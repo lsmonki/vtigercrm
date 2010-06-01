@@ -84,17 +84,6 @@ $smarty->assign("CHANGE_STATUS",$change_status);
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
-	
-
-
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-}
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Leads");
@@ -194,31 +183,29 @@ $smarty->assign("CATEGORY",$category);
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
 
-if(isset($where) && $where != '')
-{
-	$query .= ' and '.$where;
-	$_SESSION['export_where'] = $where;
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
+	$smarty->assign("SEARCH_URL",$url_string);
 }
-else
-	unset($_SESSION['export_where']);
-/*
-if(isset($order_by) && $order_by != '')
-{
-	$tablename = getTableNameForField('Leads',$order_by);
-	$tablename = (($tablename != '')?($tablename."."):'');
-	if( $adb->dbType == "pgsql")
- 	    $query .= ' GROUP BY '.$tablename.$order_by;
 
-	
-        $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+$query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
+if(isset($where) && $where != '') {
+	$_SESSION['export_where'] = $where;
+} else {
+	unset($_SESSION['export_where']);
 }
-*/
+
 if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
@@ -310,7 +297,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search=getSearchListHeaderValues($focus,"Leads",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
@@ -328,7 +315,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Leads","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($currentModule);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);

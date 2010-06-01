@@ -687,7 +687,17 @@ function getcriteria_options()
 {
 	global $log,$app_strings;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>".str_replace("'","`",$app_strings['contains'])."</option><option value=\'dcts\'>".str_replace("'","`",$app_strings['does_not_contains'])."</option><option value=\'is\'>".str_replace("'","`",$app_strings['is'])."</option><option value=\'isn\'>".str_replace("'","`",$app_strings['is_not'])."</option><option value=\'bwt\'>".str_replace("'","`",$app_strings['begins_with'])."</option><option value=\'ewt\'>".str_replace("'","`",$app_strings['ends_with'])."</option><option value=\'grt\'>".str_replace("'","`",$app_strings['greater_than'])."</option><option value=\'lst\'>".str_replace("'","`",$app_strings['less_than'])."</option><option value=\'grteq\'>".str_replace("'","`",$app_strings['greater_or_equal'])."</option><option value=\'lsteq\'>".str_replace("'","`",$app_strings['less_or_equal'])."</option>";
+	$CRIT_OPT = "<option value=\'c\'>".str_replace("'","`",$app_strings['contains']).
+			"</option><option value=\'k\'>".str_replace("'","`",$app_strings['does_not_contains']).
+			"</option><option value=\'e\'>".str_replace("'","`",$app_strings['is']).
+			"</option><option value=\'n\'>".str_replace("'","`",$app_strings['is_not']).
+			"</option><option value=\'s\'>".str_replace("'","`",$app_strings['begins_with']).
+			"</option><option value=\'ew\'>".str_replace("'","`",$app_strings['ends_with']).
+			"</option><option value=\'g\'>".str_replace("'","`",$app_strings['greater_than']).
+			"</option><option value=\'l\'>".str_replace("'","`",$app_strings['less_than']).
+			"</option><option value=\'h\'>".str_replace("'","`",$app_strings['greater_or_equal']).
+			"</option><option value=\'m\'>".str_replace("'","`",$app_strings['less_or_equal']).
+			"</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
@@ -920,6 +930,44 @@ function getWhereCondition($currentModule)
 	$log->debug("Exiting getWhereCondition method ...");
 	return $where;
 
+}
+
+function getSearchURL($input) {
+	global $log,$default_charset;
+	$urlString='';
+	if($input['searchtype']=='advance') {
+		if(empty($input['search_cnt'])) {
+			return $urlString;
+		}
+		$noOfConditions = vtlib_purify($input['search_cnt']);
+		for($i=0; $i<$noOfConditions; $i++) {
+			$fieldInfo = 'Fields'.$i;
+			$condition = 'Condition'.$i;
+			$value = 'Srch_value'.$i;
+
+			list($fieldName,$typeOfData) = split("::::",str_replace('\'','',
+					stripslashes($input[$fieldInfo])));
+			$operator = str_replace('\'','',stripslashes($input[$condition]));
+			$searchValue = $input[$value];
+			$searchValue = function_exists(iconv) ? @iconv("UTF-8",$default_charset,
+					$searchValue) : $searchValue;
+			$urlString .="&Fields$i=$fieldName&Condition$i=$operator&Srch_value$i=".
+					urlencode($searchValue);
+		}
+		$urlString .= "&searchtype=advance&search_cnt=$noOfConditions&matchtype=".
+				vtlib_purify($input['matchtype']);
+	} else {
+		$value = $input['search_text'];
+		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$value) : 
+				$value;
+		$value=trim($stringConvert);
+		$field=vtlib_purify($input['search_field']);
+ 		$urlString = "&search_field=$field&search_text=".urlencode($value)."&searchtype=BasicSearch";
+		if(!empty($input['type'])) {
+			$urlString .= "&type=".vtlib_purify($input['type']);
+		}
+	}
+	return $where;
 }
 
 /**This function is returns the where conditions for dashboard and shows the records when clicked on dashboard graph

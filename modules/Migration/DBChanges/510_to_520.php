@@ -359,6 +359,8 @@ function VT520_updateADVColumnList($columnname, $row) {
 
 function VT520_queryGeneratorMigration() {
 	$db = PearDatabase::getInstance();
+	$sql = "delete from vtiger_cvadvfilter where columnname IS NULL;";
+	$db->pquery($sql, array());
 	$sql = "select id from vtiger_users where is_admin='On' and status='Active' limit 1";
 	$result = $db->pquery($sql, array());
 	$adminId = 1;
@@ -404,6 +406,50 @@ function VT520_queryGeneratorMigration() {
 		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype not in ".
 		"('Products','HelpDesk','Faq') and columnname like 'vtiger_quotes:quoteid:quote_id%';";
 	VT520_migrateCustomview($sql,'SalesOrder', $user, VT520_updateADVColumnList);
+
+	$tabId = getTabid('Contacts');
+	$sql = "select fieldid from vtiger_field where tabid=? and fieldname='birthday';";
+	$params = array($tabId);
+	$result = $db->pquery($sql, $params);
+	$it = new SqlResultIterator($db, $result);
+	$fieldId = null;
+	foreach($it as $row) {
+		$fieldId = $row->fieldid;
+	}
+	if(!empty($fieldId)) {
+		$sql = "update vtiger_field set typeofdata = 'D~O' where fieldid=?;";
+		$params = array();
+		$result = $db->pquery($sql, $params);
+	} else {
+		echo '
+			<tr width="100%">
+				<td width="25%">Failure</td>
+				<td width="5%"><font color="red"> F </font></td>
+				<td width="70%">Failed to change typeofdata of birthday field</td>
+			</tr>';
+	}
+
+	$tabId = getTabid('Documents');
+	$sql = "select fieldid from vtiger_field where tabid=? and fieldname='filesize';";
+	$params = array($tabId);
+	$result = $db->pquery($sql, $params);
+	$it = new SqlResultIterator($db, $result);
+	$fieldId = null;
+	foreach($it as $row) {
+		$fieldId = $row->fieldid;
+	}
+	if(!empty($fieldId)) {
+		$sql = "update vtiger_field set typeofdata = 'I~O' where fieldid=?;";
+		$params = array();
+		$result = $db->pquery($sql, $params);
+	} else {
+		echo '
+			<tr width="100%">
+				<td width="25%">Failure</td>
+				<td width="5%"><font color="red"> F </font></td>
+				<td width="70%">Failed to change typeofdata of filesize field</td>
+			</tr>';
+	}
 }
 
 VT520_queryGeneratorMigration();

@@ -65,16 +65,6 @@ $_SESSION['NOTES_ORDER_BY'] = $order_by;
 $_SESSION['NOTES_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
-
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-
-}
 if(isPermitted('Documents','Delete','') == 'yes')
 {
 	$smarty->assign("MASS_DELETE","yes");
@@ -114,21 +104,30 @@ $smarty->assign("CATEGORY",$category);
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
 
 $hide_empty_folders = 'no';
 
-if(isset($where) && $where != '')
-{
-        $query .= ' and '.$where;
-        $_SESSION['export_where'] = $where;
+// Enabling Module Search
+$url_string = '';
+if($_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	$url_string .= "&query=true$ustring";
+	$smarty->assign('SEARCH_URL', $url_string);
 }
-else
-   unset($_SESSION['export_where']);
+
+$query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
+if(isset($where) && $where != '') {
+	$_SESSION['export_where'] = $where;
+} else {
+	unset($_SESSION['export_where']);
+}
    
 $focus->query = $query;
 
@@ -162,7 +161,7 @@ $controller = new ListViewController($adb, $current_user, $queryGenerator);
 $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
-$listview_header_search = getSearchListHeaderValues($focus,"Documents",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $smarty->assign("SELECT_SCRIPT", $view_script);
@@ -293,7 +292,7 @@ $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 
 $alphabetical = AlphabeticalSearch($currentModule,'index','notes_title','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($module);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);

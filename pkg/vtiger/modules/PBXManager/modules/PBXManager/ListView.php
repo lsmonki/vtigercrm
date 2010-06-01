@@ -50,14 +50,6 @@ $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('CHANGE_OWNER', getUserslist());
 $smarty->assign('CHANGE_GROUP_OWNER', getGroupslist());
 
-// Enabling Module Search
-$url_string = '';
-if($_REQUEST['query'] == 'true') {
-	list($where, $ustring) = split('#@@#', getWhereCondition($currentModule));
-	$url_string .= "&query=true$ustring";
-	$smarty->assign('SEARCH_URL', $url_string);
-}
-
 // Custom View
 $customView = new CustomView($currentModule);
 $viewid = $customView->getViewId($currentModule);
@@ -86,16 +78,22 @@ if($viewinfo['viewname'] == 'All') $smarty->assign('ALL', 'All');
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	//TODO move header generation to controller.
-	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 
-if($where != '') {
-	$list_query = "$list_query AND $where";
+// Enabling Module Search
+$url_string = '';
+if($_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	$url_string .= "&query=true$ustring";
+	$smarty->assign('SEARCH_URL', $url_string);
 }
 
+$list_query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
 // Sorting
 if(!empty($order_by)) {
 	if($order_by == 'smownerid') $list_query .= ' ORDER BY user_name '.$sorder;
@@ -140,7 +138,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
 		$navigation_array);
-$listview_header_search = getSearchListHeaderValues($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 
 // Convert field value to DetailView Link
 if(isset($focus->detailview_links) && count($focus->detailview_links)) {
@@ -163,7 +161,7 @@ $smarty->assign('SEARCHLISTHEADER',$listview_header_search);
 
 // Module Search
 $alphabetical = AlphabeticalSearch($currentModule,'index',$focus->def_basicsearch_col,'true','basic','','','','',$viewid);
-$fieldnames = getAdvSearchfields($currentModule);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("FIELDNAMES", $fieldnames);

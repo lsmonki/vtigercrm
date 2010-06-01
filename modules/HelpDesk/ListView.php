@@ -60,14 +60,6 @@ $_SESSION['HELPDESK_ORDER_BY'] = $order_by;
 $_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true'){
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-}
-
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("HelpDesk");
 $viewid = $oCustomView->getViewId($currentModule);
@@ -140,18 +132,29 @@ $smarty->assign("SINGLE_MOD",'HelpDesk');
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
+
+// Enabling Module Search
+$url_string = '';
+if($_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	$url_string .= "&query=true$ustring";
+	$smarty->assign('SEARCH_URL', $url_string);
+}
+
+$list_query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
 
 if(isset($where) && $where != '')
 {
 	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
 		$list_query .= " and (vtiger_troubletickets.status!='Closed' or vtiger_troubletickets.status is null) and ".$where;
-	$list_query .= ' and '.$where;
- 	$_SESSION['export_where'] = $where;
+	$_SESSION['export_where'] = $where;
 }
 else
    unset($_SESSION['export_where']);
@@ -258,7 +261,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search = getSearchListHeaderValues($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
@@ -276,7 +279,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','ticket_title','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($currentModule);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);

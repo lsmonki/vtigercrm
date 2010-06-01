@@ -67,15 +67,6 @@ $_SESSION['POTENTIALS_ORDER_BY'] = $order_by;
 $_SESSION['POTENTIALS_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-}
-
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Potentials");
 $viewid = $oCustomView->getViewId($currentModule);
@@ -115,19 +106,26 @@ if($viewnamedesc['viewname'] == 'All')
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$smarty->assign("SEARCH_URL",$url_string);
+}
+$list_query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
 if(isset($where) && $where != '')
 {
 	if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
 		$list_query .= " AND vtiger_potential.sales_stage = '".$mod_strings['Closed Won']."' AND ".$where;
 	elseif(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
 		$list_query .= " AND vtiger_potential.sales_stage not in( '".$mod_strings['Closed Won']."' , '".$mod_strings['Closed Lost']."' )AND ".$where;
-	else
-		$list_query .= " AND ".$where;
 
 	$_SESSION['export_where'] = $where;
 }
@@ -223,7 +221,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search=getSearchListHeaderValues($focus,"Potentials",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 
@@ -242,7 +240,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','potentialname','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($currentModule);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);

@@ -69,18 +69,6 @@ if(isset($_REQUEST['selected_module']) && $_REQUEST['selected_module'] != '') {
 	}	
 }
 
-$url_string = '';
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",RBSearch($select_module));
-
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-				
-}
-
 $focus = CRMEntity::getInstance($select_module);
 
 if(count($module_name) > 0)
@@ -90,7 +78,17 @@ if(count($module_name) > 0)
 	
 	global $current_user;
 	$queryGenerator = new QueryGenerator($select_module, $current_user);
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
+	// Enabling Module Search
+	$url_string = '';
+	if($_REQUEST['query'] == 'true') {
+		$queryGenerator->addUserSearchConditions($_POST);
+		$ustring = getSearchURL($_POST);
+		$url_string .= "&query=true$ustring";
+		$smarty->assign('SEARCH_URL', $url_string);
+	}
+
+	$list_query = $queryGenerator->getQuery();
 	$list_query = preg_replace("/vtiger_crmentity.deleted\s*=\s*0/i", 'vtiger_crmentity.deleted = 1', $list_query);
 	//Search criteria added to the list Query
 	if(isset($where) && $where != '')
@@ -103,7 +101,7 @@ if(count($module_name) > 0)
 	$controller = new ListViewController($adb, $current_user, $queryGenerator);
 	$rb_listview_header = $controller->getListViewHeader($focus,$select_module,$url_string,$sorder,
 			$order_by, true);
-	$listview_header_search=getSearchListHeaderValues($focus,$select_module,$url_string,$sorder,$order_by,"",$cur_mod_view);
+	$listview_header_search = $controller->getBasicSearchFieldInfoList();
 	$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')

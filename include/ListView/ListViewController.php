@@ -371,10 +371,10 @@ class ListViewController {
 					} else {
 						$parentModule = $this->typeList[$value];
 					}
-					if(!empty($value) && !empty($this->nameList[$fieldName])) {
+					if(!empty($value) && !empty($this->nameList[$fieldName]) && !empty($parentModule)) {
 						$parentMeta = $this->queryGenerator->getMeta($parentModule);
 						$value = textlength_check($this->nameList[$fieldName][$value]);
-						if ($parentMeta->isModuleEntity()) {
+						if ($parentMeta->isModuleEntity() && $parentModule != "Users") {
 							$value = "<a href='index.php?module=$parentModule&action=DetailView&".
 								"record=$rawValue' title='$parentModule'>$value</a>";
 						}
@@ -601,6 +601,55 @@ class ListViewController {
 				isPermitted($module,"Delete","") == 'yes'))
 			$header[] = getTranslatedString("LBL_ACTION", $module);
 		return $header;
+	}
+
+	public function getBasicSearchFieldInfoList() {
+		$fields = $this->queryGenerator->getFields();
+		$whereFields = $this->queryGenerator->getWhereFields();
+		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
+
+		$moduleFields = $meta->getModuleFields();
+		$accessibleFieldList = array_keys($moduleFields);
+		$listViewFields = array_intersect($fields, $accessibleFieldList);
+		$basicSearchFieldInfoList = array();
+		foreach ($listViewFields as $fieldName) {
+			$field = $moduleFields[$fieldName];
+			$basicSearchFieldInfoList[$fieldName] = getTranslatedString($field->getFieldLabelKey(),
+					$this->queryGenerator->getModule());
+		}
+		return $basicSearchFieldInfoList;
+	}
+
+	public function getAdvancedSearchOptionString() {
+		$module = $this->queryGenerator->getModule();
+		$meta = $this->queryGenerator->getMeta($module);
+
+		$moduleFields = $meta->getModuleFields();
+		$i =0;
+		foreach ($moduleFields as $fieldName=>$field) {
+			if($field->getFieldDataType() == 'reference') {
+				$typeOfData = 'V';
+			} else if($field->getFieldDataType() == 'boolean') {
+				$typeOfData = 'C';
+			} else {
+				$typeOfData = $field->getTypeOfData();
+				$typeOfData = explode("~",$typeOfData);
+				$typeOfData = $typeOfData[0];
+			}
+			$label = getTranslatedString($field->getFieldLabelKey(), $module);
+			if(empty($label)) {
+				$label = $field->getFieldLabelKey();
+			}
+			if($label == "Start Date & Time") {
+				$fieldlabel = "Start Date";
+			}
+			$selected = '';
+			if($i++ == 0) {
+				$selected = "selected";
+			}
+			$OPTION_SET .= "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
+		}
+		return $OPTION_SET;
 	}
 
 }

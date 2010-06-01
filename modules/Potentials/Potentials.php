@@ -200,6 +200,7 @@ class Potentials extends CRMEntity {
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 				LEFT JOIN vtiger_account on vtiger_potential.related_to=vtiger_account.accountid
+				LEFT JOIN vtiger_contactdetails on vtiger_potential.related_to=vtiger_contactdetails.contactid
 				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid 
                 LEFT JOIN vtiger_groups
         	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid

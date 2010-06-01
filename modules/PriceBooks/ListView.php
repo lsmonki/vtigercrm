@@ -63,16 +63,6 @@ $_SESSION['PRICEBOOK_ORDER_BY'] = $order_by;
 $_SESSION['PRICEBOOK_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-				
-}
-
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("PriceBooks");
 $viewid = $oCustomView->getViewId($currentModule);
@@ -104,17 +94,23 @@ if($viewnamedesc['viewname'] == 'All')
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
 
 
-if(isset($where) && $where != '')
-{
-        $list_query .= ' and '.$where;
+// Enabling Module Search
+$url_string = '';
+if($_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	$url_string .= "&query=true$ustring";
+	$smarty->assign('SEARCH_URL', $url_string);
 }
+
+$list_query = $queryGenerator->getQuery();
 
 if(isset($order_by) && $order_by != '')
 {
@@ -157,7 +153,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search = getSearchListHeaderValues($focus,"PriceBooks",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
@@ -171,7 +167,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','bookname','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($module);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);

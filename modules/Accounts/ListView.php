@@ -91,15 +91,6 @@ $smarty->assign("CV_DELETE_PERMIT",$delete_permit);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-				
-}
 if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
@@ -173,19 +164,28 @@ $smarty->assign("SINGLE_MOD",'Account');
 global $current_user;
 if ($viewid != "0") {
 	$queryGenerator = new QueryGenerator($currentModule, $current_user);
-	$query = $queryGenerator->getCustomViewQueryById($viewid);
+	$queryGenerator->initForCustomViewById($viewid);
 } else {
-	$query = $queryGenerator->getDefaultCustomViewQuery();
+	$queryGenerator->initForDefaultCustomView();
 }
 //<<<<<<<<customview>>>>>>>>>
 
-if(isset($where) && $where != '')
-{
-	$query .= ' and '.$where;
-	$_SESSION['export_where'] = $where;
+// Enabling Module Search
+$url_string = '';
+if($_REQUEST['query'] == 'true') {
+	$queryGenerator->addUserSearchConditions($_POST);
+	$ustring = getSearchURL($_POST);
+	$url_string .= "&query=true$ustring";
+	$smarty->assign('SEARCH_URL', $url_string);
 }
-else
-   unset($_SESSION['export_where']);
+
+$query = $queryGenerator->getQuery();
+$where = $queryGenerator->getConditionalWhere();
+if(isset($where) && $where != '') {
+	$_SESSION['export_where'] = $where;
+} else {
+	unset($_SESSION['export_where']);
+}
 
 $view_script = "<script language='javascript'>
 	function set_selected()
@@ -306,7 +306,7 @@ $listview_header = $controller->getListViewHeader($focus,$currentModule,$url_str
 		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search=getSearchListHeaderValues($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = $controller->getBasicSearchFieldInfoList();
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
@@ -326,7 +326,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','accountname','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($currentModule);
+$fieldnames = $controller->getAdvancedSearchOptionString();
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
