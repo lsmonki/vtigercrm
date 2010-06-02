@@ -71,7 +71,7 @@ class CustomView extends CRMEntity{
 		$this->escapemodule[] = "_";
 		$this->smownerid = $current_user->id;
 		$this->moduleMetaInfo = array();
-		if($module != "") {
+		if($module != "" && $module != 'Calendar') {
 			$this->meta = $this->getMeta($module, $current_user);
 		}
 	}
@@ -302,7 +302,7 @@ class CustomView extends CRMEntity{
 		$tabid = getTabid($module);
 		global $current_user;
 	    require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		if (empty($this->meta)) {
+		if (empty($this->meta) && $module != 'Calendar') {
 			$this->meta = $this->getMeta($module, $current_user);
 		}
 		if($tabid == 9)
@@ -366,8 +366,9 @@ class CustomView extends CRMEntity{
 		
 		if($module == 'Quotes' && $block == 51)
                         $module_columnlist['vtiger_crmentity:crmid::Quotes_Quote_No:I'] = $app_strings['Quote No'];
-
-		$moduleFieldList = $this->meta->getModuleFields();
+		if ($module != 'Calendar') {
+			$moduleFieldList = $this->meta->getModuleFields();
+		}
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$fieldtablename = $adb->query_result($result,$i,"tablename");
@@ -378,7 +379,7 @@ class CustomView extends CRMEntity{
 			$fieldtypeofdata = $fieldtype[0];
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$field = $moduleFieldList[$fieldname];
-			if($field->getFieldDataType() == 'reference') {
+			if(!empty($field) && $field->getFieldDataType() == 'reference') {
 				$fieldtypeofdata = 'V';
 			} else {
 				//Here we Changing the displaytype of the field. So that its criteria will be
