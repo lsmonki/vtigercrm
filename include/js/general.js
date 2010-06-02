@@ -3643,7 +3643,7 @@ function startCall(number, recordid){
 		'index.php',
 		{	queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PBXManagerAjax&mode=ajax&file=StartCall&ajax=true&module=PBXManager&number='+number+'&recordid='+recordid,
+			postBody: 'action=PBXManagerAjax&mode=ajax&file=StartCall&ajax=true&module=PBXManager&number='+encodeURIComponent(number)+'&recordid='+recordid,
 			onComplete: function(response) {
 							if(response.responseText == ''){
 								//successfully called

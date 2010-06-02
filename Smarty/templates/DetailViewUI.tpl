@@ -25,7 +25,7 @@
 
 				{if $keyid eq 11}
 					{if $USE_ASTERISK eq 'true'}
-						&nbsp;&nbsp;<span id="dtlview_{$label}"><a href='javascript:;' onclick='startCall("{$keyval}")'>{$keyval}</a></span>
+						&nbsp;&nbsp;<span id="dtlview_{$label}"><a href='javascript:;' onclick='startCall("{$keyval}", "{$ID}")'>{$keyval}</a></span>
 					{else}
 						&nbsp;&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
 					{/if}

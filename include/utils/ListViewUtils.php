@@ -1889,7 +1889,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//added for asterisk integration
 	elseif($uitype == 11){
-		$value = "<a href='javascript:;' onclick='startCall(&quot;$temp_val&quot;, &quot;$entity_id&quot;)'>".$temp_val."</a>";
+		// Fix added for Trac Id: 6139
+		if(vtlib_isModuleActive('PBXManager')) {
+			$value = "<a href='javascript:;' onclick='startCall(&quot;$temp_val&quot;, &quot;$entity_id&quot;)'>".$temp_val."</a>";
+		} else {
+			$value = $temp_val;
+		}
 	}
 	//asterisk changes end here
 	//Added for email status tracking

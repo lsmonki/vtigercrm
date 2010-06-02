@@ -120,7 +120,7 @@ class Asterisk {
 		$arr = explode("/", $from);
 		$request = "Action: Originate\r\n".
 					"Channel: $from\r\n".
-					"Exten: $to\r\n".
+					"Exten: ".preg_replace('~[^0-9]~', "", $to)."\r\n".
 					"Context: $context\r\n".
 					"Priority: 1\r\n".
 					"Callerid: $arr[1]\r\n".

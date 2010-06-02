@@ -53,7 +53,7 @@ function main__asteriskClient() {
 		// Give some break to avoid server hanging
 		sleep(1);
 		try {
-			$incoming = asterisk_handleEvents($asterisk, $adb, $data['version'], $_ASTERISK_EVENTHANDLER_REGULARTIMEOUT);
+			$incoming = asterisk_handleEvents($asterisk, $adb, $data['version']);
 			asterisk_IncomingEventCleanup($adb);
 		} catch(Exception $ex) {
 			echo "EXCEPTION: " . $ex->getMessage() . "\n";
@@ -77,7 +77,7 @@ function asterisk_IncomingEventCleanup($adb) {
 /**
  * Grab the events from server, parse it and process it.
  */
-function asterisk_handleEvents($asterisk, $adb, $version="1.4", $fnForceTimeout=false) {	
+function asterisk_handleEvents($asterisk, $adb, $version="1.4") {	
 	$fnEntryTime = time();
 	//values of flag for asteriskincomingevents(-1 for stray calls, 0 for incoming calls, 1 for outgoing call)
 	do {
@@ -232,7 +232,7 @@ function asterisk_handleResponse3($mainresponse, $adb, $asterisk){
 			}
 		}
 		// END
-	} else if($mainresponse['Event']== 'Newexten' && $mainresponse['AppData'] == "DIALSTATUS=CONGESTION"){
+	} else if($mainresponse['Event']== 'Newexten' && $mainresponse['AppData'] == "DIALSTATUS=CONGESTION" || $mainresponse['Event'] == 'Hangup'){
 		$status = "missed";
 		$uid = $mainresponse['Uniqueid'];
 		$extensionCalled = false;
@@ -255,7 +255,6 @@ function asterisk_handleResponse3($mainresponse, $adb, $asterisk){
 			$eventResultRow = $adb->fetch_array($eventResult);
 			
 			$callerNumber = $eventResultRow['from_number'];
-			$callerType = $eventResultRow['callertype'];
 			
 			if($extensionCalled === false) {
 				$extensionCalled = $eventResultRow['to_number'];

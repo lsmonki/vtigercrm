@@ -44,11 +44,9 @@ function TraceIncomingCall(){
 		$callerType = $adb->query_result($result,0,"callertype");
 		$refuid = $adb->query_result($result, 0, "refuid");
 
-		if(!empty($callerType)){
-			$tracedCallerInfo = getTraceIncomingCallerInfo("$callerType:$callerNumber");
-		} else {
+		if(!empty($callerNumber)){
 			$tracedCallerInfo = getTraceIncomingCallerInfo($callerNumber);
-		}
+		} 
 
 		$callerLinks = $tracedCallerInfo['callerLinks'];
 		$firstCallerInfo = false;
@@ -103,8 +101,7 @@ function TraceIncomingCall(){
  * if no information is present in database, it returns :: Unknown Caller (Unknown)
  */
 function getTraceIncomingCallerInfo($from) {
-	global $adb, $log;
-	$log->fatal("in trace incoming caller info $from");
+	global $adb;
 	// Grab all possible caller informations (lookup for number as well stripped number)
 	$callerInfos = getCallerInfo($from);
 	$callerLinks = '';

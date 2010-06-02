@@ -537,5 +537,6 @@ $adb->pquery($fieldsqueryuitype16,array($blockid,$email_Tabid));
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
+ExecuteQuery("DROP TABLE IF EXISTS vtiger_asteriskoutgoingcalls");
 
 ?>

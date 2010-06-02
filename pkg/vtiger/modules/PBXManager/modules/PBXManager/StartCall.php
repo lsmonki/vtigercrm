@@ -46,7 +46,6 @@ function startCall(){
 
 	$asterisk->transfer($extension,$number);
 	
-
 	$callerModule = getSalesEntityType($record);
 	$entityNames = getEntityName($callerModule, array($record));
 	$callerName = $entityNames[$record];
