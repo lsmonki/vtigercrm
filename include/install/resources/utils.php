@@ -57,8 +57,7 @@ class Installation_Utils {
 				$db_server_status = true;
 				$serverInfo = $conn->ServerInfo();
 				if(Common_Install_Wizard_Utils::isMySQL($db_type)) {
-					$version = explode('-',$serverInfo);
-					$mysql_server_version=$version[0];
+					$mysql_server_version = Common_Install_Wizard_Utils::getMySQLVersion($serverInfo);
 				}
 				if($create_db) {
 					// drop the current database if it exists
@@ -197,8 +196,7 @@ class Migration_Utils {
 				$db_server_status = true;
 				$serverInfo = $conn->ServerInfo();
 				if(Common_Install_Wizard_Utils::isMySQL($db_type)) {
-					$version = explode('-',$serverInfo);
-					$mysql_server_version=$version[0];
+					$mysql_server_version = Common_Install_Wizard_Utils::getMySQLVersion($serverInfo);
 				}
 		
 				// test the connection to the old database
@@ -1035,13 +1033,13 @@ class Common_Install_Wizard_Utils {
 		return (stripos($dbType ,'mysql') === 0);
 	}
 	
-    static function isOracle($dbType) { 
-    	return $dbType == 'oci8'; 
-    }
+	static function isOracle($dbType) { 
+		return $dbType == 'oci8'; 
+	}
     
-    static function isPostgres($dbType) { 
-    	return $dbType == 'pgsql'; 
-    }
+	static function isPostgres($dbType) { 
+		return $dbType == 'pgsql'; 
+	}
 	
 	public static function getInstallableModulesFromPackages() {		
 		global $optionalModuleStrings;
@@ -1194,7 +1192,17 @@ class Common_Install_Wizard_Utils {
 		
 		return $result;
 	}
-	
+
+	public static function getMySQLVersion($serverInfo) {
+		if(!is_array($serverInfo)) {
+			$version = explode('-',$serverInfo);
+			$mysql_server_version=$version[0];
+		} else {
+			$mysql_server_version = $serverInfo['version'];
+		}
+		return $mysql_server_version;
+	}
+
 }
 
 //Function used to execute the query and display the success/failure of the query
