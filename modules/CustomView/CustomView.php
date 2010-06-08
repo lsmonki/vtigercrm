@@ -1964,7 +1964,7 @@ class CustomView extends CRMEntity{
 					elseif($status == CV_STATUS_PUBLIC)
 					{
 						$log->debug("Entering when status=3");
-						if($action == 'ListView' || $action == $module."Ajax" || $action == 'index')
+						if($action == 'ListView' || $action == $module."Ajax" || $action == 'index' || $action == 'DetailView')
 						{
 							$permission = "yes";
 						}
