@@ -19,6 +19,7 @@ $mod_strings = Array (
 'Created Time' => 'Created Time',
 'Modified Time' => 'Modified Time',
 'Comment' => 'Comment',
+'Comments' => 'Comments',
 'Related To' => 'Related To',
 'Creator' => 'Creator',
 

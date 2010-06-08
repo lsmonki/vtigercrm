@@ -20,6 +20,7 @@ $mod_strings = Array(
 
 /*fields for the module*/
 'Assets'=>'Assets',
+'Asset Name' => 'Asset Name',
 'Customer Name'=>'Customer Name',
 'Product Name'=>'Product Name',
 'Serial Number'=>'Serial Number',
@@ -31,7 +32,7 @@ $mod_strings = Array(
 'Shipping Tracking Number'=>'Shipping Tracking Number',
 'Tag Number'=>'Tag Number',
 'Notes'=>'Notes',
-//'Invoice Name'=>' ',	//space included as label is picked from include/en_us.lang.php otherwise
+'Invoice Name'=>' ',	//space included as label is picked from include/en_us.lang.php otherwise
 
 /*picklist values*/
 'In Service'=>'In Service',
