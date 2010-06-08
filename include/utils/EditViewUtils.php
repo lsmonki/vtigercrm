@@ -1630,7 +1630,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['delRow'.$i]="Del";
 		}
-		if(!isset($focus->mode) && $seid!=''){
+		if(empty($focus->mode) && $seid!=''){
 			$sub_prod_query = $adb->pquery("SELECT crmid as prod_id from vtiger_seproductsrel WHERE productid=? AND setype='Products'",array($seid));
 		} else {
 			$sub_prod_query = $adb->pquery("SELECT productid as prod_id from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$i));
