@@ -627,9 +627,10 @@ class ReportRun extends CRMEntity
 		
 		$advfiltergroupssql = "SELECT * FROM vtiger_relcriteria_grouping WHERE queryid = ? ORDER BY groupid";
 		$advfiltergroups = $adb->pquery($advfiltergroupssql, array($reportid));
-		
+		$numgrouprows = $adb->num_rows($advfiltergroups);
+		$groupctr =0;
 		while($advfiltergroup = $adb->fetch_array($advfiltergroups)) {
-		
+			$groupctr++;
 			$groupid = $advfiltergroup["groupid"];
 			$groupcondition = $advfiltergroup["group_condition"];
 			
@@ -645,9 +646,9 @@ class ReportRun extends CRMEntity
 			if($noofrows > 0) {
 				
 				$advfiltergroupsql = "";
-				
+				$columnctr = 0;
 				while($advfilterrow = $adb->fetch_array($result)) {
-					
+					$columnctr++;
 					$fieldcolname = $advfilterrow["columnname"];
 					$comparator = $advfilterrow["comparator"];
 					$value = $advfilterrow["value"];
@@ -729,7 +730,7 @@ class ReportRun extends CRMEntity
 						}
 						
 						$advfiltergroupsql .= $fieldvalue;
-						if($columncondition != NULL && $columncondition != '') {
+						if($columncondition != NULL && $columncondition != '' && $noofrows > $columnctr ) {
 							$advfiltergroupsql .= ' '.$columncondition.' ';
 						}	
 					}
@@ -738,9 +739,8 @@ class ReportRun extends CRMEntity
 				
 				if (trim($advfiltergroupsql) != "") {
 					$advfiltergroupsql =  "( $advfiltergroupsql ) ";
-					
-					if($groupcondition != NULL && $groupcondition != '') {
-						$advfiltergroupsql .=  $groupcondition . ' ';
+					if($groupcondition != NULL && $groupcondition != '' && $numgrouprows > $groupctr) {
+						$advfiltergroupsql .= ' '. $groupcondition . ' ';
 					}
 					
 					$advfiltersql .= $advfiltergroupsql;
