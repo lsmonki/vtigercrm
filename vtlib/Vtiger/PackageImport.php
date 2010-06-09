@@ -128,7 +128,14 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				$manifestxml_found = true;
 				$this->__parseManifestFile($unzip);
 				$modulename = $this->_modulexml->name;
-
+				$isModuleBundle = (string)$this->_modulexml->modulebundle;
+				
+				if($isModuleBundle === 'true' && (!empty($this->_modulexml)) && 
+						(!empty($this->_modulexml->dependencies)) &&
+						(!empty($this->_modulexml->dependencies->vtiger_version))) {
+					return true;
+				}
+				
 				// Do we need to check the zip further?
 				if($this->isLanguageType()) {
 					$languagefile_found = true; // No need to search for module language file.
@@ -211,6 +218,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function initImport($zipfile, $overwrite) {
 		$module = $this->getModuleNameFromZip($zipfile);
 		if($module != null) {
+			
 			$unzip = new Vtiger_Unzip($zipfile, $overwrite);
 
 			// Unzip selectively
@@ -230,16 +238,15 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				)
 			);
 
-			// If data is not yet available
-			if(empty($this->_modulexml)) {
-				$this->__parseManifestFile($unzip);
-			}
 
 			if($unzip) $unzip->close();
 		}
 		return $module;
 	}
 
+	function getTemporaryFilePath($filepath=false) {
+		return 'cache/'. $filepath;
+	}
 	/**
 	 * Get dependent version
 	 * @access private
@@ -272,11 +279,43 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * @todo overwrite feature is not functionally currently.
 	 */
 	function import($zipfile, $overwrite=false) {
-		$module = $this->initImport($zipfile, $overwrite);
-	
-		// Call module import function
-		$this->import_Module();
+		$module = $this->getModuleNameFromZip($zipfile);
+		if($module != null) {
+			// If data is not yet available
+			if(empty($this->_modulexml)) {
+				$this->__parseManifestFile($unzip);
+			}
+
+			$buildModuleArray = array();
+			$installSequenceArray = array();
+			$moduleBundle = (boolean)$this->_modulexml->modulebundle;
+			if($moduleBundle == true) {
+				$moduleList = (Array)$this->_modulexml->modulelist;
+				foreach($moduleList as $moduleInfos) {
+					foreach($moduleInfos as $moduleInfo) {
+						$moduleInfo = (Array)$moduleInfo;
+						$buildModuleArray[] = $moduleInfo;
+						$installSequenceArray[] = $moduleInfo['install_sequence'];
+					}
+				}
+				sort($installSequenceArray);
+				$unzip = new Vtiger_Unzip($zipfile);
+				$unzip->unzipAllEx($this->getTemporaryFilePath());
+				foreach ($installSequenceArray as $sequence) {
+					foreach ($buildModuleArray as $moduleInfo) {
+						if($moduleInfo['install_sequence'] == $sequence) {
+							$this->import($this->getTemporaryFilePath($moduleInfo['filepath']), $overwrite);
+						}
+					}
+				}
+			} else {
+				$module = $this->initImport($zipfile, $overwrite);
+				// Call module import function
+				$this->import_Module();
+			}
+		}
 	}
+	
 
 	/**
 	 * Import Module

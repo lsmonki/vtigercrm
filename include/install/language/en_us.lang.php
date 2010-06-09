@@ -16,7 +16,8 @@ $optionalModuleStrings = array(
 	'Webforms_description'=>'Server side support to allow building client webforms to capture the information easily',
 	'SMSNotifier_description'=>'Sends sms messages to Accounts, contacts and Leads',
 	'Assets_description'=>'Assets represent ownership of value that can be converted into cash',
-	'ModComments_description' => 'Ability to add comments to any of the related modules'
+	'ModComments_description' => 'Ability to add comments to any of the related modules',
+	'Projects_description' => 'Adds the ability to manage Projects',
 );
 
 $installationStrings = array(
