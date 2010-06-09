@@ -3800,7 +3800,19 @@ function getDuplicateRecordsArr($module)
 				}
 						
 				$result[$col_arr[$k]]=$contactname;
-			}	
+			}
+			if($ui_type[$fld_arr[$k]] == 15 || $ui_type[$fld_arr[$k]] == 16)
+			{
+				$result[$col_arr[$k]]=getTranslatedString($result[$col_arr[$k]],$module);
+			}
+			if($ui_type[$fld_arr[$k]] == 33){
+				$fieldvalue = explode(' |##| ',$result[$col_arr[$k]]);
+				$result[$col_arr[$k]] = array();
+				foreach ($fieldvalue as $picklistValue) {
+					$result[$col_arr[$k]][] = getTranslatedString($picklistValue,$module);
+				}
+				$result[$col_arr[$k]] = implode(', ',$result[$col_arr[$k]]);
+			}
 			if($ui_type[$fld_arr[$k]] ==68)
 			{
 				$parent_id= $result[$col_arr[$k]];
