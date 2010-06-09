@@ -534,6 +534,19 @@ $adb->pquery($fieldsqueryuitype1,array($blockid,$email_Tabid));
 $fieldsqueryuitype16 = 'update vtiger_field set block=? where tabid=? and uitype=16';
 $adb->pquery($fieldsqueryuitype16,array($blockid,$email_Tabid));
 
+require_once 'include/utils/utils.php';
+
+$sql = 'delete from vtiger_field where tablename=? and fieldname=? and tabid=?';
+$params = array('vtiger_seactivityrel','parent_id',getTabid('Emails'));
+$adb->pquery($sql,$params);
+$sql = 'update vtiger_field set uitype=?,displaytype=? where tablename=? and'.
+' fieldname=? and tabid=?';
+$params = array('357',1,'vtiger_emaildetails','parent_id',getTabid('Emails'));
+$adb->pquery($sql,$params);
+$sql = 'update vtiger_field set block=(select blockid from vtiger_blocks where '.
+"blocklabel=?) where tablename=?";
+$params = array('LBL_EMAIL_INFORMATION','vtiger_emaildetails');
+$adb->pquery($sql,$params);
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
