@@ -103,7 +103,7 @@ if($contact_mailid != '')
 }
 if($isactive == 1)
 {
-	$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$focus->id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+	$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$focus->id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
 	$email_body = $bodysubject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
 }
 else

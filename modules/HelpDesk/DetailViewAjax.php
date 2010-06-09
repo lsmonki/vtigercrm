@@ -70,7 +70,7 @@ if($ajaxaction == "DETAILVIEW")
 				}
 				
 				if($isactive == 1){
-					$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$modObj->id."&fun=detail'>Ticket Details</a>";
+					$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$modObj->id."&fun=detail'>Ticket Details</a>";
 					$email_body = $subject.'<br><br>'.getPortalInfo_Ticket($modObj->id,$sub,$contactname,$url,"edit");
 				}else{
 					$data['sub']=$modObj->column_fields['ticket_title'];
