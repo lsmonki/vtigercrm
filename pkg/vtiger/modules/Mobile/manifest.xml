@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<module>
+<exporttime>2010-06-07 19:01:55</exporttime>
+<name>Mobile</name>
+<label>Mobile</label>
+<parent></parent>
+<type>extension</type>
+<version>1.2.1</version>
+<dependencies>
+<vtiger_version>5.1.0</vtiger_version>
+</dependencies>
+<tables>
+</tables>
+</module>
