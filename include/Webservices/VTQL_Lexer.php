@@ -32,7 +32,7 @@ if(strcmp($val, "*")===0){
 if(!$count){
 incrementN($lexer, 1);
 }
-return VTQL_Parser::ASTERISK;	
+return VTQL_Parser::ASTERISK;
 }else if((strcmp($val, "(")===0)){
 return VTQL_Parser::PARENOPEN;
 }else if(strcmp($val, ")")===0){
@@ -63,7 +63,7 @@ $lexer->current_state =0;
 $lexer->mandatory = false;
 if(!(strcasecmp($val, $lexer->optional_states[$lexer->current_state])===0)){
 return VTQL_Parser::TABLENAME;
-}	
+}
 }
 }
 function handlewhere($lexer, $val){
@@ -202,7 +202,7 @@ return $this->token."";
         if ($this->index >= strlen($this->data)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/^((\\w+|'(?:[^']|'')+'|\\(|\\)|(\\+|-)?\\d+|,|\\*|(?:!\\s*<\\s*|\\s*>\\s*)=|<(?:!=)|>(?:!=)|\\s*<=\\s*|\\s*>=\\s*|\\s*!=\\s*|;))|^([ \t\r\n]+)/";
+        $yy_global_pattern = "/^((\\w+|'(?:[^']|'')+'|\\(|\\)|(\\+|-)?\\d+|,|\\*|(?!<|>)=|<(?!=)|>(?!=)|<=|>=|!=|;))|^([ \t\r\n]+)/";
 
         do {
             if (preg_match($yy_global_pattern, substr($this->data, $this->index), $yymatches)) {
