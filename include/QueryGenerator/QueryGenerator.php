@@ -12,6 +12,7 @@
 require_once 'data/CRMEntity.php';
 require_once 'modules/CustomView/CustomView.php';
 require_once 'include/Webservices/Utils.php';
+require_once 'include/Webservices/RelatedModuleMeta.php';
 
 /**
  * Description of QueryGenerator
@@ -23,6 +24,7 @@ class QueryGenerator {
 	private $customViewColumnList;
 	private $stdFilterList;
 	private $conditionals;
+	private $manyToManyRelatedModuleConditions;
 	private $groupType;
 	private $whereFields;
 	/**
@@ -47,6 +49,7 @@ class QueryGenerator {
 	private $whereClause;
 	private $query;
 	private $groupInfo;
+	private $conditionInstanceCount;
 	private $conditionalWhere;
 	public static $AND = 'AND';
 	public static $OR = 'OR';
@@ -75,6 +78,8 @@ class QueryGenerator {
 		$this->query = null;
 		$this->conditionalWhere = null;
 		$this->groupInfo = '';
+		$this->manyToManyRelatedModuleConditions = array();
+		$this->conditionInstanceCount = 0;
 	}
 
 	/**
@@ -190,9 +195,9 @@ class QueryGenerator {
 				$this->addCondition($name, $value, 'BETWEEN');
 			}
 		}
-		if(count($this->conditionals) <= 0 && is_array($this->advFilterList)) {
+		if($this->conditionInstanceCount <= 0 && is_array($this->advFilterList)) {
 			$this->startGroup('');
-		} elseif(count($this->conditionals) > 0 && is_array($this->advFilterList)) {
+		} elseif($this->conditionInstanceCount > 0 && is_array($this->advFilterList)) {
 			$this->addConditionGlue(self::$AND);
 		}
 		if(is_array($this->advFilterList)) {
@@ -209,7 +214,7 @@ class QueryGenerator {
 				}
 			}
 		}
-		if(count($this->conditionals) > 0) {
+		if($this->conditionInstanceCount > 0) {
 			$this->endGroup();
 		}
 	}
@@ -331,10 +336,19 @@ class QueryGenerator {
 					$nameFields = $this->moduleNameFields[$module];
 					$nameFieldList = explode(',',$nameFields);
 					foreach ($nameFieldList as $index=>$column) {
-						$referenceField = $meta->getFieldByColumnName($column);
-						$referenceTable = $referenceField->getTableName();
-						$tableIndexList = $meta->getEntityTableIndexList();
-						$referenceTableIndex = $tableIndexList[$referenceTable];
+						// for non admin user users module is inaccessible.
+						// so need hard code the tablename.
+						if($module == 'Users') {
+							$instance = CRMEntity::getInstance($module);
+							$referenceTable = $instance->table_name;
+							$tableIndexList = $instance->tab_name_index;
+							$referenceTableIndex = $tableIndexList[$referenceTable];
+						} else {
+							$referenceField = $meta->getFieldByColumnName($column);
+							$referenceTable = $referenceField->getTableName();
+							$tableIndexList = $meta->getEntityTableIndexList();
+							$referenceTableIndex = $tableIndexList[$referenceTable];
+						}
 						if(isset($moduleTableIndexList[$referenceTable])) {
 							$referenceTableName = "$referenceTable $referenceTable$fieldName";
 							$referenceTable = "$referenceTable$fieldName";
@@ -412,6 +426,17 @@ class QueryGenerator {
 				$sql .= " $tableJoinMapping[$tableName] $tableName $tableNameAlias ON $condition";
 			}
 		}
+
+		foreach ($this->manyToManyRelatedModuleConditions as $conditionInfo) {
+			$relatedModuleMeta = RelatedModuleMeta::getInstance($this->meta->getTabName(),
+					$conditionInfo['relatedModule']);
+			$relationInfo = $relatedModuleMeta->getRelationMeta();
+			$relatedModule = $this->meta->getTabName();
+			$sql .= ' INNER JOIN '.$relationInfo['relationTable']." ON ".
+			$relationInfo['relationTable'].".$relationInfo[$relatedModule]=".
+				"$baseTable.$baseTableIndex";
+		}
+
 		$sql .= $this->meta->getEntityAccessControlQuery();
 		$this->fromClause = $sql;
 		return $sql;
@@ -426,7 +451,7 @@ class QueryGenerator {
 		if(!empty($deletedQuery)) {
 			$sql .= " WHERE $deletedQuery";
 		}
-		if(count($this->conditionals) > 0) {
+		if($this->conditionInstanceCount > 0) {
 			$sql .= ' AND ';
 		} elseif(empty($deletedQuery)) {
 			$sql .= ' WHERE ';
@@ -460,8 +485,17 @@ class QueryGenerator {
 						$meta = $this->getMeta($module);
 						$columnList = array();
 						foreach ($nameFieldList as $column) {
-							$referenceField = $meta->getFieldByColumnName($column);
-							$referenceTable = $referenceField->getTableName();
+							if($module == 'Users') {
+								$instance = CRMEntity::getInstance($module);
+								$referenceTable = $instance->table_name;
+								if(count($this->ownerFields) > 0 || 
+										$this->getModule() == 'Quotes') {
+									$referenceTable .= '2';
+								}
+							} else {
+								$referenceField = $meta->getFieldByColumnName($column);
+								$referenceTable = $referenceField->getTableName();
+							}
 							if(isset($moduleTableIndexList[$referenceTable])) {
 								$referenceTable = "$referenceTable$fieldName";
 							}
@@ -490,10 +524,21 @@ class QueryGenerator {
 				$fieldGlue = ' OR';
 			}
 			$fieldSql .= ')';
-			$fieldSqlList[] = $fieldSql;
+			$fieldSqlList[$index] = $fieldSql;
 		}
+		foreach ($this->manyToManyRelatedModuleConditions as $index=>$conditionInfo) {
+			$relatedModuleMeta = RelatedModuleMeta::getInstance($this->meta->getTabName(),
+					$conditionInfo['relatedModule']);
+			$relationInfo = $relatedModuleMeta->getRelationMeta();
+			$relatedModule = $this->meta->getTabName();
+			$fieldSql = "(".$relationInfo['relationTable'].'.'.
+			$relationInfo[$conditionInfo['column']].$conditionInfo['SQLOperator'].
+			$conditionInfo['value'].")";
+			$fieldSqlList[$index] = $fieldSql;
+		}
+
 		$groupSql = $this->makeGroupSqlReplacements($fieldSqlList, $groupSql);
-		if(count($this->conditionals) > 0) {
+		if($this->conditionInstanceCount > 0) {
 			$this->conditionalWhere = $groupSql;
 			$sql .= $groupSql;
 		}
@@ -568,7 +613,9 @@ class QueryGenerator {
 			}
 			
 			if(trim($value) == '' && ($operator == 's' || $operator == 'ew' || $operator == 'c')
-					&& $this->isStringType($field->getFieldDataType())) {
+					&& ($this->isStringType($field->getFieldDataType()) ||
+					$field->getFieldDataType() == 'picklist' ||
+					$field->getFieldDataType() == 'multipicklist')) {
 				$sql[] = "LIKE ''";
 				continue;
 			}
@@ -662,12 +709,19 @@ class QueryGenerator {
 
 	public function addCondition($fieldname,$value,$operator,$glue= null,$newGroup = false,
 			$newGroupType = null) {
-		$conditionNumber = count($this->conditionals);
+		$conditionNumber = $this->conditionInstanceCount++;
 		$this->groupInfo .= "$conditionNumber ";
 		$this->whereFields[] = $fieldname;
 		$this->reset();
-		$this->conditionals[] = $this->getConditionalArray($fieldname,
+		$this->conditionals[$conditionNumber] = $this->getConditionalArray($fieldname,
 				$value, $operator);
+	}
+
+	public function addRelatedModuleCondition($relatedModule,$column, $value, $SQLOperator) {
+		$conditionNumber = $this->conditionInstanceCount++;
+		$this->groupInfo .= "$conditionNumber ";
+		$this->manyToManyRelatedModuleConditions[$conditionNumber] = array('relatedModule'=>
+			$relatedModule,'column'=>$column,'value'=>$value,'SQLOperator'=>$SQLOperator);
 	}
 
 	private function getConditionalArray($fieldname,$value,$operator) {
@@ -698,7 +752,7 @@ class QueryGenerator {
 			} else {
 				$matchType = self::$OR;
 			}
-			if(count($this->conditionals) > 0) {
+			if($this->conditionInstanceCount > 0) {
 				$this->startGroup(self::$AND);
 			} else {
 				$this->startGroup('');
@@ -720,28 +774,59 @@ class QueryGenerator {
 				}
 			}
 			$this->endGroup();
+		} elseif($input['type']=='dbrd') {
+			if($this->conditionInstanceCount > 0) {
+				$this->startGroup(self::$AND);
+			} else {
+				$this->startGroup('');
+			}
+			$allConditionsList = $this->getDashBoardConditionList();
+			$conditionList = $allConditionsList['conditions'];
+			$relatedConditionList = $allConditionsList['relatedConditions'];
+			$noOfConditions = count($conditionList);
+			$noOfRelatedConditions = count($relatedConditionList);
+			foreach ($conditionList as $index=>$conditionInfo) {
+				$this->addCondition($conditionInfo['fieldname'], $conditionInfo['value'], 
+						$conditionInfo['operator']);
+				if($index < $noOfConditions - 1 || $noOfRelatedConditions > 0) {
+					$this->addConditionGlue(self::$AND);
+				}
+			}
+			foreach ($relatedConditionList as $index => $conditionInfo) {
+				$this->addRelatedModuleCondition($conditionInfo['relatedModule'], 
+						$conditionInfo['conditionModule'], $conditionInfo['finalValue'],
+						$conditionInfo['SQLOperator']);
+				if($index < $noOfRelatedConditions - 1) {
+					$this->addConditionGlue(self::$AND);
+				}
+			}
+			$this->endGroup();
 		} else {
 			if(isset($input['search_field']) && $input['search_field'] !="") {
 				$fieldName=vtlib_purify($input['search_field']);
 			} else {
 				return ;
 			}
-			if(count($this->conditionals) > 0) {
+			if($this->conditionInstanceCount > 0) {
 				$this->startGroup(self::$AND);
 			} else {
 				$this->startGroup('');
 			}
+			$moduleFields = $this->meta->getModuleFields();
+			$field = $moduleFields[$fieldName];
+			$type = $field->getFieldDataType();
 			if(isset($input['search_text']) && $input['search_text']!="") {
 				// search other characters like "|, ?, ?" by jagi
 				$value = $input['search_text'];
 				$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$value)
 						: $value;
-				$value=trim($stringConvert);
+				if(!$this->isStringType($type)) {
+					$value=trim($stringConvert);
+				}
 			}
-			$moduleFields = $this->meta->getModuleFields();
-			$field = $moduleFields[$fieldName];
-			$type = $field->getFieldDataType();
-			if(trim(strtolower($value)) == 'null'){
+			if(!empty($input['operator'])) {
+				$operator = $input['operator'];
+			} elseif(trim(strtolower($value)) == 'null'){
 				$operator = 'e';
 			} else {
 				if(!$this->isNumericType($type) && !$this->isDateType($type)) {
@@ -755,5 +840,87 @@ class QueryGenerator {
 		}
 	}
 
+	public function getDashBoardConditionList() {
+		if(isset($_REQUEST['leadsource'])) {
+			$leadSource = $_REQUEST['leadsource'];
+		}
+		if(isset($_REQUEST['date_closed'])) {
+			$dateClosed = $_REQUEST['date_closed'];
+		}
+		if(isset($_REQUEST['sales_stage'])) {
+			$salesStage = $_REQUEST['sales_stage'];
+		}
+		if(isset($_REQUEST['closingdate_start'])) {
+			$dateClosedStart = $_REQUEST['closingdate_start'];
+		}
+		if(isset($_REQUEST['closingdate_end'])) {
+			$dateClosedEnd = $_REQUEST['closingdate_end'];
+		}
+		if(isset($_REQUEST['owner'])) {
+			$owner = vtlib_purify($_REQUEST['owner']);
+		}
+		if(isset($_REQUEST['campaignid'])) {
+			$campaignId = vtlib_purify($_REQUEST['campaignid']);
+		}
+		if(isset($_REQUEST['quoteid'])) {
+			$quoteId = vtlib_purify($_REQUEST['quoteid']);
+		}
+		if(isset($_REQUEST['invoiceid'])) {
+			$invoiceId = vtlib_purify($_REQUEST['invoiceid']);
+		}
+		if(isset($_REQUEST['purchaseorderid'])) {
+			$purchaseOrderId = vtlib_purify($_REQUEST['purchaseorderid']);
+		}
+
+		$conditionList = array();
+		if(!empty($dateClosedStart) && !empty($dateClosedEnd)) {
+
+			$conditionList[] = array('fieldname'=>'closingdate', 'value'=>$dateClosedStart,
+				'operator'=>'h');
+			$conditionList[] = array('fieldname'=>'closingdate', 'value'=>$dateClosedEnd,
+				'operator'=>'m');
+		}
+		if(!empty($salesStage)) {
+			if($salesStage == 'Other') {
+				$conditionList[] = array('fieldname'=>'sales_stage', 'value'=>'Closed Won',
+					'operator'=>'n');
+				$conditionList[] = array('fieldname'=>'sales_stage', 'value'=>'Closed Lost',
+					'operator'=>'n');
+			} else {
+				$conditionList[] = array('fieldname'=>'sales_stage', 'value'=> $salesStage,
+					'operator'=>'e');
+			}
+		}
+		if(!empty($leadSource)) {
+			$conditionList[] = array('fieldname'=>'leadsource', 'value'=>$leadSource,
+					'operator'=>'e');
+		}
+		if(!empty($dateClosed)) {
+			$conditionList[] = array('fieldname'=>'closingdate', 'value'=>$dateClosed,
+					'operator'=>'h');
+		}
+		if(!empty($owner)) {
+			$conditionList[] = array('fieldname'=>'assigned_user_id', 'value'=>$owner,
+					'operator'=>'e');
+		}
+		$relatedConditionList = array();
+		if(!empty($campaignId)) {
+			$relatedConditionList[] = array('relatedModule'=>'Campaigns','conditionModule'=>
+				'Campaigns','finalValue'=>$campaignId, 'SQLOperator'=>'=');
+		}
+		if(!empty($quoteId)) {
+			$relatedConditionList[] = array('relatedModule'=>'Quotes','conditionModule'=>
+				'Quotes','finalValue'=>$quoteId, 'SQLOperator'=>'=');
+		}
+		if(!empty($invoiceId)) {
+			$relatedConditionList[] = array('relatedModule'=>'Invoice','conditionModule'=>
+				'Invoice','finalValue'=>$invoiceId, 'SQLOperator'=>'=');
+		}
+		if(!empty($purchaseOrderId)) {
+			$relatedConditionList[] = array('relatedModule'=>'PurchaseOrder','conditionModule'=>
+				'PurchaseOrder','finalValue'=>$purchaseOrderId, 'SQLOperator'=>'=');
+		}
+		return array('conditions'=>$conditionList,'relatedConditions'=>$relatedConditionList);
+	}
 }
 ?>

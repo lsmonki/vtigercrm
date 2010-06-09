@@ -14,9 +14,6 @@ require_once('modules/Settings/MailScanner/core/MailBox.php');
 
 $scannerinfo = new Vtiger_MailScannerInfo(trim($_REQUEST['scannername']));
 
-var_dump($_REQUEST['scannername']);
-var_dump($scannerinfo);
-
 $scannerinfo->delete();
 
 header('Location: index.php?module=Settings&action=MailScanner&parenttab=Settings');

@@ -115,8 +115,8 @@ $hide_empty_folders = 'no';
 // Enabling Module Search
 $url_string = '';
 if($_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_POST);
-	$ustring = getSearchURL($_POST);
+	$queryGenerator->addUserSearchConditions($_REQUEST);
+	$ustring = getSearchURL($_REQUEST);
 	$url_string .= "&query=true$ustring";
 	$smarty->assign('SEARCH_URL', $url_string);
 }

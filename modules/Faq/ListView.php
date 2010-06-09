@@ -139,8 +139,8 @@ if ($viewid != "0") {
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$queryGenerator->addUserSearchConditions($_POST);
-	$ustring = getSearchURL($_POST);
+	$queryGenerator->addUserSearchConditions($_REQUEST);
+	$ustring = getSearchURL($_REQUEST);
 	// we have a query
 	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");

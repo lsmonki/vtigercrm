@@ -956,6 +956,51 @@ function getSearchURL($input) {
 		}
 		$urlString .= "&searchtype=advance&search_cnt=$noOfConditions&matchtype=".
 				vtlib_purify($input['matchtype']);
+	} elseif($input['type']=='dbrd'){
+		if(isset($input['leadsource'])) {
+			$leadSource = $input['leadsource'];
+			$urlString .= "&leadsource=".$leadSource;
+		}
+		if(isset($input['date_closed'])) {
+			$dateClosed = $input['date_closed'];
+			$urlString .= "&date_closed=".$dateClosed;
+		}
+		if(isset($input['sales_stage'])) {
+			$salesStage = $input['sales_stage'];
+			$urlString .= "&sales_stage=".$salesStage;
+		}
+		if(!empty($input['closingdate_start']) && !empty($input['closingdate_end'])) {
+			$dateClosedStart = $input['closingdate_start'];
+			$dateClosedEnd = $input['closingdate_end'];
+			$urlString .= "&closingdate_start=$dateClosedStart&closingdate_end=".$dateClosedEnd;
+		}
+		if(isset($input['owner'])) {
+			$owner = vtlib_purify($input['owner']);
+			$urlString .= "&owner=".$owner;
+		}
+		if(isset($input['campaignid'])) {
+			$campaignId = vtlib_purify($input['campaignid']);
+			$urlString .= "&campaignid=".$campaignId;
+		}
+		if(isset($input['quoteid'])) {
+			$quoteId = vtlib_purify($input['quoteid']);
+			$urlString .= "&quoteid=".$quoteId;
+		}
+		if(isset($input['invoiceid'])) {
+			$invoiceId = vtlib_purify($input['invoiceid']);
+			$urlString .= "&invoiceid=".$invoiceId;
+		}
+		if(isset($input['purchaseorderid'])) {
+			$purchaseOrderId = vtlib_purify($input['purchaseorderid']);
+			$urlString .= "&purchaseorderid=".$purchaseOrderId;
+		}
+
+		if(isset($input['from_homepagedb']) && $input['from_homepagedb'] != '') {
+			$url_string .= "&from_homepagedb=".vtlib_purify($input['from_homepagedb']);
+		}
+		if(isset($input['type']) && $input['type'] != '') {
+			$url_string .= "&type=".vtlib_purify($input['type']);
+		}
 	} else {
 		$value = $input['search_text'];
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$value) : 
@@ -966,8 +1011,11 @@ function getSearchURL($input) {
 		if(!empty($input['type'])) {
 			$urlString .= "&type=".vtlib_purify($input['type']);
 		}
+		if(!empty($input['operator'])) {
+			$urlString .= "&operator=".$input['operator'];
+		}
 	}
-	return $where;
+	return $urlString;
 }
 
 /**This function is returns the where conditions for dashboard and shows the records when clicked on dashboard graph

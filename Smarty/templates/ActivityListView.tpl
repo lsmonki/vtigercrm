@@ -238,7 +238,7 @@ function alphabetic(module,url,dataid)
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
-<div id="searchAcc" style="z-index:1;display:none;position:relative;">
+<div id="searchAcc" style="display: block;position:relative;">
 <form name="basicSearch" method="post" action="index.php" onSubmit="return callSearch('Basic');">
 <table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>

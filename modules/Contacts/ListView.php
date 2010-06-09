@@ -149,8 +149,8 @@ if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_POST);
-	$ustring = getSearchURL($_POST);
+	$queryGenerator->addUserSearchConditions($_REQUEST);
+	$ustring = getSearchURL($_REQUEST);
 	// we have a query
 	$url_string .="&query=true".$ustring;
 	$smarty->assign("SEARCH_URL",$url_string);

@@ -112,8 +112,10 @@ if ($viewid != "0") {
 // Enabling Module Search
 $url_string = '';
 if($_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_POST);
-	$ustring = getSearchURL($_POST);
+	// has to REQUEST as it can either $_GET for Dashboard and
+	// $_POST for search in listview.
+	$queryGenerator->addUserSearchConditions($_REQUEST);
+	$ustring = getSearchURL($_REQUEST);
 	$url_string .= "&query=true$ustring";
 	$smarty->assign('SEARCH_URL', $url_string);
 }

@@ -184,9 +184,9 @@ $graph_array = Array(
                             return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
                     }
                     //Sales by Account
-                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'account_id') == "0"))
+                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'related_to') == "0"))
                     {
-                    	 $graph_by="accountid";
+                    	 $graph_by="related_to";
                          $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
                          $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
@@ -196,22 +196,22 @@ $graph_array = Array(
 		    //Sales by User
 		    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyuser"))
 		    {
-			$graph_by="smownerid";
-			$graph_title=$mod_strings['salesbyuser'];
-			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
-			$query=getDashboardQuery($potential_query,$module);
-			return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+				$graph_by="smownerid";
+				$graph_title=$mod_strings['salesbyuser'];
+				$module="Potentials";
+				$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_groups.groupname is NULL)";
+				$query=getDashboardQuery($potential_query,$module);
+				return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
 		    }
 		    //Sales by team
 		    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyteam"))
 		    {
-			$graph_by="groupname";
-			$graph_title=$mod_strings['salesbyteam'];
-			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_groups.groupname != NULL || vtiger_groups.groupname != '')";
-			$query=getDashboardQuery($potential_query,$module);
-			return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+				$graph_by="smownerid";
+				$graph_title=$mod_strings['salesbyteam'];
+				$module="Potentials";
+				$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_groups.groupname != NULL || vtiger_groups.groupname != '')";
+				$query=getDashboardQuery($potential_query,$module);
+				return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
 		    }
                     //Charts for Account by Industry
                     elseif ($profileTabsPermission[getTabid("Accounts")] == 0 && ($type == "accountindustry") && (getFieldVisibilityPermission('Accounts',$user_id,'industry') == "0"))
@@ -380,14 +380,14 @@ $graph_array = Array(
 			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyuser'];
 			    $module="HelpDesk";
-			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			    $where=" and (vtiger_groups.groupname is NULL)";
 			    $query=getDashboardQuery($helpdesk_query,$module);
 			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
 		    }
 		    //Tickets by Team
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyteam"))
 		    {
-			    $graph_by="ticketgroupname";
+			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyteam'];
 			    $module="HelpDesk";
 			    $where=" and (vtiger_groups.groupname != NULL || vtiger_groups.groupname != ' ')";
@@ -417,7 +417,7 @@ $graph_array = Array(
 		    //Tickets by Account
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyaccount") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
 		    {
-			    $graph_by="accountid";
+			    $graph_by="parent_id";
 			    $graph_title=$mod_strings['ticketsbyaccount'];
 			    $module="HelpDesk";
 			    $where="";
@@ -427,7 +427,7 @@ $graph_array = Array(
 		    //Tickets by Contact
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbycontact") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
 			    {
-				    $graph_by="contactid";
+				    $graph_by="parent_id";
 				    $graph_title=$mod_strings['ticketsbycontact'];
 				    $module="HelpDesk";
 				    $where="";
@@ -492,9 +492,9 @@ $graph_array = Array(
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Account
-                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'account_id') == "0"))
+                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'related_to') == "0"))
                     {
-                    	 $graph_by="accountid";
+                    	 $graph_by="related_to";
                          $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
                          $where=" and vtiger_potential.sales_stage like 'Closed Won' ";
@@ -507,14 +507,14 @@ $graph_array = Array(
 			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_groups.groupname is NULL)";
 			$query=getDashboardQuery($potential_query,$module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Sales by team
 		    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyteam"))
 		    {
-			$graph_by="groupname";
+			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
 			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_groups.groupname != NULL || vtiger_groups.groupname != '')";
@@ -706,14 +706,14 @@ $graph_array = Array(
 			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyuser'];
 			    $module="HelpDesk";
-			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			    $where=" and (vtiger_groups.groupname is NULL)";
 			    $query=getDashboardQuery($helpdesk_query,$module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by Team
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyteam"))
 		    {
-			    $graph_by="ticketgroupname";
+			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyteam'];
 			    $module="HelpDesk";
 			    $where=" and (vtiger_groups.groupname != NULL || vtiger_groups.groupname != ' ')";
@@ -743,7 +743,7 @@ $graph_array = Array(
 		    //Tickets by Account
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyaccount") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
 		    {
-			    $graph_by="accountid";
+			    $graph_by="parent_id";
 			    $graph_title=$mod_strings['ticketsbyaccount'];
 			    $module="HelpDesk";
 			    $where="";
@@ -753,7 +753,7 @@ $graph_array = Array(
 		    //Tickets by Contact
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbycontact") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
 		    {
-				    $graph_by="contactid";
+				    $graph_by="parent_id";
 				    $graph_title=$mod_strings['ticketsbycontact'];
 				    $module="HelpDesk";
 				    $where="";

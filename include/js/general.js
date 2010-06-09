@@ -3737,11 +3737,13 @@ function ToolTipManager(){
 		
 		if(getVal  > document.body.clientWidth ){
 			leftSide = eval(leftSide) - eval(widthM);
-			tooltip.style.left = leftSide + 'px';
 		}else{
 			leftSide = eval(leftSide) + (eval(tooltipWidth)/2);
-			tooltip.style.left = leftSide + 'px';
 		}
+		if(leftSide < 0) {
+			leftSide = findPosX(obj) + tooltipWidth;
+		}
+		tooltip.style.left = leftSide + 'px';
 		
 		var heightTooltip = dimensions.y;
 		var bottomSide = eval(topSide) + eval(heightTooltip);
