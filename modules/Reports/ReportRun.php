@@ -2115,6 +2115,112 @@ class ReportRun extends CRMEntity
 
 				return $arr_val;
 			}
+		}elseif($outputformat == "TOTALXLS")
+		{
+				$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
+				$totalpdf=array();
+				$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+				if(isset($this->totallist))
+				{
+						if($sSQL != "")
+						{
+								$result = $adb->query($sSQL);
+								$y=$adb->num_fields($result);
+								$custom_field_values = $adb->fetch_array($result);
+
+								foreach($this->totallist as $key=>$value)
+								{
+										$fieldlist = explode(":",$key);
+										$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
+										if($adb->num_rows($mod_query)>0){
+												$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+												$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
+												$fieldlabel = str_replace("_", " ", $fieldlabel);
+												if($module_name){
+														$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
+												} else {
+													$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
+												}
+										}
+										$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
+										$totclmnflds[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $field;
+								}
+								for($i =0;$i<$y;$i++)
+								{
+										$fld = $adb->field_name($result, $i);
+										$keyhdr[$fld->name] = $custom_field_values[$i];
+								}
+
+								$rowcount=0;
+								foreach($totclmnflds as $key=>$value)
+								{
+										$col_header = trim(str_replace($modules," ",$value));
+										$fld_name_1 = $this->primarymodule . "_" . trim($value);
+										$fld_name_2 = $this->secondarymodule . "_" . trim($value);
+										if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+														|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+												$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
+												$convert_price = true;
+										} else{
+												$convert_price = false;
+										}
+										$value = trim($key);
+										$arraykey = $value.'_SUM';
+										if(isset($keyhdr[$arraykey]))
+										{
+												if($convert_price)
+														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+												else
+														$conv_value = $keyhdr[$arraykey];
+												$totalpdf[$rowcount][$arraykey] = $conv_value;
+										}else
+										{
+												$totalpdf[$rowcount][$arraykey] = '';
+										}
+
+										$arraykey = $value.'_AVG';
+										if(isset($keyhdr[$arraykey]))
+										{
+												if($convert_price)
+														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+												else
+														$conv_value = $keyhdr[$arraykey];
+												$totalpdf[$rowcount][$arraykey] = $conv_value;
+										}else
+										{
+												$totalpdf[$rowcount][$arraykey] = '';
+										}
+
+										$arraykey = $value.'_MIN';
+										if(isset($keyhdr[$arraykey]))
+										{
+												if($convert_price)
+														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+												else
+														$conv_value = $keyhdr[$arraykey];
+												$totalpdf[$rowcount][$arraykey] = $conv_value;
+										}else
+										{
+												$totalpdf[$rowcount][$arraykey] = '';
+										}
+
+										$arraykey = $value.'_MAX';
+										if(isset($keyhdr[$arraykey]))
+										{
+												if($convert_price)
+														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+												else
+														$conv_value = $keyhdr[$arraykey];
+												$totalpdf[$rowcount][$arraykey] = $conv_value;
+										}else
+										{
+												$totalpdf[$rowcount][$arraykey] = '';
+										}
+										$rowcount++;
+								}
+						}
+				}
+				return $totalpdf;
 		}elseif($outputformat == "TOTALHTML")
 		{
 			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
@@ -2460,12 +2566,31 @@ class ReportRun extends CRMEntity
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 
-					$coltotalhtml .= '<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center" class="printReport" ><tr><th>'.$mod_strings[Totals].'</th><th>'.$mod_strings[SUM].'</th><th>'.$mod_strings[AVG].'</th><th>'.$mod_strings[MIN].'</th><th>'.$mod_strings[MAX].'</th></tr>';
+					$coltotalhtml .= "<br /><table align='center' width='60%' cellpadding='3' cellspacing='0' border='1' class='printReport'><tr><td class='rptCellLabel'>".$mod_strings['Totals']."</td><td><b>".$mod_strings['SUM']."</b></td><td><b>".$mod_strings['AVG']."</b></td><td><b>".$mod_strings['MIN']."</b></td><td><b>".$mod_strings['MAX']."</b></td></tr>";
+
+					// Performation Optimization: If Direct output is desired
+					if($directOutput) {
+						echo $coltotalhtml;
+						$coltotalhtml = '';
+					}
+					// END
 
 					foreach($this->totallist as $key=>$value)
 					{
 						$fieldlist = explode(":",$key);
-						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = str_replace($escapedchars," ",$fieldlist[3]);
+						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
+						if($adb->num_rows($mod_query)>0){
+							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+							$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
+							$fieldlabel = str_replace("_", " ", $fieldlabel);
+							if($module_name){
+								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
+							} else {
+								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
+							}
+						}
+						$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
+						$totclmnflds[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $field;
 					}
 
 					for($i =0;$i<$y;$i++)
@@ -2476,77 +2601,90 @@ class ReportRun extends CRMEntity
 					}
 					foreach($totclmnflds as $key=>$value)
 					{
-						$coltotalhtml .= '<tr valign=top>'; 
+						$coltotalhtml .= '<tr class="rptGrpHead">';
 						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+						if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
 								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
-						} else {
+						} else{
 							$convert_price = false;
 						}
-						$coltotalhtml .= '<td>'. $col_header .'</td>';
-						
-						$arraykey = trim($value).'_SUM';
+						$coltotalhtml .= '<td class="rptData">'. $col_header .'</td>';
+						$value = trim($key);
+						$arraykey = $value.'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
 								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
+							else
 								$conv_value = $keyhdr[$arraykey];
-							$coltotalhtml .= '<td>'.$conv_value.'</td>';
+							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td>&nbsp;</td>';
+							$coltotalhtml .= "<td class='rptTotal'>&nbsp;</td>";
 						}
 
-						$arraykey = trim($value).'_AVG';
+						$arraykey = $value.'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
 								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
+							else
 								$conv_value = $keyhdr[$arraykey];
-							$coltotalhtml .= '<td>'.$conv_value.'</td>';
+							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td>&nbsp;</td>';
+							$coltotalhtml .= "<td class='rptTotal'>&nbsp;</td>";
 						}
 
-						$arraykey = trim($value).'_MIN';
+						$arraykey = $value.'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
 								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
+							else
 								$conv_value = $keyhdr[$arraykey];
-							$coltotalhtml .= '<td>'.$conv_value.'</td>';
+							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td>&nbsp;</td>';
+							$coltotalhtml .= "<td class='rptTotal'>&nbsp;</td>";
 						}
 
-						$arraykey = trim($value).'_MAX';
+						$arraykey = $value.'_MAX';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
 								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
+							else
 								$conv_value = $keyhdr[$arraykey];
-							$coltotalhtml .= '<td>'.$conv_value.'</td>';
+							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td>&nbsp;</td>';
+							$coltotalhtml .= "<td class='rptTotal'>&nbsp;</td>";
 						}
 
-						$coltotalhtml .= '<tr>';
+						$coltotalhtml .= '</tr>';
+
+						// Performation Optimization: If Direct output is desired
+						if($directOutput) {
+							echo $coltotalhtml;
+							$coltotalhtml = '';
+						}
+						// END
 					}
 
 					$coltotalhtml .= "</table>";
+					// Performation Optimization: If Direct output is desired
+					if($directOutput) {
+						echo $coltotalhtml;
+						$coltotalhtml = '';
+					}
+					// END
 				}
-			}			
+			}
 			return $coltotalhtml;
 		}
 	}
