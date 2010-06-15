@@ -126,7 +126,7 @@ function getMyFaq($maxval,$calCnt)
 		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
 	}
 	
-	$search_qry = "&query=true&Fields0=vtiger_faq.status&Condition0=isn&Srch_value0=Obsolete&searchtype=advance&search_cnt=1&matchtype=any";
+	$search_qry = "&query=true&Fields0=faqstatus&Condition0=n&Srch_value0=Obsolete&searchtype=advance&search_cnt=1&matchtype=any";
 	
 	$values=Array('ModuleName'=>'Faq','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	

@@ -127,7 +127,7 @@ function getTopQuotes($maxval,$calCnt)
 		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
 	}
 
-	$search_qry = "&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_quotes.validtill&Condition1=grteq&Srch_value1=".$date_var."&Fields2=vtiger_quotes.quotestage&Condition2=isn&Srch_value2=Rejected&Fields3=vtiger_quotes.quotestage&Condition3=isn&Srch_value3=Accepted&searchtype=advance&search_cnt=4&matchtype=all";
+	$search_qry = "&query=true&Fields0=assigned_user_id&Condition0=e&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=validtill&Condition1=h&Srch_value1=".$date_var."&Fields2=quotestage&Condition2=n&Srch_value2=Rejected&Fields3=quotestage&Condition3=n&Srch_value3=Accepted&searchtype=advance&search_cnt=4&matchtype=all";
 	
 	$values=Array('ModuleName'=>'Quotes','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 

@@ -124,7 +124,7 @@ function getTopPurchaseOrder($maxval,$calCnt)
 		$entries[$crmid] = Array($valuearray[1],$valuearray[2]);	
 	}
 	
-	$search_qry = "&smodule=PO&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_purchaseorder.duedate&Condition1=grteq&Srch_value1=".$date_var."&searchtype=advance&search_cnt=2&matchtype=all";
+	$search_qry = "&smodule=PO&query=true&Fields0=assigned_user_id&Condition0=e&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=duedate&Condition1=h&Srch_value1=".$date_var."&searchtype=advance&search_cnt=2&matchtype=all";
 	
 	$values=Array('ModuleName'=>'PurchaseOrder','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	

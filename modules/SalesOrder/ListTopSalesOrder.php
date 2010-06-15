@@ -123,7 +123,7 @@ function getTopSalesOrder($maxval,$calCnt)
 		$entries[$crmid] = Array($valuearray[1],$valuearray[2]);	
 	}
 	
-	$search_qry = "&query=true&Fields0=vtiger_salesorder.duedate&Condition0=grteq&Srch_value0=".$date_var."&Fields1=vtiger_crmentity.smownerid&Condition1=is&Srch_value1=".$current_user->column_fields['user_name']."&searchtype=advance&search_cnt=2&matchtype=all";
+	$search_qry = "&query=true&Fields0=duedate&Condition0=h&Srch_value0=".$date_var."&Fields1=assigned_user_id&Condition1=e&Srch_value1=".$current_user->column_fields['user_name']."&searchtype=advance&search_cnt=2&matchtype=all";
 	
 	$values=Array('ModuleName'=>'SalesOrder','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
