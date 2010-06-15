@@ -156,7 +156,7 @@ class Users {
 	var $record_id;
 	var $new_schema = true;
 
-	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'BLOWFISH'; //'MD5';
+	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'PHP53MD5'; //'BLOWFISH', /* before PHP5.3*/ MD5;
 
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
@@ -287,14 +287,17 @@ class Users {
 		// For more details on salt format look at: http://in.php.net/crypt
 		if($crypt_type == 'MD5') {
 			$salt = '$1$' . $salt . '$';
-		} else if($crypt_type == 'BLOWFISH') {
+		} elseif($crypt_type == 'BLOWFISH') {
 			$salt = '$2$' . $salt . '$';
+		} elseif($crypt_type == 'PHP5.3MD5') {
+			//only change salt for php 5.3 or higher version for backward
+			//compactibility.
+			//crypt API is lot stricter in taking the value for salt.
+			$salt = '$1$' . str_pad($salt, 9, '0');
 		}
 
-		$encrypted_password = crypt($user_password, $salt);	
-
+		$encrypted_password = crypt($user_password, $salt);
 		return $encrypted_password;
-
 	}
 
 	

@@ -36,7 +36,7 @@ if(isset($_SESSION['migration_info']['old_version'])) {
 
 include("modules/Migration/versions.php");
 $version_sorted = $versions;
-uasort($version_sorted,version_compare);
+uasort($version_sorted,'version_compare');
 $version_sorted = array_reverse($version_sorted,true);
 ?>
 

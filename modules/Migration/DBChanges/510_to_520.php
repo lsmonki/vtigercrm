@@ -418,7 +418,7 @@ function VT520_queryGeneratorMigration() {
 	}
 	if(!empty($fieldId)) {
 		$sql = "update vtiger_field set typeofdata = 'D~O' where fieldid=?;";
-		$params = array();
+		$params = array($fieldId);
 		$result = $db->pquery($sql, $params);
 	} else {
 		echo '
@@ -440,7 +440,7 @@ function VT520_queryGeneratorMigration() {
 	}
 	if(!empty($fieldId)) {
 		$sql = "update vtiger_field set typeofdata = 'I~O' where fieldid=?;";
-		$params = array();
+		$params = array($fieldId);
 		$result = $db->pquery($sql, $params);
 	} else {
 		echo '

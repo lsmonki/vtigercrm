@@ -214,5 +214,7 @@ $installationStrings = array(
 	'LBL_CURRENT_SOURCE_PATH_IS' => 'Your current source path is : ',
 	'LBL_DATABASE_EXTENSION' =>'Database Extension',
 	'LBL_DOCUMENTATION_LINK' => 'For more information, please refer <a href="http://wiki.vtiger.com" target="_blank">vtigerCRM Manual</a>',
+	'LBL_USER_PASSWORD_CHANGE_NOTE' => 'password of all users will be reset to user name. Kindly notify users and change passwords',
+	'LBL_PASSWORD_FIELD_CHANGE_FAILURE' => "changing user's password field failed"
 );
 ?>
