@@ -104,8 +104,8 @@ if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
 } else {
 	$list_query = $queryGenerator->getDefaultCustomViewQuery();

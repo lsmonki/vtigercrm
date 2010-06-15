@@ -162,8 +162,8 @@ $smarty->assign("SINGLE_MOD",'Account');
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();
@@ -262,7 +262,7 @@ $smarty->assign('recordListRange',$recordListRangeMsg);
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
 {
-	$ids[] = $row["crmid"];
+	$ids[] = $row[$focus->table_index];
 }
 if(isset($ids))
 {

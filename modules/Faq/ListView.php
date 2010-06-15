@@ -130,8 +130,8 @@ $other_text ['del'] = $app_strings[LBL_MASS_DELETE];
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();
@@ -143,11 +143,9 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$ustring = getSearchURL($_REQUEST);
 	// we have a query
 	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
 	$smarty->assign("SEARCH_URL",$url_string);
 }
 $list_query = $queryGenerator->getQuery();
-$where = $queryGenerator->getConditionalWhere();
 
 $view_script = "<script language='javascript'>
 function set_selected()

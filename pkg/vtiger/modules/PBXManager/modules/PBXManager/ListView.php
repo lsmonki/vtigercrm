@@ -76,8 +76,8 @@ $smarty->assign("VIEWID", $viewid);
 if($viewinfo['viewname'] == 'All') $smarty->assign('ALL', 'All');
 
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();
@@ -93,7 +93,6 @@ if($_REQUEST['query'] == 'true') {
 }
 
 $list_query = $queryGenerator->getQuery();
-$where = $queryGenerator->getConditionalWhere();
 // Sorting
 if(!empty($order_by)) {
 	if($order_by == 'smownerid') $list_query .= ' ORDER BY user_name '.$sorder;

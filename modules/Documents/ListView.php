@@ -102,8 +102,8 @@ $smarty->assign("CATEGORY",$category);
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();

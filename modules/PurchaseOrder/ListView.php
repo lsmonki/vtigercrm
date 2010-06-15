@@ -114,8 +114,8 @@ $smarty->assign("CUSTOMVIEW", $custom_view_strings);
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();
@@ -132,7 +132,6 @@ if($_REQUEST['query'] == 'true') {
 }
 
 $query = $queryGenerator->getQuery();
-$where = $queryGenerator->getConditionalWhere();
 
 if(isset($order_by) && $order_by != '')
 {
