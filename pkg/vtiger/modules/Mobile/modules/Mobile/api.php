@@ -29,6 +29,7 @@ class Mobile_API_Controller {
 		'listModuleRecords'       => array('file' => '/api/ws/ListModuleRecords.php', 'class' => 'Mobile_WS_ListModuleRecords'),
 		'fetchRecord'             => array('file' => '/api/ws/FetchRecord.php', 'class' => 'Mobile_WS_FetchRecord'),
 		'fetchRecordWithGrouping' => array('file' => '/api/ws/FetchRecordWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordWithGrouping'),
+		'fetchRecordsWithGrouping' => array('file' => '/api/ws/FetchRecordsWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordsWithGrouping'),
 		'describe'                => array('file' => '/api/ws/Describe.php', 'class' => 'Mobile_WS_Describe'),
 		'saveRecord'              => array('file' => '/api/ws/SaveRecord.php', 'class' => 'Mobile_WS_SaveRecord'),
 		'syncModuleRecords'       => array('file' => '/api/ws/SyncModuleRecords.php', 'class' => 'Mobile_WS_SyncModuleRecords'),

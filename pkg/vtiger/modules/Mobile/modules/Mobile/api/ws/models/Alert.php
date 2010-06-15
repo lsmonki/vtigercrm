@@ -26,7 +26,7 @@ abstract class Mobile_WS_AlertModel {
 		return array(
 			'alertid' => (string)$this->alertid,
 			'name' => $this->name,
-			'moduleName' => $this->moduleName,
+			'category' => $this->moduleName,
 			'refreshRate'=> $this->refreshRate,
 			'description'=> $this->description
 		);
