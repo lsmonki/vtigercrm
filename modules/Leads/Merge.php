@@ -132,6 +132,8 @@ $query = "select ".$selectcolumns." from vtiger_leaddetails
   inner join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid=vtiger_leaddetails.leadid 
   inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid=vtiger_leadsubdetails.leadsubscriptionid 
   inner join vtiger_leadscf on vtiger_leaddetails.leadid = vtiger_leadscf.leadid 
+  left join vtiger_campaignleadrel on vtiger_leaddetails.leadid = vtiger_campaignleadrel.leadid
+  left join vtiger_campaignrelstatus on vtiger_campaignrelstatus.campaignrelstatusid = vtiger_campaignleadrel.campaignrelstatusid
   LEFT JOIN vtiger_groups
   	ON vtiger_groups.groupid = vtiger_crmentity.smownerid
   left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
@@ -179,7 +181,7 @@ $csvdata = implode($mergevalue,"###");
 }else
 {
 	die("No vtiger_fields to do Merge");
-}	
+}
 // Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
 $datafilename = $randomfilename . "_data.csv";
 

@@ -97,9 +97,17 @@ abstract class WebserviceEntityOperation{
 	}
 	
 	function getPicklistDetails($webserviceField){
-		$hardCodedPickListNames = array("hdntaxtype");
-		$hardCodedPickListValues = array("hdntaxtype"=>array(array("label"=>"Individual","value"=>"individual"),
-														array("label"=>"Group","value"=>"group")));
+		$hardCodedPickListNames = array("hdntaxtype","email_flag");
+		$hardCodedPickListValues = array(
+				"hdntaxtype"=>array(
+					array("label"=>"Individual","value"=>"individual"),
+					array("label"=>"Group","value"=>"group")
+				),
+				"email_flag" => array(
+					array('label'=>'SAVED','value'=>'SAVED'),
+					array('label'=>'SENT','value' => 'SENT')
+				)
+			);
 		if(in_array(strtolower($webserviceField->getFieldName()),$hardCodedPickListNames)){
 			return $hardCodedPickListValues[strtolower($webserviceField->getFieldName())];
 		}
