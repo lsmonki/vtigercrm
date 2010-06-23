@@ -103,12 +103,14 @@ if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-global $current_user;
-$queryGenerator = new QueryGenerator($currentModule, $current_user);
-if ($viewid != "0") {
-	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
-} else {
-	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+if($viewid != "0")
+{
+	$listquery = getListQuery("Emails");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Emails");
+}
+else
+{
+	$list_query = getListQuery("Emails");
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -170,13 +172,10 @@ if($viewid !='')
 	$url_string .="&viewname=".$viewid;
 if(isset($_REQUEST['folderid']) && $_REQUEST['folderid'] != '')
 	$url_string .= "&folderid=".vtlib_purify($_REQUEST['folderid']);
-$controller = new ListViewController($adb, $current_user, $queryGenerator);
-$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
-		$order_by);
+$listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
-		$navigation_array);
+$listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 //--------------------------added to fix the ticket(4386)------------------------START
 foreach($listview_entries as $key=>$value)
 {

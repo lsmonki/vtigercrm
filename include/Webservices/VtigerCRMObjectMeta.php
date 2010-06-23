@@ -305,7 +305,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		if(!$this->meta){
 			$this->retrieveMeta();
 		}
-		parent::getEmailFields();
+		return parent::getEmailFields();
 	}
 	
 	function getFieldIdFromFieldName($fieldName){

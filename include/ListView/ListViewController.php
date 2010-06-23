@@ -419,10 +419,10 @@ class ListViewController {
 
 				$nameFields = $this->queryGenerator->getModuleNameFields($module);
 				$nameFieldList = explode(',',$nameFields);
-				if(in_array($fieldName, $nameFieldList)) {
+				if(in_array($fieldName, $nameFieldList) && $module != 'Emails') {
 					$value = "<a href='index.php?module=$module&action=DetailView&record=".
 					"$recordId' title='$module'>$value</a>";
-				} elseif($fieldName == $focus->list_link_field) {
+				} elseif($fieldName == $focus->list_link_field && $module != 'Emails') {
 					$value = "<a href='index.php?module=$module&action=DetailView&record=".
 					"$recordId' title='$module'>$value</a>";
 				}
