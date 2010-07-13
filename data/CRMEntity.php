@@ -2041,17 +2041,13 @@ $log->info("in getOldFileName  ".$notesid);
 			$condvalue = $tabname.".".$prifieldname;
 		}
 		$condition = " {$tmpname}.{$prifieldname} = {$condvalue} ";
-		$entity_check_query = " {$tmpname}.{$secfieldname} IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='{$secmodule}')";
 		$condition_secmod_table = " {$table_name}.{$column_name} = {$tmpname}.{$secfieldname} ";
 		if($tabname=='vtiger_crmentityrel'){
-			$condition = " ($condition OR {$tmpname}.{$secfieldname} = $condvalue)  and";
-			$entity_check_query = "({$entity_check_query} OR {$tmpname}.{$prifieldname} IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='{$secmodule}')) ";
-			$condition_secmod_table = "({$condition_secmod_table} OR {$table_name}.{$column_name} = {$tmpname}.{$prifieldname})";
-		} else {
-			$condition .= " and ";
+			$condition = " ($condition OR {$tmpname}.{$secfieldname} = $condvalue) ";
+			$condition_secmod_table = "({$condition_secmod_table})";
 		}
 
-		$query = " left join {$tabname} as {$tmpname} on {$condition}  {$entity_check_query}";
+		$query = " left join {$tabname} as {$tmpname} on {$condition}";
 		$query .= " LEFT JOIN {$table_name} ON {$condition_secmod_table}";
 		
 		return $query;

@@ -54,7 +54,7 @@ class Assets extends CRMEntity {
         'Product Name'=>'product',
 	);
 
-	// Make the field link to detail view 
+	// Make the field link to detail view
 	var $list_link_field= 'assetname';
 
 	// For Popup listview and UI type support
@@ -73,7 +73,7 @@ class Assets extends CRMEntity {
 		'Customer Name'=>'account',
 		'Product Name'=>'product'
 	);
-	
+
 	// For Popup window record selection
 	var $popup_fields = Array ('assetname','account','product');
 
@@ -89,7 +89,7 @@ class Assets extends CRMEntity {
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
 	var $mandatory_fields = Array('assetname', 'product');
-	
+
 	// Callback function list during Importing
 	var $special_functions = Array('set_import_assigned_user');
 
@@ -112,7 +112,7 @@ class Assets extends CRMEntity {
 
 		$sortorder = $this->default_sort_order;
 		if($_REQUEST['sorder']) $sortorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else if($_SESSION[$currentModule.'_Sort_Order']) 
+		else if($_SESSION[$currentModule.'_Sort_Order'])
 			$sortorder = $_SESSION[$currentModule.'_Sort_Order'];
 
 		return $sortorder;
@@ -120,12 +120,12 @@ class Assets extends CRMEntity {
 
 	function getOrderBy() {
 		global $currentModule;
-		
-		$use_default_order_by = '';		
+
+		$use_default_order_by = '';
 		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
 			$use_default_order_by = $this->default_order_by;
 		}
-		
+
 		$orderby = $use_default_order_by;
 		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
@@ -135,7 +135,7 @@ class Assets extends CRMEntity {
 
 	function save_module($module){
 		//module specific save
-	}	
+	}
 
 	/**
 	 * Return query to use based on given modulename, fieldname
@@ -161,25 +161,25 @@ class Assets extends CRMEntity {
 		// Consider custom table join as well.
 		if(!empty($this->customFieldTable)) {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
-				      " = $this->table_name.$this->table_index"; 
+				      " = $this->table_name.$this->table_index";
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		
-	
+
+
 		$linkedModulesQuery = $this->db->pquery("SELECT distinct fieldname, columnname, relmodule FROM vtiger_field" .
 				" INNER JOIN vtiger_fieldmodulerel ON vtiger_fieldmodulerel.fieldid = vtiger_field.fieldid" .
 				" WHERE uitype='10' AND vtiger_fieldmodulerel.module=?", array($module));
 		$linkedFieldsCount = $this->db->num_rows($linkedModulesQuery);
-		
+
 		for($i=0; $i<$linkedFieldsCount; $i++) {
 			$related_module = $this->db->query_result($linkedModulesQuery, $i, 'relmodule');
 			$fieldname = $this->db->query_result($linkedModulesQuery, $i, 'fieldname');
 			$columnname = $this->db->query_result($linkedModulesQuery, $i, 'columnname');
-			
+
 			$other = CRMEntity::getInstance($related_module);
 			vtlib_setup_modulevars($related_module, $other);
-			
+
 			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
 		}
 
@@ -199,31 +199,31 @@ class Assets extends CRMEntity {
 		$sec_query = '';
 		$tabid = getTabid($module);
 
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1
 			&& $defaultOrgSharingPermission[$tabid] == 3) {
 
-				$sec_query .= " AND (vtiger_crmentity.smownerid in($current_user->id) OR vtiger_crmentity.smownerid IN 
+				$sec_query .= " AND (vtiger_crmentity.smownerid in($current_user->id) OR vtiger_crmentity.smownerid IN
 					(
-						SELECT vtiger_user2role.userid FROM vtiger_user2role 
-						INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid 
-						INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid 
+						SELECT vtiger_user2role.userid FROM vtiger_user2role
+						INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid
+						INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid
 						WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%'
-					) 
-					OR vtiger_crmentity.smownerid IN 
+					)
+					OR vtiger_crmentity.smownerid IN
 					(
-						SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per 
+						SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per
 						WHERE userid=".$current_user->id." AND tabid=".$tabid."
-					) 
-					OR 
+					)
+					OR
 						(";
-		
+
 					// Build the query based on the group association of current user.
 					if(sizeof($current_user_groups) > 0) {
 						$sec_query .= " vtiger_groups.groupid IN (". implode(",", $current_user_groups) .") OR ";
 					}
-					$sec_query .= " vtiger_groups.groupid IN 
+					$sec_query .= " vtiger_groups.groupid IN
 						(
-							SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid 
+							SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid
 							FROM vtiger_tmp_read_group_sharing_per
 							WHERE userid=".$current_user->id." and tabid=".$tabid."
 						)";
@@ -240,20 +240,20 @@ class Assets extends CRMEntity {
 	{
 		global $current_user;
 		$thismodule = $_REQUEST['module'];
-		
+
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
 		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
-		
+
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_users.user_name AS user_name 
+		$query = "SELECT $fields_list, vtiger_users.user_name AS user_name
 					FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
 
 		if(!empty($this->customFieldTable)) {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
-				      " = $this->table_name.$this->table_index"; 
+				      " = $this->table_name.$this->table_index";
 		}
 
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
@@ -297,8 +297,8 @@ class Assets extends CRMEntity {
 			LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_users_last_import.assigned_user_id='$current_user->id'
 			AND vtiger_users_last_import.bean_type='$module'
-			AND vtiger_users_last_import.deleted=0"; 
-			
+			AND vtiger_users_last_import.deleted=0";
+
 		return $query;
 	}
 
@@ -309,16 +309,16 @@ class Assets extends CRMEntity {
 		global $adb;
 		$count = 0;
 		$query1 = "select bean_id from vtiger_users_last_import where assigned_user_id=? AND bean_type='$module' AND deleted=0";
-		$result1 = $adb->pquery($query1, array($user_id)) or die("Error getting last import for undo: ".mysql_error()); 
+		$result1 = $adb->pquery($query1, array($user_id)) or die("Error getting last import for undo: ".mysql_error());
 		while ( $row1 = $adb->fetchByAssoc($result1))
 		{
 			$query2 = "update vtiger_crmentity set deleted=1 where crmid=?";
-			$result2 = $adb->pquery($query2, array($row1['bean_id'])) or die("Error undoing last import: ".mysql_error()); 
-			$count++;			
+			$result2 = $adb->pquery($query2, array($row1['bean_id'])) or die("Error undoing last import: ".mysql_error());
+			$count++;
 		}
 		return $count;
 	}
-	
+
 	/**
 	 * Transform the value while exporting
 	 */
@@ -334,12 +334,12 @@ class Assets extends CRMEntity {
 	{
 		global $current_user, $adb;
 		$record_user = $this->column_fields["assigned_user_id"];
-		
+
 		if($record_user != $current_user->id){
 			$sqlresult = $adb->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($record_user, $record_user));
 			if($this->db->num_rows($sqlresult)!= 1) {
 				$this->column_fields["assigned_user_id"] = $current_user->id;
-			} else {			
+			} else {
 				$row = $adb->fetchByAssoc($sqlresult, -1, false);
 				if (isset($row['id']) && $row['id'] != -1) {
 					$this->column_fields["assigned_user_id"] = $row['id'];
@@ -349,8 +349,8 @@ class Assets extends CRMEntity {
 			}
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Function which will give the basic query to find duplicates
 	 */
 	function getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr,$select_cols='') {
@@ -366,14 +366,14 @@ class Assets extends CRMEntity {
 		// Consider custom table join as well.
 		if(isset($this->customFieldTable)) {
 			$from_clause .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
-				      " = $this->table_name.$this->table_index"; 
+				      " = $this->table_name.$this->table_index";
 		}
 		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		
+
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
 		$where_clause .= $this->getListViewSecurityParameter($module);
-					
+
 		if (isset($select_cols) && trim($select_cols) != '') {
 			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .
 				" INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t.".$this->table_index;
@@ -381,27 +381,27 @@ class Assets extends CRMEntity {
 			if(isset($this->customFieldTable)) {
 				$sub_query .= " INNER JOIN ".$this->customFieldTable[0]." tcf ON tcf.".$this->customFieldTable[1]." = t.$this->table_index";
 			}
-			$sub_query .= " WHERE crm.deleted=0 GROUP BY $select_cols HAVING COUNT(*)>1";	
+			$sub_query .= " WHERE crm.deleted=0 GROUP BY $select_cols HAVING COUNT(*)>1";
 		} else {
 			$sub_query = "SELECT $table_cols $from_clause $where_clause GROUP BY $table_cols HAVING COUNT(*)>1";
-		}	
-		
-		
+		}
+
+
 		$query = $select_clause . $from_clause .
 					" LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name .".".$this->table_index .
 					" INNER JOIN (" . $sub_query . ") AS temp ON ".get_on_clause($field_values,$ui_type_arr,$module) .
 					$where_clause .
 					" ORDER BY $table_cols,". $this->table_name .".".$this->table_index ." ASC";
-					
-		return $query;		
+
+		return $query;
 	}
-	/** 
+	/**
 	 * Handle saving related module information.
 	 * NOTE: This function has been added to CRMEntity (base class).
 	 * You can override the behavior by re-defining it here.
 	 */
 	// function save_related_module($module, $crmid, $with_module, $with_crmid) { }
-	
+
 	/**
 	 * Handle deleting related module information.
 	 * NOTE: This function has been added to CRMEntity (base class).
@@ -418,25 +418,25 @@ class Assets extends CRMEntity {
 
 
 	/*
-	 * Function to get the primary query part of a report 
+	 * Function to get the primary query part of a report
 	 * @param - $module primary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsQuery($module){
 		global $current_user;
 			$query = "from vtiger_assets
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_assets.assetsid 
-				left join vtiger_assetscf on vtiger_assets.assetsid = vtiger_assetscf.assetsid 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_assets.assetsid
+				left join vtiger_assetscf on vtiger_assets.assetsid = vtiger_assetscf.assetsid
 				left join vtiger_account as vtiger_accountAssets on vtiger_accountAssets.accountid=vtiger_assets.account
 				left join vtiger_products as vtiger_productAssets on vtiger_productAssets.productid=vtiger_assets.product
 				left join vtiger_invoice as vtiger_invoiceAssets on vtiger_invoiceAssets.invoiceid=vtiger_assets.invoiceid
 				left join vtiger_users as vtiger_usersAssets on vtiger_usersAssets.id=vtiger_crmentity.smownerid
 				left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid";
-			return $query;	
+			return $query;
 	}
-	
+
 	/*
-	 * Function to get the secondary query part of a report 
+	 * Function to get the secondary query part of a report
 	 * @param - $module primary module name
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
@@ -456,15 +456,18 @@ class Assets extends CRMEntity {
 	}
 
 	/*
-	 * Function to get the relation tables for related modules 
+	 * Function to get the relation tables for related modules
 	 * @param - $secmodule secondary module name
 	 * returns the array with table names and fieldnames storing relations between module and this module
 	 */
 	function setRelationTables($secmodule){
-		$rel_tables = array ();
+		$rel_tables = array (
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),
+				"vtiger_assets"=>"assetsid"),
+		);
 		return $rel_tables[$secmodule];
 	}
-	
+
 	// Function to unlink all the dependent entities of the given Entity by Id
 	function unlinkDependencies($module, $id) {
 		global $log;
@@ -475,13 +478,13 @@ class Assets extends CRMEntity {
 	* Invoked when special actions are performed on the module.
 	* @param String Module name
 	* @param String Event Type
-	*/	
+	*/
 	function vtlib_handler($moduleName, $eventType) {
-		require_once('include/utils/utils.php');			
+		require_once('include/utils/utils.php');
 		global $adb;
- 		
+
  		if($eventType == 'module.postinstall') {
-			//Add Assets Module to Customer Portal 
+			//Add Assets Module to Customer Portal
 			global $adb;
 			$visible=1;
 			$query = $adb->pquery("SELECT max(sequence) AS max_tabseq FROM vtiger_customerportal_tabs",array());
