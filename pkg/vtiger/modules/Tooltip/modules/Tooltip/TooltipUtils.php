@@ -142,8 +142,7 @@ function getToolTip($text,$format = "default"){
 	require_once('Smarty_setup.php');
 	$smarty = new vtigerCRM_Smarty;
 	$tip = "";
-	
-	if(trim($text) == ""){
+	if(trim(implode('', $text)) == ''){
 		return $tip;
 	}
 	
