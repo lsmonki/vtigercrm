@@ -32,7 +32,7 @@ $mod_strings = Array(
 'Shipping Tracking Number'=>'Shipping Tracking Number',
 'Tag Number'=>'Tag Number',
 'Notes'=>'Notes',
-'Invoice Name'=>' ',	//space included as label is picked from include/en_us.lang.php otherwise
+'Invoice Name'=>'Invoice Name',
 
 /*picklist values*/
 'In Service'=>'In Service',
