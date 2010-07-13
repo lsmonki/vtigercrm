@@ -1478,5 +1478,12 @@ $app_currency_strings = array(
 	'China, Yuan Renminbi' 	=> 'China, Yuan Renminbi',
 	'Afghanistan, Afghanis' => 'Afghanistan, Afghanis',
 	'Cambodia, Riels' 		=> 'Cambodia, Riels',
+	'China, Yuan Renminbi' => 'China, Yuan Renminbi',
+	'Jordan, Dinar' => 'Jordan, Dinar',
+	'Kenya, Shilling' => 'Kenya, Shilling',
+	'MADAGASCAR, Malagasy Ariary' => 'MADAGASCAR, Malagasy Ariary',
+	'United Arab Emirates, Dirham' => 'United Arab Emirates, Dirham',
+	'United Republic OF Tanzania, Shilling' => 'United Republic OF Tanzania, Shilling',
+	'Zambia, Kwacha' => 'Zambia, Kwacha',
 );
 ?>
