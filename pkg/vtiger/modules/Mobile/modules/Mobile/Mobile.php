@@ -37,15 +37,46 @@ class Mobile {
 	}
 	
 	/**
+	 * Alert management
+	 */
+	static function alert_lookup($handlerPath, $handlerClass) {
+		global $adb;
+		$check = $adb->pquery("SELECT id FROM vtiger_mobile_alerts WHERE handler_path=? and handler_class=?", array($handlerPath, $handlerClass));
+		if ($adb->num_rows($check)) {
+			return $adb->query_result($check, 0, 'id');
+		}
+		return false;
+	}
+	static function alert_register($handlerPath, $handlerClass) {
+		global $adb;
+		if (self::alert_lookup($handlerPath, $handlerClass) === false) {
+			Vtiger_Utils::Log("Registered alert {$handlerClass} [$handlerPath]");
+			$adb->pquery("INSERT INTO vtiger_mobile_alerts (handler_path, handler_class, deleted) VALUES(?,?,?)", array($handlerPath, $handlerClass, 0));
+		}
+	}
+	static function alert_deregister($handlerPath, $handlerClass) {
+		global $adb;
+		Vtiger_Utils::Log("De-registered alert {$handlerClass} [$handlerPath]");
+		$adb->pquery("DELETE FROM vtiger_mobile_alerts WHERE handler_path=? AND handler_class=?", array($handlerPath, $handlerClass));
+	}
+	static function alert_markdeleted($handlerPath, $handlerClass, $flag) {
+		global $adb;
+		$adb->pquery("UPDATE vtiger_mobile_alerts SET deleted=? WHERE handler_path=? AND handler_class=?", array($flag, $handlerPath, $handlerClass));
+	}
+	
+	/**
 	 * Invoked when special actions are performed on the module.
 	 * @param String Module name
 	 * @param String Event Type (module.postinstall, module.disabled, module.enabled, module.preuninstall)
 	 */
 	function vtlib_handler($modulename, $event_type) {
 		
-		$registerWSAPI = false;
+		$registerWSAPI = false; 
+		$registerAlerts = false;
+		
 		if($event_type == 'module.postinstall') {
 			$registerWSAPI = true;
+			$registerAlerts= true;
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.
 		} else if($event_type == 'module.enabled') {
@@ -56,6 +87,15 @@ class Mobile {
 			// TODO Handle actions before this module is updated.
 		} else if($event_type == 'module.postupdate') {
 			$registerWSAPI = true;
+			$registerAlerts= true;
+		}
+		
+		// Register alerts
+		if ($registerAlerts) {
+			self::alert_register('modules/Mobile/api/ws/models/alerts/IdleTicketsOfMine.php', 'Mobile_WS_AlertModel_IdleTicketsOfMine');
+			self::alert_register('modules/Mobile/api/ws/models/alerts/NewTicketOfMine.php', 'Mobile_WS_AlertModel_NewTicketOfMine');
+			self::alert_register('modules/Mobile/api/ws/models/alerts/PendingTicketsOfMine.php', 'Mobile_WS_AlertModel_PendingTicketsOfMine');
+			self::alert_register('modules/Mobile/api/ws/models/alerts/PotentialsDueIn5Days.php', 'Mobile_WS_AlertModel_PotentialsDueIn5Days');
 		}
 		
 		// Register webservice API
@@ -116,7 +156,26 @@ class Mobile {
 				'name'       => 'mobile.syncModuleRecords',
 				'handler'    => 'mobile_ws_syncModuleRecords',
 				'parameters' => array( array( 'name' => 'module', 'type' => 'string' ),
-					array( 'name' => 'lastSyncTime', 'type' => 'string' ),
+					array( 'name' => 'syncToken', 'type' => 'string' ),
+					array( 'name' => 'page', 'type' => 'string' ),
+				)
+			);
+			
+			$operations[] = array (
+				'name'       => 'mobile.query',
+				'handler'    => 'mobile_ws_query',
+				'parameters' => array( array( 'name' => 'module', 'type' => 'string' ),
+					array( 'name' => 'query', 'type' => 'string' ),
+					array( 'name' => 'page', 'type' => 'string' ),
+				)
+			);
+			
+			$operations[] = array (
+				'name'       => 'mobile.querywithgrouping',
+				'handler'    => 'mobile_ws_queryWithGrouping',
+				'parameters' => array( array( 'name' => 'module', 'type' => 'string' ),
+					array( 'name' => 'query', 'type' => 'string' ),
+					array( 'name' => 'page', 'type' => 'string' ),
 				)
 			);
 			

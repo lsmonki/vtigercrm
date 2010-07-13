@@ -57,6 +57,13 @@ class Mobile_WS_SaveRecord extends Mobile_WS_FetchRecordWithGrouping {
 			if (isset($this->recordValues['id'])) {
 				$this->recordValues = vtws_update($this->recordValues, $current_user);
 			} else {
+				
+				// Set right target module name for Calendar/Event record
+				if ($module == 'Calendar') {
+					if (!empty($this->recordValues['eventstatus'])) {
+						$module = 'Events';
+					}
+				}
 				$this->recordValues = vtws_create($module, $this->recordValues, $current_user);
 			}
 			

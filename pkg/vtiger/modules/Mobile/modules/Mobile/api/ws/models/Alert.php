@@ -9,10 +9,18 @@
  ************************************************************************************/
 abstract class Mobile_WS_AlertModel {
 	
-	var $alertid, $name, $moduleName, $refreshRate, $description;
-	var $user;
+	var $alertid;    // Unique id refering the instance
+	var $name;       // Name of the alert - should be unique to make it easy on client side
+	var $moduleName; // If alert is targeting module record count, this should be set along with $recordsLinked 
+	var $refreshRate;// Recommended lookup rate in SECONDS
+	var $description;// Describe the purpose of alert to client
+	var $recordsLinked;// TRUE if message is based on records of module, FALSE otherwise
 	
-	function __construct() {}
+	protected $user;
+	
+	function __construct() {
+		$this->recordsLinked = true;
+	}
 	
 	function setUser($userInstance) {
 		$this->user = $userInstance;
@@ -23,12 +31,17 @@ abstract class Mobile_WS_AlertModel {
 	}
 	
 	function serializeToSend() {
+		$category = $this->moduleName;
+		if (empty($category)) {
+			$category = "General";
+		}
 		return array(
 			'alertid' => (string)$this->alertid,
 			'name' => $this->name,
-			'category' => $this->moduleName,
+			'category' => $category,
 			'refreshRate'=> $this->refreshRate,
-			'description'=> $this->description
+			'description'=> $this->description,
+			'recordsLinked'=> $this->recordsLinked
 		);
 	}
 	
@@ -57,20 +70,22 @@ abstract class Mobile_WS_AlertModel {
 	}
 	
 	static function models() {
+		global $adb;
+		
 		$models = array();
-
-		$models[] = new  Mobile_WS_AlertModel_NewTicketOfMine();
-		$models[] = new Mobile_WS_AlertModel_IdleTicketsOfMine();
-		$models[] = new Mobile_WS_AlertModel_PendingTicketsOfMine();
-		
-		$models[] = new Mobile_WS_AlertModel_PotentialsDueIn5Days();
-		
-		// Assign id for the models
-		$alertid = 1;
-		foreach($models as $model) {
-			$model->alertid = $alertid++;
+		$handlerResult = $adb->pquery("SELECT * FROM vtiger_mobile_alerts WHERE deleted = 0", array());
+		if ($adb->num_rows($handlerResult)) {
+			while ($handlerRow = $adb->fetch_array($handlerResult)) {
+				$handlerPath = $handlerRow['handler_path'];
+				if (file_exists($handlerPath)) {
+					checkFileAccess($handlerPath);
+					include_once $handlerPath;
+					$alertModel = new $handlerRow['handler_class'];
+					$alertModel->alertid = $handlerRow['id'];
+					$models[] = $alertModel; 
+				}
+			}
 		}
-		
 		return $models;
 	}
 	
@@ -80,96 +95,6 @@ abstract class Mobile_WS_AlertModel {
 			if ($model->alertid == $alertid) return $model;
 		}
 		return false;
-	}
-}
-
-/** Pending Ticket Alert */
-class Mobile_WS_AlertModel_PendingTicketsOfMine extends Mobile_WS_AlertModel {
-	function __construct() {
-		parent::__construct();
-		$this->name = 'Pending Ticket Alert';
-		$this->moduleName = 'HelpDesk';
-		$this->refreshRate= 1 * 60; // in minutes
-		$this->description='Alert sent when ticket assigned is not yet closed';
-	}
-	
-	function query() {
-		$sql = "SELECT crmid FROM vtiger_troubletickets INNER JOIN 
-				vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid 
-				WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.smownerid=? AND 
-				vtiger_troubletickets.status <> 'Closed'";
-		return $sql;
-	}
-	
-	function queryParameters() {
-		return array($this->getUser()->id);
-	}
-}
-
-/** Idle Ticket Alert */
-class Mobile_WS_AlertModel_IdleTicketsOfMine extends Mobile_WS_AlertModel_PendingTicketsOfMine {
-	function __construct() {
-		parent::__construct();
-		$this->name = 'Idle Ticket Alert';
-		$this->moduleName = 'HelpDesk';
-		$this->refreshRate= 1 * 60; // in minutes
-		$this->description='Alert sent when ticket has not been updated in 24 hours';
-	}
-	
-	function query() {
-		$sql = parent::query();
-		$sql .= " AND DATEDIFF(CURDATE(), vtiger_crmentity.modifiedtime) > 1";
-		return $sql;
-	}
-}
-
-/** New Ticket */
-class Mobile_WS_AlertModel_NewTicketOfMine extends Mobile_WS_AlertModel_PendingTicketsOfMine {
-	function __construct() {
-		parent::__construct();
-		$this->name = 'New Ticket Alert';
-		$this->moduleName = 'HelpDesk';
-		$this->refreshRate= 1 * 60; // in minutes
-		$this->description='Alert sent when a ticket is assigned to you';
-	}
-	
-	function query() {
-		$sql = parent::query();
-		$sql .= " ORDER BY crmid DESC LIMIT 1";
-		return $sql;
-	}
-	
-	function countQuery() {
-		return str_replace("ORDER BY crmid DESC", "", $this->query());
-	}
-	
-	function executeCount() {
-		global $adb;
-		$result = $adb->pquery($this->countQuery(), $this->queryParameters());
-		return $adb->num_rows($result);
-	}
-}
-
-/** Upcoming Opportunity */
-class Mobile_WS_AlertModel_PotentialsDueIn5Days extends Mobile_WS_AlertModel {
-	function __construct() {
-		parent::__construct();
-		$this->name = 'Upcoming Opportunity';
-		$this->moduleName = 'Potentials';
-		$this->refreshRate= 1 * 60; // in minutes
-		$this->description='Alert sent when Potential Close Date is due before 5 days or less';
-	}
-	
-	function query() {
-		$sql = Mobile_WS_Utils::getModuleListQuery('Potentials', 
-					"vtiger_potential.sales_stage not like 'Closed%' AND 
-					DATEDIFF(vtiger_potential.closingdate, CURDATE()) <= 5"
-				);
-		return preg_replace("/^SELECT count\(\*\) as count(.*)/i", "SELECT crmid $1", mkCountQuery($sql));
-	}
-	
-	function queryParameters() {
-		return array();
 	}
 }
 

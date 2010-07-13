@@ -59,11 +59,28 @@ function mobile_ws_saveRecord($module, $record, $values, $user) {
 	return Mobile_WS_API::process($request, $user, 'Mobile_WS_SaveRecord', 'ws/SaveRecord.php');
 }
 
-function mobile_ws_syncModuleRecords($module, $lastSyncTime, $user) {
+function mobile_ws_syncModuleRecords($module, $syncToken, $page, $user) {
 	$request = new Mobile_API_Request();
 	$request->set('module', $module);
-	$request->set('lastSyncTime', $lastSyncTime);
+	$request->set('syncToken', $syncToken);
+	$request->set('page', $page);
 	return Mobile_WS_API::process($request, $user, 'Mobile_WS_SyncModuleRecords', 'ws/SyncModuleRecords.php');
+}
+
+function mobile_ws_query($module, $query, $page, $user) {
+	$request = new Mobile_API_Request();
+	$request->set('module', $module);
+	$request->set('query', $query);
+	$request->set('page', $page);
+	return Mobile_WS_API::process($request, $user, 'Mobile_WS_Query', 'ws/Query.php');
+}
+
+function mobile_ws_queryWithGrouping($module, $query, $page, $user) {
+	$request = new Mobile_API_Request();
+	$request->set('module', $module);
+	$request->set('query', $query);
+	$request->set('page', $page);
+	return Mobile_WS_API::process($request, $user, 'Mobile_WS_QueryWithGrouping', 'ws/QueryWithGrouping.php');
 }
 /**********************************************************************/
 

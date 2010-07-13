@@ -7,20 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-include_once 'include/Webservices/DescribeObject.php';
 
-class Mobile_WS_Describe extends Mobile_WS_Controller {
-	
-	function process(Mobile_API_Request $request) {
-		$current_user = $this->getActiveUser();
-		
-		$module = $request->get('module');
-		$describeInfo = vtws_describe($module, $current_user);
-		Mobile_WS_Utils::fixDescribeFieldInfo($module, $describeInfo);
-		
-		$response = new Mobile_API_Response();
-		$response->setResult(array('describe' => $describeInfo));
-		
-		return $response;
-	}
+function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='') {
+	return array( 'query' => $query );
 }

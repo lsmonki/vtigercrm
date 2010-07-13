@@ -43,7 +43,7 @@ class Mobile_WS_FetchRecord extends Mobile_WS_Controller {
 		return $response;
 	}
 	
-	function resolveRecordValues(&$record, $user) {
+	function resolveRecordValues(&$record, $user, $ignoreUnsetFields=false) {
 		if(empty($record)) return $record;
 		
 		$fieldnamesToResolve = Mobile_WS_Utils::detectFieldnamesToResolve(
@@ -51,9 +51,11 @@ class Mobile_WS_FetchRecord extends Mobile_WS_Controller {
 		
 		if(!empty($fieldnamesToResolve)) {
 			foreach($fieldnamesToResolve as $resolveFieldname) {
-				$fieldvalueid = $record[$resolveFieldname];
-				$fieldvalue = $this->fetchRecordLabelForId($fieldvalueid, $user);
-				$record[$resolveFieldname] = array('value' => $fieldvalueid, 'label'=>$fieldvalue);
+				if ($ignoreUnsetFields === false || isset($record[$resolveFieldname])) {
+					$fieldvalueid = $record[$resolveFieldname];
+					$fieldvalue = $this->fetchRecordLabelForId($fieldvalueid, $user);
+					$record[$resolveFieldname] = array('value' => $fieldvalueid, 'label'=>$fieldvalue);
+				}
 			}
 		}
 	}

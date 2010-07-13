@@ -26,7 +26,6 @@ class Mobile_WS_LoginAndFetchModules extends Mobile_WS_Login {
 		
 		// Disallow modules
 		unset($modulewsids['Users']);
-		unset($modulewsids['PBXManager']);
 		
 		// Calendar & Events module will be merged
 		unset($modulewsids['Events']);

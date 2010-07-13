@@ -25,6 +25,17 @@ class Mobile_WS_Utils {
 		}
 	}*/
 	
+	static function getVtigerVersion() {
+		global $vtiger_current_version;
+		return $vtiger_current_version;
+	}
+	
+	static function getVersion() {
+		global $adb;
+		$versionResult = $adb->pquery("SELECT version FROM vtiger_tab WHERE name='Mobile'", array());
+		return $adb->query_result($versionResult, 0, 'version');
+	}
+	
 	static function array_replace($search, $replace, $array) {
 		$index = array_search($search, $array);
 		if($index !== false) {
@@ -38,13 +49,18 @@ class Mobile_WS_Utils {
 		return $module->create_list_query('', $where);
 	}
 	
+	static $moduleWSIdCache = array();
+	
 	static function getEntityModuleWSId($moduleName) {
-		global $adb;
-		$result = $adb->pquery("SELECT id FROM vtiger_ws_entity WHERE name=?", array($moduleName));
-		if ($result && $adb->num_rows($result)) {
-			return $adb->query_result($result, 0, 'id');
+		
+		if (!isset(self::$moduleWSIdCache[$moduleName])) {
+			global $adb;
+			$result = $adb->pquery("SELECT id FROM vtiger_ws_entity WHERE name=?", array($moduleName));
+			if ($result && $adb->num_rows($result)) {
+				self::$moduleWSIdCache[$moduleName] = $adb->query_result($result, 0, 'id');
+			}
 		}
-		return false;
+		return self::$moduleWSIdCache[$moduleName];
 	}
 	
 	static function getEntityModuleWSIds($ignoreNonModule = true) {
@@ -156,7 +172,7 @@ class Mobile_WS_Utils {
 			$fieldgroups[$blocklabel][$resultrow['fieldname']] = 
 				array(
 					'label' => getTranslatedString($resultrow['fieldlabel'], $module),
-					'uitype'=> $resultrow['uitype']
+					'uitype'=> self::fixUIType($module, $resultrow['fieldname'], $resultrow['uitype'])
 				);
 		}
 		
@@ -164,5 +180,126 @@ class Mobile_WS_Utils {
 		self::$gatherModuleFieldGroupInfoCache[$module] = $fieldgroups;
 		
 		return $fieldgroups;
+	}
+	
+	static function documentFoldersInfo() {
+		global $adb;
+		$folders = $adb->pquery("SELECT folderid, foldername FROM vtiger_attachmentsfolder", array());
+		$folderOptions = array();
+		while( $folderrow = $adb->fetch_array($folders) ) {
+			$folderwsid = sprintf("%sx%s", self::getEntityModuleWSId('DocumentFolders'), $folderrow['folderid']);
+			$folderOptions[] = array( 'value' => $folderwsid, 'label' => $folderrow['foldername'] );
+		} 
+		return $folderOptions;
+	}
+	
+	static function salutationValues() {
+		$values = vtlib_getPicklistValues('salutationtype');
+		$options = array();
+		foreach($values as $value) {
+			$options[] = array( 'value' => $value, 'label' => $value);
+		}
+		return $options;
+	}
+	
+	static function fixUIType($module, $fieldname, $uitype) {
+		if ($module == 'Contacts' || $module == 'Leads') {
+			if ($fieldname == 'salutationtype') {
+				return 16;
+			}
+		}
+		else if ($module == 'Calendar' || $module == 'Events') {
+			if ($fieldname == 'time_start' || $fieldname == 'time_end') {
+				// Special type for mandatory time type (not defined in product)
+				return 252;
+			}
+		}
+		return $uitype;
+	}
+	
+	static function fixDescribeFieldInfo($module, &$describeInfo) {
+		
+		if ($module == 'Leads' || $module == 'Contacts') {
+			foreach($describeInfo['fields'] as $index => $fieldInfo) {
+				if ($fieldInfo['name'] == 'salutationtype') {
+					$picklistValues = self::salutationValues();
+					$fieldInfo['uitype'] = self::fixUIType($module, $fieldInfo['name'], $fieldInfo['uitype']) ;
+					$fieldInfo['type']['name'] = 'picklist';
+					$fieldInfo['type']['picklistValues'] = $picklistValues;
+					//$fieldInfo['type']['defaultValue'] = $picklistValues[0];
+					
+					$describeInfo['fields'][$index] = $fieldInfo;
+				}
+			}
+		}		
+		else if ($module == 'Documents') {
+			foreach($describeInfo['fields'] as $index => $fieldInfo) {
+				if ($fieldInfo['name'] == 'folderid') {
+					$picklistValues = self::documentFoldersInfo();
+					$fieldInfo['type']['picklistValues'] = $picklistValues;
+					//$fieldInfo['type']['defaultValue'] = $picklistValues[0];
+					
+					$describeInfo['fields'][$index] = $fieldInfo;
+				}
+			}
+		} 
+		else if($module == 'Calendar' || $module == 'Events') {
+			foreach($describeInfo['fields'] as $index => $fieldInfo) {
+				$fieldInfo['uitype'] = self::fixUIType($module, $fieldInfo['name'], $fieldInfo['uitype']); 
+				$describeInfo['fields'][$index] = $fieldInfo;
+			}
+		}
+	}
+	
+	static function getRelatedFunctionHandler($sourceModule, $targetModule) {
+		global $adb;
+		$relationResult = $adb->pquery("SELECT name FROM vtiger_relatedlists WHERE tabid=? and related_tabid=? and presence=0", array(getTabid($sourceModule), getTabid($targetModule)));
+		$functionName = false;
+		if ($adb->num_rows($relationResult)) $functionName = $adb->query_result($relationResult, 0, 'name');
+		return $functionName;
+	}
+	
+	/**
+	 * Security restriction (sharing privilege) query part
+	 */
+	static function querySecurityFromSuffix($module, $current_user) {
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+
+		$querySuffix = '';
+		$tabid = getTabid($module);
+
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 
+			&& $defaultOrgSharingPermission[$tabid] == 3) {
+
+				$querySuffix .= " AND (vtiger_crmentity.smownerid in($current_user->id) OR vtiger_crmentity.smownerid IN 
+					(
+						SELECT vtiger_user2role.userid FROM vtiger_user2role 
+						INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid 
+						INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid 
+						WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%'
+					) 
+					OR vtiger_crmentity.smownerid IN 
+					(
+						SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per 
+						WHERE userid=".$current_user->id." AND tabid=".$tabid."
+					) 
+					OR 
+						(";
+		
+					// Build the query based on the group association of current user.
+					if(sizeof($current_user_groups) > 0) {
+						$querySuffix .= " vtiger_groups.groupid IN (". implode(",", $current_user_groups) .") OR ";
+					}
+					$querySuffix .= " vtiger_groups.groupid IN 
+						(
+							SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid 
+							FROM vtiger_tmp_read_group_sharing_per
+							WHERE userid=".$current_user->id." and tabid=".$tabid."
+						)";
+				$querySuffix .= ")
+				)";
+		}
+		return $querySuffix;
 	}
 }

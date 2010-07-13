@@ -11,6 +11,10 @@ header('Content-Type: text/json');
 
 chdir (dirname(__FILE__) . '/../../');
 
+// Define GetRelatedList API before including the core files
+// NOTE: Make sure GetRelatedList function_exists check is made in include/utils/RelatedListView.php
+include_once dirname(__FILE__) . '/api/Relation.php';
+
 include_once dirname(__FILE__) . '/api/Request.php';
 include_once dirname(__FILE__) . '/api/Response.php';
 include_once dirname(__FILE__) . '/api/Session.php';
@@ -33,6 +37,14 @@ class Mobile_API_Controller {
 		'describe'                => array('file' => '/api/ws/Describe.php', 'class' => 'Mobile_WS_Describe'),
 		'saveRecord'              => array('file' => '/api/ws/SaveRecord.php', 'class' => 'Mobile_WS_SaveRecord'),
 		'syncModuleRecords'       => array('file' => '/api/ws/SyncModuleRecords.php', 'class' => 'Mobile_WS_SyncModuleRecords'),
+		
+		'query'                   => array('file' => '/api/ws/Query.php', 'class' => 'Mobile_WS_Query'),
+		'queryWithGrouping'       => array('file' => '/api/ws/QueryWithGrouping.php', 'class' => 'Mobile_WS_QueryWithGrouping'),
+	
+		'relatedRecordsWithGrouping' => array('file' => '/api/ws/RelatedRecordsWithGrouping.php', 'class' => 'Mobile_WS_RelatedRecordsWithGrouping'),
+		'deleteRecords'              => array('file' => '/api/ws/DeleteRecords.php', 'class' => 'Mobile_WS_DeleteRecords'),
+	
+		'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),
 	);
 	
 	static function process(Mobile_API_Request $request) {

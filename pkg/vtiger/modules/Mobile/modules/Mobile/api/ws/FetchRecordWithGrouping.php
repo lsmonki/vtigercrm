@@ -44,7 +44,7 @@ class Mobile_WS_FetchRecordWithGrouping extends Mobile_WS_FetchRecord {
 		$labelFields = $describeInfo['labelFields'];
 		switch($module) {
 			case 'HelpDesk': $labelFields = 'ticket_title'; break;
-			case 'Document': $labelFields = 'notes_title'; break;
+			case 'Documents': $labelFields = 'notes_title'; break;
 		}
 		return explode(',', $labelFields);
 	}
@@ -63,7 +63,8 @@ class Mobile_WS_FetchRecordWithGrouping extends Mobile_WS_FetchRecord {
 			
 			$module = $this->detectModuleName($recordid);
 		 	$describeInfo = vtws_describe($module, $current_user);
-		 	
+		 	Mobile_WS_Utils::fixDescribeFieldInfo($module, $describeInfo);
+
 		 	$this->cacheDescribeInfo($describeInfo);
 
 			$templateRecord = array();

@@ -27,6 +27,10 @@ class Mobile_API_Request {
 		return $defvalue;
 	}
 	
+	function has($key) {
+		return isset($this->valuemap[$key]);
+	}
+	
 	function getRaw($key, $defvalue = '') {
 		if (isset($this->rawvaluemap[$key])) {
 			return $this->rawvaluemap[$key];
