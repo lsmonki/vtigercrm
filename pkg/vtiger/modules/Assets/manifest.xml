@@ -444,5 +444,16 @@
 </actions>
 <relatedmodule>HelpDesk</relatedmodule>
 </relatedlist>
+<relatedlist>
+<function>get_attachments</function>
+<label>Documents</label>
+<sequence>11</sequence>
+<presence>0</presence>
+<actions>
+<action>ADD</action>
+<action>SELECT</action>
+</actions>
+<relatedmodule>Documents</relatedmodule>
+</relatedlist>
 </relatedlists>
 </module>
