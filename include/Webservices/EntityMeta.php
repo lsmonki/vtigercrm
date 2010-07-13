@@ -147,8 +147,10 @@ abstract class EntityMeta{
 		$mandatoryFields = $this->getMandatoryFields();
 		$hasMandatory = true;
 		foreach($mandatoryFields as $ind=>$field){
-			if( !isset($row[$field])){
-				throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,"$field does not have a value");
+			// dont use empty API as '0'(zero) is a valid value.
+			if( !isset($row[$field]) || $row[$field] === "" || $row[$field] === null ){
+				throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,
+						"$field does not have a value");
 			}
 		}
 		return $hasMandatory;
