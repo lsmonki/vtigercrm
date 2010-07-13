@@ -53,13 +53,10 @@ function vtlib_getModuleNameById($tabid) {
  */
 function vtlib_getModuleNameForSharing() {
 	global $adb;
-	$vtlib_sqlres = $adb->query("SELECT * from vtiger_tab WHERE ownedby = 0 
-		AND name NOT IN('Calendar','Leads','Accounts','Contacts','Potentials',
-			'HelpDesk','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Events')");
-	$vtlib_numrows = $adb->num_rows($vtlib_sqlres);
-	$modules = Array();
-	for($idx = 0; $idx < $vtlib_numrows; ++$idx) $modules[] = $adb->query_result($vtlib_sqlres, 0, 'name');
-	return $modules;
+	$std_modules = array('Calendar','Leads','Accounts','Contacts','Potentials',
+			'HelpDesk','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Events');
+	$modulesList = getSharingModuleList($std_modules);
+	return $modulesList;
 }
 
 /**
