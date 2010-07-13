@@ -58,14 +58,8 @@ foreach($focus->column_fields as $fieldname => $val)
  $focus->column_fields["description"] =  $_REQUEST["task_description"];
  if(isset($_REQUEST['task_sendnotification']) && $_REQUEST['task_sendnotification'] != null)
  	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
+ $focus->save($tab_type);
 
- 	$focus->save($tab_type);
-	if($_REQUEST["task_sendnotification"]=='on')
-        {
-		$mail_contents = getRequestedToData();
-		getEventNotification($_REQUEST['activity_mode'],$_REQUEST['task_subject'],$mail_contents);
-
-        }
 function getRequestedToData()
 {
 	$mail_data = Array();
