@@ -349,6 +349,9 @@ class ReportRun extends CRMEntity
 		        }
 				
 			}
+			if($fieldname == 'creator'){
+				$querycolumn .= "case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then vtiger_usersModComments.user_name end as 'ModComments_Creator'";
+			}
 		}
 		return $querycolumn;
 	}

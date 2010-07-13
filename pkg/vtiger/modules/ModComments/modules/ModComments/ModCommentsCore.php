@@ -325,6 +325,22 @@ class ModCommentsCore extends CRMEntity {
 		return $query;
 	}
 
+	function generateReportsQuery($module){
+		global $current_user;
+		$query = "from vtiger_modcomments inner join vtiger_modcommentscf as vtiger_modcommentscf
+			on vtiger_modcommentscf.modcommentsid=vtiger_modcomments.modcommentsid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_modcomments.modcommentsid
+			left join vtiger_groups as vtiger_groupsModComments on vtiger_groupsModComments.groupid = vtiger_crmentity.smownerid
+			left join vtiger_users as vtiger_usersModComments on vtiger_usersModComments.id = vtiger_crmentity.smownerid
+			left join vtiger_crmentity as vtiger_crmentityRelModComments on vtiger_crmentityRelModComments.crmid = vtiger_modcomments.related_to
+			and vtiger_crmentityRelModComments.deleted=0
+			left join vtiger_leaddetails as vtiger_leaddetailsRelModComments on vtiger_leaddetailsRelModComments.leadid = vtiger_crmentityRelModComments.crmid
+			left join vtiger_contactdetails as vtiger_contactdetailsRelModComments on vtiger_contactdetailsRelModComments.contactid = vtiger_crmentityRelModComments.crmid
+			left join vtiger_account as vtiger_accountRelModComments on vtiger_accountRelModComments.accountid = vtiger_crmentityRelModComments.crmid
+			left join vtiger_projecttask as vtiger_projecttaskRelModComments on vtiger_projecttaskRelModComments.projecttaskid = vtiger_crmentityRelModComments.crmid
+			left join vtiger_project as vtiger_projectRelModComments on vtiger_projectRelModComments.projectid = vtiger_crmentityRelModComments.crmid";
+		return $query;
+	}
 	/**
 	 * Delete the last imported records.
 	 */
