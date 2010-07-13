@@ -89,8 +89,9 @@ abstract class WebserviceEntityOperation{
 			===0 || strcasecmp($webserviceField->getFieldDataType(),"id")===0){
 			return false;
 		}
-		//uitype 70 is vtiger generated fields, such as (of vtiger_crmentity table) createdtime and modified time fields.
-		if($webserviceField->getUIType() ==  70){
+		//uitype 70 is vtiger generated fields, such as (of vtiger_crmentity table) createdtime
+		//and modified time fields.
+		if($webserviceField->getUIType() ==  70 || $webserviceField->getUIType() ==  4){
 			return false;
 		}
 		return true;
