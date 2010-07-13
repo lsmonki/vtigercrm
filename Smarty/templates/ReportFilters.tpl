@@ -14,7 +14,6 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
-<script src="include/js/json.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript">
     var advft_column_index_count = -1;

@@ -118,7 +118,8 @@ function getActivityEntries($open_activity_list){
 		}
 		$values = array('noofactivities'=>count($open_activity_list),'Header'=>$header,'Entries'=>$entries);
 	}else{
-		$values = array('Entries'=>$app_strings['LBL_NO_DATA']);
+		$values = array('noofactivities'=>count($open_activity_list), 'Entries'=>
+			'<div class="componentName">'.$app_strings['LBL_NO_DATA'].'</div>');
 	}
 	return $values;
 }

@@ -53,6 +53,7 @@ class QueryGenerator {
 	private $conditionalWhere;
 	public static $AND = 'AND';
 	public static $OR = 'OR';
+	private $customViewFields;
 	
 	public function __construct($module, $user) {
 		$db = PearDatabase::getInstance();
@@ -80,6 +81,7 @@ class QueryGenerator {
 		$this->groupInfo = '';
 		$this->manyToManyRelatedModuleConditions = array();
 		$this->conditionInstanceCount = 0;
+		$this->customViewFields = array();
 	}
 
 	/**
@@ -107,6 +109,14 @@ class QueryGenerator {
 		$this->whereClause = null;
 		$this->columns = null;
 		$this->query = null;
+	}
+
+	public function setFields($fields) {
+		$this->fields = $fields;
+	}
+
+	public function getCustomViewFields() {
+		return $this->customViewFields;
 	}
 
 	public function getFields() {
@@ -160,8 +170,10 @@ class QueryGenerator {
 			$details = explode(':', $customViewColumnInfo);
 			if(empty($details[2]) && $details[1] == 'crmid' && $details[0] == 'vtiger_crmentity') {
 				$name = 'id';
+				$this->customViewFields[] = $name;
 			} else {
 				$this->fields[] = $details[2];
+				$this->customViewFields[] = $details[2];
 			}
 		}
 
@@ -327,6 +339,10 @@ class QueryGenerator {
 				continue;
 			}
 			$field = $moduleFields[$fieldName];
+			if(empty($field)) {
+				// not accessible field.
+				continue;
+			}
 			$baseTable = $field->getTableName();
 			if($field->getFieldDataType() == 'reference') {
 				$moduleList = $this->referenceFieldInfoList[$fieldName];
@@ -465,10 +481,10 @@ class QueryGenerator {
 		$fieldSqlList = array();
 		foreach ($this->conditionals as $index=>$conditionInfo) {
 			$fieldName = $conditionInfo['name'];
-			if(empty($fieldName)) {
+			$field = $moduleFieldList[$fieldName];
+			if(empty($field)) {
 				continue;
 			}
-			$field = $moduleFieldList[$fieldName];
 			$fieldSql = '(';
 			$fieldGlue = '';
 			$valueSqlList = $this->getConditionValue($conditionInfo['value'],

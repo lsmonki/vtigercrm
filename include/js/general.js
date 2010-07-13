@@ -2952,7 +2952,7 @@ function ActivityReminderCallbackProcess(message) {
 	ActivityReminder_callback_win.id  = winuniqueid;
 	ActivityReminder_callback.appendChild(ActivityReminder_callback_win);
 	
-	ActivityReminder_callback_win.innerHTML = message; 
+	$(ActivityReminder_callback_win).update(message);
 	ActivityReminder_callback_win.style.height = "0px"; 
 	ActivityReminder_callback_win.style.display = ""; 
 	

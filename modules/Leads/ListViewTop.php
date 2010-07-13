@@ -69,7 +69,7 @@ function getNewLeads($maxval,$calCnt)
 
 	$list_query = 'select vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.leadid, vtiger_leaddetails.company 
 		from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid 
-		where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND 
+		where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadid > 0 AND 
 		vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") 
 		AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?';
 	

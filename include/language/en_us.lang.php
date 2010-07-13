@@ -1260,6 +1260,8 @@ $app_strings = array (
 'Service Contracts' => 'Service Contracts',
 'ServiceContracts' => 'ServiceContracts',
 'Services' => 'Services',
+	'LBL_REFRESH' => 'Refresh',
+	'LBL_Reminder' => 'Reminder',
 );
 
 $app_list_strings = array (

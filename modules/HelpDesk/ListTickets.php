@@ -28,7 +28,9 @@ function getMyTickets($maxval,$calCnt)
 		FROM vtiger_troubletickets 
 		INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
 		INNER JOIN vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-		where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed' ORDER BY createdtime DESC";
+		where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and ".
+		"vtiger_troubletickets.ticketid > 0 and vtiger_troubletickets.status <> 'Closed' ".
+		"AND vtiger_crmentity.setype='HelpDesk' ORDER BY createdtime DESC";
 
 	$search_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
 	

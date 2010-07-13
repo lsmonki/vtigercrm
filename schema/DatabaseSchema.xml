@@ -143,18 +143,16 @@
 		<index name="crmentity_smcreatorid_idx">
 			<col>smcreatorid</col>
 		</index>
-		<index name="crmentity_smownerid_idx">
-			<col>smownerid</col>
-		</index>
 		<index name="crmentity_modifiedby_idx">
 			<col>modifiedby</col>
 		</index>
 		<index name="crmentity_deleted_idx">
 			<col>deleted</col>
 		</index>
-		<index name="crmentity_smownerid_deleted_idx">
+		<index name="crm_ownerid_del_setype_idx">
 			<col>smownerid</col>
 			<col>deleted</col>
+			<col>setype</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -850,13 +848,14 @@
 			<default value="0" />
 		</field>
 
-		<index name="potential_accountid_idx">
-			<col>accountid</col>
-		</index>
-		<index name="potential_potentialid_idx">
-			<col>potentialid</col>
+		<index name="potential_relatedto_idx">
+			<col>related_to</col>
 		</index>
 		<index name="potentail_sales_stage_idx">
+			<col>sales_stage</col>
+		</index>
+		<index name="potentail_sales_stage_amount_idx">
+			<col>amount</col>
 			<col>sales_stage</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>

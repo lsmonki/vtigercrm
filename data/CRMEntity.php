@@ -1990,7 +1990,8 @@ $log->info("in getOldFileName  ".$notesid);
         {
               $sec_query .= " vtiger_groups.groupid in (". implode(",", $current_user_groups) .") or ";
         }
-        $sec_query .= " vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid."))) ";	
+        $sec_query .= " vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid."))) ";
+		return $sec_query;
 	}
 	
 	/*
@@ -2012,7 +2013,8 @@ $log->info("in getOldFileName  ".$notesid);
         {
               $sec_query .= " vtiger_groups$module.groupid in (". implode(",", $current_user_groups) .") or ";
         }
-        $sec_query .= " vtiger_groups$module.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid."))) ";	
+        $sec_query .= " vtiger_groups$module.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid."))) ";
+		return $sec_query;
 	}
 	
 	/*

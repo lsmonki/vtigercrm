@@ -35,5 +35,8 @@ $PERFORMANCE_CONFIG = Array(
 
 	// To control the Email Notifications being sent to the Owner
 	'NOTIFY_OWNER_EMAILS' => true,		//By default it is set to true, if it is set to false, then notifications will not be sent
+	// reduce number of ajax requests on home page, reduce this value if home page widget dont
+	// show value.
+	'HOME_PAGE_WIDGET_GROUP_SIZE' => 12,
 );
 ?>

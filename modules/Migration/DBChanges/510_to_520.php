@@ -551,6 +551,44 @@ $adb->pquery($sql,$params);
 // Correct the type
 ExecuteQuery("UPDATE vtiger_field SET typeofdata='V~O' WHERE typeofdata='V~0'");
 
+function VT520_manageIndexes() {
+	$db = PearDatabase::getInstance();
+	ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `vt_pot_sales_stage_amount_idx` ".
+			"(amount, sales_stage)");
+	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+			"'$db->dbName' AND table_name = 'vtiger_potential' AND index_name = ".
+			"'potential_potentialid_idx'",array());
+	$rowCount = $db->num_rows($result);
+	if($rowCount > 0) {
+		ExecuteQuery("ALTER TABLE vtiger_potential DROP INDEX `potential_potentialid_idx`");
+	}
+	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+			"'$db->dbName' AND table_name = 'vtiger_potential' AND index_name = ".
+			"'potential_accountid_idx'",array());
+	$rowCount = $db->num_rows($result);
+	if($rowCount > 0) {
+		ExecuteQuery("ALTER TABLE vtiger_potential DROP INDEX `potential_accountid_idx`");
+		ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `potential_relatedto_idx` ".
+			"(related_to)");
+	}
+	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+			"'$db->dbName' AND table_name = 'vtiger_crmentity' AND index_name = ".
+			"'crmentity_smownerid_idx'",array());
+	$rowCount = $db->num_rows($result);
+	if($rowCount > 0) {
+		ExecuteQuery("ALTER TABLE vtiger_crmentity DROP INDEX `crmentity_smownerid_idx`");
+	}
+	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+			"'$db->dbName' AND table_name = 'vtiger_crmentity' AND index_name = ".
+			"'crmentity_smownerid_deleted_idx'",array());
+	$rowCount = $db->num_rows($result);
+	if($rowCount > 0) {
+		ExecuteQuery("ALTER TABLE vtiger_crmentity DROP INDEX `crmentity_smownerid_deleted_idx`");
+	}
+	ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `crm_ownerid_del_setype_idx` ".
+		"(smownerid,deleted,setype)");
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 ExecuteQuery("DROP TABLE IF EXISTS vtiger_asteriskoutgoingcalls");

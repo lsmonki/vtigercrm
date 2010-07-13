@@ -32,6 +32,7 @@ class ListViewController {
 	private $user;
 	private $picklistValueMap;
 	private $picklistRoleMap;
+	private $headerSortingEnabled;
 	public function __construct($db, $user, $generator) {
 		$this->queryGenerator = $generator;
 		$this->db = $db;
@@ -41,6 +42,15 @@ class ListViewController {
 		$this->ownerNameList = array();
 		$this->picklistValueMap = array();
 		$this->picklistRoleMap = array();
+		$this->headerSortingEnabled = true;
+	}
+
+	public function isHeaderSortingEnabled() {
+		return $this->headerSortingEnabled;
+	}
+
+	public function setHeaderSorting($enabled) {
+		$this->headerSortingEnabled = $enabled;
 	}
 
 	public function setupAccessiblePicklistValueList($name) {
@@ -579,10 +589,14 @@ class ListViewController {
 						$temp_sorder.$sort_qry."\");' class='listFormHeaderLinks'>".
 						getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
 				} else {
-					$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
-						"\",\"parenttab=".$tabname."&order_by=".$field->getColumnName()."&start=".
-						$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".
-					$sort_qry."\");' class='listFormHeaderLinks'>".$label."".$arrow."</a>";
+					if($this->isHeaderSortingEnabled()) {
+						$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
+							"\",\"parenttab=".$tabname."&order_by=".$field->getColumnName()."&start=".
+							$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".
+						$sort_qry."\");' class='listFormHeaderLinks'>".$label."".$arrow."</a>";
+					} else {
+						$name = $label;
+					}
 				}
 				$arrow = '';
 			} else {

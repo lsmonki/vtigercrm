@@ -15,6 +15,16 @@
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
+	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+	{* vtlib customization: Inclusion of custom javascript and css as registered *}
+	{if $HEADERCSS}
+		<!-- Custom Header CSS -->
+		{foreach item=HDRCSS from=$HEADERCSS}
+			<link rel="stylesheet" type="text/css" href="{$HDRCSS->linkurl}"></script>
+		{/foreach}
+		<!-- END -->
+	{/if}
+	{* END *}
 	<!-- ActivityReminder customization for callback -->
 	{literal}
 	<style type="text/css">div.fixedLay1 { position:fixed; }</style>
@@ -28,6 +38,7 @@
 	<a name="top"></a>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
+	<script language="JavaScript" type="text/javascript" src="include/js/json.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<!-- vtlib customization: Javascript hook -->	
 	<script language="JavaScript" type="text/javascript" src="include/js/vtlib.js"></script>
@@ -40,7 +51,6 @@
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/notificationPopup.js"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
         <script type="text/javascript" src="jscalendar/calendar.js"></script>
         <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
         <script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
@@ -59,13 +69,6 @@
 		<!-- Custom Header Script -->
 		{foreach item=HEADERSCRIPT from=$HEADERSCRIPTS}
 			<script type="text/javascript" src="{$HEADERSCRIPT->linkurl}"></script>
-		{/foreach}
-		<!-- END -->
-	{/if}
-	{if $HEADERCSS}
-		<!-- Custom Header CSS -->
-		{foreach item=HDRCSS from=$HEADERCSS}
-			<link rel="stylesheet" type="text/css" href="{$HDRCSS->linkurl}"></script>
 		{/foreach}
 		<!-- END -->
 	{/if}

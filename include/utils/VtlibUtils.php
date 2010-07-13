@@ -104,9 +104,9 @@ function vtlib_isModuleActive($module) {
 		return true;
 	}
 
-		if(!isset($__cache_module_activeinfo[$module])) {
-		$tabres = $adb->pquery("SELECT presence FROM vtiger_tab WHERE name=?", array($module));
-		$presence = $adb->query_result($tabres, 0, 'presence');
+	if(!isset($__cache_module_activeinfo[$module])) {
+		include 'tabdata.php';
+		$presence = isset($tab_info_array[$module])? 0: 1;
 		$__cache_module_activeinfo[$module] = $presence;
 	} else {
 		$presence = $__cache_module_activeinfo[$module];

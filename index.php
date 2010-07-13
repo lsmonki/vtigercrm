@@ -816,8 +816,22 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	// ActivityReminder Customization for callback
 	if(!$skipFooters) {
 	
-		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes' && vtlib_isModuleActive('Calendar'))
-			echo "<script type='text/javascript'>if(typeof(ActivityReminderCallback) != 'undefined') ActivityReminderCallback();</script>";
+		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes' &&
+				vtlib_isModuleActive('Calendar')) {
+			echo "<script type='text/javascript'>if(typeof(ActivityReminderCallback) != ".
+				"'undefined') ";
+			$cur_time = time();
+			$reminder_interval_reset = (($_SESSION['last_reminder_check_time'] + 
+					$_SESSION['next_reminder_interval']) - $cur_time) * 1000;
+			if(isset($_SESSION['last_reminder_check_time']) && $reminder_interval_reset > 0){
+				echo "window.setTimeout(function(){
+						ActivityReminderCallback();
+					},$reminder_interval_reset);";
+			} else {
+				echo "ActivityReminderCallback();";
+			}
+			echo "</script>";
+		}
 	}
 	// End
 	

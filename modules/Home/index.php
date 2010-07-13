@@ -98,6 +98,8 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("LAYOUT", $numberofcols);
+$widgetBlockSize = PerformancePrefs::getBoolean('HOME_PAGE_WIDGET_GROUP_SIZE', 12);
+$smarty->assign('widgetBlockSize', $widgetBlockSize);
 
 $smarty->display("Home/Homestuff.tpl");
 
