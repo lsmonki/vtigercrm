@@ -151,7 +151,7 @@ if($_REQUEST['reply'] == "true")
 		$smarty->assign('CC_MAIL',$cc_add);
 		$bcc_add = implode(',',$json->decode($adb->query_result($result,0,'bcc_email')));
 		$smarty->assign('BCC_MAIL',$bcc_add);
-		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
+		$smarty->assign('IDLISTS',preg_replace('/###/',',',$adb->query_result($result,0,'idlists')));
 }
 
 // Webmails

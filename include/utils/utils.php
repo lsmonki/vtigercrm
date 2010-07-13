@@ -3029,7 +3029,7 @@ function getCurrentModule($perform_set=false) {
 		$dir = @scandir($root_directory."modules");
 		$temp_arr = Array("CVS","Attic");
 		$res_arr = @array_intersect($dir,$temp_arr);
-		if(count($res_arr) == 0  && !ereg("[/.]",$module)) {
+		if(count($res_arr) == 0  && !preg_match("/[\/.]/",$module)) {
 			if(@in_array($module,$dir))
 				$is_module = true;
 		}

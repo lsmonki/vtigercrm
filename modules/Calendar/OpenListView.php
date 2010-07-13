@@ -126,7 +126,7 @@ function getPendingActivities($mode,$view=''){
 	$entries=array();
 
 	foreach($open_activity_list as $event){
-		$recur_date=ereg_replace('--','',$event['recurringdate']);
+		$recur_date=preg_replace('/--/','',$event['recurringdate']);
 		if($recur_date!=""){
 			$event['date_start']=$event['recurringdate'];
 		}

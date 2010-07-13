@@ -584,7 +584,7 @@ function get_to_emailids($module)
 		{
 			$single_record = true;
 		}
-		$crmids = ereg_replace(':',',',$idstring);
+		$crmids = preg_replace('/:/',',',$idstring);
 		$crmids = explode(",", $crmids);
 		switch($module)
 		{

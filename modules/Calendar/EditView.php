@@ -86,8 +86,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 			    $cnt_namelist .= "\n";
 		    }
 		    $cnt_idlist .= $key;
-		    $contName = eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]);
-			if ($is_fname_permitted == '0') $contName .= ' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $contName = preg_replace("/(<a[^>]*>)(.*)(<\/a>)/i", "\\2", $cntvalue[0]);
+			if ($is_fname_permitted == '0') $contName .= ' '.preg_replace("/(<a[^>]*>)(.*)(<\/a>)/i", "\\2", $cntvalue[1]);
 		    $cnt_namelist .= '<option value="'.$key.'">'.$contName.'</option>';
 		    $i++;
 	    }

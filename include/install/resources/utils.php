@@ -270,7 +270,7 @@ class Migration_Utils {
 		} else {			
 			$web_root = ($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"]:$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
 			$web_root .= $_SERVER["REQUEST_URI"];
-			$web_root = eregi_replace("/install.php(.)*", "", $web_root);
+			$web_root = preg_replace("/\/install.php(.)*/i", "", $web_root);
 			$site_URL = "http://".$web_root;
 			$configInfo['site_URL'] = $site_URL;
 			$dbVerifyResult['config_info'] = $configInfo;

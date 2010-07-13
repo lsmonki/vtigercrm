@@ -153,7 +153,7 @@ class Potentials extends CRMEntity {
         	$tab_id = getTabid("Potentials");
 		$log->debug("Entering create_list_query(".$order_by.",". $where.") method ...");
 		// Determine if the vtiger_account name is present in the where clause.
-		$account_required = ereg("accounts\.name", $where);
+		$account_required = preg_match("/accounts\.name/", $where);
 
 		if($account_required)
 		{

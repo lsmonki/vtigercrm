@@ -249,7 +249,7 @@ function from_html($string, $encode=true){
         global $toHtml;
         //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
 	if(is_string($string)){
-		if(eregi('(script).*(/script)',$string))
+		if(preg_match('/(script).*(\/script)/i',$string))
 			$string=preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
 		//$string = str_replace(array_values($toHtml), array_keys($toHtml), $string);
 	}
@@ -260,7 +260,7 @@ function from_html($string, $encode=true){
 function fck_from_html($string)
 {
 	if(is_string($string)){
-		if(eregi('(script).*(/script)',$string))
+		if(preg_match('/(script).*(\/script)/i',$string))
 			$string=str_replace('script', '', $string);
 	}
 	return $string;
@@ -2220,7 +2220,7 @@ function sendNotificationToOwner($module,$focus)
 
 		$description .= '<br><br>'.$app_strings['MSG_THANK_YOU'].',<br>'.$current_user->user_name.'.<br>';
 		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
-		
+
 		$log->debug("Exiting sendNotificationToOwner method ...");
 		return $status;
 	}

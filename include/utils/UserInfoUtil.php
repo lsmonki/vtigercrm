@@ -668,7 +668,7 @@ $log->debug("Entering substituteTokens(".$filename.",".$globals.") method ...");
     while (list($key,$val) = each($dump))
     {
 	$replacedString ;
-      if (ereg( "\$",$val)) 
+      if (preg_match( "/\$/g",$val))
 	{    
 	$log->debug("token is ".$val);
         eval(  "\$val = \"$val\";");

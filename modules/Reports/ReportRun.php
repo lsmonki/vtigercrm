@@ -2850,8 +2850,8 @@ class ReportRun extends CRMEntity
 	{
 		global $modules,$current_language,$current_user,$app_strings;
 		$rep_header = ltrim(str_replace($modules," ",$fldname));
-		$rep_header_temp = ereg_replace(" ","_",$rep_header);
-		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
+		$rep_header_temp = preg_replace("/\s+/","_",$rep_header);
+		$rep_module = preg_replace("/_$rep_header_temp/","",$fldname);
 		$temp_mod_strings = return_module_language($current_language,$rep_module);	
 		// htmlentities should be decoded in field names (eg. &). Noticed for fields like 'Terms & Conditions', 'S&H Amount'
 		$rep_header = decode_html($rep_header);		

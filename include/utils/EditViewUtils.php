@@ -1343,7 +1343,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------force numerics right justified.
-	if ( !eregi("id=",$custfld) )
+	if ( !preg_match("/id=/i",$custfld) )
 		$custfld = preg_replace("/<input/iS","<input id='$fieldname' ",$custfld);
 
 	if ( in_array($uitype,array(71,72,7,9,90)) )
