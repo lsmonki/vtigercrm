@@ -7,7 +7,7 @@
 			<autoincrement />
 		</field>
 		<field name="user_name" type="C" size="255" />
-		<field name="user_password" type="C" size="30" />
+		<field name="user_password" type="C" size="128" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">
 			<default value="#E6FAD8" />

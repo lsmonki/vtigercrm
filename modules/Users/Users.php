@@ -156,7 +156,7 @@ class Users {
 	var $record_id;
 	var $new_schema = true;
 
-	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'PHP53MD5'; //'BLOWFISH', /* before PHP5.3*/ MD5;
+	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'PHP5.3MD5'; //'BLOWFISH', /* before PHP5.3*/ MD5;
 
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
