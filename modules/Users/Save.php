@@ -51,7 +51,13 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	        die;
 	}
 }
-																		
+if(empty($_SESSION['Users_FORM_TOKEN']) || $_SESSION['Users_FORM_TOKEN']
+		!== (int)$_REQUEST['form_token']) {
+	header("Location: index.php?action=Error&module=Users&error_string=".
+			urlencode($app_strings['LBL_PERMISSION']));
+	die;
+}
+
 if (isset($_POST['record']) && !is_admin($current_user) && $_POST['record'] != $current_user->id) echo ("Unauthorized access to user administration.");
 elseif (!isset($_POST['record']) && !is_admin($current_user)) echo ("Unauthorized access to user administration.");
 
