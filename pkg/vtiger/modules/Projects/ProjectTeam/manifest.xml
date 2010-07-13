@@ -1,116 +1,91 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2010-06-03 10:47:33</exporttime>
-<name>ProjectMilestone</name>
-<label>ProjectMilestone</label>
-<parent>Support</parent>
+<exporttime>2010-05-19 12:53:51</exporttime>
+<name>ProjectTeam</name>
+<label>ProjectTeam</label>
 <version>1.7.7</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>
 <tables>
 <table>
-<name>vtiger_projectmilestone</name>
-<sql><![CDATA[CREATE TABLE `vtiger_projectmilestone` (
-  `projectmilestoneid` int(11) NOT NULL,
-  `projectmilestonename` varchar(255) default NULL,
-  `projectmilestone_no` varchar(100) default NULL,
-  `projectmilestonedate` varchar(255) default NULL,
-  `projectid` varchar(100) default NULL,
-  `projectmilestonetype` varchar(100) default NULL,
-  PRIMARY KEY  (`projectmilestoneid`)
+<name>vtiger_projectteam</name>
+<sql><![CDATA[CREATE TABLE `vtiger_projectteam` (
+  `projectteamid` int(11) DEFAULT NULL,
+  `projectteam_no` varchar(100) default NULL,
+  `projectteamnote` varchar(100) DEFAULT NULL,
+  `projectteamfunction` varchar(40) DEFAULT NULL,
+  `teamrelproject` int(15) DEFAULT NULL,
+  `teamrelcontact` int(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 <table>
-<name>vtiger_projectmilestonecf</name>
-<sql><![CDATA[CREATE TABLE `vtiger_projectmilestonecf` (
-  `projectmilestoneid` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`projectmilestoneid`)
+<name>vtiger_projectteamcf</name>
+<sql><![CDATA[CREATE TABLE `vtiger_projectteamcf` (
+  `projectteamid` int(11) NOT NULL,
+  PRIMARY KEY (`projectteamid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 </tables>
 <blocks>
 <block>
-<label>LBL_PROJECT_MILESTONE_INFORMATION</label>
+<label>LBLPROJECTTEAMINFORMATION</label>
 <fields>
 <field>
-<fieldname>projectmilestonename</fieldname>
+<fieldname>projectteamnote</fieldname>
 <uitype>2</uitype>
-<columnname>projectmilestonename</columnname>
-<tablename>vtiger_projectmilestone</tablename>
+<columnname>projectteamnote</columnname>
+<tablename>vtiger_projectteam</tablename>
 <generatedtype>1</generatedtype>
-<fieldlabel>Project Milestone Name</fieldlabel>
+<fieldlabel>LBLPROJECTTEAMNOTE</fieldlabel>
 <readonly>1</readonly>
 <presence>2</presence>
 <selected>0</selected>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>1</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
 <entityidentifier>
-<entityidfield>projectmilestoneid</entityidfield>
-<entityidcolumn>projectmilestoneid</entityidcolumn>
+<entityidfield>projectteamid</entityidfield>
+<entityidcolumn>projectteamid</entityidcolumn>
 </entityidentifier>
 </field>
 <field>
-<fieldname>projectmilestonedate</fieldname>
-<uitype>5</uitype>
-<columnname>projectmilestonedate</columnname>
-<tablename>vtiger_projectmilestone</tablename>
-<generatedtype>1</generatedtype>
-<fieldlabel>Milestone Date</fieldlabel>
-<readonly>1</readonly>
-<presence>2</presence>
-<selected>0</selected>
-<sequence>5</sequence>
-<maximumlength>100</maximumlength>
-<typeofdata>D~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>3</quickcreatesequence>
-<displaytype>1</displaytype>
-<info_type>BAS</info_type>
-<helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
-</field>
-<field>
-<fieldname>projectid</fieldname>
-<uitype>10</uitype>
-<columnname>projectid</columnname>
-<tablename>vtiger_projectmilestone</tablename>
-<generatedtype>1</generatedtype>
-<fieldlabel>Related to</fieldlabel>
+<fieldname>projectteam_no</fieldname>
+<uitype>4</uitype>
+<columnname>projectteam_no</columnname>
+<tablename>vtiger_projectteam</tablename>
+<generatedtype>2</generatedtype>
+<fieldlabel>Project Team No</fieldlabel>
 <readonly>1</readonly>
 <presence>0</presence>
 <selected>0</selected>
-<sequence>4</sequence>
+<sequence>2</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>4</quickcreatesequence>
+<typeofdata>V~O</typeofdata>
+<quickcreate>3</quickcreate>
+<quickcreatesequence>0</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
-<relatedmodules>
-<relatedmodule>Project</relatedmodule>
-</relatedmodules>
+<masseditable>0</masseditable>
 </field>
 <field>
-<fieldname>projectmilestonetype</fieldname>
+<fieldname>projectteamfunction</fieldname>
 <uitype>15</uitype>
-<columnname>projectmilestonetype</columnname>
-<tablename>vtiger_projectmilestone</tablename>
+<columnname>projectteamfunction</columnname>
+<tablename>vtiger_projectteam</tablename>
 <generatedtype>1</generatedtype>
-<fieldlabel>Type</fieldlabel>
+<fieldlabel>LBLPROJECTTEAMFUNCTION</fieldlabel>
 <readonly>1</readonly>
 <presence>2</presence>
 <selected>0</selected>
-<sequence>7</sequence>
+<sequence>3</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -120,11 +95,59 @@
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
 <picklistvalues>
-<picklistvalue>--none--</picklistvalue>
-<picklistvalue>administrative</picklistvalue>
-<picklistvalue>operative</picklistvalue>
-<picklistvalue>other</picklistvalue>
+<picklistvalue>--None--</picklistvalue>
+<picklistvalue>Project Manager</picklistvalue>
+<picklistvalue>Assistant</picklistvalue>
+<picklistvalue>IT</picklistvalue>
+<picklistvalue>Steering Committee</picklistvalue>
+<picklistvalue>Other</picklistvalue>
 </picklistvalues>
+</field>
+<field>
+<fieldname>teamrelproject</fieldname>
+<uitype>10</uitype>
+<columnname>teamrelproject</columnname>
+<tablename>vtiger_projectteam</tablename>
+<generatedtype>1</generatedtype>
+<fieldlabel>LBLTEAMRELPROJECT</fieldlabel>
+<readonly>1</readonly>
+<presence>2</presence>
+<selected>0</selected>
+<sequence>4</sequence>
+<maximumlength>100</maximumlength>
+<typeofdata>V~M</typeofdata>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
+<displaytype>1</displaytype>
+<info_type>BAS</info_type>
+<helpinfo><![CDATA[]]></helpinfo>
+<masseditable>1</masseditable>
+<relatedmodules>
+<relatedmodule>Project</relatedmodule>
+</relatedmodules>
+</field>
+<field>
+<fieldname>teamrelcontact</fieldname>
+<uitype>10</uitype>
+<columnname>teamrelcontact</columnname>
+<tablename>vtiger_projectteam</tablename>
+<generatedtype>1</generatedtype>
+<fieldlabel>LBLTEAMRELCONTACT</fieldlabel>
+<readonly>1</readonly>
+<presence>2</presence>
+<selected>0</selected>
+<sequence>5</sequence>
+<maximumlength>100</maximumlength>
+<typeofdata>V~O</typeofdata>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
+<displaytype>1</displaytype>
+<info_type>BAS</info_type>
+<helpinfo><![CDATA[]]></helpinfo>
+<masseditable>1</masseditable>
+<relatedmodules>
+<relatedmodule>Contacts</relatedmodule>
+</relatedmodules>
 </field>
 <field>
 <fieldname>assigned_user_id</fieldname>
@@ -139,38 +162,13 @@
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>2</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
 </field>
-<field>
-<fieldname>projectmilestone_no</fieldname>
-<uitype>4</uitype>
-<columnname>projectmilestone_no</columnname>
-<tablename>vtiger_projectmilestone</tablename>
-<generatedtype>2</generatedtype>
-<fieldlabel>Project Milestone No</fieldlabel>
-<readonly>1</readonly>
-<presence>0</presence>
-<selected>0</selected>
-<sequence>2</sequence>
-<maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
-<quickcreate>3</quickcreate>
-<quickcreatesequence>4</quickcreatesequence>
-<displaytype>1</displaytype>
-<info_type>BAS</info_type>
-<helpinfo><![CDATA[]]></helpinfo>
-<masseditable>0</masseditable>
-</field>
-</fields>
-</block>
-<block>
-<label>LBL_CUSTOM_INFORMATION</label>
-<fields>
 <field>
 <fieldname>createdtime</fieldname>
 <uitype>70</uitype>
@@ -181,7 +179,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <selected>0</selected>
-<sequence>1</sequence>
+<sequence>7</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -201,7 +199,7 @@
 <readonly>1</readonly>
 <presence>2</presence>
 <selected>0</selected>
-<sequence>2</sequence>
+<sequence>8</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
 <quickcreate>1</quickcreate>
@@ -214,7 +212,10 @@
 </fields>
 </block>
 <block>
-<label>LBL_DESCRIPTION_INFORMATION</label>
+<label>LBLCUSTOMINFORMATION</label>
+</block>
+<block>
+<label>LBLDESCRIPTIONINFORMATION</label>
 <fields>
 <field>
 <fieldname>description</fieldname>
@@ -222,7 +223,7 @@
 <columnname>description</columnname>
 <tablename>vtiger_crmentity</tablename>
 <generatedtype>1</generatedtype>
-<fieldlabel>description</fieldlabel>
+<fieldlabel>LBLPROJECTTEAMCOMMENT</fieldlabel>
 <readonly>1</readonly>
 <presence>2</presence>
 <selected>0</selected>
@@ -246,24 +247,20 @@
 <setmetrics>false</setmetrics>
 <fields>
 <field>
-<fieldname>projectmilestonename</fieldname>
+<fieldname>projectteamnote</fieldname>
 <columnindex>0</columnindex>
 </field>
 <field>
-<fieldname>projectmilestonedate</fieldname>
+<fieldname>projectteamfunction</fieldname>
 <columnindex>1</columnindex>
 </field>
 <field>
-<fieldname>description</fieldname>
+<fieldname>teamrelproject</fieldname>
+<columnindex>2</columnindex>
+</field>
+<field>
+<fieldname>teamrelcontact</fieldname>
 <columnindex>3</columnindex>
-</field>
-<field>
-<fieldname>createdtime</fieldname>
-<columnindex>4</columnindex>
-</field>
-<field>
-<fieldname>modifiedtime</fieldname>
-<columnindex>5</columnindex>
 </field>
 </fields>
 </customview>

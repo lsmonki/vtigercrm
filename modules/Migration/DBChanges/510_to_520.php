@@ -548,6 +548,9 @@ $sql = 'update vtiger_field set block=(select blockid from vtiger_blocks where '
 $params = array('LBL_EMAIL_INFORMATION','vtiger_emaildetails');
 $adb->pquery($sql,$params);
 
+// Correct the type
+ExecuteQuery("UPDATE vtiger_field SET typeofdata='V~O' WHERE typeofdata='V~0'");
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 ExecuteQuery("DROP TABLE IF EXISTS vtiger_asteriskoutgoingcalls");

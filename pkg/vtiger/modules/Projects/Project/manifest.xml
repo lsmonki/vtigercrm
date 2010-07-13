@@ -4,7 +4,7 @@
 <name>Project</name>
 <label>Project</label>
 <parent>Support</parent>
-<version>1.7.5</version>
+<version>1.7.7</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>
@@ -75,7 +75,7 @@
 <selected>0</selected>
 <sequence>3</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>D~0</typeofdata>
+<typeofdata>D~O</typeofdata>
 <quickcreate>0</quickcreate>
 <quickcreatesequence>3</quickcreatesequence>
 <displaytype>1</displaytype>
@@ -95,7 +95,7 @@
 <selected>0</selected>
 <sequence>5</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>D~0~OTH~GE~startdate~Start Date</typeofdata>
+<typeofdata>D~O~OTH~GE~startdate~Start Date</typeofdata>
 <quickcreate>0</quickcreate>
 <quickcreatesequence>4</quickcreatesequence>
 <displaytype>1</displaytype>
@@ -115,7 +115,7 @@
 <selected>0</selected>
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>D~0~OTH~GE~startdate~Start Date</typeofdata>
+<typeofdata>D~O~OTH~GE~startdate~Start Date</typeofdata>
 <quickcreate>1</quickcreate>
 <quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
@@ -281,7 +281,7 @@
 <selected>0</selected>
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~0</typeofdata>
+<typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
 <quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
@@ -349,7 +349,7 @@
 </picklistvalues>
 </field>
 <field>
-<fieldname>CreatedTime</fieldname>
+<fieldname>createdtime</fieldname>
 <uitype>70</uitype>
 <columnname>createdtime</columnname>
 <tablename>vtiger_crmentity</tablename>
@@ -369,7 +369,7 @@
 <masseditable>1</masseditable>
 </field>
 <field>
-<fieldname>ModifiedTime</fieldname>
+<fieldname>modifiedtime</fieldname>
 <uitype>70</uitype>
 <columnname>modifiedtime</columnname>
 <tablename>vtiger_crmentity</tablename>
@@ -405,7 +405,7 @@
 <selected>0</selected>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~0</typeofdata>
+<typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
 <quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
@@ -494,9 +494,20 @@
 <relatedmodule>ProjectMilestone</relatedmodule>
 </relatedlist>
 <relatedlist>
+<function>get_dependents_list</function>
+<label>ProjectTeam</label>
+<sequence>3</sequence>
+<presence>0</presence>
+<actions>
+<action>ADD</action>
+<action>SELECT</action>
+</actions>
+<relatedmodule>ProjectTeam</relatedmodule>
+</relatedlist>
+<relatedlist>
 <function>get_attachments</function>
 <label>Documents</label>
-<sequence>3</sequence>
+<sequence>4</sequence>
 <presence>0</presence>
 <actions>
 <action>ADD</action>
@@ -507,7 +518,7 @@
 <relatedlist>
 <function>get_related_list</function>
 <label>Trouble Tickets</label>
-<sequence>4</sequence>
+<sequence>5</sequence>
 <presence>0</presence>
 <actions>
 <action>ADD</action>

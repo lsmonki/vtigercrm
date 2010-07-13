@@ -390,11 +390,10 @@ class Project extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
-		global $current_user;
-		$from_clause .= getNonAdminAccessControlQuery($module,$current_user);
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
+		$where_clause .= $this->getListViewSecurityParameter($module);
 					
 		if (isset($select_cols) && trim($select_cols) != '') {
 			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .
@@ -453,6 +452,10 @@ class Project extends CRMEntity {
 			// Add Project module to the related list of Accounts module
 			$accountsModuleInstance = Vtiger_Module::getInstance('Accounts');			
 			$accountsModuleInstance->setRelatedList($moduleInstance, 'Projects', Array('ADD','SELECT'), 'get_dependents_list');
+						
+			// Add Project module to the related list of Accounts module
+			$contactsModuleInstance = Vtiger_Module::getInstance('Contacts');			
+			$contactsModuleInstance->setRelatedList($moduleInstance, 'Projects', Array('ADD','SELECT'), 'get_dependents_list');
 			
 			// Add Project module to the related list of HelpDesk module
 			$helpDeskModuleInstance = Vtiger_Module::getInstance('HelpDesk');			

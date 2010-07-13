@@ -105,8 +105,8 @@ if($viewid ==0)
 }
 
 global $current_user;
+$queryGenerator = new QueryGenerator($currentModule, $current_user);
 if ($viewid != "0") {
-	$queryGenerator = new QueryGenerator($currentModule, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
 } else {
 	$queryGenerator->initForDefaultCustomView();
@@ -115,8 +115,8 @@ if ($viewid != "0") {
 // Enabling Module Search
 $url_string = '';
 if($_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_POST);
-	$ustring = getSearchURL($_POST);
+	$queryGenerator->addUserSearchConditions($_REQUEST);
+	$ustring = getSearchURL($_REQUEST);
 	$url_string .= "&query=true$ustring";
 	$smarty->assign('SEARCH_URL', $url_string);
 }

@@ -501,7 +501,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,7,".$fileblockid.",2,'I~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,2,17,1,'V~O',2,2,'BAS',0)");
 		
-		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,3,17,1,'V~0',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,3,17,1,'V~O',3,null,'BAS',0)");
 		
 		//Block17 -- End
 		//Documents Details -- END

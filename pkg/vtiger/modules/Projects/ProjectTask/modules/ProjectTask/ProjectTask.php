@@ -380,7 +380,7 @@ class ProjectTask extends CRMEntity {
      * Function which will give the basic query to find duplicates
      */
     function getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr,$select_cols='') {
-        $select_clause = "SELECT ". $this->table_name .".".$this->table_index ." AS recordid, vtiger_users_last_import.deleted,".$table_cols;
+		$select_clause = "SELECT ". $this->table_name .".".$this->table_index ." AS recordid, vtiger_users_last_import.deleted,".$table_cols;
 
 		// Select Custom Field Table Columns if present
 		if(isset($this->customFieldTable)) $query .= ", " . $this->customFieldTable[0] . ".* ";
@@ -395,11 +395,10 @@ class ProjectTask extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
-		global $current_user;
-		$from_clause .= getNonAdminAccessControlQuery($module,$current_user);
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
+		$where_clause .= $this->getListViewSecurityParameter($module);
 					
 		if (isset($select_cols) && trim($select_cols) != '') {
 			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .
@@ -420,8 +419,8 @@ class ProjectTask extends CRMEntity {
 					$where_clause .
 					" ORDER BY $table_cols,". $this->table_name .".".$this->table_index ." ASC";
 					
-		return $query;        
-    }
+		return $query;		
+	}
 
     /**
      * Invoked when special actions are performed on the module.
