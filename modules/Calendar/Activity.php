@@ -891,7 +891,7 @@ function insertIntoRecurringTable(& $recurObj)
 			$sql = 'DELETE FROM vtiger_cntactivityrel WHERE contactid = ? AND activityid = ?';
 			$this->db->pquery($sql, array($return_id, $id));
 		} elseif($return_module == 'HelpDesk') {
-			$sql = 'DELETE FROM vtiger_seticketsrel WHERE ticketid = ? AND crmid = ?';
+			$sql = 'DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ?';
 			$this->db->pquery($sql, array($return_id, $id));
 		} else {
 			$sql='DELETE FROM vtiger_seactivityrel WHERE activityid=?';

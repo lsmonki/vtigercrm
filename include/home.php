@@ -166,7 +166,9 @@ class Homestuff{
 			}else if($stufftype == 'Tag Cloud'){
 				$homeval[]=Array('Stuffid'=>$stuffid,'Stufftype'=>$stufftype,'Stufftitle'=>$stuff_title);
 			}else if($modulename != 'NULL'){
-				$homeval[]=Array('Stuffid'=>$stuffid,'Stufftype'=>$stufftype,'Stufftitle'=>$stuff_title);
+				if(isPermitted($modulename,'index') == "yes"){
+					$homeval[]=Array('Stuffid'=>$stuffid,'Stufftype'=>$stufftype,'Stufftitle'=>$stuff_title);
+				}
 			}else{
 				$homeval[]=Array('Stuffid'=>$stuffid,'Stufftype'=>$stufftype,'Stufftitle'=>$stuff_title);
 			}

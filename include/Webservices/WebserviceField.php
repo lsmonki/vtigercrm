@@ -194,9 +194,9 @@ class WebserviceField{
 			}
 			if($fieldDataType == 'date' || $fieldDataType == 'datetime') {
 				$tableFieldDataType = $this->getFieldTypeFromTable();
-			}
-			if($tableFieldDataType == 'datetime'){
-				$fieldDataType = $tableFieldDataType;
+				if($tableFieldDataType == 'datetime'){
+					$fieldDataType = $tableFieldDataType;
+				}
 			}
 			$this->fieldDataType = $fieldDataType;
 		}

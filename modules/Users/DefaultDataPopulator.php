@@ -535,7 +535,7 @@ class DefaultDataPopulator extends CRMEntity {
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'crmid','vtiger_seactivityrel',1,'66','parent_id','Related To',1,0,0,100,7,19,1,'I~O',1,null,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,8,19,1,'I~O',1,null,'BAS',1)");
  $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'status','vtiger_activity',1,'15','taskstatus','Status',1,0,0,100,8,19,1,'V~M',0,3,'BAS',1)");
- $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'eventstatus','vtiger_activity',1,'15','eventstatus','Status',1,0,0,100,9,19,3,'V~M',1,null,'BAS',1)");
+ $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'eventstatus','vtiger_activity',1,'15','eventstatus','Status',1,0,0,100,9,19,3,'V~O',1,null,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'priority','vtiger_activity',1,'15','taskpriority','Priority',1,0,0,100,10,19,1,'V~O',1,null,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'sendnotification','vtiger_activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,19,1,'C~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,19,2,'T~O',3,null,'BAS',0)");

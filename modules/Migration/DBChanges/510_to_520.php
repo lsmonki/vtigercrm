@@ -555,39 +555,60 @@ function VT520_manageIndexes() {
 	$db = PearDatabase::getInstance();
 	ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `vt_pot_sales_stage_amount_idx` ".
 			"(amount, sales_stage)");
-	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+	$result = $db->pquery("SELECT COUNT(1) as count FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
 			"'$db->dbName' AND table_name = 'vtiger_potential' AND index_name = ".
 			"'potential_potentialid_idx'",array());
-	$rowCount = $db->num_rows($result);
-	if($rowCount > 0) {
+	$count = $db->query_result($result, 0, 'count');
+	if($count > 0) {
 		ExecuteQuery("ALTER TABLE vtiger_potential DROP INDEX `potential_potentialid_idx`");
 	}
-	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+	$result = $db->pquery("SELECT COUNT(1) as count FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
 			"'$db->dbName' AND table_name = 'vtiger_potential' AND index_name = ".
 			"'potential_accountid_idx'",array());
-	$rowCount = $db->num_rows($result);
-	if($rowCount > 0) {
+	$count = $db->query_result($result, 0, 'count');
+	if($count > 0) {
 		ExecuteQuery("ALTER TABLE vtiger_potential DROP INDEX `potential_accountid_idx`");
 		ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `potential_relatedto_idx` ".
 			"(related_to)");
 	}
-	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+	$result = $db->pquery("SELECT COUNT(1) as count FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
 			"'$db->dbName' AND table_name = 'vtiger_crmentity' AND index_name = ".
 			"'crmentity_smownerid_idx'",array());
-	$rowCount = $db->num_rows($result);
-	if($rowCount > 0) {
+	$count = $db->query_result($result, 0, 'count');
+	if($count > 0) {
 		ExecuteQuery("ALTER TABLE vtiger_crmentity DROP INDEX `crmentity_smownerid_idx`");
 	}
-	$result = $db->pquery("SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
+	$result = $db->pquery("SELECT COUNT(1) as count FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = ".
 			"'$db->dbName' AND table_name = 'vtiger_crmentity' AND index_name = ".
 			"'crmentity_smownerid_deleted_idx'",array());
-	$rowCount = $db->num_rows($result);
-	if($rowCount > 0) {
+	$count = $db->query_result($result, 0, 'count');
+	if($count > 0) {
 		ExecuteQuery("ALTER TABLE vtiger_crmentity DROP INDEX `crmentity_smownerid_deleted_idx`");
 	}
-	ExecuteQuery("ALTER TABLE vtiger_potential ADD INDEX `crm_ownerid_del_setype_idx` ".
+	ExecuteQuery("ALTER TABLE vtiger_crmentity ADD INDEX `crm_ownerid_del_setype_idx` ".
 		"(smownerid,deleted,setype)");
 }
+
+function VT520_fieldCleanUp() {
+	$db = PearDatabase::getInstance();
+	$result = $db->pquery("SELECT fieldid,typeofdata FROM vtiger_field WHERE fieldname = ".
+			"'birthday' AND tabid = '".getTabid('Contacts')."'",array());
+	$fieldId = $db->query_result($result, 0, 'fieldid');
+	$typeOfData = $db->query_result($result, 0, 'typeofdata');
+	$typeInfo = explode('~', $typeOfData);
+	$mandatory = $typeInfo[1];
+	ExecuteQuery("update vtiger_field set typeofdata='D~$mandatory' where fieldid=$fieldId");
+	$result = $db->pquery("SELECT fieldid,typeofdata FROM vtiger_field WHERE fieldname = ".
+			"'eventstatus' AND tabid = '".getTabid('Calendar')."'",array());
+	$fieldId = $db->query_result($result, 0, 'fieldid');
+	$typeOfData = $db->query_result($result, 0, 'typeofdata');
+	$typeInfo = explode('~', $typeOfData);
+	$type = $typeInfo[0];
+	ExecuteQuery("update vtiger_field set typeofdata='$type~O' where fieldid=$fieldId");
+}
+
+VT520_manageIndexes();
+VT520_fieldCleanUp();
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
