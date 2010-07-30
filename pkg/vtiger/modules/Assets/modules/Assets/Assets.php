@@ -455,19 +455,6 @@ class Assets extends CRMEntity {
                 return $query;
 	}
 
-	/*
-	 * Function to get the relation tables for related modules
-	 * @param - $secmodule secondary module name
-	 * returns the array with table names and fieldnames storing relations between module and this module
-	 */
-	function setRelationTables($secmodule){
-		$rel_tables = array (
-			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),
-				"vtiger_assets"=>"assetsid"),
-		);
-		return $rel_tables[$secmodule];
-	}
-
 	// Function to unlink all the dependent entities of the given Entity by Id
 	function unlinkDependencies($module, $id) {
 		global $log;

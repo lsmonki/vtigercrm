@@ -388,18 +388,6 @@ class ServiceContracts extends CRMEntity {
 		return $query;		
 	}
 
-/*
-     * Function to get the relation tables for related modules 
-     * @param - $secmodule secondary module name
-     * returns the array with table names and fieldnames storing relations between module and this module
-     */
-    function setRelationTables($secmodule){
-        $rel_tables = array (
-            "Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_servicecontracts"=>" servicecontractsid"),
-        );
-        return $rel_tables[$secmodule];
-    }
-    
 	/**
 	* Invoked when special actions are performed on the module.
 	* @param String Module name

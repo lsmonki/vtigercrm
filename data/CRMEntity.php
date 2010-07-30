@@ -2370,5 +2370,20 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		return $query;
 	}
+
+	/*
+	 * Function to get the relation tables for related modules
+	 * @param String $secmodule - $secmodule secondary module name
+	 * @return Array returns the array with table names and fieldnames storing relations
+	 * between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),
+				$this->table_name=>$this->table_index),
+		);
+		return $rel_tables[$secmodule];
+	}
+
 }
 ?>
