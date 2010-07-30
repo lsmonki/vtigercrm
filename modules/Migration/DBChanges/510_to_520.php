@@ -359,7 +359,7 @@ function VT520_updateADVColumnList($columnname, $row) {
 
 function VT520_queryGeneratorMigration() {
 	$db = PearDatabase::getInstance();
-	$sql = "delete from vtiger_cvadvfilter where columnname IS NULL;";
+	$sql = "delete from vtiger_cvadvfilter where columnname IS NULL or columnname='';";
 	$db->pquery($sql, array());
 	$sql = "select id from vtiger_users where is_admin='On' and status='Active' limit 1";
 	$result = $db->pquery($sql, array());
