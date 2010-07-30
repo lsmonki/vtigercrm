@@ -44,24 +44,22 @@ class ProjectTask extends CRMEntity {
     var $list_fields = Array (
         /* Format: Field Label => Array(tablename, columnname) */
         // tablename should not have prefix 'vtiger_'
-        'Project Task Number'=>Array('projecttask','projecttasknumber'),
         'Project Task Name'=> Array('projecttask', 'projecttaskname'),
         'Start Date'=> Array('projecttask', 'startdate'),
         'End Date'=> Array('projecttask', 'enddate'),
         'Type'=>Array('projecttask','projecttasktype'),
         'Progress'=>Array('projecttask','projecttaskprogress'),
-        //'Assigned To' => Array('crmentity','smownerid')
+        'Assigned To' => Array('crmentity','smownerid')
         
     );
     var $list_fields_name = Array(
         /* Format: Field Label => fieldname */
-        'Project Task Number'=>'projecttasknumber',
         'Project Task Name'=> 'projecttaskname',
         'Start Date'=>'startdate',
         'End Date'=> 'enddate',
         'Type'=>'projecttasktype',
         'Progress'=>'projecttaskprogress',
-        //'Assigned To' => 'assigned_user_id'
+        'Assigned To' => 'assigned_user_id'
     );
 
     // Make the field link to detail view from list view (Fieldname)
@@ -74,14 +72,14 @@ class ProjectTask extends CRMEntity {
         'Project Task Name'=> Array('projecttask', 'projecttaskname'),
         'Start Date'=> Array('projecttask', 'startdate'),
         'Type'=>Array('projecttask','projecttasktype'),
-        'Project Task Number'=>Array('projecttask','projecttasknumber'),
+        'Assigned To' => Array('crmentity','smownerid')
     );
     var $search_fields_name = Array(
         /* Format: Field Label => fieldname */
         'Project Task Name'=> 'projecttaskname',
         'Start Date'=>'startdate',
         'Type'=>'projecttasktype',
-        'Project Task Number'=>'projecttasknumber',
+        'Assigned To' => 'assigned_user_id'
     );
 
     // For Popup window record selection
@@ -102,11 +100,11 @@ class ProjectTask extends CRMEntity {
     // Callback function list during Importing
     var $special_functions = Array('set_import_assigned_user');
 
-    var $default_order_by = 'projecttasknumber';
-    var $default_sort_order='DESC';
+    var $default_order_by = 'projecttaskname';
+    var $default_sort_order='ASC';
     // Used when enabling/disabling the mandatory fields for the module.
     // Refers to vtiger_field.fieldname values.
-    var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projecttaskname');
+    var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projecttaskname', 'projectid');
     
     function __construct() {
         global $log, $currentModule;

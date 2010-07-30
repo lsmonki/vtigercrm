@@ -557,7 +557,7 @@ class Project extends CRMEntity {
 		
 		$entries = array();
         
-        global $adb,$tmp_dir;
+        global $adb,$tmp_dir,$default_charset;
         $record = $id;
 		$g = new BURAK_Gantt();
 		// set grid type
@@ -568,7 +568,7 @@ class Project extends CRMEntity {
 		
 		$related_projecttasks = $adb->pquery("SELECT pt.* FROM vtiger_projecttask AS pt 
 												INNER JOIN vtiger_crmentity AS crment ON pt.projecttaskid=crment.crmid 
-												WHERE projectid=? AND crment.deleted=0",
+												WHERE projectid=? AND crment.deleted=0 AND pt.startdate IS NOT NULL AND pt.enddate IS NOT NULL",
 										array($record)) or die("Please install the ProjectMilestone and ProjectTasks modules first.");
 		
 		while($rec_related_projecttasks = $adb->fetchByAssoc($related_projecttasks)){
@@ -599,16 +599,18 @@ class Project extends CRMEntity {
 		$origin = $tmp_dir."diagram_".$record.".jpg";
 		$destination = $tmp_dir."pic_diagram_".$record.".jpg";
 
-		$size = 1100;
 		$imagesize = getimagesize($origin);
-		if($imagesize[0] > $size){
-			
+		$actualWidth = $imagesize[0];
+		$actualHeight = $imagesize[1];
+		
+		$size = 1000;
+		if($actualWidth > $size){
 			$width = $size;
-			$height = ($size * $imagesize[1])/$imagesize[0];
+			$height = ($actualHeight * $size) / $actualWidth;
 			copy($origin,$destination);
 			$id_origin = imagecreatefromjpeg($destination);
 			$id_destination = imagecreate($width, $height);
-			imagecopyresized($id_destination, $id_origin, 0, 0, 0, 0, $width, $height, $imagesize[0], $imagesize[1]);
+			imagecopyresized($id_destination, $id_origin, 0, 0, 0, 0, $width, $height, $actualWidth, $actualHeight);
 			imagejpeg($id_destination,$destination);
 			imagedestroy($id_origin);
 			imagedestroy($id_destination);

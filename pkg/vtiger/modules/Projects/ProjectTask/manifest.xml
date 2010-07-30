@@ -122,13 +122,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Related to</fieldlabel>
 <readonly>1</readonly>
-<presence>2</presence>
+<presence>0</presence>
 <selected>0</selected>
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence></quickcreatesequence>
+<typeofdata>V~M</typeofdata>
+<quickcreate>0</quickcreate>
+<quickcreatesequence>5</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -421,4 +421,26 @@
 <status>enabled</status>
 </action>
 </actions>
+<relatedlists>
+<relatedlist>
+<function>get_attachments</function>
+<label>Documents</label>
+<sequence>1</sequence>
+<presence>0</presence>
+<actions>
+<action>ADD</action>
+<action>SELECT</action>
+</actions>
+<relatedmodule>Documents</relatedmodule>
+</relatedlist>
+</relatedlists>
+<customlinks>
+<customlink>
+<linktype>DETAILVIEWBASIC</linktype>
+<linklabel>Add Note</linklabel>
+<linkurl><![CDATA[index.php?module=Documents&action=EditView&return_module=ProjectTask&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$]]></linkurl>
+<linkicon><![CDATA[]]></linkicon>
+<sequence>0</sequence>
+</customlink>
+</customlinks>
 </module>
