@@ -481,9 +481,11 @@ class ServiceContracts extends CRMEntity {
 		for($i=0; $i < $noOfTickets; ++$i) {
 			$ticketId = $this->db->query_result($contractTicketsResult, $i, 'relcrmid');
 			$ticketFocus->id = $ticketId;
-			$ticketFocus->retrieve_entity_info($ticketId, 'HelpDesk');
-			if (strtolower($ticketFocus->column_fields['ticketstatus']) == 'closed') {
-				$totalUsedUnits += $this->computeUsedUnits($ticketFocus->column_fields);
+			if(isRecordExists($tikcetId)) {
+				$ticketFocus->retrieve_entity_info($ticketId, 'HelpDesk');
+				if (strtolower($ticketFocus->column_fields['ticketstatus']) == 'closed') {
+					$totalUsedUnits += $this->computeUsedUnits($ticketFocus->column_fields);
+				}
 			}
 		}
 		$this->updateUsedUnits($totalUsedUnits);
