@@ -146,7 +146,6 @@ function _SMSConfigServerSaveForm(form)
         	method: 'post',
             postBody: 'action=SMSNotifierAjax&module=SMSNotifier&file=SMSConfigServer&mode=Save&' + frmvalues,
             onComplete: function(response) {
-            	console.log(response.responseText);
             	$("status").style.display="none";
 				$("_smsservers_").innerHTML = response.responseText;
         	}
