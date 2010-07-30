@@ -94,7 +94,7 @@ function performScanNow(app_key, scannername) {
 
 					{if $SCANNERINFO.rules neq false}
 					<input type="button" class="crmbutton small delete" value="{$MOD.LBL_SCAN_NOW}" 
-						onclick="performScanNow('{$APP_KEY}','@addslashes|{$SCANNERINFO.scannername}')" />
+						onclick="performScanNow('{$APP_KEY}','{$SCANNERINFO.scannername|@decode_html|@addslashes|@to_html}')" />
 					{/if}
 
 					<input type="submit" class="crmbutton small cancel" onclick="this.form.mode.value='folder'" value="{$MOD.LBL_SELECT} {$MOD.LBL_FOLDERS}" />

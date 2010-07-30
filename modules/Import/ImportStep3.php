@@ -35,10 +35,6 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
 
-ini_set("display_errors",'On');
-ini_set('error_reporting', 6135);
-
-
 function p($str){
 	global $adb;
 	$adb->println("IMP :".$str);
