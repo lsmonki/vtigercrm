@@ -1016,6 +1016,13 @@ class Common_Install_Wizard_Utils {
 		       return $array;
 		
 		}';
+
+	function getRecommendedDirectives() {
+		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
+			self::$recommendedDirectives['error_reporting'] = 'E_WARNING & ~E_NOTICE & ~E_DEPRECATED';
+		}
+		return self::$recommendedDirectives;
+	}
 	
 	/** Function to check the file access is made within web root directory. */
 	static function checkFileAccess($filepath) {
@@ -1069,7 +1076,11 @@ class Common_Install_Wizard_Utils {
 			$directiveValues['max_execution_time'] = ini_get('max_execution_time');
 		if (ini_get('memory_limit') < 32)
 			$directiveValues['memory_limit'] = ini_get('memory_limit');
-		if (ini_get('error_reporting') != '2')
+		$errorReportingValue = E_WARNING & ~E_NOTICE;
+		if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
+			$errorReportingValue = E_WARNING & ~E_NOTICE & ~E_DEPRECATED;
+		}
+		if (ini_get('error_reporting') != $errorReportingValue)
 			$directiveValues['error_reporting'] = 'NOT RECOMMENDED';
 		if (ini_get('allow_call_time_pass_reference') != '1' || stripos(ini_get('allow_call_time_pass_reference'), 'Off') > -1)
 			$directiveValues['allow_call_time_pass_reference'] = 'Off';

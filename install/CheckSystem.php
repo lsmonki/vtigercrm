@@ -48,7 +48,7 @@ if (isset ($_REQUEST['filename'])) {
 
 $failed_permissions = Common_Install_Wizard_Utils::getFailedPermissionsFiles();
 $gd_info_alternate = Common_Install_Wizard_Utils::$gdInfoAlternate;
-$directive_recommended = Common_Install_Wizard_Utils::$recommendedDirectives;
+$directive_recommended = Common_Install_Wizard_Utils::getRecommendedDirectives();
 $directive_array = Common_Install_Wizard_Utils::getCurrentDirectiveValue();
 $check_mysql_extension = Common_Install_Wizard_Utils::check_mysql_extension();
 ?>
