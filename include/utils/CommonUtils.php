@@ -3060,11 +3060,16 @@ function getUItype($module,$columnname)
 {
         global $log;
         $log->debug("Entering getUItype(".$module.") method ...");
-	//To find tabid for this module
-	$tabid=getTabid($module);
+		$tabIdList = array();
+		//To find tabid for this module
+		$tabIdList[] = getTabid($module);
         global $adb;
-        $sql = "select uitype from vtiger_field where tabid=? and columnname=?";
-        $result = $adb->pquery($sql, array($tabid, $columnname));
+		if($module == 'Calendar') {
+			$tabIdList[] = getTabid('Events');
+		}
+        $sql = "select uitype from vtiger_field where tabid IN (".generateQuestionMarks($tabIdList).
+				") and columnname=?";
+        $result = $adb->pquery($sql, array($tabIdList, $columnname));
         $uitype =  $adb->query_result($result,0,"uitype");
         $log->debug("Exiting getUItype method ...");
         return $uitype;
