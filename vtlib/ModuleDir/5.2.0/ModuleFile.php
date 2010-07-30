@@ -131,7 +131,7 @@ class ModuleClass extends CRMEntity {
 	 * Return query to use based on given modulename, fieldname
 	 * Useful to handle specific case handling for Popup
 	 */
-	function getQueryByModuleField($module, $fieldname, $srcrecord) {
+	function getQueryByModuleField($module, $fieldname, $srcrecord, $query='') {
 		// $srcrecord could be empty
 	}
 
