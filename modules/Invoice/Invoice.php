@@ -129,7 +129,7 @@ class Invoice extends CRMEntity {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 			{
 				//Based on the total Number of rows we will save the product relationship with this entity
-				saveInventoryProductDetails(&$this, 'Invoice');
+				saveInventoryProductDetails($this, 'Invoice');
 			}
 		}
 		

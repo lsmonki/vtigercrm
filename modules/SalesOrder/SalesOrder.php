@@ -130,7 +130,7 @@ class SalesOrder extends CRMEntity {
 		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails(&$this, 'SalesOrder');	
+			saveInventoryProductDetails($this, 'SalesOrder');	
 		}
 		
 		// Update the currency id and the conversion rate for the sales order

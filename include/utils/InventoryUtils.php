@@ -522,7 +522,7 @@ function updateInventoryProductRel($entity)
  *	@param $update_prod_stock - true or false (default), if true we have to update the stock for PO only
  *	@return void
  */
-function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateDemand='')
+function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false', $updateDemand='')
 {
 	global $log, $adb;
 	$id=$focus->id;
