@@ -48,7 +48,7 @@ function mobile_ws_filterDetailsWithCount($filterid, $user) {
 }
 
 function mobile_ws_listModuleRecords($elements, $user) {
-	$request = new Mobile_API_Request($elements); // elements can have key (module, alertid, filterid, search)
+	$request = new Mobile_API_Request($elements); // elements can have key (module, alertid, filterid, search, page)
 	return Mobile_WS_API::process($request, $user, 'Mobile_WS_ListModuleRecords', 'ws/ListModuleRecords.php');
 }
 

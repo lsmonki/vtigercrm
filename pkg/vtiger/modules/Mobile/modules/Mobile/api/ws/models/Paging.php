@@ -10,8 +10,12 @@
 class Mobile_WS_PagingModel {
 	
 	var $_start;
-	var $_limit = 100;
+	var $_limit;
 	var $_page;
+	
+	function __construct() {
+		$this->_limit = Mobile::config('API_RECORD_FETCH_LIMIT', 20);
+	}
 	
 	function start() {
 		return $this->_start;

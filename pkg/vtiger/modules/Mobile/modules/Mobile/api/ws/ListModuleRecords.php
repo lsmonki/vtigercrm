@@ -22,8 +22,8 @@ class Mobile_WS_ListModuleRecords extends Mobile_WS_Controller {
 	}
 	
 	function getPagingModel(Mobile_API_Request $request) {
-		//return Mobile_WS_PagingModel::modelWithPageStart($request->get('page'));
-		return false; // TODO
+		$page = $request->get('page', 0);
+		return Mobile_WS_PagingModel::modelWithPageStart($page);
 	}
 	
 	function process(Mobile_API_Request $request) {

@@ -160,7 +160,7 @@ class Mobile_WS_Utils {
 		$result = $adb->pquery(
 			"SELECT fieldname, fieldlabel, blocklabel, uitype FROM vtiger_field INNER JOIN
 			vtiger_blocks ON vtiger_blocks.tabid=vtiger_field.tabid AND vtiger_blocks.blockid=vtiger_field.block 
-			WHERE vtiger_field.tabid=? ORDER BY vtiger_blocks.sequence, vtiger_field.sequence", array(getTabid($module))
+			WHERE vtiger_field.tabid=? AND vtiger_field.presence != 1 ORDER BY vtiger_blocks.sequence, vtiger_field.sequence", array(getTabid($module))
 		);
 
 		$fieldgroups = array();
