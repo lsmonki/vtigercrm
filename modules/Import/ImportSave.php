@@ -216,7 +216,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			if($process_fields == 'false'){
 				$focus->process_special_fields();
 			}
-			$focus->save($module);
+			$focus->saveentity($module);
 			//$focus->saveentity($module);
 			$return_id = $focus->id;
 
