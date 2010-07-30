@@ -12,13 +12,20 @@ require_once dirname(__FILE__) . '/../../../include/tcpdf/tcpdf.php';
 
 class Vtiger_PDF_TCPDF extends TCPDF {
 
+	protected $FontFamily;
+
 	public function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8') {
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding);
 		$this->SetFont('','',10);
+		$this->setFontFamily('times');
 	}
 
 	function getFontSize() {
 		return $this->FontSizePt;
+	}
+
+	function setFontFamily($family) {
+		$this->FontFamily = $family;
 	}
 
 	function GetStringHeight($sa,$w) {
@@ -56,6 +63,22 @@ class Vtiger_PDF_TCPDF extends TCPDF {
 		}
 
 		return ($lines * ($this->FontSize * $this->cell_height_ratio)) + 2;
+	}
+
+	function SetFont($family, $style='', $size='') {
+		if($family == '') {
+			$family = $this->FontFamily;
+		}
+		//Select a font; size given in points
+		if ($size == 0) {
+			$size = $this->FontSizePt;
+		}
+		// try to add font (if not already added)
+		$fontdata =  $this->AddFont($family, $style);
+		$this->FontFamily = $fontdata['family'];
+		$this->FontStyle = $fontdata['style'];
+		$this->CurrentFont = &$this->fonts[$fontdata['fontkey']];
+		$this->SetFontSize($size);
 	}
 }
 ?>
