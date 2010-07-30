@@ -1504,7 +1504,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if(($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1) && $temp_val != '')
 		{	
 			$temp_acttype = $adb->query_result($list_result,$list_result_count,'activitytype');
-			if(($temp_acttype != 'task') && $fieldname =="taskstatus")
+			if(($temp_acttype != 'Task') && $fieldname =="taskstatus")
 				$temptable = "eventstatus";
 			else
 				$temptable = $fieldname;
