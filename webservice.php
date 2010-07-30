@@ -29,8 +29,13 @@
 		return $operationInput[$operation];
 	}
 	
+	function setResponseHeaders() {
+		header('Content-type: application/json');
+	}
+
 	function writeErrorOutput($operationManager, $error){
 		
+		setResponseHeaders();
 		$state = new State();
 		$state->success = false;
 		$state->error = $error;
@@ -42,6 +47,7 @@
 	
 	function writeOutput($operationManager, $data){
 		
+		setResponseHeaders();
 		$state = new State();
 		$state->success = true;
 		$state->result = $data;
