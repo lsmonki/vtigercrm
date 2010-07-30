@@ -418,7 +418,7 @@ function changeSteps1()
 	{
 		var escapedOptions = new Array('account_id','contactid','contact_id','product_id','parent_id','campaignid','potential_id','assigned_user_id1','quote_id','accountname','salesorder_id','vendor_id','time_start','time_end','lastname');
 		
-		var conditionColumns = document.getElementsByName("conditionColumn");
+		var conditionColumns = vt_getElementsByName('tr', "conditionColumn");
 		var criteriaConditions = [];
 		for(var i=0;i < conditionColumns.length ; i++) {
 			
@@ -501,7 +501,7 @@ function changeSteps1()
 			}
 			if (extValueObject && extendedValue != null && extendedValue != '') specifiedValue = specifiedValue +','+ extendedValue;
 			
-			criteriaConditions[columnIndex] = {	"groupid":columnGroupId, 
+			criteriaConditions[columnIndex] = {"groupid":columnGroupId, 
 												"columnname":selectedColumn,
 												"comparator":comparatorValue,
 												"value":specifiedValue,
@@ -511,7 +511,7 @@ function changeSteps1()
 		
 		$('advft_criteria').value = JSON.stringify(criteriaConditions);
 		
-		var conditionGroups = document.getElementsByName("conditionGroup");
+		var conditionGroups = vt_getElementsByName('div', "conditionGroup");
 		var criteriaGroups = [];
 		for(var i=0;i < conditionGroups.length ; i++) {
 			var groupTableId = conditionGroups[i].getAttribute("id");
@@ -546,7 +546,7 @@ function changeSteps1()
 			return false;
 		}
 
-	} if (getObj('step6').style.display != 'none') {
+	}if (getObj('step6').style.display != 'none') {
 		saveAndRunReport();
 	} else {
 		for (i = 0; i < divarray.length; i++) {
@@ -695,7 +695,7 @@ function re_dateValidate(fldval,fldLabel,type) {
 		case 4 : 
 		case 6 : 
 		case 9 : 
-		case 11 :	if (dd>30) {
+		case 11 :if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
 						return false
 					}	
@@ -720,11 +720,11 @@ function re_patternValidate(fldval,fldLabel,type) {
 	if (type.toUpperCase()=="DATE") {//DATE validation 
 
 		switch (userDateFormat) {
-			case "yyyy-mm-dd" : 
+			case "yyyy-mm-dd" :
 								var re = /^\d{4}(-)\d{1,2}\1\d{1,2}$/
 								break;
 			case "mm-dd-yyyy" : 
-			case "dd-mm-yyyy" : 
+			case "dd-mm-yyyy" :
 								var re = /^\d{1,2}(-)\d{1,2}\1\d{4}$/								
 		}
 	}
@@ -746,7 +746,7 @@ function standardFilterDisplay()
 	if(document.NewReport.stdDateFilterField.options.length <= 0 || (document.NewReport.stdDateFilterField.selectedIndex > -1 && document.NewReport.stdDateFilterField.options[document.NewReport.stdDateFilterField.selectedIndex].value == "Not Accessible")) 
 	{
 		getObj('stdDateFilter').disabled = true;
-		getObj('startdate').disabled = true;                                                                                         getObj('enddate').disabled = true;
+		getObj('startdate').disabled = true;getObj('enddate').disabled = true;
 		getObj('jscal_trigger_date_start').style.visibility="hidden";
 		getObj('jscal_trigger_date_end').style.visibility="hidden";
 	}
@@ -827,4 +827,19 @@ function fnLoadRepValues(tab1,tab2,block1,block2){
 	document.getElementById(block2).style.display='none';
 	document.getElementById(tab1).className='dvtSelectedCell';
 	document.getElementById(tab2).className='dvtUnSelectedCell';
+}
+
+/**
+ * IE has a bug where document.getElementsByName doesnt include result of dynamically created 
+ * elements
+ */
+function vt_getElementsByName(tagName, elementName) {
+	var inputs = document.getElementsByTagName( tagName );
+	var selectedElements = [];
+	for(var i=0;i<inputs.length;i++){
+	  if(inputs.item(i).getAttribute( 'name' ) == elementName ){
+		selectedElements.push( inputs.item(i) );
+	  }
+	}
+	return selectedElements;
 }
