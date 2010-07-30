@@ -156,7 +156,7 @@ class Users {
 	var $record_id;
 	var $new_schema = true;
 
-	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'PHP5.3MD5'; //'BLOWFISH', /* before PHP5.3*/ MD5;
+	var $DEFAULT_PASSWORD_CRYPT_TYPE; //'BLOWFISH', /* before PHP5.3*/ MD5;
 
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
@@ -167,6 +167,8 @@ class Users {
 		$this->log = LoggerManager::getLogger('user');
 		$this->log->debug("Entering Users() method ...");
 		$this->db = PearDatabase::getInstance();
+		$this->DEFAULT_PASSWORD_CRYPT_TYPE = (version_compare(PHP_VERSION, '5.3.0') >= 0)?
+				'PHP5.3MD5': 'MD5';
 		$this->log->debug("Exiting Users() method ...");
 	}
 

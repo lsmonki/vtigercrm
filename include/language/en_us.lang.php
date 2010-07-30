@@ -1262,6 +1262,12 @@ $app_strings = array (
 'Services' => 'Services',
 	'LBL_REFRESH' => 'Refresh',
 	'LBL_Reminder' => 'Reminder',
+	'LBL_RESET_PASSWORD' => 'Reset Password',
+	'LBL_PHP_UPGRADE' => 'You have updated your php version. due changes in crypt API your password
+		  is no longer applicable, please reset your password.',
+	'LBL_RESET_PASSWORD_DESCRIPTION' => 'you can reset password for all users using a script and set it to thier respective
+			  user names.',
+	
 );
 
 $app_list_strings = array (
