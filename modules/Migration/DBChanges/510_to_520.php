@@ -494,7 +494,7 @@ if($adb->num_rows($maxReportIdResult) > 0) {
 				$maxColumnIndex = 0;
 				for($j=0;$j<$noOfConditions; $j++) {
 					$columnIndex = $adb->query_result($relcriteriaResult, $j, 'columnindex');
-					if($max < $columnIndex) {
+					if($maxColumnIndex < $columnIndex) {
 						$maxColumnIndex = $columnIndex;
 					}
 					$columnIndexArray[] = $columnIndex;

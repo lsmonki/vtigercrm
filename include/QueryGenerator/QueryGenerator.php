@@ -575,6 +575,8 @@ class QueryGenerator {
 
 		if(is_string($value)) {
 			$valueArray = explode(',' , $value);
+		} elseif(is_array($value)) {
+			$valueArray = $value;
 		}else{
 			$valueArray = array($value);
 		}
@@ -582,11 +584,11 @@ class QueryGenerator {
 		$sql = array();
 		if($operator == 'between') {
 			if($field->getFieldName() == 'birthday') {
-				$sql[] = "BETWEEN DATE_FORMAT(".$db->quote($value[0]).", '%m%d') AND ".
-						"DATE_FORMAT(".$db->quote($value[1]).", '%m%d')";
+				$sql[] = "BETWEEN DATE_FORMAT(".$db->quote($valueArray[0]).", '%m%d') AND ".
+						"DATE_FORMAT(".$db->quote($valueArray[1]).", '%m%d')";
 			} else {
-				$sql[] = "BETWEEN ".$db->quote($value[0])." AND ".
-							$db->quote($value[1]);
+				$sql[] = "BETWEEN ".$db->quote($valueArray[0])." AND ".
+							$db->quote($valueArray[1]);
 			}
 			return $sql;
 		}
