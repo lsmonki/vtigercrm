@@ -1349,5 +1349,25 @@ class Users {
 			$this->db->pquery($sql4, array($attachmentId));			
 		}
 	}
+
+	/** Function to delete an entity with given Id */
+	function trash($module, $id) {
+		global $log, $current_user;
+
+		$this->mark_deleted($id);
+	}
+
+	/**
+	 * This function should be overridden in each module.  It marks an item as deleted.
+	 * @param <type> $id
+	 */
+	function mark_deleted($id) {
+		global $log, $current_user, $adb;
+		$date_var = date('Y-m-d H:i:s');
+		$query = "UPDATE vtiger_users set status=?,date_modified=?,modified_user_id=? where id=?";
+		$adb->pquery($query, array('Inactive', $adb->formatDate($date_var, true),
+			$current_user->id, $id), true,"Error marking record deleted: ");
+	}
+
 }
 ?>

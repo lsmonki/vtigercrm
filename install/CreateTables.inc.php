@@ -56,72 +56,12 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_role values('H".$role4_id."','Sales Manager','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
         $adb->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
         
-        // Invalidate any cached information
-    	VTCacheUtils::clearRoleSubordinates();
-                
-        // create default admin user
-    	$user = new Users();
-        $user->column_fields["last_name"] = 'Administrator';
-        $user->column_fields["user_name"] = 'admin';
-        $user->column_fields["status"] = 'Active';
-        $user->column_fields["is_admin"] = 'on';
-        $user->column_fields["user_password"] = $admin_password;
-        $user->column_fields["tz"] = 'Europe/Berlin';
-        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
-        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
-        $user->column_fields["weekstart"] = '1';
-        $user->column_fields["namedays"] = '';
-        $user->column_fields["currency_id"] = 1;
-        $user->column_fields["reminder_interval"] = '1 Minute';
-        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
-		$user->column_fields["date_format"] = 'yyyy-mm-dd';
-		$user->column_fields["hour_format"] = 'am/pm';
-		$user->column_fields["start_hour"] = '08:00';
-		$user->column_fields["end_hour"] = '23:00';
-		$user->column_fields["imagename"] = '';
-		$user->column_fields["internal_mailer"] = '1';
-		$user->column_fields["activity_view"] = 'This Week';	
-		$user->column_fields["lead_view"] = 'Today';
-        //added by philip for default admin emailid
-		if($admin_email == '')
-			$admin_email ="admin@vtigeruser.com";
-        $user->column_fields["email1"] = $admin_email;
-		$role_query = "select roleid from vtiger_role where rolename='CEO'";
-		$adb->checkConnection();
-		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
-		$role_result = $adb->query($role_query);
-		$role_id = $adb->query_result($role_result,0,"roleid");
-		$user->column_fields["roleid"] = $role_id;
-
-        $user->save("Users");
-        $admin_user_id = $user->id;
-
-		//Inserting into vtiger_groups table
-		$group1_id = $adb->getUniqueID("vtiger_users");
-		$group2_id = $adb->getUniqueID("vtiger_users");
-		$group3_id = $adb->getUniqueID("vtiger_users");
-		
-		$adb->query("insert into vtiger_groups values ('".$group1_id."','Team Selling','Group Related to Sales')");	
-		$adb->query("insert into vtiger_group2role values ('".$group1_id."','H".$role4_id."')");	
-		$adb->query("insert into vtiger_group2rs values ('".$group1_id."','H".$role5_id."')");	
-
-		$adb->query("insert into vtiger_groups values ('".$group2_id."','Marketing Group','Group Related to Marketing Activities')");	
-		$adb->query("insert into vtiger_group2role values ('".$group2_id."','H".$role2_id."')");	
-		$adb->query("insert into vtiger_group2rs values ('".$group2_id."','H".$role3_id."')");	
-
-		$adb->query("insert into vtiger_groups values ('".$group3_id."','Support Group','Group Related to providing Support to Customers')");
-		$adb->query("insert into vtiger_group2role values ('".$group3_id."','H".$role3_id."')");
-		$adb->query("insert into vtiger_group2rs values ('".$group3_id."','H".$role3_id."')");
-	
 		//Insert into vtiger_role2profile
 		$adb->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
 		$adb->query("insert into vtiger_role2profile values ('H".$role3_id."',".$profile2_id.")");
 	  	$adb->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
 		$adb->query("insert into vtiger_role2profile values ('H".$role5_id."',".$profile2_id.")"); 
 	   
-		// Setting user group relation for admin user
-	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $admin_user_id));
-	
 		//New Security Start
 		//Inserting into vtiger_profile vtiger_table
 		$adb->query("insert into vtiger_profile values ('".$profile1_id."','Administrator','Admin Profile')");	
@@ -772,6 +712,66 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",14,10,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,10,0)");
 	
+		 // Invalidate any cached information
+    	VTCacheUtils::clearRoleSubordinates();
+
+        // create default admin user
+    	$user = new Users();
+        $user->column_fields["last_name"] = 'Administrator';
+        $user->column_fields["user_name"] = 'admin';
+        $user->column_fields["status"] = 'Active';
+        $user->column_fields["is_admin"] = 'on';
+        $user->column_fields["user_password"] = $admin_password;
+        $user->column_fields["tz"] = 'Europe/Berlin';
+        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
+        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
+        $user->column_fields["weekstart"] = '1';
+        $user->column_fields["namedays"] = '';
+        $user->column_fields["currency_id"] = 1;
+        $user->column_fields["reminder_interval"] = '1 Minute';
+        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
+		$user->column_fields["date_format"] = 'yyyy-mm-dd';
+		$user->column_fields["hour_format"] = 'am/pm';
+		$user->column_fields["start_hour"] = '08:00';
+		$user->column_fields["end_hour"] = '23:00';
+		$user->column_fields["imagename"] = '';
+		$user->column_fields["internal_mailer"] = '1';
+		$user->column_fields["activity_view"] = 'This Week';
+		$user->column_fields["lead_view"] = 'Today';
+        //added by philip for default admin emailid
+		if($admin_email == '')
+			$admin_email ="admin@vtigeruser.com";
+        $user->column_fields["email1"] = $admin_email;
+		$role_query = "select roleid from vtiger_role where rolename='CEO'";
+		$adb->checkConnection();
+		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
+		$role_result = $adb->query($role_query);
+		$role_id = $adb->query_result($role_result,0,"roleid");
+		$user->column_fields["roleid"] = $role_id;
+
+        $user->save("Users");
+        $admin_user_id = $user->id;
+
+		//Inserting into vtiger_groups table
+		$group1_id = $adb->getUniqueID("vtiger_users");
+		$group2_id = $adb->getUniqueID("vtiger_users");
+		$group3_id = $adb->getUniqueID("vtiger_users");
+
+		$adb->query("insert into vtiger_groups values ('".$group1_id."','Team Selling','Group Related to Sales')");
+		$adb->query("insert into vtiger_group2role values ('".$group1_id."','H".$role4_id."')");
+		$adb->query("insert into vtiger_group2rs values ('".$group1_id."','H".$role5_id."')");
+
+		$adb->query("insert into vtiger_groups values ('".$group2_id."','Marketing Group','Group Related to Marketing Activities')");
+		$adb->query("insert into vtiger_group2role values ('".$group2_id."','H".$role2_id."')");
+		$adb->query("insert into vtiger_group2rs values ('".$group2_id."','H".$role3_id."')");
+
+		$adb->query("insert into vtiger_groups values ('".$group3_id."','Support Group','Group Related to providing Support to Customers')");
+		$adb->query("insert into vtiger_group2role values ('".$group3_id."','H".$role3_id."')");
+		$adb->query("insert into vtiger_group2rs values ('".$group3_id."','H".$role3_id."')");
+		
+		// Setting user group relation for admin user
+	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $admin_user_id));
+
 		//Creating the flat files for admin user
 		createUserPrivilegesfile($admin_user_id);
 		createUserSharingPrivilegesfile($admin_user_id);
