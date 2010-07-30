@@ -22,7 +22,7 @@ if($argv) {
 		$value = $argv[$index];
 		if(strpos($value, '=') === false) continue;
 
-		$keyval = split('=', $value);
+		$keyval = explode('=', $value);
 		if(!isset($_REQUEST[$keyval[0]])) {
 			$_REQUEST[$keyval[0]] = $keyval[1];
 		}
