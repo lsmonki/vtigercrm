@@ -9,7 +9,9 @@
  ************************************************************************************/
 include_once dirname(__FILE__) . '/ModCommentsCore.php';
 include_once dirname(__FILE__) . '/models/Comments.php';
+
 require_once 'include/utils/VtlibUtils.php';
+
 class ModComments extends ModCommentsCore {
 	
 	/**
@@ -22,14 +24,14 @@ class ModComments extends ModCommentsCore {
 		if ($event_type == 'module.postinstall') {
 			self::addWidgetTo(array('Leads', 'Contacts', 'Accounts'));
 		}
-		
 	}
 	
 	/**
 	 * Get widget instance by name
 	 */
 	static function getWidget($name) {
-		if ($name == 'DetailViewBlockCommentWidget' && vtlib_isModuleActive('ModComments')) {
+		if ($name == 'DetailViewBlockCommentWidget' &&
+				isPermitted('ModComments', 'DetailView') == 'yes') {
 			require_once dirname(__FILE__) . '/widgets/DetailViewBlockComment.php';
 			return (new ModComments_DetailViewBlockCommentWidget());
 		}
