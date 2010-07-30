@@ -4259,6 +4259,33 @@ function getPermittedModuleNames()
 }
 
 
+/**
+ * Function to get the permitted module id Array with presence as 0
+ * @global Users $current_user
+ * @return Array Array of accessible tabids.
+ */
+function getPermittedModuleIdList() {
+	global $current_user;
+	$permittedModules=Array();
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	include('tabdata.php');
+
+	if($is_admin == false && $profileGlobalPermission[1] == 1 &&
+			$profileGlobalPermission[2] == 1) {
+		foreach($tab_seq_array as $tabid=>$seq_value) {
+			if($seq_value === 0 && $profileTabsPermission[$tabid] === 0) {
+				$permittedModules[]=($tabid);
+			}
+		}
+	} else {
+		foreach($tab_seq_array as $tabid=>$seq_value) {
+			if($seq_value === 0) {
+				$permittedModules[]=($tabid);
+			}
+		}
+	}
+	return $permittedModules;
+}
 
 /** Function to recalculate the Sharing Rules for all the vtiger_users 
   * This function will recalculate all the sharing rules for all the vtiger_users in the Organization and will write them in flat vtiger_files 

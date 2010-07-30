@@ -65,7 +65,7 @@ class VTCreateEventTask extends VTTask{
 			'due_date'=>$endDate,
 			'visibility'=>'all',
 			'taskstatus'=>'',
-			'duration_hours'=>''
+			'duration_hours'=>'0'
 		);
 
 		$moduleName = $entityData->getModuleName();

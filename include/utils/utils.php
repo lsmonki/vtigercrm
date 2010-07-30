@@ -1538,15 +1538,15 @@ function getDBInsertDateValue($value)
 	$insert_date='';
 	if($dat_fmt == 'dd-mm-yyyy')
 	{
-		list($d,$m,$y) = split('-',$value);
+		list($d,$m,$y) = explode('-',$value);
 	}
 	elseif($dat_fmt == 'mm-dd-yyyy')
 	{
-		list($m,$d,$y) = split('-',$value);
+		list($m,$d,$y) = explode('-',$value);
 	}
 	elseif($dat_fmt == 'yyyy-mm-dd')
 	{
-		list($y,$m,$d) = split('-',$value);
+		list($y,$m,$d) = explode('-',$value);
 	}
 
 	if(!$y && !$m && !$d) {
@@ -4774,7 +4774,7 @@ function getValidDBInsertDateValue($value) {
             }
         }
 	global $current_user;
-	list($y,$m,$d) = split('-',$value);
+	list($y,$m,$d) = explode('-',$value);
 
 	if(strlen($y)<4){
 		$insert_date = getDBInsertDateValue($value);

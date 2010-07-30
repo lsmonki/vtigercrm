@@ -17,9 +17,6 @@ $local_log =& LoggerManager::getLogger('UsersAjax');
 $ajaxaction = $_REQUEST["ajxaction"];
 if($ajaxaction == "DETAILVIEW")
 {
-	echo ":#:ERR".var_export(array((empty($_SESSION['Users_FORM_TOKEN']) || $_SESSION['Users_FORM_TOKEN']
-			!== $_REQUEST['form_token']), empty($_SESSION['Users_FORM_TOKEN']), $_SESSION['Users_FORM_TOKEN']
-			, $_REQUEST['form_token']), true);
 	if(empty($_SESSION['Users_FORM_TOKEN']) || $_SESSION['Users_FORM_TOKEN']
 			!== (int)$_REQUEST['form_token']) {
 		echo ":#:ERR".($app_strings['LBL_PERMISSION']);

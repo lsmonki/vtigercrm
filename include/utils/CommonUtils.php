@@ -953,7 +953,7 @@ function getDisplayDate($cur_date_val)
 	}
 
 		$date_value = explode(' ',$cur_date_val);
-		list($y,$m,$d) = split('-',$date_value[0]);
+		list($y,$m,$d) = explode('-',$date_value[0]);
 		if($dat_fmt == 'dd-mm-yyyy')
 		{
 			$display_date = $d.'-'.$m.'-'.$y;
@@ -976,6 +976,32 @@ function getDisplayDate($cur_date_val)
 	$log->debug("Exiting getDisplayDate method ...");
 	return $display_date;
  			
+}
+
+/**
+ * This function returns the date in user specified format.
+ * limitation is that mm-dd-yyyy and dd-mm-yyyy will be considered same by this API.
+ * As in the date value is on mm-dd-yyyy and user date format is dd-mm-yyyy then the mm-dd-yyyy
+ * value will be return as the API will be considered as considered as in same format.
+ * this due to the fact that this API tries to consider the where given date is in user date
+ * format. we need a better gauge for this case.
+ * @global Users $current_user
+ * @param Date $cur_date_val the date which should a changed to user date format.
+ * @return Date
+ */
+function getValidDisplayDate($cur_date_val) {
+	global $current_user;
+	$dat_fmt = $current_user->date_format;
+	if($dat_fmt == '') {
+		$dat_fmt = 'dd-mm-yyyy';
+	}
+	$date_value = explode(' ',$cur_date_val);
+	list($y,$m,$d) = explode('-',$date_value[0]);
+	list($fy, $fm, $fd) = explode('-', $dat_fmt);
+	if((strlen($fy) == 4 && strlen($y) == 4) || (strlen($fd) == 4 && strlen($d) == 4)) {
+		return $cur_date_val;
+	}
+	return getDisplayDate($cur_date_val);
 }
 
 /** This function returns the date in user specified format.

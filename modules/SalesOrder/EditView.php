@@ -75,7 +75,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		//Handling for dateformat in due_date vtiger_field
 		if ($focus->column_fields['duedate'] != '') {
 			$curr_due_date = $focus->column_fields['duedate'];
-			$focus->column_fields['duedate'] = getDBInsertDateValue($curr_due_date);
+			$focus->column_fields['duedate'] = getValidDBInsertDateValue($curr_due_date);
 		}
 
 		$quoteid = $focus->column_fields['quote_id'];
@@ -111,7 +111,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		//Handling for dateformat in due_date vtiger_field
 		if ($focus->column_fields['duedate'] != '') {
 			$curr_due_date = $focus->column_fields['duedate'];
-			$focus->column_fields['duedate'] = getDBInsertDateValue($curr_due_date);
+			$focus->column_fields['duedate'] = getValidDBInsertDateValue($curr_due_date);
 		}
 		$quoteid = $focus->column_fields['quote_id'];
 		$quote_focus = new Quotes();
