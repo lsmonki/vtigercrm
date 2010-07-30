@@ -797,7 +797,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$contact_name = getFullNameFromQResult($list_result,$i-1,"Contacts");
 								$value="";
 								//Added to get the contactname for activities custom view - t=2190
-								if($contact_id != '' && $contact_name == '') {
+								if($contact_id != '' && !empty($contact_name)) {
 									$contact_name = getContactName($contact_id);
 								}
 								if(($contact_name != "") && ($contact_id !='NULL')) {

@@ -210,11 +210,12 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 	$storearray = explode (";",$_REQUEST['contactidlist']);
 	$del_sql = "delete from vtiger_cntactivityrel where activityid=?";
 	$adb->pquery($del_sql, array($record));
+	$record = $focus->id;
 	foreach($storearray as $id)
 	{
 		if($id != '')
 		{
-			$record = $focus->id;
+			
 			$sql = "insert into vtiger_cntactivityrel values (?,?)";
 			$adb->pquery($sql, array($id, $record));
 			if(!empty($heldevent_id)) {

@@ -274,7 +274,8 @@ elseif($activity_mode == 'Events')
 		$invited_users[$userid]=$username;
 	}
 	$smarty->assign("INVITEDUSERS",$invited_users);
-	$related_array = getRelatedLists("Calendar", $focus);
+	$related_array = getRelatedListsInformation("Calendar", $focus);
+	
 	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
 	
 	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');

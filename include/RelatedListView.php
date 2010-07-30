@@ -85,7 +85,7 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 	//Retreive the list from Database
 	//Appending the security parameter Security fix by Don
 	if($relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook'
-			&& $relatedmodule != 'Vendors') {
+			&& $relatedmodule != 'Vendors' && $relatedmodule != 'Users') {
 		global $current_user;
 		$secQuery = getNonAdminAccessControlQuery($relatedmodule, $current_user);
 		if(strlen($secQuery) > 1) {
