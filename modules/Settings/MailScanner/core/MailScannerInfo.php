@@ -389,7 +389,7 @@ class Vtiger_MailScannerInfo {
 		$result = $adb->pquery("SELECT scannername FROM vtiger_mailscanner", array());
 		if($result && $adb->num_rows($result)) {
 			while($resultrow = $adb->fetch_array($result)) {
-				$scanners[] = new self( $resultrow['scannername'] );
+				$scanners[] = new self( decode_html($resultrow['scannername'] ));
 			}
 		}
 		return $scanners;

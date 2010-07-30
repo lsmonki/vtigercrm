@@ -67,11 +67,13 @@ if(isset($arr_val))
 
 	$rowcount++;
 	$count=1;
-	foreach($totalxls[0] as $key=>$value)
-	{
-			$chdr=substr($key,-3,3);
-		$worksheet->write($rowcount, $count, $mod_strings[$chdr]);
-		$count = $count + 1;
+	if(is_array($totalxls[0])) {
+		foreach($totalxls[0] as $key=>$value)
+		{
+				$chdr=substr($key,-3,3);
+			$worksheet->write($rowcount, $count, $mod_strings[$chdr]);
+			$count = $count + 1;
+		}
 	}
 	$rowcount++;
 	foreach($totalxls as $key=>$array_value)

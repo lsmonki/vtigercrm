@@ -33,7 +33,7 @@
 			<select name="smsserver_provider" class="small" onchange="_SMSCongiServerShowReqParams(this);">
 				<option value="">-- {$CMOD.LBL_SELECT_ONE} --</option>	
 				{foreach item=SMSPROVIDER from=$SMSPROVIDERS}
-				<option {if $SMSSERVERINFO.providertype eq $SMSPROVIDER}selected="true"{/if}>{$SMSPROVIDER}</option>
+				<option {if $SMSSERVERINFO.providertype eq $SMSPROVIDER}selected="true"{/if} value="{$SMSPROVIDER}">{$SMSPROVIDER}</option>
 				{/foreach}
 			</select>
 		</td>
