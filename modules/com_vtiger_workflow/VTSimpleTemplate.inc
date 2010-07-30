@@ -24,7 +24,7 @@ class VTSimpleTemplate{
 		if(count($matches)==0){
 			$fieldname = $match[1];
 			$data = $this->parent->getData();
-			if(!empty($data[$fieldname])){
+			if($this->useValue($data, $fieldname)){
 				$result = $data[$fieldname];
 			}else{
 				$result ='';
@@ -33,7 +33,7 @@ class VTSimpleTemplate{
 			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
 			if($referenceModule === '__VtigerMeta__'){
 				$result = $this->getMetaValue($fieldname);
-	}else{
+			}else{
 				$referenceId = $this->parent->get($referenceField);
 				if($referenceId==null){
 					$result="";
@@ -41,8 +41,6 @@ class VTSimpleTemplate{
 					$entity = $this->cache->forId($referenceId);
 					if($referenceModule==="Users" && $entity->getModuleName()=="Groups"){
 						list($groupEntityId, $groupId) = vtws_getIdComponents($referenceId);
-						//$users = vtws_getUsersInTheSameGroup($groupId);
-							$log->fatal($referenceModule);
 						
 						require_once('include/utils/GetGroupUsers.php');
 						$ggu = new GetGroupUsers();
@@ -54,14 +52,14 @@ class VTSimpleTemplate{
 							$refId = vtws_getWebserviceEntityId("Users", $userId);
 							$entity = $this->cache->forId($refId);
 							$data = $entity->getData();
-							if(!empty($fieldname)){
+							if($this->useValue($data, $fieldname)){
 								$parts[] = $data[$fieldname];
 							}
 						}
 						$result = implode(",", $parts);
 					}if($entity->getModuleName()===$referenceModule){
 						$data = $entity->getData();
-						if(!empty($fieldname)){
+						if($this->useValue($data, $fieldname)){
 							$result = $data[$fieldname];
 						}else{
 							$result = '';
@@ -78,6 +76,11 @@ class VTSimpleTemplate{
 		return $result;						
 		
 	}
+
+	protected function useValue($data, $fieldname) {
+		return !empty($data[$fieldname]);
+	}
+
 	function parseTemplate(){
 		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))\s*,?/', array($this,"matchHandler"), $this->template);
 	}

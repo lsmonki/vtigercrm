@@ -9,7 +9,7 @@
  ************************************************************************************/
 require_once('modules/com_vtiger_workflow/VTEntityCache.inc');
 require_once('modules/com_vtiger_workflow/VTWorkflowUtils.php');
-require_once('modules/com_vtiger_workflow/VTSimpleTemplate.inc');
+require_once('modules/com_vtiger_workflow/VTEmailRecipientsTemplate.inc');
 require_once('modules/Emails/mail.php');
 class VTEmailTask extends VTTask{
 	// Sending email takes more time, this should be handled via queue all the time.
@@ -31,8 +31,11 @@ class VTEmailTask extends VTTask{
 
 		$entityCache = new VTEntityCache($admin);
 
-		$et = new VTSimpleTemplate($this->recepient);
+		$et = new VTEmailRecipientsTemplate($this->recepient);
 		$to_email = $et->render($entityCache, $entity->getId());
+		if(strlen(trim($to_email, " \t\n,")) == 0) {
+			return ;
+		}
 		
 		$st = new VTSimpleTemplate($this->subject);
 		$subject = $st->render($entityCache, $entity->getId());
