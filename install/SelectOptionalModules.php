@@ -102,7 +102,7 @@ $selectedOptionalModuleNames = array();
 									        						<td class='small' width= "5%" valign=top align="right">
 									        							<input type="checkbox" id="<?php echo $moduleName; ?>" name="<?php echo $moduleName; ?>" value="<?php echo $moduleName; ?>" 
 									        									<?php if ($moduleSelected == true) echo "checked"; ?> 
-									        									<?php if ($moduleEnabled == false) echo "disabled"; ?> 
+									        									<?php if ($moduleEnabled == false || $option == 'update') echo "disabled"; ?>
 									        									onChange='ModuleSelected("<?php echo $moduleName; ?>");' />
 									        						</td>
 																	<td class='small' valign=top ><?php echo $moduleName; ?></td>
