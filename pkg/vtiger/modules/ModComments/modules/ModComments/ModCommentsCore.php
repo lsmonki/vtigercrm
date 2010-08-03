@@ -9,6 +9,7 @@
  ************************************************************************************/
 require_once('data/CRMEntity.php');
 require_once('data/Tracker.php');
+require_once 'vtlib/Vtiger/Module.php';
 
 class ModCommentsCore extends CRMEntity {
 	var $db, $log; // Used in class functions of CRMEntity
@@ -336,9 +337,12 @@ class ModCommentsCore extends CRMEntity {
 			and vtiger_crmentityRelModComments.deleted=0
 			left join vtiger_leaddetails as vtiger_leaddetailsRelModComments on vtiger_leaddetailsRelModComments.leadid = vtiger_crmentityRelModComments.crmid
 			left join vtiger_contactdetails as vtiger_contactdetailsRelModComments on vtiger_contactdetailsRelModComments.contactid = vtiger_crmentityRelModComments.crmid
-			left join vtiger_account as vtiger_accountRelModComments on vtiger_accountRelModComments.accountid = vtiger_crmentityRelModComments.crmid
-			left join vtiger_projecttask as vtiger_projecttaskRelModComments on vtiger_projecttaskRelModComments.projecttaskid = vtiger_crmentityRelModComments.crmid
+			left join vtiger_account as vtiger_accountRelModComments on vtiger_accountRelModComments.accountid = vtiger_crmentityRelModComments.crmid";
+		$projectModule = Vtiger_Module::getInstance('Project');
+		if($projectModule !== false) {
+			$query .= " left join vtiger_projecttask as vtiger_projecttaskRelModComments on vtiger_projecttaskRelModComments.projecttaskid = vtiger_crmentityRelModComments.crmid
 			left join vtiger_project as vtiger_projectRelModComments on vtiger_projectRelModComments.projectid = vtiger_crmentityRelModComments.crmid";
+		}
 		return $query;
 	}
 	/**
