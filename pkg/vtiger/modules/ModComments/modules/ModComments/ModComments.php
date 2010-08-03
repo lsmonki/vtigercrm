@@ -23,6 +23,9 @@ class ModComments extends ModCommentsCore {
 		parent::vtlib_handler($modulename, $event_type);
 		if ($event_type == 'module.postinstall') {
 			self::addWidgetTo(array('Leads', 'Contacts', 'Accounts'));
+			global $adb;
+			// Mark the module as Standard module
+			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($modulename));
 		}
 	}
 	
