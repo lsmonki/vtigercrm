@@ -227,6 +227,29 @@ function VTEmailTask($){
 						var value = '$'+$(this).attr('value');
 						input.attr("value", input.attr("value")+','+value);
 					});
+					var selptype = document.getElementById('task-emailfields');
+			        var selecc = document.getElementById('task-emailfieldscc');
+			        for (ops=0;ops<selptype.length;ops++) {
+			          selecc.options[ops] = new Option(selptype.options[ops].text, selptype.options[ops].value);
+			        }
+			        $('#task-emailfieldscc-busyicon').hide();
+					$('#task-emailfieldscc').show();
+					$('#task-emailfieldscc').change(function(){
+						var input = $($('#save_emailcc').get());
+						var value = '$'+$(this).attr('value');
+						input.attr("value", input.attr("value")+','+value);
+					});
+			        var selebcc = document.getElementById('task-emailfieldsbcc');
+			        for (ops=0;ops<selptype.length;ops++) {
+			          selebcc.options[ops] = new Option(selptype.options[ops].text, selptype.options[ops].value);
+			        }
+					$('#task-emailfieldsbcc-busyicon').hide();
+					$('#task-emailfieldsbcc').show();
+					$('#task-emailfieldsbcc').change(function(){
+						var input = $($('#save_emailbcc').get());
+						var value = '$'+$(this).attr('value');
+						input.attr("value", input.attr("value")+','+value);
+					});
 					
 					//time_changes
 					$('#task_timefields').change(function(){
