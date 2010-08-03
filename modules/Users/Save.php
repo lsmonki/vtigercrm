@@ -51,8 +51,9 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	        die;
 	}
 }
-if(empty($_SESSION['Users_FORM_TOKEN']) || $_SESSION['Users_FORM_TOKEN']
-		!== (int)$_REQUEST['form_token']) {
+if((empty($_SESSION['Users_FORM_TOKEN']) || $_SESSION['Users_FORM_TOKEN']
+		!== (int)$_REQUEST['form_token']) && $_REQUEST['deleteImage'] != 'true' &&
+		$_REQUEST['changepassword'] != 'true') {
 	header("Location: index.php?action=Error&module=Users&error_string=".
 			urlencode($app_strings['LBL_PERMISSION']));
 	die;
