@@ -514,6 +514,7 @@ class Migration_Utils {
 		/* Install Vtlib Compliant Modules */
 		Common_Install_Wizard_Utils::installMandatoryModules();
 		Migration_Utils::installOptionalModules($migrationInfo['selected_optional_modules'], $migrationInfo['source_directory'], $migrationInfo['root_directory']);
+		Migration_utils::copyLanguageFiles($migrationInfo['source_directory'], $migrationInfo['root_directory']);
 		
 		//Here we have to update the version in table. so that when we do migration next time we will get the version
 		$res = $adb->query('SELECT * FROM vtiger_version');
@@ -572,6 +573,51 @@ class Migration_Utils {
 		$computedEncryptedPassword = crypt($userPassword, $salt);
 		return $computedEncryptedPassword;
 	}
+
+	public static function copyLanguageFiles($sourceDirectory, $destinationDirectory) {
+		global $adb;
+		$result = $adb->pquery('select * from vtiger_language', array());
+		$it = new SqlResultIterator($adb, $result);
+		$installedLanguages = array();
+		$defaultLanguage = 'en_us';
+		foreach ($it as $row) {
+			if($row->prefix !== $defaultLanguage) {
+				$installedLanguages[] = $row->prefix;
+			}
+		}
+		self::copyLanguageFileFromFolder($sourceDirectory, $destinationDirectory,
+				$installedLanguages);
+	}
+
+	public static function copyLanguageFileFromFolder($sourceDirectory, $destinationDirectory,
+			$installedLanguages) {
+		$ignoreDirectoryList = array('.', '..', 'storage','themes','fckeditor', 'HTMLPurifier');
+		if ($handle = opendir($sourceDirectory)) {
+			while (false !== ($file = readdir($handle))) {
+				if(is_dir($sourceDirectory.DIRECTORY_SEPARATOR.$file) && !in_array($file,
+						$ignoreDirectoryList)) {
+					self::copyLanguageFileFromFolder($sourceDirectory.DIRECTORY_SEPARATOR.$file,
+							$destinationDirectory.DIRECTORY_SEPARATOR.$file,$installedLanguages);
+					continue;
+				} elseif(in_array($file, $ignoreDirectoryList)) {
+					continue;
+				}
+				$found = false;
+				foreach ($installedLanguages as $prefix) {
+					if(strpos($file, $prefix) === 0) {
+						$found = true;
+						break;
+					}
+				}
+				if (!empty($file) && $found == true) {
+					copy($sourceDirectory.DIRECTORY_SEPARATOR.$file, $destinationDirectory.
+							DIRECTORY_SEPARATOR.$file);
+				}
+			}
+			closedir($handle);
+		}
+	}
+
 }
 
 class ConfigFile_Utils {
