@@ -289,8 +289,7 @@ class Services extends CRMEntity {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
-		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_service.handler";
 		global $current_user;
 		$query .= $this->getNonAdminAccessControlQuery($module,$current_user);
 		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
