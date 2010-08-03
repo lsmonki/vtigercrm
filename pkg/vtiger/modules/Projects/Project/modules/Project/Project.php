@@ -460,9 +460,12 @@ class Project extends CRMEntity {
 			// Add Project module to the related list of HelpDesk module
 			$helpDeskModuleInstance = Vtiger_Module::getInstance('HelpDesk');			
 			$helpDeskModuleInstance->setRelatedList($moduleInstance, 'Projects', Array('SELECT'), 'get_related_list');
-			
-			include_once 'modules/ModComments/ModComments.php';
-			if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
+
+			$modcommentsModuleInstance = Vtiger_Module::getInstance('ModComments');
+			if($modcommentsModuleInstance) {
+				include_once 'modules/ModComments/ModComments.php';
+				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
+			}
 		
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.

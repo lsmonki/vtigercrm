@@ -439,9 +439,12 @@ class ProjectTask extends CRMEntity {
 			
 			$adb->query("INSERT INTO vtiger_customerportal_tabs(tabid,visible,sequence) VALUES ($projecttaskTabid,1,$nextSequence)");
 			$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($projecttaskTabid,'showrelatedinfo',1)");
-			
-			include_once 'modules/ModComments/ModComments.php';
-			if(class_exists('ModComments')) ModComments::addWidgetTo(array('ProjectTask'));
+
+			$modcommentsModuleInstance = Vtiger_Module::getInstance('ModComments');
+			if($modcommentsModuleInstance) {
+				include_once 'modules/ModComments/ModComments.php';
+				if(class_exists('ModComments')) ModComments::addWidgetTo(array('ProjectTask'));
+			}
 			
         } else if($event_type == 'module.disabled') {
             // TODO Handle actions when this module is disabled.
