@@ -88,7 +88,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	/**
 	 * Are we trying to import language package?
 	 */
-	function isLanguageType() {
+	function isLanguageType($zipfile =null) {
+		if(!empty($zipfile)) {
+			if(!$this->checkZip($zipfile)) {
+				return false;
+			}
+		}
 		$packagetype = $this->type();
 
 		if($packagetype) {

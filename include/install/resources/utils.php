@@ -1188,7 +1188,7 @@ class Common_Install_Wizard_Utils {
 				if($moduleName != null) {					
 					$moduleDetails = array();
 					$moduleDetails['description'] = $optionalModuleStrings[$moduleName.'_description'];
-					
+
 					if(Vtiger_Version::check($moduleForVtigerVersion,'>=') && Vtiger_Version::check($moduleMaxVtigerVersion,'<')) {
 						$moduleDetails['selected'] = true;
 						$moduleDetails['enabled'] = true;						
@@ -1261,6 +1261,10 @@ class Common_Install_Wizard_Utils {
 		        if (!empty($packagename)) {
 		        	$packagepath = "packages/vtiger/optional/$file";
 					$package = new Vtiger_Package();
+					if($package->isLanguageType($packagepath)) {
+						installVtlibModule($packagename, $packagepath);
+						continue;
+					}
 	        		$module = $package->getModuleNameFromZip($packagepath);
 	        		if($module != null) {
 	        			$moduleInstance = Vtiger_Module::getInstance($module);

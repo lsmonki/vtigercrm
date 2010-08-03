@@ -4582,6 +4582,11 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	$Vtiger_Utils_Log = true;
 	$package = new Vtiger_Package();
 	
+	if($package->isLanguageType($packagepath)) {
+		$package = new Vtiger_Language();
+		$package->import($packagepath, true);
+		return;
+	}
 	$module = $package->getModuleNameFromZip($packagepath);
 	$module_exists = false;
 	$module_dir_exists = false;
@@ -4590,7 +4595,7 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	} else if(Vtiger_Module::getInstance($module)) {
 		$log->fatal("$module already exists!");
 		$module_exists = true;
-	} 
+	}
 	if($module_exists == false) {
 		$log->debug("$module - Installation starts here");
 		$package->import($packagepath, true);
@@ -4598,7 +4603,7 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 		if (empty($moduleInstance)) {
 			$log->fatal("$module module installation failed!");
 		}
-	}	
+	}
 }
 
 /* Function to update Vtlib Compliant modules
