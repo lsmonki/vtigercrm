@@ -220,7 +220,7 @@ class QueryGenerator {
 				} else {
 					$name = $name[2];
 				}
-				$this->addCondition($name, $filter['value'], $filter['comparator']);
+				$this->addCondition($name, decode_html($filter['value']), $filter['comparator']);
 				if(count($this->advFilterList) -1  > $index) {
 					$this->addConditionGlue(self::$AND);
 				}
