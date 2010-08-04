@@ -145,29 +145,10 @@ class Vtiger_PackageExport {
 	 * Export vtiger dependencies
 	 * @access private
 	 */
-	function export_Dependencies($moduleInstance) {
-		global $vtiger_current_version, $adb;
-		$moduleid = $moduleInstance->id;
-		
-		$sqlresult = $adb->query("SELECT * FROM vtiger_tab_info WHERE tabid = $moduleid");
-		$vtigerMinVersion = $vtiger_current_version;
-		$vtigerMaxVersion = false;
-		$noOfPreferences = $adb->num_rows($sqlresult);
-		for($i=0; $i<$noOfPreferences; ++$i) {
-			$prefName = $adb->query_result($sqlresult,$i,'prefname');
-			$prefValue = $adb->query_result($sqlresult,$i,'prefvalue');
-			if($prefName == 'vtiger_min_version') {
-				$vtigerMinVersion = $prefValue;
-			}
-			if($prefName == 'vtiger_max_version') {
-				$vtigerMaxVersion = $prefValue;
-			}
-			
-		}
-		
+	function export_Dependencies() {
+		global $vtiger_current_version;
 		$this->openNode('dependencies');
-		$this->outputNode($vtigerMinVersion, 'vtiger_version');
-		if($vtigerMaxVersion !== false)	$this->outputNode($vtigerMaxVersion, 'vtiger_max_version');
+		$this->outputNode($vtiger_current_version, 'vtiger_version');
 		$this->closeNode('dependencies');
 	}
 
@@ -207,7 +188,7 @@ class Vtiger_PackageExport {
 		}
 
 		// Export dependency information
-		$this->export_Dependencies($moduleInstance);
+		$this->export_Dependencies();
 
 		// Export module tables
 		$this->export_Tables($moduleInstance);

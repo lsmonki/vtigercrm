@@ -72,12 +72,16 @@ function getKeyMetrics($maxval,$calCnt)
 	$log->info("Metrics :: Successfully got MetricList to be displayed");
 	if(isset($metriclists))
 	{
-		global $current_user;
-		foreach ($metriclists as $key => $metriclist) {
-			$queryGenerator = new QueryGenerator($metriclist['module'], $current_user);
-			$queryGenerator->initForCustomViewById($metriclist['id']);
-			$metricsql = $queryGenerator->getQuery();
-			$metricsql = mkCountQuery($metricsql);
+		foreach ($metriclists as $key => $metriclist)
+		{
+			$listquery = getListQuery($metriclist['module']);
+			if($metriclist['module'] == 'Calendar')
+				$listquery .= " AND vtiger_activity.activitytype != 'Emails' ";
+			$oCustomView = new CustomView($metriclist['module']);
+			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
+			if($metriclist['module'] == "Calendar" and !$adb->isPostgres())
+				$metricsql.=" group by vtiger_activity.activityid ";
+				
 			$metricresult = $adb->query($metricsql);
 			if($metricresult)
 			{

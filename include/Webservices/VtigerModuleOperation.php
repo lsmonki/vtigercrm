@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class VtigerModuleOperation extends WebserviceEntityOperation {
-	protected $tabId;
+	private $tabId;
 	protected $isEntity = true;
 	
 	public function VtigerModuleOperation($webserviceObject,$user,$adb,$log){

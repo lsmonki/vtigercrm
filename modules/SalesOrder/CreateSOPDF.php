@@ -8,11 +8,12 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/SalesOrder/SalesOrderPDFController.php';
 
-$controller = new Vtiger_SalesOrderPDFController($currentModule);
-$controller->loadRecord(vtlib_purify($_REQUEST['record']));
 
-$controller->Output('SalesOrder.pdf', 'D');//added file name to make it work in IE, also forces the download giving the user the option to save
+include('include/InventoryPDF.php');
+$pdf=get_so_pdf();
+
+$pdf->Output('SalesOrder.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
+
 exit();
 ?>

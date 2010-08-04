@@ -7,6 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
+ini_set (error_reporting,E_ALL & ~E_NOTICE );
 if(isset($_REQUEST['service']))
 {
 	if($_REQUEST['service'] == "outlook")

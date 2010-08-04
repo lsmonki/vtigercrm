@@ -22,9 +22,9 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH","themes/$theme/images/");
 
-$scanners = Vtiger_MailScannerInfo::listAll();
+$scannerinfo = new Vtiger_MailScannerInfo('DEFAULT');
 
-$smarty->assign("SCANNERS", $scanners);
+$smarty->assign("SCANNERINFO", $scannerinfo->getAsMap());
 $smarty->assign("APP_KEY", $application_unique_key);
 
 $smarty->display('MailScanner/MailScannerInfo.tpl');

@@ -55,18 +55,8 @@ function parse_import($file_name,$delimiter,$max_lines,$has_header)
 		}
 		$this_field_count = count($fields);
 
-		//Added to handle the case where the last value in a row is "" and  
-		//the field value in the next row is "" then for some reason these rows 
- 		//are getting parsed as same row, this does not happen if the line seperator is  
-		// linux line endings. 
-		$matches = array();  
-		preg_match("/^''\s*''$/",$fields[$field_count - 1],$matches); 
-		if(($this_field_count + 1)/2 == $field_count && count($matches) > 0){ 
-			$chunks = array_chunk($fields,$field_count); 
-			$fields = $chunks[0]; 
-			array_push($rows,$chunks[1]); 
-			$line_count++; 
-		}else{
+		if ( $this_field_count > $field_count)
+		{
 			$field_count = $this_field_count;
 		}
 

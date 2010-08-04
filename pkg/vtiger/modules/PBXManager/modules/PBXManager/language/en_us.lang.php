@@ -11,10 +11,6 @@
 $mod_strings = Array(
 	'Asterisk' => 'Asterisk',
 	'LBL_ASTERISK_INFORMATION' => 'ASTERISK Information',
-	
-	'Call From'=>'Call From',
-	'Call To'=>'Call To',
-	'Time Of Call'=>'Time Of Call',
 );
 
 ?>

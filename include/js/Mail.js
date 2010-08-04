@@ -170,5 +170,4 @@ function rel_eMail(module,oButton,relmod)
 	}
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(relmod,allids);
-	set_cookie(relmod+"_all","");
 }

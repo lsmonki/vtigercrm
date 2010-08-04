@@ -10,7 +10,7 @@
  *********************************************************************************/
 session_start();
 if($_SESSION['authentication_key'] != $_REQUEST['auth_key']) {
-	die($installationStrings['ERR_NOT_AUTHORIZED_TO_PERFORM_THE_OPERATION']);
+	die("Not Authorized to perform this operation");
 }
 if(!empty($_REQUEST['rootUserName'])) $_SESSION['migration_info']['root_username'] = $_REQUEST['rootUserName'];
 
@@ -22,9 +22,6 @@ if(!empty($_REQUEST['rootPassword'])) {
 
 
 require_once 'include/db_backup/DatabaseBackup.php';
-require_once 'include/db_backup/Targets/Response.php';
-require_once 'include/db_backup/Targets/Database.php';
-require_once 'include/db_backup/Source/MysqlSource.php';
 $mode = $_REQUEST['mode'];
 
 $source_directory = $_SESSION['migration_info']['source_directory'];
@@ -36,33 +33,27 @@ if(empty($createDB)){
 	$createDB = true;
 }
 
+$backup = new DatabaseBackup($dbconfig['db_type'],$createDB);
 $hostName = $dbconfig['db_server'].$dbconfig['db_port'];
 $username = $dbconfig['db_username'];
 $password = $dbconfig['db_password'];
 $dbName = $dbconfig['db_name'];
-$sourceConfig = new DatabaseConfig($hostName,$username,$password,$dbName);
-$source = new MysqlSource($sourceConfig);
+$backup->setSourceConfig(new DatabaseConfig($hostName,$username,$password,$dbName));
 if(strtolower($mode) == 'dump'){
 	header('Content-type: text/plain; charset=UTF-8');
-	$responseDest = new Response($sourceConfig, true);
-	$dbBackup = new DatabaseBackup($source, $responseDest);
-	$dbBackup->backup();
+	$backup->enableDownloadMode();
+	$backup->backup();
 }else{
 	$targetName = $_REQUEST['newDatabaseName'];
 	try{
 		if(!empty($targetName) && $dbName != $targetName){
 			$rootUserName = $_SESSION['migration_info']['root_username'];
 			$rootPassword = $_SESSION['migration_info']['root_password'];
-			$destConfig = new DatabaseConfig($hostName,$username,$password,$targetName, 'mysql', 
-					$rootUserName,$rootPassword);
-			$databaseDest = new Database($destConfig, $createDB, true);
-			$dbBackup = new DatabaseBackup($source, $databaseDest);
-			$dbBackup->backup();
+			$backup->setDestinationConfig(new DatabaseConfig($hostName,$username,$password,$targetName,$rootUserName,$rootPassword));
+			$backup->backup();
 			$_SESSION['migration_info']['new_dbname'] = $targetName;
-			if ($createDB && $databaseDest->isUTF8SupportEnabled()) {
-				$_SESSION['config_file_info']['vt_charset'] = "UTF-8";
-			} else {
-				$_SESSION['config_file_info']['vt_charset'] = "ISO-8859-1";
+			if ($createDB && $backup->isUTF8SupportEnabled()) {
+				$_SESSION['migration_info']['db_utf8_support'] = true;
 			}
 			echo 'true';
 			return;

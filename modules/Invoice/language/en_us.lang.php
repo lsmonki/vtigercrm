@@ -123,7 +123,7 @@ $mod_strings = Array(
 'Contact Name'=>'Contact Name',//to include contact name vtiger_field in Invoice
 'Invoice Date'=>'Invoice Date',
 'Sub Total'=>'Sub Total',
-'Due date'=>'Due Date',
+'Due Date'=>'Due Date',
 'Carrier'=>'Carrier',
 'Type'=>'Type',
 'Sales Tax'=>'Sales Tax',
@@ -181,7 +181,6 @@ $mod_strings = Array(
 'Sent'=>'Sent',
 'Credit Invoice'=>'Credit Invoice',
 'Paid'=>'Paid',
-'AutoCreated'=>'AutoCreated',
 //Added to Custom Invoice Number
 'Invoice No'=>'Invoice No',
 'Adjustment'=>'Adjustment',

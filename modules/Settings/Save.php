@@ -16,7 +16,6 @@ $server_username=vtlib_purify($_REQUEST['server_username']);
 $server_password=vtlib_purify($_REQUEST['server_password']);
 $server_type = vtlib_purify($_REQUEST['server_type']);
 $server_path = vtlib_purify($_REQUEST['server_path']);
-$from_email_field = vtlib_purify($_REQUEST['from_email_field']);
 $db_update = true;
 if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
 	$smtp_auth = 'true';
@@ -109,12 +108,12 @@ if($server_type == 'proxy' || $server_type == 'ftp_backup' || $server_type == 'l
 	{
 		if($id=='') {
 			$id = $adb->getUniqueID('vtiger_systems');
-			$sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
-			$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth,$server_path,$from_email_field);
+			$sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?)";
+			$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth,$server_path);
 		}
 		else {
-			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ?, server_path = ?, from_email_field=? where id = ?";
-			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $server_path,$from_email_field, $id);
+			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ?, server_path = ? where id = ?";
+			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $server_path, $id);
 		}
 		$adb->pquery($sql, $params);
 	}
@@ -151,11 +150,11 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
         	{
                 	if($id=='') {
                         $id = $adb->getUniqueID("vtiger_systems");
-                        $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?,?)";
-						$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth, '',$from_email_field);
+                        $sql="insert into vtiger_systems values(?,?,?,?,?,?,?,?)";
+						$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth, '');
                 	} else {
-                        $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=?,from_email_field=? where id=?";
-                		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port,$from_email_field,$id);
+                        $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=? where id=?";
+                		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $id);
 					}
 				$adb->pquery($sql, $params);
         	}	

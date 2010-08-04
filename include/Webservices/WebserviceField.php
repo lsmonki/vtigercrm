@@ -24,10 +24,6 @@ class WebserviceField{
 	private $mandatory;
 	private $massEditable;
 	private $tabid;
-	/**
-	 *
-	 * @var PearDatabase
-	 */
 	private $pearDB;
 	private $typeOfData;
 	private $fieldDataType;
@@ -36,7 +32,6 @@ class WebserviceField{
 	private static $fieldTypeMapping = array();
 	private $referenceList;
 	private $defaultValuePresent;
-	private $explicitDefaultValue;
 	
 	private $genericUIType = 10;
 	
@@ -64,7 +59,6 @@ class WebserviceField{
 		$this->dataFromMeta = false;
 		$this->defaultValuePresent = false;
 		$this->referenceList = null;
-		$this->explicitDefaultValue = false;
 	}
 	
 	public static function fromQueryResult($adb,$result,$rowNumber){
@@ -112,7 +106,7 @@ class WebserviceField{
 	}
 	
 	public function getDefault(){
-		if($this->dataFromMeta !== true && $this->explicitDefaultValue !== true){
+		if($this->dataFromMeta !== true){
 			$this->fillColumnMeta();
 		}
 		return $this->default;
@@ -130,7 +124,7 @@ class WebserviceField{
 	}
 	
 	public function hasDefault(){
-		if($this->dataFromMeta !== true && $this->explicitDefaultValue !== true){
+		if($this->dataFromMeta !== true){
 			$this->fillColumnMeta();
 		}
 		return $this->defaultValuePresent;
@@ -144,10 +138,8 @@ class WebserviceField{
 		$this->nullable = $nullable;
 	}
 	
-	public function setDefault($value){
+	private function setDefault($value){
 		$this->default = $value;
-		$this->explicitDefaultValue = true;
-		$this->defaultValuePresent = true;
 	}
 	
 	public function setFieldDataType($dataType){
@@ -192,11 +184,9 @@ class WebserviceField{
 			if($fieldDataType === null){
 				$fieldDataType = $this->getFieldTypeFromTypeOfData();
 			}
-			if($fieldDataType == 'date' || $fieldDataType == 'datetime' || $fieldDataType == 'time') {
-				$tableFieldDataType = $this->getFieldTypeFromTable();
-				if($tableFieldDataType == 'datetime'){
-					$fieldDataType = $tableFieldDataType;
-				}
+			$tableFieldDataType = $this->getFieldTypeFromTable();
+			if($tableFieldDataType == 'datetime'){
+				$fieldDataType = $tableFieldDataType;
 			}
 			$this->fieldDataType = $fieldDataType;
 		}
@@ -206,9 +196,9 @@ class WebserviceField{
 	public function getReferenceList(){
 		static $referenceList = array();
 		if($this->referenceList === null){
-			if(isset($referenceList[$this->getFieldId()])){
-				$this->referenceList = $referenceList[$this->getFieldId()];
-				return $referenceList[$this->getFieldId()];
+			if(isset($referenceList[$this->getUIType()])){
+				$this->referenceList = $referenceList[$this->getUIType()];
+				return $referenceList[$this->getUIType()];
 			}
 			if(!isset(WebserviceField::$fieldTypeMapping[$this->getUIType()])){
 				$this->getFieldTypeFromUIType();
@@ -237,7 +227,7 @@ class WebserviceField{
 				$referenceTypes[] = 'Campaigns';
 			}
 			
-			$referenceList[$this->getFieldId()] = $referenceTypes;
+			$referenceList[$this->getUIType()] = $referenceTypes;
 			$this->referenceList = $referenceTypes;
 			return $referenceTypes;
 		}

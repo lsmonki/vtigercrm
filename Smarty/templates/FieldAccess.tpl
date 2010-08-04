@@ -59,7 +59,10 @@
         		<td  style="padding-left:5px;" class="big">{$CMOD.LBL_SELECT_SCREEN}&nbsp; 
 			<select name="Screen" class="detailedViewTextBox" style="width:30%;"  onChange="changemodules(this)">
 			{foreach item=module from=$FIELD_INFO}
-				{assign var="MODULELABEL" value=$module|@getTranslatedString:$module}
+				{assign var="MODULELABEL" value=$module}
+				{if $APP.$module neq ''}
+					{assign var="MODULELABEL" value=$APP.$module}
+				{/if}
 				{if $module == $DEF_MODULE}
 					<option selected value='{$module}'>{$MODULELABEL}</option>
 				{else}		

@@ -46,13 +46,8 @@ function startCall(){
 
 	$asterisk->transfer($extension,$number);
 	
-	$callerModule = getSalesEntityType($record);
-	$entityNames = getEntityName($callerModule, array($record));
-	$callerName = $entityNames[$record];
-	$callerInfo = array('id'=>$record, 'module'=>$callerModule, 'name'=>$callerName);
-	
 	//adds to pbx manager
-	addToCallHistory($extension, $extension, $number, "outgoing", $adb, $callerInfo);
+	addToCallHistory($extension, $extension, $number, "outgoing", $adb);
 	
 	// add to the records activity history
 	addOutgoingcallHistory($current_user ,$extension,$record ,$adb);

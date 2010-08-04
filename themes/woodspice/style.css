@@ -1944,7 +1944,7 @@ textarea {
 }
 
 .TaxShow{
-	border:3px;
+	display:inline-table;
 }
 
 .TaxHide{

@@ -8,16 +8,15 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/Quotes/QuotePDFController.php';
 
-$controller = new Vtiger_QuotePDFController($currentModule);
-$controller->loadRecord(vtlib_purify($_REQUEST['record']));
+
+include('include/InventoryPDF.php');
+$pdf=get_quote_pdf();
 
 $filenameid = $_REQUEST['record'];
 if(empty($filenameid)) $filenameid = time();
-$filepath="storage/Quote_$filenameid.pdf";
-//added file name to make it work in IE, also forces the download giving the user the option to save
-$controller->Output($filepath,'F');
+$outputfilename = "storage/Quote_$filenameid.pdf";
+$pdf->Output($outputfilename,'F'); //added file name to make it work in IE, also forces the download giving the user the option to save
 
 // Added to fix annoying bug that includes HTML in your PDF
 echo "<script>window.history.back();</script>";

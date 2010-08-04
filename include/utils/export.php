@@ -119,15 +119,13 @@ function export($type){
 	}
 
 	$query = $focus->create_export_query($where);
-	if($search_type != 'includesearch' && $type != 'Calendar') {
-		$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
-		$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
-		if(isset($stdfiltersql) && $stdfiltersql != ''){
-			$query .= ' and '.$stdfiltersql;
-		}
-		if(isset($advfiltersql) && $advfiltersql != '') {
-			$query .= ' and '.$advfiltersql;
-		}
+	$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
+	$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
+	if(isset($stdfiltersql) && $stdfiltersql != ''){
+		$query .= ' and '.$stdfiltersql;
+	}
+	if(isset($advfiltersql) && $advfiltersql != '') {
+		$query .= ' and '.$advfiltersql;
 	}
 	$params = array();
 

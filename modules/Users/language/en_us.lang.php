@@ -206,8 +206,6 @@ $mod_strings = Array(
 'LBL_PROPERTIES'=>'Properties of',
 
 
-//added to fix the issue #6630
-'LBL_ASTERISKEXTENSIONS_EXIST' => 'Asterisk Extension Already Exists!',
 
 // Added fields in createnewgroup.php
 'LBL_CREATE_NEW_GROUP'=>'Create New Group',
@@ -679,11 +677,6 @@ $mod_strings = Array(
 //user-group fixes
 'LBL_GROUPNAME_EXIST' => 'A Group with the specified name Already Exists!',
 'LBL_PROFILENAME_EXIST' => 'A Profile with the specified name Already Exists!',
-
-//Fixed For Asterisk Configration
-'Asterisk Configuration' => 'Asterisk Configuration',
-'Asterisk Extension' => 'Asterisk Extension',
-' Receive Incoming Calls' => 'Receive Incoming Calls',
 );
 
 ?>

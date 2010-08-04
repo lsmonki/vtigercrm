@@ -109,9 +109,6 @@ class ListViewSession {
 			}
 			
 			$list_query = $_SESSION[$currentModule.'_listquery'];
-			$instance = CRMEntity::getInstance($currentModule);
-			$instance->getNonAdminAccessControlQuery($currentModule, $current_user);
-			vtlib_setup_modulevars($currentModule, $instance);
 			if($currentModule=='Documents' && !empty($folderId)){
 				$list_query = preg_replace("/[\n\r\s]+/"," ",$list_query);
 				$findOrderByPosition = stripos($list_query,' ORDER BY ');
@@ -136,7 +133,7 @@ class ListViewSession {
 			$resultAllCRMIDlist_query=$adb->pquery($list_query,array());
 			$navigationRecordList = array();
 			while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query)) {
-				$navigationRecordList[] = $forAllCRMID[$instance->table_index];
+				$navigationRecordList[] = $forAllCRMID['crmid'];
 			}
 			
 			$pageCount = 0;

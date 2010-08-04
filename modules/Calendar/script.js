@@ -742,16 +742,15 @@ function cal_navigation(type,urlstring,start)
 	$("status").style.display="inline";
 	if(type == 'event')
         {
-			var users = document.getElementsByName('onlyforuser');
-			var onlyforusers = users[0].value;
-			var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
-	                new Ajax.Request(
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
+                new Ajax.Request(
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav&viewOption='+OptionData+url+start+'&subtab='+type+'&onlyforuser='+encodeURIComponent(onlyforusers),
+                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav&viewOption='+OptionData+url+start+'&subtab='+type,
                                 onComplete: function(response) {
-					if(OptionData == 'listview')
+					//alert(response.responseText);
+                                        if(OptionData == 'listview')
                                         {
                                                 result = response.responseText.split('####');
                                                 $("total_activities").innerHTML = result[1];

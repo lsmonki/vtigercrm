@@ -29,13 +29,8 @@
 		return $operationInput[$operation];
 	}
 	
-	function setResponseHeaders() {
-		header('Content-type: application/json');
-	}
-
 	function writeErrorOutput($operationManager, $error){
 		
-		setResponseHeaders();
 		$state = new State();
 		$state->success = false;
 		$state->error = $error;
@@ -47,7 +42,6 @@
 	
 	function writeOutput($operationManager, $data){
 		
-		setResponseHeaders();
 		$state = new State();
 		$state->success = true;
 		$state->result = $data;
@@ -74,14 +68,7 @@
 		$adoptSession = false;
 		if(strcasecmp($operation,"extendsession")===0){
 			if(isset($input['operation'])){
-				// Workaround fix for PHP 5.3.x: $_REQUEST doesn't have PHPSESSID
-				if(isset($_REQUEST['PHPSESSID'])) {
-					$sessionId = vtws_getParameter($_REQUEST,"PHPSESSID");
-				} else {
-					// NOTE: Need to evaluate for possible security issues
-					$sessionId = vtws_getParameter($_COOKIE,'PHPSESSID');
-				}
-				// END
+				$sessionId = vtws_getParameter($_REQUEST,"PHPSESSID");
 				$adoptSession = true;
 			}else{
 				writeErrorOutput($operationManager,new WebServiceException(WebServiceErrorCode::$AUTHREQUIRED,"Authencation required"));

@@ -100,15 +100,13 @@ function fetchSaveNotify(id)
 	$("status").style.display="inline";
 	var subject = $("notifysubject").value;
         var body = $("notifybody").value;
-        var status = $("notify_status").value;
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=SettingsAjax&module=Settings&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id+'&status='+status,
+                        postBody: 'action=SettingsAjax&module=Settings&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id,
                         onComplete: function(response) {
                                 $("status").style.display="none";
-                $("notifycontents").innerHTML=response.responseText;
                         }
                 }
         );

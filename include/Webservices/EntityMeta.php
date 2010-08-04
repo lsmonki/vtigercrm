@@ -20,9 +20,6 @@ abstract class EntityMeta{
 	protected $objectId;
 	protected $user;
 	protected $baseTable;
-	protected $tableList;
-	protected $tableIndexList;
-	protected $defaultTableList;
 	protected $idColumn;
 	
 	protected $userAccessibleColumns;
@@ -116,16 +113,6 @@ abstract class EntityMeta{
 		}
 		return $this->userAccessibleColumns;
 	}
-
-	public function getFieldByColumnName($column){
-		$fields = $this->getModuleFields();
-		foreach ($fields as $fieldName=>$webserviceField) {
-			if($column == $webserviceField->getColumnName()) {
-				return $webserviceField;
-			}
-		}
-		return null;
-	}
 	
 	public function getColumnTableMapping(){
 		if($this->columnTableMapping === null){
@@ -147,10 +134,8 @@ abstract class EntityMeta{
 		$mandatoryFields = $this->getMandatoryFields();
 		$hasMandatory = true;
 		foreach($mandatoryFields as $ind=>$field){
-			// dont use empty API as '0'(zero) is a valid value.
-			if( !isset($row[$field]) || $row[$field] === "" || $row[$field] === null ){
-				throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,
-						"$field does not have a value");
+			if( !isset($row[$field])){
+				throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,"$field does not have a value");
 			}
 		}
 		return $hasMandatory;
@@ -161,42 +146,6 @@ abstract class EntityMeta{
 		return $this->moduleFields;
 	}
 	
-	public function getIdColumn(){
-		return $this->idColumn;
-	}
-
-	public function getEntityBaseTable() {
-		return $this->baseTable;
-	}
-
-	public function getEntityTableIndexList() {
-		return $this->tableIndexList;
-	}
-
-	public function getEntityDefaultTableList() {
-		return $this->defaultTableList;
-	}
-
-	public function getEntityTableList() {
-		return $this->tableList;
-	}
-
-	public function getEntityAccessControlQuery(){
-		$accessControlQuery = '';
-		return $accessControlQuery;
-	}
-
-	public function getEntityDeletedQuery(){
-		if($this->getEntityName() == 'Leads') {
-			return "vtiger_crmentity.deleted=0 and vtiger_leaddetails.converted=0";
-		}
-		if($this->getEntityName() != "Users"){
-			return "vtiger_crmentity.deleted=0";
-		}
-		// not sure whether inactive users should be considered deleted or not.
-		return "vtiger_users.status='Active'";
-	}
-
 	abstract function hasPermission($operation,$webserviceId);
 	abstract function hasAssignPrivilege($ownerWebserviceId);
 	abstract function hasDeleteAccess();
@@ -209,6 +158,5 @@ abstract class EntityMeta{
 	abstract function getObjectEntityName($webserviceId);
 	abstract public function getNameFields();
 	abstract public function getName($webserviceId);
-	abstract public function isModuleEntity();
 }
 ?>

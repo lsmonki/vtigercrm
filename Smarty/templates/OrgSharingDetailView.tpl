@@ -108,7 +108,10 @@ DIV.fixedLay {
 				</table>
 				<!-- Start of Module Display -->
 				{foreach  key=modulename item=details from=$MODSHARING}
-				{assign var="MODULELABEL" value=$modulename|@getTranslatedString:$modulename}
+				{assign var="MODULELABEL" value=$modulename}
+				{if $APP.$modulename neq ''}
+					{assign var="MODULELABEL" value=$APP.$modulename}
+				{/if}
 				{assign var="mod_display" value=$MODULELABEL}
 				{if $mod_display eq $APP.Accounts}
 					{assign var="xx" value=$APP.Contacts}

@@ -84,6 +84,17 @@ $smarty->assign("CHANGE_STATUS",$change_status);
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
+	
+
+
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
+{
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
+	$smarty->assign("SEARCH_URL",$url_string);
+}
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Leads");
@@ -180,32 +191,35 @@ $smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-global $current_user;
-$queryGenerator = new QueryGenerator($currentModule, $current_user);
-if ($viewid != "0") {
-	$queryGenerator->initForCustomViewById($viewid);
-} else {
-	$queryGenerator->initForDefaultCustomView();
+if($viewid != "0")
+{
+	$listquery = getListQuery("Leads");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Leads");
+}else
+{
+	$query = getListQuery("Leads");
 }
 //<<<<<<<<customview>>>>>>>>>
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_REQUEST);
-	$ustring = getSearchURL($_REQUEST);
-	// we have a query
-	$url_string .="&query=true".$ustring;
-	$log->info("Here is the where clause for the list view: $where");
-	$smarty->assign("SEARCH_URL",$url_string);
-}
-
-$query = $queryGenerator->getQuery();
-$where = $queryGenerator->getConditionalWhere();
-if(isset($where) && $where != '') {
+if(isset($where) && $where != '')
+{
+	$query .= ' and '.$where;
 	$_SESSION['export_where'] = $where;
-} else {
-	unset($_SESSION['export_where']);
 }
+else
+	unset($_SESSION['export_where']);
+/*
+if(isset($order_by) && $order_by != '')
+{
+	$tablename = getTableNameForField('Leads',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+	if( $adb->dbType == "pgsql")
+ 	    $query .= ' GROUP BY '.$tablename.$order_by;
 
+	
+        $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+}
+*/
 if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
@@ -247,13 +261,13 @@ if( $adb->dbType == "pgsql")
 else
 	$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
 $smarty->assign('recordListRange',$recordListRangeMsg);
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
 {
-	$ids[] = $row[$focus->table_index];
+	$ids[] = $row["crmid"];
 }
 if(isset($ids))
 {
@@ -292,16 +306,13 @@ if(isPermitted("Leads","Merge") == 'yes')
 if($viewid !='')
 $url_string .= "&viewname=".$viewid;
 
-$controller = new ListViewController($adb, $current_user, $queryGenerator);
-$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
-		$order_by);
+$listview_header = getListViewHeader($focus,"Leads",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search = $controller->getBasicSearchFieldInfoList();
+$listview_header_search=getSearchListHeaderValues($focus,"Leads",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
-		$navigation_array);
+$listview_entries = getListViewEntries($focus,"Leads",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
@@ -315,7 +326,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Leads","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
-$fieldnames = $controller->getAdvancedSearchOptionString();
+$fieldnames = getAdvSearchfields($currentModule);
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
@@ -327,12 +338,6 @@ $check_button = Button_Check($currentModule);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION[$currentModule.'_listquery'] = $query;
-
-// Gather the custom link information to display
-include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'ACTION'=>vtlib_purify($_REQUEST['action']), 'CATEGORY'=> $category);
-$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('LISTVIEWBASIC','LISTVIEW'), $customlink_params));
-// END
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

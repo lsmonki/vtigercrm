@@ -8,11 +8,9 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/PurchaseOrder/PurchaseOrderPDFController.php';
+include('include/InventoryPDF.php');
+$pdf=get_po_pdf();
 
-$controller = new Vtiger_PurchaseOrderPDFController($currentModule);
-$controller->loadRecord(vtlib_purify($_REQUEST['record']));
-
-$controller->Output('PurchaseOrder.pdf', 'D');//added file name to make it work in IE, also forces the download giving the user the option to save
+$pdf->Output('PurchaseOrder.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
 exit();
 ?>

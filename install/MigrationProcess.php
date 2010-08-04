@@ -7,38 +7,25 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
-
-global $php_max_execution_time;
-set_time_limit($php_max_execution_time);
-
 session_start();
-
 $auth_key = $_REQUEST['auth_key'];
 if($_SESSION['authentication_key'] != $auth_key) {
-	die($installationStrings['ERR_NOT_AUTHORIZED_TO_PERFORM_THE_OPERATION']);
+	die("Not Authorized to perform this operation");
 }
 
-if(isset($_REQUEST['selected_modules'])) {
-	$_SESSION['migration_info']['selected_optional_modules'] = $_REQUEST['selected_modules'];
-}
-
-Migration_Utils::copyRequiredFiles($_SESSION['migration_info']['source_directory'], $_SESSION['migration_info']['root_directory']);
-?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title><?php echo $installationStrings['LBL_VTIGER_CRM_5']. ' - ' . $installationStrings['LBL_CONFIG_WIZARD']. ' - ' . $installationStrings['LBL_MIGRATION']?></title>
-	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>		
-	<script type="text/javascript" src="include/js/general.js"></script>
-	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
-	<link href="include/install/install.css" rel="stylesheet" type="text/css">
-</head>
-
-<?php
 if($_REQUEST['migration_start'] != 'true') {
-?>	
+?>
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>vtiger CRM 5 - Configuration Wizard - Migration</title>
+		<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>		
+    	<script type="text/javascript" src="include/js/general.js"></script>
+		<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
+		<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	</head>
+	
 	<body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 	
 		<br>
@@ -46,8 +33,8 @@ if($_REQUEST['migration_start'] != 'true') {
 	
 		<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 		<tr>
-			<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="<?php echo $installationStrings['LBL_CONFIG_WIZARD']; ?>" hspace="20" title="<?php echo $installationStrings['LBL_CONFIG_WIZARD']; ?>"></td>
-			<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="<?php echo $installationStrings['LBL_VTIGER_CRM_5']; ?>" title="<?php echo $installationStrings['LBL_VTIGER_CRM_5']; ?>"></td>
+			<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+			<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 			<td class="cwHeadBg1" width=2%></td>
 		</tr>
 		</table>
@@ -91,8 +78,8 @@ if($_REQUEST['migration_start'] != 'true') {
 											<br>
 								<div id='Mig_Close' style='display:none;'>
 									<form action="install.php" method="post" name="form" id="form">
-										<input type="hidden" name="file" value="MigrationComplete.php" />	
-								        <input type="submit" class="button" value="<?php echo $installationStrings['LBL_NEXT']; ?>&nbsp;&#155;&#155;" title="<?php echo $installationStrings['LBL_NEXT']; ?>" />
+									<input type="hidden" name="file" value="MigrationComplete.php" />	
+							        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
 							    	</form>
 							    </div>
 							</td>
@@ -136,24 +123,26 @@ if($_REQUEST['migration_start'] != 'true') {
 	    </script>
 	    
 	    <!-- Prefetch image to display later for Screen blocker -->
-		<img style="display: none;" src="include/install/images/loading.gif">
 	    <img src="themes/softed/images/layerPopupBg.gif" style="display: none;"/>
+	</body>
+	</html>	
 <?php 
 } else {
-	// Start the migration now	
+	// Start the migration now
+	echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+	echo '<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>vtiger CRM 5 - Configuration Wizard - Migration</title>
+		<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>	
+		<link href="themes/softed/style.css" rel="stylesheet" type="text/css">	
+		<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	</head>';
+	
 	echo '<body onload="window.parent.VtigerJS_DialogBox.hideprogress();">';
 	
-	require_once('include/utils/utils.php');
-	require_once('include/logging.php');
-	$migrationlog = & LoggerManager::getLogger('MIGRATION');	
+	require_once dirname(__FILE__) . '/../migrate.php';
 	
-	if($_SESSION['authentication_key']==$_REQUEST['auth_key']) {		
-		$completed = Migration_Utils::migrate($_SESSION['migration_info']);
-		if ($completed == true) {
-			echo "<script type='text/javascript'>window.parent.Migration_Complete();</script>";
-		}
-	}
+	echo '</body></html>';
 }
 ?>
-	</body>
-</html>	

@@ -196,10 +196,17 @@ class PearDatabase{
 	static function &getInstance() {
 		global $adb, $log;
 
-		if(!isset($adb)) { 
-			$adb = new self();
+		$multiConnection = PerformancePrefs::getBoolean('ALLOW_MULTI_DB_CONNECTION_PER_REQUEST', true);
+		if(!$multiConnection) {
+			// Reuse the instance
+			if(!isset($adb)) { 
+				$adb = new self();
+			}
+			return $adb;
+		} else {
+			// Create new instance
+			return (new self());
 		}
-		return $adb;
 	}
 	// END	
 	
@@ -268,14 +275,6 @@ class PearDatabase{
     
     function checkError($msg='', $dieOnError=false) {
 		if($this->dieOnError || $dieOnError) {
-			$bt = debug_backtrace();
-			$ut = array();
-			foreach ($bt as $t) {
-				$ut[] = array('file'=>$t['file'],'line'=>$t['line'],'function'=>$t['function']);
-			}
-			echo '<pre>';
-			var_export($ut);
-			echo '</pre>';
 		    $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
 		    die ($msg."ADODB error ".$msg."->".$this->database->ErrorMsg());
 		} else {
@@ -1137,15 +1136,6 @@ class PearDatabase{
 			$last_insert_id = $this->database->Insert_ID();
 		}		
 		return $last_insert_id;
-	}
-	
-	// Function to escape the special characters in database name based on database type.
-	function escapeDbName($dbName='') {
-		if ($dbName == '')  $dbName = $this->dbName;
-		if($this->isMySql()) {
-			$dbName = "`{$dbName}`";
-		}
-		return $dbName;
 	}
 } /* End of class */
 

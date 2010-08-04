@@ -38,11 +38,11 @@ if(!$moduleName){
 	$this->syntax_error = true;
 	throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, "There is an syntax error in query");
 }
-global $adb;
-$handler = vtws_getModuleHandlerFromName($moduleName,$this->user);
-$objectMeta = $handler->getMeta();
+$inst = new VtigerCRMObject($moduleName,false);
+$inst = $inst->getInstance();
+$this->module_instance = $inst;
 $this->out['moduleName'] = $moduleName;
-$this->out['tableName'] = implode(',',$objectMeta->getEntityTableList());
+$this->out['tableName'] = implode(',',$inst->tab_name);
 }
 where_condition ::= WHERE(Wh) condition.
 where_condition ::= . 
@@ -81,18 +81,13 @@ valuelist ::= PARENOPEN valueref PARENCLOSE.
 valuelist ::= valueref.
 valueref ::= value_exp VALUE(VAL).{
 $length = sizeof($this->out['where_condition']['column_values']);
-$pos = $length - 1;
-if($pos < 0){
-$pos = 0;
+if(strcasecmp($this->out['where_condition']['column_operators'][$length-1],"in")===0 && $length !==0 && !$this->out['columnDone']){
+if(!is_array($this->out['where_condition']['column_values'][$length - 1])){
+$prev = $this->out['where_condition']['column_values'][$length - 1];
+$this->out['where_condition']['column_values'][$length - 1] = array();
+$this->out['where_condition']['column_values'][$length - 1][] = $prev; 
 }
-if(strcasecmp($this->out['where_condition']['column_operators'][$pos],"in")===0 && 
-	!empty($this->out['where_condition']['column_values'][$pos]) && !$this->out['columnDone']){
-if(!is_array($this->out['where_condition']['column_values'][$pos])){
-$prev = $this->out['where_condition']['column_values'][$pos];
-$this->out['where_condition']['column_values'][$pos] = array();
-$this->out['where_condition']['column_values'][$pos][] = $prev;
-}
-$this->out['where_condition']['column_values'][$pos][] = VAL;
+$this->out['where_condition']['column_values'][$length - 1][] = VAL;
 }else{
 $this->out['columnDone'] = false;
 $this->out['where_condition']['column_values'][] = VAL;
@@ -132,12 +127,8 @@ $this->out['orderby'][] = CN;
 }
 column_exp ::= column_list COMMA. 
 column_exp ::= .
-clause ::= ASC. {
-$this->out['sortOrder'] = 'ASC';
-}
-clause ::= DESC. {
-$this->out['sortOrder'] = 'DESC';
-}
+clause ::= ASC.
+clause ::= DESC.
 clause ::= .
 limit_clause ::= LIMIT limit_set. 
 limit_clause ::= . 
@@ -152,8 +143,7 @@ end_stmt ::= SEMICOLON(SEMI). {
 global $adb;
 if(!$this->out['meta']){
 $module = $this->out['moduleName'];
-$handler = vtws_getModuleHandlerFromName($module,$this->user);
-$objectMeta = $handler->getMeta();
+$objectMeta = new VtigerCRMObjectMeta(VtigerWebserviceObject::fromName($adb,$module),$this->user);
 $this->out['meta'] = $objectMeta;
 $meta = $this->out['meta'];
 $fieldcol = $meta->getFieldColumnMapping();
@@ -170,31 +160,35 @@ foreach($this->out['where_condition']['column_names'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
 }
+$module = $this->module_instance;
 $tables = $this->getTables($this->out, $columns);
 if(sizeof($tables)===0){
-$tables[] = $objectMeta->getEntityBaseTable();
+$tables[] = $module->table_name;
 }
-$defaultTableList = $objectMeta->getEntityDefaultTableList();
-foreach($defaultTableList as $tableName){
-if(!in_array($tableName,$tables)){
-array_push($tables,$tableName);
+if(!in_array("vtiger_crmentity",$tables) && $module != "Users"){
+array_push($tables,"vtiger_crmentity");
 }
-}
-$firstTable = $objectMeta->getEntityBaseTable();
-$tabNameIndex = $objectMeta->getEntityTableIndexList();
-$firstIndex = $tabNameIndex[$firstTable];
+$firstTable = $module->table_name;
+$firstIndex = $module->tab_name_index[$firstTable];
 foreach($tables as $ind=>$table){
-if($firstTable!=$table){
-	if(!isset($tabNameIndex[$table]) && $table == "vtiger_crmentity"){
+if($module->table_name!=$table){
+	if(!isset($module->tab_name_index[$table]) && $table == "vtiger_crmentity"){
 		$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN $table ON $firstTable.$firstIndex=$table.crmid";
 	}else{
-		$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN $table ON $firstTable.$firstIndex=$table.{$tabNameIndex[$table]}";
+		$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN $table ON $firstTable.$firstIndex=$table.{$module->tab_name_index[$table]}";
 	}
 }else{
 	$this->out['tableName'] = $table;
 }
 }
 }
+/*
+$module = $this->module_instance;
+foreach($module->tab_name_index as $key=>$val){
+ECNAME = $key.$val;
+break;
+}
+*/
 }
 %include_class {
 /*
@@ -242,6 +236,7 @@ Array (
 )*/
 	private $out;
 	public $lex;
+	private $module_inst;
 	private $success ;
 	private $query ;
 	private $error_msg;
@@ -295,8 +290,6 @@ function buildSelectStmt($sqlDump){
 		}
 	}
 	$this->query = $this->query.' FROM '.$sqlDump['tableName'].$sqlDump['defaultJoinConditions'];
-	$deletedQuery = $meta->getEntityDeletedQuery();
-	$accessControlQuery = $meta->getEntityAccessControlQuery();
 	if($sqlDump['where_condition']){
 		if((sizeof($sqlDump['where_condition']['column_names']) == 
 		sizeof($sqlDump['where_condition']['column_values'])) && 
@@ -341,8 +334,6 @@ function buildSelectStmt($sqlDump){
 				}
 				if(is_array($whereValue)){
 					$whereValue = "(".implode(',',$whereValue).")";
-				}elseif(strcasecmp($whereOperator, 'in') === 0){
-					$whereValue = "($whereValue)";
 				}
 				$this->query = $this->query.$columnTable[$fieldcol[$whereField]].'.'.
 									$fieldcol[$whereField]." ".$whereOperator." ".$whereValue;
@@ -355,25 +346,37 @@ function buildSelectStmt($sqlDump){
 			throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, "columns data inappropriate");
 		}
 		$this->query = $this->query.")";
-		$nextToken = ' AND ';
-	}else{
-		if(!empty($deletedQuery) || !empty($accessControlQuery)){
-			$nextToken = " WHERE ";
+		if($this->out['moduleName'] != "Users"){
+			$this->query = $this->query." AND ";
 		}
+	}else{
+		$this->query = $this->query." WHERE ";
 	}
 	if(strcasecmp('calendar',$this->out['moduleName'])===0){
-		$this->query = $this->query." $nextToken activitytype='Task' AND ";
+		$this->query = $this->query."activitytype='Task' AND ";
 	}elseif(strcasecmp('events',$this->out['moduleName'])===0){
-		$this->query = $this->query."$nextToken activitytype!='Emails' AND activitytype!='Task' AND ";
+		$this->query = $this->query."activitytype!='Emails' AND activitytype!='Task' AND ";
 	}else if(strcasecmp('emails',$this->out['moduleName'])===0){
-		$this->query = $this->query."$nextToken activitytype='Emails' AND ";
-	}elseif(!empty($deletedQuery)){
-		$this->query = $this->query.$nextToken;
+		$this->query = $this->query."activitytype='Emails' AND ";
 	}
-	
-	$this->query = $this->query.' '.$deletedQuery;
-	$this->query = $this->query.' '.$accessControlQuery;
-	
+	if($this->out['moduleName'] != "Users"){
+		$this->query = $this->query."vtiger_crmentity.deleted=0";
+	}
+	if(strcasecmp("off",$this->user->is_admin)===0){
+		require('user_privileges/user_privileges_'.$this->user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$this->user->id.'.php');
+		if($profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && 
+				$defaultOrgSharingPermission[$meta->getEntityId()] == 3){
+			$this->query = $this->query." and (vtiger_crmentity.smownerid in({$this->user->id}) or ".
+					"vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role".
+					" inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid ".
+					"inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid ".
+					"where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%') or ".
+					"vtiger_crmentity.smownerid in(".
+						"select shareduserid from vtiger_tmp_read_user_sharing_per ".
+						"where userid=".$this->user->id." and tabid=".$meta->getEntityId()."))";
+		}
+	}
 	if($sqlDump['orderby']){
 		$i=0;
 		$this->query = $this->query.' ORDER BY ';
@@ -384,9 +387,6 @@ function buildSelectStmt($sqlDump){
 			}else{
 				$this->query = $this->query.','.$columnTable[$fieldcol[$field]].".".$fieldcol[$field];
 			}
-		}
-		if($sqlDump['sortOrder']) {
-			$this->query .= ' '.$sqlDump['sortOrder'];
 		}
 	}
 	if($sqlDump['limit']){

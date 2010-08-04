@@ -43,7 +43,6 @@ class VTCreateTodoTask extends VTTask{
 		}
 
 		$baseDate = $entityData->get($this->datefield);
-		$time = explode(' ',$baseDate);
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
 		$date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*($this->directions=='Before'?-1:1));
@@ -54,7 +53,7 @@ class VTCreateTodoTask extends VTTask{
 			'taskpriority'=>$this->priority,
 			'taskstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
-			'time_start'=>$time[1],
+			'time_start'=>self::conv12to24hour($this->time),
 			'sendnotification'=>$this->sendNotification!=''?1:0,
 			'date_start'=>$date,
 			'due_date'=>$date,

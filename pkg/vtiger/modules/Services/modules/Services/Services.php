@@ -205,13 +205,14 @@ class Services extends CRMEntity {
 	{
 		global $adb, $log, $current_user;
 		$log->debug("Entering into insertPriceInformation($tablename, $module) method ...");
-		//removed the update of currency_id based on the logged in user's preference : fix 6490
-
+		// Update the currency_id based on the logged in user's preference
+		$currencyid=fetchCurrency($current_user->id);
+		$adb->pquery("update vtiger_service set currency_id=? where serviceid=?", array($currencyid, $this->id));
 		
 		$currency_details = getAllCurrencies('all');
 		
 		//Delete the existing currency relationship if any
-		if($this->mode == 'edit'&&  $_REQUEST['action'] != 'MassEditSave')
+		if($this->mode == 'edit')
 		{
 			for($i=0;$i<count($currency_details);$i++)
 			{
@@ -289,10 +290,11 @@ class Services extends CRMEntity {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
-		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_service.handler";
-		global $current_user;
-		$query .= $this->getNonAdminAccessControlQuery($module,$current_user);
-		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
+		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+
+		$query .= "	WHERE vtiger_crmentity.deleted = 0 ".$where;
+		$query .= $this->getListViewSecurityParameter($module);
 		return $query;
 	}
 
@@ -365,14 +367,22 @@ class Services extends CRMEntity {
 		}
 
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and ".
-		"vtiger_users.status='Active'";
-		$query .= $this->getNonAdminAccessControlQuery($thismodule,$current_user);
+		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
+
 		$where_auto = " vtiger_crmentity.deleted=0";
 
 		if($where != '') $query .= " WHERE ($where) AND $where_auto";
 		else $query .= " WHERE $where_auto";
 
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+
+		// Security Check for Field Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[7] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter($thismodule);
+		}
 		return $query;
 	}
 
@@ -467,7 +477,9 @@ class Services extends CRMEntity {
 			$from_clause .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
-		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.handler";
+		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
 		$where_clause .= $this->getListViewSecurityParameter($module);
 					
@@ -853,13 +865,7 @@ class Services extends CRMEntity {
 		$theme_path="themes/".$theme."/";
 		$image_path=$theme_path."images/";		
 
-		$computeCount = $_REQUEST['withCount'];
-		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
-				((boolean) $computeCount) == true){
-			$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
-		}else{
-			$noofrows = null;
-		}
+		$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
 		$module = 'PriceBooks';
 		$relatedmodule = 'Services';
 		if(!$_SESSION['rlvs'][$module][$relatedmodule])
@@ -875,19 +881,22 @@ class Services extends CRMEntity {
 				setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
 			}
 		}
-		global $relationId;
-		$start = RelatedListViewSession::getRequestCurrentPage($relationId, $query);
-		$navigation_array =  VT_getSimpleNavigationValues($start, $list_max_entries_per_page,
-				$noofrows);
-
-		$limit_start_rec = ($start-1) * $list_max_entries_per_page;
-
-		if( $adb->dbType == "pgsql")
-			$list_result = $adb->pquery($query.
-					" OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+		$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
+		$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+		
+		$start_rec = $navigation_array['start'];
+		$end_rec = $navigation_array['end_val'];
+	
+		//limiting the query
+		if($start_rec == 0)
+			$limit_start_rec = 0;
 		else
-			$list_result = $adb->pquery($query.
-					" LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+			$limit_start_rec = $start_rec -1;
+
+		if($adb->dbType == "pgsql")
+			$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+		else
+			$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 	
 		$header=array();
 		$header[]=$current_module_strings['LBL_LIST_SERVICE_NAME'];
@@ -928,12 +937,14 @@ class Services extends CRMEntity {
 				$entries[] = $action;
 			$entries_list[] = $entries;
 		}
-		$navigationOutput[] =  getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
-		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, '',$module,$relatedmodule,$focus->id);
-		$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
-
-		$log->debug("Exiting getPriceBookRelatedServices method ...");
-		return $return_data;
+		if($numRows>0) {		
+			$module_rel = "$module&relmodule=$relatedmodule&record=".$focus->id;		
+			$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array,'',$module_rel);
+			$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
+	
+			$log->debug("Exiting getPriceBookRelatedServices method ...");
+			return $return_data; 
+		}
 	}
 
 	/**

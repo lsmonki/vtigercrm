@@ -95,14 +95,8 @@ function getFieldLabels($checkedFields){
 	$sql = "select * from vtiger_field where fieldid in (".generateQuestionMarks($checkedFields).") and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql,array($checkedFields));
 	$count = $adb->num_rows($result);
-/**
- * to fix the localization of strings
- *  
- */
-	$tabid = $adb->query_result($result, 0, "tabid");
-	$module = getTabModuleName($tabid);
 	for($i=0;$i<$count;$i++){
-		$data[] = getTranslatedString($adb->query_result($result, $i, "fieldlabel"),$module);
+		$data[] = $adb->query_result($result, $i, "fieldlabel");
 	}
 	return $data;
 }

@@ -22,7 +22,7 @@ if($argv) {
 		$value = $argv[$index];
 		if(strpos($value, '=') === false) continue;
 
-		$keyval = explode('=', $value);
+		$keyval = split('=', $value);
 		if(!isset($_REQUEST[$keyval[0]])) {
 			$_REQUEST[$keyval[0]] = $keyval[1];
 		}
@@ -53,10 +53,6 @@ if($service == 'RecurringInvoice') {
 
 if($service == 'com_vtiger_workflow'){
 	include_once('cron/modules/com_vtiger_workflow/com_vtiger_workflow.service');
-}
-
-if($service == 'VtigerBackup'){
-	include_once('cron/modules/VtigerBackup/VtigerBackup.service');
 }
 
 ?>

@@ -46,4 +46,5 @@
 		VTWS_PreserveGlobal::flush();
 		return $entity;
 	}
+	
 ?>

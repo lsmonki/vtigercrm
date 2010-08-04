@@ -61,6 +61,18 @@ $_SESSION['SALESORDER_ORDER_BY'] = $order_by;
 $_SESSION['SALESORDER_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
+
+if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
+{
+
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
+	$smarty->assign("SEARCH_URL",$url_string);
+	
+}
+
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("SalesOrder");
 $viewid = $oCustomView->getViewId($currentModule);
@@ -96,25 +108,20 @@ if($viewnamedesc['viewname'] == 'All')
 }
 
 //<<<<<<<<<customview>>>>>>>>>
-global $current_user;
-$queryGenerator = new QueryGenerator($currentModule, $current_user);
-if ($viewid != "0") {
-	$queryGenerator->initForCustomViewById($viewid);
-} else {
-	$queryGenerator->initForDefaultCustomView();
+if($viewid != "0")
+{
+	$listquery = getListQuery("SalesOrder");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"SalesOrder");
+}else
+{
+	$list_query = getListQuery("SalesOrder");
 }
 //<<<<<<<<customview>>>>>>>>>
 
-// Enabling Module Search
-$url_string = '';
-if($_REQUEST['query'] == 'true') {
-	$queryGenerator->addUserSearchConditions($_REQUEST);
-	$ustring = getSearchURL($_REQUEST);
-	$url_string .= "&query=true$ustring";
-	$smarty->assign('SEARCH_URL', $url_string);
+if(isset($where) && $where != '')
+{
+        $list_query .= ' and '.$where;
 }
-
-$list_query = $queryGenerator->getQuery();
 
 if(isset($order_by) && $order_by != '')
 {
@@ -157,23 +164,20 @@ if( $adb->dbType == "pgsql")
 else
 	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
 $smarty->assign('recordListRange',$recordListRangeMsg);
 
 //Retreive the List View Table Header
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-$controller = new ListViewController($adb, $current_user, $queryGenerator);
-$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
-		$order_by);
+$listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search = $controller->getBasicSearchFieldInfoList();
+$listview_header_search=getSearchListHeaderValues($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
-		$navigation_array);
+$listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=SalesOrder&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
@@ -184,7 +188,7 @@ $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";")
 
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"SalesOrder",'index',$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
-$fieldnames = $controller->getAdvancedSearchOptionString();
+$fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
@@ -198,12 +202,6 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION[$currentModule.'_listquery'] = $list_query;
-
-// Gather the custom link information to display
-include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'ACTION'=>vtlib_purify($_REQUEST['action']), 'CATEGORY'=> $category);
-$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('LISTVIEWBASIC','LISTVIEW'), $customlink_params));
-// END
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

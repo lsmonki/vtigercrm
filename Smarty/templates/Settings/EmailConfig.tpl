@@ -92,12 +92,7 @@
 				{/if}&nbsp;
 			     </td>
                           </tr>
-						  <tr>
-							<td nowrap class="small cellLabel"><strong>{$MOD.LBL_FROM_EMAIL_FIELD}</strong></td>
-							<td class="small cellText">{$FROM_EMAIL_FIELD}&nbsp;</td>
-							</td>
-						  </tr>
-                          <tr>
+                          <tr> 
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
                             <td class="small cellText">
 				{if $SMTP_AUTH eq 'checked'}
@@ -129,15 +124,9 @@
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
                             <td class="small cellText">
 				<input type="password" class="detailedViewTextBox small" value="{$PASSWORD}" name="server_password">
-				</td>
-                        </tr>
-						<tr>
-							<td nowrap class="small cellLabel"><strong>{$MOD.LBL_FROM_EMAIL_FIELD}</strong></td>
-							<td class="small cellText">
-				 <input type="text" class="detailedViewTextBox small" value="{$FROM_EMAIL_FIELD}" name="from_email_field"/>
-							</td>
-						</tr>
-						<tr>
+			    </td>
+                          </tr>
+                          <tr> 
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
                             <td class="small cellText">
                               	<input type="checkbox" name="smtp_auth" {$SMTP_AUTH}/>

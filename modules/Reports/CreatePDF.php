@@ -364,8 +364,7 @@ if(isset($arr_val))
 
 }
 
-$totalpdf = $oReportRun->GenerateReport("PRINT_TOTAL",$filterlist);
-$html = '<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'<tr><td>'.$totalpdf.'</td></tr>'.'</table>';
+$html='<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'</table>';
 $columnlength = array_sum($col_width);
 if($columnlength > 14400)
 {

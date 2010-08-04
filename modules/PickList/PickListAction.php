@@ -89,11 +89,7 @@ if($mode == 'add'){
 	}
 	echo "SUCCESS";
 }elseif($mode == 'delete'){
-
-	//fix for T6033
-	$values = str_replace('\\','\\\\',$_REQUEST['values']);
-	$values = Zend_Json::decode($values);
-	
+	$values = Zend_Json::decode($_REQUEST['values']);
 	$replaceVal = $_REQUEST['replaceVal'];
 	if(!empty($replaceVal)){
 		$sql = "select * from vtiger_$tableName where $tableName=?";

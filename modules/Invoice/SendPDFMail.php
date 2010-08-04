@@ -8,18 +8,16 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-include_once 'modules/Invoice/InvoicePDFController.php';
 
-$controller = new Vtiger_InvoicePDFController($currentModule);
-$controller->loadRecord(vtlib_purify($_REQUEST['record']));
+include('include/InventoryPDF.php');
+$pdf=get_invoice_pdf();
 
 $filenameid = $_REQUEST['record'];
 if(empty($filenameid)) $filenameid = time();
-$filepath="storage/Invoice_$filenameid.pdf";
-//added file name to make it work in IE, also forces the download giving the user the option to save
-$controller->Output($filepath,'F');
+$outputfilename = "storage/Invoice_$filenameid.pdf";
+$pdf->Output($outputfilename,'F'); //added file name to make it work in IE, also forces the download giving the user the option to save
 
 // Added to fix annoying bug that includes HTML in your PDF
 echo "<script>window.history.back();</script>";
-exit()
+exit();
 ?>

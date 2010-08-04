@@ -25,6 +25,5 @@ if($return_action !='' && $return_module == "PriceBooks" && $return_action == "C
 	$adb->pquery($query, array($record, $return_id)); 
 }
 
-header("Location: index.php?module=".$return_module."&action=".$return_module.
-		"Ajax&file=$return_action&ajax=true&record=".$return_id);
+header("Location: index.php?module=".$return_module."&action=".$return_module."Ajax&file=$return_action&ajax=delpbprorel&record=".$return_id);
 ?>

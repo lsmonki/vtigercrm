@@ -35,6 +35,7 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";
 		$modObj->save("Potentials");
+	        sendNotificationToOwner('Potentials',&$modObj);
 		if($modObj->id != "")
 		{
 			echo ":#:SUCCESS";
@@ -46,7 +47,5 @@ if($ajaxaction == "DETAILVIEW")
 	{
 		echo ":#:FAILURE";
 	}
-} elseif($ajaxaction == "LOADRELATEDLIST" || $ajaxaction == "DISABLEMODULE") {
-	require_once 'include/ListView/RelatedListViewContents.php';
 }
 ?>
