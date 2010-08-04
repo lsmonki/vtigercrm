@@ -19,7 +19,7 @@ $optionalModuleStrings = array(
 	'ModComments_description' => 'Ability to add comments to any of the related modules',
 	'Projects_description' => 'Adds the ability to manage Projects',
 	'NL-Dutch_description' => 'Dutch Language pack',
-	'Pack de langue Francais_description' => 'Pack de langue Francais',
+	'Pack de langue Francais_description' => 'French Language pack',
 	'Magyar nyelvi csomag a VTiger 5.2.0 rendszerhez_description' => 'Hungarian Language pack',
 	'Spanish_description' => 'Spanish Language pack',
 );
