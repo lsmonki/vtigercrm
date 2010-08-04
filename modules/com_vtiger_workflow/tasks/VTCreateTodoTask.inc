@@ -44,6 +44,9 @@ class VTCreateTodoTask extends VTTask{
 
 		$baseDate = $entityData->get($this->datefield);
 		$time = explode(' ',$baseDate);
+		if(count($time) < 2) {
+			$time[] = date('H:i');
+		}
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
 		$date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*($this->directions=='Before'?-1:1));
