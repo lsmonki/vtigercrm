@@ -1258,7 +1258,7 @@ class Common_Install_Wizard_Utils {
 		    while (false !== ($file = readdir($handle))) {
 		        $filename_arr = explode(".", $file);
 		        $packagename = $filename_arr[0];
-		        if (!empty($packagename)) {
+		        if (!empty($packagename) && in_array($packagename,$selected_modules)) {
 		        	$packagepath = "packages/vtiger/optional/$file";
 					$package = new Vtiger_Package();
 					if($package->isLanguageType($packagepath)) {
@@ -1268,13 +1268,11 @@ class Common_Install_Wizard_Utils {
 	        		$module = $package->getModuleNameFromZip($packagepath);
 	        		if($module != null) {
 	        			$moduleInstance = Vtiger_Module::getInstance($module);
-			        	if(in_array($packagename,$selected_modules)) {
-			        		if($moduleInstance) {
-			        			updateVtlibModule($module, $packagepath);
-			        		} else {
-			        			installVtlibModule($packagename, $packagepath);
-			        		}
-			        	}
+						if($moduleInstance) {
+							updateVtlibModule($module, $packagepath);
+						} else {
+							installVtlibModule($packagename, $packagepath);
+						}
 		        	}
 		        }
 		    }
