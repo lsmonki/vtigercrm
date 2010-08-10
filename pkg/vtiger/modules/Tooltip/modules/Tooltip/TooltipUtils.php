@@ -122,7 +122,7 @@ function getToolTipText($view,$fieldname,$module,$value){
 		
 		if(in_array($fieldname, $keys)){
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			$label = getTranslatedString($fieldlabel);
+			$label = getTranslatedString($fieldlabel,$module);
 			$fieldvalue = $value[0][$fieldname];
 			if(strlen($fieldvalue)>35){
 				$fieldvalue = substr($fieldvalue,0,35).'...';
@@ -142,8 +142,7 @@ function getToolTip($text,$format = "default"){
 	require_once('Smarty_setup.php');
 	$smarty = new vtigerCRM_Smarty;
 	$tip = "";
-	
-	if(trim($text) == ""){
+	if(trim(implode('', $text)) == ''){
 		return $tip;
 	}
 	

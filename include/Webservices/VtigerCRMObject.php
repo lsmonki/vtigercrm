@@ -20,7 +20,7 @@ class VtigerCRMObject{
 			$this->moduleId = $moduleCredential;
 			$this->moduleName = $this->getObjectTypeName($this->moduleId);
 		}else{
-			$this->moduleName = $this->titleCase($moduleCredential);
+			$this->moduleName = $moduleCredential;
 			$this->moduleId = $this->getObjectTypeId($this->moduleName);
 		}
 		$this->instance = null;

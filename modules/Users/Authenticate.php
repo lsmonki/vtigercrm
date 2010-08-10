@@ -133,6 +133,16 @@ if($focus->is_authenticated())
 }
 else
 {
+	$sql = 'select user_name, id, crypt_type from vtiger_users where user_name=?';
+	$result = $adb->pquery($sql, array($focus->column_fields["user_name"]));
+	$rowList = $result->GetRows();
+	foreach ($rowList as $row) {
+		$cryptType = $row['crypt_type'];
+		if(strtolower($cryptType) == 'md5' && version_compare(PHP_VERSION, '5.3.0') >= 0) {
+			header("Location: PHP5.3_PasswordHelp.php");
+			die;
+		}
+	}
 	$_SESSION['login_user_name'] = $focus->column_fields["user_name"];
 	$_SESSION['login_password'] = $user_password;
 	$_SESSION['login_error'] = $mod_strings['ERR_INVALID_PASSWORD'];

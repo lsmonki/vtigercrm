@@ -258,6 +258,7 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['description'] = $mailrecord->getBodyHTML();
 		$focus->column_fields['assigned_user_id'] = $linkfocus->column_fields['assigned_user_id'];
 		$focus->column_fields["date_start"]= date('Y-m-d', $mailrecord->_date);
+		$focus->column_fields["email_flag"] = 'SAVED';
 		
 		$emailid = $focus->id;
 		$from=$mailrecord->_from[0];
