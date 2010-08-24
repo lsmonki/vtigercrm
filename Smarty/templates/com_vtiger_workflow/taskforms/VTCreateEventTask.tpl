@@ -136,7 +136,7 @@ var eventType = '{$task->eventType}';
 							<td>
 								<table border=0 cellspacing=0 cellpadding=2>
 									<tr>
-										<td><input type="radio" {if $task->repeatMonth eq "date"}checked{/if} name="repeatMonth" value="date"></td><td>{$MOD.on}</td><td><input type="text" class=textbox style="width:20px" value="{$task->repeatMonth_date}" name="repeatMonth_date" ></td><td>{$MOD.dayofthemonth}</td>
+										<td><input type="radio" {if $task->repeatMonth eq "date"}checked{/if} name="repeatMonth" value="date"></td><td>{$MOD.on}</td><td><input type="text" class=textbox style="width:20px" value="{$task->repeatMonth_date}" name="repeatMonth_date" ></td><td>{assign var=languageKey value='day of the month'}{$MOD[$languageKey]}</td>
 									</tr>
 								</table>
 							</td>
