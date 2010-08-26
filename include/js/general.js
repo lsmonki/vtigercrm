@@ -581,7 +581,7 @@ function timeValidate(fldName,fldLabel,type) {
 	chktime.setMinutes(minval)
 	
 	if (type!="OTH") {
-		if (!compareDates(chktime,fldLabel1,currtime,"current time",type)) {
+		if (!compareDates(chktime,fldLabel,currtime,"current time",type)) {
 			try { getObj(fldName).focus() } catch(error) { }
 			return false
 		} else return true;
