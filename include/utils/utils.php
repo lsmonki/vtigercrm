@@ -43,6 +43,7 @@ require_once('include/FormValidationUtil.php');
 require_once('include/DatabaseUtil.php');
 require_once('include/events/SqlResultIterator.inc');
 require_once('data/CRMEntity.php');
+require_once 'vtlib/Vtiger/Language.php';
  
 // Constants to be defined here
 

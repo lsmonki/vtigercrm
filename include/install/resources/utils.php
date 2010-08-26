@@ -1223,7 +1223,7 @@ class Common_Install_Wizard_Utils {
 		} else {
 			$optionalModules['install'] = $optionalModules['install']['module'];
 		}
-		if( is_array($optionalModules['update']['module']) ) {
+		if( is_array($optionalModules['update']['language']) ) {
 			$optionalModules['update'] = array_merge($optionalModules['update']['module'],
 				$optionalModules['update']['language']);
 		} else {
