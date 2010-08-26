@@ -32,7 +32,7 @@ class ModComments_DetailViewBlockCommentWidget {
 	}
 	
 	function title() {
-		return getTranslatedString('Comments Information', 'ModComments');
+		return getTranslatedString('LBL_MODCOMMENTS_INFORMATION', 'ModComments');
 	}
 	
 	function name() {
