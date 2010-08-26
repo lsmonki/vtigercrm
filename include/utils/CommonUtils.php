@@ -1082,7 +1082,7 @@ function convertFromDollar($amount,$crate){
 	global $log;
 	$log->debug("Entering convertFromDollar(".$amount.",".$crate.") method ...");
 	$log->debug("Exiting convertFromDollar method ...");
-	return $amount * $crate;
+	return round($amount * $crate, 2);
 }
 
 /** This function returns the amount converted from master currency.
