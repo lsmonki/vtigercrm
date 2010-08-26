@@ -1491,7 +1491,7 @@ $app_currency_strings = array(
 	'Kenya, Shilling' => 'Kenya, Shilling',
 	'MADAGASCAR, Malagasy Ariary' => 'MADAGASCAR, Malagasy Ariary',
 	'United Arab Emirates, Dirham' => 'United Arab Emirates, Dirham',
-	'United Republic OF Tanzania, Shilling' => 'United Republic OF Tanzania, Shilling',
+	'United Republic of Tanzania, Shilling' => 'United Republic OF Tanzania, Shilling',
 	'Zambia, Kwacha' => 'Zambia, Kwacha',
 );
 ?>
