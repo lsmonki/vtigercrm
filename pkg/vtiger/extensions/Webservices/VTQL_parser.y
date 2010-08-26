@@ -297,6 +297,7 @@ function buildSelectStmt($sqlDump){
 	$this->query = $this->query.' FROM '.$sqlDump['tableName'].$sqlDump['defaultJoinConditions'];
 	$deletedQuery = $meta->getEntityDeletedQuery();
 	$accessControlQuery = $meta->getEntityAccessControlQuery();
+	$this->query = $this->query.' '.$accessControlQuery;
 	if($sqlDump['where_condition']){
 		if((sizeof($sqlDump['where_condition']['column_names']) == 
 		sizeof($sqlDump['where_condition']['column_values'])) && 
@@ -357,7 +358,7 @@ function buildSelectStmt($sqlDump){
 		$this->query = $this->query.")";
 		$nextToken = ' AND ';
 	}else{
-		if(!empty($deletedQuery) || !empty($accessControlQuery)){
+		if(!empty($deletedQuery)){
 			$nextToken = " WHERE ";
 		}
 	}
@@ -372,7 +373,6 @@ function buildSelectStmt($sqlDump){
 	}
 	
 	$this->query = $this->query.' '.$deletedQuery;
-	$this->query = $this->query.' '.$accessControlQuery;
 	
 	if($sqlDump['orderby']){
 		$i=0;
