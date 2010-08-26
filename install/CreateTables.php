@@ -24,8 +24,6 @@ if(isset($_REQUEST['selected_modules'])) {
 
 if (isset($_SESSION['installation_info']['admin_email'])) $admin_email = $_SESSION['installation_info']['admin_email'];
 if (isset($_SESSION['installation_info']['admin_password'])) $admin_password = $_SESSION['installation_info']['admin_password'];
-if (isset($_SESSION['installation_info']['standarduser_email'])) $standarduser_email = $_SESSION['installation_info']['standarduser_email'];
-if (isset($_SESSION['installation_info']['standarduser_password'])) $standarduser_password = $_SESSION['installation_info']['standarduser_password'];
 if (isset($_SESSION['installation_info']['currency_name'])) $currency_name = $_SESSION['installation_info']['currency_name'];
 if (isset($_SESSION['installation_info']['currency_code'])) $currency_code = $_SESSION['installation_info']['currency_code'];
 if (isset($_SESSION['installation_info']['currency_symbol'])) $currency_symbol = $_SESSION['installation_info']['currency_symbol'];
