@@ -22,6 +22,7 @@ $mod_strings = Array (
 'Comments' => 'Comments',
 'Related To' => 'Related To',
 'Creator' => 'Creator',
+'Related To Comments' => 'Parent Comment',
 
 'LBL_ADD_COMMENT' => 'Add Comment',
 'LBL_AUTHOR' => 'Author',
