@@ -66,7 +66,7 @@ if($next == true) {
 
 	require_once('install/VerifyDBHealth.php');
 
-	if($_SESSION[$newDbName.'_'.$dbHostName.'_HealthApproved'] != true) {
+	if($_SESSION[$newDbName.'_'.$dbHostName.'_HealthApproved'] != true || $_SESSION['pre_migration'] != true) {
 		header("Location:install.php?file=PreMigrationActions.php");
 	} else {
 		$innodbEngineCheck = true;

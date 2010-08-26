@@ -30,7 +30,7 @@ require_once 'modules/VtigerBackup/VtigerBackup.php';
 
 global $adb, $enable_backup,$current_user;
 
-if(is_admin($current_user) == true) {
+if(is_admin($current_user) == true && PerformancePrefs::getBoolean('LOGOUT_BACKUP', true)) {
 	$backup = new VtigerBackup();
 	$backup->backup();
 }

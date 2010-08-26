@@ -21,6 +21,7 @@ $newDbForCopy = $newDbName = $migrationInfo['new_dbname'];
 if($dbName == $newDbForCopy) {
 	$newDbForCopy = '';
 }
+$_SESSION['pre_migration'] = true;
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

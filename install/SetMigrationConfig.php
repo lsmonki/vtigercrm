@@ -38,6 +38,7 @@ include("modules/Migration/versions.php");
 $version_sorted = $versions;
 uasort($version_sorted,'version_compare');
 $version_sorted = array_reverse($version_sorted,true);
+$_SESSION['pre_migration'] = false;
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
