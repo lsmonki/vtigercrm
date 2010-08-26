@@ -45,7 +45,6 @@ class VTWS_PreserveGlobal{
 			//$name store the name of the global.
 			global $$name;
 			$$name = VTWS_PreserveGlobal::$globalData[$name]['value'];
-			return $$name;
 		}
 	}
 	
