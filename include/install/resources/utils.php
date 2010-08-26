@@ -1185,6 +1185,11 @@ class Common_Install_Wizard_Utils {
 				$moduleUpdateVersion = $package->getVersion();
 				$moduleForVtigerVersion = $package->getDependentVtigerVersion();
 				$moduleMaxVtigerVersion = $package->getDependentMaxVtigerVersion();
+				if($package->isLanguageType()) {
+					$type = 'language';
+				} else {
+					$type = 'module';
+				}
 				if($moduleName != null) {					
 					$moduleDetails = array();
 					$moduleDetails['description'] = $optionalModuleStrings[$moduleName.'_description'];
@@ -1205,12 +1210,24 @@ class Common_Install_Wizard_Utils {
 						if(version_compare($moduleUpdateVersion, $moduleInstance->version, '=')) {
 							$moduleDetails['enabled'] = false;	
 						}
-						$optionalModules['update'][$moduleName] = $moduleDetails;
+						$optionalModules['update'][$type][$moduleName] = $moduleDetails;
 					} else {
-						$optionalModules['install'][$moduleName] = $moduleDetails;						
+						$optionalModules['install'][$type][$moduleName] = $moduleDetails;
 					}
 				}
 		    }
+		}
+		if(is_array($optionalModules['install']['language'])) {
+			$optionalModules['install'] = array_merge($optionalModules['install']['module'],
+				$optionalModules['install']['language']);
+		} else {
+			$optionalModules['install'] = $optionalModules['install']['module'];
+		}
+		if( is_array($optionalModules['update']['module']) ) {
+			$optionalModules['update'] = array_merge($optionalModules['update']['module'],
+				$optionalModules['update']['language']);
+		} else {
+			$optionalModules['update'] = $optionalModules['update']['module'];
 		}
 		return $optionalModules;		
 	}

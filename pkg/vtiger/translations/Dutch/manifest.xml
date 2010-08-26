@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <module>
   <type>language</type>
-  <name>NL-Dutch</name>
+  <name>Dutch</name>
   <label>NL-Dutch</label>
   <prefix>nl_nl</prefix>
   <version>1.2</version>

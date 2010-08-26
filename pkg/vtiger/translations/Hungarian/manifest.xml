@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <module>
 	<type>language</type>
-	<name>Magyar nyelvi csomag a VTiger 5.2.0 rendszerhez</name>
+	<name>Hungarian</name>
 	<label>HU Magyar</label>
 	<prefix>hu_hu</prefix>
 	
