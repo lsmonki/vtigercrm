@@ -487,8 +487,16 @@ function return_module_language($language, $module)
 	if(!isset($mod_strings))
 	{
 		$log->warn("Unable to find the module language file for language: ".$language." and module: ".$module);
-		require("modules/$module/language/$default_language.lang.php");
-		$language_used = $default_language;
+		if($default_language = 'en_us') {
+			require("modules/$module/language/$default_language.lang.php");
+			$language_used = $default_language;
+		} else {
+			@include("modules/$module/language/$default_language.lang.php");
+			if(!isset($mod_strings)) {
+				require("modules/$module/language/en_us.lang.php");
+			}
+			$language_used = 'en_us';
+		}
 	}
 
 	if(!isset($mod_strings))
