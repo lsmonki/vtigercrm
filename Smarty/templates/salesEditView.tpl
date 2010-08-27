@@ -238,10 +238,24 @@ function AddressSync(Addform,id)
 	{else}
 		textAreaName = 'description';
 	{/if}
-	CKEDITOR.replace( textAreaName,	{ldelim}
+
+	<!-- Solution for ticket #6756-->
+	CKEDITOR.replace( textAreaName,
+	{ldelim}
 		extraPlugins : 'uicolor',
-		uiColor: '#dfdff1'
-	{rdelim} ) ;
+		uiColor: '#dfdff1',
+			on : {ldelim}
+				instanceReady : function( ev ) {ldelim}
+					 this.dataProcessor.writer.setRules( 'p',  {ldelim}
+						indent : false,
+						breakBeforeOpen : false,
+						breakAfterOpen : false,
+						breakBeforeClose : false,
+						breakAfterClose : false
+				{rdelim});
+			{rdelim}
+		{rdelim}
+	{rdelim});
 	var oCKeditor = CKEDITOR.instances[textAreaName];
 </script>
 {/if}
