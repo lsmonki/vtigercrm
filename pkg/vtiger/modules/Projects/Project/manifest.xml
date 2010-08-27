@@ -4,7 +4,7 @@
 <name>Project</name>
 <label>Project</label>
 <parent>Support</parent>
-<version>1.7.8</version>
+<version>1.8</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>
@@ -492,7 +492,7 @@
 </relatedlist>
 <relatedlist>
 <function>get_dependents_list</function>
-<label>Project MIlestones</label>
+<label>Project Milestones</label>
 <sequence>2</sequence>
 <presence>0</presence>
 <actions>
@@ -503,7 +503,7 @@
 </relatedlist>
 <relatedlist>
 <function>get_dependents_list</function>
-<label>ProjectTeam</label>
+<label>Project Team</label>
 <sequence>3</sequence>
 <presence>0</presence>
 <actions>

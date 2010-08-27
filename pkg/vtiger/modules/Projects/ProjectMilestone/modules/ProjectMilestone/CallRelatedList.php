@@ -42,7 +42,7 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 	$smarty->assign('MOD', $mod_strings);
 	$smarty->assign('MODULE', $currentModule);
 	// TODO: Update Single Module Instance name here.
-	$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule)); 
+	$smarty->assign('SINGLE_MOD', getTranslatedString('SINGLE_'.$currentModule, $currentModule)); 
 	$smarty->assign('CATEGORY', $category);
 	$smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 	$smarty->assign('THEME', $theme);

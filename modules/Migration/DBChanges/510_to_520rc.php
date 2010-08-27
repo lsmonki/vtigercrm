@@ -11,16 +11,15 @@
 require_once 'include/Webservices/Utils.php';
 require_once 'modules/Users/Users.php';
 require_once 'include/utils/utils.php';
-
-//5.1.0 to 5.2.0 database changes
-
-//we have to use the current object (stored in PatchApply.php) to execute the queries
 require_once ('vtlib/Vtiger/Utils.php');
 
+//5.1.0 to 5.2.0 RC database changes
+
+//we have to use the current object (stored in PatchApply.php) to execute the queries
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
-$migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Starts \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 RC -------- Starts \n\n");
 function migration520_populateFieldForSecurity($tabid,$fieldid)
 {
 	global $adb;
@@ -610,8 +609,8 @@ function VT520_fieldCleanUp() {
 VT520_manageIndexes();
 VT520_fieldCleanUp();
 
-$migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
-
 ExecuteQuery("DROP TABLE IF EXISTS vtiger_asteriskoutgoingcalls");
+
+$migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 RC -------- Ends \n\n");
 
 ?>

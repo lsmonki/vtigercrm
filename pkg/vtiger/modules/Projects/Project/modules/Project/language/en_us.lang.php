@@ -63,6 +63,10 @@ $mod_strings = Array(
     'Charts' => 'Charts',
 	'LBL_PROGRESS_CHART' => 'Progress Chart',
 	'Project No' => 'Project No',
+	
+	'Project Milestones' => 'Project Milestones',
+	'Project Tasks' => 'Project Tasks',
+	'Project Team' => 'Project Team',
 );
 
 ?>

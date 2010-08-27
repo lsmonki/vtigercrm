@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <module>
 <name>Projects</name>
-<version>1.1</version>
+<version>1.2</version>
 <dependencies>
 <vtiger_version>5.1.0</vtiger_version>
 <vtiger_max_version>5.*</vtiger_max_version>
@@ -19,13 +19,8 @@
 <filepath>ProjectTask.zip</filepath>
 </dependent_module>
 <dependent_module>
-<name>ProjectTeam</name>
-<install_sequence>3</install_sequence>
-<filepath>ProjectTeam.zip</filepath>
-</dependent_module>
-<dependent_module>
 <name>Projects</name>
-<install_sequence>4</install_sequence>
+<install_sequence>3</install_sequence>
 <filepath>Project.zip</filepath>
 </dependent_module>
 </modulelist>
