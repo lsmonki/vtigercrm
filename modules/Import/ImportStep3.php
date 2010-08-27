@@ -275,18 +275,18 @@ if($_REQUEST['recordcount'] != ''){
 }else{
         $RECORDCOUNT = vtlib_purify($_SESSION['recordcount']);
 }
+	
+if($_REQUEST['startval'] != ''){
+	$START = vtlib_purify($_REQUEST['startval']);
+}else{
+	$START = vtlib_purify($_SESSION['startval']);
+}
 
 if(($START+$RECORDCOUNT) > $totalnoofrows){
         $RECORDCOUNT = $totalnoofrows - $START;
 }
 
 $loopcount = ($totalnoofrows/$RECORDCOUNT)+1;
-
-if($_REQUEST['startval'] != ''){
-	$START = vtlib_purify($_REQUEST['startval']);
-}else{
-	$START = vtlib_purify($_SESSION['startval']);
-}
 
 $focus->initImportableFields($module);
 if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows){
