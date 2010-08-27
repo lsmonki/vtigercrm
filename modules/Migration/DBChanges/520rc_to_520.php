@@ -55,5 +55,32 @@ function VT520GA_webserviceMigrate(){
 
 VT520GA_webserviceMigrate();
 
+function vt520_updateCurrencyInfo() {
+	global $adb;
+	include_once('modules/Utilities/Currencies.php');
+
+	ExecuteQuery("DELETE FROM vtiger_currencies;");
+	ExecuteQuery('UPDATE vtiger_currencies_seq set id=1;');
+	foreach($currencies as $key=>$value){
+		ExecuteQuery("insert into vtiger_currencies values(".$adb->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
+	}
+	$cur_result = $adb->query("SELECT * from vtiger_currency_info");
+	for($i=0;$i<$adb->num_rows($cur_result);$i++){
+		$cur_symbol = $adb->query_result($cur_result,$i,"currency_symbol");
+		$cur_code = $adb->query_result($cur_result,$i,"currency_code");
+		$cur_name = $adb->query_result($cur_result,$i,"currency_name");
+		$cur_id = $adb->query_result($cur_result,$i,"id");
+		$currency_exists = $adb->pquery("SELECT * from vtiger_currencies WHERE currency_code=?",array($cur_code));
+		if($adb->num_rows($currency_exists)>0){
+			$currency_name = $adb->query_result($currency_exists,0,"currency_name");
+			ExecuteQuery("UPDATE vtiger_currency_info SET vtiger_currency_info.currency_name = '$currency_name' WHERE id=$cur_id");
+		} else {
+			ExecuteQuery("insert into vtiger_currencies values(".$adb->getUniqueID("vtiger_currencies").",'$cur_name','$cur_code','$cur_symbol')");
+		}
+	}
+}
+
+vt520_updateCurrencyInfo();
+
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Ends \n\n");
 ?>

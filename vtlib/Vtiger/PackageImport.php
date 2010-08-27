@@ -104,6 +104,30 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
+	 * checks whether a package is module bundle or not.
+	 * @param String $zipfile - path to the zip file.
+	 * @return Boolean - true if given zipfile is a module bundle and false otherwise.
+	 */
+	function isModuleBundle($zipfile = null) {
+		// If data is not yet available
+		if(!empty($zipfile)) {
+			if(!$this->checkZip($zipfile)) {
+				return false;
+			}
+		}
+
+		return (boolean)$this->_modulexml->modulebundle;
+	}
+
+	/**
+	 * @return Array module list available in the module bundle.
+	 */
+	function getAvailableModuleInfoFromModuleBundle() {
+		$list = (Array)$this->_modulexml->modulelist;
+		return (Array)$list['dependent_module'];
+	}
+	
+	/**
 	 * Get the license of this package
 	 * NOTE: checkzip should have been called earlier.
 	 */
@@ -197,6 +221,14 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function getModuleNameFromZip($zipfile) {
 		if(!$this->checkZip($zipfile)) return null;
 
+		return (string)$this->_modulexml->name;
+	}
+
+	/**
+	 * returns the name of the module.
+	 * @return String - name of the module as given in manifest file.
+	 */
+	function getModuleName() {
 		return (string)$this->_modulexml->name;
 	}
 

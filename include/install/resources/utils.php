@@ -355,7 +355,9 @@ class Migration_Utils {
 		if(!empty($optionalModules['install'])) $skipModules = array_merge($skipModules,array_keys($optionalModules['install']));
 		if(!empty($optionalModules['update'])) $skipModules = array_merge($skipModules,array_keys($optionalModules['update']));
 		
-		$customModules = Migration_Utils::getCustomModulesFromDB($skipModules);
+		$mandatoryModules = Common_Install_Wizard_Utils::getMandatoryModuleList();
+		$customModules = Migration_Utils::getCustomModulesFromDB(array_merge($skipModules,
+				$mandatoryModules));
 		
 		$optionalModules = array_merge($optionalModules, $customModules);
 		return $optionalModules;
@@ -1182,56 +1184,117 @@ class Common_Install_Wizard_Utils {
 		    	$packagepath = "$packageDir/$file";
 				$package = new Vtiger_Package();
 				$moduleName = $package->getModuleNameFromZip($packagepath);
-				$moduleUpdateVersion = $package->getVersion();
-				$moduleForVtigerVersion = $package->getDependentVtigerVersion();
-				$moduleMaxVtigerVersion = $package->getDependentMaxVtigerVersion();
-				if($package->isLanguageType()) {
-					$type = 'language';
-				} else {
-					$type = 'module';
-				}
-				if($moduleName != null) {					
+				if($package->isModuleBundle()) {
+					$bundleOptionalModule = array();
+					$unzip = new Vtiger_Unzip($packagepath);
+					$unzip->unzipAllEx($package->getTemporaryFilePath());
+					$moduleInfoList = $package->getAvailableModuleInfoFromModuleBundle();
+					foreach($moduleInfoList as $moduleInfo) {
+						$moduleInfo = (Array)$moduleInfo;
+						$packagepath = $package->getTemporaryFilePath($moduleInfo['filepath']);
+						$subModule = new Vtiger_Package();
+						$subModule->getModuleNameFromZip($packagepath);
+						$bundleOptionalModule = self::getOptionalModuleDetails($subModule,
+								$bundleOptionalModule);
+					}
 					$moduleDetails = array();
 					$moduleDetails['description'] = $optionalModuleStrings[$moduleName.'_description'];
-
-					if(Vtiger_Version::check($moduleForVtigerVersion,'>=') && Vtiger_Version::check($moduleMaxVtigerVersion,'<')) {
-						$moduleDetails['selected'] = true;
-						$moduleDetails['enabled'] = true;						
-					} else {
-						$moduleDetails['selected'] = false;
-						$moduleDetails['enabled'] = false;						
+					$moduleDetails['selected'] = true;
+					$moduleDetails['enabled'] = true;
+					$migrationAction = 'install';
+					if(count($bundleOptionalModule['update']) > 0 ) {
+						$moduleDetails['enabled'] = false;
+						$migrationAction = 'update';
 					}
-					
-					$moduleInstance = null;					
-					if(Vtiger_Utils::checkTable('vtiger_tab')) {
-						$moduleInstance = Vtiger_Module::getInstance($moduleName);
+					$optionalModules[$migrationAction]['module'][$moduleName] = $moduleDetails;
+				} else {
+					if($package->isLanguageType()) {
+						$package = new Vtiger_Language();
+						$package->getModuleNameFromZip($packagepath);
 					}
-					if($moduleInstance) {
-						if(version_compare($moduleUpdateVersion, $moduleInstance->version, '=')) {
-							$moduleDetails['enabled'] = false;	
-						}
-						$optionalModules['update'][$type][$moduleName] = $moduleDetails;
-					} else {
-						$optionalModules['install'][$type][$moduleName] = $moduleDetails;
-					}
+					$optionalModules = self::getOptionalModuleDetails($package, $optionalModules);
 				}
 		    }
 		}
-		if(is_array($optionalModules['install']['language'])) {
+		if(is_array($optionalModules['install']['language']) &&
+				is_array($optionalModules['install']['module'])) {
 			$optionalModules['install'] = array_merge($optionalModules['install']['module'],
 				$optionalModules['install']['language']);
+		} elseif(is_array($optionalModules['install']['language']) &&
+				!is_array($optionalModules['install']['module'])) {
+			$optionalModules['install'] = $optionalModules['install']['language'];
 		} else {
 			$optionalModules['install'] = $optionalModules['install']['module'];
 		}
-		if( is_array($optionalModules['update']['language']) ) {
+		if( is_array($optionalModules['update']['language']) &&
+				is_array($optionalModules['update']['module'])) {
 			$optionalModules['update'] = array_merge($optionalModules['update']['module'],
 				$optionalModules['update']['language']);
+		} elseif(is_array($optionalModules['update']['language']) &&
+				!is_array($optionalModules['update']['module'])) {
+			$optionalModules['update'] = $optionalModules['update']['language'];
 		} else {
 			$optionalModules['update'] = $optionalModules['update']['module'];
 		}
-		return $optionalModules;		
+		return $optionalModules;
 	}
-	
+
+	/**
+	 *
+	 * @param String $packagepath - path to the package file.
+	 * @return Array
+	 */
+	static function getOptionalModuleDetails($package, $optionalModulesInfo) {
+		global $optionalModuleStrings;
+		
+		$moduleUpdateVersion = $package->getVersion();
+		$moduleForVtigerVersion = $package->getDependentVtigerVersion();
+		$moduleMaxVtigerVersion = $package->getDependentMaxVtigerVersion();
+		if($package->isLanguageType()) {
+			$type = 'language';
+		} else {
+			$type = 'module';
+		}
+		$moduleDetails = null;
+		$moduleName = $package->getModuleName();
+		if($moduleName != null) {
+			$moduleDetails = array();
+			$moduleDetails['description'] = $optionalModuleStrings[$moduleName.'_description'];
+
+			if(Vtiger_Version::check($moduleForVtigerVersion,'>=') && Vtiger_Version::check($moduleMaxVtigerVersion,'<')) {
+				$moduleDetails['selected'] = true;
+				$moduleDetails['enabled'] = true;
+			} else {
+				$moduleDetails['selected'] = false;
+				$moduleDetails['enabled'] = false;
+			}
+
+			$migrationAction = 'install';
+			if(!$package->isLanguageType()) {
+				$moduleInstance = null;
+				if(Vtiger_Utils::checkTable('vtiger_tab')) {
+					$moduleInstance = Vtiger_Module::getInstance($moduleName);
+				}
+				if($moduleInstance) {
+					$migrationAction = 'update';
+					if(version_compare($moduleUpdateVersion, $moduleInstance->version, '>=')) {
+						$moduleDetails['enabled'] = false;
+					}
+				}
+			} else {
+				if(Vtiger_Utils::CheckTable(Vtiger_Language::TABLENAME)) {
+					$languageList = array_keys(Vtiger_Language::getAll());
+					$prefix = $package->getPrefix();
+					if(in_array($prefix, $languageList)) {
+						$migrationAction = 'update';
+					}
+				}
+			}
+			$optionalModulesInfo[$migrationAction][$type][$moduleName] = $moduleDetails;
+		}
+		return $optionalModulesInfo;
+	}
+
 	// Function to install/update mandatory modules
 	public static function installMandatoryModules() {
 		require_once('vtlib/Vtiger/Package.php');
@@ -1264,6 +1327,31 @@ class Common_Install_Wizard_Utils {
 		}
 	}
 	
+	public static function getMandatoryModuleList() {
+		require_once('vtlib/Vtiger/Package.php');
+		require_once('vtlib/Vtiger/Module.php');
+		require_once('include/utils/utils.php');
+
+		$moduleList = array();
+		if ($handle = opendir('packages/vtiger/mandatory')) {
+		    while (false !== ($file = readdir($handle))) {
+				$packageNameParts = explode(".",$file);
+				if($packageNameParts[count($packageNameParts)-1] != 'zip'){
+					continue;
+				}
+				array_pop($packageNameParts);
+				$packageName = implode("",$packageNameParts);
+		        if (!empty($packageName)) {
+		        	$packagepath = "packages/vtiger/mandatory/$file";
+					$package = new Vtiger_Package();
+	        		$moduleList[] = $package->getModuleNameFromZip($packagepath);
+		        }
+		    }
+		    closedir($handle);
+		}
+		return $moduleList;
+	}
+
 	public static function installSelectedOptionalModules($selected_modules, $source_directory='', $destination_directory='') {
 		require_once('vtlib/Vtiger/Package.php');
 		require_once('vtlib/Vtiger/Module.php');
@@ -1284,11 +1372,29 @@ class Common_Install_Wizard_Utils {
 					}
 	        		$module = $package->getModuleNameFromZip($packagepath);
 	        		if($module != null) {
-	        			$moduleInstance = Vtiger_Module::getInstance($module);
-						if($moduleInstance) {
-							updateVtlibModule($module, $packagepath);
+						if($package->isModuleBundle()) {
+							$unzip = new Vtiger_Unzip($packagepath);
+							$unzip->unzipAllEx($package->getTemporaryFilePath());
+							$moduleInfoList = $package->getAvailableModuleInfoFromModuleBundle();
+							foreach($moduleInfoList as $moduleInfo) {
+								$moduleInfo = (Array)$moduleInfo;
+								$packagepath = $package->getTemporaryFilePath($moduleInfo['filepath']);
+								$subModule = new Vtiger_Package();
+								$subModuleName = $subModule->getModuleNameFromZip($packagepath);
+								$moduleInstance = Vtiger_Module::getInstance($subModuleName);
+								if($moduleInstance) {
+									updateVtlibModule($subModuleName, $packagepath);
+								} else {
+									installVtlibModule($subModuleName, $packagepath);
+								}
+							}
 						} else {
-							installVtlibModule($packagename, $packagepath);
+							$moduleInstance = Vtiger_Module::getInstance($module);
+							if($moduleInstance) {
+								updateVtlibModule($module, $packagepath);
+							} else {
+								installVtlibModule($packagename, $packagepath);
+							}
 						}
 		        	}
 		        }
