@@ -1199,7 +1199,7 @@ class ReportRun extends CRMEntity
 				if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
 					$sqlvalue = "".$adb->sql_escape_string(decode_html($selectedfields[2]))." ".$sortorder;
 				} else {
-					$sqlvalue = "".$selectedfields[2]." ".$sortorder;
+					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
 				}
 				$grouplist[$fieldcolname] = $sqlvalue;
 				$temp = split("_",$selectedfields[2],2);
@@ -1226,6 +1226,20 @@ class ReportRun extends CRMEntity
 		return $grouplist;
 	}
 
+	/** function to replace special characters
+	 *  @ param $selectedfield : type string
+	 *  this returns the string for grouplist
+	 */
+
+	function replaceSpecialChar($selectedfield){
+		$selectedfield = decode_html(decode_html($selectedfield));
+		preg_match('/&/', $selectedfield, $matches);
+		if(!empty($matches)){
+			$selectedfield = str_replace('&', 'and',($selectedfield));
+		}
+		return $selectedfield;
+		}
+	
 	/** function to get the selectedorderbylist for the given reportid  
 	 *  @ param $reportid : type integer 
 	 *  this returns the columns query for the sortorder columns
@@ -1664,9 +1678,9 @@ class ReportRun extends CRMEntity
 		}
 		$reportquery = listQueryNonAdminChange($reportquery, $this->primarymodule);
 		
-		if(trim($groupsquery) != "" && empty($type))
+		if(trim($groupsquery) != "" && !empty($type))
 		{
-			$reportquery .= " order by ".$groupsquery;
+			$reportquery .= " order by ".$groupsquery ;
 		}
 		
 		// Prasad: No columns selected so limit the number of rows directly.

@@ -55,6 +55,33 @@ function VT520GA_webserviceMigrate(){
 
 VT520GA_webserviceMigrate();
 
+require_once 'include/utils/CommonUtils.php';
+global $adb;
+$query=$adb->pquery("select * from vtiger_selectcolumn",array());
+$numOfRows=$adb->num_rows($query);
+if($numOfRows>0){
+	for($i=0;$i<$numOfRows;$i++){
+		$columnname=$adb->query_result($query,$i,'columnname');
+		preg_match('/&amp;/', $columnname, $matches);
+		if(!empty($matches)){
+			$columnname1=str_replace('&amp;', '&', $columnname);
+			$query1=$adb->pquery("update vtiger_selectcolumn set columnname=? where columnname = ? ",array($columnname1,$columnname));
+		}
+	}
+}
+$query2=$adb->pquery("select * from vtiger_reportsortcol",array());
+$numOfRows=$adb->num_rows($query2);
+if($numOfRows>0){
+	for($i=0;$i<$numOfRows;$i++){
+		$columnname=$adb->query_result($query2,$i,'columnname');
+		preg_match('/&amp;/', $columnname, $matches);
+		if(!empty($matches)){
+			$columnname1=str_replace('&amp;', '&', $columnname);
+			$query3=$adb->pquery("update vtiger_reportsortcol set columnname=? where columnname = ? ",array($columnname1,$columnname));
+		}
+	}
+}
+
 function vt520_updateCurrencyInfo() {
 	global $adb;
 	include_once('modules/Utilities/Currencies.php');
@@ -83,4 +110,5 @@ function vt520_updateCurrencyInfo() {
 vt520_updateCurrencyInfo();
 
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Ends \n\n");
+
 ?>

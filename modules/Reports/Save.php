@@ -20,11 +20,11 @@ $selectedcolumnstring = $_REQUEST["selectedColumnsString"];
 //<<<<<<<selectcolumn>>>>>>>>>
 
 //<<<<<<<reportsortcol>>>>>>>>>
-$sort_by1 = vtlib_purify($_REQUEST["Group1"]);
+$sort_by1 = decode_html(vtlib_purify($_REQUEST["Group1"]));
 $sort_order1 = vtlib_purify($_REQUEST["Sort1"]);
-$sort_by2 = vtlib_purify($_REQUEST["Group2"]);
+$sort_by2 =decode_html(vtlib_purify($_REQUEST["Group2"]));
 $sort_order2 = vtlib_purify($_REQUEST["Sort2"]);
-$sort_by3 = vtlib_purify($_REQUEST["Group3"]);
+$sort_by3 = decode_html(vtlib_purify($_REQUEST["Group3"]));
 $sort_order3 = vtlib_purify($_REQUEST["Sort3"]);
 //<<<<<<<reportsortcol>>>>>>>>>
 $selectedcolumns = explode(";",$selectedcolumnstring);
@@ -100,7 +100,7 @@ if($reportid == "")
 				{
 					if(!empty($selectedcolumns[$i])){
 						$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
-						$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$i,$selectedcolumns[$i]));
+						$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$i,(decode_html($selectedcolumns[$i]))));
 					}
 				}
 			}
@@ -248,7 +248,7 @@ if($reportid == "")
 				{
 					if(!empty($selectedcolumns[$i])){
 						$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
-						$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$i,$selectedcolumns[$i]));
+						$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$i,(decode_html($selectedcolumns[$i]))));
 					}
 				}
 			}

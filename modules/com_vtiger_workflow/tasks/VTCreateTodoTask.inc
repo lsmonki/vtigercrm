@@ -39,7 +39,7 @@ class VTCreateTodoTask extends VTTask{
 		global $adb, $current_user;
 		$userId = $entityData->get('assigned_user_id');
 		if($userId===null){
-			$userId = vtws_getWebserviceEntityId('Users', 1);;
+			$userId = vtws_getWebserviceEntityId('Users', 1);
 		}
 
 		$baseDate = $entityData->get($this->datefield);
