@@ -187,7 +187,7 @@ $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("CRITERIA", $criteria);
 
-$_SESSION[$currentModule.'_listquery'] = $list_query;
+ListViewSession::setSessionQuery($currentModule,$list_query,$viewid);
 
 if($_REQUEST['errormsg'] != '')
 {

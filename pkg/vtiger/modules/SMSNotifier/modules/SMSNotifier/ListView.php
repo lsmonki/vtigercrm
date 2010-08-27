@@ -186,7 +186,7 @@ $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merg
 $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
-$_SESSION[$currentModule.'_listquery'] = $list_query;
+ListViewSession::setSessionQuery($currentModule,$list_query,$viewid);
 
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');

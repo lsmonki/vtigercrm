@@ -336,7 +336,7 @@ $smarty->assign("NAVIGATION", $navigationOutput);
 $check_button = Button_Check($currentModule); 
 $smarty->assign("CHECK", $check_button);
 
-$_SESSION[$currentModule.'_listquery'] = $query;
+ListViewSession::setSessionQuery($currentModule,$query,$viewid);
 
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');
