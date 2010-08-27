@@ -20,12 +20,11 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 	if(((boolean)$avoidPotential) !== true){
 		try{
 			if(empty($potential)){
-				throw new WebServiceException(WebServiceCustomErrorCode::$INVALID_POTENTIAL_FOR_CONVERT_LEAD,
+				throw new WebServiceException(WebServiceErrorCode::$INVALID_POTENTIAL_FOR_CONVERT_LEAD,
 					"Invalid lead information given for potential");
 			}
-			$potential = Zend_Json::decode($potential);
 		}catch(Zend_Json_Exception $e){
-			throw new WebServiceException(WebServiceCustomErrorCode::$INVALID_POTENTIAL_FOR_CONVERT_LEAD,
+			throw new WebServiceException(WebServiceErrorCode::$INVALID_POTENTIAL_FOR_CONVERT_LEAD,
 					"Potentail information given is not in valid JSON format");
 		}
 	}
@@ -54,7 +53,7 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 	}
 	$rowCount = $adb->num_rows($result);
 	if($rowCount > 0){
-		throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_ALREADY_CONVERTED,
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_ALREADY_CONVERTED,
 			"Lead is already converted");
 	}
 
@@ -79,18 +78,18 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 
 		$status = vtws_getRelatedNotesAttachments($leadIdComponents[1],$crmId);
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Documents to the Account");
 		}
 		//Retrieve the lead related products and relate them with this new account
 		$status = vtws_saveLeadRelatedProducts($leadIdComponents[1], $crmId, "Accounts");
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Products to the Account");
 		}
 		$status = vtws_saveLeadRelations($leadIdComponents[1], $crmId, "Accounts");
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move Records to the Account");
 		}
 	}else{
@@ -159,18 +158,18 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 				$accountIdComponents = vtws_getIdComponents($account['id']);
 				$status = vtws_getRelatedNotesAttachments($leadIdComponents[1],$accountIdComponents[1]);
 				if($status === false){
-					throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+					throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Documents to the Account");
 				}
 				//Retrieve the lead related products and relate them with this new account
 				$status = vtws_saveLeadRelatedProducts($leadIdComponents[1], $accountIdComponents[1], "Accounts");
 				if($status === false){
-					throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+					throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Products to the Account");
 				}
 				$status = vtws_saveLeadRelations($leadIdComponents[1], $accountIdComponents[1], "Accounts");
 				if($status === false){
-					throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+					throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move Records to the Account");
 				}
 			}
@@ -245,29 +244,29 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 		//To convert relates Activites and Email.
 		$status = vtws_getRelatedActivities($leadIdComponents[1],$accountId,$contactIdComponents[1]);
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move Related Activities to the Contact");
 		}
 		$status = vtws_getRelatedNotesAttachments($leadIdComponents[1],$contactIdComponents[1]);
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Documents to the Contact");
 		}
 		//Retrieve the lead related products and relate them with this new contact
 		$status = vtws_saveLeadRelatedProducts($leadIdComponents[1], $contactIdComponents[1], "Contacts");
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move related Products to the Contact");
 		}
 		$status = vtws_saveLeadRelations($leadIdComponents[1], $contactIdComponents[1], "Contacts");
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move Records to the Contact");
 		}
 		//Retrieve the lead related Campaigns and relate them with this new contact --Minnie
 		$status = vtws_saveLeadRelatedCampaigns($leadIdComponents[1], $contactIdComponents[1]);
 		if($status === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 				"Failed to move Related Campaigns to the Contact");
 		}
 	}
@@ -318,19 +317,19 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 				$sql ="insert into vtiger_contpotentialrel values(?,?)";
 				$result = $adb->pquery($sql, array($contactId, $potentialIdComponents[1]));
 				if($result === false){
-					throw new WebServiceException(WebServiceCustomErrorCode::$FAILED_TO_CREATE_RELATION,
+					throw new WebServiceException(WebServiceErrorCode::$FAILED_TO_CREATE_RELATION,
 						"Failed to related Contact with the Potential");
 				}
 			}
 			//Retrieve the lead related products and relate them with this new potential
 			$status = vtws_saveLeadRelatedProducts($leadIdComponents[1], $potentialIdComponents[1], "Potentials");
 			if($status === false){
-				throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+				throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 					"Failed to move related Products to the Potential");
 			}
 			$status = vtws_saveLeadRelations($leadIdComponents[1], $potentialIdComponents[1], "Potentials");
 			if($status === false){
-				throw new WebServiceException(WebServiceCustomErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+				throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
 					"Failed to move Records to the Potential");
 			}
 			$potentialId = $potentialIdComponents[1];
@@ -341,7 +340,7 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 		$sql = "UPDATE vtiger_leaddetails SET converted = 1 where leadid=?";
 		$result = $adb->pquery($sql, array($leadIdComponents[1]));
 		if($result === false){
-			throw new WebServiceException(WebServiceCustomErrorCode::$FAILED_TO_MARK_CONVERTED,
+			throw new WebServiceException(WebServiceErrorCode::$FAILED_TO_MARK_CONVERTED,
 				"Failed mark lead converted");
 		}
 		//updating the campaign-lead relation --Minnie

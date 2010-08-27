@@ -13,6 +13,8 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	protected $entityTableName;
 	protected $moduleFields;
 	protected $isEntity = false;
+	protected $element;
+	protected $id;
 	
 	public function  __construct($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
@@ -22,6 +24,8 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		}
 		$this->meta = new VtigerCRMActorMeta($this->entityTableName,$webserviceObject,$adb,$user);
 		$this->moduleFields = null;
+		$this->element = null;
+		$this->id = null;
 	}
 	
 	protected function getActorTables(){
@@ -62,87 +66,157 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		return $id;
 	}
 
+	public function __create($elementType,$element){
+		require_once 'include/utils/utils.php';
+		$db = PearDatabase::getInstance();
+
+		$this->id=$this->getNextId($elementType, $element);
+		
+		$element[$this->meta->getObectIndexColumn()] = $this->id;
+
+		//Insert into group vtiger_table
+		$query = "insert into {$this->entityTableName}(".implode(',',array_keys($element)).
+				") values(".generateQuestionMarks(array_keys($element)).")";
+		$result = null;
+		$transactionSuccessful = vtws_runQueryAsTransaction($query, array_values($element),
+				$result);
+		return $transactionSuccessful;
+	}
+
 	public function create($elementType,$element){
 		$element = DataTransform::sanitizeForInsert($element,$this->meta);
 
-		$id = $this->getNextId($elementType,$element);
 		$element = $this->restrictFields($element);
-		$element[$this->meta->getObectIndexColumn()] = $id;
 		
-		//Insert into group vtiger_table
-		$query = "insert into {$this->entityTableName}(".implode(',',array_keys($element)).") values(".
-					generateQuestionMarks(array_keys($element)).")";
-		$result = null;
-		$transactionSuccessful = vtws_runQueryAsTransaction($query, array_values($element),$result);
-		if(!$transactionSuccessful){
+		$success = $this->__create($elementType,$element);
+		if(!$success){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation create");
 		}
-		return $this->retrieve(vtws_getId($this->meta->getEntityId(),$id));
+		return $this->retrieve(vtws_getId($this->meta->getEntityId(),$this->id));
 	}
 	
-	protected function restrictFields($element){
+	protected function restrictFields($element, $selectedOnly = false){
 		$fields = $this->getModuleFields();
 		$newElement = array();
 		foreach ($fields as $field) {
 			if(isset($element[$field['name']])){
 				$newElement[$field['name']] = $element[$field['name']];
-			}else if($field['name'] != 'id'){
+			}else if($field['name'] != 'id' && $selectedOnly == false){
 				$newElement[$field['name']] = '';
 			}
 		}
 		return $newElement;
 	}
 	
-	public function retrieve($id){
-		
-		$ids = vtws_getIdComponents($id);
-		$elemid = $ids[1];
-		
+	public function __retrieve($id){
 		$query = "select * from {$this->entityTableName} where {$this->meta->getObectIndexColumn()}=?";
-		$transactionSuccessful = vtws_runQueryAsTransaction($query,array($elemid),$result);
+		$transactionSuccessful = vtws_runQueryAsTransaction($query,array($id),$result);
 		if(!$transactionSuccessful){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");
 		}
-		$adb = $this->pearDB;
+		$db = $this->pearDB;
 		if($result){
-			$rowCount = $adb->num_rows($result);
+			$rowCount = $db->num_rows($result);
 			if($rowCount >0){
-				$element = $adb->query_result_rowdata($result,0);
+				$this->element = $db->query_result_rowdata($result,0);
+				return true;
 			}
 		}
+		return false;
+	}
+	
+	public function retrieve($id){
+
+		$ids = vtws_getIdComponents($id);
+		$elemId = $ids[1];
+		$success = $this->__retrieve($elemId);
+		if(!$success){
+			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,
+				"Record not found");
+		}
+		$element = $this->getElement();
+
 		return DataTransform::filterAndSanitize($element,$this->meta);
 	}
 	
+	public function __update($element,$id){
+		$columnStr = 'set '.implode('=?,',array_keys($element)).' =? ';
+		$query = 'update '.$this->entityTableName.' '.$columnStr.'where '.
+				$this->meta->getObectIndexColumn().'=?';
+		$params = array_values($element);
+		array_push($params,$id);
+		$result = null;
+		$transactionSuccessful = vtws_runQueryAsTransaction($query,$params,$result);
+		return $transactionSuccessful;
+	}
+
 	public function update($element){
 		$ids = vtws_getIdComponents($element["id"]);
 		$element = DataTransform::sanitizeForInsert($element,$this->meta);
 		$element = $this->restrictFields($element);
 		
-		$columnStr = 'set '.implode('=?,',array_keys($element)).' =? ';
-		
-		$query = 'update '.$this->entityTableName.' '.$columnStr.'where '.$this->meta->getObectIndexColumn().'=?';
-		$params = array_values($element);
-		array_push($params,$ids[1]);
-		$result = null;
-		$transactionSuccessful = vtws_runQueryAsTransaction($query,$params,$result);
-		if(!$transactionSuccessful){
+		$success = $this->__update($element,$ids[1]);
+		if(!$success){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");
 		}
-		
-		return $this->retrieve(vtws_getId($ids[0],$ids[1]));
+		return $this->retrieve(vtws_getId($this->meta->getEntityId(),$ids[1]));
 	}
 	
+	public function __revise($element,$id){
+		$columnStr = 'set '.implode('=?,',array_keys($element)).' =? ';
+		$query = 'update '.$this->entityTableName.' '.$columnStr.'where '.
+				$this->meta->getObectIndexColumn().'=?';
+		$params = array_values($element);
+		array_push($params,$id);
+		$result = null;
+		$transactionSuccessful = vtws_runQueryAsTransaction($query,$params,$result);
+		return $transactionSuccessful;
+	}
+
+	public function revise($element){
+		$ids = vtws_getIdComponents($element["id"]);
+
+		$element = DataTransform::sanitizeForInsert($element,$this->meta);
+		$element = $this->restrictFields($element, true);
+
+		$success = $this->__retrieve($ids[1]);
+		if(!$success){
+			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,
+				"Record not found");
+		}
+
+		$allDetails = $this->getElement();
+		foreach ($allDetails as $index=>$value) {
+			if(!isset($element)){
+				$element[$index] = $value;
+			}
+		}
+		$success = $this->__revise($element,$ids[1]);
+		if(!$success){
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
+				"Database error while performing required operation");
+		}
+
+		return $this->retrieve(vtws_getId($this->meta->getEntityId(),$ids[1]));
+	}
+	
+	public function __delete($elemId){
+		$result = null;
+		$query = 'delete from '.$this->entityTableName.' where '.
+				$this->meta->getObectIndexColumn().'=?';
+		$transactionSuccessful = vtws_runQueryAsTransaction($query,array($elemId),$result);
+		return $transactionSuccessful;
+	}
+
 	public function delete($id){
 		$ids = vtws_getIdComponents($id);
 		$elemId = $ids[1];
 		
-		$result = null;
-		$query = 'delete from '.$this->entityTableName.' where '.$this->meta->getObectIndexColumn().'=?';
-		$transactionSuccessful = vtws_runQueryAsTransaction($query,array($elemId),$result);
-		if(!$transactionSuccessful){
+		$success = $this->__delete($elemId);
+		if(!$success){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");
 		}
@@ -235,5 +309,10 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 
 		return $output;
 	}
+
+	protected function getElement(){
+		return $this->element;
+	}
+
 }
 ?>

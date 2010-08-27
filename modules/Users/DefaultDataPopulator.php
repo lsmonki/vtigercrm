@@ -2193,6 +2193,17 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 					'avoidPotential'=>'Boolean',
 					'potential'=>'Encoded'
 				)
+			),
+			"revise"=>array(
+				"include"=>array(
+					"include/Webservices/Revise.php"
+				),
+				"handler"=>"vtws_revise",
+				"params"=>array(
+					"element"=>"Encoded"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
 			)
 		);
 		$createOperationQuery = "insert into vtiger_ws_operation(operationid,name,handler_path,handler_method,type,prelogin) 

@@ -73,6 +73,27 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		return DataTransform::filterAndSanitize($crmObject->getFields(),$this->meta);
 	}
 	
+	public function revise($element){
+		$ids = vtws_getIdComponents($element["id"]);
+		$element = DataTransform::sanitizeForInsert($element,$this->meta);
+
+		$crmObject = new VtigerCRMObject($this->tabId, true);
+		$crmObject->setObjectId($ids[1]);
+		$error = $crmObject->revise($element);
+		if(!$error){
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+		}
+
+		$id = $crmObject->getObjectId();
+
+		$error = $crmObject->read($id);
+		if(!$error){
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+		}
+
+		return DataTransform::filterAndSanitize($crmObject->getFields(),$this->meta);
+	}
+
 	public function delete($id){
 		$ids = vtws_getIdComponents($id);
 		$elemid = $ids[1];

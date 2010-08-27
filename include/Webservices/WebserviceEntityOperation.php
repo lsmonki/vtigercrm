@@ -41,6 +41,11 @@ abstract class WebserviceEntityOperation{
 		"Operation Update is not supported for this entity");
 	}
 	
+	public function revise($element){
+		throw new WebServiceException(WebServiceErrorCode::$OPERATIONNOTSUPPORTED,
+		"Operation Update is not supported for this entity");
+	}
+
 	public function delete($id){
 		throw new WebServiceException(WebServiceErrorCode::$OPERATIONNOTSUPPORTED,
 		"Operation delete is not supported for this entity");
