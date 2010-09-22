@@ -487,15 +487,17 @@ function return_module_language($language, $module)
 	if(!isset($mod_strings))
 	{
 		$log->warn("Unable to find the module language file for language: ".$language." and module: ".$module);
-		if($default_language = 'en_us') {
+		if($default_language == 'en_us') {
 			require("modules/$module/language/$default_language.lang.php");
 			$language_used = $default_language;
 		} else {
 			@include("modules/$module/language/$default_language.lang.php");
 			if(!isset($mod_strings)) {
 				require("modules/$module/language/en_us.lang.php");
+				$language_used = 'en_us';
+			} else {
+				$language_used = $default_language;
 			}
-			$language_used = 'en_us';
 		}
 	}
 
@@ -1494,7 +1496,7 @@ function getQuickCreate($tabid,$actionid)
         $QuickCreateForm= 'true';
 
 	$perr=isPermitted($module,$actionname);
-	if($perr = 'no')
+	if($perr == 'no')
 	{
                 $QuickCreateForm= 'false';
 	}	
