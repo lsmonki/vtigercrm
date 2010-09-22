@@ -260,7 +260,6 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields["date_start"]= date('Y-m-d', $mailrecord->_date);
 		$focus->column_fields["email_flag"] = 'SAVED';
 		
-		$emailid = $focus->id;
 		$from=$mailrecord->_from[0];
 		$to = $mailrecord->_to[0];
 		$cc = (!empty($mailrecord->_cc))? implode(',', $mailrecord->_cc) : '';
@@ -273,6 +272,7 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['bccmail'] = $bcc;  
 		$focus->save('Emails');
 
+		$emailid = $focus->id;
 		$this->log("Created [$focus->id]: $mailrecord->_subject linked it to " . $linkfocus->id);
 
 		// TODO: Handle attachments of the mail (inline/file)
