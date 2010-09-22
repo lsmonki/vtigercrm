@@ -53,9 +53,10 @@ function mobile_ws_listModuleRecords($elements, $user) {
 }
 
 function mobile_ws_saveRecord($module, $record, $values, $user) {
-	$request = new Mobile_API_Request($values);
+	$request = new Mobile_API_Request();
 	$request->set('module', $module);
 	$request->set('record', $record);
+	$request->set('values', $values);
 	return Mobile_WS_API::process($request, $user, 'Mobile_WS_SaveRecord', 'ws/SaveRecord.php');
 }
 
