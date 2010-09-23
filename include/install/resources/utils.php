@@ -406,11 +406,16 @@ class Migration_Utils {
 		
 		$customModulesResult = $adb->pquery('SELECT tabid, name FROM vtiger_tab WHERE customized = 1', array());
 		$noOfCustomModules = $adb->num_rows($customModulesResult);
+		$mandatoryModules = Common_Install_Wizard_Utils::getMandatoryModuleList();
+		$optionalModules = Common_Install_Wizard_Utils::getInstallableModulesFromPackages();
+		$skipModules = array_merge($mandatoryModules, $optionalModules);
 		for($i=0;$i<$noOfCustomModules;++$i) {
-			$moduleName = $adb->query_result($customModulesResult,$i,'name');					
-			Migration_Utils::copyModuleFiles($moduleName, $sourceDirectory, $destinationDirectory);
-			if(!in_array($moduleName,$selectedModules)) {
-				vtlib_toggleModuleAccess((string)$moduleName, false);
+			$moduleName = $adb->query_result($customModulesResult,$i,'name');
+			if(!in_array($moduleName, $skipModules)) {
+				Migration_Utils::copyModuleFiles($moduleName, $sourceDirectory, $destinationDirectory);
+				if(!in_array($moduleName,$selectedModules)) {
+					vtlib_toggleModuleAccess((string)$moduleName, false);
+				}
 			}
 		}
 	}
