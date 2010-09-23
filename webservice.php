@@ -18,7 +18,7 @@
 	require_once('include/logging.php');
 	require_once "include/language/$default_language.lang.php";
 	
-	$API_VERSION = "0.2";
+	$API_VERSION = "0.22";
 	
 	global $seclog,$log;
 	$seclog =& LoggerManager::getLogger('SECURITY');
