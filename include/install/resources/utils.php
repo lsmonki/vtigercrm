@@ -222,10 +222,11 @@ class Migration_Utils {
 							);
 						}
 						
-						self::resetUserPasswords($olddb_conn);
-						$_SESSION['migration_info']['user_pwd'] = $user_name;
-						$migrationInfo['user_pwd'] = $user_name;
-						$user_pwd = $user_name;
+						if(self::resetUserPasswords($olddb_conn)) {
+							$_SESSION['migration_info']['user_pwd'] = $user_name;
+							$migrationInfo['user_pwd'] = $user_name;
+							$user_pwd = $user_name;
+						}
 					}
 					
 					if(Migration_Utils::authenticateUser($olddb_conn, $user_name,$user_pwd)==true) {
@@ -542,10 +543,13 @@ class Migration_Utils {
 	}
 
 	public static function resetUserPasswords($con) {
-		$sql = 'select user_name, id, crypt_type from vtiger_users';
+		$sql = 'select * from vtiger_users';
 		$result = $con->_Execute($sql, false);
 		$rowList = $result->GetRows();
 		foreach ($rowList as $row) {
+			if(!isset($row['crypt_type'])) {
+				return false;
+			}
 			$cryptType = $row['crypt_type'];
 			if(strtolower($cryptType) == 'md5' && version_compare(PHP_VERSION, '5.3.0') >= 0) {
 				$cryptType = 'PHP5.3MD5';
@@ -562,6 +566,7 @@ class Migration_Utils {
 				);
 			}
 		}
+		return true;
 	}
 
 	public static function getEncryptedPassword($userName, $cryptType, $userPassword) {
