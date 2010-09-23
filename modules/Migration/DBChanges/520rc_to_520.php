@@ -1,6 +1,6 @@
 <?php
 /*+*******************************************************************************
- *  The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -108,6 +108,8 @@ function vt520_updateCurrencyInfo() {
 }
 
 vt520_updateCurrencyInfo();
+
+ExecuteQuery("UPDATE vtiger_tab SET customized=1 WHERE name='ProjectTeam'");
 
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Ends \n\n");
 
