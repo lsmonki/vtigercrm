@@ -1678,7 +1678,7 @@ class ReportRun extends CRMEntity
 		}
 		$reportquery = listQueryNonAdminChange($reportquery, $this->primarymodule);
 		
-		if(trim($groupsquery) != "" && !empty($type))
+		if(trim($groupsquery) != "" && !empty($type) && $type !== 'COLUMNSTOTOTAL')
 		{
 			$reportquery .= " order by ".$groupsquery ;
 		}
