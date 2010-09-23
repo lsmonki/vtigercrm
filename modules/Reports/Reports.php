@@ -1301,7 +1301,7 @@ function getEscapedColumns($selectedfields)
 					}
 					$advfilterval = implode(",",$val);
 				}
-				$criteria['value'] = $advfilterval;
+				$criteria['value'] = decode_html($advfilterval);
 				$criteria['column_condition'] = $relcriteriarow["column_condition"];
 				
 				$advft_criteria[$i]['columns'][$j] = $criteria;
