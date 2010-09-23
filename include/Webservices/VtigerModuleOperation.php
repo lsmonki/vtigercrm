@@ -160,6 +160,9 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$fields = array();
 		$moduleFields = $this->meta->getModuleFields();
 		foreach ($moduleFields as $fieldName=>$webserviceField) {
+			if(((int)$webserviceField->getPresence()) == 1) {
+				continue;
+			}
 			array_push($fields,$this->getDescribeFieldArray($webserviceField));
 		}
 		array_push($fields,$this->getIdField($this->meta->getObectIndexColumn()));

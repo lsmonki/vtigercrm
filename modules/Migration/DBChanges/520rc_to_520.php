@@ -21,40 +21,6 @@ $conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Starts \n\n");
 
-ExecuteQuery("UPDATE vtiger_tab SET customized=1 WHERE name='ProjectTeam'");
-
-function VT520GA_webserviceMigrate(){
-	require_once 'include/Webservices/Utils.php';
-	$customWebserviceDetails = array(
-		"name"=>"revise",
-		"include"=>"include/Webservices/Revise.php",
-		"handler"=>"vtws_revise",
-		"prelogin"=>0,
-		"type"=>"POST"
-	);
-
-	$customWebserviceParams = array(
-		array("name"=>'element',"type"=>'Encoded')
-	);
-	echo 'INITIALIZING WEBSERVICE...';
-	$operationId = vtws_addWebserviceOperation($customWebserviceDetails['name'],$customWebserviceDetails['include'],
-		$customWebserviceDetails['handler'],$customWebserviceDetails['type']);
-	if($operationId === null && $operationId > 0){
-		echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE';
-		die;
-	}
-	$sequence = 1;
-	foreach ($customWebserviceParams as $param) {
-		$status = vtws_addWebserviceOperationParam($operationId,$param['name'],$param['type'],$sequence++);
-		if($status === false){
-			echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE HALFWAY THOURGH';
-			die;
-		}
-	}
-}
-
-VT520GA_webserviceMigrate();
-
 require_once 'include/utils/CommonUtils.php';
 global $adb;
 $query=$adb->pquery("select * from vtiger_selectcolumn",array());
@@ -109,8 +75,45 @@ function vt520_updateCurrencyInfo() {
 
 vt520_updateCurrencyInfo();
 
+function VT520GA_webserviceMigrate(){
+	require_once 'include/Webservices/Utils.php';
+	$customWebserviceDetails = array(
+		"name"=>"revise",
+		"include"=>"include/Webservices/Revise.php",
+		"handler"=>"vtws_revise",
+		"prelogin"=>0,
+		"type"=>"POST"
+	);
+
+	$customWebserviceParams = array(
+		array("name"=>'element',"type"=>'Encoded')
+	);
+	echo 'INITIALIZING WEBSERVICE...';
+	$operationId = vtws_addWebserviceOperation($customWebserviceDetails['name'],$customWebserviceDetails['include'],
+		$customWebserviceDetails['handler'],$customWebserviceDetails['type']);
+	if($operationId === null && $operationId > 0){
+		echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE';
+		die;
+	}
+	$sequence = 1;
+	foreach ($customWebserviceParams as $param) {
+		$status = vtws_addWebserviceOperationParam($operationId,$param['name'],$param['type'],$sequence++);
+		if($status === false){
+			echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE HALFWAY THOURGH';
+			die;
+		}
+	}
+
+	$moduleList = vtws_getModuleNameList();
+	foreach ($moduleList as $moduleName) {
+		vtws_addDefaultModuleTypeEntity($moduleName);
+	}
+
+}
+
+VT520GA_webserviceMigrate();
+
 ExecuteQuery("UPDATE vtiger_tab SET customized=1 WHERE name='ProjectTeam'");
 
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Ends \n\n");
-
 ?>

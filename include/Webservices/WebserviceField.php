@@ -24,6 +24,7 @@ class WebserviceField{
 	private $mandatory;
 	private $massEditable;
 	private $tabid;
+	private $presence;
 	/**
 	 *
 	 * @var PearDatabase
@@ -40,7 +41,7 @@ class WebserviceField{
 	
 	private $genericUIType = 10;
 	
-	private function WebserviceField($adb,$row){
+	private function __construct($adb,$row){
 		$this->uitype = $row['uitype'];
 		$this->blockId = $row['block'];
 		$this->tableName = $row['tablename'];
@@ -50,6 +51,7 @@ class WebserviceField{
 		$this->displayType = $row['displaytype'];
 		$this->massEditable = ($row['masseditable'] === 1)? true: false;
 		$typeOfData = $row['typeofdata'];
+		$this->presence = $row['presence'];
 		$this->typeOfData = $typeOfData;
 		$typeOfData = explode("~",$typeOfData);
 		$this->mandatory = ($typeOfData[1] == 'M')? true: false;
@@ -291,6 +293,11 @@ class WebserviceField{
 			return null;
 		}
 	}
+
+	function getPresence() {
+		return $this->presence;
+	}
+
 }
 
 ?>

@@ -83,6 +83,7 @@ class VtigerCRMActorMeta extends EntityMeta {
 		$field['tabid'] = null;
 		$field['fieldid'] = null;
 		$field['masseditable'] = 0;
+		$field['presence'] = '0';
 		return $field;
 	}
 	
