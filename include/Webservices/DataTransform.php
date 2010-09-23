@@ -85,9 +85,14 @@
 					$_REQUEST['remmin'] = $minutes;
 					$_REQUEST['remhrs'] = $hours;
 					$_REQUEST['remdays'] = $days;
-				}
-				else{
+				} else {
 					$_REQUEST['set_reminder'] = "No";
+				}
+			} elseif(strtolower($meta->getEntityName()) == "calendar") {
+				if(empty($row['sendnotification']) || strtolower($row['sendnotificaiton'])=='no'
+						|| $row['sendnotificaiton'] == '0' || $row['sendnotificaiton'] == 'false'
+						|| strtolower($row['sendnotificaiton']) == 'n') {
+					unset($row['sendnotification']);
 				}
 			}
 			$references = $meta->getReferenceFieldDetails();

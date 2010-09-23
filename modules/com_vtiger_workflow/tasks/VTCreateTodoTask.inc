@@ -58,7 +58,8 @@ class VTCreateTodoTask extends VTTask{
 			'taskstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
 			'time_start'=>$time[1],
-			'sendnotification'=>$this->sendNotification!=''?1:0,
+			'sendnotification'=>($this->sendNotification!='' && $this->sendNotification!='N')?
+					true: false,
 			'date_start'=>$date,
 			'due_date'=>$date,
 			'visibility'=>'all',
