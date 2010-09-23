@@ -35,7 +35,6 @@ class Vtiger_FTPBackup extends Vtiger_Location{
 			$this->server = $db->query_result($result,0,'server');
 			$this->username = $db->query_result($result,0,'server_username');
 			$this->password = $db->query_result($result,0,'server_password');
-			$this->init();
 		}else{
 			//TODO handler error;
 		}
