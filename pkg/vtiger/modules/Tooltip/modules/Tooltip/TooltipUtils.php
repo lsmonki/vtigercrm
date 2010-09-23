@@ -115,7 +115,7 @@ function getToolTipText($view,$fieldname,$module,$value){
 	$result = $adb->pquery($quickview,array($fieldid,$view));
 	$count = $adb->num_rows($result);
 	
-	$text='';
+	$text=array();
 	$fieldname = Array();
 	for($i=0;$i<$count;$i++){
 		$fieldname = $adb->query_result($result,$i,"fieldname");
@@ -124,6 +124,9 @@ function getToolTipText($view,$fieldname,$module,$value){
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$label = getTranslatedString($fieldlabel,$module);
 			$fieldvalue = $value[0][$fieldname];
+			if(empty($fieldvalue)) {
+				$fieldvalue = '&nbsp;';
+			}
 			if(strlen($fieldvalue)>35){
 				$fieldvalue = substr($fieldvalue,0,35).'...';
 			}
