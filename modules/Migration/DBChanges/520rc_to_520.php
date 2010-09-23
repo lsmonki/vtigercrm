@@ -109,6 +109,8 @@ function VT520GA_webserviceMigrate(){
 		vtws_addDefaultModuleTypeEntity($moduleName);
 	}
 
+	ExecuteQuery("delete from vtiger_ws_fieldtype where uitype=116;");
+	ExecuteQuery("update vtiger_field set uitype=117 where tabid=29 and fieldname='currency_id';");
 }
 
 VT520GA_webserviceMigrate();

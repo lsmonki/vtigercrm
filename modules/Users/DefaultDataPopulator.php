@@ -920,7 +920,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,6,$userloginandroleblockid,1,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'activity_view','vtiger_users',1,'16','activity_view','Default Activity View',1,0,0,100,12,$userloginandroleblockid,1,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'lead_view','vtiger_users',1,'16','lead_view','Default Lead View',1,0,0,100,10,$userloginandroleblockid,1,'V~O',1,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,8,$userloginandroleblockid,1,'I~O',1,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'currency_id','vtiger_users',1,'117','currency_id','Currency',1,0,0,100,8,$userloginandroleblockid,1,'I~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'hour_format','vtiger_users',1,'116','hour_format','Calendar Hour Format',1,0,0,100,13,$userloginandroleblockid,3,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'end_hour','vtiger_users',1,'116','end_hour','Day ends at',1,0,0,100,15,$userloginandroleblockid,3,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'start_hour','vtiger_users',1,'116','start_hour','Day starts at',1,0,0,100,14,$userloginandroleblockid,3,'V~O',1,null,'BAS',1)");
@@ -2293,7 +2293,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			"78"=>array("Quotes"),"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"),
-			"117"=>array('Currency'),"116"=>array('Currency'),'26'=>array('DocumentFolders'),'10'=>array());
+			"117"=>array('Currency'),'26'=>array('DocumentFolders'),'10'=>array());
 		
 		foreach($referenceMapping as $uitype=>$referenceArray){
 			$success = true;
