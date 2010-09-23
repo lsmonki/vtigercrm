@@ -50,7 +50,7 @@ if($numOfRows>0){
 
 function vt520_updateCurrencyInfo() {
 	global $adb;
-	include_once('modules/Utilities/Currencies.php');
+	include('modules/Utilities/Currencies.php');
 
 	ExecuteQuery("DELETE FROM vtiger_currencies;");
 	ExecuteQuery('UPDATE vtiger_currencies_seq set id=1;');
@@ -116,6 +116,18 @@ function VT520GA_webserviceMigrate(){
 VT520GA_webserviceMigrate();
 
 ExecuteQuery("UPDATE vtiger_tab SET customized=1 WHERE name='ProjectTeam'");
+
+function VT520GA_picklistMigrate(){
+	global $adb;
+	$columnList = $adb->getColumnNames('vtiger_invoicestatus');
+	//fix the typo, where invoice is spelled as inovice
+	if(in_array('inovicestatusid', $columnList)) {
+		$sql = 'alter table vtiger_invoicestatus change inovicestatusid invoicestatusid int(19)';
+		ExecuteQuery($sql);
+	}
+}
+
+VT520GA_picklistMigrate();
 
 $migrationlog->debug("\n\nDB Changes from 5.2.0 RC to 5.2.0 -------- Ends \n\n");
 ?>

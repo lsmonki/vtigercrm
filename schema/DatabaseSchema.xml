@@ -4519,7 +4519,7 @@
 	</table>
 
 	<table name="vtiger_invoicestatus">
-		<field name="inovicestatusid" type="I" size="19">
+		<field name="invoicestatusid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
