@@ -357,9 +357,13 @@ class Migration_Utils {
 		if(!empty($optionalModules['update'])) $skipModules = array_merge($skipModules,array_keys($optionalModules['update']));
 		
 		$mandatoryModules = Common_Install_Wizard_Utils::getMandatoryModuleList();
-		$customModules = Migration_Utils::getCustomModulesFromDB(array_merge($skipModules,
-				$mandatoryModules));
-		
+		$oldVersion = str_replace(array('.', ' '), array('', ''),
+				$_SESSION['migration_info']['old_version']);
+		$customModules = array();
+		if (version_compare($oldVersion, '502') > 0) {
+			$customModules = Migration_Utils::getCustomModulesFromDB(array_merge($skipModules,
+									$mandatoryModules));
+		}
 		$optionalModules = array_merge($optionalModules, $customModules);
 		return $optionalModules;
 	}
