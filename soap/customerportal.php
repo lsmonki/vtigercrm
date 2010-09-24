@@ -2759,7 +2759,7 @@ function get_documents($id,$module,$customerid,$sessionid)
 
 	$query ="select vtiger_notes.title,'Documents' ActivityType, vtiger_notes.filename,
 		crm2.createdtime,vtiger_notes.notesid,vtiger_notes.folderid,
-		vtiger_notes.notecontent description, vtiger_users.user_name
+		vtiger_notes.notecontent description, vtiger_users.user_name, vtiger_notes.filelocationtype
 		from vtiger_notes
 		LEFT join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 		INNER join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
