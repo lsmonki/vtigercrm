@@ -59,9 +59,11 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 
 		}
 		$meta = $this->getMeta();
-		$sql = "update $tableName"."_seq set id=(select max(".$meta->getIdColumn().")
-			from $tableName)";
-		$this->pearDB->pquery($sql,array());
+		if(strcasecmp($elementType,'Groups') !== 0 && strcasecmp($elementType,'Users') !== 0) {
+			$sql = "update $tableName"."_seq set id=(select max(".$meta->getIdColumn().")
+				from $tableName)";
+			$this->pearDB->pquery($sql,array());
+		}
 		$id = $this->pearDB->getUniqueId($tableName);
 		return $id;
 	}
