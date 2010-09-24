@@ -20,18 +20,18 @@ selectcol_list ::= selectcolumn_exp COLUMNNAME(CNAME). {
 $this->out['column_list'][] = CNAME;
 }
 selectcol_list ::= ASTERISK(A). {
-$this->out['column_list'] = A;
+$this->out['column_list'][] = A;
 }
 selectcol_list ::= COUNT PARENOPEN ASTERISK PARENCLOSE. {
-$this->out['column_list'] = 'count(*)';
+$this->out['column_list'][] = 'count(*)';
 }
 selectcolumn_exp ::= selectcol_list COMMA. 
 selectcolumn_exp ::= . 
 table_list ::= TABLENAME(TNAME). {
-if($this->out["column_list"] !=="*" && strcmp($this->out["column_list"],"count(*)") !==0){
+if(!in_array($this->out["column_list"], "*") && !in_array(array_map(strtolower, $this->out["column_list"]), "count(*)")){
 if(!in_array("id",$this->out["column_list"])){
 	$this->out["column_list"][] = "id";
-} 
+}
 }
 $moduleName = TNAME;
 if(!$moduleName){
@@ -158,9 +158,9 @@ $this->out['meta'] = $objectMeta;
 $meta = $this->out['meta'];
 $fieldcol = $meta->getFieldColumnMapping();
 $columns = array();
-if(strcmp($this->out['column_list'],'*')===0){
+if(in_array($this->out['column_list'],'*')){
 $columns = array_values($fieldcol);
-}else if( strcmp($this->out['column_list'],'count(*)')!==0){
+}else if( !in_array(array_map(strcmp, $this->out['column_list']),'count(*)')){
 foreach($this->out['column_list'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
@@ -171,7 +171,7 @@ $columns[] = $fieldcol[$field];
 }
 }
 $tables = $this->getTables($this->out, $columns);
-if(sizeof($tables)===0){
+if(!in_array($objectMeta->getEntityBaseTable(), $tables)){
 $tables[] = $objectMeta->getEntityBaseTable();
 }
 $defaultTableList = $objectMeta->getEntityDefaultTableList();
@@ -268,7 +268,7 @@ function buildSelectStmt($sqlDump){
 	$fieldcol = $meta->getFieldColumnMapping();
 	$columnTable = $meta->getColumnTableMapping();
 	$this->query = 'SELECT ';
-	if(strcmp($sqlDump['column_list'],'*')===0){
+	if(in_array($sqlDump['column_list'],'*')){
 		$i=0;
 		foreach($fieldcol as $field=>$col){
 			if($i===0){
@@ -278,7 +278,7 @@ function buildSelectStmt($sqlDump){
 				$this->query = $this->query.','.$columnTable[$col].'.'.$col;
 			}
 		}
-	}else if(strcmp($sqlDump['column_list'],'count(*)')===0){
+	}else if(in_array($sqlDump['column_list'],'count(*)')){
 		$this->query = $this->query." COUNT(*)";
 	}else{
 		$i=0;

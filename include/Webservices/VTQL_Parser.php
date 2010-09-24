@@ -106,26 +106,26 @@ class VTQL_Parser#line 102 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservi
 /*
 add this rule to add parenthesis support.
 condition ::= PARENOPEN expr_set expr(E) PARENCLOSE.
-sample format(for contacts) for generated sql object
-Array (
-	[column_list] => c4,c3,c2,c1
-	[tableName] => vtiger_crmentity,vtiger_contactdetails,vtiger_contactaddress,vtiger_contactsubdetails,vtiger_contactscf,vtiger_customerdetails
-	[where_condition] => Array (
-		[column_operators] => Array (
-			[0] => =
-			[1] => =
-			[2] => =
-			)
-		[column_names] => Array (
-			[0] => c1
-			[1] => c2
-			[2] => c3
-			)
-		[column_values] => Array (
-			[0] => 'llet me'
-			[1] => 45
-			[2] => -1
-			)
+sample format(for contacts) for generated sql object 
+Array ( 
+	[column_list] => c4,c3,c2,c1 
+	[tableName] => vtiger_crmentity,vtiger_contactdetails,vtiger_contactaddress,vtiger_contactsubdetails,vtiger_contactscf,vtiger_customerdetails 
+	[where_condition] => Array ( 
+		[column_operators] => Array ( 
+			[0] => = 
+			[1] => = 
+			[2] => = 
+			) 
+		[column_names] => Array ( 
+			[0] => c1 
+			[1] => c2 
+			[2] => c3 
+			) 
+		[column_values] => Array ( 
+			[0] => 'llet me' 
+			[1] => 45 
+			[2] => -1 
+			) 
 		//TO BE DONE
 		[grouping] => Array (
 			[0] => Array (
@@ -133,18 +133,18 @@ Array (
 				[1] => 2
 				)
 			)
-		[operators] => Array (
-			[0] => and
-			[1] => or
+		[operators] => Array ( 
+			[0] => and 
+			[1] => or 
 			)
 		)
-	[orderby] => Array (
-		[0] => c4
-		[1] => c5
+	[orderby] => Array ( 
+		[0] => c4 
+		[1] => c5 
 		)
-	[select] => SELECT
-	[from] => from
-	[semi_colon] => ;
+	[select] => SELECT 
+	[from] => from 
+	[semi_colon] => ; 
 )*/
 	private $out;
 	public $lex;
@@ -174,7 +174,7 @@ function buildSelectStmt($sqlDump){
 	$fieldcol = $meta->getFieldColumnMapping();
 	$columnTable = $meta->getColumnTableMapping();
 	$this->query = 'SELECT ';
-	if(strcmp($sqlDump['column_list'],'*')===0){
+	if(in_array('*', $sqlDump['column_list'])){
 		$i=0;
 		foreach($fieldcol as $field=>$col){
 			if($i===0){
@@ -184,7 +184,7 @@ function buildSelectStmt($sqlDump){
 				$this->query = $this->query.','.$columnTable[$col].'.'.$col;
 			}
 		}
-	}else if(strcmp($sqlDump['column_list'],'count(*)')===0){
+	}else if(in_array('count(*)', $sqlDump['column_list'])){
 		$this->query = $this->query." COUNT(*)";
 	}else{
 		$i=0;
@@ -205,10 +205,9 @@ function buildSelectStmt($sqlDump){
 	$accessControlQuery = $meta->getEntityAccessControlQuery();
 	$this->query = $this->query.' '.$accessControlQuery;
 	if($sqlDump['where_condition']){
-		if((sizeof($sqlDump['where_condition']['column_names']) ==
-				sizeof($sqlDump['where_condition']['column_values'])) &&
-				(sizeof($sqlDump['where_condition']['column_operators']) ==
-						sizeof($sqlDump['where_condition']['operators'])+1)){
+		if((sizeof($sqlDump['where_condition']['column_names']) == 
+		sizeof($sqlDump['where_condition']['column_values'])) && 
+		(sizeof($sqlDump['where_condition']['column_operators']) == sizeof($sqlDump['where_condition']['operators'])+1)){
 			$this->query = $this->query.' WHERE (';
 			$i=0;
 			$referenceFields = $meta->getReferenceFieldDetails();
@@ -278,9 +277,9 @@ function buildSelectStmt($sqlDump){
 	}elseif(!empty($deletedQuery)){
 		$this->query = $this->query.$nextToken;
 	}
-
+	
 	$this->query = $this->query.' '.$deletedQuery;
-
+	
 	if($sqlDump['orderby']){
 		$i=0;
 		$this->query = $this->query.' ORDER BY ';
@@ -334,7 +333,7 @@ function getReferenceValue($whereValue){
 	$whereValue = trim($whereValue,'\'"');
 	$whereValue = vtws_getIdComponents($whereValue);
 	$whereValue = $whereValue[1];
-	return $whereValue;
+	return $whereValue;	
 }
 function getOwner($whereValue){
 	$whereValue = trim($whereValue,'\'"');
@@ -358,10 +357,10 @@ function getObjectMetaData(){
 
 /* Next is all token values, as class constants
 */
-/*
+/* 
 ** These constants (all generated automatically by the parser generator)
 ** specify the various kinds of tokens (terminals) that the parser
-** understands.
+** understands. 
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
@@ -398,7 +397,7 @@ function getObjectMetaData(){
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
 ** functions that take a state number and lookahead value and return an
-** action integer.
+** action integer.  
 **
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
@@ -426,7 +425,7 @@ function getObjectMetaData(){
 ** If the index value self::$yy_shift_ofst[S]+X is out of range or if the value
 ** self::$yy_lookahead[self::$yy_shift_ofst[S]+X] is not equal to X or if
 ** self::$yy_shift_ofst[S] is equal to self::YY_SHIFT_USE_DFLT, it means that
-** the action is not in the table and that self::$yy_default[S] should be used instead.
+** the action is not in the table and that self::$yy_default[S] should be used instead.  
 **
 ** The formula above is for computing the action when the lookahead is
 ** a terminal symbol.  If the lookahead is a non-terminal (as occurs after
@@ -547,7 +546,7 @@ static public $yy_action = array(
 ** various aspects of the generated parser.
 **    self::YYNOCODE      is a number which corresponds
 **                        to no legal terminal or nonterminal number.  This
-**                        number is used to fill in empty slots of the hash
+**                        number is used to fill in empty slots of the hash 
 **                        table.
 **    self::YYFALLBACK    If defined, this indicates that one or more tokens
 **                        have fall-back values which should be used if the
@@ -567,7 +566,7 @@ static public $yy_action = array(
     const YYFALLBACK = 0;
     /** The next table maps tokens into fallback tokens.  If a construct
      * like the following:
-     *
+     * 
      *      %fallback ID X Y Z.
      *
      * appears in the grammer, then ID becomes a fallback token for X, Y,
@@ -580,10 +579,10 @@ static public $yy_action = array(
     /**
      * Turn parser tracing on by giving a stream to which to write the trace
      * and a prompt to preface each trace message.  Tracing is turned off
-     * by making either argument NULL
+     * by making either argument NULL 
      *
      * Inputs:
-     *
+     * 
      * - A stream resource to which trace output should be written.
      *   If NULL, then tracing is turned off.
      * - A prefix string written at the beginning of every
@@ -591,7 +590,7 @@ static public $yy_action = array(
      *   turned off.
      *
      * Outputs:
-     *
+     * 
      * - None.
      * @param resource
      * @param string
@@ -643,20 +642,20 @@ static public $yy_action = array(
      * are required.  The following table supplies these names
      * @var array
      */
-    static public $yyTokenName = array(
-  '$',             'SELECT',        'FRM',           'COLUMNNAME',
-  'ASTERISK',      'COUNT',         'PARENOPEN',     'PARENCLOSE',
-  'COMMA',         'TABLENAME',     'WHERE',         'LOGICAL_AND',
-  'LOGICAL_OR',    'VALUE',         'EQ',            'LT',
-  'GT',            'LTE',           'GTE',           'NE',
-  'IN',            'LIKE',          'ORDERBY',       'ASC',
-  'DESC',          'LIMIT',         'SEMICOLON',     'error',
-  'sql',           'select_statement',  'selectcol_list',  'table_list',
-  'where_condition',  'order_clause',  'limit_clause',  'end_stmt',
-  'selectcolumn_exp',  'condition',     'expr_set',      'expr',
-  'logical_term',  'valuelist',     'valueref',      'value_exp',
-  'column_group',  'clause',        'column_list',   'column_exp',
-  'limit_set',
+    static public $yyTokenName = array( 
+  '$',             'SELECT',        'FRM',           'COLUMNNAME',  
+  'ASTERISK',      'COUNT',         'PARENOPEN',     'PARENCLOSE',  
+  'COMMA',         'TABLENAME',     'WHERE',         'LOGICAL_AND', 
+  'LOGICAL_OR',    'VALUE',         'EQ',            'LT',          
+  'GT',            'LTE',           'GTE',           'NE',          
+  'IN',            'LIKE',          'ORDERBY',       'ASC',         
+  'DESC',          'LIMIT',         'SEMICOLON',     'error',       
+  'sql',           'select_statement',  'selectcol_list',  'table_list',  
+  'where_condition',  'order_clause',  'limit_clause',  'end_stmt',    
+  'selectcolumn_exp',  'condition',     'expr_set',      'expr',        
+  'logical_term',  'valuelist',     'valueref',      'value_exp',   
+  'column_group',  'clause',        'column_list',   'column_exp',  
+  'limit_set',   
     );
 
     /**
@@ -738,7 +737,7 @@ static public $yy_action = array(
         /* Here is inserted the actions which take place when a
         ** terminal or non-terminal is destroyed.  This can happen
         ** when the symbol is popped from the stack during a
-        ** reduce or during error processing or when a parser is
+        ** reduce or during error processing or when a parser is 
         ** being destroyed before it is finished parsing.
         **
         ** Note: during a reduce, the only symbols destroyed are those
@@ -865,7 +864,7 @@ static public $yy_action = array(
     /**
      * Based on the parser state and current parser stack, determine whether
      * the lookahead token is possible.
-     *
+     * 
      * The parser will convert the token value to an error token if not.  This
      * catches some unusual edge cases where the parser would fail.
      * @param int
@@ -952,7 +951,7 @@ static public $yy_action = array(
     function yy_find_shift_action($iLookAhead)
     {
         $stateno = $this->yystack[$this->yyidx]->stateno;
-
+     
         /* if ($this->yyidx < 0) return self::YY_NO_ACTION;  */
         if (!isset(self::$yy_shift_ofst[$stateno])) {
             // no shift actions
@@ -1119,7 +1118,7 @@ static public $yy_action = array(
     /**
      * The following table contains a mapping of reduce action to method name
      * that handles the reduction.
-     *
+     * 
      * If a rule is not set, it has no handler.
      */
     static public $yyReduceMap = array(
@@ -1154,7 +1153,7 @@ static public $yy_action = array(
     **  #line <lineno> <thisfile>
     */
 #line 5 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
-    function yy_r1(){
+    function yy_r1(){ 
 if($this->yystack[$this->yyidx + -7]->minor){
 $this->out['select'] = $this->yystack[$this->yyidx + -7]->minor;
 }
@@ -1170,23 +1169,23 @@ $this->buildSelectStmt($this->out);
     }
 #line 1176 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
 #line 19 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
-    function yy_r2(){
+    function yy_r2(){ 
 $this->out['column_list'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
 #line 1181 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
 #line 22 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
     function yy_r3(){
-$this->out['column_list'] = $this->yystack[$this->yyidx + 0]->minor;
+$this->out['column_list'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
 #line 1186 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
 #line 25 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
     function yy_r4(){
-$this->out['column_list'] = 'count(*)';
+$this->out['column_list'][] = 'count(*)';
     }
 #line 1191 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
 #line 30 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
     function yy_r7(){
-if($this->out["column_list"] !=="*" && strcmp($this->out["column_list"],"count(*)") !==0){
+if(!in_array("*", $this->out["column_list"]) && !in_array("count(*)", array_map(strtolower, $this->out["column_list"]))){
 if(!in_array("id",$this->out["column_list"])){
 	$this->out["column_list"][] = "id";
 }
@@ -1240,7 +1239,7 @@ $pos = $length - 1;
 if($pos < 0){
 $pos = 0;
 }
-if(strcasecmp($this->out['where_condition']['column_operators'][$pos],"in")===0 &&
+if(strcasecmp($this->out['where_condition']['column_operators'][$pos],"in")===0 && 
 	!empty($this->out['where_condition']['column_values'][$pos]) && !$this->out['columnDone']){
 if(!is_array($this->out['where_condition']['column_values'][$pos])){
 $prev = $this->out['where_condition']['column_values'][$pos];
@@ -1331,9 +1330,9 @@ $this->out['meta'] = $objectMeta;
 $meta = $this->out['meta'];
 $fieldcol = $meta->getFieldColumnMapping();
 $columns = array();
-if(strcmp($this->out['column_list'],'*')===0){
+if(in_array('*', $this->out['column_list'])){
 $columns = array_values($fieldcol);
-}else if( strcmp($this->out['column_list'],'count(*)')!==0){
+}elseif( !in_array('count(*)', array_map(strtolower, $this->out['column_list']))){
 foreach($this->out['column_list'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
@@ -1344,7 +1343,7 @@ $columns[] = $fieldcol[$field];
 }
 }
 $tables = $this->getTables($this->out, $columns);
-if(sizeof($tables)===0){
+if(!in_array($objectMeta->getEntityBaseTable(), $tables)){
 $tables[] = $objectMeta->getEntityBaseTable();
 }
 $defaultTableList = $objectMeta->getEntityDefaultTableList();
@@ -1373,14 +1372,14 @@ if($firstTable!=$table){
 
     /**
      * placeholder for the left hand side in a reduce operation.
-     *
+     * 
      * For a parser with a rule like this:
      * <pre>
      * rule(A) ::= B. { A = 1; }
      * </pre>
-     *
+     * 
      * The parser will translate to something like:
-     *
+     * 
      * <code>
      * function yy_r0(){$this->_retvalue = 1;}
      * </code>
@@ -1390,13 +1389,13 @@ if($firstTable!=$table){
     /**
      * Perform a reduce action and the shift that must immediately
      * follow the reduce.
-     *
+     * 
      * For a rule such as:
-     *
+     * 
      * <pre>
      * A ::= B blah C. { dosomething(); }
      * </pre>
-     *
+     * 
      * This function will first call the action, if any, ("dosomething();" in our
      * example), and then it will pop three states from the stack,
      * one for each entry on the right-hand side of the expression
@@ -1413,7 +1412,7 @@ if($firstTable!=$table){
         //VTQL_ParseryyStackEntry $yymsp;            /* The top of the parser's stack */
         //int $yysize;                     /* Amount to pop the stack */
         $yymsp = $this->yystack[$this->yyidx];
-        if (self::$yyTraceFILE && $yyruleno >= 0
+        if (self::$yyTraceFILE && $yyruleno >= 0 
               && $yyruleno < count(self::$yyRuleName)) {
             fprintf(self::$yyTraceFILE, "%sReduce (%d) [%s].\n",
                 self::$yyTracePrompt, $yyruleno,
@@ -1457,7 +1456,7 @@ if($firstTable!=$table){
 
     /**
      * The following code executes when the parse fails
-     *
+     * 
      * Code from %parse_fail is inserted here
      */
     function yy_parse_failed()
@@ -1480,7 +1479,7 @@ if($firstTable!=$table){
 
     /**
      * The following code executes when a syntax error first occurs.
-     *
+     * 
      * %syntax_error code is inserted here
      * @param int The major type of the error token
      * @param mixed The minor type of the error token
@@ -1496,14 +1495,14 @@ if($firstTable!=$table){
 	}
 	$synMsg =$synMsg.('Unexpected ' . $this->tokenName($yymajor) . '(' . $TOKEN
 		. '), expected one of: ' . implode(',', $expect));
-
+	
 	throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, $synMsg);
 #line 1508 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
     }
 
     /**
      * The following is executed when the parser accepts
-     *
+     * 
      * %parse_accept code is inserted here
      */
     function yy_accept()
@@ -1524,7 +1523,7 @@ if($firstTable!=$table){
 
     /**
      * The main parser program.
-     *
+     * 
      * The first argument is the major token number.  The second is
      * the token value string as scanned from the input.
      *
@@ -1537,7 +1536,7 @@ if($firstTable!=$table){
 //        $yyact;            /* The parser action. */
 //        $yyendofinput;     /* True if we are at the end of input */
         $yyerrorhit = 0;   /* True if yymajor has invoked an error */
-
+        
         /* (re)initialize the parser, if necessary */
         if ($this->yyidx === null || $this->yyidx < 0) {
             /* if ($yymajor == 0) return; // not sure why this was here... */
@@ -1550,12 +1549,12 @@ if($firstTable!=$table){
             array_push($this->yystack, $x);
         }
         $yyendofinput = ($yymajor==0);
-
+        
         if (self::$yyTraceFILE) {
             fprintf(self::$yyTraceFILE, "%sInput %s\n",
                 self::$yyTracePrompt, self::$yyTokenName[$yymajor]);
         }
-
+        
         do {
             $yyact = $this->yy_find_shift_action($yymajor);
             if ($yymajor < self::YYERRORSYMBOL &&
@@ -1581,7 +1580,7 @@ if($firstTable!=$table){
                 if (self::YYERRORSYMBOL) {
                     /* A syntax error has occurred.
                     ** The response to an error depends upon whether or not the
-                    ** grammar defines an error token "ERROR".
+                    ** grammar defines an error token "ERROR".  
                     **
                     ** This is what we do if the grammar does define ERROR:
                     **
@@ -1651,7 +1650,7 @@ if($firstTable!=$table){
             } else {
                 $this->yy_accept();
                 $yymajor = self::YYNOCODE;
-            }
+            }            
         } while ($yymajor != self::YYNOCODE && $this->yyidx >= 0);
     }
 }
