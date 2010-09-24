@@ -2609,6 +2609,17 @@ function check_permission($customerid, $module, $entityid) {
 								if ($adb->num_rows($res) > 0) {
 									return true;
 								}
+								if(checkModuleActive('Project')) {
+									$query = "SELECT vtiger_senotesrel.notesid FROM vtiger_senotesrel
+										INNER JOIN vtiger_project ON vtiger_project.projectid = vtiger_senotesrel.crmid
+										WHERE vtiger_project.linktoaccountscontacts IN (". generateQuestionMarks($allowed_contacts_and_accounts) .")
+										AND vtiger_senotesrel.notesid = ?";
+									$res = $adb->pquery($query, array($allowed_contacts_and_accounts, $entityid));
+									if ($adb->num_rows($res) > 0) {
+										return true;
+									}
+								}
+
 								$query = "SELECT vtiger_senotesrel.notesid FROM vtiger_senotesrel
 															INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_senotesrel.notesid AND vtiger_crmentity.deleted = 0
 															WHERE vtiger_senotesrel.crmid IN (". generateQuestionMarks($faq_id) .")
