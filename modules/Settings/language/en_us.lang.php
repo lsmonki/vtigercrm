@@ -1198,5 +1198,7 @@ $mod_strings = Array(
 //for customer portal extension module
 'PORTAL_EXTENSION_DESCRIPTION'=>'Allows you to Configure Customer Portal Plugin',
 'LBL_CUSTOMER_PORTAL'=> 'Customer Portal',
+
+'LBL_ADD_CUSTOMFIELD' => 'Add Custom Field',
 );
 ?>
