@@ -782,10 +782,32 @@ class QueryGenerator {
 
 				list($fieldName,$typeOfData) = split("::::",str_replace('\'','',
 						stripslashes($input[$fieldInfo])));
+				$moduleFields = $this->meta->getModuleFields();
+				$field = $moduleFields[$fieldName];
+				$type = $field->getFieldDataType();
+			
 				$operator = str_replace('\'','',stripslashes($input[$condition]));
 				$searchValue = $input[$value];
 				$searchValue = function_exists(iconv) ? @iconv("UTF-8",$default_charset, 
 						$searchValue) : $searchValue;
+								
+				if($type == 'picklist') { 
+					global $mod_strings;
+					// Get all the keys for the for the Picklist value
+					$mod_keys = array_keys($mod_strings, $searchValue);
+					if(sizeof($mod_keys) >= 1) {
+						// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
+						foreach($mod_keys as $mod_idx=>$mod_key) {
+							$stridx = strpos($mod_key, 'LBL_');
+							// Use strict type comparision, refer strpos for more details
+							if ($stridx !== 0) {
+								$searchValue = $mod_key;
+								break;
+							}
+						}
+					}
+				}
+				
 				$this->addCondition($fieldName, $searchValue, $operator);
 				if($i+1<$noOfConditions) {
 					$this->addConditionGlue($matchType);
@@ -840,6 +862,23 @@ class QueryGenerator {
 						: $value;
 				if(!$this->isStringType($type)) {
 					$value=trim($stringConvert);
+				}
+				
+				if($type == 'picklist') { 
+					global $mod_strings;
+					// Get all the keys for the for the Picklist value
+					$mod_keys = array_keys($mod_strings, $value);
+					if(sizeof($mod_keys) >= 1) {
+						// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
+						foreach($mod_keys as $mod_idx=>$mod_key) {
+							$stridx = strpos($mod_key, 'LBL_');
+							// Use strict type comparision, refer strpos for more details
+							if ($stridx !== 0) {
+								$value = $mod_key;
+								break;
+							}
+						}
+					}
 				}
 			}
 			if(!empty($input['operator'])) {

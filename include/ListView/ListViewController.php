@@ -305,6 +305,7 @@ class ListViewController {
 						$value = "<font color='red'>".getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
 					} else {
+						$value = getTranslatedString($value,$module);
 						$value = textlength_check($value);
 					}
 				}elseif($field->getFieldDataType() == 'date' ||
@@ -672,7 +673,9 @@ class ListViewController {
 			if($i++ == 0) {
 				$selected = "selected";
 			}
-			$OPTION_SET .= "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
+			$fieldLabelEscaped = str_replace(" ","_",$field->getFieldLabelKey());
+			$optionvalue = $field->getTableName().":".$field->getColumnName().":".$fieldName.":".$module."_".$fieldLabelEscaped.":".$typeOfData;
+			$OPTION_SET .= "<option value=\'$optionvalue\' $selected>$label</option>";
 		}
 		return $OPTION_SET;
 	}
