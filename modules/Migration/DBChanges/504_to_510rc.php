@@ -325,6 +325,7 @@ ExecuteQuery("UPDATE vtiger_crmentity SET setype='Documents' WHERE setype='Notes
 
 $attachmentidQuery = 'select vtiger_seattachmentsrel.attachmentsid as attachmentid, vtiger_seattachmentsrel.crmid as id from vtiger_seattachmentsrel INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.crmid WHERE vtiger_crmentity.deleted = 0';
 $res = $adb->pquery($attachmentidQuery,array());
+global $default_charset;
 if($adb->num_rows($res)>0){
 	for($index=0;$index<$adb->num_rows($res);$index++){
 		$attachmentid = $adb->query_result($res,$index,'attachmentid');
@@ -334,6 +335,7 @@ if($adb->num_rows($res)>0){
 			 $attachres = $adb->pquery($attachmentInfoQuery,array($attachmentid));
 			 if($adb->num_rows($attachres)>0){
 				 $filename = $adb->query_result($attachres,0,'name');
+				 $filename = $adb->sql_escape_string(html_entity_decode($filename,ENT_QUOTES,$default_charset));
 				 $attch_sub = $adb->query_result($attachres,0,'subject');
 				 $description = $adb->query_result($attachres,0,'description');
 				 $filepath = $adb->query_result($attachres,0,'path');
