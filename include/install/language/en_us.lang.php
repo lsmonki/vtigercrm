@@ -124,7 +124,7 @@ $installationStrings = array(
 	'WARNING_RENAME_MIGRATE_PHP_FILE' => 'We strongly suggest you to rename the migrate.php file',
 	'WARNING_RENAME_INSTALL_DIRECTORY' => 'We strongly suggest you to rename the install directory',
 	'LBL_LOGIN_USING_ADMIN' => 'Please log in using the "admin" user name and the password you entered in step 3/4',
-	'LBL_SET_OUTGOING_EMAIL_SERVER' => 'Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server',
+	'LBL_SET_OUTGOING_EMAIL_SERVER' => 'Do not forget to set the outgoing email server (setup accessible from Settings-&gt;Outgoing Server)',
 	'LBL_RENAME_HTACCESS_FILE' => 'Rename htaccess.txt file to .htaccess to control public file access',
 	'MSG_HTACCESS_DETAILS' => 'This .htaccess file will work if "<b>AllowOverride All</b>" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.<br>
 				   				If this AllowOverride is set as None ie., "<b>AllowOverride None</b>" then .htaccess file will not take into effect.<br>
@@ -217,10 +217,23 @@ $installationStrings = array(
 	'LBL_OLD_VERSION_IS_AT' => 'Your older version is available at : ',
 	'LBL_CURRENT_SOURCE_PATH_IS' => 'Your current source path is : ',
 	'LBL_DATABASE_EXTENSION' =>'Database Extension',
-	'LBL_DOCUMENTATION_LINK' => 'For more information, please refer <a href="http://wiki.vtiger.com" target="_blank">vtigerCRM Manual</a>',
+	'LBL_DOCUMENTATION_TEXT' => 'Documentation including User Manual can be found at',
 	'LBL_USER_PASSWORD_CHANGE_NOTE' => 'password of all users will be reset to user name. Kindly notify users and change passwords',
 	'LBL_PASSWORD_FIELD_CHANGE_FAILURE' => "changing user's password field failed",
 	'LBL_OPENSSL_SUPPORT' => 'OpenSSL Support',
 	'LBL_OPTIONAL_MORE_LANGUAGE_PACK' => 'Addition language packs are available at',
+	'LBL_GETTING_STARTED' => 'Getting Started:',
+	'LBL_GETTING_STARTED_TEXT' => 'You can start using your CRM now.',
+	'LBL_YOUR_LOGIN_PAGE' => 'Your login page:',
+	'LBL_ADD_USERS' => 'To add more users, please visit the Settings page.',
+	'LBL_SETUP_BACKUP' => "Setup 'Backup Server' so that your CRM data and files are archived to ".
+			"another location on a daily basis",
+	'LBL_RECOMMENDED_STEPS' => 'Recommended Steps:',
+	'LBL_RECOMMENDED_STEPS_TEXT' => 'It is important that you complete the following steps',
+	'LBL_DOCUMENTATION_TUTORIAL' => 'Documentation And Tutorial',
+	'LBL_WELCOME_FEEDBACK' => 'We welcome your feedback',
+	'LBL_TUTORIAL_TEXT' => 'Video Tutorials are available at',
+	'LBL_DROP_A_MAIL' => 'Drop us an email to',
+	'LBL_LOGIN_PAGE' => 'Your login page: ',
 );
 ?>

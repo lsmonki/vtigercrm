@@ -86,29 +86,21 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 				<b>vtigercrm-<?php echo $vtiger_current_version. ' ' .$installationStrings['LBL_ALL_SET_TO_GO']; ?></b>
 				<hr noshade size=1>
 				<div style="width:100%;padding:10px;" align=left>
+					<strong><?php echo $installationStrings['LBL_GETTING_STARTED']; ?>&nbsp;</strong>
+					<div><em><?php echo $installationStrings['LBL_GETTING_STARTED_TEXT']; ?></em></div>
 					<ul>
-						<?php if($ins_file_renamed==true){ ?>
-						<li><?php echo $installationStrings['LBL_INSTALL_PHP_FILE_RENAMED']. ' ' .$renamefile;?>install.php.txt.</li>
-						<?php } else { ?>						
-						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_INSTALL_PHP_FILE']; ?>.</font></li>
-						<?php } ?>
-						
-						<?php /*if($mig_file_renamed==true){ ?>
-						<li><?php echo $installationStrings['LBL_MIGRATE_PHP_FILE_RENAMED']. ' ' .$renamefile;?>migrate.php.txt.</li>
-						<?php } else { ?>						
-						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_MIGRATE_PHP_FILE']; ?>.</font></li>
-						<?php } */ ?>
-						<?php if($ins_dir_renamed==true){ ?>
-						<li><?php echo $installationStrings['LBL_INSTALL_DIRECTORY_RENAMED']. ' ' .$renamefile;?>install.</li> 
-						<?php } else { ?>						
-						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_INSTALL_DIRECTORY']; ?>.</font></li>
-						<?php } ?>
+						<li>
+							<?php echo $installationStrings['LBL_LOGIN_PAGE'].' '.$site_URL; ?>.
+						</li>
+						<li><?php echo $installationStrings['LBL_LOGIN_USING_ADMIN']; ?>.</li>
+						<li><?php echo $installationStrings['LBL_ADD_USERS']; ?>.</li>
 					</ul>
 					<br>
+					<strong><?php echo $installationStrings['LBL_RECOMMENDED_STEPS']; ?></strong>
+					<div><em><?php echo $installationStrings['LBL_RECOMMENDED_STEPS_TEXT']; ?></em></div>
 					<ul>
-						<li><?php echo $installationStrings['LBL_DOCUMENTATION_LINK']; ?>.</li>
-						<li><?php echo $installationStrings['LBL_LOGIN_USING_ADMIN']; ?>.</li>
-						<li><?php echo $installationStrings['LBL_SET_OUTGOING_EMAIL_SERVER']; ?></li>						
+						<li><?php echo $installationStrings['LBL_SET_OUTGOING_EMAIL_SERVER']; ?></li>
+						<li><?php echo $installationStrings['LBL_SETUP_BACKUP']; ?></li>
 						<li><?php echo $installationStrings['LBL_RENAME_HTACCESS_FILE']; ?>. <a href="javascript:void(0);" onclick="showhidediv();"><?php echo $installationStrings['LBL_MORE_INFORMATION']; ?></a>
 			   				<div id='htaccess_div' style="display:none"><br><br>
 				   				<?php echo $installationStrings['MSG_HTACCESS_DETAILS']; ?>
@@ -116,13 +108,42 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 			  			</li>
 					</ul>
 					<br>
+					<strong><?php echo $installationStrings['LBL_DOCUMENTATION_TUTORIAL']; ?></strong>
+					<ul>
+						<li><?php echo $installationStrings['LBL_DOCUMENTATION_TEXT']; ?>
+							<a href="http://wiki.vtiger.com" target="_blank">http://wiki.vtiger.com</a>
+						</li>
+						<li><?php echo $installationStrings['LBL_TUTORIAL_TEXT']; ?>
+							<a href="http://youtube.com/vtigercrm" target="_blank">http://youtube.com/vtigercrm</a>
+						</li>
+					</ul>
+					<br>
+					<strong><?php echo $installationStrings['LBL_WE_AIM_TO_BE_BEST']. '. ' .$installationStrings['LBL_WELCOME_FEEDBACK'].'.'; ?></strong>
 					<ul><b>
-						<li><font color='#0000FF'><?php echo $installationStrings['LBL_YOU_ARE_IMPORTANT']; ?></font></li>
-						<li><?php echo $installationStrings['LBL_PRIDE_BEING_ASSOCIATED']; ?></li>
 						<li><?php echo $installationStrings['LBL_TALK_TO_US_AT_FORUMS']; ?></li>
 						<li><?php echo $installationStrings['LBL_DISCUSS_WITH_US_AT_BLOGS']; ?></li>
-						<li><?php echo $installationStrings['LBL_WE_AIM_TO_BE_BEST']. '. ' .$installationStrings['LBL_SPACE_FOR_YOU']; ?></li>
+						<li><?php echo $installationStrings['LBL_DROP_A_MAIL']; ?>
+							<a href="mailto:feedback@vtiger.com" target="_blank">feedback@vtiger.com</a>
+						</li>
 					</b></ul>
+					<ul>
+						<?php if($ins_file_renamed==true){ ?>
+						<li><?php echo $installationStrings['LBL_INSTALL_PHP_FILE_RENAMED']. ' ' .$renamefile;?>install.php.txt.</li>
+						<?php } else { ?>
+						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_INSTALL_PHP_FILE']; ?>.</font></li>
+						<?php } ?>
+
+						<?php /*if($mig_file_renamed==true){ ?>
+						<li><?php echo $installationStrings['LBL_MIGRATE_PHP_FILE_RENAMED']. ' ' .$renamefile;?>migrate.php.txt.</li>
+						<?php } else { ?>
+						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_MIGRATE_PHP_FILE']; ?>.</font></li>
+						<?php } */ ?>
+						<?php if($ins_dir_renamed==true){ ?>
+						<li><?php echo $installationStrings['LBL_INSTALL_DIRECTORY_RENAMED']. ' ' .$renamefile;?>install.</li>
+						<?php } else { ?>
+						<li><font color='red'><?php echo $installationStrings['WARNING_RENAME_INSTALL_DIRECTORY']; ?>.</font></li>
+						<?php } ?>
+					</ul>
 				</div>
 			</td>
 		</tr>
