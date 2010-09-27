@@ -112,12 +112,23 @@ $selectedOptionalModuleNames = array();
 																}
 															}
 														}
+														?>
+														<tr  class="level2">
+															<td colspan="3" align="right">
+																<?php echo $installationStrings['LBL_OPTIONAL_MORE_LANGUAGE_PACK'] ?>
+																<a href="http://www.vtiger.com//index.php?option=com_jreviews&Itemid=251" target="_NEW">Marketplace</a>
+															</td>
+														</tr>
+													<?php
 													} else {
 													?>
-														<div class="fixedSmallHeight textCenter fontBold">
-															<div style="padding-top:50px;width:100%;">
-																<span class="genHeaderBig"><?php echo $installationStrings['LBL_NO_OPTIONAL_MODULES_FOUND']; ?> !</span>
+														<tr><td>
+															<div class="fixedSmallHeight textCenter fontBold">
+																<div style="padding-top:50px;width:100%;">
+																	<span class="genHeaderBig"><?php echo $installationStrings['LBL_NO_OPTIONAL_MODULES_FOUND']; ?> !</span>
+																</div>
 															</div>
+														</td></tr>
 													<?php } ?>
 						       						</table>
 													<br>

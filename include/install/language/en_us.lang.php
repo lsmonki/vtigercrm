@@ -221,5 +221,6 @@ $installationStrings = array(
 	'LBL_USER_PASSWORD_CHANGE_NOTE' => 'password of all users will be reset to user name. Kindly notify users and change passwords',
 	'LBL_PASSWORD_FIELD_CHANGE_FAILURE' => "changing user's password field failed",
 	'LBL_OPENSSL_SUPPORT' => 'OpenSSL Support',
+	'LBL_OPTIONAL_MORE_LANGUAGE_PACK' => 'Addition language packs are available at',
 );
 ?>
