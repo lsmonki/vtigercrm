@@ -1,4 +1,5 @@
 <?php
+	chdir(dirname(__FILE__).'/../../');
 	require_once 'include/utils/utils.php';
 	$language = $_REQUEST['login_language'];
 	if(empty($language)) {

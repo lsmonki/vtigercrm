@@ -139,7 +139,7 @@ else
 	foreach ($rowList as $row) {
 		$cryptType = $row['crypt_type'];
 		if(strtolower($cryptType) == 'md5' && version_compare(PHP_VERSION, '5.3.0') >= 0) {
-			header("Location: PHP5.3_PasswordHelp.php");
+			header("Location: modules/Migration/PHP5.3_PasswordHelp.php");
 			die;
 		}
 	}
