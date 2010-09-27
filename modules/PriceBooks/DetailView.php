@@ -81,6 +81,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("SINGLE_MOD", 'PriceBook');
+$smarty->assign("CURRENCY_ID",$focus->column_fields['currency_id']);	
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if($singlepane_view == 'true')

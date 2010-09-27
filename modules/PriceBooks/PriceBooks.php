@@ -167,6 +167,7 @@ class PriceBooks extends CRMEntity {
 		
 		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_pricebookproductrel.listprice from vtiger_products inner join vtiger_pricebookproductrel on vtiger_products.productid = vtiger_pricebookproductrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid  where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0'; 
 		
+		$this->retrieve_entity_info($id,$this_module);
 		$return_value = getPriceBookRelatedProducts($query,$this,$returnset);
 
 		if($return_value == null) $return_value = Array();
@@ -215,6 +216,7 @@ class PriceBooks extends CRMEntity {
 			inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid
 			where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0';
 		
+		$this->retrieve_entity_info($id,$this_module);
 		$return_value = $other->getPriceBookRelatedServices($query,$this,$returnset);
 
 		if($return_value == null) $return_value = Array();
