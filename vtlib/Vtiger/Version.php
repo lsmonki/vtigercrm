@@ -30,6 +30,10 @@ class Vtiger_Version {
 	 */
 	static function check($with_version, $condition='=') {
 		$current_version = self::current();
+		//xml node is passed to this method sometimes
+		if(!is_string($with_version)) {
+			$with_version = (string) $with_version;
+		}
 		$with_version = self::getUpperLimitVersion($with_version);
 		return version_compare($current_version, $with_version, $condition);
 	}

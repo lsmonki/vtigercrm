@@ -9,20 +9,20 @@
  ************************************************************************************/
 
 $optionalModuleStrings = array(
-	'CustomerPortal_description'=>'Management interface to control the behavior of Customer Portal Plugin',
-	'FieldFormulas_description'=>'Setup rules for custom fields to update value on record save',
-	'RecycleBin_description'=>'Module to manage deleted records, provides ability to restore or remove it completely',
-	'Tooltip_description'=>'Configure tooltip to be shown for a field, which can be combination of other fields',
-	'Webforms_description'=>'Server side support to allow building client webforms to capture the information easily',
-	'SMSNotifier_description'=>'Sends sms messages to Accounts, contacts and Leads',
-	'Assets_description'=>'Assets represent ownership of value that can be converted into cash',
-	'ModComments_description' => 'Ability to add comments to any of the related modules',
-	'Projects_description' => 'Adds the ability to manage Projects',
-	'Dutch_description' => 'Dutch Language pack',
-	'French_description' => 'French Language pack',
-	'Hungarian_description' => 'Hungarian Language pack',
-	'Spanish_description' => 'Spanish Language pack',
-	'Deutsch_description' => 'German Language pack',
+	'CustomerPortal_description'=>'Management Interface zur Kontrolle des Kundenportals',
+	'FieldFormulas_description'=>'Definiere Regeln für benutzerdefinierte Felder um die Werte beim Speichern eines Datensatzes zu setzen',
+	'RecycleBin_description'=>'Modul zur Wiederherstellung oder entgültigem Entfernen von gelöschten Datensätzen',
+	'Tooltip_description'=>'Konfiguriere Kurzinfos für ein Feld in Bezug auf andere Felder',
+	'Webforms_description'=>'Server seitige Unterstützung für die Konfiguration von Webforms',
+	'SMSNotifier_description'=>'Sendet SMS Nachrichten zu Organisationen, Personen und Leads',
+	'Assets_description'=>'Fügt eine Bestandverwaltung von Proukten hinzu',
+	'ModComments_description' => 'Fügt die Möglichkeit zur Kommentierung von referenzierenden Modulen hinzu',
+	'Projects_description' => 'Fügt die Möglichkeit zum Projektmanagement zum CRM hinzu',
+	'NL-Dutch_description' => 'Niederländisches Sprachpaket',
+	'Pack de langue Francais_description' => 'Französiches Sprachpaket',
+	'Magyar nyelvi csomag a VTiger 5.2.0 rendszerhez_description' => 'Ungarisches Sprachpaket',
+	'Spanish_description' => 'Spanisches Sprachpaket',
+	'German_description' => 'Deutsches Sprachpaket von crm-now',
 );
 
 $installationStrings = array(
@@ -125,7 +125,7 @@ $installationStrings = array(
 	'WARNING_RENAME_MIGRATE_PHP_FILE' => 'We strongly suggest you to rename the migrate.php file',
 	'WARNING_RENAME_INSTALL_DIRECTORY' => 'We strongly suggest you to rename the install directory',
 	'LBL_LOGIN_USING_ADMIN' => 'Please log in using the "admin" user name and the password you entered in step 3/4',
-	'LBL_SET_OUTGOING_EMAIL_SERVER' => 'Do not forget to set the outgoing email server (setup accessible from Settings-&gt;Outgoing Server)',
+	'LBL_SET_OUTGOING_EMAIL_SERVER' => 'Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server',
 	'LBL_RENAME_HTACCESS_FILE' => 'Rename htaccess.txt file to .htaccess to control public file access',
 	'MSG_HTACCESS_DETAILS' => 'This .htaccess file will work if "<b>AllowOverride All</b>" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.<br>
 				   				If this AllowOverride is set as None ie., "<b>AllowOverride None</b>" then .htaccess file will not take into effect.<br>
@@ -218,23 +218,9 @@ $installationStrings = array(
 	'LBL_OLD_VERSION_IS_AT' => 'Your older version is available at : ',
 	'LBL_CURRENT_SOURCE_PATH_IS' => 'Your current source path is : ',
 	'LBL_DATABASE_EXTENSION' =>'Database Extension',
-	'LBL_DOCUMENTATION_TEXT' => 'Documentation including User Manual can be found at',
+	'LBL_DOCUMENTATION_LINK' => 'For more information, please refer <a href="http://wiki.vtiger.com" target="_blank">vtigerCRM Manual</a>',
 	'LBL_USER_PASSWORD_CHANGE_NOTE' => 'password of all users will be reset to user name. Kindly notify users and change passwords',
 	'LBL_PASSWORD_FIELD_CHANGE_FAILURE' => "changing user's password field failed",
 	'LBL_OPENSSL_SUPPORT' => 'OpenSSL Support',
-	'LBL_OPTIONAL_MORE_LANGUAGE_PACK' => 'Addition language packs are available at',
-	'LBL_GETTING_STARTED' => 'Getting Started:',
-	'LBL_GETTING_STARTED_TEXT' => 'You can start using your CRM now.',
-	'LBL_YOUR_LOGIN_PAGE' => 'Your login page:',
-	'LBL_ADD_USERS' => 'To add more users, please visit the Settings page.',
-	'LBL_SETUP_BACKUP' => "Setup 'Backup Server' so that your CRM data and files are archived to ".
-			"another location on a daily basis",
-	'LBL_RECOMMENDED_STEPS' => 'Recommended Steps:',
-	'LBL_RECOMMENDED_STEPS_TEXT' => 'It is important that you complete the following steps',
-	'LBL_DOCUMENTATION_TUTORIAL' => 'Documentation And Tutorial',
-	'LBL_WELCOME_FEEDBACK' => 'We welcome your feedback',
-	'LBL_TUTORIAL_TEXT' => 'Video Tutorials are available at',
-	'LBL_DROP_A_MAIL' => 'Drop us an email to',
-	'LBL_LOGIN_PAGE' => 'Your login page: ',
 );
 ?>
