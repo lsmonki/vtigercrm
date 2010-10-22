@@ -673,9 +673,7 @@ class ListViewController {
 			if($i++ == 0) {
 				$selected = "selected";
 			}
-			$fieldLabelEscaped = str_replace(" ","_",$field->getFieldLabelKey());
-			$optionvalue = $field->getTableName().":".$field->getColumnName().":".$fieldName.":".$module."_".$fieldLabelEscaped.":".$typeOfData;
-			$OPTION_SET .= "<option value=\'$optionvalue\' $selected>$label</option>";
+			$OPTION_SET .= "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
 		}
 		return $OPTION_SET;
 	}
