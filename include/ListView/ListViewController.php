@@ -673,9 +673,25 @@ class ListViewController {
 			if($i++ == 0) {
 				$selected = "selected";
 			}
-			$OPTION_SET .= "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
+						
+			// place option in array for sorting later
+			//$blockName = getTranslatedString(getBlockName($field->getBlockId()), $module);
+			$blockName = getTranslatedString($field->getBlockName(), $module);
+
+			$OPTION_SET[$blockName][$label] = "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
+
 		}
-		return $OPTION_SET;
+	   	// sort array on block label
+	    ksort($OPTION_SET, SORT_STRING);
+	    	    
+		foreach ($OPTION_SET as $key=>$value) {
+	  		$shtml .= "<optgroup label='$key' class='select' style='border:none'>";
+	   		// sort array on field labels
+	   		ksort($value, SORT_STRING);
+	  		$shtml .= implode('',$value);
+	  	}
+	    
+	    return $shtml;
 	}
 
 }
