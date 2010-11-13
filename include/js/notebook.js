@@ -33,7 +33,7 @@ function saveContents(node, notebookid) {
 					
 					temp = $('notebook_contents_'+notebookid);
 					temp.style.display = 'block';
-					temp.innerHTML = responsearray['contents'];
+					temp.innerHTML = '<pre>' + responsearray['contents'] + '</pre>';
 					$('notebook_'+notebookid).style.display = 'block';
 					
 					var notebook_dbl_click_message = $('notebook_dbl_click_message');
@@ -55,7 +55,7 @@ function editContents(node, notebookid) {
 	var notebook_dbl_click_message = $('notebook_dbl_click_message');
 	var notebook_save_message = $('notebook_save_message');
 	
-	notebook.value = contents.innerHTML;
+	notebook.value = contents.getElementsByTagName('pre')[0].innerHTML;
 	node.style.display = 'none';
 	notebook.style.display = 'block';
 	notebook_dbl_click_message.style.display = 'none';
