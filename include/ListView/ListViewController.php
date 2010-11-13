@@ -57,11 +57,11 @@ class ListViewController {
 		$isRoleBased = vtws_isRoleBasedPicklist($name);
 		$this->picklistRoleMap[$name] = $isRoleBased;
 		if ($this->picklistRoleMap[$name]) {
-			$this->picklistValueMap[$name] = getAssignedPicklistValues($fieldName, 
+			$this->picklistValueMap[$name] = getAssignedPicklistValues($fieldName,
 					$this->user->roleid, $this->db);
 		}
 	}
-	
+
 	public function fetchNameList($field, $result) {
 		$referenceFieldInfoList = $this->queryGenerator->getReferenceFieldInfoList();
 		$fieldName = $field->getFieldName();
@@ -180,7 +180,7 @@ class ListViewController {
 				$baseTable = $meta->getEntityBaseTable();
 				$moduleTableIndexList = $meta->getEntityTableIndexList();
 				$baseTableIndex = $moduleTableIndexList[$baseTable];
-				
+
 				$recordId = $db->query_result($result,$i,$baseTableIndex);
 				$ownerId = $db->query_result($result,$i,"smownerid");
 			}else {
@@ -244,6 +244,7 @@ class ListViewController {
 					}
 
 					$fileName = $db->query_result($result,$i,'filename');
+
 					$downloadType = $db->query_result($result,$i,'filelocationtype');
 					$status = $db->query_result($result,$i,'filestatus');
 					$fileIdQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid=?";
@@ -513,7 +514,7 @@ class ListViewController {
 		$link = "index.php?module=$module&action=EditView&record=$recordId&return_module=$module".
 			"&return_action=$return_action&parenttab=$parent".$url."&return_viewname=".
 			$_SESSION['lvs'][$module]["viewname"];
-		
+
 		if($module == 'Calendar') {
 			if($activityType == 'Task') {
 				$link .= '&activity_mode=Task';
@@ -555,7 +556,7 @@ class ListViewController {
 			$skipActions=false) {
 		global $log, $singlepane_view;
 		global $theme;
-		
+
 		$arrow='';
 		$qry = getURLstring($focus);
 		$theme_path="themes/".$theme."/";
@@ -566,7 +567,7 @@ class ListViewController {
 		$tabid = getTabid($module);
 		$tabname = getParentTab();
 		global $current_user;
-		
+
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		$fields = $this->queryGenerator->getFields();
 		$whereFields = $this->queryGenerator->getWhereFields();
@@ -575,13 +576,13 @@ class ListViewController {
 		$moduleFields = $meta->getModuleFields();
 		$accessibleFieldList = array_keys($moduleFields);
 		$listViewFields = array_intersect($fields, $accessibleFieldList);
-		
 		//Added on 14-12-2005 to avoid if and else check for every list
 		//vtiger_field for arrow image and change order
 		$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
 		$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
 		foreach($listViewFields as $fieldName) {
 			$field = $moduleFields[$fieldName];
+
 			if(in_array($field->getColumnName(),$focus->sortby_fields)) {
 				if($orderBy == $field->getColumnName()) {
 					$temp_sorder = $change_sorder[$sorder];
@@ -603,9 +604,10 @@ class ListViewController {
 				} else {
 					if($this->isHeaderSortingEnabled()) {
 						$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
-							"\",\"parenttab=".$tabname."&order_by=".$field->getColumnName()."&start=".
+							"\",\"parenttab=".$tabname."&foldername=Default&order_by=".$field->getColumnName()."&start=".
 							$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".
 						$sort_qry."\");' class='listFormHeaderLinks'>".$label."".$arrow."</a>";
+
 					} else {
 						$name = $label;
 					}
