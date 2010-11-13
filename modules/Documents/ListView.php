@@ -56,6 +56,10 @@ if($_REQUEST['errormsg'] != '')
 {
         $smarty->assign("ERROR","");
 }
+
+if(ListViewSession::hasViewChanged($currentModule,$viewid)) {
+	$_SESSION['NOTES_ORDER_BY'] = '';
+}
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();

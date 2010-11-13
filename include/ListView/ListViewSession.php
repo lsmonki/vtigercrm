@@ -207,6 +207,12 @@ class ListViewSession {
 		}
 		$_SESSION[$currentModule.'_listquery'] = $query;
 	}
-
+	
+	function hasViewChanged($currentModule) {
+		if(empty($_SESSION['lvs'][$currentModule]['viewname'])) return true;
+		if(empty($_REQUEST['viewname'])) return false;
+		if($_REQUEST['viewname'] != $_SESSION['lvs'][$currentModule]['viewname']) return true;
+		return false;
+	}
 }
 ?>
