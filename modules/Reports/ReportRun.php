@@ -327,7 +327,7 @@ class ReportRun extends CRMEntity
 				        $ui10_modules_query = $adb->pquery("SELECT relmodule FROM vtiger_fieldmodulerel WHERE fieldid=?",array($field_id));
   				        
 				       if($adb->num_rows($ui10_modules_query)>0){
-					        $querycolumn = " case vtiger_crmentityRel$module.setype";
+					        $querycolumn = " case vtiger_crmentityRel$module$field_id.setype";
 					        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
 					        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
 					        	$rel_obj = CRMEntity::getInstance($rel_mod);
@@ -338,12 +338,12 @@ class ReportRun extends CRMEntity
 								
 								if($rel_mod=="Contacts" || $rel_mod=="Leads"){
 									if(getFieldVisibilityPermission($rel_mod,$current_user->id,'firstname')==0){
-										$link_field = "concat($link_field,' ',".$rel_tab_name."Rel$module.firstname)";
+										$link_field = "concat($link_field,' ',".$rel_tab_name."Rel$module"."_via_field".$field_id.".firstname)";
 									}
 								}
 								$querycolumn.= " when '$rel_mod' then $link_field ";
 					        }
-					        $querycolumn .= "end as '".$selectedfields[2]."', vtiger_crmentityRel$module.setype as 'Entity_type'" ;
+					        $querycolumn .= "end as '".$selectedfields[2]."', vtiger_crmentityRel$module$field_id.setype as 'Entity_type'" ;
 				       }
 			        }
 		        }
@@ -1882,9 +1882,13 @@ class ReportRun extends CRMEntity
 							}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
 								$type = getSalesEntityType($custom_field_values[$i]);
 								$tmp =getEntityName($type,$custom_field_values[$i]);
-								foreach($tmp as $key=>$val){
-									$fieldvalue = $val;
-									break;
+								if (is_array($tmp)){
+									foreach($tmp as $key=>$val){
+										$fieldvalue = $val;
+										break;
+									}
+								}else{
+									$fieldvalue = $custom_field_values[$i];
 								}
 							}
 							else {
