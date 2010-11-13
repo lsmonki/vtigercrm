@@ -856,9 +856,12 @@ function doformValidation(edit_type) {
 		//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
 		if(edit_type=='')
 		{
-			if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
-			    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
-			{
+			if(getObj('existing_portal') != null 
+   				&& ((getObj('existing_portal').value == 0 && getObj('portal').checked && 
+          				(getObj('email') == null || trim(getObj('email').value) == '')) ||
+       				(getObj('existing_portal').value == 1 && getObj('portal').checked && 
+         		 		getObj('email') != null && trim(getObj('email').value) == ''))) {
+				
 				alert(alert_arr.PORTAL_PROVIDE_EMAILID);
 				return false;
 			}
