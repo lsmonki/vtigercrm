@@ -51,8 +51,6 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$log->info("Document detail view");
-
 $smarty = new vtigerCRM_Smarty;
 $dbQuery="select filename,folderid,filelocationtype,filestatus from vtiger_notes where notesid = ?";
 $result=$adb->pquery($dbQuery,array($focus->id));
@@ -145,7 +143,7 @@ $tabid = getTabid("Documents");
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
- if($current_user->id == 1)
+ if(is_admin($current_user))
 {
  	$smarty->assign("CHECK_INTEGRITY_PERMISSION","yes");
     $smarty->assign("ADMIN","yes");
