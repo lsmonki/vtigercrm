@@ -95,7 +95,7 @@ if($cvmodule != "") {
    	   $string = substr($allKeys[$i], 0, 4);
 	   if($string == "fval"  && !empty($_REQUEST[$allKeys[$i]])) {
 		   //$adv_filter_value[] = htmlentities(trim($_REQUEST[$allKeys[$i]]));
-		   $adv_filter_value[] = trim($_REQUEST[$allKeys[$i]]);
+		   $adv_filter_value[] = trim(vtlib_purify($_REQUEST[$allKeys[$i]]));
    	   }
 	}
 	//<<<<<<<advancedfilter>>>>>>>>

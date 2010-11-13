@@ -439,13 +439,14 @@ class ListViewController {
 					$value = "<span align='right'>$value</div>";
 				}
 
+                                    $parenttab = getParentTab();
 				$nameFields = $this->queryGenerator->getModuleNameFields($module);
 				$nameFieldList = explode(',',$nameFields);
 				if(in_array($fieldName, $nameFieldList) && $module != 'Emails') {
-					$value = "<a href='index.php?module=$module&action=DetailView&record=".
+					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
 					"$recordId' title='$module'>$value</a>";
 				} elseif($fieldName == $focus->list_link_field && $module != 'Emails') {
-					$value = "<a href='index.php?module=$module&action=DetailView&record=".
+					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
 					"$recordId' title='$module'>$value</a>";
 				}
 
@@ -524,7 +525,7 @@ class ListViewController {
 	}
 
 	public function getListViewDeleteLink($module,$recordId) {
-		$parent = getParentTab();
+		$parenttab = getParentTab();
 		$viewname = $_SESSION['lvs'][$module]['viewname'];
 		//Added to fix 4600
 		$url = getBasic_Advance_SearchURL();
@@ -535,13 +536,12 @@ class ListViewController {
 		//This is added to avoid the del link in Product related list for the following modules
 		$link = "index.php?module=$module&action=Delete&record=$recordId".
 			"&return_module=$module&return_action=$return_action".
-			"&parenttab=$parent&return_viewname=".$viewname.$url;
+			"&parenttab=$parenttab&return_viewname=".$viewname.$url;
 
 		// vtlib customization: override default delete link for custom modules
 		$requestModule = vtlib_purify($_REQUEST['module']);
 		$requestRecord = vtlib_purify($_REQUEST['record']);
 		$requestAction = vtlib_purify($_REQUEST['action']);
-		$parenttab = vtlib_purify($_REQUEST['parenttab']);
 		$isCustomModule = vtlib_isCustomModule($requestModule);
 		if($isCustomModule && !in_array($requestAction, Array('index','ListView'))) {
 			$link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";

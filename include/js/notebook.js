@@ -23,7 +23,9 @@ function saveContents(node, notebookid) {
 			method: 'post',
 			postBody:'module=Home&action=HomeAjax&file=SaveNotebookContents&contents='+encodeURIComponent(contents)+'&notebookid='+notebookid,
 			onComplete: function(response){
-				if(response.responseText == false){
+				var responsedata = trim(response.responseText);
+                                var responsearray = JSON.parse(responsedata);
+                                if(responsearray['status'] == false){
 					alert("Some error has occurred during save");
 				}else{
 					//success
@@ -31,7 +33,7 @@ function saveContents(node, notebookid) {
 					
 					temp = $('notebook_contents_'+notebookid);
 					temp.style.display = 'block';
-					temp.innerHTML = contents;
+					temp.innerHTML = responsearray['contents'];
 					$('notebook_'+notebookid).style.display = 'block';
 					
 					var notebook_dbl_click_message = $('notebook_dbl_click_message');

@@ -1522,13 +1522,37 @@ function getParentTab() {
     $log->debug("Entering getParentTab() method ...");
     if(!empty($_REQUEST['parenttab'])) {
 		$log->debug("Exiting getParentTab method ...");
+        if(checkParentTabExists($_REQUEST['parenttab'])) {
 		return vtlib_purify($_REQUEST['parenttab']);
+        } else {
+            return getParentTabFromModule($_REQUEST['module']);
+        }
     } else {
 		$log->debug("Exiting getParentTab method ...");
 		return getParentTabFromModule($_REQUEST['module']);
     }
 }
 
+function checkParentTabExists($parenttab) {
+    global $adb;
+
+    if (file_exists('parent_tabdata.php') && (filesize('parent_tabdata.php') != 0)) {
+        include('parent_tabdata.php');
+        if(in_array($parenttab,$parent_tab_info_array))
+            return true;
+        else
+            return false;
+    } else {
+
+        $result = "select 1 from vtiger_parenttab where parenttab_label = ?";
+        $noofrows = $adb->num_rows($result);
+        if($noofrows > 0)
+            return true;
+        else
+            return false;
+    }
+         
+}
 /**
  * This function is used to get the days in between the current time and the modified time of an entity .
  * Takes the input parameter as $id - crmid  it will calculate the number of days in between the
