@@ -3631,4 +3631,27 @@ function vt_hasRTE() {
 			(!empty($USE_RTE) && $USE_RTE == 'true'));
 }
 
+
+function getModuleSequenceNumber($module,$recordId){
+	global $adb;
+	switch($module){
+		case "Invoice":
+			$res = $adb->query("SELECT invoice_no FROM vtiger_invoice WHERE invoiceid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'invoice_no');
+			break;
+		case "PurchaseOrder":
+			$res = $adb->query("SELECT purchaseorder_no FROM vtiger_purchaseorder WHERE purchaseorderid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'purchaseorder_no');
+			break;
+		case "Quotes":
+			$res = $adb->query("SELECT quote_no FROM vtiger_quotes WHERE quoteid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'quote_no');
+			break;
+		case "SalesOrder":
+			$res = $adb->query("SELECT salesorder_no FROM vtiger_salesorder WHERE salesorderid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'salesorder_no');
+			break;
+	}
+	return $moduleSeqNo;
+}
 ?>
