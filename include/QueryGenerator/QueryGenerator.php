@@ -253,18 +253,9 @@ class QueryGenerator {
 					$meta = $this->getMeta('Groups');
 				}
 			}
-			$query = 'SELECT ';
-			$columns = array();
-			$moduleFields = $this->meta->getModuleFields();
-			$accessibleFieldList = array_keys($moduleFields);
-			$accessibleFieldList[] = 'id';
-			$this->fields = array_intersect($this->fields, $accessibleFieldList);
-			foreach ($this->fields as $field) {
-				$sql = $this->getSQLColumn($field);
-				$columns[] = $sql;
-			}
-			$this->columns = implode(', ',$columns);
-			$query .= $this->columns;
+
+			$query = "SELECT ";
+			$query .= $this->getSelectClauseColumnSQL();
 			$query .= $this->getFromClause();
 			$query .= $this->getWhereClause();
 			$this->query = $query;
@@ -289,6 +280,20 @@ class QueryGenerator {
 		//one module or is of type owner.
 		$column = $field->getColumnName();
 		return $field->getTableName().'.'.$column;
+	}
+
+	public function getSelectClauseColumnSQL(){
+		$columns = array();
+		$moduleFields = $this->meta->getModuleFields();
+		$accessibleFieldList = array_keys($moduleFields);
+		$accessibleFieldList[] = 'id';
+		$this->fields = array_intersect($this->fields, $accessibleFieldList);
+		foreach ($this->fields as $field) {
+			$sql = $this->getSQLColumn($field);
+			$columns[] = $sql;
+		}
+		$this->columns = implode(', ',$columns);
+		return $this->columns;
 	}
 
 	public function getFromClause() {

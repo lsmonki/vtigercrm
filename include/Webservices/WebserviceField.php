@@ -252,6 +252,9 @@ class WebserviceField{
 				$referenceTypes[] = 'Campaigns';
 			}
 			
+			global $current_user;
+			$types = vtws_listtypes(null, $current_user);
+			$referenceTypes = array_values(array_intersect($types['types'],$referenceTypes));
 			$referenceList[$this->getFieldId()] = $referenceTypes;
 			$this->referenceList = $referenceTypes;
 			return $referenceTypes;

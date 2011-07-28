@@ -426,6 +426,17 @@ function insertIntoRecurringTable(& $recurObj)
 		}
 	}	
 }
+
+	/**
+	 *
+	 * @param String $tableName
+	 * @return String
+	 */
+	public function getJoinClause($tableName) {
+        if($tableName == "vtiger_activity_reminder")
+            return 'LEFT JOIN';
+		return parent::getJoinClause($tableName);
+	}
 	
 	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us

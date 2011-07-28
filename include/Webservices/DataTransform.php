@@ -19,10 +19,11 @@
 			if(isset($row['count(*)'])){
 				return DataTransform::sanitizeDataWithCountColumn($row,$meta);
 			}
-			$fieldColumn = $meta->getFieldColumnMapping();
-			$columnField = array_flip($fieldColumn);
+			$fieldColumnMapping = $meta->getFieldColumnMapping();
+			$columnFieldMapping = array_flip($fieldColumnMapping);
 			foreach($row as $col=>$val){
-				$newRow[$columnField[$col]] = $val;
+				if(array_key_exists($col,$columnFieldMapping))
+					$newRow[$columnFieldMapping[$col]] = $val;
 			}
 			$newRow = DataTransform::sanitizeData($newRow,$meta,true);
 			return $newRow;
@@ -72,10 +73,10 @@
 					$_REQUEST['mode'] = 'edit';
 
 					$reminder = $row['reminder_time'];
-					$seconds = $reminder%60;
-					$minutes = ($reminder/60)%60;
-					$hours = ($reminder/(60*60))%24;
-					$days =  ($reminder/(60*60*24));
+					$seconds = (int)$reminder%60;
+					$minutes = (int)($reminder/60)%60;
+					$hours = (int)($reminder/(60*60))%24;
+					$days =  (int)($reminder/(60*60*24));
 
 					//at vtiger there cant be 0 minutes reminder so we are setting to 1
 					if($minutes == 0){

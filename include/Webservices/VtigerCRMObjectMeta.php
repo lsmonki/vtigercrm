@@ -48,14 +48,27 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		}
 		$this->tabId = null;
 	}
-	
+
+	/**
+	 * returns tabid of the current object.
+	 * @return Integer 
+	 */
 	public function getTabId(){
 		if($this->tabId == null){
 			$this->tabId = getTabid($this->objectName);
 		}
 		return $this->tabId;
 	}
-	
+
+	/**
+	 * returns tabid that can be consumed for database lookup purpose generally, events and
+	 * calendar are treated as the same module
+	 * @return Integer
+	 */
+	public function getEffectiveTabId() {
+		return getTabid($this->getTabName());
+	}
+
 	public function getTabName(){
 		if($this->objectName == 'Events'){
 			return 'Calendar';
@@ -456,7 +469,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		global $adb;
 		
 		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where tabid = ?";
-		$result = $adb->pquery($query, array($this->getTabId()));
+		$result = $adb->pquery($query, array($this->getEffectiveTabId()));
 		$fieldNames = '';
 		if($result){
 			$rowCount = $adb->num_rows($result);

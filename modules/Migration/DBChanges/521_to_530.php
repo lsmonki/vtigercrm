@@ -36,7 +36,46 @@ foreach ($it as $row) {
 	$adb->pquery($sql, $params);
 }
 
+// Adding email field type to vtiger_ws_fieldtype
+function vt530_addEmailFieldTypeInWs(){
+	$db = PearDatabase::getInstance();
+	$checkQuery = "SELECT * FROM vtiger_ws_fieldtype WHERE fieldtype=?";
+	$params = array ("email");
+	$checkResult = $db->pquery($checkQuery,$params);
+	if($db->num_rows($checkResult) <= 0) {		
+		$fieldTypeId = $db->getUniqueID('vtiger_ws_fieldtype');
+		$sql = 'insert into vtiger_ws_fieldtype(uitype,fieldtype) values (?,?)';
+		$params = array( '13', 'email');
+		$db->pquery($sql, $params);
+		//$sql = "update vtiger_field set uitype=? where uitype=?";
+		//$params = array('13','104');
+		//$db->pquery($sql, $params);
+		echo "<br> Added Email in webservices types ";
+	}
+}
 
+function vt530_addFilterToListTypes() {
+	$db = PearDatabase::getInstance();
+	$query = "SELECT operationid FROM vtiger_ws_operation WHERE name=?";
+	$parameters = array("listtypes");
+	$result = $db->pquery($query,$parameters);
+	if($db->num_rows($result) > 0){
+		$operationId = $db->query_result($result,0,'operationid');
+		$status = vtws_addWebserviceOperationParam($operationId,'fieldTypeList',
+						'Encoded',0);
+		if($status === false){
+				echo 'FAILED TO SETUP listypes WEBSERVICE HALFWAY THOURGH';
+				die;
+		}
+	}
+}
+
+vt530_addEmailFieldTypeInWs();
+vt530_addFilterToListTypes();
+installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
+
+
+updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0  -------- Ends \n\n");
 

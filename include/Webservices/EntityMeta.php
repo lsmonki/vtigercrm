@@ -156,6 +156,26 @@ abstract class EntityMeta{
 		return $hasMandatory;
 		
 	}
+	public function isUpdateMandatoryFields($element){
+		if(!is_array($element)){
+			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,
+							"Mandatory field does not have a value");
+		}
+		$mandatoryFields = $this->getMandatoryFields();
+		$updateFields = array_keys($element);
+		$hasMandatory = true;
+		$updateMandatoryFields = array_intersect($updateFields, $mandatoryFields);
+		if(!empty($updateMandatoryFields)){
+			foreach($updateMandatoryFields as $ind=>$field){
+				// dont use empty API as '0'(zero) is a valid value.
+				if( !isset($element[$field]) || $element[$field] === "" || $element[$field] === null ){
+					throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,
+							"$field does not have a value");
+				}
+			}
+		}
+		return $hasMandatory;
+	}
 	
 	public function getModuleFields(){
 		return $this->moduleFields;

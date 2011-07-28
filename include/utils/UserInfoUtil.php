@@ -786,7 +786,7 @@ function isPermitted($module,$actionname,$record_id='')
 	$tabid = getTabid($module);
 	$actionid=getActionid($actionname);
 	//If no actionid, then allow action is vtiger_tab permission is available	
-	if($actionid == '')
+	if($actionid === '')
 	{
 		if($profileTabsPermission[$tabid] ==0)
         	{	

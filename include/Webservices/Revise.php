@@ -23,7 +23,7 @@
 		$meta = $handler->getMeta();
 		$entityName = $meta->getObjectEntityName($element['id']);
 		
-		$types = vtws_listtypes($user);
+		$types = vtws_listtypes(null, $user);
 		if(!in_array($entityName,$types['types'])){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
@@ -63,7 +63,9 @@
 				unset($element[$fieldName]);
 			}
 		}
-		
+		//check if the element has mandtory fields filled
+		$meta->isUpdateMandatoryFields($element);
+
 		$ownerFields = $meta->getOwnerFields();
 		if(is_array($ownerFields) && sizeof($ownerFields) >0){
 			foreach($ownerFields as $ownerField){

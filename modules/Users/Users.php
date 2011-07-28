@@ -41,7 +41,7 @@ require_once 'include/Webservices/Utils.php';
  /** Main class for the user module
    *
   */
-class Users {
+class Users extends CRMEntity {
 	var $log;
 	var $db;
 	// Stored fields
