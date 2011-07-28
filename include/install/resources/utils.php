@@ -1376,7 +1376,10 @@ class Common_Install_Wizard_Utils {
 		if ($handle = opendir('packages/vtiger/optional')) {		    
 		    while (false !== ($file = readdir($handle))) {
 		        $filename_arr = explode(".", $file);
-		        $packagename = $filename_arr[0];
+				if($filename_arr[count($filename_arr)-1] != 'zip'){
+					continue;
+				}
+				$packagename = $filename_arr[0];
 				$packagepath = "packages/vtiger/optional/$file";
 				$package = new Vtiger_Package();
 				$module = $package->getModuleNameFromZip($packagepath);
