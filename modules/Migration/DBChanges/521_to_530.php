@@ -76,6 +76,7 @@ installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
 
 updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
+updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0  -------- Ends \n\n");
 
