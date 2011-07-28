@@ -1332,7 +1332,7 @@ class Common_Install_Wizard_Utils {
 				        if($moduleInstance) {
 		        			updateVtlibModule($module, $packagepath);
 		        		} else {
-		        			installVtlibModule($packageName, $packagepath);
+		        			installVtlibModule($module, $packagepath);
 		        		}
 	        		}
 		        }
@@ -1372,19 +1372,20 @@ class Common_Install_Wizard_Utils {
 		require_once('include/utils/utils.php');
 		
 		$selected_modules = explode(":",$selected_modules);
-		
+
 		if ($handle = opendir('packages/vtiger/optional')) {		    
 		    while (false !== ($file = readdir($handle))) {
 		        $filename_arr = explode(".", $file);
 		        $packagename = $filename_arr[0];
-		        if (!empty($packagename) && in_array($packagename,$selected_modules)) {
-		        	$packagepath = "packages/vtiger/optional/$file";
-					$package = new Vtiger_Package();
+				$packagepath = "packages/vtiger/optional/$file";
+				$package = new Vtiger_Package();
+				$module = $package->getModuleNameFromZip($packagepath);
+				
+		        if (!empty($packagename) && in_array($module,$selected_modules)) {
 					if($package->isLanguageType($packagepath)) {
-						installVtlibModule($packagename, $packagepath);
+						installVtlibModule($module, $packagepath);
 						continue;
 					}
-	        		$module = $package->getModuleNameFromZip($packagepath);
 	        		if($module != null) {
 						if($package->isModuleBundle()) {
 							$unzip = new Vtiger_Unzip($packagepath);
@@ -1407,7 +1408,7 @@ class Common_Install_Wizard_Utils {
 							if($moduleInstance) {
 								updateVtlibModule($module, $packagepath);
 							} else {
-								installVtlibModule($packagename, $packagepath);
+								installVtlibModule($module, $packagepath);
 							}
 						}
 		        	}

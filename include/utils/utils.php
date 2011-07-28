@@ -4649,7 +4649,14 @@ function updateVtlibModule($module, $packagepath) {
 	require_once('vtlib/Vtiger/Module.php');
 	$Vtiger_Utils_Log = true;
 	$package = new Vtiger_Package();
-	
+
+	if($package->isLanguageType($packagepath)) {
+		require_once('vtlib/Vtiger/Language.php');
+		$languagePack = new Vtiger_Language();
+		$languagePack->update(null, $packagepath, true);
+		return;
+	}
+
 	if($module == null) {
 		$log->fatal("Module name is invalid");
 	} else {
