@@ -1268,6 +1268,9 @@ $app_strings = array (
 	'LBL_RESET_PASSWORD_DESCRIPTION' => 'you can reset password for all users using a script and set it to thier respective
 			  user names.',
 	
+'LBL_CHANGE'=>'Change',
+'LBL_CHANGE_TITLE'=>'Change [Alt+C]',
+
 );
 
 $app_list_strings = array (
