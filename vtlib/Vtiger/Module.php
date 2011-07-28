@@ -137,6 +137,13 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * De-Initialize webservice setup for this module instance.
+	 */
+	function deinitWebservice() {
+		Vtiger_Webservice::uninitialize($this);
+	}
+
+	/**
 	 * Get instance by id or name
 	 * @param mixed id or name of the module
 	 */

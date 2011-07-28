@@ -290,6 +290,11 @@ function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
 	}
 }
 
+function vtws_deleteWebserviceEntity($moduleName) {
+	global $adb;
+	$adb->pquery('DELETE FROM vtiger_ws_entity WHERE name=?',array($moduleName));	
+}
+
 function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails,$withName = true){
 	$actorHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
 		'class'=>'VtigerActorOperation');

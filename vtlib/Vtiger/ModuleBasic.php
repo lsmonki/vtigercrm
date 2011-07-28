@@ -240,6 +240,9 @@ class Vtiger_ModuleBasic {
 			Vtiger_Access::deleteTools($this);
 			Vtiger_Filter::deleteForModule($this);
 			Vtiger_Block::deleteForModule($this);
+			if(method_exists($this, 'deinitWebservice')) {
+				$this->deinitWebservice();
+			}
 		}
 		$this->__delete();
 		Vtiger_Profile::deleteForModule($this);
