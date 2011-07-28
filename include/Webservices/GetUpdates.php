@@ -187,7 +187,9 @@ require_once 'include/Webservices/ModuleTypes.php';
 		$adb->completeTransaction();
 
 		if($error){
-			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
+					vtws_getWebserviceTranslatedString('LBL_'.
+							WebServiceErrorCode::$DATABASEQUERYERROR));
 		}
 
 		VTWS_PreserveGlobal::flush();

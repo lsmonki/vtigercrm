@@ -757,4 +757,57 @@ function vtws_transferOwnership($ownerId, $newOwnerId) {
 	}
 }
 
+
+function vtws_getWebserviceTranslatedStringForLanguage($label, $currentLanguage) {
+	static $translations = array();
+	$currentLanguage = vtws_getWebserviceCurrentLanguage();
+	if(empty($translations[$currentLanguage])) {
+		include 'include/Webservices/language/'.$currentLanguage.'.lang.php';
+		$translations[$currentLanguage] = $webservice_strings;
+	}
+	if(isset($translations[$currentLanguage][$label])) {
+		return $translations[$currentLanguage][$label];
+	}
+	return null;
+}
+
+function vtws_getWebserviceTranslatedString($label) {
+	$currentLanguage = vtws_getWebserviceCurrentLanguage();
+	$translation = vtws_getWebserviceTranslatedStringForLanguage($label, $currentLanguage);
+	if(!empty($translation)) {
+		return $translation;
+	}
+	
+	//current language doesn't have translation, return translation in default language
+	//if default language is english then LBL_ will not shown to the user.
+	$defaultLanguage = vtws_getWebserviceDefaultLanguage();
+	$translation = vtws_getWebserviceTranslatedStringForLanguage($label, $defaultLanguage);
+	if(!empty($translation)) {
+		return $translation;
+	}
+	
+	//if default language is not en_us then do the translation in en_us to eliminate the LBL_ bit 
+	//of label.
+	if('en_us' != $defaultLanguage) {
+		$translation = vtws_getWebserviceTranslatedStringForLanguage($label, 'en_us');
+		if(!empty($translation)) {
+			return $translation;
+		}
+	}
+	return $label;
+}
+
+function vtws_getWebserviceCurrentLanguage() {
+	global $default_language, $current_language;
+	if(empty($current_language)) {
+		return $default_language;
+	}
+	return $current_language;
+}
+
+function vtws_getWebserviceDefaultLanguage() {
+	global $default_language;
+	return $default_language;
+}
+
 ?>

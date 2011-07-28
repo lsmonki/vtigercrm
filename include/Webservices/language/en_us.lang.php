@@ -16,4 +16,9 @@ $app_strings = array (
 	'SINGLE_DocumentFolders'=>'Document Folder',
 	'SINGLE_Currency'=>'Currency',
 );
+
+$webservice_strings = array(
+	'LBL_DATABASE_QUERY_ERROR' => 'Database error while performing requested operation',
+);
+
 ?>

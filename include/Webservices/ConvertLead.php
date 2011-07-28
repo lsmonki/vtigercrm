@@ -49,7 +49,8 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 	$result = $adb->pquery($sql, array($leadIdComponents[1]));
 	if($result === false){
 		throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
-			"Database error while performing required operation");
+			vtws_getWebserviceTranslatedString('LBL_'.
+							WebServiceErrorCode::$DATABASEQUERYERROR));
 	}
 	$rowCount = $adb->num_rows($result);
 	if($rowCount > 0){
@@ -70,7 +71,8 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 	$result = $adb->pquery($sql, array($accountName));
 	if($result === false){
 		throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
-			"Database error while performing required operation");
+			vtws_getWebserviceTranslatedString('LBL_'.
+							WebServiceErrorCode::$DATABASEQUERYERROR));
 	}
 	$rowCount = $adb->num_rows($result);
 	if($rowCount != 0 && vtlib_isModuleActive('Accounts') === true){
