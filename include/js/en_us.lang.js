@@ -304,5 +304,7 @@
 				'LBL_ENTER_RSS_URL':'Please enter RSS URL',
 				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again',
 				
-				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field'
+				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field',
+
+				'RECIPIENTS_CANNOT_BE_EMPTY' : 'Selected Recipients cannot be empty'
 			};

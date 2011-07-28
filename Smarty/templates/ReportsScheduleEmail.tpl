@@ -41,7 +41,7 @@
 									<td valign=top class="small">
 										<span id="scheduledTypeSpan">
 											<select class="dataInput small" name="scheduledType" id="scheduledType" onchange="javascript: setScheduleOptions();">
-												<option value="0">{$MOD.OPTION_SCHEDULE_EMAIL_CHOOSE}</option>
+												<!-- Hourly doesn't make sense on OD as the cron job is running once in 2 hours -->
 												<option id="schtype_1" value="1" {if $schtypeid eq 1}selected{/if}>{$MOD.Hourly}</option>
 												<option id="schtype_2" value="2" {if $schtypeid eq 2}selected{/if}>{$MOD.Daily}</option>
 												<option id="schtype_3" value="3" {if $schtypeid eq 3}selected{/if}>{$MOD.Weekly}</option>

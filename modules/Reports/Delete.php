@@ -63,6 +63,6 @@ function DeleteReport($reportid)
     $ireportsqlresult = $adb->pquery($ireportsql, array($reportid));
 
 	$reportsql = 'DELETE FROM vtiger_scheduled_reports WHERE reportid=?';
-	$adb->pquery($reportsql, array($rpeortid));
+	$adb->pquery($reportsql, array($reportid));
 }
 ?>
