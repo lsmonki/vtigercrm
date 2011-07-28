@@ -41,6 +41,8 @@ $log =& LoggerManager::getLogger('SendReminder');
 $log->debug(" invoked SendReminder ");
 
 // retrieve the translated strings.
+if(empty($current_language))
+	$current_language = 'en_us';
 $app_strings = return_application_language($current_language);
 
 //modified query for recurring events -Jag
