@@ -233,18 +233,20 @@ function emptyCheck(fldName,fldLabel, fldType) {
 
 
 function patternValidate(fldName,fldLabel,type) {
-	var currObj=getObj(fldName)
+	var currObj=getObj(fldName);
+	
 	if (type.toUpperCase()=="YAHOO") //Email ID validation
 	{
 		//yahoo Id validation
 		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
 	}
+	
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
 		//Changes made to fix tickets #4633, #5111  to accomodate all possible email formats
-		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
+		var re=new RegExp(/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/) 
 	}
 
 	if (type.toUpperCase()=="DATE") {//DATE validation 
@@ -2438,8 +2440,7 @@ function CharValidation(s,type)
 
 
 /** Check Upload file is in specified format(extension).
-  * @param fldname -- name of the file field
-  * @param fldLabel -- Lable of the file field
+  * @param fldName -- name of the file field
   * @param filter -- List of file extensions to allow. each extension must be seperated with a | sybmol.
   * Example: upload_filter("imagename","Image", "jpg|gif|bmp|png") 
   * @returns true -- if the extension is IN  specified extension.
@@ -2454,8 +2455,8 @@ function upload_filter(fldName, filter)
 	if(currObj.value !="")
 	{
 		var file=currObj.value;
-		var type=file.split(".");
-		var valid_extn=filter.split("|");	
+		var type=file.toLowerCase().split(".");
+		var valid_extn=filter.toLowerCase().split("|");	
 	
 		if(valid_extn.indexOf(type[type.length-1]) == -1)
 		{
