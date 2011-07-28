@@ -1542,7 +1542,7 @@ $log->info("in getOldFileName  ".$notesid);
 		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
 		
 	 	$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
-				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
+				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,vtiger_crmentity.modifiedtime,
 				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
 				vtiger_notes.notecontent description,vtiger_notes.*
 				from vtiger_notes

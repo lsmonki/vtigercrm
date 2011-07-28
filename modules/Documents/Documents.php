@@ -38,12 +38,14 @@ class Documents extends CRMEntity {
 	var $list_fields = Array(
 				'Title'=>Array('notes'=>'title'),
 				'File Name'=>Array('notes'=>'filename'),
+				'Modified Time'=>Array('crmentity'=>'modifiedtime'),
 				'Assigned To' => Array('crmentity'=>'smownerid'),
 				'Folder Name' => Array('attachmentsfolder'=>'foldername')
 				);
 	var $list_fields_name = Array(
 					'Title'=>'notes_title',
 					'File Name'=>'filename',
+					'Modified Time'=>'modifiedtime',
 					'Assigned To'=>'assigned_user_id',
 					'Folder Name' => 'folderid'
 				     );
