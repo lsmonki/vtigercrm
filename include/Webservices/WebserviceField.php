@@ -340,7 +340,8 @@ class WebserviceField{
 				),
 				"email_flag" => array(
 					array('label'=>'SAVED','value'=>'SAVED'),
-					array('label'=>'SENT','value' => 'SENT')
+					array('label'=>'SENT','value' => 'SENT'),
+					array('label'=>'MAILSCANNER','value' => 'MAILSCANNER')
 				)
 			);
 		if(in_array(strtolower($this->getFieldName()),$hardCodedPickListNames)){
