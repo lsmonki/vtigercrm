@@ -59,8 +59,6 @@
 					throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,
 						"Permission to access reference type is denied ".$referenceObject->getEntityName());
 				}
-			}else if($element[$fieldName] !== NULL){
-				unset($element[$fieldName]);
 			}
 		}
 		//check if the element has mandtory fields filled
