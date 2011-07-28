@@ -68,6 +68,13 @@ if(isset($_REQUEST['PHPSESSID']))
         $sid=$_REQUEST['PHPSESSID'];
 }	
 
+if(isset($_REQUEST['view'])) {
+    //setcookie("view",$_REQUEST['view']);
+    $view = $_REQUEST["view"];
+    session_register("view");
+}
+	
+
 /** Function to set, character set in the header, as given in include/language/*_lang.php
  */
 	 
@@ -86,6 +93,10 @@ function insert_charset_header()
 insert_charset_header();
 // Create or reestablish the current session
 session_start();
+$_SESSION['KCFINDER'] = array();
+$_SESSION['KCFINDER']['disabled'] = false;
+$_SESSION['KCFINDER']['uploadURL'] = "test/upload";
+$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
 
 if (!is_file('config.inc.php')) {
 	header("Location: install.php");
@@ -112,7 +123,20 @@ global $adb, $vtiger_current_version;
 if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_id'])) {
     if(version_compare($_SESSION['VTIGER_DB_VERSION'], $vtiger_current_version, '!=')) {
         unset($_SESSION['VTIGER_DB_VERSION']);
-        header("Location: install.php");
+    	global $app_strings;
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tbody><tr>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_MIGRATION_INCOMPLETE]</span></td>
+			</tr>
+			<tr>
+			<td class='small' align='right' nowrap='nowrap'>$app_strings[LBL_CONTACT_SYS_ADMIN] ($app_strings[LBL_SERVER_ADMIN_EMAIL_ID])<br></td>
+			</tr>
+			</tbody></table>
+			</div>";
+		echo "</td></tr></table>";
         exit();
     }
 } else {
@@ -121,7 +145,20 @@ if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_
     if(version_compare($dbversion, $vtiger_current_version, '=')) {
     	$_SESSION['VTIGER_DB_VERSION']= $dbversion;
     } else {
-    	header("Location: install.php");
+    	global $app_strings;
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tbody><tr>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_MIGRATION_INCOMPLETE]</span></td>
+			</tr>
+			<tr>
+			<td class='small' align='right' nowrap='nowrap'>$app_strings[LBL_CONTACT_SYS_ADMIN] ($app_strings[LBL_SERVER_ADMIN_EMAIL_ID])<br></td>
+			</tr>
+			</tbody></table>
+			</div>";
+		echo "</td></tr></table>";
         exit();
     }
 }
@@ -512,7 +549,11 @@ if(isset($_SESSION['vtiger_authenticated_user_theme']) && $_SESSION['vtiger_auth
 }
 else 
 {
-	$theme = $default_theme;
+	if(!empty($current_user->theme)) {
+		$theme = $current_user->theme;
+	} else {
+		$theme = $default_theme;
+	}
 }
 $log->debug('Current theme is: '.$theme);
 
@@ -526,7 +567,11 @@ if(isset($_SESSION['authenticated_user_language']) && $_SESSION['authenticated_u
 }
 else 
 {
-	$current_language = $default_language;
+	if(!empty($current_user->language)) {
+		$current_language = $current_user->language;
+	} else {
+		$current_language = $default_language;
+	}
 }
 $log->debug('current_language is: '.$current_language);
 
@@ -627,7 +672,11 @@ if(isset($_SESSION['vtiger_authenticated_user_theme']) && $_SESSION['vtiger_auth
 }
 else 
 {
-	$theme = $default_theme;
+	if(!empty($current_user->theme)) {
+		$theme = $current_user->theme;
+	} else {
+		$theme = $default_theme;
+	}
 }
 
 
