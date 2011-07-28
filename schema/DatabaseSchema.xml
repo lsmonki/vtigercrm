@@ -6620,7 +6620,9 @@
         <field name="is_active" type="I" size="1">
 			<notnull />
 		</field>
-        
+		<field name="dependent_on" type="C" size="255">
+			<default value="[]" />
+		</field>        
 		<index name="eventhandler_idx">
 			<unique />
 			<col>eventhandler_id</col>

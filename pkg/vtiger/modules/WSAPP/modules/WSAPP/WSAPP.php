@@ -7,6 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
+require_once('include/events/include.inc');
+require_once 'include/Zend/Json.php';
+require_once 'include/utils/utils.php';
 
 class WSAPP {
 
@@ -20,6 +23,7 @@ class WSAPP {
 			$this->initCustomWebserviceOperations();
             $this->registerHandlers();
             $this->registerVtigerCRMApp();
+			$this->registerWsappWorkflowhandler();
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.
 			return;
@@ -128,6 +132,13 @@ class WSAPP {
         $db->pquery("INSERT INTO vtiger_wsapp (name, appkey,type) VALUES(?,?,?)", array($name, $uid,$type));
     }
 
+	function registerWsappWorkflowhandler(){
+		$db = PearDatabase::getInstance();
+		$em = new VTEventsManager($db);
+		$dependentEventHandlers = array('VTEntityDelta');
+		$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
+		$em->registerHandler('vtiger.entity.aftersave', 'modules/WSAPP/WorkFlowHandlers/WSAPPAssignToTracker.php', 'WSAPPAssignToTracker','',$dependentEventHandlersJson);
+	}
 }
  
 ?>

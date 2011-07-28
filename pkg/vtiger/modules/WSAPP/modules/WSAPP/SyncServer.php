@@ -11,6 +11,7 @@
 require_once 'modules/WSAPP/Utils.php';
 require_once 'include/database/PearDatabase.php';
 require_once 'include/Zend/Json.php';
+require_once 'include/utils/utils.php';
 
 class SyncServer {
         private $appkey;
@@ -51,7 +52,6 @@ class SyncServer {
                     "servermodifiedtime"=>$row['servermodifiedtime'],"id"=>$row['id']);
 			}
 		}
-		
 		return $mapping;
 	}
 
@@ -87,6 +87,49 @@ class SyncServer {
         $params[] = $appid;
         $db->pquery("INSERT INTO vtiger_wsapp_queuerecords(syncserverid,details,flag,appid) VALUES(?,?,?,?)",array($params));
     }
+	
+	function checkIdExistInQueue($syncServerId){
+		$db = PearDatabase::getInstance();
+		$checkQuery = "SELECT syncserverid FROM vtiger_wsapp_queuerecords WHERE syncserverid=?";
+		$result = $db->pquery($checkQuery,array($syncServerId));
+		if($db->num_rows($result)>0)
+				return true;
+		return false;
+	}
+
+	function markRecordAsDeleteForAllCleints($recordValues){
+		$recordWsId = $recordValues['id'];
+		$modifiedTime = $recordValues['modifiedtime'];
+		$db = PearDatabase::getInstance();
+		$query = "SELECT * FROM vtiger_wsapp_recordmapping WHERE serverid=? and servermodifiedtime < ?";
+		$params = array($recordWsId,$modifiedTime);
+		$result = $db->pquery($query,$params);
+		while($arre = $db->fetchByAssoc($result)){
+			$syncServerId = $arre["id"];
+			$clientId = $arre["clientid"];
+			$clientMappedId = $arre["appid"];
+			if(!$this->checkIdExistInQueue($syncServerId)){
+				$this->idmap_storeRecordsInQueue($syncServerId,$recordValues,$this->delete,$clientMappedId);
+			}
+		}
+	}
+
+	function getSyncServerId($clientId,$serverId,$clientAppId){
+		$db = PearDatabase::getInstance();
+		$syncServerId = NULL;
+		$query = "SELECT id FROM vtiger_wsapp_recordmapping WHERE clientid=? and serverid=? and appid=?";
+		$result = $db->pquery($query,array($clientId,$serverId,$clientAppId));
+		if($db->num_rows($result)>0){
+			$syncServerId = $db->query_result($result,0,'id');
+		}
+		return $syncServerId;
+	}
+
+	function deleteQueueRecords($syncServerIdList){
+		$db= PearDatabase::getInstance();
+		$deleteQuery = "DELETE FROM vtiger_wsapp_queuerecords WHERE syncserverid IN (".generateQuestionMarks($syncServerIdList).")";
+		$result = $db->pquery($deleteQuery,$syncServerIdList);
+	}
 	
 	/**
 	 * Create serverid-clientid record map for the application
@@ -278,7 +321,9 @@ class SyncServer {
            foreach($queueRecordIds as $serverId){
                $syncServerId = $syncServerDetails[$serverId]['id'];
                $recordValues = $queueRecordDetails[$serverId];
-               $this->idmap_storeRecordsInQueue($syncServerId, $recordValues, $this->delete,$appid);
+			   if(!$this->checkIdExistInQueue($syncServerId)){
+					$this->idmap_storeRecordsInQueue($syncServerId, $recordValues, $this->delete,$appid);
+			   }
            }
        }
 		return true;
@@ -311,6 +356,12 @@ class SyncServer {
         foreach($syncServerDeleteIds as $deleteServerId){
             $deletedIds[] = $deleteServerId;
         }
+
+		$updateDeleteCommonIds = array_values(array_intersect($updatedIds,$deletedIds));
+		//if the record exist in both the update and delete , then send record as update
+		// and unset the id from deleted list
+		$deletedIds = array_diff($deletedIds,$updateDeleteCommonIds);
+
         $updatedLookupIds = $this->idmap_get_clientmap($appid, $updatedIds);
 		$deletedLookupIds = $this->idmap_get_clientmap($appid, $deletedIds);
 		$filteredCreates = array(); $filteredUpdates = array();
@@ -347,12 +398,12 @@ class SyncServer {
 	 */
 	function map($key, $element, $user) {
         if (empty($element)) return;
-		$db = PearDatabase::getInstance(); 		;
+		$db = PearDatabase::getInstance();
 		$appid = $this->appid_with_key($key);
 		$createDetails = $element["create"];
         $deleteDetails = $element["delete"];
         $updatedDetails = $element["update"];
-
+		$deleteQueueSyncServerIds = array();
         $serverKey = wsapp_getAppKey("vtigerCRM");
         $serverAppId = $this->appid_with_key($serverKey);
 		//$lookups = $this->idmap_get_clientmap($appid, array_values($createDetails));
@@ -361,17 +412,28 @@ class SyncServer {
 		}
         foreach($updatedDetails as $clientid=>$serverDetails){
             $this->idmap_updateMapDetails( $appid, $clientid,$serverDetails['modifiedtime'],$serverDetails['_modifiedtime'],$this->update);
+			$syncServerId = $this->getSyncServerId($clientid,$serverDetails['serverid'],$appid);
+			if(isset($syncServerId) && $syncServerId != NULL){
+				$deleteQueueSyncServerIds[] = $syncServerId;
+			}
         }
         if(count($deleteDetails)>0){
             $deleteLookUps = $this->idmap_get_clientservermap($appid, array_values($deleteDetails));
             foreach($deleteDetails as $clientid){
                 if(isset($deleteLookUps[$clientid])){
-                    $serverId = $deleteLookUps[$clientid];
+					$serverId = $deleteLookUps[$clientid];
+					$syncServerId = $this->getSyncServerId($clientid,$serverId,$appid);
+					if(isset($syncServerId) && $syncServerId != NULL){
+						$deleteQueueSyncServerIds[] = $syncServerId;
+					}
                     $this->idmap_delete($appid, $serverId, $clientid,$serverAppId);
                 }
 
             }
         }
+		if(count($deleteQueueSyncServerIds)>0){
+			$this->deleteQueueRecords($deleteQueueSyncServerIds);
+		}
     }
 
     function getQueueDeleteRecord($appId){

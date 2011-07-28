@@ -969,9 +969,16 @@ function registerEvents($adb) {
 
 	// Registering event for Recurring Invoices
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
+
+	//Registering Entity Delta handler for before save and after save events of the record to track the field value changes
+	$em->registerHandler('vtiger.entity.beforesave', 'data/VTEntityDelta.php', 'VTEntityDelta');
+	$em->registerHandler('vtiger.entity.aftersave', 'data/VTEntityDelta.php', 'VTEntityDelta');
 	
 	// Workflow manager
-	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+	$dependentEventHandlers = array('VTEntityDelta');
+	$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
+	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler',
+								'',$dependentEventHandlersJson);
 	
 	//Registering events for On modify
 	$em->registerHandler('vtiger.entity.afterrestore', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');

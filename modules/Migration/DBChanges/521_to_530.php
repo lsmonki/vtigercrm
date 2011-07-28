@@ -67,8 +67,35 @@ function vt530_addFilterToListTypes() {
 	}
 }
 
+function vt530_registerVTEntityDeltaApi() {
+	$db = PearDatabase::getInstance();
+
+	$em = new VTEventsManager($db);
+	$em->registerHandler('vtiger.entity.beforesave', 'data/VTEntityDelta.php', 'VTEntityDelta');
+	$em->registerHandler('vtiger.entity.aftersave', 'data/VTEntityDelta.php', 'VTEntityDelta');
+}
+
+function vt530_addDependencyColumnToEventHandler() {
+	$db = PearDatabase::getInstance();
+	$db->pquery("ALTER TABLE vtiger_eventhandlers ADD COLUMN dependent_on VARCHAR(255) NOT NULL DEFAULT '[]'", array());
+}
+
+function vt530_addDepedencyToVTWorkflowEventHandler(){
+	$db = PearDatabase::getInstance();
+
+	$dependentEventHandlers = array('VTEntityDelta');
+	$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
+	$db->pquery('UPDATE vtiger_eventhandlers SET dependent_on=? WHERE event_name=? AND handler_class=?',
+									array($dependentEventHandlersJson, 'vtiger.entity.aftersave', 'VTWorkflowEventHandler'));
+}
+
 vt530_addEmailFieldTypeInWs();
 vt530_addFilterToListTypes();
+
+vt530_registerVTEntityDeltaApi();
+vt530_addDependencyColumnToEventHandler();
+vt530_addDepedencyToVTWorkflowEventHandler();
+
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
 
