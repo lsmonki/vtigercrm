@@ -150,7 +150,7 @@ if($mode == 'view')
 	foreach($act_perr_arry as $tabid=>$action_array)
 	{
 		$stand = array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		//Create/Edit Permission
 		$tab_create_per_id = $action_array['1'];
 		$tab_create_per = getDisplayValue($tab_create_per_id,$tabid,'1');
@@ -174,7 +174,7 @@ if($mode == 'edit')
 	foreach($act_perr_arry as $tabid=>$action_array)
 	{
 		$stand = array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		//Create/Edit Permission
 		$tab_create_per_id = $action_array['1'];
 		$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
@@ -200,7 +200,7 @@ if($mode == 'create')
 		foreach($act_perr_arry as $tabid=>$action_array)
 		{
 			$stand = array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			//Create/Edit Permission
 			$tab_create_per_id = $action_array['1'];
 			$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
@@ -224,7 +224,7 @@ if($mode == 'create')
 		foreach($act_perr_arry as $tabid=>$action_array)
 		{
 			$stand = array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			//Create/Edit Permission
 			$tab_create_per_id = $action_array['1'];
 			$tab_create_per = getDisplayOutput(0,$tabid,'1');
@@ -255,7 +255,7 @@ if($mode == 'view')
 	foreach($tab_perr_array as $tabid=>$tab_perr)
 	{
 		$tab=array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		$tab_allow_per_id = $tab_perr_array[$tabid];
 		$tab_allow_per = getDisplayValue($tab_allow_per_id,$tabid,'');	
 		$tab[]=$entity_name;
@@ -270,7 +270,7 @@ if($mode == 'edit')
 	foreach($tab_perr_array as $tabid=>$tab_perr)
 	{
 		$tab=array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		$tab_allow_per_id = $tab_perr_array[$tabid];
 		$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
 		$tab[]=$entity_name;
@@ -287,7 +287,7 @@ if($mode == 'create')
 		foreach($tab_perr_array as $tabid=>$tab_perr)
 		{
 			$tab=array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			$tab_allow_per_id = $tab_perr_array[$tabid];
 			$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
 			$tab[]=$entity_name;
@@ -302,7 +302,7 @@ if($mode == 'create')
 		foreach($tab_perr_array as $tabid=>$tab_perr)
 		{
 			$tab=array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			$tab_allow_per_id = $tab_perr_array[$tabid];
 			$tab_allow_per = getDisplayOutput(0,$tabid,'');	
 			$tab[]=$entity_name;
@@ -321,7 +321,7 @@ if($mode == 'view')
 	foreach($act_utility_arry as $tabid=>$action_array)
 	{
 		$util=array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		$no_of_actions=sizeof($action_array);
 		foreach($action_array as $action_id=>$act_per)
 		{
@@ -342,7 +342,7 @@ elseif($mode == 'edit')
 	foreach($act_utility_arry as $tabid=>$action_array)
 	{
 		$util=array();
-		$entity_name = getTabname($tabid);
+		$entity_name = getTabModuleName($tabid);
 		$no_of_actions=sizeof($action_array);
 		foreach($action_array as $action_id=>$act_per)
 		{
@@ -365,7 +365,7 @@ elseif($mode == 'create')
 		foreach($act_utility_arry as $tabid=>$action_array)
 		{
 			$util=array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			$no_of_actions=sizeof($action_array);
 			foreach($action_array as $action_id=>$act_per)
 			{
@@ -386,7 +386,7 @@ elseif($mode == 'create')
 		foreach($act_utility_arry as $tabid=>$action_array)
 		{
 			$util=array();
-			$entity_name = getTabname($tabid);
+			$entity_name = getTabModuleName($tabid);
 			$no_of_actions=sizeof($action_array);
 			foreach($action_array as $action_id=>$act_per)
 			{

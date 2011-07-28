@@ -196,13 +196,17 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 				if($private == 'private')
 				{
 					$log->debug("Sharing is Private. Only the current user should be listed");
-					$query = "select id as id,user_name as user_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";	
+					$query = "select id as id,user_name as user_name,first_name,last_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name ,
+							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  
+							  from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union 
+							  select shareduserid as id,vtiger_users.user_name as user_name ,
+							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";
 					$params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
 				}
 				else
 				{
 					$log->debug("Sharing is Public. All vtiger_users should be listed");
-					$query = "SELECT id, user_name from vtiger_users WHERE status=?";
+					$query = "SELECT id, user_name,first_name,last_name from vtiger_users WHERE status=?";
 					$params = array($status);
 				}
 		}
@@ -223,7 +227,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		// Get the id and the name.
 		while($row = $db->fetchByAssoc($result))
 		{
-			$temp_result[$row['id']] = $row['user_name'];
+			$temp_result[$row['id']] = getDisplayName(array('f'=>$row['first_name'],'l'=>$row['last_name']));
 		}
 
 		$user_array = &$temp_result;
@@ -1072,6 +1076,13 @@ function getTabModuleName($tabid)
 		if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) {
 			include('tabdata.php');
 			$tabname = array_search($tabid,$tab_info_array);
+
+			if($tabname == false) {
+				global $adb;
+				$sql = "select name from vtiger_tab where tabid=?";
+				$result = $adb->pquery($sql, array($tabid));
+				$tabname=  $adb->query_result($result,0,"name");
+			}
 			
 			// Update information to cache for re-use
 			VTCacheUtils::updateTabidInfo($tabid, $tabname);
@@ -2241,9 +2252,10 @@ function getEmailParentsList($module,$id,$focus = false)
     
         $fieldid = 0;
         $fieldname = 'email';
-        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
+        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '' )
                 $fieldname = 'yahooid';
-
+        elseif($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )         
+				$fieldname='secondaryemail';
         $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ? and vtiger_field.presence in (0,2)", array(getTabid($module), $fieldname));
         $fieldid = $adb->query_result($res,0,'fieldid');
 
@@ -4600,6 +4612,16 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 		return;
 	}
 	$module = $package->getModuleNameFromZip($packagepath);
+
+	// Customization
+	if($package->isLanguageType()) {
+		require_once('vtlib/Vtiger/Language.php');		
+		$languagePack = new Vtiger_Language();
+		@$languagePack->import($packagepath, true);
+		return;
+	}
+	// END
+
 	$module_exists = false;
 	$module_dir_exists = false;
 	if($module == null) {
