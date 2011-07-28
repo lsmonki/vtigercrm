@@ -683,7 +683,7 @@ else
 //logging the security Information
 $seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.' :: RecordID --> '.$record.' #######');
 
-if(!$skipSecurityCheck)
+if(!$skipSecurityCheck && $use_current_login)
 {
 
 
