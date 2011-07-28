@@ -975,6 +975,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						} elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes') { //Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
 							$accountname = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							$accountid = $adb->query_result($list_result,$i-1,"accountid");
+							if(empty($accountname)) $accountname = getAccountName($accountid);
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
 						} else {
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
