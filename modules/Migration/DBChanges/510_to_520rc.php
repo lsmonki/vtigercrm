@@ -319,7 +319,11 @@ function VT520_migrateCustomview($sql,$forModule, $user, $handler) {
 		$module = $row->entitytype;
 		$current_module = $module;
 		if($forModule == 'Accounts') {
-			$fieldname = 'account_id';
+			if($module == 'Potentials') {
+				$fieldname = 'related_to';
+			} else {
+				$fieldname = 'account_id';
+			}
 		}elseif($forModule == 'Contacts') {
 			$fieldname = 'contact_id';
 		}elseif($forModule == 'Products') {
