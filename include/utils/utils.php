@@ -1334,13 +1334,12 @@ function insertProfile2field($profileid)
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and vtiger_field.presence in (0,2) and tabid != 29", array());
-        $num_rows = $adb->num_rows($fld_result);
-        for($i=0; $i<$num_rows; $i++)
-        {
-                 $tab_id = $adb->query_result($fld_result,$i,'tabid');
-                 $field_id = $adb->query_result($fld_result,$i,'fieldid');
-				 $params = array($profileid, $tab_id, $field_id, 0, 1);
-                 $adb->pquery("insert into vtiger_profile2field values (?,?,?,?,?)", $params);
+    $num_rows = $adb->num_rows($fld_result);
+    for($i=0; $i<$num_rows; $i++) {
+         $tab_id = $adb->query_result($fld_result,$i,'tabid');
+         $field_id = $adb->query_result($fld_result,$i,'fieldid');
+		 $params = array($profileid, $tab_id, $field_id, 0, 0);
+         $adb->pquery("insert into vtiger_profile2field values (?,?,?,?,?)", $params);
 	}
 	$log->debug("Exiting insertProfile2field method ...");
 }
@@ -1360,7 +1359,7 @@ function insert_def_org_field()
         {
                  $tab_id = $adb->query_result($fld_result,$i,'tabid');
                  $field_id = $adb->query_result($fld_result,$i,'fieldid');
-				 $params = array($tab_id, $field_id, 0, 1);
+				 $params = array($tab_id, $field_id, 0, 0);
                  $adb->pquery("insert into vtiger_def_org_field values (?,?,?,?)", $params);
 	}
 	$log->debug("Exiting insert_def_org_field() method ...");
@@ -1418,7 +1417,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 		global $adb;
 		$tabid = getTabid($fld_module);
 	
-		$query = "SELECT vtiger_profile2field.visible, vtiger_field.fieldlabel, vtiger_field.uitype, 
+		$query = "SELECT vtiger_profile2field.visible, vtiger_profile2field.readonly, vtiger_field.fieldlabel, vtiger_field.uitype, 
 			vtiger_field.fieldid, vtiger_field.displaytype, vtiger_field.typeofdata 
 			FROM vtiger_profile2field INNER JOIN vtiger_field ON vtiger_field.fieldid=vtiger_profile2field.fieldid 
 			WHERE vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
@@ -1431,7 +1430,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 				$adb->query_result($result,$i,"fieldlabel"),
 				$adb->query_result($result,$i,"visible"), // From vtiger_profile2field.visible
 				$adb->query_result($result,$i,"uitype"),
-				$adb->query_result($result,$i,"visible"),
+				$adb->query_result($result,$i,"readonly"),
 				$adb->query_result($result,$i,"fieldid"),
 				$adb->query_result($result,$i,"displaytype"),
 				$adb->query_result($result,$i,"typeofdata")
@@ -3252,7 +3251,7 @@ function getRecordValues($id_array,$module) {
 		$fld_label=$adb->query_result($result,$i,"fieldlabel");
 		$ui_type=$adb->query_result($result,$i,"uitype");
 		
-		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name) == '0') {
+		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name, 'readwrite') == '0') {
 			$fld_array []= $fld_name;	
 			$record_values[$c][$fld_label] = Array();
 			$ui_value[]=$ui_type;

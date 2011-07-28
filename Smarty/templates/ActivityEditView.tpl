@@ -674,7 +674,8 @@ var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 									</div>
 								</td>
 							</tr>
-							{/if}
+							{/if}							
+			     			{if $LABEL.contact_id neq ''}
 							<tr>
 								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
@@ -689,6 +690,7 @@ var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 							
 								</td>
 							</tr>
+							{/if}
 						</table>
 					</div>
 			</td>

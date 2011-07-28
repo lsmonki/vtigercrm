@@ -155,7 +155,7 @@
 {if $CUSTOM_LINKS && $CUSTOM_LINKS.DETAILVIEWBASIC}
 	{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.DETAILVIEWBASIC}
 	<tr>
-		<td align="left" style="padding-left:10px;">
+		<td align="left" style="padding-left:5px;">
 			{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
 			{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
 			{if $customlink_label eq ''}

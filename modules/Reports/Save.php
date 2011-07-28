@@ -83,6 +83,13 @@ $advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
 $advft_criteria_groups = $json->decode($advft_criteria_groups);
 //<<<<<<<advancedfilter>>>>>>>>
 
+//<<<<<<<scheduled report>>>>>>>>
+$isReportScheduled		= vtlib_purify($_REQUEST['isReportScheduled']);
+$selectedRecipients	= vtlib_purify($_REQUEST['selectedRecipientsString']);
+$scheduledFormat	= vtlib_purify($_REQUEST['scheduledReportFormat']);
+$scheduledInterval	= vtlib_purify($_REQUEST['scheduledIntervalString']);
+//<<<<<<<scheduled report>>>>>>>>
+
 if($reportid == "")
 {
 	$genQueryId = $adb->getUniqueID("vtiger_selectquery");
@@ -214,6 +221,13 @@ if($reportid == "")
 					}
 					$log->info("Reports :: Save->Successfully saved vtiger_relcriteria");
 					//<<<<step5 advancedfilter>>>>>>>
+
+					//<<<<step7 scheduledReport>>>>>>>
+					if($isReportScheduled == 'on' || $isReportScheduled == '1'){
+						$scheduleReportSql = 'INSERT INTO vtiger_scheduled_reports (reportid,recipients,schedule,format,next_trigger_time) VALUES (?,?,?,?,?)';
+						$adb->pquery($scheduleReportSql, array($genQueryId,$selectedRecipients,$scheduledInterval,$scheduledFormat,date("Y-m-d H:i:s")));
+					}
+					//<<<<step7 scheduledReport>>>>>>>
 
 				}else
 				{
@@ -377,6 +391,23 @@ if($reportid == "")
 			$log->info("Reports :: Save->Successfully saved vtiger_relcriteria");
 			//<<<<step5 advancedfilter>>>>>>>
 
+			//<<<<step7 scheduledReport>>>>>>>
+			if($isReportScheduled == 'off' || $isReportScheduled == '0' || $isReportScheduled == '') {
+				$deleteScheduledReportSql = "DELETE FROM vtiger_scheduled_reports WHERE reportid=?";
+				$adb->pquery($deleteScheduledReportSql, array($reportid));
+			} else{
+				$checkScheduledResult = $adb->pquery('SELECT 1 FROM vtiger_scheduled_reports WHERE reportid=?', array($reportid));
+
+				if($adb->num_rows($checkScheduledResult) > 0) {
+					$scheduledReportSql = 'UPDATE vtiger_scheduled_reports SET recipients=?,schedule=?,format=? WHERE reportid=?';
+					$adb->pquery($scheduledReportSql, array($selectedRecipients,$scheduledInterval,$scheduledFormat,$reportid));
+				} else {
+					$scheduleReportSql = 'INSERT INTO vtiger_scheduled_reports (reportid,recipients,schedule,format,next_trigger_time) VALUES (?,?,?,?,?)';
+					$adb->pquery($scheduleReportSql, array($reportid,$selectedRecipients,$scheduledInterval,$scheduledFormat,date("Y-m-d H:i:s")));
+				}
+			}
+			//<<<<step7 scheduledReport>>>>>>>
+			
 		}else
 		{
 			$errormessage = "<font color='red'><B>Error Message<ul>

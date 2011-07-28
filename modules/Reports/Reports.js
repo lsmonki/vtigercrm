@@ -386,11 +386,11 @@ function hideTabs()
 	
 	if(objreportType.value == 'tabular')
 	{
-		divarray = new Array('step1','step2','step4','step5','step6');
+		divarray = new Array('step1','step2','step4','step5','step6','step7');
 	}
 	else
 	{
-		divarray = new Array('step1','step2','step3','step4','step5','step6');
+		divarray = new Array('step1','step2','step3','step4','step5','step6','step7');
 	}
 }
         
@@ -415,38 +415,38 @@ function saveAndRunReport()
 function changeSteps1() 
 {
 	if(getObj('step5').style.display != 'none')
-	{
+	{		
 		var escapedOptions = new Array('account_id','contactid','contact_id','product_id','parent_id','campaignid','potential_id','assigned_user_id1','quote_id','accountname','salesorder_id','vendor_id','time_start','time_end','lastname');
-		
+
 		var conditionColumns = vt_getElementsByName('tr', "conditionColumn");
 		var criteriaConditions = [];
 		for(var i=0;i < conditionColumns.length ; i++) {
-			
+
 			var columnRowId = conditionColumns[i].getAttribute("id");
 			var columnRowInfo = columnRowId.split("_");
 			var columnGroupId = columnRowInfo[1];
 			var columnIndex = columnRowInfo[2];
-			
+
 			var columnId = "fcol"+columnIndex;
 			var columnObject = getObj(columnId);
 			var selectedColumn = trim(columnObject.value);
-			var selectedColumnIndex = columnObject.selectedIndex;	
+			var selectedColumnIndex = columnObject.selectedIndex;
 			var selectedColumnLabel = columnObject.options[selectedColumnIndex].text;
-			
+
 			var comparatorId = "fop"+columnIndex;
 			var comparatorObject = getObj(comparatorId);
 			var comparatorValue = trim(comparatorObject.value);
-			
+
 			var valueId = "fval"+columnIndex;
 			var valueObject = getObj(valueId);
 			var specifiedValue = trim(valueObject.value);
-			
+
 			var extValueId = "fval_ext"+columnIndex;
 			var extValueObject = getObj(extValueId);
 			if(extValueObject) {
 				extendedValue = trim(extValueObject.value);
 			}
-			
+
 			var glueConditionId = "fcon"+columnIndex;
 			var glueConditionObject = getObj(glueConditionId);
 			var glueCondition = '';
@@ -455,22 +455,22 @@ function changeSteps1()
 			}
 
 			if (!emptyCheck(columnId," Column ","text"))
-				return false;
+			return false;
 			if (!emptyCheck(comparatorId,selectedColumnLabel+" Option","text"))
 				return false;
-
+		
 			var col = selectedColumn.split(":");
 			if(escapedOptions.indexOf(col[3]) == -1) {
-				if(col[4] == 'T') {   
+				if(col[4] == 'T') {
 					var datime = specifiedValue.split(" ");
 					if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH"))
 						return false
-					if(datime.length > 1)	
+					if(datime.length > 1)
 					if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS"))
 						return false
-				}	
+				}
 				else if(col[4] == 'D')
-				{        
+				{
 					if(!dateValidate(valueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
 						return false
 					if(extValueObject) {
@@ -479,10 +479,10 @@ function changeSteps1()
 					}
 				}else if(col[4] == 'I')
 				{
-					if(!intValidate(valueId,selectedColumnLabel+" (Integer Criteria)"+i))           
+					if(!intValidate(valueId,selectedColumnLabel+" (Integer Criteria)"+i))
 						return false
 				}else if(col[4] == 'N')
-				{  
+				{
 					if (!numValidate(valueId,selectedColumnLabel+" (Number) ","any",true))
 						return false
 				}else if(col[4] == 'E')
@@ -491,8 +491,8 @@ function changeSteps1()
 						return false
 				}
 			}
-			
-			//Added to handle yes or no for checkbox fields in reports advance filters. 
+
+			//Added to handle yes or no for checkbox fields in reports advance filters.
 			if(col[4] == "C") {
 				if(specifiedValue == "1")
 					specifiedValue = getObj(valueId).value = 'yes';
@@ -500,24 +500,24 @@ function changeSteps1()
 					specifiedValue = getObj(valueId).value = 'no';
 			}
 			if (extValueObject && extendedValue != null && extendedValue != '') specifiedValue = specifiedValue +','+ extendedValue;
-			
-			criteriaConditions[columnIndex] = {"groupid":columnGroupId, 
+
+			criteriaConditions[columnIndex] = {"groupid":columnGroupId,
 												"columnname":selectedColumn,
 												"comparator":comparatorValue,
 												"value":specifiedValue,
 												"columncondition":glueCondition
 											};
 		}
-		
+
 		$('advft_criteria').value = JSON.stringify(criteriaConditions);
-		
+
 		var conditionGroups = vt_getElementsByName('div', "conditionGroup");
 		var criteriaGroups = [];
 		for(var i=0;i < conditionGroups.length ; i++) {
 			var groupTableId = conditionGroups[i].getAttribute("id");
 			var groupTableInfo = groupTableId.split("_");
 			var groupIndex = groupTableInfo[1];
-			
+
 			var groupConditionId = "gpcon"+groupIndex;
 			var groupConditionObject = getObj(groupConditionId);
 			var groupCondition = '';
@@ -525,10 +525,10 @@ function changeSteps1()
 				groupCondition = trim(groupConditionObject.value);
 			}
 			criteriaGroups[groupIndex] = {"groupcondition":groupCondition};
-			
+
 		}
 		$('advft_criteria_groups').value = JSON.stringify(criteriaGroups);
-		
+
 		var date1=getObj("startdate")
 		var date2=getObj("enddate")
 
@@ -546,7 +546,50 @@ function changeSteps1()
 			return false;
 		}
 
-	}if (getObj('step6').style.display != 'none') {
+	}
+	if (getObj('step7').style.display != 'none') {
+
+		var isScheduledObj = getObj("isReportScheduled");
+		if(isScheduledObj.checked == true) {
+			var selectedRecipientsObj = getObj("selectedRecipients");
+
+			if (selectedRecipientsObj.options.length == 0) {
+				alert(alert_arr.RECIPIENTS_CANNOT_BE_EMPTY);
+				return false;
+			}
+			
+			var selectedUsers = new Array();
+			var selectedGroups = new Array();
+			var selectedRoles = new Array();
+			var selectedRolesAndSub = new Array();
+			for(i = 0; i < selectedRecipientsObj.options.length; i++){
+				var selectedCol = selectedRecipientsObj.options[i].value;
+				var selectedColArr = selectedCol.split("::");
+				if(selectedColArr[0] == "users")
+					selectedUsers.push(selectedColArr[1]);
+				else if(selectedColArr[0] == "groups")
+					selectedGroups.push(selectedColArr[1]);
+				else if(selectedColArr[0] == "roles")
+					selectedRoles.push(selectedColArr[1]);
+				else if(selectedColArr[0] == "rs")
+					selectedRolesAndSub.push(selectedColArr[1]);
+			}
+
+			var selectedRecipients = { users : selectedUsers, groups : selectedGroups,
+										roles : selectedRoles, rs : selectedRolesAndSub };
+			var selectedRecipientsJson = JSON.stringify(selectedRecipients);
+			document.NewReport.selectedRecipientsString.value = selectedRecipientsJson;
+
+			var scheduledInterval= { scheduletype : document.NewReport.scheduledType.value,
+									month : document.NewReport.scheduledMonth.value,
+									date : document.NewReport.scheduledDOM.value,
+									day : document.NewReport.scheduledDOW.value,
+									time : document.NewReport.scheduledTime.value
+								};
+
+			var scheduledIntervalJson = JSON.stringify(scheduledInterval);
+			document.NewReport.scheduledIntervalString.value = scheduledIntervalJson;
+		}
 		saveAndRunReport();
 	} else {
 		for (i = 0; i < divarray.length; i++) {
@@ -555,7 +598,7 @@ function changeSteps1()
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
 				}
-				if (divarray[i] == 'step5') {
+				if (divarray[i + 1] == 'step7') {
 					document.getElementById("next").value = finish_text;
 				}
 				hide(divarray[i]);
@@ -667,47 +710,47 @@ function fnPopupWin(winName){
 function re_dateValidate(fldval,fldLabel,type) {
 	if(re_patternValidate(fldval,fldLabel,"DATE")==false)
 		return false;
-	dateval=fldval.replace(/^\s+/g, '').replace(/\s+$/g, '') 
+	dateval=fldval.replace(/^\s+/g, '').replace(/\s+$/g, '')
 
 	var dateelements=splitDateVal(dateval)
-	
+
 	dd=dateelements[0]
 	mm=dateelements[1]
 	yyyy=dateelements[2]
-	
+
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		return false
 	}
-	
+
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		return false
 	}
-	
+
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		return false
 	}
 
 	switch (parseInt(mm)) {
-		case 2 : 
-		case 4 : 
-		case 6 : 
-		case 9 : 
+		case 2 :
+		case 4 :
+		case 6 :
+		case 9 :
 		case 11 :if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
 						return false
-					}	
+					}
 	}
-	
+
 	var currdate=new Date()
 	var chkdate=new Date()
-	
+
 	chkdate.setYear(yyyy)
 	chkdate.setMonth(mm-1)
 	chkdate.setDate(dd)
-	
+
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date",type)) {
 			return false
@@ -717,18 +760,18 @@ function re_dateValidate(fldval,fldLabel,type) {
 
 //Copied from general.js and altered some lines. becos we cant send vales to function present in general.js. it accept only field names.
 function re_patternValidate(fldval,fldLabel,type) {
-	if (type.toUpperCase()=="DATE") {//DATE validation 
+	if (type.toUpperCase()=="DATE") {//DATE validation
 
 		switch (userDateFormat) {
 			case "yyyy-mm-dd" :
 								var re = /^\d{4}(-)\d{1,2}\1\d{1,2}$/
 								break;
-			case "mm-dd-yyyy" : 
+			case "mm-dd-yyyy" :
 			case "dd-mm-yyyy" :
-								var re = /^\d{1,2}(-)\d{1,2}\1\d{4}$/								
+								var re = /^\d{1,2}(-)\d{1,2}\1\d{4}$/
 		}
 	}
-	
+
 
 	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
 		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
@@ -842,4 +885,43 @@ function vt_getElementsByName(tagName, elementName) {
 	  }
 	}
 	return selectedElements;
+}
+
+function setScheduleOptions() {
+
+	var stid = document.getElementById('scheduledType').value;
+	switch( stid ) {
+		case "0": // nothing choosen
+		case "1": // hourly
+					document.getElementById('scheduledMonthSpan').style.display = 'none';
+					document.getElementById('scheduledDOMSpan').style.display = 'none';
+					document.getElementById('scheduledDOWSpan').style.display = 'none';
+					document.getElementById('scheduledTimeSpan').style.display = 'none';
+					break;
+		case "2": // daily
+					document.getElementById('scheduledMonthSpan').style.display = 'none';
+					document.getElementById('scheduledDOMSpan').style.display = 'none';
+					document.getElementById('scheduledDOWSpan').style.display = 'none';
+					document.getElementById('scheduledTimeSpan').style.display = 'inline';
+					break;
+		case "3": // weekly
+		case "4": // bi-weekly
+					document.getElementById('scheduledMonthSpan').style.display = 'none';
+					document.getElementById('scheduledDOMSpan').style.display = 'none';
+					document.getElementById('scheduledDOWSpan').style.display = 'inline';
+					document.getElementById('scheduledTimeSpan').style.display = 'inline';
+					break;
+		case "5": // monthly
+					document.getElementById('scheduledMonthSpan').style.display = 'none';
+					document.getElementById('scheduledDOMSpan').style.display = 'inline';
+					document.getElementById('scheduledDOWSpan').style.display = 'none';
+					document.getElementById('scheduledTimeSpan').style.display = 'inline';
+					break;
+		case "6": // annually
+					document.getElementById('scheduledMonthSpan').style.display = 'inline';
+					document.getElementById('scheduledDOMSpan').style.display = 'inline';
+					document.getElementById('scheduledDOWSpan').style.display = 'none';
+					document.getElementById('scheduledTimeSpan').style.display = 'inline';
+					break;
+	}
 }

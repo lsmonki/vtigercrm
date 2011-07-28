@@ -65,9 +65,9 @@ require_once("VTWorkflowApplication.inc");
 		
 		?>
 		<script type="text/javascript" charset="utf-8">
-			window.location="<?=$returnUrl?>";
+			window.location="<?php echo $returnUrl?>";
 		</script>
-		<a href="<?=$returnUrl?>">Return</a>
+		<a href="<?php echo $returnUrl?>">Return</a>
 		<?php
 	}
 vtSaveTask($adb, $_REQUEST);

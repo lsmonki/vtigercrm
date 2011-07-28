@@ -41,6 +41,8 @@ class WebserviceField{
 	private $explicitDefaultValue;
 	
 	private $genericUIType = 10;
+
+	private $readOnly = 0;
 	
 	private function __construct($adb,$row){
 		$this->uitype = $row['uitype'];
@@ -69,6 +71,12 @@ class WebserviceField{
 		$this->defaultValuePresent = false;
 		$this->referenceList = null;
 		$this->explicitDefaultValue = false;
+
+		$this->readOnly = (isset($row['readonly']))? $row['readonly'] : 0;
+
+		if(array_key_exists('defaultvalue', $row)) {
+			$this->setDefault($row['defaultvalue']);
+		}
 	}
 	
 	public static function fromQueryResult($adb,$result,$rowNumber){
@@ -157,6 +165,11 @@ class WebserviceField{
 	
 	public function getUIType(){
 		return $this->uitype;
+	}
+
+	public function isReadOnly() {
+		if($this->readOnly == 1) return true;
+		return false;
 	}
 	
 	private function setNullable($nullable){

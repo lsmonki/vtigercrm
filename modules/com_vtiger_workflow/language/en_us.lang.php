@@ -38,6 +38,29 @@ $mod_strings = array(
 'LBL_NO_TEMPLATES'=>'No Templates',
 'LBL_SELECT'=>'Select',
 'LBL_MESSAGE'=>'Message',
+'LBL_SET_FIELD_VALUES'=>'Set Field Values',
+'LBL_ADD_FIELD'=>'Add Field',
+
+'LBL_USE_FIELD_VALUE_DASHDASH'=>'-- Use Field Value --',
+'LBL_USE_FUNCTION_DASHDASH'=>'-- Use Function --',
+
+'LBL_RAW_TEXT'=>'Raw Text',
+'LBL_FIELD'=>'Field',
+'LBL_EXPRESSION'=>'Expression',
+'LBL_SET_EXPRESSION'=>'Set Expression',
+
+'LBL_MANUAL'=>'System',
+
+'LBL_NEW_CONDITION_GROUP_BUTTON_LABEL'=>'New Condition Group',
+
+'VTUpdateFieldsTask' => 'Update Fields',
+
+
+'LBL_VALIDATION_DUPLICATE_FIELDNAMES' => 'Same field selected more than once.',
+'LBL_VALIDATION_INVALID_FIELD_VALUES' => 'Invalid field values',
+'LBL_CREATE_ENTITY_NOTE_ORDER_MATTERS' => 'Note: Expressions will be evaluated in the order of the field values provided.
+											So make sure to provide value for a field before using it in expressions.',
+'LBL_SET_VALUE' => 'Set Value',
 );
 
 

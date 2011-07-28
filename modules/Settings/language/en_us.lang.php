@@ -1202,5 +1202,34 @@ $mod_strings = Array(
 'LBL_ADD_CUSTOMFIELD' => 'Add Custom Field',
 
 'ERR_INVALID_PROFILE_ID' => 'Invalid Profile Id. Please specify valid Profile Id',
+
+// Customization
+'LBL_PUBLISHER' => 'Publisher',
+'LBL_PUBLISHED_ON' => 'Published On',
+'LBL_LICENSE'   => 'License',
+'LBL_EXTENSION_FILE_DOWNLOAD_FAILED' => 'Failed to download the extension package!',
+'LBL_DEFAULT'=>'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.',
+'LBL_OPTIONS1'=>'Send emails from your mail server<br>
+				- Enter the SMTP account details (Server Name, User Name, Password) for the same account as entered in the FROM email address.',
+'LBL_OPTIONS2'=>"Add od1.vtiger.com server as a authorized sender for your domain.<br>
+				- If you prefer to retain the vtiger server as the outgoing server, we recommend that you configure your domain's SPF record to include the vtiger server as a valid sender for your domain.
+				  For additonal instruction on setting up SPF record, please email od-support@vtiger.com .",
+'LBL_ALREADY_EXISTS' => 'Already Exists',
+'LBL_EXTENSION_INCOMPATIBLE' => 'Extension Incompatible',
+'LBL_INSTALL' => 'Install',
+'LBL_DEFAULT_SETTINGS_BUTTON_TITLE' => 'Reset To Default',
+'LBL_CONFIRM_DEFAULT_SETTINGS' => 'Are you sure that you want to change the server details to the default server values',
+'EXISTING_DEFAULT_VALUES' => 'The server details are already set to the default values',
+'LBL_NOTE' => 'Note:',
+'LBL_HIDE' => 'Hide Details',
+'LBL_SHOW' => 'Show Details',
+// END
+'LBL_USER_ADDITION_INFO'=>"To add a new user, please click on  
+			   <span style='font-style:italic;color:blue;'>OD-Settings Menu -> On Demand Admin -> Add / Invite User </span>",
+
+'LBL_READ_ONLY_ACCESS_MSG' => 'Read-Only Access',
+'LBL_READ_WRITE_ACCESS_MSG' => 'Read-Write Access',
+
+'LBL_DEFAULT_VALUE' => 'Default Value',
 );
 ?>

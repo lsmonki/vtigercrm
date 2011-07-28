@@ -446,7 +446,12 @@ if($mode=='view')
 			$field=array();
 			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src='".vtiger_imageurl('prvPrfSelectedTick.gif', $theme)."'>";
+				if($fieldListResult[$module_name][$j][3] == 1) {
+					$visible = "<img src='".vtiger_imageurl('locked.png', $theme)."'>";
+				} else {
+					$visible = "<img src='".vtiger_imageurl('unlocked.png', $theme)."'>";
+				}
+				//$visible = "<img src='".vtiger_imageurl('prvPrfSelectedTick.gif', $theme)."'>";
 			}
 			else
 			{
@@ -486,7 +491,9 @@ elseif($mode=='edit')
 			$mandatory = '';
 			$readonly = '';
 			$field=array();
-			if($fieldListResult[$module_name][$j][3] == 0)
+			$fieldAccessMandatory = false;
+			$fieldAccessRestricted = false;
+			if($fieldListResult[$module_name][$j][1] == 0)
 			{
 				$visible = "checked";
 			}
@@ -499,12 +506,14 @@ elseif($mode=='edit')
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
 				$visible = "checked";
+				$fieldAccessMandatory = true;
 			}
 			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
 				$mandatory = '<font color="blue">*</font>';
 				$readonly = 'disabled';
 				$visible = "";
+				$fieldAccessRestricted = true;
 			}
 			
 			if($language_strings[$fldLabel] != '')
@@ -513,6 +522,28 @@ elseif($mode=='edit')
 				$field[]=$mandatory.' '.$fldLabel;
 							
 			$field[]='<input id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'" onClick="selectUnselect(this);" type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+			
+			// Check for Read-Only or Read-Write Access for the field.
+			$fieldReadOnlyAccess = $fieldListResult[$module_name][$j][3];
+			if($fieldReadOnlyAccess == 1) {
+				$display_locked = "inline";
+				$display_unlocked = "none";
+			} else {
+				$display_locked = "none";
+				$display_unlocked = "inline";				
+			}	
+			if(!$fieldAccessMandatory && !$fieldAccessRestricted) {
+				$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+						'<a href="javascript:void(0);" onclick="toogleAccess(\''.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'\');">' .
+						'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_unlocked" src="'.vtiger_imageurl('unlocked.png', $theme).'" style="display:'.$display_unlocked.'" border="0">' .
+						'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_locked" src="'.vtiger_imageurl('locked.png', $theme).'" style="display:'.$display_locked.'" border="0"></a>';
+			} elseif($fieldAccessMandatory) {
+				$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="0" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+			} else {
+				$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+			}
 			$field_module[]=$field;
 		}
 		$privilege_field[$module_id] = array_chunk($field_module,3);
@@ -542,12 +573,15 @@ elseif($mode=='create')
 				$field=array();
 
 				
+				$fieldAccessMandatory = false;
+				$fieldAccessRestricted = false;
 				if($fieldtype[1] == "M")
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
+					$fieldAccessMandatory = true;
 				}	
-				if($fieldListResult[$module_name][$j][3] == 0)
+				if($fieldListResult[$module_name][$j][1] == 0)
 				{
 					$visible = 'checked';
 				}
@@ -560,12 +594,35 @@ elseif($mode=='create')
 					$mandatory = '<font color="blue">*</font>';
 					$readonly = 'disabled';
 					$visible = "";
+					$fieldAccessRestricted = true;
 				}
 				if($language_strings[$fldLabel] != '')
 					$field[]=$mandatory.' '.$language_strings[$fldLabel];
 				else
 					$field[]=$mandatory.' '.$fldLabel;
 				$field[]='<input type="checkbox" id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'" onClick="selectUnselect(this);" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+							
+				// Check for Read-Only or Read-Write Access for the field.
+				$fieldReadOnlyAccess = $fieldListResult[$module_name][$j][3];
+				if($fieldReadOnlyAccess == 1) {
+					$display_locked = "inline";
+					$display_unlocked = "none";
+				} else {
+					$display_locked = "none";
+					$display_unlocked = "inline";				
+				}	
+				if(!$fieldAccessMandatory && !$fieldAccessRestricted) {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+							'<a href="javascript:void(0);" onclick="toogleAccess(\''.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'\');">' .
+							'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_unlocked" src="'.vtiger_imageurl('unlocked.png', $theme).'" style="display:'.$display_unlocked.'" border="0">' .
+							'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_locked" src="'.vtiger_imageurl('locked.png', $theme).'" style="display:'.$display_locked.'" border="0"></a>';
+				} elseif($fieldAccessMandatory) {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="0" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+				} else {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+				}
 				$field_module[]=$field;
 			}
 			$privilege_field[$module_id] = array_chunk($field_module,3);
@@ -592,11 +649,13 @@ elseif($mode=='create')
 				$readonly = '';
 				$field=array();
 
-				
+				$fieldAccessMandatory = false;
+				$fieldAccessRestricted = false;				
 				if($fieldtype[1] == "M")
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
+					$fieldAccessMandatory = true;
 				}	
 				
 				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
@@ -604,6 +663,7 @@ elseif($mode=='create')
 					$mandatory = '<font color="blue">*</font>';
 					$readonly = 'disabled';
 					$visible = "";
+					$fieldAccessRestricted = true;
 				}else
 				{
 					$visible = "checked";
@@ -613,6 +673,28 @@ elseif($mode=='create')
 				else
 					$field[]=$mandatory.' '.$fldLabel;
 				$field[]='<input type="checkbox" id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'"  onClick="selectUnselect(this);" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+				
+				// Check for Read-Only or Read-Write Access for the field.
+				$fieldReadOnlyAccess = $fieldListResult[$module_name][$j][3];
+				if($fieldReadOnlyAccess == 1) {
+					$display_locked = "inline";
+					$display_unlocked = "none";
+				} else {
+					$display_locked = "none";
+					$display_unlocked = "inline";				
+				}	
+				if(!$fieldAccessMandatory && !$fieldAccessRestricted) {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+							'<a href="javascript:void(0);" onclick="toogleAccess(\''.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'\');">' .
+							'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_unlocked" src="'.vtiger_imageurl('unlocked.png', $theme).'" style="display:'.$display_unlocked.'" border="0">' .
+							'<img id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'_locked" src="'.vtiger_imageurl('locked.png', $theme).'" style="display:'.$display_locked.'" border="0"></a>';
+				} elseif($fieldAccessMandatory) {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="0" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+				} else {
+					$field[] = '<input type="hidden" id="'.$module_id.'_readonly_'.$fieldListResult[$module_name][$j][4].'" name="'.$fieldListResult[$module_name][$j][4].'_readonly" value="'.$fieldReadOnlyAccess.'" />' .
+							'<img src="'.vtiger_imageurl('blank.gif', $theme).'" style="display:inline" border="0">';
+				}
 				$field_module[]=$field;
 			}
 			$privilege_field[$module_id] = array_chunk($field_module,3);

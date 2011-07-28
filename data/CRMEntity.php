@@ -325,7 +325,7 @@ class CRMEntity
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2);"; 
+			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.readonly = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2);"; 
 			$perm_result = $adb->pquery($perm_qry, array($tabid, $profileList));
 			$perm_rows = $adb->num_rows($perm_result);
 			for($i=0; $i<$perm_rows; $i++)
@@ -426,7 +426,7 @@ class CRMEntity
 			  			INNER JOIN vtiger_def_org_field
 			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 			  			WHERE vtiger_field.tabid = ?
-			  			AND vtiger_profile2field.visible = 0 
+			  			AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.readonly = 0
 			  			AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
 			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2) group by columnname"; 
 			  			  
@@ -439,7 +439,7 @@ class CRMEntity
 			  			INNER JOIN vtiger_def_org_field
 			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 			  			WHERE vtiger_field.tabid = ?
-			  			AND vtiger_profile2field.visible = 0 
+			  			AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.readonly = 0
 			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2) group by columnname"; 
 			  	
 				$params = array($tabid, $table_name);
@@ -1188,7 +1188,7 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		
 		foreach($colf as $key=>$value) {
-			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
+			if (getFieldVisibilityPermission($module, $current_user->id, $key, 'readwrite') == '0')
 				$this->importable_fields[$key] = $value;
 		}
 	}
@@ -1783,7 +1783,7 @@ $log->info("in getOldFileName  ".$notesid);
 			if($actions) {
 				if(is_string($actions)) $actions = explode(',', strtoupper($actions));
 				if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes' 
-						&& getFieldVisibilityPermission($related_module,$current_user->id,$dependentField) == '0') {
+						&& getFieldVisibilityPermission($related_module,$current_user->id,$dependentField,'readwrite') == '0') {
 					$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname, $related_module) ."' class='crmbutton small create'" .
 						" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
 						" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname, $related_module) ."'>&nbsp;";

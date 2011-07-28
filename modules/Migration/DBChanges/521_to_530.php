@@ -96,11 +96,34 @@ vt530_registerVTEntityDeltaApi();
 vt530_addDependencyColumnToEventHandler();
 vt530_addDepedencyToVTWorkflowEventHandler();
 
+// Workflow changes
+if(!in_array('type', $adb->getColumnNames('com_vtiger_workflows'))) {
+	$adb->pquery("ALTER TABLE com_vtiger_workflows ADD COLUMN type VARCHAR(255) DEFAULT 'basic'", array());
+}
+
+// Read-Only configuration for fields at Profile level
+$adb->query("UPDATE vtiger_def_org_field SET readonly=0");
+$adb->query("UPDATE vtiger_profile2field SET readonly=0");
+
+// Modify selected column to enable support for setting default values for fields
+$adb->query("ALTER TABLE vtiger_field CHANGE COLUMN selected defaultvalue TEXT default ''");
+$adb->query("UPDATE vtiger_field SET defaultvalue='' WHERE defaultvalue='0'");
+
+// Scheduled Reports (Email)
+$adb->pquery("CREATE TABLE IF NOT EXISTS vtiger_scheduled_reports(reportid INT, recipients TEXT, schedule TEXT,
+									format VARCHAR(10), next_trigger_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(reportid))
+				ENGINE=InnoDB DEFAULT CHARSET=utf8;", array());
+
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
 
 updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
 updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
+updateVtlibModule('Services', 'packages/vtiger/mandatory/Services.zip');
+updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContracts.zip');
+updateVtlibModule('PBXManager','packages/vtiger/mandatory/PBXManager.zip');
+updateVtlibModule('ModComments', 'packages/vtiger/optional/ModComments.zip');
+updateVtlibModule('SMSNotifier', 'packages/vtiger/optional/SMSNotifier.zip');
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0  -------- Ends \n\n");
 

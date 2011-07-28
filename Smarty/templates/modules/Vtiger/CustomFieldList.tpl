@@ -70,7 +70,7 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
 }
 function makeFieldSelected(oField,fieldid,blockid)
 {
-	if(gselected_fieldtype != '')
+    if(gselected_fieldtype != '')
 	{
 		$(gselected_fieldtype).className = 'customMnu';
 	}
@@ -119,10 +119,9 @@ var gselected_fieldtype = '';
 				<div id="cfList">
                                 {include file="'Leads'|@vtlib_getModuleTemplate:'LeadsCustomEntries.tpl'}
                 </div>	
-                {/if}
-                {if $MODULE eq 'Calendar'}
+                {else}
                 <div id="cfList">
-                                {include file="'Calendar'|@vtlib_getModuleTemplate:'CustomFieldEntries.tpl'}
+                                {include file="'Vtiger'|@vtlib_getModuleTemplate:'CustomFieldEntries.tpl'}
                 </div>	
                 {/if}
             <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -135,16 +134,10 @@ var gselected_fieldtype = '';
 			</tr>
 			</table>
 		<!-- End of Display -->
-		
+		</div>
 		</td>
         </tr>
-        </table>
-        </td>
-        </tr>
-        </table>
-        </div>
-
-        </td>
+        <tr>
         <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
         </tr>
 </tbody>

@@ -47,11 +47,11 @@ function check_duplicate()
 							if(response.responseText.indexOf('SUCCESS') > -1)
 							{ldelim}
 							//	$('user_status').disabled = false;
-						                document.EditView.submit();
+								document.EditView.submit();
 							{rdelim}
 			       				else {ldelim}
-			       						VtigerJS_DialogBox.unblock();
-						                alert(response.responseText);
+			       					VtigerJS_DialogBox.unblock();
+									alert(response.responseText);
 						        {rdelim}
 			            {rdelim}
                 {rdelim}

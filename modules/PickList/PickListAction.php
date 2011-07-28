@@ -83,6 +83,9 @@ if($mode == 'add'){
 					
 					$sql = "update $table_name set $columnName=? where $columnName=?";
 					$adb->pquery($sql, array($newVal, $oldVal));
+					
+					$sql = "UPDATE vtiger_field SET defaultvalue=? WHERE defaultvalue=? AND tablename=? AND columnname=?";
+					$adb->pquery($sql, array($newVal, $oldVal, $table_name, $columnName));
 				}
 			}
 		}
@@ -134,6 +137,9 @@ if($mode == 'add'){
 				
 				$sql = "update $table_name set $columnName=? where $columnName=?";
 				$adb->pquery($sql, array($replaceVal, $values[$i]));
+					
+				$sql = "UPDATE vtiger_field SET defaultvalue=? WHERE defaultvalue=? AND tablename=? AND columnname=?";
+				$adb->pquery($sql, array($replaceVal, $values[$i], $table_name, $columnName));
 			}
 		}
 	}

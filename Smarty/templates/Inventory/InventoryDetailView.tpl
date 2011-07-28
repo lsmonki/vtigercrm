@@ -265,8 +265,9 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 			{assign var=keycursymb value=$data.cursymb}
 			{assign var=keysalut value=$data.salut}
 			{assign var=keycntimage value=$data.cntimage}
-			   {assign var=keyadmin value=$data.isadmin}
-							   
+			{assign var=keyadmin value=$data.isadmin}
+			{assign var=display_type value=$data.displaytype}
+			{assign var=_readonly value=$data.readonly}
 
 				{if $label ne ''}
 					{if $keycntimage ne ''}
@@ -278,7 +279,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{/if}
 					{/if}  
-					{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2'}
+					{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2' && $_readonly eq '0'}
 						{* Performance Optimization Control *}
 						{if !empty($DETAILVIEW_AJAX_EDIT) }
 							{include file="DetailViewUI.tpl"}

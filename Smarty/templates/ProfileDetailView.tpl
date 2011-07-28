@@ -331,10 +331,16 @@ function UpdateProfile()
                 </tr>
 		<table border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td align="left"><font color="red" size=5>*</font>{$CMOD.LBL_MANDATORY_MSG}</td>
+				<td align="left"><font color="red" size=5>*</font>&nbsp;{$CMOD.LBL_MANDATORY_MSG}</td>
 			</tr>
 			<tr>
-				<td align="left"><font color="blue" size=5>*</font>{$CMOD.LBL_DISABLE_FIELD_MSG}</td>
+				<td align="left"><font color="blue" size=5>*</font>&nbsp;{$CMOD.LBL_DISABLE_FIELD_MSG}</td>
+			</tr>
+			<tr>
+				<td align="left"><img src="{'locked.png'|@vtiger_imageurl:$THEME}" />&nbsp;{$CMOD.LBL_READ_ONLY_ACCESS_MSG}</td>
+			</tr>
+			<tr>
+				<td align="left"><img src="{'unlocked.png'|@vtiger_imageurl:$THEME}" />&nbsp;{$CMOD.LBL_READ_WRITE_ACCESS_MSG}</td>
 			</tr>
 		</table>
 		<tr>

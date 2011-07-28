@@ -347,7 +347,7 @@ class Vtiger_PackageExport {
 			$this->outputNode($fieldresultrow['fieldlabel'],    'fieldlabel');
 			$this->outputNode($fieldresultrow['readonly'],      'readonly');
 			$this->outputNode($fieldresultrow['presence'],      'presence');
-			$this->outputNode($fieldresultrow['selected'],      'selected');
+			$this->outputNode($fieldresultrow['defaultvalue'],  'defaultvalue');
 			$this->outputNode($fieldresultrow['sequence'],      'sequence');
 			$this->outputNode($fieldresultrow['maximumlength'], 'maximumlength');
 			$this->outputNode($fieldresultrow['typeofdata'],    'typeofdata');

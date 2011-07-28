@@ -18,8 +18,8 @@ require_once("include/DatabaseUtil.php");
 
 if(!function_exists('GetRelatedList')) {
 	function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',
-			$edit_val='',$del_val='') {
-		return GetRelatedListBase($module, $relatedmodule, $focus, $query, $button, $returnset, $id, $edit_val, $del_val);
+			$edit_val='',$del_val='',$skipActions=false) {
+		return GetRelatedListBase($module, $relatedmodule, $focus, $query, $button, $returnset, $id, $edit_val, $del_val, $skipActions);
 	}
 }
 
@@ -37,7 +37,7 @@ if(!function_exists('GetRelatedList')) {
   *
   */
 
-function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='')
+function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='',$skipActions=false)
 {
 	$log = LoggerManager::getLogger('account_list');
 	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".get_class($focus).",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
@@ -197,7 +197,7 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 
 	//Retreive the List View Table Header
 	$id = vtlib_purify($_REQUEST['record']);
-	$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
+	$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module,$skipActions);//"Accounts");
 	if ($noofrows > 15) {
 		$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
 		$smarty->assign('SCROLLSTOP','</div>');
@@ -205,14 +205,14 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 	$smarty->assign("LISTHEADER", $listview_header);
 
 	if($module == 'PriceBook' && $relatedmodule == 'Products') {
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val,'','','','',$skipActions);
 	}
 	if($module == 'Products' && $relatedmodule == 'PriceBook') {
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel');
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel','','','','',$skipActions);
 	} elseif($relatedmodule == 'SalesOrder') {
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder','','','','',$skipActions);
 	}else {
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val,'','','','',$skipActions);
 	}
 
 	$navigationOutput = Array();

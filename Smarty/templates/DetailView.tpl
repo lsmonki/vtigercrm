@@ -275,7 +275,7 @@ function sendfile_email()
 							{include file='DetailViewHidden.tpl'}
 						
 							  <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
-							 {include_php file="./include/DetailViewBlockStatus.php"}
+							 {include_php file="include/DetailViewBlockStatus.php"}
 							 <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
 
 							{foreach key=header item=detail from=$BLOCKS}
@@ -353,7 +353,7 @@ function sendfile_email()
 							   {assign var=keycntimage value=$data.cntimage}
 							   {assign var=keyadmin value=$data.isadmin}
 							   {assign var=display_type value=$data.displaytype}
-							   
+							   {assign var=_readonly value=$data.readonly}
 							   
                            {if $label ne ''}
 	                        {if $keycntimage ne ''}
@@ -363,7 +363,7 @@ function sendfile_email()
 				{else}
 					<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 				{/if}
-				{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2'}
+				{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2' && $_readonly eq '0'}
 					{* Performance Optimization Control *}
 					{if !empty($DETAILVIEW_AJAX_EDIT) }
 						{include file="DetailViewUI.tpl"}

@@ -34,7 +34,7 @@
 <fieldlabel>Call From</fieldlabel>
 <readonly>1</readonly>
 <presence>0</presence>
-<selected>0</selected>
+<defaultvalue></defaultvalue>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
@@ -58,7 +58,7 @@
 <fieldlabel>Call To</fieldlabel>
 <readonly>1</readonly>
 <presence>0</presence>
-<selected>0</selected>
+<defaultvalue></defaultvalue>
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
@@ -78,7 +78,7 @@
 <fieldlabel>Time Of Call</fieldlabel>
 <readonly>1</readonly>
 <presence>0</presence>
-<selected>0</selected>
+<defaultvalue></defaultvalue>
 <sequence>3</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
@@ -98,7 +98,7 @@
 <fieldlabel>Status</fieldlabel>
 <readonly>1</readonly>
 <presence>0</presence>
-<selected>0</selected>
+<defaultvalue></defaultvalue>
 <sequence>4</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>

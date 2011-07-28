@@ -290,8 +290,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
-		<field name="selected" type="I" size="1">
-			<notnull />
+		<field name="defaultvalue" type="X">
 		</field>
 		<field name="maximumlength" type="I" size="19" />
 		<field name="sequence" type="I" size="19" />
@@ -6774,6 +6773,8 @@
 		</field>
 		<field name="defaultworkflow" type="I" size="1">
 		</field>
+		<field name="type" type="C" size="255">
+		</field>
 		<index name="com_vtiger_workflows_idx">
 			<unique />
 			<col>workflow_id</col>
@@ -7286,6 +7287,22 @@
 		<field name="group_condition" type="C" size="256">
 		</field>
 		<field name="condition_expression" type="X">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>	
+	
+	<table name="vtiger_scheduled_reports">
+		<field name="reportid" type="I">
+			<key />
+		</field>
+		<field name="recipients" type="X">
+		</field>
+		<field name="schedule" type="X">
+		</field>
+		<field name="format" type="C" size="10">
+		</field>
+		<field name="next_trigger_time" type="TS">
+			<DEFTIMESTAMP/>
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>

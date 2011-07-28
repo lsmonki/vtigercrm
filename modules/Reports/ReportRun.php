@@ -110,15 +110,23 @@ class ReportRun extends CRMEntity
 			$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			
-			$mod_strings = return_module_language($current_language,$module);
-			$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+			if(isset($module) && $module!="") {
+				$mod_strings = return_module_language($current_language,$module);
+			}
+
+			$fieldlabel = trim(preg_replace("/$module/"," ",$selectedfields[2],1));
 			$mod_arr=explode('_',$fieldlabel);
-			$mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
 			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
 			//modified code to support i18n issue
 			$fld_arr = explode(" ",$fieldlabel);
-			$mod_lbl = getTranslatedString($fld_arr[0],$module); //module
-			array_shift($fld_arr);
+			if(($mod_arr[0] == '')) {
+				$mod = $module;
+				$mod_lbl = getTranslatedString($module,$module); //module
+			} else {
+				$mod = $mod_arr[0];
+				array_shift($fld_arr);
+				$mod_lbl = getTranslatedString($fld_arr[0],$mod); //module
+			}
 			$fld_lbl_str = implode(" ",$fld_arr);
 			$fld_lbl = getTranslatedString($fld_lbl_str,$module); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
@@ -133,6 +141,7 @@ class ReportRun extends CRMEntity
 			}
 			else
 			{
+				$this->labelMapping[$selectedfields[2]] = str_replace(" ","_",$fieldlabel);
 				$header_label = $selectedfields[2]; // Header label to be displayed in the reports table
 				// To check if the field in the report is a custom field
 				// and if yes, get the label of this custom field freshly from the vtiger_field as it would have been changed.
@@ -1645,7 +1654,7 @@ class ReportRun extends CRMEntity
 		{
 			$stdfiltersql = implode(", ",$stdfilterlist);
 		}
-		if(isset($filterlist))
+		if(!empty($filterlist))
 		{
 			$stdfiltersql = implode(", ",$filterlist);
 		}
@@ -2628,13 +2637,13 @@ class ReportRun extends CRMEntity
 						$fieldlist = explode(":",$key);
 						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
 						if($adb->num_rows($mod_query)>0){
-							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+							$module_name = getTabModuleName($adb->query_result($mod_query,0,'tabid'));
 							$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
 							$fieldlabel = str_replace("_", " ", $fieldlabel);
 							if($module_name){
-								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
+								$field = getTranslatedString($module_name, $module_name)." ".getTranslatedString($fieldlabel,$module_name);
 							} else {
-								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
+								$field = getTranslatedString($fieldlabel);
 							}
 						}
 						$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
@@ -2894,23 +2903,28 @@ class ReportRun extends CRMEntity
 	function getLstringforReportHeaders($fldname)
 	{
 		global $modules,$current_language,$current_user,$app_strings;
-		$rep_header = ltrim(str_replace($modules," ",$fldname));
-		$rep_header_temp = preg_replace("/\s+/","_",$rep_header);
-		$rep_module = preg_replace("/_$rep_header_temp/","",$fldname);
-		$temp_mod_strings = return_module_language($current_language,$rep_module);	
-		// htmlentities should be decoded in field names (eg. &). Noticed for fields like 'Terms & Conditions', 'S&H Amount'
-		$rep_header = decode_html($rep_header);		
+		$rep_header = ltrim($fldname);
+		$rep_header = decode_html($rep_header);
+		$labelInfo = explode('_', $rep_header);
+		$rep_module = $labelInfo[0];
+		if(is_array($this->labelMapping) && !empty($this->labelMapping[$rep_header])) {
+			$rep_header = $this->labelMapping[$rep_header];
+		} else {
+			if($rep_module == 'LBL') {
+				$rep_module = '';
+			}
+			array_shift($labelInfo);
+			$fieldLabel = decode_html(implode("_",$labelInfo));
+			$rep_header_temp = preg_replace("/\s+/","_",$fieldLabel);
+			$rep_header = "$rep_module $fieldLabel";
+		}
 		$curr_symb = "";
 		if(in_array($fldname, $this->convert_currency)) {
         	$curr_symb = " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 		}
-        if($temp_mod_strings[$rep_header] != '')
-        {
-            $rep_header = $temp_mod_strings[$rep_header];
-        }
         $rep_header .=$curr_symb;
-        	
-		return $rep_header;  
+
+		return $rep_header;
 	}
 
 	/** Function to get picklist value array based on profile
@@ -2990,6 +3004,179 @@ class ReportRun extends CRMEntity
 		return $fieldlists;
 	}
 
+	function getReportPDF($filterlist='') {
+		require_once 'include/tcpdf/tcpdf.php';
+
+		$arr_val = $this->GenerateReport("PDF",$filterlist);
+
+		if(isset($arr_val)) {
+			foreach($arr_val as $wkey=>$warray_value) {
+				foreach($warray_value as $whd=>$wvalue) {
+					if(strlen($wvalue) < strlen($whd)) {
+						$w_inner_array[] = strlen($whd);
+					} else {
+						$w_inner_array[] = strlen($wvalue);
+					}
+				}
+				$warr_val[] = $w_inner_array;
+				unset($w_inner_array);
+			}
+
+			foreach($warr_val[0] as $fkey=>$fvalue) {
+				foreach($warr_val as $wkey=>$wvalue) {
+					$f_inner_array[] = $warr_val[$wkey][$fkey];
+				}
+				sort($f_inner_array,1);
+				$farr_val[] = $f_inner_array;
+				unset($f_inner_array);
+			}
+
+			foreach($farr_val as $skkey=>$skvalue) {
+				if($skvalue[count($arr_val)-1] == 1) {
+					$col_width[] = ($skvalue[count($arr_val)-1] * 50);
+				} else {
+					$col_width[] = ($skvalue[count($arr_val)-1] * 10) + 10 ;
+				}
+			}
+			$count = 0;
+			foreach($arr_val[0] as $key=>$value) {
+				$headerHTML .= '<td width="'.$col_width[$count].'" bgcolor="#DDDDDD"><b>'.$this->getLstringforReportHeaders($key).'</b></td>';
+				$count = $count + 1;
+			}
+
+			foreach($arr_val as $key=>$array_value) {
+				$valueHTML = "";
+				$count = 0;
+				foreach($array_value as $hd=>$value) {
+					$valueHTML .= '<td width="'.$col_width[$count].'">'.$value.'</td>';
+					$count = $count + 1;
+				}
+				$dataHTML .= '<tr>'.$valueHTML.'</tr>';
+			}
+
+		}
+
+		$totalpdf = $this->GenerateReport("PRINT_TOTAL",$filterlist);
+		$html = '<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'<tr><td>'.$totalpdf.'</td></tr>'.'</table>';
+		$columnlength = array_sum($col_width);
+		if($columnlength > 14400) {
+			die("<br><br><center>".$app_strings['LBL_PDF']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+		}
+		if($columnlength <= 420 ) {
+			$pdf = new TCPDF('P','mm','A5',true);
+		
+		} elseif($columnlength >= 421 && $columnlength <= 1120) {
+			$pdf = new TCPDF('L','mm','A3',true);
+
+		}elseif($columnlength >=1121 && $columnlength <= 1600) {
+			$pdf = new TCPDF('L','mm','A2',true);
+
+		}elseif($columnlength >=1601 && $columnlength <= 2200) {
+			$pdf = new TCPDF('L','mm','A1',true);
+		}
+		elseif($columnlength >=2201 && $columnlength <= 3370) {
+			$pdf = new TCPDF('L','mm','A0',true);
+		}
+		elseif($columnlength >=3371 && $columnlength <= 4690) {
+			$pdf = new TCPDF('L','mm','2A0',true);
+		}
+		elseif($columnlength >=4691 && $columnlength <= 6490) {
+			$pdf = new TCPDF('L','mm','4A0',true);
+		}
+		else {
+			$columnhight = count($arr_val)*15;
+			$format = array($columnhight,$columnlength);
+			$pdf = new TCPDF('L','mm',$format,true);
+		}
+		$pdf->SetMargins(10, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		$pdf->setLanguageArray($l);
+		//echo '<pre>';print_r($columnlength);echo '</pre>';
+		$pdf->AddPage();
+
+		$pdf->SetFillColor(224,235,255);
+		$pdf->SetTextColor(0);
+		$pdf->SetFont('FreeSerif','B',14);
+		$pdf->Cell(($pdf->columnlength*50),10,getTranslatedString($oReport->reportname),0,0,'C',0);
+		//$pdf->writeHTML($oReport->reportname);
+		$pdf->Ln();
+
+		$pdf->SetFont('FreeSerif','',10);
+
+		$pdf->writeHTML($html);
+
+		return $pdf;
+	}
+
+	function writeReportToExcelFile($fileName, $filterlist='') {
+
+		global $currentModule, $current_language;
+		$mod_strings = return_module_language($current_language, $currentModule);
+		
+		require_once("include/php_writeexcel/class.writeexcel_workbook.inc.php");
+		require_once("include/php_writeexcel/class.writeexcel_worksheet.inc.php");
+
+		$workbook = &new writeexcel_workbook($fileName);
+		$worksheet =& $workbook->addworksheet();
+
+		# Set the column width for columns 1, 2, 3 and 4
+		$worksheet->set_column(0, 3, 25);
+
+		# Create a format for the column headings
+		$header =& $workbook->addformat();
+		$header->set_bold();
+		$header->set_size(12);
+		$header->set_color('blue');
+
+		$arr_val = $this->GenerateReport("PDF",$filterlist);
+		$totalxls = $this->GenerateReport("TOTALXLS",$filterlist);
+
+		if(isset($arr_val)) {
+			foreach($arr_val[0] as $key=>$value) {
+				$worksheet->write(0, $count, $key , $header);
+				$count = $count + 1;
+			}
+			$rowcount=1;
+			foreach($arr_val as $key=>$array_value) {
+				$dcount = 0;
+				foreach($array_value as $hdr=>$value) {
+					//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
+					$value = decode_html($value);
+					$worksheet->write($key+1, $dcount, utf8_decode($value));
+					$dcount = $dcount + 1;
+				}
+				$rowcount++;
+			}
+
+			$rowcount++;
+			$count=0;
+			if(is_array($totalxls[0])) {
+				foreach($totalxls[0] as $key=>$value) {
+					$chdr=substr($key,-3,3);
+					$translated_str = in_array($chdr ,array_keys($mod_strings))?$mod_strings[$chdr]:$key;
+					$worksheet->write($rowcount, $count, $translated_str);
+					$count = $count + 1;
+				}
+			}
+			$rowcount++;
+			foreach($totalxls as $key=>$array_value) {
+				$dcount = 0;
+				foreach($array_value as $hdr=>$value) {
+					//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
+					//if ($dcount==1)
+					//		$worksheet->write($key+$rowcount, 0, utf8_decode(substr($hdr,0,strlen($hdr)-4)));
+					$value = decode_html($value);
+					$worksheet->write($key+$rowcount, $dcount, utf8_decode($value));
+					$dcount = $dcount + 1;
+				}
+			}
+		}
+		$workbook->close();
+	}
 
 }
 ?>

@@ -388,32 +388,37 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 55 || $uitype == 255){
 		require_once 'modules/PickList/PickListUtils.php';
 		if($uitype==255){
-			$fieldpermission = getFieldVisibilityPermission($module_name, $current_user->id,'firstname');
+			$fieldpermission = getFieldVisibilityPermission($module_name, $current_user->id,'firstname', 'readwrite');
 		}
 		if($uitype == 255 && $fieldpermission == '0'){
 			$fieldvalue[] = '';
 		}else{
-			$roleid=$current_user->roleid;
-			$picklistValues = getAssignedPicklistValues('salutationtype', $roleid, $adb);
-			$pickcount = 0;
-			$salt_value = $col_fields["salutationtype"];
-			foreach($picklistValues as $order=>$pickListValue){
-				if($salt_value == trim($pickListValue)){
-					$chk_val = "selected";
-					$pickcount++;
-				}else{
-					$chk_val = '';
+			$fieldpermission = getFieldVisibilityPermission($module_name, $current_user->id,'salutationtype', 'readwrite');
+			if($fieldpermission == '0'){
+				$roleid=$current_user->roleid;
+				$picklistValues = getAssignedPicklistValues('salutationtype', $roleid, $adb);
+				$pickcount = 0;
+				$salt_value = $col_fields["salutationtype"];
+				foreach($picklistValues as $order=>$pickListValue){
+					if($salt_value == trim($pickListValue)){
+						$chk_val = "selected";
+						$pickcount++;
+					}else{
+						$chk_val = '';
+					}
+					if(isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate'){
+						$options[] = array(htmlentities(getTranslatedString($pickListValue),ENT_QUOTES,$default_charset),$pickListValue,$chk_val );	
+					}else{
+						$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val);
+					}
 				}
-				if(isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate'){
-					$options[] = array(htmlentities(getTranslatedString($pickListValue),ENT_QUOTES,$default_charset),$pickListValue,$chk_val );	
-				}else{
-					$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val);
+				if($pickcount == 0 && $salt_value != ''){
+					$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$salt_value,'selected');
 				}
+				$fieldvalue [] = $options;
+			} else {
+				$fieldvalue[] = '';				
 			}
-			if($pickcount == 0 && $salt_value != ''){
-				$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$salt_value,'selected');
-			}
-			$fieldvalue [] = $options;
 		}
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $value;
@@ -1948,8 +1953,8 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 	}
 	
 
-	for($i=0; $i<$noofrows; $i++)
-	{
+	for($i=0; $i<$noofrows; $i++) {
+		
 		$fieldtablename = $adb->query_result($result,$i,"tablename");	
 		$fieldcolname = $adb->query_result($result,$i,"columnname");	
 		$uitype = $adb->query_result($result,$i,"uitype");	
@@ -1959,26 +1964,16 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 		$typeofdata = $adb->query_result($result,$i,"typeofdata");
+		$defaultvalue = $adb->query_result($result,$i,"defaultvalue");
+		if($mode == '' && empty($col_fields[$fieldname])) {
+			$col_fields[$fieldname] = $defaultvalue;
+		}
 		
 		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode,$typeofdata);
 		$editview_arr[$block][]=$custfld;
+		
 		if ($mvAdd_flag == true)
-		$mvAdd_flag = false;
-		$i++;
-		if($i<$noofrows)
-		{
-			$fieldtablename = $adb->query_result($result,$i,"tablename");	
-			$fieldcolname = $adb->query_result($result,$i,"columnname");	
-			$uitype = $adb->query_result($result,$i,"uitype");	
-			$fieldname = $adb->query_result($result,$i,"fieldname");	
-			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			$block = $adb->query_result($result,$i,"block");
-			$maxlength = $adb->query_result($result,$i,"maximumlength");
-			$generatedtype = $adb->query_result($result,$i,"generatedtype");
-			$typeofdata = $adb->query_result($result,$i,"typeofdata");
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode,$typeofdata);			
-			$editview_arr[$block][]=$custfld;
-		}
+			$mvAdd_flag = false;		
 	}
 	foreach($editview_arr as $headerid=>$editview_value)
 	{
@@ -2005,6 +2000,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 		}
 		$editview_arr[$headerid] = $editview_data;
 	}
+	
 	foreach($block_label as $blockid=>$label)
 	{
 		if($label == '')

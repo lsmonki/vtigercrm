@@ -302,5 +302,7 @@
 				'LBL_ENTER_WINDOW_TITLE': 'Please enter Window Title.',
 				'LBL_SELECT_ONLY_FIELDS': 'Please select only two fields.',
 				'LBL_ENTER_RSS_URL':'Please enter RSS URL',
-				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again'
+				'LBL_ADD_HOME_WIDGET': 'Unable to add homestuff! Please try again',
+				
+				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field'
 			};

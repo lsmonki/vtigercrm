@@ -4118,7 +4118,7 @@ function getGrpId($groupname)
   * @returns $rolename -- Role Name :: Type varchar
   *
  */
-function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
+function getFieldVisibilityPermission($fld_module, $userid, $fieldname, $accessmode='readonly')
 {
 	global $log;
 	$log->debug("Entering getFieldVisibilityPermission(".$fld_module.",". $userid.",". $fieldname.") method ...");
@@ -4149,11 +4149,20 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 		$tabid = getTabid($fld_module);
 
 		if (count($profilelist) > 0) {
-			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
- 			$params = array($tabid, $profilelist, $fieldname);
+			if($accessmode == 'readonly') {			
+				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+			} else {
+				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+			}
+			$params = array($tabid, $profilelist, $fieldname);
+			
 		} else {
-			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
- 			$params = array($tabid, $fieldname);			
+			if($accessmode == 'readonly') {			
+				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+ 			} else {
+				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+			}
+			$params = array($tabid, $fieldname);			
 		}
  		//Postgres 8 fixes
  		if( $adb->dbType == "pgsql")
@@ -4175,7 +4184,7 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
  * @param $columnname -- columnname :: Type String
  * @param $module -- Module Name :: Type varchar
  */
-function getColumnVisibilityPermission($userid,$columnname, $module)
+function getColumnVisibilityPermission($userid, $columnname, $module, $accessmode='readonly')
 {
 	global $adb,$log;
 	$log->debug("in function getcolumnvisibilitypermission $columnname -$userid");
@@ -4191,7 +4200,7 @@ function getColumnVisibilityPermission($userid,$columnname, $module)
 		$fieldname = $cacheFieldInfo['fieldname'];
 	}
 	
-	return getFieldVisibilityPermission($module,$userid,$fieldname);
+	return getFieldVisibilityPermission($module,$userid,$fieldname,$accessmode);
 }	
 
 /** Function to get the vtiger_field access module array 
