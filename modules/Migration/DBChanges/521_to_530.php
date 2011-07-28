@@ -47,9 +47,6 @@ function vt530_addEmailFieldTypeInWs(){
 		$sql = 'insert into vtiger_ws_fieldtype(uitype,fieldtype) values (?,?)';
 		$params = array( '13', 'email');
 		$db->pquery($sql, $params);
-		//$sql = "update vtiger_field set uitype=? where uitype=?";
-		//$params = array('13','104');
-		//$db->pquery($sql, $params);
 		echo "<br> Added Email in webservices types ";
 	}
 }
