@@ -67,6 +67,9 @@ if(!is_string($_SESSION[$currentModule.'_listquery'])){
 		}
 	}
 }else{
+	//TODO: remove after calendar module listview cleanup.
+	//its failing for calendar module.
+	$dummyQuery = getListQuery($currentModule);
 	$list_query = $_SESSION[$currentModule.'_listquery'];
 }
 
