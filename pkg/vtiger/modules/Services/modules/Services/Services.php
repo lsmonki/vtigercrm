@@ -140,7 +140,7 @@ class Services extends CRMEntity {
 	function save_module($module)
 	{
 		//Inserting into service_taxrel table
-		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['ajxaction'] != 'DETAILVIEW'&& $_REQUEST['action'] != 'MassEditSave')
 		{
 			$this->insertTaxInformation('vtiger_producttaxrel', 'Services');
 			$this->insertPriceInformation('vtiger_productcurrencyrel', 'Services');

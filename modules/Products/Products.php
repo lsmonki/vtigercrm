@@ -126,7 +126,7 @@ class Products extends CRMEntity {
 	function save_module($module)
 	{
 		//Inserting into product_taxrel table
-		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			$this->insertTaxInformation('vtiger_producttaxrel', 'Products');
 			$this->insertPriceInformation('vtiger_productcurrencyrel', 'Products');
