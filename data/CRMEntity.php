@@ -2049,7 +2049,7 @@ $log->info("in getOldFileName  ".$notesid);
 		if($pritablename=='vtiger_crmentityrel'){
 			$condition = "($table_name.$column_name={$tmpname}.{$secfieldname} ".
 			"OR $table_name.$column_name={$tmpname}.{$prifieldname})";
-			$query = " left join vtiger_crmentityrel  ON ($condvalue={$tmpname}.{$secfieldname} ".
+			$query = " left join vtiger_crmentityrel as $tmpname ON ($condvalue={$tmpname}.{$secfieldname} ".
 			"OR $condvalue={$tmpname}.{$prifieldname}) ";
 		} elseif(strripos($pritablename, 'rel') === (strlen($pritablename) - 3)) {
 			$instance = self::getInstance($module);
