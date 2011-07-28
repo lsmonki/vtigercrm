@@ -161,10 +161,11 @@ else
 	   INNER JOIN vtiger_accountshipads ON vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 	   INNER JOIN vtiger_accountscf ON vtiger_account.accountid = vtiger_accountscf.accountid
 	   INNER JOIN vtiger_contactdetails contactdetails ON vtiger_account.accountid = contactdetails.accountid
+	   INNER JOIN vtiger_crmentity contactdetails_crmentity ON contactdetails.contactid = contactdetails_crmentity.crmid
 	   INNER JOIN vtiger_contactscf contactscf ON contactscf.contactid = contactdetails.contactid
 	   LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 	   LEFT JOIN vtiger_groups ON vtiger_crmentity.smownerid=vtiger_groups.groupid
-	   WHERE vtiger_crmentity.deleted=0 AND contactdetails.email != '' ".$where;
+	   WHERE vtiger_crmentity.deleted=0 AND contactdetails_crmentity.deleted=0 AND contactdetails.email != '' ".$where;
 
 	 if (strlen ($exportWhere))
 	      $exquery[0] .= " AND ".$exportWhere;
@@ -179,10 +180,11 @@ else
 		    INNER JOIN vtiger_accountshipads ON vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 		    INNER JOIN vtiger_accountscf ON vtiger_account.accountid = vtiger_accountscf.accountid
 		    INNER JOIN vtiger_contactdetails contactdetails ON vtiger_account.accountid = contactdetails.accountid
+			INNER JOIN vtiger_crmentity contactdetails_crmentity ON contactdetails.contactid = contactdetails_crmentity.crmid
 		    INNER JOIN vtiger_contactscf contactscf ON contactscf.contactid = contactdetails.contactid
 	   LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 	   LEFT JOIN vtiger_groups ON vtiger_crmentity.smownerid=vtiger_groups.groupid
-		    WHERE vtiger_crmentity.deleted=0
+		    WHERE vtiger_crmentity.deleted=0 AND contactdetails_crmentity.deleted=0
 		    AND contactdetails.email = '' AND vtiger_account.email1 != '' ".$where;
 
      		if (strlen ($exportWhere))
@@ -209,10 +211,11 @@ else
 	      ." LEFT JOIN vtiger_accountshipads ON vtiger_account.accountid=vtiger_accountshipads.accountaddressid"
 	      ." INNER JOIN vtiger_accountscf ON vtiger_account.accountid = vtiger_accountscf.accountid"
 	      ." INNER JOIN vtiger_contactdetails contactdetails ON vtiger_account.accountid = contactdetails.accountid"
+		." INNER JOIN vtiger_crmentity contactdetails_crmentity ON contactdetails.contactid = contactdetails_crmentity.crmid"
 	      ." INNER JOIN vtiger_contactscf contactscf ON contactscf.contactid = contactdetails.contactid
 	   LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 	   LEFT JOIN vtiger_groups ON vtiger_crmentity.smownerid=vtiger_groups.groupid"
-	      ." WHERE vtiger_crmentity.deleted=0 ".$where;
+	      ." WHERE vtiger_crmentity.deleted=0 AND contactdetails_crmentity.deleted=0 ".$where;
 
 	  if (strlen ($exportWhere))
 	      $exquery[0] .= " AND ".$exportWhere;
