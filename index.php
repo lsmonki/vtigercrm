@@ -287,7 +287,7 @@ if($use_current_login){
 	$log->debug("We are authenticating user now");
 }else{
 	if($_REQUEST['action'] != 'Logout' && $_REQUEST['action'] != 'Login'){
-		$_SESSION['lastpage'] = $_SERVER['argv'];
+		$_SESSION['lastpage'] = $_SERVER['QUERY_STRING']; 
 	}
 	$log->debug("The current user does not have a session.  Going to the login page");	
 	$action = "Login";

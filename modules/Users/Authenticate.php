@@ -127,7 +127,7 @@ if($focus->is_authenticated())
 	}
 	$arr = $_SESSION['lastpage'];
 	if(isset($_SESSION['lastpage']))
-		header("Location: index.php?".$arr[0]);
+		header("Location: index.php?".$arr);
 	else
 		header("Location: index.php");
 }
