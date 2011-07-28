@@ -107,6 +107,7 @@ class ReportRun extends CRMEntity
 				$permitted_fields = array_merge($permitted_fields,$inventory_fields);
 			}
 			$selectedfields = explode(":",$fieldcolname);
+			$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			
 			$mod_strings = return_module_language($current_language,$module);
@@ -121,6 +122,11 @@ class ReportRun extends CRMEntity
 			$fld_lbl_str = implode(" ",$fld_arr);
 			$fld_lbl = getTranslatedString($fld_lbl_str,$module); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
+			if(($selectedfields[0] == "vtiger_usersRel1")  && ($selectedfields[1] == 'user_name') && ($selectedfields[2] == 'Quotes_Inventory_Manager')){
+				$columnslist[$fieldcolname] = $concatSql." as ".$module."_Inventory_Manager";
+				continue;
+			}
+			
 			if((CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid" && (!in_array($fieldname,$inventory_fields) && in_array($module,$inventory_modules))) || empty($fieldname))
 			{
 				continue;
@@ -160,14 +166,14 @@ class ReportRun extends CRMEntity
 							$condition = "and vtiger_crmentity.crmid!=''";
 						}
 						if($temp_module_from_tablename == $module)
-							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '' $condition) then ".$selectedfields[0].".user_name else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
+							$columnslist[$fieldcolname] = " case when(".$selectedfields[0].".last_name NOT LIKE '' $condition ) THEN ".$concatSql." else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
 						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
 							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
 							
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
 					{
-						$columnslist[$fieldcolname] = $selectedfields[0].".user_name as ".$module."_Handler";
+						$columnslist[$fieldcolname] =  $concatSql." as ".$module."_Handler";
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
@@ -659,6 +665,7 @@ class ReportRun extends CRMEntity
 					
 					if($fieldcolname != "" && $comparator != "") {
 						$selectedfields = explode(":",$fieldcolname);
+						$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
 						//Added to handle yes or no for checkbox  field in reports advance filters. -shahul
 						if($selectedfields[4] == 'C') {
 							if(strcasecmp(trim($value),"yes")==0)
@@ -680,9 +687,9 @@ class ReportRun extends CRMEntity
 		                        } elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 									$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 									if($this->primarymodule == 'Products') {
-										$advcolsql[] = ($selectedfields[0].".user_name ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
+										$advcolsql[] = ($concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
 									} else {
-										$advcolsql[] = " ".$selectedfields[0].".user_name".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
+										$advcolsql[] = " ".$concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 									}
 								} elseif($selectedfields[1] == 'status') {//when you use comma seperated values.
 									if($selectedfields[2] == 'Calendar_Status')
@@ -694,6 +701,8 @@ class ReportRun extends CRMEntity
 										$advcolsql[] = "vtiger_crmentity.description".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 									else	
 										$advcolsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
+								} elseif($selectedfields[2] == 'Quotes_Inventory_Manager'){
+									$advcolsql[] = ($concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
 								} else {
 									$advcolsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 								}
@@ -707,12 +716,15 @@ class ReportRun extends CRMEntity
 						} elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 							$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 							if($this->primarymodule == 'Products') {
-								$fieldvalue = ($selectedfields[0].".user_name ".$this->getAdvComparator($comparator,trim($value),$datatype));
+								$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
 							} else {
-								$fieldvalue = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
+								$fieldvalue = " case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
 							}
 						} elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
 							$fieldvalue = "vtiger_crmentity.".$selectedfields[1]." ".$this->getAdvComparator($comparator,trim($value),$datatype);
+						} elseif($selectedfields[2] == 'Quotes_Inventory_Manager'){
+							$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
+						
 						} elseif($selectedfields[0] == 'vtiger_crmentityRelHelpDesk' && $selectedfields[1]=='setype') {
 							$fieldvalue = "(vtiger_accountRelHelpDesk.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.lastname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.firstname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
 						} elseif($selectedfields[0] == 'vtiger_crmentityRelCalendar' && $selectedfields[1]=='setype') {
@@ -1900,6 +1912,7 @@ class ReportRun extends CRMEntity
 							}
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
+						$fieldvalue = decode_html($fieldvalue);
 
 					//check for Roll based pick list
 						$temp_val= $fld->name;
