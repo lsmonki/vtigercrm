@@ -89,8 +89,10 @@
 
 <table align="center" border="0" cellpadding="5" cellspacing="0" width="100%" class="mailSubHeader">
 	<tbody><tr>
+	{if $EXPORT_PERMITTED eq 'YES'}
 	<td align="left" nowrap ><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
 	<td align="left" nowrap ><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
+	{/if}
 	<td align="left" width=100% nowrap><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" class="crmbutton small create" onClick="goToPrintReport({$REPORTID});" type="button"></td>
 	</tr>
 	</tbody>
