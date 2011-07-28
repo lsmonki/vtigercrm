@@ -271,7 +271,11 @@ class WebserviceField{
 			
 			global $current_user;
 			$types = vtws_listtypes(null, $current_user);
-			$referenceTypes = array_values(array_intersect($types['types'],$referenceTypes));
+			$accessibleTypes = $types['types'];
+			if(!is_admin($current_user)) {
+				array_push($accessibleTypes, 'Users');
+			}
+			$referenceTypes = array_values(array_intersect($accessibleTypes,$referenceTypes));
 			$referenceList[$this->getFieldId()] = $referenceTypes;
 			$this->referenceList = $referenceTypes;
 			return $referenceTypes;

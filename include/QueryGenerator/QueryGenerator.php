@@ -349,6 +349,12 @@ class QueryGenerator {
 				continue;
 			}
 			$baseTable = $field->getTableName();
+			// When a field is included in Where Clause, but not is Select Clause, and the field table is not base table,
+			// The table will not be present in tablesList and hence needs to be added to the list.
+			if(empty($tableList[$baseTable])) {
+				$tableList[$baseTable] = $field->getTableName();
+				$tableJoinMapping[$baseTable] = $this->meta->getJoinClause($field->getTableName());
+			}
 			if($field->getFieldDataType() == 'reference') {
 				$moduleList = $this->referenceFieldInfoList[$fieldName];
 				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
