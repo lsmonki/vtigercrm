@@ -526,24 +526,47 @@ class Reports extends CRMEntity{
 			{
 				//$this->updateModuleList($secmodule[$i]);
 				if($this->module_list[$secmodule[$i]]){
-					foreach($this->module_list[$secmodule[$i]] as $key=>$value)
-					{
-						$temp = $this->getColumnsListbyBlock($secmodule[$i],$key);
-						if(!empty($ret_module_list[$secmodule[$i]][$value])){
-							if(!empty($temp)){
-								$ret_module_list[$secmodule[$i]][$value] = array_merge($ret_module_list[$secmodule[$i]][$value],$temp);
-							}
-						} else {
-							$ret_module_list[$secmodule[$i]][$value] = $this->getColumnsListbyBlock($secmodule[$i],$key);
+					$this->sec_module_columnslist[$secmodule[$i]] = $this->getModuleFieldList(
+							$secmodule[$i]);
+					if($this->module_list[$secmodule[$i]] == 'Calendar') {
+						if($this->module_list['Events']){
+							$this->sec_module_columnslist['Events'] = $this->getModuleFieldList(
+									'Events');
 						}
 					}
-					$this->sec_module_columnslist[$secmodule[$i]] = $ret_module_list[$secmodule[$i]];
 				}
 			}
 		}
 		return true;
 	}
 
+	/**
+	 *
+	 * @param String $module
+	 * @param type $blockIdList
+	 * @param Array $currentFieldList
+	 * @return Array 
+	 */
+	public function getBlockFieldList($module, $blockIdList, $currentFieldList) {
+		if(!empty($currentFieldList)){
+			$temp = $this->getColumnsListbyBlock($module,$blockIdList);
+			if(!empty($temp)){
+				$currentFieldList = array_merge($currentFieldList,$temp);
+			}
+		} else {
+			$currentFieldList = $this->getColumnsListbyBlock($module,$blockIdList);
+		}
+		return $currentFieldList;
+	}
+	
+	public function getModuleFieldList($module) {
+		foreach($this->module_list[$module] as $key=>$value) {
+			$ret_module_list[$module][$value] = $this->getBlockFieldList(
+					$module, $key, $ret_module_list[$module][$value]);
+		}
+		return $ret_module_list[$module];
+	}
+	
 	/** Function to get vtiger_fields for the given module and block
 	 *  This function gets the vtiger_fields for the given module
 	 *  It accepts the module and the block as arguments and 
@@ -575,7 +598,7 @@ class Reports extends CRMEntity{
 			if($module == "Calendar")
 				$sql.=" group by vtiger_field.fieldlabel order by sequence";
 			else
-				$sql.=" order by sequence";
+			$sql.=" order by sequence";
 		}
 		else
 		{
@@ -589,7 +612,7 @@ class Reports extends CRMEntity{
 
 			//fix for Ticket #4016
 			if($module == "Calendar")
-				$sql.=" group by vtiger_field.fieldid,vtiger_field.fieldlabel order by sequence";
+				$sql.=" group by vtiger_field.fieldlabel order by sequence";
 			else
 				$sql.=" group by vtiger_field.fieldid order by sequence";			
 		}
