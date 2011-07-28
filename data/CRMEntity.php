@@ -2030,25 +2030,35 @@ $log->info("in getOldFileName  ".$notesid);
 			$tables[]=$key;
 			$fields[] = $value;
 		}
-		$tabname = $tables[0];
+		$pritablename = $tables[0];
+		$sectablename = $tables[1];
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
+		$tmpname=$pritablename.'tmp'.$secmodule;
 		$condition = "";
 		if(!empty($tables[1]) && !empty($fields[1])){
 			$condvalue = $tables[1].".".$fields[1];
+			$condition = "$pritablename.$prifieldname=$condvalue";
 		} else {
-			$condvalue = $tabname.".".$prifieldname;
+			$condvalue = $table_name.".".$column_name;
+			$condition = "$pritablename.$secfieldname=$condvalue";
 		}
-		$condition = " {$tmpname}.{$prifieldname} = {$condvalue} ";
-		$condition_secmod_table = " {$table_name}.{$column_name} = {$tmpname}.{$secfieldname} ";
-		if($tabname=='vtiger_crmentityrel'){
-			$condition = " ($condition OR {$tmpname}.{$secfieldname} = $condvalue) ";
-			$condition_secmod_table = "({$condition_secmod_table})";
+		$secQuery = "select $table_name.* from $table_name inner join vtiger_crmentity on ".
+				"vtiger_crmentity.crmid=$table_name.$column_name and vtiger_crmentity.deleted=0";
+		$query = '';
+		if($pritablename=='vtiger_crmentityrel'){
+			$condition = "($table_name.$column_name={$tmpname}.{$secfieldname} ".
+			"OR $table_name.$column_name={$tmpname}.{$prifieldname})";
+			$query = " left join vtiger_crmentityrel  ON ($condvalue={$tmpname}.{$secfieldname} ".
+			"OR $condvalue={$tmpname}.{$prifieldname}) ";
+		} elseif(strripos($pritablename, 'rel') === (strlen($pritablename) - 3)) {
+			$instance = self::getInstance($module);
+			$sectableindex = $instance->tab_name_index[$sectablename];
+			$condition = "$table_name.$column_name=$tmpname.$secfieldname";
+			$query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname)";
 		}
-
-		$query = " left join {$tabname} as {$tmpname} on {$condition}";
-		$query .= " LEFT JOIN {$table_name} ON {$condition_secmod_table}";
+		
+		$query .= " left join ($secQuery) as $table_name on {$condition}";
 		
 		return $query;
 	}
