@@ -784,6 +784,9 @@ class QueryGenerator {
 						stripslashes($input[$fieldInfo])));
 				$moduleFields = $this->meta->getModuleFields();
 				$field = $moduleFields[$fieldName];
+				if(empty($field)) {
+					continue;
+				}
 				$type = $field->getFieldDataType();
 			
 				$operator = str_replace('\'','',stripslashes($input[$condition]));
