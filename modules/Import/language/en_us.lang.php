@@ -141,7 +141,7 @@ $mod_strings = Array(
 'LBL_FINISHED'=>'Finished',
 'LBL_UNDO_LAST_IMPORT'=>'Undo Last Import',
 
-'LBL_SUCCESS_1' => 'No. of Records Successfully Imported : ',
+'LBL_SUCCESS_1' => 'No. of Records Successfully Imported/Updated : ',
 'LBL_SKIPPED_1' => 'No. of Records Skipped as they were missing one or more required fields : ',
 
 //Added for patch2 - Products Import Notes
@@ -190,6 +190,8 @@ $mod_strings = Array(
 
 'LBL_DELIMITER' => 'Delimiter:',
 'LBL_FORMAT' => 'Format:',
+
+'LBL_MERGE_FIELDS_DUPLICATE' => 'Merge Fields For Duplicate Import Records',
 );
 
 /*$mod_list_strings = Array(
