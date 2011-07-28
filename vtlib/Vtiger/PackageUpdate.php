@@ -112,6 +112,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 		$this->update_Events($this->_modulexml, $moduleInstance);
 		$this->update_Actions($this->_modulexml, $moduleInstance);
 		$this->update_RelatedLists($this->_modulexml, $moduleInstance);
+		$this->update_CustomLinks($this->_modulexml, $moduleInstance);
 
 		$moduleInstance->__updateVersion($tabversion);
 
@@ -345,6 +346,20 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 			$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
 		}
 		return $relModuleInstance;
-	}		
+	}
+
+	function update_CustomLinks($modulenode, $moduleInstance) {
+		if(empty($modulenode->customlinks) || empty($modulenode->customlinks->customlink)) return;
+		$moduleInstance->deleteLinks();
+		foreach($modulenode->customlinks->customlink as $customlinknode) {
+			$moduleInstance->addLink(
+				"$customlinknode->linktype",
+				"$customlinknode->linklabel",
+				"$customlinknode->linkurl",
+				"$customlinknode->linkicon",
+				"$customlinknode->sequence"
+			);
+		}
+	}
 }			
 ?>

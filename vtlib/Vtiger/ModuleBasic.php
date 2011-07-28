@@ -318,6 +318,15 @@ class Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Delete links information
+	 */
+	function deleteLinks() {
+		global $adb;
+		$adb->pquery("DELETE FROM vtiger_links WHERE tabid=?", Array($this->id));
+		self::log("Deleting links ... DONE");
+	}
+	
+	/**
 	 * Configure default sharing access for the module
 	 * @param String Permission text should be one of ['Public_ReadWriteDelete', 'Public_ReadOnly', 'Public_ReadWrite', 'Private']
 	 */
