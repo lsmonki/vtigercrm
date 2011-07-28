@@ -177,6 +177,22 @@ function fieldExpressionPopup(moduleName, $){
 				);
 			value.replaceWith('<select id="editpopup_expression" class="value">'+options+'</select>');
 		}
+		function forDateField(opType) {
+			var value = $("#editpopup_expression");
+			value.replaceWith('<input type="text" id="editpopup_expression" class="value"> \
+								<img border=0 src="themes/softed/images/btnL3Calendar.gif" alt="SET DATE" title="SET DATE" id="jscal_trigger_editpopup_expression">');
+			Calendar.setup (
+				{inputField : "editpopup_expression", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_editpopup_expression", singleClick : true, step : 1}
+			);
+		}
+		function forDateTimeField(opType) {
+			var value = $("#editpopup_expression");
+			value.replaceWith('<input type="text" id="editpopup_expression" class="value" readonly> \
+								<img align="absmiddle" border=0 src="themes/softed/images/btnL3Calendar.gif" alt="SET DATE" title="SET DATE" id="jscal_trigger_editpopup_expression">');
+			Calendar.setup (
+				{inputField : "editpopup_expression", ifFormat : "%Y-%m-%d", showsTime : true, button : "jscal_trigger_editpopup_expression", singleClick : true, step : 1}
+			);
+		}
 		var functions = {
 			string:function(opType){
 				var value = $("#editpopup_expression");
@@ -191,10 +207,14 @@ function fieldExpressionPopup(moduleName, $){
 					</select>');
 			},
 			integer: forInteger,
-			picklist:forPicklist,
-			multipicklist:forPicklist,
-			owner:forOwnerField
+			picklist: forPicklist,
+			multipicklist: forPicklist,
+			owner: forOwnerField,
+			date: forDateField,
+			datetime: forDateTimeField
 		};
+
+		if($('#jscal_trigger_editpopup_expression'))  $('#jscal_trigger_editpopup_expression').remove();
 		var ret = functions[fieldType];
 		if(ret==null){
 			ret = functions['string'];

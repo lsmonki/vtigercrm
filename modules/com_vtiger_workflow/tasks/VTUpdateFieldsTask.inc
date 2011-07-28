@@ -31,7 +31,7 @@ class VTUpdateFieldsTask extends VTTask {
 
 		$moduleHandler = vtws_getModuleHandlerFromName($moduleName, $current_user);
 		$handlerMeta = $moduleHandler->getMeta();
-		$ownerFields = $handlerMeta->getOwnerFields();
+		$moduleFields = $handlerMeta->getModuleFields();
 
 		$fieldValueMapping = array();
 		if (!empty($this->field_value_mapping)) {
@@ -51,6 +51,8 @@ class VTUpdateFieldsTask extends VTTask {
 				$fieldValueType = $fieldInfo['valuetype'];
 				$fieldValue = trim($fieldInfo['value']);
 
+				$fieldInstance = $moduleFields[$fieldName];
+
 				if ($fieldValueType == 'fieldname') {
 					$fieldValue = $focus->column_fields[$fieldValue];
 				} elseif ($fieldValueType == 'expression') {
@@ -60,16 +62,21 @@ class VTUpdateFieldsTask extends VTTask {
 					$expression = $parser->expression();
 					$exprEvaluater = new VTFieldExpressionEvaluater($expression);
 					$fieldValue = $exprEvaluater->evaluate($entity);
-				} elseif (preg_match('/([^:]+):boolean$/', $fieldValue, $match)) {
-					$fieldValue = $match[1];
-					if ($fieldValue == 'true') {
-						$fieldValue = '1';
-					} else {
-						$fieldValue = '0';
+				} else {
+					if (preg_match('/([^:]+):boolean$/', $fieldValue, $match)) {
+						$fieldValue = $match[1];
+						if ($fieldValue == 'true') {
+							$fieldValue = '1';
+						} else {
+							$fieldValue = '0';
+						}
+					}
+					if ($fieldInstance->getFieldDataType() === 'date') {
+						$fieldValue = getDisplayDate($fieldValue);
 					}
 				}
 
-				if (in_array($fieldName, $ownerFields)) {
+				if ($fieldInstance->getFieldDataType() === 'owner') {
 					$userId = getUserId_Ol($fieldValue);
 					$groupId = getGrpId($fieldValue);
 
