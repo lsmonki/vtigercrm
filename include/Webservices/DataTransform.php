@@ -61,7 +61,7 @@
 					$components = vtws_getIdComponents($row['parent_id']);
 					$userObj = VtigerWebserviceObject::fromName($adb,'Users');
 					$parentTypeId = $components[0];
- 		                        if($components[0] == $userObj->getEntityId()){
+ 		            if($components[0] == $userObj->getEntityId()){
 						$associatedToUser = true;
 					}
 				}
@@ -115,7 +115,7 @@
 					if($associatedToUser === true){
 						$_REQUEST['module'] = 'Emails';
 						$row['parent_id'] = $row['parent_id']."@-1|";
-						$_REQUEST['parent_id'] = $row['parent_id']; 
+						$_REQUEST['parent_id'] = $row['parent_id'];
 					}else{
 						$referenceHandler = vtws_getModuleHandlerFromId($parentTypeId,
 								$meta->getUser());

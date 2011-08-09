@@ -22,13 +22,11 @@ $image_path=$theme_path."images/";
 $tax_details = getAllTaxes();
 $sh_tax_details = getAllTaxes('all','sh');
 
-
 //To save the edited value
 if($_REQUEST['save_tax'] == 'true')
 {
-	for($i=0;$i<count($tax_details);$i++)
-	{
-     		$new_labels[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxlabel']];
+	for($i=0;$i<count($tax_details); $i++) {
+		$new_labels[$tax_details[$i]['taxid']] = $_REQUEST[bin2hex($tax_details[$i]['taxlabel'])];
 		$new_percentages[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxname']];
 	}
 	updateTaxPercentages($new_percentages);
@@ -40,7 +38,7 @@ elseif($_REQUEST['sh_save_tax'] == 'true')
  
 	for($i=0;$i<count($sh_tax_details);$i++)
 	{
-	  $new_labels[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxlabel']];
+	  $new_labels[$sh_tax_details[$i]['taxid']] = $_REQUEST[bin2hex($sh_tax_details[$i]['taxlabel'])];
 		$new_percentages[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxname']];
 	}
 	

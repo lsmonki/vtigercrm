@@ -91,7 +91,7 @@ class UsersLastImport extends SugarBean
 			vtiger_account.accountname as accountname,
 			vtiger_contactdetails.contactid,
 			vtiger_contactdetails.accountid,				
-			vtiger_contactdetails.yahooid,
+			vtiger_contactdetails.secondaryemail,
 			vtiger_contactdetails.firstname,
 			vtiger_contactdetails.lastname,
 			vtiger_contactdetails.phone,

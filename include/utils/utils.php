@@ -196,7 +196,11 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 				if($private == 'private')
 				{
 					$log->debug("Sharing is Private. Only the current user should be listed");
-					$query = "select id as id,user_name as user_name,first_name,last_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";
+					$query = "select id as id,user_name as user_name,first_name,last_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name ,
+							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  
+							  from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union 
+							  select shareduserid as id,vtiger_users.user_name as user_name ,
+							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";
 					$params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
 				}
 				else
@@ -225,6 +229,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		{
 			$temp_result[$row['id']] = getDisplayName(array('f'=>$row['first_name'],'l'=>$row['last_name']));
 		}
+
 		$user_array = &$temp_result;
 	}
 
@@ -1071,6 +1076,13 @@ function getTabModuleName($tabid)
 		if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) {
 			include('tabdata.php');
 			$tabname = array_search($tabid,$tab_info_array);
+
+			if($tabname == false) {
+				global $adb;
+				$sql = "select name from vtiger_tab where tabid=?";
+				$result = $adb->pquery($sql, array($tabid));
+				$tabname=  $adb->query_result($result,0,"name");
+			}
 			
 			// Update information to cache for re-use
 			VTCacheUtils::updateTabidInfo($tabid, $tabname);
@@ -1322,13 +1334,12 @@ function insertProfile2field($profileid)
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and vtiger_field.presence in (0,2) and tabid != 29", array());
-        $num_rows = $adb->num_rows($fld_result);
-        for($i=0; $i<$num_rows; $i++)
-        {
-                 $tab_id = $adb->query_result($fld_result,$i,'tabid');
-                 $field_id = $adb->query_result($fld_result,$i,'fieldid');
-				 $params = array($profileid, $tab_id, $field_id, 0, 1);
-                 $adb->pquery("insert into vtiger_profile2field values (?,?,?,?,?)", $params);
+    $num_rows = $adb->num_rows($fld_result);
+    for($i=0; $i<$num_rows; $i++) {
+         $tab_id = $adb->query_result($fld_result,$i,'tabid');
+         $field_id = $adb->query_result($fld_result,$i,'fieldid');
+		 $params = array($profileid, $tab_id, $field_id, 0, 0);
+         $adb->pquery("insert into vtiger_profile2field values (?,?,?,?,?)", $params);
 	}
 	$log->debug("Exiting insertProfile2field method ...");
 }
@@ -1348,7 +1359,7 @@ function insert_def_org_field()
         {
                  $tab_id = $adb->query_result($fld_result,$i,'tabid');
                  $field_id = $adb->query_result($fld_result,$i,'fieldid');
-				 $params = array($tab_id, $field_id, 0, 1);
+				 $params = array($tab_id, $field_id, 0, 0);
                  $adb->pquery("insert into vtiger_def_org_field values (?,?,?,?)", $params);
 	}
 	$log->debug("Exiting insert_def_org_field() method ...");
@@ -1406,7 +1417,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 		global $adb;
 		$tabid = getTabid($fld_module);
 	
-		$query = "SELECT vtiger_profile2field.visible, vtiger_field.fieldlabel, vtiger_field.uitype, 
+		$query = "SELECT vtiger_profile2field.visible, vtiger_profile2field.readonly, vtiger_field.fieldlabel, vtiger_field.uitype, 
 			vtiger_field.fieldid, vtiger_field.displaytype, vtiger_field.typeofdata 
 			FROM vtiger_profile2field INNER JOIN vtiger_field ON vtiger_field.fieldid=vtiger_profile2field.fieldid 
 			WHERE vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
@@ -1419,7 +1430,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 				$adb->query_result($result,$i,"fieldlabel"),
 				$adb->query_result($result,$i,"visible"), // From vtiger_profile2field.visible
 				$adb->query_result($result,$i,"uitype"),
-				$adb->query_result($result,$i,"visible"),
+				$adb->query_result($result,$i,"readonly"),
 				$adb->query_result($result,$i,"fieldid"),
 				$adb->query_result($result,$i,"displaytype"),
 				$adb->query_result($result,$i,"typeofdata")
@@ -2240,9 +2251,10 @@ function getEmailParentsList($module,$id,$focus = false)
     
         $fieldid = 0;
         $fieldname = 'email';
-        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
+        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '' )
                 $fieldname = 'yahooid';
-
+        elseif($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )         
+				$fieldname='secondaryemail';
         $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ? and vtiger_field.presence in (0,2)", array(getTabid($module), $fieldname));
         $fieldid = $adb->query_result($res,0,'fieldid');
 
@@ -3239,7 +3251,7 @@ function getRecordValues($id_array,$module) {
 		$fld_label=$adb->query_result($result,$i,"fieldlabel");
 		$ui_type=$adb->query_result($result,$i,"uitype");
 		
-		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name) == '0') {
+		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name, 'readwrite') == '0') {
 			$fld_array []= $fld_name;	
 			$record_values[$c][$fld_label] = Array();
 			$ui_value[]=$ui_type;
@@ -4637,7 +4649,14 @@ function updateVtlibModule($module, $packagepath) {
 	require_once('vtlib/Vtiger/Module.php');
 	$Vtiger_Utils_Log = true;
 	$package = new Vtiger_Package();
-	
+
+	if($package->isLanguageType($packagepath)) {
+		require_once('vtlib/Vtiger/Language.php');
+		$languagePack = new Vtiger_Language();
+		$languagePack->update(null, $packagepath, true);
+		return;
+	}
+
 	if($module == null) {
 		$log->fatal("Module name is invalid");
 	} else {

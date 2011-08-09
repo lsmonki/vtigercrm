@@ -44,6 +44,9 @@ require_once 'include/Webservices/Utils.php';
   */
 class Users extends CRMEntity {
 	var $log;
+	/**
+	 * @var PearDatabase
+	 */
 	var $db;
 	// Stored fields
 	var $id;
@@ -484,7 +487,7 @@ class Users extends CRMEntity {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function change_password($user_password, $new_password)
+	function change_password($user_password, $new_password, $dieOnError = true)
 	{
 		
 		$usr_name = $this->column_fields["user_name"];
@@ -497,23 +500,21 @@ class Users extends CRMEntity {
 			return false;
 		}
 
-		$encrypted_password = $this->encrypt_password($user_password);
-
 		if (!is_admin($current_user)) {
-			//check old password first
-			$query = "SELECT user_name,user_password FROM $this->table_name WHERE id=?";
-			$result =$this->db->pquery($query, array($this->id), true);	
-			$row = $this->db->fetchByAssoc($result);
-			$this->log->debug("select old password query: $query");
-			$this->log->debug("return result of $row");
-
-			if($encrypted_password != $this->db->query_result($result,0,'user_password'))
-			{
+			$this->db->startTransaction();
+			if(!$this->verifyPassword($user_password)) {
 				$this->log->warn("Incorrect old password for $usr_name");
 				$this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
 				return false;
 			}
-		}		
+			if($this->db->hasFailedTransaction()) {
+				if($dieOnError) {
+					die("error verifying old transaction[".$this->db->database->ErrorNo()."] ".
+							$this->db->database->ErrorMsg());
+				}
+				return false;
+			}
+		}
 
 
 		$user_hash = strtolower(md5($new_password));
@@ -522,8 +523,18 @@ class Users extends CRMEntity {
 		$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
 		$encrypted_new_password = $this->encrypt_password($new_password, $crypt_type);
 
-		$query = "UPDATE $this->table_name SET user_password=?, user_hash=?, crypt_type=? where id=?";
-		$this->db->pquery($query, array($encrypted_new_password, $user_hash, $crypt_type, $this->id), true, "Error setting new password for $usr_name: ");	
+		$query = "UPDATE $this->table_name SET user_password=?, confirm_password=?, user_hash=?, ".
+				"crypt_type=? where id=?";
+		$this->db->startTransaction();
+		$this->db->pquery($query, array($encrypted_new_password, $encrypted_new_password, 
+				$user_hash, $crypt_type, $this->id));
+		if($this->db->hasFailedTransaction()) {
+			if($dieOnError) {
+				die("error setting new password: [".$this->db->database->ErrorNo()."] ".
+						$this->db->database->ErrorMsg());
+			}
+			return false;
+		}
 		return true;
 	}
 	 
@@ -549,6 +560,17 @@ class Users extends CRMEntity {
 		return $encrypted_password;
 	}
 
+	function verifyPassword($password) {
+		$encryptedPassword = $this->encrypt_password($password);
+		$query = "SELECT user_name,user_password FROM {$this->table_name} WHERE id=?";
+		$result =$this->db->pquery($query, array($this->id));
+		$row = $this->db->fetchByAssoc($result);
+		$this->log->debug("select old password query: $query");
+		$this->log->debug("return result of $row");
+		if($encryptedPassword != $this->db->query_result($result, 0, 'user_password')) {
+			return false;
+		}
+	}
 
 	function is_authenticated()
 	{

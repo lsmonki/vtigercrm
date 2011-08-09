@@ -406,7 +406,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				onclick=\"return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id='.$id.'&recordid='.$id.'","test","width=640,height=520,resizable=0,scrollbars=0");\"
 				type="button">';                  
 
-		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
+		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.secondaryemail , vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
 		$result=$adb->pquery($query, array($id));   
 
 		$noofrows = $adb->num_rows($result);
@@ -436,7 +436,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 			$entries[] = $row['user_name'];
 			$entries[] = $row['email1'];
 			if($email == '')        $email = $row['email2'];
-			if($email == '')        $email = $row['yahoo_id'];
+			if($email == '')        $email = $row['secondaryemail'];
 
 			$entries[] = $row['phone_home'];
 			if($phone == '')        $phone = $row['phone_work'];
@@ -594,9 +594,9 @@ function get_to_emailids($module)
 			case 'Contacts':
 				//email opt out funtionality works only when we do mass mailing.
 				if(!$single_record)
-				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
+				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
 				else
-				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and ';
+				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and ';
 				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
 			case 'Accounts':

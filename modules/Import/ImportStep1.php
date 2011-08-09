@@ -88,6 +88,7 @@ $smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
 $smarty->assign("MODULE", $_REQUEST['module']);
 $smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module'],$_REQUEST['module']));
 $smarty->assign("SOURCE", $_REQUEST['source']);
+$smarty->assign("maxUploadFileSize", ini_get('upload_max_filesize'));
 
 //we have set this as default. upto 4.2.3 we have Outlook, Act, SF formats. but now CUSTOM is enough to import
 $lang_key = "CUSTOM";

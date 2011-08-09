@@ -275,7 +275,7 @@ function sendfile_email()
 							{include file='DetailViewHidden.tpl'}
 						
 							  <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
-							 {include_php file="./include/DetailViewBlockStatus.php"}
+							 {include_php file="include/DetailViewBlockStatus.php"}
 							 <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
 
 							{foreach key=header item=detail from=$BLOCKS}

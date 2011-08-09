@@ -114,6 +114,8 @@ $adb->pquery("CREATE TABLE IF NOT EXISTS vtiger_scheduled_reports(reportid INT, 
 									format VARCHAR(10), next_trigger_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(reportid))
 				ENGINE=InnoDB DEFAULT CHARSET=utf8;", array());
 
+
+// Change Display of User Name from user_name to lastname firstname.
 $updatedCVIds = array();
 $updatedReportIds = array();
 $usersQuery = "SELECT * FROM vtiger_users";
@@ -188,6 +190,223 @@ for($i=0;$i<$usersCount;$i++){
 		}
 	}
 }
+
+// Rename Yahoo Id field to Secondary Email field
+function vt530_renameField($fieldInfo){
+	global $adb;
+	$moduleName = $fieldInfo['moduleName'];
+	$tableName = $fieldInfo['tableName'];
+	$fieldName = $fieldInfo['fieldName'];
+	$fieldLabel = $fieldInfo['fieldLabel'];
+	$fieldColumnName = $fieldInfo['columnName'];
+	$newFieldName = $fieldInfo['newFieldName'];
+	$newFieldLabel = $fieldInfo['newFieldLabel'];
+	$newColumnName = $fieldInfo['newColumnName'];
+	$columnType = $fieldInfo['columnType'];
+	$tabId = getTabid($moduleName);
+
+	$adb->pquery("UPDATE vtiger_field SET fieldlabel=? WHERE fieldlabel=? AND tabid=?", array($newFieldLabel, $fieldLabel, $tabId));
+	$adb->pquery("UPDATE vtiger_field SET fieldname=? WHERE fieldname=? AND tabid=?",array($newFieldName, $fieldName, $tabId));
+	$adb->pquery("UPDATE vtiger_field SET columnname=? WHERE columnname=? AND tabid=?",array($newColumnName, $fieldColumnName, $tabId));
+	$adb->pquery("ALTER TABLE $tableName CHANGE $fieldColumnName $newColumnName $columnType",array());
+
+	$searchColumn= $tableName.':'.$fieldName;
+
+	$filter_sql = 'SELECT * FROM vtiger_cvcolumnlist WHERE columnname LIKE ?';
+	$res 	 = $adb->pquery($filter_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($res);
+	for($k=0;$k<$count;$k++){
+		 $columnName     = $adb->query_result($res,$k,'columnname');
+		 $id             = $adb->query_result($res,$k,'cvid');
+		 $column_index   = $adb->query_result($res,$k,'columnindex');
+		 $pattern_new    = "/$fieldName/";
+		 preg_match($pattern_new,$columnName,$matches);
+		 if(!empty($matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName = preg_replace($pattern_new,$newFieldName,$columnName);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_cvcolumnlist SET  columnname = ? WHERE cvid = ? AND columnindex = ?',array($newColumnName,$id,$column_index));
+		 }
+	}
+	$adv_sql = 'SELECT * FROM vtiger_cvadvfilter WHERE columnname LIKE ?';
+	$res 	 = $adb->pquery($adv_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($res);
+	for($v=0;$v<$count;$v++){
+		 $adv_columnname     = $adb->query_result($res,$v,'columnname');
+		 $cvid           	 = $adb->query_result($res,$v,'cvid');
+		 $column_index_adv	 = $adb->query_result($res,$v,'columnindex');
+		 $pattern_new    	 = "/$fieldName/";
+		 preg_match($pattern_new,$adv_columnname,$adv_matches);
+		 if(!empty($adv_matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_cvadvfilter SET  columnname = ? WHERE cvid = ? AND columnindex = ?',array($newColumnName,$cvid,$column_index_adv));
+		 }
+	}
+	$report_sql = 'SELECT * FROM vtiger_relcriteria WHERE columnname LIKE ?';
+	$report_res = $adb->pquery($report_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($report_res);
+	for($l=0;$l<$count;$l++){
+		 $adv_columnname     = $adb->query_result($report_res,$l,'columnname');
+		 $queryid            = $adb->query_result($report_res,$l,'queryid');
+		 $column_index_adv   = $adb->query_result($report_res,$l,'columnindex');
+		 $pattern_new    	 = "/$fieldName/";
+		 preg_match($pattern_new,$adv_columnname,$adv_matches);
+		 if(!empty($adv_matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_relcriteria SET  columnname = ? WHERE queryid = ?',array($newColumnName,$queryid));
+		 }
+	}
+
+	$report_sql = 'SELECT * FROM vtiger_reportsortcol WHERE columnname LIKE ?';
+	$report_res = $adb->pquery($report_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($report_res);
+	for($e=0;$e<$count;$e++){
+		 $adv_columnname     = $adb->query_result($report_res,$e,'columnname');
+		 $sortcolid          = $adb->query_result($report_res,$e,'sortcolid');
+		 $report_id          = $adb->query_result($report_res,$e,'reportid');
+		 $pattern_new    	 = "/$fieldName/";
+		 preg_match($pattern_new,$adv_columnname,$adv_matches);
+		 if(!empty($adv_matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_reportsortcol SET  columnname = ? WHERE sortcolid = ? AND reportid = ?',
+								array($newColumnName,$sortcolid,$report_id));
+		 }
+	}
+
+	$report_sql = 'SELECT * FROM vtiger_reportsummary WHERE columnname LIKE ?';
+	$report_sum_res 	 = $adb->pquery($report_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($report_sum_res);
+	for($z=0;$z<$count;$z++){
+		 $adv_columnname     = $adb->query_result($report_sum_res,$z,'columnname');
+		 $rsid               = $adb->query_result($report_sum_res,$z,'reportsummaryid');
+		 $summarytype        = $adb->query_result($report_sum_res,$z,'summarytype');
+		 $pattern_new    	 = "/$fieldName/";
+		 preg_match($pattern_new,$adv_columnname,$adv_matches);
+		 if(!empty($adv_matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_reportsummary SET  columnname = ? WHERE reportsummaryid = ? AND summarytype = ?',
+							array($newColumnName,$rsid,$summarytype));
+		 }
+	}
+	$report_sql = 'SELECT * FROM vtiger_selectcolumn WHERE columnname LIKE ?';
+	$report_sum_res 	 = $adb->pquery($report_sql,array("%$searchColumn%"));
+	$count   = $adb->num_rows($report_sum_res);
+	for($z=0;$z<$count;$z++){
+		 $adv_columnname     = $adb->query_result($report_sum_res,$z,'columnname');
+		 $queryid               = $adb->query_result($report_sum_res,$z,'queryid');
+		 $columnindex        = $adb->query_result($report_sum_res,$z,'columnindex');
+		 $pattern_new    	 = "/$fieldName/";
+		 preg_match($pattern_new,$adv_columnname,$adv_matches);
+		 if(!empty($adv_matches)){
+			 $transformedFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
+			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
+			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
+			 $adb->pquery('UPDATE vtiger_selectcolumn SET  columnname = ? WHERE queryid = ? AND columnindex = ?',
+							array($newColumnName,$queryid,$columnindex));
+		 }
+	}
+}
+
+$contactYahooFieldDetails = array('moduleName'=>'Contacts', 'tableName'=>'vtiger_contactdetails', 'columnType'=>'VARCHAR(100)',
+								'fieldName'=>'yahooid', 'fieldLabel'=>'Yahoo Id', 'columnName'=>'yahooid',
+								'newFieldName'=>'secondaryemail', 'newFieldLabel'=>'Secondary Email', 'newColumnName'=>'secondaryemail');
+vt530_renameField($contactYahooFieldDetails);
+
+$leadYahooFieldDetails = array('moduleName'=>'Leads', 'tableName'=>'vtiger_leaddetails', 'columnType'=>'VARCHAR(100)',
+								'fieldName'=>'yahooid', 'fieldLabel'=>'Yahoo Id', 'columnName'=>'yahooid',
+								'newFieldName'=>'secondaryemail', 'newFieldLabel'=>'Secondary Email', 'newColumnName'=>'secondaryemail');
+vt530_renameField($leadYahooFieldDetails);
+
+$userYahooFieldDetails = array('moduleName'=>'Users', 'tableName'=>'vtiger_users', 'columnType'=>'VARCHAR(100)',
+								'fieldName'=>'yahoo_id', 'fieldLabel'=>'Yahoo id', 'columnName'=>'yahoo_id',
+								'newFieldName'=>'secondaryemail', 'newFieldLabel'=>'Secondary Email', 'newColumnName'=>'secondaryemail');
+vt530_renameField($userYahooFieldDetails);
+
+
+// Adding Organization ID column
+$sql = 'ALTER TABLE vtiger_organizationdetails ADD UNIQUE KEY(organizationname);';
+$params = array();
+$adb->pquery($sql, $params);
+
+$sql = 'ALTER TABLE vtiger_organizationdetails DROP PRIMARY KEY;';
+$params = array();
+$adb->pquery($sql, $params);
+
+$sql = 'ALTER TABLE vtiger_organizationdetails ADD COLUMN organization_id INT(11) PRIMARY KEY';
+$params = array();
+$adb->pquery($sql, $params);
+
+$result = $adb->pquery('SELECT organizationname FROM vtiger_organizationdetails', array());
+$noOfCompanies = $adb->num_row($result);
+if($noOfCompanies > 0) {
+	for($i=0; $i<$noOfCompanies; ++$i) {
+		$id = $adb->getUniqueID('vtiger_organizationdetails');
+		$organizationName = $adb->query_result($result, $i, 'organizationname');
+		$adb->pquery('UPDATE vtiger_organizationdetails SET organization_id=? WHERE organizationname=?',
+						array($id, $organizationName));
+	}
+} else {
+	$id = $adb->getUniqueID('vtiger_organizationdetails');
+}
+
+$sql = 'UPDATE vtiger_organizationdetails_seq SET id = (SELECT max(organization_id) FROM vtiger_organizationdetails)';
+$adb->pquery($sql, $params);
+
+// Add Webservice support for Company Details type of entity.
+vtws_addActorTypeWebserviceEntityWithName(
+		'CompanyDetails',
+		'include/Webservices/VtigerCompanyDetails.php',
+		'VtigerCompanyDetails',
+		array('fieldNames'=>'organizationname','indexField'=>'groupid','tableName'=>'vtiger_organizationdetails'));
+
+$sql = 'CREATE TABLE vtiger_ws_fieldinfo(id varchar(64) NOT NULL PRIMARY KEY,
+										property_name VARCHAR(32),
+										property_value VARCHAR(64)
+										) ENGINE=Innodb DEFAULT CHARSET=utf8;';
+$adb->pquery($sql, $params);
+
+$id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
+$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
+$params = array($id,'vtiger_organizationdetails','logoname','file');
+$adb->pquery($sql, $params);
+$id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
+$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
+$params = array($id,'vtiger_organizationdetails','phone','phone');
+$adb->pquery($sql, $params);
+$id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
+$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
+$params = array($id,'vtiger_organizationdetails','fax','phone');
+$adb->pquery($sql, $params);
+$id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
+$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
+$params = array($id,'vtiger_organizationdetails','website','url');
+$adb->pquery($sql, $params);
+
+$sql='INSERT INTO vtiger_ws_fieldinfo(id,property_name,property_value) VALUES (?,?,?)';
+$params = array('vtiger_organizationdetails.organization_id','upload.path','1');
+$adb->pquery($sql, $params);
+
+$webserviceObject = VtigerWebserviceObject::fromName($adb, 'CompanyDetails');
+$sql = 'INSERT INTO vtiger_ws_entity_tables(webservice_entity_id,table_name) VALUES (?,?)';
+$params = array($webserviceObject->getEntityId(),'vtiger_organizationdetails');
+$adb->pquery($sql, $params);
+
+// Increase the size of User Singature field
+$this->db->pquery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000);",array());
 
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 

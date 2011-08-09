@@ -190,6 +190,7 @@ $mod_strings = Array(
 
 'LBL_DELIMITER' => 'Delimiter:',
 'LBL_FORMAT' => 'Format:',
+'LBL_MAX_FILE_SIZE' => ' is the max allowed filesize',
 
 'LBL_MERGE_FIELDS_DUPLICATE' => 'Merge Fields For Duplicate Import Records',
 );

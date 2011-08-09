@@ -9,6 +9,7 @@
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
 include_once('vtlib/Vtiger/Utils/StringTemplate.php');
+include_once 'vtlib/Vtiger/LinkData.php';
 
 /**
  * Provides API to handle custom links
@@ -95,15 +96,24 @@ class Vtiger_Link {
 	 * @param String ICON to use on the display
 	 * @param Integer Order or sequence of displaying the link
 	 */
-	static function addLink($tabid, $type, $label, $url, $iconpath='',$sequence=0) {
+	static function addLink($tabid, $type, $label, $url, $iconpath='',$sequence=0, $handlerInfo=null) {
 		global $adb;
 		self::__initSchema();
 		$checkres = $adb->pquery('SELECT linkid FROM vtiger_links WHERE tabid=? AND linktype=? AND linkurl=? AND linkicon=? AND linklabel=?',
 			Array($tabid, $type, $url, $iconpath, $label));
 		if(!$adb->num_rows($checkres)) {
 			$uniqueid = self::__getUniqueId();
-			$adb->pquery('INSERT INTO vtiger_links (linkid,tabid,linktype,linklabel,linkurl,linkicon,sequence) VALUES(?,?,?,?,?,?,?)',
-				Array($uniqueid, $tabid, $type, $label, $url, $iconpath, $sequence));
+			$sql = 'INSERT INTO vtiger_links (linkid,tabid,linktype,linklabel,linkurl,linkicon,'.
+			'sequence';
+			$params = Array($uniqueid, $tabid, $type, $label, $url, $iconpath, $sequence);
+			if(!empty($handlerInfo)) {
+				$sql .= (', handler_path, handler_class, handler');
+				$params[] = $handlerInfo['path'];
+				$params[] = $handlerInfo['class'];
+				$params[] = $handlerInfo['method'];
+			}
+			$sql .= (') VALUES ('.generateQuestionMarks($params).')');
+			$adb->pquery($sql, $params);
 			self::log("Adding Link ($type - $label) ... DONE");
 		}
 	}
@@ -205,6 +215,15 @@ class Vtiger_Link {
 		while($row = $adb->fetch_array($result)){
 			$instance = new self();
 			$instance->initialize($row);
+			if(!empty($row['handler_path']) && isFileAccessible($row['handler_path'])) {
+				require_once $row['handler_path'];
+				$linkData = new Vtiger_LinkData($instance, $current_user);
+				$ignore = call_user_func(array($row['handler_class'], $row['handler']), $linkData);
+				if(!$ignore) {
+					self::log("Ignoring Link ... ".var_export($row, true));
+					continue;
+				}
+			}
 			if($parameters) {
 				$instance->linkurl = $strtemplate->merge($instance->linkurl);
 				$instance->linkicon= $strtemplate->merge($instance->linkicon);
@@ -227,5 +246,16 @@ class Vtiger_Link {
 	static function log($message, $delimit=true) {
 		Vtiger_Utils::Log($message, $delimit);
 	}
+
+	/**
+	 * Checks whether the user is admin or not
+	 * @param Vtiger_LinkData $linkData
+	 * @return Boolean
+	 */
+	static function isAdmin($linkData) {
+		$user = $linkData->getUser();
+		return $user->is_admin == 'on' || $user->column_fields['is_admin'] == 'on';
+	}
+
 }
 ?>

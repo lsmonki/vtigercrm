@@ -1945,6 +1945,10 @@ function getRoleAndSubordinatesInformation($roleId)
 	global $log;
 	$log->debug("Entering getRoleAndSubordinatesInformation(".$roleId.") method ...");
 	global $adb;
+	static $roleInfoCache = array();
+	if(!empty($roleInfoCache[$roleId])) {
+		return $roleInfoCache[$roleId];
+	}
 	$roleDetails=getRoleInformation($roleId);
 	$roleInfo=$roleDetails[$roleId];
 	$roleParentSeq=$roleInfo[1];
@@ -1966,6 +1970,7 @@ function getRoleAndSubordinatesInformation($roleId)
 		$roleInfo[$roleid]=$roleDet;
 		
 	}
+	$roleInfoCache[$roleId] = $roleInfo;
 	$log->debug("Exiting getRoleAndSubordinatesInformation method ...");
 	return $roleInfo;	
 

@@ -180,6 +180,30 @@ abstract class EntityMeta{
 	public function getModuleFields(){
 		return $this->moduleFields;
 	}
+
+	public function getFieldNameListByType($type) { 
+		$type = strtolower($type); 
+		$typeList = array(); 
+		$moduleFields = $this->getModuleFields(); 
+		foreach ($moduleFields as $fieldName=>$webserviceField) { 
+			if(strcmp($webserviceField->getFieldDataType(),$type) === 0){ 
+				array_push($typeList, $fieldName); 
+			} 
+		} 
+		return $typeList; 
+	}
+
+	public function getFieldListByType($type) {
+		$type = strtolower($type);
+		$typeList = array();
+		$moduleFields = $this->getModuleFields();
+		foreach ($moduleFields as $fieldName=>$webserviceField) {
+			if(strcmp($webserviceField->getFieldDataType(),$type) === 0){
+				array_push($typeList, $webserviceField);
+			}
+		}
+		return $typeList;
+	}
 	
 	public function getIdColumn(){
 		return $this->idColumn;

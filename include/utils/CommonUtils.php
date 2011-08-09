@@ -1288,13 +1288,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
   		{
- 			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.*, '0' as readonly FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
   			$params = array($tabid, $blockid_list);
 		}
   		else
   		{
   			$profileList = getCurrentUserProfileList();
- 			$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.*, vtiger_profile2field.readonly FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  			$params = array($tabid, $blockid_list, $profileList);
 			//Postgres 8 fixes
  			if( $adb->dbType == "pgsql")
@@ -1320,7 +1320,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  				$params = array($tabid, $blockid_list, $info_type, $profileList);
 				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -1337,7 +1337,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
 				$params = array($tabid, $blockid_list, $profileList);
  				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -2146,7 +2146,7 @@ function QuickCreate($module)
 	else
 	{
 		$profileList = getCurrentUserProfileList();
-		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) and displaytype != 2 GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
+		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) and displaytype != 2 GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
 		$params = array($tabid, $profileList);
 		//Postgres 8 fixes
 		if( $adb->dbType == "pgsql")
@@ -2165,6 +2165,8 @@ function QuickCreate($module)
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$typeofdata = $adb->query_result($result,$i,"typeofdata");
+		$defaultvalue = $adb->query_result($result,$i,"defaultvalue");
+		$col_fields[$fieldname] = $defaultvalue;
 
 		//to get validationdata
 		$fldLabel_array = Array();
@@ -3071,10 +3073,10 @@ function is_emailId($entity_id)
 	$module = getSalesEntityType($entity_id);
 	if($module == 'Contacts')
 	{
-		$sql = "select email,yahooid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where contactid = ?";
+		$sql = "select email,secondaryemail from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where contactid = ?";
 		$result = $adb->pquery($sql, array($entity_id));
 		$email1 = $adb->query_result($result,0,"email");
-		$email2 = $adb->query_result($result,0,"yahooid");
+		$emaWil2 = $adb->query_result($result,0,"secondaryemail");
 		if($email1 != "" || $email2 != "") {
 			$check_mailids = "true";
 		} else {
@@ -3201,7 +3203,7 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 		"vtiger_contactdetails:accountid"=>"V",
 		"vtiger_contactsubdetails:birthday"=>"D",
 		"vtiger_contactdetails:email"=>"V",
-		"vtiger_contactdetails:yahooid"=>"V",
+		"vtiger_contactdetails:secondaryemail"=>"V",
 		
 		//Potential Related Fields
 		"vtiger_potential:campaignid"=>"V",
@@ -3486,6 +3488,19 @@ function getPickListValues($tablename,$roleid)
 
 /** Function to check the file access is made within web root directory. */
 function checkFileAccess($filepath) {
+	if(!isFileAccessible($filepath)) {
+		die("Sorry! Attempt to access restricted file.");
+	}
+}
+
+/**
+ * function to return whether the file access is made within vtiger root directory
+ * and it exists.
+ * @global String $root_directory vtiger root directory as given in config.inc.php file.
+ * @param String $filepath relative path to the file which need to be verified
+ * @return Boolean true if file is a valid file within vtiger root directory, false otherwise.
+ */
+function isFileAccessible($filepath) {
 	global $root_directory;
 	// Set the base directory to compare with
 	$use_root_directory = $root_directory;
@@ -3502,10 +3517,11 @@ function checkFileAccess($filepath) {
 	/** Replace all \ with / now */
 	$realfilepath = str_replace('\\', '/', $realfilepath);
 	$rootdirpath  = str_replace('\\', '/', $rootdirpath);
-	
+
 	if(stripos($realfilepath, $rootdirpath) !== 0) {
-		die("Sorry! Attempt to access restricted file.");
+		return false;
 	}
+	return true;
 }
 
 /** Function to get the ActivityType for the given entity id
@@ -3672,5 +3688,28 @@ function getDisplayName($input,$dispFormat="lf",$glue=' '){
 	$formattedNameList = getNameInDisplayFormat($input,$dispFormat);
 	$displayName = joinName($formattedNameList);
 	return $displayName;
+}
+
+function getModuleSequenceNumber($module,$recordId){
+	global $adb;
+	switch($module){
+		case "Invoice":
+			$res = $adb->query("SELECT invoice_no FROM vtiger_invoice WHERE invoiceid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'invoice_no');
+			break;
+		case "PurchaseOrder":
+			$res = $adb->query("SELECT purchaseorder_no FROM vtiger_purchaseorder WHERE purchaseorderid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'purchaseorder_no');
+			break;
+		case "Quotes":
+			$res = $adb->query("SELECT quote_no FROM vtiger_quotes WHERE quoteid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'quote_no');
+			break;
+		case "SalesOrder":
+			$res = $adb->query("SELECT salesorder_no FROM vtiger_salesorder WHERE salesorderid = $recordId");
+			$moduleSeqNo = $adb->query_result($res,0,'salesorder_no');
+			break;
+	}
+	return $moduleSeqNo;
 }
 ?>

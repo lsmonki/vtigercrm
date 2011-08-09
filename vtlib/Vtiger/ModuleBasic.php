@@ -153,7 +153,7 @@ class Vtiger_ModuleBasic {
 		if(!Vtiger_Utils::CheckTable('vtiger_tab_info')) {
 			Vtiger_Utils::CreateTable(
 				'vtiger_tab_info',
-				'(tabid INT PRIMARY KEY, prefname VARCHAR(256), prefvalue VARCHAR(256), FOREIGN KEY fk_1_vtiger_tab_info(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE)',
+				'(tabid INT, prefname VARCHAR(256), prefvalue VARCHAR(256), FOREIGN KEY fk_1_vtiger_tab_info(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE)',
 				true);
 		}
 		if($this->minversion) {

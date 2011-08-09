@@ -41,9 +41,9 @@
 		<field name="phone_fax" type="C" size="50" />
 		<field name="email1" type="C" size="100" />
 		<field name="email2" type="C" size="100" />
-		<field name="yahoo_id" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="status" type="C" size="25" />
-		<field name="signature" type="C" size="250" />
+		<field name="signature" type="C" size="1000" />
 		<field name="address_street" type="C" size="150" />
 		<field name="address_city" type="C" size="100" />
 		<field name="address_state" type="C" size="100" />
@@ -472,7 +472,7 @@
 		<field name="usertype" type="C" size="50" />
 		<field name="contacttype" type="C" size="50" />
 		<field name="otheremail" type="C" size="100" />
-		<field name="yahooid" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="donotcall" type="C" size="3" />
 		<field name="emailoptout" type="C" size="3">
 			<default value="0" />
@@ -654,7 +654,7 @@
 		<field name="transferdate" type="D" />
 		<field name="revenuetype" type="C" size="50" />
 		<field name="noofemployees" type="I" size="50" />
-		<field name="yahooid" type="C" size="100" />
+		<field name="secondaryemail" type="C" size="100" />
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />
 		</field>
@@ -4635,8 +4635,11 @@
 	</table>
 
 	<table name="vtiger_organizationdetails">
-		<field name="organizationname" type="C" size="60">
+		<field name="organization_id" type="I" size="11">
 			<key />
+		</field>
+		<field name="organizationname" type="C" size="60">
+			<unique />
 		</field>
 		<field name="address" type="C" size="150" />
 		<field name="city" type="C" size="100" />
@@ -7303,6 +7306,18 @@
 		</field>
 		<field name="next_trigger_time" type="TS">
 			<DEFTIMESTAMP/>
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>	
+	
+	<table name="vtiger_ws_fieldinfo">
+		<field name="id" type="C" size="64">
+			<notnull />
+			<key />
+		</field>
+		<field name="property_name" type="C" size="32">
+		</field>
+		<field name="property_value" type="C" size="64">
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>

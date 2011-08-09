@@ -156,6 +156,17 @@ $focus->parent_type = $_REQUEST['parent_type'];
 $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
 $focus->column_fields["date_start"]= date(getNewDisplayDate());//This will be converted to db date format in save
+if((!empty($_REQUEST['record'])&& $_REQUEST['send_mail']==false &&
+		!empty($_REQUEST['mode']))) {
+	$focus->mode = 'edit';
+} elseif(empty($_REQUEST['record']) ||(!empty($_REQUEST['record'])&& $_REQUEST['send_mail']== false
+		&& empty($_REQUEST['mode'])) || !empty($_REQUEST['record'])&& $_REQUEST['send_mail']==true
+		&& empty($_REQUEST['mode'])) {
+	$focus->mode = '';
+	$focus->id = '';
+} else {
+	$focus->mode = 'edit';
+}
 $focus->save("Emails");
 $return_id = $focus->id;
 
@@ -200,7 +211,6 @@ if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_
 	}
 
 }
-
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button

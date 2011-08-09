@@ -444,7 +444,7 @@ if(vtlib_isModuleActive('Contacts') && isPermitted("Contacts","EditView") =='yes
 	$contact_no = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
 	// END
 	
-	$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contact_no,contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contact_no,contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,secondaryemail) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	$contact_params = array($contact_no, $contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
 	$adb->pquery($sql_insert_contact, $contact_params);
 	

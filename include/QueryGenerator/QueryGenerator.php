@@ -249,18 +249,9 @@ class QueryGenerator {
 					$meta = $this->getMeta('Groups');
 				}
 			}
-			$query = 'SELECT ';
-			$columns = array();
-			$moduleFields = $this->meta->getModuleFields();
-			$accessibleFieldList = array_keys($moduleFields);
-			$accessibleFieldList[] = 'id';
-			$this->fields = array_intersect($this->fields, $accessibleFieldList);
-			foreach ($this->fields as $field) {
-				$sql = $this->getSQLColumn($field);
-				$columns[] = $sql;
-			}
-			$this->columns = implode(', ',$columns);
-			$query .= $this->columns;
+
+			$query = "SELECT ";
+			$query .= $this->getSelectClauseColumnSQL();
 			$query .= $this->getFromClause();
 			$query .= $this->getWhereClause();
 			$this->query = $query;
@@ -285,6 +276,20 @@ class QueryGenerator {
 		//one module or is of type owner.
 		$column = $field->getColumnName();
 		return $field->getTableName().'.'.$column;
+	}
+
+	public function getSelectClauseColumnSQL(){
+		$columns = array();
+		$moduleFields = $this->meta->getModuleFields();
+		$accessibleFieldList = array_keys($moduleFields);
+		$accessibleFieldList[] = 'id';
+		$this->fields = array_intersect($this->fields, $accessibleFieldList);
+		foreach ($this->fields as $field) {
+			$sql = $this->getSQLColumn($field);
+			$columns[] = $sql;
+		}
+		$this->columns = implode(', ',$columns);
+		return $this->columns;
 	}
 
 	public function getFromClause() {
@@ -340,6 +345,12 @@ class QueryGenerator {
 				continue;
 			}
 			$baseTable = $field->getTableName();
+			// When a field is included in Where Clause, but not is Select Clause, and the field table is not base table,
+			// The table will not be present in tablesList and hence needs to be added to the list.
+			if(empty($tableList[$baseTable])) {
+				$tableList[$baseTable] = $field->getTableName();
+				$tableJoinMapping[$baseTable] = $this->meta->getJoinClause($field->getTableName());
+			}
 			if($field->getFieldDataType() == 'reference') {
 				$moduleList = $this->referenceFieldInfoList[$fieldName];
 				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
@@ -515,9 +526,10 @@ class QueryGenerator {
 						}
 						if(count($columnList) > 1) {
 							$columnSql = getSqlForNameInDisplayFormat(array('f'=>$columnList[1],'l'=>$columnList[0]));
+						} else {
+							$columnSql = implode('', $columnList);
 						}
-					
-							
+						
 						$fieldSql .= "$fieldGlue $columnSql $valueSql";
 						$fieldGlue = ' OR';
 					}
@@ -549,7 +561,7 @@ class QueryGenerator {
 			$conditionInfo['value'].")";
 			$fieldSqlList[$index] = $fieldSql;
 		}
-
+		
 		$groupSql = $this->makeGroupSqlReplacements($fieldSqlList, $groupSql);
 		if($this->conditionInstanceCount > 0) {
 			$this->conditionalWhere = $groupSql;
@@ -782,6 +794,9 @@ class QueryGenerator {
 						stripslashes($input[$fieldInfo])));
 				$moduleFields = $this->meta->getModuleFields();
 				$field = $moduleFields[$fieldName];
+				if(empty($field)) {
+					continue;
+				}
 				$type = $field->getFieldDataType();
 			
 				$operator = str_replace('\'','',stripslashes($input[$condition]));

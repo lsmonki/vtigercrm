@@ -238,7 +238,7 @@ function getParentMailId($returnmodule,$parentid)
         {
                 $mailid = $adb->query_result($res,0,'otheremail');
                 if($mailid == '')
-                        $mailid = $adb->query_result($res,0,'yahooid');
+                        $mailid = $adb->query_result($res,0,'secondaryemail');
         }
 	return $mailid;
 }

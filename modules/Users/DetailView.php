@@ -203,6 +203,7 @@ $smarty->assign('FORM_TOKEN', $_SESSION['Users_FORM_TOKEN']);
 //for check audittrail if it is enable or not
 $smarty->assign("AUDITTRAIL",$audit_trail);
 
+$smarty->assign("view", null);
 $smarty->display("UserDetailView.tpl");
 }
 else

@@ -125,10 +125,10 @@ function vtws_getId($objId, $elemId){
 function getEmailFieldId($meta, $entityId){
 	global $adb;
 	//no email field accessible in the module. since its only association pick up the field any way.
-	$query="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? 
+	$query="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=?
 		and uitype=13 and presence in (0,2)";
 	$result = $adb->pquery($query, array($meta->getTabId()));
-	
+
 	//pick up the first field.
 	$fieldId = $adb->query_result($result,0,'fieldid');
 	return $fieldId;
@@ -442,6 +442,31 @@ function vtws_getModuleHandlerFromId($id,$user){
 	return $handler;
 }
 
+function vtws_CreateCompanyLogoFile($fieldname) {
+	global $root_directory;
+	$uploaddir = $root_directory ."/test/logo/";
+	$allowedFileTypes = array("jpeg", "png", "jpg", "pjpeg" ,"x-png");
+	$binFile = $_FILES[$fieldname]['name'];
+	$fileType = $_FILES[$fieldname]['type'];
+	$fileSize = $_FILES[$fieldname]['size'];
+	$fileTypeArray = explode("/",$fileType);
+	$fileTypeValue = strtolower($fileTypeArray[1]);
+	if($fileTypeValue == '') {
+		$fileTypeValue = substr($binFile,strrpos($binFile, '.')+1);
+	}
+	if($fileSize != 0) {
+		if(in_array($fileTypeValue, $allowedFileTypes)) {
+			move_uploaded_file($_FILES[$fieldname]["tmp_name"],
+					$uploaddir.$_FILES[$fieldname]["name"]);
+			return $binFile;
+		}
+		throw new WebServiceException(WebServiceErrorCode::$INVALIDTOKEN,
+			"$fieldname wrong file type given for upload");
+	}
+	throw new WebServiceException(WebServiceErrorCode::$INVALIDTOKEN,
+			"$fieldname file upload failed");
+}
+
 function vtws_getActorEntityName ($name, $idList) {
 	$db = PearDatabase::getInstance();
 	if (!is_array($idList) && count($idList) == 0) {
@@ -706,6 +731,10 @@ function vtws_transferOwnership($ownerId, $newOwnerId) {
 	//Updating the smcreatorid,smownerid, modifiedby in vtiger_crmentity
 	$sql = "update vtiger_crmentity set smcreatorid=? where smcreatorid=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
+
+	$sql = "update vtiger_crmentity set smownerid=? where smownerid=?";
+	$db->pquery($sql, array($newOwnerId, $ownerId));
+	
 	$sql = "update vtiger_crmentity set modifiedby=? where modifiedby=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 

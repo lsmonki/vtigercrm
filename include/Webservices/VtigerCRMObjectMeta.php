@@ -452,9 +452,10 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$exists = false;
 		$sql = '';
 		if($this->objectName == 'Users'){
-			$sql = 'select * from vtiger_users where id=? and deleted=0';
+			$sql = "select * from vtiger_users where id=? and deleted=0 and status='Active'";
 		}else{
-			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".$this->getTabName()."'";
+			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".
+				$this->getTabName()."'";
 		}
 		$result = $adb->pquery($sql , array($recordId));
 		if($result != null && isset($result)){

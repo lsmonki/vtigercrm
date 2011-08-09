@@ -101,7 +101,7 @@ $server->wsdl->addComplexType(
         'mobile' => array('name'=>'mobile','type'=>'xsd:string'),
         'fax' => array('name'=>'fax','type'=>'xsd:string'),
         'email' => array('name'=>'email','type'=>'xsd:string'),
-        'yahoo_id' => array('name'=>'yahoo_id','type'=>'xsd:string'),
+        'secondaryemail' => array('name'=>'secondaryemail','type'=>'xsd:string'),
         'website' => array('name'=>'website','type'=>'xsd:string'),
         'lead_status' => array('name'=>'lead_status','type'=>'xsd:string'),
         'rating' => array('name'=>'rating','type'=>'xsd:string'),
