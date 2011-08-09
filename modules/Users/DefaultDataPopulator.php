@@ -2209,20 +2209,45 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				),
 				"prelogin"=>0,
 				"type"=>"POST"
+			),
+			"changePassword"=>array(
+				"include"=>array(
+					"include/Webservices/ChangePassword.php"
+				),
+				"handler"=>"vtws_changePassword",
+				"params"=>array(
+					"id"=>"String",
+					"oldPassword"=>"String",
+					"newPassword"=>"String",
+					'confirmPassword' => 'String'
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
+			),
+			"deleteUser"=>array(
+				"include"=>array(
+					"include/Webservices/DeleteUser.php"
+				),
+				"handler"=>"vtws_deleteUser",
+				"params"=>array(
+					"id"=>"String",
+					"newOwnerId"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
 			)
 		);
-		$createOperationQuery = "insert into vtiger_ws_operation(operationid,name,handler_path,handler_method,type,prelogin) 
-			values (?,?,?,?,?,?);";
-		$createOperationParamsQuery = "insert into vtiger_ws_operation_parameters(operationid,name,type,sequence) 
-			values (?,?,?,?);";
+
 		foreach ($operationMeta as $operationName => $operationDetails) {
-			$operationId = $this->db->getUniqueID("vtiger_ws_operation");
-			$result = $this->db->pquery($createOperationQuery,array($operationId,$operationName,$operationDetails['include'],
-				$operationDetails['handler'],$operationDetails['type'],$operationDetails['prelogin']));
+			$operationId = vtws_addWebserviceOperation($operationName,
+														$operationDetails['include'],
+														$operationDetails['handler'],
+														$operationDetails['type'],
+														$operationDetails['prelogin']);
 			$params = $operationDetails['params'];
 			$sequence = 1;
 			foreach ($params as $paramName => $paramType) {
-				$result = $this->db->pquery($createOperationParamsQuery,array($operationId,$paramName,$paramType,$sequence++));
+				vtws_addWebserviceOperationParam($operationId, $paramName, $paramType, $sequence++);
 			}
 		}
 	}

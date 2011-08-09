@@ -373,6 +373,7 @@ vtws_addActorTypeWebserviceEntityWithName(
 		'VtigerCompanyDetails',
 		array('fieldNames'=>'organizationname','indexField'=>'groupid','tableName'=>'vtiger_organizationdetails'));
 
+
 $sql = 'CREATE TABLE vtiger_ws_fieldinfo(id varchar(64) NOT NULL PRIMARY KEY,
 										property_name VARCHAR(32),
 										property_value VARCHAR(64)
@@ -408,6 +409,7 @@ $adb->pquery($sql, $params);
 // Increase the size of User Singature field
 $adb->pquery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000);",array());
 
+// New Currencies added
 function vt530_updateCurrencyInfo() {
 	global $adb;
 	include('modules/Utilities/Currencies.php');
@@ -437,6 +439,50 @@ function vt530_updateCurrencyInfo() {
 	}
 }
 vt530_updateCurrencyInfo();
+
+// Change Password & Delete User Webservice apis
+$operationMeta = array(
+	"changePassword"=>array(
+		"include"=>array(
+			"include/Webservices/ChangePassword.php"
+		),
+		"handler"=>"vtws_changePassword",
+		"params"=>array(
+			"id"=>"String",
+			"oldPassword"=>"String",
+			"newPassword"=>"String",
+			'confirmPassword' => 'String'
+		),
+		"prelogin"=>0,
+		"type"=>"POST"
+	),
+	"deleteUser"=>array(
+		"include"=>array(
+			"include/Webservices/DeleteUser.php"
+		),
+		"handler"=>"vtws_deleteUser",
+		"params"=>array(
+			"id"=>"String",
+			"newOwnerId"=>"String"
+		),
+		"prelogin"=>0,
+		"type"=>"POST"
+	)
+);
+
+foreach ($operationMeta as $operationName => $operationDetails) {
+	$operationId = vtws_addWebserviceOperation($operationName,
+												$operationDetails['include'],
+												$operationDetails['handler'],
+												$operationDetails['type'],
+												$operationDetails['prelogin']);
+	$params = $operationDetails['params'];
+	$sequence = 1;
+	foreach ($params as $paramName => $paramType) {
+		vtws_addWebserviceOperationParam($operationId, $paramName, $paramType, $sequence++);
+	}
+}
+
 
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
