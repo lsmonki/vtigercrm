@@ -438,6 +438,7 @@ function vt530_updateCurrencyInfo() {
 }
 vt530_updateCurrencyInfo();
 
+installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
 updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
