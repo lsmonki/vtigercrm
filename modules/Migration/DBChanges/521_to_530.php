@@ -406,7 +406,37 @@ $params = array($webserviceObject->getEntityId(),'vtiger_organizationdetails');
 $adb->pquery($sql, $params);
 
 // Increase the size of User Singature field
-$this->db->pquery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000);",array());
+$adb->pquery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000);",array());
+
+function vt530_updateCurrencyInfo() {
+	global $adb;
+	include('modules/Utilities/Currencies.php');
+
+	$adb->pquery("DELETE FROM vtiger_currencies;", array());
+	$adb->pquery('UPDATE vtiger_currencies_seq SET id=1;', array());
+	foreach ($currencies as $key => $value) {
+		$adb->pquery("INSERT INTO vtiger_currencies VALUES (?,?,?,?)",
+						array($adb->getUniqueID("vtiger_currencies"), $key, $value[0], $value[1]));
+	}
+	$cur_result = $adb->pquery("SELECT * from vtiger_currency_info", array());
+	for ($i = 0; $i < $adb->num_rows($cur_result); $i++) {
+		$cur_symbol = $adb->query_result($cur_result, $i, "currency_symbol");
+		$cur_code = $adb->query_result($cur_result, $i, "currency_code");
+		$cur_name = $adb->query_result($cur_result, $i, "currency_name");
+		$cur_id = $adb->query_result($cur_result, $i, "id");
+		$currency_exists = $adb->pquery("SELECT * from vtiger_currencies WHERE currency_code=?",
+				array($cur_code));
+		if ($adb->num_rows($currency_exists) > 0) {
+			$currency_name = $adb->query_result($currency_exists, 0, "currency_name");
+			$adb->pquery("UPDATE vtiger_currency_info SET vtiger_currency_info.currency_name=? WHERE id=?",
+								array($currency_name, $cur_id));
+		} else {
+			$adb->pquery("INSERT INTO vtiger_currencies VALUES (?,?,?,?)",
+							array($adb->getUniqueID("vtiger_currencies"), $cur_name, $cur_code, $cur_symbol));
+		}
+	}
+}
+vt530_updateCurrencyInfo();
 
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
