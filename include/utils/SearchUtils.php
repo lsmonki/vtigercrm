@@ -1062,7 +1062,8 @@ function getdashboardcondition()
 		$url_string .= "&date_closed=".$date_closed;
 	}
 	if(isset($owner) && $owner != ""){
-		$user_qry="select vtiger_users.id from vtiger_users where vtiger_users.user_name = ?";
+		$column = getSqlForNameInDisplayFormat(array('l'=>'last_name', 'f'=>'first_name'));
+		$user_qry="select vtiger_users.id from vtiger_users where $column = ?";
 		$res = $adb->pquery($user_qry, array($owner));
 		$uid = $adb->query_result($res,0,'id');
 		array_push($where_clauses, "vtiger_crmentity.smownerid = ".$uid);

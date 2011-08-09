@@ -152,7 +152,7 @@ class jpgraph {
 				foreach($stages as $stage) {
 					$log->debug("stage is $stage");
 					foreach ($user_id as $the_id) {
-						$the_user = get_assigned_user_name($the_id);
+						$the_user = getEntityName('Users', $the_id);
 						if (!isset($datax[$stage][$the_id])) {
 							$datax[$stage][$the_id] = array();
 						}
@@ -481,7 +481,7 @@ class jpgraph {
 			  	}
 			  	foreach($stages as $stage) {
 					foreach ($user_id as $the_id) {
-						$the_user = get_assigned_user_name($the_id);
+						$the_user = getEntityName('Users', $the_id);
 						$log->debug("stage_key is $stage");
 						if (!isset($datax[$stage][$the_id])) {
 							$datax[$stage][$the_id] = array();
@@ -785,7 +785,7 @@ class jpgraph {
 			$aAlts = array();
 			foreach ($datax as $stage_key=>$stage_translation) {
 			  foreach ($user_id as $the_id) {
-			  	$the_user = get_assigned_user_name($the_id);
+			  	$the_user = getEntityName('Users', $the_id);
 				if (!isset($datay[$the_id])) {
 					$datay[$the_id] = array();
 				}

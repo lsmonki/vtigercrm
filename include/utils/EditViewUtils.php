@@ -1281,7 +1281,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}elseif($uitype == 101)
 	{
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
-        $fieldvalue[] = getUserName($value);
+        $fieldvalue[] = getOwnerName($value);
         $fieldvalue[] = $value;
 	}
 	elseif($uitype == 26){

@@ -1364,7 +1364,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		AND (vtiger_recurringevents.activityid is NULL))
 		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?))";
 
-	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid, vtiger_crmentity.crmid,
+	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+	$query = "SELECT vtiger_groups.groupname, $userNameSql as user_name,vtiger_crmentity.smownerid, vtiger_crmentity.crmid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1595,7 +1597,9 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 
-   $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid,
+	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+   $query = "SELECT vtiger_groups.groupname, $userNameSql as user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid,
 				vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
 					ON vtiger_crmentity.crmid = vtiger_activity.activityid

@@ -1467,7 +1467,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 52) 
 	{        
-		$value = getUserName($adb->query_result($list_result,$list_result_count,$colname)); 
+		$value = getOwnerName($adb->query_result($list_result,$list_result_count,$colname)); 
 	}
 	elseif($uitype == 51)//Accounts - Member Of
 	{
@@ -1481,7 +1481,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 77) 
 	{        
-		$value = getUserName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
+		$value = getOwnerName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
 	} 
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
@@ -2351,12 +2351,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				else
 				{
-					if($colname == "lastname")
+					if($colname == "lastname") {
 						$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
-
+					} elseif($module == 'Users' && $fieldname == 'last_name') {
+						$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
+					}
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-
+					
 					$log->debug("Exiting getValue method ...");
 					if($_REQUEST['maintab'] == 'Calendar')
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_todo("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
@@ -2450,7 +2452,9 @@ function getListQuery($module,$where='')
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	$tab_id = getTabid($module);	
+	$tab_id = getTabid($module);
+	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 	switch($module)
 	{
 	Case "HelpDesk":
@@ -2572,7 +2576,7 @@ function getListQuery($module,$where='')
                 $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Documents":
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
 			vtiger_crmentity.smownerid,vtiger_attachmentsfolder.*,vtiger_notes.*
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity

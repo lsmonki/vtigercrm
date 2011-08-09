@@ -549,12 +549,14 @@ class Services extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
 			vtiger_inventoryproductrel.productid,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
@@ -617,11 +619,13 @@ class Services extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
 			vtiger_service.servicename,
 			vtiger_inventoryproductrel.productid,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
@@ -682,11 +686,13 @@ class Services extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_service.servicename AS servicename,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
@@ -749,11 +755,13 @@ class Services extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity

@@ -66,8 +66,10 @@ class Appointment
 		$and = "AND ((vtiger_activity.date_start between ? AND ?)
 			OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
 			OR (vtiger_activity.due_date between ? AND ?))";
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		
-        	$q= "select vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype not in ('Emails','Task') $and ";
+        	$q= "select vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype not in ('Emails','Task') $and ";
 
 		// User Select Customization: Changes should made also in (calendayLaout getEventList) and one more BELOW
 		$query_filter_prefix = calendarview_getSelectedUserFilterQuerySuffix(); 
@@ -127,7 +129,7 @@ class Appointment
 			
         }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name , vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_groups.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$q = "SELECT vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name , vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_groups.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$q .= getNonAdminAccessControlQuery('Calendar',$current_user);
         $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype not in ('Emails','Task') AND (recurringdate between ? and ?) ";
 		

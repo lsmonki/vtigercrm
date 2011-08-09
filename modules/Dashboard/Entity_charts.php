@@ -126,10 +126,11 @@ function module_Chart_HomePageDashboard($userinfo) {
 				$cnt_val .= $modrec_count;
 
 				$modviewid = $cvidinfo[$modulename];
+				$username = getDisplayName(array('f'=>$userinfo->first_name,'l'=>$userinfo->last_name));
 				if($target_val!= '') $target_val.= '::';
-				$target_val.= urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+				$target_val.= urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$username&viewname=$modviewid");
 				if($test_target_val!='') $test_target_val.= 'K';
-				$test_target_val.=urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+				$test_target_val.=urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$username&viewname=$modviewid");
 
 				$urlstring .= 'K';
 				$cnt_table .= "<tr><td>$modulename</td><td align='center'>$modrec_count</td></tr>";

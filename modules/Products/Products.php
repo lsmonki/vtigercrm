@@ -498,8 +498,15 @@ class Products extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid, vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.related_to, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
-			FROM vtiger_potential
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid, 
+			vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.related_to,
+			vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, 
+			case when (vtiger_users.user_name not like '') then $userNameSql else 
+			vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, 
+			vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, 
+			vtiger_products.expiry_date FROM vtiger_potential
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid
 			INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_potential.potentialid
 			INNER JOIN vtiger_products ON vtiger_seproductsrel.productid = vtiger_products.productid
@@ -553,7 +560,9 @@ class Products extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT  case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_users.id,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT  case when (vtiger_users.user_name not like \"\") then $userNameSql else vtiger_groups.groupname end as user_name, vtiger_users.id,
 			vtiger_products.productid, vtiger_products.productname,
 			vtiger_troubletickets.ticketid,
 			vtiger_troubletickets.parent_id, vtiger_troubletickets.title,
@@ -606,6 +615,8 @@ class Products extends CRMEntity {
 			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_contactdetails.lastname,
 			vtiger_contactdetails.firstname,
 			vtiger_contactdetails.contactid,
@@ -613,7 +624,7 @@ class Products extends CRMEntity {
 			vtiger_seactivityrel.*,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
-			vtiger_users.user_name,
+			$userNameSql,
 			vtiger_recurringevents.recurringtype
 			FROM vtiger_activity
 			INNER JOIN vtiger_seactivityrel
@@ -672,12 +683,14 @@ class Products extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
 			vtiger_inventoryproductrel.productid,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
@@ -740,11 +753,13 @@ class Products extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
 			vtiger_inventoryproductrel.productid,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
@@ -805,11 +820,13 @@ class Products extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
@@ -872,11 +889,13 @@ class Products extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+			case when (vtiger_users.user_name not like '') then $userNameSql 
 				else vtiger_groups.groupname end as user_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity

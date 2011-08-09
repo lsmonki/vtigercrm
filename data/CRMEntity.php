@@ -1541,7 +1541,9 @@ $log->info("in getOldFileName  ".$notesid);
 		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
 		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
 		
-	 	$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+	 	$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name," .
 				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,vtiger_crmentity.modifiedtime,
 				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
 				vtiger_notes.notecontent description,vtiger_notes.*
@@ -1710,7 +1712,9 @@ $log->info("in getOldFileName  ".$notesid);
 
 		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 
-		$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN $userNameSql ELSE vtiger_groups.groupname END AS user_name";
 		
 		$more_relation = '';
 		if(!empty($other->related_tables)) {
@@ -1792,7 +1796,9 @@ $log->info("in getOldFileName  ".$notesid);
 			
 			$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 	
-			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
+			$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+				'vtiger_users.last_name'));
+			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN $userNameSql ELSE vtiger_groups.groupname END AS user_name";
 			
 			$more_relation = '';
 			if(!empty($other->related_tables)) {

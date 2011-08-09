@@ -212,7 +212,9 @@ class SalesOrder extends CRMEntity {
 			}
 		}
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and vtiger_activity.status !='Deferred')";
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and vtiger_activity.status !='Deferred')";
 		
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
@@ -231,8 +233,14 @@ class SalesOrder extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,vtiger_activity.*, vtiger_seactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,	vtiger_crmentity.createdtime, vtiger_crmentity.description, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
-			from vtiger_activity
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, 
+			vtiger_contactdetails.contactid,vtiger_activity.*, vtiger_seactivityrel.*, 
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,	
+			vtiger_crmentity.createdtime, vtiger_crmentity.description, case when 
+			(vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname 
+			end as user_name from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
@@ -269,14 +277,18 @@ class SalesOrder extends CRMEntity {
 		else
 			$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
 
-			$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
-				from vtiger_invoice 
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
-				left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid 
-				inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid 
-				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
-				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid 
-				where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, 
+			vtiger_salesorder.subject as salessubject, case when 
+			(vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname
+			end as user_name from vtiger_invoice 
+			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
+			left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid 
+			inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid 
+			left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+			left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid 
+			where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);

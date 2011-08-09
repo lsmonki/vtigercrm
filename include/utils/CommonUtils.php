@@ -672,27 +672,31 @@ function getLeadName($lead_id)
  * returns the Contact Name in string format.
  */
 
-function getFullNameFromQResult($result, $row_count, $module)
-{
+function getFullNameFromQResult($result, $row_count, $module) {
 	global $log, $adb, $current_user;
 	$log->info("In getFullNameFromQResult(". print_r($result, true) . " - " . $row_count . "-".$module.") method ...");
-    
+
 	$rowdata = $adb->query_result_rowdata($result,$row_count);
-	
+
 	$name = '';
-	if($rowdata != '' && count($rowdata) > 0)
-	{
-        	$firstname = $rowdata["firstname"];
-        	$lastname = $rowdata["lastname"];
-        	$name = $lastname;
+	if($rowdata != '' && count($rowdata) > 0) {
+		if($module == 'Users') {
+			$firstname = $rowdata["first_name"];
+			$lastname = $rowdata["last_name"];
+			$name = $lastname.' '.$firstname;
+		} else {
+			$firstname = $rowdata["firstname"];
+			$lastname = $rowdata["lastname"];
+			
+			$name = $lastname;
 			// Asha: Check added for ticket 4788
 			if (getFieldVisibilityPermission($module, $current_user->id,'firstname') == '0') {
 				$name .= ' '.$firstname;
 			}
+		}
 	}
-	$nam = textlength_check($name);
-	
-	return $nam;
+	$name = textlength_check($name);
+	return $name;
 }
 
 /**
@@ -1284,13 +1288,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
   		{
- 			$sql = "SELECT vtiger_field.*, '0' as readonly FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
   			$params = array($tabid, $blockid_list);
 		}
   		else
   		{
   			$profileList = getCurrentUserProfileList();
- 			$sql = "SELECT vtiger_field.*, vtiger_profile2field.readonly FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  			$params = array($tabid, $blockid_list, $profileList);
 			//Postgres 8 fixes
  			if( $adb->dbType == "pgsql")
@@ -1316,7 +1320,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  				$params = array($tabid, $blockid_list, $info_type, $profileList);
 				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -1333,7 +1337,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
 				$params = array($tabid, $blockid_list, $profileList);
  				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -2142,7 +2146,7 @@ function QuickCreate($module)
 	else
 	{
 		$profileList = getCurrentUserProfileList();
-		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly = 0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) and displaytype != 2 GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
+		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) and displaytype != 2 GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
 		$params = array($tabid, $profileList);
 		//Postgres 8 fixes
 		if( $adb->dbType == "pgsql")
@@ -2161,8 +2165,6 @@ function QuickCreate($module)
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$typeofdata = $adb->query_result($result,$i,"typeofdata");
-		$defaultvalue = $adb->query_result($result,$i,"defaultvalue");
-		$col_fields[$fieldname] = $defaultvalue;
 
 		//to get validationdata
 		$fldLabel_array = Array();
@@ -3540,11 +3542,11 @@ function getOwnerNameList($idList) {
 
 	$nameList = array();
 	$db = PearDatabase::getInstance();
-	$sql = "select user_name,id from vtiger_users where id in (".generateQuestionMarks($idList).")";
+	$sql = "select first_name,last_name,id from vtiger_users where id in (".generateQuestionMarks($idList).")";
 	$result = $db->pquery($sql, $idList);
 	$it = new SqlResultIterator($db, $result);
 	foreach ($it as $row) {
-		$nameList[$row->id] = $row->user_name;
+		$nameList[$row->id] = getDisplayName(array('f'=>$row->first_name,'l'=>$row->last_name));
 	}
 	$groupIdList = array_diff($idList, array_keys($nameList));
 	if(count($groupIdList) > 0) {
@@ -3633,27 +3635,42 @@ function vt_hasRTE() {
 			(!empty($USE_RTE) && $USE_RTE == 'true'));
 }
 
-
-function getModuleSequenceNumber($module,$recordId){
-	global $adb;
-	switch($module){
-		case "Invoice":
-			$res = $adb->query("SELECT invoice_no FROM vtiger_invoice WHERE invoiceid = $recordId");
-			$moduleSeqNo = $adb->query_result($res,0,'invoice_no');
-			break;
-		case "PurchaseOrder":
-			$res = $adb->query("SELECT purchaseorder_no FROM vtiger_purchaseorder WHERE purchaseorderid = $recordId");
-			$moduleSeqNo = $adb->query_result($res,0,'purchaseorder_no');
-			break;
-		case "Quotes":
-			$res = $adb->query("SELECT quote_no FROM vtiger_quotes WHERE quoteid = $recordId");
-			$moduleSeqNo = $adb->query_result($res,0,'quote_no');
-			break;
-		case "SalesOrder":
-			$res = $adb->query("SELECT salesorder_no FROM vtiger_salesorder WHERE salesorderid = $recordId");
-			$moduleSeqNo = $adb->query_result($res,0,'salesorder_no');
-			break;
+function getNameInDisplayFormat($input,$dispFormat="lf"){
+	if(empty($dispFormat)){
+		$dispFormat = "lf";
 	}
-	return $moduleSeqNo;
+	$dispFormat = strtolower($dispFormat);
+	$formattedNameList = array();
+	$strLength = strlen($dispFormat);
+	for($i=0;$i<$strLength;$i++) {
+		$pos = strpos($dispFormat, $dispFormat[$i]);
+		if($pos !== false) {
+			$formattedNameList[$pos] = $input[$dispFormat[$i]];
+		}
+	}
+	return $formattedNameList;
+}
+
+function concatNamesSql($string){
+	$sqlString = "CONCAT(".$string.")";
+	return $sqlString;
+}
+
+function joinName($input,$glue=' '){
+	$displayName = implode($glue,$input);
+	return $displayName;
+}
+
+function getSqlForNameInDisplayFormat($input,$dispFormat="lf",$glue=' '){
+	$formattedNameList = getNameInDisplayFormat($input,$dispFormat);
+	$formattedNameListString = implode(",'".$glue."',",$formattedNameList);
+	$sqlString = concatNamesSql($formattedNameListString);
+	return $sqlString;
+}
+
+function getDisplayName($input,$dispFormat="lf",$glue=' '){
+	$formattedNameList = getNameInDisplayFormat($input,$dispFormat);
+	$displayName = joinName($formattedNameList);
+	return $displayName;
 }
 ?>

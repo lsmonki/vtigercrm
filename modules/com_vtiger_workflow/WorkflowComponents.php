@@ -32,7 +32,7 @@ function vtJsonOwnersList($adb) {
 	$activeUsersList = get_user_array(false);
 	$allGroupsList = get_group_array(false);
 	foreach ($activeUsersList as $userId => $userName) {
-		$ownersList[] = array('label' => $userName, 'value' => $userName);
+		$ownersList[] = array('label' => $userName, 'value' => getUserName($userId));
 	}
 	foreach ($allGroupsList as $groupId => $groupName) {
 		$ownersList[] = array('label' => $groupName, 'value' => $groupName);

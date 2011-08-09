@@ -35,17 +35,8 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 	global $process_fields;
 
 	// MWC ** Getting vtiger_users
-	$temp = get_user_array(FALSE);
-	foreach ( $temp as $key=>$data)
-	$users_groups_list[$data] = $key;
+	$users_groups_list = array();
 
-	$temp = get_group_array(FALSE);
-	foreach ( $temp as $key=>$data)
-	$users_groups_list[$data] = $key;
-
-	p(print_r(users_groups_list,1));
-	$adb->println("Users List : ");
-	$adb->println($users_groups_list);
 	$dup_count = 0;
 	$count = 0;
 	$dup_ow_count = 0;
@@ -102,7 +93,16 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 				{
 					//Here we are assigning the user id in column fields, so in function assign_user (ImportLead.php and ImportProduct.php files) we should use the id instead of user name when query the user
 					//or we can use $focus->column_fields['smownerid'] = $users_groups_list[$row[$field_count]];
-					$focus->column_fields[$field] = $users_groups_list[trim($row[$field_count])];
+					$row[$field_count] = trim($row[$field_count]);
+					if(empty($users_groups_list[$row[$field_count]])) {
+						$id = getUserId_Ol($row[$field_count]);
+						if(empty($id)) {
+							$id = getGrpId($row[$field_count]);
+						}
+						$users_groups_list[trim($row[$field_count])] = $id;
+								
+					}
+					$focus->column_fields[$field] = $users_groups_list[$row[$field_count]];
 					p("setting my_userid=$my_userid for user=".$row[$field_count]);
 				}
 				else

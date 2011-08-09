@@ -132,7 +132,9 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 	//Added by Don for AssignedTo ordering issue in Related Lists
 	$query_order_by = $order_by;
 	if($order_by == 'smownerid') {
-		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query_order_by = "case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end ";
 	} elseif($order_by != 'crmid' && !empty($order_by)) {
 		$tabname = getTableNameForField($relatedmodule, $order_by);
 		if($tabname !== '' and $tabname != NULL)

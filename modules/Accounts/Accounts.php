@@ -183,7 +183,9 @@ class Accounts extends CRMEntity {
 			}
 		}
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 					vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus,
 					vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 					vtiger_crmentity.modifiedtime from vtiger_campaign
@@ -239,11 +241,13 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_contactdetails.*,
 			vtiger_crmentity.crmid,
                         vtiger_crmentity.smownerid,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
@@ -302,11 +306,13 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.related_to,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
 			vtiger_potential.potentialtype, vtiger_potential.amount,
 			vtiger_potential.closingdate, vtiger_potential.potentialtype, vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.smownerid
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
@@ -371,12 +377,14 @@ class Accounts extends CRMEntity {
 			}
 		}
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_activity.*, vtiger_cntactivityrel.*,
 			vtiger_seactivityrel.*, vtiger_contactdetails.lastname,
 			vtiger_contactdetails.firstname,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 			vtiger_recurringevents.recurringtype
 			FROM vtiger_activity
 			INNER JOIN vtiger_seactivityrel
@@ -416,12 +424,14 @@ class Accounts extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering get_history(".$id.") method ...");
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.status, vtiger_activity.eventstatus,
 			vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,
 			vtiger_activity.time_start, vtiger_activity.time_end,
 			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
-			vtiger_crmentity.description,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
+			vtiger_crmentity.description,case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
 			FROM vtiger_activity
 			INNER JOIN vtiger_seactivityrel
 				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
@@ -477,7 +487,9 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 			vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.activitytype, vtiger_crmentity.modifiedtime,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_activity.date_start, vtiger_seactivityrel.crmid as parent_id 
@@ -539,7 +551,9 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 			vtiger_crmentity.*,
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
@@ -603,7 +617,9 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 			vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_account.accountname,
@@ -668,11 +684,13 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_quotes.subject AS quotename,
 			vtiger_account.accountname,
-			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
+			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -732,7 +750,9 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_users.id,
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
 			vtiger_troubletickets.status, vtiger_troubletickets.priority,
 			vtiger_troubletickets.parent_id, vtiger_troubletickets.ticket_no,
@@ -1075,8 +1095,10 @@ class Accounts extends CRMEntity {
 			$this->__getParentAccounts($parentid,$parent_accounts,$encountered_accounts);
 		}
 		
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_account.*, vtiger_accountbillads.*," .
-				" CASE when (vtiger_users.user_name not like '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END as user_name " .
+				" CASE when (vtiger_users.user_name not like '') THEN $userNameSql ELSE vtiger_groups.groupname END as user_name " .
 				" FROM vtiger_account" .
 				" INNER JOIN vtiger_crmentity " .
 				" ON vtiger_crmentity.crmid = vtiger_account.accountid" .
@@ -1120,8 +1142,10 @@ class Accounts extends CRMEntity {
 		global $log, $adb;
         $log->debug("Entering __getChildAccounts(".$id.",".$child_accounts.",".$depth.") method ...");
 		
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_account.*, vtiger_accountbillads.*," .
-				" CASE when (vtiger_users.user_name not like '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END as user_name " .
+				" CASE when (vtiger_users.user_name not like '') THEN $userNameSql ELSE vtiger_groups.groupname END as user_name " .
 				" FROM vtiger_account" .
 				" INNER JOIN vtiger_crmentity " .
 				" ON vtiger_crmentity.crmid = vtiger_account.accountid" .
