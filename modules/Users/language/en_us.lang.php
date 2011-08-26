@@ -690,6 +690,9 @@ $mod_strings = Array(
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
 
+'Theme' => 'Theme',
+'Language' => 'Language',
+
 );
 
 ?>

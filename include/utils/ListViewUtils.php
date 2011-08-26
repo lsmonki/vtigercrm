@@ -2283,9 +2283,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$email_check = 0;
 						if($emailaddress == '')
 						{
-							if(CheckFieldPermission('yahooid',$module) == 'true')
+							if(CheckFieldPermission('secondaryemail',$module) == 'true')
 							{
-								$emailaddress2=$adb->query_result($list_result,$list_result_count,"yahooid");
+								$emailaddress2=$adb->query_result($list_result,$list_result_count,"secondaryemail");
 								$email_check = 2;
 							}
 							else{
@@ -2298,7 +2298,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
-						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
+						//Change this index 0 - to get the vtiger_fieldid based on email or secondaryemail
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						$slashes_name = popup_from_html($name);

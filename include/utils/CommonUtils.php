@@ -3085,10 +3085,10 @@ function is_emailId($entity_id)
 	}
 	elseif($module == 'Leads')
 	{
-		$sql = "select email,yahooid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where leadid = ?";
+		$sql = "select email,secondaryemail from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where leadid = ?";
 		$result = $adb->pquery($sql, array($entity_id));
 		$email1 = $adb->query_result($result,0,"email");
-		$email2 = $adb->query_result($result,0,"yahooid");
+		$email2 = $adb->query_result($result,0,"secondaryemail");
 		if($email1 != "" || $email2 != "") {
 			$check_mailids = "true";
 		} else {
@@ -3215,7 +3215,7 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 
 		//Lead Related Fields
 		"vtiger_leaddetails:email"=>"V",
-		"vtiger_leaddetails:yahooid"=>"V",
+		"vtiger_leaddetails:secondaryemail"=>"V",
 
 		//Documents Related Fields
 		"vtiger_senotesrel:crmid"=>"V",

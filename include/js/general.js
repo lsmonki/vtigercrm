@@ -236,12 +236,6 @@ function emptyCheck(fldName,fldLabel, fldType) {
 function patternValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName);
 	
-	if (type.toUpperCase()=="YAHOO") //Email ID validation
-	{
-		//yahoo Id validation
-		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
-	}
-	
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
@@ -1081,11 +1075,7 @@ function doformValidation(edit_type) {
 					{
 						if (getObj(fieldname[i]).value.length!=0)
 						{
-							var etype = "EMAIL"
-							if(fieldname[i] == "yahooid" || fieldname[i] == "yahoo_id")
-							{
-								etype = "YAHOO";
-							}
+							var etype = "EMAIL";
 							if (!patternValidate(fieldname[i],fieldlabel[i],etype))
 								return false;
 						}
@@ -2412,10 +2402,10 @@ function selectSalesOrder()
 		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
 
-function checkEmailid(parent_module,emailid,yahooid)
+function checkEmailid(parent_module,emailid,secondaryemail)
 {
 	var check = true;
-	if(emailid == '' && yahooid == '')
+	if(emailid == '' && secondaryemail == '')
 	{
 		alert(alert_arr.LBL_THIS+parent_module+alert_arr.DOESNOT_HAVE_MAILIDS);
 		check=false;
@@ -4268,12 +4258,7 @@ function re_dateValidate(fldval,fldLabel,type) {
 
 //Copied from general.js and altered some lines. becos we cant send vales to function present in general.js. it accept only field names.
 function re_patternValidate(fldval,fldLabel,type) {
-	
-	if (type.toUpperCase()=="YAHOO") {
-		//yahoo Id validation
-		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
-	}
-	
+		
 	if (type.toUpperCase()=="EMAIL") {
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/

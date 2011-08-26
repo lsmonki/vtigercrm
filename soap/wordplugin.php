@@ -126,7 +126,7 @@ $server->wsdl->addComplexType(
  	'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
     	'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
         'username' => array('name'=>'username','type'=>'xsd:string'),
-        'yahooid' => array('name'=>'yahooid','type'=>'xsd:string'),
+        'secondaryemail' => array('name'=>'secondaryemail','type'=>'xsd:string'),
         'title' => array('name'=>'title','type'=>'xsd:string'),
         'workphone' => array('name'=>'workphone','type'=>'xsd:string'),
         'department' => array('name'=>'department','type'=>'xsd:string'), 

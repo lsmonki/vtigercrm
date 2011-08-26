@@ -237,25 +237,6 @@ class UsersLastImport extends SugarBean
 		return $query;
 
 	}
-
-	/*
-	function list_view_parse_additional_sections(&$list_form)
-	{
-		if ($this->bean_type == "Contacts")
-		{
-                	if( isset($this->yahoo_id) && $this->yahoo_id != '')
-			{
-                        	$list_form->parse("main.row.yahoo_id");
-			}
-                	else
-			{
-                        	$list_form->parse("main.row.no_yahoo_id");
-			}
-		}
-                return $list_form;
-
-        }
-	*/
 	
 	/**	function used to delete (update deleted=1 in crmentity table) the last imported records of the current user
 	 *	@param int $user_id - user id, whose last imported records want to be deleted

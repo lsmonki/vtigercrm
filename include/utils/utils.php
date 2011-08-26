@@ -2251,8 +2251,8 @@ function getEmailParentsList($module,$id,$focus = false)
     
         $fieldid = 0;
         $fieldname = 'email';
-        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '' )
-                $fieldname = 'yahooid';
+        if($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )
+                $fieldname = 'secondaryemail';
         elseif($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )         
 				$fieldname='secondaryemail';
         $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ? and vtiger_field.presence in (0,2)", array(getTabid($module), $fieldname));
