@@ -246,10 +246,7 @@ function UpdateProfile()
 			        {foreach key=tabid item=elements from=$TAB_PRIV}	
 			        <tr>
 					{assign var=modulename value=$TAB_PRIV[$tabid][0]}
-					{assign var="MODULELABEL" value=$modulename}
-					{if $APP[$modulename] neq ''}
-						{assign var="MODULELABEL" value=$APP[$modulename]}
-					{/if}
+					{assign var="MODULELABEL" value=$modulename|@getTranslatedString:$modulename}
 			          <td class="small cellLabel" width="3%"><div align="right">
 					{$TAB_PRIV[$tabid][1]}
 			          </div></td>
