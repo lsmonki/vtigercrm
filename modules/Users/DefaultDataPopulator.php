@@ -700,7 +700,7 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_quotesshipads',1,'1','ship_country','Shipping Country',1,2,'',100,12,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'bill_pobox','vtiger_quotesbillads',1,'1','bill_pobox','Billing Po Box',1,2,'',100,3,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_pobox','vtiger_quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,'',100,4,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_pobox','vtiger_quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,2,'',100,4,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
 		 //Block55
 		
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,2,'',100,1,$quotedescription,1,'V~O',3,null,'ADV',1)");

@@ -547,7 +547,7 @@ if($adb->num_rows($maxCvIdResult) > 0) {
 $adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE tabid=? AND (fieldname = ? OR fieldname = ?)',
 								array(getTabid('SalesOrder'), 'bill_country', 'ship_country'));
 
-
+$adb->pquery('UPDATE vtiger_field SET presence = 2 WHERE tabid=? AND fieldname = ?', array(getTabid('Quotes'), 'ship_pobox'));
 
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
