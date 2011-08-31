@@ -1152,6 +1152,7 @@ function get_contactsforol($user_name)
 	*/
 	function save_module($module)
 	{
+        $this->sendCustomerPortalLoginDetails($module);
 		$this->insertIntoAttachment($this->id,$module);		
 	}	
 
@@ -1395,8 +1396,58 @@ function get_contactsforol($user_name)
 			$this->db->pquery($sql, $params);
 		}
 	}
-	
-//End
+
+    function sendCustomerPortalLoginDetails($module){
+        global $adb, $log, $PORTAL_URL, $mod_strings;
+
+        $email = $this->column_fields['email'];
+        if ($this->column_fields['portal'] == 'on' || $this->column_fields['portal'] == '1') {            
+            $sql = "SELECT id, user_name, user_password, isactive FROM vtiger_portalinfo WHERE id=?";
+            $result = $adb->pquery($sql, array($this->id));
+            $insert = false;
+            if($adb->num_rows($result) == 0){
+                $insert = true;
+            }else{                
+                $dbusername = $adb->query_result($result,0,'user_name');
+                $isactive = $adb->query_result($result,0,'isactive');
+                if($email == $dbusername && $isactive == 1 && $this->mode == 'edit'){
+                    $update = false;
+                } else if($this->column_fields['portal'] == 'on' ||  $this->column_fields['portal'] == '1'){
+                    $sql = "UPDATE vtiger_portalinfo SET user_name=?, isactive=1 WHERE id=?";
+                    $adb->pquery($sql, array($email, $this->id));
+                    $password = $adb->query_result($result,0,'user_password');
+                    $update = true;
+                } else {
+                    $sql = "UPDATE vtiger_portalinfo SET user_name=?, isactive=? WHERE id=?";
+                    $adb->pquery($sql, array($email, 0, $this->id));
+                    $update = false;
+                }
+            }
+            if($insert == true){
+                $password = makeRandomPassword();
+                $sql = "INSERT INTO vtiger_portalinfo VALUES(?,?,?,?,?,?,?,?)";
+                $params = array($this->id, $email, $password, 'C', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
+                $adb->pquery($sql, $params);
+            }
+
+            require_once("modules/Emails/mail.php");
+			global $current_user;
+            $data_array = Array();
+            $data_array['first_name'] = $this->column_fields['firstname'];
+            $data_array['last_name'] = $this->column_fields['lastname'];
+            $data_array['email'] = $this->column_fields['email'];
+            $data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$mod_strings['Please Login Here'].'</a>';
+            $contents= getmail_contents_portalUser($data_array,$password);
+            $subject = $mod_strings['Customer Portal Login Details'];
+            $log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
+
+            if($insert == true || $update == true)
+                $mail_status = send_mail('Contacts',$this->column_fields['email'],$current_user->user_name,"",$subject,$contents);
+        } else {
+            $sql = "UPDATE vtiger_portalinfo SET user_name=?,isactive=0 WHERE id=?";
+            $adb->pquery($sql, array($email, $this->id));
+        }
+    }
 }
 
 ?>

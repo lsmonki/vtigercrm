@@ -193,6 +193,7 @@ $mod_strings = Array(
 'LBL_MAX_FILE_SIZE' => ' is the max allowed filesize',
 
 'LBL_MERGE_FIELDS_DUPLICATE' => 'Merge Fields For Duplicate Import Records',
+'Customer Portal Login Details' => 'Customer Portal Login Details',
 );
 
 /*$mod_list_strings = Array(
