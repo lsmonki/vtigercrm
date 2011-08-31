@@ -851,8 +851,11 @@ $mod_strings = Array(
 'LBL_PRIVATE'=>'Private',
  
 'Public: Read Only'=>'Public: Read Only',
+
 'Public: Read, Create/Edit'=>'Public: Read, Create/Edit',
+
 'Public: Read, Create/Edit, Delete'=>'Public: Read, Create/Edit, Delete',
+
 'Private'=>'Private',
 'Hide Details'=>'Hide Details',
 'Hide Details and Add Events'=>'Hide Details and Add Events',
@@ -1231,5 +1234,10 @@ $mod_strings = Array(
 'LBL_READ_WRITE_ACCESS_MSG' => 'Read-Write Access',
 
 'LBL_DEFAULT_VALUE' => 'Default Value',
+
+'LBL_DESCRIPTION_Public: Read Only'=>'Users can Read Only other users ',
+'LBL_DESCRIPTION_Public: Read, Create/Edit'=>'Users can Read, Create/Edit other users ',
+'LBL_DESCRIPTION_Public: Read, Create/Edit, Delete'=>'Users can Read, Create/Edit, Delete other users ',
+
 );
 ?>
