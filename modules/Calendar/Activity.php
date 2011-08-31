@@ -997,7 +997,7 @@ function insertIntoRecurringTable(& $recurObj)
 			$sharedIds = getSharedCalendarId($user->id);
 			if(!empty($sharedIds)){
 				$query .= "or ($tableName$scope.id = vtiger_crmentity$scope.smownerid AND ".
-					"$tableName$scope.shared=1 and vtiger_activity$scope.visibility = 'Public') ";
+					"$tableName$scope.shared=1 and vtiger_activity.visibility = 'Public') ";
 			}
 		}
 		return $query;
