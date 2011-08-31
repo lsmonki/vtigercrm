@@ -57,6 +57,8 @@ if(isset($query_string) && $query_string != ''){
 			if(isPermitted($module,"index") == "yes"){
 				$smarty = new vtigerCRM_Smarty;
 	
+				if(!file_exists("modules/$module/language/".$current_language.".lang.php")) $current_language = 'en_us';
+				
 				require_once("modules/$module/language/".$current_language.".lang.php");
 				global $mod_strings;
 				global $app_strings;
