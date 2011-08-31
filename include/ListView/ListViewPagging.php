@@ -17,7 +17,7 @@ require_once('include/DatabaseUtil.php');
 
 checkFileAccess("modules/$currentModule/$currentModule.php");
 require_once("modules/$currentModule/$currentModule.php");
-if(!is_string($_SESSION[$currentModule.'_listquery'])){
+if(!is_string($_SESSION[$currentModule.'_listquery']) || !empty($_REQUEST['globalSearch'])){
 	// Custom View
 	$customView = new CustomView($currentModule);
 	$viewid = $customView->getViewId($currentModule);
@@ -30,11 +30,13 @@ if(!is_string($_SESSION[$currentModule.'_listquery'])){
 	}else{
 		$list_query = getListQuery($currentModule);
 	}
-
-	// Enabling Module Search
+    // Enabling Module Search
 	$url_string = '';
 	if($_REQUEST['query'] == 'true') {
-		if(!empty($_REQUEST['globalSearch'])){
+        if(!empty($_REQUEST['tagSearchText'])){
+            $searchValue = vtlib_purify($_REQUEST['globalSearchText']);
+			$where = '(' . getTagWhere($searchValue, $current_user->id) . ')';
+        } else if(!empty($_REQUEST['globalSearch'])){
 			$searchValue = vtlib_purify($_REQUEST['globalSearchText']);
 			$where = '(' . getUnifiedWhere($list_query,$currentModule,$searchValue) . ')';
 			$url_string .= '&query=true&globalSearch=true&globalSearchText='.$searchValue;

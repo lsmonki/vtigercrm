@@ -3631,7 +3631,7 @@ function getDuplicateListViewEntries_js(module,url)
 		);
 }
 
-function getUnifiedSearchEntries_js(module,url){
+function getUnifiedSearchEntries_js(search,module,url){
 	var qryStr = document.getElementsByName('search_criteria')[0].value;
 	$("status").style.display="block";
 	var recordCount = document.getElementById(module+'RecordCount').value;
@@ -3643,7 +3643,7 @@ function getUnifiedSearchEntries_js(module,url){
 				scope: 'command'
 			},
 			method: 'post',
-			postBody:"module="+module+"&action="+module+"Ajax&file=UnifiedSearch&ajax=true&"+url+
+			postBody:"module="+module+"&search_tag="+search+"&action="+module+"Ajax&file=UnifiedSearch&ajax=true&"+url+
 			'&query_string='+qryStr+'&search_onlyin='+encodeURIComponent('--USESELECTED--')+'&recordCount='+recordCount,
 			onComplete: function(response) {
 				$("status").style.display="none";

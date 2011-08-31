@@ -461,8 +461,12 @@ function getListViewCount(module,element,parentElement,url){
 		}
 	}else if(document.getElementById('globalSearchText') != null && 
 			typeof document.getElementById('globalSearchText') != 'undefined'){
-		var searchText = document.getElementById('globalSearchText').value;
-		searchURL = '&query=true&globalSearch=true&globalSearchText='+encodeURIComponent(searchText);
+            var searchText = document.getElementById('globalSearchText').value;
+            searchURL = '&query=true&globalSearch=true&globalSearchText='+encodeURIComponent(searchText);
+            if(document.getElementById('tagSearchText') != null && typeof document.getElementById('tagSearchText') != 'undefined'){
+                var tagSearch = document.getElementById('tagSearchText').value;
+                searchURL = '&query=true&globalSearch=true&globalSearchText='+encodeURIComponent(searchText)+'&tagSearchText='+encodeURIComponent(tagSearch);
+            }
 	}
 	if(module != 'Documents'){
 		searchURL += (url);
