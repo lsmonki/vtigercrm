@@ -483,6 +483,26 @@ foreach ($operationMeta as $operationName => $operationDetails) {
 	}
 }
 
+$usersModuleInstance = Vtiger_Module::getInstance('Users');
+$blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $usersModuleInstance);
+
+$fieldInstance = new Vtiger_Field();
+$fieldInstance->name = 'theme';
+$fieldInstance->label = 'Theme';
+$fieldInstance->table = 'vtiger_users';
+$fieldInstance->column = 'theme';
+$fieldInstance->columntype = 'VARCHAR(100)';
+$fieldInstance->uitype = 31;
+$blockInstance->addField($fieldInstance);
+
+$fieldInstance = new Vtiger_Field();
+$fieldInstance->name = 'language';
+$fieldInstance->label = 'Language';
+$fieldInstance->table = 'vtiger_users';
+$fieldInstance->column = 'language';
+$fieldInstance->columntype = 'VARCHAR(36)';
+$fieldInstance->uitype = 32;
+$blockInstance->addField($fieldInstance);
 
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");

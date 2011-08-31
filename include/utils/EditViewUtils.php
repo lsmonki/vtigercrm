@@ -1321,6 +1321,32 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $editview_label[] = getTranslatedString($fieldlabel, $module_name);
                 $fieldvalue[] = $value;
                 $fieldvalue[] = $filename;
+	} elseif($uitype == '31') {
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
+		$options = array();
+		$themeList = get_themes();
+		foreach ($themeList as $theme) {
+			if($current_user->theme == $theme) {
+				$selected = 'selected';
+			} else {
+				$selected = '';
+			}
+			$options[] = array(getTranslatedString($theme), $theme, $selected);
+		}
+		$fieldvalue [] = $options;
+	} elseif($uitype == '32') {
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
+		$options = array();
+		$languageList = Vtiger_Language::getAll();
+		foreach ($languageList as $prefix => $label) {
+			if($current_user->language == $prefix) {
+				$selected = 'selected';
+			} else {
+				$selected = '';
+			}
+			$options[] = array(getTranslatedString($label), $prefix, $selected);
+		}
+		$fieldvalue [] = $options;
 	}
 	else
 	{

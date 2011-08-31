@@ -96,6 +96,11 @@ $gmail_bookmarklet = '<a href=\'javascript:(function()%7Bvar%20doc=top.document;
 $app_strings['LBL_GMAIL'].' '.$app_strings['LBL_BOOKMARKLET'].'</a>';
 $smarty->assign("GMAIL_BOOKMARKLET", $gmail_bookmarklet);
 
+$sql="select * from vtiger_organizationdetails";
+$result = $adb->pquery($sql, array());
+//Handle for allowed organation logo/logoname likes UTF-8 Character
+$organization_logo = decode_html($adb->query_result($result,0,'logoname'));
+$smarty->assign("LOGO",$organization_logo);
 
 $smarty->display("Header.tpl");
 ?>

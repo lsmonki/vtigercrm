@@ -80,7 +80,7 @@
 
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
-		<td valign=top><img src="{'vtiger-crm.gif'|@vtiger_imageurl:$THEME}" alt="vtiger CRM" title="vtiger CRM" border=0></td>
+		<td valign=top><img src="test/logo/{$LOGO}" alt="{$LOGO}" title="{$LOGO}" border=0 style="width: 15em;height: 3.5em;"></td>
 		<td width=100% align=center>
 {if $APP.$MODULE_NAME eq 'Dashboards'}
 		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT|escape}</marquee>

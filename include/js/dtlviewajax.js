@@ -411,7 +411,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = popObj.value;
 		}
 	}
-	else if(uitype == '15' || uitype == '16' )
+	else if(uitype == '15' || uitype == '16' || uitype == '31' || uitype == '32')
         {
                         var notaccess =document.getElementById(txtBox);
                         tagValue = notaccess.options[notaccess.selectedIndex].text;

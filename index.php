@@ -292,6 +292,8 @@ if($use_current_login){
 	$log->debug("The current user does not have a session.  Going to the login page");	
 	$action = "Login";
 	$module = "Users";
+	include 'modules/Users/Login.php';
+	exit;
 }
 
 
@@ -644,8 +646,6 @@ if(!$skipHeaders) {
 		}
 		include('themes/'.$theme.'/header.php');
 	}
-	else 
-		include('themes/'.$theme.'/loginheader.php');
 	
 	if(isset($_SESSION['administrator_error']))
 	{
@@ -839,8 +839,8 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		// END
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM $vtiger_current_version</span></td>";
-		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-".date('Y')." <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a> | <a href='http://www.vtiger.com/products/crm/privacy_policy.html' target='_blank'>".getTranslatedString('LNK_PRIVACY_POLICY')."</a></span> $statimage</td></tr></table>";
+		echo "<tr><td class=small align=left><span>Powered by vtiger CRM - $vtiger_current_version</span></td>";
+		echo "<td class=small align=right><span>&copy; 2004-".date('Y')." <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a> | <a href='http://www.vtiger.com/products/crm/privacy_policy.html' target='_blank'>".getTranslatedString('LNK_PRIVACY_POLICY')."</a></span> $statimage</td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements

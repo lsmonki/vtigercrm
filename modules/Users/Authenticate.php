@@ -75,24 +75,16 @@ if($focus->is_authenticated())
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
 	// store the user's theme in the session
-	if (isset($_REQUEST['login_theme'])) {
-		$authenticated_user_theme = vtlib_purify($_REQUEST['login_theme']);
-	}
-	elseif (isset($_REQUEST['ck_login_theme']))  {
-		$authenticated_user_theme = vtlib_purify($_REQUEST['ck_login_theme']);
-	}
-	else {
+	if(!empty($focus->column_fields["theme"])) {
+		$authenticated_user_theme = $focus->column_fields["theme"];
+	} else {
 		$authenticated_user_theme = $default_theme;
 	}
 	
 	// store the user's language in the session
-	if (isset($_REQUEST['login_language'])) {
-		$authenticated_user_language = vtlib_purify($_REQUEST['login_language']);
-	}
-	elseif (isset($_REQUEST['ck_login_language']))  {
-		$authenticated_user_language = vtlib_purify($_REQUEST['ck_login_language']);
-	}
-	else {
+	if(!empty($focus->column_fields["language"])) {
+		$authenticated_user_language = $focus->column_fields["language"];
+	} else {
 		$authenticated_user_language = $default_language;
 	}
 
