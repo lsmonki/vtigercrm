@@ -61,6 +61,12 @@ $mod_strings = array(
 'LBL_CREATE_ENTITY_NOTE_ORDER_MATTERS' => 'Note: Expressions will be evaluated in the order of the field values provided.
 											So make sure to provide value for a field before using it in expressions.',
 'LBL_SET_VALUE' => 'Set Value',
+
+'LBL_EMAIL_RECIPIENT' => 'Recipient',
+'LBL_EMAIL_CC' => 'CC',
+'LBL_EMAIL_BCC' => 'BCC',
+'LBL_EMAIL_SUBJECT' => 'Subject',
+	
 );
 
 
