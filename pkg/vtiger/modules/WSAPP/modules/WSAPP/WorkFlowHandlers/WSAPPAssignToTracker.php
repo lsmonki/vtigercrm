@@ -31,6 +31,10 @@ class WSAPPAssignToTracker extends VTEventHandler{
 			return;
 		}
 		$wsModuleName = $this->getWsModuleName($moduleName);
+		if($wsModuleName =="Calendar")
+		{
+				$wsModuleName = vtws_getCalendarEntityType($recordId);
+		}
 		$handler = vtws_getModuleHandlerFromName($wsModuleName, $current_user);
 		$meta = $handler->getMeta();
 		$recordWsValues = DataTransform::sanitizeData($recordValues,$meta);
