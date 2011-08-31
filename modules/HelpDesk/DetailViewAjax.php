@@ -48,7 +48,7 @@ if($ajaxaction == "DETAILVIEW")
 			require_once('modules/Emails/mail.php');
 			$user_emailid = getUserEmailId('id',$modObj->column_fields['assigned_user_id']);
 			
-			$subject = $modObj->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$modObj->id.' ] Re : '.$modObj->column_fields['ticket_title'];
+			$subject = $modObj->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$modObj->id.' ] '.$mod_strings["Re"].''.$modObj->column_fields['ticket_title'];
 			$parent_id = $modObj->column_fields['parent_id'];
 			if(!empty($parent_id) && $parent_id!=0){
 				$parent_module = getSalesEntityType($parent_id);

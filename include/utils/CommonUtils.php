@@ -2921,7 +2921,7 @@ function getTicketComments($ticketid)
                 }
         }
         if($commentlist != '')
-                $commentlist = '<br><br> The comments are : '.$commentlist;
+                $commentlist = '<br><br>'.$mod_strings["The comments are"].' : '.$commentlist;
 
         $log->debug("Exiting getTicketComments method ...");
         return $commentlist;
@@ -2933,7 +2933,7 @@ function getTicketDetails($id,$whole_date)
 	 if($whole_date['mode'] == 'edit')
 	 {
 		$reply = $mod_strings["replied"];
-		$temp = "Re : ";
+		$temp = $mod_strings["Re"];
 	 }
 	 else	
 	 {
@@ -2941,7 +2941,7 @@ function getTicketDetails($id,$whole_date)
 		$temp = " ";
 	 }
 	
-	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br> Ticket Title : '. $temp .' '.$whole_date['sub'];
+	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br>'.$mod_strings['Ticket Title'].' : '. $temp .' '.$whole_date['sub'];
 	 $desc .= "<br><br>".$mod_strings['Hi']." ". $whole_date['parent_name'].",<br><br>".$mod_strings['LBL_PORTAL_BODY_MAILINFO']." ".$reply." ".$mod_strings['LBL_DETAIL']."<br>";
 	 $desc .= "<br>".$mod_strings['Ticket No']." : ".$whole_date['ticketno'];
 	 $desc .= "<br>".$mod_strings['Status']." : ".$whole_date['status'];
