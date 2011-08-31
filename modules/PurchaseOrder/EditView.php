@@ -249,6 +249,9 @@ if($focus->mode == 'edit') {
 	$smarty->assign("INV_CURRENCY_ID", $currencyid);
 }
 
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
+
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
 else

@@ -252,6 +252,8 @@ $mode=$focus->mode;
 if($mode != "edit" && $_REQUEST['isDuplicate'] != "true")
 	$smarty->assign("PROD_MODE", "create");
 
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
 
 if($focus->mode == 'edit') {
 	$smarty->display('Inventory/InventoryEditView.tpl');

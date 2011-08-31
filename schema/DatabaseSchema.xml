@@ -7344,5 +7344,25 @@
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_picklist_dependency">
+		<field name="id" type="I" size="11">
+			<key />
+		</field>
+		<field name="tabid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="sourcefield" type="C" size="255">
+		</field>
+		<field name="targetfield" type="C" size="255">
+		</field>
+		<field name="sourcevalue" type="C" size="100">
+		</field>
+		<field name="targetvalues" type="X">
+		</field>
+		<field name="criteria" type="X">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 	
 </schema>

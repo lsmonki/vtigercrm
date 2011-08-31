@@ -511,7 +511,8 @@ $adb->query("ALTER TABLE vtiger_cvadvfilter ADD COLUMN column_condition VARCHAR(
 
 // Create table to store Custom Views Advanced Filters Condition Grouping information
 $adb->query("CREATE TABLE IF NOT EXISTS vtiger_cvadvfilter_grouping
-		(groupid INT NOT NULL, cvid INT, group_condition VARCHAR(255), condition_expression TEXT, PRIMARY KEY(groupid, cvid))");
+		(groupid INT NOT NULL, cvid INT, group_condition VARCHAR(255), condition_expression TEXT, PRIMARY KEY(groupid, cvid))
+		 ENGINE=Innodb DEFAULT CHARSET=utf8;");
 
 // Migration queries to migrate existing data to the required state (Storing Condition Expression in the newly created table for existing filters)
 // Remove all unwanted condition columns added (where column name is empty)
@@ -549,6 +550,31 @@ $adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE tabid=? AND (fieldname
 
 $adb->pquery('UPDATE vtiger_field SET presence = 2 WHERE tabid=? AND fieldname = ?', array(getTabid('Quotes'), 'ship_pobox'));
 
+/* Dependent Picklists feature */
+$adb->query("CREATE TABLE IF NOT EXISTS vtiger_picklist_dependency (
+					id INT NOT NULL PRIMARY KEY, tabid INT NOT NULL,
+					sourcefield VARCHAR(255), targetfield VARCHAR(255),
+					sourcevalue VARCHAR(100), targetvalues TEXT, criteria TEXT)
+					ENGINE=Innodb DEFAULT CHARSET=utf8;");
+echo '<b>Created table vtiger_picklist_dependency</b><br>';
+
+$studioBlockRes = $adb->pquery("SELECT blockid FROM vtiger_settings_blocks WHERE label = ?", array('LBL_STUDIO'));
+if($adb->num_rows($studioBlockRes) > 0) {
+	$blockId = $adb->query_result($studioBlockRes, 0, 'blockid');
+	$maxSequenceRes = $adb->pquery("SELECT MAX(sequence) as maxsequence FROM vtiger_settings_field WHERE blockid = ?", array($blockId));
+	if($adb->num_rows($maxSequenceRes) > 0){
+		$maxSequence = $adb->query_result($maxSequenceRes, 0, 'maxsequence');
+		$adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active)
+								VALUES(?,?,?,?,?,?,?,?)",
+				array($adb->getUniqueID('vtiger_settings_field'), $blockId, 'LBL_PICKLIST_DEPENDENCY_SETUP', 'picklistdependency.gif',
+					'LBL_PICKLIST_DEPENDENCY_DESCRIPTION', 'index.php?module=PickList&action=PickListDependencySetup&parenttab=Settings',
+					$maxSequence+1, 0));
+
+		echo '<b>Added Dependency picklist to settings page </b><br>';
+	}
+}
+
+
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
@@ -559,6 +585,8 @@ updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContract
 updateVtlibModule('PBXManager','packages/vtiger/mandatory/PBXManager.zip');
 updateVtlibModule('ModComments', 'packages/vtiger/optional/ModComments.zip');
 updateVtlibModule('SMSNotifier', 'packages/vtiger/optional/SMSNotifier.zip');
+updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
+updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0  -------- Ends \n\n");
 

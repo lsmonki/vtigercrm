@@ -16,7 +16,7 @@ require_once('modules/Calendar/Calendar.php');
 require_once('modules/Calendar/CalendarCommon.php');
 require_once("modules/Emails/mail.php");
 
- global $theme,$mod_strings,$app_strings,$current_user;
+ global $theme,$mod_strings,$app_strings,$current_user,$currentModule;
  $theme_path="themes/".$theme."/";
  $image_path=$theme_path."images/";
  $category = getParentTab();
@@ -1105,4 +1105,24 @@ function getAssignedToHTML($assignedto,$toggletype)
 	var theTodoHandle = document.getElementById("moveTodo");
 	var theTodoRoot   = document.getElementById("createTodo");
 	Drag.init(theTodoHandle, theTodoRoot);
+</script>
+
+<?php
+$picklistDependencyDSEvents = Vtiger_DependencyPicklist::getPicklistDependencyDatasource('Events');
+$picklistDependencyDSCalendar = Vtiger_DependencyPicklist::getPicklistDependencyDatasource('Calendar');
+?>
+<script type="text/javascript" src="include/js/FieldDependencies.js"></script>
+<script type="text/javascript" src="modules/com_vtiger_workflow/resources/jquery-1.2.6.js"></script>
+<script type="text/javascript">
+	jQuery.noConflict();
+</script>
+<script type="text/javascript">
+	jQuery(document).ready(function() { 
+		<?php if(!empty($picklistDependencyDSEvents)) { ?>
+		(new FieldDependencies(<?php echo Zend_Json::encode($picklistDependencyDSEvents) ?>)).init();
+		<?php } ?>
+		<?php if(!empty($picklistDependencyDSCalendar)) { ?>
+		(new FieldDependencies(<?php echo Zend_Json::encode($picklistDependencyDSCalendar) ?>)).init(document.forms['createTodo']);
+		<?php } ?>
+	});
 </script>

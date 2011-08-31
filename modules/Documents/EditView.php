@@ -219,6 +219,9 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
 	$smarty->assign("MOD_SEQ_ID", $focus->column_fields[$mod_seq_field['name']]);
 }
 // END
+
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
  
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");

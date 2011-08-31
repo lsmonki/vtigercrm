@@ -30,5 +30,17 @@ $mod_strings = array(
 	'LBL_OK_BUTTON_LABEL'=>'Ok',
 	'LBL_SELECT_ROLES'=>'Select roles',
 	'LBL_DISPLAYED_VALUES'=>'All accessible values for the role are shown below',
+	
+	// For Dependency picklist
+	'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Picklist Dependency Setup',
+	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Setup Dependency between Picklist values in each module',
+	'LBL_NEW_DEPENDENCY' => 'New Picklist Dependency',
+	'LBL_TOOLS' => 'Tools',
+	'LBL_SOURCE_FIELD' => 'Source Field',
+	'LBL_TARGET_FIELD' => 'Target Field',
+	'LBL_BUTTON_SELECTED_SOURCE_VALUES' => 'Select Source Values',
+	'LBL_SELECTED_SOURCE_VALUES_MSG' => 'Select Source Picklist Values to configure mapping',
+	'LBL_ERR_CYCLIC_DEPENDENCY' => 'This dependency setup is not allowed as it ends up in some cyclic dependency',
+	'LBL_SELECTED_VALUES' => 'Selected Values',
 );
 ?>

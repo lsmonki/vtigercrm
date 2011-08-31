@@ -173,6 +173,9 @@ $smarty->assign("PRICE_DETAILS", $price_details);
 $base_currency = 'curname' . $service_base_currency;	
 $smarty->assign("BASE_CURRENCY", $base_currency);
 
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
+
 if($focus->mode == 'edit') {
 	$smarty->display('Inventory/InventoryEditView.tpl');
 } else {

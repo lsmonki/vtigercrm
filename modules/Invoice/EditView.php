@@ -382,6 +382,10 @@ if ($focus->mode == 'edit') {
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
+
+$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
+$smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
+
 if ($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else

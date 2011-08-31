@@ -72,11 +72,11 @@ function mass_edit_formload(idstring,module,parenttab) {
 				onComplete: function(response) {
                 	$("status").style.display="none";
                	    var result = response.responseText;
-                    $("massedit_form_div").innerHTML= result;
+                    $("massedit_form_div").update(result);
 					$("massedit_form")["massedit_recordids"].value = idstring;
 					$("massedit_form")["massedit_module"].value = module;
 					
-					var jscripts = $('massedit_javascript');
+					//var jscripts = $('massedit_javascript');
 					if(jscripts) { 
 						eval(jscripts.innerHTML); 
 						// Updating global variables

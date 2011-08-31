@@ -23,6 +23,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
+require_once 'modules/PickList/DependentPickListUtils.php';
 
 /** This function returns the vtiger_field details for a given vtiger_fieldname.
   * Param $uitype - UI type of the vtiger_field

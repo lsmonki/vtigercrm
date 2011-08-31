@@ -1278,6 +1278,8 @@ $app_strings = array (
 'LBL_CHANGE'=>'Change',
 'LBL_CHANGE_TITLE'=>'Change [Alt+C]',
 
+'LBL_NEXT_BUTTON_LABEL' => 'Next',
+
 );
 
 $app_list_strings = array (
