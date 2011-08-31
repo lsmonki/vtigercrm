@@ -47,7 +47,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$smarty->assign("DUPLICATE_FROM", $focus->id);
-	$PO_associated_prod = getAssociatedProducts("PurchaseOrder",$focus);
+	$PO_associated_prod = getAssociatedProducts($currentModule,$focus);
+    $inventory_cur_info = getInventoryCurrencyInfo($currentModule, $focus->id);
+	$smarty->assign("INV_CURRENCY_ID", $inventory_cur_info['currency_id']);
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
@@ -240,7 +242,7 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
 // END
 
 $smarty->assign("CURRENCIES_LIST", getAllCurrencies());
-if($focus->mode == 'edit' || $_REQUEST['isDuplicate'] == 'true') {
+if($focus->mode == 'edit') {
 	$inventory_cur_info = getInventoryCurrencyInfo('PurchaseOrder', $focus->id);
 	$smarty->assign("INV_CURRENCY_ID", $inventory_cur_info['currency_id']);
 } else {
