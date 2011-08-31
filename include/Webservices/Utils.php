@@ -541,7 +541,7 @@ function vtws_getConvertLeadFieldMapping(){
 
 /**	Function used to get the lead related Notes and Attachments with other entities Account, Contact and Potential
  *	@param integer $id - leadid
- *	@param integer $accountid -  related entity id (accountid)
+ *	@param integer $relatedId -  related entity id (accountid / contactid)
  */
 function vtws_getRelatedNotesAttachments($id,$relatedId) {
 	global $adb,$log;
@@ -653,10 +653,12 @@ function vtws_getFieldfromFieldId($fieldId, $fieldObjectList){
 }
 
 /**	Function used to get the lead related activities with other entities Account and Contact
- *	@param integer $accountid - related entity id
- *	@param integer $contact_id -  related entity id
+ *	@param integer $leadId - lead entity id
+ *	@param integer $accountId - related account id
+ *	@param integer $contactId -  related contact id
+ *	@param integer $relatedId - related entity id to which the records need to be transferred
  */
-function vtws_getRelatedActivities($leadId,$accountId,$contactId) {
+function vtws_getRelatedActivities($leadId,$accountId,$contactId,$relatedId) {
 	global $adb;
 	$sql = "select * from vtiger_seactivityrel where crmid=?";
 	$result = $adb->pquery($sql, array($leadId));
@@ -692,7 +694,7 @@ function vtws_getRelatedActivities($leadId,$accountId,$contactId) {
 			}
 		} else {
 			$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
-			$resultNew = $adb->pquery($sql, array($contactId, $activityId));
+			$resultNew = $adb->pquery($sql, array($relatedId, $activityId));
 			if($resultNew === false){
 				return false;
 			}
@@ -704,26 +706,70 @@ function vtws_getRelatedActivities($leadId,$accountId,$contactId) {
 /**
  * Function used to save the lead related Campaigns with Contact
  * @param $leadid - leadid
- * @param $relatedid - related entity id (contactid)
+ * @param $relatedid - related entity id (contactid/accountid)
+ * @param $setype - related module(Accounts/Contacts)
  * @return Boolean true on success, false otherwise.
  */
-function vtws_saveLeadRelatedCampaigns($leadId, $relatedId) {
+function vtws_saveLeadRelatedCampaigns($leadId, $relatedId, $seType) {
 	global $adb;
 	
-	$result = $adb->pquery("select * from vtiger_campaignleadrel where leadid=?", array($leadid));
-	if($resultNew === false){
+	$result = $adb->pquery("select * from vtiger_campaignleadrel where leadid=?", array($leadId));
+	if($result === false){
 		return false;
 	}
 	$rowCount = $adb->num_rows($result);
 	for($i = 0; $i < $rowCount; ++$i) {
 		$campaignId = $adb->query_result($result,$i,'campaignid');
-		$resultNew = $adb->pquery("insert into vtiger_campaigncontrel (campaignid, contactid) values(?,?)",
-			array($campaignId, $relatedId));
+		if($seType == 'Accounts') {
+			$resultNew = $adb->pquery("insert into vtiger_campaignaccountrel (campaignid, accountid) values(?,?)",
+				array($campaignId, $relatedId));
+		} elseif ($seType == 'Contacts') {
+			$resultNew = $adb->pquery("insert into vtiger_campaigncontrel (campaignid, contactid) values(?,?)",
+				array($campaignId, $relatedId));
+		}
 		if($resultNew === false){
 			return false;
 		}
 	}
 	return true;
+}
+
+/**
+ * Function used to transfer all the lead related records to given Entity(Contact/Account) record
+ * @param $leadid - leadid
+ * @param $relatedid - related entity id (contactid/accountid)
+ * @param $setype - related module(Accounts/Contacts)
+ */
+function vtws_transferLeadRelatedRecords($leadId, $relatedId, $seType) {
+
+	$status = vtws_getRelatedNotesAttachments($leadId, $relatedId);
+	if($status === false){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move related Documents to the ".$seType);
+	}
+	//Retrieve the lead related products and relate them with this new account
+	$status = vtws_saveLeadRelatedProducts($leadId, $relatedId, $seType);
+	if($status === false){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move related Products to the ".$seType);
+	}
+	$status = vtws_saveLeadRelations($leadId, $relatedId, $seType);
+	if($status === false){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move Records to the ".$seType);
+	}
+	$status = vtws_saveLeadRelatedCampaigns($leadId, $relatedId, $seType);
+	if($status === false){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move Records to the ".$seType);
+	}
+	vtws_transferComments($leadId, $relatedId);
+}
+
+function vtws_transferComments($sourceRecordId, $destinationRecordId) {
+	if(vtlib_isModuleActive('ModComments')) { 
+		CRMEntity::getInstance('ModComments'); ModComments::transferRecords($sourceRecordId, $destinationRecordId);
+	}
 }
 
 function vtws_transferOwnership($ownerId, $newOwnerId) {

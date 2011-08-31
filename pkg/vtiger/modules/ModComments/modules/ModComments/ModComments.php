@@ -28,6 +28,16 @@ class ModComments extends ModCommentsCore {
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($modulename));
 		}
 	}
+
+	/**
+	 * Transfer the comment records from one parent record to another.
+	 * @param CRMID Source parent record id
+	 * @param CRMID Target parent record id
+	 */
+	static function transferRecords($currentParentId, $targetParentId) {
+		global $adb;
+		$adb->pquery("UPDATE vtiger_modcomments SET related_to=? WHERE related_to=?", array($targetParentId, $currentParentId));
+	}
 	
 	/**
 	 * Get widget instance by name

@@ -200,6 +200,20 @@ foreach($fields_list as $mod=>$fields){
 	}
 }
 
+$convertlead .= '<tr>
+					<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_TRANSFER_RELATED_RECORDS_TO'].'</td>
+					<td class="dvtCellInfo">
+						<select class="small" name="transfer_related_records_to">';
+							if(vtlib_isModuleActive('Contacts') && (isPermitted('Contacts','EditView')== 'yes')) {
+								$convertlead .= '<option value="Contacts">'.getTranslatedString('Contacts','Contacts').'</option>';
+							}
+							if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes') && !empty($company)) {
+								$convertlead .= '<option value="Accounts">'.getTranslatedString('Accounts','Accounts').'</option>';
+							}
+		$convertlead .= '</select>
+					</td>
+				</tr>';
+
 $convertlead .='<tr>
 			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_DO_NOT_CREATE_NEW_POTENTIAL'].'</td>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="if(this.checked) { $(\'ch\').hide(); } else { $(\'ch\').show(); }"></td>
