@@ -544,7 +544,8 @@ if($adb->num_rows($maxCvIdResult) > 0) {
 }
 /* Advanced filter ehancement for Custom Filter and Advanced Search -- ENDS HERE */
 
-
+$adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE tabid=? AND (fieldname = ? OR fieldname = ?)',
+								array(getTabid('SalesOrder'), 'bill_country', 'ship_country'));
 
 
 

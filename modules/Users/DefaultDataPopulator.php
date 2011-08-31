@@ -821,8 +821,8 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_code','vtiger_soshipads',1,'1','ship_code','Shipping Code',1,2,'',100,10,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		
 		
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_country','vtiger_sobillads',1,'1','bill_country','Billing Country',1,2,'',100,11,$soaddressblock,3,'V~O',3,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_soshipads',1,'1','ship_country','Shipping Country',1,2,'',100,12,$soaddressblock,3,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_country','vtiger_sobillads',1,'1','bill_country','Billing Country',1,2,'',100,11,$soaddressblock,1,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_soshipads',1,'1','ship_country','Shipping Country',1,2,'',100,12,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_pobox','vtiger_sobillads',1,'1','bill_pobox','Billing Po Box',1,2,'',100,3,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_pobox','vtiger_soshipads',1,'1','ship_pobox','Shipping Po Box',1,2,'',100,4,$soaddressblock,1,'V~O',3,null,'BAS',1)");
