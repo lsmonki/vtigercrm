@@ -340,8 +340,8 @@ if(isset($where) && $where != '')
 }
 //Added to fix the issue #2307 
 
-$order_by = (isset($_REQUEST['order_by'])) ? $adb->sql_escape_string($_REQUEST['order_by']) : $focus->default_order_by;
-$sorder = (isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '') ? $adb->sql_escape_string($_REQUEST['sorder']) : $focus->default_sort_order;
+$order_by = $focus->getOrderBy();
+$sorder = $focus->getSortOrder();
 
 if(isset($order_by) && $order_by != '')
 {
