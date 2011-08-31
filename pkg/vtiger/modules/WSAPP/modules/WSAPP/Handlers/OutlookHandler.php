@@ -74,6 +74,11 @@ Class OutlookHandler extends SyncHandler {
 
             $record['duration_hours'] = date('H',(strtotime($endTime)-strtotime($startTime)));
             $record['duration_minutes'] = date('i',(strtotime($endTime)-strtotime($startTime)));
+	
+			//TODO:Make the Oulook client not to send the activity type parameter
+			if($module=="Events"){
+				unset($record['activitytype']);
+			}
         }
         $record['modifiedtime'] = $record['utclastmodifiedtime'];
         return $record;

@@ -44,8 +44,10 @@ class vtigerCRMHandler extends SyncHandler {
         $updatedRecords = $recordDetails['updated'];
         $deletedRecords = $recordDetails['deleted'];
 
-        if(count($createdRecords)>0)
+        if(count($createdRecords)>0){
             $createdRecords = $this->translateReferenceFieldNamesToIds($createdRecords,$user);
+			$createdRecords = $this->fillNonExistingMandatoryPicklistValues($createdRecords);
+		}
         foreach($createdRecords as $index=>$record){
             $createdRecords[$index] = vtws_create($record['module'], $record, $this->user);
         }
@@ -201,5 +203,32 @@ class vtigerCRMHandler extends SyncHandler {
     public function getAssignToChangedRecords(){
         return $this->assignToChangedRecords;
     }
+
+	
+	public function fillNonExistingMandatoryPicklistValues($recordList){
+		//Meta is cached to eliminate overhead of doing the query every time to get the meta details(retrieveMeta)
+		$modulesMetaCache = array();
+		foreach($recordList as $index=>$recordDetails){
+			if(!array_key_exists($recordDetails['module'], $modulesMetaCache)){
+				$handler = vtws_getModuleHandlerFromName($recordDetails['module'], $this->user);
+				$meta = $handler->getMeta();
+				$modulesMetaCache[$recordDetails['module']] = $meta;
+			}
+			$moduleMeta = $modulesMetaCache[$recordDetails['module']];
+			$mandatoryFieldsList = $meta->getMandatoryFields();
+			$moduleFields = $meta->getModuleFields();
+			foreach($mandatoryFieldsList as $fieldName){
+				$fieldInstance = $moduleFields[$fieldName];
+				if(empty($recordDetails[$fieldName]) &&
+						($fieldInstance->getFieldDataType()=="multipicklist" || $fieldInstance->getFieldDataType()=="picklist")){
+					$pickListDetails = $fieldInstance->getPicklistDetails($webserviceField);
+					$defaultValue = $pickListDetails[0]['value'];
+					$recordDetails[$fieldName] = $defaultValue;
+				}
+			}
+			$recordList[$index]= $recordDetails;
+		}
+		return $recordList;
+	}
 }
 ?>

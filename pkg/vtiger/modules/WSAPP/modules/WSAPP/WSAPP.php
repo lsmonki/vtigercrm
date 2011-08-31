@@ -8,8 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 require_once('include/events/include.inc');
-require_once 'include/Zend/Json.php';
-require_once 'include/utils/utils.php';
 
 class WSAPP {
 
