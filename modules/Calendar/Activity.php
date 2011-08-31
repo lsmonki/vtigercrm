@@ -90,7 +90,11 @@ class Activity extends CRMEntity {
        'Start Date & Time'=>'date_start',
        'End Date & Time'=>'due_date',
 	   'Recurring Type'=>'recurringtype',	
-       'Assigned To'=>'assigned_user_id');
+       'Assigned To'=>'assigned_user_id',
+       'Start Date'=>'date_start',
+       'Start Time'=>'time_start',
+       'End Date'=>'due_date',
+       'End Time'=>'time_end');
 
        var $list_link_field= 'subject';
 	
@@ -269,7 +273,7 @@ function insertIntoRecurringTable(& $recurObj)
 	$log->debug("end_date is set ".$end_date);
 	$type = $recurObj->recur_type;
 	$log->debug("type is ".$type);
-        $flag="true";
+    $flag="true";
 
 	if($_REQUEST['mode'] == 'edit')
 	{
@@ -336,7 +340,7 @@ function insertIntoRecurringTable(& $recurObj)
 	{
 		$recurringinfo = '';
 	}
-	if($flag=="true")
+    if($flag=="true")
 	{
 		for($k=0; $k< count($date_array); $k++)
 		{
