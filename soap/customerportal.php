@@ -472,7 +472,7 @@ function get_combo_values($input_array)
 		$output['servicename']['servicename']="#MODULE INACTIVE#";
 	} else {
 		$servicequery = "SELECT vtiger_servicecontracts.servicecontractsid,vtiger_servicecontracts.subject from vtiger_servicecontracts
-inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_servicecontracts.servicecontractsid and vtiger_crmentity.deleted = 0";
+							inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_servicecontracts.servicecontractsid and vtiger_crmentity.deleted = 0 where vtiger_servicecontracts.sc_related_to = $id ";
 		$serviceResult = $adb->pquery($servicequery,array());
 
 		for($i=0;$i < $adb->num_rows($serviceResult);$i++){
@@ -2112,7 +2112,6 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
 	$fields_list['Related To'] = 'entityid';
 	$query = array();
 	$params = array();
-
 	$query[] = "SELECT vtiger_products.*,vtiger_seproductsrel.crmid as entityid, vtiger_seproductsrel.setype FROM vtiger_products
 		INNER JOIN vtiger_crmentity on vtiger_products.productid = vtiger_crmentity.crmid 
 		LEFT JOIN vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid  					
