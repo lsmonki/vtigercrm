@@ -333,21 +333,30 @@ class Vtiger_MailScannerInfo {
 		$useisvalid = ($this->isvalid)? 1 : 0;
 
 		$usepassword = $this->__crypt($this->password);
-
+        
 		global $adb;
-		if($this->scannerid) { // This record exists in the database
-			$adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
-				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?", 
-				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype, 
-				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
-		} else {
-			$adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
-				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)", 
-				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword, 
+        $query = "SELECT scannername FROM vtiger_mailscanner";
+        $result = $adb->pquery($query,array());
+        $noofrows = $adb->num_rows($result);
+        $scannername = array();
+        for($i=0; $i<$noofrows; $i++){
+            $scannername[] = $adb->query_result($result, $i, 'scannername');
+        }
+        if(!in_array($this->scannername, $scannername) && $this->scannerid == false){
+            $adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
+				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword,
 				$this->ssltype, $this->sslmethod, $this->connecturl, $this->searchfor, $this->markas, $useisvalid));
 			$this->scannerid = $adb->database->Insert_ID();
-		}
+        }else{ //this record is exist in the data
+            if(!in_array($this->scannername, $scannername))
+                $adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
+				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?",
+				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype,
+				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
 
+        }
+		
 		return $mailServerChanged;
 	}
 
