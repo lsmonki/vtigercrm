@@ -2331,7 +2331,7 @@ class ReportRun extends CRMEntity
 										$col_header = trim(str_replace($modules," ",$value));
 										$fld_name_1 = $this->primarymodule . "_" . trim($value);
 										$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-										if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+										if($uitype_arr[$key] == 71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
 														|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 												$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 												$convert_price = true;
