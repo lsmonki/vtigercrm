@@ -306,5 +306,6 @@
 				
 				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field',
 
-				'RECIPIENTS_CANNOT_BE_EMPTY' : 'Selected Recipients cannot be empty'
+				'RECIPIENTS_CANNOT_BE_EMPTY' : 'Selected Recipients cannot be empty',
+                VALID_SCANNER_NAME : 'Please enter a valid Scanner name (It should be only Characters and Numbers)'
 			};
