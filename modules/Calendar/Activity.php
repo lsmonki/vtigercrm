@@ -140,9 +140,10 @@ class Activity extends CRMEntity {
 			$value = getaddEventPopupTime($this->column_fields['time_start'],$this->column_fields['time_end'],'24');
 			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 			$mail_data['st_date_time'] = getDisplayDate($this->column_fields['date_start'])." ".$start_hour;
-			$mail_data['end_date_time']=getDisplayDate($this->column_fields['due_date']);
+			$mail_data['end_date_time'] = getDisplayDate($this->column_fields['due_date']);
+			$mail_data['relatedto'] = getParentName($this->column_fields['parent_id']);
 			getEventNotification($this->column_fields['activitytype'],$this->column_fields['subject'],$mail_data);
-
+			
 		}
 		$recur_type='';	
 		if(($recur_type == "--None--" || $recur_type == '') && $this->mode == "edit")
