@@ -192,29 +192,4 @@ function getRelatedFieldColumns($selected=""){
 	return $rel_fields;
 }
 
-/** Function to get the  advanced filter criteria for an option
- *  This function accepts The option in the advenced filter as an argument
- *  This generate filter criteria for the advanced filter 
- *  It returns a HTML string of combo values
- */
-
-
-function getAdvCriteriaHTML($selected="")
-{
-	 global $adv_filter_options;
-		
-	 foreach($adv_filter_options as $key=>$value)
-	 {
-		if($selected == $key)
-		{
-			$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
-		}else
-		{
-			$shtml .= "<option value=\"".$key."\">".$value."</option>";
-		}
-	 }
-	
-    return $shtml;
-}
-
 ?>

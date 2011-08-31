@@ -679,8 +679,11 @@ class ListViewController {
 			// place option in array for sorting later
 			//$blockName = getTranslatedString(getBlockName($field->getBlockId()), $module);
 			$blockName = getTranslatedString($field->getBlockName(), $module);
+			
+			$fieldLabelEscaped = str_replace(" ","_",$field->getFieldLabelKey());
+			$optionvalue = $field->getTableName().":".$field->getColumnName().":".$fieldName.":".$module."_".$fieldLabelEscaped.":".$typeOfData;
 
-			$OPTION_SET[$blockName][$label] = "<option value=\'$fieldName::::$typeOfData\' $selected>$label</option>";
+			$OPTION_SET[$blockName][$label] = "<option value=\'$optionvalue\' $selected>$label</option>";
 
 		}
 	   	// sort array on block label

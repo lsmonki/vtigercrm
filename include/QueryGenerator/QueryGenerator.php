@@ -203,22 +203,33 @@ class QueryGenerator {
 				$this->addCondition($name, $value, 'BETWEEN');
 			}
 		}
-		if($this->conditionInstanceCount <= 0 && is_array($this->advFilterList)) {
+		if($this->conditionInstanceCount <= 0 && is_array($this->advFilterList) && count($this->advFilterList) > 0) {
 			$this->startGroup('');
-		} elseif($this->conditionInstanceCount > 0 && is_array($this->advFilterList)) {
+		} elseif($this->conditionInstanceCount > 0 && is_array($this->advFilterList) && count($this->advFilterList) > 0) {
 			$this->addConditionGlue(self::$AND);
 		}
-		if(is_array($this->advFilterList)) {
-			foreach ($this->advFilterList as $index=>$filter) {
-				$name = explode(':',$filter['columnname']);
-				if(empty($name[2]) && $name[1] == 'crmid' && $name[0] == 'vtiger_crmentity') {
-					$name = $this->getSQLColumn('id');
-				} else {
-					$name = $name[2];
-				}
-				$this->addCondition($name, decode_html($filter['value']), $filter['comparator']);
-				if(count($this->advFilterList) -1  > $index) {
-					$this->addConditionGlue(self::$AND);
+		if(is_array($this->advFilterList) && count($this->advFilterList) > 0) {
+			foreach ($this->advFilterList as $groupindex=>$groupcolumns) {
+				$filtercolumns = $groupcolumns['columns'];
+				if(count($filtercolumns) > 0) {
+					$this->startGroup('');
+					foreach ($filtercolumns as $index=>$filter) {
+						$name = explode(':',$filter['columnname']);
+						if(empty($name[2]) && $name[1] == 'crmid' && $name[0] == 'vtiger_crmentity') {
+							$name = $this->getSQLColumn('id');
+						} else {
+							$name = $name[2];
+						}
+						$this->addCondition($name, $filter['value'], $filter['comparator']);
+						$columncondition = $filter['column_condition'];
+						if(!empty($columncondition)) {
+							$this->addConditionGlue($columncondition);
+						}
+					}
+					$this->endGroup();
+					$groupConditionGlue = $groupcolumns['condition'];
+					if(!empty($groupConditionGlue)) 
+						$this->addConditionGlue($groupConditionGlue);
 				}
 			}
 		}
@@ -579,23 +590,29 @@ class QueryGenerator {
 	 * @param WebserviceField $field
 	 */
 	private function getConditionValue($value, $operator, $field) {
+		
 		$operator = strtolower($operator);
 		$db = PearDatabase::getInstance();
 
 		if(is_string($value)) {
 			$valueArray = explode(',' , $value);
 		} elseif(is_array($value)) {
-			$valueArray = $value;
-		}else{
+			$valueArray = $value;		
+		} else{
 			$valueArray = array($value);
 		}
-
 		$sql = array();
-		if($operator == 'between') {
+		if($operator == 'between' || $operator == 'bw') {
 			if($field->getFieldName() == 'birthday') {
+				$valueArray[0] = getValidDBInsertDateTimeValue($valueArray[0]);
+				$valueArray[1] = getValidDBInsertDateTimeValue($valueArray[1]);
 				$sql[] = "BETWEEN DATE_FORMAT(".$db->quote($valueArray[0]).", '%m%d') AND ".
 						"DATE_FORMAT(".$db->quote($valueArray[1]).", '%m%d')";
 			} else {
+				if($this->isDateType($field->getFieldDataType())) {
+					$valueArray[0] = getValidDBInsertDateTimeValue($valueArray[0]);
+					$valueArray[1] = getValidDBInsertDateTimeValue($valueArray[1]);
+				}
 				$sql[] = "BETWEEN ".$db->quote($valueArray[0])." AND ".
 							$db->quote($valueArray[1]);
 			}
@@ -622,14 +639,7 @@ class QueryGenerator {
 					$value = 0;
 				}
 			} elseif($this->isDateType($field->getFieldDataType())) {
-				if($field->getFieldDataType() == 'datetime') {
-					$valueList = explode(' ',$value);
-					$value = $valueList[0];
-				}
-				$value = getValidDBInsertDateValue($value);
-				if($field->getFieldDataType() == 'datetime') {
-					$value .=(' '.$valueList[1]);
-				}
+				$value = getValidDBInsertDateTimeValue($value);
 			}
 
 			if($field->getFieldName() == 'birthday' && !$this->isRelativeSearchOperators(
@@ -677,6 +687,10 @@ class QueryGenerator {
 				case 'm': $sqlOperator = "<=";
 					break;
 				case 'h': $sqlOperator = ">=";
+					break;
+				case 'a': $sqlOperator = ">";
+					break;
+				case 'b': $sqlOperator = "<";
 					break;
 			}
 			if(!$this->isNumericType($field->getFieldDataType()) &&
@@ -736,7 +750,6 @@ class QueryGenerator {
 
 	public function addCondition($fieldname,$value,$operator,$glue= null,$newGroup = false,
 			$newGroupType = null) {
-		
 		$conditionNumber = $this->conditionInstanceCount++;
 		$this->groupInfo .= "$conditionNumber ";
 		$this->whereFields[] = $fieldname;
@@ -771,59 +784,49 @@ class QueryGenerator {
 	public function addUserSearchConditions($input) {
 		global $log,$default_charset;
 		if($input['searchtype']=='advance') {
-			if(empty($input['search_cnt'])) {
+			
+			$json = new Zend_Json();	
+			$advft_criteria = $_REQUEST['advft_criteria'];
+			if(!empty($advft_criteria))	$advft_criteria = $json->decode($advft_criteria);	
+			$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
+			if(!empty($advft_criteria_groups))	$advft_criteria_groups = $json->decode($advft_criteria_groups);
+			
+			if(empty($advft_criteria) || count($advft_criteria) <= 0) {
 				return ;
 			}
-			$noOfConditions = vtlib_purify($input['search_cnt']);
-			if($input['matchtype'] == 'all') {
-				$matchType = self::$AND;
-			} else {
-				$matchType = self::$OR;
+			
+			$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups);
+			
+			if(empty($advfilterlist) || count($advfilterlist) <= 0) {
+				return ;
 			}
+			
 			if($this->conditionInstanceCount > 0) {
 				$this->startGroup(self::$AND);
 			} else {
 				$this->startGroup('');
 			}
-			for($i=0; $i<$noOfConditions; $i++) {
-				$fieldInfo = 'Fields'.$i;
-				$condition = 'Condition'.$i;
-				$value = 'Srch_value'.$i;
-
-				list($fieldName,$typeOfData) = split("::::",str_replace('\'','',
-						stripslashes($input[$fieldInfo])));
-				$moduleFields = $this->meta->getModuleFields();
-				$field = $moduleFields[$fieldName];
-				if(empty($field)) {
-					continue;
-				}
-				$type = $field->getFieldDataType();
-			
-				$operator = str_replace('\'','',stripslashes($input[$condition]));
-				$searchValue = $input[$value];
-				$searchValue = function_exists(iconv) ? @iconv("UTF-8",$default_charset, 
-						$searchValue) : $searchValue;
-								
-				if($type == 'picklist') { 
-					global $mod_strings;
-					// Get all the keys for the for the Picklist value
-					$mod_keys = array_keys($mod_strings, $searchValue);
-					if(sizeof($mod_keys) >= 1) {
-						// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
-						foreach($mod_keys as $mod_idx=>$mod_key) {
-							$stridx = strpos($mod_key, 'LBL_');
-							// Use strict type comparision, refer strpos for more details
-							if ($stridx !== 0) {
-								$searchValue = $mod_key;
-								break;
-							}
+			foreach ($advfilterlist as $groupindex=>$groupcolumns) {
+				$filtercolumns = $groupcolumns['columns'];
+				if(count($filtercolumns) > 0) {
+					$this->startGroup('');
+					foreach ($filtercolumns as $index=>$filter) {
+						$name = explode(':',$filter['columnname']);
+						if(empty($name[2]) && $name[1] == 'crmid' && $name[0] == 'vtiger_crmentity') {
+							$name = $this->getSQLColumn('id');
+						} else {
+							$name = $name[2];
+						}
+						$this->addCondition($name, $filter['value'], $filter['comparator']);
+						$columncondition = $filter['column_condition'];
+						if(!empty($columncondition)) {
+							$this->addConditionGlue($columncondition);
 						}
 					}
-				}
-				
-				$this->addCondition($fieldName, $searchValue, $operator);
-				if($i+1<$noOfConditions) {
-					$this->addConditionGlue($matchType);
+					$this->endGroup();
+					$groupConditionGlue = $groupcolumns['condition'];
+					if(!empty($groupConditionGlue)) 
+						$this->addConditionGlue($groupConditionGlue);
 				}
 			}
 			$this->endGroup();

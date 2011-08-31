@@ -633,12 +633,15 @@ function insertCvAdvFilter($CVid,$filters)
 	global $adb;
 	if($CVid != "")
 	{
+		$columnIndexArray = array();
 		foreach($filters as $i=>$filter)
 		{
 			$advfiltersql = "insert into vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value) values (?,?,?,?,?)";
 			$advfilterparams = array($CVid, $i, $filter['columnname'], $filter['comparator'], $filter['value']);
 			$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);
 		}
+		$conditionExpression = implode(' and ', $columnIndexArray);
+		$adb->pquery('INSERT INTO vtiger_cvadvfilter_grouping VALUES(?,?,?,?)', array(1, $CVid, '', $conditionExpression));
 	}
 }
 ?>

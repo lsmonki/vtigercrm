@@ -504,6 +504,50 @@ $fieldInstance->columntype = 'VARCHAR(36)';
 $fieldInstance->uitype = 32;
 $blockInstance->addField($fieldInstance);
 
+/* Advanced filter ehancement for Custom Filter and Advanced Search */
+// Alter vtiger_cvadvfilter table to store groupid and column_condition
+$adb->query("ALTER TABLE vtiger_cvadvfilter ADD COLUMN groupid INT DEFAULT 1");
+$adb->query("ALTER TABLE vtiger_cvadvfilter ADD COLUMN column_condition VARCHAR(255) DEFAULT 'and'");
+
+// Create table to store Custom Views Advanced Filters Condition Grouping information
+$adb->query("CREATE TABLE IF NOT EXISTS vtiger_cvadvfilter_grouping
+		(groupid INT NOT NULL, cvid INT, group_condition VARCHAR(255), condition_expression TEXT, PRIMARY KEY(groupid, cvid))");
+
+// Migration queries to migrate existing data to the required state (Storing Condition Expression in the newly created table for existing filters)
+// Remove all unwanted condition columns added (where column name is empty)
+$adb->query("DELETE FROM vtiger_cvadvfilter WHERE (columnname IS NULL OR trim(columnname) = '')");
+$maxCvIdResult = $adb->query("SELECT max(cvid) as max_cvid FROM vtiger_customview");
+if($adb->num_rows($maxCvIdResult) > 0) {
+	$maxCvId = $adb->query_result($maxCvIdResult, 0, 'max_cvid');
+	if(!empty($maxCvId) && $maxCvId > 0) {
+		for($i=1; $i<=$maxCvId; ++$i) {
+			$cvId = $i;
+			$relcriteriaResult = $adb->pquery("SELECT * FROM vtiger_cvadvfilter WHERE cvid=?", array($cvId)); // Pick all the conditions of a Custom View
+			$noOfConditions = $adb->num_rows($relcriteriaResult);
+			if($noOfConditions > 0) {
+				$columnIndexArray = array();
+				$maxColumnIndex = 0;
+				for($j=0;$j<$noOfConditions; $j++) {
+					$columnIndex = $adb->query_result($relcriteriaResult, $j, 'columnindex');
+					if($maxColumnIndex < $columnIndex) {
+						$maxColumnIndex = $columnIndex;
+					}
+					$columnIndexArray[] = $columnIndex;
+				}
+				$conditionExpression = implode(' and ', $columnIndexArray);
+				$adb->pquery('INSERT INTO vtiger_cvadvfilter_grouping VALUES(?,?,?,?)', array(1, $cvId, '', $conditionExpression));
+
+				$adb->pquery("UPDATE vtiger_cvadvfilter SET column_condition='' WHERE columnindex=? AND cvid=?", array($maxColumnIndex,$cvId));
+			}
+		}
+	}
+}
+/* Advanced filter ehancement for Custom Filter and Advanced Search -- ENDS HERE */
+
+
+
+
+
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 

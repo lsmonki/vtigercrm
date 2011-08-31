@@ -2251,8 +2251,8 @@ function getEmailParentsList($module,$id,$focus = false)
     
         $fieldid = 0;
         $fieldname = 'email';
-        if($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )
-                $fieldname = 'secondaryemail';
+        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '' )
+                $fieldname = 'yahooid';
         elseif($focus->column_fields['email'] == '' && $focus->column_fields['secondaryemail'] != '' )         
 				$fieldname='secondaryemail';
         $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ? and vtiger_field.presence in (0,2)", array(getTabid($module), $fieldname));
@@ -4828,6 +4828,18 @@ function getValidDBInsertDateValue($value) {
 	}
 	$log->debug("Exiting getDBInsertDateValue method ...");
 	return $insert_date;
+}
+	
+function getValidDBInsertDateTimeValue($value) {
+	$valueList = explode(' ',$value);
+	if(count($valueList) == 2) {
+		$value = $valueList[0];
+		$value = getDBInsertDateValue($value);
+		$value .=(' '.$valueList[1]);
+	} elseif(count($valueList == 1)) {
+		$value = getDBInsertDateValue($value);
+	}
+	return $value;
 }
 
 /** Function to set the PHP memory limit to the specified value, if the memory limit set in the php.ini is less than the specified value

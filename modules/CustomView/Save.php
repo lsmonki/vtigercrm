@@ -79,27 +79,13 @@ if($cvmodule != "") {
 	//<<<<<<<standardfilters>>>>>>>>>
 
 	//<<<<<<<advancedfilter>>>>>>>>>
-	for ($i=0;$i<count($allKeys);$i++) {
-	   $string = substr($allKeys[$i], 0, 4);
-		if($string == "fcol" && $_REQUEST[$allKeys[$i]] !== null &&
-				$_REQUEST[$allKeys[$i]] !== '') {
-           	$adv_filter_col[] = $_REQUEST[$allKeys[$i]];
-   	   }
-	}
-	for ($i=0;$i<count($allKeys);$i++) {
-	   $string = substr($allKeys[$i], 0, 3);
-		if($string == "fop" && $_REQUEST[$allKeys[$i]] !== null &&
-				$_REQUEST[$allKeys[$i]] !== '') {
-           	$adv_filter_option[] = $_REQUEST[$allKeys[$i]];
-   	   }
-	}
-	for ($i=0;$i<count($allKeys);$i++) {
-   	   $string = substr($allKeys[$i], 0, 4);
-		if($string == "fval"  && $_REQUEST[$allKeys[$i]] !== null &&
-				$_REQUEST[$allKeys[$i]] !== '') {
-		   $adv_filter_value[] = trim(vtlib_purify($_REQUEST[$allKeys[$i]]));
-   	   }
-	}
+	$json = new Zend_Json();
+	
+	$advft_criteria = $_REQUEST['advft_criteria'];
+	$advft_criteria = $json->decode($advft_criteria);
+	
+	$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
+	$advft_criteria_groups = $json->decode($advft_criteria_groups);
 	//<<<<<<<advancedfilter>>>>>>>>
 
 	if(!$cvid) {
@@ -144,24 +130,50 @@ if($cvmodule != "") {
 						$stdfilterresult = $adb->pquery($stdfiltersql, $stdfilterparams);
 						$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
 					}
-					for($i=0;$i<count($adv_filter_col);$i++) {
-						$col = explode(":",$adv_filter_col[$i]);
-						$temp_val = explode(",",$adv_filter_value[$i]);
-						if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT') {
+					
+					foreach($advft_criteria as $column_index => $column_condition) {
+								
+						if(empty($column_condition)) continue;
+								
+						$adv_filter_column = $column_condition["columnname"];
+						$adv_filter_comparator = $column_condition["comparator"];
+						$adv_filter_value = $column_condition["value"];
+						$adv_filter_column_condition = $column_condition["columncondition"];
+						$adv_filter_groupid = $column_condition["groupid"];
+					
+						$column_info = explode(":",$adv_filter_column);
+						$temp_val = explode(",",$adv_filter_value);
+						if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
+						{
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								//if date and time given then we have to convert the date and leave the time as it is, if date only given then temp_time value will be empty
 								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
 								$temp_date = getDBInsertDateValue(trim($temp_date));
-								if(trim($temp_time) != '')
-									$temp_date .= ' '.$temp_time;
 								$val[$x] = $temp_date;
+								if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
 							}
-							$adv_filter_value[$i] = implode(", ",$val);
+							$adv_filter_value = implode(",",$val);
 						}
-						$advfiltersql = "INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value) VALUES (?,?,?,?,?)";
-						$advfilterparams = array($genCVid, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]);
-						$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);
+		
+						$irelcriteriasql = "INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition) values (?,?,?,?,?,?,?)";
+						$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($genCVid, $column_index, $adv_filter_column, $adv_filter_comparator, $adv_filter_value, $adv_filter_groupid, $adv_filter_column_condition));
+					
+						// Update the condition expression for the group to which the condition column belongs
+						$groupConditionExpression = '';
+						if(!empty($advft_criteria_groups[$adv_filter_groupid]["conditionexpression"])) {
+							$groupConditionExpression = $advft_criteria_groups[$adv_filter_groupid]["conditionexpression"];
+						}
+						$groupConditionExpression = $groupConditionExpression .' '. $column_index .' '. $adv_filter_column_condition;
+						$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
+					}
+					
+					foreach($advft_criteria_groups as $group_index => $group_condition_info) {				
+								
+						if(empty($group_condition_info)) continue;
+						if(empty($group_condition_info["conditionexpression"])) continue; // Case when the group doesn't have any column criteria
+											
+						$irelcriteriagroupsql = "insert into vtiger_cvadvfilter_grouping(groupid,cvid,group_condition,condition_expression) values (?,?,?,?)";
+						$irelcriteriagroupresult = $adb->pquery($irelcriteriagroupsql, array($group_index, $genCVid, $group_condition_info["groupcondition"], $group_condition_info["conditionexpression"]));
 					}
 					$log->info("CustomView :: Save :: vtiger_cvadvfilter created successfully");
 				}
@@ -202,7 +214,11 @@ if($cvmodule != "") {
 	
 			$deletesql = "DELETE FROM vtiger_cvadvfilter WHERE cvid = ?";
 			$deleteresult = $adb->pquery($deletesql, array($cvid));
-			$log->info("CustomView :: Save :: vtiger_cvcolumnlist,cvstdfilter,cvadvfilter deleted successfully before update".$genCVid);
+	
+			$deletesql = "DELETE FROM vtiger_cvadvfilter_grouping WHERE cvid = ?";
+			$deleteresult = $adb->pquery($deletesql, array($cvid));
+			
+			$log->info("CustomView :: Save :: vtiger_cvcolumnlist,cvstdfilter,cvadvfilter,cvadvfilter_grouping deleted successfully before update".$genCVid);
 	
 			$genCVid = $cvid;
 			if($updatecvresult) {
@@ -219,24 +235,50 @@ if($cvmodule != "") {
 						$stdfilterresult = $adb->pquery($stdfiltersql, $stdfilterparams);
 						$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
 					}
-					for($i=0;$i<count($adv_filter_col);$i++) {
-						$col = explode(":",$adv_filter_col[$i]);
-						$temp_val = explode(",",$adv_filter_value[$i]);
-						if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT') {
+					
+					foreach($advft_criteria as $column_index => $column_condition) {
+								
+						if(empty($column_condition)) continue;
+								
+						$adv_filter_column = $column_condition["columnname"];
+						$adv_filter_comparator = $column_condition["comparator"];
+						$adv_filter_value = $column_condition["value"];
+						$adv_filter_column_condition = $column_condition["columncondition"];
+						$adv_filter_groupid = $column_condition["groupid"];
+					
+						$column_info = explode(":",$adv_filter_column);
+						$temp_val = explode(",",$adv_filter_value);
+						if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
+						{
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								//if date and time given then we have to convert the date and leave the time as it is, if date only given then temp_time value will be empty
 								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
 								$temp_date = getDBInsertDateValue(trim($temp_date));
-								if(trim($temp_time) != '')
-									$temp_date .= ' '.$temp_time;
 								$val[$x] = $temp_date;
+								if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
 							}
-							$adv_filter_value[$i] = implode(", ",$val);	
+							$adv_filter_value = implode(",",$val);
 						}
-						$advfiltersql = "INSERT INTO vtiger_cvadvfilter (cvid,columnindex,columnname,comparator,value) VALUES (?,?,?,?,?)";
-						$advfilterparams = array($genCVid, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]);
-						$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);
+		
+						$irelcriteriasql = "INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition) values (?,?,?,?,?,?,?)";
+						$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($genCVid, $column_index, $adv_filter_column, $adv_filter_comparator, $adv_filter_value, $adv_filter_groupid, $adv_filter_column_condition));
+					
+						// Update the condition expression for the group to which the condition column belongs
+						$groupConditionExpression = '';
+						if(!empty($advft_criteria_groups[$adv_filter_groupid]["conditionexpression"])) {
+							$groupConditionExpression = $advft_criteria_groups[$adv_filter_groupid]["conditionexpression"];
+						}
+						$groupConditionExpression = $groupConditionExpression .' '. $column_index .' '. $adv_filter_column_condition;
+						$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
+					}
+					
+					foreach($advft_criteria_groups as $group_index => $group_condition_info) {				
+								
+						if(empty($group_condition_info)) continue;
+						if(empty($group_condition_info["conditionexpression"])) continue; // Case when the group doesn't have any column criteria
+											
+						$irelcriteriagroupsql = "insert into vtiger_cvadvfilter_grouping(groupid,cvid,group_condition,condition_expression) values (?,?,?,?)";
+						$irelcriteriagroupresult = $adb->pquery($irelcriteriagroupsql, array($group_index, $genCVid, $group_condition_info["groupcondition"], $group_condition_info["conditionexpression"]));
 					}
 					$log->info("CustomView :: Save :: vtiger_cvadvfilter update successfully".$cvid);
 				}

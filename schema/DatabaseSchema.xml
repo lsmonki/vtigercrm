@@ -4156,6 +4156,12 @@
 		<field name="value" type="C" size="200">
 			<default value="" />
 		</field>
+		<field name="groupid" type="I">
+			<default value="1" />
+		</field>
+		<field name="column_condition" type="C" size="255">
+			<default value="and" />
+		</field>
 
 		<index name="cvadvfilter_cvid_idx">
 			<col>cvid</col>
@@ -7320,6 +7326,21 @@
 		<field name="property_name" type="C" size="32">
 		</field>
 		<field name="property_value" type="C" size="64">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_cvadvfilter_grouping">
+		<field name="groupid" type="I" size="11">
+			<key />
+			<notnull />
+		</field>
+		<field name="cvid" type="I" size="19">
+			<key />
+		</field>
+		<field name="group_condition" type="C" size="255">
+		</field>
+		<field name="condition_expression" type="X">
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
