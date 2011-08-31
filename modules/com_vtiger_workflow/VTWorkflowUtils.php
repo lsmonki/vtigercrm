@@ -16,8 +16,8 @@ class VTWorkflowUtils {
 
 	function __construct() {
 		global $current_user;
-		if(empty($this->userStack)) {
-			$this->userStack = array();
+		if(empty(self::$userStack)) {
+			self::$userStack = array();
 		}
 	}
 
@@ -41,10 +41,10 @@ class VTWorkflowUtils {
 		$user = new Users();
 		$user->retrieveCurrentUserInfoFromFile(1);
 		global $current_user;
-		if (empty($this->userStack) || count($this->userStack) == 0) {
-			$this->loggedInUser = $current_user;
+		if (empty(self::$userStack) || count(self::$userStack) == 0) {
+			self::$loggedInUser = $current_user;
 		}
-		array_push($this->userStack, $current_user);
+		array_push(self::$userStack, $current_user);
 		$current_user = $user;
 		return $user;
 	}
@@ -54,9 +54,9 @@ class VTWorkflowUtils {
 	 * and make it the $current_user
 	 */
 	function loggedInUser() {
-		$user = $this->loggedInUser;
+		$user = self::$loggedInUser;
 		global $current_user;
-		array_push($this->userStack, $current_user);
+		array_push(self::$userStack, $current_user);
 		$current_user = $user;
 		return $user;
 	}
@@ -66,8 +66,8 @@ class VTWorkflowUtils {
 	 */
 	function revertUser() {
 		global $current_user;
-		if (count($this->userStack) != 0) {
-			$current_user = array_pop($this->userStack);
+		if (count(self::$userStack) != 0) {
+			$current_user = array_pop(self::$userStack);
 		} else {
 			$current_user = null;
 		}
