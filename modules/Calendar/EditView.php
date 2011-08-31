@@ -94,7 +94,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     }
     $smarty->assign("CONTACTSID",$cnt_idlist);
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
-    $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
+	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
     $res = $adb->pquery($query, array($focus->id));
     $rows = $adb->num_rows($res);
     if($rows != 0)
@@ -137,7 +137,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		$contact_name = "<option value=".$_REQUEST['contact_id'].">".getContactName($_REQUEST['contact_id'])."</option>";
 		$smarty->assign("CONTACTSNAME",$contact_name);
 		$account_id = $_REQUEST['account_id'];
-                $account_name = getAccountName($account_id);
+		$account_name = getAccountName($account_id);
 	}	
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
@@ -239,6 +239,9 @@ $smarty->assign("CATEGORY",$category);
 // Unimplemented until jscalendar language vtiger_files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+$isContactIdEditable = getFieldVisibilityPermission($tab_type, $current_user->id, 'contact_id', 'readwrite');
+$smarty->assign("IS_CONTACTS_EDIT_PERMITTED", (($isContactIdEditable == '0')? true : false));
 
 if (isset($_REQUEST['return_module']))
 	$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
