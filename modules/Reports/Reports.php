@@ -598,7 +598,7 @@ class Reports extends CRMEntity{
 			if($module == "Calendar")
 				$sql.=" group by vtiger_field.fieldlabel order by sequence";
 			else
-			$sql.=" order by sequence";
+				$sql.=" order by sequence";
 		}
 		else
 		{
@@ -1278,11 +1278,9 @@ function getEscapedColumns($selectedfields)
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $shtml;		
 	}
-	function getAdvancedFilterList($reportid)
-	{
-		global $adb;
-		global $modules;
-		global $log;
+	
+	function getAdvancedFilterList($reportid) {
+		global $adb, $log;
 		
 		$advft_criteria = array();
 		
@@ -1333,6 +1331,8 @@ function getEscapedColumns($selectedfields)
 			}
 			$i++;
 		}
+		// Clear the condition (and/or) for last group, if any.
+		if(!empty($advft_criteria[$i-1]['condition'])) $advft_criteria[$i-1]['condition'] = '';
 		$this->advft_criteria = $advft_criteria;
 		$log->info("Reports :: Successfully returned getAdvancedFilterList");
 		return true;
@@ -1633,4 +1633,81 @@ function getReportRelatedModules($module,$focus)
 }
 
 
+
+/** Function to get the  advanced filter criteria for an option
+ *  This function accepts The option in the advenced filter as an argument
+ *  This generate filter criteria for the advanced filter 
+ *  It returns a HTML string of combo values
+ */
+function getAdvCriteriaHTML($selected="") {
+	global $adv_filter_options;
+		
+	foreach($adv_filter_options as $key=>$value) {
+		if($selected == $key) {
+			$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
+		} else {
+			$shtml .= "<option value=\"".$key."\">".$value."</option>";
+		}
+	}	
+	return $shtml;
+}
+
+function updateAdvancedCriteria($reportid, $advft_criteria, $advft_criteria_groups) {	
+
+	global $adb, $log;
+	
+	$idelrelcriteriasql = "delete from vtiger_relcriteria where queryid=?";
+	$idelrelcriteriasqlresult = $adb->pquery($idelrelcriteriasql, array($reportid));
+
+	$idelrelcriteriagroupsql = "delete from vtiger_relcriteria_grouping where queryid=?";
+	$idelrelcriteriagroupsqlresult = $adb->pquery($idelrelcriteriagroupsql, array($reportid));
+	
+	if(empty($advft_criteria)) return;
+
+	foreach($advft_criteria as $column_index => $column_condition) {
+				
+		if(empty($column_condition)) continue;
+				
+		$adv_filter_column = $column_condition["columnname"];
+		$adv_filter_comparator = $column_condition["comparator"];
+		$adv_filter_value = $column_condition["value"];
+		$adv_filter_column_condition = $column_condition["columncondition"];
+		$adv_filter_groupid = $column_condition["groupid"];
+	
+		$column_info = explode(":",$adv_filter_column);
+		$temp_val = explode(",",$adv_filter_value);
+		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
+				|| ($column_info[4] == 'DT'))
+			&& ($column_info[4] != '' && $adv_filter_value != '' )) {
+			$val = Array();
+			for($x=0;$x<count($temp_val);$x++) {
+				list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+				$temp_date = getDBInsertDateValue(trim($temp_date));
+				$val[$x] = $temp_date;
+				if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+			}
+			$adv_filter_value = implode(",",$val);
+		}
+
+		$irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE,GROUPID,COLUMN_CONDITION) values (?,?,?,?,?,?,?)";
+		$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($reportid, $column_index, $adv_filter_column, $adv_filter_comparator, $adv_filter_value, $adv_filter_groupid, $adv_filter_column_condition));
+	
+		// Update the condition expression for the group to which the condition column belongs
+		$groupConditionExpression = '';
+		if(!empty($advft_criteria_groups[$adv_filter_groupid]["conditionexpression"])) {
+			$groupConditionExpression = $advft_criteria_groups[$adv_filter_groupid]["conditionexpression"];
+		}
+		$groupConditionExpression = $groupConditionExpression .' '. $column_index .' '. $adv_filter_column_condition;
+		$advft_criteria_groups[$adv_filter_groupid]["conditionexpression"] = $groupConditionExpression;
+	}
+	
+	foreach($advft_criteria_groups as $group_index => $group_condition_info) {				
+				
+		if(empty($group_condition_info)) continue;
+		if(empty($group_condition_info["conditionexpression"])) continue; // Case when the group doesn't have any column criteria
+							
+		$irelcriteriagroupsql = "insert into vtiger_relcriteria_grouping(GROUPID,QUERYID,GROUP_CONDITION,CONDITION_EXPRESSION) values (?,?,?,?)";
+		$irelcriteriagroupresult = $adb->pquery($irelcriteriagroupsql, array($group_index, $reportid, $group_condition_info["groupcondition"], $group_condition_info["conditionexpression"]));
+	}
+}
 ?>

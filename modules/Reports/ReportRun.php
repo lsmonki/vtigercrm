@@ -629,53 +629,79 @@ class ReportRun extends CRMEntity
 	 *				      	     )
 	 *
 	 */
-
-
-	function getAdvFilterSql($reportid)
-	{
-		// Have we initialized information already?
-		if($this->_advfiltersql !== false) {
-			return $this->_advfiltersql;
-		}
+	 function getAdvFilterList($reportid) {
+		global $adb, $log;
 		
-		global $adb;
-		global $modules;
+		$advft_criteria = array();
+		
+		$sql = 'SELECT * FROM vtiger_relcriteria_grouping WHERE queryid = ? ORDER BY groupid';
+		$groupsresult = $adb->pquery($sql, array($reportid));
+		
+		$i = 1;
+		$j = 0;
+		while($relcriteriagroup = $adb->fetch_array($groupsresult)) {
+			$groupId = $relcriteriagroup["groupid"];
+			$groupCondition = $relcriteriagroup["group_condition"];
+			
+			$ssql = 'select vtiger_relcriteria.* from vtiger_report 
+						inner join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_report.queryid
+						left join vtiger_relcriteria_grouping on vtiger_relcriteria.queryid = vtiger_relcriteria_grouping.queryid 
+								and vtiger_relcriteria.groupid = vtiger_relcriteria_grouping.groupid';
+			$ssql.= " where vtiger_report.reportid = ? AND vtiger_relcriteria.groupid = ? order by vtiger_relcriteria.columnindex";
+	
+			$result = $adb->pquery($ssql, array($reportid, $groupId));
+			$noOfColumns = $adb->num_rows($result);
+			if($noOfColumns <= 0) continue;
+			
+			while($relcriteriarow = $adb->fetch_array($result)) {
+				$columnIndex = $relcriteriarow["columnindex"];
+				$criteria = array();
+				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"]);
+				$criteria['comparator'] = $relcriteriarow["comparator"];
+				$advfilterval = $relcriteriarow["value"];
+				$col = explode(":",$relcriteriarow["columnname"]);
+				$criteria['value'] = $advfilterval;
+				$criteria['column_condition'] = $relcriteriarow["column_condition"];
+				
+				$advft_criteria[$i]['columns'][$j] = $criteria;
+				$advft_criteria[$i]['condition'] = $groupCondition;
+				$j++;
+			}
+			if(!empty($advft_criteria[$i]['columns'][$j-1]['column_condition'])) {
+				$advft_criteria[$i]['columns'][$j-1]['column_condition'] = '';
+			}	
+			$i++;
+		}
+		// Clear the condition (and/or) for last group, if any.
+		if(!empty($advft_criteria[$i-1]['condition'])) $advft_criteria[$i-1]['condition'] = '';
+		return $advft_criteria;
+	}
+
+	function generateAdvFilterSql($advfilterlist) {
+		
 		global $log;
 
 		$advfiltersql = "";
 		
-		$advfiltergroupssql = "SELECT * FROM vtiger_relcriteria_grouping WHERE queryid = ? ORDER BY groupid";
-		$advfiltergroups = $adb->pquery($advfiltergroupssql, array($reportid));
-		$numgrouprows = $adb->num_rows($advfiltergroups);
-		$groupctr =0;
-		while($advfiltergroup = $adb->fetch_array($advfiltergroups)) {
-			$groupctr++;
-			$groupid = $advfiltergroup["groupid"];
-			$groupcondition = $advfiltergroup["group_condition"];
+		foreach($advfilterlist as $groupindex => $groupinfo) {
+			$groupcondition = $groupinfo['condition'];
+			$groupcolumns = $groupinfo['columns'];
 			
-			$advfiltercolumnssql =  "select vtiger_relcriteria.* from vtiger_report";
-			$advfiltercolumnssql .= " inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
-			$advfiltercolumnssql .= " left join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_selectquery.queryid";
-			$advfiltercolumnssql .= " where vtiger_report.reportid = ? AND vtiger_relcriteria.groupid = ?";
-			$advfiltercolumnssql .= " order by vtiger_relcriteria.columnindex";
-	
-			$result = $adb->pquery($advfiltercolumnssql, array($reportid, $groupid));
-			$noofrows = $adb->num_rows($result);
-			
-			if($noofrows > 0) {
+			if(count($groupcolumns) > 0) {
 				
 				$advfiltergroupsql = "";
-				$columnctr = 0;
-				while($advfilterrow = $adb->fetch_array($result)) {
-					$columnctr++;
-					$fieldcolname = $advfilterrow["columnname"];
-					$comparator = $advfilterrow["comparator"];
-					$value = $advfilterrow["value"];
-					$columncondition = $advfilterrow["column_condition"];
+				foreach($groupcolumns as $columnindex => $columninfo) {
+					$fieldcolname = $columninfo["columnname"];
+					$comparator = $columninfo["comparator"];
+					$value = $columninfo["value"];
+					$columncondition = $columninfo["column_condition"];
 					
 					if($fieldcolname != "" && $comparator != "") {
 						$selectedfields = explode(":",$fieldcolname);
-						$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
+                        // Added to handle the crmentity table name for Primary module
+                        if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
+                            $selectedfields[0] = "vtiger_crmentity";
+                        }
 						//Added to handle yes or no for checkbox  field in reports advance filters. -shahul
 						if($selectedfields[4] == 'C') {
 							if(strcasecmp(trim($value),"yes")==0)
@@ -730,6 +756,12 @@ class ReportRun extends CRMEntity
 							} else {
 								$fieldvalue = " case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
 							}
+						} elseif($comparator == 'bw' && count($valuearray) == 2) {
+							if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
+								$fieldvalue = "("."vtiger_crmentity.".$selectedfields[1]." between '".trim($valuearray[0])."' and '".trim($valuearray[1])."')";
+							} else {
+								$fieldvalue = "(".$selectedfields[0].".".$selectedfields[1]." between '".trim($valuearray[0])."' and '".trim($valuearray[1])."')";
+							}
 						} elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
 							$fieldvalue = "vtiger_crmentity.".$selectedfields[1]." ".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($selectedfields[2] == 'Quotes_Inventory_Manager'){
@@ -748,14 +780,12 @@ class ReportRun extends CRMEntity
 								$fieldvalue = "concat(vtiger_contactdetails". $this->secondarymodule .".lastname,' ',vtiger_contactdetails". $this->secondarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($comparator == 'e' && (trim($value) == "NULL" || trim($value) == '')) {
 							$fieldvalue = "(".$selectedfields[0].".".$selectedfields[1]." IS NULL OR ".$selectedfields[0].".".$selectedfields[1]." = '')";
-						} elseif($comparator == 'bw' && count($valuearray) == 2) {
-							$fieldvalue = "(".$selectedfields[0].".".$selectedfields[1]." between '".trim($valuearray[0])."' and '".trim($valuearray[1])."')";
 						} else {
 							$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 						}
 						
 						$advfiltergroupsql .= $fieldvalue;
-						if($columncondition != NULL && $columncondition != '' && $noofrows > $columnctr ) {
+						if(!empty($columncondition)) {
 							$advfiltergroupsql .= ' '.$columncondition.' ';
 						}	
 					}
@@ -764,7 +794,7 @@ class ReportRun extends CRMEntity
 				
 				if (trim($advfiltergroupsql) != "") {
 					$advfiltergroupsql =  "( $advfiltergroupsql ) ";
-					if($groupcondition != NULL && $groupcondition != '' && $numgrouprows > $groupctr) {
+					if(!empty($groupcondition)) {
 						$advfiltergroupsql .= ' '. $groupcondition . ' ';
 					}
 					
@@ -773,6 +803,20 @@ class ReportRun extends CRMEntity
 			}
 		}
 		if (trim($advfiltersql) != "") $advfiltersql = '('.$advfiltersql.')';
+		
+		return $advfiltersql;
+	}
+
+	function getAdvFilterSql($reportid) {
+		// Have we initialized information already?
+		if($this->_advfiltersql !== false) {
+			return $this->_advfiltersql;
+		}
+		global $log;
+		
+		$advfilterlist = $this->getAdvFilterList($reportid);
+		$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+		
 		// Save the information
 		$this->_advfiltersql = $advfiltersql;
 		
@@ -875,6 +919,71 @@ class ReportRun extends CRMEntity
 
 		}
 		return $stdfilterlist;
+
+	}
+
+	/** Function to get the RunTime Advanced filter conditions 
+	 *  @ param $advft_criteria : Type Array
+	 *  @ param $advft_criteria_groups : Type Array
+	 *  This function returns  $advfiltersql
+	 *
+	 */
+	function RunTimeAdvFilter($advft_criteria,$advft_criteria_groups) {
+						
+		$advfilterlist = array();
+		
+		if(!empty($advft_criteria)) {
+			foreach($advft_criteria as $column_index => $column_condition) {
+				
+				if(empty($column_condition)) continue;
+				
+				$adv_filter_column = $column_condition["columnname"];
+				$adv_filter_comparator = $column_condition["comparator"];
+				$adv_filter_value = $column_condition["value"];
+				$adv_filter_column_condition = $column_condition["columncondition"];
+				$adv_filter_groupid = $column_condition["groupid"];
+			
+				$column_info = explode(":",$adv_filter_column);
+				$temp_val = explode(",",$adv_filter_value);
+				if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') 
+						|| ($column_info[4] == 'DT'))
+					&& ($column_info[4] != '' && $adv_filter_value != '' )) {
+					$val = Array();
+					for($x=0;$x<count($temp_val);$x++) {
+						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+						$temp_date = getDBInsertDateValue(trim($temp_date));
+						$val[$x] = $temp_date;
+						if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+					}
+					$adv_filter_value = implode(",",$val);
+				}
+				
+				$criteria = array();
+				$criteria['columnname'] = $adv_filter_column;
+				$criteria['comparator'] = $adv_filter_comparator;
+				$criteria['value'] = $adv_filter_value;
+				$criteria['column_condition'] = $adv_filter_column_condition;
+				
+				$advfilterlist[$adv_filter_groupid]['columns'][] = $criteria;
+			}
+			
+			foreach($advft_criteria_groups as $group_index => $group_condition_info) {						
+				if(empty($group_condition_info)) continue;
+				if(empty($advfilterlist[$group_index])) continue;			
+				$advfilterlist[$group_index]['condition'] = $group_condition_info["groupcondition"];
+				$noOfGroupColumns = count($advfilterlist[$group_index]['columns']);		
+				if(!empty($advfilterlist[$group_index]['columns'][$noOfGroupColumns-1]['column_condition'])) {
+					$advfilterlist[$group_index]['columns'][$noOfGroupColumns-1]['column_condition'] = '';
+				}
+			}
+			$noOfGroups = count($advfilterlist);
+			if(!empty($advfilterlist[$noOfGroups]['condition'])) {
+				$advfilterlist[$noOfGroups]['condition'] = '';
+			}
+			
+			$advfiltersql = $this->generateAdvFilterSql($advfilterlist);
+		}
+		return $advfiltersql;
 
 	}
 
@@ -1619,12 +1728,12 @@ class ReportRun extends CRMEntity
 
 	/** function to get query for the given reportid,filterlist,type    
 	 *  @ param $reportid : Type integer
-	 *  @ param $filterlist : Type Array
+	 *  @ param $filtersql : Type Array
 	 *  @ param $module : Type String 
 	 *  this returns join query for the report 
 	 */
 
-	function sGetSQLforReport($reportid,$filterlist,$type='')
+	function sGetSQLforReport($reportid,$filtersql,$type='')
 	{
 		global $log;
 
@@ -1655,10 +1764,6 @@ class ReportRun extends CRMEntity
 		{
 			$stdfiltersql = implode(", ",$stdfilterlist);
 		}
-		if(!empty($filterlist))
-		{
-			$stdfiltersql = implode(", ",$filterlist);
-		}
 		//columns to total list
 		if(isset($columnstotallist))
 		{
@@ -1668,8 +1773,11 @@ class ReportRun extends CRMEntity
 		{
 			$wheresql = " and ".$stdfiltersql;
 		}
-		if($advfiltersql != "")
-		{
+		
+		if(isset($filtersql)) {
+			$advfiltersql = $filtersql;
+		}
+		if($advfiltersql != "") {
 			$wheresql .= " and ".$advfiltersql;
 		}
 
@@ -1718,7 +1826,7 @@ class ReportRun extends CRMEntity
 
 	/** function to get the report output in HTML,PDF,TOTAL,PRINT,PRINTTOTAL formats depends on the argument $outputformat    
 	 *  @ param $outputformat : Type String (valid parameters HTML,PDF,TOTAL,PRINT,PRINT_TOTAL)
-	 *  @ param $filterlist : Type Array
+	 *  @ param $filtersql : Type String
 	 *  This returns HTML Report if $outputformat is HTML
          *  		Array for PDF if  $outputformat is PDF
 	 *		HTML strings for TOTAL if $outputformat is TOTAL
@@ -1728,7 +1836,7 @@ class ReportRun extends CRMEntity
 	 */
 
 	// Performance Optimization: Added parameter directOutput to avoid building big-string!
-	function GenerateReport($outputformat,$filterlist, $directOutput=false)
+	function GenerateReport($outputformat,$filtersql, $directOutput=false)
 	{
 		global $adb,$current_user,$php_max_execution_time;
 		global $modules,$app_strings;
@@ -1766,7 +1874,7 @@ class ReportRun extends CRMEntity
 		
 		if($outputformat == "HTML")
 		{
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,$outputformat);
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,$outputformat);
 			$result = $adb->query($sSQL);
 			$error_msg = $adb->database->ErrorMsg();
 			if(!$result && $error_msg!=''){
@@ -2060,7 +2168,7 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "PDF")
 		{
 
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
 			$result = $adb->query($sSQL);
 			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			$picklistarray = $this->getAccessPickListValues();
@@ -2185,7 +2293,7 @@ class ReportRun extends CRMEntity
 		{
 				$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 				$totalpdf=array();
-				$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+				$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
 				if(isset($this->totallist))
 				{
 						if($sSQL != "")
@@ -2290,7 +2398,7 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "TOTALHTML")
 		{
 			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
 			if(isset($this->totallist))
 			{
 				if($sSQL != "")
@@ -2420,7 +2528,7 @@ class ReportRun extends CRMEntity
 			return $coltotalhtml;
 		}elseif($outputformat == "PRINT")
 		{
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql);
 			$result = $adb->query($sSQL);
 			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			$picklistarray = $this->getAccessPickListValues();
@@ -2626,7 +2734,7 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "PRINT_TOTAL")
 		{
 			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
-			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filtersql,"COLUMNSTOTOTAL");
 			if(isset($this->totallist))
 			{
 				if($sSQL != "")

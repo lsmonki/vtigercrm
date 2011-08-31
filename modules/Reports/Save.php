@@ -215,6 +215,7 @@ if($reportid == "")
 					foreach($advft_criteria_groups as $group_index => $group_condition_info) {				
 						
 						if(empty($group_condition_info)) continue;
+						if(empty($group_condition_info["conditionexpression"])) continue; // Case when the group doesn't have any column criteria
 						
 						$irelcriteriagroupsql = "insert into vtiger_relcriteria_grouping(GROUPID,QUERYID,GROUP_CONDITION,CONDITION_EXPRESSION) values (?,?,?,?)";
 						$irelcriteriagroupresult = $adb->pquery($irelcriteriagroupsql, array($group_index, $genQueryId, $group_condition_info["groupcondition"], $group_condition_info["conditionexpression"]));
@@ -384,6 +385,7 @@ if($reportid == "")
 			foreach($advft_criteria_groups as $group_index => $group_condition_info) {				
 						
 				if(empty($group_condition_info)) continue;
+				if(empty($group_condition_info["conditionexpression"])) continue; // Case when the group doesn't have any column criteria
 									
 				$irelcriteriagroupsql = "insert into vtiger_relcriteria_grouping(GROUPID,QUERYID,GROUP_CONDITION,CONDITION_EXPRESSION) values (?,?,?,?)";
 				$irelcriteriagroupresult = $adb->pquery($irelcriteriagroupsql, array($group_index, $reportid, $group_condition_info["groupcondition"], $group_condition_info["conditionexpression"]));

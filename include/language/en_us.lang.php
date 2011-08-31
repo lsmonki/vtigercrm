@@ -1267,7 +1267,14 @@ $app_strings = array (
 		  is no longer applicable, please reset your password.',
 	'LBL_RESET_PASSWORD_DESCRIPTION' => 'you can reset password for all users using a script and set it to thier respective
 			  user names.',
-	
+
+'LBL_CRITERIA_AND'=>'and',
+'LBL_CRITERIA_OR'=>'or',
+'LBL_NEW_GROUP'=>'New Group',
+'LBL_DELETE_GROUP'=>'Delete Group',
+'LBL_NEW_CONDITION'=>'New Condition',
+'LBL_ADVANCED_FILTER' => 'Advanced Search',
+
 'LBL_CHANGE'=>'Change',
 'LBL_CHANGE_TITLE'=>'Change [Alt+C]',
 

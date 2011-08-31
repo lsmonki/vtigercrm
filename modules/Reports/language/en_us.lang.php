@@ -224,10 +224,6 @@ $mod_strings = Array(
 'NO_REL_MODULES'=>'No Related Modules for the Selected Module',
 'LBL_REPORT_GENERATION_FAILED'=>'Report generation failed!',
 
-'LBL_OR'=>'or',
-'LBL_NEW_GROUP'=>'New Group',
-'LBL_DELETE_GROUP'=>'Delete Group',
-'LBL_NEW_CONDITION'=>'New Condition',
 'LBL_SHARING_TYPE'=>'Sharing Type',
 'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Select Sharing Type to Control Access to the Report', 
 'LBL_ACTION' => 'Action',
@@ -266,7 +262,10 @@ $mod_strings = Array(
 'MONTH_STRINGS' => array('January','February','March','April','May','June','July','August','September','October','November','December'),
 
 'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'This is an auto-generated email sent on behalf of a scheduled report.',
-'LBL_TIME_FORMAT_MSG' => 'hh:mm (24 hour format)'
+'LBL_TIME_FORMAT_MSG' => 'hh:mm (24 hour format)',
+
+'LBL_SAVE_REPORT' => 'Save',
+'LBL_SAVE_REPORT_AS' => 'Save Report as...',
 )
 
 ?>
