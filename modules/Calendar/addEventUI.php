@@ -717,7 +717,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 				if(isPermitted("Calendar","Delete") == "yes")	
 				{
 				?>
-				<a href="" id="actdelete" onclick ="fninvsh('eventcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+				<a href="" id="actdelete" onclick ="fninvsh('eventcalAction');return confirm('<?php echo $mod_strings['LBL_ARE_YOU_SURE']?>');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
 				<?php
 				}
 				?>
@@ -1086,7 +1086,7 @@ function getAssignedToHTML($assignedto,$toggletype)
                                 if(isPermitted("Calendar","Delete") == "yes")
                                 {
                                 ?>
-                                <a href="" id="taskactdelete" onClick ="fninvsh('taskcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+                                <a href="" id="taskactdelete" onClick ="fninvsh('taskcalAction');return confirm('<?php echo $mod_strings['LBL_ARE_YOU_SURE']?>');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
                                 <?php
                                 }
                                 ?>
