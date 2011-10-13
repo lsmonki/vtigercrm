@@ -366,7 +366,13 @@ class Users extends CRMEntity {
 
 			default:
 				$this->log->debug("Using integrated/SQL authentication");
-				$encrypted_password = $this->encrypt_password($user_password);
+				$query = "SELECT crypt_type FROM $this->table_name WHERE user_name=?";
+				$result = $this->db->requirePsSingleResult($query, array($usr_name), false);
+				if (empty($result)) {
+					return false;
+				}
+				$crypt_type = $this->db->query_result($result, 0, 'crypt_type');
+				$encrypted_password = $this->encrypt_password($user_password, $crypt_type);
 				$query = "SELECT * from $this->table_name where user_name=? AND user_password=?";
 				$result = $this->db->requirePsSingleResult($query, array($usr_name, $encrypted_password), false);
 				if (empty($result)) {
@@ -399,15 +405,10 @@ class Users extends CRMEntity {
 			$this->log->warn("SECURITY: " . $usr_name . " has attempted to login ". 	$_SESSION['loginattempts'] . " times.");
 		}
 		$this->log->debug("Starting user load for $usr_name");
-		$validation = 0;
-		unset($_SESSION['validation']);
+		
 		if( !isset($this->column_fields["user_name"]) || $this->column_fields["user_name"] == "" || !isset($user_password) || $user_password == "")
 			return null;
-
-		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f', '866bba5ae0a15180e8613d33b0acc6bd') == -1)$validation = -1;
-		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvcG93ZXJlZF9ieV9zdWdhcmNybS5naWY=' , '3d49c9768de467925daabf242fe93cce') == -1)$validation = -1;
-		if($this->authorization_check('aW5kZXgucGhw' , 'PEEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nIHRhcmdldD0nX2JsYW5rJz48aW1nIGJvcmRlcj0nMCcgc3JjPSdpbmNsdWRlL2ltYWdlcy9wb3dlcmVkX2J5X3N1Z2FyY3JtLmdpZicgYWx0PSdQb3dlcmVkIEJ5IFN1Z2FyQ1JNJz48L2E+', 1) == -1)$validation = -1;
-
+		
 		$authCheck = false;
 		$authCheck = $this->doLogin($user_password);
 

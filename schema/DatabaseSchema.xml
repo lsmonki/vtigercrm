@@ -7,7 +7,7 @@
 			<autoincrement />
 		</field>
 		<field name="user_name" type="C" size="255" />
-		<field name="user_password" type="C" size="128" />
+		<field name="user_password" type="C" size="200" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">
 			<default value="#E6FAD8" />
@@ -76,7 +76,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
-		<field name="confirm_password" type="C" size="30" />
+		<field name="confirm_password" type="C" size="300" />
 
 		<field name="internal_mailer" type="C" size="3">
 			<notnull />
