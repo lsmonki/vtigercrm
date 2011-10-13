@@ -4818,7 +4818,7 @@ function getValidDBInsertDateValue($value) {
 	
 function getValidDBInsertDateTimeValue($value) {
 	$valueList = explode(' ',$value);
-	$date = new DateTime($value);
+	$date = new DateTimeField($value);
 	if(count($valueList) == 2) {
 		$value = $date->getDBInsertDateTimeValue();
 	} elseif(count($valueList == 1)) {

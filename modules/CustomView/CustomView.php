@@ -28,6 +28,9 @@ $adv_filter_options = array("e"=>"".$mod_strings['equals']."",
                             "g"=>"".$mod_strings['greater than']."",
                             "m"=>"".$mod_strings['less or equal']."",
                             "h"=>"".$mod_strings['greater or equal']."",
+                            "b"=>"".$mod_strings['before']."",
+                            "a"=>"".$mod_strings['after']."",
+                            "bw"=>"".$mod_strings['between']."",
                             );
 
 class CustomView extends CRMEntity{
@@ -1449,6 +1452,7 @@ class CustomView extends CRMEntity{
 		global $adb, $default_charset;
 		$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
 		$value = $adb->sql_escape_string($value);
+		
 		if($comparator == "e")
 		{
 			if(trim($value) == "NULL")
@@ -1539,6 +1543,12 @@ class CustomView extends CRMEntity{
 		if($comparator == "h")
 		{
 			$rtvalue = " >= ".$adb->quote($value);
+		}
+		if($comparator == "b") {
+			$rtvalue = " < ".$adb->quote($value);
+		}
+		if($comparator == "a") {
+			$rtvalue = " > ".$adb->quote($value);
 		}
 
 		return $rtvalue;
