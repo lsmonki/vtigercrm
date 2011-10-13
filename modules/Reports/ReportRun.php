@@ -99,15 +99,20 @@ class ReportRun extends CRMEntity
 			$inventory_fields = array('quantity','listprice','serviceid','productid','discount','comment');
 			$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice');
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
-			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+			if(sizeof($permitted_fields[$module]) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				list($module,$field) = split("_",$module_field);
-				$permitted_fields = $this->getaccesfield($module);
+				//list($module,$field) = split("_",$module_field);
+				$permitted_fields[$module] = $this->getaccesfield($module);
 			}
 			if(in_array($module,$inventory_modules)){
 				$permitted_fields = array_merge($permitted_fields,$inventory_fields);
 			}
 			$selectedfields = explode(":",$fieldcolname);
+			if($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1
+					&& !in_array($selectedfields[3], $permitted_fields[$module])) {
+				//user has no access to this field, skip it.
+				continue;
+			}
 			$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			
@@ -275,12 +280,12 @@ class ReportRun extends CRMEntity
 		}
 		else
 		{
-			array_push($params, $this->primarymodule, $this->secondarymodule);
+			array_push($params, $module);
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->pquery($query, $params);
@@ -2307,13 +2312,13 @@ class ReportRun extends CRMEntity
 										$fieldlist = explode(":",$key);
 										$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
 										if($adb->num_rows($mod_query)>0){
-												$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+												$module_name = getTabModuleName($adb->query_result($mod_query,0,'tabid'));
 												$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
 												$fieldlabel = str_replace("_", " ", $fieldlabel);
 												if($module_name){
-														$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
+														$field = getTranslatedString($module_name,$module_name)." ".getTranslatedString($fieldlabel,$module_name);
 												} else {
-													$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
+													$field = getTranslatedString($fieldlabel);
 												}
 										}
 										$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
@@ -2420,13 +2425,13 @@ class ReportRun extends CRMEntity
 						$fieldlist = explode(":",$key);
 						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
 						if($adb->num_rows($mod_query)>0){
-							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+							$module_name = getTabModuleName($adb->query_result($mod_query,0,'tabid'));
 							$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
 							$fieldlabel = str_replace("_", " ", $fieldlabel);
 							if($module_name){
-								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
+								$field = getTranslatedString($module_name, $module_name)." ".getTranslatedString($fieldlabel,$module_name);
 							} else {
-								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
+								$field = getTranslatedString($fieldlabel);
 							}							
 						}
 						$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
