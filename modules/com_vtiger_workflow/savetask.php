@@ -52,7 +52,7 @@ require_once("VTWorkflowApplication.inc");
 		foreach($fieldNames as $fieldName){
 			$task->$fieldName = $request[$fieldName];
 			if ($fieldName == 'calendar_repeat_limit_date') {
-				$task->$fieldName = getDBInsertDateValue($request[$fieldName]);
+				$task->$fieldName = DateTimeField::convertToDBFormat($request[$fieldName]);
 			}
 		}
 		$tm->saveTask($task);

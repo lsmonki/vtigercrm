@@ -186,7 +186,10 @@ function addRequiredElements(columnindex) {
     
     var fieldtype = null ;
     if(currField.value != null && currField.value.length != 0) {
-		fieldtype = trimfValues(currField.value);
+		var fieldInfo = currField.value.split(":");
+		var tableName = fieldInfo[0];
+		var fieldName = fieldInfo[2];
+		fieldtype = fieldInfo[4];
 		
 		switch(fieldtype) {
 			case 'D':
@@ -194,7 +197,7 @@ function addRequiredElements(columnindex) {
 			case 'T':	var dateformat = $('jscal_dateformat').value;
 						var timeformat = "%H:%M:%S";
 						var showtime = true;
-						if(fieldtype == 'D' || fieldtype == 'DT') {
+						if(fieldtype == 'D' || (tableName == 'vtiger_activity' && fieldName == 'date_start')) {
 							timeformat = '';
 							showtime = false;
 						}						
@@ -330,28 +333,48 @@ function checkAdvancedFilter() {
 
 		var col = selectedColumn.split(":");
         if(escapedOptions.indexOf(col[3]) == -1) {
-            if(col[4] == 'T') {
+            if(col[4] == 'T' || col[4] == 'DT') {
                 var datime = specifiedValue.split(" ");
                 if (specifiedValue.charAt(0) != "$" && specifiedValue.charAt(specifiedValue.length-1) != "$"){
-                    if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH"))
-                        return false
+					if(datime.length > 1) {
+						if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH")) {
+							return false
+						}
+						if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS")) {
+							return false
+						}
+					} else if($col[0] == 'vtiger_activity' && $col[2] == 'date_start') {
+						if(!dateValidate(valueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
+							return false
+					} else {
+						if(!re_patternValidate(datime[0],selectedColumnLabel+" (Time)","TIMESECONDS")) {
+							return false
+						}
+					}
                 }
-                if(datime.length > 1)
-                if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS"))
-                    return false
 
                 if(extValueObject) {
                     var datime = extendedValue.split(" ");
-                    if (specifiedValue.charAt(0) != "$" && specifiedValue.charAt(specifiedValue.length-1) != "$"){
-                        if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH"))
-                            return false
-                    }
-                    if(datime.length > 1)
-                    if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS"))
-                        return false
+					if (extendedValue.charAt(0) != "$" && extendedValue.charAt(extendedValue.length-1) != "$"){
+						if(datime.length > 1) {
+							if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH")) {
+								return false
+							}
+							if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS")) {
+								return false
+							}
+						} else if($col[0] == 'vtiger_activity' && $col[2] == 'date_start') {
+							if(!dateValidate(extValueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
+								return false
+						} else {
+							if(!re_patternValidate(datime[0],selectedColumnLabel+" (Time)","TIMESECONDS")) {
+								return false
+							}
+						}
+					}
                 }
             }
-            else if(col[4] == 'D' || col[4] == 'DT')
+            else if(col[4] == 'D')
             {
                 if (specifiedValue.charAt(0) != "$" && specifiedValue.charAt(specifiedValue.length-1) != "$"){
                     if(!dateValidate(valueId,selectedColumnLabel+" (Current User Date Format)","OTH"))

@@ -109,7 +109,7 @@ class CRMEntity
 	
 	function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
 	{
-		$date_var = date('Y-m-d H:i:s');
+		$date_var = date("Y-m-d H:i:s");
 		global $current_user;
 		global $adb;
 		//global $root_directory;
@@ -170,7 +170,7 @@ class CRMEntity
 		global $adb, $current_user;
 		global $upload_badext;
 
-		$date_var = date('Y-m-d H:i:s');
+		$date_var = date("Y-m-d H:i:s");
 
 		//to get the owner id
 		$ownerid = $this->column_fields['assigned_user_id'];
@@ -290,7 +290,7 @@ class CRMEntity
 		$this->mode = 'edit';
 	}
 	
-	$date_var = date('Y-m-d H:i:s');
+	$date_var = date("Y-m-d H:i:s");
 	
 	$ownerid = $this->column_fields['assigned_user_id'];
      
@@ -570,7 +570,7 @@ class CRMEntity
 				$curSymCrate = getCurrencySymbolandCRate($currency_id);
 				$fldvalue = convertToDollar($this->column_fields[$fieldname], $curSymCrate['rate']);
 			} else {
-				$fldvalue = $this->column_fields[$fieldname]; 
+				$fldvalue = $this->column_fields[$fieldname];
 			}
 			if($uitype != 33 && $uitype !=8)
 				$fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
@@ -603,8 +603,9 @@ class CRMEntity
 			  $sales_stage = $adb->query_result($adb->pquery($dbquery, array($this->id)),0,'sales_stage');
 			  if($sales_stage != $_REQUEST['sales_stage'] && $_REQUEST['sales_stage'] != '')
 			  {
-				  $date_var = date('YmdHis');
-				  $closingdate = ($_REQUEST['ajxaction'] == 'DETAILVIEW')? $this->column_fields['closingdate'] : getDBInsertDateValue($this->column_fields['closingdate']);
+				  $date_var = date("Y-m-d H:i:s");
+				  $closingDateField = new DateTimeField($this->column_fields['closingdate']);
+				  $closingdate = ($_REQUEST['ajxaction'] == 'DETAILVIEW')? $this->column_fields['closingdate'] : $closingDateField->getDBInsertDateValue();
 				  $sql = "insert into vtiger_potstagehistory values(?,?,?,?,?,?,?,?)";
 				  $params = array('', $this->id, $this->column_fields['amount'], decode_html($sales_stage), $this->column_fields['probability'], 0, $adb->formatDate($closingdate, true), $adb->formatDate($date_var, true));
 				  $adb->pquery($sql, $params);
@@ -970,7 +971,7 @@ $log->info("in getOldFileName  ".$notesid);
 	*/
 	function mark_deleted($id) {
 		global $current_user;
-		$date_var = date('Y-m-d H:i:s');
+		$date_var = date("Y-m-d H:i:s");
 		$query = "UPDATE vtiger_crmentity set deleted=1,modifiedtime=?,modifiedby=? where crmid=?";
 		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$current_user->id,$id), true,"Error marking record deleted: ");
 	}
@@ -1292,7 +1293,7 @@ $log->info("in getOldFileName  ".$notesid);
 		$this->db->println("TRANS restore starts $module");
 		$this->db->startTransaction();		
 	
-		$date_var = date('Y-m-d H:i:s'); 
+		$date_var = date("Y-m-d H:i:s");
 		$query = 'UPDATE vtiger_crmentity SET deleted=0,modifiedtime=?,modifiedby=? WHERE crmid = ?'; 
 		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$current_user->id,$id),true,"Error restoring records :" ); 
 		//Restore related entities/records

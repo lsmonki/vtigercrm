@@ -31,7 +31,7 @@ $avoidPotential = (isset($createPotential) && $createPotential == "on")? true : 
 
 $potential = array();
 $potential['potentialname'] = vtlib_purify($_REQUEST["potential_name"]);
-$potential['closingdate'] = getDBInsertDateValue($_REQUEST["closedate"]);
+$potential['closingdate'] = getValidDBInsertDateValue($_REQUEST["closedate"]);
 $potential['amount'] = vtlib_purify($_REQUEST['potential_amount']);
 $potential['sales_stage'] = vtlib_purify($_REQUEST['potential_sales_stage']);
 

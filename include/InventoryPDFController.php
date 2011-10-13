@@ -405,7 +405,7 @@ class Vtiger_InventoryPDFController {
 	}
 
 	function formatDate($value) {
-		return getDisplayDate($value);
+		return DateTimeField::convertToUserFormat($value);
 	}
 
 }

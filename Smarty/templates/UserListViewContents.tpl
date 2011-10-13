@@ -10,10 +10,19 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
-<tr>
-	<td class="big"><strong>{$MOD.LBL_USERS_LIST}</strong></td>
-	<td class="small" align=right>&nbsp;</td>
-</tr>
+	<tr>
+		<td class="big"><strong>{$MOD.LBL_USERS_LIST}</strong></td>
+		<td class="small" align=right>&nbsp;</td>
+	</tr>
+</table>
+<table width=100% class="tableHeading" border=0 cellspacing=0 >
+	<tr>
+		<td class="small cellLabel" style="white-space: normal;">
+			<div id="note">
+				{'LBL_USER_ADDITION_INFO'|@getTranslatedString:'Settings'}
+			</div>
+		</td>
+	</tr>
 </table>
 					
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
@@ -22,13 +31,18 @@
 		{$recordListRange}
 	</td>
 	<!-- Page Navigation -->
-	<td nowrap width="30%" align="center">
+	<td nowrap width="100%" align="center">
 		<table border=0 cellspacing=0 cellpadding=0 class="small">
 			<tr>{$NAVIGATION}</tr>
 		</table>
     </td>
-	<td class=small width="30%" align="right"><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>
+	{*<!--<td class=small width="30%" align="right"><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>-->*}
+	</tr>
 </tr>
+
+{*<!--<tr>
+	<td class=small align=right><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>
+</tr>-->*}
 
 {if $ERROR_MSG neq ''}
 <tr>
@@ -60,7 +74,6 @@
 	{if $flag eq 0}
 		<img src="{'delete.gif'|@vtiger_imageurl:$THEME}" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/>
 	{/if}	
-	<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}&isDuplicate=true"><img src="{'settingsActBtnDuplicate.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_DUPLICATE_BUTTON}" title="{$APP.LBL_DUPLICATE_BUTTON}" border="0"></a>
 </td>
 	<td class="listTableRow small" valign=top><b><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.3} </a></b><br><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.1} {$listvalues.0}</a> ({$listvalues.2})</td>
 	<td class="listTableRow small" valign=top>{$listvalues.5}&nbsp;</td>

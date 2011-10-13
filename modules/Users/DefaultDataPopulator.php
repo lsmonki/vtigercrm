@@ -943,6 +943,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,'',100,4,$useraddressblock,1,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,'',100,2,$useraddressblock,1,'V~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values(29,".$this->db->getUniqueID("vtiger_field").",'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,'',100,2,$useradvanceblock,2,'V~O',1,null,'BAS',1);");
+		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'time_zone','vtiger_users',1,'16','time_zone','Time Zone',1,0,'',200,15,$usermoreinfoblock,1,'V~O',1,null,'BAS',1)");
 		
 		//User Image Information
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,'',250,10,$userblockid,1,'V~O',1,null,'BAS',1)");

@@ -103,7 +103,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		//Handling for dateformat in vtiger_invoicedate vtiger_field
 		if ($focus->column_fields['invoicedate'] != '') {
 			$curr_due_date = $focus->column_fields['invoicedate'];
-			$focus->column_fields['invoicedate'] = getDBInsertDateValue($curr_due_date);
+			$focus->column_fields['invoicedate'] = DateTimeField::convertToDBFormat($curr_due_date);
 		}
 
 		$soid = $focus->column_fields['salesorder_id'];
@@ -137,7 +137,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		//Handling for dateformat in vtiger_invoicedate vtiger_field
 		if ($focus->column_fields['invoicedate'] != '') {
 			$curr_due_date = $focus->column_fields['invoicedate'];
-			$focus->column_fields['invoicedate'] = getDBInsertDateValue($curr_due_date);
+			$focus->column_fields['invoicedate'] = DateTimeField::convertToDBFormat($curr_due_date);
 		}
 
 		$soid = $focus->column_fields['salesorder_id'];

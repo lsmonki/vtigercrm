@@ -52,8 +52,8 @@ $folderid = vtlib_purify($_REQUEST["folder"]);
 //<<<<<<<standarfilters>>>>>>>>>
 $stdDateFilterField = vtlib_purify($_REQUEST["stdDateFilterField"]);
 $stdDateFilter = vtlib_purify($_REQUEST["stdDateFilter"]);
-$startdate = getDBInsertDateValue($_REQUEST["startdate"]);
-$enddate = getDBInsertDateValue($_REQUEST["enddate"]);
+$startdate = DateTimeField::convertToDBFormat($_REQUEST["startdate"]);
+$enddate = DateTimeField::convertToDBFormat($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<shared entities>>>>>>>>>
@@ -192,10 +192,17 @@ if($reportid == "")
 						{
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-								$temp_date = getDBInsertDateValue(trim($temp_date));
-								$val[$x] = $temp_date;
-								if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+								if(trim($temp_val[$x]) != '') {
+									$date = new DateTimeField(trim($temp_val[$x]));
+									if($column_info[4] == 'D') {
+										$val[$x] = DateTimeField::convertToUserFormat(
+												trim($temp_val[$x]));
+									} elseif($column_info[4] == 'DT') {
+										$val[$x] = $date->getDBInsertDateTimeValue();
+									} else {
+										$val[$x] = $date->getDBInsertTimeValue();
+									}
+								}
 							}
 							$adv_filter_value = implode(",",$val);
 						}
@@ -362,10 +369,17 @@ if($reportid == "")
 				{
 					$val = Array();
 					for($x=0;$x<count($temp_val);$x++) {
-						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-						$temp_date = getDBInsertDateValue(trim($temp_date));
-						$val[$x] = $temp_date;
-						if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+						if(trim($temp_val[$x]) != '') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							if($column_info[4] == 'D') {
+								$val[$x] = DateTimeField::convertToUserFormat(
+										trim($temp_val[$x]));
+							} elseif($column_info[4] == 'DT') {
+								$val[$x] = $date->getDBInsertDateTimeValue();
+							} else {
+								$val[$x] = $date->getDBInsertTimeValue();
+							}
+						}
 					}
 					$adv_filter_value = implode(",",$val);
 				}

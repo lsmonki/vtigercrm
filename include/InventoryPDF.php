@@ -48,7 +48,7 @@ function get_invoice_pdf()
 	$po_name = $focus->column_fields["vtiger_purchaseorder"];
 
 	$valid_till = $focus->column_fields["duedate"];
-	$valid_till = getDisplayDate($valid_till);
+	$valid_till = DateTimeField::convertToUserFormat($valid_till);
 	$bill_street = $focus->column_fields["bill_street"];
 	$bill_city = $focus->column_fields["bill_city"];
 	$bill_state = $focus->column_fields["bill_state"];
@@ -324,7 +324,7 @@ function get_po_pdf() {
 	$trno = $focus->column_fields["tracking_no"];
 	
 	$valid_till = $focus->column_fields["duedate"];
-	$valid_till = getDisplayDate($valid_till);
+	$valid_till = DateTimeField::convertToUserFormat($valid_till);
 	$bill_street = $focus->column_fields["bill_street"];
 	$bill_city = $focus->column_fields["bill_city"];
 	$bill_state = $focus->column_fields["bill_state"];
@@ -611,7 +611,7 @@ function get_so_pdf() {
 	$subject = $focus->column_fields["subject"];
 	
 	$valid_till = $focus->column_fields["duedate"];
-	$valid_till = getDisplayDate($valid_till);
+	$valid_till = DateTimeField::convertToUserFormat($valid_till);
 	$bill_street = $focus->column_fields["bill_street"];
 	$bill_city = $focus->column_fields["bill_city"];
 	$bill_state = $focus->column_fields["bill_state"];
@@ -901,7 +901,7 @@ function get_quote_pdf() {
 	
 	// Quote Information
 	$valid_till = $focus->column_fields["validtill"];
-	$valid_till = getDisplayDate($valid_till); 
+	$valid_till = DateTimeField::convertToUserFormat($valid_till);
 	$bill_street = $focus->column_fields["bill_street"];
 	$bill_city = $focus->column_fields["bill_city"];
 	$bill_state = $focus->column_fields["bill_state"];

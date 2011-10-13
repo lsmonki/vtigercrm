@@ -49,7 +49,8 @@ $smarty->assign("CNT", $cnt);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("MODULE_NAME", $currentModule);
-$smarty->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
+$date = new DateTimeField(null);
+$smarty->assign("DATE", $date->getDisplayDateTimeValue());
 
 $smarty->assign("CURRENT_USER", $current_user->user_name);
 

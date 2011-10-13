@@ -37,6 +37,7 @@ require_once('modules/Contacts/Contacts.php');
 require_once('data/Tracker.php');
 require_once 'include/utils/CommonUtils.php';
 require_once 'include/Webservices/Utils.php';
+require_once('modules/Users/UserTimeZonesArray.php');
 
 // User is used to store customer information.
  /** Main class for the user module
@@ -701,6 +702,11 @@ class Users extends CRMEntity {
 	{
 		global $current_user;//$adb added by raju for mass mailing
 		$insertion_mode = $this->mode;
+		if(empty($this->column_fields['time_zone'])) {
+			$dbDefaultTimeZone = DateTimeField::getDBTimeZone();
+			$this->column_fields['time_zone'] = $dbDefaultTimeZone;
+			$this->time_zone = $dbDefaultTimeZone;
+		}
 
 		$this->db->println("TRANS saveentity starts $module");
 		$this->db->startTransaction();

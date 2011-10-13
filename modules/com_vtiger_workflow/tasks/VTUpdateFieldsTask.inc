@@ -45,6 +45,7 @@ class VTUpdateFieldsTask extends VTTask {
 			$focus->mode = 'edit';
 			$focus->retrieve_entity_info($recordId, $moduleName);
 
+			$util->loggedInUser();
 			foreach ($fieldValueMapping as $fieldInfo) {
 				$fieldName = $fieldInfo['fieldname'];
 				$fieldType = '';
@@ -72,7 +73,8 @@ class VTUpdateFieldsTask extends VTTask {
 						}
 					}
 					if ($fieldInstance->getFieldDataType() === 'date') {
-						$fieldValue = getDisplayDate($fieldValue);
+						$date = new DateTimeField($fieldValue);
+						$fieldValue = $date->getDisplayDate();
 					}
 				}
 
@@ -93,7 +95,6 @@ class VTUpdateFieldsTask extends VTTask {
 			foreach ($focus->column_fields as $fieldName => $fieldValue) {
 				$focus->column_fields[$fieldName] = html_entity_decode($fieldValue, ENT_QUOTES, $default_charset);
 			}
-			$util->loggedInUser();
 			$focus->saveentity($moduleName);
 			$util->revertUser();
 		}

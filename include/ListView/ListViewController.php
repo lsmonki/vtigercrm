@@ -312,7 +312,11 @@ class ListViewController {
 				}elseif($field->getFieldDataType() == 'date' ||
 						$field->getFieldDataType() == 'datetime') {
 					if($value != '' && $value != '0000-00-00') {
-						$value = getDisplayDate($value);
+						$date = new DateTimeField($value);
+						$value = $date->getDisplayDate();
+						if($field->getFieldDataType() == 'datetime') {
+							$value .= (' ' . $date->getDisplayTime());
+						}
 					} elseif ($value == '0000-00-00') {
 						$value = '';
 					}

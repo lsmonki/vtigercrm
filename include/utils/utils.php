@@ -42,6 +42,7 @@ require_once('include/utils/SearchUtils.php');
 require_once('include/FormValidationUtil.php');
 require_once('include/DatabaseUtil.php');
 require_once('include/events/SqlResultIterator.inc');
+require_once('include/fields/DateTimeField.php');
 require_once('data/CRMEntity.php');
 require_once 'vtlib/Vtiger/Language.php';
  
@@ -1542,43 +1543,6 @@ function ChangeStatus($status,$activityid,$activity_mode='')
 		}
 	$log->debug("Exiting ChangeStatus method ...");
  }
-
-/** Function to set date values compatible to database (YY_MM_DD)
-  * @param $value -- value :: Type string
-  * @returns $insert_date -- insert_date :: Type string
-  */
-
-function getDBInsertDateValue($value)
-{
-	global $log;
-	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
-	global $current_user;
-	$dat_fmt = $current_user->date_format;
-	if($dat_fmt == '') {
-		$dat_fmt = 'dd-mm-yyyy';
-	}
-	$insert_date='';
-	if($dat_fmt == 'dd-mm-yyyy')
-	{
-		list($d,$m,$y) = explode('-',$value);
-	}
-	elseif($dat_fmt == 'mm-dd-yyyy')
-	{
-		list($m,$d,$y) = explode('-',$value);
-	}
-	elseif($dat_fmt == 'yyyy-mm-dd')
-	{
-		list($y,$m,$d) = explode('-',$value);
-	}
-
-	if(!$y && !$m && !$d) {
-		$insert_date = '';
-	} else {
-		$insert_date=$y.'-'.$m.'-'.$d;
-	}
-	$log->debug("Exiting getDBInsertDateValue method ...");
-	return $insert_date;
-}
 
 /** Function to get unitprice for a given product id
   * @param $productid -- product id :: Type integer
@@ -3237,9 +3201,9 @@ function getRecordValues($id_array,$module) {
 	
 	$focus = new $module();
 	if(isset($id_array) && $id_array !='') {
-		foreach($id_array as $value) {
-			$focus->id=$value;
-			$focus->retrieve_entity_info($value,$module);
+		foreach($id_array as $value_pair['disp_value']) {
+			$focus->id=$value_pair['disp_value'];
+			$focus->retrieve_entity_info($value_pair['disp_value'],$module);
 			$field_values[]=$focus->column_fields;
 		}
 	}
@@ -3307,7 +3271,18 @@ function getRecordValues($id_array,$module) {
 				} elseif($ui_type == 10) {
 					$value_pair['disp_value'] = getRecordInfoFromID($field_values[$j][$fld_name]);
 				}elseif($ui_type == 5 || $ui_type == 6 || $ui_type == 23){
-					$value_pair['disp_value'] = getDisplayDate($field_values[$j][$fld_name]);
+					if ($field_values[$j][$fld_name] != '' && $field_values[$j][$fld_name] 
+							!= '0000-00-00') {
+						$date = new DateTimeField($field_values[$j][$fld_name]);
+						$value_pair['disp_value'] = $date->getDisplayDate();
+						if(strpos($field_values[$j][$fld_name], ' ') > -1) {
+							$value_pair['disp_value'] .= (' ' . $date->getDisplayTime());
+						}
+					} elseif ($field_values[$j][$fld_name] == '0000-00-00') {
+						$value_pair['disp_value'] = '';
+					} else {
+						$value_pair['disp_value'] = $field_values[$j][$fld_name];
+					}
 				}else {
 					$value_pair['disp_value']=$field_values[$j][$fld_name];
 				}
@@ -3886,7 +3861,18 @@ function getDuplicateRecordsArr($module)
 				$result[$col_arr[$k]] = getRecordInfoFromID($result[$col_arr[$k]]);
 			}
 			if($ui_type[$fld_arr[$k]] == 5 || $ui_type[$fld_arr[$k]] == 6 || $ui_type[$fld_arr[$k]] == 23){
-				$result[$col_arr[$k]]  = getDisplayDate($result[$col_arr[$k]]);
+				if ($$result[$col_arr[$k]] != '' && $$result[$col_arr[$k]] != '0000-00-00') {
+					$date = new DateTimeField($$result[$col_arr[$k]]);
+					$value = $date->getDisplayDate();
+					if(strpos($$result[$col_arr[$k]], ' ') > -1) {
+						$value .= (' ' . $date->getDisplayTime());
+					}
+				} elseif ($$result[$col_arr[$k]] == '0000-00-00') {
+					$value = '';
+				} else {
+					$value = $$result[$col_arr[$k]];
+				}
+				$result[$col_arr[$k]] = $value;
 			} 
 			
 			$fld_values[$grp][$ii][$fld_labl_arr[$k]] = $result[$col_arr[$k]];
@@ -4822,7 +4808,7 @@ function getValidDBInsertDateValue($value) {
 	list($y,$m,$d) = explode('-',$value);
 
 	if(strlen($y)<4){
-		$insert_date = getDBInsertDateValue($value);
+		$insert_date = DateTimeField::convertToDBFormat($value);
 	} else {
 		$insert_date = $value;
 	}
@@ -4832,12 +4818,11 @@ function getValidDBInsertDateValue($value) {
 	
 function getValidDBInsertDateTimeValue($value) {
 	$valueList = explode(' ',$value);
+	$date = new DateTime($value);
 	if(count($valueList) == 2) {
-		$value = $valueList[0];
-		$value = getDBInsertDateValue($value);
-		$value .=(' '.$valueList[1]);
+		$value = $date->getDBInsertDateTimeValue();
 	} elseif(count($valueList == 1)) {
-		$value = getDBInsertDateValue($value);
+		$value = $date->getDBInsertDateValue();
 	}
 	return $value;
 }

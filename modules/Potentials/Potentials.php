@@ -457,8 +457,9 @@ class Potentials extends CRMEntity {
 			$entries[] = ($amount_access != 1)? $row['amount'] : 0;
 			$entries[] = (in_array($row['stage'], $potential_stage_array))? $row['stage']: $error_msg;
 			$entries[] = ($probability_access != 1) ? $row['probability'] : 0;
-			$entries[] = getDisplayDate($row['closedate']);
-			$entries[] = getDisplayDate($row['lastmodified']);
+			$entries[] = DateTimeField::convertToUserFormat($row['closedate']);
+			$date = new DateTimeField($row['lastmodified']);
+			$entries[] = $date->getDisplayDate();
 
 			$entries_list[] = $entries;
 		}

@@ -94,39 +94,36 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     }
     $smarty->assign("CONTACTSID",$cnt_idlist);
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
-	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
-    $res = $adb->pquery($query, array($focus->id));
+    $query = 'SELECT vtiger_recurringevents.*, vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.due_date, vtiger_activity.time_end
+				FROM vtiger_recurringevents
+					INNER JOIN vtiger_activity ON vtiger_activity.activityid = vtiger_recurringevents.activityid
+					WHERE vtiger_recurringevents.activityid = ?';
+	$res = $adb->pquery($query, array($focus->id));
     $rows = $adb->num_rows($res);
-    if($rows != 0)
-    {
+    if($rows > 0) {
+		$recurringObject = RecurringType::fromDBRequest($adb->query_result_rowdata($res, 0));
+
 	    $value['recurringcheck'] = 'Yes';
-	    $value['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
-	    $recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
-	    $value['eventrecurringtype'] = $recurringinfo[0];
-	    if($recurringinfo[0] == 'Weekly')
-	    {
-		   for($i=0;$i<6;$i++)
-		   {
-			   $label = 'week'.$recurringinfo[$i+1];
-			   $value[$label] = 'checked';
-		   }
-	    }
-	    elseif($recurringinfo[0] == 'Monthly')
-	    {
-		    $value['repeatMonth'] = $recurringinfo[1];
-		    if($recurringinfo[1] == 'date')
-		    {
-			    $value['repeatMonth_date'] = $recurringinfo[2];
-		    }
-		    else
-		    {
-			    $value['repeatMonth_daytype'] = $recurringinfo[2];
-			    $value['repeatMonth_day'] = $recurringinfo[3];
-		    }
-	    }
-    }
-    else
-    {
+	    $value['repeat_frequency'] = $recurringObject->getRecurringFrequency();
+		$value['eventrecurringtype'] = $recurringObject->getRecurringType();
+		$recurringInfo = $recurringObject->getUserRecurringInfo();
+	    
+		if($recurringObject->getRecurringType() == 'Weekly') {
+			$noOfDays = count($recurringInfo['dayofweek_to_repeat']);
+			for ($i = 0; $i < $noOfDays; ++$i) {
+				$value['week'.$recurringInfo['dayofweek_to_repeat'][$i]] = 'checked';
+			}
+
+		   } elseif ($recurringObject->getRecurringType() == 'Monthly') {
+			$value['repeatMonth'] = $recurringInfo['repeatmonth_type'];
+			if ($recurringInfo['repeatmonth_type'] == 'date') {
+				$value['repeatMonth_date'] = $recurringInfo['repeatmonth_date'];
+			} else {
+				$value['repeatMonth_daytype'] = $recurringInfo['repeatmonth_daytype'];
+				$value['repeatMonth_day'] = $recurringInfo['dayofweek_to_repeat'][0];
+			}
+		}
+    } else {
 	    $value['recurringcheck'] = 'No';
     }
 

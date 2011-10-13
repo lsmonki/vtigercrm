@@ -17,6 +17,7 @@ $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once("modules/Reports/Reports.php");
+require_once 'modules/Reports/ReportUtils.php';
 
 class ReportRun extends CRMEntity
 {
@@ -101,7 +102,6 @@ class ReportRun extends CRMEntity
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
 			if(sizeof($permitted_fields[$module]) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				//list($module,$field) = split("_",$module_field);
 				$permitted_fields[$module] = $this->getaccesfield($module);
 			}
 			if(in_array($module,$inventory_modules)){
@@ -703,7 +703,8 @@ class ReportRun extends CRMEntity
 					
 					if($fieldcolname != "" && $comparator != "") {
 						$selectedfields = explode(":",$fieldcolname);
-                        // Added to handle the crmentity table name for Primary module
+                        $concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
+						// Added to handle the crmentity table name for Primary module
                         if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
                             $selectedfields[0] = "vtiger_crmentity";
                         }
@@ -906,8 +907,8 @@ class ReportRun extends CRMEntity
 				$selectedfields[0] = "vtiger_crmentity";
 			if($filter == "custom")
 			{
-				if($startdate != "" && $enddate != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
-				{
+				if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $startdate != "" && 
+						$enddate != "" && $selectedfields[0] != "" && $selectedfields[1] != "") {
 					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 				}
 			}else
@@ -949,20 +950,25 @@ class ReportRun extends CRMEntity
 				$adv_filter_groupid = $column_condition["groupid"];
 			
 				$column_info = explode(":",$adv_filter_column);
-				$temp_val = explode(",",$adv_filter_value);
-				if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') 
-						|| ($column_info[4] == 'DT'))
-					&& ($column_info[4] != '' && $adv_filter_value != '' )) {
-					$val = Array();
-					for($x=0;$x<count($temp_val);$x++) {
-						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-						$temp_date = getDBInsertDateValue(trim($temp_date));
-						$val[$x] = $temp_date;
-						if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
-					}
-					$adv_filter_value = implode(",",$val);
-				}
-				
+                $temp_val = explode(",",$adv_filter_value);
+                if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
+                        || ($column_info[4] == 'DT'))
+                    && ($column_info[4] != '' && $adv_filter_value != '' )) {
+                    $val = Array();
+                    for($x=0;$x<count($temp_val);$x++) {
+                        if($column_info[4] == 'D') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDBInsertDateValue();
+						} elseif($column_info[4] == 'DT') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDBInsertDateTimeValue();
+						} else {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDBInsertTimeValue();
+						}
+                    }
+                    $adv_filter_value = implode(",",$val);
+                }
 				$criteria = array();
 				$criteria['columnname'] = $adv_filter_column;
 				$criteria['comparator'] = $adv_filter_comparator;
@@ -1920,19 +1926,19 @@ class ReportRun extends CRMEntity
 					}
 					/*STRING TRANSLATION starts */
 					$mod_name = split(' ',$headerLabel,2);
-					$module ='';
+					$moduleLabel ='';
 					if(in_array($mod_name[0],$modules_selected)){
-						$module = getTranslatedString($mod_name[0],$mod_name[0]);
+						$moduleLabel = getTranslatedString($mod_name[0],$mod_name[0]);
 					}
 					
 					if(!empty($this->secondarymodule)){
-						if($module!=''){
-							$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						if($moduleLabel!=''){
+							$headerLabel_tmp = $moduleLabel." ".getTranslatedString($mod_name[1],$mod_name[0]);
 						} else {
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
 						}
 					} else {
-						if($module!=''){
+						if($moduleLabel!=''){
 							$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
 						} else {
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
@@ -1998,75 +2004,11 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
-						if (in_array($fld->name, $this->convert_currency)) {
-								if($custom_field_values[$i]!='')
-									$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-								else
-									$fieldvalue = getTranslatedString($custom_field_values[$i]);
-							} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
-								$curid_value = explode("::", $custom_field_values[$i]);
-								$currency_id = $curid_value[0];
-								$currency_value = $curid_value[1];
-								$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-								if($custom_field_values[$i]!='')
-									$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
-								else
-									$fieldvalue = getTranslatedString($custom_field_values[$i]);
-							}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
-										|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
-								if($custom_field_values[$i]!='')
-									$fieldvalue = getCurrencyName($custom_field_values[$i]);
-								else
-									$fieldvalue =getTranslatedString($custom_field_values[$i]);
-							}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
-								$type = getSalesEntityType($custom_field_values[$i]);
-								$tmp =getEntityName($type,$custom_field_values[$i]);
-								if (is_array($tmp)){
-									foreach($tmp as $key=>$val){
-										$fieldvalue = $val;
-										break;
-									}
-								}else{
-									$fieldvalue = $custom_field_values[$i];
-								}
-							} elseif (in_array($fld->name,$this->ui101_fields) && !empty($custom_field_values[$i])) {
-								$entityNames = getEntityName('Users', $custom_field_values[$i]);
-								$fieldvalue = $entityNames[$custom_field_values[$i]];
-							} else {
-								if($custom_field_values[$i]!='')
-									$fieldvalue = getTranslatedString($custom_field_values[$i]);
-								else
-									$fieldvalue = getTranslatedString($custom_field_values[$i]);
-							}
-						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
-						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
-						$fieldvalue = decode_html($fieldvalue);
+						$fieldvalue = getReportFieldValue($this, $picklistarray, $fld, 
+								$custom_field_values, $i);
 
 					//check for Roll based pick list
 						$temp_val= $fld->name;
-						if(is_array($picklistarray))
-							if(array_key_exists($temp_val,$picklistarray))
-							{
-								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
-									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
-
-							}
-						if(is_array($picklistarray[1]))
-							if(array_key_exists($temp_val,$picklistarray[1]))
-							{
-								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
-								$temp_val = Array();
-								foreach($temp as $key =>$val)
-								{
-										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
-										{
-											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
-										}
-										else
-											$temp_val[]=$val;
-								}
-								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
-							}
 
 						if($fieldvalue == "" )
 						{
@@ -2075,13 +2017,6 @@ class ReportRun extends CRMEntity
 						else if($fld->name == 'LBL_ACTION')
 						{
 							$fieldvalue = "<a href='index.php?module={$this->primarymodule}&action=DetailView&record={$fieldvalue}' target='_blank'>".getTranslatedString('LBL_VIEW_DETAILS')."</a>";
-						}
-						else if(stristr($fieldvalue,"|##|"))
-						{
-							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
-						}
-						else if($fld_type == "date" || $fld_type == "datetime") {
-							$fieldvalue = getDisplayDate($fieldvalue);
 						}
 																				
 						if(($lastvalue == $fieldvalue) && $this->reporttype == "summary")
@@ -2191,102 +2126,41 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-                                                $fld_type = $column_definitions[$i]->type;
-						if (in_array($fld->name, $this->convert_currency)) {
-							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
-							$curid_value = explode("::", $custom_field_values[$i]);
-							$currency_id = $curid_value[0];
-							$currency_value = $curid_value[1];
-							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
-						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
-									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
-							$fieldvalue = getCurrencyName($custom_field_values[$i]);
-						}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
-								$type = getSalesEntityType($custom_field_values[$i]);
-								$tmp =getEntityName($type,$custom_field_values[$i]);
-								foreach($tmp as $key=>$val){
-									$fieldvalue = $val;
-									break;
-								}
-						} elseif (in_array($fld->name,$this->ui101_fields) && !empty($custom_field_values[$i])) {
-							$entityNames = getEntityName('Users', $custom_field_values[$i]);
-							$fieldvalue = $entityNames[$custom_field_values[$i]];
-						} else {
-							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+						$fld_type = $column_definitions[$i]->type;
+						list($module, $fieldLabel) = explode('_', $fld->name, 2);
+						$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+						$fieldType = null;
+						if(!empty($fieldInfo)) {
+							$field = WebserviceField::fromArray($adb, $fieldInfo);
+							$fieldType = $field->getFieldDataType();
 						}
-						$append_cur = str_replace($fld->name,"",decode_html($this->getLstringforReportHeaders($fld->name)));
-						$headerLabel = str_replace("_"," ",$fld->name);
+						if(!empty($fieldInfo)) {
+							$translatedLabel = getTranslatedString($field->getFieldLabelKey(), 
+									$module);
+						} else {
+							$translatedLabel = getTranslatedString(str_replace('_', " ", 
+									$fieldLabel), $module);
+						}
 						/*STRING TRANSLATION starts */
-						$mod_name = split(' ',$headerLabel,2);
-						$module ='';
-						if(in_array($mod_name[0],$modules_selected))
-							$module = getTranslatedString($mod_name[0],$mod_name[0]);
+						$moduleLabel ='';
+						if(in_array($module,$modules_selected))
+							$moduleLabel = getTranslatedString($module,$module);
 						
-						if(!empty($this->secondarymodule)){
-							if($module!=''){
-								$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
-							} else {
-								$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
-							}
-						} else {
-							if($module!=''){
-								$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
-							} else {
-								$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+						if(empty($translatedLabel)) {
+								$translatedLabel = getTranslatedString(str_replace('_', " ", 
+									$fld->name));
+						}
+						$headerLabel = $translatedLabel;
+						if(!empty($this->secondarymodule)) {
+							if($moduleLabel != '') {
+								$headerLabel = $moduleLabel." ". $translatedLabel;
 							}
 						}
-						if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
-						else $headerLabel = $headerLabel_tmp;
-						/*STRING TRANSLATION starts */
-						if(trim($append_cur)!="") $headerLabel .= $append_cur;
-					
-						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
-						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
-
 						// Check for role based pick list
 						$temp_val= $fld->name;
-						if(is_array($picklistarray))
-							if(array_key_exists($temp_val,$picklistarray))
-							{
-								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
-								{
-									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
-								}
-							}
-						if(is_array($picklistarray[1]))
-							if(array_key_exists($temp_val,$picklistarray[1]))
-							{
-								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
-								$temp_val = Array();
-								foreach($temp as $key =>$val)
-								{
-										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
-										{
-											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
-										}
-										else
-											$temp_val[]=$val;
-								}
-								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
-							}
-
-						if($fieldvalue == "" )
-						{
-							$fieldvalue = "-";
-						}
-						else if(stristr($fieldvalue,"|##|"))
-						{
-							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
-						}
-						else if($fld_type == "date" || $fld_type == "datetime") {
-							$fieldvalue = getDisplayDate($fieldvalue);
-						}
-						if(array_key_exists($this->getLstringforReportHeaders($fld->name), $arraylists))
-							$arraylists[$headerLabel] = $fieldvalue;
-						else	
-							$arraylists[$headerLabel] = $fieldvalue;
+						$fieldvalue = getReportFieldValue($this, $picklistarray, $fld, 
+								$custom_field_values, $i);
+						$arraylists[$headerLabel] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
 					set_time_limit($php_max_execution_time);
@@ -2557,19 +2431,19 @@ class ReportRun extends CRMEntity
 					}	
 					/*STRING TRANSLATION starts */
 					$mod_name = split(' ',$headerLabel,2);
-					$module ='';
+					$moduleLabel ='';
 					if(in_array($mod_name[0],$modules_selected)){
-						$module = getTranslatedString($mod_name[0],$mod_name[0]);
+						$moduleLabel = getTranslatedString($mod_name[0],$mod_name[0]);
 					}
 					
 					if(!empty($this->secondarymodule)){
-						if($module!=''){
-							$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						if($moduleLabel!=''){
+							$headerLabel_tmp = $moduleLabel." ".getTranslatedString($mod_name[1],$mod_name[0]);
 						} else {
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
 						}
 					} else {
-						if($module!=''){
+						if($moduleLabel!=''){
 							$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
 						} else {
 							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
@@ -2615,74 +2489,8 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
-						if (in_array($fld->name, $this->convert_currency)) {
-							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
-							$curid_value = explode("::", $custom_field_values[$i]);
-							$currency_id = $curid_value[0];
-							$currency_value = $curid_value[1];
-							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
-						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
-									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
-							$fieldvalue = getCurrencyName($custom_field_values[$i]);
-						}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
-								$type = getSalesEntityType($custom_field_values[$i]);
-								$tmp =getEntityName($type,$custom_field_values[$i]);
-								foreach($tmp as $key=>$val){
-									$fieldvalue = $val;
-									break;
-								}
-						} elseif (in_array($fld->name,$this->ui101_fields) && !empty($custom_field_values[$i])) {
-							$entityNames = getEntityName('Users', $custom_field_values[$i]);
-							$fieldvalue = $entityNames[$custom_field_values[$i]];
-						} else {
-							$fieldvalue = getTranslatedString($custom_field_values[$i]);
-						}
-					
-						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
-						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);	
-
-						//Check For Role based pick list 
-						$temp_val= $fld->name;
-						if(is_array($picklistarray))
-							if(array_key_exists($temp_val,$picklistarray))
-							{
-								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
-								{
-									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
-								}
-							}
-						if(is_array($picklistarray[1]))
-							if(array_key_exists($temp_val,$picklistarray[1]))
-							{
-
-								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
-								$temp_val = Array();
-								foreach($temp as $key =>$val)
-								{
-										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
-										{
-											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
-										}
-										else
-											$temp_val[]=$val;
-								}
-								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
-							}
-
-
-						if($fieldvalue == "" )
-						{
-							$fieldvalue = "-";
-						}
-						else if(stristr($fieldvalue,"|##|"))
-						{
-							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
-						}
-						else if($fld_type == "date" || $fld_type == "datetime") {
-							$fieldvalue = getDisplayDate($fieldvalue);
-						}
+						$fieldvalue = getReportFieldValue($this, $picklistarray, $fld, 
+								$custom_field_values, $i);
 						if(($lastvalue == $fieldvalue) && $this->reporttype == "summary")
 						{
 							if($this->reporttype == "summary")
@@ -3302,6 +3110,5 @@ class ReportRun extends CRMEntity
 		}
 		$workbook->close();
 	}
-
 }
 ?>

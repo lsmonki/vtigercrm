@@ -758,12 +758,14 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				} else {
 					if($module == 'Calendar') {
 						$act_id = $adb->query_result($list_result,$i-1,"activityid");
-						
-						$cal_sql = "select activitytype from vtiger_activity where activityid=?";
-						$cal_res = $adb->pquery($cal_sql,array($act_id));
-						if($adb->num_rows($cal_res)>=0)
-							$activitytype = $adb->query_result($cal_res,0,"activitytype");
-					}					
+						$activitytype = $adb->query_result($list_result,$i-1,'activitytype');
+						if(empty($activitytype)) {
+							$cal_sql = "select activitytype from vtiger_activity where activityid=?";
+							$cal_res = $adb->pquery($cal_sql,array($act_id));
+							if($adb->num_rows($cal_res)>=0)
+								$activitytype = $adb->query_result($cal_res,0,"activitytype");
+						}
+					}			
 					if(($module == 'Calendar' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname'))) {
 						if($module == 'Calendar'){
 							if($fieldname=='status'){
@@ -815,15 +817,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$activityid = $adb->query_result($list_result,$i-1,"activityid");
 								if(empty($activityid)){
 									$activityid = $adb->query_result($list_result, $i-1, "tmp_activity_id");
-								}
-								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
-								// TODO - Picking activitytype when it is not present in the Custom View. 
-								// Going forward, this column should be added to the select list if not already present as a performance improvement.
-								if (empty($activitytype)) {
-									$activitytypeRes = $adb->pquery('SELECT activitytype FROM vtiger_activity WHERE activityid=?', array($activityid));
-									if ($adb->num_rows($activitytypeRes) > 0) {
-										$activitytype = $adb->query_result($activitytypeRes, 0, 'activitytype');
-									}
 								}
 								if ($activitytype != 'Task' && $activitytype != 'Emails') {
 									$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
@@ -1444,10 +1437,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$displayValueArray = getEntityName($parent_module, $parent_id);
 			if(!empty($displayValueArray)){
 				foreach($displayValueArray as $key=>$value){
-					$displayValue = $value;
+					$value = $value;
 				}
 			}
-			$value = "<a href='index.php?module=$parent_module&action=DetailView&record=$parent_id' title='$valueTitle'>$displayValue</a>";
+			$value = "<a href='index.php?module=$parent_module&action=DetailView&record=$parent_id' title='$valueTitle'>$value</a>";
 		} else {
 			$value = '';
 		}
@@ -1480,24 +1473,36 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 77) 
 	{        
 		$value = getOwnerName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
-	} 
-	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
-	{
-		if($temp_val != '' && $temp_val != '0000-00-00')
-		{
-			$value = getDisplayDate($temp_val);  
+	} elseif ($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70) {
+		$temp_val = trim($temp_val);
+		$timeField = 'time_start';
+		if($fieldname == 'due_date') {
+			$timeField = 'time_end';
 		}
-		elseif($temp_val == '0000-00-00')
-		{
+		if ($temp_val != '' && $module == 'Calendar' && ($uitype == 23 || $uitype == 6) &&
+				$timeField != '' && ($fieldname == 'date_start' || $fieldname == 'due_date' )) {
+			$time = $adb->query_result($list_result,$list_result_count, $timeField);
+			if(empty($time)) {
+				$time = getSingleFieldValue('vtiger_activity', $timeField, 'activityid', $entity_id);
+			}
+		}
+		if ($temp_val == '0000-00-00' || empty($temp_val)) {
 			$value = '';
+		} else {
+			if (empty($time) && strpos($temp_val, ' ') == false) {
+				$value = DateTimeField::convertToUserFormat($temp_val);
+			} else {
+				if(!empty($time)) {
+					$date = new DateTimeField($temp_val.' '.$time);
+					$value = $date->getDisplayDate();
+				} else {
+					$date = new DateTimeField($temp_val);
+					$value = $date->getDisplayDateTimeValue();
+				}
+			}
 		}
-		else
-		{
-			$value = $temp_val;
-		}
-			
-	
 	}
+	
 	elseif($uitype == 15 || ($uitype == 55 && $fieldname =="salutationtype"))
 	{
 		$temp_val = decode_html($adb->query_result($list_result,$list_result_count,$colname));
@@ -2429,6 +2434,23 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$currency_id = $currency_info['currency_id'];
 			$currency_symbol = $currency_info['currency_symbol'];
 			$value = $currency_symbol.$temp_val;
+		} elseif($module == 'Calendar' && ($fieldname == 'time_start' || 
+				$fieldname == 'time_end')) {
+			$dateField = 'date_start';
+			if($fieldname == 'time_end') {
+				$dateField = 'due_date';
+			}
+			$type = $adb->query_result($list_result,$list_result_count,'activitytype');
+			if(empty($type)) {
+				$type = $adb->query_result($list_result,$list_result_count,'type');
+			}
+			if($type == 'Task' && $fieldname == 'time_end') {
+				$value = '--';
+			} else {
+				$date_val = $adb->query_result($list_result,$list_result_count, $dateField);
+				$date = new DateTimeField($date_val .' '. $temp_val);
+				$value = $date->getDisplayTime();
+			}
 		}
 		else
 		{

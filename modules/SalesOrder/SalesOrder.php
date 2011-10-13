@@ -342,7 +342,8 @@ class SalesOrder extends CRMEntity {
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['sostatus'], $sostatus_array))? $row['sostatus']: $error_msg;
-			$entries[] = getDisplayDate($row['lastmodified']);
+			$date = new DateTimeField($row['lastmodified']);
+			$entries[] = $date->getDisplayDateTimeValue();
 
 			$entries_list[] = $entries;
 		}

@@ -223,11 +223,10 @@ function addConditionGroup(parentNodeId) {ldelim}
 		{foreach key=COLUMN_INDEX item=COLUMN_CRITERIA from=$GROUP_COLUMNS}
 		<script type="text/javascript">
 			addConditionRow('{$GROUP_ID}');
-			
-			document.getElementById('fop'+advft_column_index_count).value = '{$COLUMN_CRITERIA.comparator}';
 			var conditionColumnRowElement = document.getElementById('fcol'+advft_column_index_count);
 			conditionColumnRowElement.value = '{$COLUMN_CRITERIA.columnname}';
 			updatefOptions(conditionColumnRowElement, 'fop'+advft_column_index_count);
+			document.getElementById('fop'+advft_column_index_count).value = '{$COLUMN_CRITERIA.comparator}';
 			addRequiredElements(advft_column_index_count);
 			{if $SOURCE eq 'reports'}
 				updateRelFieldOptions(conditionColumnRowElement, 'fval_'+advft_column_index_count);

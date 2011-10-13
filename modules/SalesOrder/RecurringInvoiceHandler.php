@@ -20,8 +20,8 @@ class RecurringInvoiceHandler extends VTEventHandler {
 			$data = $entityData->getData();
 			if($data['enable_recurring'] == 'on' || $data['enable_recurring'] == 1) {
 				$frequency = $data['recurring_frequency'];
-				$startPeriod = getValidDBInsertDateValue($data['start_period']);
-				$endPeriod = getValidDBInsertDateValue($data['end_period']);
+				$startPeriod = DateTimeField::convertToDBFormat($data['start_period']);
+				$endPeriod = DateTimeField::convertToDBFormat($data['end_period']);
 				$paymentDuration = $data['payment_duration'];
 				$invoiceStatus = $data['invoicestatus'];
 				if (isset($frequency) && $frequency != '' && $frequency != '--None--') {

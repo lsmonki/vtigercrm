@@ -353,7 +353,8 @@ class Quotes extends CRMEntity {
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['quotestage'], $quotestage_array))? $row['quotestage']: $error_msg;
-			$entries[] = getDisplayDate($row['lastmodified']);
+			$date = new DateTimeField($row['lastmodified']);
+			$entries[] = $date->getDisplayDateTimeValue();
 
 			$entries_list[] = $entries;
 		}

@@ -28,9 +28,6 @@ $adv_filter_options = array("e"=>"".$mod_strings['equals']."",
                             "g"=>"".$mod_strings['greater than']."",
                             "m"=>"".$mod_strings['less or equal']."",
                             "h"=>"".$mod_strings['greater or equal']."",
-                            "b"=>"".$mod_strings['before']."",
-                            "a"=>"".$mod_strings['after']."",
-                            "bw"=>"".$mod_strings['between']."",
                             );
 
 class CustomView extends CRMEntity{
@@ -221,7 +218,7 @@ class CustomView extends CRMEntity{
 		$selected = 'selected';
 		if ($markselected == false) $selected = '';
 		
-		$ssql = "select vtiger_customview.*, vtiger_users.user_name from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype 
+		$ssql = "select vtiger_customview.*, vtiger_users.first_name,vtiger_users.last_name from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype 
 					left join vtiger_users on vtiger_customview.userid = vtiger_users.id ";
 		$ssql .= " where vtiger_tab.tabid=?";
 		$sparams = array($tabid);
@@ -244,7 +241,9 @@ class CustomView extends CRMEntity{
 			if ($cvrow['status'] == CV_STATUS_DEFAULT || $cvrow['userid'] == $current_user->id) {
 				$disp_viewname = $viewname;				
 			} else {
-				$disp_viewname = $viewname . " [" . $cvrow['user_name'] . "] ";	
+				$userName = getDisplayName(array('f'=>$cvrow['first_name'], 
+					'l'=>$cvrow['last_name']));
+				$disp_viewname = $viewname . " [" . $userName . "] ";	
 			}
 			
 			
@@ -705,129 +704,129 @@ class CustomView extends CRMEntity{
 				}
 				if( type == "today" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "yesterday" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($yesterday).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($yesterday).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($yesterday).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($yesterday).'";
 				}
 				else if( type == "tomorrow" )
 				{
 
-					document.CustomView.startdate.value = "'.getDisplayDate($tomorrow).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($tomorrow).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($tomorrow).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($tomorrow).'";
 				}
 				else if( type == "thisweek" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($thisweek0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($thisweek1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($thisweek0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($thisweek1).'";
 				}
 				else if( type == "lastweek" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($lastweek0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($lastweek1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($lastweek0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($lastweek1).'";
 				}
 				else if( type == "nextweek" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($nextweek0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($nextweek1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($nextweek0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($nextweek1).'";
 				}
 				else if( type == "thismonth" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($currentmonth0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($currentmonth1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($currentmonth0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($currentmonth1).'";
 				}
 				else if( type == "lastmonth" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($lastmonth0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($lastmonth1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($lastmonth0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($lastmonth1).'";
 				}
 				else if( type == "nextmonth" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($nextmonth0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($nextmonth1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($nextmonth0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($nextmonth1).'";
 				}
 				else if( type == "next7days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($next7days).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($next7days).'";
 				}
 				else if( type == "next30days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($next30days).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($next30days).'";
 				}
 				else if( type == "next60days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($next60days).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($next60days).'";
 				}
 				else if( type == "next90days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($next90days).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($next90days).'";
 				}
 				else if( type == "next120days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($next120days).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($today).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($next120days).'";
 				}
 				else if( type == "last7days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($last7days).'";
-					document.CustomView.enddate.value =  "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($last7days).'";
+					document.CustomView.enddate.value =  "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "last30days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($last30days).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($last30days).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "last60days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($last60days).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($last60days).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "last90days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($last90days).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($last90days).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "last120days" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($last120days).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($last120days).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($today).'";
 				}
 				else if( type == "thisfy" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($currentFY0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($currentFY1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($currentFY0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($currentFY1).'";
 				}
 				else if( type == "prevfy" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($lastFY0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($lastFY1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($lastFY0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($lastFY1).'";
 				}
 				else if( type == "nextfy" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($nextFY0).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($nextFY1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($nextFY0).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($nextFY1).'";
 				}
 				else if( type == "nextfq" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($nFq).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($nFq1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($nFq).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($nFq1).'";
 				}
 				else if( type == "prevfq" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($pFq).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($pFq1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($pFq).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($pFq1).'";
 				}
 				else if( type == "thisfq" )
 				{
-					document.CustomView.startdate.value = "'.getDisplayDate($cFq).'";
-					document.CustomView.enddate.value = "'.getDisplayDate($cFq1).'";
+					document.CustomView.startdate.value = "'.DateTimeField::convertToUserFormat($cFq).'";
+					document.CustomView.enddate.value = "'.DateTimeField::convertToUserFormat($cFq1).'";
 				}
 				else
 				{
@@ -917,12 +916,17 @@ class CustomView extends CRMEntity{
 				$temp_val = explode(",",$relcriteriarow["value"]);
 				if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
 					$val = Array();
-					for($x=0;$x<count($temp_val);$x++) {
-						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-						$temp_date = getDisplayDate(trim($temp_date));
-						if(trim($temp_time) != '')
-							$temp_date .= ' '.$temp_time;
-						$val[$x]=$temp_date;
+					for($x=0;$x<count($temp_val);$x++) {						
+						if($col[4] == 'D') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayDate();
+						} elseif($col[4] == 'DT') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayDateTimeValue();
+						} else {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayTime();
+						}
 					}
 					$advfilterval = implode(",",$val);
 				}
@@ -1013,7 +1017,9 @@ class CustomView extends CRMEntity{
 					//Added for assigned to sorting
 					if($list[1] == "smownerid")
 					{
-						$sqllist_column = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name";
+						$userNameSql = getSqlForNameInDisplayFormat(array('f'=>
+							'vtiger_users.first_name', 'l' => 'vtiger_users.last_name'));
+						$sqllist_column = "case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name";
 					}
 					if($list[0] == "vtiger_contactdetails" && $list[1] == "lastname")
                     	$sqllist_column = "vtiger_contactdetails.lastname,vtiger_contactdetails.firstname";	
@@ -1443,8 +1449,6 @@ class CustomView extends CRMEntity{
 		global $adb, $default_charset;
 		$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
 		$value = $adb->sql_escape_string($value);
-		$value = getValidDBInsertDateTimeValue($value, $datatype);
-		
 		if($comparator == "e")
 		{
 			if(trim($value) == "NULL")
@@ -1535,12 +1539,6 @@ class CustomView extends CRMEntity{
 		if($comparator == "h")
 		{
 			$rtvalue = " >= ".$adb->quote($value);
-		}
-		if($comparator == "b") {
-			$rtvalue = " < ".$adb->quote($value);
-		}
-		if($comparator == "a") {
-			$rtvalue = " > ".$adb->quote($value);
 		}
 
 		return $rtvalue;

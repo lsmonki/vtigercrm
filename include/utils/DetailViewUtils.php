@@ -477,11 +477,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$value = $col_fields[$fieldname];
 		if ($value == 1) {
 			//Since "yes" is not been translated it is given as app strings here..
-			$display_val = $app_strings['yes'];
+			$displayValue = $app_strings['yes'];
 		} else {
-			$display_val = $app_strings['no'];
+			$displayValue = $app_strings['no'];
 		}
-		$label_fld[] = $display_val;
+		$label_fld[] = $displayValue;
 	} elseif ($uitype == 57) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$contact_id = $col_fields[$fieldname];
@@ -901,31 +901,43 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		if ($col_fields['time_start'] != '') {
 			$start_time = $col_fields['time_start'];
 		}
-		if ($col_fields[$fieldname] == '0000-00-00') {
-			$displ_date = '';
+		$dateValue = $col_fields[$fieldname];
+		if ($col_fields[$fieldname] == '0000-00-00' || empty($dateValue)) {
+			$displayValue = '';
 		} else {
-			$displ_date = getDisplayDate($col_fields[$fieldname]);
+			if (empty($start_time) && strpos($col_fields[$fieldname], ' ') == false) {
+				$displayValue = DateTimeField::convertToUserFormat($col_fields[$fieldname]);
+			} else {
+				if(!empty($start_time)) {
+					$date = new DateTimeField($col_fields[$fieldname].' '.$start_time);
+				} else {
+					$date = new DateTimeField($col_fields[$fieldname]);
+				}
+				$displayValue = $date->getDisplayDateTimeValue();
+			}
 		}
-		if (empty($start_time))
-			$label_fld[] = $displ_date;
-		else
-			$label_fld[] = $displ_date . ' ' . $start_time;
-	}
-	elseif ($uitype == 5 || $uitype == 23 || $uitype == 70) {
+		$label_fld[] = $displayValue;
+	} elseif ($uitype == 5 || $uitype == 23 || $uitype == 70) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
-		$cur_date_val = $col_fields[$fieldname];
+		$dateValue = $col_fields[$fieldname];
 		if ($col_fields['time_end'] != '' && ($tabid == 9 || $tabid == 16) && $uitype == 23) {
 			$end_time = $col_fields['time_end'];
 		}
-		if ($cur_date_val == '0000-00-00') {
-			$display_val = '';
+		if ($dateValue == '0000-00-00' || empty($dateValue)) {
+			$displayValue = '';
 		} else {
-			$display_val = getDisplayDate($cur_date_val);
+			if (empty($end_time) && strpos($dateValue, ' ') == false) {
+				$displayValue = DateTimeField::convertToUserFormat($col_fields[$fieldname]);
+			} else {
+				if(!empty($end_time)) {
+					$date = new DateTimeField($col_fields[$fieldname].' '.$end_time);
+				} else {
+					$date = new DateTimeField($col_fields[$fieldname]);
+				}
+				$displayValue = $date->getDisplayDateTimeValue();
+			}
 		}
-		if (empty($end_time))
-			$label_fld[] = $display_val;
-		else
-			$label_fld[] = $display_val . ' ' . $end_time;
+		$label_fld[] = $displayValue;
 	}
 	elseif ($uitype == 71 || $uitype == 72) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);

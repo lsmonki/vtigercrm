@@ -492,10 +492,10 @@ function getHistory($parentmodule,$query,$id)
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
 			
-			$entries[] = getDisplayDate($row['date_start'])."   ".$row['time_start'];
-			$entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];
-
-			//$entries[] = nl2br($row['description']);
+			$date = new DateTimeField($row['date_start']."   ".$row['time_start']);
+			$entries[] = $date->getDisplayDateTimeValue();
+			$date = new DateTimeField($row['due_date']."   ".$row['time_end']);
+			$entries[] = $date->getDisplayDate();
 
 			$entries[] = $status;
 

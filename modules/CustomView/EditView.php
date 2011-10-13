@@ -106,9 +106,9 @@ if($recordid == "") {
 		$stdfilterjs = $oCustomView->getCriteriaJS();
 	
 		if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"])) {
-			$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
-			$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
-		} else{
+			$smarty->assign("STARTDATE",DateTimeField::convertToUserFormat($stdfilterlist["startdate"]));
+			$smarty->assign("ENDDATE",DateTimeField::convertToUserFormat($stdfilterlist["enddate"]));
+		} else {
 			$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
 			$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
 		}

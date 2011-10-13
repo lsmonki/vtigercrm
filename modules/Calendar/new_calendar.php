@@ -67,19 +67,22 @@ if ( isset($_REQUEST['year']))
 }
 
 
-if(empty($date_data))
-{
-	$data_value=date('Y-m-d H:i:s');
-	preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$data_value,$value);
+if(empty($date_data)) {
+	$dateTimeField = new DateTimeField('');
+	$dateValue = $dateTimeField->getDisplayDate();
+	$timeValue = $dateTimeField->getDisplayTime();
+	$dbDateValue = DateTimeField::convertToDBFormat($dateValue);
+	$dateValueArray = explode('-', $dbDateValue);
+	$timeValueArray = explode(':', $timeValue);
 	$date_data = Array(
-		'day'=>$value[3],
-		'month'=>$value[2],
-		'year'=>$value[1],
-		'hour'=>$value[4],
-		'min'=>$value[5],
-	);
-	
+		'day'=>$dateValueArray[2],
+		'month'=>$dateValueArray[1],
+		'year'=>$dateValueArray[0],
+		'hour'=>$timeValueArray[0],
+		'min'=>$timeValueArray[1],
+	);	
 }
+
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 if($current_user->hour_format != '') 
 	$calendar_arr['calendar']->hour_format=$current_user->hour_format;

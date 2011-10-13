@@ -46,7 +46,12 @@ var taskPriority = '{$task->priority}';
 	<tr><td colspan="2"><hr size="1" noshade="noshade" /></td></tr>
 	<tr>
 		<td align="right"><b>Time</b></td>
-		<td><input type="hidden" name="time" value="{$task->time}" id="workflow_time" style="width:60px" class="time_field"></td>
+		{if $task->time neq ''} 
+			{assign var=now value=$task->time}
+		{else}
+			{assign var=now value=$USER_TIME}
+		{/if}
+		<td><input type="hidden" name="time" value="{$now}" id="workflow_time" style="width:60px" class="time_field"></td>
 	</tr>
 	<tr>
 		<td align="right"><b>Due Date</b></td>

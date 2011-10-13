@@ -582,6 +582,117 @@ $query = 'ALTER TABLE vtiger_users MODIFY COLUMN confirm_password VARCHAR(200)';
 $params = array();
 $adb->pquery($query, $params);
 
+function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $typeOfData) {
+	global $adb;
+
+	$query = "UPDATE vtiger_field SET typeofdata=? WHERE tablename=? AND fieldname=?";
+	$params = array($typeOfData, $tableName, $fieldName);
+	$adb->pquery($query, $params);
+
+	$filterSql = 'SELECT cvid, columnname FROM vtiger_cvcolumnlist WHERE columnname LIKE ?';
+	$params = array("$tableName:$columnName:$fieldName:%:%");
+	$result = $adb->pquery($filterSql, $params);
+	$noOfRows = $adb->num_rows($result);
+	for($i=0; $i<$noOfRows; ++$i) {
+		$cvId = $adb->query_result($result, $i, 'cvid');
+		$columnName = $adb->query_result($result, $i, 'columnname');
+		$columnNameParts = explode(':', $columnName);
+		$length = count($columnNameParts);
+		$columnNameParts[$length-1] = $dataType;
+		$newColumnName = implode(':', $columnNameParts);
+		$adb->pquery("UPDATE vtiger_cvcolumnlist SET columnname=? WHERE cvid=? AND columnname=?",
+						array($newColumnName, $cvId, $columnName));
+	}
+
+	$advSql = 'SELECT cvid, columnname FROM vtiger_cvadvfilter WHERE columnname LIKE ?';
+	$params = array("$tableName:$columnName:$fieldName:%:%");
+	$result = $adb->pquery($advSql, $params);
+	$noOfRows = $adb->num_rows($result);
+	for($i=0; $i<$noOfRows; ++$i) {
+		$cvId = $adb->query_result($result, $i, 'cvid');
+		$columnName = $adb->query_result($result, $i, 'columnname');
+		$columnNameParts = explode(':', $columnName);
+		$length = count($columnNameParts);
+		$columnNameParts[$length-1] = $dataType;
+		$newColumnName = implode(':', $columnNameParts);
+		$adb->pquery("UPDATE vtiger_cvadvfilter SET columnname=? WHERE cvid=? AND columnname=?",
+						array($newColumnName, $cvId, $columnName));
+	}
+
+	$reportSql = 'SELECT queryid, columnname FROM vtiger_relcriteria WHERE columnname LIKE ?';
+	$params = array("%:$columnName:%:$fieldName:%");
+	$result = $adb->pquery($reportSql, $params);
+	$noOfRows = $adb->num_rows($result);
+	for($i=0; $i<$noOfRows; ++$i) {
+		$queryId = $adb->query_result($result, $i, 'queryid');
+		$columnName = $adb->query_result($result, $i, 'columnname');
+		$columnNameParts = explode(':', $columnName);
+		$length = count($columnNameParts);
+		$columnNameParts[$length-1] = $dataType;
+		$newColumnName = implode(':', $columnNameParts);
+		$adb->pquery("UPDATE vtiger_relcriteria SET columnname=? WHERE queryid=? AND columnname=?",
+						array($newColumnName, $queryId, $columnName));
+	}
+
+	$reportSql = 'SELECT reportid, columnname FROM vtiger_reportsortcol WHERE columnname LIKE ?';
+	$params = array("%:$columnName:%:$fieldName:%");
+	$result = $adb->pquery($reportSql, $params);
+	$noOfRows = $adb->num_rows($result);
+	for($i=0; $i<$noOfRows; ++$i) {
+		$queryId = $adb->query_result($result, $i, 'reportid');
+		$columnName = $adb->query_result($result, $i, 'columnname');
+		$columnNameParts = explode(':', $columnName);
+		$length = count($columnNameParts);
+		$columnNameParts[$length-1] = $dataType;
+		$newColumnName = implode(':', $columnNameParts);
+		$adb->pquery("UPDATE vtiger_reportsortcol SET columnname=? WHERE queryid=? AND columnname=?",
+						array($newColumnName, $queryId, $columnName));
+	}
+
+	$reportSql = 'SELECT queryid, columnname FROM vtiger_selectcolumn WHERE columnname LIKE ?';
+	$params = array("%:$columnName:%:$fieldName:%");
+	$result = $adb->pquery($reportSql, $params);
+	$noOfRows = $adb->num_rows($result);
+	for($i=0; $i<$noOfRows; ++$i) {
+		$queryId = $adb->query_result($result, $i, 'queryid');
+		$columnName = $adb->query_result($result, $i, 'columnname');
+		$columnNameParts = explode(':', $columnName);
+		$length = count($columnNameParts);
+		$columnNameParts[$length-1] = $dataType;
+		$newColumnName = implode(':', $columnNameParts);
+		$adb->pquery("UPDATE vtiger_selectcolumn SET columnname=? WHERE queryid=? AND columnname=?",
+						array($newColumnName, $queryId, $columnName));
+	}
+}
+
+$moduleInstance = Vtiger_Module::getInstance('Users');
+$block = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $moduleInstance);
+
+$timezone_field = new Vtiger_Field();
+$timezone_field->name = 'time_zone';
+$timezone_field->label = 'Time Zone';
+$timezone_field->table ='vtiger_users';
+$timezone_field->column = 'time_zone';
+$timezone_field->columntype = 'varchar(200)';
+$timezone_field->typeofdata = 'V~O';
+$timezone_field->uitype = 16;
+$block->addField($timezone_field);
+
+$usertimezonesClass = new UserTimeZones();
+$arrayOfSupportedTimeZones = $usertimezonesClass->userTimeZones();
+$timezone_field->setPicklistValues($arrayOfSupportedTimeZones);
+
+$timeZone = DateTimeField::getDBTimeZone();
+$params = array($timeZone);
+$sql = "UPDATE vtiger_users SET time_zone=?";
+$this->executeQuery($sql, $params);
+
+$adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=? OR tabid=?)",
+					array(getTabid('Calender'), getTabid('Events')));
+
+vt530_changeDataType('vtiger_crmentity', 'createdtime', 'createdtime', 'DT', 'DT~O');
+vt530_changeDataType('vtiger_crmentity', 'modifiedtime', 'modifiedtime', 'DT', 'DT~O');
+
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 

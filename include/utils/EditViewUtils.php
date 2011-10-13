@@ -93,55 +93,54 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	else if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{	
 		$log->info("uitype is ".$uitype);
-		if($value=='')
-		{
-			//modified to fix the issue in trac(http://vtiger.fosslabs.com/cgi-bin/trac.cgi/ticket/1469)
-			if($fieldname != 'birthday' && $generatedtype != 2 && getTabid($module_name) !=14)// && $fieldname != 'due_date')//due date is today's date by default
-				$disp_value=getNewDisplayDate();
+		if($value == '') {
+			//modified to fix the issue in trac(http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/1469)
+			if ($fieldname != 'birthday' && $generatedtype != 2 && getTabid($module_name) != 14)
+				$disp_value = getNewDisplayDate();
 
-			//Added to display the Contact - Support End Date as one year future instead of today's date -- 30-11-2005
-			if($fieldname == 'support_end_date' && $_REQUEST['module'] == 'Contacts')
-			{
-				$addyear = strtotime("+1 year");
-				global $current_user;
-				$dat_fmt = (($current_user->date_format == '')?('dd-mm-yyyy'):($current_user->date_format));
-
-				$disp_value = (($dat_fmt == 'dd-mm-yyyy')?(date('d-m-Y',$addyear)):(($dat_fmt == 'mm-dd-yyyy')?(date('m-d-Y',$addyear)):(($dat_fmt == 'yyyy-mm-dd')?(date('Y-m-d', $addyear)):(''))));
+			if(($module_name == 'Events' || $module_name == 'Calendar') && $uitype == 6) {
+				$curr_time = date('H:i', strtotime('+5 minutes'));
+			}
+			if(($module_name == 'Events' || $module_name == 'Calendar') && $uitype == 23) {
+				$curr_time = date('H:i', strtotime('+10 minutes'));
 			}
 
-			if($fieldname == 'validtill' && $_REQUEST['module'] == 'Quotes')
-                        {
-                                $disp_value = '';
-                        }
-
-		}
-		else
-		{
+			//Added to display the Contact - Support End Date as one year future instead of 
+			//today's date -- 30-11-2005
+			if ($fieldname == 'support_end_date' && $_REQUEST['module'] == 'Contacts') {
+				$addyear = strtotime("+1 year");
+				$disp_value = DateTimeField::convertToUserFormat(date('Y-m-d', $addyear));
+			} elseif ($fieldname == 'validtill' && $_REQUEST['module'] == 'Quotes') {
+				$disp_value = '';
+			}
+		} else {
+			
+			if($uitype == 6) {
+				if ($col_fields['time_start'] != '' && ($module_name == 'Events' || $module_name 
+						== 'Calendar')) {
+					$curr_time = $col_fields['time_start'];
+					$value = $value . ' ' . $curr_time;
+				} else {
+				$curr_time = date('H:i', strtotime('+5 minutes'));
+				}
+			}
+			if(($module_name == 'Events' || $module_name == 'Calendar') && $uitype == 23) {
+				if ($col_fields['time_end'] != '') {
+					$curr_time = $col_fields['time_end'];
+					$value = $value . ' ' . $curr_time;
+				} else {
+					$curr_time = date('H:i', strtotime('+10 minutes'));
+				}
+			}
 			$disp_value = getValidDisplayDate($value);
 		}
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-		if($uitype == 6)
-		{
-			if($col_fields['time_start']!='')
-			{
-				$curr_time = $col_fields['time_start'];
-			}
-			else
-			{
-				$curr_time = date('H:i',(time() + (5 * 60)));
-			}
-		}
-		if($module_name == 'Events' && $uitype == 23)
-		{
-			if($col_fields['time_end']!='')
-			{
-				$curr_time = $col_fields['time_end'];
-			}
-			else
-			{
-				$endtime = time() + (10 * 60);
-				$curr_time = date('H:i',$endtime);
+		if(!empty($curr_time)) {
+			if(($module_name == 'Events' || $module_name == 'Calendar') && ($uitype == 23 || 
+					$uitype == 6)) {
+				$curr_time = DateTimeField::convertToUserTimeZone($curr_time);
+				$curr_time = $curr_time->format('H:i');
 			}
 		}
 		$fieldvalue[] = array($disp_value => $curr_time) ;

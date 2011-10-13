@@ -76,6 +76,9 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh(\'allMenu\');" onclick="fnvshobj(this,\'allMenu\')"><img src="'.$image_path.'btnL3AllMenu.gif" alt="'.$app_strings['LBL_ALL_MENU_ALT'].'" title="'.$app_strings['LBL_ALL_MENU_TITLE'].'" border="0"></a></td>';
 				if((isPermitted('Settings','index') == 'yes'))
 					$html_string .= '<td style="padding-left:10px;"><a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule=Calendar&parenttab=Settings"><img src="'.$image_path.'settingsBox.png" alt="'.$app_strings['LBL_SETTINGS'].'" title="'.$app_strings['LBL_SETTINGS'].'" border="0"></a></td>';
+				$html_string .= '<td><a href="index.php?module=Users&action=DetailView&record='.$current_user->id.'&modechk=prefview">
+						<img src="'.vtiger_imageurl('preference.png', $theme).'" alt="'.$app_strings['LBL_MY_PREFERENCES'].'" title="'.$app_strings['LBL_MY_PREFERENCES'].'" style="width:27px;height:27px;border: 0px;" /></a>
+					</td>';
 				$html_string .= '</tr>
 				</table>
 	</td>			

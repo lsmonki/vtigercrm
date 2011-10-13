@@ -91,6 +91,7 @@
 		<field name="accesskey" type="C" size="36" />
 		<field name="theme" type="C" size="100" />
 		<field name="language" type="C" size="36" />
+		<field name="time_zone" type="C" size="200" />
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>

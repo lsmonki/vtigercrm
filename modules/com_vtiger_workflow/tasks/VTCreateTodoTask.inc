@@ -50,6 +50,8 @@ class VTCreateTodoTask extends VTTask{
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
 		$date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*($this->directions=='Before'?-1:1));
+		$startDate = new DateTimeField($date.' '.$time[1]);
+		$date = $startDate->getDisplayDate();
 		$fields = array(
 			'activitytype'=>'Task',
 			'description'=>$this->description,
@@ -57,7 +59,7 @@ class VTCreateTodoTask extends VTTask{
 			'taskpriority'=>$this->priority,
 			'taskstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
-			'time_start'=>$time[1],
+			'time_start'=> $startDate->getDisplayTime(),
 			'sendnotification'=>($this->sendNotification!='' && $this->sendNotification!='N')?
 					true: false,
 			'date_start'=>$date,
@@ -100,5 +102,10 @@ class VTCreateTodoTask extends VTTask{
 		}
 		return str_pad($hours, 2, '0', STR_PAD_LEFT).':'.str_pad($arr[2], 2, '0', STR_PAD_LEFT);
 	}
+
+	public function getTimeFieldList() {
+		return array('time');
+	}
+
 }
 ?>

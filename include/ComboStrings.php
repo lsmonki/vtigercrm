@@ -334,6 +334,10 @@ $combo_strings = Array(
 		
 );
 
+require_once('modules/Users/UserTimeZonesArray.php');
+$usertimezonesClass = new UserTimeZones();
+$arrayOfSupportedTimeZones = $usertimezonesClass->userTimeZones();
+$combo_strings['time_zone'] = array_combine($arrayOfSupportedTimeZones,$arrayOfSupportedTimeZones);
 
 ?>
 

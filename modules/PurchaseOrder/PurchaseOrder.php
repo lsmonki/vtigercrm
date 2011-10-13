@@ -306,7 +306,8 @@ class PurchaseOrder extends CRMEntity {
 			$entries[] = $row['vendorname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['postatus'], $postatus_array))? $row['postatus']: $error_msg;
-			$entries[] = getDisplayDate($row['lastmodified']);
+			$date = new DateTimeField($row['lastmodified']);
+			$entries[] = $date->getDisplayDateTimeValue();
 
 			$entries_list[] = $entries;
 		}

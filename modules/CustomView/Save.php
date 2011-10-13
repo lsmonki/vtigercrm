@@ -69,8 +69,8 @@ if($cvmodule != "") {
 	$startdate = $_REQUEST["startdate"];
 	$enddate = $_REQUEST["enddate"];
 	if($stdcriteria == "custom") {
-		$startdate = getDBInsertDateValue($startdate);
-		$enddate = getDBInsertDateValue($enddate);
+		$startdate = DateTimeField::convertToDBFormat($startdate);
+		$enddate = DateTimeField::convertToDBFormat($enddate);
 	}
 	$std_filter_list["startdate"] = $startdate;
 	$std_filter_list["enddate"]=$enddate;
@@ -147,10 +147,20 @@ if($cvmodule != "") {
 						{
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-								$temp_date = getDBInsertDateValue(trim($temp_date));
-								$val[$x] = $temp_date;
-								if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+								//if date and time given then we have to convert the date and 
+								//leave the time as it is, if date only given then temp_time 
+								//value will be empty
+								if(trim($temp_val[$x]) != '') {
+									$date = new DateTimeField(trim($temp_val[$x]));
+									if($column_info[4] == 'D') {
+										$val[$x] = DateTimeField::convertToUserFormat(
+												trim($temp_val[$x]));
+									} elseif($column_info[4] == 'DT') {
+										$val[$x] = $date->getDBInsertDateTimeValue();
+									} else {
+										$val[$x] = $date->getDBInsertTimeValue();
+									}
+								}
 							}
 							$adv_filter_value = implode(",",$val);
 						}
@@ -252,10 +262,20 @@ if($cvmodule != "") {
 						{
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-								$temp_date = getDBInsertDateValue(trim($temp_date));
-								$val[$x] = $temp_date;
-								if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+								//if date and time given then we have to convert the date and 
+								//leave the time as it is, if date only given then temp_time value 
+								//will be empty
+								if(trim($temp_val[$x]) != '') {
+									$date = new DateTimeField(trim($temp_val[$x]));
+									if($column_info[4] == 'D') {
+										$val[$x] = DateTimeField::convertToUserFormat(
+												trim($temp_val[$x]));
+									} elseif($column_info[4] == 'DT') {
+										$val[$x] = $date->getDBInsertDateTimeValue();
+									} else {
+										$val[$x] = $date->getDBInsertTimeValue();
+									}
+								}
 							}
 							$adv_filter_value = implode(",",$val);
 						}

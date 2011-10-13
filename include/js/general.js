@@ -1213,32 +1213,8 @@ function clearId(fldName) {
 
 }
 
-function comparestartdate(chkdate)
-{
-	var datObj = [];
-	var ajxdate = "test";
-	var url = "module=Calendar&action=CalendarAjax&file=CalendarCommon&fieldval="+ajxdate
+function comparestartdate(chkdate) {
 	var currdate = new Date();
-	new Ajax.Request(
-		'index.php',
-		{
-			queue: {
-				position: 'end',
-				scope: 'command'
-			},
-			method: 'post',
-			postBody:url,
-			onComplete: function(response)
-			{
-				datObj = eval(response.responseText);
-				currdate.setFullYear(datObj[0].YEAR)
-				currdate.setMonth(datObj[0].MONTH-1)
-				currdate.setDate(datObj[0].DAY)
-				currdate.setHours(datObj[0].HOUR)
-				currdate.setMinutes(datObj[0].MINUTE)
-			}
-		}
-		);
 	return compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE");
 }
 

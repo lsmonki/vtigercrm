@@ -24,10 +24,16 @@ $fname = tempnam($root_directory.$tmp_dir, "merge2.xls");
 $reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST['stdDateFilterField'];
-$filter = $_REQUEST['stdDateFilter'];
-$startdate = getDBInsertDateValue($_REQUEST['startdate']);
-$enddate = getDBInsertDateValue($_REQUEST['enddate']);
-
+$startdate = ($_REQUEST['startdate']);
+$enddate = ($_REQUEST['enddate']);
+if(!empty($startdate) && !empty($enddate) && $startdate != "0000-00-00" && 
+		$enddate != "0000-00-00" ) {
+	$filter = $_REQUEST['stdDateFilter'];
+	$date = new DateTimeField($_REQUEST['startdate']);
+	$endDate = new DateTimeField($_REQUEST['enddate']);
+	$startdate = $date->getDBInsertDateValue();//Convert the user date format to DB date format
+	$enddate = $endDate->getDBInsertDateValue();//Convert the user date format to DB date format
+}
 $oReportRun = new ReportRun($reportid);
 $filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 

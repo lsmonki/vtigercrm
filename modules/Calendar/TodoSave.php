@@ -49,15 +49,17 @@ foreach($focus->column_fields as $fieldname => $val)
  	$focus->column_fields['assigned_user_id'] = $_REQUEST['task_assigned_group_id'];
  }
  
+ $date = new DateTimeField($_REQUEST['task_date_start']. ' ' . $_REQUEST['task_time_start']);
  $focus->column_fields["taskstatus"] =  $_REQUEST["taskstatus"];
- $focus->column_fields["date_start"] =  $_REQUEST["task_date_start"];
+ $focus->column_fields["date_start"] =  $date->getDBInsertDateValue();
  $focus->column_fields["due_date"] =  $_REQUEST["task_due_date"];
  $focus->column_fields["taskpriority"] =  $_REQUEST["taskpriority"];
  $focus->column_fields["parent_id"] = $_REQUEST["task_parent_id"];
  $focus->column_fields["contact_id"] = $_REQUEST["task_contact_id"];
  $focus->column_fields["description"] =  $_REQUEST["task_description"];
  if(isset($_REQUEST['task_sendnotification']) && $_REQUEST['task_sendnotification'] != null)
- 	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
+	 $focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
+ $focus->column_fields["time_start"] = $date->getDBInsertTimeValue();
  $focus->save($tab_type);
 
 function getRequestedToData()
@@ -74,10 +76,16 @@ function getRequestedToData()
 	$mail_data['assign_type'] = $_REQUEST['task_assigntype'];
 	$mail_data['group_name'] = getGroupName($_REQUEST['task_assigned_group_id']);
 	$mail_data['mode'] = $_REQUEST['task_mode'];
-	$value = getaddEventPopupTime($_REQUEST['task_time_start'],$_REQUEST['task_time_end'],'24');
+	$startTime = $_REQUEST['task_time_start'];
+	$date = new DateTimeField($_REQUEST['task_date_start']." ".$startTime);
+	$endTime = $_REQUEST['task_time_end'];
+	$endDate = new DateTimeField($_REQUEST['task_due_date']." ".$startTime);
+	$startTime = $date->getDisplayTime();
+	$endTime = $endDate->getDisplayTime();
+	$value = getaddEventPopupTime($startTime, $endTime,'24');
 	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['task_date_start'])." ".$start_hour;
-	$mail_data['end_date_time']=getDisplayDate($_REQUEST['task_due_date']);
+	$mail_data['st_date_time'] = $date->getDisplayDateTimeValue();
+	$mail_data['end_date_time'] = $endDate->getDisplayDate();
 	return $mail_data;
 }
 

@@ -378,11 +378,15 @@ function BasicSearch($module,$search_field,$search_string){
 			//Added to support user date format in basic search	
 			if($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 			{
-				list($sdate,$stime) = split(" ",$search_string);
-				if($stime !='')
-					$search_string = getDBInsertDateValue($sdate)." ".$stime;
-				else
-					$search_string = getDBInsertDateValue($sdate);
+				if ($search_string != '' && $search_string != '0000-00-00') {
+					$date = new DateTimeField($search_string);
+					$value = $date->getDisplayDate();
+					if(strpos($search_string, ' ') > -1) {
+						$value .= (' ' . $date->getDisplayTime());
+					}
+				} else {
+					$value = $search_string;
+				}
 			}
 			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
 			if ($uitype == 56)
@@ -717,11 +721,15 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	$searchstring = ltrim(rtrim($searchstring));
 	if(($searchfield != "vtiger_troubletickets.update_log") && ($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime" || stristr($searchfield,'date')))
 	{
-		list($sdate,$stime) = split(" ",$searchstring);
-		if($stime !='')
-			$searchstring = getDBInsertDateValue($sdate)." ".$stime;
-		else
-			$searchstring = getDBInsertDateValue($sdate);
+		if ($search_string != '' && $search_string != '0000-00-00') {
+			$date = new DateTimeField($search_string);
+			$value = $date->getDisplayDate();
+			if(strpos($search_string, ' ') > -1) {
+				$value .= (' ' . $date->getDisplayTime());
+			}
+		} else {
+			$value = $search_string;
+		}
 	}
 	if($searchfield == "vtiger_account.parentid")
 		$searchfield = "vtiger_account2.accountname";

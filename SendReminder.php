@@ -24,7 +24,9 @@ require_once('include/utils/utils.php');
 require("modules/Emails/class.phpmailer.php");
 require_once('include/logging.php');
 require("config.php");
-
+$currentuserid = 1;
+$users = CRMEntity::getInstance('Users');
+$current_user = $users->retrieveCurrentUserInfoFromFile($currentuserid);
 // Set the default sender email id
 global $HELPDESK_SUPPORT_EMAIL_ID;
 $from = $HELPDESK_SUPPORT_EMAIL_ID;
@@ -56,7 +58,8 @@ if($adb->num_rows($result) >= 1)
 		$date_start = $result_set['date_start'];
 		$time_start = $result_set['time_start'];
 		$reminder_time = $result_set['reminder_time'];
-	        $curr_time = strtotime(date("Y-m-d H:i"))/60;
+		$date = new DateTimeField( null );
+		$curr_time = strtotime($date->getDisplayDateTimeValue())/60;
 		$activity_id = $result_set['activityid'];
 		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
 		$parent_type = $result_set['setype']; 
@@ -78,10 +81,10 @@ if($adb->num_rows($result) >= 1)
 		{
 			$date_start = $result_set['recurringdate'];
 		}
-		//code included for recurring events by jaguar ends	
-
-	        $activity_time = strtotime(date("$date_start $time_start"))/60;
-
+		//code included for recurring events by jaguar ends
+		$date = new DateTimeField("$date_start $time_start");
+		$activity_time = strtotime($date->getDisplayDateTimeValue())/60;
+                
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) <= $reminder_time)
 		{
 			$log->debug(" InSide  REMINDER");

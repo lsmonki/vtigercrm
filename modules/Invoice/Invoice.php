@@ -335,7 +335,7 @@ class Invoice extends CRMEntity {
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['invoicestatus'], $invoicestatus_array))? $row['invoicestatus']: $error_msg;
-			$entries[] = getDisplayDate($row['lastmodified']);
+			$entries[] = DateTimeField::convertToUserFormat($row['lastmodified']);
 
 			$entries_list[] = $entries;
 		}

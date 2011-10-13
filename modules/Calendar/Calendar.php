@@ -86,6 +86,7 @@ class Calendar
 				{
 					$layout = new Layout('day',$this->date_time->getThisweekDaysbyIndex($i));
 					$this->week_array[$layout->start_time->get_formatted_date()] = $layout;
+
 					for($h=-1;$h<=23;$h++)
 					{
 						if($h == -1)
@@ -96,7 +97,7 @@ class Calendar
 						}
 						else
 						{
-						      	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
+						    $hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
 							$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->z_hour] = $hour_list;
 							array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->z_hour);
 						}
@@ -186,11 +187,10 @@ class Calendar
 		{
 			$this->day_end_hour=23;
 		}
-		if ( $this->view == 'week')
-		{
+		if ( $this->view == 'week'){
 			$start_datetime = $this->date_time->getThisweekDaysbyIndex(0);
 			$end_datetime = $this->date_time->getThisweekDaysbyIndex(6);
-                } elseif($this->view == 'month') {
+        } elseif($this->view == 'month') {
 			$start_datetime = $this->date_time->getThismonthDaysbyIndex(0);
 			$end_datetime = $this->date_time->getThismonthDaysbyIndex($this->date_time->daysinmonth-1);
 		} elseif($this->view == 'year'){
@@ -236,7 +236,7 @@ class Layout
 {
 	var $view = 'day';
 	var $start_time;
-        var $end_time;
+    var $end_time;
 	var $activities = Array();
 	
 	/**
@@ -287,8 +287,9 @@ function getCalendarDaysInMonth($date_time){
 		$pd = $date_time->getThisMonthsDayByIndex($i);
 		
 		$layout = new Layout('day', $pd);
-		$month_array[$layout->start_time->get_formatted_date()] = $layout;
-		array_push($slices,  $layout->start_time->get_formatted_date());
+		$date = $layout->start_time->get_formatted_date();
+		$month_array[$date] = $layout;
+		array_push($slices,  $date);
 	}
 	
 	$result = array("month_array"=>$month_array, "slices"=>$slices, "date_time"=>$date_time);
