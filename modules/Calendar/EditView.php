@@ -295,6 +295,13 @@ $smarty->assign("REPEAT_LIMIT_DATEFORMAT", parse_calendardate($app_strings['NTC_
 $picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($tab_type);
 $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
 
+// Gather the help information associated with fields
+$smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
+// END
+
+$smarty->assign('USER_CURRENCY_SEPARATOR', $current_user->currency_grouping_separator);
+$smarty->assign('USER_DECIMAL_SEPARATOR', $current_user->currency_decimal_separator);
+
 $smarty->display("ActivityEditView.tpl");
 
 ?>
