@@ -92,8 +92,8 @@ function vt530_addDepedencyToVTWorkflowEventHandler(){
 vt530_addEmailFieldTypeInWs();
 vt530_addFilterToListTypes();
 
-vt530_registerVTEntityDeltaApi();
 vt530_addDependencyColumnToEventHandler();
+vt530_registerVTEntityDeltaApi();
 vt530_addDepedencyToVTWorkflowEventHandler();
 
 // Workflow changes
@@ -351,7 +351,7 @@ $params = array();
 $adb->pquery($sql, $params);
 
 $result = $adb->pquery('SELECT organizationname FROM vtiger_organizationdetails', array());
-$noOfCompanies = $adb->num_row($result);
+$noOfCompanies = $adb->num_rows($result);
 if($noOfCompanies > 0) {
 	for($i=0; $i<$noOfCompanies; ++$i) {
 		$id = $adb->getUniqueID('vtiger_organizationdetails');
@@ -685,7 +685,7 @@ $timezone_field->setPicklistValues($arrayOfSupportedTimeZones);
 $timeZone = DateTimeField::getDBTimeZone();
 $params = array($timeZone);
 $sql = "UPDATE vtiger_users SET time_zone=?";
-$this->executeQuery($sql, $params);
+$adb->pquery($sql, $params);
 
 $adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=? OR tabid=?)",
 					array(getTabid('Calender'), getTabid('Events')));
