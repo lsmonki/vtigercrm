@@ -1243,5 +1243,7 @@ $mod_strings = Array(
 'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Picklist Dependency Setup',
 'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Setup Dependency between Picklist values in each module',
 
+'Settings' => 'Settings',
+
 );
 ?>

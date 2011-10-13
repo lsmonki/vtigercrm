@@ -112,7 +112,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = $col_fields[$fieldname];
 	} elseif ($uitype == 16) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
-		$label_fld[] = $col_fields[$fieldname];
+		$label_fld[] = getTranslatedString($col_fields[$fieldname], $module);
 
 		$fieldname = $adb->sql_escape_string($fieldname);
 		$pick_query = "select $fieldname from vtiger_$fieldname order by sortorderid";

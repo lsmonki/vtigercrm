@@ -222,7 +222,7 @@
 						 {if $MODULE eq 'Vendors' || $MODULE eq 'HelpDesk' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' || $MODULE eq 'Documents'|| $CUSTOM_MODULE eq 'true' }
 						 	{if $CHECK.Import eq 'yes' && $MODULE neq 'Documents'}
 						 	</a></b><br>
-						 	&nbsp;&nbsp;- <b><a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=ListView&parenttab={$CATEGORY}">{$APP.LBL_IMPORT} {$MODULE}
+						 	&nbsp;&nbsp;- <b><a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=ListView&parenttab={$CATEGORY}">{$APP.LBL_IMPORT} {$MODULE|@getTranslatedString:$MODULE}
 						 	{/if}
 						 {/if}
 						 {* END *}
