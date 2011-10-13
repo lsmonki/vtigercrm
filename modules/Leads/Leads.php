@@ -374,7 +374,7 @@ class Leads extends CRMEntity {
 				" inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
 				" inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid" .
 				" left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid" .
-				" inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid" .
+				" left join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid" .
 				" where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;	
 					
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
