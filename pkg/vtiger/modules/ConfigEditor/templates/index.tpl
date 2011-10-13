@@ -76,7 +76,7 @@
 				document.getElementById('msg_HELPDESK_SUPPORT_NAME').innerHTML = emptyName;
 				name.focus();
 				return false;
-			}else if((reg1.test(size.value) == false) || (size.value <= 0) || (size.value > 3) || (size.value == NaN)){
+			}else if((reg1.test(size.value) == false) || (size.value <= 0) || (size.value > 5) || (size.value == NaN)){
 				document.getElementById('msg_upload_maxsize').innerHTML =uploadSize;
 				size.focus();
 				return false;
