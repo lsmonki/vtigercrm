@@ -432,22 +432,8 @@ function getFieldid($tabid, $fieldname, $onlyactive = true) {
 	// Look up information at cache first	
 	$fieldinfo = VTCacheUtils::lookupFieldInfo($tabid, $fieldname);
 	if($fieldinfo === false) {
-		$query  = "SELECT fieldid, fieldlabel, columnname, tablename, uitype, typeofdata, presence 
-			FROM vtiger_field WHERE tabid=? AND fieldname=?";
-		$result = $adb->pquery($query, array($tabid, $fieldname));
-		
-		if($adb->num_rows($result)) {
-			
-			$resultrow = $adb->fetch_array($result);
-			
-			// Update information to cache for re-use		
-			VTCacheUtils::updateFieldInfo(
-				$tabid, $fieldname,$resultrow['fieldid'],
-				$resultrow['fieldlabel'], $resultrow['columnname'], $resultrow['tablename'],
-				$resultrow['uitype'], $resultrow['typeofdata'], $resultrow['presence']);
-			
-			$fieldinfo = VTCacheUtils::lookupFieldInfo($tabid, $fieldname);
-		}
+		getColumnFields(getTabModuleName($tabid));
+		$fieldinfo = VTCacheUtils::lookupFieldInfo($tabid, $fieldname);
 	}
 	
 	// Get the field id based on required criteria
