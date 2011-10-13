@@ -48,6 +48,12 @@ if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')
 }
 $smarty->assign("MAINTAB",$act_tab);
 			
+// This is added to support the type of popup and callback
+if(isset($_REQUEST['popupmode']) && isset($_REQUEST['callback'])) {
+	$url = "&popupmode=".$_REQUEST['popupmode']."&callback=".$_REQUEST['callback'];
+	$smarty->assign("POPUPMODE", $_REQUEST['popupmode']);
+	$smarty->assign("CALLBACK", $_REQUEST['callback']);
+}
 			
 switch($currentModule)
 {

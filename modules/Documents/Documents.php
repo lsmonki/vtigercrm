@@ -466,5 +466,18 @@ class Documents extends CRMEntity {
 			}
 		}
 	}
+
+	function getQueryByModuleField($module, $fieldname, $srcrecord, $query) {
+		if($module == "MailManager") {
+			$tempQuery = split('WHERE', $query);
+			if(!empty($tempQuery[1])) {
+				$where = " vtiger_notes.filelocationtype = 'I' AND vtiger_notes.filename != '' AND vtiger_notes.filestatus != 0 AND ";
+				$query = $tempQuery[0].' WHERE '.$where.$tempQuery[1];
+			} else{
+				$query = $tempQuery[0].' WHERE '.$tempQuery;
+			}
+			return $query;
+		}
+	}
 }
 ?>

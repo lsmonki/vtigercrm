@@ -246,8 +246,10 @@ class Vtiger_MailScannerAction {
 	 */
 	function __CreateNewEmail($mailrecord, $module, $linkfocus) {	
 		global $current_user, $adb;
-		if(!$current_user) $current_user = new Users();
-		$current_user->id = 1;
+		if(!$current_user) {
+			$current_user = new Users();
+			$current_user->retrieveCurrentUserInfoFromFile('1');
+		}
 
 		$focus = new Emails();
 		$focus->column_fields['parent_type'] = $module;

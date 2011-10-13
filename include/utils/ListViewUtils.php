@@ -1974,12 +1974,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
 					$focus->record_id = $_REQUEST['recordid'];
+					$popupMode = $_REQUEST['popupmode'];
+					$callBack = $_REQUEST['callback'];
 					if($_REQUEST['return_module'] == "Calendar")
 					{
 						$value = '<a href="javascript:window.close();" id="calendarCont'.$entity_id.'" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.decode_html($slashes_temp_val).'");\'>'.$temp_val.'</a>';
 					}
 					else
-						$value = '<a href="javascript:window.close();" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'");\'>'.$temp_val.'</a>';
+						$value = '<a style="cursor:pointer;" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'","'.$popupMode.'",'.$callBack.');\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "formname_specific")
 				{
@@ -4249,7 +4251,7 @@ function textlength_check($field_val)
 	if($listview_max_textlength) {
 		$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
 		if(function_exists('mb_strlen')){
-			if(mb_strlen($default_charset) > $listview_max_textlength) {
+			if(mb_strlen($temp_val) > $listview_max_textlength) {
 				$temp_val = mb_substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,
 						$listview_max_textlength,$default_charset).'...';
 			}
