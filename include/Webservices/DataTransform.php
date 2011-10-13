@@ -68,7 +68,7 @@
 			}
                         // added to handle the setting reminder time
 			if(strtolower($meta->getEntityName()) == "events"){
-				if(isset($row['reminder_time'])&& $row['reminder_time']!= null){
+				if(isset($row['reminder_time'])&& $row['reminder_time']!= null && $row['reminder_time'] != 0){
 					$_REQUEST['set_reminder'] = "Yes";
 					$_REQUEST['mode'] = 'edit';
 

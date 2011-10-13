@@ -17,8 +17,8 @@
 		} else {
 			$fieldTypeString = 'all';
 		}
-		if(!empty($types[$fieldTypeString])) {
-			return $types[$fieldTypeString];
+		if(!empty($types[$user->id][$fieldTypeString])) {
+			return $types[$user->id][$fieldTypeString];
 		}
 		try{
 			global $log;
@@ -120,9 +120,9 @@
 		}
 		
 		VTWS_PreserveGlobal::flush();
-		$types[$fieldTypeString] = array("types"=>array_merge($accessibleModules,$accessibleEntities),
+		$types[$user->id][$fieldTypeString] = array("types"=>array_merge($accessibleModules,$accessibleEntities),
 			'information'=>$informationArray);
-		return $types[$fieldTypeString];
+		return $types[$user->id][$fieldTypeString];
 	}
 
 ?>
