@@ -120,8 +120,9 @@ function getCFListEntries($module)
 					$cf_element['activitytype'] = getTranslatedString('Task',$module);
 				else
 					$cf_element['activitytype'] = getTranslatedString('Event',$module);
+				
+				$cf_element['tool']='&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'. vtiger_imageurl('delete.gif', $theme) .'" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 			}
-			$cf_element['tool']='&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'. vtiger_imageurl('delete.gif', $theme) .'" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 			$cflist[] = $cf_element;
 			$count++;
 		}while($row = $adb->fetch_array($result));
