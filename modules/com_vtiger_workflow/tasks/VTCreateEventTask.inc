@@ -44,6 +44,9 @@ class VTCreateEventTask extends VTTask{
 	}
 	
 	public function doTask($entityData){
+		if(!vtlib_isModuleActive('Calendar')) {
+			return;
+		}
 		global $adb, $current_user;
 		$userId = $entityData->get('assigned_user_id');
 		if($userId===null){
