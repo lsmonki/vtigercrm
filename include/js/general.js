@@ -2557,9 +2557,9 @@ function validateUrl(name)
 
 	var oRegex = new Object();
 	oRegex.UriProtocol = new RegExp('');
-	oRegex.UriProtocol.compile( '^(((http|https|ftp|news):\/\/)|mailto:)', 'gi' );
+	oRegex.UriProtocol.compile( '^(((http):\/\/)|mailto:)', 'gi' );
 	oRegex.UrlOnChangeProtocol = new RegExp('') ;
-	oRegex.UrlOnChangeProtocol.compile( '^(http|https|ftp|news)://(?=.)', 'gi' );
+	oRegex.UrlOnChangeProtocol.compile( '^(http)://(?=.)', 'gi' );
 
 	wUrl = Url.value;
 	wProtocol=oRegex.UrlOnChangeProtocol.exec( wUrl ) ;

@@ -272,7 +272,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld ["options"] = $options;
 	} elseif ($uitype == 17) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
-		$label_fld[] = $col_fields[$fieldname];
+        $matchPattern = "^[\w]+:\/\/^";
+        $value = $col_fields[$fieldname];
+        preg_match($matchPattern, $value, $matches);
+        if(!empty ($matches[0])){
+            $fieldValue = str_replace($matches, "", $value);
+            $label_fld[] = $value;
+        }else{
+            if($value != null)
+                $label_fld[] = 'http://'.$value;
+            else
+                $label_fld[] = '';
+        }
 	} elseif ($uitype == 19) {
 		if ($fieldname == 'notecontent')
 			$col_fields[$fieldname] = decode_html($col_fields[$fieldname]);

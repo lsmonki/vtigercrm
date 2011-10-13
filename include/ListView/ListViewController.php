@@ -333,7 +333,13 @@ class ListViewController {
 						}
 					}
 				} elseif($field->getFieldDataType() == 'url') {
-					$value = '<a href="http://'.$rawValue.'" target="_blank">'.$value.'</a>';
+                    $matchPattern = "^[\w]+:\/\/^";
+                    preg_match($matchPattern, $rawValue, $matches);
+                    if(!empty ($matches[0])){
+                        $value = '<a href="'.$rawValue.'" target="_blank">'.$value.'</a>';
+                    }else{
+                        $value = '<a href="http://'.$rawValue.'" target="_blank">'.$value.'</a>';
+                    }
 				} elseif ($field->getFieldDataType() == 'email') {
 					if($_SESSION['internal_mailer'] == 1) {
 						//check added for email link in user detailview

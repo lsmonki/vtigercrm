@@ -260,10 +260,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						} else {
 							$name = getTranslatedString($name, $module);
 						}
-					}
-				}
-			}
-																	//added to display vtiger_currency symbol in related listview header
+                    }
+                }
+            }
+        															//added to display vtiger_currency symbol in related listview header
 		if($name =='Amount' && $relatedlist !='' )
 		{
 			$name .=' ('.$app_strings['LBL_IN'].' '.$user_info['currency_symbol'].')';
@@ -281,10 +281,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 		else
 		{
-			$list_header[]=$name;
-		}
+            $list_header[]=$name;
+        }
 	}
-     }
+	 }
 
 	//Added for Action - edit and delete link header in listview
 	if(!$skipActions && (isPermitted($module,"EditView","") == 'yes' || isPermitted($module,"Delete","") == 'yes'))
@@ -755,8 +755,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$column_name = $colname;
 					}
 					$value = $adb->query_result($list_result,$i-1,$colname);
-				}
-				else {
+				} else {
 					if($module == 'Calendar') {
 						$act_id = $adb->query_result($list_result,$i-1,"activityid");
 						
@@ -1028,11 +1027,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							} else {
 								$value = '';
 							}
-						} 
+						}
 					} else {
-						$list_result_count = $i-1;
-						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
-					}
+                        $list_result_count = $i-1;
+                        $value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+                    }
 				}
 				
 				// vtlib customization: For listview javascript triggers
@@ -1416,10 +1415,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	$tabid = getTabid($module);
 	$current_module_strings = return_module_language($current_language, $module);
 	$uicolarr=$field_result[$fieldname];
-	foreach($uicolarr as $key=>$value)
-	{
-		$uitype = $key;
-		$colname = $value;
+    foreach($uicolarr as $key=>$value){
+        $uitype = $key;
+        $colname = $value;
     }
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Calendar' && ($colname == "status" || $colname == "eventstatus"))
@@ -1565,7 +1563,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 17)
 	{
-		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
+        $matchPattern = "^[\w]+:\/\/^";
+        preg_match($matchPattern, $field_val, $matches);
+        if(!empty ($matches[0])){
+            $value = '<a href="'.$field_val.'" target="_blank">'.$temp_val.'</a>';
+        }else{
+            $value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
+        }
 	}
 	elseif($uitype == 13 || $uitype == 104 && ($_REQUEST['action'] != 'Popup' && $_REQUEST['file'] != 'Popup'))
 	{
@@ -4523,5 +4527,45 @@ function listQueryNonAdminChange($query, $module, $scope='') {
 	$instance = CRMEntity::getInstance($module);
 	return $instance->listQueryNonAdminChange($query, $scope);
 }
+function html_strlen($str) {
+	$chars = preg_split('/(&[^;\s]+;)|/', $str, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+	return count($chars);
+}
 
+function html_substr($str, $start, $length = NULL) {
+	if($length === 0) return ""; 
+	//check if we can simply use the built-in functions
+	if(strpos($str, '&') === false) { //No entities. Use built-in functions
+		if($length === NULL)
+			return substr($str, $start);
+		else
+			return substr($str, $start, $length);
+	}
+
+	// create our array of characters and html entities
+	$chars = preg_split('/(&[^;\s]+;)|/', $str, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE);
+	$html_length = count($chars);
+	// check if we can predict the return value and save some processing time
+	if(($html_length === 0) or ($start >= $html_length) or (isset($length) and ($length <= -$html_length)))
+		return "";
+
+	//calculate start position
+	if($start >= 0) {
+		$real_start = $chars[$start][1];
+	} else { //start'th character from the end of string
+		$start = max($start,-$html_length);
+		$real_start = $chars[$html_length+$start][1];
+	}
+	if (!isset($length)) // no $length argument passed, return all remaining characters
+		return substr($str, $real_start);
+	else if ($length > 0) { // copy $length chars
+		if ($start+$length >= $html_length) { // return all remaining characters
+			return substr($str, $real_start);
+		} else { //return $length characters
+			return substr($str, $real_start, $chars[max($start,0)+$length][1] - $real_start);
+		}
+	} else { //negative $length. Omit $length characters from end
+		return substr($str, $real_start, $chars[$html_length+$length][1] - $real_start);
+	}
+}
 ?>
