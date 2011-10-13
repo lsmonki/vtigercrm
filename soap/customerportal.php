@@ -1357,13 +1357,7 @@ function add_ticket_attachment($input_array)
 	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 
 	//fix for space in file name
-	$filename = preg_replace('/\s+/', '_', $filename);
-	$ext_pos = strrpos($filename, ".");
-	$ext = substr($filename, $ext_pos + 1);
-
-	if (in_array(strtolower($ext), $upload_badext)){
-		$filename .= ".txt";
-	}
+	$filename = SanitizeFileName($filename);
 	$new_filename = $attachmentid.'_'.$filename;
 
 	$data = base64_decode($filecontents);

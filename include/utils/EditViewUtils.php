@@ -429,7 +429,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$value = $_REQUEST['product_id'];
 		}
 		elseif(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
-			$value = $_REQUEST['parent_id'];
+			$value = vtlib_purify($_REQUEST['parent_id']);
 
 		if($value != '')
 		{		
@@ -640,7 +640,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 62)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
-			$value = $_REQUEST['parent_id'];
+			$value = vtlib_purify($_REQUEST['parent_id']);
 		if($value != '')
 			$parent_module = getSalesEntityType($value);
 		if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
@@ -745,7 +745,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 66)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
-			$value = $_REQUEST['parent_id'];
+			$value = vtlib_purify($_REQUEST['parent_id']);
 		if($value != '')
 			$parent_module = getSalesEntityType($value);
 		// Check for vtiger_activity type if task orders to be added in select option
@@ -1047,7 +1047,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 68)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
-			$value = $_REQUEST['parent_id'];
+			$value = vtlib_purify($_REQUEST['parent_id']);
 
 		if($value != '')
 		{

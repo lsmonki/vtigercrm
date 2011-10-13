@@ -37,7 +37,7 @@ $focus->load_user($user_password);
 
 if($focus->is_authenticated())
 {
-
+	session_regenerate_id();
 	//Inserting entries for audit trail during login
 	
 	if($audit_trail == 'true')

@@ -103,7 +103,7 @@ else
 
 
 //Added code from mysendmail.php which is contributed by Raju(rdhital)
-$parentid= $_REQUEST['parent_id'];
+$parentid= vtlib_purify($_REQUEST['parent_id']);
 $myids=explode("|",$parentid);
 $all_to_emailids = Array();
 $from_name = $current_user->user_name;

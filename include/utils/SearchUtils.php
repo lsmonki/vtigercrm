@@ -843,28 +843,28 @@ function getSearchURL($input) {
 	global $log,$default_charset;
 	$urlString='';
 	if($input['searchtype']=='advance') {				
-		$advft_criteria = $_REQUEST['advft_criteria'];
+		$advft_criteria = vtlib_purify($input['advft_criteria']);
 		if(empty($advft_criteria))	return $urlString;	
-		$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
+		$advft_criteria_groups = vtlib_purify($input['advft_criteria_groups']);
 		
 		$urlString .= '&advft_criteria='.$advft_criteria.'&advft_criteria_groups='.$advft_criteria_groups.'&searchtype=advance';
 		
 	} elseif($input['type']=='dbrd'){
 		if(isset($input['leadsource'])) {
-			$leadSource = $input['leadsource'];
+			$leadSource = vtlib_purify($input['leadsource']);
 			$urlString .= "&leadsource=".$leadSource;
 		}
 		if(isset($input['date_closed'])) {
-			$dateClosed = $input['date_closed'];
+			$dateClosed = vtlib_purify($input['date_closed']);
 			$urlString .= "&date_closed=".$dateClosed;
 		}
 		if(isset($input['sales_stage'])) {
-			$salesStage = $input['sales_stage'];
+			$salesStage = vtlib_purify($input['sales_stage']);
 			$urlString .= "&sales_stage=".$salesStage;
 		}
 		if(!empty($input['closingdate_start']) && !empty($input['closingdate_end'])) {
-			$dateClosedStart = $input['closingdate_start'];
-			$dateClosedEnd = $input['closingdate_end'];
+			$dateClosedStart = vtlib_purify($input['closingdate_start']);
+			$dateClosedEnd = vtlib_purify($input['closingdate_end']);
 			$urlString .= "&closingdate_start=$dateClosedStart&closingdate_end=".$dateClosedEnd;
 		}
 		if(isset($input['owner'])) {
@@ -895,7 +895,7 @@ function getSearchURL($input) {
 			$url_string .= "&type=".vtlib_purify($input['type']);
 		}
 	} else {
-		$value = $input['search_text'];
+		$value = vtlib_purify($input['search_text']);
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$value) : 
 				$value;
 		$value=trim($stringConvert);
@@ -905,7 +905,7 @@ function getSearchURL($input) {
 			$urlString .= "&type=".vtlib_purify($input['type']);
 		}
 		if(!empty($input['operator'])) {
-			$urlString .= "&operator=".$input['operator'];
+			$urlString .= "&operator=".vtlib_purify($input['operator']);
 		}
 	}
 	return $urlString;

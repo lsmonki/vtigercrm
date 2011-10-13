@@ -23,7 +23,7 @@ $profileName='';
 $profileDescription='';
 
 if(!empty($profileId)) {
-	if(!profileExists($profileId)) {
+	if(!profileExists($profileId) || !is_numeric($profileId)) {
 		die(getTranslatedString('ERR_INVALID_PROFILE_ID', $currentModule));
 	}
 } elseif($_REQUEST['mode'] !='create') {
@@ -89,12 +89,13 @@ else
 
 $smarty->assign("PROFILE_DESCRIPTION", $profileDescription);
 
-if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
-	$smarty->assign("MODE",vtlib_purify($_REQUEST['mode']));
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '') {
+	$mode = vtlib_purify($_REQUEST['mode']);
+	$smarty->assign("MODE", $mode);
+}
 
 
 //Initially setting the secondary selected vtiger_tab
-$mode=$_REQUEST['mode'];
 if($mode == 'create')
 {
 	$smarty->assign("ACTION",'SaveProfile');
@@ -418,8 +419,7 @@ for($i=0;$i<$no_of_mod; $i++)
 	$privilege_fld[]=$fldModule;
 	next($modArr);
 }
-$smarty->assign("PRI_FIELD_LIST",$privilege_fld);	
-$smarty->assign("MODE",$mode);
+$smarty->assign("PRI_FIELD_LIST",$privilege_fld);
 
 $disable_field_array = Array();
 $sql_disablefield = "select * from vtiger_def_org_field";

@@ -65,9 +65,9 @@ function vtWorkflowEdit($adb, $request, $requestUrl, $current_language, $app_str
 	$tasks = $tm->getTasksForWorkflow($workflow->id);
 	$smarty->assign("tasks", $tasks);
 	$smarty->assign("taskTypes", $tm->getTaskTypes());
-	$smarty->assign("newTaskReturnUrl", $requestUrl);
+	$smarty->assign("newTaskReturnUrl", vtlib_purify($requestUrl));
 
-	$smarty->assign("returnUrl", $request["return_url"]);
+	$smarty->assign("returnUrl", vtlib_purify($request["return_url"]));
 	$smarty->assign("APP", $app_strings);
 	$smarty->assign("MOD", array_merge(
 	return_module_language($current_language,'Settings'),

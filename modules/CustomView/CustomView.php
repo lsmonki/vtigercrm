@@ -129,8 +129,12 @@ class CustomView extends CRMEntity{
 		}
 		else {
 			$viewname = vtlib_purify($_REQUEST['viewname']);
-			if((is_string($viewname) && strtolower($viewname) == 'all') || $viewname == 0) {
-        		$viewid = $this->getViewIdByName('All', $module);
+			if(is_string($viewname)) {
+				if(strtolower($viewname) == 'all' || $viewname == 0) {
+					$viewid = $this->getViewIdByName('All', $module);
+				} else {
+					$viewid = $this->getViewIdByName($viewname, $module);
+				}
 			} else { 
         		$viewid = $viewname;
 			}

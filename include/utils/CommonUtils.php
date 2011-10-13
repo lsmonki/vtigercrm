@@ -3275,7 +3275,7 @@ function getBasic_Advance_SearchURL()
 	$url = '';
 	if($_REQUEST['searchtype'] == 'BasicSearch')
 	{
-		$url .= (isset($_REQUEST['query']))?'&query='.vtlib_purify($_REQUEST['query']):'';
+		$url .= (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')?'&query=true':'';
 		$url .= (isset($_REQUEST['search_field']))?'&search_field='.vtlib_purify($_REQUEST['search_field']):'';
 		$url .= (isset($_REQUEST['search_text']))?'&search_text='.to_html(vtlib_purify($_REQUEST['search_text'])):'';
 		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.vtlib_purify($_REQUEST['searchtype']):'';

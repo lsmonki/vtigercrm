@@ -54,7 +54,7 @@ elseif($activity_mode == 'Events')
 }
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
-    $focus->id = $_REQUEST['record'];
+    $focus->id = vtlib_purify($_REQUEST['record']);
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
     $focus->name=$focus->column_fields['subject'];
@@ -130,10 +130,11 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 }else
 {
 	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
-		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
-		$contact_name = "<option value=".$_REQUEST['contact_id'].">".getContactName($_REQUEST['contact_id'])."</option>";
+		$contactId = vtlib_purify($_REQUEST['contact_id']);
+		$smarty->assign("CONTACTSID",$contactId);
+		$contact_name = "<option value=".$contactId.">".getContactName($contactId)."</option>";
 		$smarty->assign("CONTACTSNAME",$contact_name);
-		$account_id = $_REQUEST['account_id'];
+		$account_id = vtlib_purify($_REQUEST['account_id']);
 		$account_name = getAccountName($account_id);
 	}	
 }
@@ -247,9 +248,9 @@ if (isset($_REQUEST['return_action']))
 if (isset($_REQUEST['return_id']))
 	$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['ticket_id']))
-	$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
+	$smarty->assign("TICKETID", vtlib_purify($_REQUEST['ticket_id']));
 if (isset($_REQUEST['product_id']))
-	$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+	$smarty->assign("PRODUCTID", vtlib_purify($_REQUEST['product_id']));
 if (isset($_REQUEST['return_viewname']))
 	$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')

@@ -259,27 +259,27 @@ $smarty->assign("ATT_ID_LIST",$att_id_list);
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
 {
-	$focus->contact_name = $_REQUEST['contact_name'];
+	$focus->contact_name = vtlib_purify($_REQUEST['contact_name']);
 }
 if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) 
 {
-	$focus->contact_id = $_REQUEST['contact_id'];
+	$focus->contact_id = vtlib_purify($_REQUEST['contact_id']);
 }
 if (isset($_REQUEST['parent_name']) && is_null($focus->parent_name)) 
 {
-	$focus->parent_name = $_REQUEST['parent_name'];
+	$focus->parent_name = vtlib_purify($_REQUEST['parent_name']);
 }
 if (isset($_REQUEST['parent_id']) && is_null($focus->parent_id)) 
 {
-	$focus->parent_id = $_REQUEST['parent_id'];
+	$focus->parent_id = vtlib_purify($_REQUEST['parent_id']);
 }
 if (isset($_REQUEST['parent_type'])) 
 {
-	$focus->parent_type = $_REQUEST['parent_type'];
+	$focus->parent_type = vtlib_purify($_REQUEST['parent_type']);
 }
 if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') 
 {
-        $focus->filename = $_REQUEST['filename'];
+        $focus->filename = vtlib_purify($_REQUEST['filename']);
 }
 elseif (is_null($focus->parent_type)) 
 {
