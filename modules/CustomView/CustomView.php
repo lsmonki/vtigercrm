@@ -129,7 +129,7 @@ class CustomView extends CRMEntity{
 		}
 		else {
 			$viewname = vtlib_purify($_REQUEST['viewname']);
-			if(is_string($viewname)) {
+			if(!is_numeric($viewname)) {
 				if(strtolower($viewname) == 'all' || $viewname == 0) {
 					$viewid = $this->getViewIdByName('All', $module);
 				} else {
@@ -145,9 +145,8 @@ class CustomView extends CRMEntity{
 		return $viewid;
 
 	}
-	//Return id of a view : Added by Pavani
-	function getViewIdByName($viewname, $module)
-	{
+
+	function getViewIdByName($viewname, $module) {
 		global $adb;
 		if(isset($viewname)) {
 			$query="select cvid from vtiger_customview where viewname=? and entitytype=?";

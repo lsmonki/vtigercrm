@@ -1989,8 +1989,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					{
 						$value = '<a href="javascript:window.close();" id="calendarCont'.$entity_id.'" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.decode_html($slashes_temp_val).'");\'>'.$temp_val.'</a>';
 					}
-					else
-						$value = '<a style="cursor:pointer;" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'","'.$popupMode.'",'.$callBack.');\'>'.$temp_val.'</a>';
+					else {
+						if(empty($callBack)) {
+							$value = '<a style="cursor:pointer;" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'","'.$popupMode.'");\'>'.$temp_val.'</a>';
+						} else {
+							$value = '<a style="cursor:pointer;" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'","'.$popupMode.'",'.$callBack.');\'>'.$temp_val.'</a>';
+						}
+					}
 				}
 				elseif($popuptype == "formname_specific")
 				{

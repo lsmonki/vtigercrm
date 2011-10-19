@@ -139,7 +139,7 @@ if (isset ($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$SO_associated_prod = getAssociatedProducts($currentModule, $focus);
     $inventory_cur_info = getInventoryCurrencyInfo($currentModule, $focus->id);
-	$smarty->assign("INV_CURRENCY_ID", $inventory_cur_info['currency_id']);
+	$currencyid = $inventory_cur_info['currency_id'];
 	$focus->id = "";
 	$focus->mode = '';
 }
@@ -366,11 +366,9 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
 
-$smarty->assign('USER_CURRENCY_SEPARATOR', $current_user->currency_grouping_separator);
-$smarty->assign('USER_DECIMAL_SEPARATOR', $current_user->currency_decimal_separator);
-
 if ($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else
 	$smarty->display('Inventory/InventoryCreateView.tpl');
+
 ?>

@@ -1425,8 +1425,8 @@ function get_contactsforol($user_name)
             }
             if($insert == true){
                 $password = makeRandomPassword();
-                $sql = "INSERT INTO vtiger_portalinfo VALUES(?,?,?,?,?,?,?,?)";
-                $params = array($this->id, $email, $password, 'C', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
+                $sql = "INSERT INTO vtiger_portalinfo(id,user_name,user_password,type,isactive) VALUES(?,?,?,?,?)";
+                $params = array($this->id, $email, $password, 'C', 1);
                 $adb->pquery($sql, $params);
             }
 

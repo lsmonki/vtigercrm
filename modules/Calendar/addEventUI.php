@@ -653,6 +653,7 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
 									<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
 									<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option>
+									<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option>
 								</select>
 							</td>
 							<td>
@@ -965,12 +966,12 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 						<option value="Leads"><?php echo $app_strings['Leads']?></option>
 						<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
 						<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
+						<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option>
+						<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option>
 						<option value="Quotes"><?php echo $app_strings['Quotes']?></option>
 						<option value="PurchaseOrder"><?php echo $app_strings['PurchaseOrder']?></option>
 						<option value="SalesOrder"><?php echo $app_strings['SalesOrder']?></option>
 						<option value="Invoice"><?php echo $app_strings['Invoice']?></option>
-						<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option>
-						<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option></select>
 						</select>
 				</td>
 				<td>
@@ -1130,4 +1131,12 @@ $picklistDependencyDSCalendar = Vtiger_DependencyPicklist::getPicklistDependency
 		(new FieldDependencies(<?php echo Zend_Json::encode($picklistDependencyDSCalendar) ?>)).init(document.forms['createTodo']);
 		<?php } ?>
 	});
+</script>
+<script type="text/javascript">
+function triggerOnChangeHandler(elementName, formName) {
+	if(typeof(formName) == 'undefined') {
+		formName = document.forms['EditView'];
+	}
+	jQuery('[name="'+elementName+'"]', formName).trigger('change');
+}
 </script>

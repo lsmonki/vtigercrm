@@ -56,7 +56,7 @@ class Vtiger_DependencyPicklist {
 		
 		$query="select vtiger_field.fieldlabel,vtiger_field.fieldname" .
 				" FROM vtiger_field inner join vtiger_picklist on vtiger_field.fieldname = vtiger_picklist.name" .
-				" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','33','16') " .
+				" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','16') " .
 				" and vtiger_field.presence in (0,2) ORDER BY vtiger_picklist.picklistid ASC";
 		
 		$result = $adb->pquery($query, array($tabId));
@@ -212,7 +212,8 @@ class Vtiger_DependencyPicklist {
 
 		$query = 'SELECT distinct vtiger_field.tabid, vtiger_tab.tablabel, vtiger_tab.name as tabname FROM vtiger_field
 						INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_field.tabid
-					WHERE uitype IN (15,16,33)
+						INNER JOIN vtiger_picklist ON vtiger_picklist.name = vtiger_field.fieldname
+					WHERE uitype IN (15,16)
 						AND vtiger_field.tabid != 29
 						AND vtiger_field.displaytype = 1
 						AND vtiger_field.presence in (0,2)

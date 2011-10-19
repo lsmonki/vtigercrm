@@ -1850,7 +1850,7 @@ ul {
 
 .colHeader{
 	background-color:#fff;
-	background-repeat:repeat-x;
+	background-repeat:repeat;
 	background-image:url(images/mailSubHeaderBg-grey.gif);	
 	border-left:1px solid #fff;
 	border-top:1px solid #ddd;

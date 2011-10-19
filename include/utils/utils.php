@@ -4925,4 +4925,24 @@ function validateEmailId($string){
     return true;
 }
 
+/**
+ * Function to get the list of Contacts related to an activity
+ * @param Integer $activityId
+ * @return Array $contactsList - List of Contact ids, mapped to Contact Names
+ */
+function getActivityRelatedContacts($activityId) {
+	$adb = PearDatabase::getInstance();
+
+	$query = 'SELECT * FROM vtiger_cntactivityrel WHERE activityid=?';
+	$result = $adb->pquery($query, array($activityId));
+	
+	$noOfContacts = $adb->num_rows($result);
+	$contactsList = array();
+	for($i=0; $i<$noOfContacts; ++$i) {
+		$contactId = $adb->query_result($result, $i, 'contactid');
+		$contactsList[$contactId] = getContactName($contactId);
+	}
+	return $contactsList;
+}
+
 ?>

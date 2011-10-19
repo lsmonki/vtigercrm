@@ -122,7 +122,7 @@ $y=$adb->num_rows($result);
 $userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
 			'vtiger_users.last_name'));
 $contactUserNameSql = getSqlForNameInDisplayFormat(array('f'=>'usersContacts.first_name', 'l' => 
-			'$usersContacts.last_name'));
+			'usersContacts.last_name'));
 	
 for ($x=0; $x<$y; $x++)
 { 

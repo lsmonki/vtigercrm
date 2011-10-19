@@ -18,11 +18,13 @@ $recordId = vtlib_purify($_REQUEST["record"]);
 $leadId = vtws_getWebserviceEntityId('Leads',$recordId);
 
 $assigned_to = $_REQUEST["assigntype"];
-if($assigned_to == "U")
+if($assigned_to == "U") {
 	$assigned_user_id = $_REQUEST["assigned_user_id"];
-else
+	$assignedTo = vtws_getWebserviceEntityId('Users',$assigned_user_id);
+} else {
 	$assigned_user_id = $_REQUEST["assigned_group_id"];
-$assignedTo = vtws_getWebserviceEntityId('Users',$assigned_user_id);
+	$assignedTo = vtws_getWebserviceEntityId('Groups',$assigned_user_id);
+}
 
 $accountName = $_REQUEST['account_name'];
 

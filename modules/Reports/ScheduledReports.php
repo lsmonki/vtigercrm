@@ -131,7 +131,7 @@ class VTScheduledReport extends Reports {
 		}
 
 		$currentTime = date('Y-m-d H:i:s');
-		$subject = $this->reportname .' - '. $currentTime;
+		$subject = $this->reportname .' - '. $currentTime .' ('. DateTimeField::getDBTimeZone() .')';
 
 		$contents = getTranslatedString('LBL_AUTO_GENERATED_REPORT_EMAIL', $currentModule) .'<br/><br/>';
 		$contents .= '<b>'.getTranslatedString('LBL_REPORT_NAME', $currentModule) .' :</b> '. $this->reportname .'<br/>';

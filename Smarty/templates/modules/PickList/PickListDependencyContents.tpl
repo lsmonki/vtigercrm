@@ -45,16 +45,19 @@
 		 		<input type="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" name="cancel" class="crmButton small cancel" onclick="location.href='index.php?module=PickList&action=PickListDependencySetup&parenttab=Settings&moduleName={$MODULE}';" />
 		 	</td>
 		</tr>
-	</table>
-	
-	<br />
-	{if $DEPENDENCY_MAP neq '' && $DEPENDENCY_MAP|@count > 0}
-	<table width="100%" class="small" cellpadding="0" cellspacing="0">
-		<tr>
-			<td align="left">
-				<span class="selectedCellIndex">{$MOD_PICKLIST.LBL_SELECTED_VALUES}</span>
+
+		{if $DEPENDENCY_MAP neq '' && $DEPENDENCY_MAP|@count > 0}
+		<tr class="small cellLabel">
+			<td align="left" colspan="3">
+				<ul>
+					<li>{$MOD_PICKLIST.LBL_CONFIGURE_DEPENDENCY_HELP_1}.</li>
+					<li>{$MOD_PICKLIST.LBL_CONFIGURE_DEPENDENCY_HELP_2}.</li>
+					<li>{$MOD_PICKLIST.LBL_CONFIGURE_DEPENDENCY_HELP_3}
+						<span class="selectedCellIndex">{$MOD_PICKLIST.LBL_SELECTED_VALUES}</span>
+					</li>
+				</ul>
 			</td>
-			<td align="right" width="100%">
+			<td align="right" valign="top">
 				<input type="button" class="small create" onclick="show('sourceValuesSelectionDiv');placeAtCenter($('sourceValuesSelectionDiv'));"
 					    value="{$MOD_PICKLIST.LBL_BUTTON_SELECTED_SOURCE_VALUES}"  title="{'LBL_BUTTON_SELECTED_SOURCE_VALUES'|@getTranslatedString:$MODULE}"/>
 
@@ -92,7 +95,7 @@
 			</td>
 		</tr>
 	</table>
-
+	
 	<br />
 	<table class="listTable" cellpadding="5" cellspacing="0" align="center">
 		<tbody id="valueMapping">

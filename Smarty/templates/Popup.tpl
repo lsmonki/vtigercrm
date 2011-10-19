@@ -85,6 +85,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod, popupmode, callback) {
 	} else {
 		{/literal}
         opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parentid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&parenttab={$CATEGORY}";
+		window.close();
 		{literal}
 	}
 }

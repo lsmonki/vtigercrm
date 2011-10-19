@@ -137,7 +137,11 @@ function getEmailFieldId($meta, $entityId){
 function vtws_getParameter($parameterArray, $paramName,$default=null){
 	
 	if (!get_magic_quotes_gpc()) {
-		$param = addslashes($parameterArray[$paramName]);
+		if(is_array($parameterArray[$paramName])) {
+			$param = array_map('addslashes', $parameterArray[$paramName]);
+		} else {
+			$param = addslashes($parameterArray[$paramName]);
+		}
 	} else {
 		$param = $parameterArray[$paramName];
 	}

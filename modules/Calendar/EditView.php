@@ -300,9 +300,6 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
 
-$smarty->assign('USER_CURRENCY_SEPARATOR', $current_user->currency_grouping_separator);
-$smarty->assign('USER_DECIMAL_SEPARATOR', $current_user->currency_decimal_separator);
-
 $smarty->display("ActivityEditView.tpl");
 
 ?>

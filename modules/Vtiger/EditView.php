@@ -37,10 +37,12 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 }
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view') 
+if($disp_view == 'edit_view') {
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
-else
+} else {
 	$smarty->assign('BASBLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields, 'BAS'));
+	$smarty->assign('ADVBLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
+}
 
 $smarty->assign('OP_MODE',$disp_view);
 $smarty->assign('APP', $app_strings);

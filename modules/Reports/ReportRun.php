@@ -444,7 +444,7 @@ class ReportRun extends CRMEntity
 		$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
 		$value_len = strlen($value);
 		$is_field = false;
-		if($value[0]=='$' && $value[$value_len-1]=='$'){
+		if($value_len > 1 && $value[0]=='$' && $value[$value_len-1]=='$'){
 			$temp = str_replace('$','',$value);
 			$is_field = true;
 		}

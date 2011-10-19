@@ -43,6 +43,7 @@ function addNewDependencyPicklist() {
 			postBody: 'action=PickListAjax&module=PickList&directmode=ajax&file=PickListDependencySetup&submode=editdependency&moduleName='+encodeURIComponent(selectedModule),
 			onComplete: function(response) {
 				$("status").style.display="none";
+				modifiedMappingValues = new Array();
 				$("picklist_datas").update(response.responseText);
 			}
 		}

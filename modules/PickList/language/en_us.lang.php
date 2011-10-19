@@ -42,5 +42,9 @@ $mod_strings = array(
 	'LBL_SELECTED_SOURCE_VALUES_MSG' => 'Select Source Picklist Values to configure mapping',
 	'LBL_ERR_CYCLIC_DEPENDENCY' => 'This dependency setup is not allowed as it ends up in some cyclic dependency',
 	'LBL_SELECTED_VALUES' => 'Selected Values',
+	'LBL_CONFIGURE_DEPENDENCY_HELP_1' => 'Only mapped picklist values of the Source field will be shown below (except for first time)',
+	'LBL_CONFIGURE_DEPENDENCY_HELP_2' => "If you want to see or change the mapping for the other picklist values of Source field, <br/>
+										then you can select the values by clicking on <b>'Select Source values'</b> button on the right side",
+	'LBL_CONFIGURE_DEPENDENCY_HELP_3' => 'Selected values of the Target field values, are highlighted as',
 );
 ?>

@@ -100,7 +100,8 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		{
 			for(var i=0;;i++){
 				if( document.EditView.activitytype[i].value == type){
-					document.EditView.activitytype[i].selected='yes';	
+					document.EditView.activitytype[i].selected='yes';
+					triggerOnChangeHandler(('activitytype'));
 					break;
 				}
 			}

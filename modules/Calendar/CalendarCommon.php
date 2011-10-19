@@ -524,15 +524,8 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$rel_res = $adb->pquery($rel_qry, array($return_id));
 	$rel_name = $adb->query_result($rel_res,0,"relname");
 
-
-	$cont_qry = "select * from vtiger_cntactivityrel where activityid=?";
-	$cont_res = $adb->pquery($cont_qry, array($return_id));
-	$cont_id = $adb->query_result($cont_res,0,"contactid");
-	$cont_name = '';
-	if($cont_id != '')
-	{
-		$cont_name = getContactName($cont_id);
-	}
+	$relatedContacts = getActivityRelatedContacts($return_id);
+	
 	$mail_data['mode'] = "edit";
 	$mail_data['activity_mode'] = $activity_type;
 	$mail_data['sendnotification'] = $send_notification;
@@ -541,7 +534,7 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$mail_data['status'] = $status;
 	$mail_data['taskpriority'] = $priority;
 	$mail_data['relatedto'] = $rel_name;
-	$mail_data['contact_name'] = $cont_name;
+	$mail_data['contact_name'] = implode(',', $relatedContacts);
 	$mail_data['description'] = $description;
 	$mail_data['assign_type'] = $assignType;
 	$mail_data['group_name'] = $grp_name;
