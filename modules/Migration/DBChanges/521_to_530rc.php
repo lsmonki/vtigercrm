@@ -10,12 +10,12 @@
 
 require_once 'include/utils/utils.php';
 
-//5.2.1 to 5.3.0  database changes
+//5.2.1 to 5.3.0RC database changes
 
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
-$migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0 -------- Starts \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0RC -------- Starts \n\n");
 
 // Take away the ability to disable entity name fields
 $sql = "SELECT modulename, fieldname, tablename FROM vtiger_entityname;";
@@ -835,6 +835,6 @@ updateVtlibModule('SMSNotifier', 'packages/vtiger/optional/SMSNotifier.zip');
 updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
 updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
 
-$migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0  -------- Ends \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0RC  -------- Ends \n\n");
 
 ?>
