@@ -58,11 +58,15 @@ function vt530_addFilterToListTypes() {
 	$result = $db->pquery($query,$parameters);
 	if($db->num_rows($result) > 0){
 		$operationId = $db->query_result($result,0,'operationid');
-		$status = vtws_addWebserviceOperationParam($operationId,'fieldTypeList',
+		$operationName = 'fieldTypeList';
+		$checkQuery = 'SELECT 1 FROM vtiger_ws_operation_parameters where operationid=? and name=?';
+		$operationResult = $db->pquery($checkQuery,array($operationId,$operationName));
+		if($db->num_rows($operationResult) <=0 ){
+			$status = vtws_addWebserviceOperationParam($operationId,$operationName,
 						'Encoded',0);
-		if($status === false){
+			if($status === false){
 				echo 'FAILED TO SETUP listypes WEBSERVICE HALFWAY THOURGH';
-				die;
+			}
 		}
 	}
 }
@@ -77,7 +81,10 @@ function vt530_registerVTEntityDeltaApi() {
 
 function vt530_addDependencyColumnToEventHandler() {
 	$db = PearDatabase::getInstance();
-	$db->pquery("ALTER TABLE vtiger_eventhandlers ADD COLUMN dependent_on VARCHAR(255) NOT NULL DEFAULT '[]'", array());
+	$columnNames = $db->getColumnNames('vtiger_eventhandlers');
+	if(!in_array('dependent_on',$columnNames)){
+		$db->pquery("ALTER TABLE vtiger_eventhandlers ADD COLUMN dependent_on VARCHAR(255) NOT NULL DEFAULT '[]'", array());
+	}
 }
 
 function vt530_addDepedencyToVTWorkflowEventHandler(){
