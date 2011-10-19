@@ -875,19 +875,14 @@ function getUserFullName($userid)
 /** Fucntion to get related To name with id */
 function getParentName($parent_id)
 {
-	global $adb;
-	if ($parent_id == 0)
+	global $adb;	
+	if (empty($parent_id) || $parent_id == 0) {
 		return "";
-	$sql="select setype from vtiger_crmentity where crmid=?";
-	$result=$adb->pquery($sql,array($parent_id));
-	//For now i have conditions only for accounts and contacts, if needed can add more
-	if($adb->query_result($result,'setype') == 'Accounts')
-		$sql1="select accountname name from vtiger_account where accountid=?";
-	else if($adb->query_result($result,'setype') == 'Contacts')
-		$sql1="select concat( firstname, ' ', lastname ) name from vtiger_contactdetails where contactid=?";
-	$result1=$adb->pquery($sql1,array($parent_id));
-	$asd=$adb->query_result($result1,'name');
-	return $asd;
+	}
+
+	$seType = getSalesEntityType($parent_id);
+	$entityNames = getEntityName($seType, $parent_id);
+	return $entityNames[$parent_id];
 }
 
 /**

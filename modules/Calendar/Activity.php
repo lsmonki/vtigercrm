@@ -148,7 +148,7 @@ class Activity extends CRMEntity {
 			$endDate = new DateTimeField($this->column_fields['due_date']." ".$this->column_fields['time_end']);
 			$mail_data['st_date_time'] = $startDate->getDBInsertDateTimeValue() ." ". DateTimeField::getDBTimeZone();
 			$mail_data['end_date_time'] = $endDate->getDBInsertDateTimeValue() ." ". DateTimeField::getDBTimeZone();
-			$mail_data['relatedto'] = getParentName($this->column_fields['parent_id']);
+			$mail_data['relatedto'] =  getParentName($this->column_fields['parent_id']);
 			getEventNotification($this->column_fields['activitytype'],$this->column_fields['subject'],$mail_data);
 
 		}
