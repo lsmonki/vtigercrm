@@ -38,8 +38,7 @@ class VTWorkflowUtils {
 	 *
 	 */
 	function adminUser() {
-		$user = new Users();
-		$user->retrieveCurrentUserInfoFromFile(1);
+        $user = Users::getActiveAdminUser();
 		global $current_user;
 		if (empty(self::$userStack) || count(self::$userStack) == 0) {
 			self::$loggedInUser = $current_user;

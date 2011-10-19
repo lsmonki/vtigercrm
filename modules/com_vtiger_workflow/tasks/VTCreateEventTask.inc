@@ -35,8 +35,7 @@ class VTCreateEventTask extends VTTask{
 	}
 	
 	function getAdmin(){
-		$user = new Users();
-		$user->retrieveCurrentUserInfoFromFile(1);
+		$user = Users::getActiveAdminUser();
 		global $current_user;
 		$this->originalUser = $current_user;
 		$current_user = $user;

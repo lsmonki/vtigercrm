@@ -27,8 +27,7 @@ class VTCreateTodoTask extends VTTask{
 	public function getFieldNames(){return array('todo', 'description', 'sendNotification', 'time', 'date', 'status', 'priority', 'days', 'direction', 'datefield', 'sendNotification');}
 	
 	function getAdmin(){
-		$user = new Users();
-		$user->retrieveCurrentUserInfoFromFile(1);
+		$user = Users::getActiveAdminUser();
 		global $current_user;
 		$this->originalUser = $current_user;
 		$current_user = $user;

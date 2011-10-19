@@ -31,8 +31,7 @@ class MailManager_RelationControllerAction extends Vtiger_MailScannerAction {
 	function __CreateNewEmail($mailrecord, $module, $linkfocus) {
 		global $current_user, $adb;
 		if(!$current_user) {
-			$current_user = new Users();
-			$current_user->retrieveCurrentUserInfoFromFile('1');
+			$current_user = Users::getActiveAdminUser();
 		}
 		$handler = vtws_getModuleHandlerFromName('Emails', $current_user);
 		$meta = $handler->getMeta();

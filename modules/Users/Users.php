@@ -1445,6 +1445,33 @@ class Users extends CRMEntity {
 		$adb->pquery($query, array('Inactive', $adb->formatDate($date_var, true),
 			$current_user->id, $id), true,"Error marking record deleted: ");
 	}
+    
+    /**
+	 * Function to get the user if of the active admin user.
+	 * @return Integer - Active Admin User ID
+	 */
+    public static function getActiveAdminId(){
+        global $adb;
+        $sql = "SELECT id FROM vtiger_users WHERE is_admin='On' and status='Active' limit 1";
+        $result = $adb->pquery($sql, array());
+        $adminId = 1;
+        $it = new SqlResultIterator($adb, $result);
+        foreach ($it as $row) {
+            $adminId = $row->id;
+        }
+        return $adminId;
+    }
+
+	/**
+	 * Function to get the active admin user object
+	 * @return Users - Active Admin User Instance
+	 */
+    public static function getActiveAdminUser(){
+        $adminId = self::getActiveAdminId();
+		$user = new Users();
+        $user->retrieveCurrentUserInfoFromFile($adminId);
+        return $user;
+    }
 
 }
 ?>

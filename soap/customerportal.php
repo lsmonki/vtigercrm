@@ -1915,11 +1915,7 @@ function get_pdf($id,$block,$customerid,$sessionid)
 	return null;
 
 	require_once("config.inc.php");
-	$seed_user=new Users();
-	$user_id=$seed_user->retrieve_user_id('admin');
-	
-	$current_user=$seed_user;
-	$current_user->retrieveCurrentUserInfoFromFile($user_id);
+	$current_user = Users::getActiveAdminUser();
 	
 	$currentModule = $block;
 	$current_language = $default_language;

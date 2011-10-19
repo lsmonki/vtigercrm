@@ -24,9 +24,8 @@ require_once('include/utils/utils.php');
 require("modules/Emails/class.phpmailer.php");
 require_once('include/logging.php');
 require("config.php");
-$currentuserid = 1;
-$users = CRMEntity::getInstance('Users');
-$current_user = $users->retrieveCurrentUserInfoFromFile($currentuserid);
+
+$current_user = Users::getActiveAdminUser();
 // Set the default sender email id
 global $HELPDESK_SUPPORT_EMAIL_ID;
 $from = $HELPDESK_SUPPORT_EMAIL_ID;
