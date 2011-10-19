@@ -227,6 +227,9 @@ function vttooltip_processResult($result, $descObj){
 		} elseif($field['type']['name'] == 'time') {
 			$date = new DateTimeField($value);
 			$result[0][$name] = $date->getDisplayTime();
+		} elseif($field['type']['name'] == 'currency') {
+			$currencyField = new CurrencyField($value);
+			$result[0][$name] = $currencyField->getDisplayValueWithSymbol();
 		}
 	}
 	return $result;

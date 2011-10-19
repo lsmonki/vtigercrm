@@ -19,7 +19,11 @@
 	<script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
-{$DATE_FORMAT}
+	<script type="text/javascript">
+		var userDateFormat = "{$USER_DATE_FORMAT}"; 
+		var userCurrencySeparator = "{$USER_CURRENCY_SEPARATOR}";
+		var userDecimalSeparator = "{$USER_DECIMAL_FORMAT}";
+	</script>
 </head>
 <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <!-- Master Table -->

@@ -330,7 +330,21 @@ $combo_strings = Array(
 								'Contacted - Successful' => 'Contacted - Successful',
 								'Contacted - Unsuccessful' => 'Contacted - Unsuccessful',
 								'Contacted - Never Contact Again' => 'Contacted - Never Contact Again'
-							),		
+							),
+'currency_grouping_pattern_dom' => Array('123,456,789' => '123,456,789',
+										'123456789' => '123456789',
+										'123456,789' => '123456,789',
+										'12,34,56,789' => '12,34,56,789'
+							),
+'currency_decimal_separator_dom' => Array("." => ".",
+										"," => ",",
+										"'" => "'",
+										" " => " ",
+										"$" => "$"
+							),
+'currency_grouping_separator_dom' => Array("$1.0" => "$1.0",
+										"1.0$" => "1.0$"
+							),
 		
 );
 

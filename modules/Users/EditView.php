@@ -125,7 +125,6 @@ $smarty->assign('FORM_TOKEN', $_SESSION['Users_FORM_TOKEN']);
 // Gather the help information associated with fields
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
-
 $smarty->display('UserEditView.tpl');
 
 ?>

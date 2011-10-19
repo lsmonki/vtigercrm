@@ -320,19 +320,24 @@ class ListViewController {
 					} elseif ($value == '0000-00-00') {
 						$value = '';
 					}
-				} elseif($field->getUIType() == 71 || $field->getUIType() == 72) {
+				} elseif($field->getFieldDataType() == 'currency') {
 					if($value != '') {
-						if($fieldName == 'unit_price') {
-							$currencyId = getProductBaseCurrency($recordId,$module);
-							$cursym_convrate = getCurrencySymbolandCRate($currencyId);
-							$value = "<font style='color:grey;'>".$cursym_convrate['symbol'].
-								"</font> ". $value;
+						if($field->getUIType() == 72) {
+							if($fieldName == 'unit_price') {
+								$currencyId = getProductBaseCurrency($recordId,$module);
+								$cursym_convrate = getCurrencySymbolandCRate($currencyId);
+								$currencySymbol = $cursym_convrate['symbol'];
+							} else {
+								$currencyInfo = getInventoryCurrencyInfo($module, $recordId);
+								$currencySymbol = $currencyInfo['currency_symbol'];
+							}
+							$currencyValue = CurrencyField::convertToUserFormat($value, null, true);
+							$value = CurrencyField::appendCurrencySymbol($currencyValue, $currencySymbol);
 						} else {
-							$rate = $user_info['conv_rate'];
 							//changes made to remove vtiger_currency symbol infront of each
 							//vtiger_potential amount
 							if ($value != 0) {
-								$value = convertFromDollar($value,$rate);
+								$value = CurrencyField::convertToUserFormat($value);
 							}
 						}
 					}
@@ -432,21 +437,8 @@ class ListViewController {
 						$json = new Zend_Json();
 						$value = vt_suppressHTMLTags(implode(',',$json->decode($temp_val)));
 					}
-				} elseif ($fieldName == 'expectedroi' || $fieldName == 'actualroi' ||
-						$fieldName == 'actualcost' || $fieldName == 'budgetcost' ||
-						$fieldName == 'expectedrevenue') {
-					$rate = $user_info['conv_rate'];
-					$value = convertFromDollar($value,$rate);
-				} elseif(($module == 'Invoice' || $module == 'Quotes' || $module == 'PurchaseOrder' ||
-						$module == 'SalesOrder') && ($fieldName == 'hdnGrandTotal' ||
-						$fieldName == 'hdnSubTotal' || $fieldName == 'txtAdjustment' ||
-						$fieldName == 'hdnDiscountAmount' || $fieldName == 'hdnS_H_Amount')) {
-					$currencyInfo = getInventoryCurrencyInfo($module, $recordId);
-					$currencyId = $currencyInfo['currency_id'];
-					$currencySymbol = $currencyInfo['currency_symbol'];
-					$value = $currencySymbol.$value;
 				}
-				if ( in_array($uitype,array(71,72,7,9,90)) ) {
+				if ( in_array($uitype,array(7,9,90)) ) {
 					$value = "<span align='right'>$value</div>";
 				}
 

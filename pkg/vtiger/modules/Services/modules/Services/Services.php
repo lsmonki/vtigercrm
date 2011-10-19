@@ -231,21 +231,22 @@ class Services extends CRMEntity {
 			$cur_checkname = 'cur_' . $curid . '_check';
 			$cur_valuename = 'curname' . $curid;
 			$base_currency_check = 'base_currency' . $curid;
+			$requestPrice = CurrencyField::convertToDBFormat($_REQUEST['unit_price'], null, true);
+			$actualPrice = CurrencyField::convertToDBFormat($_REQUEST[$cur_valuename], null, true);
 			if($_REQUEST[$cur_checkname] == 'on' || $_REQUEST[$cur_checkname] == 1)
 			{
 				$conversion_rate = $currency_details[$i]['conversionrate'];
 				$actual_conversion_rate = $service_base_conv_rate * $conversion_rate;
-				$converted_price = $actual_conversion_rate * $_REQUEST['unit_price'];
-				$actual_price = $_REQUEST[$cur_valuename];
+				$converted_price = $actual_conversion_rate * $requestPrice;
 				
 				$log->debug("Going to save the Product - $curname currency relationship");
 
 				$query = "insert into vtiger_productcurrencyrel values(?,?,?,?)";
-				$adb->pquery($query, array($this->id,$curid,$converted_price,$actual_price));
+				$adb->pquery($query, array($this->id,$curid,$converted_price,$actualPrice));
 				
 				// Update the Product information with Base Currency choosen by the User.
 				if ($_REQUEST['base_currency'] == $cur_valuename) {
-					$adb->pquery("update vtiger_service set currency_id=?, unit_price=? where serviceid=?", array($curid, $actual_price, $this->id)); 
+					$adb->pquery("update vtiger_service set currency_id=?, unit_price=? where serviceid=?", array($curid, $actualPrice, $this->id));
 				}
 			}
 		}
@@ -920,9 +921,9 @@ class Services extends CRMEntity {
 			$entries = Array();
 			$entries[] = textlength_check($adb->query_result($list_result,$i,"servicename"));
 			if(getFieldVisibilityPermission('Services', $current_user->id, 'unit_price') == '0')
-				$entries[] = $unit_price;
+				$entries[] = CurrencyField::convertToUserFormat($unit_price, null, true);
 	
-			$entries[] = $listprice;
+			$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
 			$action = "";
 			if(isPermitted("PriceBooks","EditView","") == 'yes')
 				$action .= '<img style="cursor:pointer;" src="themes/images/editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';

@@ -941,16 +941,22 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 	}
 	elseif ($uitype == 71 || $uitype == 72) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
-		if ($fieldname == 'unit_price') {
-			$rate_symbol = getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'], $module));
-			$label_fld[] = $col_fields[$fieldname];
+		$currencyField = new CurrencyField($col_fields[$fieldname]);
+		if($uitype == 72) {
+			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+			if ($fieldname == 'unit_price') {
+				$rate_symbol = getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'], $module));
+				$label_fld[] = $currencyField->getDisplayValue(null, true);
+				$label_fld["cursymb"] = $rate_symbol['symbol'];
+			} else {
+				$currency_info = getInventoryCurrencyInfo($module, $col_fields['record_id']);
+				$label_fld[] = $currencyField->getDisplayValue(null, true);
+				$label_fld["cursymb"] = $currency_info['currency_symbol'];
+			}
 		} else {
-			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
-			$rate = $rate_symbol['rate'];
-			$label_fld[] = convertFromDollar($col_fields[$fieldname], $rate);
+			$label_fld[] = $currencyField->getDisplayValue();
+			$label_fld["cursymb"] = $currencyField->getCurrencySymbol();
 		}
-		$currency = $rate_symbol['symbol'];
-		$label_fld["cursymb"] = $currency;
 	} elseif ($uitype == 75 || $uitype == 81) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$vendor_id = $col_fields[$fieldname];
@@ -1253,11 +1259,13 @@ function getDetailAssociatedProducts($module, $focus) {
 			$productDiscount = $total * $discount_percent / 100;
 			$totalAfterDiscount = $total - $productDiscount;
 			//if discount is percent then show the percentage
-			$discount_info_message = "$discount_percent % of $total = $productDiscount";
+			$discount_info_message = "$discount_percent % of ".
+										CurrencyField::convertToUserFormat($total, null, true)." = ".
+										CurrencyField::convertToUserFormat($productDiscount, null, true);
 		} elseif ($discount_amount != 'NULL' && $discount_amount != '') {
 			$productDiscount = $discount_amount;
 			$totalAfterDiscount = $total - $productDiscount;
-			$discount_info_message = $app_strings['LBL_DIRECT_AMOUNT_DISCOUNT'] . " = $productDiscount";
+			$discount_info_message = $app_strings['LBL_DIRECT_AMOUNT_DISCOUNT'] . " = ". CurrencyField::convertToUserFormat($productDiscount, null, true);
 		} else {
 			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'];
 		}
@@ -1267,7 +1275,7 @@ function getDetailAssociatedProducts($module, $focus) {
 		//Calculate the individual tax if taxtype is individual
 		if ($taxtype == 'individual') {
 			$taxtotal = '0.00';
-			$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT'] . " = $totalAfterDiscount \\n";
+			$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT'] . " = ".CurrencyField::convertToUserFormat($totalAfterDiscount, null, true)." \\n";
 			$tax_details = getTaxDetailsForProduct($productid, 'all');
 			for ($tax_count = 0; $tax_count < count($tax_details); $tax_count++) {
 				$tax_name = $tax_details[$tax_count]['taxname'];
@@ -1276,9 +1284,11 @@ function getDetailAssociatedProducts($module, $focus) {
 
 				$individual_taxamount = $totalAfterDiscount * $tax_value / 100;
 				$taxtotal = $taxtotal + $individual_taxamount;
-				$tax_info_message .= "$tax_label : $tax_value % = $individual_taxamount \\n";
+				$tax_info_message .= "$tax_label : $tax_value % = ".
+										CurrencyField::convertToUserFormat($individual_taxamount, null, true).
+										" \\n";
 			}
-			$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = $taxtotal";
+			$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($taxtotal, null, true);
 			$netprice = $netprice + $taxtotal;
 		}
 
@@ -1307,7 +1317,7 @@ function getDetailAssociatedProducts($module, $focus) {
 			<td class="crmTableRow small lineOnTop" align="right">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				   <tr>
-				   	<td align="right">' . $listprice . '</td>
+				   	<td align="right">' . CurrencyField::convertToUserFormat($listprice, null, true) . '</td>
 				   </tr>
 				   <tr>
 					   <td align="right">(-)&nbsp;<b><a href="javascript:;" onclick="alert(\'' . $discount_info_message . '\'); ">' . $app_strings['LBL_DISCOUNT'] . ' : </a></b></td>
@@ -1328,18 +1338,18 @@ function getDetailAssociatedProducts($module, $focus) {
 		$output .= '
 			<td class="crmTableRow small lineOnTop" align="right">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
-				   <tr><td align="right">' . $total . '</td></tr>
-				   <tr><td align="right">' . $productDiscount . '</td></tr>
-				   <tr><td align="right" nowrap>' . $totalAfterDiscount . '</td></tr>';
+				   <tr><td align="right">' . CurrencyField::convertToUserFormat($total, null, true) . '</td></tr>
+				   <tr><td align="right">' . CurrencyField::convertToUserFormat($productDiscount, null, true) . '</td></tr>
+				   <tr><td align="right" nowrap>' . CurrencyField::convertToUserFormat($totalAfterDiscount, null, true) . '</td></tr>';
 
 		if ($taxtype == 'individual') {
-			$output .= '<tr><td align="right" nowrap>' . $taxtotal . '</td></tr>';
+			$output .= '<tr><td align="right" nowrap>' . CurrencyField::convertToUserFormat($taxtotal, null, true) . '</td></tr>';
 		}
 
 		$output .= '		   
 				</table>
 			</td>';
-		$output .= '<td class="crmTableRow small lineOnTop" valign="bottom" align="right">' . $netprice . '</td>';
+		$output .= '<td class="crmTableRow small lineOnTop" valign="bottom" align="right">' . CurrencyField::convertToUserFormat($netprice, null, true) . '</td>';
 		$output .= '</tr>';
 
 		$netTotal = $netTotal + $netprice;
@@ -1354,7 +1364,7 @@ function getDetailAssociatedProducts($module, $focus) {
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="5" class="crmTable">';
 	$output .= '<tr>';
 	$output .= '<td width="88%" class="crmTableRow small" align="right"><b>' . $app_strings['LBL_NET_TOTAL'] . '</td>';
-	$output .= '<td width="12%" class="crmTableRow small" align="right"><b>' . $netTotal . '</b></td>';
+	$output .= '<td width="12%" class="crmTableRow small" align="right"><b>' . CurrencyField::convertToUserFormat($netTotal, null, true) . '</b></td>';
 	$output .= '</tr>';
 
 	//Decide discount
@@ -1363,10 +1373,11 @@ function getDetailAssociatedProducts($module, $focus) {
 	//if($focus->column_fields['hdnDiscountPercent'] != '') - previously (before changing to prepared statement) the selected option (either percent or amount) will have value and the other remains empty. So we can find the non selected item by empty check. But now with prepared statement, the non selected option stored as 0
 	if ($focus->column_fields['hdnDiscountPercent'] != '0') {
 		$finalDiscount = ($netTotal * $focus->column_fields['hdnDiscountPercent'] / 100);
-		$final_discount_info = $focus->column_fields['hdnDiscountPercent'] . " % of $netTotal = $finalDiscount";
+		$final_discount_info = $focus->column_fields['hdnDiscountPercent'] . " % of ".CurrencyField::convertToUserFormat($netTotal, null, true).
+											" = ". CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	} elseif ($focus->column_fields['hdnDiscountAmount'] != '0') {
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
-		$final_discount_info = $finalDiscount;
+		$final_discount_info = CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	}
 
 	//Alert the Final Discount amount even it is zero
@@ -1375,13 +1386,13 @@ function getDetailAssociatedProducts($module, $focus) {
 
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop">(-)&nbsp;<b><a href="javascript:;" ' . $final_discount_info . '>' . $app_strings['LBL_DISCOUNT'] . '</a></b></td>';
-	$output .= '<td align="right" class="crmTableRow small lineOnTop">' . $finalDiscount . '</td>';
+	$output .= '<td align="right" class="crmTableRow small lineOnTop">' . CurrencyField::convertToUserFormat($finalDiscount, null, true) . '</td>';
 	$output .= '</tr>';
 
 	if ($taxtype == 'group') {
 		$taxtotal = '0.00';
 		$final_totalAfterDiscount = $netTotal - $finalDiscount;
-		$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT'] . " = $final_totalAfterDiscount \\n";
+		$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT'] . " = ". CurrencyField::convertToUserFormat($final_totalAfterDiscount, null, true)." \\n";
 		//First we should get all available taxes and then retrieve the corresponding tax values
 		$tax_details = getAllTaxes('available', '', 'edit', $focus->id);
 		//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
@@ -1394,20 +1405,21 @@ function getDetailAssociatedProducts($module, $focus) {
 
 			$taxamount = ($netTotal - $finalDiscount) * $tax_value / 100;
 			$taxtotal = $taxtotal + $taxamount;
-			$tax_info_message .= "$tax_label : $tax_value % = $taxamount \\n";
+			$tax_info_message .= "$tax_label : $tax_value % = ".
+									CurrencyField::convertToUserFormat($taxtotal, null, true) ." \\n";
 		}
-		$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = $taxtotal";
+		$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($taxtotal, null, true);
 
 		$output .= '<tr>';
 		$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\'' . $tax_info_message . '\');">' . $app_strings['LBL_TAX'] . '</a></b></td>';
-		$output .= '<td align="right" class="crmTableRow small">' . $taxtotal . '</td>';
+		$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($taxtotal, null, true) . '</td>';
 		$output .= '</tr>';
 	}
 
 	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '') ? $focus->column_fields['hdnS_H_Amount'] : '0.00';
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b>' . $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'] . '</b></td>';
-	$output .= '<td align="right" class="crmTableRow small">' . $shAmount . '</td>';
+	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($shAmount, null, true) . '</td>';
 	$output .= '</tr>';
 
 	//calculate S&H tax
@@ -1415,32 +1427,32 @@ function getDetailAssociatedProducts($module, $focus) {
 	//First we should get all available taxes and then retrieve the corresponding tax values
 	$shtax_details = getAllTaxes('available', 'sh', 'edit', $focus->id);
 	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
-	$shtax_info_message = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGE'] . " = $shAmount \\n";
+	$shtax_info_message = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGE'] . " = ". CurrencyField::convertToUserFormat($shAmount, null, true) ."\\n";
 	for ($shtax_count = 0; $shtax_count < count($shtax_details); $shtax_count++) {
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
 		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = getInventorySHTaxPercent($focus->id, $shtax_name);
 		$shtaxamount = $shAmount * $shtax_percent / 100;
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
-		$shtax_info_message .= "$shtax_label : $shtax_percent % = $shtaxamount \\n";
+		$shtax_info_message .= "$shtax_label : $shtax_percent % = ". CurrencyField::convertToUserFormat($shtaxamount, null, true) ." \\n";
 	}
-	$shtax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = $shtaxtotal";
+	$shtax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($shtaxtotal, null, true);
 
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\'' . $shtax_info_message . '\')">' . $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'] . '</a></b></td>';
-	$output .= '<td align="right" class="crmTableRow small">' . $shtaxtotal . '</td>';
+	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($shtaxtotal, null, true) . '</td>';
 	$output .= '</tr>';
 
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '') ? $focus->column_fields['txtAdjustment'] : '0.00';
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">&nbsp;<b>' . $app_strings['LBL_ADJUSTMENT'] . '</b></td>';
-	$output .= '<td align="right" class="crmTableRow small">' . $adjustment . '</td>';
+	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($adjustment, null, true) . '</td>';
 	$output .= '</tr>';
 
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '') ? $focus->column_fields['hdnGrandTotal'] : '0.00';
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop"><b>' . $app_strings['LBL_GRAND_TOTAL'] . '</b></td>';
-	$output .= '<td align="right" class="crmTableRow small lineOnTop">' . $grandTotal . '</td>';
+	$output .= '<td align="right" class="crmTableRow small lineOnTop">' . CurrencyField::convertToUserFormat($grandTotal, null, true) . '</td>';
 	$output .= '</tr>';
 	$output .= '</table>';
 

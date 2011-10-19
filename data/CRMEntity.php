@@ -565,10 +565,11 @@ class CRMEntity
 			  	if($rows > 0) {
 			  		$fldvalue = $adb->query_result($res,0,'email1');
 				}
-			}elseif($uitype == 71 && $generatedtype == 2) { // Convert currency to base currency value before saving for custom fields of type currency
-				$currency_id = $current_user->currency_id;
-				$curSymCrate = getCurrencySymbolandCRate($currency_id);
-				$fldvalue = convertToDollar($this->column_fields[$fieldname], $curSymCrate['rate']);
+			}elseif($uitype == 72) {
+				// Some of the currency fields like Unit Price, Totoal , Sub-total - doesn't need currency conversion during save
+				$fldvalue = CurrencyField::convertToDBFormat($this->column_fields[$fieldname],null,true);
+			} elseif($uitype == 71) {
+				$fldvalue = CurrencyField::convertToDBFormat($this->column_fields[$fieldname]);
 			} else {
 				$fldvalue = $this->column_fields[$fieldname];
 			}

@@ -1774,10 +1774,6 @@ function setObjectValuesFromRequest($focus)
 {
 	global $log;
 	$log->debug("Entering setObjectValuesFromRequest(".get_class($focus).") method ...");
-	global $current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol = getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
 	if(isset($_REQUEST['record']))
 	{
 		$focus->id = $_REQUEST['record'];

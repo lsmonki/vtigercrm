@@ -88,6 +88,9 @@ if($cvmodule != "") {
 	$advft_criteria_groups = $json->decode($advft_criteria_groups);
 	//<<<<<<<advancedfilter>>>>>>>>
 
+	$moduleHandler = vtws_getModuleHandlerFromName($cvmodule,$current_user);
+	$moduleMeta = $moduleHandler->getMeta();
+	$moduleFields = $moduleMeta->getModuleFields();
 	if(!$cvid) {
 		$genCVid = $adb->getUniqueID("vtiger_customview");
 		if($genCVid != "") {
@@ -115,7 +118,7 @@ if($cvmodule != "") {
 			}
 			
 			$log->info("CustomView :: Save :: setdefault upated successfully");
-			
+
 			if($customviewresult) {
 				if(isset($columnslist)) {
 					for($i=0;$i<count($columnslist);$i++) {
@@ -142,20 +145,32 @@ if($cvmodule != "") {
 						$adv_filter_groupid = $column_condition["groupid"];
 					
 						$column_info = explode(":",$adv_filter_column);
+						
+						$fieldName = $column_info[2];
+						$fieldObj = $moduleFields[$fieldName];
+						$fieldType = $fieldObj->getFieldDataType();
+
+						if($fieldType == 'currency') {
+							if($fieldObj->getUIType() == '71') {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+							} else {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+							}
+						}
+
 						$temp_val = explode(",",$adv_filter_value);
-						if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
-						{
+						if(($fieldType == 'date' || ($fieldType == 'time' && $fieldName != 'time_start' && $fieldName != 'time_end') || ($fieldType == 'datetime')) && ($fieldType != '' && $adv_filter_value != '' )) {
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								//if date and time given then we have to convert the date and 
-								//leave the time as it is, if date only given then temp_time 
+								//if date and time given then we have to convert the date and
+								//leave the time as it is, if date only given then temp_time
 								//value will be empty
 								if(trim($temp_val[$x]) != '') {
 									$date = new DateTimeField(trim($temp_val[$x]));
-									if($column_info[4] == 'D') {
+									if($fieldType == 'date') {
 										$val[$x] = DateTimeField::convertToUserFormat(
 												trim($temp_val[$x]));
-									} elseif($column_info[4] == 'DT') {
+									} elseif($fieldType == 'datetime') {
 										$val[$x] = $date->getDBInsertDateTimeValue();
 									} else {
 										$val[$x] = $date->getDBInsertTimeValue();
@@ -257,20 +272,33 @@ if($cvmodule != "") {
 						$adv_filter_groupid = $column_condition["groupid"];
 					
 						$column_info = explode(":",$adv_filter_column);
+						
+						$fieldName = $column_info[2];
+						$fieldObj = $moduleFields[$fieldName];
+						$fieldType = $fieldObj->getFieldDataType();
+
+						if($fieldType == 'currency') {
+							// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+							if($fieldObj->getUIType() == '72') {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+							} else {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+							}
+						}
+
 						$temp_val = explode(",",$adv_filter_value);
-						if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
-						{
+						if(($fieldType == 'date' || ($fieldType == 'time' && $fieldName != 'time_start' && $fieldName != 'time_end') || ($fieldType == 'datetime')) && ($fieldType != '' && $adv_filter_value != '' )) {
 							$val = Array();
 							for($x=0;$x<count($temp_val);$x++) {
-								//if date and time given then we have to convert the date and 
-								//leave the time as it is, if date only given then temp_time value 
-								//will be empty
+								//if date and time given then we have to convert the date and
+								//leave the time as it is, if date only given then temp_time
+								//value will be empty
 								if(trim($temp_val[$x]) != '') {
 									$date = new DateTimeField(trim($temp_val[$x]));
-									if($column_info[4] == 'D') {
+									if($fieldType == 'date') {
 										$val[$x] = DateTimeField::convertToUserFormat(
 												trim($temp_val[$x]));
-									} elseif($column_info[4] == 'DT') {
+									} elseif($fieldType == 'datetime') {
 										$val[$x] = $date->getDBInsertDateTimeValue();
 									} else {
 										$val[$x] = $date->getDBInsertTimeValue();

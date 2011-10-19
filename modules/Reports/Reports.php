@@ -11,6 +11,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once 'modules/Reports/ReportUtils.php';
 global $calpath;
 global $app_strings,$mod_strings;
 global $app_list_strings;
@@ -1312,6 +1313,25 @@ function getEscapedColumns($selectedfields)
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = $relcriteriarow["value"];
 				$col = explode(":",$relcriteriarow["columnname"]);
+
+				$moduleFieldLabel = $col[2];
+				$fieldName = $col[3];
+
+				list($module, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+				$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+				$fieldType = null;
+				if(!empty($fieldInfo)) {
+					$field = WebserviceField::fromArray($adb, $fieldInfo);
+					$fieldType = $field->getFieldDataType();
+				}
+				if($fieldType == 'currency') {
+					if($field->getUIType() == '71') {
+						$advfilterval = CurrencyField::convertToUserFormat($advfilterval, null, true);
+					} else {
+						$advfilterval = CurrencyField::convertToUserFormat($advfilterval);
+					}
+				}
+
 				$temp_val = explode(",",$relcriteriarow["value"]);
 				if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
 					$val = Array();
@@ -1679,6 +1699,25 @@ function updateAdvancedCriteria($reportid, $advft_criteria, $advft_criteria_grou
 		$adv_filter_groupid = $column_condition["groupid"];
 	
 		$column_info = explode(":",$adv_filter_column);
+		$moduleFieldLabel = $column_info[2];
+		$fieldName = $column_info[3];
+
+		list($module, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+		$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+		$fieldType = null;
+		if(!empty($fieldInfo)) {
+			$field = WebserviceField::fromArray($adb, $fieldInfo);
+			$fieldType = $field->getFieldDataType();
+		}
+		if($fieldType == 'currency') {
+			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+			if($field->getUIType() == '72') {
+				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+			} else {
+				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+			}
+		}
+		
 		$temp_val = explode(",",$adv_filter_value);
 		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
 				|| ($column_info[4] == 'DT'))

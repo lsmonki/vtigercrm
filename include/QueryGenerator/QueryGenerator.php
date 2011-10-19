@@ -896,6 +896,14 @@ class QueryGenerator {
 						}
 					}
 				}
+				if($type == 'currency') {
+					// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+					if($field->getUIType() == '72') {
+						$value = CurrencyField::convertToDBFormat($value, null, true);
+					} else {
+						$value = CurrencyField::convertToDBFormat($value);
+					}
+				}
 			}
 			if(!empty($input['operator'])) {
 				$operator = $input['operator'];

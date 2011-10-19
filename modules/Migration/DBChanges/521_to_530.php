@@ -700,6 +700,128 @@ $adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start'
 vt530_changeDataType('vtiger_crmentity', 'createdtime', 'createdtime', 'DT', 'DT~O');
 vt530_changeDataType('vtiger_crmentity', 'modifiedtime', 'modifiedtime', 'DT', 'DT~O');
 
+$moduleInstance = Vtiger_Module::getInstance('Users');
+
+// Update/Increment the sequence for the succeeding blocks of Users module, with starting sequence 2
+$blocksListResult = $adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 2',
+											array(getTabid('Users')));
+
+// Create Currency Configuration block placing at position 2
+$currencyBlock = new Vtiger_Block();
+$currencyBlock->label = 'LBL_CURRENCY_CONFIGURATION';
+$currencyBlock->sequence = 2;
+$moduleInstance->addBlock($currencyBlock);
+
+echo "Currency Configuration block created <br>";
+
+$currencyBlock = Vtiger_Block::getInstance('LBL_CURRENCY_CONFIGURATION', $moduleInstance);
+
+$currencyPattern = new Vtiger_Field();
+$currencyPattern->name = 'currency_grouping_pattern';
+$currencyPattern->label = 'Digit Grouping Pattern';
+$currencyPattern->table ='vtiger_users';
+$currencyPattern->column = 'currency_grouping_pattern';
+$currencyPattern->columntype = 'varchar(100)';
+$currencyPattern->typeofdata = 'V~O';
+$currencyPattern->uitype = 16;
+$currencyPattern->defaultvalue = '123,456,789';
+$currencyPattern->sequence = 2;
+$currencyPattern->helpinfo = "<b>Currency - Digit Grouping Pattern</b> <br/><br/>".
+								"This pattern specifies the format in which the currency separator will be placed.";
+$currencyBlock->addField($currencyPattern);
+$currencyPattern->setPicklistValues(array('123,456,789','123456789','123456,789','12,34,56,789'));
+echo "Currency - Digit Grouping Pattern field added <br>";
+
+$currencyDecimalSeparator = new Vtiger_Field();
+$currencyDecimalSeparator->name = 'currency_decimal_separator';
+$currencyDecimalSeparator->label = 'Decimal Separator';
+$currencyDecimalSeparator->table ='vtiger_users';
+$currencyDecimalSeparator->column = 'currency_decimal_separator';
+$currencyDecimalSeparator->columntype = 'varchar(2)';
+$currencyDecimalSeparator->typeofdata = 'V~O';
+$currencyDecimalSeparator->uitype = 16;
+$currencyDecimalSeparator->defaultvalue = '.';
+$currencyDecimalSeparator->sequence = 3;
+$currencyDecimalSeparator->helpinfo = "<b>Currency - Decimal Separator</b> <br/><br/>".
+										"Decimal separator specifies the separator to be used to separate ".
+										"the fractional values from the whole number part. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.45 <br/>".
+										", => 123,45 <br/>".
+										"' => 123'45 <br/>".
+										"  => 123 45 <br/>".
+										"$ => 123$45 <br/>";
+$currencyBlock->addField($currencyDecimalSeparator);
+$currencyDecimalSeparator->setPicklistValues(array(".",",","'"," ","$"));
+echo "Currency - Decimal Separator field added <br>";
+
+$currencyThousandSeparator = new Vtiger_Field();
+$currencyThousandSeparator->name = 'currency_grouping_separator';
+$currencyThousandSeparator->label = 'Digit Grouping Separator';
+$currencyThousandSeparator->table ='vtiger_users';
+$currencyThousandSeparator->column = 'currency_grouping_separator';
+$currencyThousandSeparator->columntype = 'varchar(2)';
+$currencyThousandSeparator->typeofdata = 'V~O';
+$currencyThousandSeparator->uitype = 16;
+$currencyThousandSeparator->defaultvalue = ',';
+$currencyThousandSeparator->sequence = 4;
+$currencyThousandSeparator->helpinfo = "<b>Currency - Grouping Separator</b> <br/><br/>".
+										"Grouping separator specifies the separator to be used to group ".
+										"the whole number part into hundreds, thousands etc. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.456.789 <br/>".
+										", => 123,456,789 <br/>".
+										"' => 123'456'789 <br/>".
+										"  => 123 456 789 <br/>".
+										"$ => 123$456$789 <br/>";
+$currencyBlock->addField($currencyThousandSeparator);
+$currencyThousandSeparator->setPicklistValues(array(".",",","'"," ","$"));
+echo "Currency - Digit Grouping Separator field added <br>";
+
+$currencySymbolPlacement = new Vtiger_Field();
+$currencySymbolPlacement->name = 'currency_symbol_placement';
+$currencySymbolPlacement->label = 'Symbol Placement';
+$currencySymbolPlacement->table ='vtiger_users';
+$currencySymbolPlacement->column = 'currency_symbol_placement';
+$currencySymbolPlacement->columntype = 'varchar(20)';
+$currencySymbolPlacement->typeofdata = 'V~O';
+$currencySymbolPlacement->uitype = 16;
+$currencySymbolPlacement->defaultvalue = ',';
+$currencySymbolPlacement->sequence = 5;
+$currencySymbolPlacement->helpinfo = "<b>Currency - Symbol Placement</b> <br/><br/>".
+										"Symbol Placement allows you to configure the position of the ".
+										"currency symbol with respect to the currency value.<br/>".
+										"<b>Eg:</b> <br/>".
+										"$1.0 => $123,456,789.50 <br/>".
+										"1.0$ => 123,456,789.50$ <br/>";
+$currencyBlock->addField($currencySymbolPlacement);
+$currencySymbolPlacement->setPicklistValues(array("$1.0", "1.0$"));
+
+// Update the block and the sequence for Currency field of Users module - Push it to Currency Configuration block
+$adb->pquery('UPDATE vtiger_field SET block=?, sequence=? WHERE tablename=? AND fieldname=?',
+					array($currencyBlock->id, 1, 'vtiger_users', 'currency_id'));
+
+$adb->pquery("UPDATE vtiger_users SET currency_grouping_pattern='123,456,789',
+										currency_decimal_separator='.',
+										currency_grouping_separator=',',
+										currency_symbol_placement='$1.0'", array());
+echo "Done setting the default Digit Grouping Pattern, Decimal separator and Digit separator for existing users <br>";
+
+$adb->pquery("UPDATE vtiger_field SET uitype='71' WHERE uitype=1 AND tablename='vtiger_campaign'
+							AND fieldname IN ('expectedrevenue', 'actualrevenue', 'expectedroi', 'actualroi', 'budgetcost')",
+		array());
+
+$adb->pquery("UPDATE vtiger_field SET uitype='72' WHERE uitype IN ('1','71')
+					AND fieldname IN ('unit_price', 'hdnGrandTotal', 'hdnSubTotal', 'txtAdjustment', 'hdnDiscountAmount', 'hdnS_H_Amount')",
+		array());
+
+$sql = 'insert into vtiger_ws_fieldtype(uitype,fieldtype) values (?,?)';
+$params = array('71', 'currency');
+$adb->pquery($sql, $params);
+$params = array('72', 'currency');
+$adb->pquery($sql, $params);
+
+
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 

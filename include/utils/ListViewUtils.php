@@ -1548,15 +1548,22 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		if($temp_val != '')
-		{   
-			if($fieldname == 'unit_price') {			
-				$currency_id = getProductBaseCurrency($entity_id,$module);
-				$cursym_convrate = getCurrencySymbolandCRate($currency_id);
-				$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
+		{
+			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+			if($uitype == 72) {
+				if($fieldname == 'unit_price') {
+					$currency_id = getProductBaseCurrency($entity_id,$module);
+					$cursym_convrate = getCurrencySymbolandCRate($currency_id);
+					$currency_symbol = $cursym_convrate['symbol'];
+				} else {
+					$currency_info = getInventoryCurrencyInfo($module, $entity_id);
+					$currency_symbol = $currency_info['currency_symbol'];
+				}
+				$currencyValue = CurrencyField::convertToUserFormat($temp_val, null, true);
+				$value = CurrencyField::appendCurrencySymbol($currencyValue, $currency_symbol);
 			} else {
-				$rate = $user_info['conv_rate'];
 				//changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
-        		if ($temp_val != 0) $value = convertFromDollar($temp_val,$rate);
+        		if ($temp_val != 0) $value = CurrencyField::convertToUserFormat($temp_val);
         		else $value = $temp_val;
 			}
 		}
@@ -2426,20 +2433,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 			}
 		}
-		elseif($fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
-		{
-			$rate = $user_info['conv_rate'];
-			$value = convertFromDollar($temp_val,$rate);
-		}
-		elseif(($module == 'Invoice' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder') 
-				&& ($fieldname == 'hdnGrandTotal' || $fieldname == 'hdnSubTotal' || $fieldname == 'txtAdjustment' 
-						|| $fieldname == 'hdnDiscountAmount' || $fieldname == 'hdnS_H_Amount')) 
-		{								
-			$currency_info = getInventoryCurrencyInfo($module, $entity_id);
-			$currency_id = $currency_info['currency_id'];
-			$currency_symbol = $currency_info['currency_symbol'];
-			$value = $currency_symbol.$temp_val;
-		} elseif($module == 'Calendar' && ($fieldname == 'time_start' || 
+		elseif($module == 'Calendar' && ($fieldname == 'time_start' || 
 				$fieldname == 'time_end')) {
 			$dateField = 'date_start';
 			if($fieldname == 'time_end') {

@@ -92,6 +92,10 @@
 		<field name="theme" type="C" size="100" />
 		<field name="language" type="C" size="36" />
 		<field name="time_zone" type="C" size="200" />
+		<field name="currency_grouping_pattern" type="C" size="100" />
+		<field name="currency_decimal_separator" type="C" size="2" />
+		<field name="currency_grouping_separator" type="C" size="2" />
+		<field name="currency_symbol_placement" type="C" size="20" />
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>

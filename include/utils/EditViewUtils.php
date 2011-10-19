@@ -1007,19 +1007,24 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $value;
 	}
 	
-	elseif($uitype == 71 || $uitype == 72)
-	{
-		if($col_fields['record_id'] != '' && $fieldname == 'unit_price') {
-			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'],$module_name));
-			$fieldvalue[] = $value;			
+	elseif($uitype == 71 || $uitype == 72) {
+		
+		$currencyField = new CurrencyField($value);
+		// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+		if($col_fields['record_id'] != '' && $uitype == 72) {
+			if($fieldname == 'unit_price') {
+				$rate_symbol = getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'],$module_name));
+				$currencySymbol = $rate_symbol['symbol'];
+			} else {
+				$currency_info = getInventoryCurrencyInfo($module, $col_fields['record_id']);
+				$currencySymbol = $currency_info['currency_symbol'];
+			}
+			$fieldvalue[] = $currencyField->getDisplayValue(null, true);
 		} else {
-			$currency_id = fetchCurrency($current_user->id);
-			$rate_symbol=getCurrencySymbolandCRate($currency_id);
-			$rate = $rate_symbol['rate'];
-			$fieldvalue[] = convertFromDollar($value,$rate);
+			$fieldvalue[] = $currencyField->getDisplayValue();
+			$currencySymbol = $currencyField->getCurrencySymbol();
 		}
-        $currency = $rate_symbol['symbol'];
-		$editview_label[]=getTranslatedString($fieldlabel, $module_name).': ('.$currency.')';		
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name).': ('.$currencySymbol.')';
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{

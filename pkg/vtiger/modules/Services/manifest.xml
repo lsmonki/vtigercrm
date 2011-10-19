@@ -354,7 +354,7 @@
 <fields>
 <field>
 <fieldname>unit_price</fieldname>
-<uitype>71</uitype>
+<uitype>72</uitype>
 <columnname>unit_price</columnname>
 <tablename>vtiger_service</tablename>
 <generatedtype>1</generatedtype>

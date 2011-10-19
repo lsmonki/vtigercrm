@@ -1,21 +1,16 @@
 <?php
-
-/* +*******************************************************************************
+/*+*******************************************************************************
  *  The contents of this file are subject to the vtiger CRM Public License Version 1.0
  *  ("License"); You may not use this file except in compliance with the License
  *  The Original Code is:  vtiger CRM Open Source
  *  The Initial Developer of the Original Code is vtiger.
  *  Portions created by vtiger are Copyright (C) vtiger.
  *  All Rights Reserved.
- *
- * ******************************************************************************* */
+ ******************************************************************************** */
 
 /**
- * Description of ReportUtils
- *
- * @author Musavir Ahmed Khan<musavir at vtiger.com>
+ * Function to get the field information from module name and field label
  */
-
 function getFieldByReportLabel($module, $label) {
 	
 	// this is required so the internal cache is populated or reused.
@@ -53,31 +48,32 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 	list($module, $fieldLabel) = explode('_', $dbField->name, 2);
 	$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
 	$fieldType = null;
+	$fieldvalue = $value;
 	if(!empty($fieldInfo)) {
 		$field = WebserviceField::fromArray($db, $fieldInfo);
 		$fieldType = $field->getFieldDataType();
 	}
-	if (in_array($dbField->name, $report->convert_currency) || 
-		$fieldType == 'currency') {
-		if($value!='')
-			$fieldvalue = convertFromMasterCurrency($value,$current_user->conv_rate);
-		else
-			$fieldvalue = getTranslatedString($value);
-	} elseif(in_array($dbField->name, $report->append_currency_symbol_to_value)) {
-		$curid_value = explode("::", $value);
-		$currency_id = $curid_value[0];
-		$currency_value = $curid_value[1];
-		$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-		if($value!='')
-			$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
-		else
-			$fieldvalue = getTranslatedString($value);
-	} elseif ($dbField->name == "PurchaseOrder_Currency" || $dbField->name == "SalesOrder_Currency" 
+	
+	if ($fieldType == 'currency' && $value != '') {
+		// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+		if($field->getUIType() == '72') {
+			$curid_value = explode("::", $value);
+			$currency_id = $curid_value[0];
+			$currency_value = $curid_value[1];
+			$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
+			if($value!='') {
+				$formattedCurrencyValue = CurrencyField::convertToUserFormat($currency_value, null, true);
+				$fieldvalue = CurrencyField::appendCurrencySymbol($formattedCurrencyValue, $cur_sym_rate['symbol']);
+			}
+		} else {
+			$currencyField = new CurrencyField($value);
+			$fieldvalue = $currencyField->getDisplayValue();
+		}
+		
+	} elseif ($dbField->name == "PurchaseOrder_Currency" || $dbField->name == "SalesOrder_Currency"
 				|| $dbField->name == "Invoice_Currency" || $dbField->name == "Quotes_Currency") {
 		if($value!='')
 			$fieldvalue = getCurrencyName($value);
-		else
-			$fieldvalue =getTranslatedString($value);
 	}elseif ((in_array($dbField->name,$report->ui10_fields) || $fieldType == 'reference') && 
 			!empty($value)) {
 		$type = getSalesEntityType($value);
@@ -144,11 +140,6 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		} else {
 			implode(', ', $translatedValueList);
 		}
-	} else {
-		if($value!='')
-			$fieldvalue = getTranslatedString( $value, $module);
-		else
-			$fieldvalue = getTranslatedString( $value, $module);
 	}
 	if($fieldvalue == "") {
 		return "-";

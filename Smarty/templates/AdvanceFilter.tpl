@@ -232,7 +232,7 @@ function addConditionGroup(parentNodeId) {ldelim}
 				updateRelFieldOptions(conditionColumnRowElement, 'fval_'+advft_column_index_count);
 			{/if}
 			
-			var columnvalue = '{$COLUMN_CRITERIA.value}';
+			var columnvalue = "{$COLUMN_CRITERIA.value}";
 			if('{$COLUMN_CRITERIA.comparator}' == 'bw' && columnvalue != '') {ldelim}
 				var values = columnvalue.split(",");
 				document.getElementById('fval'+advft_column_index_count).value = values[0];

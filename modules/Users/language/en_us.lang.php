@@ -690,6 +690,8 @@ $mod_strings = Array(
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
 
+'LBL_CURRENCY_CONFIGURATION'=> 'Currency Configuration',
+
 //Time zones-Dont change any value
 'Kwajalein' => '(UTC-12:00) International Date Line West',
 'Pacific/Midway' => '(UTC-11:00) Coordinated Universal Time-11',

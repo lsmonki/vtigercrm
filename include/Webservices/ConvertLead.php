@@ -31,11 +31,6 @@ function vtws_convertlead($leadId,$assignedTo,$accountName,$avoidPotential,$pote
 					"Potentail information given is not in valid JSON format");
 		}
 	}
-	$currencyInfo=getCurrencySymbolandCRate($user->currency_id);
-	$rate = $currencyInfo['rate'];
-	if($potential['amount'] != ''){
-		$potential['amount'] = convertToDollar($potential['amount'],$rate);
-	}
 
 	$leadObject = VtigerWebserviceObject::fromName($adb,'Leads');
 	$handlerPath = $leadObject->getHandlerPath();

@@ -858,9 +858,23 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body") && ($action != 'ActivityAjax'))
 	{
 	?>
-		<script>
+		<script type="text/javascript">
 			var userDateFormat = "<?php echo $current_user->date_format ?>";
 			var default_charset = "<?php echo $default_charset; ?>";
+			var userCurrencySeparator = "<?php if(isset($current_user->currency_grouping_separator)
+													&& $current_user->currency_grouping_separator == '') {
+													echo ' ';
+												} else {
+													echo html_entity_decode($current_user->currency_grouping_separator, ENT_QUOTES, $default_charset);
+												}
+										?>";
+			var userDecimalSeparator = "<?php if(isset($current_user->currency_decimal_separator)
+													&& $current_user->currency_decimal_separator == '') {
+													echo ' ';
+												} else {
+													echo html_entity_decode($current_user->currency_decimal_separator, ENT_QUOTES, $default_charset);
+												}
+										?>";
 		</script>
 <?php
 	}

@@ -609,9 +609,9 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
 			$entries[] = $adb->query_result($list_result,$i,"productcode");
 		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
-			$entries[] = $unit_price;
+			$entries[] = CurrencyField::convertToUserFormat($unit_price, null, true);
 
-		$entries[] = $listprice;
+		$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
 		$action = "";
 		if(isPermitted("PriceBooks","EditView","") == 'yes')
 			$action .= '<img style="cursor:pointer;" src="'. vtiger_imageurl('editfield.gif', $theme).'" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';

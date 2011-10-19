@@ -401,7 +401,8 @@ class Vtiger_InventoryPDFController {
 	}
 
 	function formatPrice($value, $decimal=2) {
-		return number_format($value, $decimal, '.', ',');
+		$currencyField = new CurrencyField($value);
+		return $currencyField->getDisplayValue(null, true);
 	}
 
 	function formatDate($value) {

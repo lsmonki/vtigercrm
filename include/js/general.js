@@ -678,7 +678,17 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 }
 
 function numValidate(fldName,fldLabel,format,neg) {
-	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+	if(typeof userCurrencySeparator != 'undefined') {
+		while(val.indexOf(userCurrencySeparator) != -1) {
+			val = val.replace(userCurrencySeparator,'');
+		}
+	}
+	if(typeof userDecimalSeparator != 'undefined') {
+		if(val.indexOf(userDecimalSeparator) != -1) {
+			val = val.replace(userDecimalSeparator,'.');
+		}
+	}
 	if (format!="any") {
 		if (isNaN(val)) {
 			var invalid=true
@@ -776,7 +786,12 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 
 function intValidate(fldName,fldLabel) {
-	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+	if(typeof userCurrencySeparator != 'undefined') {
+		while(val.indexOf(userCurrencySeparator) != -1) {
+			val = val.replace(userCurrencySeparator,'');
+		}
+	}
 	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount' && fldName != 'list_price')) 
 	{
 		alert(alert_arr.INVALID+fldLabel)
@@ -2893,10 +2908,18 @@ function fnenableDisable(currObj,enableId) {
 // Update current value with current value of base currency and the conversion rate
 function updateCurrencyValue(currObj,txtObj,base_curid,conv_rate) {
 	var unit_price = $(base_curid).value;
-	//if(currObj.checked == true)
-	//{
+
+	if(typeof userCurrencySeparator != 'undefined') {
+		while(unit_price.indexOf(userCurrencySeparator) != -1) {
+			unit_price = unit_price.replace(userCurrencySeparator,'');
+		}
+	}
+	if(typeof userDecimalSeparator != 'undefined') {
+		if(unit_price.indexOf(userDecimalSeparator) != -1) {
+			unit_price = unit_price.replace(userDecimalSeparator,'.');
+		}
+	}
 	document.getElementById(txtObj).value = unit_price * conv_rate;
-//}
 }
 
 // Synchronize between Unit price and Base currency value.

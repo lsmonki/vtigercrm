@@ -11,6 +11,8 @@ require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("include/Zend/Json.php");
+require_once 'modules/Reports/ReportUtils.php';
+
 global $adb;
 global $log,$current_user;
 $reportid = vtlib_purify($_REQUEST["record"]);
@@ -187,6 +189,25 @@ if($reportid == "")
 						$adv_filter_groupid = $column_condition["groupid"];
 					
 						$column_info = explode(":",$adv_filter_column);
+						$moduleFieldLabel = $column_info[2];
+						$fieldName = $column_info[3];
+
+						list($module, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+						$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+						$fieldType = null;
+						if(!empty($fieldInfo)) {
+							$field = WebserviceField::fromArray($adb, $fieldInfo);
+							$fieldType = $field->getFieldDataType();
+						}
+						
+						if($fieldType == 'currency') {
+							if($field->getUIType() == '71') {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+							} else {
+								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+							}
+						}
+						
 						$temp_val = explode(",",$adv_filter_value);
 						if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
 						{
@@ -364,6 +385,26 @@ if($reportid == "")
 				$adv_filter_groupid = $column_condition["groupid"];
 			
 				$column_info = explode(":",$adv_filter_column);
+				$moduleFieldLabel = $column_info[2];
+				$fieldName = $column_info[3];
+
+				list($module, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+				$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+				$fieldType = null;
+				if(!empty($fieldInfo)) {
+					$field = WebserviceField::fromArray($adb, $fieldInfo);
+					$fieldType = $field->getFieldDataType();
+				}
+
+				if($fieldType == 'currency') {
+					// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+					if($field->getUIType() == '72') {
+						$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+					} else {
+						$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+					}
+				}
+				
 				$temp_val = explode(",",$adv_filter_value);
 				if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
 				{

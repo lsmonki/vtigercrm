@@ -38,10 +38,7 @@ class ReportRun extends CRMEntity
 	var	$_stdfilterlist = false;
 	var	$_columnstotallist = false;
 	var	$_advfiltersql = false;
-		
-	var $convert_currency = array('Potentials_Amount', 'Accounts_Annual_Revenue', 'Leads_Annual_Revenue', 'Campaigns_Budget_Cost', 
-									'Campaigns_Actual_Cost', 'Campaigns_Expected_Revenue', 'Campaigns_Actual_ROI', 'Campaigns_Expected_ROI');
-	//var $add_currency_sym_in_headers = array('Amount', 'Unit_Price', 'Total', 'Sub_Total', 'S&H_Amount', 'Discount_Amount', 'Adjustment');
+	
 	var $append_currency_symbol_to_value = array('Products_Unit_Price','Services_Price', 
 						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment', 
 						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment', 
@@ -935,7 +932,8 @@ class ReportRun extends CRMEntity
 	 *
 	 */
 	function RunTimeAdvFilter($advft_criteria,$advft_criteria_groups) {
-						
+		$adb = PearDatabase::getInstance();
+		
 		$advfilterlist = array();
 		
 		if(!empty($advft_criteria)) {
@@ -950,6 +948,26 @@ class ReportRun extends CRMEntity
 				$adv_filter_groupid = $column_condition["groupid"];
 			
 				$column_info = explode(":",$adv_filter_column);
+				
+				$moduleFieldLabel = $column_info[2];
+				$fieldName = $column_info[3];
+				list($module, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+				$fieldInfo = getFieldByReportLabel($module, $fieldLabel);
+				$fieldType = null;
+				if(!empty($fieldInfo)) {
+					$field = WebserviceField::fromArray($adb, $fieldInfo);
+					$fieldType = $field->getFieldDataType();
+				}
+
+				if($fieldType == 'currency') {
+					// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+					if($field->getUIType() == '72') {
+						$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+					} else {
+						$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+					}
+				}
+				
                 $temp_val = explode(",",$adv_filter_value);
                 if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
                         || ($column_info[4] == 'DT'))
@@ -1862,23 +1880,18 @@ class ReportRun extends CRMEntity
 			}
 		}
 		
-		// Update Currency Field list
-		$currencyfieldres = $adb->pquery("SELECT tabid, fieldlabel, uitype from vtiger_field WHERE uitype in (71,72,10,101)", array());
-		if($currencyfieldres) {
-			foreach($currencyfieldres as $currencyfieldrow) {
-				$uiType = $currencyfieldrow['uitype'];
-				$modprefixedlabel = getTabModuleName($currencyfieldrow['tabid']).' '.$currencyfieldrow['fieldlabel'];
-				$modprefixedlabel = str_replace(' ','_',$modprefixedlabel);				
-				if($uiType!=10 && $uiType!=101){
-					if(!in_array($modprefixedlabel, $this->convert_currency) && !in_array($modprefixedlabel, $this->append_currency_symbol_to_value)) {					
-						$this->convert_currency[] = $modprefixedlabel;
-					}
-				} else {
-					if($uiType == 10 && !in_array($modprefixedlabel, $this->ui10_fields)) {
-						$this->ui10_fields[] = $modprefixedlabel;
-					} elseif($uiType == 101 && !in_array($modprefixedlabel, $this->ui101_fields)) {
-						$this->ui101_fields[] = $modprefixedlabel;
-					}
+		// Update Reference fields list list
+		$referencefieldres = $adb->pquery("SELECT tabid, fieldlabel, uitype from vtiger_field WHERE uitype in (10,101)", array());
+		if($referencefieldres) {
+			foreach($referencefieldres as $referencefieldrow) {
+				$uiType = $referencefieldrow['uitype'];
+				$modprefixedlabel = getTabModuleName($referencefieldrow['tabid']).' '.$referencefieldrow['fieldlabel'];
+				$modprefixedlabel = str_replace(' ','_',$modprefixedlabel);		
+				
+				if($uiType == 10 && !in_array($modprefixedlabel, $this->ui10_fields)) {
+					$this->ui10_fields[] = $modprefixedlabel;
+				} elseif($uiType == 101 && !in_array($modprefixedlabel, $this->ui101_fields)) {
+					$this->ui101_fields[] = $modprefixedlabel;
 				}
 			}
 		}
@@ -2210,8 +2223,8 @@ class ReportRun extends CRMEntity
 										$col_header = trim(str_replace($modules," ",$value));
 										$fld_name_1 = $this->primarymodule . "_" . trim($value);
 										$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-										if($uitype_arr[$key] == 71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
-														|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+										if($uitype_arr[$key] == 71 || $uitype_arr[$key] == 72 ||
+											in_array($fld_name_1,$this->append_currency_symbol_to_value) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 												$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 												$convert_price = true;
 										} else{
@@ -2323,8 +2336,8 @@ class ReportRun extends CRMEntity
 						$col_header = trim(str_replace($modules," ",$value));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
-								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+						if($uitype_arr[$value]==71 || $uitype_arr[$key] == 72 ||
+											in_array($fld_name_1,$this->append_currency_symbol_to_value) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
 						} else{
@@ -2595,8 +2608,8 @@ class ReportRun extends CRMEntity
 						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
-								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+						if($uitype_arr[$value]==71 || $uitype_arr[$key] == 72 ||
+										in_array($fld_name_1,$this->append_currency_symbol_to_value) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
 						} else{
@@ -2852,7 +2865,9 @@ class ReportRun extends CRMEntity
 			$rep_header = "$rep_module $fieldLabel";
 		}
 		$curr_symb = "";
-		if(in_array($fldname, $this->convert_currency)) {
+		$fieldLabel = ltrim(str_replace($rep_module, '', $rep_header), '_');
+		$fieldInfo = getFieldByReportLabel($rep_module, $fieldLabel);
+		if($fieldInfo['uitype'] == '71') {
         	$curr_symb = " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 		}
         $rep_header .=$curr_symb;

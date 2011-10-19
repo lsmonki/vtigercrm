@@ -1065,10 +1065,14 @@ function getUnifiedWhere($listquery,$module,$search_val){
 }
 
 function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) {
-	global $log;
+	global $log, $currentModule, $current_user;
 	
 	$advfilterlist = array();
-			
+
+	$moduleHandler = vtws_getModuleHandlerFromName($currentModule,$current_user);
+	$moduleMeta = $moduleHandler->getMeta();
+	$moduleFields = $moduleMeta->getModuleFields();
+
 	foreach($advft_criteria as $column_index => $column_condition) {					
 		if(empty($column_condition)) continue;
 		
@@ -1079,6 +1083,20 @@ function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) 
 		$adv_filter_groupid = $column_condition["groupid"];
 	
 		$column_info = explode(":",$adv_filter_column);
+
+		$fieldName = $column_info[2];
+		$fieldObj = $moduleFields[$fieldName];
+		$fieldType = $fieldObj->getFieldDataType();
+
+		if($fieldType == 'currency') {
+			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+			if($fieldObj->getUIType() == '72') {
+				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+			} else {
+				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+			}
+		}
+
 		$temp_val = explode(",",$adv_filter_value);
 		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
 		{

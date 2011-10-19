@@ -224,21 +224,22 @@ class Products extends CRMEntity {
 			$cur_checkname = 'cur_' . $curid . '_check';
 			$cur_valuename = 'curname' . $curid;
 			$base_currency_check = 'base_currency' . $curid;
+			$requestPrice = CurrencyField::convertToDBFormat($_REQUEST['unit_price'], null, true);
+			$actualPrice = CurrencyField::convertToDBFormat($_REQUEST[$cur_valuename], null, true);
 			if($_REQUEST[$cur_checkname] == 'on' || $_REQUEST[$cur_checkname] == 1)
 			{
 				$conversion_rate = $currency_details[$i]['conversionrate'];
 				$actual_conversion_rate = $product_base_conv_rate * $conversion_rate;
-				$converted_price = $actual_conversion_rate * $_REQUEST['unit_price'];
-				$actual_price = $_REQUEST[$cur_valuename];
+				$converted_price = $actual_conversion_rate * $requestPrice;
 				
 				$log->debug("Going to save the Product - $curname currency relationship");
 
 				$query = "insert into vtiger_productcurrencyrel values(?,?,?,?)";
-				$adb->pquery($query, array($this->id,$curid,$converted_price,$actual_price));
+				$adb->pquery($query, array($this->id,$curid,$converted_price,$actualPrice));
 				
 				// Update the Product information with Base Currency choosen by the User.
 				if ($_REQUEST['base_currency'] == $cur_valuename) {
-					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actual_price, $this->id)); 
+					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actualPrice, $this->id));
 				}
 			}
 		}

@@ -1118,6 +1118,39 @@ function setFieldHelpInfo() {
 				'<br>When the same ticket is added to a Service Contract,'. 
 				'based on the Tracking Unit of the Service Contract,'.
 				'Used units is updated whenever a ticket is Closed.');
+
+	$usersModuleInstance = Vtiger_Module::getInstance('Users');
+	$field1 = Vtiger_Field::getInstance('currency_grouping_pattern', $usersModuleInstance);
+	$field2 = Vtiger_Field::getInstance('currency_decimal_separator', $usersModuleInstance);
+	$field3 = Vtiger_Field::getInstance('currency_grouping_separator', $usersModuleInstance);
+	$field4 = Vtiger_Field::getInstance('currency_symbol_placement', $usersModuleInstance);
+
+	$field1->setHelpInfo("<b>Currency - Digit Grouping Pattern</b> <br/><br/>".
+								"This pattern specifies the format in which the currency separator will be placed.");
+	$field2->setHelpInfo("<b>Currency - Decimal Separator</b> <br/><br/>".
+										"Decimal separator specifies the separator to be used to separate ".
+										"the fractional values from the whole number part. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.45 <br/>".
+										", => 123,45 <br/>".
+										"' => 123'45 <br/>".
+										"  => 123 45 <br/>".
+										"$ => 123$45 <br/>");
+	$field3->setHelpInfo("<b>Currency - Grouping Separator</b> <br/><br/>".
+										"Grouping separator specifies the separator to be used to group ".
+										"the whole number part into hundreds, thousands etc. <br/>".
+										"<b>Eg:</b> <br/>".
+										". => 123.456.789 <br/>".
+										", => 123,456,789 <br/>".
+										"' => 123'456'789 <br/>".
+										"  => 123 456 789 <br/>".
+										"$ => 123$456$789 <br/>");
+	$field4->setHelpInfo("<b>Currency - Symbol Placement</b> <br/><br/>".
+										"Symbol Placement allows you to configure the position of the ".
+										"currency symbol with respect to the currency value.<br/>".
+										"<b>Eg:</b> <br/>".
+										"$1.0 => $123,456,789.50 <br/>".
+										"1.0$ => 123,456,789.50$ <br/>");
 }
 
 ?>
