@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-
+require_once 'include/fields/DateTimeField.php';
 require_once 'modules/WSAPP/SyncServer.php';
 require_once 'modules/WSAPP/Handlers/SyncHandler.php';
 
@@ -90,6 +90,13 @@ Class OutlookHandler extends SyncHandler {
 
                 $record['start_time'] = date($dformat,strtotime($record['date_start']." ".$record['time_start']));
                 $record['end_time'] = date($dformat,strtotime($record['due_date']." ".$record['time_end']));
+
+				// convert the start time and end time to user time zone
+				$dateTimeField = new DateTimeField($record['start_time']);
+				$record['start_time'] = $dateTimeField->getDisplayDateTimeValue($this->user);
+
+				$dateTimeField = new DateTimeField($record['end_time']);
+				$record['end_time'] = $dateTimeField->getDisplayDateTimeValue($this->user);
         }
         return $record;
     }
