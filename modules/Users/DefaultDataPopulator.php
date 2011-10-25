@@ -1886,7 +1886,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$organizationId = $this->db->getUniqueID('vtiger_organizationdetails');
 	$this->db->query("insert into vtiger_organizationdetails(organization_id,organizationname,address,city,state,country,code,phone,fax,website,logoname)
 								values ($organizationId,'vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai',
-										'Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.jpg')");
+										'Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.gif')");
 
 
 	$this->db->query("insert into vtiger_actionmapping values(0,'Save',0)");
