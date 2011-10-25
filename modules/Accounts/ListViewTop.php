@@ -99,7 +99,7 @@ function getTopAccounts($maxval,$calCnt)
 
 		$Top_Accounts = (strlen($account['accountname']) > 20) ? (substr($account['accountname'],0,20).'...') : $account['accountname'];
 		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'">'.$Top_Accounts.'</a>';
-		$value[]=convertFromDollar($account['amount'],$rate);
+		$value[] = CurrencyField::convertToUserFormat($account['amount']);
 		$entries[$account['accountid']]=$value;	
 	}
 	$values=Array('ModuleName'=>'Accounts','Title'=>$title,'Header'=>$header,'Entries'=>$entries);

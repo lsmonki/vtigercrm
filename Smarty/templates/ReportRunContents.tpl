@@ -59,7 +59,7 @@
 		{* Performance Optimization: Direct result output *}
 		{if $DIRECT_OUTPUT eq true}
 			{php}
-				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterList, true); }
+				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterSql, true); }
 			{/php}
 		{else}			
 			{$REPORTTOTHTML}

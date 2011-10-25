@@ -209,18 +209,30 @@ class Calendar
 			{
 				if($this->view == 'day')
 				{
+					if(empty($this->day_slice[$value->formatted_datetime]->activities)) {
+						$this->day_slice[$value->formatted_datetime]->activities = array();
+					}
 					array_push($this->day_slice[$value->formatted_datetime]->activities, $value);
 				}
 				elseif($this->view == 'week')
 				{
+					if(empty($this->week_slice[$value->formatted_datetime]->activities)) {
+						$this->week_slice[$value->formatted_datetime]->activities = array();
+					}
 					array_push($this->week_slice[$value->formatted_datetime]->activities, $value);
 				}
 				elseif($this->view == 'month')
 				{
+					if(empty($this->month_array[$value->formatted_datetime]->activities)) {
+						$this->month_array[$value->formatted_datetime]->activities = array();
+					}
 					array_push($this->month_array[$value->formatted_datetime]->activities,$value);
 				}
 				elseif($this->view == 'year')
 				{
+					if(empty($this->year_array[$value->formatted_datetime]->activities)) {
+						$this->year_array[$value->formatted_datetime]->activities = array();
+					}
 					array_push($this->year_array[$value->formatted_datetime]->activities,$value);
 				}
 				else

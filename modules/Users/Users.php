@@ -707,6 +707,12 @@ class Users extends CRMEntity {
 			$this->column_fields['time_zone'] = $dbDefaultTimeZone;
 			$this->time_zone = $dbDefaultTimeZone;
 		}
+		if(empty($this->column_fields['currency_id'])) {
+			$this->column_fields['currency_id'] = CurrencyField::getDBCurrencyId();
+		}
+		if(empty($this->column_fields['date_format'])) {
+			$this->column_fields['date_format'] = 'yyyy-mm-dd';
+		}
 
 		$this->db->println("TRANS saveentity starts $module");
 		$this->db->startTransaction();

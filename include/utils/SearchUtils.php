@@ -1093,19 +1093,30 @@ function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) 
 			if($fieldObj->getUIType() == '72') {
 				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
 			} else {
-				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value);
+				$currencyField = new CurrencyField($adv_filter_value);
+				if($currentModule == 'Potentials' && $fieldName == 'amount') {
+					$currencyField->setNumberofDecimals(2);
+				}
+				$adv_filter_value = $currencyField->getDBInsertedValue();
 			}
 		}
-
+		
 		$temp_val = explode(",",$adv_filter_value);
-		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
-		{
+		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
+				|| ($column_info[4] == 'DT'))
+			&& ($column_info[4] != '' && $adv_filter_value != '' )) {
 			$val = Array();
 			for($x=0;$x<count($temp_val);$x++) {
-				list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-				$temp_date = getValidDBInsertDateValue(trim($temp_date));
-				$val[$x] = $temp_date;
-				if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+				if($column_info[4] == 'D') {
+					$date = new DateTimeField(trim($temp_val[$x]));
+					$val[$x] = $date->getDBInsertDateValue();
+				} elseif($column_info[4] == 'DT') {
+					$date = new DateTimeField(trim($temp_val[$x]));
+					$val[$x] = $date->getDBInsertDateTimeValue();
+				} else {
+					$date = new DateTimeField(trim($temp_val[$x]));
+					$val[$x] = $date->getDBInsertTimeValue();
+				}
 			}
 			$adv_filter_value = implode(",",$val);
 		}

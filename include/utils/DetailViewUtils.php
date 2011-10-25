@@ -1072,66 +1072,62 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		if ($col_fields[$fieldname] == '0' && $fieldname != 'filedownloadcount' && $fieldname != 'filestatus' && $fieldname != 'filesize')
 			$col_fields[$fieldname] = '';
-		if ($uitype == 1 && ($fieldname == 'expectedrevenue' || $fieldname == 'budgetcost' || $fieldname == 'actualcost' || $fieldname == 'expectedroi' || $fieldname == 'actualroi' )) {
-			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
-			$label_fld[] = convertFromDollar($col_fields[$fieldname], $rate_symbol['rate']);
-		} else {
-			//code for Documents module :start
-			if ($tabid == 8) {
-				$downloadtype = $col_fields['filelocationtype'];
-				if ($fieldname == 'filename') {
-					if ($downloadtype == 'I') {
-						//$file_value = $mod_strings['LBL_INTERNAL'];
-						$fld_value = $col_fields['filename'];
-						$ext_pos = strrpos($fld_value, ".");
-						$ext = substr($fld_value, $ext_pos + 1);
-						$ext = strtolower($ext);
-						if ($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
-							$fileicon = "<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-						elseif ($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
-							$fileicon = "<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-						elseif ($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
-							$fileicon = "<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-						elseif ($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
-							$fileicon = "<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
-						else
-							$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					}
-					else {
-						$fld_value = $col_fields['filename'];
-						$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='" . $mod_strings['LBL_EXTERNAL_LNK'] . "' title='" . $mod_strings['LBL_EXTERNAL_LNK'] . "' hspace='3' align='absmiddle' border='0'>";
-					}
-					$label_fld[] = $fileicon . $fld_value;
+		
+		//code for Documents module :start
+		if ($tabid == 8) {
+			$downloadtype = $col_fields['filelocationtype'];
+			if ($fieldname == 'filename') {
+				if ($downloadtype == 'I') {
+					//$file_value = $mod_strings['LBL_INTERNAL'];
+					$fld_value = $col_fields['filename'];
+					$ext_pos = strrpos($fld_value, ".");
+					$ext = substr($fld_value, $ext_pos + 1);
+					$ext = strtolower($ext);
+					if ($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
+						$fileicon = "<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+					elseif ($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
+						$fileicon = "<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+					elseif ($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
+						$fileicon = "<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+					elseif ($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
+						$fileicon = "<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
+					else
+						$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 				}
-				if ($fieldname == 'filesize') {
-					if ($col_fields['filelocationtype'] == 'I') {
-						$filesize = $col_fields[$fieldname];
-						if ($filesize < 1024)
-							$label_fld[] = $filesize . ' B';
-						elseif ($filesize > 1024 && $filesize < 1048576)
-							$label_fld[] = round($filesize / 1024, 2) . ' KB';
-						else if ($filesize > 1048576)
-							$label_fld[] = round($filesize / (1024 * 1024), 2) . ' MB';
-					}
-					else {
-						$label_fld[] = ' --';
-					}
+				else {
+					$fld_value = $col_fields['filename'];
+					$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='" . $mod_strings['LBL_EXTERNAL_LNK'] . "' title='" . $mod_strings['LBL_EXTERNAL_LNK'] . "' hspace='3' align='absmiddle' border='0'>";
 				}
-				if ($fieldname == 'filetype' && $col_fields['filelocationtype'] == 'E') {
+				$label_fld[] = $fileicon . $fld_value;
+			}
+			if ($fieldname == 'filesize') {
+				if ($col_fields['filelocationtype'] == 'I') {
+					$filesize = $col_fields[$fieldname];
+					if ($filesize < 1024)
+						$label_fld[] = $filesize . ' B';
+					elseif ($filesize > 1024 && $filesize < 1048576)
+						$label_fld[] = round($filesize / 1024, 2) . ' KB';
+					else if ($filesize > 1048576)
+						$label_fld[] = round($filesize / (1024 * 1024), 2) . ' MB';
+				}
+				else {
 					$label_fld[] = ' --';
 				}
-				/* if($fieldname == 'filestatus')
-				  {
-				  $filestatus = $col_fields[$fieldname];
-				  if($filestatus == 0)
-				  $label_fld[]=$mod_strings['LBL_ACTIVE'];
-				  else
-				  $label_fld[]=$mod_strings['LBL_INACTIVE'];
-				  } */
 			}
-			//code for Documents module :end
-			$label_fld[] = $col_fields[$fieldname];
+			if ($fieldname == 'filetype' && $col_fields['filelocationtype'] == 'E') {
+				$label_fld[] = ' --';
+			}
+			/* if($fieldname == 'filestatus')
+			  {
+			  $filestatus = $col_fields[$fieldname];
+			  if($filestatus == 0)
+			  $label_fld[]=$mod_strings['LBL_ACTIVE'];
+			  else
+			  $label_fld[]=$mod_strings['LBL_INACTIVE'];
+			  } */
 		}
+		//code for Documents module :end
+		$label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[] = $uitype;
 

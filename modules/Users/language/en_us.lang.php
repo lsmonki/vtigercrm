@@ -730,6 +730,7 @@ $mod_strings = Array(
 'Atlantic/Azores' => '(UTC-01:00) Azores',
 'Atlantic/Cape_Verde' => '(UTC-01:00) Cape Verde Is.',
 'Europe/London' => '(UTC) London, Edinburgh, Dublin, Lisbon',
+'UTC' => '(UTC) Coordinated Universal Time, Greenwich Mean Time',
 'Africa/Monrovia' => '(UTC) Monrovia, Reykjavik',
 'Africa/Casablanca' => '(UTC) Casablanca',
 'Europe/Belgrade' => '(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague',

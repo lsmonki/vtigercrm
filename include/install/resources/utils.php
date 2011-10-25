@@ -1084,7 +1084,7 @@ class Common_Install_Wizard_Utils {
 		}
 		return self::$recommendedDirectives;
 	}
-	
+
 	/** Function to check the file access is made within web root directory. */
 	static function checkFileAccess($filepath) {
 		global $root_directory, $installationStrings;
@@ -1093,18 +1093,47 @@ class Common_Install_Wizard_Utils {
 		if(empty($use_root_directory)) {
 			$use_root_directory = realpath(dirname(__FILE__).'/../../..');
 		}
-	
+
 		$realfilepath = realpath($filepath);
-	
+
 		/** Replace all \\ with \ first */
 		$realfilepath = str_replace('\\\\', '\\', $realfilepath);
 		$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
-	
+
 		/** Replace all \ with / now */
 		$realfilepath = str_replace('\\', '/', $realfilepath);
 		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
-		
+
 		if(stripos($realfilepath, $rootdirpath) !== 0) {
+			die($installationStrings['ERR_RESTRICTED_FILE_ACCESS']);
+		}
+	}
+	
+	/** Function to check the file access is made within web root directory. */
+	static function checkFileAccessForInclusion($filepath) {
+		global $root_directory, $installationStrings;
+		// Set the base directory to compare with
+		$use_root_directory = $root_directory;
+		if(empty($use_root_directory)) {
+			$use_root_directory = realpath(dirname(__FILE__).'/../../..');
+		}
+
+		$unsafeDirectories = array('storage', 'cache', 'test');
+
+		$realfilepath = realpath($filepath);
+
+		/** Replace all \\ with \ first */
+		$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+		$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+
+		/** Replace all \ with / now */
+		$realfilepath = str_replace('\\', '/', $realfilepath);
+		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+
+		$relativeFilePath = str_replace($rootdirpath, '', $realfilepath);
+		$filePathParts = explode('/', $relativeFilePath);
+
+		if(stripos($realfilepath, $rootdirpath) !== 0 || in_array($filePathParts[0], $unsafeDirectories)) {
 			die($installationStrings['ERR_RESTRICTED_FILE_ACCESS']);
 		}
 	}

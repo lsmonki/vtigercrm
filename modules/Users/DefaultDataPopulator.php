@@ -164,8 +164,8 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$campaignexpectedandactualsblock.",26,'LBL_EXPECTATIONS_AND_ACTUALS',3,0,0,0,0,0,1,0)");
 		$userloginandroleblockid = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$userloginandroleblockid.",29,'LBL_USERLOGIN_ROLE',1,0,0,0,0,0,1,0)");
-		$usercurrencyinfoblockid = $this->db->getUniqueID('vtiger_blocks');
-		$this->db->query("insert into vtiger_blocks values (".$usercurrencyinfoblockid.",29,'LBL_CURRENCY_CONFIGURATION',2,0,0,0,0,0,1,0)");
+		$usercurrencyinfoblock = $this->db->getUniqueID('vtiger_blocks');
+		$this->db->query("insert into vtiger_blocks values (".$usercurrencyinfoblock.",29,'LBL_CURRENCY_CONFIGURATION',2,0,0,0,0,0,1,0)");
 		$usermoreinfoblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$usermoreinfoblock.",29,'LBL_MORE_INFORMATION',3,0,0,0,0,0,1,0)");
 		$useraddressblock = $this->db->getUniqueID('vtiger_blocks');

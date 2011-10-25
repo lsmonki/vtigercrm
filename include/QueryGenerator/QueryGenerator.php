@@ -721,7 +721,7 @@ class QueryGenerator {
 		return in_array($operator, $nonDaySearchOperators);
 	}
 	private function isNumericType($type) {
-		return ($type == 'integer' || $type == 'double');
+		return ($type == 'integer' || $type == 'double' || $type == 'currency');
 	}
 
 	private function isStringType($type) {
@@ -901,7 +901,11 @@ class QueryGenerator {
 					if($field->getUIType() == '72') {
 						$value = CurrencyField::convertToDBFormat($value, null, true);
 					} else {
-						$value = CurrencyField::convertToDBFormat($value);
+						$currencyField = new CurrencyField($value);
+						if($this->getModule() == 'Potentials' && $fieldName == 'amount') {
+							$currencyField->setNumberofDecimals(2);
+						}
+						$value = $currencyField->getDBInsertedValue();
 					}
 				}
 			}

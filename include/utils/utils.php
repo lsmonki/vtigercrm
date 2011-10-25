@@ -438,7 +438,7 @@ function return_application_language($language)
 	$temp_app_strings = $app_strings;
 	$language_used = $language;
 
-	checkFileAccess("include/language/$language.lang.php");
+	checkFileAccessForInclusion("include/language/$language.lang.php");
 	@include("include/language/$language.lang.php");
 	if(!isset($app_strings))
 	{
@@ -3199,7 +3199,7 @@ function getRecordValues($id_array,$module) {
 	$query="select fieldname,fieldlabel,uitype from vtiger_field where tabid=? and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')";
 	$result=$adb->pquery($query, array($tabid));
 	$no_rows=$adb->num_rows($result);
-	
+
 	$focus = new $module();
 	if(isset($id_array) && $id_array !='') {
 		foreach($id_array as $value_pair['disp_value']) {
@@ -3208,6 +3208,7 @@ function getRecordValues($id_array,$module) {
 			$field_values[]=$focus->column_fields;
 		}
 	}
+	
 	$labl_array=array();
 	$value_pair = array();
 	$c = 0;
@@ -3217,11 +3218,11 @@ function getRecordValues($id_array,$module) {
 		$ui_type=$adb->query_result($result,$i,"uitype");
 		
 		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name, 'readwrite') == '0') {
-			$fld_array []= $fld_name;	
+			$fld_array []= $fld_name;
 			$record_values[$c][$fld_label] = Array();
 			$ui_value[]=$ui_type;
 			for($j=0;$j < count($field_values);$j++) {
-				
+
 				if($ui_type ==56) {
 					if($field_values[$j][$fld_name] == 0)
 						$value_pair['disp_value']=$app_strings['no'];
@@ -3284,7 +3285,14 @@ function getRecordValues($id_array,$module) {
 					} else {
 						$value_pair['disp_value'] = $field_values[$j][$fld_name];
 					}
-				}else {
+				}elseif($ui_type == '71' || $ui_type == '72') {
+					$currencyField = new CurrencyField($field_values[$j][$fld_name]);
+					if($ui_type == '72') {
+						$value_pair['disp_value'] = $currencyField->getDisplayValue(null, true);
+					} else {
+						$value_pair['disp_value'] = $currencyField->getDisplayValue();
+					}
+				} else {
 					$value_pair['disp_value']=$field_values[$j][$fld_name];
 				}
 				$value_pair['org_value'] = $field_values[$j][$fld_name];
@@ -3874,7 +3882,13 @@ function getDuplicateRecordsArr($module)
 					$value = $$result[$col_arr[$k]];
 				}
 				$result[$col_arr[$k]] = $value;
-			} 
+			}
+			if($ui_type[$fld_arr[$k]] == 71) {
+				$result[$col_arr[$k]] = CurrencyField::convertToUserFormat($result[$col_arr[$k]]);
+			}
+			if($ui_type[$fld_arr[$k]] == 72) {
+				$result[$col_arr[$k]] = CurrencyField::convertToUserFormat($result[$col_arr[$k]], null, true);
+			}
 			
 			$fld_values[$grp][$ii][$fld_labl_arr[$k]] = $result[$col_arr[$k]];
 			
@@ -4795,7 +4809,7 @@ function isRecordExists($recordId) {
   */
 function getValidDBInsertDateValue($value) {
 	global $log;
-	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
+	$log->debug("Entering getValidDBInsertDateValue(".$value.") method ...");
         $delim = array('/','.');
         foreach ($delim as $delimiter){
             $x = strpos($value, $delimiter);
@@ -4813,7 +4827,7 @@ function getValidDBInsertDateValue($value) {
 	} else {
 		$insert_date = $value;
 	}
-	$log->debug("Exiting getDBInsertDateValue method ...");
+	$log->debug("Exiting getValidDBInsertDateValue method ...");
 	return $insert_date;
 }
 	
@@ -4930,6 +4944,26 @@ function str_rsplit($string, $splitLength) {
 	$reverseString = strrev($string);
 	$chunks = str_split($reverseString, $splitLength);
 	return array_reverse($chunks);
+}
+
+/**
+ * Function to get the list of Contacts related to an activity
+ * @param Integer $activityId
+ * @return Array $contactsList - List of Contact ids, mapped to Contact Names
+ */
+function getActivityRelatedContacts($activityId) {
+	$adb = PearDatabase::getInstance();
+
+	$query = 'SELECT * FROM vtiger_cntactivityrel WHERE activityid=?';
+	$result = $adb->pquery($query, array($activityId));
+
+	$noOfContacts = $adb->num_rows($result);
+	$contactsList = array();
+	for ($i = 0; $i < $noOfContacts; ++$i) {
+		$contactId = $adb->query_result($result, $i, 'contactid');
+		$contactsList[$contactId] = getContactName($contactId);
+	}
+	return $contactsList;
 }
 
 ?>

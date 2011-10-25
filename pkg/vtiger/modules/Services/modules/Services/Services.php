@@ -796,7 +796,7 @@ class Services extends CRMEntity {
 		$log->debug("Entering get_service_pricebooks(".$id.") method ...");
 		
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
-		checkFileAccess("modules/$related_module/$related_module.php");
+		checkFileAccessForInclusion("modules/$related_module/$related_module.php");
 		require_once("modules/$related_module/$related_module.php");
 		$focus = new $related_module();
 		$singular_modname = vtlib_toSingular($related_module);

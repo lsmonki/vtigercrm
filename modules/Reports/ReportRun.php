@@ -1361,12 +1361,14 @@ class ReportRun extends CRMEntity
 				} else {
 					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
 				}
-				$grouplist[$fieldcolname] = $sqlvalue;
 				$temp = split("_",$selectedfields[2],2);
 				$module = $temp[0];
 				if(CheckFieldPermission($fieldname,$module) == 'true')
 				{
+					$grouplist[$fieldcolname] = $sqlvalue;
 					$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
+				} else {
+					$grouplist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1];
 				}
 			}
 		}
@@ -2234,10 +2236,10 @@ class ReportRun extends CRMEntity
 										$arraykey = $value.'_SUM';
 										if(isset($keyhdr[$arraykey]))
 										{
-												if($convert_price)
-														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-												else
-														$conv_value = $keyhdr[$arraykey];
+											if($convert_price)
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+											else
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 												$totalpdf[$rowcount][$arraykey] = $conv_value;
 										}else
 										{
@@ -2247,11 +2249,11 @@ class ReportRun extends CRMEntity
 										$arraykey = $value.'_AVG';
 										if(isset($keyhdr[$arraykey]))
 										{
-												if($convert_price)
-														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-												else
-														$conv_value = $keyhdr[$arraykey];
-												$totalpdf[$rowcount][$arraykey] = $conv_value;
+											if($convert_price)
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+											else
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
+											$totalpdf[$rowcount][$arraykey] = $conv_value;
 										}else
 										{
 												$totalpdf[$rowcount][$arraykey] = '';
@@ -2260,11 +2262,11 @@ class ReportRun extends CRMEntity
 										$arraykey = $value.'_MIN';
 										if(isset($keyhdr[$arraykey]))
 										{
-												if($convert_price)
-														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-												else
-														$conv_value = $keyhdr[$arraykey];
-												$totalpdf[$rowcount][$arraykey] = $conv_value;
+											if($convert_price)
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+											else
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
+											$totalpdf[$rowcount][$arraykey] = $conv_value;
 										}else
 										{
 												$totalpdf[$rowcount][$arraykey] = '';
@@ -2273,11 +2275,11 @@ class ReportRun extends CRMEntity
 										$arraykey = $value.'_MAX';
 										if(isset($keyhdr[$arraykey]))
 										{
-												if($convert_price)
-														$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-												else
-														$conv_value = $keyhdr[$arraykey];
-												$totalpdf[$rowcount][$arraykey] = $conv_value;
+											if($convert_price)
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+											else
+												$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
+											$totalpdf[$rowcount][$arraykey] = $conv_value;
 										}else
 										{
 												$totalpdf[$rowcount][$arraykey] = '';
@@ -2336,7 +2338,7 @@ class ReportRun extends CRMEntity
 						$col_header = trim(str_replace($modules," ",$value));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if($uitype_arr[$value]==71 || $uitype_arr[$key] == 72 ||
+						if($uitype_arr[$key]==71 || $uitype_arr[$key] == 72 ||
 											in_array($fld_name_1,$this->append_currency_symbol_to_value) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
@@ -2349,9 +2351,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
 							else 
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
@@ -2362,9 +2364,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+							else
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
@@ -2375,9 +2377,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+							else
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
@@ -2386,11 +2388,11 @@ class ReportRun extends CRMEntity
 
 						$arraykey = $value.'_MAX';
 						if(isset($keyhdr[$arraykey]))
-						{							
+						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
-							else 
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
+							else
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
@@ -2608,7 +2610,7 @@ class ReportRun extends CRMEntity
 						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if($uitype_arr[$value]==71 || $uitype_arr[$key] == 72 ||
+						if($uitype_arr[$key]==71 || $uitype_arr[$key] == 72 ||
 										in_array($fld_name_1,$this->append_currency_symbol_to_value) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
@@ -2621,9 +2623,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
 							else
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
@@ -2634,9 +2636,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
 							else
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
@@ -2647,9 +2649,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
 							else
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{
@@ -2660,9 +2662,9 @@ class ReportRun extends CRMEntity
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
-								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey]);
 							else
-								$conv_value = $keyhdr[$arraykey];
+								$conv_value = CurrencyField::convertToUserFormat ($keyhdr[$arraykey], null, true);
 							$coltotalhtml .= "<td class='rptTotal'>".$conv_value.'</td>';
 						}else
 						{

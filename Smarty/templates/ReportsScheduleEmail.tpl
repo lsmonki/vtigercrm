@@ -13,9 +13,9 @@
 <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='530' width="100%">
 	<tr valign='top'>
 		<td colspan="1">
-			<span class="genHeaderGray">{$MOD.LBL_SCHEDULE_EMAIL}</span>
+			<span class="genHeaderGray">{'LBL_SCHEDULE_EMAIL'|@getTranslatedString:'Reports'}</span>
 			<br>
-			{$MOD.LBL_SCHEDULE_EMAIL_DESCRIPTION}
+			{'LBL_SCHEDULE_EMAIL_DESCRIPTION'|@getTranslatedString:'Reports'}
 			<hr>
 		</td>
 	</tr>
@@ -29,37 +29,38 @@
 							{if $IS_SCHEDULED eq 'true'} checked {/if}
 							>
 						</td>
-						<td width="90%" class="detailedViewHeader" class="cellText"><strong>{$MOD.LBL_SCHEDULE_REPORT}</strong></td>
+						<td width="90%" class="detailedViewHeader" class="cellText"><strong>{'LBL_SCHEDULE_REPORT'|@getTranslatedString:'Reports'}</strong></td>
 					</tr>
 					<tr valign="top">
 						<td colspan="2">
 							<table width="100%" class="small" border="0" cellpadding="5" cellspacing="0" align="top">
 								<tr align="left" valign="top">
-									<td class="cellBottomDotLinePlain small"><strong>{$MOD.LBL_SCHEDULE_FREQUENCY}</strong></td>
+									<td class="cellBottomDotLinePlain small"><strong>{'LBL_SCHEDULE_FREQUENCY'|@getTranslatedString:'Reports'}</strong></td>
 								</tr>
 								<tr align="left" valign="top">
 									<td valign=top class="small">
 										<span id="scheduledTypeSpan">
 											<select class="dataInput small" name="scheduledType" id="scheduledType" onchange="javascript: setScheduleOptions();">
 												<!-- Hourly doesn't make sense on OD as the cron job is running once in 2 hours -->
-												<option id="schtype_1" value="1" {if $schtypeid eq 1}selected{/if}>{$MOD.Hourly}</option>
-												<option id="schtype_2" value="2" {if $schtypeid eq 2}selected{/if}>{$MOD.Daily}</option>
-												<option id="schtype_3" value="3" {if $schtypeid eq 3}selected{/if}>{$MOD.Weekly}</option>
-												<option id="schtype_4" value="4" {if $schtypeid eq 4}selected{/if}>{$MOD.BiWeekly}</option>
-												<option id="schtype_5" value="5" {if $schtypeid eq 5}selected{/if}>{$MOD.Monthly}</option>
-												<option id="schtype_6" value="6" {if $schtypeid eq 6}selected{/if}>{$MOD.Annually}</option>
+												<!-- option id="schtype_1" value="1" {if $schtypeid eq 1}selected{/if}>{'Hourly'|@getTranslatedString:'Reports'}</option -->
+												<option id="schtype_2" value="2" {if $schtypeid eq 2}selected{/if}>{'Daily'|@getTranslatedString:'Reports'}</option>
+												<option id="schtype_3" value="3" {if $schtypeid eq 3}selected{/if}>{'Weekly'|@getTranslatedString:'Reports'}</option>
+												<option id="schtype_4" value="4" {if $schtypeid eq 4}selected{/if}>{'BiWeekly'|@getTranslatedString:'Reports'}</option>
+												<option id="schtype_5" value="5" {if $schtypeid eq 5}selected{/if}>{'Monthly'|@getTranslatedString:'Reports'}</option>
+												<option id="schtype_6" value="6" {if $schtypeid eq 6}selected{/if}>{'Annually'|@getTranslatedString:'Reports'}</option>
 											</select>
 										</span>
-										<span id="scheduledMonthSpan" style="display: {if $schtypeid eq 6}inline{else}none{/if};">&nbsp;<strong>{$MOD.LBL_SCHEDULE_EMAIL_MONTH}</strong>
+										<span id="scheduledMonthSpan" style="display: {if $schtypeid eq 6}inline{else}none{/if};">&nbsp;<strong>{'LBL_SCHEDULE_EMAIL_MONTH'|@getTranslatedString:'Reports'}</strong>
 											<select class="dataInput small" name="scheduledMonth" id="scheduledMonth">
-												{foreach key=mid item=month from=$MOD.MONTH_STRINGS}
+												{assign var="MONTH_STRINGS" value='MONTH_STRINGS'|@getTranslatedString:'Reports'}
+												{foreach key=mid item=month from=$MONTH_STRINGS}
 												<option value="{$mid}" {if $schmonth eq $mid}selected{/if}>{$month}</option>
 												{/foreach}
 											</select>
 										</span>
 
 										<!-- day of month (monthly, annually) -->
-										<span id="scheduledDOMSpan" style="display: {if $schtypeid eq 5 || $schtypeid eq 6}inline{else}none{/if};">&nbsp;<strong>{$MOD.LBL_SCHEDULE_EMAIL_DAY}</strong>:
+										<span id="scheduledDOMSpan" style="display: {if $schtypeid eq 5 || $schtypeid eq 6}inline{else}none{/if};">&nbsp;<strong>{'LBL_SCHEDULE_EMAIL_DAY'|@getTranslatedString:'Reports'}</strong>:
 											<select class="dataInput small" name="scheduledDOM" id="scheduledDOM">
 												{section name=day start=1 loop=32}
 												<option value="{$smarty.section.day.iteration}" {if $schday eq $smarty.section.day.iteration}selected{/if}>{$smarty.section.day.iteration}</option>
@@ -68,17 +69,18 @@
 										</span>
 
 										<!-- day of week (weekly/bi-weekly) -->
-										<span id="scheduledDOWSpan" style="display: {if $schtypeid eq 3 || $schtypeid eq 4}inline{else}none{/if};">&nbsp;<strong>{$MOD.LBL_SCHEDULE_EMAIL_DOW}</strong>:
+										<span id="scheduledDOWSpan" style="display: {if $schtypeid eq 3 || $schtypeid eq 4}inline{else}none{/if};">&nbsp;<strong>{'LBL_SCHEDULE_EMAIL_DOW'|@getTranslatedString:'Reports'}</strong>:
 											<select class="dataInput small" name="scheduledDOW" id="scheduledDOW">
-												{foreach key=wid item=week from=$MOD.WEEKDAY_STRINGS}
+												{assign var="WEEKDAY_STRINGS" value='WEEKDAY_STRINGS'|@getTranslatedString:'Reports'}
+												{foreach key=wid item=week from=$WEEKDAY_STRINGS}
 												<option value="{$wid}" {if $schweek eq $wid}selected{/if}>{$week}</option>
 												{/foreach}
 											</select>
 										</span>
 
 										<!-- time (daily, weekly, bi-weekly, monthly, annully) -->
-										<span id="scheduledTimeSpan" style="display: {if $schtypeid > 1}inline{else}none{/if};">&nbsp;<strong>{$MOD.LBL_SCHEDULE_EMAIL_TIME}</strong>:
-											<input class="dataInput small" type="text" name="scheduledTime" id="scheduledTime" value="{$schtime}" size="5" maxlength="5" /> {$MOD.LBL_TIME_FORMAT_MSG}
+										<span id="scheduledTimeSpan" style="display: {if $schtypeid > 1}inline{else}none{/if};">&nbsp;<strong>{'LBL_SCHEDULE_EMAIL_TIME'|@getTranslatedString:'Reports'}</strong>:
+											<input class="dataInput small" type="text" name="scheduledTime" id="scheduledTime" value="{$schtime}" size="5" maxlength="5" /> {'LBL_TIME_FORMAT_MSG'|@getTranslatedString:'Reports'}
 										</span>
 
 										<input type="hidden" name="scheduledIntervalString" value="" />
@@ -88,15 +90,15 @@
 									<td>&nbsp;</td>
 								</tr>
 								<tr align="left" valign="top">
-									<td class="cellBottomDotLinePlain small"><strong>{$MOD.LBL_REPORT_FORMAT}</strong>:</td>
+									<td class="cellBottomDotLinePlain small"><strong>{'LBL_REPORT_FORMAT'|@getTranslatedString:'Reports'}</strong>:</td>
 								</tr>
 								<tr align="left" valign="top">
 									<td valign=top class="small">
-										{$APP.LBL_SELECT}:&nbsp;
+										{'LBL_SELECT'|@getTranslatedString:'Reports'}:&nbsp;
 										<select id="scheduledReportFormat" name="scheduledReportFormat" class="small">
-											<option value="pdf" {if $REPORT_FORMAT eq 'pdf'} selected {/if}>{$MOD.LBL_REPORT_FORMAT_PDF}</option>
-											<option value="excel" {if $REPORT_FORMAT eq 'excel'} selected {/if}>{$MOD.LBL_REPORT_FORMAT_EXCEL}</option>
-											<option value="both" {if $REPORT_FORMAT eq 'both'} selected {/if}>{$MOD.LBL_REPORT_FORMAT_BOTH}</option>
+											<option value="pdf" {if $REPORT_FORMAT eq 'pdf'} selected {/if}>{'LBL_REPORT_FORMAT_PDF'|@getTranslatedString:'Reports'}</option>
+											<option value="excel" {if $REPORT_FORMAT eq 'excel'} selected {/if}>{'LBL_REPORT_FORMAT_EXCEL'|@getTranslatedString:'Reports'}</option>
+											<option value="both" {if $REPORT_FORMAT eq 'both'} selected {/if}>{'LBL_REPORT_FORMAT_BOTH'|@getTranslatedString:'Reports'}</option>
 										</select>
 									</td>
 								</tr>
@@ -104,24 +106,24 @@
 									<td>&nbsp;</td>
 								</tr>
 								<tr align="left" valign="top">
-									<td valign=top class="cellBottomDotLinePlain small"><strong>{$MOD.LBL_USERS_AVAILABEL}</strong></td>
+									<td valign=top class="cellBottomDotLinePlain small"><strong>{'LBL_USERS_AVAILABEL'|@getTranslatedString:'Reports'}</strong></td>
 								</tr>
 								<tr align="left" valign="top">
 									<td>
 										<table>
 											<tr>
 												<td width="45%" valign=top class="small">
-													{$APP.LBL_SELECT}:&nbsp;
+													{'LBL_SELECT'|@getTranslatedString:'Reports'}:&nbsp;
 													<select id="recipient_type" name="recipient_type" class="small" onChange="showRecipientsOptions()">
-														<option value="users">{$MOD.LBL_USERS}</option>
-														<option value="groups">{$MOD.LBL_GROUPS}</option>
-														<option value="roles">{$MOD.LBL_ROLES}</option>
-														<option value="rs">{$MOD.LBL_ROLES_SUBORDINATES}</option>
+														<option value="users">{'LBL_USERS'|@getTranslatedString:'Reports'}</option>
+														<option value="groups">{'LBL_GROUPS'|@getTranslatedString:'Reports'}</option>
+														<option value="roles">{'LBL_ROLES'|@getTranslatedString:'Reports'}</option>
+														<option value="rs">{'LBL_ROLES_SUBORDINATES'|@getTranslatedString:'Reports'}</option>
 													</select>
 													<input type="hidden" name="findStr1" class="small">&nbsp;
 												</td>
 												<td width="10%">&nbsp;</td>
-												<td width="45%" class="small"><strong>{$MOD.LBL_USERS_SELECTED}</strong></td>
+												<td width="45%" class="small"><strong>{'LBL_USERS_SELECTED'|@getTranslatedString:'Reports'}</strong></td>
 											</tr>
 
 											<tr class=small>

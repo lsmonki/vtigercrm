@@ -218,7 +218,7 @@ function editworkflowscript($, conditions){
 		};
 		var mapping = [
 			['string', ['string', 'text', 'url', 'email', 'phone']],
-			['number', ['integer', 'double']],
+			['number', ['integer', 'double', 'currency']],
 			['value', ['reference', 'picklist', 'multipicklist', 'datetime',
 								'time', 'date', 'boolean']]
 		];

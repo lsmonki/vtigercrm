@@ -342,7 +342,13 @@ $combo_strings = Array(
 										" " => " ",
 										"$" => "$"
 							),
-'currency_grouping_separator_dom' => Array("$1.0" => "$1.0",
+'currency_grouping_separator_dom' => Array("." => ".",
+										"," => ",",
+										"'" => "'",
+										" " => " ",
+										"$" => "$"
+							),
+'currency_symbol_placement_dom' => Array("$1.0" => "$1.0",
 										"1.0$" => "1.0$"
 							),
 		
@@ -351,7 +357,7 @@ $combo_strings = Array(
 require_once('modules/Users/UserTimeZonesArray.php');
 $usertimezonesClass = new UserTimeZones();
 $arrayOfSupportedTimeZones = $usertimezonesClass->userTimeZones();
-$combo_strings['time_zone'] = array_combine($arrayOfSupportedTimeZones,$arrayOfSupportedTimeZones);
+$combo_strings['time_zone_dom'] = array_combine($arrayOfSupportedTimeZones,$arrayOfSupportedTimeZones);
 
 ?>
 

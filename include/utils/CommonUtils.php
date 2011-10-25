@@ -2637,34 +2637,6 @@ function get_announcements()
 	return $announcement;
 }
 
-/**	Function used to retrieve the rate converted into dollar tobe saved into database
- *	The function accepts the price in the current currency
- *	return integer $conv_price  -
- */
- function getConvertedPrice($price)
- {
-	 global $current_user;
-	 $currencyid=fetchCurrency($current_user->id);
-	 $rate_symbol = getCurrencySymbolandCRate($currencyid);
-	 $conv_price = convertToDollar($price,$rate_symbol['rate']);
-	 return $conv_price;
- }
-
-
-/**	Function used to get the converted amount from dollar which will be showed to the user
- *	@param float $price - amount in dollor which we want to convert to the user configured amount
- *	@return float $conv_price  - amount in user configured currency
- */
-function getConvertedPriceFromDollar($price)
-{
-	global $current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol = getCurrencySymbolandCRate($currencyid);
-	$conv_price = convertFromDollar($price,$rate_symbol['rate']);
-	return $conv_price;
-}
-
-
 /**
  *  Function to get recurring info depending on the recurring type
  *  return  $recurObj       - Object of class RecurringType
@@ -3417,6 +3389,35 @@ function getPickListValues($tablename,$roleid)
 		$fldVal []= $row[$tablename];
 	}
 	return $fldVal;
+}
+
+/** Function to check the file access is made within web root directory and whether it is not from unsafe directories */
+function checkFileAccessForInclusion($filepath) {	
+	global $root_directory;
+	// Set the base directory to compare with
+	$use_root_directory = $root_directory;
+	if(empty($use_root_directory)) {
+		$use_root_directory = realpath(dirname(__FILE__).'/../../.');
+	}
+
+	$unsafeDirectories = array('storage', 'cache', 'test');
+
+	$realfilepath = realpath($filepath);
+
+	/** Replace all \\ with \ first */
+	$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+	$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+
+	/** Replace all \ with / now */
+	$realfilepath = str_replace('\\', '/', $realfilepath);
+	$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+
+	$relativeFilePath = str_replace($rootdirpath, '', $realfilepath);
+	$filePathParts = explode('/', $relativeFilePath);
+
+	if(stripos($realfilepath, $rootdirpath) !== 0 || in_array($filePathParts[0], $unsafeDirectories)) {
+		die("Sorry! Attempt to access restricted file.");
+	}
 }
 
 /** Function to check the file access is made within web root directory. */

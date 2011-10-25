@@ -1336,14 +1336,15 @@ function getEscapedColumns($selectedfields)
 				if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
 					$val = Array();
 					for($x=0;$x<count($temp_val);$x++) {
-						$temp_val[$x] = trim($temp_val[$x]);
-						if($temp_val[$x] != '') {
-							if(stripos($temp_val[$x], ' ') === false) {
-								$date = new DateTimeField($temp_val[$x]);
-								$val[$x] = $date->getDisplayDateTimeValue();
-							} else {
-								$val[$x] = DateTimeField::convertToUserFormat($temp_val[$x]);
-							}
+                        if($col[4] == 'D') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayDate();
+						} elseif($col[4] == 'DT') {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayDateTimeValue();
+						} else {
+							$date = new DateTimeField(trim($temp_val[$x]));
+							$val[$x] = $date->getDisplayTime();
 						}
 					}
 					$advfilterval = implode(",",$val);
@@ -1607,6 +1608,24 @@ function getEscapedColumns($selectedfields)
 		$log->info("Reports :: Successfully returned sgetColumnstoTotalHTML");
 		return $options_list;
 	}
+
+	/** Function to get the  advanced filter criteria for an option
+	 *  This function accepts The option in the advenced filter as an argument
+	 *  This generate filter criteria for the advanced filter
+	 *  It returns a HTML string of combo values
+	 */
+	public static function getAdvCriteriaHTML($selected="") {
+		global $adv_filter_options;
+
+		foreach($adv_filter_options as $key=>$value) {
+			if($selected == $key) {
+				$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
+			} else {
+				$shtml .= "<option value=\"".$key."\">".$value."</option>";
+			}
+		}
+		return $shtml;
+	}
 }
 
 /** Function to get the primary module list in vtiger_reports
@@ -1658,24 +1677,6 @@ function getReportRelatedModules($module,$focus)
 	return $optionhtml;
 }
 
-/** Function to get the  advanced filter criteria for an option
- *  This function accepts The option in the advenced filter as an argument
- *  This generate filter criteria for the advanced filter
- *  It returns a HTML string of combo values
- */
-function getAdvCriteriaHTML($selected="") {
-	global $adv_filter_options;
-
-	foreach($adv_filter_options as $key=>$value) {
-		if($selected == $key) {
-			$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
-		} else {
-			$shtml .= "<option value=\"".$key."\">".$value."</option>";
-		}
-	}
-	return $shtml;
-}
-
 function updateAdvancedCriteria($reportid, $advft_criteria, $advft_criteria_groups) {	
 
 	global $adb, $log;
@@ -1719,15 +1720,21 @@ function updateAdvancedCriteria($reportid, $advft_criteria, $advft_criteria_grou
 		}
 		
 		$temp_val = explode(",",$adv_filter_value);
-		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end')
-				|| ($column_info[4] == 'DT'))
-			&& ($column_info[4] != '' && $adv_filter_value != '' )) {
+		if(($column_info[4] == 'D' || ($column_info[4] == 'T' && $column_info[1] != 'time_start' && $column_info[1] != 'time_end') || ($column_info[4] == 'DT')) && ($column_info[4] != '' && $adv_filter_value != '' ))
+		{
 			$val = Array();
 			for($x=0;$x<count($temp_val);$x++) {
-				list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
-				$temp_date = getDBInsertDateValue(trim($temp_date));
-				$val[$x] = $temp_date;
-				if($temp_time != '') $val[$x] = $val[$x].' '.$temp_time;
+				if(trim($temp_val[$x]) != '') {
+					$date = new DateTimeField(trim($temp_val[$x]));
+					if($column_info[4] == 'D') {
+						$val[$x] = DateTimeField::convertToUserFormat(
+								trim($temp_val[$x]));
+					} elseif($column_info[4] == 'DT') {
+						$val[$x] = $date->getDBInsertDateTimeValue();
+					} else {
+						$val[$x] = $date->getDBInsertTimeValue();
+					}
+				}
 			}
 			$adv_filter_value = implode(",",$val);
 		}

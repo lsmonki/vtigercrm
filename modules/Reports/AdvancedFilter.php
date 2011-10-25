@@ -33,7 +33,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$COLUMNS_BLOCK .= getSecondaryColumns_AdvFilterHTML($oReport->secmodule);
 	$report_std_filter->assign("COLUMNS_BLOCK", $COLUMNS_BLOCK);
 	
-	$FILTER_OPTION = getAdvCriteriaHTML();
+	$FILTER_OPTION = Reports::getAdvCriteriaHTML();
 	$report_std_filter->assign("FOPTION",$FILTER_OPTION);
 
 	$rel_fields = getRelatedFieldColumns();

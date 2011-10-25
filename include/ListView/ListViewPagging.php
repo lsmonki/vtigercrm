@@ -15,7 +15,7 @@ require_once('include/ListView/ListView.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/DatabaseUtil.php');
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
+checkFileAccessForInclusion("modules/$currentModule/$currentModule.php");
 require_once("modules/$currentModule/$currentModule.php");
 if(!is_string($_SESSION[$currentModule.'_listquery']) || !empty($_REQUEST['globalSearch'])){
 	// Custom View

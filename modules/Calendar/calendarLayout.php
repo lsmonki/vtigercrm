@@ -1365,11 +1365,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
 
-	//modified query to fix the ticket #5014 & #5180
-	$and = "AND ((((cast(concat(date_start, ' ', time_start) as datetime) between ? and ?)
-			OR (cast(concat(due_date, ' ', time_end) as datetime) between ? and ?))
-			AND (vtiger_recurringevents.activityid is NULL))
-			OR (cast(concat(vtiger_recurringevents.recurringdate, ' ', time_start) as datetime) BETWEEN ? AND ?))";
+	$and = "AND (((date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))
+				AND vtiger_recurringevents.activityid is NULL)
+			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ? OR due_date BETWEEN ? AND ?
+					OR (vtiger_recurringevents.recurringdate <= ? AND due_date >= ?)))";
 
 	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
 			'vtiger_users.last_name'));
@@ -1397,9 +1396,13 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$startDate = new DateTimeField($start_date.' 00:00');
 	$endDate = new DateTimeField($end_date. ' 23:59');
 	$params = $info_params = array(
-		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(), 
-		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
-		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue());
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(), 
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue()
+	);
 	if($info != '')
 	{
 		$groupids = explode(",", fetchUserGroupids($current_user->id)); // Explode can be removed, once implode is removed from fetchUserGroupids
@@ -1420,7 +1423,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		if (count($groupids) > 0) {
 			array_push($info_params, $groupids);
 		}
-		
+
 		$total_res = $adb->pquery($total_q, $info_params);
 		$total = $adb->num_rows($total_res);
 
@@ -1631,12 +1634,15 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 					ON vtiger_users.id = vtiger_crmentity.smownerid";
 	$query .= getNonAdminAccessControlQuery('Calendar',$current_user);
 	$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_activity.activitytype = 'Task'".
-					" AND (cast(concat(date_start, ' ', time_start) as datetime) between ? and ?)";
+					" AND (date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))";
+
 	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 
 	$startDate = new DateTimeField($start_date.' 00:00');
 	$endDate = new DateTimeField($end_date. ' 23:59');
-	$params = $info_params = array($startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue());
+	$params = $info_params = array($startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+									$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
+									$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue());
 	
         if($info != '')
 		{

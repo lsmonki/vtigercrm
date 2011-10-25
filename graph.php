@@ -168,7 +168,7 @@ $log->info("current langugage is $current_language");
 $log->info("current module is $current_module ");	
 $log->info("including $current_module_file");	
 
-checkFileAccess($current_module_file);
+checkFileAccessForInclusion($current_module_file);
 require_once($current_module_file);
 $draw_this = new jpgraph();
 

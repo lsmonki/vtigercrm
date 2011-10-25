@@ -52,6 +52,7 @@ class UserTimeZones{
 										'Atlantic/Azores',
 										'Atlantic/Cape_Verde',
 										'Europe/London',
+										'UTC',
 										'Africa/Monrovia',
 										'Africa/Casablanca',
 										'Europe/Belgrade',

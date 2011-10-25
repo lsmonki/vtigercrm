@@ -808,7 +808,7 @@ $adb->pquery("UPDATE vtiger_users SET currency_grouping_pattern='123,456,789',
 echo "Done setting the default Digit Grouping Pattern, Decimal separator and Digit separator for existing users <br>";
 
 $adb->pquery("UPDATE vtiger_field SET uitype='71' WHERE uitype=1 AND tablename='vtiger_campaign'
-							AND fieldname IN ('expectedrevenue', 'actualrevenue', 'expectedroi', 'actualroi', 'budgetcost')",
+							AND fieldname IN ('expectedrevenue', 'actualcost', 'expectedroi', 'actualroi', 'budgetcost')",
 		array());
 
 $adb->pquery("UPDATE vtiger_field SET uitype='72' WHERE uitype IN ('1','71')
@@ -826,13 +826,9 @@ installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip")
 installVtlibModule('WSAPP', "packages/vtiger/mandatory/WSAPP.zip");
 
 updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
-updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
 updateVtlibModule('Services', 'packages/vtiger/mandatory/Services.zip');
 updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContracts.zip');
 updateVtlibModule('PBXManager','packages/vtiger/mandatory/PBXManager.zip');
-updateVtlibModule('ModComments', 'packages/vtiger/optional/ModComments.zip');
-updateVtlibModule('SMSNotifier', 'packages/vtiger/optional/SMSNotifier.zip');
-updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
 updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0RC  -------- Ends \n\n");

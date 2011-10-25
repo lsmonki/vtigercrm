@@ -80,9 +80,6 @@ if($numOfRows > 0) {
 		// Performance Optimization: Direct output of the report result
 		$list_report_form = new vtigerCRM_Smarty;
 
-		//$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
-		//if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-
 		$sshtml = array();
 		$totalhtml = '';
 		$list_report_form->assign("DIRECT_OUTPUT", true);
@@ -98,7 +95,7 @@ if($numOfRows > 0) {
 		$COLUMNS_BLOCK .= getSecondaryColumns_AdvFilter_HTML($ogReport->secmodule, $ogReport);
 		$list_report_form->assign("COLUMNS_BLOCK", $COLUMNS_BLOCK);
 
-		$FILTER_OPTION = getAdvCriteriaHTML();
+		$FILTER_OPTION = Reports::getAdvCriteriaHTML();
 		$list_report_form->assign("FOPTION",$FILTER_OPTION);
 
 		$rel_fields = $ogReport->adv_rel_fields;

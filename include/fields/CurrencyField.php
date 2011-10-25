@@ -37,7 +37,7 @@ class CurrencyField {
      * Number of Decimal Numbers
      * @var Integer
      */
-    var $numberOfDecimal = 2;
+    var $numberOfDecimal = 3;
 
 	/**
 	 * Currency Id
@@ -93,7 +93,11 @@ class CurrencyField {
 			$this->decimalSeparator = html_entity_decode($user->currency_decimal_separator, ENT_QUOTES, $default_charset);
 		}
 
-		$this->currencyId = $user->currency_id;
+		if(!empty($user->currency_id)) {
+			$this->currencyId = $user->currency_id;
+		} else {
+			$this->currencyId = self::getDBCurrencyId();
+		}
 		$currencyRateAndSymbol = getCurrencySymbolandCRate($this->currencyId);
 		$this->currencySymbol = $currencyRateAndSymbol['symbol'];
 		$this->conversionRate = $currencyRateAndSymbol['rate'];
@@ -102,6 +106,10 @@ class CurrencyField {
 
 	public function getCurrencySymbol() {
 		return $this->currencySymbol;
+	}
+
+	public function setNumberofDecimals($numberOfDecimals) {
+		$this->numberOfDecimal = $numberOfDecimals;
 	}
     
     /**
@@ -299,6 +307,7 @@ class CurrencyField {
 		if($skipConversion == false) {
 			$value = convertToDollar($value,$this->conversionRate);
 		}
+		$value = round($value, $this->numberOfDecimal);
 		
         return $value;
     }
@@ -314,5 +323,20 @@ class CurrencyField {
         $self = new self($value);
         return $self->getDBInsertedValue($user, $skipConversion);
     }
+
+	/**
+	 * Function to get the default CRM currency
+	 * @return Integer Default system currency id
+	 */
+	public static function getDBCurrencyId() {
+		$adb = PearDatabase::getInstance();
+
+		$result = $adb->pquery('SELECT id FROM vtiger_currency_info WHERE defaultid < 0', array());
+		$noOfRows = $adb->num_rows($result);
+		if($noOfRows > 0) {
+			return $adb->query_result($result, 0, 'id');
+		}
+		return null;
+	}
 }
 ?>

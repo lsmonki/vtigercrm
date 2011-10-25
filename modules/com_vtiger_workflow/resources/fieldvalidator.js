@@ -173,7 +173,7 @@ var validateFieldData = {
 					invalidFieldValues[fieldName] = fieldDetails;
 					validationFailed = true;
 				}
-			} else if(fieldType == 'double') {
+			} else if(fieldType == 'double' || fieldType == 'currency') {
 				if(!this.validateNumeric(fieldValue)) {
 					invalidFieldValues[fieldName] = fieldDetails;
 					validationFailed = true;

@@ -21,8 +21,8 @@ $mode = $_REQUEST['mode'];
 // Split the string of ids
 if($mode == 'delete') {
 	$ids = explode (";",trim($idlist,";"));
-	if(function_exists('checkFileAccess')) {
-		checkFileAccess("modules/$currentModule/$currentModule.php");
+	if(function_exists('checkFileAccessForInclusion')) {
+		checkFileAccessForInclusion("modules/$currentModule/$currentModule.php");
 	}
 	require_once("modules/$currentModule/$currentModule.php");
 	$focus = new $currentModule();
@@ -39,8 +39,8 @@ if($mode == 'delete') {
 
 if(!empty($_REQUEST['idlist'])) {
 	$ids = explode (";",trim($idlist,";"));
-	if(function_exists('checkFileAccess')) {
-		checkFileAccess("modules/$currentModule/$currentModule.php");
+	if(function_exists('checkFileAccessForInclusion')) {
+		checkFileAccessForInclusion("modules/$currentModule/$currentModule.php");
 	}
 	require_once("modules/$currentModule/$currentModule.php");
 	$focus = new $currentModule();

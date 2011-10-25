@@ -34,7 +34,7 @@ class MailManager_IndexController extends MailManager_Controller {
 		
 		// TODO Handle case when controller information is not available
 		$controllerFile = dirname(__FILE__) . '/' . $controllerInfo['file'];
-		checkFileAccess($controllerFile);
+		checkFileAccessForInclusion($controllerFile);
 		include_once $controllerFile;
 		$controller = new $controllerInfo['class'];
 		

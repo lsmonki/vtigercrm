@@ -7369,5 +7369,100 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_currency_grouping_pattern">
+		<field name="currency_grouping_patternid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_grouping_pattern" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_currency_decimal_separator">
+		<field name="currency_decimal_separatorid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_decimal_separator" type="C" size="2">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_currency_grouping_separator">
+		<field name="currency_grouping_separatorid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_grouping_separator" type="C" size="2">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_currency_symbol_placement">
+		<field name="currency_symbol_placementid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_symbol_placement" type="C" size="30">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_time_zone">
+		<field name="time_zoneid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="time_zone" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
 	
 </schema>

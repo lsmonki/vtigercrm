@@ -1284,12 +1284,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['mg_subject'];
 		}
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
-		if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ) && ($module_name=='Campaigns'))
-		{
-			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
-			$fieldvalue[] = convertFromDollar($value,$rate_symbol['rate']);
-		}
-		elseif($fieldname == 'fileversion'){
+		if($fieldname == 'fileversion'){
 			if(empty($value)){
 				$value = '';
 			}
@@ -1957,15 +1952,15 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 	
 	foreach($block_label as $blockid=>$label)
 	{
-		if($label == '')
-		{
-			$returndata[getTranslatedString($curBlock,$module)]=array_merge((array)$returndata[getTranslatedString($curBlock,$module)],(array)$editview_arr[$blockid]);
-		}
-		else
-		{
-			$curBlock = $label;
-			if(is_array($editview_arr[$blockid]))
+		if($editview_arr[$blockid] != null) {
+			if($label == '') {
 				$returndata[getTranslatedString($curBlock,$module)]=array_merge((array)$returndata[getTranslatedString($curBlock,$module)],(array)$editview_arr[$blockid]);
+			}
+			else {
+				$curBlock = $label;
+				if(is_array($editview_arr[$blockid]))
+					$returndata[getTranslatedString($curBlock,$module)]=array_merge((array)$returndata[getTranslatedString($curBlock,$module)],(array)$editview_arr[$blockid]);
+			}
 		}
 	}
 	$log->debug("Exiting getBlockInformation method ...");

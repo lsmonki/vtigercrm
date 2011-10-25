@@ -1371,7 +1371,7 @@ function add_ticket_attachment($input_array)
 	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 
 	//fix for space in file name
-	$filename = SanitizeFileName($filename);
+	$filename = sanitizeUploadFileName($filename, $upload_badext);
 	$new_filename = $attachmentid.'_'.$filename;
 
 	$data = base64_decode($filecontents);
@@ -1944,7 +1944,7 @@ function get_pdf($id,$block,$customerid,$sessionid)
 	if (file_exists($filenamewithpath) && (filesize($filenamewithpath) != 0))
 	unlink($filenamewithpath);
 
-	checkFileAccess("modules/$block/CreatePDF.php");
+	checkFileAccessForInclusion("modules/$block/CreatePDF.php");
 	include("modules/$block/CreatePDF.php");
 
 	if (file_exists($filenamewithpath) && (filesize($filenamewithpath) != 0))
