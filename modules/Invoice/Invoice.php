@@ -126,7 +126,8 @@ class Invoice extends CRMEntity {
 			$this->createRecurringInvoiceFromSO();
 			
 		} else if(isset($_REQUEST)) {
-			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
+			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' 
+					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
 			{
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Invoice');

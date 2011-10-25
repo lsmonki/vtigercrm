@@ -140,7 +140,7 @@ class Services extends CRMEntity {
 	function save_module($module)
 	{
 		//Inserting into service_taxrel table
-		if($_REQUEST['ajxaction'] != 'DETAILVIEW'&& $_REQUEST['action'] != 'MassEditSave')
+		if($_REQUEST['ajxaction'] != 'DETAILVIEW'&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
 		{
 			$this->insertTaxInformation('vtiger_producttaxrel', 'Services');
 			$this->insertPriceInformation('vtiger_productcurrencyrel', 'Services');
@@ -211,7 +211,7 @@ class Services extends CRMEntity {
 		$currency_details = getAllCurrencies('all');
 		
 		//Delete the existing currency relationship if any
-		if($this->mode == 'edit'&&  $_REQUEST['action'] != 'MassEditSave')
+		if($this->mode == 'edit' &&  $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
 		{
 			for($i=0;$i<count($currency_details);$i++)
 			{

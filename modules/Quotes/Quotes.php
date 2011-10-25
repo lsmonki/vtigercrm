@@ -117,7 +117,8 @@ class Quotes extends CRMEntity {
 	{
 		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
+		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' 
+				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails($this, 'Quotes');
