@@ -471,9 +471,23 @@ function get_combo_values($input_array)
 		$output['serviceid']['serviceid']="#MODULE INACTIVE#";
 		$output['servicename']['servicename']="#MODULE INACTIVE#";
 	} else {
-		$servicequery = "SELECT vtiger_servicecontracts.servicecontractsid,vtiger_servicecontracts.subject from vtiger_servicecontracts
-							inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_servicecontracts.servicecontractsid and vtiger_crmentity.deleted = 0 where vtiger_servicecontracts.sc_related_to = $id ";
-		$serviceResult = $adb->pquery($servicequery,array());
+		$servicequery = "SELECT vtiger_servicecontracts.servicecontractsid,vtiger_servicecontracts.subject
+							FROM vtiger_servicecontracts
+							INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid=vtiger_servicecontracts.servicecontractsid
+									AND vtiger_crmentity.deleted = 0
+							WHERE vtiger_servicecontracts.sc_related_to = ?";
+		$params = array($id);
+		$showAll = show_all('HelpDesk');
+		if($showAll == 'true') {
+			$servicequery .= ' OR vtiger_servicecontracts.sc_related_to = (SELECT accountid FROM vtiger_contactdetails WHERE contactid=?)
+								OR vtiger_servicecontracts.sc_related_to IN
+											(SELECT contactid FROM vtiger_contactdetails WHERE accountid =
+													(SELECT accountid FROM vtiger_contactdetails WHERE contactid=?))
+							';
+			array_push($params, $id);
+			array_push($params, $id);
+		}
+		$serviceResult = $adb->pquery($servicequery,$params);
 
 		for($i=0;$i < $adb->num_rows($serviceResult);$i++){
 			$serviceid = $adb->query_result($serviceResult,$i,'servicecontractsid');
