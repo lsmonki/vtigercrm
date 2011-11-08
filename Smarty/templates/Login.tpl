@@ -32,6 +32,11 @@
 						<br />
 						<div class="label">Password</div>
 						<div class="input"><input type="password" name="user_password"/></div>
+						{if $LOGIN_ERROR neq ''}
+						<div class="errorMessage">
+							{$LOGIN_ERROR}
+						</div>
+						{/if}
 						<br />
 						<div class="button">
 							<input type="submit" id="submitButton" value="Login" />
