@@ -1219,7 +1219,9 @@ function getAdvancedSearchComparator($comparator,$value,$datatype = '') {
 	global $adb, $default_charset;
 	$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
 	$value = $adb->sql_escape_string($value);
-	$value = getValidDBInsertDateTimeValue($value, $datatype);
+	if($datatype == 'DT' || $datatype == 'D') {
+		$value = getValidDBInsertDateTimeValue($value, $datatype);
+	}
 	
 	if($comparator == "e") {
 		if(trim($value) == "NULL") {

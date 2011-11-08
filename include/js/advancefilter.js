@@ -194,7 +194,7 @@ function addRequiredElements(columnindex) {
 		switch(fieldtype) {
 			case 'D':
 			case 'DT':
-			case 'T':	var dateformat = $('jscal_dateformat').value;
+			case 'T':var dateformat = $('jscal_dateformat').value;
 						var timeformat = "%H:%M:%S";
 						var showtime = true;
 						if(fieldtype == 'D' || (tableName == 'vtiger_activity' && fieldName == 'date_start')) {
@@ -274,7 +274,7 @@ function addRequiredElements(columnindex) {
                         
                         break;
 						
-			default	:	if(document.getElementById('jscal_trigger_fval'+columnindex)) removeElement('jscal_trigger_fval'+columnindex);
+			default	:if(document.getElementById('jscal_trigger_fval'+columnindex)) removeElement('jscal_trigger_fval'+columnindex);
 						if(document.getElementById('fval_ext'+columnindex)) removeElement('fval_ext'+columnindex);
 						if(document.getElementById('jscal_trigger_fval_ext'+columnindex)) removeElement('jscal_trigger_fval_ext'+columnindex);
 						if(document.getElementById('clear_text_ext'+columnindex)) removeElement('clear_text_ext'+columnindex);
@@ -343,7 +343,7 @@ function checkAdvancedFilter() {
 						if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS")) {
 							return false
 						}
-					} else if($col[0] == 'vtiger_activity' && $col[2] == 'date_start') {
+					} else if(col[0] == 'vtiger_activity' && col[2] == 'date_start') {
 						if(!dateValidate(valueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
 							return false
 					} else {
@@ -408,15 +408,15 @@ function checkAdvancedFilter() {
 		}
 		if (extValueObject && extendedValue != null && extendedValue != '') specifiedValue = specifiedValue +','+ extendedValue;
 		
-		criteriaConditions[columnIndex] = {	"groupid":columnGroupId, 
+		criteriaConditions[columnIndex] = {"groupid":columnGroupId, 
 											"columnname":selectedColumn,
 											"comparator":comparatorValue,
 											"value":specifiedValue,
 											"columncondition":glueCondition
 										};
 	}
-	
-	$('advft_criteria').value = JSON.stringify(criteriaConditions);
+
+	$('advft_criteria').value = encodeURIComponent(JSON.stringify(criteriaConditions));
 	
 	var conditionGroups = vt_getElementsByName('div', "conditionGroup");
 	var criteriaGroups = [];
