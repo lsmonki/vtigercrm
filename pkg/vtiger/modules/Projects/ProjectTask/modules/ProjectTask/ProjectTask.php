@@ -455,7 +455,12 @@ class ProjectTask extends CRMEntity {
         } else if($event_type == 'module.preupdate') {
             // TODO Handle actions before this module is updated.
         } else if($event_type == 'module.postupdate') {
-            // TODO Handle actions after this module is updated.
+
+			$modcommentsModuleInstance = Vtiger_Module::getInstance('ModComments');
+			if($modcommentsModuleInstance) {
+				include_once 'modules/ModComments/ModComments.php';
+				if(class_exists('ModComments')) ModComments::addWidgetTo(array('ProjectTask'));
+			}
         }
     }
 
