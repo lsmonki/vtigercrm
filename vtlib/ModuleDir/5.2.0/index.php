@@ -9,7 +9,7 @@
  ************************************************************************************/
 global $currentModule;
 
-checkFileAccessForInclusion("modules/$currentModule/ListView.php");
+checkFileAccess("modules/$currentModule/ListView.php");
 include_once("modules/$currentModule/ListView.php");
 
 ?>

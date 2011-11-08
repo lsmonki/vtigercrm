@@ -7,9 +7,13 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-global $currentModule;
 
-checkFileAccess("modules/$currentModule/ListView.php");
-include_once("modules/$currentModule/ListView.php");
+require_once 'modules/Vtiger/EditView.php';
+
+if($focus->mode == 'edit') {
+	$smarty->display('salesEditView.tpl');
+} else {
+	$smarty->display('CreateView.tpl');
+}
 
 ?>

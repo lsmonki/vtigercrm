@@ -7,9 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-global $currentModule;
-
-checkFileAccess("modules/$currentModule/ListView.php");
-include_once("modules/$currentModule/ListView.php");
+require_once('include/utils/ExportRecords.php');
 
 ?>

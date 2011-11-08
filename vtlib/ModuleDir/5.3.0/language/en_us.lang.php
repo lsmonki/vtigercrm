@@ -7,9 +7,14 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-global $currentModule;
 
-checkFileAccess("modules/$currentModule/ListView.php");
-include_once("modules/$currentModule/ListView.php");
+$mod_strings = Array(
+	'ModuleName' => 'Module Name',
+
+	'LBL_CUSTOM_INFORMATION' => 'Custom Information',
+	'LBL_MODULEBLOCK_INFORMATION' => 'ModuleBlock Information',
+
+	'ModuleFieldLabel' => 'ModuleFieldLabel Text',
+);
 
 ?>
