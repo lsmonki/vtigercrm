@@ -59,7 +59,8 @@
 			</td>
 			<td align="right" valign="top">
 				<input type="button" class="small create" onclick="show('sourceValuesSelectionDiv');placeAtCenter($('sourceValuesSelectionDiv'));"
-					    value="{$MOD_PICKLIST.LBL_BUTTON_SELECTED_SOURCE_VALUES}"  title="{'LBL_BUTTON_SELECTED_SOURCE_VALUES'|@getTranslatedString:$MODULE}"/>
+					    value="{'LBL_BUTTON_SELECTED_SOURCE_VALUES'|@getTranslatedString:$PICKLIST_MODULE}"
+						title="{'LBL_BUTTON_SELECTED_SOURCE_VALUES'|@getTranslatedString:$PICKLIST_MODULE}"/>
 
 				<div style="display:none;position:absolute;" id="sourceValuesSelectionDiv">
 					<div class="layerPopup" style="position:relative; display:block; padding:10px">

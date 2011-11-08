@@ -54,6 +54,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));	//
 $smarty->assign("MOD_PICKLIST", return_module_language($current_language,'PickList'));	//the picklist module language files
 
 $smarty->assign("MODULE",$fld_module);
+$smarty->assign("PICKLIST_MODULE",'PickList');
 $smarty->assign("THEME",$theme);
 
 $smarty->assign("SUBMODE",vtlib_purify($_REQUEST['submode']));
