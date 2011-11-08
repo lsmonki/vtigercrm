@@ -923,12 +923,14 @@ function delActivity(id,view,hour,day,month,year,subtab)
 {
 	if(subtab == 'event')
 	{
+		var users = document.getElementsByName('onlyforuser');
+		var onlyforuser = users[0].value;
 		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
          	new Ajax.Request(
 	                	'index.php',
 	                	{queue: {position: 'end', scope: 'command'},
 	                        	method: 'post',
-	                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
+	                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true&onlyforuser='+encodeURIComponent(onlyforuser),
 	                        	onComplete: function(response) {
 								if(OptionData == 'listview')
 								{
