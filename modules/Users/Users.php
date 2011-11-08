@@ -563,15 +563,16 @@ class Users extends CRMEntity {
 	}
 
 	function verifyPassword($password) {
-		$encryptedPassword = $this->encrypt_password($password);
-		$query = "SELECT user_name,user_password FROM {$this->table_name} WHERE id=?";
+		$query = "SELECT user_name,user_password,crypt_type FROM {$this->table_name} WHERE id=?";
 		$result =$this->db->pquery($query, array($this->id));
 		$row = $this->db->fetchByAssoc($result);
 		$this->log->debug("select old password query: $query");
 		$this->log->debug("return result of $row");
-		if($encryptedPassword != $this->db->query_result($result, 0, 'user_password')) {
+		$encryptedPassword = $this->encrypt_password($password, $row['crypt_type']);
+		if($encryptedPassword != $row['user_password']) {
 			return false;
 		}
+		return true;
 	}
 
 	function is_authenticated()

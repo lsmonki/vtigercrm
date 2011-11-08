@@ -81,23 +81,15 @@ if($_REQUEST['deleteImage'] == 'true') {
 	exit;
 }
 
-if($_REQUEST['changepassword'] == 'true')
-{
+if($_REQUEST['changepassword'] == 'true') {
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
 	$focus->id = $_REQUEST['record'];
-if (isset($_POST['new_password'])) {
-		$new_pass = $_POST['new_password'];
-		$new_passwd = $_POST['new_password'];
-		$new_pass = md5($new_pass);
-		$old_pass = $_POST['old_password'];
-		$uname = $_POST['user_name'];
-		if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
-		
+	if (isset($_REQUEST['new_password'])) {
+		if (!$focus->change_password($_REQUEST['old_password'], $_REQUEST['new_password'])) {
 			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
-		exit;
-}
-}
-	
+			exit;
+		}
+	}
 }	
 
     
