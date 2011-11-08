@@ -21,7 +21,7 @@ $url = getBasic_Advance_SearchURL();
 
 //split the string and store in an array
 $storearray = explode(";",$idlist);
-array_filter($storearray);
+$storearray = array_filter($storearray);
 $ids_list = array();
 $errormsg = '';
 foreach($storearray as $id)
