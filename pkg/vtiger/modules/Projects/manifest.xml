@@ -19,7 +19,7 @@
 <filepath>ProjectTask.zip</filepath>
 </dependent_module>
 <dependent_module>
-<name>Projects</name>
+<name>Project</name>
 <install_sequence>3</install_sequence>
 <filepath>Project.zip</filepath>
 </dependent_module>
