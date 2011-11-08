@@ -1401,6 +1401,7 @@ class Common_Install_Wizard_Utils {
 		
 		$selected_modules = explode(":",$selected_modules);
 
+		$languagePacks = array();
 		if ($handle = opendir('packages/vtiger/optional')) {		    
 		    while (false !== ($file = readdir($handle))) {
 		        $filename_arr = explode(".", $file);
@@ -1414,9 +1415,10 @@ class Common_Install_Wizard_Utils {
 				
 		        if (!empty($packagename) && in_array($module,$selected_modules)) {
 					if($package->isLanguageType($packagepath)) {
-						installVtlibModule($module, $packagepath);
+						$languagePacks[$module] = $packagename;
 						continue;
 					}
+					
 	        		if($module != null) {
 						if($package->isModuleBundle()) {
 							$unzip = new Vtiger_Unzip($packagepath);
@@ -1446,6 +1448,11 @@ class Common_Install_Wizard_Utils {
 		        }
 		    }
 		    closedir($handle);
+		}
+
+		foreach($languagePacks as $module => $packagepath) {
+			installVtlibModule($module, $packagepath);
+			continue;
 		}
 	}
 	
