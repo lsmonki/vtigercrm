@@ -27,6 +27,7 @@ ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler VARCHAR(32) DEFAULT nu
 
 updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
 updateVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
+updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Ends \n\n");
 
