@@ -108,3 +108,7 @@ a:hover {
 .importantLinks, .communityLinks {
 	font-size: 0.8em;
 }
+
+.errorMessage {
+	color: #FF0000;
+}
