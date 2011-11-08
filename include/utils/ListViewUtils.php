@@ -199,7 +199,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$temp_sorder = 'ASC';
 						}
-						$lbl_name = getTranslatedString($name, $module);
+						$lbl_name = getTranslatedString(decode_html($name), $module);
 						//added to display vtiger_currency symbol in listview header
 						if($lbl_name =='Amount')
 						{
