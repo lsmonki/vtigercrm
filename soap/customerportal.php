@@ -982,8 +982,14 @@ function authenticate_user($username,$password,$version,$login = 'true')
 	$password = $adb->sql_escape_string($password);
 
 	$current_date = date("Y-m-d");
-	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from vtiger_portalinfo inner join vtiger_customerdetails on vtiger_portalinfo.id=vtiger_customerdetails.customerid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_portalinfo.id where vtiger_crmentity.deleted=0 and user_name=? and user_password = ? and isactive=1 and vtiger_customerdetails.portal=1 and vtiger_customerdetails.support_end_date >= ?";
-	$result = $adb->pquery($sql, array($username, $password, $current_date));
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date
+				from vtiger_portalinfo
+					inner join vtiger_customerdetails on vtiger_portalinfo.id=vtiger_customerdetails.customerid
+					inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_portalinfo.id
+				where vtiger_crmentity.deleted=0 and user_name=? and user_password = ?
+					and isactive=1 and vtiger_customerdetails.portal=1
+					and vtiger_customerdetails.support_start_date <= ? and vtiger_customerdetails.support_end_date >= ?";
+	$result = $adb->pquery($sql, array($username, $password, $current_date, $current_date));
 	$err[0]['err1'] = "MORE_THAN_ONE_USER";
 	$err[1]['err1'] = "INVALID_USERNAME_OR_PASSWORD";
 
