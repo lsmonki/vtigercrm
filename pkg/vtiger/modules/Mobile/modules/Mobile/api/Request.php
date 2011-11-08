@@ -12,7 +12,7 @@ class Mobile_API_Request {
 	private $rawvaluemap;
 	private $defaultmap = array();
 	
-	function __construct($values, $rawvalues = array()) {
+	function __construct($values = array(), $rawvalues = array()) {
 		$this->valuemap = $values;
 		$this->rawvaluemap = $rawvalues;
 	}

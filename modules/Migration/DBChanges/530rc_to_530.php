@@ -25,6 +25,8 @@ ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler_path VARCHAR(128) DEFA
 ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler_class VARCHAR(32) DEFAULT null");
 ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler VARCHAR(32) DEFAULT null");
 
+updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Ends \n\n");
 
 ?>
