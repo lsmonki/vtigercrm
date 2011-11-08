@@ -695,7 +695,7 @@ $sql = "UPDATE vtiger_users SET time_zone=?";
 $adb->pquery($sql, $params);
 
 $adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=? OR tabid=?)",
-					array(getTabid('Calender'), getTabid('Events')));
+					array(getTabid('Calendar'), getTabid('Events')));
 
 vt530_changeDataType('vtiger_crmentity', 'createdtime', 'createdtime', 'DT', 'DT~O');
 vt530_changeDataType('vtiger_crmentity', 'modifiedtime', 'modifiedtime', 'DT', 'DT~O');
