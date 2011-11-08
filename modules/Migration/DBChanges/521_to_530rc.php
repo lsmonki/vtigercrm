@@ -17,6 +17,8 @@ $conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0RC -------- Starts \n\n");
 
+create_tab_data_file();
+
 // Take away the ability to disable entity name fields
 $sql = "SELECT modulename, fieldname, tablename FROM vtiger_entityname;";
 $params = array();
