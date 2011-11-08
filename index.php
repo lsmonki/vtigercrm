@@ -23,7 +23,7 @@ global $entityDel;
 global $display;
 global $category;
 
-if(version_compare(phpversion(), '5.0') < 0) {
+if(version_compare(phpversion(), '5.2.0') < 0) {
         insert_charset_header();
 		$serverPhpVersion = phpversion();
         require_once('phpversionfail.php');
@@ -32,7 +32,7 @@ if(version_compare(phpversion(), '5.0') < 0) {
 
 require_once('include/utils/utils.php');
 
-if (version_compare(phpversion(), '5.0') < 0) {
+if (version_compare(phpversion(), '5.2.0') < 0) {
     eval('
     function clone($object) {
       return $object;
