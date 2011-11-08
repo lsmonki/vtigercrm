@@ -146,7 +146,7 @@ if(isset($query_string) && $query_string != ''){
 				}
 				$list_result = $adb->query($listquery);
 				
-				$moduleRecordCount[$module]['recordListRangeMessage'] = getRecordRangeMessage($list_result, $limitStartRecord);
+				$moduleRecordCount[$module]['recordListRangeMessage'] = getRecordRangeMessage($list_result, $limitStartRecord, $noofrows);
 
 				$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
 				$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
