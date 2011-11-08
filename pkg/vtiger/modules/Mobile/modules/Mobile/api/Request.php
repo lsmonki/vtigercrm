@@ -19,7 +19,7 @@ class Mobile_API_Request {
 
 	function get($key, $defvalue = '') {
 		if(isset($this->valuemap[$key])) {
-			return $this->valuemap[$key];
+			return vtlib_purify($this->valuemap[$key]);
 		}
 		if($defvalue === '' && isset($this->defaultmap[$key])) {
 			$defvalue = $this->defaultmap[$key];
