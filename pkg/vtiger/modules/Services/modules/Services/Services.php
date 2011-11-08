@@ -995,7 +995,8 @@ class Services extends CRMEntity {
 			$query = "from vtiger_service 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid 
 				left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid 
-				left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_service.handler 
+				left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_service.handler
+				left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_service.handler
 				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_service.serviceid 
 				left join vtiger_crmentity as vtiger_crmentityRelServices on vtiger_crmentityRelServices.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelServices.deleted = 0   
 				left join vtiger_account as vtiger_accountRelServices on vtiger_accountRelServices.accountid=vtiger_seproductsrel.crmid
