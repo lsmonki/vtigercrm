@@ -17,6 +17,8 @@ $conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Starts \n\n");
 
+updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Ends \n\n");
 
 ?>

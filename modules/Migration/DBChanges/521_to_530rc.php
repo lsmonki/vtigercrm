@@ -829,7 +829,6 @@ updateVtlibModule('Mobile', "packages/vtiger/mandatory/Mobile.zip");
 updateVtlibModule('Services', 'packages/vtiger/mandatory/Services.zip');
 updateVtlibModule('ServiceContracts', 'packages/vtiger/mandatory/ServiceContracts.zip');
 updateVtlibModule('PBXManager','packages/vtiger/mandatory/PBXManager.zip');
-updateVtlibModule('Projects', 'packages/vtiger/optional/Projects.zip');
 
 $migrationlog->debug("\n\nDB Changes from 5.2.1 to 5.3.0RC  -------- Ends \n\n");
 
