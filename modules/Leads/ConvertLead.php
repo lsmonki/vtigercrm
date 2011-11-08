@@ -275,7 +275,7 @@ $convertlead .='</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
 			<td align="center">
-				<input name="Save" value=" '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verify_data(ConvertLead)" type="submit"  class="crmbutton save small">&nbsp;&nbsp;
+				<input name="Save" value=" '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verifyConvertLeadData(ConvertLead)" type="submit"  class="crmbutton save small">&nbsp;&nbsp;
 				<input type="button" name=" Cancel " value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " onClick="hide(\'orgLay\')" class="crmbutton cancel small">
 			</td>
 		</tr>
