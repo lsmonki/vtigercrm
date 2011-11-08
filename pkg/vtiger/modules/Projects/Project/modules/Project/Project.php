@@ -462,7 +462,7 @@ class Project extends CRMEntity {
 			$helpDeskModuleInstance->setRelatedList($moduleInstance, 'Projects', Array('SELECT'), 'get_related_list');
 
 			$modcommentsModuleInstance = Vtiger_Module::getInstance('ModComments');
-			if($modcommentsModuleInstance) {
+			if($modcommentsModuleInstance && file_exists('modules/ModComments/ModComments.php')) {
 				include_once 'modules/ModComments/ModComments.php';
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
 			}
@@ -490,7 +490,7 @@ class Project extends CRMEntity {
 
 			// Add Comments widget to Project module
 			$modcommentsModuleInstance = Vtiger_Module::getInstance('ModComments');
-			if($modcommentsModuleInstance) {
+			if($modcommentsModuleInstance && file_exists('modules/ModComments/ModComments.php')) {
 				include_once 'modules/ModComments/ModComments.php';
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
 			}
