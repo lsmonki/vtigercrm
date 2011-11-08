@@ -24,16 +24,15 @@ $result = $adb->pquery($sql, $params);
 $it = new SqlResultIterator($adb, $result);
 foreach ($it as $row) {
 	$tabId = getTabid($row->modulename);
-	$column = $row->fieldname;
+	$column = "'$row->fieldname'";
 	$columnArray = explode(',', $column);
 	$tableName = $row->tablename;
 	$sql = "UPDATE vtiger_field,vtiger_def_org_field
 					SET presence=0,
 						vtiger_def_org_field.visible=0
-					WHERE vtiger_field.tabid=? and columnname in "."(".generateQuestionMarks($columnArray).")
-						AND tablename=? AND vtiger_field.fieldid=vtiger_def_org_field.fieldid";
-	$params = array($tabId, $columnArray, $tableName);
-	$adb->pquery($sql, $params);
+					WHERE vtiger_field.tabid=$tabId and columnname in "."(".implode(',',$columnArray).")
+						AND tablename='$tableName' AND vtiger_field.fieldid=vtiger_def_org_field.fieldid";
+	ExecuteQuery($sql);
 }
 
 // Adding email field type to vtiger_ws_fieldtype
@@ -44,10 +43,8 @@ function vt530_addEmailFieldTypeInWs(){
 	$checkResult = $db->pquery($checkQuery,$params);
 	if($db->num_rows($checkResult) <= 0) {		
 		$fieldTypeId = $db->getUniqueID('vtiger_ws_fieldtype');
-		$sql = 'insert into vtiger_ws_fieldtype(uitype,fieldtype) values (?,?)';
-		$params = array( '13', 'email');
-		$db->pquery($sql, $params);
-		echo "<br> Added Email in webservices types ";
+		$sql = "INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES ('13','email')";
+		ExecuteQuery($sql);
 	}
 }
 
@@ -83,7 +80,7 @@ function vt530_addDependencyColumnToEventHandler() {
 	$db = PearDatabase::getInstance();
 	$columnNames = $db->getColumnNames('vtiger_eventhandlers');
 	if(!in_array('dependent_on',$columnNames)){
-		$db->pquery("ALTER TABLE vtiger_eventhandlers ADD COLUMN dependent_on VARCHAR(255) NOT NULL DEFAULT '[]'", array());
+		ExecuteQuery("ALTER TABLE vtiger_eventhandlers ADD COLUMN dependent_on VARCHAR(255) NOT NULL DEFAULT '[]'");
 	}
 }
 
@@ -92,8 +89,8 @@ function vt530_addDepedencyToVTWorkflowEventHandler(){
 
 	$dependentEventHandlers = array('VTEntityDelta');
 	$dependentEventHandlersJson = Zend_Json::encode($dependentEventHandlers);
-	$db->pquery('UPDATE vtiger_eventhandlers SET dependent_on=? WHERE event_name=? AND handler_class=?',
-									array($dependentEventHandlersJson, 'vtiger.entity.aftersave', 'VTWorkflowEventHandler'));
+	ExecuteQuery("UPDATE vtiger_eventhandlers SET dependent_on='$dependentEventHandlersJson'
+								WHERE event_name='vtiger.entity.aftersave' AND handler_class='VTWorkflowEventHandler'");
 }
 
 vt530_addEmailFieldTypeInWs();
@@ -105,21 +102,21 @@ vt530_addDepedencyToVTWorkflowEventHandler();
 
 // Workflow changes
 if(!in_array('type', $adb->getColumnNames('com_vtiger_workflows'))) {
-	$adb->pquery("ALTER TABLE com_vtiger_workflows ADD COLUMN type VARCHAR(255) DEFAULT 'basic'", array());
+	ExecuteQuery("ALTER TABLE com_vtiger_workflows ADD COLUMN type VARCHAR(255) DEFAULT 'basic'");
 }
 
 // Read-Only configuration for fields at Profile level
-$adb->query("UPDATE vtiger_def_org_field SET readonly=0");
-$adb->query("UPDATE vtiger_profile2field SET readonly=0");
+ExecuteQuery("UPDATE vtiger_def_org_field SET readonly=0");
+ExecuteQuery("UPDATE vtiger_profile2field SET readonly=0");
 
 // Modify selected column to enable support for setting default values for fields
-$adb->query("ALTER TABLE vtiger_field CHANGE COLUMN selected defaultvalue TEXT default ''");
-$adb->query("UPDATE vtiger_field SET defaultvalue='' WHERE defaultvalue='0'");
+ExecuteQuery("ALTER TABLE vtiger_field CHANGE COLUMN selected defaultvalue TEXT default ''");
+ExecuteQuery("UPDATE vtiger_field SET defaultvalue='' WHERE defaultvalue='0'");
 
 // Scheduled Reports (Email)
-$adb->pquery("CREATE TABLE IF NOT EXISTS vtiger_scheduled_reports(reportid INT, recipients TEXT, schedule TEXT,
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_scheduled_reports(reportid INT, recipients TEXT, schedule TEXT,
 									format VARCHAR(10), next_trigger_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(reportid))
-				ENGINE=InnoDB DEFAULT CHARSET=utf8;", array());
+				ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 
 // Change Display of User Name from user_name to lastname firstname.
@@ -161,7 +158,7 @@ for($i=0;$i<$usersCount;$i++){
 					$fullname = $fullnames[$i];
 				}
 				$updatedCVIds[$k] = $id;
-				$adb->query("UPDATE vtiger_cvadvfilter SET value='$fullname' WHERE cvid=$id AND columnname LIKE '%:assigned_user_id%'");
+				ExecuteQuery("UPDATE vtiger_cvadvfilter SET value='$fullname' WHERE cvid=$id AND columnname LIKE '%:assigned_user_id%'");
 			}
 	}
 	$reportQuery = "SELECT * FROM vtiger_relcriteria WHERE columnname LIKE 'vtiger_users%:user_name%' AND value LIKE '%$usernames[$i]%'";
@@ -192,7 +189,7 @@ for($i=0;$i<$usersCount;$i++){
 			}
 
 			$updatedReportIds[$j] =$id;
-			$adb->query("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
+			ExecuteQuery("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
 
 		}
 	}
@@ -212,10 +209,10 @@ function vt530_renameField($fieldInfo){
 	$columnType = $fieldInfo['columnType'];
 	$tabId = getTabid($moduleName);
 
-	$adb->pquery("UPDATE vtiger_field SET fieldlabel=? WHERE fieldlabel=? AND tabid=?", array($newFieldLabel, $fieldLabel, $tabId));
-	$adb->pquery("UPDATE vtiger_field SET fieldname=? WHERE fieldname=? AND tabid=?",array($newFieldName, $fieldName, $tabId));
-	$adb->pquery("UPDATE vtiger_field SET columnname=? WHERE columnname=? AND tabid=?",array($newColumnName, $fieldColumnName, $tabId));
-	$adb->pquery("ALTER TABLE $tableName CHANGE $fieldColumnName $newColumnName $columnType",array());
+	ExecuteQuery("UPDATE vtiger_field SET fieldlabel='$newFieldLabel' WHERE fieldlabel='$fieldLabel' AND tabid=$tabId");
+	ExecuteQuery("UPDATE vtiger_field SET fieldname='$newFieldName' WHERE fieldname='$fieldName' AND tabid=$tabId");
+	ExecuteQuery("UPDATE vtiger_field SET columnname='$newColumnName' WHERE columnname='$fieldColumnName' AND tabid=$tabId");
+	ExecuteQuery("ALTER TABLE $tableName CHANGE $fieldColumnName $newColumnName $columnType");
 
 	$searchColumn= $tableName.':'.$fieldName;
 
@@ -233,7 +230,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName = preg_replace($pattern_new,$newFieldName,$columnName);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_cvcolumnlist SET  columnname = ? WHERE cvid = ? AND columnindex = ?',array($newColumnName,$id,$column_index));
+			 ExecuteQuery("UPDATE vtiger_cvcolumnlist SET  columnname = '$newColumnName' WHERE cvid = $id AND columnindex = $column_index");
 		 }
 	}
 	$adv_sql = 'SELECT * FROM vtiger_cvadvfilter WHERE columnname LIKE ?';
@@ -250,7 +247,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_cvadvfilter SET  columnname = ? WHERE cvid = ? AND columnindex = ?',array($newColumnName,$cvid,$column_index_adv));
+			 ExecuteQuery("UPDATE vtiger_cvadvfilter SET  columnname = '$newColumnName' WHERE cvid = $cvid AND columnindex = $column_index_adv");
 		 }
 	}
 	$report_sql = 'SELECT * FROM vtiger_relcriteria WHERE columnname LIKE ?';
@@ -267,7 +264,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_relcriteria SET  columnname = ? WHERE queryid = ?',array($newColumnName,$queryid));
+			 ExecuteQuery("UPDATE vtiger_relcriteria SET  columnname = '$newColumnName' WHERE queryid = $queryid");
 		 }
 	}
 
@@ -285,8 +282,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_reportsortcol SET  columnname = ? WHERE sortcolid = ? AND reportid = ?',
-								array($newColumnName,$sortcolid,$report_id));
+			 ExecuteQuery("UPDATE vtiger_reportsortcol SET  columnname = '$newColumnName' WHERE sortcolid = $sortcolid AND reportid = $report_id");
 		 }
 	}
 
@@ -304,8 +300,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_reportsummary SET  columnname = ? WHERE reportsummaryid = ? AND summarytype = ?',
-							array($newColumnName,$rsid,$summarytype));
+			 ExecuteQuery("UPDATE vtiger_reportsummary SET columnname = '$newColumnName' WHERE reportsummaryid = $rsid AND summarytype = $summarytype");
 		 }
 	}
 	$report_sql = 'SELECT * FROM vtiger_selectcolumn WHERE columnname LIKE ?';
@@ -322,8 +317,7 @@ function vt530_renameField($fieldInfo){
 			 $transformedNewFieldLabel = str_replace(' ','_',$fieldLabel);
 			 $newColumnName  = preg_replace($pattern_new,$newFieldName,$adv_columnname);
 			 $newColumnName =  str_replace($module.'_'.$transformedFieldLabel,$module.'_'.$transformedNewFieldLabel,$newColumnName);
-			 $adb->pquery('UPDATE vtiger_selectcolumn SET  columnname = ? WHERE queryid = ? AND columnindex = ?',
-							array($newColumnName,$queryid,$columnindex));
+			 ExecuteQuery("UPDATE vtiger_selectcolumn SET columnname = '$newColumnName' WHERE queryid = $queryid AND columnindex = $columnindex");
 		 }
 	}
 }
@@ -346,16 +340,13 @@ vt530_renameField($userYahooFieldDetails);
 
 // Adding Organization ID column
 $sql = 'ALTER TABLE vtiger_organizationdetails ADD UNIQUE KEY(organizationname);';
-$params = array();
-$adb->pquery($sql, $params);
+ExecuteQuery($sql);
 
 $sql = 'ALTER TABLE vtiger_organizationdetails DROP PRIMARY KEY;';
-$params = array();
-$adb->pquery($sql, $params);
+ExecuteQuery($sql);
 
 $sql = 'ALTER TABLE vtiger_organizationdetails ADD COLUMN organization_id INT(11) PRIMARY KEY';
-$params = array();
-$adb->pquery($sql, $params);
+ExecuteQuery($sql);
 
 $result = $adb->pquery('SELECT organizationname FROM vtiger_organizationdetails', array());
 $noOfCompanies = $adb->num_rows($result);
@@ -363,15 +354,14 @@ if($noOfCompanies > 0) {
 	for($i=0; $i<$noOfCompanies; ++$i) {
 		$id = $adb->getUniqueID('vtiger_organizationdetails');
 		$organizationName = $adb->query_result($result, $i, 'organizationname');
-		$adb->pquery('UPDATE vtiger_organizationdetails SET organization_id=? WHERE organizationname=?',
-						array($id, $organizationName));
+		ExecuteQuery("UPDATE vtiger_organizationdetails SET organization_id=$id WHERE organizationname='$organizationName'");
 	}
 } else {
 	$id = $adb->getUniqueID('vtiger_organizationdetails');
 }
 
 $sql = 'UPDATE vtiger_organizationdetails_seq SET id = (SELECT max(organization_id) FROM vtiger_organizationdetails)';
-$adb->pquery($sql, $params);
+ExecuteQuery($sql);
 
 // Add Webservice support for Company Details type of entity.
 vtws_addActorTypeWebserviceEntityWithName(
@@ -385,36 +375,31 @@ $sql = 'CREATE TABLE vtiger_ws_fieldinfo(id varchar(64) NOT NULL PRIMARY KEY,
 										property_name VARCHAR(32),
 										property_value VARCHAR(64)
 										) ENGINE=Innodb DEFAULT CHARSET=utf8;';
-$adb->pquery($sql, $params);
+ExecuteQuery($sql);
 
 $id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
-$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
-$params = array($id,'vtiger_organizationdetails','logoname','file');
-$adb->pquery($sql, $params);
+$sql = "INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES ($id,'vtiger_organizationdetails','logoname','file')";
+ExecuteQuery($sql);
 $id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
-$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
-$params = array($id,'vtiger_organizationdetails','phone','phone');
-$adb->pquery($sql, $params);
+$sql = "INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES ($id,'vtiger_organizationdetails','phone','phone')";
+ExecuteQuery($sql);
 $id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
-$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
-$params = array($id,'vtiger_organizationdetails','fax','phone');
-$adb->pquery($sql, $params);
+$sql = "INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES ($id,'vtiger_organizationdetails','fax','phone')";
+ExecuteQuery($sql);
 $id = $adb->getUniqueID('vtiger_ws_entity_fieldtype');
-$sql = 'INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?)';
-$params = array($id,'vtiger_organizationdetails','website','url');
-$adb->pquery($sql, $params);
+$sql = "INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES ($id,'vtiger_organizationdetails','website','url')";
+ExecuteQuery($sql);
 
-$sql='INSERT INTO vtiger_ws_fieldinfo(id,property_name,property_value) VALUES (?,?,?)';
-$params = array('vtiger_organizationdetails.organization_id','upload.path','1');
-$adb->pquery($sql, $params);
+$sql="INSERT INTO vtiger_ws_fieldinfo(id,property_name,property_value) VALUES ('vtiger_organizationdetails.organization_id','upload.path','1')";
+ExecuteQuery($sql);
 
 $webserviceObject = VtigerWebserviceObject::fromName($adb, 'CompanyDetails');
-$sql = 'INSERT INTO vtiger_ws_entity_tables(webservice_entity_id,table_name) VALUES (?,?)';
-$params = array($webserviceObject->getEntityId(),'vtiger_organizationdetails');
-$adb->pquery($sql, $params);
+$webserviceEntityId = $webserviceObject->getEntityId();
+$sql = "INSERT INTO vtiger_ws_entity_tables(webservice_entity_id,table_name) VALUES ($webserviceEntityId,'vtiger_organizationdetails')";
+ExecuteQuery($sql);
 
 // Increase the size of User Singature field
-$adb->pquery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000);",array());
+ExecuteQuery("ALTER TABLE vtiger_users CHANGE signature signature varchar(1000)");
 
 // New Currencies added
 function vt530_updateCurrencyInfo() {
@@ -437,11 +422,10 @@ function vt530_updateCurrencyInfo() {
 				array($cur_code));
 		if ($adb->num_rows($currency_exists) > 0) {
 			$currency_name = $adb->query_result($currency_exists, 0, "currency_name");
-			$adb->pquery("UPDATE vtiger_currency_info SET vtiger_currency_info.currency_name=? WHERE id=?",
-								array($currency_name, $cur_id));
+			ExecuteQuery("UPDATE vtiger_currency_info SET vtiger_currency_info.currency_name='$currency_name' WHERE id=$cur_id");
 		} else {
-			$adb->pquery("INSERT INTO vtiger_currencies VALUES (?,?,?,?)",
-							array($adb->getUniqueID("vtiger_currencies"), $cur_name, $cur_code, $cur_symbol));
+			$currencyId = $adb->getUniqueID("vtiger_currencies");
+			ExecuteQuery("INSERT INTO vtiger_currencies VALUES ($currencyId, '$cur_name', '$cur_code', '$cur_symbol')");
 		}
 	}
 }
@@ -513,11 +497,11 @@ $blockInstance->addField($fieldInstance);
 
 /* Advanced filter ehancement for Custom Filter and Advanced Search */
 // Alter vtiger_cvadvfilter table to store groupid and column_condition
-$adb->query("ALTER TABLE vtiger_cvadvfilter ADD COLUMN groupid INT DEFAULT 1");
-$adb->query("ALTER TABLE vtiger_cvadvfilter ADD COLUMN column_condition VARCHAR(255) DEFAULT 'and'");
+ExecuteQuery("ALTER TABLE vtiger_cvadvfilter ADD COLUMN groupid INT DEFAULT 1");
+ExecuteQuery("ALTER TABLE vtiger_cvadvfilter ADD COLUMN column_condition VARCHAR(255) DEFAULT 'and'");
 
 // Create table to store Custom Views Advanced Filters Condition Grouping information
-$adb->query("CREATE TABLE IF NOT EXISTS vtiger_cvadvfilter_grouping
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_cvadvfilter_grouping
 		(groupid INT NOT NULL, cvid INT, group_condition VARCHAR(255), condition_expression TEXT, PRIMARY KEY(groupid, cvid))
 		 ENGINE=Innodb DEFAULT CHARSET=utf8;");
 
@@ -543,27 +527,27 @@ if($adb->num_rows($maxCvIdResult) > 0) {
 					$columnIndexArray[] = $columnIndex;
 				}
 				$conditionExpression = implode(' and ', $columnIndexArray);
-				$adb->pquery('INSERT INTO vtiger_cvadvfilter_grouping VALUES(?,?,?,?)', array(1, $cvId, '', $conditionExpression));
+				ExecuteQuery("INSERT INTO vtiger_cvadvfilter_grouping VALUES(1, $cvId, '', $conditionExpression)");
 
-				$adb->pquery("UPDATE vtiger_cvadvfilter SET column_condition='' WHERE columnindex=? AND cvid=?", array($maxColumnIndex,$cvId));
+				ExecuteQuery("UPDATE vtiger_cvadvfilter SET column_condition='' WHERE columnindex=$maxColumnIndex AND cvid=$cvId");
 			}
 		}
 	}
 }
 /* Advanced filter ehancement for Custom Filter and Advanced Search -- ENDS HERE */
 
-$adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE tabid=? AND (fieldname = ? OR fieldname = ?)',
-								array(getTabid('SalesOrder'), 'bill_country', 'ship_country'));
+$salesOrderTabId = getTabid('SalesOrder');
+ExecuteQuery("UPDATE vtiger_field SET displaytype=1 WHERE tabid=$salesOrderTabId AND (fieldname = 'bill_country' OR fieldname = 'ship_country')");
 
-$adb->pquery('UPDATE vtiger_field SET presence = 2 WHERE tabid=? AND fieldname = ?', array(getTabid('Quotes'), 'ship_pobox'));
+$quotesTabId = getTabid('Quotes');
+ExecuteQuery("UPDATE vtiger_field SET presence = 2 WHERE tabid=$quotesTabId AND fieldname = 'ship_pobox'");
 
 /* Dependent Picklists feature */
-$adb->query("CREATE TABLE IF NOT EXISTS vtiger_picklist_dependency (
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_picklist_dependency (
 					id INT NOT NULL PRIMARY KEY, tabid INT NOT NULL,
 					sourcefield VARCHAR(255), targetfield VARCHAR(255),
 					sourcevalue VARCHAR(100), targetvalues TEXT, criteria TEXT)
 					ENGINE=Innodb DEFAULT CHARSET=utf8;");
-echo '<b>Created table vtiger_picklist_dependency</b><br>';
 
 $studioBlockRes = $adb->pquery("SELECT blockid FROM vtiger_settings_blocks WHERE label = ?", array('LBL_STUDIO'));
 if($adb->num_rows($studioBlockRes) > 0) {
@@ -571,30 +555,26 @@ if($adb->num_rows($studioBlockRes) > 0) {
 	$maxSequenceRes = $adb->pquery("SELECT MAX(sequence) as maxsequence FROM vtiger_settings_field WHERE blockid = ?", array($blockId));
 	if($adb->num_rows($maxSequenceRes) > 0){
 		$maxSequence = $adb->query_result($maxSequenceRes, 0, 'maxsequence');
-		$adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active)
-								VALUES(?,?,?,?,?,?,?,?)",
-				array($adb->getUniqueID('vtiger_settings_field'), $blockId, 'LBL_PICKLIST_DEPENDENCY_SETUP', 'picklistdependency.gif',
+		$nextSequence = $maxSequence + 1;
+		$settingsFieldId = $adb->getUniqueID('vtiger_settings_field');
+		ExecuteQuery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active)
+							VALUES($settingsFieldId, $blockId, 'LBL_PICKLIST_DEPENDENCY_SETUP', 'picklistdependency.gif',
 					'LBL_PICKLIST_DEPENDENCY_DESCRIPTION', 'index.php?module=PickList&action=PickListDependencySetup&parenttab=Settings',
-					$maxSequence+1, 0));
-
-		echo '<b>Added Dependency picklist to settings page </b><br>';
+					$nextSequence, 0)");
 	}
 }
 
 // Need to extend the password field size, as the encrypted password, generated by PHP5.3 MD5, is exceeding 30 characters
 $query = 'ALTER TABLE vtiger_users MODIFY COLUMN user_password VARCHAR(200)';
-$params = array();
-$adb->pquery($query, $params);
+ExecuteQuery($query);
 $query = 'ALTER TABLE vtiger_users MODIFY COLUMN confirm_password VARCHAR(200)';
-$params = array();
-$adb->pquery($query, $params);
+ExecuteQuery($query);
 
 function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $typeOfData) {
 	global $adb;
 
-	$query = "UPDATE vtiger_field SET typeofdata=? WHERE tablename=? AND fieldname=?";
-	$params = array($typeOfData, $tableName, $fieldName);
-	$adb->pquery($query, $params);
+	$query = "UPDATE vtiger_field SET typeofdata='$typeOfData' WHERE tablename='$tableName' AND fieldname='$fieldName'";
+	ExecuteQuery($query);
 
 	$filterSql = 'SELECT cvid, columnname FROM vtiger_cvcolumnlist WHERE columnname LIKE ?';
 	$params = array("$tableName:$columnName:$fieldName:%:%");
@@ -607,8 +587,7 @@ function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $t
 		$length = count($columnNameParts);
 		$columnNameParts[$length-1] = $dataType;
 		$newColumnName = implode(':', $columnNameParts);
-		$adb->pquery("UPDATE vtiger_cvcolumnlist SET columnname=? WHERE cvid=? AND columnname=?",
-						array($newColumnName, $cvId, $columnName));
+		ExecuteQuery("UPDATE vtiger_cvcolumnlist SET columnname='$newColumnName' WHERE cvid=$cvId AND columnname='$columnName'");
 	}
 
 	$advSql = 'SELECT cvid, columnname FROM vtiger_cvadvfilter WHERE columnname LIKE ?';
@@ -622,8 +601,7 @@ function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $t
 		$length = count($columnNameParts);
 		$columnNameParts[$length-1] = $dataType;
 		$newColumnName = implode(':', $columnNameParts);
-		$adb->pquery("UPDATE vtiger_cvadvfilter SET columnname=? WHERE cvid=? AND columnname=?",
-						array($newColumnName, $cvId, $columnName));
+		ExecuteQuery("UPDATE vtiger_cvadvfilter SET columnname='$newColumnName' WHERE cvid=$cvId AND columnname='$columnName'");
 	}
 
 	$reportSql = 'SELECT queryid, columnname FROM vtiger_relcriteria WHERE columnname LIKE ?';
@@ -637,8 +615,7 @@ function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $t
 		$length = count($columnNameParts);
 		$columnNameParts[$length-1] = $dataType;
 		$newColumnName = implode(':', $columnNameParts);
-		$adb->pquery("UPDATE vtiger_relcriteria SET columnname=? WHERE queryid=? AND columnname=?",
-						array($newColumnName, $queryId, $columnName));
+		ExecuteQuery("UPDATE vtiger_relcriteria SET columnname='$newColumnName' WHERE queryid=$queryId AND columnname='$columnName'");
 	}
 
 	$reportSql = 'SELECT reportid, columnname FROM vtiger_reportsortcol WHERE columnname LIKE ?';
@@ -652,8 +629,7 @@ function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $t
 		$length = count($columnNameParts);
 		$columnNameParts[$length-1] = $dataType;
 		$newColumnName = implode(':', $columnNameParts);
-		$adb->pquery("UPDATE vtiger_reportsortcol SET columnname=? WHERE queryid=? AND columnname=?",
-						array($newColumnName, $queryId, $columnName));
+		ExecuteQuery("UPDATE vtiger_reportsortcol SET columnname='$newColumnName' WHERE queryid=$queryId AND columnname='$columnName'");
 	}
 
 	$reportSql = 'SELECT queryid, columnname FROM vtiger_selectcolumn WHERE columnname LIKE ?';
@@ -667,8 +643,7 @@ function vt530_changeDataType($tableName, $columnName, $fieldName, $dataType, $t
 		$length = count($columnNameParts);
 		$columnNameParts[$length-1] = $dataType;
 		$newColumnName = implode(':', $columnNameParts);
-		$adb->pquery("UPDATE vtiger_selectcolumn SET columnname=? WHERE queryid=? AND columnname=?",
-						array($newColumnName, $queryId, $columnName));
+		ExecuteQuery("UPDATE vtiger_selectcolumn SET columnname='$newColumnName' WHERE queryid=$queryId AND columnname='$columnName'");
 	}
 }
 
@@ -690,12 +665,12 @@ $arrayOfSupportedTimeZones = $usertimezonesClass->userTimeZones();
 $timezone_field->setPicklistValues($arrayOfSupportedTimeZones);
 
 $timeZone = DateTimeField::getDBTimeZone();
-$params = array($timeZone);
-$sql = "UPDATE vtiger_users SET time_zone=?";
-$adb->pquery($sql, $params);
+$sql = "UPDATE vtiger_users SET time_zone='$timeZone'";
+ExecuteQuery($sql);
 
-$adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=? OR tabid=?)",
-					array(getTabid('Calendar'), getTabid('Events')));
+$calendarTabId = getTabid('Calendar');
+$eventsTabId = getTabid('Events');
+ExecuteQuery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=$calendarTabId OR tabid=$eventsTabId)");
 
 vt530_changeDataType('vtiger_crmentity', 'createdtime', 'createdtime', 'DT', 'DT~O');
 vt530_changeDataType('vtiger_crmentity', 'modifiedtime', 'modifiedtime', 'DT', 'DT~O');
@@ -703,16 +678,14 @@ vt530_changeDataType('vtiger_crmentity', 'modifiedtime', 'modifiedtime', 'DT', '
 $moduleInstance = Vtiger_Module::getInstance('Users');
 
 // Update/Increment the sequence for the succeeding blocks of Users module, with starting sequence 2
-$blocksListResult = $adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 2',
-											array(getTabid('Users')));
+$usersTabId = getTabid('Users');
+$blocksListResult = ExecuteQuery("UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=$usersTabId AND sequence >= 2");
 
 // Create Currency Configuration block placing at position 2
 $currencyBlock = new Vtiger_Block();
 $currencyBlock->label = 'LBL_CURRENCY_CONFIGURATION';
 $currencyBlock->sequence = 2;
 $moduleInstance->addBlock($currencyBlock);
-
-echo "Currency Configuration block created <br>";
 
 $currencyBlock = Vtiger_Block::getInstance('LBL_CURRENCY_CONFIGURATION', $moduleInstance);
 
@@ -730,7 +703,6 @@ $currencyPattern->helpinfo = "<b>Currency - Digit Grouping Pattern</b> <br/><br/
 								"This pattern specifies the format in which the currency separator will be placed.";
 $currencyBlock->addField($currencyPattern);
 $currencyPattern->setPicklistValues(array('123,456,789','123456789','123456,789','12,34,56,789'));
-echo "Currency - Digit Grouping Pattern field added <br>";
 
 $currencyDecimalSeparator = new Vtiger_Field();
 $currencyDecimalSeparator->name = 'currency_decimal_separator';
@@ -753,7 +725,6 @@ $currencyDecimalSeparator->helpinfo = "<b>Currency - Decimal Separator</b> <br/>
 										"$ => 123$45 <br/>";
 $currencyBlock->addField($currencyDecimalSeparator);
 $currencyDecimalSeparator->setPicklistValues(array(".",",","'"," ","$"));
-echo "Currency - Decimal Separator field added <br>";
 
 $currencyThousandSeparator = new Vtiger_Field();
 $currencyThousandSeparator->name = 'currency_grouping_separator';
@@ -776,7 +747,6 @@ $currencyThousandSeparator->helpinfo = "<b>Currency - Grouping Separator</b> <br
 										"$ => 123$456$789 <br/>";
 $currencyBlock->addField($currencyThousandSeparator);
 $currencyThousandSeparator->setPicklistValues(array(".",",","'"," ","$"));
-echo "Currency - Digit Grouping Separator field added <br>";
 
 $currencySymbolPlacement = new Vtiger_Field();
 $currencySymbolPlacement->name = 'currency_symbol_placement';
@@ -798,28 +768,23 @@ $currencyBlock->addField($currencySymbolPlacement);
 $currencySymbolPlacement->setPicklistValues(array("$1.0", "1.0$"));
 
 // Update the block and the sequence for Currency field of Users module - Push it to Currency Configuration block
-$adb->pquery('UPDATE vtiger_field SET block=?, sequence=? WHERE tablename=? AND fieldname=?',
-					array($currencyBlock->id, 1, 'vtiger_users', 'currency_id'));
+ExecuteQuery("UPDATE vtiger_field SET block=$currencyBlock->id, sequence=1 WHERE tablename='vtiger_users' AND fieldname='currency_id'");
 
-$adb->pquery("UPDATE vtiger_users SET currency_grouping_pattern='123,456,789',
+ExecuteQuery("UPDATE vtiger_users SET currency_grouping_pattern='123,456,789',
 										currency_decimal_separator='.',
 										currency_grouping_separator=',',
-										currency_symbol_placement='$1.0'", array());
-echo "Done setting the default Digit Grouping Pattern, Decimal separator and Digit separator for existing users <br>";
+										currency_symbol_placement='$1.0'");
 
-$adb->pquery("UPDATE vtiger_field SET uitype='71' WHERE uitype=1 AND tablename='vtiger_campaign'
-							AND fieldname IN ('expectedrevenue', 'actualcost', 'expectedroi', 'actualroi', 'budgetcost')",
-		array());
+ExecuteQuery("UPDATE vtiger_field SET uitype='71' WHERE uitype=1 AND tablename='vtiger_campaign'
+							AND fieldname IN ('expectedrevenue', 'actualcost', 'expectedroi', 'actualroi', 'budgetcost')");
 
-$adb->pquery("UPDATE vtiger_field SET uitype='72' WHERE uitype IN ('1','71')
-					AND fieldname IN ('unit_price', 'hdnGrandTotal', 'hdnSubTotal', 'txtAdjustment', 'hdnDiscountAmount', 'hdnS_H_Amount')",
-		array());
+ExecuteQuery("UPDATE vtiger_field SET uitype='72' WHERE uitype IN ('1','71')
+					AND fieldname IN ('unit_price', 'hdnGrandTotal', 'hdnSubTotal', 'txtAdjustment', 'hdnDiscountAmount', 'hdnS_H_Amount')");
 
-$sql = 'insert into vtiger_ws_fieldtype(uitype,fieldtype) values (?,?)';
-$params = array('71', 'currency');
-$adb->pquery($sql, $params);
-$params = array('72', 'currency');
-$adb->pquery($sql, $params);
+$sql = "INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES ('71', 'currency')";
+ExecuteQuery($sql);
+$sql = "INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES ('72', 'currency')";
+ExecuteQuery($sql);
 
 
 installVtlibModule('ConfigEditor', "packages/vtiger/mandatory/ConfigEditor.zip");
