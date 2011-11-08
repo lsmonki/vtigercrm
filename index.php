@@ -124,16 +124,15 @@ global $adb, $vtiger_current_version;
 if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_id'])) {
     if(version_compare($_SESSION['VTIGER_DB_VERSION'], $vtiger_current_version, '!=')) {
         unset($_SESSION['VTIGER_DB_VERSION']);
-    	global $app_strings;
 		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_MIGRATION_INCOMPLETE]</span></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incompleted.</span></td>
 			</tr>
 			<tr>
-			<td class='small' align='right' nowrap='nowrap'>$app_strings[LBL_CONTACT_SYS_ADMIN] ($app_strings[LBL_SERVER_ADMIN_EMAIL_ID])<br></td>
+			<td class='small' align='right' nowrap='nowrap'>Please contact your system administrator.<br></td>
 			</tr>
 			</tbody></table>
 			</div>";
@@ -146,16 +145,15 @@ if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_
     if(version_compare($dbversion, $vtiger_current_version, '=')) {
     	$_SESSION['VTIGER_DB_VERSION']= $dbversion;
     } else {
-    	global $app_strings;
 		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_MIGRATION_INCOMPLETE]</span></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incompleted.</span></td>
 			</tr>
 			<tr>
-			<td class='small' align='right' nowrap='nowrap'>$app_strings[LBL_CONTACT_SYS_ADMIN] ($app_strings[LBL_SERVER_ADMIN_EMAIL_ID])<br></td>
+			<td class='small' align='right' nowrap='nowrap'>Please contact your system administrator.<br></td>
 			</tr>
 			</tbody></table>
 			</div>";
@@ -268,16 +266,6 @@ if (isset($_SESSION["authenticated_user_id"]) && $module == 'Users' && $action =
 } 
 
 if($use_current_login){
-	/*&Added to prevent fatal error before starting migration(5.0.4. patch ).
-	//Start
-	$arr=$adb->getColumnNames("vtiger_users");
-	if(!in_array("internal_mailer", $arr))
-	{
-		$adb->pquery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'", array());
-		$adb->pquery("alter table vtiger_users add column tagcloud_view int(1) default 1", array());
-	}
-	//End*/
-
 	//getting the internal_mailer flag
 	if(!isset($_SESSION['internal_mailer'])){
 		$qry_res = $adb->pquery("select internal_mailer from vtiger_users where id=?", array($_SESSION["authenticated_user_id"]));
