@@ -1244,6 +1244,7 @@ $mod_strings = Array(
 'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Setup Dependency between Picklist values in each module',
 
 'Settings' => 'Settings',
-
+'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'This tax is already available.',
+'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
 );
 ?>
