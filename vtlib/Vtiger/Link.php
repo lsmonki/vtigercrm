@@ -24,6 +24,9 @@ class Vtiger_Link {
 	var $linkicon;
 	var $sequence;
 	var $status = false;
+	var $handler_path;
+	var $handler_class;
+	var $handler;
 
 	// Ignore module while selection
 	const IGNORE_MODULE = -1; 
@@ -46,6 +49,9 @@ class Vtiger_Link {
 		$this->linkicon =decode_html($valuemap['linkicon']);
 		$this->sequence =$valuemap['sequence'];
 		$this->status   =$valuemap['status'];
+		$this->handler_path	=$valuemap['handler_path'];
+		$this->handler_class=$valuemap['handler_class'];
+		$this->handler		=$valuemap['handler'];
 	}
 
 	/**

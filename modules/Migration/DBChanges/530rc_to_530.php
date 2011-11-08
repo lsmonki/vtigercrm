@@ -19,8 +19,11 @@ $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Starts \n\n"
 
 updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
 
-$adb->pquery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND (tabid=? OR tabid=?)",
-					array(getTabid('Calendar'), getTabid('Events')));
+ExecuteQuery("UPDATE vtiger_field SET quickcreate=0 WHERE fieldname='time_start' AND tabid=". getTabid('Calendar'));
+
+ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler_path VARCHAR(128) DEFAULT null");
+ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler_class VARCHAR(32) DEFAULT null");
+ExecuteQuery("ALTER TABLE vtiger_links ADD COLUMN handler VARCHAR(32) DEFAULT null");
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0RC to 5.3.0 -------- Ends \n\n");
 

@@ -698,12 +698,20 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(empty($modulenode->customlinks) || empty($modulenode->customlinks->customlink)) return;
 
 		foreach($modulenode->customlinks->customlink as $customlinknode) {
+			$handlerInfo = null;
+			if(!empty($customlinknode->handler_path)) {
+				$handlerInfo = array();
+				$handlerInfo = array("$customlinknode->handler_path",
+										"$customlinknode->handler_class",
+										"$customlinknode->handler");
+			}
 			$moduleInstance->addLink(
 				"$customlinknode->linktype",
 				"$customlinknode->linklabel",
 				"$customlinknode->linkurl",
 				"$customlinknode->linkicon",
-				"$customlinknode->sequence"	
+				"$customlinknode->sequence",
+				$handlerInfo
 			);
 		}
 	}

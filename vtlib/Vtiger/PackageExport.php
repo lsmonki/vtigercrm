@@ -606,6 +606,9 @@ class Vtiger_PackageExport {
 				$this->outputNode("<![CDATA[$customlink->linkurl]]>", 'linkurl');
 				$this->outputNode("<![CDATA[$customlink->linkicon]]>", 'linkicon');
 				$this->outputNode($customlink->sequence, 'sequence');
+				$this->outputNode("<![CDATA[$customlink->handler_path]]>", 'handler_path');
+				$this->outputNode("<![CDATA[$customlink->handler_class]]>", 'handler_class');
+				$this->outputNode("<![CDATA[$customlink->handler]]>", 'handler');
 				$this->closeNode('customlink');
 			}
 			$this->closeNode('customlinks');

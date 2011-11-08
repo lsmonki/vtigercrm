@@ -387,15 +387,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 	function update_CustomLinks($modulenode, $moduleInstance) {
 		if(empty($modulenode->customlinks) || empty($modulenode->customlinks->customlink)) return;
 		$moduleInstance->deleteLinks();
-		foreach($modulenode->customlinks->customlink as $customlinknode) {
-			$moduleInstance->addLink(
-				"$customlinknode->linktype",
-				"$customlinknode->linklabel",
-				"$customlinknode->linkurl",
-				"$customlinknode->linkicon",
-				"$customlinknode->sequence"
-			);
-		}
+		$this->import_CustomLinks($modulenode, $moduleInstance);
 	}
 }			
 ?>

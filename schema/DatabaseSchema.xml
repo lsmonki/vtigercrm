@@ -7048,6 +7048,15 @@
 		<field name="linkurl" type="C" size="255" />
 		<field name="linkicon" type="C" size="100" />
 		<field name="sequence" type="I" />
+		<field name="handler_path" type="C" size="128">
+			<default value="NULL" />
+		</field>
+		<field name="handler_class" type="C" size="32">
+			<default value="NULL" />
+		</field>
+		<field name="handler" type="C" size="32">
+			<default value="NULL" />
+		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 		<index name="link_tabidtype_idx">
 			<col>tabid</col>
