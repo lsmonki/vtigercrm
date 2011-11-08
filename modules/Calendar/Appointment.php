@@ -63,10 +63,10 @@ class Appointment
 		global $current_user,$adb;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$and = "AND ((date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))
+		$and = "AND (((date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))
 				AND vtiger_recurringevents.activityid is NULL)
 			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ? OR due_date BETWEEN ? AND ?
-					OR (vtiger_recurringevents.recurringdate <= ? AND due_date >= ?))";
+					OR (vtiger_recurringevents.recurringdate <= ? AND due_date >= ?)))";
 		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
 			'vtiger_users.last_name'));
 		
