@@ -307,7 +307,7 @@
 				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Default Value for this Field',
 
 				'RECIPIENTS_CANNOT_BE_EMPTY' : 'Selected Recipients cannot be empty',
-				VALID_SCANNER_NAME : 'Please enter a valid Scanner name (It should be only Characters and Numbers)',
+				'VALID_SCANNER_NAME' : 'Please enter a valid Scanner name (It should be only Characters and Numbers)',
 				'ERR_SAME_SOURCE_AND_TARGET' : 'Source field and Target field should not be same',
 				'ERR_ATLEAST_ONE_VALUE_FOR' : 'You need to select atleast one value for',
 				'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Please select a module to add Dependency'
