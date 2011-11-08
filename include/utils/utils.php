@@ -4662,7 +4662,7 @@ function updateVtlibModule($module, $packagepath) {
 		$log->fatal("Module name is invalid");
 	} else {
 		$moduleInstance = Vtiger_Module::getInstance($module);
-		if($moduleInstance) {
+		if($moduleInstance || $package->isModuleBundle($packagepath)) {
 			$log->debug("$module - Module instance found - Update starts here");
 			$package->update($moduleInstance, $packagepath);
 		} else {
