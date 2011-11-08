@@ -63,10 +63,24 @@ class Appointment
 		global $current_user,$adb;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$and = "AND (((date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))
-				AND vtiger_recurringevents.activityid is NULL)
-			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ? OR due_date BETWEEN ? AND ?
-					OR (vtiger_recurringevents.recurringdate <= ? AND due_date >= ?)))";
+		$and = "AND (
+					(
+						(
+							(CAST(CONCAT(date_start,' ',time_start) AS DATETIME) >= ? AND CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ?)
+							OR	(CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) <= ? )
+							OR	(CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ?)
+						)
+						AND vtiger_recurringevents.activityid is NULL
+					)
+				OR (
+						(CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) >= ?
+							AND CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) <= ?)
+						OR	(CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) <= ?)
+						OR	(CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) <= ?
+							AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ?)
+					)
+				)";
+		
 		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
 			'vtiger_users.last_name'));
 		
@@ -95,12 +109,12 @@ class Appointment
 		$endDate = new DateTimeField($to_datetime->year."-".$to_datetime->z_month."-".
 				$to_datetime->z_day." $h:$m");
 		$params = array(
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-			$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue()
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+			$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue()
 		);
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{

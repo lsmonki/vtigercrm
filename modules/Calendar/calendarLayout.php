@@ -503,7 +503,8 @@ function dateCheck($slice_date)
 {
 	global $cal_log;
 	$cal_log->debug("Entering dateCheck() method...");
-	$today = DateTimeField::convertToUserFormat(date('Y-m-d'));
+	$userCurrenDate = new DateTimeField(date('Y-m-d H:i:s'));
+	$today = $userCurrenDate->getDisplayDate();
 	if($today == $slice_date)
 	{
 		$cal_log->debug("Exiting dateCheck() method...");
@@ -1365,10 +1366,23 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
 
-	$and = "AND (((date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))
-				AND vtiger_recurringevents.activityid is NULL)
-			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ? OR due_date BETWEEN ? AND ?
-					OR (vtiger_recurringevents.recurringdate <= ? AND due_date >= ?)))";
+	$and = "AND (
+					(
+						(
+							(CAST(CONCAT(date_start,' ',time_start) AS DATETIME) >= ? AND CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ?)
+							OR	(CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) <= ? )
+							OR	(CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ?)
+						)
+						AND vtiger_recurringevents.activityid is NULL
+					)
+				OR (
+						(CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) >= ?
+							AND CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) <= ?)
+						OR	(CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) <= ?)
+						OR	(CAST(CONCAT(vtiger_recurringevents.recurringdate,' ',time_start) AS DATETIME) <= ?
+							AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ?)
+					)
+				)";
 
 	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
 			'vtiger_users.last_name'));
@@ -1396,12 +1410,12 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$startDate = new DateTimeField($start_date.' 00:00');
 	$endDate = new DateTimeField($end_date. ' 23:59');
 	$params = $info_params = array(
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(), 
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-		$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue()
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+		$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue()
 	);
 	if($info != '')
 	{
@@ -1634,15 +1648,18 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 					ON vtiger_users.id = vtiger_crmentity.smownerid";
 	$query .= getNonAdminAccessControlQuery('Calendar',$current_user);
 	$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_activity.activitytype = 'Task'".
-					" AND (date_start BETWEEN ? AND ? OR due_date BETWEEN ? AND ? OR (date_start <= ? AND due_date >= ?))";
+					" AND ((CAST(CONCAT(date_start,' ',time_start) AS DATETIME) >= ? AND CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ?)
+							OR	(CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) <= ? )
+							OR	(CAST(CONCAT(date_start,' ',time_start) AS DATETIME) <= ? AND CAST(CONCAT(due_date,' ',time_end) AS DATETIME) >= ?)
+						)";
 
 	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 
 	$startDate = new DateTimeField($start_date.' 00:00');
 	$endDate = new DateTimeField($end_date. ' 23:59');
-	$params = $info_params = array($startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-									$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue(),
-									$startDate->getDBInsertDateValue(), $endDate->getDBInsertDateValue());
+	$params = $info_params = array($startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+									$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+									$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue());
 	
         if($info != '')
 		{
