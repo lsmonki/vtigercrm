@@ -24,8 +24,8 @@ function addColumnConditionGlue(columnIndex) {ldelim}
 	
 	if(columnConditionGlueElement) {ldelim}		
 		columnConditionGlueElement.innerHTML = "<select name='fcon"+columnIndex+"' id='fcon"+columnIndex+"' class='detailedViewTextBox'>"+
-													"<option value='and'>{$APP.LBL_CRITERIA_AND}</option>"+
-													"<option value='or'>{$APP.LBL_CRITERIA_OR}</option>"+
+													"<option value='and'>{'LBL_CRITERIA_AND'|@getTranslatedString:$MODULE}</option>"+
+													"<option value='or'>{'LBL_CRITERIA_OR'|@getTranslatedString:$MODULE}</option>"+
 												"</select>";
 	{rdelim}
 {rdelim}
@@ -58,12 +58,12 @@ function addConditionRow(groupIndex) {ldelim}
 	newNode.appendChild(node1);
 	{if $SOURCE eq 'reports'}
 		node1.innerHTML = '<select name="fcol'+columnIndex+'" id="fcol'+columnIndex+'" onchange="updatefOptions(this, \'fop'+columnIndex+'\');addRequiredElements('+columnIndex+');updateRelFieldOptions(this, \'fval_'+columnIndex+'\');" class="detailedViewTextBox">'+
-							'<option value="">{$MOD.LBL_NONE}</option>'+
+							'<option value="">{'LBL_NONE'|@getTranslatedString:$MODULE}</option>'+
 	        				'{$COLUMNS_BLOCK}'+
 						'</select>';
 	{else}
 		node1.innerHTML = "<select name='fcol"+columnIndex+"' id='fcol"+columnIndex+"' onchange='updatefOptions(this, \"fop"+columnIndex+"\");addRequiredElements("+columnIndex+");' class='detailedViewTextBox'>"+
-							"<option value=''>{$MOD.LBL_NONE}</option>"+
+							"<option value=''>{'LBL_NONE'|@getTranslatedString:$MODULE}</option>"+
 	        				"{$COLUMNS_BLOCK}"+
 						"</select>";
 	{/if}
@@ -72,7 +72,7 @@ function addConditionRow(groupIndex) {ldelim}
 	node2.setAttribute('width', '25%');
 	newNode.appendChild(node2);
 	node2.innerHTML = '<select name="fop'+columnIndex+'" id="fop'+columnIndex+'" class="repBox" style="width:100px;" onchange="addRequiredElements('+columnIndex+');">'+
-							'<option value="">{$MOD.LBL_NONE}</option>'+
+							'<option value="">{'LBL_NONE'|@getTranslatedString:$MODULE}</option>'+
 							'{$FOPTION}'+
 						'</select>';
 	
@@ -156,8 +156,8 @@ function addGroupConditionGlue(groupIndex) {ldelim}
 	var groupConditionGlueElement = document.getElementById('groupconditionglue_'+groupIndex);
 	if(groupConditionGlueElement) {ldelim}
 		groupConditionGlueElement.innerHTML = "<select name='gpcon"+groupIndex+"' id='gpcon"+groupIndex+"' class='small'>"+
-												"<option value='and'>{$APP.LBL_CRITERIA_AND}</option>"+
-												"<option value='or'>{$APP.LBL_CRITERIA_OR}</option>"+
+												"<option value='and'>{'LBL_CRITERIA_AND'|@getTranslatedString:$MODULE}</option>"+
+												"<option value='or'>{'LBL_CRITERIA_OR'|@getTranslatedString:$MODULE}</option>"+
 											"</select>";
 	{rdelim}
 {rdelim}
@@ -211,7 +211,7 @@ function addConditionGroup(parentNodeId) {ldelim}
 		</tr>
 		<tr>
 			<td colspan="2" align="right">
-				<input type="button" class="crmbutton create small" value="{$APP.LBL_NEW_GROUP}" onclick="addNewConditionGroup('adv_filter_div')" />
+				<input type="button" class="crmbutton create small" value="{'LBL_NEW_GROUP'|@getTranslatedString:$MODULE}" onclick="addNewConditionGroup('adv_filter_div')" />
 			</td>
 		</tr>
 	</table>
