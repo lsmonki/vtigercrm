@@ -270,7 +270,7 @@ class ConfigFileRow {
 		// Should the value be restricted to a set?
 		$meta = $this->meta();
 		if (isset($meta['values']) && is_array($meta['values']) ) {
-			$allowedValues = $meta['values'];
+			$allowedValues = array_keys($meta['values']);
 			if (!empty($allowedValues) && !in_array($value, $allowedValues)) {
 				return false;
 			}

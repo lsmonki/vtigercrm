@@ -221,8 +221,8 @@
 																		{if $CONFIGLINE->isEditable()}
 																			{if $VARMETA.values}
 																				<select class="small" name="key_{$CONFIGLINE->variableName()}" id="key_{$CONFIGLINE->variableName()}">
-																				{foreach item=VARVALUEOPTION from=$VARMETA.values}
-																					<option value="{$VARVALUEOPTION}" {if $CONFIGLINE->variableValue() eq $VARVALUEOPTION}selected=true{/if}>{$VARVALUEOPTION}</option>
+																				{foreach item=VARVALUEOPTION key=VARVALUEOPTIONKEY from=$VARMETA.values}
+																					<option value="{$VARVALUEOPTIONKEY}" {if $CONFIGLINE->variableValue() eq $VARVALUEOPTIONKEY}selected=true{/if}>{$VARVALUEOPTION}</option>
 																				{/foreach}
 																				</select>
 																			{else}
