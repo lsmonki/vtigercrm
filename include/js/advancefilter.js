@@ -411,12 +411,12 @@ function checkAdvancedFilter() {
 		criteriaConditions[columnIndex] = {"groupid":columnGroupId, 
 											"columnname":selectedColumn,
 											"comparator":comparatorValue,
-											"value":specifiedValue,
+											"value":encodeURIComponent(specifiedValue),
 											"columncondition":glueCondition
 										};
 	}
 
-	$('advft_criteria').value = encodeURIComponent(JSON.stringify(criteriaConditions));
+	$('advft_criteria').value = JSON.stringify(criteriaConditions);
 	
 	var conditionGroups = vt_getElementsByName('div', "conditionGroup");
 	var criteriaGroups = [];
