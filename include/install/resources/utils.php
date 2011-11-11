@@ -1415,7 +1415,7 @@ class Common_Install_Wizard_Utils {
 				
 		        if (!empty($packagename) && in_array($module,$selected_modules)) {
 					if($package->isLanguageType($packagepath)) {
-						$languagePacks[$module] = $packagename;
+						$languagePacks[$module] = $packagepath;
 						continue;
 					}
 					
