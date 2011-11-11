@@ -142,12 +142,8 @@ class Activity extends CRMEntity {
 			$relatedContacts = getActivityRelatedContacts($this->id);
 			$mail_data['contact_name'] = implode(',',$relatedContacts);
 			$mail_data['description'] = $this->column_fields['description'];
-			$value = getaddEventPopupTime($this->column_fields['time_start'],$this->column_fields['time_end'],'24');
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$startDate = new DateTimeField($this->column_fields['date_start']." ".$start_hour);
-			$endDate = new DateTimeField($this->column_fields['due_date']." ".$this->column_fields['time_end']);
-			$mail_data['st_date_time'] = $startDate->getDBInsertDateTimeValue() ." ". DateTimeField::getDBTimeZone();
-			$mail_data['end_date_time'] = $endDate->getDBInsertDateTimeValue() ." ". DateTimeField::getDBTimeZone();
+			$mail_data['st_date_time'] = $this->column_fields['date_start'].' '.$this->column_fields['time_start'];
+			$mail_data['end_date_time'] = $this->column_fields['due_date'].' '.$this->column_fields['time_end'];
 			$mail_data['relatedto'] =  getParentName($this->column_fields['parent_id']);
 			$mail_data['location'] = $this->column_fields['location'];
 			getEventNotification($this->column_fields['activitytype'],$this->column_fields['subject'],$mail_data);

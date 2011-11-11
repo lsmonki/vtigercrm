@@ -1127,7 +1127,7 @@ function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) 
 }
 
 function generateAdvancedSearchSql($advfilterlist) {
-	global $log, $currentModule,$column_array;
+	global $log, $currentModule,$column_array,$current_user;
 
 	$advfiltersql = "";
 	

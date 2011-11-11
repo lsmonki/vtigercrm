@@ -234,8 +234,8 @@ function getRequestData($return_id)
 		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
 	$startDate = new DateTimeField($_REQUEST['date_start']." ".$start_hour);
 	$endDate = new DateTimeField($_REQUEST['due_date']." ".$end_hour);
-	$mail_data['st_date_time'] = $startDate->getDBInsertDateValue();
-	$mail_data['end_date_time'] = $endDate->getDBInsertDateValue();
+	$mail_data['st_date_time'] = $startDate->getDBInsertDateTimeValue();
+	$mail_data['end_date_time'] = $endDate->getDBInsertDateTimeValue();
 	$mail_data['location']=vtlib_purify($_REQUEST['location']);
 	return $mail_data;
 }
@@ -275,7 +275,7 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 {
 	$mail_contents = getRequestData($return_id);
-        sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
+	sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 //to delete contact account relation while editing event
