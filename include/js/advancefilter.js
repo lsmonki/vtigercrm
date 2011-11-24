@@ -411,7 +411,7 @@ function checkAdvancedFilter() {
 		criteriaConditions[columnIndex] = {"groupid":columnGroupId, 
 											"columnname":selectedColumn,
 											"comparator":comparatorValue,
-											"value":encodeURIComponent(specifiedValue),
+											"value":specifiedValue,
 											"columncondition":glueCondition
 										};
 	}
