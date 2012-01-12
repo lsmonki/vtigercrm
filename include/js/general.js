@@ -4002,6 +4002,11 @@ VtigerJS_DialogBox = {
 			olayer.id = olayerid;
 			olayer.className = "small veil"; 
 			olayer.style.zIndex = (new Date()).getTime();
+
+			// Avoid zIndex going beyond integer max
+			// http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7146#comment:1
+			olayer.style.zIndex = parseInt((new Date()).getTime() / 1000);
+
 			// In case zIndex goes to negative side!
 			if(olayer.style.zIndex < 0) olayer.style.zIndex *= -1; 
 			if (browser_ie) { 
@@ -4310,4 +4315,14 @@ function re_patternValidate(fldval,fldLabel,type) {
 		return false
 	}
 	else return true
+}
+
+function getTranslatedString(key){
+    if(alert_arr[key] != undefined){
+        return alert_arr[key];
+    }
+    else{
+        return key;
+    }
+
 }

@@ -2413,7 +2413,7 @@ function getAllParenttabmoduleslist()
 		if($is_admin){
 			$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
 		}
-		elseif($profileGlobalPermission[2]==0 || $profileGlobalPermission[1]==0 || $profileTabsPermission[$tabid]==0)		     {
+		elseif($profileGlobalPermission[2]==0 || $profileGlobalPermission[1]==0 || $profileTabsPermission[$tabid]===0)		     {
 			$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
 		}
 	}

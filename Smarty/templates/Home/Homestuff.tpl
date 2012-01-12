@@ -92,3 +92,7 @@ function fnAddWindow(obj,CurrObj){
 </script>
 
 
+{* First time login *}
+{if $FIRST_TIME_LOGIN}
+	{include file="Home/FirstTimeLogin.tpl"}
+{/if}

@@ -3356,6 +3356,11 @@ function getCombinedUserTabsPermissions($userId)
 		}
 
 	}
+        
+    $homeTabid = getTabid('Home');
+    if(!array_key_exists($homeTabid, $userTabPerrArr)) {
+        $userTabPerrArr[$homeTabid] = 0;
+    }
 	$log->debug("Exiting getCombinedUserTabsPermissions method ...");
 	return $userTabPerrArr;
 
@@ -4283,7 +4288,7 @@ function getPermittedModuleIdList() {
 	$permittedModules=Array();
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	include('tabdata.php');
-
+       
 	if($is_admin == false && $profileGlobalPermission[1] == 1 &&
 			$profileGlobalPermission[2] == 1) {
 		foreach($tab_seq_array as $tabid=>$seq_value) {
@@ -4298,6 +4303,10 @@ function getPermittedModuleIdList() {
 			}
 		}
 	}
+    $homeTabid = getTabid('Home');
+    if(!in_array($homeTabid, $permittedModules)) {
+        $permittedModules[] = $homeTabid;
+    }
 	return $permittedModules;
 }
 
