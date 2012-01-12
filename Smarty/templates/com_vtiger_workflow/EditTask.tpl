@@ -66,7 +66,7 @@
 					<input type="text" name="select_date_days" value="{$trigger.days}" id="select_date_days" class="small"> days 
 					<select name="select_date_direction" class="small">
 						<option {if $trigger.direction eq 'after'}selected{/if} value='after'>{$MOD.LBL_AFTER}</option>
-						<option {if $trigger.direction eq 'after'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option>
+						<option {if $trigger.direction eq 'before'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option>
 					</select> 
 					<select name="select_date_field" class="small">
 		{foreach key=name item=label from=$dateFields}
