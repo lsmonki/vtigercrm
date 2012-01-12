@@ -1489,9 +1489,11 @@ function updateInfo($id)
 
     global $adb;
     global $app_strings;
-    $query='select modifiedtime from vtiger_crmentity where crmid = ?';
+    $query='SELECT modifiedtime, modifiedby FROM vtiger_crmentity WHERE crmid = ?';
     $result = $adb->pquery($query, array($id));
     $modifiedtime = $adb->query_result($result,0,'modifiedtime');
+    $modifiedby_id = $adb->query_result($result,0,'modifiedby');
+    $modifiedby = $app_strings['LBL_BY'].getOwnerName($modifiedby_id);
 	$date = new DateTimeField($modifiedtime);
 	$modifiedtime = DateTimeField::convertToDBFormat($date->getDisplayDate());
 	$current_time = date('Y-m-d H:i:s');
@@ -1503,11 +1505,11 @@ function updateInfo($id)
     $time_now = strtotime($current_time);
     $days_diff = (int)(($time_now - $time_modified) / (60 * 60 * 24));
     if($days_diff == 0)
-        $update_info = $app_strings['LBL_UPDATED_TODAY']." (".$date.")";
+        $update_info = $app_strings['LBL_UPDATED_TODAY']." (".$date.")".' '.$modifiedby;
     elseif($days_diff == 1)
-        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAY_AGO']." (".$date.")";
+        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAY_AGO']." (".$date.")".' '.$modifiedby;
     else
-        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAYS_AGO']." (".$date.")";
+        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAYS_AGO']." (".$date.")".' '.$modifiedby;
 
     $log->debug("Exiting updateInfo method ...");
     return $update_info;

@@ -413,7 +413,8 @@ class Vendors extends CRMEntity {
 			        inner join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$moduletable.$moduleindex   
 					inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
 					left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
-					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                    left join vtiger_users as vtiger_lastModifiedByVendors on vtiger_lastModifiedByVendors.id = vtiger_crmentity.modifiedby ";
 	            return $query;
 	}
 	
@@ -427,7 +428,8 @@ class Vendors extends CRMEntity {
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_vendor","vendorid");
 		$query .=" left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendor.vendorid and vtiger_crmentityVendors.deleted=0 
 				left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_crmentityVendors.crmid 
-				left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid"; 
+				left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid
+                left join vtiger_users as vtiger_lastModifiedByVendors on vtiger_lastModifiedByVendors.id = vtiger_crmentityVendors.modifiedby ";
 
 		return $query;
 	}

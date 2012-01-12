@@ -288,7 +288,8 @@ class PriceBooks extends CRMEntity {
 					left join vtiger_groups as vtiger_groups$module on vtiger_groups$module.groupid = vtiger_crmentity.smownerid 
 					left join vtiger_users as vtiger_users$module on vtiger_users$module.id = vtiger_crmentity.smownerid 
 					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid 
-					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+                    left join vtiger_users as vtiger_lastModifiedByPriceBooks on vtiger_lastModifiedByPriceBooks.id = vtiger_crmentity.modifiedby ";
 	            return $query;
 	}
 	

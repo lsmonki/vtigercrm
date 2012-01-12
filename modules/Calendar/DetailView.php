@@ -157,6 +157,7 @@ else
 	$data['taskpriority'] = $finaldata['taskpriority'];
 $data['modifiedtime'] = $finaldata['modifiedtime'];
 $data['createdtime'] = $finaldata['createdtime'];
+$data['modifiedby'] = $finaldata['modifiedby'];
 $data['parent_name'] = $finaldata['parent_id'];
 $data['description'] = $finaldata['description'];
 if($activity_mode == 'Task')

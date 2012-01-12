@@ -515,6 +515,7 @@ $app_strings = array (
 'LBL_UPD_FIELD_ORD' => 'Update Field Order',
 'LBL_SEND_CUSTOM_MAIL_BUTTON' => 'Send Custom Mail',
 'LBL_UPDATED_TODAY' => 'Updated today',
+'LBL_BY' => 'By ',
 'LBL_UPDATED' => 'Updated',
 'LBL_DAY_AGO' => 'day ago',
 'LBL_DAYS_AGO' => 'days ago',

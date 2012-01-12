@@ -431,7 +431,8 @@ class Assets extends CRMEntity {
 				left join vtiger_products as vtiger_productAssets on vtiger_productAssets.productid=vtiger_assets.product
 				left join vtiger_invoice as vtiger_invoiceAssets on vtiger_invoiceAssets.invoiceid=vtiger_assets.invoiceid
 				left join vtiger_users as vtiger_usersAssets on vtiger_usersAssets.id=vtiger_crmentity.smownerid
-				left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid";
+				left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid
+                left join vtiger_users as vtiger_lastModifiedByAssets on vtiger_lastModifiedByAssets.id = vtiger_crmentity.modifiedby ";
 			return $query;
 	}
 
@@ -451,7 +452,7 @@ class Assets extends CRMEntity {
                             left join vtiger_invoice as vtiger_invoiceAssets on vtiger_invoiceAssets.invoiceid=vtiger_assets.invoiceid
                             left join vtiger_users as vtiger_usersAssets on vtiger_usersAssets.id=vtiger_crmentity.smownerid
                             left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid
-                                ";
+                            left join vtiger_users as vtiger_lastModifiedByAssets on vtiger_lastModifiedByAssets.id = vtiger_crmentityAssets.modifiedby ";
                 return $query;
 	}
 

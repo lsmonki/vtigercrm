@@ -1205,7 +1205,9 @@ class Products extends CRMEntity {
 			left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid and vtiger_crmentityProducts.deleted=0
 			left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 			left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
-			left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id ";
+			left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id
+            left join vtiger_users as vtiger_lastModifiedByProducts on vtiger_lastModifiedByProducts.id = vtiger_crmentityProducts.modifiedby ";
+
 		return $query;
 	}
 

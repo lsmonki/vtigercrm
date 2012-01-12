@@ -363,8 +363,8 @@ class CRMEntity
 			$current_user->id = 0;
 
 		$description_val = from_html($this->column_fields['description'],($insertion_mode == 'edit')?true:false);
-		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
-		$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,modifiedby,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?)";
+		$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $current_user->id, $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
 		$adb->pquery($sql, $params);
 		$this->id = $current_id;
 	}
@@ -1892,6 +1892,7 @@ $log->info("in getOldFileName  ".$notesid);
 	        inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
 			left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
             left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
+			left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby
 			left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
             left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
             
@@ -1949,7 +1950,8 @@ $log->info("in getOldFileName  ".$notesid);
 		$query .=" 	left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					$cfquery   
 					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
-		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 
+		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid
+   left join vtiger_users as vtiger_lastModifiedBy".$secmodule." on vtiger_lastModifiedBy".$secmodule.".id = vtiger_crmentity".$secmodule.".modifiedby";
    
        $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10) and vtiger_field.presence in (0,2)",array($secmodule));
        

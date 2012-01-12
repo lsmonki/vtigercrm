@@ -1002,6 +1002,7 @@ class Services extends CRMEntity {
 				left join vtiger_account as vtiger_accountRelServices on vtiger_accountRelServices.accountid=vtiger_seproductsrel.crmid
 				left join vtiger_leaddetails as vtiger_leaddetailsRelServices on vtiger_leaddetailsRelServices.leadid = vtiger_seproductsrel.crmid
 				left join vtiger_potential as vtiger_potentialRelServices on vtiger_potentialRelServices.potentialid = vtiger_seproductsrel.crmid 
+                left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentity.modifiedby
 				LEFT JOIN (
 					SELECT vtiger_service.serviceid, 
 							(CASE WHEN (vtiger_service.currency_id = 1 ) THEN vtiger_service.unit_price
@@ -1038,7 +1039,8 @@ class Services extends CRMEntity {
 			left join vtiger_crmentity as vtiger_crmentityServices on vtiger_crmentityServices.crmid=vtiger_service.serviceid and vtiger_crmentityServices.deleted=0
 			left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid
 			left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_service.handler
-			left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_service.handler";
+			left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_service.handler
+            left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentityServices.modifiedby ";
 		return $query;
 	}
 
