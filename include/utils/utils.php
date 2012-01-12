@@ -1382,7 +1382,7 @@ function getProfile2FieldList($fld_module, $profileid)
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
-	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
+	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,1,2)";
 	$result = $adb->pquery($query, array($profileid, $tabid));
 	$log->debug("Exiting getProfile2FieldList method ...");
 	return $result;
