@@ -4966,4 +4966,18 @@ function getActivityRelatedContacts($activityId) {
 	return $contactsList;
 }
 
+function isLeadConverted($leadId) {
+	$adb = PearDatabase::getInstance();
+
+	$query = 'SELECT converted FROM vtiger_leaddetails WHERE converted = 1 AND leadid=?';
+	$params = array($leadId);
+
+	$result = $adb->pquery($query, $params);
+
+	if($result && $adb->num_rows($result) > 0) {
+		return true;
+	}
+	return false;
+}
+
 ?>

@@ -87,7 +87,12 @@ $val = isPermitted("Leads","EditView",$_REQUEST['record']);
 if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes' && isPermitted("Leads","ConvertLead") =='yes' && (isPermitted("Accounts","EditView") =='yes' || isPermitted("Contacts","EditView") == 'yes') && (vtlib_isModuleActive('Contacts') || vtlib_isModuleActive('Accounts')))
+if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes' 
+		&& isPermitted("Leads","ConvertLead") =='yes'
+		&& (isPermitted("Accounts","EditView") =='yes' || isPermitted("Contacts","EditView") == 'yes')
+		&& (vtlib_isModuleActive('Contacts') || vtlib_isModuleActive('Accounts'))
+		&& !isLeadConverted($focus->id)
+	)
 {
 	$smarty->assign("CONVERTLEAD","permitted");
 }

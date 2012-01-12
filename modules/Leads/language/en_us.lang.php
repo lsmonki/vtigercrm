@@ -240,6 +240,12 @@ $mod_strings = Array(
 // END
 
 'LBL_TRANSFER_RELATED_RECORDS_TO' => 'Transfer related records to',
+
+'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Following could be one of the possible reasons',
+'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'All the mandatory fields are not mapped',
+'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Some of the mandatory field value are empty',
+'LBL_LEADS_FIELD_MAPPING' => 'Leads Custom Field Mapping',
+
 );
 
 ?>

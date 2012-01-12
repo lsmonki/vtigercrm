@@ -178,43 +178,48 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
 									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
 								</tr>';
 			}
-if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')== 'yes')){			
-// An array which as module => fields mapping, to check for field permissions
-$fields_list = array( 'Potentials'=> array('potentialname', 'closingdate', 'amount', 'sales_stage'));
-$fields_permission = array();
-foreach($fields_list as $mod=>$fields){
-	foreach($fields as $key=>$field) {
-		if(getFieldVisibilityPermission($mod, $current_user->id, $field)=='0' && (isActive($field,$mod) == true)){
-			$fields_permission[$field] = '0';
-			$potTabid = getTabid('Potentials');
-			global $adb;
-			$query = 'select typeofdata from vtiger_field where fieldname = ? and tabid = ?';
-			$res = $adb->pquery($query,array($field,$potTabid));
-			$type = $adb->query_result($res,0,'typeofdata');
-			if(strpos($type,'M')){
-				$mandatory[$field] = '*';
-			}
-		}
-		else
-			$fields_permission[$field] = '1';
-	}
+
+
+if((vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes'))
+		||  (vtlib_isModuleActive('Contacts') && (isPermitted('Contacts','EditView')== 'yes'))){
+	$convertlead .= '<tr>
+						<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_TRANSFER_RELATED_RECORDS_TO'].'</td>
+						<td class="dvtCellInfo">
+							<select class="small" name="transfer_related_records_to">';
+								if(vtlib_isModuleActive('Contacts') && (isPermitted('Contacts','EditView')== 'yes')) {
+									$convertlead .= '<option value="Contacts">'.getTranslatedString('Contacts','Contacts').'</option>';
+								}
+								if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes') && !empty($company)) {
+									$convertlead .= '<option value="Accounts">'.getTranslatedString('Accounts','Accounts').'</option>';
+								}
+			$convertlead .= '</select>
+						</td>
+					</tr>';
 }
 
-$convertlead .= '<tr>
-					<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_TRANSFER_RELATED_RECORDS_TO'].'</td>
-					<td class="dvtCellInfo">
-						<select class="small" name="transfer_related_records_to">';
-							if(vtlib_isModuleActive('Contacts') && (isPermitted('Contacts','EditView')== 'yes')) {
-								$convertlead .= '<option value="Contacts">'.getTranslatedString('Contacts','Contacts').'</option>';
-							}
-							if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes') && !empty($company)) {
-								$convertlead .= '<option value="Accounts">'.getTranslatedString('Accounts','Accounts').'</option>';
-							}
-		$convertlead .= '</select>
-					</td>
-				</tr>';
+if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')== 'yes')){			
+	// An array which as module => fields mapping, to check for field permissions
+	$fields_list = array( 'Potentials'=> array('potentialname', 'closingdate', 'amount', 'sales_stage'));
+	$fields_permission = array();
+	foreach($fields_list as $mod=>$fields){
+		foreach($fields as $key=>$field) {
+			if(getFieldVisibilityPermission($mod, $current_user->id, $field)=='0' && (isActive($field,$mod) == true)){
+				$fields_permission[$field] = '0';
+				$potTabid = getTabid('Potentials');
+				global $adb;
+				$query = 'select typeofdata from vtiger_field where fieldname = ? and tabid = ?';
+				$res = $adb->pquery($query,array($field,$potTabid));
+				$type = $adb->query_result($res,0,'typeofdata');
+				if(strpos($type,'M')){
+					$mandatory[$field] = '*';
+				}
+			}
+			else
+				$fields_permission[$field] = '1';
+		}
+	}
 
-$convertlead .='<tr>
+	$convertlead .='<tr>
 			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_DO_NOT_CREATE_NEW_POTENTIAL'].'</td>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="if(this.checked) { $(\'ch\').hide(); } else { $(\'ch\').show(); }"></td>
 		</tr>
