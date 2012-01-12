@@ -906,7 +906,31 @@ function validateFilename(form_ele) {
 	}
 	form_ele.style.backgroundColor = form_ele.bgcolor;
 	form_ele.form[form_ele.name + '_hidden'].value = value;
+	displayFileSize(form_ele);
 	return true;
+}
+
+/* Function to validate the filsize */
+function validateFileSize(form_ele,uploadSize) {
+	var fileSize = form_ele.files[0].size;
+	if(fileSize > uploadSize) {
+		alert(alert_arr.LBL_SIZE_SHOULDNOTBE_GREATER + uploadSize/1000000+alert_arr.LBL_FILESIZEIN_MB);
+		form_ele.value = '';
+		document.getElementById('displaySize').innerHTML= '';
+	} else {
+		displayFileSize(form_ele);
+	}
+}
+
+/* Function to Display FileSize while uploading */
+function displayFileSize(form_ele){
+	var fileSize = form_ele.files[0].size;
+	if (fileSize < 1024)
+		document.getElementById('displaySize').innerHTML = fileSize + alert_arr.LBL_FILESIZEIN_B;
+	else if (fileSize > 1024 && fileSize < 1048576)
+		document.getElementById('displaySize').innerHTML = Math.round(fileSize / 1024, 2) + alert_arr.LBL_FILESIZEIN_KB;
+	else if (fileSize > 1048576)
+		document.getElementById('displaySize').innerHTML = Math.round(fileSize / (1024 * 1024), 2) + alert_arr.LBL_FILESIZEIN_MB;
 }
 
 function formValidate(){

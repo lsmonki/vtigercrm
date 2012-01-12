@@ -21,8 +21,11 @@ $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
+
 //4600 ends
 
+$smarty->assign("UPLOADSIZE", $upload_maxsize/1000000); //Convert to MB
+$smarty->assign("UPLOAD_MAXSIZE",$upload_maxsize);
 if($_REQUEST['upload_error'] == true)
 {
 	echo '<br><b><font color="red"> '.$mod_strings['FILE_HAS_NO_DATA'].'.</font></b><br>';
@@ -107,7 +110,7 @@ if($disp_view == 'edit_view')
 else	
 {
 	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
-}	
+}
 $smarty->assign("OP_MODE",$disp_view);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
