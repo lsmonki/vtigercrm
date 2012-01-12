@@ -557,7 +557,15 @@ function vtlib_purify($input, $ignore=false) {
 			$__htmlpurifier_instance = new HTMLPurifier($config);
 		}
 		if($__htmlpurifier_instance) {
-			$value = $__htmlpurifier_instance->purify($input);
+			// Composite type
+			if (is_array($input)) {
+				$value = array();
+				foreach ($input as $k => $v) {
+					$value[$k] = vtlib_purify($v, $ignore);
+				}
+			} else { // Simple type
+				$value = $__htmlpurifier_instance->purify($input);
+			}
 		}
 	}
 	return $value;
