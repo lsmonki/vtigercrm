@@ -912,6 +912,7 @@ function validateFilename(form_ele) {
 
 /* Function to validate the filsize */
 function validateFileSize(form_ele,uploadSize) {
+	if (form_ele.value == '') return true;
 	var fileSize = form_ele.files[0].size;
 	if(fileSize > uploadSize) {
 		alert(alert_arr.LBL_SIZE_SHOULDNOTBE_GREATER + uploadSize/1000000+alert_arr.LBL_FILESIZEIN_MB);
@@ -923,7 +924,7 @@ function validateFileSize(form_ele,uploadSize) {
 }
 
 /* Function to Display FileSize while uploading */
-function displayFileSize(form_ele){
+function displayFileSize(form_ele) {
 	var fileSize = form_ele.files[0].size;
 	if (fileSize < 1024)
 		document.getElementById('displaySize').innerHTML = fileSize + alert_arr.LBL_FILESIZEIN_B;
@@ -1231,17 +1232,7 @@ function doformValidation(edit_type) {
 		if(!comparestartdate(chkdate)) return false;
 	}//end
 	 
-	// We need to enforce fileupload for internal type
-	if(gVTModule == 'Documents') {
-		if(getObj('filelocationtype').value == 'I') {
-			if(getObj('filename_hidden').value == '') {
-				alert(alert_arr.LBL_PLEASE_SELECT_FILE_TO_UPLOAD);
-				return false;				
-			}
-		}
-	}
-
-	return true
+	return true;
 }
 
 function clearId(fldName) {

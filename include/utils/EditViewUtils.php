@@ -1231,12 +1231,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $fldr_name;
 		}
 	elseif($uitype == 27){
-				if($value == 'I'){
-					$internal_selected = "selected";
+				if($value == 'E'){
+                    $external_selected = "selected";
 					$filename = $col_fields['filename'];
 				}
 				else{
-					$external_selected = "selected";
+					$internal_selected = "selected";
 					$filename = $col_fields['filename'];
 				}
 				$editview_label[] = array(getTranslatedString('Internal'),
