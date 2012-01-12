@@ -216,7 +216,7 @@ if($reportid == "")
 								if(trim($temp_val[$x]) != '') {
 									$date = new DateTimeField(trim($temp_val[$x]));
 									if($column_info[4] == 'D') {
-										$val[$x] = DateTimeField::convertToUserFormat(
+										$val[$x] = DateTimeField::convertToDBFormat(
 												trim($temp_val[$x]));
 									} elseif($column_info[4] == 'DT') {
 										$val[$x] = $date->getDBInsertDateTimeValue();
@@ -413,7 +413,7 @@ if($reportid == "")
 						if(trim($temp_val[$x]) != '') {
 							$date = new DateTimeField(trim($temp_val[$x]));
 							if($column_info[4] == 'D') {
-								$val[$x] = DateTimeField::convertToUserFormat(
+								$val[$x] = DateTimeField::convertToDBFormat(
 										trim($temp_val[$x]));
 							} elseif($column_info[4] == 'DT') {
 								$val[$x] = $date->getDBInsertDateTimeValue();

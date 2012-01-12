@@ -149,7 +149,7 @@ if($cvmodule != "") {
 						$fieldName = $column_info[2];
 						$fieldObj = $moduleFields[$fieldName];
 						$fieldType = $fieldObj->getFieldDataType();
-
+						
 						if($fieldType == 'currency') {
 							if($fieldObj->getUIType() == '71') {
 								$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
@@ -168,7 +168,7 @@ if($cvmodule != "") {
 								if(trim($temp_val[$x]) != '') {
 									$date = new DateTimeField(trim($temp_val[$x]));
 									if($fieldType == 'date') {
-										$val[$x] = DateTimeField::convertToUserFormat(
+										$val[$x] = DateTimeField::convertToDBFormat(
 												trim($temp_val[$x]));
 									} elseif($fieldType == 'datetime') {
 										$val[$x] = $date->getDBInsertDateTimeValue();
@@ -296,7 +296,7 @@ if($cvmodule != "") {
 								if(trim($temp_val[$x]) != '') {
 									$date = new DateTimeField(trim($temp_val[$x]));
 									if($fieldType == 'date') {
-										$val[$x] = DateTimeField::convertToUserFormat(
+										$val[$x] = DateTimeField::convertToDBFormat(
 												trim($temp_val[$x]));
 									} elseif($fieldType == 'datetime') {
 										$val[$x] = $date->getDBInsertDateTimeValue();
@@ -307,7 +307,7 @@ if($cvmodule != "") {
 							}
 							$adv_filter_value = implode(",",$val);
 						}
-		
+
 						$irelcriteriasql = "INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition) values (?,?,?,?,?,?,?)";
 						$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($genCVid, $column_index, $adv_filter_column, $adv_filter_comparator, $adv_filter_value, $adv_filter_groupid, $adv_filter_column_condition));
 					

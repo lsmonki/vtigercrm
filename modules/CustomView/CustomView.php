@@ -889,7 +889,7 @@ class CustomView extends CRMEntity{
 	  */	
     function getAdvFilterByCvid($cvid) {
 		
-		global $adb, $log;
+		global $adb, $log, $default_charset;
 		
 		$advft_criteria = array();
 		
@@ -915,9 +915,9 @@ class CustomView extends CRMEntity{
 			while($relcriteriarow = $adb->fetch_array($result)) {
 				$columnIndex = $relcriteriarow["columnindex"];
 				$criteria = array();
-				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"]);
+				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"], ENT_QUOTES, $default_charset);
 				$criteria['comparator'] = $relcriteriarow["comparator"];
-				$advfilterval = $relcriteriarow["value"];
+				$advfilterval = html_entity_decode($relcriteriarow["value"], ENT_QUOTES, $default_charset);
 				$col = explode(":",$relcriteriarow["columnname"]);
 				$temp_val = explode(",",$relcriteriarow["value"]);
 				if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
@@ -1235,7 +1235,7 @@ class CustomView extends CRMEntity{
 
 		if($fieldname == "smownerid")
                 {
-	                $temp_value = "( vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
+       	                $temp_value = "(CONCAT(vtiger_users.last_name,' ',vtiger_users.first_name)".$this->getAdvComparator($comparator,$value,$datatype);
 	                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype);
 	                $value=$temp_value.")";
 		}elseif( $fieldname == "inventorymanager")
