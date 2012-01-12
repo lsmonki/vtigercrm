@@ -314,7 +314,7 @@ Skype: holboki
 				'LBL_ENTER_WINDOW_TITLE': 'Kérjük, hogy adja meg az ablak címét.',
 				'LBL_SELECT_ONLY_FIELDS': 'Kérjük, hogy csak két mezőt válasszon.',
 				'LBL_ENTER_RSS_URL': 'Kérjük, hogy adja meg az RSS URL-t',
-				'LBL_ADD_HOME_WIDGET': 'Nem adható hozzá a nyitó oldali doboz. Próbálja újra.'
+				'LBL_ADD_HOME_WIDGET': 'Nem adható hozzá a nyitó oldali doboz. Próbálja újra.',
 				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Alapértelmezett érték ehhez a mezőhöz',
 
 				'RECIPIENTS_CANNOT_BE_EMPTY' : 'A kiválasztott Címzett nem lehet üres mező',
