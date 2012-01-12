@@ -868,17 +868,17 @@ class CustomView extends CRMEntity{
 		{
 			if($stdfilterrow["startdate"] != "0000-00-00" && $stdfilterrow["startdate"] != "")
 			{
-				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
+				$stdfilterlist["startdate"] = DateTimeField::convertToUserFormat($stdfilterrow["startdate"]);
 			}
 			if($stdfilterrow["enddate"] != "0000-00-00" && $stdfilterrow["enddate"] != "")
 			{
-				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
+				$stdfilterlist["enddate"] = DateTimeField::convertToUserFormat($stdfilterrow["enddate"]);
 			}
 		}else  //if it is not custom get the date according to the selected duration
 		{
 			$datefilter = $this->getDateforStdFilterBytype($stdfilterrow["stdfilter"]);
-			$stdfilterlist["startdate"] = $datefilter[0];
-			$stdfilterlist["enddate"] = $datefilter[1];
+			$stdfilterlist["startdate"] = DateTimeField::convertToUserFormat($datefilter[0]);
+			$stdfilterlist["enddate"] = DateTimeField::convertToUserFormat($datefilter[1]);
 		}
 		return $stdfilterlist;
 	}

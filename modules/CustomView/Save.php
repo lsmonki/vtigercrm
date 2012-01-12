@@ -68,12 +68,8 @@ if($cvmodule != "") {
 	$std_filter_list["stdfilter"] = $stdcriteria;
 	$startdate = $_REQUEST["startdate"];
 	$enddate = $_REQUEST["enddate"];
-	if($stdcriteria == "custom") {
-		$startdate = DateTimeField::convertToDBFormat($startdate);
-		$enddate = DateTimeField::convertToDBFormat($enddate);
-	}
-	$std_filter_list["startdate"] = $startdate;
-	$std_filter_list["enddate"]=$enddate;
+	$std_filter_list["startdate"] = DateTimeField::convertToDBFormat($startdate);
+	$std_filter_list["enddate"] = DateTimeField::convertToDBFormat($enddate);
 	if(empty($startdate) && empty($enddate))
 		unset($std_filter_list);
 	//<<<<<<<standardfilters>>>>>>>>>
