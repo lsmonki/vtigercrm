@@ -766,7 +766,7 @@ class QueryGenerator {
 	}
 
 	private function getConditionalArray($fieldname,$value,$operator) {
-		return array('name'=>$fieldname,'value'=>$value,'operator'=>$operator);
+		return array('name'=>$fieldname,'value'=>trim($value),'operator'=>$operator);
 	}
 
 	private function startGroup($groupType) {
