@@ -24,6 +24,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 require_once('vtlib/Vtiger/Language.php');
+require_once('modules/PickList/PickListUtils.php');
 
 /** This function returns the detail view form vtiger_field and and its properties in array format.
  * Param $uitype - UI type of the vtiger_field
@@ -144,51 +145,32 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = $col_fields[$fieldname];
 		$roleid = $current_user->roleid;
 
-		$subrole = getRoleSubordinates($roleid);
-		if (count($subrole) > 0) {
-			$roleids = $subrole;
-			array_push($roleids, $roleid);
-		} else {
-			$roleids = $roleid;
-		}
-		if ($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-			$pick_query = "select $fieldname from vtiger_$fieldname";
-			$params = array();
-		} else {
-			if (count($roleids) > 0) {
-				$pick_query = "select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (" . generateQuestionMarks($roleids) . ") and picklistid in (select picklistid from vtiger_picklist) order by $fieldname asc";
-				$params = array($roleids);
-			} else {
-				$pick_query = "select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where picklistid in (select picklistid from vtiger_picklist) order by $fieldname asc";
-				$params = array();
-			}
-		}
-		$pickListResult = $adb->pquery($pick_query, $params);
-		$noofpickrows = $adb->num_rows($pickListResult);
+		$valueArr = explode("|##|", $col_fields[$fieldname]);
+		$picklistValues = getAssignedPicklistValues($fieldname, $roleid, $adb);
 
 		//Mikecrowe fix to correctly default for custom pick lists
 		$options = array();
 		$count = 0;
 		$found = false;
-		for ($j = 0; $j < $noofpickrows; $j++) {
-			$pickListValue = decode_html($adb->query_result($pickListResult, $j, strtolower($fieldname)));
-			$col_fields[$fieldname] = decode_html($col_fields[$fieldname]);
-
-			if ($col_fields[$fieldname] == $pickListValue) {
-				$chk_val = "selected";
-				$count++;
-				$found = true;
-			} else {
-				$chk_val = '';
+		if (!empty($picklistValues)) {
+			foreach ($picklistValues as $order => $pickListValue) {
+				if (in_array(trim($pickListValue), array_map("trim", $valueArr))) {
+					$chk_val = "selected";
+					$pickcount++;
+				} else {
+					$chk_val = '';
+				}
+				if (isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate') {
+					$options[] = array(htmlentities(getTranslatedString($pickListValue), ENT_QUOTES, $default_charset), $pickListValue, $chk_val);
+				} else {
+					$options[] = array(getTranslatedString($pickListValue), $pickListValue, $chk_val);
+				}
 			}
-			$pickListValue = to_html($pickListValue);
-			$options[] = array(getTranslatedString($pickListValue), $pickListValue, $chk_val);
-		}
-		if ($count == 0 && $col_fields[$fieldname] != '') {
-			$options[] = array($app_strings['LBL_NOT_ACCESSIBLE'], $col_fields[$fieldname], 'selected');
-		}
 
-
+			if ($pickcount == 0 && !empty($value)) {
+				$options[] = array($app_strings['LBL_NOT_ACCESSIBLE'], $value, 'selected');
+			}
+		}
 		$label_fld ["options"] = $options;
 	} elseif ($uitype == 115) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
@@ -213,61 +195,36 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld ["options"] = $options;
 	} elseif ($uitype == 33) { //uitype 33 added for multiselector picklist - Jeri
 		$roleid = $current_user->roleid;
-		$subrole = getRoleSubordinates($roleid);
-		if (count($subrole) > 0) {
-			$roleids = $subrole;
-			array_push($roleids, $roleid);
-		} else {
-			$roleids = $roleid;
-		}
-		$editview_label[] = getTranslatedString($fieldlabel, $module);
-		if ($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-			$pick_query = "select $fieldname from vtiger_$fieldname order by $fieldname asc";
-			$params = array();
-		} else {
-			if (count($roleids) > 0) {
-				$pick_query = "select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (" . generateQuestionMarks($roleids) . ") and picklistid in (select picklistid from vtiger_picklist) order by $fieldname asc";
-				$params = array($roleids);
-			} else {
-				$pick_query = "select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where picklistid in (select picklistid from vtiger_picklist) order by $fieldname asc";
-				$params = array();
-			}
-		}
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$label_fld[] = str_ireplace(' |##| ', ', ', $col_fields[$fieldname]);
 
-		$pickListResult = $adb->pquery($pick_query, $params);
-		$noofpickrows = $adb->num_rows($pickListResult);
+		$picklistValues = getAssignedPicklistValues($fieldname, $roleid, $adb);
 
 		$options = array();
 		$selected_entries = Array();
 		$selected_entries = explode(' |##| ', $col_fields[$fieldname]);
-		for ($j = 0; $j < $noofpickrows; $j++) {
-			$pickListValue = $adb->query_result($pickListResult, $j, strtolower($fieldname));
-			$chk_val = '';
-			foreach ($selected_entries as $selected_entries_value) {
-				if (trim($selected_entries_value) == trim($pickListValue)) {
-					$chk_val = 'selected';
-					break;
+
+		if (!empty($picklistValues)) {
+			foreach ($picklistValues as $order => $pickListValue) {
+				foreach ($selected_entries as $selected_entries_value) {
+					if (trim($selected_entries_value) == trim($pickListValue)) {
+						$chk_val = 'selected';
+						$pickcount++;
+						break;
+					} else {
+						$chk_val = '';
+					}
+				}
+				if (isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate') {
+					$options[] = array(htmlentities(getTranslatedString($pickListValue), ENT_QUOTES, $default_charset), $pickListValue, $chk_val);
 				} else {
-					$chk_val = '';
+					$options[] = array(getTranslatedString($pickListValue), $pickListValue, $chk_val);
 				}
 			}
-			$options[] = array($pickListValue, $pickListValue, $chk_val);
-		}
-		foreach ($selected_entries as $selected_entries_value) {
-			$mul_count = 0;
-			$options_length = count($options);
-			for ($j = 0; $j < $options_length; $j++) {
-				if (in_array($selected_entries_value, $options[$j])) {
-					$mul_count++;
-				}
-			}
-			if ($mul_count == 0 && $options_length > 0) {
+			if ($pickcount == 0 && !empty($value)) {
 				$not_access_lbl = "<font color='red'>" . $app_strings['LBL_NOT_ACCESSIBLE'] . "</font>";
 				$options[] = array($not_access_lbl, trim($selected_entries_value), 'selected');
 			}
-			$mul_count = 0;
 		}
 		$label_fld ["options"] = $options;
 	} elseif ($uitype == 17) {
