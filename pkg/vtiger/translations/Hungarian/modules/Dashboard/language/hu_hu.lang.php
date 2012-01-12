@@ -11,15 +11,13 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Dashboard\language\hu_hu.lang.php - 19:23 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Dashboard module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\Dashboard\language\hu_hu.lang.php - 12:04 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Dashboard module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
- ********************************************************************************/
- 
+ ********************************************************************************/ 
 $mod_strings = Array(
 'LBL_SALES_STAGE_FORM_TITLE'=>'Tölcsér értékesítési fázisok szerint',
 'LBL_SALES_STAGE_FORM_DESC'=>'A kumulált Lehetőségek összegének mutatása a kiválasztott értékesítési fázis szerint a kiválasztott Felhasználóknak, ahol a várható lezárási dátum a megadott dátum intervallumban van.',
@@ -57,31 +55,31 @@ $mod_strings = Array(
 'leadsource' => 'Jelöltek forrás szerint',
 'leadstatus' => 'Jelöltek állapot szerint',
 'leadindustry' => 'Jelöltek iparág szerint',
-'salesbyleadsource' => 'Eladás Jelölt forrás szerint',
-'salesbyaccount' => 'Eladás Cégenként',
-'salesbyuser' => 'Eladás Felhasználók szerint',
-'salesbyteam'=>'Eladás Csapatok szerint',
+'salesbyleadsource' => 'Megrendelés Jelölt forrás szerint',
+'salesbyaccount' => 'Megrendelés Cégenként',
+'salesbyuser' => 'Megrendelés Felhasználók szerint',
+'salesbyteam'=>'Megrendelés Csapatok szerint',
 'accountindustry' => 'Cégek iparág szerint',
 'productcategory' => 'Termékek Kategória szerint',
 'productbyqtyinstock' => 'Termékek Készlet szerint',
 'productbypo' => 'Termékek Rendelések szerint',
 'productbyquotes' => 'Termékek Ajánlatok szerint',
-'productbyinvoice' => 'Termékek Számlák szerint',
-'sobyaccounts' => 'Vevői rendelések Cégenként',
-'sobystatus' => 'Vevői rendelések állapot szerint',
-'pobystatus' => 'Beszerzési rendelések állapot szerint',
+'productbyinvoice' => 'Termékek Díjbekérők szerint',
+'sobyaccounts' => 'Megrendelések Cégenként',
+'sobystatus' => 'Megrendelések állapot szerint',
+'pobystatus' => 'Beszerzések állapot szerint',
 'quotesbyaccounts' => 'Ajánlatok Cégenként',
 'quotesbystage' => 'Ajánlatok fázis szerint',
-'invoicebyacnts' => 'Számlák Cégenként',
-'invoicebystatus' => 'Számlák állapot szerint',
-'ticketsbystatus' => 'Ügyfélszolgálati Jegyek állapot szerint',
-'ticketsbypriority' => 'Ügyfélszolgálati Jegyek prioritás szerint',
-'ticketsbycategory' => 'Ügyfélszolgálati Jegyek Kategória szerint',
-'ticketsbyuser'=>'Ügyfélszolgálati Jegyek Felhasználók szerint',
-'ticketsbyteam'=>'Ügyfélszolgálati Jegyek Csapatok szerint',
-'ticketsbyproduct'=>'Ügyfélszolgálati Jegyek Termékek szerint',
+'invoicebyacnts' => 'Díjbekérők Cégenként',
+'invoicebystatus' => 'Díjbekérők állapot szerint',
+'ticketsbystatus' => 'Kérések állapot szerint',
+'ticketsbypriority' => 'Kérések prioritás szerint',
+'ticketsbycategory' => 'Kérések kategória szerint',
+'ticketsbyuser'=>'Kérések felhasználók szerint',
+'ticketsbyteam'=>'Kérések csapatok szerint',
+'ticketsbyproduct'=>'Kérések termékek szerint',
 'contactbycampaign'=>'Kapcsolatok Kampányok szerint',
-'ticketsbyaccount'=>'Ügyfélszolgálati Jegyek Cégenként',
+'ticketsbyaccount'=>'Kérések cégenként',
 
 'LBL_DASHBRD_HOME'=>'Műszerfal Kezdőlap',
 'LBL_HORZ_BAR_CHART'=>'Vízszintes oszlop Diagram',
@@ -101,7 +99,7 @@ $mod_strings = Array(
 'Delivered'=>'Kiszállított',
 'Received Shipment'=>'Fogadott szállítmány',
 'Sent'=>'Elküldött',
-'Credit Invoice'=>'Utalásos számla',
+'Credit Invoice'=>'Utalásos Díjbekérő',
 'Paid'=>'Fizetett',
 'Un Assigned'=>'Nincs Felelöse',
 'Cold Call'=>'Hideg Hívás',

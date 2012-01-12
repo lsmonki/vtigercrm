@@ -5,9 +5,8 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * *********************************************************************************
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\RecycleBin\language\hu_hu.lang.js - 21:43 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the RecycleBin module vtiger 5.2.0
+ * $Header:  \modules\RecycleBin\language\hu_hu.lang.js - 12:11 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the RecycleBin module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/

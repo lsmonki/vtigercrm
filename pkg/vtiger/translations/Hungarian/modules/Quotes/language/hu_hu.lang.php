@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Quotes\language\hu_hu.lang.php - 21:41 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Quotes module vtiger 5.2.0
+ * $Header:  \modules\Quotes\language\hu_hu.lang.php - 22:01 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Quotes module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -62,9 +62,9 @@ $mod_strings = Array(
 'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
-'LBL_Quote_INFORMATION'=>'Account Information',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_Quote_INFORMATION'=>'Cég adatok',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
 'LBL_SHIPPING_ADDRESS'=>'Szállítási cím:',
 'LBL_ANY_ADDRESS'=>'Bármilyen cím:',
@@ -72,8 +72,8 @@ $mod_strings = Array(
 'LBL_STATE'=>'Állam/Megye:',
 'LBL_POSTAL_CODE'=>'Irányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
-'LBL_DESCRIPTION'=>'Megjegyzés:',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_DESCRIPTION'=>'Leírás:',
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a Szállítási címhez',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Szállítási cím másolása a Számlázási címhez',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Biztos vagy abban, hogy ezt a rekordot - mint tagszervezetet - el akarod távolítani?',
@@ -84,7 +84,7 @@ $mod_strings = Array(
 'ERR_DELETE_RECORD'=>"Adj meg egy rekord azonosítót a VTiger-fiók törléséhez",
 
 'LBL_SELECT_ACCOUNT'=>'Cég Kiválasztása',
-'LBL_GENERAL_INFORMATION'=>'Általános Információ',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
 
 //for v4 release added
 'LBL_NEW_POTENTIAL'=>'Új Lehetőség',
@@ -141,11 +141,11 @@ $mod_strings = Array(
 'Shipping Country'=>'Szállítási cím - Ország',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Account Name'=>'Cég neve',
 'Terms & Conditions'=>'Határidők és Feltételek',
 //Quote Info
-'LBL_QUOTE_INFORMATION'=>'Ajánlat Információ',
+'LBL_QUOTE_INFORMATION'=>'Ajánlat adatai',
 'LBL_TERMS_INFORMATION'=>'Határidők és Feltételek',
 'LBL_QUOTE'=>'Ajánlat:',
 
@@ -154,7 +154,7 @@ $mod_strings = Array(
 'LBL_POTENTIAL_NAME'=>'Lehetőség neve:',
 'LBL_ACCOUNT_NAME'=>'Cég neve:',
 'LBL_QUOTE_STAGE'=>'Ajánlat fázisa:',
-'LBL_MY_TOP_QUOTE'=>'Csúcs Nyitott Ajánlataim',
+'LBL_MY_TOP_QUOTE'=>'Legfontosabb Nyitott Ajánlataim',
 //'Quote ID'=>'Quote Id',
 'Quote'=>'Ajánlat',
 
@@ -178,11 +178,13 @@ $mod_strings = Array(
 'Discount Percent'=>'Kedvezmény Százalék',
 'Discount Amount'=>'Kedvezmény Összeg',
 'Terms & Conditions'=>'Határidők és Feltételek',
-'Adjustment'=>'Kiegyenlítés',
+'Adjustment'=>'Kézi módosítási lehetőség',
 'S&H Amount'=>'Szállítási és kezelési ktg.',
 
 //Added after 5.0.4 GA
-'Quote No'=>'Ajánlat száma',
+'Quote No'=>'Ajánlat No.',
+'SINGLE_Quotes'=>'Ajánlat',
+'Products' => 'Termékek',
 );
 
 ?>

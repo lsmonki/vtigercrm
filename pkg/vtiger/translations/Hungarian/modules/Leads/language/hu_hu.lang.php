@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Leads\language\hu_hu.lang.php - 20:51 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Leads module vtiger 5.2.0
+ * $Header:  \modules\Leads\language\hu_hu.lang.php - 21:38 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Leads module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -29,21 +29,21 @@ $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'Új Jelölt',
 'LBL_LEAD_OPP_FORM_TITLE'=>'Kapcsolatfelvételi lehetőség:',
 'LBL_LEAD'=>'Jelöltek:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 
 'LBL_LIST_NAME'=>'Név',
 'LBL_LIST_LAST_NAME'=>'Vezetéknév',
 'LBL_LIST_COMPANY'=>'Cég',
 'LBL_LIST_WEBSITE'=>'Weboldal',
-'LBL_LIST_LEAD_NAME'=>'Jelölt Neve',
+'LBL_LIST_LEAD_NAME'=>'Jelölt neve',
 'LBL_LIST_EMAIL'=>'Email',
 'LBL_LIST_PHONE'=>'Telefon',
 'LBL_LIST_LEAD_ROLE'=>'Munkakör',
 
 'LBL_NAME'=>'Név:',
-'LBL_LEAD_NAME'=>'Jelölt Neve:',
-'LBL_LEAD_INFORMATION'=>'Jelölt Információ',
+'LBL_LEAD_NAME'=>'Jelölt neve:',
+'LBL_LEAD_INFORMATION'=>'Jelölt adatai',
 'LBL_FIRST_NAME'=>'Keresztnév:',
 'LBL_PHONE'=>'Telefon:',
 'LBL_COMPANY'=>'Cégnév:',
@@ -53,7 +53,7 @@ $mod_strings = Array(
 'LBL_MOBILE'=>'Mobil:',
 'LBL_EMAIL'=>'Email:',
 'LBL_LEAD_SOURCE'=>'Jelölt Forrás:',
-'LBL_LEAD_STATUS'=>'Jelölt Állapot:',
+'LBL_LEAD_STATUS'=>'Jelölt állapota:',
 'LBL_WEBSITE'=>'Weboldal:',
 'LBL_FAX'=>'Fax:',
 'LBL_INDUSTRY'=>'Iparág:',
@@ -69,11 +69,11 @@ $mod_strings = Array(
 'LBL_ADDRESS_COUNTRY'=>'Ország:',
 'LBL_ADDRESS_STATE'=>'Állam/Megye:',
 'LBL_ADDRESS'=>'Cím:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
-'LBL_DESCRIPTION'=>'Megjegyzés:',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_DESCRIPTION'=>'Leírás:',
 
-'LBL_CONVERT_LEAD'=>'Jelöltet átalakít:',
-'LBL_CONVERT_LEAD_INFORMATION'=>'Átalakított Jelöltek Információ',
+'LBL_CONVERT_LEAD'=>'Jelöltet átalakít Kapcsolattá:',
+'LBL_CONVERT_LEAD_INFORMATION'=>'Átalakított Jelöltek adatai',
 'LBL_ACCOUNT_NAME'=>'Cég neve',
 'LBL_POTENTIAL_NAME'=>'Lehetőség neve',
 'LBL_POTENTIAL_CLOSE_DATE'=>'Lehetőség Lezárási Dátuma',
@@ -100,8 +100,8 @@ $mod_strings = Array(
 'LBL_NONE'=>'Nincs',
 'LBL_ASSIGNED_TO'=>'Felelős:',
 'LBL_SELECT_LEAD'=>'Jelölt Kiválasztása',
-'LBL_GENERAL_INFORMATION'=>'Általános Információ',
-'LBL_DO_NOT_CREATE_NEW_POTENTIAL'=>'Ne hozz létre egy új Lehetőséget az átalakításon',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
+'LBL_DO_NOT_CREATE_NEW_POTENTIAL'=>'Ne hozz létre egy új Lehetőséget az átalakításkor',
 
 //for v4 release added
 'LBL_NEW_POTENTIAL'=>'Új Lehetőség',
@@ -142,15 +142,15 @@ $mod_strings = Array(
 'Company'=>'Cég',
 'Fax'=>'Fax',
 'Email'=>'Email',
-'Lead Source'=>'Jelölt Forrás',
+'Lead Source'=>'Jelölt forrása',
 'Website'=>'Weboldal',
 'Annual Revenue'=>'Éves forgalom',
-'Lead Status'=>'Jelölt Állapot',
+'Lead Status'=>'Jelölt állapota',
 'Industry'=>'Iparág',
 'Rating'=>'Értékelés',
 'No Of Employees'=>'Alkalmazottak száma',
 'Assigned To'=>'Felelős',
-'Yahoo Id'=>'Yahoo Id',
+'Yahoo Id'=>'Yahoo azonosító',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
 'Street'=>'Utca',
@@ -238,15 +238,18 @@ $mod_strings = Array(
 
 // Added/Updated for vtiger CRM 5.0.4
 
-'Designation'=>'Titulus',
+'Designation'=>'Beosztás',
      
 // Added after 5.0.4 GA
 
 //Module Sequence Numbering
-'Lead No'=>'Jelölt száma',
+'Lead No'=>'Jelölt No.',
 
 // Added for 5.2.0 
 'Send SMS' => 'SMS küldés',
+
+// Added for 5.3.0 
+'LBL_TRANSFER_RELATED_RECORDS_TO' => 'Transzfer miatt kapcsolódó rekordok ehhez: ',
 // END
      
 );

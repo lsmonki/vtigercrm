@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Emails\language\hu_hu.lang.php - 19:30 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Emails module vtiger 5.2.0
+ * $Header:  \modules\Emails\language\hu_hu.lang.php - 19:34 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Emails module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -22,7 +22,7 @@
  
 $mod_strings = Array(
 // Mike Crowe Mod --------------------------------------------------------added for general search
-'LBL_GENERAL_INFORMATION'=>'Általános Információ',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
 
 'LBL_MODULE_NAME'=>'Email',
 'LBL_MODULE_TITLE'=>'Email: Kezdőlap',
@@ -38,7 +38,7 @@ $mod_strings = Array(
 
 'ERR_DELETE_RECORD'=>"Adj meg egy rekord azonosítót a VTiger-fiók törléséhez",
 'LBL_DATE_SENT'=>'Küldés Dátuma:',
-'LBL_DATE_AND_TIME'=>'Küldés Dátuma és Ideje:',
+'LBL_DATE_AND_TIME'=>'Küldés dátuma és ideje:',
 'LBL_DATE'=>'Küldés Dátuma:',
 'LBL_TIME'=>'Küldés Ideje:',
 'LBL_SUBJECT'=>'Tárgy:',
@@ -83,9 +83,9 @@ $mod_strings = Array(
 
 'LBL_EMAIL_TEMPLATES'=>'Email Sablonok',
 'LBL_TEMPLATE_NAME'=>'Sablon neve',
-'LBL_DESCRIPTION'=>'Megjegyzés',
+'LBL_DESCRIPTION'=>'Leírás',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Email Sablonok  Listája',
-'LBL_EMAIL_INFORMATION'=>'Email Információ',
+'LBL_EMAIL_INFORMATION'=>'Email adatok',
 
 
 
@@ -108,7 +108,7 @@ $mod_strings = Array(
 // Added for 4 GA
 'LBL_TOOL_FORM_TITLE'=>'Email Eszközök',
 //Added for 4GA
-'Date & Time Sent'=>'Küldés Dátuma és Ideje',
+'Date & Time Sent'=>'Küldés dátuma és ideje',
 'Sales Enity Module'=>'Értékesítési Entitás Modul',
 'Related To'=>'Kapcsolódik',
 'Assigned To'=>'Felelős',
@@ -137,16 +137,16 @@ $mod_strings = Array(
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Hiba a mail szerverhez kapcsolódás közben!<br> Ellenőrizd a Fiókom -> Mail Szerverek listája -> Email fiókok listája',
 'LBL_ALLMAILS'=>'Minden levél',
 'LBL_TO_USERS'=>'Felhasználóknak',
-'LBL_TO'=>'Neki:',
+'LBL_TO'=>'Címzett:',
 'LBL_IN_SUBJECT'=>'a Tárgyban',
 'LBL_IN_SENDER'=>'a Küldőben',
 'LBL_IN_SUBJECT_OR_SENDER'=>'a Tárgyban vagy a Küldőben',
-'SELECT_EMAIL'=>'Válassz Email azonosítókat',
+'SELECT_EMAIL'=>'Válassz Email címeket',
 'Sender'=>'Küldő',
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'A Bejövő Mail Szerver nincs beállítva',
-	'LBL_MAILSELECT_INFO1'=>'The following Email ID types are associated to the selected',
-	'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
-'LBL_MULTIPLE'=>'Sokszoros',
+'LBL_MAILSELECT_INFO1'=>'A következő email cím típust hozzárendeltük a kiválasztottakhoz',
+'LBL_MAILSELECT_INFO2'=>'Válaszd ki az email cím típust küldésre',
+'LBL_MULTIPLE'=>'Többszörös',
 'LBL_COMPOSE_EMAIL'=>'Email szerkesztése',
 'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Webmail Kliens',
 
@@ -155,19 +155,18 @@ $mod_strings = Array(
 'TITLE_COMPOSE_MAIL'=>'Email szerkesztése',
 
 'MESSAGE_MAIL_COULD_NOT_BE_SEND'=>'A levelet nem sikerült elküldeni a Felelős Felhasználónak.',
-'MESSAGE_PLEASE_CHECK_ASSIGNED_USER_EMAILID'=>'Kérjük, hogy ellenőrizd a Felelős Felhasználó email azonosítóját...',
-'MESSAGE_PLEASE_CHECK_THE_FROM_MAILID'=>'Kérjük, hogy ellenőrizd a Küldő email azonosítóját...',
-'MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID'=>'A levelet nem sikerült elküldeni ehhez az email ID-hez',
-'PLEASE_CHECK_THIS_EMAILID'=>'Kérjük, hogy ellenőrizd ezt az email azonosítót...',
-'LBL_CC_EMAIL_ERROR'=>'A megadott Másolat email azonosító nem megfelelő',
-'LBL_BCC_EMAIL_ERROR'=>'A megadott Rejtett másolat email azonosító nem megfelelő',
+'MESSAGE_PLEASE_CHECK_ASSIGNED_USER_EMAILID'=>'Kérjük, hogy ellenőrizd a Felelős Felhasználó email címét...',
+'MESSAGE_PLEASE_CHECK_THE_FROM_MAILID'=>'Kérjük, hogy ellenőrizd a Küldő email címét...',
+'MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID'=>'A levelet nem sikerült elküldeni erre az email címre',
+'PLEASE_CHECK_THIS_EMAILID'=>'Kérjük, hogy ellenőrizd ezt az email címet...',
+'LBL_CC_EMAIL_ERROR'=>'A megadott Másolat email cím nem megfelelő',
+'LBL_BCC_EMAIL_ERROR'=>'A megadott Rejtett másolat email cím nem megfelelő',
 'LBL_NO_RCPTS_EMAIL_ERROR'=>'Nincs Címzett megadva',
 'LBL_CONF_MAILSERVER_ERROR'=>'Kérjük, hogy állítsd be a Kimenő levelek mailszerverét a Beállítások -> Kimenő levelek MailSzerver linken',
 
-'LBL_MAILSELECT_INFO3'=>'Neked nincs jogosultságod arra, hogy a kiválasztott rekord(ok) email azonosítóit megtekintsd.',
+'LBL_MAILSELECT_INFO3'=>'Neked nincs jogosultságod arra, hogy a kiválasztott rekord(ok) email címeit megtekintsd.',
 //Added  for script alerts
-	'FEATURE_AVAILABLE_INFO' => 'This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait f
-or an update!',
+'FEATURE_AVAILABLE_INFO' => 'Ez a funkció jelenleg csak a Microsoft Internet Explorer 5.5+ felhasználóknak érhető el.\n\nVárja meg a következő verziót!',
 'DOWNLOAD_CONFIRAMATION' => 'Le szeretnéd tölteni a fájlt?',
 'LBL_PLEASE_ATTACH' => 'Kérjük, hogy adj meg egy létező fájlt a csatoláshoz és próbáld meg újra!',
 'LBL_KINDLY_UPLOAD' => 'Kérjük, hogy álltsd be az <font color="red">upload_tmp_dir</font> változót a php.ini fájlban.',
@@ -177,9 +176,10 @@ or an update!',
 
 // Added/Updated for vtiger CRM 5.0.4
 'Activity Type'=>'Aktivitás típus',
-'LBL_MAILSELECT_INFO'=>'a következő Email azonosítókat összekapcsoltuk. Kérjük, hogy válaszd ki azokat az email azonosítókat, amelyeknek az emailt el kell küldeni',
+'LBL_MAILSELECT_INFO'=>'a következő Email címeket összekapcsoltuk. Kérjük, hogy válaszd ki azokat az email címeket, amelyeknek az emailt el kell küldeni',
 'LBL_NO_RECORDS' => 'A rekord nem található',
 'LBL_PRINT_EMAIL'=> 'Nyomtatás',
+'Access Count' => 'Megnyitva',
 
 );
 

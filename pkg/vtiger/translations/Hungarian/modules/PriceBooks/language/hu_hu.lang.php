@@ -8,21 +8,21 @@
  * All Rights Reserved.
  *********************************************************************************
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\PriceBooks\language\hu_hu.lang.php - 21:10 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the PriceBooks module vtiger 5.2.0
+ * $Header:  \modules\PriceBooks\language\hu_hu.lang.php - 14:13 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the PriceBooks module vtiger 5.3.x
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
 
 $mod_strings = array(
 
-'LBL_PRICEBOOK_INFORMATION'=>'Csomagár Információ:',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_PRICEBOOK_INFORMATION'=>'Csomagár adatai',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 //Mapping for price book
 'Price Book Name'=>'Csomagár megnevezése',
 'Product Name'=>'Termék neve',
 'Active'=>'Aktív',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
 'LBL_LIST_PRODUCT_NAME'=>'Termék neve',
@@ -36,7 +36,7 @@ $mod_strings = array(
 'Currency'=>'Pénznem',
 
 // Module Sequence Numbering
-'PriceBook No' => 'Csomagár sorszáma',
+'PriceBook No' => 'Csomagár No.',
 // END
 );
 

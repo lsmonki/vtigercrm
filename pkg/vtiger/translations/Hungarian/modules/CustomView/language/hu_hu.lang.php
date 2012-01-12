@@ -11,10 +11,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\CustomView\language\hu_hu.lang.php - 19:19 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the CustomView module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\CustomView\language\hu_hu.lang.php - 12:04 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the CustomView module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -44,12 +43,12 @@ $mod_strings = Array(
 'LBL_DATE_FORMAT_CUSTOMVIEW'=>'É-h-n', 
 //Strings added for filter 
 'Custom'=>'Egyedi',
-'Previous FY'=>'Előző FY', 
-'Current FY'=>'Aktuális FY', 
-'Next FY'=>'Következő FY', 
-'Previous FQ'=>'Előző FQ', 
-'Current FQ'=>'Aktuális FQ', 
-'Next FQ'=>'Következő FQ', 
+'Previous FY'=>'Előző pü.Év',
+'Current FY'=>'Aktuális pü.Év',
+'Next FY'=>'Következő pü.Év',
+'Previous FQ'=>'Előző pü.nÉv',
+'Current FQ'=>'Aktuális pü.nÉv',
+'Next FQ'=>'Következő pü.nÉv',
 'Yesterday'=>'Tegnap', 
 'Today'=>'Ma', 
 'Tomorrow'=>'Holnap', 
@@ -69,6 +68,7 @@ $mod_strings = Array(
 'Next 90 Days'=>'Következő 90 nap', 
 'Next 120 Days'=>'Következő 120 nap', 
  
+'None'=>'üres',
 'equals'=>'egyenlő ezzel', 
 'contains'=>'tartalmazza ezt', 
 'does not contain'=>'nem tartalmazza ezt', 
@@ -88,7 +88,7 @@ $mod_strings = Array(
 '- Task Description'=>'- Feladat Leírás', 
  
 //Strings added for helpdesk module fields 
-'Title'=>'Titulus', 
+'Title'=>'Megnevezés', 
 'Assigned To'=>'Felelős', 
 'Related to'=>'Kapcsolódik', 
 'Priority'=>'Prioritás', 
@@ -196,8 +196,8 @@ $mod_strings = Array(
 'Excise Duty'=>'Jövedéki adó', 
  
 //Strings added for Invoices module fields 
-'Sales Order'=>'Vevő rendelés', 
-'Invoice Date'=>'Számla dátuma', 
+'Sales Order'=>'Megrendelés', 
+'Invoice Date'=>'Díjbekérő dátuma', 
  
 //Strings added for Product module fields 
 'Product Active'=>'Aktív Termék', 
@@ -236,10 +236,10 @@ $mod_strings = Array(
 'Target Audience'=>'Célközönség', 
 'TargetSize'=>'Cél méret', 
 'Sponsor'=>'Szponzor', 
-'Expected Sales Count'=>'Várható eladási darabszám', 
+'Expected Sales Count'=>'Várható megrendelések száma', 
 'Expected Response Count'=>'Várható visszajelzési darabszám', 
 'Expected ROI'=>'Várható megtérülés', 
-'Actual Sales Count'=>'Jelenlegi eladási darabszám', 
+'Actual Sales Count'=>'Jelenleg: megrendelések száma', 
 'Actual Response Count'=>'Jelenlegi visszajelzési darabszám', 
 'Actual ROI'=>'Jelenlegi megtérülés', 
  
@@ -272,6 +272,8 @@ $mod_strings = Array(
 'LBL_NEW'=>'Új',
 'LBL_EDIT'=>'Szerkeszt',
 'LBL_STATUS_PUBLIC_APPROVE'=>'Elfogad',
-'LBL_STATUS_PUBLIC_DENY'=>'Visszautasít'
+'LBL_STATUS_PUBLIC_DENY'=>'Visszautasít',
+'LBL_ADVANCED_FILTER' => 'Munkakör',
+'yyyy-mm-dd'=>'éééé-hh-nn'
 ); 
 ?>

@@ -8,8 +8,8 @@
  * All Rights Reserved.
  *********************************************************************************
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\ServiceContracts\language\hu_hu.lang.php - 22:01 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the ServiceContracts module vtiger 5.2.0
+ * $Header:  \modules\ServiceContracts\language\hu_hu.lang.php - 14:42 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the ServiceContracts module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
@@ -18,10 +18,10 @@ $mod_strings = Array (
 'Service Contracts' => 'Szolgáltatási Szerződések',
 'ServiceContracts' => 'Szolgáltatási Szerződések',
 'SINGLE_ServiceContracts' => 'Szolgáltatási Szerződés',
-'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szolgáltatási Szerződés Információ',
-'LBL_CUSTOM_INFORMATION' => 'Egyedi Információ',
+'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szolgáltatási Szerződés adatai',
+'LBL_CUSTOM_INFORMATION' => 'Egyedi adatok',
 
-'Contract No' => 'Szerződés szám',
+'Contract No' => 'Szerződés No.',
 'Assigned To' => 'Felelős',
 'Created Time' => 'Létrehozva',
 'Modified Time' => 'Módosítva',
@@ -32,7 +32,7 @@ $mod_strings = Array (
 'Tracking Unit' => 'Nyomkövető Egység',
 'Total Units' => 'Összes Egység',
 'Used Units' => 'Használt Egység',
-'Subject' => 'Tárgy',
+'Subject' => 'Szerződés tárgya',
 'Progress'=> 'Előrehaladás (%-ban)',
 'Type' => 'Típus',
 'Planned Duration' => 'Tervezett időtartam (Napokban)',
@@ -58,11 +58,13 @@ $mod_strings = Array (
 'None'=>'Nincs',
 'Hours'=>'Órák',
 'Days'=>'Napok',
-'Incidents'=>'Jelenségek',
+'Incidents'=>'Alkalmak',
 /*
  * 5.2.0 changes 
  */
 'LBL_MODULE_NAME'=>'Szolgáltatási szerződések',
+'Due date'=>'Határidő',
+'Service Requests' => 'Szolgáltatási igények',
 
 );
 

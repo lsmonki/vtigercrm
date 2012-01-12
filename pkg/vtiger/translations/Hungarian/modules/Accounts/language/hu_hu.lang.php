@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Accounts\language\hu_hu.lang.php - 18:10 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Account module vtiger 5.2.0
+ * $Header: \modules\Accounts\language\hu_hu.lang.php - 17:09 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Account module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -28,7 +28,7 @@ $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'Új Cég',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Szervezeti tagság',
 // Label for Top Accounts in Home Page, added for 4.2 GA
-'LBL_TOP_ACCOUNTS'=>'Legjobb cégeim', 
+'LBL_TOP_ACCOUNTS'=>'Legfontosabb cégeim', 
 'LBL_TOP_AMOUNT'=>'Összeg',
 'LBL_LIST_ACCOUNT_NAME'=>'Cég neve',
 'LBL_LIST_CITY'=>'Város',
@@ -58,24 +58,24 @@ $mod_strings = Array(
 'LBL_EMAIL'=>'Email:',
 'LBL_EMPLOYEES'=>'Alkalmazottak:',
 'LBL_OTHER_EMAIL_ADDRESS'=>'Email, másik:',
-'LBL_ANY_EMAIL'=>'Email, bármelyik:',
+'LBL_ANY_EMAIL'=>'Email, bármely:',
 'LBL_OWNERSHIP'=>'Tulajdonos:',
 'LBL_RATING'=>'Értékelés:',
 'LBL_INDUSTRY'=>'Iparág:',
-'LBL_SIC_CODE'=>'SIC Kód:',
+'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
-'LBL_ACCOUNT_INFORMATION'=>'Cég Információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_ACCOUNT_INFORMATION'=>'Cég adatok',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
-'LBL_SHIPPING_ADDRESS'=>'Szállítási Cím:',
+'LBL_SHIPPING_ADDRESS'=>'Szállítási cím:',
 'LBL_ANY_ADDRESS'=>'Cím, bármely:',
 'LBL_CITY'=>'Város:',
 'LBL_STATE'=>'Állam:',
 'LBL_POSTAL_CODE'=>'Írányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 'LBL_DESCRIPTION'=>'Leírás:',
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a szállítási címbe',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Szállítási cím másolása a számlázási címbe',
@@ -87,7 +87,7 @@ $mod_strings = Array(
 'ERR_DELETE_RECORD'=>"Egy rekord azonosítót meg kell adnon a vtiger_account törléséhez.",
 
 'LBL_SELECT_ACCOUNT'=>'Cég Kiválasztása',
-'LBL_GENERAL_INFORMATION'=>'Általános információ',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
 
 //for v4 release added
 'LBL_NEW_POTENTIAL'=>'Új Lehetőség',
@@ -143,13 +143,13 @@ $mod_strings = Array(
 'Shipping Country'=>'Szállítási cím - Ország',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Shipping Po Box'=>'Szállítási cím - Postafiók',
 'Billing Po Box'=>'Számlázási cím - Postafiók',
 
 //Added after 4.2 patch 2
-'Email Opt Out'=>'Email Leiratkozva',
-'LBL_EMAIL_OPT_OUT'=>'Email Leiratkozva:',
+'Email Opt Out'=>'Email leiratkozva',
+'LBL_EMAIL_OPT_OUT'=>'Email leiratkozva:',
 
 //Added after 5Alpha5
 'Notify Owner'=>'Értesítsd a tulajdonost',
@@ -230,13 +230,16 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 //Module Sequence Numbering
-'Account No'=>'Cég sorszám',
+'Account No'=>'Cég No.',
 
 // Account Hierarchy
 'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Cég Hierarchiát mutat',
 
 // Added for 5.2.0 
 'Send SMS' => 'SMS küldés',
+'Projects' => 'Projektek',
+'Service Places' => 'Szolgáltatási helyek',
+
 // END
 );
 

@@ -7,8 +7,8 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Products\language\hu_hu.lang.php - 21:12 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Products module vtiger 5.2.0
+ * $Header:  \modules\Products\language\hu_hu.lang.php - 21:15 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Products module vtiger 5.3.x
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
 
@@ -16,19 +16,19 @@ $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Termékek',
 'SINGLE_Products'=>'Termék',
 'LBL_LIST_PRODUCT_NAME'=>'Termék neve',
-'LBL_TOOL_FORM_TITLE'=>'Termék Eszközök',
+'LBL_TOOL_FORM_TITLE'=>'Termék eszközök',
 'LBL_SEARCH_FORM_TITLE'=>'Termék Keresés',
 'LBL_PRODUCT_NAME'=>'Termék neve:',
 'LBL_VENDOR_NAME'=>'Beszállító neve:',
 'LBL_PRICEBOOK_NAME'=>'Csomagár neve:',
 'LBL_VENDOR'=>'Beszállító',
 'LBL_PRICEBOOK'=>'Csomagár:',
-'LBL_VENDOR_INFORMATION'=>'Beszállító Információ:',
-'LBL_PRICEBOOK_INFORMATION'=>'Csomagár Információ:',
-'LBL_VENDOR_ADDRESS_INFORMATION'=>'Cím Információ:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ:',
-'LBL_PRICING_INFORMATION'=>'Ár Információ:',
-'LBL_STOCK_INFORMATION'=>'Készlet Információ:',
+'LBL_VENDOR_INFORMATION'=>'Beszállító adatai',
+'LBL_PRICEBOOK_INFORMATION'=>'Csomagár adatai',
+'LBL_VENDOR_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_PRICING_INFORMATION'=>'Ár adatok',
+'LBL_STOCK_INFORMATION'=>'Készlet adatok',
 'LBL_LIST_FORM_TITLE'=>'Termék Lista',
 'LBL_LIST_VENDOR_FORM_TITLE'=>'Beszállító Lista',
 'LBL_LIST_PRICEBOOK_FORM_TITLE'=>'Csomagárak Listája',
@@ -44,8 +44,8 @@ $mod_strings = Array(
 'LBL_PRODUCT_DESCRIPTION'=>'Megjegyzés',
 'LBL_PRODUCT_IMAGE'=>'Kép',
 'LBL_NEW_FORM_TITLE'=>'Új Termék',
-'LBL_PRODUCT_INFORMATION'=>'Termék Információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_PRODUCT_INFORMATION'=>'Termék adatai',
+'LBL_CUSTOM_INFORMATION'=>'Egyéb adatok',
 
 //New entry
 'LBL_UPLOAD'=>'Fájl feltöltése',
@@ -63,8 +63,8 @@ $mod_strings = Array(
 'LBL_NEW_POTENTIAL'=>'Új Lehetőség',
 'LBL_POTENTIAL_TITLE'=>'Lehetőségek',
 
-'LBL_NEW_TICKET'=>'Új Ügyfélszolgálati Jegy',
-'LBL_TICKET_TITLE'=>'Ügyfélszolgálati Jegyek',
+'LBL_NEW_TICKET'=>'Új Kérés',
+'LBL_TICKET_TITLE'=>'Kérések',
 
 'LBL_NEW_CALL'=>'Új Hívás',
 'LBL_CALL_TITLE'=>'Hívások',
@@ -106,8 +106,8 @@ $mod_strings = Array(
 'Currency'=>'Pénznem',
 'Reorder Level'=>'Újrarendelési szint',
 'Tax Class'=>'Adó osztály',
-'Mfr PartNo'=>'Mfr Part No',
-'Vendor PartNo'=>'Vendor Part No',
+'Mfr PartNo'=>'Gyártási alkatrész szám',
+'Vendor PartNo'=>'Beszállítói Cikkszám',
 'Serial No'=>'Sorozat szám',
 'Qty In Stock'=>'Mennyiség készleten',
 'Product Sheet'=>'Termék adatlap',
@@ -128,7 +128,7 @@ $mod_strings = Array(
 'State'=>'Állam/megye',
 'Postal Code'=>'Irányítószám',
 'Country'=>'Ország',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Po Box'=>'Postafiók',
 
 //Mapping for price book
@@ -147,7 +147,7 @@ $mod_strings = Array(
 'LBL_CATEGORY_TITLE'=>'Kategória',
 'LBL_ACTIVE_TITLE'=>'Aktív',
 'LBL_LIST_VENDOR_NAME'=>'Beszállító neve',
-'LBL_IMAGE_INFORMATION'=>'Termék kép információ:',
+'LBL_IMAGE_INFORMATION'=>'Képek a Termékről (max. 6):',
 'Product Image'=>'Termék kép',
 'LBL_ADD_PRICEBOOK_BUTTON_TITLE'=>'Csomagárakhoz Hozzáad [Alt+B]',
 'LBL_ADD_PRICEBOOK_BUTTON_KEY'=>'B',
@@ -156,10 +156,10 @@ $mod_strings = Array(
 'LBL_ADD_PRODUCTS_PRICEBOOK'=>'Terméket Csomagárhoz Hozzáad',
 
 //Added for 4.2 patch2 release
-	'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a file smaller than 800000 bytes',
-'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
-'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
-'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
+'LBL_MAXIMUM_LIMIT_ERROR'=>'Sajnáljuk, de a feltöltendő fájl meghaladta a vtiger által beállított maximális méretet. Próbáld meg egy 800000 bájtnál (~800kB) kisebb fájllal.',
+'LBL_UPLOAD_ERROR'=>'A fájl feltöltése nem sikerült. Próbáld újra!',
+'LBL_IMAGE_ERROR'=>'Az adott fájl nem kép típus(.gif/.jpg/.png)',
+'LBL_INVALID_IMAGE'=>'Rossz fájl, vagy nincs benne adat',
 'LBL_EMAIL'=>'Email',
 'Product'=>'Termék',
 'LBL_EDITLISTPRICE'=>'Csomagár Szerkesztése',
@@ -188,8 +188,8 @@ $mod_strings = Array(
 'Dozen'=>'Tucat',
 'Each'=>'Mindegyik',
 'Hours'=>'Órák',
-'Impressions'=>'Benyomások',
-'Lb'=>'Lb',
+'Impressions'=>'Alkalmak',
+'Lb'=>'Font',
 'M'=>'M',
 'Pack'=>'Csomag',
 'Pages'=>'Oldalak',
@@ -215,7 +215,7 @@ $mod_strings = Array(
 'Member Of'=>'Tagja',
 
 // Module Sequence Numbering
-'Product No' => 'Termék száma',
+'Product No' => 'Termék No.',
 // END
 
 'LBL_NO_TAXES_ASSOCIATED'=>'Nem kapcsolódik adó ehhez a termékhez',

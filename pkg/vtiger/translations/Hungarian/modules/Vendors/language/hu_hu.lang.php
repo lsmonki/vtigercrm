@@ -8,8 +8,8 @@
  * All Rights Reserved.
  *********************************************************************************
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Vendors\language\hu_hu.lang.php - 22:48 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Vendors module vtiger 5.2.0
+ * $Header: \modules\Vendors\language\hu_hu.lang.php - 18:11 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Vendors module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
@@ -17,10 +17,10 @@
 
 $mod_strings = array(
 
-'LBL_VENDOR_INFORMATION'=>'Beszállító Információ:',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
-'LBL_VENDOR_ADDRESS_INFORMATION'=>'Cím Információ:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ:',
+'LBL_VENDOR_INFORMATION'=>'Beszállító adatai',
+'LBL_CUSTOM_INFORMATION'=>'Egyéb adatok',
+'LBL_VENDOR_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 
 
 'Vendor Name'=>'Beszállító neve',
@@ -36,7 +36,7 @@ $mod_strings = array(
 'State'=>'Állam/megye',
 'Postal Code'=>'Irányítószám',
 'Country'=>'Ország',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Po Box'=>'Postafiók',
 'Vendor'=>'Beszállító',
 
@@ -69,7 +69,7 @@ $mod_strings = array(
 'LBL_RECORD'=>'Rekord #',
 
 // Module Sequence Numbering
-'Vendor No' => 'Beszállító száma',
+'Vendor No' => 'Beszállító No.',
 // END
 
 /*

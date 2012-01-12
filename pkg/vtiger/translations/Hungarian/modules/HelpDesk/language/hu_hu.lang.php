@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\HelpDesk\language\hu_hu.lang.php - 20:04 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the HelpDesk module vtiger 5.2.0
+ * $Header:  \modules\HelpDesk\language\hu_hu.lang.php - 21:14 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the HelpDesk module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -22,12 +22,12 @@
 
 $mod_strings = Array(
 // Added in release 4.0
-'LBL_MODULE_NAME'=>'Ügyfélszolgálati Jegyek',
+'LBL_MODULE_NAME'=>'Kérések',
 'LBL_GROUP'=>'Csoport',
 'LBL_ACCOUNT_NAME'=>'Cég neve',
 'LBL_CONTACT_NAME'=>'Kapcsolat neve',
 'LBL_SUBJECT'=>'Tárgy',
-'LBL_NEW_FORM_TITLE' => 'Új Ügyfélszolgálati Jegy',
+'LBL_NEW_FORM_TITLE' => 'Új Kérés',
 'LBL_DESCRIPTION'=>'Megjegyzés',
 'NTC_DELETE_CONFIRMATION'=>'Biztos vagy abban, hogy törölni akarod ezt a rekordot?',
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Egyedi Mezők Beállítások:',
@@ -36,28 +36,28 @@ $mod_strings = Array(
 'Accounts'=>'Cég',
 'Contacts'=>'Kapcsolat',
 'Opportunities'=>'Lehetőség',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 
 'LBL_ACCOUNT'=>'Cég',
 'LBL_OPPURTUNITY'=>'Lehetőség',
 'LBL_PRODUCT'=>'Termék',
 
 'LBL_COLON'=>':',
-'LBL_TICKET'=>'Ügyfélszolgálati Jegy',
+'LBL_TICKET'=>'Kérés',
 'LBL_CONTACT'=>'Kapcsolat',
 'LBL_STATUS'=>'Állapot',
 'LBL_ASSIGNED_TO'=>'Felelős',
-'LBL_FAQ'=>'GYIK',
-'LBL_VIEW_FAQS'=>'GYIK megnézése',
-'LBL_ADD_FAQS'=>'GYIK hozzáadása',
-'LBL_FAQ_CATEGORIES'=>'GYIK kategóriák',
+'LBL_FAQ'=>'TudásTár',
+'LBL_VIEW_FAQS'=>'TudásTár megtekintése',
+'LBL_ADD_FAQS'=>'TudásTár hozzáadása',
+'LBL_FAQ_CATEGORIES'=>'TudásTár kategóriák',
 
 'LBL_PRIORITY'=>'Prioritás',
 'LBL_CATEGORY'=>'Kategória',
 
 'LBL_ANSWER'=>'Válasz',
-'LBL_COMMENTS'=>'Kommentár',
+'LBL_COMMENTS'=>'Feljegyzés',
 
 'LBL_AUTHOR'=>'Szerző',
 'LBL_QUESTION'=>'Kérdés',
@@ -74,24 +74,24 @@ $mod_strings = Array(
 'LBL_IS_BEFORE'=>'ez előtt',
 'LBL_IS_AFTER'=>'ez után',
 'LBL_STATISTICS'=>'Statisztika',
-'LBL_TICKET_ID'=>'Ügyfélszolgálati Jegy ID',
-'LBL_MY_TICKETS'=>'Ügyfélszolgálati Jegyeim',
-"LBL_MY_FAQ"=>"Az én GYIK",
+'LBL_TICKET_ID'=>'Kérés AZ',
+'LBL_MY_TICKETS'=>'Kéréseim',
+"LBL_MY_FAQ"=>"Az én TudásTáram",
 'LBL_ESTIMATED_FINISHING_TIME'=>'Becsült befejezési idő',
-'LBL_SELECT_TICKET'=>'Ügyfélszolgálati Jegy kiválasztása',
+'LBL_SELECT_TICKET'=>'Kérés kiválasztása',
 'LBL_CHANGE_OWNER'=>'Tulajdonos módosítása',
 'LBL_CHANGE_STATUS'=>'Állapot módosítása',
-'LBL_TICKET_TITLE'=>'Titulus',
-'LBL_TICKET_DESCRIPTION'=>'Megjegyzés',
+'LBL_TICKET_TITLE'=>'Megnevezés',
+'LBL_TICKET_DESCRIPTION'=>'Leírás:',
 'LBL_TICKET_CATEGORY'=>'Kategória',
 'LBL_TICKET_PRIORITY'=>'Prioritás',
 
 //Added vtiger_fields after 4 -- Beta
-'LBL_NEW_TICKET'=>'Új Ügyfélszolgálati Jegy',
-'LBL_TICKET_INFORMATION'=>'Ügyfélszolgálati Jegy Információ',
+'LBL_NEW_TICKET'=>'Új Kérés',
+'LBL_TICKET_INFORMATION'=>'Kérés adatai',
 
-'LBL_LIST_FORM_TITLE'=>'Ügyfélszolgálati Jegy Lista',
-'LBL_SEARCH_FORM_TITLE'=>'Ügyfélszolgálati Jegy Keresés',
+'LBL_LIST_FORM_TITLE'=>'Kérés Lista',
+'LBL_SEARCH_FORM_TITLE'=>'Kérések Keresése',
 
 //Added vtiger_fields after RC1 - Release
 'LBL_CHOOSE_A_VIEW'=>'Válassz egy Nézetet...',
@@ -109,27 +109,27 @@ $mod_strings = Array(
 'Update History'=>'Előzmények aktualizálása',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Title'=>'Titulus',
+'Title'=>'Megnevezés',
 'Description'=>'Megjegyzés',
 
-'LBL_TICKET_CUMULATIVE_STATISTICS'=>'Ügyfélszolgálati Jegy Kumulált Statisztikája:',
+'LBL_TICKET_CUMULATIVE_STATISTICS'=>'Kérések Kumulált Statisztikája:',
 'LBL_CASE_TOPIC'=>'Eset Téma',
 'LBL_OPEN'=>'Nyitott',
 'LBL_CLOSED'=>'Lezárt',
 'LBL_TOTAL'=>'Összes',
-'LBL_TICKET_HISTORY'=>'Ügyfélszolgálati Jegy előzmények',
+'LBL_TICKET_HISTORY'=>'Lezárt kérések',
 'LBL_CATEGORIES'=>'Kategóriák',
 'LBL_PRIORITIES'=>'Prioritások',
 'LBL_SUPPORTERS'=>'Támogatók',
 
 //Added vtiger_fields after 4_0_1
-'LBL_TICKET_RESOLUTION'=>'Megoldás Információ',
+'LBL_TICKET_RESOLUTION'=>'Megoldás adatai',
 'Solution'=>'Megoldás',
-'Add Comment'=>'Kommentárt hozzáad',
-'LBL_ADD_COMMENT'=>'Kommentárt hozzáad',//give the same value given to the above string 'Add Comment'
+'Add Comment'=>'Feljegyzést hozzáad',
+'LBL_ADD_COMMENT'=>'Feljegyzést hozzáad',//give the same value given to the above string 'Add Comment'
 
 //Added for 4.2 Release -- CustomView
-'Ticket ID'=>'Ügyfélszolgálati Jegy ID',
+'Ticket ID'=>'Kérés AZ',
 'Subject'=>'Tárgy',
 
 //Added after 4.2 alpha
@@ -138,17 +138,17 @@ $mod_strings = Array(
 'Related To'=>'Kapcsolódik',
 'LBL_MORE'=>'Több',
 
-'LBL_TICKETS'=>'Ügyfélszolgálati Jegyek',
+'LBL_TICKETS'=>'Kérések',
 
 //Added on 09-12-2005
 'LBL_CUMULATIVE_STATISTICS'=>'Kumulált Statisztikák',
 
 //Added on 12-12-2005
-'LBL_CONVERT_AS_FAQ_BUTTON_TITLE'=>'Átalakít -> GYIK',
+'LBL_CONVERT_AS_FAQ_BUTTON_TITLE'=>'Átalakít -> TudásTár',
 'LBL_CONVERT_AS_FAQ_BUTTON_KEY'=>'C',
-'LBL_CONVERT_AS_FAQ_BUTTON_LABEL'=>'Átalakít -> GYIK',
+'LBL_CONVERT_AS_FAQ_BUTTON_LABEL'=>'Átalakít -> TudásTár',
 'Attachment'=>'Melléklet',
-'LBL_COMMENT_INFORMATION'=>'Kommentár Információ',
+'LBL_COMMENT_INFORMATION'=>'Feljegyzések',
 
 //Added for existing picklist entries
 
@@ -174,11 +174,11 @@ $mod_strings = Array(
 //added to support i18n in ticket mails
 'Hi' => 'Helló',
 'Dear'=> 'Kedves',
-'LBL_PORTAL_BODY_MAILINFO'=> 'A Ügyfélszolgálati Jegy',
+'LBL_PORTAL_BODY_MAILINFO'=> 'A Kérés',
 'LBL_DETAIL' => 'adatai :',
 'LBL_REGARDS'=> 'Üdvözlettel',
 'LBL_TEAM'=> 'Ügyfélszolgálat',
-'LBL_TICKET_DETAILS' => 'Ügyfélszolgálati Jegy adatok',
+'LBL_TICKET_DETAILS' => 'Kérés adatok',
 'LBL_SUBJECT' => 'Tárgy : ',
 'created' => 'létrehozva',
 'replied' => 'megválszolva',
@@ -186,19 +186,22 @@ $mod_strings = Array(
 'customer_portal' => 'az "Ügyfél Portál"-on a VTiger-ben.',
 'link' => 'A következő linken elolvashatod a válaszunkat:',
 'Thanks' => 'Köszönettel',
-'Support_team' => 'Vtiger Támogatás Csapat',
+'Support_team' => 'Ügyfélszolgálat',
+'The comments are' => 'A megjegyzések ',
+'Ticket Title' => 'Kérés megnevezése',
+'Re' => 'Hiv. :',
 
 // Added/Updated for vtiger CRM 5.0.4
 
 //this label for customerportal.
 'LBL_STATUS_CLOSED' =>'Lezárt',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you have to change in customerportal language file also.
-'LBL_STATUS_UPDATE' => 'A Jegy állapota aktualizálva, mint ',
-'LBL_COULDNOT_CLOSED' => 'A Jegy nem lehet',
+'LBL_STATUS_UPDATE' => 'A Kérés állapota aktualizálva, mint ',
+'LBL_COULDNOT_CLOSED' => 'A Kérés nem lehet',
 'LBL_CUSTOMER_COMMENTS' => 'Az Ügyfél a következő kiegészítő információkat küldte válaszként:',
-'LBL_RESPOND'=> 'Válaszold meg a legkorábbi Jegyet.',
+'LBL_RESPOND'=> 'Válaszold meg a legkorábbi Kérést.',
 'LBL_REGARDS' =>'Üdvözlettel',
 'LBL_SUPPORT_ADMIN' => 'Ügyfél Adminisztrátor',
-'LBL_RESPONDTO_TICKETID' =>'Válaszold meg Jegyet AZ:',
+'LBL_RESPONDTO_TICKETID' =>'Válaszold meg Kérést AZ:',
 'LBL_CUSTOMER_PORTAL' => 'az Ügyél Portálon - SÜRGŐS',
 'LBL_LOGIN_DETAILS' => 'Ezek az Ön Ügyfél Portál belépési adatai :',
 'LBL_MAIL_COULDNOT_SENT' =>'A levelet nem sikerült elküldeni',
@@ -214,10 +217,11 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 // Module Sequence Numbering
-'Ticket No' => 'Ügyfélszolgálati Jegy szám',
+'Ticket No' => 'Kérés No.',
 // END
 'Hours' => 'Órák',
 'Days' => 'Napok',
+'Projects' =>  'Projektek',
 );
 
 ?>

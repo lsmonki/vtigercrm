@@ -7,38 +7,36 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Services\language\hu_hu.lang.php - 22:02 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Services module vtiger 5.2.0
+ * $Header:  \modules\Services\language\hu_hu.lang.php - 12:12 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Services module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Szolgáltatások',
 'SINGLE_Services'=>'Szolgáltatás',
 'LBL_LIST_SERVICE_NAME'=>'Szolgáltatás neve',
 'LBL_PRICEBOOK'=>'Csomagár:',
 'LBL_PRICEBOOK_INFORMATION'=>'Csomagár Információ:',
-'LBL_PRICING_INFORMATION'=>'Árazás Információ:',
+'LBL_PRICING_INFORMATION'=>'Ár adatok',
 'LBL_LIST_FORM_TITLE'=>'Szolgáltatás Lista',
 'LBL_LIST_PRICEBOOK_FORM_TITLE'=>'Csomagár Lista',
 'LBL_SERVICE_UNIT_PRICE'=>'Egyedi ár',
 'LBL_PB_LIST_PRICE'=>'Ár csomagban',
-'LBL_SERVICE_INFORMATION'=>'Szolgáltatás Információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_SERVICE_INFORMATION'=>'Szolgáltatás adatai',
+'LBL_CUSTOM_INFORMATION'=>'Egyéb adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 'LBL_ADD_PRICEBOOK_BUTTON_LABEL'=>'Csomagár Hozzáadása',
 
 'Services'=>'Szolgáltatások',
 'Service Name'=>'Szolgáltatás neve',
 'Service Active'=>'Aktív',
 'Service Category'=>'Kategória',
-'Service No'=>'Szolgáltatás száma',
+'Service No'=>'Szolgáltatás No.',
 'Owner'=>'Tulajdonos',
 'Days'=>'Napok',
 'Hours'=>'Órák',
-'Incidents'=>'Jelenségek',
+'Incidents'=>'Alkalmak',
 'No of Units'=>'Egységek száma',
 'Commission Rate'=>'Jutalék arány (%)',
 'Unit Price'=>'Egységár',
@@ -54,7 +52,7 @@ $mod_strings = Array(
 'Currency'=>'Pénznem',
 'Tax Class'=>'Adó osztály',
 'Website'=>'Weboldal',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 
 'Price Book Name'=>'Csomagár neve',
 

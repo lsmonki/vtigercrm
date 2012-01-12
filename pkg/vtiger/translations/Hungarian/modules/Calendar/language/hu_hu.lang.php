@@ -11,10 +11,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Calendar\language\hu_hu.lang.php - 18:35 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Calendar module vtiger 5.2.0
+ ********************************************************************************
+ * $Header: \modules\Calendar\language\hu_hu.lang.php - 19:16 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Calendar module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -172,8 +171,8 @@ $mod_strings = Array(
 'LBL_START_DATE'=>'Kezdés dátuma',
 'LBL_TIME_START'=>'Idő kezdés',
 'LBL_DUE_DATE'=>'Határidő',
-'LBL_START_DATE_TIME'=>'Kezdés Dátuma és Ideje',
-'LBL_END_DATE_TIME'=>'Befejezés Dátuma és Ideje',
+'LBL_START_DATE_TIME'=>'Kezdés dátuma és ideje',
+'LBL_END_DATE_TIME'=>'Befejezés dátuma és ideje',
 'LBL_TODO'=>'Teendő',
 'LBL_TODOS'=>'Teendők',
 'LBL_EVENTS'=>'Események',
@@ -189,8 +188,6 @@ $mod_strings = Array(
 'LBL_ACTION'=>'Tevékenységek',
 'LBL_ADD'=>'Hozzáad',
 'LBL_OPENCAL'=>'Naptár megnyitása',
-
-
 'LBL_ADD_EVENT'=>'Eseményt hozzáad',
 'LBL_ADDCALL'=>'Hívás',
 'LBL_ADDMEETING'=>'Megbeszélés',
@@ -254,9 +251,9 @@ $mod_strings = Array(
 'LBL_SEARCH_FORM_TITLE'=>'Aktivitás Keresés',
 'LBL_LIST_FORM_TITLE'=>'Aktivitás Lista',
 'LBL_NEW_FORM_TITLE'=>'Új Aktivitás',
-'LBL_TASK_INFORMATION'=>'Feladat Információ',
-'LBL_EVENT_INFORMATION'=>'Esemény Információ',
-'LBL_CALENDAR_INFORMATION'=>'Naptár Információ',
+'LBL_TASK_INFORMATION'=>'Feladatok',
+'LBL_EVENT_INFORMATION'=>'Események',
+'LBL_CALENDAR_INFORMATION'=>'Naptár adatok',
 
 'LBL_NAME'=>'Tárgy:',
 'LBL_ACTIVITY_NOTIFICATION'=>'Ez egy értesítés egy aktivitásról, amit hozzád rendeltek, és ami',
@@ -317,7 +314,7 @@ $mod_strings = Array(
 //Added for 4GA Release
 'Subject'=>'Tárgy',
 'Assigned To'=>'Felelős',
-'Start Date & Time'=>'Kezdés Dátuma és Ideje',
+'Start Date & Time'=>'Kezdés dátuma és ideje',
 'Time Start'=>'Kezdő idő',
 'Due Date'=>'Határidő',
 'Related To'=>'Kapcsolódik',
@@ -344,7 +341,7 @@ $mod_strings = Array(
 'LBL_BEFORE_EVENT'=>'az esemény előtt',
 //Added for CustomView 4.2 Release
 'Close'=>'Lezár',
-'Start Date'=>'Kezdés Dátuma',
+'Start Date'=>'Kezdés dátuma',
 'Type'=>'Típus',
 'End Date'=>'Befejezés dátuma',
 'Recurrence'=> 'Ismétlődő Események',
@@ -352,7 +349,7 @@ $mod_strings = Array(
 //Activities - Notification Error
 'LBL_NOTIFICATION_ERROR'=>'Levelezési Hiba : Kérjük, hogy ellenőrizd a Kimenő mail szerver beállításokat a Beállítások -> Kimenő mail szerver beállításoknál vagy az adott Felhasználó email azonosítója nincs beállítva',
 // Mike Crowe Mod --------------------------------------------------------added for generic search
-'LBL_GENERAL_INFORMATION'=>'Általános Információ',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
 
 'LBL_EVENTTYPE'=>'Esemény típusa',
 'LBL_EVENTNAME'=>'Esemény neve',
@@ -407,8 +404,8 @@ $mod_strings = Array(
 
 //added to send dates and time in calendar notification/invitation mail.
 
-'Start date and time'=>'Kezdés Dátuma és Ideje',
-'End date and time'=>'Befejezés Dátuma és Ideje',
+'Start date and time'=>'Kezdés dátuma és ideje',
+'End date and time'=>'Befejezés dátuma és ideje',
 //this is for task
 'End date'=>'Befejezés dátuma',
 'LBL_SET_DATE'=>'Dátum beállítása..',
@@ -429,7 +426,7 @@ $mod_strings = Array(
 'LBL_BUSY' => 'Foglalt',
 
 //Custom Fields support for Calendar
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 
 // Repeat Event support for Calendar
 'LBL_UNTIL' => 'eddig',
@@ -448,9 +445,12 @@ $mod_strings = Array(
 'LBL_SUCCESS'=>'Sikeres!',
 'LBL_NO_IMPORT_TO_UNDO'=>'Nem volt visszavonható Importálás.',
 'LBL_FAILURE'=>'Sikertelen!',
+'LBL_ARE_YOU_SURE'=>'Biztos vagy benne?',
 
 // 5.2.0 fix/
 'DELETE_TASK_ACT_CONFIRMATION'=>'Biztos, hogy törölni akarod?',
+'Start Time' => 'Kezdés ideje',
+'End Time' => 'Befejezés ideje',
 
 );
 

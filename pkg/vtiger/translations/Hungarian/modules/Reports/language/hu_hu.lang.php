@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  *********************************************************************************
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Reports\language\hu_hu.lang.php - 21:48 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Reports module vtiger 5.2.0
+ * $Header:  \modules\Reports\language\hu_hu.lang.php - 21:17 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Reports module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -120,29 +120,29 @@ $mod_strings = Array(
 'Lead Reports'=>'(Vevő)Jelölt Jelentések',
 'Potential Reports'=>'Lehetőség Jelentések',
 'Activity Reports'=>'Aktivitás Jelentések',
-'HelpDesk Reports'=>'Ügyfélszolgálati Jegy Jelentések',
+'HelpDesk Reports'=>'Kérés Jelentések',
 'Product Reports'=>'Termék Jelentések',
 'Quote Reports'=>'Ajánlat Jelentések',
-'PurchaseOrder Reports'=>'Beszerzési Jelentések',
-'SalesOrder Reports'=>'Eladási Jelentések', //Added for SO
-'Invoice Reports'=>'Számla Jelentések',
+'PurchaseOrder Reports'=>'Beszerzések Jelentések',
+'SalesOrder Reports'=>'Megrendelések Jelentések', //Added for SO
+'Invoice Reports'=>'Díjbekérő Jelentések',
 'Campaign Reports'=>'Kampány Jelentések', //Added for Campaigns 
 'Contacts by Accounts'=>'Kapcsolatok Cégek szerint listázva',
 'Contacts without Accounts'=>'Kapcsolatok Cégek nélkül',
-'Contacts by Potentials'=>'Kapcsolatoka Lehetőségek szerint',
+'Contacts by Potentials'=>'Kapcsolatok Lehetőségek szerint',
 'Contacts related to Accounts'=>'Kapcsolatok, amelyek Cégekhez tartoznak',
 'Contacts not related to Accounts'=>'Kapcsolatok, amelyek nem tartoznak Cégekhez',
 'Contacts related to Potentials'=>'Kapcsolatok, amelyek Lehetőségekhez tartoznak',
-'Lead by Source'=>'Jelöltek a Források szerint',
+'Lead by Source'=>'Jelöltek Források szerint',
 'Lead Status Report'=>'Jelölt Állapot Jelentés',
 'Potential Pipeline'=>'Lehetőségek értékesítési tölcsér',
 'Closed Potentials'=>'Lezárt Lehetőségek',
 'Potential that have Won'=>'Lehetőségek, amiket Megkötöttünk',
-'Tickets by Products'=>'Ügyfélszolgálati Jegyek a Termékek szerint',
-'Tickets by Priority'=>'Ügyfélszolgálati Jegyek Prioritásuk szerint',
-'Open Tickets'=>'Nyitott Ügyfélszolgálati Jegyek',
-'Tickets related to Products'=>'Ügyfélszolgálati Jegyek, amelyek Termékekhez tartoznak',
-'Tickets that are Open'=>'Ügyfélszolgálati Jegyek, amelyek nyitva vannak',
+'Tickets by Products'=>'Kérések Termékek szerint',
+'Tickets by Priority'=>'Kérések Prioritásuk szerint',
+'Open Tickets'=>'Nyitott Kérések',
+'Tickets related to Products'=>'Kérések, amelyek Termékekhez tartoznak',
+'Tickets that are Open'=>'Kérések, amelyek nyitva vannak',
 'Product Details'=>'Termék adatok',
 'Products by Contacts'=>'Termékek a Kapcsolatok szerint',
 'Product Detailed Report'=>'Termékek: részletes Jelentés',
@@ -150,14 +150,14 @@ $mod_strings = Array(
 'Open Quotes'=>'Nyitott Ajánlatok',
 'Quotes Detailed Report'=>'Ajánlatok: részletes Jelentés',
 'Quotes that are Open'=>'Ajánlatok, amelyek nyitva vannak',
-'PurchaseOrder by Contacts'=>'Beszerzési rendelések a Kapcsolatok szerint',
-'PurchaseOrder Detailed Report'=>'Beszerzési rendelések: részletes Jelentés',
-'PurchaseOrder related to Contacts'=>'Beszerzési rendelések, amelyek Kapcsolatokhoz tartoznak',
-'Invoice Detailed Report'=>'Számlák: részletes Jelentés',
+'PurchaseOrder by Contacts'=>'Beszerzések Kapcsolatok szerint',
+'PurchaseOrder Detailed Report'=>'Beszerzések: részletes Jelentés',
+'PurchaseOrder related to Contacts'=>'Beszerzések, amelyek Kapcsolatokhoz tartoznak',
+'Invoice Detailed Report'=>'Díjbekérők: részletes Jelentés',
 'Last Month Activities'=>'Az elmúlt Hónap Aktivitásai',
 'This Month Activities'=>'Az aktuális Hónap Aktivitásai',
-'Campaign Expectations and Actuals'=>'Kampány: Várakozások és aktuális adatok', //Added for Campaigns
-'SalesOrder Detailed Report'=>'Vevői Rendelések: részletes Jelentés', //Added for SO
+'Campaign Expectations and Actuals'=>'Kampány: Elvárt és aktuális adatok', //Added for Campaigns
+'SalesOrder Detailed Report'=>'Megrendelések: részletes Jelentés', //Added for SO
 
 'LBL_DELETE'=>'Töröl',
 'Create_Reports'=>'Új Jelentések',
@@ -203,7 +203,7 @@ $mod_strings = Array(
 'MIN'=>'MIN',
 'LBL_CUSTOM_REPORTS'=>'Egyedi Jelentések',
 
-'ticketid'=>'Ügyfélszolgálati Jegy ID',
+'ticketid'=>'Kérés AZ',
 'NO_COLUMN'=>'Nincs elérhető oszlop az összesítéshez',
 
 // Added/Updated for vtiger CRM 5.0.4
@@ -224,15 +224,48 @@ $mod_strings = Array(
 'NO_REL_MODULES'=>'A kiválasztott Modulhoz nincs kapcsolódó Modul',
 'LBL_REPORT_GENERATION_FAILED'=>'A Jelentés létrehozása nem sikerült!',
 
-'LBL_OR'=>'vagy',
-'LBL_NEW_GROUP'=>'Új Csoport',
-'LBL_DELETE_GROUP'=>'Csoport Törlése',
-'LBL_NEW_CONDITION'=>'Új Feltétel',
-'LBL_SHARING_TYPE'=>'Típus Megosztása',
-'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Válaszd ki a Típus Megosztását, hogy szabályozd a Jelentéshez való hozzáférést', 
-'LBL_ACTION' => 'Akció',
-'LBL_VIEW_DETAILS' => 'Részletek megtekintése',
+'LBL_SHARING_TYPE'=>'Megosztás típusa',
+'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Válaszd ki a Megosztás Típusát, hogy szabályozd a Jelentéshez való hozzáférést', 
+'LBL_ACTION' => 'Művelet',
+'LBL_VIEW_DETAILS' => 'Adatok megtekintése',
 'LBL_SHOW_STANDARD_FILTERS' => 'Standard szűrők mutatása',
+'LBL_YEAR' => 'Év',
+'LBL_MONTH'=> 'Hónap',
+'LBL_QUARTER'=> 'Negyedév',
+'LBL_NONE'=> 'Nincs',
+
+'LBL_ROLES'=>'Munkakörök',
+'LBL_ROLES_SUBORDINATES'=>'Munkakörök és beosztottak',
+'LBL_SCHEDULE_EMAIL'=>'E-mail időzítése',
+'LBL_SCHEDULE_EMAIL_DESCRIPTION'=>'Jelentés időzítése a kiválasztott címzetteknek e-mailben való rendszeres elküldésre',
+'LBL_USERS_AVAILABEL'=> 'Címzettek',
+'LBL_REPORT_FORMAT_PDF'=> 'PDF',
+'LBL_REPORT_FORMAT_EXCEL'=> 'EXCEL',
+'LBL_REPORT_FORMAT_BOTH'=> 'Mindkettő',
+'LBL_REPORT_FORMAT'=> 'Jelentés formátuma',
+'LBL_USERS_SELECTED'=>'Kiválasztott Címzettek',
+'LBL_SELECT'=>'Kiválasztás',
+'Hourly'=>'Óránkénti',
+'Daily'=>'Napi',
+'Weekly'=>'Heti',
+'BiWeekly'=>'Kétheti',
+'Monthly'=>'Havi',
+'Annually'=>'Éves',
+'LBL_SCHEDULE_REPORT'=>'Jelentés időzítése',
+'LBL_SCHEDULE_FREQUENCY'=>'Gyakoriság',
+'OPTION_SCHEDULE_EMAIL_CHOOSE'=>'Válassz ..... ',
+'LBL_SCHEDULE_EMAIL_TIME'=>'Idő',
+'LBL_SCHEDULE_EMAIL_DOW'=>'Hét napja',
+'LBL_SCHEDULE_EMAIL_DAY'=>'Nap',
+'LBL_SCHEDULE_EMAIL_MONTH'=>'Hónap',
+'WEEKDAY_STRINGS' => array('Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'),
+'MONTH_STRINGS' => array('Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Júlis', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'),
+
+'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Ez egy automatikusan generált, időzített CRM jelentések e-mail.',
+'LBL_TIME_FORMAT_MSG' => 'hh:mm (24 órás formátum)',
+
+'LBL_SAVE_REPORT' => 'Mentés',
+'LBL_SAVE_REPORT_AS' => '(Jelentés) Mentése másként...',
 );
 
 ?>

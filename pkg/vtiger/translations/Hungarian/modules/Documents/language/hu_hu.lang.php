@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Documents\language\hu_hu.lang.php - 19:28 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Documents module vtiger 5.2.0
+ * $Header:  \modules\Documents\language\hu_hu.lang.php - 19:54 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Documents module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -48,8 +48,8 @@ $mod_strings = Array(
 // Added for Note(3.2-patch 3) 
 
 'LBL_FILENAME'=>'Melléklet:',
-'LBL_NOTE_INFORMATION'=>'Alap Információ',
-'File Information'=>'Fájl Információ',
+'LBL_NOTE_INFORMATION'=>'Dokumentum adatai',
+'File Information'=>'Fájl adatok',
 
 // Added for 4GA
 'LBL_TOOL_FORM_TITLE'=>'Dokumentumok Eszközök',
@@ -60,16 +60,16 @@ $mod_strings = Array(
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
 'Document'=>'Dokumentum',
-'Note'=>'Notes',
+'Note'=>'Leírás:',
 //Added for 4.2 Release -- CustomView
 'Related to'=>'Kapcsolódik',
 'Last Modified'=>'Utoljára Módosítva',
-'File'=>'File',
+'File'=>'Fájl',
 'LBL_ALL'=>'Minden',
-'Title'=>'Titulus',
+'Title'=>'Megnevezés',
 
 //Added after 504 for Downloads Module
-'LBL_FILE_INFORMATION'=>'Fájl Információ',
+'LBL_FILE_INFORMATION'=>'Fájl adatok',
 'LBL_FILE_NAME'=>'Fájlnév',
 'LBL_FILE_TYPE'=>'Fájl típus',
 'LBL_FILE_SIZE'=>'Méret',
@@ -97,7 +97,7 @@ $mod_strings = Array(
 'LBL_CLICK_HERE'=>'Kattints ide',
 'LBL_TO_ADD_FOLDER'=>'új mappa hozzáadásához.',
 'LBL_DELETE_FOLDER'=>'Mappa Törlése',
-'LBL_FOLDER_DESC'=>'Megjegyzés',
+'LBL_FOLDER_DESC'=>'Leírás',
 'LBL_ADD_NEW_FOLDER'=>'Mappa Hozzáadása',
 'LBL_DELETE_DOCUMENTS'=>'Dokumentum(ok) Törlése',
 'LBL_MOVE_TO'=>'Mozgat',
@@ -121,21 +121,21 @@ $mod_strings = Array(
 'Platform'=>'Platform',
 'Assigned To'=>'Felelős',
 // Module Sequence Numbering
-'Note No' => 'Dokumentum száma',
+'Note No' => 'Dokumentum No.',
 // END
 
 // Documents module
 'LBL_EMPTY_FOLDERS' => 'Üres Mappák',
 'LBL_VIEW_EMPTY_FOLDERS' => 'Üres Mappák megtekintése',
 'LBL_NO_DOCUMENTS' => 'Nincs dokumentum',
-'LBL_DESCRIPTION' => 'Megjegyzés',
+'LBL_DESCRIPTION' => 'Leírás',
 'FILE_HAS_NO_DATA'=>'A kiválasztott fájl sérült, vagy nem tartalmaz adatot',
 
 'LBL_MAXIMUM_20'=>'Maximum 20',
 'LBL_MAXIMUM_50'=>'Maximum 50',
 // Added after 5.1.0 GA
 'Folder Name'=>'Mappa neve',
-'Document No'=>'Dokumentum száma',
+'Document No'=>'Dokumentum No.',
 );
 
 ?>

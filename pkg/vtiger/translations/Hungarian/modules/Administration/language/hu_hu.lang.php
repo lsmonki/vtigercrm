@@ -11,10 +11,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Administration\language\hu_hu.lang.php - 18:10 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Administration module vtiger 5.2.0
+ ********************************************************************************
+ * $Header: \modules\Administration\language\hu_hu.lang.php - 9:42 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Administration module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki

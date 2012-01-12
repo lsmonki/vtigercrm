@@ -11,31 +11,29 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Faq\language\hu_hu.lang.php - 19:41 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Faq module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\Faq\language\hu_hu.lang.php - 12:06 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Faq module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
- ********************************************************************************/
- 
+ ********************************************************************************/ 
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'GYIK',
-'LBL_MODULE_TITLE'=>'GYIK: Kezdőlap',
-'LBL_SEARCH_FORM_TITLE'=>'GYIK Keresés',
-'LBL_LIST_FORM_TITLE'=>'GYIK Lista',
-'LBL_NEW_FORM_TITLE'=>'Új GYIK',
+'LBL_MODULE_NAME'=>'TudásTár',
+'LBL_MODULE_TITLE'=>'TudásTár: Kezdőlap',
+'LBL_SEARCH_FORM_TITLE'=>'TudásTár Keresés',
+'LBL_LIST_FORM_TITLE'=>'TudásTár Lista',
+'LBL_NEW_FORM_TITLE'=>'Új TudásTár',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Szervezeti tagság',
 
-'LBL_LIST_ACCOUNT_NAME'=>'GYIK neve',
+'LBL_LIST_ACCOUNT_NAME'=>'TudásTár neve',
 'LBL_LIST_CITY'=>'Város',
 'LBL_LIST_WEBSITE'=>'Weboldal',
 'LBL_LIST_STATE'=>'Állam/megye',
 'LBL_LIST_PHONE'=>'Telefon',
-'LBL_LIST_EMAIL_ADDRESS'=>'Email Cím',
+'LBL_LIST_EMAIL_ADDRESS'=>'Email cím',
 'LBL_LIST_CONTACT_NAME'=>'Kapcsolat neve',
-'LBL_FAQ_INFORMATION'=>'GYIK Információ',
+'LBL_FAQ_INFORMATION'=>'TudásTár adatai',
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_name' => 'LBL_LIST_ACCOUNT_NAME',
@@ -44,8 +42,8 @@ $mod_strings = Array(
 
 //END DON'T CONVERT
 
-'LBL_ACCOUNT'=>'GYIK:',
-'LBL_ACCOUNT_NAME'=>'GYIK neve:',
+'LBL_ACCOUNT'=>'TudásTár:',
+'LBL_ACCOUNT_NAME'=>'TudásTár neve:',
 'LBL_PHONE'=>'Telefon:',
 'LBL_WEBSITE'=>'Weboldal:',
 'LBL_FAX'=>'Fax:',
@@ -63,8 +61,8 @@ $mod_strings = Array(
 'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
-'LBL_ACCOUNT_INFORMATION'=>'GYIK Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_ACCOUNT_INFORMATION'=>'Cég adatok',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
 'LBL_SHIPPING_ADDRESS'=>'Szállítási cím:',
 'LBL_ANY_ADDRESS'=>'Bármilyen cím:',
@@ -77,13 +75,13 @@ $mod_strings = Array(
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a szállítási címbe',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Szállítási cím másolása a számlázási címbe',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Biztos vagy abban, hogy ezt a rekorodot mint tagszervezetet törölni akarod?',
-'LBL_DUPLICATE'=>'Lehetséges GYIK Duplikáció',
-'MSG_DUPLICATE' => 'Ennek a tételnek a létrehozása valószínűleg duplikálni fog egy már létező tételt a rendszerben. Kiválaszthatsz egy már létező tételt a listáról innen alább, vagy kattinthatsz az Új GYIK gombra, hogy folytasd a GYIK létrehozását a már bevitt adatokkal.',
+'LBL_DUPLICATE'=>'Lehetséges TudásTár Duplikáció',
+'MSG_DUPLICATE' => 'Ennek a tételnek a létrehozása valószínűleg duplikálni fog egy már létező tételt a rendszerben. Kiválaszthatsz egy már létező tételt a listáról innen alább, vagy kattinthatsz az Új TudásTár gombra, hogy folytasd a TudásTár létrehozását a már bevitt adatokkal.',
 
 'LBL_INVITEE'=>'Kapcsolatok',
 'ERR_DELETE_RECORD'=>"Adj meg egy rekord azonosítót a VTiger-fiók törléséhez",
 
-'LBL_SELECT_ACCOUNT'=>'GYIK kiválasztása',
+'LBL_SELECT_ACCOUNT'=>'TudásTár kiválasztása',
 'LBL_GENERAL_INFORMATION'=>'Általános Információ',
 
 //for v4 release added
@@ -113,9 +111,9 @@ $mod_strings = Array(
 
 //Added vtiger_fields after 4.2 alpha
 'LBL_TICKETS'=>'Ügyfélszolgáltai Jegyek',
-'LBL_FAQ'=>'GYIK',
+'LBL_FAQ'=>'TudásTár',
 'Product Name'=>'Termék neve',
-'FAQ Id'=>'GYIK AZ',
+'FAQ Id'=>'TudásTár AZ',
 'Add Comment'=>'Megjegyzést Hozzáad',
 'LBL_ADD_COMMENT'=>'Megjegyzést Hozzáad',//give the same value given to the above string 'Add Comment'
 'LBL_COMMENT_INFORMATION'=>'Megjegyzés Információ',
@@ -124,7 +122,7 @@ $mod_strings = Array(
 //Added on 10-12-2005
 'LBL_QUESTION'=>'Kérdés',
 'LBL_CATEGORY'=>'Kategória',
-'LBL_MY_FAQ'=>'Az aktuális GYIK',
+'LBL_MY_FAQ'=>'Az aktuális TudásTár',
 
 //Added for existing Picklist Entries
 
@@ -136,7 +134,7 @@ $mod_strings = Array(
 'Obsolete'=>'Elavult',
 			
 // Module Sequence Numbering
-'Faq No' => 'GYIK szám',
+'Faq No' => 'TudásTár No.',
 // END
 
 );

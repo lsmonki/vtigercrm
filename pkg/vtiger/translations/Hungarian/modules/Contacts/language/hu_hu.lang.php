@@ -11,10 +11,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
-********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Contacts\language\hu_hu.lang.php - 19:13 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Contacts module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\Contacts\language\hu_hu.lang.php - 19:15 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Contacts module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -35,7 +34,7 @@ $mod_strings = Array(
 'LBL_LIST_LAST_NAME'=>'Vezetéknév',
 'LBL_LIST_FIRST_NAME'=>'Keresztnév',
 'LBL_LIST_CONTACT_NAME'=>'Kapcsolat neve',
-'LBL_LIST_TITLE'=>'Titulus',
+'LBL_LIST_TITLE'=>'Beosztás',
 'LBL_LIST_ACCOUNT_NAME'=>'Cég neve',
 'LBL_LIST_EMAIL_ADDRESS'=>'Email',
 'LBL_LIST_PHONE'=>'Telefon',
@@ -61,8 +60,8 @@ $mod_strings = Array(
 
 'LBL_NAME'=>'Név:',
 'LBL_CONTACT_NAME'=>'Kapcsolat neve:',
-'LBL_CONTACT_INFORMATION'=>'Kapcsolat információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi információ',
+'LBL_CONTACT_INFORMATION'=>'Kapcsolat adatok',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 'LBL_FIRST_NAME'=>'Keresztnév:',
 'LBL_OFFICE_PHONE'=>'Telefon, irodai:',
 'LBL_ACCOUNT_NAME'=>'Cégnév:',
@@ -71,10 +70,10 @@ $mod_strings = Array(
 'LBL_LAST_NAME'=>'Vezetéknév:',
 'LBL_MOBILE_PHONE'=>'Mobil:',
 'LBL_HOME_PHONE'=>'Kezdőlap:',
-'LBL_LEAD_SOURCE'=>'Jelölt forrás:',
+'LBL_LEAD_SOURCE'=>'Kapcsolat forrása:',
 'LBL_OTHER_PHONE'=>'Telefon, másik:',
 'LBL_FAX_PHONE'=>'Fax:',
-'LBL_TITLE'=>'Titulus:',
+'LBL_TITLE'=>'Beosztás:',
 'LBL_DEPARTMENT'=>'Részleg:',
 'LBL_BIRTHDATE'=>'Születésnap:',
 'LBL_EMAIL_ADDRESS'=>'Email:',
@@ -93,10 +92,10 @@ $mod_strings = Array(
 'LBL_STATE'=>'Állam/megye:',
 'LBL_POSTAL_CODE'=>'Irányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró információ',
-'LBL_IMAGE_INFORMATION'=>'Kapcsolat képhez információ:',
-'LBL_ADDRESS_INFORMATION'=>'Cím információ',
-'LBL_DESCRIPTION'=>'Megjegyzés:',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_IMAGE_INFORMATION'=>'Kapcsolat képe',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
+'LBL_DESCRIPTION'=>'Leírás:',
 'LBL_CONTACT_ROLE'=>'Munkakör:',
 'LBL_OPP_NAME'=>'Lehetőség neve:',
 'LBL_DUPLICATE'=>'lehetséges Kapcsolatok Duplikáció',
@@ -142,16 +141,16 @@ $mod_strings = Array(
 'Mobile'=>'Mobil',
 'Account Name'=>'Cégnév',
 'Home Phone'=>'Telefon, otthoni',
-'Lead Source'=>'Jelölt Forrás',
+'Lead Source'=>'Kapcsolat forrása',
 'Other Phone'=>'Telefon, másik',
-'Title'=>'Titulus',
+'Title'=>'Beosztás',
 'Fax'=>'Fax',
 'Department'=>'Részleg',
 'Birthdate'=>'Születésnap',
 'Email'=>'Email',
 'Reports To'=>'Jelent neki',
 'Assistant'=>'Asszisztens',
-'Yahoo Id'=>'Yahoo ID',
+'Yahoo Id'=>'Yahoo azonosító',
 'Assistant Phone'=>'Telefon, asszisztens',
 'Do Not Call'=>'Ne hívd',
 'Email Opt Out'=>'Email leiratkozott',
@@ -173,7 +172,7 @@ $mod_strings = Array(
 'Other Zip'=>'Irányítószám (Másik)',
 'Other Country'=>'Ország (Másik)',
 'Contact Image'=>'Kapcsolat képe',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 
 // Added vtiger_fields for Add Business Card
 'LBL_NEW_CONTACT'=>'Új Kapcsolat',
@@ -188,9 +187,9 @@ $mod_strings = Array(
 
 //Added vtiger_field after 4_0_1
 'Portal User'=>'Portál felhasználó',
-'LBL_CUSTOMER_PORTAL_INFORMATION'=>'Vevő Portál Információ',
-'Support Start Date'=>'Támogatás kezdő dátuma',
-'Support End Date'=>'Támogatás záró dátuma',
+'LBL_CUSTOMER_PORTAL_INFORMATION'=>'Ügyfélszolgálati Portál adatok',
+'Support Start Date'=>'Hozzáférés kezdő dátuma',
+'Support End Date'=>'Hozzáférés záró dátuma',
 //Added for 4.2 Release -- CustomView
 'Name'=>'Név',
 'LBL_ALL'=>'Minden',
@@ -234,17 +233,19 @@ $mod_strings = Array(
 'Please Login Here'=>'Kérjük, lépjen be itt',
 'Note :'=>'Megjegyzés :',
 'We suggest you to change your password after logging in first time'=>'Javasoljuk, hogy cserélje a jelszavát az első belépést követően.',
-'Support Team'=>'Támogatási Csapat',
+'Support Team'=>'Ügyfélszolgálat',
 
 'TITLE_AJAX_CSS_POPUP_CHAT'=>'Azonnali üzenetküldő (chat)',
 
 // Added after 5.0.4 GA
 
 // Module Sequence Numbering
-'Contact Id' => 'Kapcsolat ID',
+'Contact Id' => 'Kapcsolat No.',
 
-// Added for 5.2.0 
+// Added for 5.2.0 - 5.2.1
 'Send SMS' => 'SMS küldés',
+'Projects' => 'Projektek',
+'Service Places' => 'Szolgáltatási helyek',
 // END
 
 );

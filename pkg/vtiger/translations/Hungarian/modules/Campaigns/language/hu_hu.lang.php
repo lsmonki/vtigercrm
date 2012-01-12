@@ -11,10 +11,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Campaigns\language\hu_hu.lang.php - 18:51 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Campaigns module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\Campaigns\language\hu_hu.lang.php - 17:09 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Campaigns module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -22,16 +21,16 @@
 
 $mod_strings = Array(
 // Added in release 5.0
-'LBL_CAMPAIGN_INFORMATION'=>'Kampány Információ',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
-'LBL_EXPECTATIONS_AND_ACTUALS'=>'Várható és Jelenlegi adatok',
+'LBL_CAMPAIGN_INFORMATION'=>'Kampány adatok',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_EXPECTATIONS_AND_ACTUALS'=>'Várható adatok és jelenlegi adatok',
 
 'Campaign Name'=>'Kampány neve',
 'Campaign Type'=>'Kampány típusa',
 'Campaign Status'=>'Kampány állapot',
 'Campaign ID'=>'Kampány ID',
-'Expected Close Date'=>'Várható lezárás Dátuma',
+'Expected Close Date'=>'Várható lezárás dátuma',
 'Expected Revenue'=>'Várható jövedelem',
 'Budget Cost'=>'Tervezett költség',
 'Actual Cost'=>'Jelenlegi költség',
@@ -40,17 +39,17 @@ $mod_strings = Array(
 'Num Sent'=>'Küldött db',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Product'=>'Termék',
 'Target Audience'=>'Célközönség',
-'TargetSize'=>'Cél méret',
+'TargetSize'=>'Célkitűzés nagysága',
 'Sponsor'=>'Szponzor',
 
-'Expected Sales Count'=>'Várható eladási darabszám',
+'Expected Sales Count'=>'Várható megrendelések száma',
 'Expected Response Count'=>'Várható visszajelzési darabszám',
 'Expected ROI'=>'Várható megtérülés',
 
-'Actual Sales Count'=>'Jelenlegi eladási darabszám',
+'Actual Sales Count'=>'Jelenleg: megrendelések száma',
 'Actual Response Count'=>'Jelenlegi visszajelzési darabszám',
 'Actual ROI'=>'Jelenlegi megtérülés',
 'Select One'=>'Válassz ki egyet',
@@ -64,8 +63,8 @@ $mod_strings = Array(
 'Public Relations'=>'Public Relations',
 'Partners'=>'Partnerek',
 'Referral Program'=>'Ajánló program',
-'Advertisement'=>'Hírdetés',
-'Banner Ads'=>'Banner hírdetés',
+'Advertisement'=>'Hirdetés',
+'Banner Ads'=>'Banner hirdetés',
 'Direct Mail'=>'Direct Mail',
 'Email'=>'Email',
 'Telemarketing'=>'Telemarketing',
@@ -83,7 +82,7 @@ $mod_strings = Array(
 'Poor'=>'Gyenge',
 			      
 //Module Sequence Numbering
-'Campaign No'=>'Kampány száma',
+'Campaign No'=>'Kampány No.',
 // status fields 
 '--None--'=>'--Nincs--',
 'Contacted - Successful' => 'Kapcsolatfelvétel - Sikeres',

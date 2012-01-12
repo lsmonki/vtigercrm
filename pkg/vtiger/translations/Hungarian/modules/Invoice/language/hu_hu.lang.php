@@ -13,23 +13,23 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Invoice\language\hu_hu.lang.php - 20:47 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Invoice module vtiger 5.2.0
+ * $Header:  \modules\Invoice\language\hu_hu.lang.php - 19:17 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Invoice module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
  
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Számla',
-'LBL_SO_MODULE_NAME'=>'Számla',
+'LBL_MODULE_NAME'=>'Díjbekérő',
+'LBL_SO_MODULE_NAME'=>'Díjbekérő',
 'LBL_RELATED_PRODUCTS'=>'Termék adatok',
-'LBL_MODULE_TITLE'=>'Számla: Kezdőlap',
-'LBL_SEARCH_FORM_TITLE'=>'Számla Keresés',
-'LBL_LIST_FORM_TITLE'=>'Számla Lista',
-'LBL_LIST_SO_FORM_TITLE'=>'Vevő rendelések Listája',
-'LBL_NEW_FORM_TITLE'=>'Új Számla',
-'LBL_NEW_FORM_SO_TITLE'=>'Új Vevő rendelés',
+'LBL_MODULE_TITLE'=>'Díjbekérő: Kezdőlap',
+'LBL_SEARCH_FORM_TITLE'=>'Díjbekérő Keresés',
+'LBL_LIST_FORM_TITLE'=>'Díjbekérő Lista',
+'LBL_LIST_SO_FORM_TITLE'=>'Megrendelések Listája',
+'LBL_NEW_FORM_TITLE'=>'Új Díjbekérő',
+'LBL_NEW_FORM_SO_TITLE'=>'Új Megrendelés',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Szervezeti tagság',
 
 'LBL_LIST_ACCOUNT_NAME'=>'Cég neve',
@@ -63,10 +63,10 @@ $mod_strings = Array(
 'LBL_OWNERSHIP'=>'Tulajdonos:',
 'LBL_RATING'=>'Értékelés:',
 'LBL_INDUSTRY'=>'Iparág:',
-'LBL_SIC_CODE'=>'SIC kód:',
+'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
 'LBL_Quote_INFORMATION'=>'Cég Információ',
 'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
@@ -76,8 +76,8 @@ $mod_strings = Array(
 'LBL_STATE'=>'Állam/Megye:',
 'LBL_POSTAL_CODE'=>'Irányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
-'LBL_DESCRIPTION'=>'Megjegyzés:',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_DESCRIPTION'=>'Leírás:',
 'LBL_TERMS_INFORMATION'=>'Határidők és Feltételek',
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a Szállítási címhez',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Szállítási cím másolása a Számlázási címhez',
@@ -121,7 +121,7 @@ $mod_strings = Array(
 'Vendor Name'=>'Beszállító neve',
 'Invoice Terms'=>'Fizetési határidő',
 'Contact Name'=>'Kapcsolat neve',//to include contact name vtiger_field in Invoice
-'Invoice Date'=>'Számla kiállítási dátuma',
+'Invoice Date'=>'Díjbekérő kiállítási dátuma',
 'Sub Total'=>'Részösszeg',
 'Due date'=>'Határidő',
 'Carrier'=>'Futár',
@@ -153,38 +153,38 @@ $mod_strings = Array(
 'Description'=>'Megjegyzés',
 'Potential Name'=>'Lehetőség neve',
 'Customer No'=>'Ügyfél száma',
-'Sales Order'=>'Eladások',
+'Sales Order'=>'Megrendelések',
 'Pending'=>'Függőben',
 'Account Name'=>'Cég neve',
 'Terms & Conditions'=>'Határidők és Feltételek',
 //Quote Info
-'LBL_INVOICE_INFORMATION'=>'Számla Információ',
-'LBL_INVOICE'=>'Számla:',
-'LBL_SO_INFORMATION'=>'Vevői Rendelés Információ',
-'LBL_SO'=>'Vevői Rendelés:',
+'LBL_INVOICE_INFORMATION'=>'Díjbekérő Információ',
+'LBL_INVOICE'=>'Díjbekérő:',
+'LBL_SO_INFORMATION'=>'Megrendelés adatai',
+'LBL_SO'=>'Megrendelés:',
 
 //Added in release 4.2
 'LBL_SUBJECT'=>'Tárgy:',
-'LBL_SALES_ORDER'=>'Vevői Rendelés:',
-'Invoice Id'=>'Számla ID',
-'LBL_MY_TOP_INVOICE'=>'Csúcs Nyitott Számláim',
-'LBL_INVOICE_NAME'=>'Számla neve:',
+'LBL_SALES_ORDER'=>'Megrendelés:',
+'Invoice Id'=>'Díjbekérő No.',
+'LBL_MY_TOP_INVOICE'=>'Legfontosabb ki nem egyenlített Díjbekérőim',
+'LBL_INVOICE_NAME'=>'Díjbekérő neve:',
 'Purchase Order'=>'Beszerzések',
 'Status'=>'Állapot',
-'Id'=>'Számla ID',
-'Invoice'=>'Számla',
+'Id'=>'Díjbekérő No.',
+'Invoice'=>'Díjbekérő',
 
 //Added for existing Picklist Entries
 
 'Created'=>'Létrehozott',
 'Approved'=>'Jóváhagyott',
 'Sent'=>'Elküldött',
-'Credit Invoice'=>'Utalásos számla',
+'Credit Invoice'=>'Utalásos Díjbekérő',
 'Paid'=>'Fizetett',
 'AutoCreated'=>'Automatikusan létrehozva',
 //Added to Custom Invoice Number
-'Invoice No'=>'Számla száma',
-'Adjustment'=>'Kiegyenlítés',
+'Invoice No'=>'Díjbekérő No.',
+'Adjustment'=>'Kézi módosítási lehetőség',
 
 //Added for Reports (5.0.4)
 'Tax Type'=>'Adó típusa',
@@ -197,6 +197,7 @@ $mod_strings = Array(
 // Added affter 5.0.4 GA
 //Added for Documents module
 'Documents'=>'Dokumentumok',
+'SINGLE_Invoice'=>'Díjbekérő',
 );
 
 ?>

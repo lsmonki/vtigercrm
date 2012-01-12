@@ -9,8 +9,8 @@
    *********************************************************************************
 *  Module       : JavaScript General 
 *  Language     : HU Magyar
-*  Version      : 5.2.0
-*  Created Date : 20:47 2010.05.31.
+*  Version      : 5.3.x
+*  Created Date : 9:39 2011.11.11.
 *  Translator      : Holbok István, holbok@gmail.com , http://holbok.hu
 
 If you have a questions or suggestions about this translation module, please contact me.
@@ -98,7 +98,7 @@ Skype: holboki
 		VALID_FINAL_PERCENT:'Adj meg egy érvényes Végső kedvezmény százalékot!',
 		VALID_FINAL_AMOUNT:'Adj meg egy érvényes Végső kedvezmény értéket!',
 		VALID_SHIPPING_CHARGE:'Adj meg egy érvényes szállítási és kezelési költséget',
-		VALID_ADJUSTMENT:'Adj meg egy érvényes kiegyenlítést',
+		VALID_ADJUSTMENT:'Adj meg egy valós módosító összeget',
 		WANT_TO_CONTINUE:'Szeretnéd folytatni?',
 		ENTER_VALID_TAX:'Adj meg egy érvényes adó értéket',
 		VALID_TAX_NAME:'Adj meg egy érvényes adó nevet',
@@ -123,7 +123,7 @@ Skype: holboki
 		LESS_OR_EQUALS:'kisebb vagy egyenlő',
 		GREATER_OR_EQUALS:'nagyobb vagy egyenlő',
 
-		NO_SPECIAL_CHARS:'Különleges karakterek nem engedélyezettek a Számla karaktersorozatban',
+		NO_SPECIAL_CHARS:'Különleges karakterek nem engedélyezettek a Díjbekérő sorszám karaktersorozatban',
 		PLS_SELECT_VALID_FILE:'Kérjük, hogy válassz egy fájlt a következő kiterjesztésekkel:\n',
 		NO_SPECIAL:'Különleges karakterek nem engedélyezettek',
 		NO_QUOTES:'Idézőjelek (\' ") és + jel nem engedélyezettek ',
@@ -302,13 +302,25 @@ Skype: holboki
 				LBL_ADD: 'Hozzáad ',
 				Module: 'Modul',
 				DashBoard: 'Műszerfal',
-				RSS: 'RSS',
+				RSS: 'RSS Hírfolyam',
 				Default: 'Alapértelmezett',
 				Notebook: 'Jegyzettömb',
 				SPECIAL_CHARS:'\\ / < > + \' " ',
 				
 				BETWEEN: 'közte',
 				BEFORE: 'előtte',
-				AFTER: 'utána'
+				AFTER: 'utána',
+				'ERROR_DELETING_TRY_AGAIN': 'Hiba a törlés közben. Próbálja újra.',
+				'LBL_ENTER_WINDOW_TITLE': 'Kérjük, hogy adja meg az ablak címét.',
+				'LBL_SELECT_ONLY_FIELDS': 'Kérjük, hogy csak két mezőt válasszon.',
+				'LBL_ENTER_RSS_URL': 'Kérjük, hogy adja meg az RSS URL-t',
+				'LBL_ADD_HOME_WIDGET': 'Nem adható hozzá a nyitó oldali doboz. Próbálja újra.'
+				'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Alapértelmezett érték ehhez a mezőhöz',
+
+				'RECIPIENTS_CANNOT_BE_EMPTY' : 'A kiválasztott Címzett nem lehet üres mező',
+				'VALID_SCANNER_NAME' : 'Kérjük, hogy adjon meg egy érvényes Szkenner nevet (Ez számokat és betűket tartalmazhat)',
+				'ERR_SAME_SOURCE_AND_TARGET' : 'A forrás és a cél mező nem lehet ugyanaz',
+				'ERR_ATLEAST_ONE_VALUE_FOR' : 'Neked legalább egy értéket ki kell választanod ehhez: ',
+				'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Kérünk, hogy válassz egy modult, hogy megadd a Függőséget'				
 
 	};

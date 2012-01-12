@@ -7,8 +7,8 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\com_vtiger_workflow\language\hu_hu.lang.php - 19:06 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the com_vtiger_workflow module vtiger 5.2.0
+ * $Header:  \modules\com_vtiger_workflow\language\hu_hu.lang.php - 9:46 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the com_vtiger_workflow module vtiger 5.3.x
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
@@ -44,6 +44,35 @@ $mod_strings = array(
 'LBL_NO_TEMPLATES'=>'Nincsenek Sablonok',
 'LBL_SELECT'=>'Kiválasztás',
 'LBL_MESSAGE'=>'Üzenet',
+'LBL_SET_FIELD_VALUES'=>'Add meg a mezők értékeit',
+'LBL_ADD_FIELD'=>'Add meg a mezőt',
+'LBL_USE_FIELD_VALUE_DASHDASH'=>'-- Mező érték használata --',
+'LBL_USE_FUNCTION_DASHDASH'=>'-- Függvény használata --',
+'LBL_RAW_TEXT'=>'Nyers szöveg',
+'LBL_FIELD'=>'Mező',
+'LBL_EXPRESSION'=>'Kifejezés',
+'LBL_SET_EXPRESSION'=>'Kifejezést megad',
+'LBL_MANUAL'=>'Rendszer',
+'LBL_Module'=>'Modul',
+'LBL_Description'=>'Leírás',
+'LBL_Tools'=>'Eszközök',
+'LBL_NEW_CONDITION_GROUP_BUTTON_LABEL'=>'Új Feltétel csoport',
+'VTUpdateFieldsTask' => 'Mezők frissítése',
+
+'LBL_VALIDATION_DUPLICATE_FIELDNAMES' => 'Ugyanazt a mezőt egynél többször választottad.',
+'LBL_VALIDATION_INVALID_FIELD_VALUES' => 'Érvénytelen mező érték',
+'LBL_CREATE_ENTITY_NOTE_ORDER_MATTERS' => 'Megjegyzés: A kifejezéseket abban a sorrendben értékeljük ki, ahogy a mezők értéket kapnak.
+											Tehát légy biztos abban, hogy a mezők már azelőtt kaptak értéket, mielőtt egy kifejezésben használnád őket.',
+'LBL_SET_VALUE' => 'Érték megadása',
+
+'LBL_EMAIL_RECIPIENT' => 'Címzett',
+
+'LBL_Recepient'=>'Címzett',
+'LBL_CC'=>'Másolatot kap',
+'LBL_BCC'=>'Rejtett másolatot kap',
+'LBL_Subject'=>'Tárgysor',
+'LBL_WORKFLOW_NOTE_EVENT_TASK_TIMEZONE' => 'Megjegyzés: Minden dátumot, időpontot és az ismétlődéssel kapcsolatos információt beállítottuk az eseményhez,
+											és ezt a config.inc.php-ben megadott alapértelmezett időzónához viszonyítva fogjuk használni.',
 );
 
 

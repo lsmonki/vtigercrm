@@ -7,10 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  * @author MAK
- *********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\VtigerBackup\language\hu_hu.lang.php - 22:51 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the VtigerBackup module vtiger 5.2.0
+ *********************************************************************************
+ * $Header:  \modules\VtigerBackup\language\hu_hu.lang.php - 12:15 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the VtigerBackup module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/

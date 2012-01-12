@@ -7,9 +7,8 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\FieldFormulas\language\hu_hu.lang.php - 19:51 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the FieldFormulas module vtiger 5.2.0
+ * $Header:  \modules\FieldFormulas\language\hu_hu.lang.php - 11:32 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the FieldFormulas module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki

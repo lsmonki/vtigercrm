@@ -13,21 +13,21 @@
  * Contributor(s): ______________________________________.
  *********************************************************************************
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\SalesOrder\language\hu_hu.lang.php - 21:58 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the SalesOrder module vtiger 5.2.0
+ * $Header:  \modules\SalesOrder\language\hu_hu.lang.php - 19:17 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the SalesOrder module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
  
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Eladások',
-'LBL_SO_MODULE_NAME'=>'Eladások',
+'LBL_MODULE_NAME'=>'Megrendelések',
+'LBL_SO_MODULE_NAME'=>'Megrendelések',
 'LBL_RELATED_PRODUCTS'=>'Termék adatok',
-'LBL_MODULE_TITLE'=>'Vevői Rendelés: Kezdőlap',
+'LBL_MODULE_TITLE'=>'Megrendelés: Kezdőlap',
 'LBL_SEARCH_FORM_TITLE'=>'Rendelések Keresés',
-'LBL_LIST_SO_FORM_TITLE'=>'Vevői Rendelés Lista',
-'LBL_NEW_FORM_SO_TITLE'=>'Új Vevői Rendelés',
+'LBL_LIST_SO_FORM_TITLE'=>'Megrendelés Lista',
+'LBL_NEW_FORM_SO_TITLE'=>'Új Megrendelés',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Szervezeti tagság',
 
 'LBL_LIST_ACCOUNT_NAME'=>'Cég neve',
@@ -61,10 +61,10 @@ $mod_strings = Array(
 'LBL_OWNERSHIP'=>'Tulajdonos:',
 'LBL_RATING'=>'Értékelés:',
 'LBL_INDUSTRY'=>'Iparág:',
-'LBL_SIC_CODE'=>'SIC kód:',
+'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
 'LBL_Quote_INFORMATION'=>'Cég Információ',
 'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
@@ -74,7 +74,7 @@ $mod_strings = Array(
 'LBL_STATE'=>'Állam/Megye:',
 'LBL_POSTAL_CODE'=>'Irányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_DESCRIPTION_INFORMATION'=>'Megjegyzés',
 'LBL_TERMS_INFORMATION'=>'Határidők és Feltételek',
 'LBL_DESCRIPTION'=>'Megjegyzés:',
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a Szállítási címhez',
@@ -114,8 +114,8 @@ $mod_strings = Array(
 // Added for 4GA
 'LBL_TOOL_FORM_TITLE'=>'Cég Eszközök',
 //Added for 4GA
-'Subject'=>'Tárgy',
-'Quote Name'=>'Ajánlat neve',
+'Subject'=>'Megrendelés megnevezése',
+'Quote Name'=>'Ajánlat megnevezése',
 'Vendor Name'=>'Beszállító neve',
 'Requisition No'=>'Igény száma',
 'Tracking Number'=>'Követő szám',
@@ -147,29 +147,29 @@ $mod_strings = Array(
 'Country'=>'Ország',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Description'=>'Megjegyzés',
-'Potential Name'=>'Lehetőség neve',
+'Description'=>'Megjegyzés:',
+'Potential Name'=>'Lehetőség megnevezése',
 'Customer No'=>'Ügyfél száma',
-'Purchase Order'=>'Beszerzések',
+'Purchase Order'=>'Kapcsolódó beszerzés',
 'Vendor Terms'=>'Szállítói határidők',
-'Pending'=>'Függőben',
-'Account Name'=>'Cég neve',
+'Pending'=>'Folyamatban',
+'Account Name'=>'Megrendelő cég neve',
 'Terms & Conditions'=>'Határidők és Feltételek',
 //Quote Info
-'LBL_SO_INFORMATION'=>'Vevői Rendelés Információ',
-'LBL_SO'=>'Vevői Rendelés:',
+'LBL_SO_INFORMATION'=>'Megrendelés adatai',
+'LBL_SO'=>'Megrendelés:',
 
  //Added for 5.0 GA
-'LBL_SO_FORM_TITLE'=>'Eladás',
-'LBL_SUBJECT_TITLE'=>'Tárgy',
+'LBL_SO_FORM_TITLE'=>'Megrendelés',
+'LBL_SUBJECT_TITLE'=>'Megnevezés',
 'LBL_VENDOR_NAME_TITLE'=>'Beszállító neve',
 'LBL_TRACKING_NO_TITLE'=>'Követő szám:',
-'LBL_SO_SEARCH_TITLE'=>'Vevői Rendelés Keresés',
-'LBL_QUOTE_NAME_TITLE'=>'Ajánlat neve',
-'Order No'=>'Rendelés száma',
-'LBL_MY_TOP_SO'=>'Csúcs Nyitott Vevői Rendeléseim',
+'LBL_SO_SEARCH_TITLE'=>'Megrendelés Keresés',
+'LBL_QUOTE_NAME_TITLE'=>'Ajánlat megnevezése',
+'Order No'=>'Megrendelés No.',
+'LBL_MY_TOP_SO'=>'Legfontosabb nyitott Megrendeléseim',
 'Status'=>'Állapot',
-'SalesOrder'=>'Eladások',
+'SalesOrder'=>'Megrendelések',
 
 //Added for existing Picklist Entries
 
@@ -183,11 +183,11 @@ $mod_strings = Array(
 'Approved'=>'Jóváhagyott',
 'Delivered'=>'Kiszállított',
 'Cancelled'=>'Törölt',
-'Adjustment'=>'Kiegyenlítés',
+'Adjustment'=>'Kézi módosítási lehetőség',
 'Sub Total'=>'Részösszeg',
 'AutoCreated'=>'Automatikusan létrehozva',
 'Sent'=>'Elküldve',
-'Credit Invoice'=>'Átutalásos számla',
+'Credit Invoice'=>'Átutalásos díjbekérő',
 'Paid'=>'Fizetve',
 
 //Added for Reports (5.0.4)
@@ -198,16 +198,22 @@ $mod_strings = Array(
 'S&H Amount'=>'Szállítási és kezelési ktg.',
 
 //Added after 5.0.4 GA
-'SalesOrder No'=>'Vevő Rendelés szám',
+'SalesOrder No'=>'Megrendelés No.',
 
-'Recurring Invoice Information' => 'Ismétlődő Számla Információ',
-'Enable Recurring' => 'Ismétlődés Engedélyezve',
+'Recurring Invoice Information' => 'Előfizetés - Ismétlődő Díjbekérő beállításai',
+'Enable Recurring' => 'Díjbekérő-ismétlődés engedélyezve',
 'Frequency' => 'Gyakoriság',
-'Start Period' => 'Kezdő Időszak',
-'End Period' => 'Záró Időszak',
+'Start Period' => 'Első Díjbekérő',
+'End Period' => 'Utolsó Díjbekérő',
 'Payment Duration' => 'Fizetés időtartama',
-'Invoice Status' => 'Számla Állapot',
-
+'Invoice Status' => 'Díjbekérő állapot',
+'Daily'=>'Naponta',
+'Weekly'=>'Hetente',
+'Monthly'=>'Havonta',
+'Quarterly'=>'Negyedéves',
+'Yearly'=>'Évente',
+'--None--'=>'--Nincs--',
+'SINGLE_SalesOrder'=>'Megrendelés',
 );
 
 ?>

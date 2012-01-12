@@ -8,32 +8,33 @@
  * All Rights Reserved.
  ************************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\ModComments\language\hu_hu.lang.php - 20:58 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the ModComments module vtiger 5.2.0
+ * $Header:  \modules\ModComments\language\hu_hu.lang.php - 17:58 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the ModComments module vtiger 5.3.x
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/ 
 $mod_strings = Array (
-'ModComments' => 'Megjegyzések',
-'SINGLE_ModComments' => 'Megjegyzés',
+'ModComments' => 'Feljegyzések',
+'SINGLE_ModComments' => 'Feljegyzés',
 
-'LBL_MODCOMMENTS_INFORMATION' => 'Megjegyzés Információ',
-'LBL_OTHER_INFORMATION' => 'Egyéb Információ',
-'LBL_CUSTOM_INFORMATION' => 'Egyedi Információ',
+'LBL_MODCOMMENTS_INFORMATION' => 'Feljegyzések',
+'LBL_OTHER_INFORMATION' => 'Egyéb adatok',
+'LBL_CUSTOM_INFORMATION' => 'Egyedi adatok',
 
 'Assigned To' => 'Felelős',
 'Created Time' => 'Létrehozva',
 'Modified Time' => 'Módosítva',
-'Comment' => 'Megjegyzés',
-'Related To' => 'Kapcsolódik',
+'Comment' => 'Feljegyzés',
+'Related To' => 'Kapcsolódó entitás',
 'Creator' => 'Létrehozó',
 
-'LBL_ADD_COMMENT' => 'Megjegyzés Hozzáadása',
+'LBL_ADD_COMMENT' => 'Feljegyzés hozzáadása',
 'LBL_AUTHOR' => 'Szerző',
 'LBL_ON' => 'ekkor',
 'LBL_MINE' => 'Az én',
 'LBL_LAST5'=> 'Utolsó 5',
 
-'Comments' => 'Megjegyzések',
+'Comments' => 'Feljegyzések',
+'Related To Comments' => 'Kapcsolódó feljegyzések',
 
 );
 

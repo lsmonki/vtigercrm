@@ -7,14 +7,12 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *
- *********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Webforms\language\hu_hu.lang.php - 22:59 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Webforms module vtiger 5.2.0
+ *********************************************************************************
+ * $Header:  \modules\Webforms\language\hu_hu.lang.php - 12:16 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Webforms module vtiger 5.3.x
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
- ********************************************************************************/
- 
+ ********************************************************************************/ 
 $mod_strings = Array (
 'Webforms' => 'Webűrlapok',
 'LBL_SUCCESS' => 'Az adatokat sikeresen hozzáadtuk a VTiger CRM rendszerhez.',

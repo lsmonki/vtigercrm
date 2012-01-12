@@ -11,15 +11,13 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Home\language\hu_hu.lang.php - 20:26 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Home module vtiger 5.2.0
+ ********************************************************************************
+ * $Header:  \modules\Home\language\hu_hu.lang.php - 12:06 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the Home module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
- ********************************************************************************/
- 
+ ********************************************************************************/ 
 $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'Új Kapcsolat',
 'LBL_FIRST_NAME'=>'Keresztnév:',
@@ -69,7 +67,7 @@ $mod_strings = Array(
 
 //ADDED for Home Page Customization
 'LBL_HOME_MODULE' => 'Modul',
-'LBL_HOME_RSS' => 'RSS',
+'LBL_HOME_RSS' => 'RSS Hírfolyam',
 'LBL_HOME_DASHBOARD' => 'Műszerfal',
 'LBL_HOME_STUFFTITLE'=>'Ablak cím',
 'LBL_HOME_SHOW'=>'Mutat',
@@ -103,13 +101,13 @@ $mod_strings = Array(
 // END
 
 // Default home page widget's title
-'Top Accounts'=>'Csúcs Cégek',
-'Top Potentials'=>'Csúcs Lehetőségek',
-'Top Quotes'=>'Csúcs Ajánlatok',
-'Top Trouble Tickets'=>'Csúcs Ügyfélszolgálati Jegyek',
-'Top Invoices'=>'Csúcs Számlák',
-'Top Sales Orders'=>'Csúcs Vevői Rendelések',
-'Top Purchase Orders'=>'Csúcs Beszerzési Rendelések',
+'Top Accounts'=>'Legfontosabb Cégek',
+'Top Potentials'=>'Legfontosabb Lehetőségek',
+'Top Quotes'=>'Legfontosabb Ajánlatok',
+'Top Trouble Tickets'=>'Legfontosabb Kérések',
+'Top Invoices'=>'Legfontosabb Díjbekérők',
+'Top Sales Orders'=>'Legfontosabb Megrendelés',
+'Top Purchase Orders'=>'Legfontosabb Beszerzések',
 'My New Leads'=>'Új Jelöltjeim',
 'Key Metrics'=>'Kulcs Mérőszámok',
 'My Group Allocation'=>'Csoport Allokációm',

@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\Potentials\language\hu_hu.lang.php - 21:08 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the Potentials module vtiger 5.2.0
+ * $Header:  \modules\Potentials\language\hu_hu.lang.php - 21:49 2011.11.12. $
+ * Description:  Defines the Hungarian language pack for the Potentials module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
@@ -39,28 +39,28 @@ $mod_strings = Array(
 'LBL_OPPORTUNITY_NAME'=>'Lehetőség neve:',
 'LBL_ACCOUNT_NAME'=>'Cég neve:',
 'LBL_AMOUNT'=>'Összeg:',
-'LBL_DATE_CLOSED'=>'Várható lezárás Dátuma:',
+'LBL_DATE_CLOSED'=>'Várható lezárás dátuma:',
 'LBL_TYPE'=>'Típus:',
 'LBL_NEXT_STEP'=>'Következő lépés:',
-'LBL_LEAD_SOURCE'=>'Jelölt Forrás:',
+'LBL_LEAD_SOURCE'=>'Lehetőség forrása:',
 'LBL_SALES_STAGE'=>'Értékesítési fázis:',
 'LBL_PROBABILITY'=>'Valószínűség (%):',
 'LBL_DESCRIPTION'=>'Megjegyzés:',
-'LBL_OPPORTUNITY_INFORMATION'=>'Lehetőség Információ:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ:',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
+'LBL_OPPORTUNITY_INFORMATION'=>'Lehetőség adatai',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
+'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
 
 'LBL_NEW_FORM_TITLE'=>'Új Lehetőség',
 
 'ERR_DELETE_RECORD'=>"Egy rekord azonosítót meg kell adnod a Lehetőség törléséhez.",
-'LBL_TOP_OPPORTUNITIES'=>"Csúcs Nyitott Lehetőségeim",
+'LBL_TOP_OPPORTUNITIES'=>"Legfontosabb Nyitott Lehetőségeim",
 
 'NTC_REMOVE_OPP_CONFIRMATION'=>'Biztos vagy abban, hogy el akarod távolítani ezt a Kapcsolatot ebből a Lehetőségből?',
 
 'NTC_NONE_SCHEDULED'=>'Nincs ütemezve.',
 
 'LBL_SELECT_OPPOPTUNITY'=>'Lehetőség Kiválasztása',
-'LBL_GENERAL_INFORMATION'=>'Általános Információ',
+'LBL_GENERAL_INFORMATION'=>'Általános adatok',
 
 
 
@@ -99,16 +99,16 @@ $mod_strings = Array(
 'Amount'=>'Összeg',
 'Account Name'=>'Cég neve',
 'Currency'=>'Pénznem',
-'Expected Close Date'=>'Várható lezárás Dátuma',
+'Expected Close Date'=>'Várható lezárás dátuma',
 'Opportunity Type'=>'Lehetőség típusa',
 'Type'=>'Típus',
 'Next Step'=>'Következő lépés',
-'Lead Source'=>'Jelölt Forrás',
+'Lead Source'=>'Lehetőség forrása',
 'Sales Stage'=>'Értékesítési fázis',
 'Assigned To'=>'Felelős',
 'Probability'=>'Valószínűség (%)',
-'Campaign Source'=>'Kampány Forrás',
-'Description'=>'Megjegyzés',
+'Campaign Source'=>'Kampány forrás',
+'Description'=>'Leírás:',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
 //Added for 4.2 Release -- CustomView
@@ -148,7 +148,7 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 // Module Sequence Numbering
-'Potential No' => 'Lehetőség száma',
+'Potential No' => 'Lehetőség No.',
 // END
 
 'Related To' => 'Kapcsolódik hozzá', 

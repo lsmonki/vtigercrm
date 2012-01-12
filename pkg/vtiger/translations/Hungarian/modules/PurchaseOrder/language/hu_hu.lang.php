@@ -12,14 +12,12 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  *********************************************************************************
-/*********************************************************************************
- * $Header:  E:\D_root\Dokumentumok\vtiger520\hungarian52\trunk\modules\PurchaseOrder\language\hu_hu.lang.php - 21:22 2010.05.21. $
- * Description:  Defines the Hungarian language pack for the PurchaseOrder module vtiger 5.2.0
+ * $Header:  \modules\PurchaseOrder\language\hu_hu.lang.php - 12:10 2011.11.11. $
+ * Description:  Defines the Hungarian language pack for the PurchaseOrder module vtiger 5.3.x
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
- ********************************************************************************/
- 
+ ********************************************************************************/ 
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Beszerzések',
 'LBL_RELATED_PRODUCTS'=>'Termék adatok',
@@ -63,7 +61,7 @@ $mod_strings = Array(
 'LBL_SIC_CODE'=>'TEÁOR:',
 'LBL_TYPE'=>'Típus:',
 'LBL_ANNUAL_REVENUE'=>'Éves forgalom:',
-'LBL_ADDRESS_INFORMATION'=>'Cím Információ',
+'LBL_ADDRESS_INFORMATION'=>'Cím adatok',
 'LBL_Quote_INFORMATION'=>'Cég Információ',
 'LBL_CUSTOM_INFORMATION'=>'Egyedi Információ',
 'LBL_BILLING_ADDRESS'=>'Számlázási cím:',
@@ -73,7 +71,7 @@ $mod_strings = Array(
 'LBL_STATE'=>'Állam/Megye:',
 'LBL_POSTAL_CODE'=>'Irányítószám:',
 'LBL_COUNTRY'=>'Ország:',
-'LBL_DESCRIPTION_INFORMATION'=>'Leíró Információ',
+'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
 'LBL_TERMS_INFORMATION'=>'Határidők és Feltételek',
 'LBL_DESCRIPTION'=>'Megjegyzés:',
 'NTC_COPY_BILLING_ADDRESS'=>'Számlázási cím másolása a Szállítási címhez',
@@ -113,7 +111,7 @@ $mod_strings = Array(
 // Added for 4GA
 'LBL_TOOL_FORM_TITLE'=>'Cég Eszközök',
 //Added for 4GA
-'Subject'=>'Tárgy',
+'Subject'=>'Megnevezés',
 'Quote Name'=>'Ajánlat neve',
 'Vendor Name'=>'Beszállító neve',
 'Requisition No'=>'Igény száma',
@@ -146,7 +144,7 @@ $mod_strings = Array(
 'Country'=>'Ország',
 'Created Time'=>'Létrehozva',
 'Modified Time'=>'Módosítva',
-'Description'=>'Megjegyzés',
+'Description'=>'Leírás:',
 'Potential Name'=>'Lehetőség neve',
 'Customer No'=>'Ügyfél száma',
 'Purchase Order'=>'Beszerzések',
@@ -155,8 +153,8 @@ $mod_strings = Array(
 'Account Name'=>'Cég neve',
 'Terms & Conditions'=>'Határidők és Feltételek',
 //Quote Info
-'LBL_PO_INFORMATION'=>'Beszerzési Rendelés Információ',
-'LBL_PO'=>'Beszerzési Rendelés:',
+'LBL_PO_INFORMATION'=>'Beszerzés adatai',
+'LBL_PO'=>'Beszerzés:',
 
  //Added for 4.2 GA
 'LBL_SO_FORM_TITLE'=>'Értékesítés',
@@ -164,13 +162,13 @@ $mod_strings = Array(
 'LBL_SUBJECT_TITLE'=>'Tárgy',
 'LBL_VENDOR_NAME_TITLE'=>'Beszállító neve',
 'LBL_TRACKING_NO_TITLE'=>'Követő szám:',
-'LBL_PO_SEARCH_TITLE'=>'Beszerzési Rendelés Keresés',
-'LBL_SO_SEARCH_TITLE'=>'Vevői Rendelés Keresés',
+'LBL_PO_SEARCH_TITLE'=>'Beszerzés Keresés',
+'LBL_SO_SEARCH_TITLE'=>'Megrendelés Keresés',
 'LBL_QUOTE_NAME_TITLE'=>'Ajánlat neve',
-'Order No'=>'Rendelés száma',
+'Order No'=>'Beszerzés No.',
 'Status'=>'Állapot',
 'PurchaseOrder'=>'Beszerzések',
-'LBL_MY_TOP_PO'=>'Csúcs Nyitott Beszerzési Rendeléseim',
+'LBL_MY_TOP_PO'=>'Legfontosabb Nyitott Beszerzéseim',
 
 //Added for existing Picklist Entries
 
@@ -184,19 +182,20 @@ $mod_strings = Array(
 'Approved'=>'Jóváhagyott',
 'Delivered'=>'Kiszállított',
 'Cancelled'=>'Törölt',
-'Received Shipment'=>'Fogadott Szállítmány',
+'Received Shipment'=>'Fogadott szállítmány',
 
 //Added for Reports (5.0.4)
 'Tax Type'=>'Adó típusa',
 'Discount Percent'=>'Kedvezmény Százalék',
 'Discount Amount'=>'Kedvezmény Összeg',
 'Terms & Conditions'=>'Határidők és Feltételek',
-'Adjustment'=>'Kiegyenlítés',
+'Adjustment'=>'Kézi módosítási lehetőség',
 'Sub Total'=>'Részösszeg',
 'S&H Amount'=>'Szállítási és kezelési ktg.',
 
 //Added after 5.0.4 GA
-'PurchaseOrder No'=>'Beszerzés sorszám',
+'PurchaseOrder No'=>'Beszerzés No.',
+'SINGLE_PurchaseOrder'=>'Beszerzés',
 
 );
 
