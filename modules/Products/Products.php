@@ -1286,8 +1286,8 @@ class Products extends CRMEntity {
 			$sql = 'DELETE FROM vtiger_seproductsrel WHERE productid = ? AND crmid = ?';
 			$this->db->pquery($sql, array($id, $return_id));
 		} elseif($return_module == 'Vendors') {
-			$sql = 'UPDATE vtiger_products SET vendor_id = 0 WHERE productid = ?';
-			$this->db->pquery($sql, array($id));
+			$sql = 'UPDATE vtiger_products SET vendor_id = ? WHERE productid = ?';
+			$this->db->pquery($sql, array(null, $id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);

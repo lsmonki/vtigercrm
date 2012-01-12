@@ -405,16 +405,16 @@ class SalesOrder extends CRMEntity {
 			$this->trash('SalesOrder',$id);
 		}
 		elseif($return_module == 'Quotes') {
-			$relation_query = 'UPDATE vtiger_salesorder SET quoteid=0 WHERE salesorderid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_salesorder SET quoteid=? WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array(null, $id));
 		}
 		elseif($return_module == 'Potentials') {
-			$relation_query = 'UPDATE vtiger_salesorder SET potentialid=0 WHERE salesorderid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_salesorder SET potentialid=? WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array(null, $id));
 		}
 		elseif($return_module == 'Contacts') {
-			$relation_query = 'UPDATE vtiger_salesorder SET contactid=0 WHERE salesorderid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_salesorder SET contactid=? WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array(null, $id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);

@@ -1376,8 +1376,8 @@ function get_contactsforol($user_name)
 		if(empty($return_module) || empty($return_id)) return;
 		
 		if($return_module == 'Accounts') {
-			$sql = 'UPDATE vtiger_contactdetails SET accountid = 0 WHERE contactid = ?';
-			$this->db->pquery($sql, array($id));
+			$sql = 'UPDATE vtiger_contactdetails SET accountid = ? WHERE contactid = ?';
+			$this->db->pquery($sql, array(null, $id));
 		} elseif($return_module == 'Potentials') {
 			$sql = 'DELETE FROM vtiger_contpotentialrel WHERE contactid=? AND potentialid=?';
 			$this->db->pquery($sql, array($id, $return_id));

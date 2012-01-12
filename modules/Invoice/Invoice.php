@@ -402,8 +402,8 @@ class Invoice extends CRMEntity {
 		if($return_module == 'Accounts' || $return_module == 'Contacts') {
 			$this->trash('Invoice',$id);
 		} elseif($return_module=='SalesOrder') {
-			$relation_query = 'UPDATE vtiger_invoice set salesorderid=0 where invoiceid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_invoice set salesorderid=? where invoiceid=?';
+			$this->db->pquery($relation_query, array(null,$id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);

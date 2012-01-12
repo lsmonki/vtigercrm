@@ -1278,8 +1278,8 @@ $log->info("in getOldFileName  ".$notesid);
 			$relatedModule = vtlib_getModuleNameById($tabId);
 			$focusObj = CRMEntity::getInstance($relatedModule);
 			
-			$updateQuery = "UPDATE $tableName SET $columnName=0 WHERE $columnName=? AND $focusObj->table_index=?";
-			$updateParams = array($return_id, $id);
+			$updateQuery = "UPDATE $tableName SET $columnName=? WHERE $columnName=? AND $focusObj->table_index=?";
+			$updateParams = array(null, $return_id, $id);
 			$this->db->pquery($updateQuery, $updateParams);			
 		}
 	}

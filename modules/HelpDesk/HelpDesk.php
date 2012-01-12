@@ -754,13 +754,13 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		if(empty($return_module) || empty($return_id)) return;
 		
 		if($return_module == 'Contacts' || $return_module == 'Accounts') {
-			$sql = 'UPDATE vtiger_troubletickets SET parent_id=0 WHERE ticketid=?';
-			$this->db->pquery($sql, array($id));
+			$sql = 'UPDATE vtiger_troubletickets SET parent_id=? WHERE ticketid=?';
+			$this->db->pquery($sql, array(null, $id));
 			$se_sql= 'DELETE FROM vtiger_seticketsrel WHERE ticketid=?';
 			$this->db->pquery($se_sql, array($id));
 		} elseif($return_module == 'Products') {
-			$sql = 'UPDATE vtiger_troubletickets SET product_id=0 WHERE ticketid=?';
-			$this->db->pquery($sql, array($id));
+			$sql = 'UPDATE vtiger_troubletickets SET product_id=? WHERE ticketid=?';
+			$this->db->pquery($sql, array(null, $id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);

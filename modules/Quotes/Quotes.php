@@ -425,11 +425,11 @@ class Quotes extends CRMEntity {
 		if($return_module == 'Accounts' ) {
 			$this->trash('Quotes',$id);
 		} elseif($return_module == 'Potentials') {
-			$relation_query = 'UPDATE vtiger_quotes SET potentialid=0 WHERE quoteid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_quotes SET potentialid=? WHERE quoteid=?';
+			$this->db->pquery($relation_query, array(null, $id));
 		} elseif($return_module == 'Contacts') {
-			$relation_query = 'UPDATE vtiger_quotes SET contactid=0 WHERE quoteid=?';
-			$this->db->pquery($relation_query, array($id));
+			$relation_query = 'UPDATE vtiger_quotes SET contactid=? WHERE quoteid=?';
+			$this->db->pquery($relation_query, array(null, $id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
