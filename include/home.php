@@ -141,7 +141,7 @@ class Homestuff{
 					continue;
 				}
 			}elseif(!empty($stufftype) && $stufftype=='RSS'){
-				if(!vtlib_isModuleActive($stufftype)){
+				if(!vtlib_isModuleActive('Rss')){
 					continue;
 				}
 			}
