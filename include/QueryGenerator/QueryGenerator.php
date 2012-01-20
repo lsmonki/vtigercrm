@@ -766,7 +766,12 @@ class QueryGenerator {
 	}
 
 	private function getConditionalArray($fieldname,$value,$operator) {
-		return array('name'=>$fieldname,'value'=>trim($value),'operator'=>$operator);
+		if(is_string($value)) {
+			$value = trim($value);
+		} elseif(is_array($value)) {
+			$value = array_map(trim, $value);
+		}
+		return array('name'=>$fieldname,'value'=>$value,'operator'=>$operator);
 	}
 
 	private function startGroup($groupType) {
