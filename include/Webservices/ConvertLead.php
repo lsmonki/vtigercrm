@@ -193,7 +193,7 @@ function vtws_convertlead($leadId, $assignedTo, $accountName, $avoidPotential, $
         $contact['mobile'] = $leadInfo["mobile"];
         $contact['title'] = $leadInfo["designation"];
         $contact['fax'] = $leadInfo["fax"];
-        $contact['secondaryemail'] = $leadInfo['yahooid'];
+        $contact['secondaryemail'] = $leadInfo['secondaryemail'];
         $contact['leadsource'] = $leadInfo['leadsource'];
         $contact['mailingcity'] = $leadInfo["city"];
         $contact['mailingzip'] = $leadInfo["code"];
