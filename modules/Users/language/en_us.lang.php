@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.18 2005/04/19 14:45:38 ray Exp $
- * Description:  Defines the English language pack for the Account module.
+ * Description:  Defines the English language pack for the Users module.
  ********************************************************************************/
  
 $mod_strings = Array(
@@ -575,7 +575,7 @@ $mod_strings = Array(
 'LBL_TRANSFER_USER'=>'Transfer Ownership to User',
 'LBL_DELETE_PROFILE'=>'Delete Profile',
 'LBL_TRANSFER_ROLES_TO_PROFILE'=>'Transfer Roles to Profile',
-'LBL_PROFILE_TO_BE_DELETED'=>'Profile to be Deteted',
+'LBL_PROFILE_TO_BE_DELETED'=>'Profile to be Deleted',
 
 //Added for disabling window Recalculate
 
@@ -688,8 +688,6 @@ $mod_strings = Array(
 // Added for Create Custom Fields 
 'LBL_USER_CUSTOMFIELDS_DESCRIPTION' => 'Create Custom Fields for Users ',
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
-'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
-
 'LBL_CURRENCY_CONFIGURATION'=> 'Currency Configuration',
 
 //Time zones-Dont change any value
@@ -790,6 +788,11 @@ $mod_strings = Array(
 'Pacific/Auckland' => '(UTC+12:00) Auckland',
 'Asia/Magadan' => '(UTC+12:00) Magadan',
 'Pacific/Tongatapu' => '(UTC+13:00) Nukualofa',
+    
+'Theme'=>'Theme',
+'Language'=>'Language',
+'Secondary Email'=>'Secondary Email',
+'Time Zone'=>'Time Zone',
 	
 );
 

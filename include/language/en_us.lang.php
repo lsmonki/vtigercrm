@@ -574,7 +574,6 @@ $app_strings = array (
 'LBL_NO' => 'No',
 'LBL_FOUND' => 'Found',
 'LBL_YOU_CAN_CREATE' => 'You can Create',
-'LBL_NOW' => 'now',
 'LBL_CLICK_THE_LINK' => 'Click the link below',
 'LBL_CREATE' => 'Create',
 'LBL_A' => 'a',
@@ -689,7 +688,7 @@ $app_strings = array (
 'Dear_Team_Time_to_Party' => '<br>Congratulations!Time to Party! <br>We closed a deal worth more than 10000!!!!<br> Time to hit the dance floor!<br>',
 'Task_Not_completed' => 'Task Not completed',
 'Too_many_pending_tickets' => 'Too many pending tickets',
-'Dear_Admin_too_ many_tickets_pending' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
+'Dear_Admin_too_many_tickets_pending' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
 
 //Added for java script alerts
 'DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected ',
@@ -946,7 +945,6 @@ $app_strings = array (
 'LBL_DATA_IN_CURRENT_PAGE'=>'Export data in current page',
 'LBL_ONLY_SELECTED_RECORDS'=>'Export selected records',
 'LBL_YES'=>'Yes',
-'LBL_NO'=>'No',
 'Planned'=>'Planned',
 'Held'=>'Held',
 'Not Held'=>'Not Held',
@@ -1292,7 +1290,19 @@ $app_strings = array (
 'LBL_LAST_SCAN_AT' => 'Last Scan @',
 'LBL_TIME_TAKEN' => 'Time taken',
 'LBL_SHORT_SECONDS' => 'sec',
-	
+
+//Added missing labels in the vtigercrm
+'Projects' => 'Projects',
+'End Time' => 'End Time',
+'Start Time' => 'Start Time',
+'Email2' => 'Email2',
+'Comments' => 'Comments',
+'Issued Date' => 'Issued Date',
+'Shipping & Handling Charges' => 'Shipping & Handling Charges',
+'Shipping & Handling Tax:' => 'Shipping & Handling Tax:',
+'Quantity' => 'Quantity',
+'Net Total' => 'Net Total',
+'Send SMS' => 'Send SMS',
 );
 
 $app_list_strings = array (

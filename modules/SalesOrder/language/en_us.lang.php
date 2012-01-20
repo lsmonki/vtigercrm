@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header$
- * Description:  Defines the English language pack 
+ * Description:  Defines the English language pack for Sales Order
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -195,7 +195,6 @@ $mod_strings = Array(
 'Tax Type'=>'Tax Type',
 'Discount Percent'=>'Discount Percent',
 'Discount Amount'=>'Discount Amount',
-'Terms & Conditions'=>'Terms & Conditions',
 'S&H Amount'=>'S&H Amount',
 
 //Added after 5.0.4 GA
@@ -210,6 +209,10 @@ $mod_strings = Array(
 'Invoice Status' => 'Invoice Status',
 
 'SINGLE_SalesOrder'=>'Sales Order',
+'Net 30 days' => 'Net 30 days',
+'Net 45 days' => 'Net 45 days',
+'Net 60 days' => 'Net 60 days',
+
 );
 
 ?>

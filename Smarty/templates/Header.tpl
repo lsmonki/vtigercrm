@@ -91,9 +91,30 @@
 		<td class=small nowrap>
 			<table border=0 cellspacing=0 cellpadding=0>
 			 <tr>
-			
-			{* vtlib customization: Header links on the top panel *}
-			{if $HEADERLINKS}
+{* ondemand customization: Header links on the top panel *}
+{if $ONDEMANDLINKS}
+				<td class="small"  onmouseover="fnDropDown(this,'ondemand_sub');" onmouseout="fnHideDrop('ondemand_sub');" align="center" valign="bottom" nowrap style="padding: 1em;"><a href="{$ONDEMANDLINKS[0]->linkurl}">{'OD Settings'|@getTranslatedString:'Ondemand'}</a><img src="themes/images/menuDnArrow.gif" border=0 style="padding: 0px;padding-left:5px">
+				<div class="drop_mnu" id="ondemand_sub" onmouseout="fnHideDrop('ondemand_sub')" onmouseover="fnShowDrop('ondemand_sub')">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	{foreach item=ONDEMANDLINK from=$ONDEMANDLINKS}
+		{assign var="headerlink_href" value=$ONDEMANDLINK->linkurl}
+		{assign var="headerlink_label" value=$ONDEMANDLINK->linklabel}
+		{if $headerlink_label eq ''}
+			{assign var="headerlink_label" value=$headerlink_href}
+		{else}
+			{* Pickup the translated label provided by the module *}
+			{assign var="headerlink_label" value=$headerlink_label|@getTranslatedString:$ONDEMANDLINK->module()}
+		{/if}
+
+						<tr><td><a href="{$headerlink_href}" class="drop_down">{$headerlink_label|@getTranslatedString:$MODULE}</a></td></tr>
+	{/foreach}
+					</table>
+				</div>
+			</td>
+{/if}
+{* END *}
+{* vtlib customization: Header links on the top panel *}
+{if $HEADERLINKS}
 			<td style="padding-left:10px;padding-right:5px" class=small nowrap>
 				<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_headerLinksLay');" onclick="fnvshobj(this,'vtlib_headerLinksLay');">{$APP.LBL_MORE}</a> <img src="{'arrow_down.gif'|@vtiger_imageurl:$THEME}" border=0>
 				<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_headerLinksLay"
@@ -654,7 +675,7 @@ function getFormValidate(divValidate)
 	   		{assign var="moduleaction" value=$modules[2]}
 	   	{/if}
 		
-		<tr><td><a href="index.php?module={$modules.0}&action={$moduleaction}&parenttab={$parenttab}" class="drop_down">{$modulelabel}</a></td></tr>
+		<tr><td><a href="index.php?module={$modules.0}&action={$moduleaction}&parenttab={$parenttab}" class="drop_down">{$modulelabel|@getTranslatedString:$MODULE}</a></td></tr>
 		{/foreach}
 	</table>
 </div>

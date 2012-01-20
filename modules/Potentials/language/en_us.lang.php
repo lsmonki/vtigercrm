@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/language/en_us.lang.php,v 1.18 2005/04/28 14:05:53 ray Exp $
- * Description:  Defines the English language pack for the Account module.
+ * Description:  Defines the English language pack for the Potentials module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..

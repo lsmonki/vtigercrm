@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header$
- * Description:  Defines the English language pack 
+ * Description:  Defines the English language pack for Quotes module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -177,7 +177,6 @@ $mod_strings = Array(
 'Tax Type'=>'Tax Type',
 'Discount Percent'=>'Discount Percent',
 'Discount Amount'=>'Discount Amount',
-'Terms & Conditions'=>'Terms & Conditions',
 'Adjustment'=>'Adjustment',
 'S&H Amount'=>'S&H Amount',
 
@@ -185,6 +184,7 @@ $mod_strings = Array(
 'Quote No'=>'Quote No',
 
 'SINGLE_Quotes'=>'Quote',
+'Add Service Contract'=>'Add Service Contract',
 );
 
 ?>

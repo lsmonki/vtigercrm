@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header$
- * Description:  Defines the English language pack 
+ * Description:  Defines the English language pack for Puchase Order
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -190,7 +190,6 @@ $mod_strings = Array(
 'Tax Type'=>'Tax Type',
 'Discount Percent'=>'Discount Percent',
 'Discount Amount'=>'Discount Amount',
-'Terms & Conditions'=>'Terms & Conditions',
 'Adjustment'=>'Adjustment',
 'Sub Total'=>'Sub Total',
 'S&H Amount'=>'S&H Amount',

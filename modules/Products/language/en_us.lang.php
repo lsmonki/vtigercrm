@@ -216,6 +216,8 @@ $mod_strings = Array(
 // END
 
 'LBL_NO_TAXES_ASSOCIATED'=>'No taxes associated with this product',
+'Parent Product' => 'Parent Product',
+
 );
 
 ?>

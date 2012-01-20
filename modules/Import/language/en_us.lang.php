@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header$
- * Description:  Defines the English language pack for the Account module.
+ * Description:  Defines the English language pack for the Import module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -37,7 +37,6 @@ $mod_strings = Array(
 'LBL_SELECT_FILE'=>'Select file:',
 'LBL_CUSTOM'=>'Custom',
 'LBL_DONT_MAP'=>'-- Do not map this field --',
-'LBL_STEP_1_TITLE'=>'Step 1 of 4: Select Data Source',
 'LBL_WHAT_IS'=>'Please select a data source from the following:',
 'LBL_MICROSOFT_OUTLOOK'=>'Microsoft Outlook',
 'LBL_ACT'=>'Act!',

@@ -30,7 +30,7 @@
 
  * $Header: /advent/projects/custprojects/vtigercrm/vtigersupport/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.2 2007/07/06 09:55:40 rajeshkannan Exp $
 
- * Description:  Defines the English language pack
+ * Description:  Defines the English language pack for Settings
 
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
 
@@ -161,10 +161,6 @@ $mod_strings = Array(
 'Events'=>'Event',
 
 'Activities'=>'Task',
-
-
-
-
 
 'CustomFields'=>' Custom Fields',
 
@@ -1246,5 +1242,7 @@ $mod_strings = Array(
 'Settings' => 'Settings',
 'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'This tax is already available.',
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
+'Configuration Editor'=>'Configuration Editor',
+
 );
 ?>

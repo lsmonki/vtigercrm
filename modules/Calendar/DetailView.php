@@ -143,10 +143,10 @@ $data['endhr'] = $time_arr['endhour'];
 $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
-if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
-        $data['sendnotification'] = $mod_strings['LBL_YES'];
+if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == strtolower($mod_strings['LBL_YES'])) 
+	$data['sendnotification'] = $mod_strings['LBL_YES'];
 else
-        $data['sendnotification'] = $mod_strings['LBL_NO'];
+	$data['sendnotification'] = $mod_strings['LBL_NO'];
 $data['subject'] = $finaldata['subject'];
 $data['date_start'] = $stdate;
 $data['due_date'] = $enddate;

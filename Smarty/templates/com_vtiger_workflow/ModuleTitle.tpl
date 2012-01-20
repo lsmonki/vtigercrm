@@ -4,8 +4,8 @@
 			<img width="48" height="48" border="0" src="{'settingsWorkflow.png'|@vtiger_imageurl:$THEME}"/>
 		</td>
 		<td valign="bottom" class="heading2">
-			<b><a href="index.php?module=Settings&amp;action=index&amp;parenttab=Settings">Settings</a> > 
-				<a href="index.php?module={$module->name}&amp;action=workflowlist&amp;parenttab=Settings">{$MODULE_NAME}</a> > {$PAGE_NAME} </b>
+			<b><a href="index.php?module=Settings&amp;action=index&amp;parenttab=Settings">{'Settings'|@getTranslatedString:$MODULE}</a> >
+				<a href="index.php?module={$module->name}&amp;action=workflowlist&amp;parenttab=Settings">{$MODULE_NAME|@getTranslatedString:$MODULE_NAME}</a> > {$PAGE_NAME} </b>
 		</td>
 	</tr>
 	<tr>
