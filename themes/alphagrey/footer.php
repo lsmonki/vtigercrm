@@ -21,7 +21,9 @@
 global $app_strings;
 ?>
 <!--end body panes-->
-</td></tr>
+</td>
+<td><img src="themes/alphagrey/images/showPanelTopRight.gif"></td>
+</tr>
 <tr><td colspan="2" align="center">
 </td></tr></table>
 </body>

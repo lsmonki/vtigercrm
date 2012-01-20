@@ -1965,8 +1965,8 @@ textarea {
 }
 
 .reportGenerateTable{
-    background-image:url(images/layerPopupBg.gif);
-    border:2px dotted #a5b5ee;
+	background-image:url(images/layerPopupBg.gif);
+	border:2px dotted #a5b5ee;
 }
 
 .reportCreateBottom{
@@ -2543,3 +2543,11 @@ input {
     padding: 5px;
 }
 /* Mail Manager ends */
+
+.documentModuleFolderView{
+	padding-bottom:5px;
+}
+
+.filterTable{
+	background-color: #adc1ff;
+}

@@ -210,7 +210,7 @@ function alphabetic(module,url,dataid)
 	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="display: block;position:relative;">
 <form name="basicSearch" method="post" action="index.php" onSubmit="return callSearch('Basic');">
-<table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
+<table width="98%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
 		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
@@ -253,13 +253,13 @@ function alphabetic(module,url,dataid)
 <!-- ADVANCED SEARCH -->
 <div id="advSearch" style="display:none;">
 <form name="advSearch" method="post" action="index.php" onSubmit="return callSearch('Advanced');">
-	<table  cellspacing=0 cellpadding=5 width=80% class="searchUIAdv1 small" align="center" border=0>
+	<table  cellspacing=0 cellpadding=5 width=98% class="searchUIAdv1 small" align="center" border=0>
 		<tr>
 			<td class="searchUIName small" nowrap align="left"><span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
 			<td class="small" align="right" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 		</tr>
 	</table>
-	<table cellpadding="2" cellspacing="0" width="80%" align="center" class="searchUIAdv2 small" border=0>
+	<table cellpadding="2" cellspacing="0" width="98%" align="center" class="searchUIAdv2 small" border=0>
 		<tr>
 			<td align="center" class="small" width=90%>
 				{include file='AdvanceFilter.tpl' SOURCE='customview' COLUMNS_BLOCK=$FIELDNAMES}
@@ -267,7 +267,7 @@ function alphabetic(module,url,dataid)
 		</tr>
 	</table>
 		
-	<table border=0 cellspacing=0 cellpadding=5 width=80% class="searchUIAdv3 small" align="center">
+	<table border=0 cellspacing=0 cellpadding=5 width=98% class="searchUIAdv3 small" align="center">
 		<tr>
 			<td align="center" class="small"><input type="button" class="crmbutton small create" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="callSearch('Advanced');">
 			</td>
@@ -318,6 +318,46 @@ function alphabetic(module,url,dataid)
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr >
 		      <td>
+                            <table class="filterTable" width="100%">
+                                <tr>
+                                    <td class="small" nowrap width="25%">
+						{$recordListRange}
+					</td>
+					
+				 <td align="center">
+				   <table border=0 cellspacing=0 cellpadding=0 class="small">
+					<tr>
+						<td style="padding-left:5px;padding-right:5px">
+                                    <b><font size =2 color="#33338C">{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                        </td>
+                        <td>
+                            {if $ALL eq 'All'}
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+								<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+								<span class="small">|</span>
+                            	<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
+						    {else}
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+                                <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+                                <span class="small">|</span>
+								<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
+						    {/if}
+							{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+								<span class="small">|</span>
+							   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+							{/if}
+						</td>
+					</tr>
+				   </table>
+				 </td><!-- Page Navigation -->
+					<td nowrap width="25%" align="right">
+						<table border=0 cellspacing=0 cellpadding=0 class="small">
+							<tr>{$NAVIGATION}</tr>
+						</table>
+	                </td>
+                        </tr></table>
 		         <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 			      <tr>
 				 <td style="padding-right:20px" nowrap>
@@ -383,44 +423,6 @@ function alphabetic(module,url,dataid)
 						{/if}
 						{* END *}
                     </td>
-					<td class="small" nowrap>
-						{$recordListRange}
-					</td>
-					<!-- Page Navigation -->
-					<td nowrap width="30%" align="center">
-						<table border=0 cellspacing=0 cellpadding=0 class="small">
-							<tr>{$NAVIGATION}</tr>
-						</table>
-	                </td>
-				 <td width="100%" align="right">
-				   <table border=0 cellspacing=0 cellpadding=0 class="small">
-					<tr>
-						<td>{$APP.LBL_VIEW}</td>
-						<td style="padding-left:5px;padding-right:5px">
-                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
-                        </td>
-                        <td>
-                            {if $ALL eq 'All'}
-								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-								<span class="small">|</span>
-								<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
-								<span class="small">|</span>
-                            	<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
-						    {else}
-								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-								<span class="small">|</span>
-                                <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-                                <span class="small">|</span>
-								<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
-						    {/if}
-							{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
-								<span class="small">|</span>	
-							   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
-							{/if}
-						</td>
-					</tr>
-				   </table>
-				 </td>	
        		       </tr>
 			 </table>
                          <div  class="calDIV" style="overflow:auto;">
@@ -540,15 +542,6 @@ function alphabetic(module,url,dataid)
 						{/if}
 						{* END *}
                     </td>
-					<td class="small" nowrap>
-						{$recordListRange}
-					</td>
-					<!-- Page Navigation -->
-					<td nowrap width="30%" align="center">
-						<table border=0 cellspacing=0 cellpadding=0 class="small">
-							<tr>{$NAVIGATION}</tr>
-						</table>
-	                </td>
 				 <td align="right" width=100%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
@@ -557,6 +550,17 @@ function alphabetic(module,url,dataid)
 				   </table>
 				 </td>
 			      </tr>
+                              <tr>
+                                    <td class="small" nowrap width="50%">
+						{$recordListRange}
+                                    </td>
+                                    <!-- Page Navigation -->
+                                    <td nowrap width="50%" align="right">
+					<table border=0 cellspacing=0 cellpadding=0 class="small">
+                                    		<tr>{$NAVIGATION}</tr>
+					</table>
+                                    </td>
+                              </tr>
        		    </table>
 		       </td>
 		   </tr>

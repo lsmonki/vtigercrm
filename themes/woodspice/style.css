@@ -2032,8 +2032,8 @@ textarea {
 }
 
 .reportsListTable {
-    background-color:white;
-    border:2px solid #a3a29f;
+	background-color:white;
+	border:2px solid #a3a29f;
 }
 
 .reportGenerateTable{
@@ -2561,3 +2561,11 @@ input {
     padding: 5px;
 }
 /* Mail Manager ends */
+
+.documentModuleFolderView{
+	padding-bottom:5px;
+}
+
+.filterTable{
+	background-color: #D3D2C1;
+}

@@ -4399,7 +4399,7 @@ function getTableHeaderSimpleNavigation($navigation_array, $url_qry,$module='',$
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	if($module == 'Documents') {
-		$output = '<td class="mailSubHeader" width="100%" align="center">';
+		$output = '<td class="mailSubHeader" width="40%" align="right">';
 	} else {
 		$output = '<td align="right" style="padding: 5px;">';
 	}

@@ -29,42 +29,101 @@
 				<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 				<tr>
 				<td>
-				<!-- List View's Buttons and Filters starts -->
-		        <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
-			    <tr>
-				<!-- Buttons -->
-				<td style="padding-right:20px" nowrap>
+					<!-- List View's Buttons and Filters starts -->
+					<table width="100%" class="filterTable">
+						<tr>				
+							<td width="25%" class="small" nowrap>
+										{$recordListRange}
+							</td>
+							<td><table align="center">
+								<tr>
+									<td>
+									   <!-- Filters -->
+									   {if $HIDE_CUSTOM_LINKS neq '1'}
+										<table cellpadding="5" cellspacing="0" class="small">
+											<tr>
+												<td style="padding-left:5px;padding-right:5px" align="center">
+                        										<b><font size =2 color="#33338C">{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                   										</td>
+               
+                            									{if $ALL eq 'All'}
+												<td style="padding-left:5px;padding-right:5px" align="center"><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+													<span class="small">|</span>
+													<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+													<span class="small">|</span>
+													<span class="small" disabled>{$APP.LNK_CV_DELETE}</span>
+												</td>
+						    						{else}
+												<td style="padding-left:5px;padding-right:5px" align="center">
+													<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+													<span class="small">|</span>
+													{if $CV_EDIT_PERMIT neq 'yes'}
+														<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+													{else}
+														<a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+													{/if}
+													<span class="small">|</span>
+													{if $CV_DELETE_PERMIT neq 'yes'}
+														<span class="small" disabled>{$APP.LNK_CV_DELETE}</span>
+													{else}
+													<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
+													{/if}
+													{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+													<span class="small">|</span>	
+									   				<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+													{/if}
+												</td>
+						    						{/if}
+											</tr>
+											</table> 
+				   						<!-- Filters  END-->
+				   						{/if}
+										</td>
+									</td></tr></table>
+								</td>
+							<!-- Page Navigation -->
+							<td nowrap align="right"width="25%">
+								<table border=0 cellspacing=0 cellpadding=0 class="small">
+									<tr>{$NAVIGATION}</tr>
+								</table>
+               						</td>
+						</tr>
+					</table>
+		        		<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
+			   		<tr>
+					<!-- Buttons -->
+					<td style="padding-right:20px" nowrap>
 
-                 {foreach key=button_check item=button_label from=$BUTTONS}
-                    {if $button_check eq 'del'}
-                         <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
-                    {elseif $button_check eq 'mass_edit'}
-                         <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return mass_edit(this, 'massedit', '{$MODULE}', '{$CATEGORY}')"/>
-                    {elseif $button_check eq 's_mail'}
-                         <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
-					{elseif $button_check eq 's_cmail'}
-                         <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
-                    {elseif $button_check eq 'mailer_exp'}
-                         <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
-                    {* Mass Edit handles Change Owner for other module except Calendar *}
-                    {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
-                    	<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
-					{/if}
-                {/foreach}
-                
-                {* vtlib customization: Custom link buttons on the List view basic buttons *}
-				{if $CUSTOM_LINKS && $CUSTOM_LINKS.LISTVIEWBASIC}
-					{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.LISTVIEWBASIC}
-						{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
-						{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
-						{if $customlink_label eq ''}
-							{assign var="customlink_label" value=$customlink_href}
-						{else}
-							{* Pickup the translated label provided by the module *}
-							{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$CUSTOMLINK->module()}
-						{/if}
-						<input class="crmbutton small edit" type="button" value="{$customlink_label}" onclick="{$customlink_href}" />
+					 {foreach key=button_check item=button_label from=$BUTTONS}
+					    {if $button_check eq 'del'}
+						 <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+					    {elseif $button_check eq 'mass_edit'}
+						 <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return mass_edit(this, 'massedit', '{$MODULE}', '{$CATEGORY}')"/>
+					    {elseif $button_check eq 's_mail'}
+						 <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
+								{elseif $button_check eq 's_cmail'}
+						 <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
+					    {elseif $button_check eq 'mailer_exp'}
+						 <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
+					    {* Mass Edit handles Change Owner for other module except Calendar *}
+					    {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
+					    	<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+								{/if}
 					{/foreach}
+				
+						{* vtlib customization: Custom link buttons on the List view basic buttons *}
+								{if $CUSTOM_LINKS && $CUSTOM_LINKS.LISTVIEWBASIC}
+									{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.LISTVIEWBASIC}
+										{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
+										{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
+										{if $customlink_label eq ''}
+											{assign var="customlink_label" value=$customlink_href}
+										{else}
+											{* Pickup the translated label provided by the module *}
+											{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$CUSTOMLINK->module()}
+										{/if}
+										<input class="crmbutton small edit" type="button" value="{$customlink_label}" onclick="{$customlink_href}" />
+									{/foreach}
 				{/if}
 				
 				{* vtlib customization: Custom link buttons on the List view *}
@@ -98,57 +157,7 @@
 				{* END *}
 			
                 </td>
-				<td class="small" nowrap>
-					{$recordListRange}
-				</td>
-				<!-- Page Navigation -->
-				<td nowrap width="30%" align="center">
-					<table border=0 cellspacing=0 cellpadding=0 class="small">
-						<tr>{$NAVIGATION}</tr>
-					</table>
-                </td>
-				<td width=40% align="right">
-				   <!-- Filters -->
-				   {if $HIDE_CUSTOM_LINKS neq '1'}
-					<table border=0 cellspacing=0 cellpadding=0 class="small">
-					<tr>
-						<td>{$APP.LBL_VIEW}</td>
-						<td style="padding-left:5px;padding-right:5px">
-                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
-                            {if $ALL eq 'All'}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-							<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
-							<span class="small">|</span>
-							<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
-						    {else}
-							<td>
-								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-								<span class="small">|</span>
-								{if $CV_EDIT_PERMIT neq 'yes'}
-									<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
-								{else}
-									<a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-								{/if}
-								<span class="small">|</span>
-								{if $CV_DELETE_PERMIT neq 'yes'}
-									<span class="small" disabled>{$APP.LNK_CV_DELETE}</span>
-								{else}
-									<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
-								{/if}
-								{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
-									<span class="small">|</span>	
-								   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
-								{/if}
-							</td>
-						    {/if}
-					</tr>
-					</table> 
-				   <!-- Filters  END-->
-				   {/if}
-
-				</td>	
-       		    </tr>
+       		  </tr>
 			</table>
 			<!-- List View's Buttons and Filters ends -->
 			
@@ -332,14 +341,7 @@
 						{/if}
 						{* END *}
                     </td>
-				<td class="small" nowrap>
-					{$recordListRange}
-				</td>
-				<td nowrap width="30%" align="center">
-				    <table border=0 cellspacing=0 cellpadding=0 class="small">
-				         <tr>{$NAVIGATION}</tr>
-				     </table>
-				 </td>
+				
 				 <td align="right" width=40%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
@@ -350,6 +352,21 @@
 			      </tr>
        		    </table>
 		       </td>
+		   </tr>
+		   <tr>
+		   	<td>
+		   		<table width=="100%">
+		   			<tr>
+		   				<td class="small" nowrap>
+								{$recordListRange}
+							</td>
+							<td nowrap width="50%" align="right">
+				    				<table border=0 cellspacing=0 cellpadding=0 class="small">
+				         			<tr>{$NAVIGATION}</tr>
+				     				</table>
+				 			</td>
+				 		</tr>
+				 	</table>
 		   </tr>
 	    </table>
 
