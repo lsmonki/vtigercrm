@@ -724,11 +724,13 @@ function numValidate(fldName,fldLabel,format,neg) {
 		} else return true
 	} else {
 		// changes made -- to fix the ticket#3272
-		var splitval=val.split(".")
-		var arr_len = splitval.length;
-		var len = 0;
 		if(fldName == "probability" || fldName == "commissionrate")
 		{
+			var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+			var splitval=val.split(".")
+			var arr_len = splitval.length;
+			var len = 0;
+
 			if(arr_len > 1)
 				len = splitval[1].length;
 			if(isNaN(val))
@@ -745,12 +747,14 @@ function numValidate(fldName,fldLabel,format,neg) {
 				return false;
 			}
 		}
-		else if(splitval[0]>18446744073709551615)
-		{
-			alert( fldLabel + alert_arr.EXCEEDS_MAX);
-			return false;
+		else {
+			var splitval=val.split(".")
+			if(splitval[0]>18446744073709551615)
+			{
+				alert( fldLabel + alert_arr.EXCEEDS_MAX);
+				return false;
+			}
 		}
-
 
 		if (neg==true)
 			var re=/^(-|)(\d)*(\.)?\d+(\.\d\d*)*$/
