@@ -733,7 +733,8 @@ $log->info("in getOldFileName  ".$notesid);
     foreach($this->tab_name_index as $table_name=>$index)
     {
 	    $result[$table_name] = $adb->pquery("select * from $table_name where $index=?", array($record));
-	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1) {
+		$isRecordDeleted = $adb->query_result($result["vtiger_crmentity"],0,"deleted");
+		if($isRecordDeleted !== 0 && $isRecordDeleted !== '0') {
 			die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 		}
     }
