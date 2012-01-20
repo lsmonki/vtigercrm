@@ -99,13 +99,12 @@ require_once("VTWorkflowUtils.php");
 			$smarty->assign('trigger', array('days'=>$days, 'direction'=>$direction, 
 			  'field'=>$trigger['field']));
 		}
-		$curr_date="(general : (__VtigerMeta__) date)";
-		$curr_time='(general : (__VtigerMeta__) time)';
+		$metaVariables = $task->getMetaVariables();
 		
 		$date = new DateTimeField(null);
 		$time = substr($date->getDisplayTime(), 0, 5);
-		$smarty->assign("DATE",$curr_date);
-		$smarty->assign("TIME",$curr_time);
+		$smarty->assign("META_VARIABLES",$metaVariables);
+		$smarty->assign("SYSTEM_TIMEZONE",$db_timezone);
 		$smarty->assign("USER_TIME",$task->formatTimeForTimePicker($time));
 		$smarty->assign("USER_DATE", $date->getDisplayDate());
 		$smarty->assign("MOD", array_merge(

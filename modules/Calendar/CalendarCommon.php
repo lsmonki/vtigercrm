@@ -416,42 +416,6 @@ function formatUserTimeString($datetime,$fmt){
 	}
 	return $timeStr;
 }
-//added to fix Ticket#3068
-function getEventNotification($mode,$subject,$desc)
-{
-	global $current_user,$adb;
-	require_once("modules/Emails/mail.php");
-	$subject = $mode.' : '.$subject;
-	$crmentity = new CRMEntity();
-	if(getUserName($desc['user_id']))
-	{
-		$to_email = getUserEmailId('id',$desc['user_id']);
-		$description = getActivityDetails($desc,$desc['user_id']);
-		print_r($description);
-		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-	}
-	else
-	{
-		$groupid = $desc['user_id'];
-		require_once('include/utils/GetGroupUsers.php');
-		$getGroupObj=new GetGroupUsers();
-		$getGroupObj->getAllUsersInGroup($groupid);
-		$userIds=$getGroupObj->group_users;
-		if (count($userIds) > 0) {
-			$groupqry="select email1,id from vtiger_users where id in(".generateQuestionMarks($userIds).")";
-			$groupqry_res=$adb->pquery($groupqry, array($userIds));
-			$noOfRows = $adb->num_rows($groupqry_res);
-			for($z=0;$z < $noOfRows;$z++)
-			{
-				$emailadd = $adb->query_result($groupqry_res,$z,'email1');
-				$curr_userid = $adb->query_result($groupqry_res,$z,'id');
-				$description = getActivityDetails($desc,$curr_userid);
-				$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
-	
-			}
-		}
-	}
-}
 
 function sendInvitation($inviteesid,$mode,$subject,$desc)
 {

@@ -1795,6 +1795,7 @@
 		<field name="version_id" type="I" size="11" />
 		<field name="hours" type="C" size="200" />
 		<field name="days" type="C" size="200" />
+		<field name="from_portal" type="C" size="3" />
 
 		<index name="troubletickets_ticketid_idx">
 			<col>ticketid</col>

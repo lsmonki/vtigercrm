@@ -221,6 +221,8 @@ $mod_strings = Array(
 
 'Hours' => 'Hours',
 'Days' => 'Days',
+
+'From Portal' => 'From Portal',
 );
 
 ?>

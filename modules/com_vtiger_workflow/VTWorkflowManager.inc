@@ -28,17 +28,17 @@
 			if(isset($workflow->id)){
 				$wf=$workflow;
 				$adb->pquery("update com_vtiger_workflows set
-								module_name=?, summary=?, test=?, execution_condition=?
+								module_name=?, summary=?, test=?, execution_condition=?, defaultworkflow=?
 								where workflow_id=?", 
-					array($wf->moduleName, $wf->description, $wf->test, $wf->executionCondition, $wf->id));
+					array($wf->moduleName, $wf->description, $wf->test, $wf->executionCondition, $wf->defaultworkflow, $wf->id));
 			}else{
 				$workflowId = $adb->getUniqueID("com_vtiger_workflows");
 				$workflow->id = $workflowId;
 				$wf=$workflow;
 				$adb->pquery("insert into com_vtiger_workflows 
-								(workflow_id, module_name, summary, test, execution_condition, type)
-								values (?,?,?,?,?,?)",
-					array($workflowId, $wf->moduleName, $wf->description, $wf->test,  $wf->executionCondition, $wf->type));
+								(workflow_id, module_name, summary, test, execution_condition, type, defaultworkflow)
+								values (?,?,?,?,?,?,?)",
+					array($workflowId, $wf->moduleName, $wf->description, $wf->test,  $wf->executionCondition, $wf->type, $wf->defaultworkflow));
 			}
 		}
 		
@@ -112,7 +112,7 @@
 		 */
 		function retrieve($id){
 			$adb=$this->adb;
-			$result = $adb->pquery("select workflow_id, module_name, summary, test, execution_condition, type
+			$result = $adb->pquery("select workflow_id, module_name, summary, test, execution_condition, type, defaultworkflow
 									from com_vtiger_workflows where workflow_id=?", 
 						array($id));
 			
@@ -128,8 +128,10 @@
 		
 		function delete($id){
 			$adb=$this->adb;
-			$adb->pquery("delete from com_vtiger_workflowtasks where workflow_id=?", array($id));
-			$adb->pquery("delete from com_vtiger_workflows where workflow_id=?", array($id));
+			$adb->pquery("DELETE FROM com_vtiger_workflowtasks WHERE workflow_id IN 
+							(SELECT workflow_id FROM com_vtiger_workflows WHERE workflow_id=? AND (defaultworkflow IS NULL OR defaultworkflow != 1))",
+						array($id));
+			$adb->pquery("DELETE FROM com_vtiger_workflows WHERE workflow_id=? AND (defaultworkflow IS NULL OR defaultworkflow != 1)", array($id));
 		}
 		
 		function newWorkflow($moduleName){

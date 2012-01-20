@@ -815,25 +815,9 @@ function create_ticket($input_array)
 	$userid = getPortalUserid();
 		
 	$ticket->column_fields['assigned_user_id']=$userid;
+	$ticket->column_fields['from_portal'] = 1;
 
 	$ticket->save("HelpDesk");
-
-	$subject = "[From Portal] " .$ticket->column_fields['ticket_no']." [ Ticket ID : $ticket->id ] ".$title;
-	$contents = ' Ticket No : '.$ticket->column_fields['ticket_no']. '<br> Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
-
-	//get the contact email id who creates the ticket from portal and use this email as from email id in email
-	$result = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($parent_id));
-	$contact_email = $adb->query_result($result,0,'email');
-	$from_email = $contact_email;
-
-	//send mail to assigned to user
-	$to_email = getUserEmailId('id',$userid);
-	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
-	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
-
-	//send mail to the customer(contact who creates the ticket from portal)
-	$adb->println("Send mail to the customer(contact) who creates the portal ticket");
-	$mail_status = send_mail('Contacts',$contact_email,'',$from_email,$subject,$contents);
 
 	$ticketresult = $adb->pquery("select vtiger_troubletickets.ticketid from vtiger_troubletickets
 		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid 
@@ -874,7 +858,7 @@ function create_ticket($input_array)
 	*/
 function update_ticket_comment($input_array)
 {
-	global $adb,$mod_strings;
+	global $adb,$mod_strings,$current_user;
 	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
 
@@ -884,44 +868,22 @@ function update_ticket_comment($input_array)
 	$ownerid = (int) $input_array['ownerid'];
 	$comments = $input_array['comments'];
 
+	$user = new Users();
+	$userid = getPortalUserid();
+	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
+
 	if(!validateSession($id,$sessionid))
 		return null;
 
-	$servercreatedtime = $adb->formatDate(date('YmdHis'), true);
-	if(trim($comments) != '')
-	{
-		$sql = "insert into vtiger_ticketcomments values(?,?,?,?,?,?)";
-		$params1 = array('', $ticketid, $comments, $ownerid, 'customer', $servercreatedtime);
-		$adb->pquery($sql, $params1);
+	if(trim($comments) != '') {
 
-		$updatequery = "update vtiger_crmentity set modifiedtime=? where crmid=?";
-		$updateparams = array($servercreatedtime, $ticketid);
-		$adb->pquery($updatequery, $updateparams);
-
-		//To get the username and user email id, user means assigned to user of the ticket
-		$result = $adb->pquery("select user_name, email1 from vtiger_users inner join vtiger_crmentity on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.crmid=?", array($ticketid));
-		$owner = $adb->query_result($result,0,'user_name');
-		$to_email = $adb->query_result($result,0,'email1');
-
-		//To get the contact name
-		$result1 = $adb->pquery("select lastname, firstname, email from vtiger_contactdetails where contactid=?", array($ownerid));
-		$customername = $adb->query_result($result1,0,'firstname').' '.$adb->query_result($result1,0,'lastname');
-		$customername = decode_html($customername);//Fix to display the original UTF-8 characters in sendername instead of ascii characters
-		$from_email = $adb->query_result($result1,0,'email');
-
-		//send mail to the assigned to user when customer add comment
-		$subject = $mod_strings['LBL_RESPONDTO_TICKETID']."##". $ticketid."##". $mod_strings['LBL_CUSTOMER_PORTAL'];
-		$contents = $mod_strings['Dear']." ".$owner.","."<br><br>"
-		.$mod_strings['LBL_CUSTOMER_COMMENTS']."<br><br>
-
-		<b>".nl2br($comments)."</b><br><br>"
-
-		.$mod_strings['LBL_RESPOND']."<br><br>"
-
-		.$mod_strings['LBL_REGARDS']."<br>"
-		.$mod_strings['LBL_SUPPORT_ADMIN'];
-
-		$mailstatus = send_mail('HelpDesk',$to_email,$customername,$from_email,$subject,$contents);
+		$ticket = CRMEntity::getInstance('HelpDesk');
+		$ticket->retrieve_entity_info($ticketid, 'HelpDesk');
+		$ticket->id = $ticketid;
+		$ticket->mode = 'edit';
+		$ticket->column_fields['comments'] = $comments;
+		$ticket->column_fields['from_portal'] = 1;
+		$ticket->save('HelpDesk');
 	}
 }
 

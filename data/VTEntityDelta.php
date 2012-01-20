@@ -26,12 +26,20 @@ class VTEntityDelta extends VTEventHandler {
 		
 		if($eventName == 'vtiger.entity.beforesave') {
 			if(!empty($recordId)) {
-				self::$oldEntity[$moduleName][$recordId] = VTEntityData::fromEntityId($adb, $recordId);
+				$entityData = VTEntityData::fromEntityId($adb, $recordId);
+				if($moduleName == 'HelpDesk') {
+					$entityData->set('comments', getTicketComments($recordId));
+				}
+				self::$oldEntity[$moduleName][$recordId] = $entityData;
 			}
 		}
 
 		if($eventName == 'vtiger.entity.aftersave'){
-			self::$newEntity[$moduleName][$recordId] = VTEntityData::fromEntityId($adb, $recordId);
+			$entityData = VTEntityData::fromEntityId($adb, $recordId);
+			if($moduleName == 'HelpDesk') {
+				$entityData->set('comments', getTicketComments($recordId));
+			}
+			self::$newEntity[$moduleName][$recordId] = $entityData;
 			$this->computeDelta($moduleName, $recordId);
 		}
 	}

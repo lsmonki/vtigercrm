@@ -69,6 +69,19 @@ class VTWorkflowEntity{
 	function save(){
 		vtws_update($this->data,$this->user);
 	}
+
+	function isNew() {
+		$wsId = $this->data['id'];
+		$parts = explode('x', $wsId);
+		$recordId = $parts[1];
+		$entityDelta = new VTEntityDelta();
+		$oldEntity = $entityDelta->getOldEntity($this->moduleName, $recordId);
+		if($oldEntity == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }
 

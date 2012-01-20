@@ -69,6 +69,15 @@ $mod_strings = array(
 
 'LBL_WORKFLOW_NOTE_EVENT_TASK_TIMEZONE' => 'Note: All the date, time and recurring information configured for the event,
 													will be with respect to default time zone, configured in config.inc.php',
+
+'Select Meta Variables' => 'Select Meta Variables',
+'Current Date' => 'Current Date',
+'Current Time' => 'Current Time',
+'System Timezone' => 'System Timezone',
+'CRM Detail View URL' => 'CRM Detail View URL',
+'Portal Detail View URL' => 'Portal Detail View URL',
+'Site Url' => 'Site Url',
+'Portal Url' => 'Portal Url',
 	
 );
 

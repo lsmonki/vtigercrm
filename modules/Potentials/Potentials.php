@@ -748,10 +748,6 @@ class Potentials extends CRMEntity {
 			$this->db->pquery($sql, $params);
 		}
 	}
-	function whomToSendMail($module,$insertion_mode,$assigntype)
-	{
- 	//do not send any mail	
-	}
 	
 }
 ?>

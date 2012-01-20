@@ -70,13 +70,6 @@ class CRMEntity
 		
 		//Calling the Module specific save code
 		$this->save_module($module);
-	
-		$assigntype=vtlib_purify($_REQUEST['assigntype']);
-		if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
-			if($module != "Calendar" && $module != "Accounts" && $module != "Contacts"){
-				$this->whomToSendMail($module,$this ->mode,$assigntype);
-			}
-		}
 		
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
@@ -679,40 +672,21 @@ class CRMEntity
 
   }
 
-function whomToSendMail($module,$insertion_mode,$assigntype)
-{
- 	global $adb;
-   	if($insertion_mode!="edit")
-   	{
-		if($assigntype=='U')
-		{
-			sendNotificationToOwner($module,$this);
-		}
-       	elseif($assigntype=='T')
-       	{
-			$groupid=vtlib_purify($_REQUEST['assigned_group_id']);
-			sendNotificationToGroups($groupid,$this->id,$module);
-       	}
-   	}
-}
+/** Function to delete a record in the specifed table 
+  * @param $table_name -- table name:: Type varchar
+  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
+ */
+function deleteRelation($table_name) {
+	global $adb;
+	$check_query = "select * from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+	$check_result=$adb->pquery($check_query, array($this->id));
+	$num_rows = $adb->num_rows($check_result);
 
-
-	/** Function to delete a record in the specifed table 
-  	  * @param $table_name -- table name:: Type varchar
-	  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
- 	 */
-function deleteRelation($table_name)
-{
-         global $adb;
-         $check_query = "select * from $table_name where ". $this->tab_name_index[$table_name] ."=?";
-         $check_result=$adb->pquery($check_query, array($this->id));
-         $num_rows = $adb->num_rows($check_result);
-
-         if($num_rows == 1)
-         {
-                $del_query = "DELETE from $table_name where ". $this->tab_name_index[$table_name] ."=?";
-                $adb->pquery($del_query, array($this->id));
-         }
+	if($num_rows == 1)
+	{
+		$del_query = "DELETE from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+		$adb->pquery($del_query, array($this->id));
+	}
 
 }
 	/** Function to attachment filename of the given entity 
@@ -863,6 +837,7 @@ $log->info("in getOldFileName  ".$notesid);
 		
 		//Event triggering code
 		$em->triggerEvent("vtiger.entity.aftersave", $entityData);
+		$em->triggerEvent("vtiger.entity.aftersave.final", $entityData);
 		//Event triggering code ends
 	}
   

@@ -2116,126 +2116,6 @@ function QuickCreate($module)
 	return $form_data;
 }
 
-/**	Function to send the Notification mail to the assigned to owner about the entity creation or updation
-  *	@param string $module -- module name
-  *	@param object $focus  -- reference of the object
-**/
-function sendNotificationToOwner($module,$focus)
-{
-	global $log,$app_strings;
-	$log->debug("Entering sendNotificationToOwner(".$module.",".get_class($focus).") method ...");
-	require_once("modules/Emails/mail.php");
-	global $current_user;
-
-	$ownername = getUserName($focus->column_fields['assigned_user_id']);
-	$ownermailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
-	$recseqnumber = '';
-
-	if($module == 'Contacts')
-	{
-		$objectname = $focus->column_fields['lastname'].' '.$focus->column_fields['firstname'];
-		$recseqnumber=$focus->column_fields['contact_no'];
-		$mod_name = 'Contact';
-		$object_column_fields = array(
-						'lastname'=>'Last Name',
-						'firstname'=>'First Name',
-						'leadsource'=>'Lead Source',
-						'department'=>'Department',
-						'description'=>'Description',
-					     );
-	}
-	if($module == 'Accounts')
-	{
-		$objectname = $focus->column_fields['accountname'];
-		$recseqnumber=$focus->column_fields['account_no'];
-		$mod_name = 'Account';
-		$object_column_fields = array(
-						'accountname'=>'Account Name',
-						'rating'=>'Rating',
-						'industry'=>'Industry',
-						'accounttype'=>'Account Type',
-						'description'=>'Description',
-					     );
-	}
-	if($module == 'Potentials')
-	{
-		$objectname = $focus->column_fields['potentialname'];
-		$recseqnumber=$focus->column_fields['potential_no'];
-		$mod_name = 'Potential';
-		$object_column_fields = array(
-						'potentialname'=>'Potential Name',
-						'amount'=>'Amount',
-						'closingdate'=>'Expected Close Date',
-						'opportunity_type'=>'Type',
-						'description'=>'Description',
-			      		     );
-	}
-
-	if($module == "Accounts" || $module == "Potentials" || $module == "Contacts")
-	{
-		$description = $app_strings['MSG_DEAR'].' '.$ownername.',<br><br>';
-
-		if(!empty($recseqnumber)) $recseqnumber = "[$recseqnumber]";
-
-		if($focus->mode == 'edit')
-		{
-			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_UPDATION']." $recseqnumber ".$objectname;
-			$description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_UPDATED'].'.';
-		}
-		else
-		{
-			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_ASSIGNMENT']." $recseqnumber ".$objectname;
-		        $description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_ASSIGNED_TO_YOU'].'.';
-		}
-		$description .= '<br>'.$app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_DETAILS_ARE'].':<br><br>';
-                $description .= $mod_name.' '.$app_strings['MSG_ID'].' '.'<b>'.$focus->id.'</b><br>';
-		foreach($object_column_fields as $fieldname => $fieldlabel)
-		{
-			//Get the translated string
-			$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
-
-			$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
-		}
-
-		$description .= '<br><br>'.$app_strings['MSG_THANK_YOU'].',<br>'.$current_user->user_name.'.<br>';
-		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
-
-		$log->debug("Exiting sendNotificationToOwner method ...");
-		return $status;
-	}
-}
-
-//Function to send notification to the users of a group
-function sendNotificationToGroups($groupid,$crmid,$module)
-{
-       global $adb,$app_strings,$current_user;
-       $returnEntity=Array();
-       $returnEntity=getEntityName($module,Array($crmid));
-       $mycrmid=$groupid;
-       require_once('include/utils/GetGroupUsers.php');
-       $getGroupObj=new GetGroupUsers();
-       $getGroupObj->getAllUsersInGroup($mycrmid);
-       $userIds=$getGroupObj->group_users;
-	   if (count($userIds) > 0) {
-	       $groupqry="select email1,id,user_name from vtiger_users WHERE status='Active' AND id in(". generateQuestionMarks($userIds) .")";
-	       $groupqry_res=$adb->pquery($groupqry, array($userIds));
-	       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
-	       {
-	               //handle the mail send to vtiger_users
-	               $emailadd = $adb->query_result($groupqry_res,$z,'email1');
-	               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
-	               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
-	               $pmodule = 'Users';
-		       	   $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
-	               require_once('modules/Emails/mail.php');
-	               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$crmid);
-	               $all_to_emailids []= $emailadd;
-	               $mail_status_str .= $emailadd."=".$mail_status."&&&";
-	        }
-		}
-}
-
-
 function getUserslist($setdefval=true)
 {
 	global $log,$current_user,$module,$adb,$assigned_user_id;
@@ -2816,6 +2696,7 @@ function getTicketComments($ticketid)
         $log->debug("Entering getTicketComments(".$ticketid.") method ...");
         global $adb;
 
+		$moduleName = getSalesEntityType($ticketid);
         $commentlist = '';
         $sql = "select * from vtiger_ticketcomments where ticketid=?";
         $result = $adb->pquery($sql, array($ticketid));
@@ -2828,66 +2709,10 @@ function getTicketComments($ticketid)
                 }
         }
         if($commentlist != '')
-                $commentlist = '<br><br>'.$mod_strings["The comments are"].' : '.$commentlist;
+                $commentlist = '<br><br>'.getTranslatedString("The comments are", $moduleName).' : '.$commentlist;
 
         $log->debug("Exiting getTicketComments method ...");
         return $commentlist;
-}
-
-function getTicketDetails($id,$whole_date)
-{
-	 global $adb,$mod_strings;
-	 if($whole_date['mode'] == 'edit')
-	 {
-		$reply = $mod_strings["replied"];
-		$temp = $mod_strings["Re"];
-	 }
-	 else
-	 {
-		$reply = $mod_strings["created"];
-		$temp = " ";
-	 }
-	
-	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br>'.$mod_strings['Ticket Title'].' : '. $temp .' '.$whole_date['sub'];
-	 $desc .= "<br><br>".$mod_strings['Hi']." ". $whole_date['parent_name'].",<br><br>".$mod_strings['LBL_PORTAL_BODY_MAILINFO']." ".$reply." ".$mod_strings['LBL_DETAIL']."<br>";
-	 $desc .= "<br>".$mod_strings['Ticket No']." : ".$whole_date['ticketno'];
-	 $desc .= "<br>".$mod_strings['Status']." : ".$whole_date['status'];
-	 $desc .= "<br>".$mod_strings['Category']." : ".$whole_date['category'];
-	 $desc .= "<br>".$mod_strings['Severity']." : ".$whole_date['severity'];
-	 $desc .= "<br>".$mod_strings['Priority']." : ".$whole_date['priority'];
-	 $desc .= "<br><br>".$mod_strings['Description']." : <br>".$whole_date['description'];
-	 $desc .= "<br><br>".$mod_strings['Solution']." : <br>".$whole_date['solution'];
-	 $desc .= getTicketComments($id);
-
-	 $sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = ?";
-	 $result = $adb->pquery($sql, array($id));
-	 $cffields = $adb->getFieldsArray($result);
-	 foreach ($cffields as $cfOneField)
-	 {
-		 if ($cfOneField != 'ticketid')
-		 {
-			 $cfData = $adb->query_result($result,0,$cfOneField);
-			 $sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ? and vtiger_field.presence in (0,2)";
-			 $cfLabel = $adb->query_result($adb->pquery($sql,array($cfOneField)),0,'fieldlabel');
-			 $desc .= '<br><br>'.$cfLabel.' : <br>'.$cfData;
-		 }
-	 }
-	 // end of contribution
-	 $desc .= '<br><br><br>';
-	 $desc .= '<br>'.$mod_strings["LBL_REGARDS"].',<br>'.$mod_strings["LBL_TEAM"].'.<br>';
-	 return $desc;
-
-}
-
-function getPortalInfo_Ticket($id,$title,$contactname,$portal_url)
-{
-	global $mod_strings;
-	$bodydetails =$mod_strings['Dear']." ".$contactname.",<br><br>";
-        $bodydetails .= $mod_strings['reply'].' <b>'.$title.'</b>'.$mod_strings['customer_portal'];
-        $bodydetails .= $mod_strings["link"].'<br>';
-        $bodydetails .= $portal_url;
-        $bodydetails .= '<br><br>'.$mod_strings["Thanks"].'<br><br>'.$mod_strings["Support_team"];
-	return $bodydetails;
 }
 
 /**
@@ -2910,40 +2735,6 @@ function makeRandomPassword()
 	}
 	$log->debug("Exiting makeRandomPassword method ...");
 	return $pass;
-}
-
-//added to get mail info for portal user
-//type argument included when when addin customizable tempalte for sending portal login details
-function getmail_contents_portalUser($request_array,$password,$type='')
-{
-	global $mod_strings ,$adb;
-
-	$subject = $mod_strings['Customer Portal Login Details'];
-
-	//here id is hardcoded with 5. it is for support start notification in vtiger_notificationscheduler
-
-	$query='select vtiger_emailtemplates.subject,vtiger_emailtemplates.body from vtiger_notificationscheduler inner join vtiger_emailtemplates on vtiger_emailtemplates.templateid=vtiger_notificationscheduler.notificationbody where schedulednotificationid=5';
-
-	$result = $adb->pquery($query, array());
-	$body=$adb->query_result($result,0,'body');
-	$contents=$body;
-	$contents = str_replace('$contact_name$',$request_array['first_name']." ".$request_array['last_name'],$contents);
-	$contents = str_replace('$login_name$',$request_array['email'],$contents);
-	$contents = str_replace('$password$',$password,$contents);
-	$contents = str_replace('$URL$',$request_array['portal_url'],$contents);
-	$contents = str_replace('$support_team$',$mod_strings['Support Team'],$contents);
-	$contents = str_replace('$logo$','<img src="cid:logo" />',$contents);
-
-	if($type == "LoginDetails")
-	{
-		$temp=$contents;
-		$value["subject"]=$adb->query_result($result,0,'subject');
-		$value["body"]=$temp;
-		return $value;
-	}
-
-	return $contents;
-
 }
 
 /**

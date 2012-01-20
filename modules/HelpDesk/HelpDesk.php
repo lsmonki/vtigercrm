@@ -111,7 +111,7 @@ class HelpDesk extends CRMEntity {
 
 
 	function save_module($module)
-	{
+	{	
 		//Inserting into Ticket Comment Table
 		$this->insertIntoTicketCommentTable("vtiger_ticketcomments",'HelpDesk');
 
@@ -126,7 +126,7 @@ class HelpDesk extends CRMEntity {
 				$on_focus = CRMEntity::getInstance($for_module);
 				$on_focus->save_related_module($for_module, $for_crmid, $module, $this->id);
 			}
-		}				
+		}
 	}	
 
 	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
@@ -137,24 +137,26 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
-        	global $adb;
+		global $adb;
 		global $current_user;
 
-        	$current_time = $adb->formatDate(date('YmdHis'), true);
-		if($this->column_fields['assigned_user_id'] != '')
+		$current_time = $adb->formatDate(date('Y-m-d H:i:s'), true);
+		if ($this->column_fields['from_portal'] != 1) {
 			$ownertype = 'user';
-		else
+			$ownerId = $current_user->id;
+		} else {
 			$ownertype = 'customer';
+			$ownerId = $this->column_fields['parent_id'];
+		}
 
-		if($this->column_fields['comments'] != '')
+		if ($this->column_fields['comments'] != '')
 			$comment = $this->column_fields['comments'];
 		else
 			$comment = $_REQUEST['comments'];
 		
-		if($comment != '')
-		{
-			$sql = "insert into vtiger_ticketcomments values(?,?,?,?,?,?)";	
-	        	$params = array('', $this->id, from_html($comment), $current_user->id, $ownertype, $current_time);
+		if ($comment != '') {
+			$sql = "insert into vtiger_ticketcomments values(?,?,?,?,?,?)";
+			$params = array('', $this->id, from_html($comment), $ownerId, $ownertype, $current_time);
 			$adb->pquery($sql, $params);
 		}
 	}
@@ -769,5 +771,80 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		}
 	}
 
+	public static function getTicketEmailContents($entityData) {
+	 $adb = PearDatabase::getInstance();
+		$moduleName = $entityData->getModuleName();
+		$wsId = $entityData->getId();
+		$parts = explode('x', $wsId);
+		$entityId = $parts[1];
+
+		$isNew = $entityData->isNew();
+
+		if (!$isNew) {
+			$reply = getTranslatedString("replied", $moduleName);
+			$temp = getTranslatedString("Re", $moduleName);
+		} else {
+			$reply = getTranslatedString("created", $moduleName);
+			$temp = " ";
+		}
+
+		$wsParentId = $entityData->get('parent_id');
+		$parentIdParts = explode('x', $wsParentId);
+		$parentId = $parentIdParts[1];
+		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
+				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
+				. $entityData->get('ticket_title');
+		$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
+				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
+		$desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticketno');
+		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . " : " . $entityData->get('ticketstatus');
+		$desc .= "<br>" . getTranslatedString('Category', $moduleName) . " : " . $entityData->get('ticketcategories');
+		$desc .= "<br>" . getTranslatedString('Severity', $moduleName) . " : " . $entityData->get('ticketseverities');
+		$desc .= "<br>" . getTranslatedString('Priority', $moduleName) . " : " . $entityData->get('ticketpriorities');
+		$desc .= "<br><br>" . getTranslatedString('Description', $moduleName) . " : <br>" . $entityData->get('description');
+		$desc .= "<br><br>" . getTranslatedString('Solution', $moduleName) . " : <br>" . $entityData->get('solution');
+		$desc .= getTicketComments($entityId);
+
+		$sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = ?";
+		$result = $adb->pquery($sql, array($id));
+		$cffields = $adb->getFieldsArray($result);
+		foreach ($cffields as $cfOneField) {
+			if ($cfOneField != 'ticketid') {
+				$cfData = $adb->query_result($result, 0, $cfOneField);
+				$sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ? and vtiger_field.presence in (0,2)";
+				$cfLabel = $adb->query_result($adb->pquery($sql, array($cfOneField)), 0, 'fieldlabel');
+				$desc .= '<br><br>' . $cfLabel . ' : <br>' . $cfData;
+			}
+		}
+		// end of contribution
+		$desc .= '<br><br><br>';
+		$desc .= '<br>' . getTranslatedString("LBL_REGARDS", $moduleName) . ',<br>' . getTranslatedString("LBL_TEAM", $moduleName) . '.<br>';
+		return $desc;
+	}
+
+	public static function getPortalTicketEmailContents($entityData) {
+		require_once 'config.inc.php';
+		global $PORTAL_URL;
+
+		$moduleName = $entityData->getModuleName();
+		$wsId = $entityData->getId();
+		$parts = explode('x', $wsId);
+		$entityId = $parts[1];
+
+		$wsParentId = $entityData->get('parent_id');
+		$parentIdParts = explode('x', $wsParentId);
+		$parentId = $parentIdParts[1];
+		$portalUrl = "<a href='" . $PORTAL_URL . "/index.php?module=HelpDesk&action=index&ticketid=" . $entityId . "&fun=detail'>"
+				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
+		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName(parentId) . ",<br><br>";
+		$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $entityData->get('ticket_title')
+				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+		$contents .= getTranslatedString("link", $moduleName) . '<br>';
+		$contents .= $portalUrl;
+		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . getTranslatedString("Support_team", $moduleName);
+		return $contents;
+	}
+
 }
+
 ?>
