@@ -76,9 +76,6 @@ if($errormessage!="") {
 	$smarty->assign("ERROR_MESSAGE",$errormessage);
 }
 
-if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
-else
-$smarty->display('CreateView.tpl');
 
 ?>

@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 global $app_strings, $mod_strings, $current_language, $currentModule, $theme;
-
 require_once('Smarty_setup.php');
 
 $focus = CRMEntity::getInstance($currentModule);
@@ -37,12 +36,9 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 }
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view') {
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
-} else {
 	$smarty->assign('BASBLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields, 'BAS'));
 	$smarty->assign('ADVBLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
-}
 
 $smarty->assign('OP_MODE',$disp_view);
 $smarty->assign('APP', $app_strings);

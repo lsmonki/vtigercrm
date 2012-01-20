@@ -72,19 +72,7 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 }
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view') { 
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
-} else {
-	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
-	$adv_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV');
-
-	$blocks['basicTab'] = $bas_block;
-	if(is_array($adv_block))
-		$blocks['moreTab'] = $adv_block;
-
-	$smarty->assign("BLOCKS",$blocks);
-	$smarty->assign("BLOCKS_COUNT",count($blocks));
-}
 	
 $smarty->assign('OP_MODE',$disp_view);
 $smarty->assign('APP', $app_strings);
@@ -264,5 +252,4 @@ if($focus->mode == 'edit') {
 } else {
 	$smarty->display('Inventory/InventoryCreateView.tpl');
 }
-
 ?>

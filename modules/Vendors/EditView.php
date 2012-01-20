@@ -40,20 +40,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view')
 	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
-else	
-{
-	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
-	$adv_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV');
 
-	$blocks['basicTab'] = $bas_block;
-	if(is_array($adv_block ))
-		$blocks['moreTab'] = $adv_block;
-
-	$smarty->assign("BLOCKS",$blocks);
-	$smarty->assign("BLOCKS_COUNT",count($blocks));
-}
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
@@ -125,9 +113,6 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
 
-if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
-else
-	$smarty->display('Inventory/InventoryCreateView.tpl');
 
 ?>

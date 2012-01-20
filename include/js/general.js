@@ -1499,7 +1499,7 @@ function fnhide(divId)
 
 function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
-   
+
 	var oform = document.forms['EditView'];
 	oform.action.value='Save';
 	//global variable to check the validation calling function to avoid validating when tab change

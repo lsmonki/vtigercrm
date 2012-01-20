@@ -40,16 +40,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view')
 	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
-else	
-{
-	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
-	$blocks['basicTab'] = $bas_block;
 
-	$smarty->assign("BLOCKS",$blocks);
-	$smarty->assign("BLOCKS_COUNT",count($blocks));
-}
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
