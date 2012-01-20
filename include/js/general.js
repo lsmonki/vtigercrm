@@ -4013,7 +4013,7 @@ VtigerJS_DialogBox = {
 			document.body.appendChild(olayer);
 			
 			var closeimg = document.createElement("img");
-			closeimg.src = 'themes/images/close.gif';
+			closeimg.src = 'themes/images/popuplay_close.png';
 			closeimg.alt = 'X';
 			closeimg.style.right= '10px';
 			closeimg.style.top  = '5px';
@@ -4035,7 +4035,7 @@ VtigerJS_DialogBox = {
 		VtigerJS_DialogBox._olayer(false);
 	},
 	block : function(opacity) {
-		if(typeof(opactiy)=='undefined') opacity = '0.3';
+		if(typeof(opactiy)=='undefined') opacity = '0.7';
 		var olayernode = VtigerJS_DialogBox._olayer(true);
 		olayernode.style.opacity = opacity;
 	},

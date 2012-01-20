@@ -7,7 +7,7 @@
  * All Rights Reserved.
  ******************************************************************************
 *}
-<div id="vtigerHelpWelcomePopupLay" style="display:none;" class="vtigerHelpWelcomePopupLay">
+<div id="vtigerHelpWelcomePopupLay" style="display:none;width:700px;" class="vtigerHelpWelcomePopupLay">
 	<table class="layerHeadingULine hdrTabBg" width="100%" cellpadding="5" cellspacing="0" width="100%" border="0" >
 	<tr valign="top">
 		<td class="genHeaderSmall">

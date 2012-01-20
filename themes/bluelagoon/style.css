@@ -2080,18 +2080,18 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-    background: url(images/layerPopupBg.gif) ;
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
-    z-index: 10000;
-    Filter: Alpha(opacity = 70);
-    -moz-opacity: 0.7;
-    text-align: center;
-    vertical-align: middle;
-    position: absolute;
+   	background: black;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
+	z-index: 10000;
+	Filter: Alpha(opacity = 70);
+	-moz-opacity: 0.7;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
 }
 
 .veil_new{
@@ -2331,11 +2331,11 @@ a.drop_down:Hover{
  * Product help tips
 */
 .vtigerHelpWelcomePopupLay {
-    background: #F5F5F5;
-    border: 1px solid #999;
-    position: absolute;
-    top: 69px;
-    left: 25%;
+	background: #F5F5F5;
+	border: 1px solid #999;
+	position: absolute;
+	top: 69px;
+	left: 25%;
 }
 
 .vtigerHelpPopupLay { 
@@ -2385,7 +2385,7 @@ a.drop_down:Hover{
 
 }
 .vtigerHelpPopupLay .helppage .content p {
-    margin-top: 2px;
+	margin-top: 2px;
 }
 .vtigerHelpPopupLay .helppage .footer { 
     color: gray;
@@ -2403,6 +2403,9 @@ a.drop_down:Hover{
     color: black;
     font-style:  italic;
 
+}
+.vtigerHelpWelcomePopupLay #contentOfHelp{
+    height : 400px !important;
 }
 div.goog-te-sectional-gadget-all{
     margin-left:3px;

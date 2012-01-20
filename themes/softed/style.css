@@ -2240,7 +2240,7 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-   background: url(images/layerPopupBg.gif) ;
+	background: black;
     height: 100%;
     width: 100%;
     top: 0px;
@@ -2493,11 +2493,11 @@ a.drop_down:Hover{
  * Product help tips
 */
 .vtigerHelpWelcomePopupLay {
-    background: #F5F5F5;
-    border: 1px solid #999;
-    position: absolute;
-    top: 69px;
-    left: 25%;
+	background: #F5F5F5;
+	border: 1px solid #999;
+	position: absolute;
+	top: 69px;
+	left: 25%;
 }
 
 .vtigerHelpPopupLay { 
@@ -2547,7 +2547,7 @@ a.drop_down:Hover{
 
 }
 .vtigerHelpPopupLay .helppage .content p {
-    margin-top: 2px;
+	margin-top: 2px;
 }
 .vtigerHelpPopupLay .helppage .footer { 
     color: gray;
@@ -2598,14 +2598,8 @@ a#helpLink:hover{
     background: url(images/help_background.png);
     overflow: auto;
 }
-
-.vtigerHelpPopupLay .helppage .header .helpArrow{
-    margin-bottom: 1px;
-    cursor: pointer;
-    margin-right:3px;
-}
-a .links{
-    margin-top:3px;
+.vtigerHelpWelcomePopupLay #contentOfHelp{
+    height : 400px !important;
 }
 /* Mail Manager starts*/
 .mm_blur {
