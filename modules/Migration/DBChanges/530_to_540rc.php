@@ -13,6 +13,7 @@ require_once 'modules/com_vtiger_workflow/include.inc';
 require_once 'modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc';
 require_once 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
 require_once 'include/events/include.inc';
+include_once 'vtlib/Vtiger/Cron.php';
 
 //5.2.1 to 5.3.0RC database changes
 
@@ -194,6 +195,13 @@ $adb->pquery("UPDATE com_vtiger_workflows SET defaultworkflow=1 WHERE
 $em = new VTEventsManager($adb);
 // Registering event for HelpDesk - To reset from_portal value
 $em->registerHandler('vtiger.entity.aftersave.final', 'modules/HelpDesk/HelpDeskHandler.php', 'HelpDeskHandler');
+
+Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900);
+Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200);
+Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900 );
+Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900);
+Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900 );
+
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 

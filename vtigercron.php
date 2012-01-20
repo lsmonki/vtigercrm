@@ -42,21 +42,51 @@ if($_REQUEST['app_key'] != $application_unique_key) {
 	exit;
 }
 
-/** Include the service file */
-$service = $_REQUEST['service'];
-if($service == 'MailScanner') {
-	include_once('cron/MailScanner.service');
+/**
+ * Start the cron services configured.
+ */
+include_once 'vtlib/Vtiger/Cron.php';
+
+$cronTasks = false;
+if (isset($_REQUEST['service'])) {
+	// Run specific service
+	$cronTasks = array(Vtiger_Cron::getInstance($_REQUEST['service']));
 }
-if($service == 'RecurringInvoice') {
-	include_once('cron/modules/SalesOrder/RecurringInvoice.service');
+else {
+	// Run all service
+	$cronTasks = Vtiger_Cron::listAllActiveInstances();
 }
 
-if($service == 'com_vtiger_workflow'){
-	include_once('cron/modules/com_vtiger_workflow/com_vtiger_workflow.service');
+foreach ($cronTasks as $cronTask) {
+	try {
+		$cronTask->setBulkMode(true);
+
+		// Not ready to run yet?
+		if (!$cronTask->isRunnable()) {
+			echo sprintf("[INFO]: %s - not ready to run\n", $cronTask->getName());
+			continue;
 }
 
-if($service == 'VtigerBackup'){
-	include_once('cron/modules/VtigerBackup/VtigerBackup.service');
+		// Timeout could happen if intermediate cron-tasks fails
+		// and affect the next task. Which need to be handled in this cycle.				
+		if ($cronTask->hadTimedout()) {
+			echo sprintf("[INFO]: %s - cron task had timedout - restarting\n", $cronTask->getName());
+}
+
+		// Mark the status - running		
+		$cronTask->markRunning();
+		
+		checkFileAccess($cronTask->getHandlerFile());		
+		include_once $cronTask->getHandlerFile();
+		
+		// Mark the status - finished
+		$cronTask->markFinished();
+		
+	} catch (Exception $e) {
+		echo sprintf("[ERROR]: %s - cron task execution throwed exception.\n", $cronTask->getName());
+		echo $e->getMessage();
+		echo "\n";
+	}		
 }
 
 ?>

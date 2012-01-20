@@ -914,6 +914,20 @@ populateLinks();
 // Set Help Information for Fields
 setFieldHelpInfo();
 
+// Register Cron Jobs
+registerCronTasks();
+
+// Register all the Cron Tasks
+function registerCronTasks() {
+	include_once 'vtlib/Vtiger/Cron.php';
+
+	Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900);
+	Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200);
+	Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900 );
+	Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900);
+	Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900 );
+}
+
 // Register all the events here
 function registerEvents($adb) {
 	require_once('include/events/include.inc');

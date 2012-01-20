@@ -1285,6 +1285,14 @@ $app_strings = array (
 'LBL_MAX_SIZE'=> 'Maximum upload size is', //added for uploadsize limit message
 'LBL_FILESIZEIN_MB'=> 'MB', //added to show filesize in MB
 
+// Unified Cron Job language strings
+'LBL_DISABLED' => 'Disabled',
+'LBL_RUNNING' => 'Running',
+'LBL_LAST_SCAN_TIMED_OUT' => 'Last Scan Timed Out',
+'LBL_LAST_SCAN_AT' => 'Last Scan @',
+'LBL_TIME_TAKEN' => 'Time taken',
+'LBL_SHORT_SECONDS' => 'sec',
+	
 );
 
 $app_list_strings = array (

@@ -568,13 +568,17 @@ function vtiger_help_nav(obj) {
     vtiger_help_controller_singleton.get().helpMeNowNavigate(obj);
 }
 /**
- *
+ *funtion to close the popup
  */
 function closePopup(){
     document.getElementById('vtigerHelpPopupLay').style.display='none';
     document.getElementById('helpLink').style.display='block';
 
 }
+
+/**
+ *funtion to have a toggle action in the popup
+ */
 
 function vtiger_help_toggle(header){
     var heading=header.parentNode;
