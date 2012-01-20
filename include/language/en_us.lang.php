@@ -1279,7 +1279,6 @@ $app_strings = array (
 
 'LBL_NEXT_BUTTON_LABEL' => 'Next',
 
-'LBL_SIZE_SHOULDNOTBE_GREATER' => 'File size should not be greater than ', //added for upload error message
 'LBL_MAX_SIZE'=> 'Maximum upload size is', //added for uploadsize limit message
 'LBL_FILESIZEIN_MB'=> 'MB', //added to show filesize in MB
 

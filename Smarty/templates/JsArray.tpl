@@ -97,8 +97,6 @@
                                 VALID_DISCOUNT_PERCENT:'{$APP.VALID_DISCOUNT_PERCENT}',
                                 VALID_DISCOUNT_AMOUNT:'{$APP.VALID_DISCOUNT_AMOUNT}',
                                 SELECT_TEMPLATE_TO_MERGE:'{$APP.SELECT_TEMPLATE_TO_MERGE}',
-                                LBL_MAX_SIZE:'{$APP.LBL_MAX_SIZE}',
-                                LBL_FILESIZEIN_MB:'{$APP.LBL_FILESIZEIN_MB}',
 				YES:'{$APP.yes}',
                                 NO:'{$APP.no}',
                         {rdelim};

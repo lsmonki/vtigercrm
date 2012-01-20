@@ -123,7 +123,7 @@
 					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						<input id="my_file_element" type="file" name="{$elements.2.0}" tabindex="7" onchange="validateFilename(this)" >
 						<input type="hidden" name="{$elements.2.0}_hidden" value="" />
-                        <span id="limitmsg" style= "color:red; display:'';">{$APP.LBL_MAX_SIZE} {$UPLOADSIZE}{$APP.LBL_FILESIZEIN_MB}</span>
+                        <span id="limitmsg" style= "color:red; display:'';">{'LBL_MAX_SIZE'|@getTranslatedString:$MODULE} {$UPLOADSIZE}{'LBL_FILESIZEIN_MB'|@getTranslatedString:$MODULE}</span>
                 	</div>
 					<script>
 						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );

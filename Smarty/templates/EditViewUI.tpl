@@ -944,7 +944,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 				{/if}
 			</span>
 		</div>
-                <span id="limitmsg" style= "color:red; display:none;"> {$APP.LBL_MAX_SIZE} {$UPLOADSIZE}{$APP.LBL_FILESIZEIN_MB}</span>
+                <span id="limitmsg" style= "color:red; display:none;"> {'LBL_MAX_SIZE'|@getTranslatedString:$MODULE} {$UPLOADSIZE}{'LBL_FILESIZEIN_MB'|@getTranslatedString:$MODULE}</span>
 		</td>
 
 		{elseif $uitype eq 83} <!-- Handle the Tax in Inventory -->
