@@ -179,5 +179,7 @@ $mod_strings = Array(
 
 'LBL_LIST_COUNT'=>'Showing',
 
+'LBL_INSTEAD_OF_WEBMAILS_USE' => 'Instead of Webmails, please click here to use',
+'LBL_PLEASE_CLICK_HERE_TO_GO_TO' => 'Please click here to go to ',
 );
 ?>

@@ -99,7 +99,7 @@ function ShowFolders(folderid)
 												</td>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
 												<img src="{'webmail_settings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
-							&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}" >{$MOD.LBL_SETTINGS}</a>
+							&nbsp;<a href="index.php?module=MailManager&action=index&parenttab={$CATEGORY}" >{$MOD.LBL_SETTINGS}</a>
 												</td>
 											</tr>
 											</table>
@@ -133,7 +133,7 @@ function ShowFolders(folderid)
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{'mymail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="gotoWebmail();" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
+									<a href="index.php?module=MailManager&action=index&parenttab={$CATEGORY}" >{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul>
 								<!-- Sent mail -->

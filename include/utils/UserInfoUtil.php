@@ -1465,7 +1465,14 @@ $log->debug("Entering getProfileTabsPermission(".$profileid.") method ...");
 	$tab_id = $adb->query_result($result,$i,"tabid");
 	$per_id = $adb->query_result($result,$i,"permissions");
 	$copy[$tab_id] = $per_id;
-  }	 
+  }
+  // TODO This is temporarily required, till we provide a hook/entry point for Emails module.
+  // Once that is done, Webmails need to be removed permanently.
+  $emailsTabId = getTabid('Emails');
+  $webmailsTabid = getTabid('Webmails');
+  if(array_key_exists($emailsTabId, $copy)) {
+	  $copy[$webmailsTabid] = $copy[$emailsTabId];
+  }
 
 $log->debug("Exiting getProfileTabsPermission method ...");
    return $copy;
