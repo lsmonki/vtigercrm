@@ -60,6 +60,7 @@ if(!empty($_SESSION[$sModule.'_DetailView_Navigation'.$viewId])){
 	$recordPageMapping = array();
 	foreach ($recordNavigationInfo as $start=>$recordIdList){
 		foreach ($recordIdList as $index=>$recordId) {
+			if(!isRecordExists($recordId)) continue;
 			$recordList[] = $recordId;
 			$recordPageMapping[$recordId] = $start;
 			if($recordId == $iCurRecord){
