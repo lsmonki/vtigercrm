@@ -385,8 +385,8 @@ vtiger_help_controller = function() {
 	
         // NOTE update recordUI API below to match the helppage node-structure...
         var tpl = 
-        '<% if (SKIP_HEADER_FOOTER != true) {%><div id="helpHandle"  style="cursor:move;">'+
-        '<table class="layerHeadingULine"  border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:3px 0px 0px 0px;height:30px;">' +
+        '<% if (SKIP_HEADER_FOOTER != true) {%><div id="help_handle">'+
+        '<table class="layerHeadingULine hdrTabBg"  border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:3px 0px 0px 0px;height:30px;">' +
         '	<tr valign=top>' +
         '		<td align="left"   valign="middle"><b><label  style="margin-left:6px;">'+getTranslatedString("LBL_HELP_TITLE")+'</label><b></td>' +
         '		<td align="center" valign="middle"></td>' +
@@ -401,7 +401,7 @@ vtiger_help_controller = function() {
         '<% } %>' +
         '</table>' +
         '</div>'+
-        '<div id="contentOfHelp"  style="padding:6px;">'+
+        '<div id="contentOfHelp"style="height:217px;overflow:auto;padding:6px;">'+
         '	<% if (RECORDS.length == 0) {%>' +
         '	<div class="helppage">' +
         '		No quick help found. Try <a href="http://wiki.vtiger.com" target="_blank">wiki.vtiger.com</a>' +
