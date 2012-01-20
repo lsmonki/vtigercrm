@@ -4035,7 +4035,7 @@ VtigerJS_DialogBox = {
 		VtigerJS_DialogBox._olayer(false);
 	},
 	block : function(opacity) {
-		if(typeof(opactiy)=='undefined') opacity = '0.7';
+		if(typeof(opactiy)=='undefined') opacity = '0.3';
 		var olayernode = VtigerJS_DialogBox._olayer(true);
 		olayernode.style.opacity = opacity;
 	},

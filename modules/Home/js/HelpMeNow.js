@@ -139,21 +139,20 @@ vtiger_help_controller = function() {
     this.initHandler = function() {	
         var linkDiv = document.createElement('div');
         var link = document.createElement('a');
+        document.body.appendChild(linkDiv);
+        linkDiv.appendChild(link);
         link.id='helpLink';
         linkDiv.id='helpButton';
         link.setAttribute('class', 'helpTipsHandler');
-        link.style.visibility = 'visible';
         //link.setAttribute('onclick', "vtiger_help($('helpTipsHandlerPin'));");
         link.onclick=function(){
             vtiger_help($('helpTipsHandlerPin'));
             return false;
         }
-        var themePath = vtlib_vtiger_imageurl(gVTTheme);
+
         link.setAttribute('href',"javascript:void(0);");
         link.innerHTML="<span id='helpTipsHandlerPin'>&nbsp;</span><img src='"+themePath+"/help_sidebar.png' border=0 align='absmiddle' title="+getTranslatedString("LBL_HELP_TITLE")+">";
-        document.body.appendChild(linkDiv);
-        linkDiv.appendChild(link);
- 	         
+        
     }
 
 	
@@ -196,9 +195,8 @@ vtiger_help_controller = function() {
             vtigerHelpPopupLay.style.width = '310px';
             vtigerHelpPopupLay.style.bottom = '2px';
             vtigerHelpPopupLay.style.fontWeight = 'normal';
-            vtigerHelpPopupLay.style.visibility = 'visible';
             vtigerHelpPopupLay.style.margin="-1% 0 0 0";
-            vtigerHelpPopupLay.innerHTML = '<div id="vtigerHelpPopupLayContainer"></div><div id="vtigerHelpGTranslateEl" ></div>';
+            vtigerHelpPopupLay.innerHTML = '<div id="vtigerHelpPopupLayContainer"></div><div id="vtigerHelpGTranslateEl" class="hdrTabBg" style="border-top:2px solid #717351;heigth:30px;"></div>';
 
             document.getElementById('helpButton').appendChild(vtigerHelpPopupLay);
         }

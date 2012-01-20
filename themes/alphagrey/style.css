@@ -2135,7 +2135,7 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-	background:black;
+	background: url(images/layerPopupBg.gif) ;
 	height: 100%;
 	width: 100%;
 	top: 0px;
