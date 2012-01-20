@@ -22,7 +22,6 @@ global $app_strings;
 ?>
 <!--end body panes-->
 </td>
-<td valign="top"><img src="themes/softed/images/showPanelTopRight.gif"></td>
 </tr>
 <tr><td colspan="2" align="center">
 </td></tr></table>

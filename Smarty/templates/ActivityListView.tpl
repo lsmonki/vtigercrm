@@ -318,7 +318,7 @@ function alphabetic(module,url,dataid)
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr >
 		      <td>
-                            <table class="filterTable" width="100%">
+                            <table class="layerPopupTransport" width="100%">
                                 <tr>
                                     <td class="small" nowrap width="25%">
 						{$recordListRange}
@@ -328,7 +328,7 @@ function alphabetic(module,url,dataid)
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td style="padding-left:5px;padding-right:5px">
-                                    <b><font size =2 color="#33338C">{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                                    <b><font size =2>{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
                         </td>
                         <td>
                             {if $ALL eq 'All'}

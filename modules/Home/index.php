@@ -103,7 +103,7 @@ $smarty->assign('widgetBlockSize', $widgetBlockSize);
 
 // First time login check
 include_once 'modules/Users/LoginHistory.php';
-$accept_login_delay_seconds = 1*60; // (use..5*60 for 5 min) to overcome redirection post authentication
+$accept_login_delay_seconds = 5*60; // (use..5*60 for 5 min) to overcome redirection post authentication
 $smarty->assign('FIRST_TIME_LOGIN', LoginHistory::firstTimeLoggedIn($current_user->user_name, $accept_login_delay_seconds));
 // End
 

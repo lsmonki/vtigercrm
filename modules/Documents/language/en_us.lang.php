@@ -137,6 +137,8 @@ $mod_strings = Array(
 // Added after 5.1.0 GA
 'Folder Name'=>'Folder Name',
 'Document No'=>'Document No',
+
+'Documents' => 'Documents',
 );
 
 ?>

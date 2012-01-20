@@ -30,9 +30,9 @@
 				<tr>
 				<td>
 					<!-- List View's Buttons and Filters starts -->
-					<table width="100%" class="filterTable">
+					<table width="100%" class="layerPopupTransport">
 						<tr>				
-							<td width="25%" class="small" nowrap>
+							<td width="25%" class="small" nowrap align="left">
 										{$recordListRange}
 							</td>
 							<td><table align="center">
@@ -43,7 +43,7 @@
 										<table cellpadding="5" cellspacing="0" class="small">
 											<tr>
 												<td style="padding-left:5px;padding-right:5px" align="center">
-                        										<b><font size =2 color="#33338C">{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                        										<b><font size=2>{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
                    										</td>
                
                             									{if $ALL eq 'All'}
@@ -82,11 +82,11 @@
 									</td></tr></table>
 								</td>
 							<!-- Page Navigation -->
-							<td nowrap align="right"width="25%">
+							<td nowrap align="right" width="25%">
 								<table border=0 cellspacing=0 cellpadding=0 class="small">
 									<tr>{$NAVIGATION}</tr>
 								</table>
-               						</td>
+               				</td>
 						</tr>
 					</table>
 		        		<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
@@ -355,9 +355,9 @@
 		   </tr>
 		   <tr>
 		   	<td>
-		   		<table width=="100%">
+		   		<table width="100%">
 		   			<tr>
-		   				<td class="small" nowrap>
+		   				<td class="small" nowrap align="left">
 								{$recordListRange}
 							</td>
 							<td nowrap width="50%" align="right">

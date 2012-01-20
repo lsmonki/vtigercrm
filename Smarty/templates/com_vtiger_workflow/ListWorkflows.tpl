@@ -75,24 +75,6 @@
 			<td class="big" nowrap="nowrap">
 				<strong><span id="module_info"></span></strong>
 			</td>
-			<td  align="left" class="small" >
-				<b>                                                            
-                {if $CRON_TASK->isDisabled() }{'LBL_DISABLED'|@getTranslatedString:$MODULE}{/if}
-                {if $CRON_TASK->isRunning() }{'LBL_RUNNING'|@getTranslatedString:$MODULE}{/if}
-                {if $CRON_TASK->isEnabled()}
-                	{if $CRON_TASK->hadTimedout}
-						{'LBL_LAST_SCAN_TIMED_OUT'|@getTranslatedString:$MODULE}.
-					{else}
-						{'LBL_LAST_SCAN_AT'|@getTranslatedString:$MODULE} 
-						{$CRON_TASK->getLastEndDateTime()}  
-						& 
-						{'LBL_TIME_TAKEN'|@getTranslatedString:$MODULE}:					
-						{$CRON_TASK->getTimeDiff()}
-						{'LBL_SHORT_SECONDS'|@getTranslatedString:$MODULE}
-					{/if}
-				{/if}
-				</b>
-			</td>
 			<td class="small" align="right">
 				<form action="index.php" method="get" accept-charset="utf-8" id="filter_modules" onsubmit="VtigerJS_DialogBox.block();" style="display: inline;">
 					<b>{$MOD.LBL_SELECT_MODULE}: </b>

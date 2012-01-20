@@ -12,7 +12,7 @@
 {if $smarty.request.ajax neq ''}
 &#&#&#{$ERROR}&#&#&#
 {/if}
-<table class="filterTable" width="100%">
+<table class="layerPopupTransport" width="100%">
     <tr>
         <td class="small" nowrap="" width="25%"></td>
         <td>
@@ -21,7 +21,7 @@
                         <table border=0 cellspacing=0 cellpadding=0 class="small" align="center">
                             <tr>
                                <td align="center" style="padding-left:5px;padding-right:5px">
-                                  <b><font size =2 color="#33338C">{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                                  <b><font size=2>{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
                                </td>
                                {if $ALL eq 'All'}
                                   <td align="center" style="padding-left:5px;padding-right:5px">
@@ -152,7 +152,7 @@
                                                     <div id='{$folder.folderid}' class="documentModuleFolderView">
                                                     <table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
-                                                            <td class="mailSubHeader" width="40%">
+                                                            <td class="mailSubHeader" width="40%" align="left">
                                                                 <b>{$folder.foldername}</b>
                                                                 &nbsp;&nbsp;
                                                                 {if $folder.description neq ''}

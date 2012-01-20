@@ -15,7 +15,7 @@ $VTIGER_CRON_CONFIGURATION = array(
 	 * 'app_key' => '4cad1980873495f4dfdd4bd8b1204cfc7'
 	 */
 
-	'app_key' => '4b20dd9cc9ec2b17d37765f74d846924'
+	'app_key' => ''
 	
 );
 

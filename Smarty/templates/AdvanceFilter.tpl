@@ -207,7 +207,7 @@ function addConditionGroup(parentNodeId) {ldelim}
 <div style="overflow:auto;" id='adv_filter_div' name='adv_filter_div'>
 	<table class="small" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-			<td class="detailedViewHeader"><b>{'LBL_ADVANCED_FILTER'|@getTranslatedString:$MODULE}</b></td>
+			<td class="detailedViewHeader" align="left"><b>{'LBL_ADVANCED_FILTER'|@getTranslatedString:$MODULE}</b></td>
 		</tr>
 		<tr>
 			<td colspan="2" align="right">
