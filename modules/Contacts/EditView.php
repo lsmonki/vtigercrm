@@ -94,12 +94,9 @@ if (empty($_REQUEST['record']) && $focus->mode != 'edit') {
         setObjectValuesFromRequest($focus);
 }
 $disp_view = getView($focus->mode);
-if ($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS", getBlocks($currentModule, $disp_view, $mode, $focus->column_fields));
-else {
-	$smarty->assign("BASBLOCKS", getBlocks($currentModule, $disp_view, $mode, $focus->column_fields, 'BAS'));
-	$smarty->assign("ADVBLOCKS", getBlocks($currentModule, $disp_view, $mode, $focus->column_fields, 'ADV'));
-}
+
+$smarty->assign("BLOCKS", getBlocks($currentModule, $disp_view, $mode, $focus->column_fields));
+
 $smarty->assign("OP_MODE", $disp_view);
 
 //needed when creating a new contact with a default vtiger_account value passed in
@@ -216,8 +213,6 @@ $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 $picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
 $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));
 
-if ($focus->mode == 'edit')
-	$smarty->display("salesEditView.tpl");
-else
-	$smarty->display('CreateView.tpl');
+$smarty->display("salesEditView.tpl");
+
 ?>
