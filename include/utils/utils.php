@@ -4507,7 +4507,7 @@ function getFieldsResultForMerge($tabid) {
 	$nonmergable_displaytypes = Array(4);
 	$nonmergable_uitypes = Array('70','69','4');
 	
-	$sql = "SELECT fieldid,typeofdata FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
+	$sql = "SELECT fieldid,typeofdata FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2) AND block IS NOT NULL";
 	$params = array($tabid);
 
 	$where = '';
