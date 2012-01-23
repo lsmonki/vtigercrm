@@ -20,11 +20,12 @@
 
 
 //file modified by richie
+
 require_once('include/utils/utils.php');
 require_once("modules/Emails/class.phpmailer.php");
 require_once("modules/Emails/mail.php");
 require_once('include/logging.php');
-require("config.php");
+require_once("config.php");
 
 $current_user = Users::getActiveAdminUser();
 // Set the default sender email id

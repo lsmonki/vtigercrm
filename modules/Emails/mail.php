@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 
-require("modules/Emails/class.phpmailer.php");
+require_once("modules/Emails/class.phpmailer.php");
 
 /**   Function used to send email 
   *   $module 		-- current module 

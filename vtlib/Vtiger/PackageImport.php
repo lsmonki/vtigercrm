@@ -9,9 +9,9 @@
  ************************************************************************************/
 include_once('vtlib/Vtiger/PackageExport.php');
 include_once('vtlib/Vtiger/Unzip.php');
-
 include_once('vtlib/Vtiger/Module.php');
 include_once('vtlib/Vtiger/Event.php');
+include_once('vtlib/Vtiger/Cron.php');
 
 /**
  * Provides API to import module into vtiger CRM
@@ -396,6 +396,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$this->import_Actions($this->_modulexml, $moduleInstance);
 		$this->import_RelatedLists($this->_modulexml, $moduleInstance);
 		$this->import_CustomLinks($this->_modulexml, $moduleInstance);
+		$this->import_CronTasks($this->_modulexml);
 
 		Vtiger_Module::fireEvent($moduleInstance->name, 
 			Vtiger_Module::EVENT_MODULE_POSTINSTALL);
@@ -713,6 +714,23 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				"$customlinknode->sequence",
 				$handlerInfo
 			);
+		}
+	}
+
+	/**
+	 * Import cron jobs of the module.
+	 * @access private
+	 */
+	function import_CronTasks($modulenode){
+		if(empty($modulenode->crons) || empty($modulenode->crons->cron)) return;
+		foreach ($modulenode->crons->cron as $cronTask){
+			if(empty($cronTask->status)){
+				$cronTask->status=Vtiger_Cron::$STATUS_ENABLED;
+			}
+			if((empty($cronTask->sequence))){
+				$cronTask->sequence=Vtiger_Cron::nextSequence();
+			}
+			Vtiger_Cron::register("$cronTask->name","$cronTask->handler", "$cronTask->frequency", "$modulenode->name","$cronTask->status","$cronTask->sequence","$cronTask->description");
 		}
 	}
 }			
