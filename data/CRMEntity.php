@@ -2468,5 +2468,13 @@ $log->info("in getOldFileName  ".$notesid);
 		return $rel_tables[$secmodule];
 	}
 
+	/**
+	 * Function to clear the fields which needs to be saved only once during the Save of the record
+	 * For eg: Comments of HelpDesk should be saved only once during one save of a Trouble Ticket
+	 */
+	function clearSingletonSaveFields() {
+		return;
+	}
+
 }
 ?>

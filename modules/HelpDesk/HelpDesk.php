@@ -148,11 +148,7 @@ class HelpDesk extends CRMEntity {
 			$ownerId = $this->column_fields['parent_id'];
 		}
 
-		if ($this->column_fields['comments'] != '')
-			$comment = $this->column_fields['comments'];
-		else
-			$comment = $_REQUEST['comments'];
-		
+		$comment = $this->column_fields['comments'];		
 		if ($comment != '') {
 			$sql = "insert into vtiger_ticketcomments values(?,?,?,?,?,?)";
 			$params = array('', $this->id, from_html($comment), $ownerId, $ownertype, $current_time);
@@ -843,6 +839,11 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . getTranslatedString("Support_team", $moduleName);
 		return $contents;
 	}
+
+	function clearSingletonSaveFields() {
+		$this->column_fields['comments'] = '';
+	}
+
 
 }
 
