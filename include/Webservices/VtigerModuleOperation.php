@@ -14,8 +14,15 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 	
 	public function VtigerModuleOperation($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
-		$this->meta = new VtigerCRMObjectMeta($this->webserviceObject,$this->user);
+		$this->meta = $this->getMetaInstance();
 		$this->tabId = $this->meta->getTabId();
+	}
+	
+	protected function getMetaInstance(){
+		if(empty(WebserviceEntityOperation::$metaCache[$this->webserviceObject->getEntityName()][$this->user->id])){
+			WebserviceEntityOperation::$metaCache[$this->webserviceObject->getEntityName()][$this->user->id]  = new VtigerCRMObjectMeta($this->webserviceObject,$this->user);
+		}
+		return WebserviceEntityOperation::$metaCache[$this->webserviceObject->getEntityName()][$this->user->id];
 	}
 	
 	public function create($elementType,$element){
