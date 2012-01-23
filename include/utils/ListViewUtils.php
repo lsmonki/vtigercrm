@@ -3721,6 +3721,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 				$proids_comma = "(0)";
 			$condition ="and vtiger_products.productid in ".$proids_comma;
 		}
+		if($relmodule == 'Vendor' && $relmod_recordid != '')
+			$condition = "and vtiger_vendor.vendorid= ".$relmod_recordid;
 	}
 	else if($current_module == 'Quotes')
 	{
