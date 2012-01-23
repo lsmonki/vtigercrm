@@ -97,6 +97,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 }
 
 function HelpDesk_notifyParentOnTicketChange($entityData) {
+	global $HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID;
 	$adb = PearDatabase::getInstance();
 	$moduleName = $entityData->getModuleName();
 	$wsId = $entityData->getId();
@@ -182,6 +183,7 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 }
 
 function HelpDesk_notifyOwnerOnTicketChange($entityData) {
+	global $HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID;
 	$adb = PearDatabase::getInstance();
 	$moduleName = $entityData->getModuleName();
 	$wsId = $entityData->getId();
