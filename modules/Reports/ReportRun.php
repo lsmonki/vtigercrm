@@ -1832,7 +1832,7 @@ class ReportRun extends CRMEntity
 			$wheresql = " and ".$stdfiltersql;
 		}
 		
-		if(isset($filtersql)) {
+		if(isset($filtersql) && $filtersql !== false) {
 			$advfiltersql = $filtersql;
 		}
 		if($advfiltersql != "") {
@@ -2981,7 +2981,7 @@ class ReportRun extends CRMEntity
 		return $fieldlists;
 	}
 
-	function getReportPDF($filterlist='') {
+	function getReportPDF($filterlist=false) {
 		require_once 'include/tcpdf/tcpdf.php';
 
 		$arr_val = $this->GenerateReport("PDF",$filterlist);
