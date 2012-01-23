@@ -41,14 +41,6 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		}
 
 		$picklist_table = 'vtiger_'.$this->name;
-		$picklist_idcol = $this->name.'id';
-		
-		// Fix Table ID column names
-		if ($this->name == 'sales_stage') {
-			$picklist_idcol = $this->name . '_id';
-		}		
-		// END
-
 		if(!Vtiger_Utils::CheckTable($picklist_table)) {
 			Vtiger_Utils::CreateTable(
 				$picklist_table,
@@ -64,6 +56,14 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 			$new_picklistid = $adb->query_result(
 				$adb->pquery("SELECT picklistid FROM vtiger_picklist WHERE name=?", Array($this->name)), 0, 'picklistid');
 		}
+
+		// Fix Table ID column names
+		if(in_array($this->name.'_id', $adb->getColumnNames($picklist_table))) {
+			$picklist_idcol = $this->name.'_id';
+		} else {
+			$picklist_idcol = $this->name.'id';
+		}
+		// END
 
 		// Add value to picklist now
 		$sortid = 0; // TODO To be set per role

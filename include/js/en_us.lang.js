@@ -323,5 +323,11 @@ var alert_arr = {
     'LBL_WIKI_TITLE' : 'Wiki',
     'LBL_FAQ_TITLE'   : 'FAQ',
     'LBL_VIDEO_TITLE' : 'Video',
-    'LBL_CLOSE_TITLE' : 'Close'
+    'LBL_CLOSE_TITLE' : 'Close',
+
+	'ERR_SELECT_ATLEAST_ONE_MERGE_CRITERIA_FIELD' : 'Select at least one field for merge criteria',
+	'ERR_PLEASE_MAP_MANDATORY_FIELDS' : 'Please map the following mandatory fields',
+	'ERR_MAP_NAME_ALREADY_EXISTS' : 'Map name already exists. Please give a different name',
+	'ERR_MAP_NAME_CANNOT_BE_EMPTY' : 'Map name cannot be empty',
+	'ERR_FIELDS_MAPPED_MORE_THAN_ONCE' : 'Following field is mapped more than once. Please check the mapping.'
 };

@@ -23,7 +23,6 @@
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Accounts/Accounts.php');

@@ -15,7 +15,6 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('data/SugarBean.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/Documents/Documents.php');

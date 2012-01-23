@@ -7,7 +7,7 @@ include('modules/Calendar/iCal/iCalendar_properties.php');
 include('modules/Calendar/iCal/iCalendar_parameters.php');
 include('modules/Calendar/iCal/ical-parser-class.php');
 require_once('include/Zend/Json.php');
-require_once('modules/Import/UsersLastImport.php');
+require_once('modules/Calendar/iCalLastImport.php');
 
 require_once('include/utils/utils.php');
 require_once('data/CRMEntity.php');
@@ -15,8 +15,8 @@ require_once('data/CRMEntity.php');
 global $import_dir,$current_user,$mod_strings,$app_strings,$currentModule;
 
 if($_REQUEST['step']!='undo'){
-	$last_import = new UsersLastImport();
-	$last_import->mark_deleted_by_user_id($current_user->id);
+	$last_import = new iCalLastImport();
+	$last_import->clearRecords($current_user->id);
 	$file_details = $_FILES['ics_file'];
 	$binFile = 'vtiger_import'.date('YmdHis');
 	$file = $import_dir.''.$binFile;
@@ -61,10 +61,10 @@ if($_REQUEST['step']!='undo'){
 			}
 		}
 		$calendar->save('Calendar');
-		$last_import = new UsersLastImport();
-		$last_import->assigned_user_id = $current_user->id;
-		$last_import->bean_type = 'Calendar';
-		$last_import->bean_id = $calendar->id;
+		$last_import = new iCalLastImport();
+		$last_import->setFields(array('userid' => $current_user->id,
+									'entitytype' => 'Calendar',
+									'crmid' => $calendar->id));
 		$last_import->save();
 		if(!empty($ical_activities[$i]['VALARM'])){
 			$calendar->activity_reminder($calendar->id,$calendar->column_fields['reminder_time'],0,'','');
@@ -124,8 +124,8 @@ if($_REQUEST['step']!='undo'){
 	//@session_unregister("import_parenttab");
 		$smarty->display("Buttons_List1.tpl");
 
-	$last_import = new UsersLastImport();
-	$ret_value = $last_import->undo($current_user->id);
+	$last_import = new iCalLastImport();
+	$ret_value = $last_import->undo('Calendar', $current_user->id);
 	
 	if(!empty($ret_value)){
 	 $message= "<b>".$mod_strings['LBL_SUCCESS']."</b>"

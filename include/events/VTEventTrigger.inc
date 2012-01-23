@@ -78,10 +78,10 @@
 					$query .= " AND event_name = ?";
 				}
 				$params[] = $name;
-				if(!CRMEntity::isBulkSaveMode()) {
-					$query .= " AND handler_class IN (" . generateQuestionMarks(self::$mandatoryEventClass) . ")";
-					array_push($params, self::$mandatoryEventClass);
-				}
+			}
+			if(CRMEntity::isBulkSaveMode()) {
+				$query .= " AND handler_class IN (" . generateQuestionMarks(self::$mandatoryEventClass) . ")";
+				array_push($params, self::$mandatoryEventClass);
 			}
 			
 			$evtinfosbyname = array();

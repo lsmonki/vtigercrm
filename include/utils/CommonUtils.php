@@ -866,7 +866,7 @@ function getUserFullName($userid)
 		$result = $adb->pquery($sql, array($userid));
 		$first_name = $adb->query_result($result,0,"first_name");
 		$last_name = $adb->query_result($result,0,"last_name");
-		$user_name = $first_name." ".$last_name;
+		$user_name = getDisplayName(array('f'=>$first_name, 'l'=>$last_name));
 	}
         $log->debug("Exiting getUserFullName method ...");
         return $user_name;

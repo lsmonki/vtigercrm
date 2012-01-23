@@ -774,15 +774,15 @@ class QueryGenerator {
 		return array('name'=>$fieldname,'value'=>$value,'operator'=>$operator);
 	}
 
-	private function startGroup($groupType) {
+	public function startGroup($groupType) {
 		$this->groupInfo .= "$groupType (";
 	}
 
-	private function endGroup() {
+	public function endGroup() {
 		$this->groupInfo .= ')';
 	}
 
-	private function addConditionGlue($glue) {
+	public function addConditionGlue($glue) {
 		$this->groupInfo .= "$glue ";
 	}
 

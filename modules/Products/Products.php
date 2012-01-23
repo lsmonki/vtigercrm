@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/SugarBean.php');
+
 require_once('include/utils/utils.php');
 require_once('include/RelatedListView.php');
 require_once('user_privileges/default_module_view.php');
