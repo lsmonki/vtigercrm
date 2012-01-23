@@ -12,7 +12,7 @@ require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 
-global $mod_strings,$app_strings,$log,$current_user,$theme;
+global $mod_strings,$app_strings,$log,$current_user,$theme,$default_charset;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -175,7 +175,7 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
 			if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes')){
 				$convertlead .= '<tr>
 									<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
-									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
+									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.htmlentities($company, ENT_QUOTES, $default_charset).'"readonly="readonly"></td>
 								</tr>';
 			}
 
@@ -232,7 +232,7 @@ if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')==
 						$convertlead .= '<tr>							
 							<td align="right" class="dvtCellLabel" width="53%"><font color="red">'.$mandatory['potentialname'].'</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="47%">
-							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
+							<input name="potential_name" class="detailedViewTextBox" value="'.htmlentities($potentialname, ENT_QUOTES, $default_charset).'" tabindex="3">
 							<input type="hidden" name="potentialname_mandatory" id="potentialname_mandatory" value='.$mandatory['potentialname'].' />
 							</td>
 						</tr>';
