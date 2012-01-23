@@ -292,9 +292,17 @@ var alert_arr = {
       BETWEEN: 'entre',
       BEFORE: 'antes',
       AFTER: 'después',
-      'ERROR_DELETING_TRY_AGAIN': 'Error eliminando. Por favor inténtalo otra vez.',
-      'LBL_ENTER_WINDOW_TITLE': 'Introduce el título de la ventana.',
-      'LBL_SELECT_ONLY_FIELDS': 'Selecciona solo dos campos.',
-      'LBL_ENTER_RSS_URL':'Introduce la URL del RSS',
-      'LBL_ADD_HOME_WIDGET': 'No se ha podido agregar elementos a la portada! Por favor inténtalo otra vez.'
+	'ERROR_DELETING_TRY_AGAIN': 'Error eliminando. Por favor inténtalo otra vez.',
+	'LBL_ENTER_WINDOW_TITLE': 'Introduce el título de la ventana.',
+	'LBL_SELECT_ONLY_FIELDS': 'Selecciona solo dos campos.',
+	'LBL_ENTER_RSS_URL':'Introduce la URL del RSS',
+	'LBL_ADD_HOME_WIDGET': 'No se ha podido agregar elementos a la portada! Por favor inténtalo otra vez.',
+	
+	'LBL_DEFAULT_VALUE_FOR_THIS_FIELD' : 'Valor por defecto para este campo',
+
+	'RECIPIENTS_CANNOT_BE_EMPTY' : 'Destinatarios no puede estar vacío',
+	'VALID_SCANNER_NAME' : 'Ingrese un nombre válido para Mail Scanner (Solo letras y números)',
+	'ERR_SAME_SOURCE_AND_TARGET' : 'Campo origen y Destino no pueden ser el mismo',
+	'ERR_ATLEAST_ONE_VALUE_FOR' : 'Necesita seleccionar al menos un valor',
+	'ERR_SELECT_MODULE_FOR_DEPENDENCY' : 'Por favor seleccione un módulo para agregar la dependencia',
 };

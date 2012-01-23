@@ -903,7 +903,8 @@ $mod_strings = array (
       'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Establece Dependencias entre los elementos de las listas desplegables en cada módulo',
 
       'Settings' => 'Configuración',
-
+	'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'Este impuesto ya está disponible.',
+	'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Algunas etiquetas de impuestos ya están disponibles, por lo tanto no se guardan.',
 );
 $mod_list_strings = array (
 );

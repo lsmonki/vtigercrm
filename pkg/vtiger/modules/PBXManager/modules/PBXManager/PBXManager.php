@@ -222,72 +222,7 @@ class PBXManager extends CRMEntity {
 		}
 		return $query;
 	}
-
-	/**
-	 * Initialize this instance for importing.
-	 */
-	function initImport($module) {
-		$this->db = PearDatabase::getInstance();
-		$this->initImportableFields($module);
-	}
-
-	/**
-	 * Create list query to be shown at the last step of the import.
-	 * Called From: modules/Import/UserLastImport.php
-	 */
-	function create_import_query($module) {
-		global $current_user;
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_users.user_name, $this->table_name.* FROM $this->table_name
-			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index
-			LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
-			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_users_last_import.assigned_user_id='$current_user->id'
-			AND vtiger_users_last_import.bean_type='$module'
-			AND vtiger_users_last_import.deleted=0
-			AND vtiger_users.status = 'Active'";
-		return $query;
-	}
-
-	/**
-	 * Delete the last imported records.
-	 */
-	function undo_import($module, $user_id) {
-		global $adb;
-		$count = 0;
-		$query1 = "select bean_id from vtiger_users_last_import where assigned_user_id=? AND bean_type='$module' AND deleted=0";
-		$result1 = $adb->pquery($query1, array($user_id)) or die("Error getting last import for undo: ".mysql_error()); 
-		while ( $row1 = $adb->fetchByAssoc($result1))
-		{
-			$query2 = "update vtiger_crmentity set deleted=1 where crmid=?";
-			$result2 = $adb->pquery($query2, array($row1['bean_id'])) or die("Error undoing last import: ".mysql_error()); 
-			$count++;			
-		}
-		return $count;
-	}
-
-	/**
-	 * Function which will set the assigned user id for import record.
-	 */
-	function set_import_assigned_user()
-	{
-		global $current_user, $adb;
-		$record_user = $this->column_fields["assigned_user_id"];
-		
-		if($record_user != $current_user->id){
-			$sqlresult = $adb->pquery("select id from vtiger_users where id = ?", array($ass_user));
-			if($this->db->num_rows($sqlresult)!= 1) {
-				$this->column_fields["assigned_user_id"] = $current_user->id;
-			} else {			
-				$row = $adb->fetchByAssoc($sqlresult, -1, false);
-				if (!empty($row['id']) && $row['id'] != -1) {
-					$this->column_fields["assigned_user_id"] = $row['id'];
-				} else {
-					$this->column_fields["assigned_user_id"] = $current_user->id;
-				}
-			}
-		}
-	}
-
+	
 	/**
 	 * Handle getting related list information.
 	 * NOTE: This function has been added to CRMEntity (base class).

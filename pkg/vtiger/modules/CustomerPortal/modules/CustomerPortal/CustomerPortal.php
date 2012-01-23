@@ -21,20 +21,20 @@ class CustomerPortal {
 		global $adb,$mod_strings;
  		
  		if($eventType == 'module.postinstall') {			
-			$portalmodules = array("HelpDesk","Faq","Invoice","Quotes","Products","Services","Documents","Contacts","Accounts",);
+			$portalModules = array("HelpDesk","Faq","Invoice","Quotes","Products","Services","Documents",
+									"Contacts","Accounts","Project","ProjectTask","ProjectMilestone");
 			
 			$query = "SELECT max(sequence) AS max_tabseq FROM vtiger_customerportal_tabs";
 			$res = $adb->pquery($query,array());
 			$tabseq = $adb->query_result($res,0,'max_tabseq');
 			$i = ++$tabseq;
-			foreach($portalmodules as $modules) {
-				++$i;
-				$tabid = getTabid($modules);	
-				$adb->query("INSERT INTO vtiger_customerportal_tabs (tabid,visible,sequence) VALUES ($tabid,1,$i)");
-			}
-			for($j = 0; $j< count($portalmodules); $j++) {
-			 	$tabid = getTabid($portalmodules[$j]);	
-				$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($tabid,'showrelatedinfo',1)");
+			foreach($portalModules as $module) {
+				$tabId = getTabid($module);
+				if($tabId) {
+					++$i;
+					$adb->query("INSERT INTO vtiger_customerportal_tabs (tabid,visible,sequence) VALUES ($tabId,1,$i)");
+					$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($tabId,'showrelatedinfo',1)");
+				}
 			}
 			
 			$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES (0,'userid',1)");

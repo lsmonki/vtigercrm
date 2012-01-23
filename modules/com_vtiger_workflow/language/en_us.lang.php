@@ -80,6 +80,11 @@ $mod_strings = array(
 'Portal Url' => 'Portal Url',
 
 'Workflow'=>'Workflow',
+
+'VTCreateEntityTask' => 'Create Entity',
+'LBL_ENTITY_TYPE' => 'Entity Type',
+'LBL_SELECT_ENTITY_TYPE' => '-- Select Entity Type --',
+'LBL_NO_ENTITIES_FOUND' => 'No Entities Found to Create',
 );
 
 

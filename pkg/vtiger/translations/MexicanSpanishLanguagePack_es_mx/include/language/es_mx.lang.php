@@ -1200,9 +1200,32 @@ $app_strings = array (
      'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE'=>'Selecciona campos a actualizar e introduce su nuevo valor.',
 
      'LBL_LOADING'=>'Cargando...',
+	//Added for Sub Products
+	'Parent Product' => 'Producto Padre',
+	
+	//Added for Service Contracts
+	'Service Contracts' => 'Contratos de Servicio',
+	'ServiceContracts' => 'Contratos de servicio',
+	'Services' => 'Servicios',
      'LBL_REFRESH' => 'Actualizar',
      'LBL_Reminder' => 'Recordatorio',
+	'LBL_RESET_PASSWORD' => 'Reiniciar contraseña',
+	'LBL_PHP_UPGRADE' => 'Se ha actualizado la versión de PHP. Dados los cambios en crypt API, su contraseña 
+		  ya no funciona, por favor reinicie su contraseña.',
+	'LBL_RESET_PASSWORD_DESCRIPTION' => 'Puede reiniciar las contraseñas para todos los usuarios utilizando un script y estableciendo la misma
+			igual a su nombre de usuario.',
 
+	'LBL_CRITERIA_AND'=>'y',
+	'LBL_CRITERIA_OR'=>'o',
+	'LBL_NEW_GROUP'=>'Nuevo Grupo',
+	'LBL_DELETE_GROUP'=>'Borrar Grupo',
+	'LBL_NEW_CONDITION'=>'Nueva Condición',
+	'LBL_ADVANCED_FILTER' => 'Búsqueda avanzada',
+	
+	'LBL_CHANGE'=>'Cambiar',
+	'LBL_CHANGE_TITLE'=>'Cambiar [Alt+C]',
+	
+	'LBL_NEXT_BUTTON_LABEL' => 'Siguiente',
 );
 $app_list_strings = array (
       'moduleList' => array(
@@ -1234,6 +1257,8 @@ $app_list_strings = array (
                              ),
       'opportunity_relationship_type_dom' => array(
             '0' => '',
+
+
             'Primary Decision Maker' => 'Toma la Decisión',
             'Business Decision Maker' => 'Decide viabilidad de la propuesta',
             'Business Evaluator' => 'Evalua económicamente la propuesta',
@@ -1245,6 +1270,9 @@ $app_list_strings = array (
                              ),
       'case_relationship_type_dom' => array(
             '0' => '',
+
+
+
             'Primary Contact' => 'Contacto Principal',
             'Alternate Contact' => 'Contacto Alternativo',
                              ),
@@ -1415,5 +1443,8 @@ $app_currency_strings = array(
     'United Republic OF Tanzania, Shilling' => 'United Republic OF Tanzania, Shilling',
     'Yemen, Rials'			=> 'Yemen, Rials',
     'Zambia, Kwacha' => 'Zambia, Kwacha',
+	'Malawi, kwacha'		=> 'Malawi, kwacha',
+	'Tunisian, Dinar'		=> 'Tunisian, Dinar',
+	'Moroccan, Dirham'		=> 'Moroccan, Dirham',
 );
 ?>

@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <module>
   <type>language</type>
-  <name>English</name>
+  <name>BritishEnglish</name>
   <label>British English</label>
   <prefix>en_gb</prefix>
   <version>5.3.0</version>
-  <dependencies>
-    <vtiger_version>5.3.0</vtiger_version>
-  </dependencies>
+	<dependencies>
+		<vtiger_version>5.2.1</vtiger_version>
+		<vtiger_max_version>5.*</vtiger_max_version>
+	</dependencies>
   <license>
    <inline><![CDATA[
  ********************************************************************************
