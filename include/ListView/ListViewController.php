@@ -57,8 +57,7 @@ class ListViewController {
 		$isRoleBased = vtws_isRoleBasedPicklist($name);
 		$this->picklistRoleMap[$name] = $isRoleBased;
 		if ($this->picklistRoleMap[$name]) {
-			$this->picklistValueMap[$name] = getAssignedPicklistValues($fieldName,
-					$this->user->roleid, $this->db);
+			$this->picklistValueMap[$name] = getAssignedPicklistValues($name,$this->user->roleid, $this->db);
 		}
 	}
 
@@ -301,8 +300,8 @@ class ListViewController {
 						$value = ' --';
 					}
 				}elseif ($field->getFieldDataType() == 'picklist') {
-					if (!$is_admin && $this->picklistRoleMap[$fieldName] &&
-							!in_array($tmpValue, $this->picklistValueMap[$fieldName])) {
+					if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
+							!in_array($value, $this->picklistValueMap[$fieldName])) {
 						$value = "<font color='red'>".getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
 					} else {

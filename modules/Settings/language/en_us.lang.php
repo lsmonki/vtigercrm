@@ -1244,5 +1244,8 @@ $mod_strings = Array(
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
 'Configuration Editor'=>'Configuration Editor',
 
+'ModTracker' => 'ModTracker',
+'LBL_MODTRACKER_DESCRIPTION' => 'Select modules for tracking',
+
 );
 ?>

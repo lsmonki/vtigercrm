@@ -1252,8 +1252,19 @@ $log->info("in getOldFileName  ".$notesid);
 	
 	/** Function to delete an entity with given Id */
 	function trash($module, $id) {
-		global $log, $current_user;
-		
+		global $log, $current_user, $adb;
+
+        require_once("include/events/include.inc");
+		global $adb;
+		$em = new VTEventsManager($adb);
+
+        // Initialize Event trigger cache
+		$em->initTriggerCache();
+
+		$entityData  = VTEntityData::fromEntityId($adb, $id);
+
+        $em->triggerEvent("vtiger.entity.beforedelete", $entityData);
+
 		$this->mark_deleted($id);
 		$this->unlinkDependencies($module, $id);
 		
@@ -1263,6 +1274,8 @@ $log->info("in getOldFileName  ".$notesid);
 		
 		$sql_recentviewed ='DELETE FROM vtiger_tracker WHERE user_id = ? AND item_id = ?';
         $this->db->pquery($sql_recentviewed, array($current_user->id, $id));
+
+        $em->triggerEvent("vtiger.entity.afterdelete", $entityData);
 	}
 	
 	

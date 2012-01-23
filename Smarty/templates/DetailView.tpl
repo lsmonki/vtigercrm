@@ -423,13 +423,11 @@ function sendfile_email()
 				  
 			<!-- right side relevant info -->
 			<!-- Action links for Event & Todo START-by Minnie -->
-			{if $MODULE eq 'Potentials' || $MODULE eq 'HelpDesk' || $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads' || ($MODULE eq 'Documents' && ($ADMIN eq 'yes' || $FILE_STATUS eq '1') && $FILE_EXIST eq 'yes')}
-  			<table width="100%" border="0" cellpadding="5" cellspacing="0">
-				<tr><td>&nbsp;</td></tr>				
+			<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
 								
 				{if $MODULE eq 'HelpDesk'}
-					{if $CONVERTASFAQ eq 'permitted'}
-				<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>				
+					{if $CONVERTASFAQ eq 'permitted'}				
 				<tr>
 					<td align="left" style="padding-left:10px;"> 
 						<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&record={$ID}&return_id={$ID}&module={$MODULE}&action=ConvertAsFAQ"><img src="{'convert.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
@@ -438,8 +436,7 @@ function sendfile_email()
 				</tr>
 					{/if}		
 				{elseif $MODULE eq 'Potentials'}
-						{if $CONVERTINVOICE eq 'permitted'}
-				<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>				
+						{if $CONVERTINVOICE eq 'permitted'}			
 				<tr>
 					<td align="left" style="padding-left:10px;"> 
 						<a class="webMnu" href="index.php?return_module={$MODULE}&return_action=DetailView&return_id={$ID}&convertmode={$CONVERTMODE}&module=Invoice&action=EditView&account_id={$ACCOUNTID}"><img src="{'actionGenerateInvoice.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
@@ -448,7 +445,6 @@ function sendfile_email()
 				</tr>
 						{/if}
 				{elseif $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents')}                              
-				<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
 						
 					{if $MODULE eq 'Contacts'}
 						{assign var=subst value="contact_id"}
@@ -540,10 +536,7 @@ function sendfile_email()
 						<tr><td>&nbsp;</td></tr>
 					
 						{/if}
-					{/if}
-					
-				<!-- End: Actions for Documents Module -->	
-                  </table>
+			      </table>
                 {* vtlib customization: Avoid line break if custom links are present *}
                 {if !isset($CUSTOM_LINKS) || empty($CUSTOM_LINKS)}
                 <br>

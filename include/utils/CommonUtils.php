@@ -2231,7 +2231,9 @@ function getEntityName($module, $ids_list)
 	global $adb;
 	global $log;
 	$log->debug("Entering getEntityName(".$module.") method ...");
-
+	if($module == 'Events') {
+		$module = 'Calendar';
+	}
 	if($module != '')
 	{
 		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";

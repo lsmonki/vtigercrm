@@ -522,7 +522,7 @@ function vtws_getActorEntityNameById ($entityId, $idList) {
 function vtws_isRoleBasedPicklist($name) {
 	$db = PearDatabase::getInstance();
 	$sql = "select picklistid from vtiger_picklist where name = ?";
-	$result = $db->pquery($sql, array($tableName));
+	$result = $db->pquery($sql, array($name));
 	return ($db->num_rows($result) > 0);
 }
 
