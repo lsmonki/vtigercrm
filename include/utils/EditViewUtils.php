@@ -1623,6 +1623,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
+		$qty = number_format($qty, 2,'.',''); //Convert to 2 decimals
+		$listprice = number_format($listprice, 2,'.',''); //Convert to 2 decimals
 		$product_Detail[$i]['qty'.$i]=$qty;
 		$product_Detail[$i]['listPrice'.$i]=$listprice;
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
@@ -1779,6 +1781,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	//To set the Shipping & Handling charge
 	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
+	$shCharge = number_format($shCharge, 2,'.',''); //Convert to 2 decimals
 	$product_Detail[1]['final_details']['shipping_handling_charge'] = $shCharge;
 
 	//To set the Shipping & Handling tax values
@@ -1809,6 +1812,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	//To set the Adjustment value
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
+	$adjustment = number_format($adjustment, 2,'.',''); //Convert to 2 decimals
 	$product_Detail[1]['final_details']['adjustment'] = $adjustment;
 
 	//To set the grand total
