@@ -266,7 +266,9 @@ class Vtiger_Cron {
     static function nextSequence() {
         global $adb;
         $result = self::querySilent('SELECT MAX(sequence) FROM vtiger_cron_task ORDER BY SEQUENCE');
-        $row = $adb->fetch_array($result);
+		if ($result && $adb->num_rows($result)) {
+			$row = $adb->fetch_array($result);
+		}
         if($row == NULL) {
             $row[0] = 1;
         }
