@@ -103,7 +103,7 @@ function addColumn()
 
 function addColumnStep1()
 {
-	//the below line is added for report not woking properly in browser IE7 --bharath
+	//the below line is added for report not woking properly in browser IE7 
 	document.getElementById("selectedColumns").style.width="164px";
 	
 	if (availListObj.options.selectedIndex > -1)
@@ -142,7 +142,7 @@ function addColumnStep1()
 		}
 	}
 }
-//this function is done for checking,whether the user has access to edit the field :Bharath
+//this function is done for checking,whether the user has access to edit the field 
 function selectedColumnClick(oSel)
 {
 	var error_msg = '';
@@ -507,8 +507,10 @@ function editReport(id)
 	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport0&record='+id;
 	fnPopupWin(arg);
 }
-function CreateReport(module)
+function CreateReport(element)
 {
+	if($(element) == null) return;
+	var module = $(element).value;
 	var arg ='index.php?module=Reports&action=ReportsAjax&file=NewReport0&folder='+gcurrepfolderid+'&reportmodule='+module;
 	fnPopupWin(arg);
 }

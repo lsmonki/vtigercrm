@@ -1640,14 +1640,13 @@ function getReportsModuleList($focus)
 	//global $report_modules;	
 	global $mod_strings;
 	$modules = Array();
-	foreach($focus->module_list as $key=>$value)
-	{
-			if(isPermitted($key,'index') == "yes")
-			{
-				$count_flag = 1;
-				$modules [$key] = getTranslatedString($key,$key);
-			}
+	foreach($focus->module_list as $key=>$value) {
+		if(isPermitted($key,'index') == "yes") {
+			$count_flag = 1;
+			$modules [$key] = getTranslatedString($key,$key);
+		}
 	}
+	asort($modules);
 	return $modules;
 }
 /** Function to get the Related module list in vtiger_reports
