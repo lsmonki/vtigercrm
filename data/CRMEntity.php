@@ -1487,6 +1487,16 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 	}
 	// END
+
+	/* Function to check if module sequence numbering is configured for the given module or not */
+	function isModuleSequenceConfigured($module) {
+		$adb = PearDatabase::getInstance();
+		$result = $adb->pquery('SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1', array($module));
+		if($result && $adb->num_rows($result) > 0) {
+			return true;
+		}
+		return false;
+	}
 	
 	/* Function to get the next module sequence number for a given module */
 	function getModuleSeqInfo($module) {
@@ -1520,6 +1530,8 @@ $log->info("in getOldFileName  ".$notesid);
 		$log->debug("Entered updateMissingSeqNumber function");
 		
 		vtlib_setup_modulevars($module, $this);
+
+		if(!$this->isModuleSequenceConfigured($module)) return;
 		
 		$tabid = getTabid($module);
 		$fieldinfo = $adb->pquery("SELECT * FROM vtiger_field WHERE tabid = ? AND uitype = 4", Array($tabid));
