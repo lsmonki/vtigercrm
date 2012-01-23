@@ -117,9 +117,9 @@ function getFieldsListFromQuery($query)
 		elseif($tablename == 'vtiger_seproductsrel' && $columnName == 'crmid')//Product - Related To
 		{
 			$fields .= "case vtiger_crmentityRelatedTo.setype 
-					when 'Leads' then concat('Leads ::: ',vtiger_ProductRelatedToLead.lastname,' ',vtiger_ProductRelatedToLead.firstname) 
-					when 'Accounts' then concat('Accounts ::: ',vtiger_ProductRelatedToAccount.accountname) 
-					when 'Potentials' then concat('Potentials ::: ',vtiger_ProductRelatedToPotential.potentialname) 
+					when 'Leads' then concat('Leads :::: ',vtiger_ProductRelatedToLead.lastname,' ',vtiger_ProductRelatedToLead.firstname)
+					when 'Accounts' then concat('Accounts :::: ',vtiger_ProductRelatedToAccount.accountname)
+					when 'Potentials' then concat('Potentials :::: ',vtiger_ProductRelatedToPotential.potentialname)
 				    End as 'Related To',";
 		}
 		elseif($tablename == 'vtiger_products' && $columnName == 'contactid')//Product - Contact
@@ -151,8 +151,8 @@ function getFieldsListFromQuery($query)
         elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
         {
                  $fields .= "case vtiger_crmentityRelatedTo.setype
-                                when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname)
-			when 'Contacts' then concat('Contacts ::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
+                                when 'Accounts' then concat('Accounts :::: ',vtiger_account.accountname)
+			when 'Contacts' then concat('Contacts :::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
                              End as 'Related To',";
         }
 		elseif($tablename == 'vtiger_notes' && ($columnName == 'filename' || $columnName == 'filetype' || $columnName == 'filesize' || $columnName == 'filelocationtype' || $columnName == 'filestatus' || $columnName == 'filedownloadcount' ||$columnName == 'folderid')){
