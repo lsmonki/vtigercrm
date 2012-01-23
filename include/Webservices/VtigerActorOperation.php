@@ -43,6 +43,8 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 				$row = $this->pearDB->query_result_rowdata($result,$i);
 				$tableName = $row['table_name'];
 			}
+			// Cache the result for further re-use
+			$actorTables[$this->webserviceObject->getEntityName()] = $tableName;
 		}
 		return $tableName;
 	}

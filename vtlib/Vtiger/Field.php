@@ -42,6 +42,12 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 
 		$picklist_table = 'vtiger_'.$this->name;
 		$picklist_idcol = $this->name.'id';
+		
+		// Fix Table ID column names
+		if ($this->name == 'sales_stage') {
+			$picklist_idcol = $this->name . '_id';
+		}		
+		// END
 
 		if(!Vtiger_Utils::CheckTable($picklist_table)) {
 			Vtiger_Utils::CreateTable(

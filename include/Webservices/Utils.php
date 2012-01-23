@@ -776,7 +776,7 @@ function vtws_transferComments($sourceRecordId, $destinationRecordId) {
 	}
 }
 
-function vtws_transferOwnership($ownerId, $newOwnerId) {
+function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 	$db = PearDatabase::getInstance();
 	//Updating the smcreatorid,smownerid, modifiedby in vtiger_crmentity
 	$sql = "update vtiger_crmentity set smcreatorid=? where smcreatorid=?";
@@ -789,8 +789,10 @@ function vtws_transferOwnership($ownerId, $newOwnerId) {
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
 	//deleting from vtiger_tracker
-	$sql = "delete from vtiger_tracker where user_id=?";
-	$db->pquery($sql, array($ownerId));
+	if ($delete) {
+		$sql = "delete from vtiger_tracker where user_id=?";
+		$db->pquery($sql, array($ownerId));
+	}
 
 	//updating created by in vtiger_lar
 	$sql = "update vtiger_lar set createdby=? where createdby=?";
@@ -812,13 +814,23 @@ function vtws_transferOwnership($ownerId, $newOwnerId) {
 	$sql = "update vtiger_moduleowners set user_id=? where user_id=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
+	//delete from vtiger_homestuff
+	if ($delete) {
+		$sql = "delete from vtiger_homestuff where userid=?";
+		$db->pquery($sql, array($ownerId));
+	}
+
 	//delete from vtiger_users to group vtiger_table
-	$sql = "delete from vtiger_user2role where userid=?";
-	$db->pquery($sql, array($ownerId));
+	if ($delete) {
+		$sql = "delete from vtiger_user2role where userid=?";
+		$db->pquery($sql, array($ownerId));
+	}
 
 	//delete from vtiger_users to vtiger_role vtiger_table
-	$sql = "delete from vtiger_users2group where userid=?";
-	$db->pquery($sql, array($ownerId));
+	if ($delete) {
+		$sql = "delete from vtiger_users2group where userid=?";
+		$db->pquery($sql, array($ownerId));
+	}
 
 	$sql = "select tabid,fieldname,tablename,columnname from vtiger_field left join ".
 	"vtiger_fieldmodulerel on vtiger_field.fieldid=vtiger_fieldmodulerel.fieldid where uitype ".

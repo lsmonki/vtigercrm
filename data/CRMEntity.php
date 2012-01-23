@@ -30,6 +30,17 @@ require_once("include/Zend/Json.php");
 class CRMEntity
 {
   	var $ownedby;
+
+	/**
+	 * Detect if we are in bulk save mode, where some features can be turned-off
+	 * to improve performance.
+	 */
+	static function isBulkSaveMode() {
+		global $VTIGER_BULK_SAVE_MODE;
+		if(isset($VTIGER_BULK_SAVE_MODE) && $VTIGER_BULK_SAVE_MODE) {
+			return true;
+		}
+	}
    
 	static function getInstance($module) {
 		$modName = $module;
@@ -354,16 +365,35 @@ class CRMEntity
 		$_REQUEST['currentid']=$current_id;
 		if($current_user->id == '')
 			$current_user->id = 0;
+			
+			
+		// Customization
+		$created_date_var = $adb->formatDate($date_var, true);
+		$modified_date_var= $adb->formatDate($date_var, true);
+		
+		// Preserve the timestamp
+		if(self::isBulkSaveMode()) {
+			if(!empty($this->column_fields['createdtime'])) $created_date_var = $adb->formatDate($this->column_fields['createdtime'], true);
+			if(!empty($this->column_fields['modifiedtime'])) $modified_date_var = $adb->formatDate($this->column_fields['modifiedtime'], true);		
+		}
+		// END
 
 		$description_val = from_html($this->column_fields['description'],($insertion_mode == 'edit')?true:false);
 		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,modifiedby,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?)";
-		$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $current_user->id, $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $current_user->id, $created_date_var, $modified_date_var);
 		$adb->pquery($sql, $params);
 		$this->id = $current_id;
 	}
 
    }
 
+	// Function which returns the value based on result type (array / ADODB ResultSet)
+	private function resolve_query_result_value($result, $index, $columnname) {
+		global $adb;	  	
+		if(is_array($result)) return $result[$index][$columnname];
+		else return $adb->query_result($result, $index, $columnname);
+	}  
+	  
 
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
@@ -453,21 +483,46 @@ class CRMEntity
 		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4) and vtiger_field.presence in (0,2)";  
 		  $params = array($tabid, $table_name);
 	  }
-
-	  $result = $adb->pquery($sql, $params);
-	  $noofrows = $adb->num_rows($result);
+	  
+	  // Attempt to re-use the quer-result to avoid reading for every save operation
+	  // TODO Need careful analysis on impact ... MEMORY requirement might be more
+	  static $_privatecache = array();
+	  
+	  $cachekey = "{$insertion_mode}-". implode(',', $params);
+	  
+	  if(!isset($_privatecache[$cachekey])) {
+	  	$result = $adb->pquery($sql, $params);
+	  	$noofrows = $adb->num_rows($result);
+	  	
+	  	if(CRMEntity::isBulkSaveMode()) {
+	  		$cacheresult = array();
+	  		for($i = 0; $i < $noofrows; ++$i) {
+	  			$cacheresult[] = $adb->fetch_array($result);
+	  		}
+	  		$_privatecache[$cachekey] = $cacheresult;
+	  	}
+	  	
+	  } else { // Useful when doing bulk save
+	  	$result = $_privatecache[$cachekey];
+	  	$noofrows = count($result);
+	  }
+	  
 	  for($i=0; $i<$noofrows; $i++) {
-		$fieldname=$adb->query_result($result,$i,"fieldname");
-		$columname=$adb->query_result($result,$i,"columnname");
-		$uitype=$adb->query_result($result,$i,"uitype");
-		$generatedtype=$adb->query_result($result,$i,"generatedtype");
-		$typeofdata=$adb->query_result($result,$i,"typeofdata");
+	  
+		$fieldname=$this->resolve_query_result_value($result,$i,"fieldname");
+		$columname=$this->resolve_query_result_value($result,$i,"columnname");
+		$uitype=$this->resolve_query_result_value($result,$i,"uitype");
+		$generatedtype=$this->resolve_query_result_value($result,$i,"generatedtype");
+		$typeofdata=$this->resolve_query_result_value($result,$i,"typeofdata");
+		
 		$typeofdata_array = explode("~",$typeofdata);
 		$datatype = $typeofdata_array[0];
 
 		if($uitype == 4 && $insertion_mode != 'edit') {
-			$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
-			$fldvalue = $this->column_fields[$fieldname];
+			$fldvalue = '';
+			// Bulk Save Mode: Avoid generation of module sequence number, take care later.
+			if(!CRMEntity::isBulkSaveMode()) $fldvalue = $this->setModuleSeqNumber("increment",$module);
+			$this->column_fields[$fieldname] = $fldvalue;
 		}
 		  if(isset($this->column_fields[$fieldname]))
 		  {
@@ -552,12 +607,20 @@ class CRMEntity
 				$json = new Zend_Json();
 				$fldvalue = $json->encode($ids);
 			}elseif($uitype == 12) {
-			  	$query = "SELECT email1 FROM vtiger_users WHERE id = ?";
-			  	$res = $adb->pquery($query,array($current_user->id));
-			  	$rows = $adb->num_rows($res);
-			  	if($rows > 0) {
-			  		$fldvalue = $adb->query_result($res,0,'email1');
+				
+				// Bulk Sae Mode: Consider the FROM email address as specified, if not lookup
+				$fldvalue = $this->column_fields[$fieldname];
+				
+				if(empty($fldvalue)) {
+				  	$query = "SELECT email1 FROM vtiger_users WHERE id = ?";
+				  	$res = $adb->pquery($query,array($current_user->id));
+				  	$rows = $adb->num_rows($res);
+				  	if($rows > 0) {
+				  		$fldvalue = $adb->query_result($res,0,'email1');
+					}
 				}
+				// END
+				
 			}elseif($uitype == 72) {
 				// Some of the currency fields like Unit Price, Totoal , Sub-total - doesn't need currency conversion during save
 				$fldvalue = CurrencyField::convertToDBFormat($this->column_fields[$fieldname],null,true);
@@ -822,12 +885,12 @@ $log->info("in getOldFileName  ".$notesid);
 		//Event triggering code
 		require_once("include/events/include.inc");
 		global $adb;
+
 		$em = new VTEventsManager($adb);
-		
 		// Initialize Event trigger cache
-		$em->initTriggerCache(); 
-		
+		$em->initTriggerCache();
 		$entityData  = VTEntityData::fromCRMEntity($this);
+
 		$em->triggerEvent("vtiger.entity.beforesave.modifiable", $entityData);
 		$em->triggerEvent("vtiger.entity.beforesave", $entityData);
 		$em->triggerEvent("vtiger.entity.beforesave.final", $entityData);

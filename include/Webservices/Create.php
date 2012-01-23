@@ -17,7 +17,14 @@ function vtws_create($elementType, $element, $user) {
 
     global $log, $adb;
 
-    $webserviceObject = VtigerWebserviceObject::fromName($adb, $elementType);
+    // Cache the instance for re-use
+	if(!isset($vtws_create_cache[$elementType]['webserviceobject'])) {
+		$webserviceObject = VtigerWebserviceObject::fromName($adb,$elementType);
+		$vtws_create_cache[$elementType]['webserviceobject'] = $webserviceObject;
+	} else {
+		$webserviceObject = $vtws_create_cache[$elementType]['webserviceobject'];
+	}
+	// END			
 
     $handlerPath = $webserviceObject->getHandlerPath();
     $handlerClass = $webserviceObject->getHandlerClass();
