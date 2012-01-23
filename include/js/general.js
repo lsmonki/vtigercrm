@@ -212,7 +212,7 @@ function emptyCheck(fldName,fldLabel, fldType) {
 		else{
 			return true
 		}
-	} else if((fldType == "textarea")  
+	} else if((fldType == "textarea")
 		&& (typeof(CKEDITOR)!=='undefined' && CKEDITOR.intances[fldName] !== 'undefined')) {
 		var textObj = CKEDITOR.intances[fldName];
 		var textValue = textObj.getData();
@@ -721,7 +721,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 				getObj(fldName).focus()
 			} catch(error) { }
 			return false
-		} else return true
+		}else return true
 	} else {
 		// changes made -- to fix the ticket#3272
 		if(fldName == "probability" || fldName == "commissionrate")
@@ -738,7 +738,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 				alert(alert_arr.INVALID+fldLabel)
 				try {
 					getObj(fldName).focus()
-				} catch(error) { }
+				}catch(error) { }
 				return false
 			}
 			else if(splitval[0] > 100 || len > 3 || (splitval[0] >= 100 && splitval[1] > 0))
@@ -775,7 +775,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 		alert(alert_arr.INVALID+fldLabel)
 		try {
 			getObj(fldName).focus()
-		} catch(error) { }
+		}catch(error) { }
 		return false;
 	}
 
@@ -4318,6 +4318,66 @@ function getTranslatedString(key){
     }
     else{
         return key;
-    }
+	}
+}
 
+function copySelectedOptions(source, destination) {
+
+	var srcObj = $(source);
+	var destObj = $(destination);
+
+	if(typeof(srcObj) == 'undefined' || typeof(destObj) == 'undefined') return;
+
+	for (i=0;i<srcObj.length;i++) {
+		if (srcObj.options[i].selected==true) {
+			var rowFound=false;
+			var existingObj=null;
+			for (j=0;j<destObj.length;j++) {
+				if (destObj.options[j].value==srcObj.options[i].value) {
+					rowFound=true
+					existingObj=destObj.options[j]
+					break
+				}
+			}
+
+			if (rowFound!=true) {
+				var newColObj=document.createElement("OPTION")
+				newColObj.value=srcObj.options[i].value
+				if (browser_ie) newColObj.innerText=srcObj.options[i].innerText
+				else if (browser_nn4 || browser_nn6) newColObj.text=srcObj.options[i].text
+				destObj.appendChild(newColObj)
+				srcObj.options[i].selected=false
+				newColObj.selected=true
+				rowFound=false
+			} else {
+				if(existingObj != null) existingObj.selected=true
+			}
+		}
+	}
+}
+
+function removeSelectedOptions(objName) {
+	var obj = getObj(objName);
+	if(obj == null || typeof(obj) == 'undefined') return;
+
+	for (i=obj.options.length-1;i>=0;i--) {
+		if (obj.options[i].selected == true) {
+			obj.options[i] = null;
+		}
+	}
+}
+
+function convertOptionsToJSONArray(objName,targetObjName) {
+	var obj = $(objName);
+	var arr = [];
+	if(typeof(obj) != 'undefined') {
+		for (i=0; i<obj.options.length; ++i) {
+			arr.push(obj.options[i].value);
+		}
+	}
+	if(targetObjName != 'undefined') {
+		var targetObj = $(targetObjName);
+		if(typeof(targetObj) != 'undefined') targetObj.value = JSON.stringify(arr);
+	}
+	return arr;
 }
