@@ -144,12 +144,13 @@ vtiger_help_controller = function() {
         link.id='helpLink';
         linkDiv.id='helpButton';
         link.setAttribute('class', 'helpTipsHandler');
+        link.style.visibility = 'visible';
         //link.setAttribute('onclick', "vtiger_help($('helpTipsHandlerPin'));");
         link.onclick=function(){
             vtiger_help($('helpTipsHandlerPin'));
             return false;
         }
-
+        var themePath = vtlib_vtiger_imageurl(gVTTheme);
         link.setAttribute('href',"javascript:void(0);");
         link.innerHTML="<span id='helpTipsHandlerPin'>&nbsp;</span><img src='"+themePath+"/help_sidebar.png' border=0 align='absmiddle' title="+getTranslatedString("LBL_HELP_TITLE")+">";
         
@@ -195,8 +196,9 @@ vtiger_help_controller = function() {
             vtigerHelpPopupLay.style.width = '310px';
             vtigerHelpPopupLay.style.bottom = '2px';
             vtigerHelpPopupLay.style.fontWeight = 'normal';
+            vtigerHelpPopupLay.style.visibility = 'visible';
             vtigerHelpPopupLay.style.margin="-1% 0 0 0";
-            vtigerHelpPopupLay.innerHTML = '<div id="vtigerHelpPopupLayContainer"></div><div id="vtigerHelpGTranslateEl" class="hdrTabBg" style="border-top:2px solid #717351;heigth:30px;"></div>';
+            vtigerHelpPopupLay.innerHTML = '<div id="vtigerHelpPopupLayContainer"></div><div id="vtigerHelpGTranslateEl" ></div>';
 
             document.getElementById('helpButton').appendChild(vtigerHelpPopupLay);
         }
@@ -383,8 +385,8 @@ vtiger_help_controller = function() {
 	
         // NOTE update recordUI API below to match the helppage node-structure...
         var tpl = 
-        '<% if (SKIP_HEADER_FOOTER != true) {%><div id="help_handle">'+
-        '<table class="layerHeadingULine hdrTabBg"  border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:3px 0px 0px 0px;height:30px;">' +
+        '<% if (SKIP_HEADER_FOOTER != true) {%><div id="helpHandle"  style="cursor:move;">'+
+        '<table class="layerHeadingULine"  border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:3px 0px 0px 0px;height:30px;">' +
         '	<tr valign=top>' +
         '		<td align="left"   valign="middle"><b><label  style="margin-left:6px;">'+getTranslatedString("LBL_HELP_TITLE")+'</label><b></td>' +
         '		<td align="center" valign="middle"></td>' +
@@ -399,7 +401,7 @@ vtiger_help_controller = function() {
         '<% } %>' +
         '</table>' +
         '</div>'+
-        '<div id="contentOfHelp"style="height:217px;overflow:auto;padding:6px;">'+
+        '<div id="contentOfHelp"  style="padding:6px;">'+
         '	<% if (RECORDS.length == 0) {%>' +
         '	<div class="helppage">' +
         '		No quick help found. Try <a href="http://wiki.vtiger.com" target="_blank">wiki.vtiger.com</a>' +

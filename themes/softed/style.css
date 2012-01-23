@@ -2115,8 +2115,8 @@ textarea {
 }
 
 .reportsListTable {
-	background-color:white;
-	border:2px solid #c4a6d1;
+    background-color:white;
+    border:2px solid #c4a6d1;
 }
 
 .reportGenerateTable{
@@ -2493,11 +2493,11 @@ a.drop_down:Hover{
  * Product help tips
 */
 .vtigerHelpWelcomePopupLay {
-	background: #F5F5F5;
-	border: 1px solid #999;
-	position: absolute;
-	top: 69px;
-	left: 25%;
+    background: #F5F5F5;
+    border: 1px solid #999;
+    position: absolute;
+    top: 69px;
+    left: 25%;
 }
 
 .vtigerHelpPopupLay { 
@@ -2547,7 +2547,7 @@ a.drop_down:Hover{
 
 }
 .vtigerHelpPopupLay .helppage .content p {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 .vtigerHelpPopupLay .helppage .footer { 
     color: gray;
@@ -2598,8 +2598,14 @@ a#helpLink:hover{
     background: url(images/help_background.png);
     overflow: auto;
 }
-.vtigerHelpWelcomePopupLay #contentOfHelp{
-    height : 400px !important;
+
+.vtigerHelpPopupLay .helppage .header .helpArrow{
+    margin-bottom: 1px;
+    cursor: pointer;
+    margin-right:3px;
+}
+a .links{
+    margin-top:3px;
 }
 /* Mail Manager starts*/
 .mm_blur {
@@ -2696,5 +2702,5 @@ input {
 /* Mail Manager ends */
 
 .documentModuleFolderView{
-	padding-bottom:5px;
+    padding-bottom:5px;
 }

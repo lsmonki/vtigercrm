@@ -2032,8 +2032,8 @@ textarea {
 }
 
 .reportsListTable {
-	background-color:white;
-	border:2px solid #a3a29f;
+    background-color:white;
+    border:2px solid #a3a29f;
 }
 
 .reportGenerateTable{
@@ -2128,18 +2128,18 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-   	background: url(images/layerPopupBg.gif) ;
-	height: 100%;
-	width: 100%;
-	top: 0px;
-	left: 0px;
-	overflow: hidden;
-	z-index: 10000;
-	Filter: Alpha(opacity = 70);
-	-moz-opacity: 0.7;
-	text-align: center;
-	vertical-align: middle;
-	position: absolute;
+    background: url(images/layerPopupBg.gif) ;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    z-index: 10000;
+    Filter: Alpha(opacity = 70);
+    -moz-opacity: 0.7;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
 }
 
 .veil_new{
@@ -2357,7 +2357,7 @@ a.drop_down:Hover{
     border: 1px solid #999;
     position: absolute;
     top: 69px;
-	left: 25%;
+    left: 25%;
 }
 
 .vtigerHelpPopupLay {
@@ -2401,8 +2401,13 @@ a.drop_down:Hover{
 .vtigerHelpPopupLay .helppage .header .helpArrow .arrowRight{
         margin-right:2px;
 }
+
+.vtigerHelpPopupLay .helppage .content {
+    margin-left:11px;
+
+}
 .vtigerHelpPopupLay .helppage .content p {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 .vtigerHelpPopupLay .helppage .footer {
     color: gray;
@@ -2417,9 +2422,6 @@ a.drop_down:Hover{
     height : 400px !important;
     background: url(images/help_background.png) ;
     overflow: auto;
-}
-.vtigerHelpWelcomePopupLay #contentOfHelp{
-    height : 400px !important;
 }
 .vtigerHelpPopupLay .goog-te-sectional-gadget-link-text {
     font-weight: normal;
@@ -2561,5 +2563,5 @@ input {
 /* Mail Manager ends */
 
 .documentModuleFolderView{
-	padding-bottom:5px;
+    padding-bottom:5px;
 }
