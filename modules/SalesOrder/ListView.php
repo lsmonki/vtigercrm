@@ -25,7 +25,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",'SalesOrder');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

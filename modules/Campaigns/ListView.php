@@ -131,7 +131,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("SINGLE_MOD",'Campaign');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>

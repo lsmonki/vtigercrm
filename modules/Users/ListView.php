@@ -47,7 +47,7 @@ if( $adb->dbType == "pgsql")
 	$list_query = fixPostgresQuery($list_query, $log, 0);
 
 $userid = array(); 
-$userid_Query = "SELECT id,user_name FROM vtiger_users WHERE user_name IN ('admin')";
+$userid_Query = "SELECT id,user_name FROM vtiger_users";
 $users = $adb->pquery($userid_Query,array());
 $norows = $adb->num_rows($users);
 if($norows  > 0){

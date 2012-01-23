@@ -186,7 +186,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",'Opportunity');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 

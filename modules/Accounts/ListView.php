@@ -160,7 +160,7 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",'Account');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 
 
 //Retreive the list from Database

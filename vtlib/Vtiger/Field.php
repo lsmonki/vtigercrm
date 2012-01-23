@@ -41,6 +41,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		}
 
 		$picklist_table = 'vtiger_'.$this->name;
+		$picklist_idcol = $this->name.'id';
 		if(!Vtiger_Utils::CheckTable($picklist_table)) {
 			Vtiger_Utils::CreateTable(
 				$picklist_table,
@@ -60,8 +61,6 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		// Fix Table ID column names
 		if(in_array($this->name.'_id', $adb->getColumnNames($picklist_table))) {
 			$picklist_idcol = $this->name.'_id';
-		} else {
-			$picklist_idcol = $this->name.'id';
 		}
 		// END
 

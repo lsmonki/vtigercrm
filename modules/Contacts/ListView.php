@@ -295,7 +295,7 @@ $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("MODULE", $currentModule);
-$smarty->assign("SINGLE_MOD", 'Contact');
+$smarty->assign("SINGLE_MOD", getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 
 $check_button = Button_Check($currentModule);
 $smarty->assign("CHECK", $check_button);

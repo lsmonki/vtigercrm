@@ -2436,17 +2436,6 @@ div.goog-te-sectional-gadget-all{
     overflow: auto;
 }
 .vtigerHelpPopupLay #vtigerHelpGTranslateEl {
-	 bottom: 0;
-	 background: url(images/help_header.png) repeat-x;
-	 border-top:2px solid #717351;
-	 heigth:30px;
-}
-.vtigerHelpWelcomePopupLay #contentOfHelp{
-    height : 400px !important;
-    background: url(images/help_background.png);
-    overflow: auto;
-}
-.vtigerHelpPopupLay #vtigerHelpGTranslateEl {
          bottom: 0;
          background: url(images/help_header.png) repeat-x;
          border-top:2px solid #717351;

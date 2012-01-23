@@ -78,8 +78,13 @@ class Vtiger_Cron {
      * Get the user datetimefeild
      */
     function getLastEndDateTime() {
-        $lastEndTimeDate = new DateTimeField(date('Y-m-d H:i:s', $this->data['lastend']));
-        return $lastEndTimeDate->getDisplayDateTimeValue();
+        if($this->data['lastend'] != NULL){
+			$lastEndTimeDate = new DateTimeField(date('Y-m-d H:i:s', $this->data['lastend']));
+			return $lastEndTimeDate->getDisplayDateTimeValue();
+		}
+		else{
+			return '';
+		}
     }
 
     /**

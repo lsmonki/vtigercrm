@@ -160,7 +160,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",'Email');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

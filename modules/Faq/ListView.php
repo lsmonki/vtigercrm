@@ -180,7 +180,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("SINGLE_MOD",'Document');
+$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 
 if($viewnamedesc['viewname'] == 'All')
 {
@@ -246,7 +246,7 @@ $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
-$smarty->assign("SINGLE_MOD" ,'Faq');
+$smarty->assign("SINGLE_MOD" ,getTranslatedString('SINGLE_'.$currentModule, $currentModule));
 
 if(isPermitted('Faq','EditView','') == 'yes') {
 	$other_text['mass_edit'] = $app_strings[LBL_MASS_EDIT];
