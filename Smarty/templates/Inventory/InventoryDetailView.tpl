@@ -275,6 +275,8 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 					{elseif $label neq 'Tax Class'}<!-- Avoid to display the label Tax Class -->
 						{if $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label} ({$keycursymb})</td>
+						{elseif $keyid eq '9'}
+							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label} {$APP.COVERED_PERCENTAGE}</td>
 						{else}
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{/if}

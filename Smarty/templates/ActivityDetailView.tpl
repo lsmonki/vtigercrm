@@ -282,7 +282,11 @@ function DeleteTag(id,recordid)
 						          		{assign var=keyval value=$custom_field.1}
 						          		{assign var=keyfldname value=$custom_field.0}
 						          		{assign var=keyoptions value=$custom_field.options}
-						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+										{if $keyid eq '9'}
+											<td class="cellLabel" align="right" width="20%"><b>{$keyfldname} {$APP.COVERED_PERCENTAGE}</b></td>
+										{else}
+											<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+										{/if}
 						          		{include file="DetailViewFields.tpl"}
 						          		{if ($index+1)% 2 == 0}
 						          			</tr><tr>
@@ -499,7 +503,11 @@ function DeleteTag(id,recordid)
 						          		{assign var=keyval value=$custom_field.1}
 						          		{assign var=keyfldname value=$custom_field.0}
 						          		{assign var=keyoptions value=$custom_field.options}
-						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+										{if $keyid eq '9'}
+											<td class="cellLabel" align="right" width="20%"><b>{$keyfldname} {$APP.COVERED_PERCENTAGE}</b></td>
+										{else}
+											<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+										{/if}
 						          		{include file="DetailViewFields.tpl"}
 											{if ($index+1)% 2 == 0}
 												</tr><tr>

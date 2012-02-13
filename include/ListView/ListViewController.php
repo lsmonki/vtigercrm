@@ -598,6 +598,9 @@ class ListViewController {
 					$label .=' ('.getTranslatedString('LBL_IN', $module).' '.
 							$user_info['currency_symbol'].')';
 				}
+				if($field->getUIType() == '9') {
+					$label .=' (%)';
+				}
 				if($module == 'Users' && $fieldName == 'User Name') {
 					$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
 						"\",\"parenttab=".$tabname."&order_by=".$field->getColumnName()."&sorder=".
