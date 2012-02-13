@@ -14,14 +14,14 @@ if (typeof(ImportJs) == 'undefined') {
     ImportJs = {
 
 		toogleMergeConfiguration: function() {
-			$mergeChecked = jQuery('#auto_merge').is(':checked');
-			if($mergeChecked) {
+			var mergeChecked = jQuery('#auto_merge').is(':checked');
+			if(mergeChecked) {
 				jQuery('#duplicates_merge_configuration').show();
 			} else {
 				jQuery('#duplicates_merge_configuration').hide();
 			}
 		},
-		
+
         uploadAndParse: function(){
 			if(!ImportJs.validateFilePath()) return false;
 			if(!ImportJs.validateMergeCriteria()) return false;
@@ -249,7 +249,7 @@ if (typeof(ImportJs) == 'undefined') {
 					ImportJs.loadDefaultValueWidget(fieldElement.attr('id'));
 				}
 			});
-			
+
 		}
     }
 

@@ -34,7 +34,7 @@ class Import_Controller {
 		}
 
 		$isImportScheduled = $importController->userInputObject->get('is_scheduled');
-		
+
 		if($isImportScheduled) {
 			$importInfo = Import_Queue_Controller::getUserCurrentImportInfo($importController->user);
 			self::showScheduledStatus($importInfo);
@@ -54,7 +54,7 @@ class Import_Controller {
 				exit;
 			}
 		}
-		
+
 		$importDataController->importData();
 		Import_Queue_Controller::updateStatus($importInfo['id'], Import_Queue_Controller::$IMPORT_STATUS_HALTED);
 		$importInfo = Import_Queue_Controller::getImportInfo($this->userInputObject->get('module'), $this->user);
@@ -78,10 +78,10 @@ class Import_Controller {
 		$importStatusCount = $importDataController->getImportStatusCount();
 		$totalRecords = $importStatusCount['TOTAL'];
 		if($totalRecords > ($importStatusCount['IMPORTED'] + $importStatusCount['FAILED'])) {
-			if($importInfo['status'] == Import_Queue_Controller::$IMPORT_STATUS_SCHEDULED) {
-				self::showScheduledStatus($importInfo);
-				exit;
-			}
+//			if($importInfo['status'] == Import_Queue_Controller::$IMPORT_STATUS_SCHEDULED) {
+//				self::showScheduledStatus($importInfo);
+//				exit;
+//			}
 			self::showCurrentStatus($importInfo, $importStatusCount, $continueImport);
 			exit;
 		} else {
@@ -125,7 +125,7 @@ class Import_Controller {
 		$saveMap = $this->userInputObject->get('save_map');
 		$mapName = $this->userInputObject->get('save_map_as');
 		if($saveMap && !empty($mapName)) {
-			$fieldMapping = $this->userInputObject->get('field_mapping');			
+			$fieldMapping = $this->userInputObject->get('field_mapping');
 			$hasHeader = $this->userInputObject->get('has_header');
 			if($hasHeader) {
 				$fileReader = Import_Utils::getFileReader($this->userInputObject, $this->user);

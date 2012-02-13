@@ -108,11 +108,16 @@ class Import_Data_Controller {
 	public function initializeImport() {
 		$lockInfo = Import_Lock_Controller::isLockedForModule($this->module);
 		if ($lockInfo != null) {
-			Import_Utils::showImportLockedError($lockInfo);
-			return false;
+			if($lockInfo['userid'] != $this->user->id) {
+				Import_Utils::showImportLockedError($lockInfo);
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			Import_Lock_Controller::lock($this->id, $this->module, $this->user);
+			return true;
 		}
-		Import_Lock_Controller::lock($this->id, $this->module, $this->user);
-		return true;
 	}
 
 	public function finishImport() {
@@ -299,7 +304,7 @@ class Import_Data_Controller {
 					$ownerId = $this->user->id;
 				}
 				$fieldData[$fieldName] = $ownerId;
-				
+
 			} elseif ($fieldInstance->getFieldDataType() == 'reference') {
 				$entityId = false;
 				if (!empty($fieldValue)) {
@@ -350,7 +355,7 @@ class Import_Data_Controller {
 						if(empty($fieldData[$fieldName]) ||
 								!Import_Utils::hasAssignPrivilege($moduleMeta->getEntityName(), $fieldData[$fieldName])) {
 							$fieldData[$fieldName] = $this->user->id;
-						}						
+						}
 					} else {
 						$fieldData[$fieldName] = '';
 					}
@@ -377,6 +382,22 @@ class Import_Data_Controller {
 			} else {
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
 					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
+				}
+				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {
+					if($fieldValue == null || $fieldValue == '0000-00-00 00:00:00') {
+						$fieldValue = '';
+					}
+					$valuesList = explode(' ', $fieldValue);
+					if(count($valuesList) == 1) $fieldValue = '';
+					$fieldValue = getValidDBInsertDateTimeValue($fieldValue);
+					$fieldData[$fieldName] = $fieldValue;
+				}
+				if ($fieldInstance->getFieldDataType() == 'date' && !empty($fieldValue)) {
+					if($fieldValue == null || $fieldValue == '0000-00-00') {
+						$fieldValue = '';
+					}
+					$fieldValue = getValidDBInsertDateValue($fieldValue);
+					$fieldData[$fieldName] = $fieldValue;
 				}
 			}
 		}
@@ -430,7 +451,7 @@ class Import_Data_Controller {
 
 		$statusCount = array('TOTAL' => 0, 'IMPORTED' => 0, 'FAILED' => 0, 'PENDING' => 0,
 								'CREATED' => 0, 'SKIPPED' => 0, 'UPDATED' => 0, 'MERGED' => 0);
-		
+
 		if($result) {
 			$noOfRows = $adb->num_rows($result);
 			$statusCount['TOTAL'] = $noOfRows;
@@ -438,10 +459,10 @@ class Import_Data_Controller {
 				$status = $adb->query_result($result, $i, 'status');
 				if(self::$IMPORT_RECORD_NONE == $status) {
 					$statusCount['PENDING']++;
-					
+
 				} elseif(self::$IMPORT_RECORD_FAILED == $status) {
 					$statusCount['FAILED']++;
-					
+
 				} else {
 					$statusCount['IMPORTED']++;
 					switch($status) {
@@ -469,7 +490,10 @@ class Import_Data_Controller {
 		foreach ($scheduledImports as $scheduledId => $importDataController) {
 			$current_user = $importDataController->user;
 			$importDataController->batchImport = false;
-			$importDataController->import();
+
+			if(!$importDataController->initializeImport()) { continue; }
+			$importDataController->importData();
+
 			$importStatusCount = $importDataController->getImportStatusCount();
 
 			$emailSubject = 'vtiger CRM - Scheduled Import Report for '.$importDataController->module;
@@ -488,12 +512,14 @@ class Import_Data_Controller {
 			$vtigerMailer->Subject = $emailSubject;
 			$vtigerMailer->Body    = $emailData;
 			$vtigerMailer->Send();
+
+			$importDataController->finishImport();
 		}
 		Vtiger_Mailer::dispatchQueue(null);
 	}
 
 	public static function getScheduledImport() {
-		
+
 		$scheduledImports = array();
 		$importQueue = Import_Queue_Controller::getAll(Import_Queue_Controller::$IMPORT_STATUS_SCHEDULED);
 		foreach($importQueue as $importId => $importInfo) {
