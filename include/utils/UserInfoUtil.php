@@ -4263,7 +4263,7 @@ function getModuleAccessArray() {
 	$log->debug("Entering getModuleAccessArray() method ...");
 
 	$fldModArr=Array();
-	$query = 'SELECT distinct(name) FROM vtiger_profile2field INNER JOIN vtiger_tab ON vtiger_tab.tabid=vtiger_profile2field.tabid WHERE vtiger_tab.presence=0';
+	$query = 'SELECT distinct(name) FROM vtiger_profile2field INNER JOIN vtiger_tab ON vtiger_tab.tabid=vtiger_profile2field.tabid WHERE vtiger_tab.presence IN (0, 2)';
 	$result = $adb->pquery($query, array());
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++) {
