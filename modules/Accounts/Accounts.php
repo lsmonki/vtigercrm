@@ -458,7 +458,7 @@ class Accounts extends CRMEntity {
 	 * Contributor(s): ______________________________________..
 	*/
 	function get_emails($id, $cur_tab_id, $rel_tab_id, $actions=false) {
-		global $log, $singlepane_view,$currentModule,$current_user;
+		global $log, $singlepane_view,$currentModule,$current_user, $adb;
 		$log->debug("Entering get_emails(".$id.") method ...");
 		$this_module = $currentModule;
 
@@ -486,6 +486,17 @@ class Accounts extends CRMEntity {
 			}
 		}
 
+		$entityIds = array($id);
+		$accountContacts = $adb->pquery('SELECT contactid FROM vtiger_contactdetails
+															INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+															WHERE vtiger_contactdetails.accountid = ? AND vtiger_crmentity.deleted = 0',
+											array($id));
+		$numOfContacts = $adb->num_rows($accountContacts);
+		if($accountContacts && $numOfContacts > 0) {
+			for($i=0; $i < $numOfContacts; ++ $i) {
+				array_push($entityIds, $adb->query_result($accountContacts, $i, 'contactid'));
+			}
+		}
 		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
 			'vtiger_users.last_name'));
 		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
@@ -496,11 +507,7 @@ class Accounts extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid=vtiger_crmentity.smownerid
 			WHERE vtiger_seactivityrel.activityid = vtiger_activity.activityid
-				AND (
-					vtiger_account.accountid = vtiger_seactivityrel.crmid
-					OR
-					vtiger_seactivityrel.crmid IN (SELECT contactid FROM vtiger_contactdetails WHERE vtiger_contactdetails.accountid = $id)
-				)
+				AND vtiger_seactivityrel.crmid IN (". implode(',', $entityIds) .")
 				AND vtiger_users.id=vtiger_crmentity.smownerid
 				AND vtiger_crmentity.crmid = vtiger_activity.activityid
 				AND vtiger_account.accountid = ".$id."
