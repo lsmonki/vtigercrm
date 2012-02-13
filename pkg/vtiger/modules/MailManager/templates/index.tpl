@@ -41,7 +41,7 @@ var MailManageri18nInfo = {ldelim}{rdelim};
 	<td class='showPanelBg' valign='top' >
 
 		<div id='_progress_' style='float: right; display: none; position: absolute; right: 35px; font-weight: bold;'>
-		<span id='_progressmsg_'>...</span><img src='themes/images/vtbusy.gif' border='0' align='absmiddle'></div>
+		<span id='_progressmsg_'>...</span><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border='0' align='absmiddle'></div>
 
 		<div style='padding: 20px 5px 20px 20px; min-height: 300px;' id='_mailmanagermaindiv_'>
 			<table width="100%" cellpadding=0 cellspacing=0 align=left>
@@ -49,7 +49,7 @@ var MailManageri18nInfo = {ldelim}{rdelim};
 				<td nowrap="nowrap" width="15%">
 					<div id="_quicklinks_mainuidiv_">{include file="modules/MailManager/Mainui.QuickLinks.tpl"}</div>
 					<div id='_folderprogress_' style='float: right; display: none; position: absolute;left: 30px; font-weight: bold;'>
-						<span>{$MOD.JSLBL_LOADING_FOLDERS}</span><img src='themes/images/vtbusy.gif' border='0' align='absmiddle'>
+						<span>{$MOD.JSLBL_LOADING_FOLDERS}</span><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border='0' align='absmiddle'>
 					</div>
 					<div id="_mainfolderdiv_" >
 					</div>
