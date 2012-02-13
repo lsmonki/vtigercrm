@@ -11,11 +11,24 @@
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 <script language="javascript">
 {literal}
-function CustomFieldMapping()
-{
-        document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
-        document.form.submit();
+
+function confirmAction(msg){
+	return confirm(msg);
 }
+
+function deleteForm(formname,address){
+	var status=confirmAction(alert_arr["SURE_TO_DELETE_CUSTOM_MAP"]);
+	if(!status){
+		return false;
+	}
+	submitForm(formname, address);
+		return true;
+}
+
+function submitForm(formName,action){
+		document.forms[formName].action=action;
+		document.forms[formName].submit();
+	}
 var gselected_fieldtype = '';
 function getCustomFieldList(customField)
 {

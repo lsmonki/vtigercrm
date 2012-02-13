@@ -2043,6 +2043,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			$this->db->query("insert into vtiger_currencies values(".$this->db->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
 		}
 
+		$this->addDefaultLeadMapping();
+
 	}
 
 	function initWebservices(){
@@ -2623,6 +2625,56 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 		//hide the system details tab for now
 		$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");
+	}
+
+	function addDefaultLeadMapping() {
+		global $adb;
+
+		$fieldMap = array(
+			array('industry','industry',null,null),
+			array('phone','phone','phone',null),
+			array('fax','fax','fax',null),
+			array('rating','rating',null,null),
+			array('email','email1','email',null),
+			array('website','website',null,null),
+			array('city','bill_city','mailingcity',null),
+			array('code','bill_code','mailingcode',null),
+			array('country','bill_country','mailingcountry',null),
+			array('state','bill_state','mailingstate',null),
+			array('lane','bill_street','mailingstreet',null),
+			array('pobox','bill_pobox','mailingpobox',null),
+			array('city','ship_city',null,null),
+			array('code','ship_code',null,null),
+			array('country','ship_country',null,null),
+			array('state','ship_state',null,null),
+			array('lane','ship_street',null,null),
+			array('pobox','ship_pobox',null,null),
+			array('description','description','description','description'),
+			array('salutationtype',null,'salutationtype',null),
+			array('firstname',null,'firstname',null),
+			array('lastname',null,'lastname',null),
+			array('mobile',null,'mobile',null),
+			array('designation',null,'title',null),
+			array('secondaryemail',null,'secondaryemail',null),
+			array('leadsource',null,'leadsource','leadsource'),
+			array('leadstatus',null,null,null),
+			array('noofemployees','employees',null,null),
+			array('annualrevenue','annual_revenue',null,null)
+		);
+
+		$leadTab=  getTabid('Leads');
+		$accountTab=  getTabid('Accounts');
+		$contactTab=  getTabid('Contacts');
+		$potentialTab=  getTabid('Potentials');
+		$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
+
+		foreach ($fieldMap as $values) {
+			$leadfid=getFieldid($leadTab,$values[0]);
+			$accountfid=getFieldid($accountTab,$values[1]);
+			$contactfid=getFieldid($contactTab,$values[2]);
+			$potentialfid=getFieldid($potentialTab,$values[3]);
+			$adb->pquery($mapSql,array($leadfid,$accountfid,$contactfid,$potentialfid));
+		}
 	}
 }
 ?>

@@ -8,55 +8,89 @@
  * All Rights Reserved.
  ******************************************************************************* */
 
-global $current_user, $currentModule, $theme, $app_strings;
+global $current_user, $currentModule, $theme, $app_strings,$log;
 $category = getParentTab();
 
 require_once 'include/Webservices/ConvertLead.php';
-
+require_once 'include/utils/VtlibUtils.php';
 //Getting the Parameters from the ConvertLead Form
 $recordId = vtlib_purify($_REQUEST["record"]);
 $leadId = vtws_getWebserviceEntityId('Leads', $recordId);
 
-$assigned_to = $_REQUEST["assigntype"];
-if ($assigned_to == "U") {
-    $assigned_user_id = $_REQUEST["assigned_user_id"];
-    $assignedTo = vtws_getWebserviceEntityId('Users', $assigned_user_id);
-} else {
-    $assigned_user_id = $_REQUEST["assigned_group_id"];
-    $assignedTo = vtws_getWebserviceEntityId('Groups', $assigned_user_id);
+//make sure that either contacts or accounts is selected
+if(!empty($_REQUEST['entities']))
+{
+	$entities=vtlib_purify($_REQUEST['entities']);
+
+	$assigned_to = vtlib_purify($_REQUEST["assigntype"]);
+	if ($assigned_to == "U") {
+		$assigned_user_id = vtlib_purify($_REQUEST["assigned_user_id"]);
+		$assignedTo = vtws_getWebserviceEntityId('Users', $assigned_user_id);
+	} else {
+		$assigned_user_id = vtlib_purify($_REQUEST["assigned_group_id"]);
+		$assignedTo = vtws_getWebserviceEntityId('Groups', $assigned_user_id);
+	}
+
+	$transferRelatedRecordsTo = vtlib_purify($_REQUEST['transferto']);
+	if (empty($transferRelatedRecordsTo))
+		$transferRelatedRecordsTo = 'Contacts';
+
+
+	$entityValues=array();
+
+	$entityValues['transferRelatedRecordsTo']=$transferRelatedRecordsTo;
+	$entityValues['assignedTo']=$assignedTo;
+	$entityValues['leadId']=$leadId;
+
+	if(vtlib_isModuleActive('Accounts')&& in_array('Accounts', $entities)){
+		$entityValues['entities']['Accounts']['create']=true;
+		$entityValues['entities']['Accounts']['name']='Accounts';
+		$entityValues['entities']['Accounts']['accountname'] = vtlib_purify($_REQUEST['accountname']);
+		$entityValues['entities']['Accounts']['industry']=vtlib_purify($_REQUEST['industry']);
+	}
+
+	if(vtlib_isModuleActive('Potentials')&& in_array('Potentials', $entities)){
+		$entityValues['entities']['Potentials']['create']=true;
+		$entityValues['entities']['Potentials']['name']='Potentials';
+		$entityValues['entities']['Potentials']['potentialname']=  vtlib_purify($_REQUEST['potentialname']);
+		$entityValues['entities']['Potentials']['closingdate']=  vtlib_purify($_REQUEST['closingdate']);
+		$entityValues['entities']['Potentials']['sales_stage']=  vtlib_purify($_REQUEST['sales_stage']);
+		$entityValues['entities']['Potentials']['amount']=  vtlib_purify($_REQUEST['amount']);
+	}
+
+	if(vtlib_isModuleActive('Contacts')&& in_array('Contacts', $entities)){
+		$entityValues['entities']['Contacts']['create']=true;
+		$entityValues['entities']['Contacts']['name']='Contacts';
+		$entityValues['entities']['Contacts']['lastname']=  vtlib_purify($_REQUEST['lastname']);
+		$entityValues['entities']['Contacts']['firstname']=  vtlib_purify($_REQUEST['firstname']);
+		$entityValues['entities']['Contacts']['email']=  vtlib_purify($_REQUEST['email']);
+	}
+
+	try{
+		$result = vtws_convertlead($entityValues,$current_user);
+	}catch(Exception $e){
+		showError();
+	}
+	
+	$accountIdComponents = vtws_getIdComponents($result['Accounts']);
+	$accountId = $accountIdComponents[1];
+	$contactIdComponents = vtws_getIdComponents($result['Contacts']);
+	$contactId = $contactIdComponents[1];
+	$potentialIdComponents = vtws_getIdComponents($result['Potentials']);
+	$potentialId = $potentialIdComponents[1];
 }
-
-$accountName = $_REQUEST['account_name'];
-
-$createPotential = $_REQUEST["createpotential"];
-$avoidPotential = (isset($createPotential) && $createPotential == "on") ? true : false;
-
-$potential = array();
-$potential['potentialname'] = vtlib_purify($_REQUEST["potential_name"]);
-$potential['closingdate'] = getValidDBInsertDateValue($_REQUEST["closedate"]);
-$potential['amount'] = vtlib_purify($_REQUEST['potential_amount']);
-$potential['sales_stage'] = vtlib_purify($_REQUEST['potential_sales_stage']);
-
-$transferRelatedRecordsTo = $_REQUEST['transfer_related_records_to'];
-if (empty($transferRelatedRecordsTo))
-    $transferRelatedRecordsTo = 'Contacts';
-
-$result = vtws_convertlead($leadId, $assignedTo, $accountName, $avoidPotential, $potential, $transferRelatedRecordsTo, $current_user);
-
-$accountIdComponents = vtws_getIdComponents($result['accountId']);
-$accountId = $accountIdComponents[1];
-$contactIdComponents = vtws_getIdComponents($result['contactId']);
-$contactId = $contactIdComponents[1];
-$potentialIdComponents = vtws_getIdComponents($result['potentialId']);
-$potentialId = $potentialIdComponents[1];
 
 if (!empty($accountId)) {
     header("Location: index.php?action=DetailView&module=Accounts&record=$accountId&parenttab=$category");
 } elseif (!empty($contactId)) {
     header("Location: index.php?action=DetailView&module=Contacts&record=$contactId&parenttab=$category");
 } else {
+	showError();
+}
 
-
+function showError(){
+	require_once 'include/utils/VtlibUtils.php';
+	global $current_user, $currentModule, $theme, $app_strings,$log;
     echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";
     echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
     echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
@@ -67,7 +101,7 @@ if (!empty($accountId)) {
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
 			<span class='genHeaderSmall'>". getTranslatedString('SINGLE_'.$currentModule, $currentModule)." ".
 			getTranslatedString('CANNOT_CONVERT', $currentModule)  ."
-		<br> 
+		<br>
 		<ul> ". getTranslatedString('LBL_FOLLOWING_ARE_POSSIBLE_REASONS', $currentModule) .":
 			<li>". getTranslatedString('LBL_LEADS_FIELD_MAPPING_INCOMPLETE', $currentModule) ."</li>
 			<li>". getTranslatedString('LBL_MANDATORY_FIELDS_ARE_EMPTY', $currentModule) ."</li>
@@ -86,7 +120,7 @@ if (!empty($accountId)) {
 
     echo "</td>
                </tr>
-		</tbody></table> 
+		</tbody></table>
 		</div>
                 </td></tr></table>";
 }

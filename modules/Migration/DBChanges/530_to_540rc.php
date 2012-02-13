@@ -298,6 +298,52 @@ $query = "INSERT INTO vtiger_customerportal_prefs (
 		)";
 $adb->pquery($query, array());
 
+$fieldMap = array(
+	array('industry','industry',null,null),
+	array('phone','phone','phone',null),
+	array('fax','fax','fax',null),
+	array('rating','rating',null,null),
+	array('email','email1','email',null),
+	array('website','website',null,null),
+	array('city','bill_city','mailingcity',null),
+	array('code','bill_code','mailingcode',null),
+	array('country','bill_country','mailingcountry',null),
+	array('state','bill_state','mailingstate',null),
+	array('lane','bill_street','mailingstreet',null),
+	array('pobox','bill_pobox','mailingpobox',null),
+	array('city','ship_city',null,null),
+	array('code','ship_code',null,null),
+	array('country','ship_country',null,null),
+	array('state','ship_state',null,null),
+	array('lane','ship_street',null,null),
+	array('pobox','ship_pobox',null,null),
+	array('description','description','description','description'),
+	array('salutationtype',null,'salutationtype',null),
+	array('firstname',null,'firstname',null),
+	array('lastname',null,'lastname',null),
+	array('mobile',null,'mobile',null),
+	array('designation',null,'title',null),
+	array('secondaryemail',null,'secondaryemail',null),
+	array('leadsource',null,'leadsource','leadsource'),
+	array('leadstatus',null,null,null),
+	array('noofemployees','employees',null,null),
+	array('annualrevenue','annual_revenue',null,null)
+);
+
+$leadTab=  getTabid('Leads');
+$accountTab=  getTabid('Accounts');
+$contactTab=  getTabid('Contacts');
+$potentialTab=  getTabid('Potentials');
+$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
+
+foreach ($fieldMap as $values) {
+	$leadfid=getFieldid($leadTab,$values[0]);
+	$accountfid=getFieldid($accountTab,$values[1]);
+	$contactfid=getFieldid($contactTab,$values[2]);
+	$potentialfid=getFieldid($potentialTab,$values[3]);
+	$adb->pquery($mapSql,array($leadfid,$accountfid,$contactfid,$potentialfid));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>

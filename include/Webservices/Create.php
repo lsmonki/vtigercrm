@@ -82,19 +82,4 @@ function vtws_create($elementType, $element, $user) {
         return null;
     }
 }
-
-function preCreate($entity, $mandatoryFields, $entityObject) {
-
-    global $log;
-
-    foreach ($mandatoryFields as $field) {
-        if (($entityObject[$field] == '') || ($entityObject[$field] == null) || ($entityObject[$field] == "")) {
-            $log->fatal($field);
-            return false;
-        }
-    }
-
-    return true;
-}
-
 ?>

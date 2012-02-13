@@ -7,15 +7,15 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
+require_once 'include/utils/CommonUtils.php';
+global $adb,$log,$current_user;
 
-require_once('include/utils/utils.php');
-global $adb;
-$id=$_REQUEST['id'];
+$cfmid=vtlib_purify($_REQUEST['cfmid']);
 
-if($id !='') {
-	$sql="update vtiger_convertleadmapping set accountfid ='NULL',contactfid='NULL',potentialfid='NULL' where cfmid=?";
-	$result = $adb->pquery($sql, array($id));
-}
+$deleteSql='UPDATE vtiger_convertleadmapping SET accountfid=NULL,contactfid=NULL,potentialfid=NULL WHERE cfmid=?';
+$result=$adb->pquery($deleteSql,array($cfmid));
 
-header("Location: index.php?module=Settings&action=ListLeadCustomFieldMapping&parenttab=Settings");
+$listURL='index.php?action=CustomFieldList&module=Settings&parenttab=Settings';
+header(sprintf("Location: %s",$listURL));
+
 ?>

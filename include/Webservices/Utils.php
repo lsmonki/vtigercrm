@@ -663,6 +663,11 @@ function vtws_getFieldfromFieldId($fieldId, $fieldObjectList){
  *	@param integer $relatedId - related entity id to which the records need to be transferred
  */
 function vtws_getRelatedActivities($leadId,$accountId,$contactId,$relatedId) {
+
+	if(empty($leadId) || empty($relatedId) || (empty($accountId) && empty($contactId))){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move related Activities/Emails");
+	}
 	global $adb;
 	$sql = "select * from vtiger_seactivityrel where crmid=?";
 	$result = $adb->pquery($sql, array($leadId));
@@ -686,15 +691,19 @@ function vtws_getRelatedActivities($leadId,$accountId,$contactId,$relatedId) {
 			return false;
 		}
 		if($type != "Emails") {
-			$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
-			$resultNew = $adb->pquery($sql, array($accountId, $activityId));
-			if($resultNew === false){
-				return false;
+				if(!empty($accountId)){
+					$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
+					$resultNew = $adb->pquery($sql, array($accountId, $activityId));
+					if($resultNew === false){
+						return false;
+				}
 			}
-			$sql="insert into vtiger_cntactivityrel(contactid,activityid) values (?,?)";
-			$resultNew = $adb->pquery($sql, array($contactId, $activityId));
-			if($resultNew === false){
-				return false;
+				if(!empty($contactId)){
+					$sql="insert into vtiger_cntactivityrel(contactid,activityid) values (?,?)";
+					$resultNew = $adb->pquery($sql, array($contactId, $activityId));
+					if($resultNew === false){
+						return false;
+				}
 			}
 		} else {
 			$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
@@ -746,6 +755,10 @@ function vtws_saveLeadRelatedCampaigns($leadId, $relatedId, $seType) {
  */
 function vtws_transferLeadRelatedRecords($leadId, $relatedId, $seType) {
 
+	if(empty($leadId) || empty($relatedId) || empty($seType)){
+		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,
+			"Failed to move related Records");
+	}
 	$status = vtws_getRelatedNotesAttachments($leadId, $relatedId);
 	if($status === false){
 		throw new WebServiceException(WebServiceErrorCode::$LEAD_RELATED_UPDATE_FAILED,

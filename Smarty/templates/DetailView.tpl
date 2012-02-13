@@ -47,16 +47,20 @@ function showHideStatus(sId,anchorImgId,sImagePath)
 	if(oObj.style.display == 'block')
 	{
 		oObj.style.display = 'none';
-		eval(document.getElementById(anchorImgId)).src =  'themes/images/inactivate.gif';
-		eval(document.getElementById(anchorImgId)).alt = 'Display';
-		eval(document.getElementById(anchorImgId)).title = 'Display';
+		if(anchorImgId !=null){
+			eval(document.getElementById(anchorImgId)).src =  'themes/images/inactivate.gif';
+			eval(document.getElementById(anchorImgId)).alt = 'Display';
+			eval(document.getElementById(anchorImgId)).title = 'Display';
+		}
 	}
 	else
 	{
 		oObj.style.display = 'block';
-		eval(document.getElementById(anchorImgId)).src = 'themes/images/activate.gif';
-		eval(document.getElementById(anchorImgId)).alt = 'Hide';
-		eval(document.getElementById(anchorImgId)).title = 'Hide';
+		if(anchorImgId !=null){
+			eval(document.getElementById(anchorImgId)).src = 'themes/images/activate.gif';
+			eval(document.getElementById(anchorImgId)).alt = 'Hide';
+			eval(document.getElementById(anchorImgId)).title = 'Hide';
+		}
 	}
 }
 <!-- End Of Code modified by SAKTI on 10th Apr, 2008 -->

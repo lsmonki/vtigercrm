@@ -55,12 +55,13 @@
 				</tr>
 				{foreach key=leadcf item=cfarray name=cfarray from=$CUSTOMFIELDMAPPING}
 				<tr>
+					<input type="hidden" value="{$cfarray.cfmid}" name="{$cfarray.cfmname}"></input>
 					<td class="listTableRow small">{$cfarray.sno}</td>
 					<td class="listTableRow small">{$cfarray.leadid}</td>
 					<td class="listTableRow small">{$cfarray.fieldtype}</td>
 					{foreach item=acc_cf key=fldnameacc from=$cfarray.account}
 					<td class="listTableRow small">
-						<select name='{$fldnameacc}' id='{$fldnameacc}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnameacc}",this);' >
+						<select class="small" name='{$fldnameacc}' id='{$fldnameacc}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnameacc}",this);' >
 						<option value='None'>{$APP.LBL_NONE}</option>
 						{foreach item=element from=$acc_cf}
 							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
@@ -76,7 +77,7 @@
 					{/foreach}
 					{foreach item=con_cf key=fldnamecon from=$cfarray.contact}
                     <td class="listTableRow small">
-                        <select name='{$fldnamecon}' id='{$fldnamecon}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnamecon}",this);'>
+                        <select class="small" name='{$fldnamecon}' id='{$fldnamecon}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnamecon}",this);'>
 						<option value='None'>{$APP.LBL_NONE}</option>
 						{foreach item=element from=$con_cf}
 							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
@@ -92,7 +93,7 @@
 				  	{/foreach}
 					{foreach item=pot_cf key=fldnamepot from=$cfarray.potential}
 					<td class="listTableRow small">
-						<select name='{$fldnamepot}' id='{$fldnamepot}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnamepot}",this);'>
+						<select class="small" name='{$fldnamepot}' id='{$fldnamepot}' onChange='return validateTypeforCFMapping("{$cfarray.fieldtype}","{$cfarray.typeofdata}","{$fldnamepot}",this);'>
 						<option value='None'>{$APP.LBL_NONE}</option>
 						{foreach item=element from=$pot_cf}
 							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
