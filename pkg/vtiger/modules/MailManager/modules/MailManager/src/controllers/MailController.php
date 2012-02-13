@@ -125,12 +125,17 @@ class MailManager_MailController extends MailManager_Controller {
 
 			$fromEmail = $connector->getFromEmailAddress();
 			$userFullName = $current_user->first_name.' '.$current_user->last_name;
+			$userId = $current_user->id;
 
 			$mailer = new Vtiger_Mailer();
 			$mailer->IsHTML(true);
 			$mailer->ConfigSenderInfo($fromEmail, $userFullName, $current_user->email1);
 			$mailer->Subject = $subject;
 			$mailer->Body = $body;
+			$mailer->addSignature($userId);
+            if($mailer->Signature != '') {
+               $mailer->Body.= $mailer->Signature;
+              }
 			
 			$tos = explode(',', $to_string);
 			$ccs = empty($cc_string)? array() : explode(',', $cc_string);
