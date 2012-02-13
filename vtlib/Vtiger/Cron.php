@@ -299,8 +299,8 @@ class Vtiger_Cron {
      */
     static function deregister($name) {
         self::querySilent('DELETE FROM vtiger_cron_task WHERE name=?', array($name));
-        if (isset(self::$instanceCache[$name])) {
-            unset(self::$instanceCache[$name]);
+        if (isset(self::$instanceCache["$name"])) {
+            unset(self::$instanceCache["$name"]);
         }
     }
 
@@ -333,8 +333,8 @@ class Vtiger_Cron {
         global $adb;
 
         $instance = false;
-        if (isset(self::$instanceCache[$name])) {
-            $instance = self::$instanceCache[$name];
+        if (isset(self::$instanceCache["$name"])) {
+            $instance = self::$instanceCache["$name"];
         }
 
         if ($instance === false) {
