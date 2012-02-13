@@ -31,21 +31,21 @@ require_once 'include/Webservices/PreserveGlobal.php';
 function vtws_getUsersInTheSameGroup($id){
 	require_once('include/utils/GetGroupUsers.php');
 	require_once('include/utils/GetUserGroups.php');
-	
+
 	$groupUsers = new GetGroupUsers();
 	$userGroups = new GetUserGroups();
 	$allUsers = Array();
 	$userGroups->getAllUserGroups($id);
 	$groups = $userGroups->user_groups;
-	
+
 	foreach ($groups as $group) {
 		$groupUsers->getAllUsersInGroup($group);
 		$usersInGroup = $groupUsers->group_users;
 		foreach ($usersInGroup as $user) {
 		if($user != $id){
-				$allUsers[$user] = getUserName($user); 
+				$allUsers[$user] = getUserName($user);
 			}
-		}		
+		}
 	}
 	return $allUsers;
 }
@@ -80,13 +80,13 @@ function vtws_getUserAccessibleGroups($moduleId, $user){
 	require('user_privileges/user_privileges_'.$user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$user->id.'.php');
 	$tabName = getTabname($moduleId);
-	if($is_admin==false && $profileGlobalPermission[2] == 1 && 
+	if($is_admin==false && $profileGlobalPermission[2] == 1 &&
 			($defaultOrgSharingPermission[$moduleId] == 3 or $defaultOrgSharingPermission[$moduleId] == 0)){
 		$result=get_current_user_access_groups($tabName);
-	}else{ 		
+	}else{
 		$result = get_group_options();
 	}
-	
+
 	$groups = array();
 	if($result != null && $result != '' && is_object($result)){
 		$rowCount = $adb->num_rows($result);
@@ -135,7 +135,7 @@ function getEmailFieldId($meta, $entityId){
 }
 
 function vtws_getParameter($parameterArray, $paramName,$default=null){
-	
+
 	if (!get_magic_quotes_gpc()) {
 		if(is_array($parameterArray[$paramName])) {
 			$param = array_map('addslashes', $parameterArray[$paramName]);
@@ -152,7 +152,7 @@ function vtws_getParameter($parameterArray, $paramName,$default=null){
 }
 
 function vtws_getEntityNameFields($moduleName){
-	
+
 	global $adb;
 	$query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
 	$result = $adb->pquery($query, array($moduleName));
@@ -166,10 +166,10 @@ function vtws_getEntityNameFields($moduleName){
 			array_push($nameFields,$fieldsname);
 		}
 	}
-	return $nameFields;	
+	return $nameFields;
 }
 
-/** function to get the module List to which are crm entities. 
+/** function to get the module List to which are crm entities.
  *  @return Array modules list as array
  */
 function vtws_getModuleNameList(){
@@ -240,7 +240,7 @@ function vtws_getOwnerType($ownerId){
 
 function vtws_runQueryAsTransaction($query,$params,&$result){
 	global $adb;
-	
+
 	$adb->startTransaction();
 	$result = $adb->pquery($query,$params);
 	$error = $adb->hasFailedTransaction();
@@ -250,7 +250,7 @@ function vtws_runQueryAsTransaction($query,$params,&$result){
 
 function vtws_getCalendarEntityType($id){
 	global $adb;
-	
+
 	$sql = "select activitytype from vtiger_activity where activityid=?";
 	$result = $adb->pquery($sql,array($id));
 	$seType = 'Calendar';
@@ -283,7 +283,7 @@ function vtws_addDefaultModuleTypeEntity($moduleName){
 }
 
 function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
-	global $adb;	
+	global $adb;
 	$checkres = $adb->pquery('SELECT id FROM vtiger_ws_entity WHERE name=? AND handler_path=? AND handler_class=?',
 		array($moduleName, $filePath, $className));
 	if($checkres && $adb->num_rows($checkres) == 0) {
@@ -296,7 +296,7 @@ function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
 
 function vtws_deleteWebserviceEntity($moduleName) {
 	global $adb;
-	$adb->pquery('DELETE FROM vtiger_ws_entity WHERE name=?',array($moduleName));	
+	$adb->pquery('DELETE FROM vtiger_ws_entity WHERE name=?',array($moduleName));
 }
 
 function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails,$withName = true){
@@ -337,13 +337,13 @@ function vtws_addActorTypeName($entityId,$fieldNames,$indexColumn,$tableName){
 
 function vtws_getName($id,$user){
 	global $log,$adb;
-	
+
 	$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
 	$handlerPath = $webserviceObject->getHandlerPath();
 	$handlerClass = $webserviceObject->getHandlerClass();
-	
+
 	require_once $handlerPath;
-	
+
 	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
 	$meta = $handler->getMeta();
 	return $meta->getName($id);
@@ -427,9 +427,9 @@ function vtws_getModuleHandlerFromName($name,$user){
 	$webserviceObject = VtigerWebserviceObject::fromName($adb,$name);
 	$handlerPath = $webserviceObject->getHandlerPath();
 	$handlerClass = $webserviceObject->getHandlerClass();
-	
+
 	require_once $handlerPath;
-	
+
 	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
 	return $handler;
 }
@@ -439,9 +439,9 @@ function vtws_getModuleHandlerFromId($id,$user){
 	$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
 	$handlerPath = $webserviceObject->getHandlerPath();
 	$handlerClass = $webserviceObject->getHandlerClass();
-	
+
 	require_once $handlerPath;
-	
+
 	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
 	return $handler;
 }
@@ -716,7 +716,7 @@ function vtws_getRelatedActivities($leadId,$accountId,$contactId,$relatedId) {
  */
 function vtws_saveLeadRelatedCampaigns($leadId, $relatedId, $seType) {
 	global $adb;
-	
+
 	$result = $adb->pquery("select * from vtiger_campaignleadrel where leadid=?", array($leadId));
 	if($result === false){
 		return false;
@@ -771,7 +771,7 @@ function vtws_transferLeadRelatedRecords($leadId, $relatedId, $seType) {
 }
 
 function vtws_transferComments($sourceRecordId, $destinationRecordId) {
-	if(vtlib_isModuleActive('ModComments')) { 
+	if(vtlib_isModuleActive('ModComments')) {
 		CRMEntity::getInstance('ModComments'); ModComments::transferRecords($sourceRecordId, $destinationRecordId);
 	}
 }
@@ -784,7 +784,7 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 
 	$sql = "update vtiger_crmentity set smownerid=? where smownerid=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
-	
+
 	$sql = "update vtiger_crmentity set modifiedby=? where modifiedby=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
@@ -808,10 +808,6 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 
 	//update assigned_user_id in vtiger_users_last_import
 	$sql = "update vtiger_users_last_import set assigned_user_id=? where assigned_user_id=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
-
-	//updating user_id in vtiger_moduleowners
-	$sql = "update vtiger_moduleowners set user_id=? where user_id=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
 	//delete from vtiger_homestuff
@@ -868,7 +864,7 @@ function vtws_getWebserviceTranslatedString($label) {
 	if(!empty($translation)) {
 		return $translation;
 	}
-	
+
 	//current language doesn't have translation, return translation in default language
 	//if default language is english then LBL_ will not shown to the user.
 	$defaultLanguage = vtws_getWebserviceDefaultLanguage();
@@ -876,8 +872,8 @@ function vtws_getWebserviceTranslatedString($label) {
 	if(!empty($translation)) {
 		return $translation;
 	}
-	
-	//if default language is not en_us then do the translation in en_us to eliminate the LBL_ bit 
+
+	//if default language is not en_us then do the translation in en_us to eliminate the LBL_ bit
 	//of label.
 	if('en_us' != $defaultLanguage) {
 		$translation = vtws_getWebserviceTranslatedStringForLanguage($label, 'en_us');

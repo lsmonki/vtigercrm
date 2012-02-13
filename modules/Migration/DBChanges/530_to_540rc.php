@@ -202,6 +202,8 @@ Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calend
 Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', '', '', 'Recommended frequency for ScheduleReports is 15 mins');
 Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', '', '', 'Recommended frequency for MailScanner is 15 mins');
 
+$adb->pquery("DELETE FROM vtiger_settings_field WHERE name='LBL_ASSIGN_MODULE_OWNERS'", array());
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>

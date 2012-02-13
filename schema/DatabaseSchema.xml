@@ -64,7 +64,7 @@
 		</field>
 		<field name="end_hour" type="C" size="30">
 			<default value="23:00" />
-		</field>	
+		</field>
 		<field name="activity_view" type="C" size="200">
 			<default value="Today" />
 		</field>
@@ -767,7 +767,7 @@
 		<field name="folderid" type="I" size="19">
 			<default value="1" />
 			<notnull />
-		</field>        
+		</field>
 			<field name="filetype" type="C" size="50">
 			<default value="NULL" />
 		</field>
@@ -3382,7 +3382,7 @@
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
-		<field name="sostatus" type="C" size='200' />		
+		<field name="sostatus" type="C" size='200' />
 		<field name="currency_id" type="I" size='19' >
 			<notnull />
 			<default value="1" />
@@ -3625,7 +3625,7 @@
 		<field name="productid" type="I" size="19">
 			<key />
 		</field>
-		<field name="listprice" type="N" size="25.3" />		
+		<field name="listprice" type="N" size="25.3" />
 		<field name="usedcurrency" type="I" size="11">
 			<notnull />
 			<default value="1" />
@@ -3703,7 +3703,7 @@
 		<field name="discount_amount" type="N" size="25.3" />
 		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="accountid" type="I" size="19" />
-		<field name="terms_conditions" type="X" />		
+		<field name="terms_conditions" type="X" />
 		<field name="currency_id" type="I" size='19' >
 			<notnull />
 			<default value="1" />
@@ -4075,7 +4075,7 @@
 		<index name="customview_entitytype_idx">
 			<col>entitytype</col>
 		</index>
-		
+
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -4782,29 +4782,6 @@
 <table name="vtiger_org_share_action2tab" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_org_share_action2tab FOREIGN KEY (share_action_id) REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
 <constraint>ADD CONSTRAINT fk_2_vtiger_org_share_action2tab FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
-<opt>Engine=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_moduleowners">
-		<field name="tabid" type="I" size="19">
-			<key />
-			<unique />
-			<default value="0" />
-		</field>
-		<field name="user_id" type="C" size="11">
-			<notnull />
-		</field>
-		<index name="moduleowners_tabid_user_id_idx">
-			<col>tabid</col>
-			<col>user_id</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-<table name="vtiger_moduleowners" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_moduleowners FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 <opt>Engine=InnoDB</opt>
 <data>
 </data>
@@ -5555,7 +5532,7 @@
 		</field>
 		<field name="setdefault" type="I" size="3">
 			<notnull />
-			<default value="0" />	
+			<default value="0" />
 		</field>
 		<index name="portal_portalname_idx">
 			<col>portalname</col>
@@ -6181,7 +6158,7 @@
 	</table>
 
 	<!-- Database changes after 5.0.4 GA -->
-	
+
 	<table name="vtiger_relatedlists_rb">
 		<field name="entityid" type="I" size="19" />
 		<field name="action" type="C" size="50" />
@@ -6214,7 +6191,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_reminder_interval">
 		<field name="reminder_intervalid" type="I" size="19" >
 			<key/>
@@ -6230,7 +6207,7 @@
 			<notnull />
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>		
+	</table>
 
 	<table name="vtiger_user2mergefields">
 		<field name="userid" type="I" size="11" />
@@ -6254,7 +6231,7 @@
 		<field name="converted_price"  type="N" size="25.2" />
 		<field name="actual_price"  type="N" size="25.2" />
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>	
+	</table>
 
 	<table name="vtiger_attachmentsfolder">
 		<field name="folderid" type="I" size="19">
@@ -6275,7 +6252,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homestuff">
 		<field name="stuffid" type="I" size="19">
 			<key />
@@ -6325,14 +6302,14 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homemodule" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_homemodule FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-	
+
 	<table name="vtiger_homemoduleflds">
 		<field name="stuffid" type="I" size="19">
 		</field>
@@ -6342,7 +6319,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homemoduleflds" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_homemoduleflds FOREIGN KEY (stuffid) REFERENCES vtiger_homemodule(stuffid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
@@ -6364,7 +6341,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homerss" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_homerss FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
@@ -6384,14 +6361,14 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homedashbd" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_homedashbd FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-	
+
 	<table name="vtiger_homedefault">
 		<field name="stuffid" type="I" size="19">
 			<key />
@@ -6401,15 +6378,15 @@
 			<notnull />
 		</field>
 		<field name="maxentries" type="I" size="19">
-		</field>	
+		</field>
 		<field name="setype" type="C" size="30">
-		</field>	
+		</field>
 		<index name="stuff_stuffid_idx">
 			<col>stuffid</col>
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_homedefault" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_homedefault FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
@@ -6446,14 +6423,14 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_referencetype" alter="true">
 		<constraint>ADD CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-	
+
 	<table name="vtiger_ws_userauthtoken">
 		<field name="userid" type="I" size="19">
 			<key />
@@ -6471,7 +6448,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity">
 		<field name="id" type="I" size="11">
 			<key />
@@ -6493,7 +6470,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_tables">
 		<field name="webservice_entity_id" type="I" size="11">
 			<key />
@@ -6505,14 +6482,14 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_tables" alter="true">
 		<constraint>ADD CONSTRAINT `fk_1_vtiger_ws_actor_tables` FOREIGN KEY (`webservice_entity_id`) REFERENCES `vtiger_ws_entity` (`id`) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_fieldtype">
 		<field name="fieldtypeid" type="I" size="19">
 			<key />
@@ -6534,7 +6511,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_referencetype">
 		<field name="fieldtypeid" type="I" size="19">
 			<key />
@@ -6546,14 +6523,14 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_referencetype" alter="true">
 		<constraint>ADD CONSTRAINT `vtiger_fk_1_actors_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_entity_fieldtype` (`fieldtypeid`) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
 	</table>
-	
+
 	<table name="vtiger_ws_operation">
 		<field name="operationid" type="I" size="11">
 			<key />
@@ -6578,7 +6555,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_operation_parameters">
 		<field name="operationid" type="I" size="11">
 			<key />
@@ -6597,7 +6574,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_ws_entity_name">
 		<field name="entity_id" type="I" size="11">
 			<key />
@@ -6614,7 +6591,7 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 	<!-- END -->
-	
+
 	<table name="vtiger_eventhandlers">
 		<field name="eventhandler_id" type="I" >
 			<key />
@@ -6638,7 +6615,7 @@
 		</field>
 		<field name="dependent_on" type="C" size="255">
 			<default value="[]" />
-		</field>        
+		</field>
 		<index name="eventhandler_idx">
 			<unique />
 			<col>eventhandler_id</col>
@@ -6753,7 +6730,7 @@
 		<field name="invoice_status" type="C" size="200"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_recurring_frequency">
 		<field name="recurring_frequency_id" type="I"></field>
 		<field name="recurring_frequency" type="C" size="200"></field>
@@ -6761,7 +6738,7 @@
 		<field name="presence" type="I"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_payment_duration">
 		<field name="payment_duration_id" type="I"></field>
 		<field name="payment_duration" type="C" size="200"></field>
@@ -6798,7 +6775,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="com_vtiger_workflow_activatedonce">
 	    <field name="workflow_id" type="I" >
 			<key />
@@ -6808,8 +6785,8 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-    
-	
+
+
 	<table name="com_vtiger_workflowtasks">
 	    <field name="task_id" type="I" >
 			<key />
@@ -6829,7 +6806,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="com_vtiger_workflowtask_queue">
 	    <field name="task_id" type="I" >
 		</field>
@@ -6844,7 +6821,7 @@
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="com_vtiger_workflowtasks_entitymethod">
 	    <field name="workflowtasks_entitymethod_id" type="I" >
 	        <key />
@@ -6876,9 +6853,9 @@
 		<field name="template" type="X">
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>	
+	</table>
     <!-- com_vtiger_workflow ends-->
-	
+
 	<!--  asterisk integration starts -->
 	<table name="vtiger_asteriskextensions">
 		<field name="userid" type="I" size="11">
@@ -6918,14 +6895,14 @@
 		<field name="timer" type="I" size="19">
 		</field>
 		<field name="refuid" type="C" size="255">
-		</field>	
+		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_asteriskincomingevents">
 		<field name="uid" type="C" size="255">
 			<key />
-		</field>	
+		</field>
 		<field name="channel" type="C" size="100">
 		</field>
 		<field name="from_number" type="I8" size="20">
@@ -7064,7 +7041,7 @@
 			<col>linktype</col>
 		</index>
 	</table>
-	
+
 	<!-- move settings page to database starts -->
 	<table name="vtiger_settings_blocks">
 		<field name="blockid" type="I" size="19">
@@ -7099,7 +7076,7 @@
 			<default value="0"/>
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>		
+	</table>
 
 	<table name="vtiger_settings_field" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_settings_field FOREIGN KEY (blockid) REFERENCES vtiger_settings_blocks(blockid) ON DELETE CASCADE</constraint>
@@ -7117,7 +7094,7 @@
 		<field name="accesstime" type="T" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_email_track">
 		<field name="crmid" type="I" />
 		<field name="mailid" type="I" />
@@ -7142,7 +7119,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_reportfilters">
 		<field name="filterid" type="I" size="19">
 			<notnull />
@@ -7179,7 +7156,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_activitycf">
 		<field name="activityid" type="I" size="19">
 			<key />
@@ -7188,7 +7165,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_user_module_preferences">
 		<field name="userid" type="I" size="19">
 			<key />
@@ -7201,7 +7178,7 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_user_module_preferences" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_user_module_preferences FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
 		<constraint>ADD CONSTRAINT fk_2_vtiger_user_module_preferences FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
@@ -7221,7 +7198,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<!-- home page changes end -->
 	<table name="vtiger_notescf">
 		<field name="notesid" type="I" size="19">
@@ -7231,7 +7208,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_currencies">
 		<field name="currencyid" type="I" size="19">
 			<key />
@@ -7243,7 +7220,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_tab_info">
 		<field name="tabid" type="I" size="19" />
 		<field name="prefname" type="C" size="256" />
@@ -7256,7 +7233,7 @@
 		<constraint>ADD CONSTRAINT fk_1_vtiger_tab_info FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_campaignrelstatus">
 		<field name="campaignrelstatusid" type="I" size="19" />
 		<field name="campaignrelstatus" type="C" size="256" />
@@ -7265,7 +7242,7 @@
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 	<table name="vtiger_campaignaccountrel">
 		<field name="campaignid" type="I" size="19" />
 		<field name="accountid" type="I" size="19" />
@@ -7300,8 +7277,8 @@
                         <default value="NULL" />
                 </field>
                 <opt platform="mysql">Engine=InnoDB</opt>
-        </table>	
-	
+        </table>
+
 	<table name="vtiger_relcriteria_grouping">
 		<field name="groupid" type="I" size="11">
 			<key />
@@ -7315,8 +7292,8 @@
 		<field name="condition_expression" type="X">
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>	
-	
+	</table>
+
 	<table name="vtiger_scheduled_reports">
 		<field name="reportid" type="I">
 			<key />
@@ -7331,8 +7308,8 @@
 			<DEFTIMESTAMP/>
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>	
-	
+	</table>
+
 	<table name="vtiger_ws_fieldinfo">
 		<field name="id" type="C" size="64">
 			<notnull />
@@ -7474,5 +7451,5 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
+
 </schema>

@@ -1913,12 +1913,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_actionmapping values(3,'Popup',1)");
 	$this->db->query("insert into vtiger_actionmapping values(10,'DuplicatesHandling',0)");
 
-	//Insert values for vtiger_moduleowners vtiger_table which contains the modules and their vtiger_users. default user id admin - after 4.2 patch 2
-	$module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
-	foreach($module_array as $mod)
-	{
-		$this->db->query("insert into vtiger_moduleowners values(".getTabid($mod).",1)");
-	}
 	//added by jeri for category view from db
 	$this->db->query("insert into vtiger_parenttab values (1,'My Home Page',1,0)");
 	$this->db->query("insert into vtiger_parenttab values (2,'Marketing',2,0)");
@@ -2460,7 +2454,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				"company.gif",
 				"ogmailserver.gif",
 				"backupserver.gif",
-				"assign.gif",
 				"currency.gif",
 				"taxConfiguration.gif",
 				"system.gif",
@@ -2498,7 +2491,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'LBL_COMPANY_DETAILS',
 				'LBL_MAIL_SERVER_SETTINGS',
 				'LBL_BACKUP_SERVER_SETTINGS',
-				'LBL_ASSIGN_MODULE_OWNERS',
 				'LBL_CURRENCY_SETTINGS',
 				'LBL_TAX_SETTINGS',
 				'LBL_SYSTEM_INFO',
@@ -2529,7 +2521,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'LBL_COMPANY_DETAILS'=>'LBL_COMMUNICATION_TEMPLATES',
 				'LBL_MAIL_SERVER_SETTINGS'=>'LBL_OTHER_SETTINGS',
 				'LBL_BACKUP_SERVER_SETTINGS'=>'LBL_OTHER_SETTINGS',
-				'LBL_ASSIGN_MODULE_OWNERS'=>'LBL_OTHER_SETTINGS',
 				'LBL_CURRENCY_SETTINGS'=>'LBL_OTHER_SETTINGS',
 				'LBL_TAX_SETTINGS'=>'LBL_OTHER_SETTINGS',
 				'LBL_SYSTEM_INFO'=>'LBL_OTHER_SETTINGS',
@@ -2561,7 +2552,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 					'LBL_COMPANY_DESCRIPTION',
 					'LBL_MAIL_SERVER_DESCRIPTION',
 					'LBL_BACKUP_SERVER_DESCRIPTION',
-					'LBL_MODULE_OWNERS_DESCRIPTION',
 					'LBL_CURRENCY_DESCRIPTION',
 					'LBL_TAX_DESCRIPTION',
 					'LBL_SYSTEM_DESCRIPTION',
@@ -2591,7 +2581,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'index.php?module=Settings&action=OrganizationConfig&parenttab=Settings',
 				'index.php?module=Settings&action=EmailConfig&parenttab=Settings',
 				'index.php?module=Settings&action=BackupServerConfig&parenttab=Settings',
-				'index.php?module=Settings&action=ListModuleOwners&parenttab=Settings',
 				'index.php?module=Settings&action=CurrencyListView&parenttab=Settings',
 				'index.php?module=Settings&action=TaxConfig&parenttab=Settings',
 				'index.php?module=System&action=listsysconfig&parenttab=Settings',
