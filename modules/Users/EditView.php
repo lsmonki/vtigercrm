@@ -26,7 +26,6 @@ require_once('modules/Users/Users.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Users/Forms.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Calendar/OpenListView.php');
 require_once('modules/Leads/ListViewTop.php');
 
 global $app_strings;
@@ -95,7 +94,7 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 $focus->mode = $mode;
 $disp_view = getView($focus->mode);
 $smarty->assign("IMAGENAME",$focus->imagename);
-$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
+$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 $smarty->assign("MODULE", 'Settings');
 $smarty->assign("MODE",$focus->mode);
 $smarty->assign("HOUR_FORMAT",$focus->hour_format);
@@ -104,8 +103,8 @@ if ($_REQUEST['Edit'] == ' Edit ')
 {
 	$smarty->assign("READONLY", "readonly");
 	$smarty->assign("USERNAME_READONLY", "readonly");
-	
-}	
+
+}
 if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 {
 	$smarty->assign("USERNAME_READONLY", "readonly");
@@ -113,7 +112,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 
 $smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
-if($mode == 'create') $smarty->assign("TAGCLOUDVIEW","true"); // While creating user select tag cloud by default 
+if($mode == 'create') $smarty->assign("TAGCLOUDVIEW","true"); // While creating user select tag cloud by default
 else $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 
 $smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));

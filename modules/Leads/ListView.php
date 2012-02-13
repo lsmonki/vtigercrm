@@ -137,7 +137,7 @@ elseif($viewid ==0)
 //raju
 if(isPermitted('Leads','Delete','') == 'yes')
 {
-	$other_text['del'] =	$app_strings[LBL_MASS_DELETE];	
+	$other_text['del'] =	$app_strings[LBL_MASS_DELETE];
 
 }
 if(isPermitted('Emails','EditView','') == 'yes')
@@ -263,7 +263,7 @@ if(isset($ids))
 {
 	$smarty->assign("ALLIDS", implode($ids,";"));
 }
-if(isPermitted("Leads","Merge") == 'yes') 
+if(isPermitted("Leads","Merge") == 'yes')
 {
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -340,7 +340,7 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
-else	
+else
 	$smarty->display("ListView.tpl");
 
 ?>

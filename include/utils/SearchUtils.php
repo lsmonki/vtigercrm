@@ -822,7 +822,7 @@ function getWhereCondition($currentModule)
 		$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
 		if(!empty($advft_criteria_groups))	$advft_criteria_groups_decoded = $json->decode($advft_criteria_groups);
 
-		$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria_decoded, $advft_criteria_groups_decoded);
+		$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria_decoded, $advft_criteria_groups_decoded, $currentModule);
 		$adv_string = generateAdvancedSearchSql($advfilterlist);
 		if(!empty($adv_string)) $adv_string = '('.$adv_string.')';
 		$where = $adv_string.'#@@#'.'&advft_criteria='.$advft_criteria.'&advft_criteria_groups='.$advft_criteria_groups.'&searchtype=advance';
@@ -1065,12 +1065,15 @@ function getUnifiedWhere($listquery,$module,$search_val){
 	return $where;
 }
 
-function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) {
-	global $log, $currentModule, $current_user;
+function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups, $module='') {
+	global $currentModule, $current_user;
+	if(empty($module)) {
+		$module = $currentModule;
+	}
 
 	$advfilterlist = array();
 
-	$moduleHandler = vtws_getModuleHandlerFromName($currentModule,$current_user);
+	$moduleHandler = vtws_getModuleHandlerFromName($module,$current_user);
 	$moduleMeta = $moduleHandler->getMeta();
 	$moduleFields = $moduleMeta->getModuleFields();
 
@@ -1095,7 +1098,7 @@ function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups) 
 				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
 			} else {
 				$currencyField = new CurrencyField($adv_filter_value);
-				if($currentModule == 'Potentials' && $fieldName == 'amount') {
+				if($module == 'Potentials' && $fieldName == 'amount') {
 					$currencyField->setNumberofDecimals(2);
 				}
 				$adv_filter_value = $currencyField->getDBInsertedValue();

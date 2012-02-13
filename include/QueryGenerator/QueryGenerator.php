@@ -29,12 +29,12 @@ class QueryGenerator {
 	private $whereFields;
 	/**
 	 *
-	 * @var VtigerCRMObjectMeta 
+	 * @var VtigerCRMObjectMeta
 	 */
 	private $meta;
 	/**
 	 *
-	 * @var Users 
+	 * @var Users
 	 */
 	private $user;
 	private $advFilterList;
@@ -54,7 +54,7 @@ class QueryGenerator {
 	public static $AND = 'AND';
 	public static $OR = 'OR';
 	private $customViewFields;
-	
+
 	public function __construct($module, $user) {
 		$db = PearDatabase::getInstance();
 		$this->module = $module;
@@ -146,7 +146,7 @@ class QueryGenerator {
 	public function getConditionalWhere() {
 		return $this->conditionalWhere;
 	}
-	
+
 	public function getDefaultCustomViewQuery() {
 		$customView = new CustomView($this->module);
 		$viewId = $customView->getViewId($this->module);
@@ -228,7 +228,7 @@ class QueryGenerator {
 					}
 					$this->endGroup();
 					$groupConditionGlue = $groupcolumns['condition'];
-					if(!empty($groupConditionGlue)) 
+					if(!empty($groupConditionGlue))
 						$this->addConditionGlue($groupConditionGlue);
 				}
 			}
@@ -279,7 +279,7 @@ class QueryGenerator {
 			$baseTableIndex = $moduleTableIndexList[$baseTable];
 			return $baseTable.'.'.$baseTableIndex;
 		}
-		
+
 		$moduleFields = $this->meta->getModuleFields();
 		$field = $moduleFields[$name];
 		$sql = '';
@@ -522,7 +522,7 @@ class QueryGenerator {
 							if($module == 'Users') {
 								$instance = CRMEntity::getInstance($module);
 								$referenceTable = $instance->table_name;
-								if(count($this->ownerFields) > 0 || 
+								if(count($this->ownerFields) > 0 ||
 										$this->getModule() == 'Quotes') {
 									$referenceTable .= '2';
 								}
@@ -540,7 +540,7 @@ class QueryGenerator {
 						} else {
 							$columnSql = implode('', $columnList);
 						}
-						
+
 						$fieldSql .= "$fieldGlue $columnSql $valueSql";
 						$fieldGlue = ' OR';
 					}
@@ -572,7 +572,7 @@ class QueryGenerator {
 			$conditionInfo['value'].")";
 			$fieldSqlList[$index] = $fieldSql;
 		}
-		
+
 		$groupSql = $this->makeGroupSqlReplacements($fieldSqlList, $groupSql);
 		if($this->conditionInstanceCount > 0) {
 			$this->conditionalWhere = $groupSql;
@@ -590,14 +590,14 @@ class QueryGenerator {
 	 * @param WebserviceField $field
 	 */
 	private function getConditionValue($value, $operator, $field) {
-		
+
 		$operator = strtolower($operator);
 		$db = PearDatabase::getInstance();
 
 		if(is_string($value)) {
 			$valueArray = explode(',' , $value);
 		} elseif(is_array($value)) {
-			$valueArray = $value;		
+			$valueArray = $value;
 		} else{
 			$valueArray = array($value);
 		}
@@ -648,7 +648,7 @@ class QueryGenerator {
 			} else {
 				$value = $db->sql_escape_string($value);
 			}
-			
+
 			if(trim($value) == '' && ($operator == 's' || $operator == 'ew' || $operator == 'c')
 					&& ($this->isStringType($field->getFieldDataType()) ||
 					$field->getFieldDataType() == 'picklist' ||
@@ -731,7 +731,7 @@ class QueryGenerator {
 	private function isDateType($type) {
 		return ($type == 'date' || $type == 'datetime');
 	}
-	
+
 	private function fixDateTimeValue($name, $value, $first = true) {
 		$moduleFields = $this->meta->getModuleFields();
 		$field = $moduleFields[$name];
@@ -789,23 +789,23 @@ class QueryGenerator {
 	public function addUserSearchConditions($input) {
 		global $log,$default_charset;
 		if($input['searchtype']=='advance') {
-			
-			$json = new Zend_Json();	
+
+			$json = new Zend_Json();
 			$advft_criteria = $_REQUEST['advft_criteria'];
-			if(!empty($advft_criteria))	$advft_criteria = $json->decode($advft_criteria);	
+			if(!empty($advft_criteria))	$advft_criteria = $json->decode($advft_criteria);
 			$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
 			if(!empty($advft_criteria_groups))	$advft_criteria_groups = $json->decode($advft_criteria_groups);
-			
+
 			if(empty($advft_criteria) || count($advft_criteria) <= 0) {
 				return ;
 			}
-			
-			$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups);
-			
+
+			$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups, $this->getModule());
+
 			if(empty($advfilterlist) || count($advfilterlist) <= 0) {
 				return ;
 			}
-			
+
 			if($this->conditionInstanceCount > 0) {
 				$this->startGroup(self::$AND);
 			} else {
@@ -830,7 +830,7 @@ class QueryGenerator {
 					}
 					$this->endGroup();
 					$groupConditionGlue = $groupcolumns['condition'];
-					if(!empty($groupConditionGlue)) 
+					if(!empty($groupConditionGlue))
 						$this->addConditionGlue($groupConditionGlue);
 				}
 			}
@@ -847,14 +847,14 @@ class QueryGenerator {
 			$noOfConditions = count($conditionList);
 			$noOfRelatedConditions = count($relatedConditionList);
 			foreach ($conditionList as $index=>$conditionInfo) {
-				$this->addCondition($conditionInfo['fieldname'], $conditionInfo['value'], 
+				$this->addCondition($conditionInfo['fieldname'], $conditionInfo['value'],
 						$conditionInfo['operator']);
 				if($index < $noOfConditions - 1 || $noOfRelatedConditions > 0) {
 					$this->addConditionGlue(self::$AND);
 				}
 			}
 			foreach ($relatedConditionList as $index => $conditionInfo) {
-				$this->addRelatedModuleCondition($conditionInfo['relatedModule'], 
+				$this->addRelatedModuleCondition($conditionInfo['relatedModule'],
 						$conditionInfo['conditionModule'], $conditionInfo['finalValue'],
 						$conditionInfo['SQLOperator']);
 				if($index < $noOfRelatedConditions - 1) {
@@ -884,8 +884,8 @@ class QueryGenerator {
 				if(!$this->isStringType($type)) {
 					$value=trim($stringConvert);
 				}
-				
-				if($type == 'picklist') { 
+
+				if($type == 'picklist') {
 					global $mod_strings;
 					// Get all the keys for the for the Picklist value
 					$mod_keys = array_keys($mod_strings, $value);
@@ -1012,5 +1012,32 @@ class QueryGenerator {
 		}
 		return array('conditions'=>$conditionList,'relatedConditions'=>$relatedConditionList);
 	}
+
+	public function initForGlobalSearchByType($type, $value, $operator='s') {
+		$fieldList = $this->meta->getFieldNameListByType($type);
+		if($this->conditionInstanceCount <= 0) {
+			$this->startGroup('');
+		} else {
+			$this->startGroup(self::$AND);
+		}
+		$nameFieldList = explode(',',$this->getModuleNameFields($this->module));
+		foreach ($nameFieldList as $nameList) {
+			$field = $this->meta->getFieldByColumnName($nameList);
+			$this->fields[] = $field->getFieldName();
+		}
+		foreach ($fieldList as $index => $field) {
+			$fieldName = $this->meta->getFieldByColumnName($field);
+			$this->fields[] = $fieldName->getFieldName();
+			if($index > 0) {
+				$this->addConditionGlue(self::$OR);
+			}
+			$this->addCondition($fieldName->getFieldName(), $value, $operator);
+		}
+		$this->endGroup();
+		if(!in_array('id', $this->fields)) {
+				$this->fields[] = 'id';
+		}
+	}
+
 }
 ?>

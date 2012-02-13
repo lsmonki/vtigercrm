@@ -175,11 +175,18 @@ if(isset($where) && $where != '')
 		$list_query .= " AND " .$where;
 }
 if (isset($_REQUEST['from_homepage'])) {
-	$today = date("Y-m-d", time());
+	$dbStartDateTime = new DateTimeField(date('Y-m-d H:i:s'));
+	$userStartDate = $dbStartDateTime->getDisplayDate();
+	$userStartDateTime = new DateTimeField($userStartDate.' 00:00:00');
+	$startDateTime = $userStartDateTime->getDBInsertDateTimeValue();
+
+	$userEndDateTime = new DateTimeField($userStartDate.' 23:59:00');
+	$endDateTime = $userEndDateTime->getDBInsertDateTimeValue();
+
 	if ($_REQUEST['from_homepage'] == 'upcoming_activities')
-		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (date_start >= '$today' OR vtiger_recurringevents.recurringdate >= '$today')";
-	elseif ($_REQUEST['from_homepage'] == 'pending_activities') 
-		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (due_date <= '$today' OR vtiger_recurringevents.recurringdate <= '$today')";
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (CAST((CONCAT(date_start,' ',time_start)) AS DATETIME) >= '$startDateTime' OR CAST((CONCAT(vtiger_recurringevents.recurringdate,' ',time_start)) AS DATETIME) >= '$startDateTime')";
+	elseif ($_REQUEST['from_homepage'] == 'pending_activities')
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (CAST((CONCAT(due_date,' ',time_end)) AS DATETIME) <= '$endDateTime' OR CAST((CONCAT(vtiger_recurringevents.recurringdate,' ',time_start)) AS DATETIME) <= '$endDateTime')";
 }
 
 if(isset($order_by) && $order_by != '') {
@@ -191,7 +198,7 @@ if(isset($order_by) && $order_by != '') {
 		if($order_by == 'lastname')
          	$list_query .= ' ORDER BY vtiger_contactdetails.lastname '.$sorder;
 		else
-			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder; 
+			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 	}
 }
 
@@ -283,6 +290,6 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
-else	
+else
 	$smarty->display("ActivityListView.tpl");
 ?>
