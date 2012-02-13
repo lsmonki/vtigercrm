@@ -119,6 +119,10 @@ $mod_strings = Array(
 'MSG_NO_FILTERS' => 'No Filters Available',
 'MSG_NO_FIELDS' => 'No Fields Available',
 
+//added for Default Widgets
+'LBL_DEFAULT_WIDGET'=>'Default Widgets',
+'LBL_NO_WIDGETS_HIDDEN'=>'No default widgets are hidden',
+
 );
 
 ?>

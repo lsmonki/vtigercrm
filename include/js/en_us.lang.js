@@ -269,7 +269,7 @@ var alert_arr = {
 	'LBL_REPLY_TO_ALL': 'Reply To All',
 				
 	'LBL_WIDGET_HIDDEN': 'Widget Hidden',
-	'LBL_RESTORE_FROM_PREFERENCES': 'You can restore it from your preferences',
+	'LBL_RESTORE_FROM_PREFERENCES': 'You can restore it from Create Button of Home Page or your preferences',
 	'ERR_HIDING': 'Error while hiding',
 	'MSG_TRY_AGAIN': 'Please try again',
 				
@@ -322,6 +322,7 @@ var alert_arr = {
     'LBL_FAQ_TITLE'   : 'FAQ',
     'LBL_VIDEO_TITLE' : 'Video',
     'LBL_CLOSE_TITLE' : 'Close',
+	'LBL_SELECT':'Select Default Widgets To Be Shown',
 
 	'ERR_SELECT_ATLEAST_ONE_MERGE_CRITERIA_FIELD' : 'Select at least one field for merge criteria',
 	'ERR_PLEASE_MAP_MANDATORY_FIELDS' : 'Please map the following mandatory fields',
