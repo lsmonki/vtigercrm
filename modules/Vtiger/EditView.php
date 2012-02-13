@@ -51,6 +51,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('ID', $focus->id);
 $smarty->assign('MODE', $focus->mode);
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 $smarty->assign('CHECK', Button_Check($currentModule));
 $smarty->assign('DUPLICATE', $isduplicate);
@@ -67,7 +68,7 @@ if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", vtlib_
 if(isset($_REQUEST['return_id']))        $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 
-// Field Validation Information 
+// Field Validation Information
 $tabid = getTabid($currentModule);
 $validationData = getDBValidationData($focus->tab_name,$tabid);
 $validationArray = split_validationdataArray($validationData);

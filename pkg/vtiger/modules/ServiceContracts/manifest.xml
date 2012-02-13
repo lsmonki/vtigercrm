@@ -28,7 +28,7 @@
 				<name>vtiger_servicecontracts</name>
 				<sql><![CDATA[ALTER TABLE vtiger_servicecontracts MODIFY COLUMN used_units decimal(5,2) default NULL]]></sql>
 			</table>
-		</tables>		
+		</tables>
 	</migration>
 </migrations>
 <tables>

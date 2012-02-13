@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -53,7 +53,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		$currencyid = $quote_focus->column_fields['currency_id'];
 		$rate = $quote_focus->column_fields['conversion_rate'];
 
-		//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView 
+		//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView
 		$associated_prod = getAssociatedProducts("Quotes", $quote_focus);
 		$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 		$smarty->assign("QUOTE_ID", $quoteid);
@@ -347,6 +347,7 @@ if ($focus->mode == 'edit') {
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 $picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($currentModule);
 $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDependencyDatasource));

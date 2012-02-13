@@ -10,7 +10,7 @@
 <vtiger_max_version>5.*</vtiger_max_version>
 </dependencies>
 <migrations>
-	<migration version='1.0'>		
+	<migration version='1.0'>
 	</migration>
 </migrations>
 <tables>

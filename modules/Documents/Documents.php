@@ -266,7 +266,7 @@ class Documents extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Documents", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
 			'vtiger_users.last_name'));
 		$query = "SELECT $fields_list, case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name" .
 				" FROM vtiger_notes
@@ -316,15 +316,6 @@ class Documents extends CRMEntity {
 	}
 
 	/*function save_related_module($module, $crmid, $with_module, $with_crmid){
-		global $log;
-		$log->debug("indocument".$module.$crmid.$with_module.$with_crmid);
-		if(isset($this->parentid) && $this->parentid != '')
-			$relid =  $this->parentid;
-		//inserting into vtiger_senotesrel
-		if(isset($relid) && $relid != '')
-		{
-			$this->insertintonotesrel($relid,$this->id);
-		}
 	}*/
 
 

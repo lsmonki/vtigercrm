@@ -133,6 +133,7 @@ if ($focus->mode == 'edit') {
 	$smarty->assign("UPDATEINFO", updateInfo($focus->id));
 	$smarty->assign("MODE", $focus->mode);
 }
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 if (isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '')
 	$smarty->assign("ACTIVITYMODE", vtlib_purify($_REQUEST['activity_mode']));

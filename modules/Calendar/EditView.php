@@ -25,7 +25,7 @@ require_once('data/Tracker.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
-require_once('modules/Calendar/calendarLayout.php'); 
+require_once('modules/Calendar/calendarLayout.php');
 require_once("modules/Emails/mail.php");
 include_once 'modules/Calendar/header.php';
 global $app_strings;
@@ -43,7 +43,7 @@ $activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Calendar';
-	$taskcheck = true;	
+	$taskcheck = true;
 	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_TODO']);
 }
 elseif($activity_mode == 'Events')
@@ -56,7 +56,7 @@ elseif($activity_mode == 'Events')
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->id = vtlib_purify($_REQUEST['record']);
     $focus->mode = 'edit';
-    $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
+    $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);
     $focus->name=$focus->column_fields['subject'];
     $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
     $result = $adb->pquery($sql, array($focus->id));
@@ -107,7 +107,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	    $value['repeat_frequency'] = $recurringObject->getRecurringFrequency();
 		$value['eventrecurringtype'] = $recurringObject->getRecurringType();
 		$recurringInfo = $recurringObject->getUserRecurringInfo();
-	    
+
 		if($recurringObject->getRecurringType() == 'Weekly') {
 			$noOfDays = count($recurringInfo['dayofweek_to_repeat']);
 			for ($i = 0; $i < $noOfDays; ++$i) {
@@ -136,11 +136,11 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		$smarty->assign("CONTACTSNAME",$contact_name);
 		$account_id = vtlib_purify($_REQUEST['account_id']);
 		$account_name = getAccountName($account_id);
-	}	
+	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-    	$focus->mode = ''; 	
+    	$focus->mode = '';
 }
 if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 	setObjectValuesFromRequest($focus);
@@ -154,7 +154,7 @@ if($disp_view == 'edit_view')
 {
 	$act_data = getBlocks($tab_type,$disp_view,$mode,$focus->column_fields);
 }
-else	
+else
 {
 	$act_data = getBlocks($tab_type,$disp_view,$mode,$focus->column_fields,'BAS');
 }
@@ -230,6 +230,7 @@ if($focus->mode == 'edit')
 {
         $smarty->assign("MODE", $focus->mode);
 }
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -269,8 +270,8 @@ if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='')
 	$smarty->assign("subtab",vtlib_purify($_REQUEST['subtab']));
 if(isset($_REQUEST['maintab']) && $_REQUEST['maintab']!='')
 	$smarty->assign("maintab",vtlib_purify($_REQUEST['maintab']));
-	
-	
+
+
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);

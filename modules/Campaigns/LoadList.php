@@ -8,11 +8,11 @@
  * All Rights Reserved.
  * Contributor(s): mmbrich
  ********************************************************************************/
-      
+
 require_once('modules/CustomView/CustomView.php');
 require_once('user_privileges/default_module_view.php');
 
-global $singlepane_view, $adb;
+global $currentModule, $current_user;
 $queryGenerator = new QueryGenerator(vtlib_purify($_REQUEST["list_type"]), $current_user);
 if ($_REQUEST["cvid"] != "0") {
 	$queryGenerator->initForCustomViewById(vtlib_purify($_REQUEST["cvid"]));
@@ -27,7 +27,7 @@ if($_REQUEST["list_type"] == "Leads"){
 		$relid = "leadid";
 }
 elseif($_REQUEST["list_type"] == "Contacts"){
-               
+
 		$reltable = "vtiger_campaigncontrel";
 		$relid = "contactid";
 }
@@ -36,11 +36,9 @@ elseif($_REQUEST["list_type"] == "Accounts"){
 		$relid = "accountid";
 }
 
+$focus = CRMEntity::getInstance($currentModule);
 while($row=$adb->fetch_array($rs)) {
-	$sql = "SELECT $relid FROM $reltable WHERE $relid = ? AND campaignid = ?";
-	$result = $adb->pquery($sql, array($row[$relid], $_REQUEST['return_id']));
-	if ($adb->num_rows($result) > 0) continue;
-	$adb->pquery("INSERT INTO $reltable(campaignid, $relid,campaignrelstatusid) VALUES(?,?,1)", array($_REQUEST["return_id"], $row[$relid]));
+	relateEntities($focus, $currentModule, vtlib_purify($_REQUEST['return_id']), vtlib_purify($_REQUEST["list_type"]), $row[$relid]);
 }
 
 header("Location: index.php?module=Campaigns&action=CampaignsAjax&file=CallRelatedList&ajax=true&".

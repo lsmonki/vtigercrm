@@ -31,7 +31,7 @@ require_once('user_privileges/default_module_view.php');
 class Quotes extends CRMEntity {
 	var $log;
 	var $db;
-		
+
 	var $table_name = "vtiger_quotes";
 	var $table_index= 'quoteid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_quotes','vtiger_quotesbillads','vtiger_quotesshipads','vtiger_quotescf');
@@ -41,7 +41,7 @@ class Quotes extends CRMEntity {
 	 */
 	var $customFieldTable = Array('vtiger_quotescf', 'quoteid');
 	var $entity_table = "vtiger_crmentity";
-	
+
 	var $billadr_table = "vtiger_quotesbillads";
 
 	var $object_name = "Quote";
@@ -50,7 +50,7 @@ class Quotes extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('subject','crmid','smownerid','accountname','lastname');		
+	var $sortby_fields = Array('subject','crmid','smownerid','accountname','lastname');
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
@@ -62,13 +62,13 @@ class Quotes extends CRMEntity {
 				'Quote No'=>Array('quotes'=>'quote_no'),
 				// END
 				'Subject'=>Array('quotes'=>'subject'),
-				'Quote Stage'=>Array('quotes'=>'quotestage'), 
+				'Quote Stage'=>Array('quotes'=>'quotestage'),
 				'Potential Name'=>Array('quotes'=>'potentialid'),
 				'Account Name'=>Array('account'=> 'accountid'),
 				'Total'=>Array('quotes'=> 'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
-	
+
 	var $list_fields_name = Array(
 				        'Quote No'=>'quote_no',
 				        'Subject'=>'subject',
@@ -84,9 +84,9 @@ class Quotes extends CRMEntity {
 				'Quote No'=>Array('quotes'=>'quote_no'),
 				'Subject'=>Array('quotes'=>'subject'),
 				'Account Name'=>Array('quotes'=>'accountid'),
-				'Quote Stage'=>Array('quotes'=>'quotestage'), 
+				'Quote Stage'=>Array('quotes'=>'quotestage'),
 				);
-	
+
 	var $search_fields_name = Array(
 					'Quote No'=>'quote_no',
 				        'Subject'=>'subject',
@@ -101,9 +101,9 @@ class Quotes extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
 	//var $groupTable = Array('vtiger_quotegrouprelation','quoteid');
-	
+
 	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
-	
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Quotes() {
@@ -116,27 +116,27 @@ class Quotes extends CRMEntity {
 	{
 		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' 
+		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails($this, 'Quotes');
 		}
-		
+
 		// Update the currency id and the conversion rate for the quotes
 		$update_query = "update vtiger_quotes set currency_id=?, conversion_rate=? where quoteid=?";
-		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
+		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id);
 		$adb->pquery($update_query, $update_params);
-	}	
-	
+	}
+
 	/**	Function used to get the sort order for Quote listview
-	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned.
 	 */
 	function getSortOrder()
 	{
 		global $log;
-                $log->debug("Entering getSortOrder() method ...");	
-		if(isset($_REQUEST['sorder'])) 
+                $log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
 			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['QUOTES_SORT_ORDER'] != '')?($_SESSION['QUOTES_SORT_ORDER']):($this->default_sort_order));
@@ -145,25 +145,25 @@ class Quotes extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for Quotes listview
-	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['QUOTES_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['QUOTES_ORDER_BY'] if this session value is empty then default order by will be returned.
 	 */
 	function getOrderBy()
 	{
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
-                
-		$use_default_order_by = '';		
+
+		$use_default_order_by = '';
 		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
 			$use_default_order_by = $this->default_order_by;
 		}
-		
-		if (isset($_REQUEST['order_by'])) 
+
+		if (isset($_REQUEST['order_by']))
 			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['QUOTES_ORDER_BY'] != '')?($_SESSION['QUOTES_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
-	}	
+	}
 
 	/**	function used to get the list of sales orders which are related to the Quotes
 	 *	@param int $id - quote id
@@ -175,7 +175,7 @@ class Quotes extends CRMEntity {
 		$log->debug("Entering get_salesorder(".$id.") method ...");
 		require_once('modules/SalesOrder/SalesOrder.php');
 	        $focus = new SalesOrder();
- 
+
 		$button = '';
 
 		if($singlepane_view == 'true')
@@ -183,15 +183,15 @@ class Quotes extends CRMEntity {
 		else
 			$returnset = '&return_module=Quotes&return_action=CallRelatedList&return_id='.$id;
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
 			'vtiger_users.last_name'));
 		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename
-			, vtiger_account.accountname,case when (vtiger_users.user_name not like '') then 
-			$userNameSql else vtiger_groups.groupname end as user_name 
+			, vtiger_account.accountname,case when (vtiger_users.user_name not like '') then
+			$userNameSql else vtiger_groups.groupname end as user_name
 		from vtiger_salesorder
 		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid
-		left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid 
-		left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid  
+		left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid
+		left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid
 		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		where vtiger_crmentity.deleted=0 and vtiger_salesorder.quoteid = ".$id;
@@ -211,20 +211,20 @@ class Quotes extends CRMEntity {
         $related_module = vtlib_getModuleNameById($rel_tab_id);
 		require_once("modules/$related_module/Activity.php");
 		$other = new Activity();
-        vtlib_setup_modulevars($related_module, $other);		
+        vtlib_setup_modulevars($related_module, $other);
 		$singular_modname = vtlib_toSingular($related_module);
-		
+
 		$parenttab = getParentTab();
-		
+
 		if($singlepane_view == 'true')
 			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
 			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
-		
+
 		$button = '';
-				
+
 		$button .= '<input type="hidden" name="activity_mode">';
-		
+
 		if($actions) {
 			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
 			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
@@ -236,36 +236,36 @@ class Quotes extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
 			'vtiger_users.last_name'));
-		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else 
-		vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid, 
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else
+		vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid,
 		vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,
-		vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, 
-		vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype 
-		from vtiger_activity 
+		vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+		vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype
+		from vtiger_activity
 		inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=
-		vtiger_activity.activityid 
-		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
-		left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= 
-		vtiger_activity.activityid 
-		left join vtiger_contactdetails on vtiger_contactdetails.contactid = 
-		vtiger_cntactivityrel.contactid 
-		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid 
+		vtiger_activity.activityid
+		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
+		left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=
+		vtiger_activity.activityid
+		left join vtiger_contactdetails on vtiger_contactdetails.contactid =
+		vtiger_cntactivityrel.contactid
+		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=
-		vtiger_activity.activityid 
-		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid 
-		where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and 
-			activitytype='Task' and (vtiger_activity.status is not NULL and 
-			vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and 
+		vtiger_activity.activityid
+		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
+		where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and
+			activitytype='Task' and (vtiger_activity.status is not NULL and
+			vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and
 			vtiger_activity.status != 'Deferred')";
-							
-		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
-		
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+
 		if($return_value == null) $return_value = Array();
 		$return_value['CUSTOM_BUTTON'] = $button;
-		
-		$log->debug("Exiting get_activities method ...");		
+
+		$log->debug("Exiting get_activities method ...");
 		return $return_value;
 	}
 
@@ -277,10 +277,10 @@ class Quotes extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' => 
+		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
 			'vtiger_users.last_name'));
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
-			vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
+			vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start,
 			vtiger_activity.due_date,vtiger_activity.time_start, vtiger_activity.time_end,
 			vtiger_contactdetails.contactid,
 			vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_crmentity.modifiedtime,
@@ -299,7 +299,7 @@ class Quotes extends CRMEntity {
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
-		return getHistory('Quotes',$query,$id);	
+		return getHistory('Quotes',$query,$id);
 	}
 
 
@@ -311,7 +311,7 @@ class Quotes extends CRMEntity {
 	 *	@return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are arrays which contains header values and all column values of all entries
 	 */
 	function get_quotestagehistory($id)
-	{	
+	{
 		global $log;
 		$log->debug("Entering get_quotestagehistory(".$id.") method ...");
 
@@ -328,7 +328,7 @@ class Quotes extends CRMEntity {
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['Quote Stage'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
-		
+
 		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
 		//Account Name , Total are mandatory fields. So no need to do security check to these fields.
 		global $current_user;
@@ -375,7 +375,7 @@ class Quotes extends CRMEntity {
 	}
 
 	/*
-	 * Function to get the secondary query part of a report 
+	 * Function to get the secondary query part of a report
 	 * @param - $module primary module name
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
@@ -386,9 +386,9 @@ class Quotes extends CRMEntity {
 			left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
 			left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 			left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
-			left join vtiger_inventoryproductrel as vtiger_inventoryproductrelQuotes on vtiger_quotes.quoteid = vtiger_inventoryproductrelQuotes.id  
-			left join vtiger_products as vtiger_productsQuotes on vtiger_productsQuotes.productid = vtiger_inventoryproductrelQuotes.productid  
-			left join vtiger_service as vtiger_serviceQuotes on vtiger_serviceQuotes.serviceid = vtiger_inventoryproductrelQuotes.productid  
+			left join vtiger_inventoryproductrel as vtiger_inventoryproductrelQuotes on vtiger_quotes.quoteid = vtiger_inventoryproductrelQuotes.id
+			left join vtiger_products as vtiger_productsQuotes on vtiger_productsQuotes.productid = vtiger_inventoryproductrelQuotes.productid
+			left join vtiger_service as vtiger_serviceQuotes on vtiger_serviceQuotes.serviceid = vtiger_inventoryproductrelQuotes.productid
 			left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupid = vtiger_crmentityQuotes.smownerid
 			left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentityQuotes.smownerid
 			left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
@@ -401,7 +401,7 @@ class Quotes extends CRMEntity {
 	}
 
 	/*
-	 * Function to get the relation tables for related modules 
+	 * Function to get the relation tables for related modules
 	 * @param - $secmodule secondary module name
 	 * returns the array with table names and fieldnames storing relations between module and this module
 	 */
@@ -416,12 +416,12 @@ class Quotes extends CRMEntity {
 		);
 		return $rel_tables[$secmodule];
 	}
-	
+
 	// Function to unlink an entity with given Id from another entity
 	function unlinkRelationship($id, $return_module, $return_id) {
 		global $log;
 		if(empty($return_module) || empty($return_id)) return;
-		
+
 		if($return_module == 'Accounts' ) {
 			$this->trash('Quotes',$id);
 		} elseif($return_module == 'Potentials') {

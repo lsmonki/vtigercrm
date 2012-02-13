@@ -20,21 +20,21 @@ $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
 
-if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 {
 	$focus->id = $_REQUEST['record'];
-	$focus->mode = 'edit'; 	
+	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
 	$focus->name = $focus->column_fields['bookname'];
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
 	$focus->id = "";
-    	$focus->mode = ''; 	
+    	$focus->mode = '';
 }
 if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 	setObjectValuesFromRequest($focus);
-} 
+}
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -65,6 +65,7 @@ if($focus->mode == 'edit')
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
         $smarty->assign("MODE", $focus->mode);
 }
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
@@ -119,6 +120,6 @@ $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
-else 
+else
 	$smarty->display('Inventory/InventoryCreateView.tpl');
 ?>

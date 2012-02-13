@@ -62,10 +62,10 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 	setObjectValuesFromRequest($focus);
 }
 
-//needed when creating a new product with a default vtiger_vendor name to passed 
+//needed when creating a new product with a default vtiger_vendor name to passed
 if (isset($_REQUEST['name']) && is_null($focus->name)) {
 	$focus->name = $_REQUEST['name'];
-	
+
 }
 if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 	$focus->vendorid = $_REQUEST['vendorid'];
@@ -73,7 +73,7 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 
 $disp_view = getView($focus->mode);
 	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
-	
+
 $smarty->assign('OP_MODE',$disp_view);
 $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
@@ -85,6 +85,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('ID', $focus->id);
 $smarty->assign('MODE', $focus->mode);
+$smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 
 $smarty->assign('CHECK', Button_Check($currentModule));
 $smarty->assign('DUPLICATE', $isduplicate);
@@ -101,7 +102,7 @@ if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", vtlib_
 if(isset($_REQUEST['return_id']))        $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 
-// Field Validation Information 
+// Field Validation Information
 $tabid = getTabid($currentModule);
 $validationData = getDBValidationData($focus->tab_name,$tabid);
 $validationArray = split_validationdataArray($validationData);
@@ -191,7 +192,7 @@ $unit_price = $focus->column_fields['unit_price'];
 $price_details = getPriceDetailsForProduct($productid, $unit_price, 'available',$currentModule);
 $smarty->assign("PRICE_DETAILS", $price_details);
 
-$base_currency = 'curname' . $product_base_currency;	
+$base_currency = 'curname' . $product_base_currency;
 $smarty->assign("BASE_CURRENCY", $base_currency);
 
 if(isset($focus->id) && $_REQUEST['isDuplicate'] != 'true')
@@ -214,7 +215,7 @@ else if($errormessage==3)
 {
         $msg = $mod_strings['LBL_UPLOAD_ERROR'];
         $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
-	
+
 }
 else if($errormessage=="image")
 {
