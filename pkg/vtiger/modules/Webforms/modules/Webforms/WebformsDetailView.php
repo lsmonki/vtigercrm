@@ -24,7 +24,7 @@ if(isset($_REQUEST['id'])){
 	$smarty = new vtigerCRM_Smarty();
 
 	$category = getParentTab();
-	$username=getUserName($webformModel->getOwnerId());
+	$username = getUserFullName($webformModel->getOwnerId());
 
 
 	$smarty->assign('WEBFORMMODEL',$webformModel);
@@ -38,7 +38,7 @@ if(isset($_REQUEST['id'])){
 	$smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 	$smarty->assign('WEBFORMFIELDS', Webforms::getFieldInfos($webformModel->getTargetModule()));
 	$smarty->assign('ACTIONPATH',$site_URL.'/modules/Webforms/capture.php');
-
+	$smarty->assign('LANGUAGE',$current_language);
 	$smarty->display(vtlib_getModuleTemplate($currentModule,'DetailView.tpl'));
 }
 

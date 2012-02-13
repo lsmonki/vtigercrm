@@ -9,8 +9,8 @@
 *********************************************************************************/
 -->*}
 {include file='modules/Webforms/Buttons_List.tpl'}
+<script type="text/javascript" src="modules/{$MODULE}/language/{$LANGUAGE}.lang.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}Ajax.js"></script>
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	<tr>
@@ -110,7 +110,7 @@
 					<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$webform->getPublicId()}</td>
 					<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$webform->getReturnUrl()}</td>
 					<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))" align="center"> {if $webform->getEnabled() eq 1}<img src="themes/images/prvPrfSelectedTick.gif">{else}<img src="themes/images/no.gif">{/if}</td>
-					<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))"><a onclick='javascript:document.getElementById("webform_popup_header").innerHTML="{$webform->getName()}";Webforms.getHTMLSource({$webform->getId()});' style="cursor:pointer;">{'LBL_SOURCE'|@getTranslatedString:$MODULE}</a> | <a href="index.php?module=Webforms&amp;action=WebformsEditView&amp;id={$webform->getId()}&amp;parenttab=Settings&amp;operation=edit">{'LBL_EDIT'|@getTranslatedString:$MODULE}</a>  | <a onclick="Webforms.deleteForm('form{$webform->getId()}',{$webform->getId()})">{'LBL_DELETE'|@getTranslatedString:$MODULE}</a> </td>
+					<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))"><a onclick='javascript:document.getElementById("webform_popup_header").innerHTML="{$webform->getName()}";Webforms.getHTMLSource({$webform->getId()});' style="cursor:pointer;">{'LBL_SOURCE'|@getTranslatedString:$MODULE}</a> | <a href="index.php?module=Webforms&amp;action=WebformsEditView&amp;id={$webform->getId()}&amp;parenttab=Settings&amp;operation=edit">{'LBL_EDIT'|@getTranslatedString:$MODULE}</a>  | <a onclick="Webforms.deleteForm('form{$webform->getId()}',{$webform->getId()})" style="cursor:pointer;">{'LBL_DELETE'|@getTranslatedString:$MODULE}</a> </td>
 				</tr>
 				{/foreach}
 			</table>

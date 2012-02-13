@@ -9,6 +9,7 @@
  *********************************************************************************/
 -->*}
 {include file='modules/Webforms/Buttons_List.tpl'}
+<script type="text/javascript" src="modules/{$MODULE}/language/{$LANGUAGE}.lang.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	<tr>
@@ -27,7 +28,7 @@
 						<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 							<tr>
 								<td class="dvtTabCache" style="width:10px" nowrap="nowrap">&nbsp;</td>
-								<td class="dvtSelectedCell" nowrap="nowrap" align="center">Basic Information</td>
+								<td class="dvtSelectedCell" nowrap="nowrap" align="center">{'LBL_BASIC_INFORMATION'|@getTranslatedString:$MODULE}</td>
 								<td class="dvtTabCache" style="width:65%">&nbsp;</td>
 							</tr>
 						</table>
@@ -92,7 +93,7 @@
 													<td class="dvtCellInfo" align="left" width="40%">
 														{if $WEBFORM->hasId()}
 															{$WEBFORM->getTargetModule()}
-															<input type="hidden" value="{$WEBFORM->getTargetModule()}" name="targetmodule" id="targetmodule"></input>
+															<input type="hidden" value="{$WEBFORM->getTargetModule()}" name="targetmodule"></input>
 														{else}
 															<select id="targetmodule" name="targetmodule" onchange='javascript:Webforms.fetchFieldsView(this.value);' class="small">
 																<option value="">--module--</option>
@@ -108,31 +109,21 @@
 														<font color="red">*</font>{'LBL_ASSIGNED_TO'|@getTranslatedString:$MODULE}
 													</td>
 													<td class="dvtCellInfo" align="left" >
-														{if $WEBFORMID}
-															<select id="ownerid" name="ownerid" class="small">
-																<option value="">--user--</option>
-																 {foreach item=user from=$USERS name=assigned_user}
-																	{if $user.id eq $WEBFORM->getOwnerId()}
-																		<option value="{$user.id}" selected="selected">{$user.name}</option>
-																	{else}
-																		<option value="{$user.id}">{$user.name}</option>
-																	{/if}
-																{/foreach}
-															</select>
-														{else}
-															<select id="ownerid" name="ownerid" class="small">
-																<option value="">--user--</option>
-																 {foreach item=user from=$USERS name=assigned_user}
-																	<option value="{$user.id}">{$user.name}</option>
-																{/foreach}
-															</select>
-														{/if}
+														<select id="ownerid" name="ownerid" class="small">
+															<option value="">--{'LBL_SELECT_USER'|@getTranslatedString:$MODULE}--</option>
+																{foreach key=userid item=username name=assigned_user from=$USERS}
+																<option value="{$userid}"
+																	{if $WEBFORMID && $userid eq $WEBFORM->getOwnerId()} selected {/if}>
+																	{$username}
+																</option>
+															{/foreach}
+														</select>
 													</td>
 													<td class="dvtCellLabel" align="right" >
 														{'LBL_RETURNURL'|@getTranslatedString:$MODULE}
 													</td>
 													<td class="dvtCellInfo" align="left" >
-														http://<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="returnurl"  name="returnurl" value="{$WEBFORM->getReturnUrl()}">
+														<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="returnurl"  name="returnurl" value="{$WEBFORM->getReturnUrl()}">
 													</td>
 												</tr>
 												{if $WEBFORM->hasId()}

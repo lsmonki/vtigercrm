@@ -29,11 +29,8 @@ $smarty = new vtigerCRM_Smarty();
 
 $category = getParentTab();
 $targetModules = array('Leads');
-$users=getAllUserName();
-$usersList=array();
-foreach($users as $id=>$name){
-	$usersList[]=array("id"=>$id,"name"=>$name);
-}
+
+$usersList = get_user_array(false);
 
 $smarty->assign('WEBFORM',$webform);
 $smarty->assign('USERS',$usersList);
@@ -45,6 +42,7 @@ $smarty->assign('MODULE', $currentModule);
 $smarty->assign('CATEGORY', $category);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('CALENDAR_LANG','en');
+$smarty->assign('LANGUAGE',$current_language);
 if ($webform->hasId()) {
 	$smarty->assign('WEBFORMFIELDS', Webforms::getFieldInfos($webform->getTargetModule()));
 	$smarty->assign('ACTIONPATH',$site_URL.'/modules/Webforms/capture.php');

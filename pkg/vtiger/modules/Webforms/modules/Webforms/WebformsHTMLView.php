@@ -23,5 +23,6 @@ $smarty->assign('ACTIONPATH',$site_URL);
 $smarty->assign('WEBFORM',new Webforms());
 $smarty->assign('WEBFORMMODEL',$webformModel);
 $smarty->assign('WEBFORMFIELDS',$webformFields);
+$smarty->assign('LANGUAGE',$current_language);
 $smarty->display(vtlib_getModuleTemplate($currentModule,'HTMLView.tpl'));
 ?>

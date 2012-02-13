@@ -30,6 +30,7 @@ $smarty->assign('APP', $app_strings);
 $smarty->assign('MODULE', $currentModule);
 $smarty->assign('CATEGORY', $category);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
+$smarty->assign('LANGUAGE',$current_language);
 
 $smarty->display(vtlib_getModuleTemplate($currentModule,'ListView.tpl'));
 ?>

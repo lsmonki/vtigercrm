@@ -30,6 +30,6 @@ $smarty->assign('CATEGORY', $category);
 $smarty->assign('CHECK', $tool_buttons);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('CALENDAR_LANG','en');
-
+$smarty->assign('LANGUAGE',$current_language);
 $smarty->display(vtlib_getModuleTemplate($currentModule,'FieldsView.tpl'));
 ?>

@@ -9,6 +9,7 @@
  *********************************************************************************/
 -->*}
 {include file='modules/Webforms/Buttons_List.tpl'}
+<script type="text/javascript" src="modules/{$MODULE}/language/{$LANGUAGE}.lang.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	<tr>

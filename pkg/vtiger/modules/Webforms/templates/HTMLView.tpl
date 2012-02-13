@@ -9,7 +9,7 @@
 *********************************************************************************/
 -->*}
 {* NOTE: PLEASE MAKE SURE THE SPACES BESIDE TAGS ARE STRIPPED TO PRESEVE FORMATTING OF THE OUTPUT *}
-<form name="{$WEBFORMMODEL->getName()}" action="{$ACTIONPATH}/modules/Webforms/capture.php" method="post">
+<form name="{$WEBFORMMODEL->getName()}" action="{$ACTIONPATH}/modules/Webforms/capture.php" method="post" accept-charset="utf-8">
 	<p>
 		<input type="hidden" name="publicid" value="{$WEBFORMMODEL->getpublicId()}"></input>
 		<input type="hidden" name="name" value="{$WEBFORMMODEL->getName()}"></input>

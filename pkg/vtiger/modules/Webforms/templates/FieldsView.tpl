@@ -45,7 +45,7 @@
 		<td class="dvtCellInfo">
 		{if $WEBFORMID && $WEBFORM->isWebformField($WEBFORMID,$field.name) eq true }
 			{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
-				<select name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
+				<select class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
 						<option value="">{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 					{foreach item=option from=$field.type.picklistValues name=optionloop}
 						<option value="{$option.value}" {if in_array($option.value,$values)}selected="selected"{/if}>{$option.label}</option>
@@ -58,7 +58,7 @@
 					<input type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]">
 			{else}
 					{if $field.name eq salutationtype}
-							<select id="value[{$field.name}]" name="value[{$field.name}]">
+							<select class="small" id="value[{$field.name}]" name="value[{$field.name}]">
 								<option value="" {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq ""}selected="selected"{/if}>--None--</option>
 								<option value="Mr." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Mr."}selected="selected"{/if}>Mr.</option>
 								<option value="Ms." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Ms."}selected="selected"{/if}>Ms.</option>
@@ -73,19 +73,19 @@
 		{else}
 			{if $field.mandatory eq 1}
 				{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
-					<select name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
-							<option value="">{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
+					<select class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
+							<option value="" {if $field.default eq $option.value} selected="selected"{/if}>{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 						{foreach item=option from=$field.type.picklistValues name=optionloop}
-							<option value="{$option.value}">{$option.label}</option>
+							<option value="{$option.value}" {if $field.default eq $option.value} selected="selected"{/if}>{$option.label}</option>
 						{/foreach}
 					</select>
 				{elseif $field.type.name eq text}
-						<textarea rows="2" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" class="detailedViewTextBox"  id="value[{$field.name}]" name="value[{$field.name}]"  value="" style="display:inline;"></textarea>
+						<textarea rows="2" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" class="detailedViewTextBox"  id="value[{$field.name}]" name="value[{$field.name}]"  value="" style="display:inline;">{$field.default}</textarea>
 				{elseif $field.type.name eq boolean}
-					<input type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]" style="display:inline;">
+					<input type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]" style="display:inline;" value="{$field.default}">
 				{else}
 						{if $field.name eq salutationtype}
-							<select id="value[{$field.name}]" name="value[{$field.name}]">
+							<select class="small" id="value[{$field.name}]" name="value[{$field.name}]">
 								<option value="" {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq ""}selected="selected"{/if}>--None--</option>
 								<option value="Mr." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Mr."}selected="selected"{/if}>Mr.</option>
 								<option value="Ms." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Ms."}selected="selected"{/if}>Ms.</option>
@@ -94,24 +94,24 @@
 								<option value="Prof." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Prof."}selected="selected"{/if}>Prof</option>
 							</select>
 						{else}
-							<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="value[{$field.name}]"  name="value[{$field.name}]" value="" style="display:inline;"></input>
+							<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="value[{$field.name}]"  name="value[{$field.name}]" value="{$field.default}" style="display:inline;"></input>
 						{/if}
 				{/if}
 			{else}
 				{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
-					<select name="value[{$field.name}][]" id="value[{$field.name}]" style="display:none;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
-							<option value="">{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
+					<select class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:none;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
+							<option value="" {if $field.default eq $option.value} selected="selected"{/if}>{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 						{foreach item=option from=$field.type.picklistValues name=optionloop}
-							<option value="{$option.value}">{$option.label}</option>
+							<option value="{$option.value}" {if $field.default eq $option.value} selected="selected"{/if} >{$option.label}</option>
 						{/foreach}
 					</select>
 				{elseif $field.type.name eq text}
-						<textarea rows="2" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" class="detailedViewTextBox"  id="value[{$field.name}]" name="value[{$field.name}]"  value="" style="display:none;"></textarea>
+						<textarea rows="2" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" class="detailedViewTextBox"  id="value[{$field.name}]" name="value[{$field.name}]"  value="" style="display:none;">{$field.default}</textarea>
 				{elseif $field.type.name eq boolean}
-					<input type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]" style="display:none;">
+					<input type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]" style="display:none;" value="{$field.default}">
 				{else}
 						{if $field.name eq salutationtype}
-							<select id="value[{$field.name}]" name="value[{$field.name}]" style="display:none;">
+							<select class="small" id="value[{$field.name}]" name="value[{$field.name}]" style="display:none;">
 								<option value="" {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq ""}selected="selected"{/if}>--None--</option>
 								<option value="Mr." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Mr."}selected="selected"{/if}>Mr.</option>
 								<option value="Ms." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Ms."}selected="selected"{/if}>Ms.</option>
@@ -120,7 +120,7 @@
 								<option value="Prof." {if $WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name) eq "Prof."}selected="selected"{/if}>Prof</option>
 							</select>
 						{else}
-							<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="value[{$field.name}]"  name="value[{$field.name}]" value="" style="display:none;"></input>
+							<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="value[{$field.name}]"  name="value[{$field.name}]" value="{$field.default}" style="display:none;"></input>
 						{/if}
 				{/if}
 			{/if}

@@ -1,12 +1,12 @@
 <?php
-/* +********************************************************************************
+/*+********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * ****************************************************************************** */
+ ******************************************************************************* */
 require_once 'modules/Webforms/model/WebformsFieldModel.php';
 
 class Webforms_Model {
@@ -25,15 +25,15 @@ class Webforms_Model {
 	function setData($data) {
 		$this->data = $data;
 		if (isset($data["fields"])) {
-			$this->setFields(vtlib_purify($data["fields"]),vtlib_purify($data["required"]),vtlib_purify($data["value"]));
+			$this->setFields(vtlib_purify($data["fields"]), vtlib_purify($data["required"]), vtlib_purify($data["value"]));
 		}
 		if (isset($data['id'])) {
-			if(($data['enabled']=='on')||($data['enabled']==1)){
+			if (($data['enabled'] == 'on') || ($data['enabled'] == 1)) {
 				$this->setEnabled(1);
-			}else{
+			} else {
 				$this->setEnabled(0);
 			}
-		}else{
+		} else {
 			$this->setEnabled(1);
 		}
 	}
@@ -74,16 +74,16 @@ class Webforms_Model {
 		$this->data["ownerid"];
 	}
 
-	function setFields(array $fieldNames,$required,$value) {
+	function setFields(array $fieldNames, $required, $value) {
 		foreach ($fieldNames as $ind => $fieldname) {
 			$fieldInfo = Webforms::getFieldInfo($this->getTargetModule(), $fieldname);
 			$fieldModel = new Webforms_Field_Model();
 			$fieldModel->setFieldName($fieldname);
 			$fieldModel->setNeutralizedField($fieldname, $fieldInfo['label']);
 			$fieldModel->setDefaultValue($value[$fieldname]);
-			if((!empty($required) && in_array($fieldname, $required))){
+			if ((!empty($required) && in_array($fieldname, $required))) {
 				$fieldModel->setRequired(1);
-			}else{
+			} else {
 				$fieldModel->setRequired(0);
 			}
 			$this->addField($fieldModel);
@@ -145,7 +145,7 @@ class Webforms_Model {
 		global $adb, $log;
 
 		$isNew = !$this->hasId();
-		
+
 		// Create?
 		if ($isNew) {
 			$this->setPublicId($this->generatePublicId($this->getName()));
@@ -186,7 +186,7 @@ class Webforms_Model {
 
 		$model = false;
 		// Retrieve model and populate information
-		$result = $adb->pquery("SELECT * FROM vtiger_webforms WHERE publicid=? AND enabled=?", array($publicid,1));
+		$result = $adb->pquery("SELECT * FROM vtiger_webforms WHERE publicid=? AND enabled=?", array($publicid, 1));
 		if ($adb->num_rows($result)) {
 			$model = new Webforms_Model($adb->fetch_array($result));
 			$model->retrieveFields();
@@ -239,25 +239,24 @@ class Webforms_Model {
 		return false;
 	}
 
-	
-	static function isRequired($webformid,$fieldname){
+	static function isRequired($webformid, $fieldname) {
 		global $adb;
-		$sql="SELECT required FROM vtiger_webforms_field where webformid=? AND fieldname=?";
-		$result=$adb->pquery($sql,array($webformid,$fieldname));
-		$required=false;
-		if($adb->num_rows($result)){
-			$required=$adb->query_result($result,0,"required");
+		$sql = "SELECT required FROM vtiger_webforms_field where webformid=? AND fieldname=?";
+		$result = $adb->pquery($sql, array($webformid, $fieldname));
+		$required = false;
+		if ($adb->num_rows($result)) {
+			$required = $adb->query_result($result, 0, "required");
 		}
 		return $required;
 	}
 
-	static function retrieveDefaultValue($webformid,$fieldname){
+	static function retrieveDefaultValue($webformid, $fieldname) {
 		global $adb;
-		$sql="SELECT defaultvalue FROM vtiger_webforms_field WHERE webformid=? and fieldname=?";
-		$result=$adb->pquery($sql,array($webformid,$fieldname));
-		$defaultvalue=false;
+		$sql = "SELECT defaultvalue FROM vtiger_webforms_field WHERE webformid=? and fieldname=?";
+		$result = $adb->pquery($sql, array($webformid, $fieldname));
+		$defaultvalue = false;
 		if ($adb->num_rows($result)) {
-			$defaultvalue = $adb->query_result($result,0,"defaultvalue");
+			$defaultvalue = $adb->query_result($result, 0, "defaultvalue");
 		}
 		return $defaultvalue;
 	}
