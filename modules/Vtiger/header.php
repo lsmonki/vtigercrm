@@ -91,6 +91,10 @@ $smarty->assign('HEADERSCRIPTS', $COMMONHDRLINKS['HEADERSCRIPT']);
 $smarty->assign('HEADERCSS', $COMMONHDRLINKS['HEADERCSS']);
 // END
 
+// Pass on the version information
+global $vtiger_current_version;
+$smarty->assign('VERSION', $vtiger_current_version);
+// END
 
 $sql="select * from vtiger_organizationdetails";
 $result = $adb->pquery($sql, array());
