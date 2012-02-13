@@ -249,7 +249,7 @@ $mod_strings = Array(
 
 'Skype'=>'Skype',
 
-
+'Time'=>'Time',
 
 //added for patch2
 

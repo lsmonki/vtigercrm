@@ -617,7 +617,14 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			<td width="30%" align=left class="dvtCellInfo">
 				<textarea name="{$fldname}" cols="30" tabindex="{$vt_tab}" rows="2">{$fldvalue}</textarea>
 			</td>
-
+        {elseif $uitype eq 14}
+            <td width="20%" class="dvtCellLabel" align=right>
+				<font color="red">{$mandatory_field}</font>{$usefldlabel} {"LBL_TIMEFIELD"|@getTranslatedString}{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+			</td>
+			<td width=10% align=left class="dvtCellInfo">
+				<input type="text" tabindex="{$vt_tab}" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+			</td>
+			
 		{elseif $uitype eq 69}
 			<td width="20%" class="dvtCellLabel" align=right>
 				<font color="red">{$mandatory_field}</font>{$usefldlabel}

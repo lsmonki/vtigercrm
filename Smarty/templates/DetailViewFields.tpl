@@ -95,6 +95,9 @@
 				{/foreach}
 				{$selected_val|replace:"\n":"<br>&nbsp;&nbsp;"}
 			</td>
+		{elseif $keyid eq '14'}<!--Time-->
+			<td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
+			</td>
 		{elseif $keyid eq '17'} <!--WebSite-->
 			<td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="{$keyval}" target="_blank">{$keyval}</a>
 			</td>

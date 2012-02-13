@@ -57,7 +57,8 @@ $cfimagecombo = Array(
 	$image_path."url.gif",
 	$image_path."checkbox.gif",
 	$image_path."text.gif",
-	$image_path."picklist.gif"
+	$image_path."picklist.gif",
+	$image_path."time.PNG"
 	);
 
 $cftextcombo = Array(
@@ -72,7 +73,8 @@ $cftextcombo = Array(
 	$mod_strings['LBL_URL'],
 	$mod_strings['LBL_CHECK_BOX'],
 	$mod_strings['LBL_TEXT_AREA'],
-	$mod_strings['LBL_MULTISELECT_COMBO']
+	$mod_strings['LBL_MULTISELECT_COMBO'],
+	$mod_strings['Time']
 	);
 	
 
@@ -879,6 +881,10 @@ else{
 		$uitype = 13;
 		$type = "C(50) default () "; //adodb type
 		$uichekdata='E~O';
+	}elseif($fldType == 'Time'){
+		$uitype = 14;
+		$type = "TIME";
+		$uichekdata='T~O';
 	}elseif($fldType == 'Phone'){
 		$uitype = 11;
 		$type = "C(30) default () "; //adodb type

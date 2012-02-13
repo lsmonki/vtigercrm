@@ -584,7 +584,7 @@ function re_patternValidate(fldval,fldLabel,type) {
 
 
 	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
-		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
+		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$|^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"); 
 	}
 	if (!re.test(fldval)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)

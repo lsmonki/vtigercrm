@@ -125,8 +125,8 @@ function validate(blockid) {
         }
 		return true;
 }
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype');
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype');
+var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time');
+var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype','time');
 var currFieldIdx=0,totFieldType;
 var focusFieldType;
 
@@ -180,7 +180,7 @@ function selFieldType(id,scrollLayer,bool,blockid) {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
+        } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype' || type=='time') {
                	document.getElementById("lengthdetails_"+blockid).style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"

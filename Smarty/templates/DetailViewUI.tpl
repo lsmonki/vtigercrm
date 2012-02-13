@@ -13,7 +13,7 @@
 -->*}
 
 <!-- This file is used to display the fields based on the ui type in detailview -->
-		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72' || $keyid eq '103' || $keyid eq '255'} <!--TextBox-->
+		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72' || $keyid eq '103' || $keyid eq '255' || $keyid eq '14'} <!--TextBox-->
 			<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');" valign="top">
 				{if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
 					{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}

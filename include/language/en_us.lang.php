@@ -200,6 +200,7 @@ $app_strings = array (
 'NTC_LOGIN_MESSAGE' => 'Login',
 'LBL_NONE' => '--None--',
 'LBL_BACK' => 'Back',
+'LBL_TIMEFIELD'=>'(HH:mm:ss)',
 'LBL_IMPORT' => 'Import',
 'LBL_EXPORT' => 'Export',
 'LBL_EXPORT_ALL' => 'Export All',

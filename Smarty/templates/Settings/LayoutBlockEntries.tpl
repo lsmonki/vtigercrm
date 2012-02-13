@@ -137,6 +137,7 @@
 																								<tr><td align="left"><a id="field10_{$entries.blockid}"	href="javascript:void(0);" class="customMnu" style="text-decoration:none; background-image:url({'text.gif'|@vtiger_imageurl:$THEME});" 		onclick = "makeFieldSelected(this,10,{$entries.blockid});"> {$MOD.LBL_TEXT_AREA} </a></td></tr>
 																								<tr><td align="left"><a id="field11_{$entries.blockid}"	href="javascript:void(0);" class="customMnu" style="text-decoration:none; background-image:url({'cfpicklist.gif'|@vtiger_imageurl:$THEME});" 	onclick = "makeFieldSelected(this,11,{$entries.blockid});"> {$MOD.LBL_MULTISELECT_COMBO} </a></td></tr>
 																								<tr><td align="left"><a id="field12_{$entries.blockid}"	href="javascript:void(0);" class="customMnu" style="text-decoration:none; background-image:url({'skype.gif'|@vtiger_imageurl:$THEME});" 		onclick = "makeFieldSelected(this,12,{$entries.blockid});"> {$MOD.Skype} </a></td></tr>
+                                                                                                <tr><td align="left"><a id="field13_{$entries.blockid}"	href="javascript:void(0);" class="customMnu" style="text-decoration:none; background-image:url({'time.PNG'|@vtiger_imageurl:$THEME});" 		onclick = "makeFieldSelected(this,13,{$entries.blockid});"> {$MOD.Time} </a></td></tr>
 																							</table>
 																						</div>	
 																					</td>

@@ -268,7 +268,7 @@ function patternValidate(fldName,fldLabel,type) {
 	}
 	
 	if (type.toUpperCase()=="TIME") {//TIME validation
-		var re = /^\d{1,2}\:\d{1,2}$/
+		var re = /^\d{1,2}\:\d{2}:\d{2}$|^\d{1,2}\:\d{2}$/ 
 	}
 	//Asha: Remove spaces on either side of a Email id before validating
 	if (type.toUpperCase()=="EMAIL" || type.toUpperCase() == "DATE") currObj.value = trim(currObj.value);	
@@ -596,9 +596,10 @@ function timeValidate(fldName,fldLabel,type) {
 	var timeval=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	var hourval=parseInt(timeval.substring(0,timeval.indexOf(":")))
 	var minval=parseInt(timeval.substring(timeval.indexOf(":")+1,timeval.length))
+	var secval=parseInt(timeval.substring(timeval.indexOf(":")+4,timeval.length))
 	var currObj=getObj(fldName)
 	
-	if (hourval>23 || minval>59) {
+	if (hourval>23 || minval>59 || secval>59) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		try {
 			currObj.focus()
@@ -611,6 +612,7 @@ function timeValidate(fldName,fldLabel,type) {
 	
 	chktime.setHours(hourval)
 	chktime.setMinutes(minval)
+	chktime.setSeconds(secval)
 	
 	if (type!="OTH") {
 		if (!compareDates(chktime,fldLabel,currtime,"current time",type)) {
@@ -4304,7 +4306,7 @@ function re_patternValidate(fldval,fldLabel,type) {
 	
 
 	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
-		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
+		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$|^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
 	}
 	if (!re.test(fldval)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
