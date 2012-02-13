@@ -32,6 +32,15 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 	$parts = explode('x', $wsId);
 	$entityId = $parts[1];
 
+	$ownerIdInfo = getRecordOwnerId($entityId);
+	if(!empty($ownerIdInfo['Users'])) {
+		$ownerId = $ownerIdInfo['Users'];
+		$to_email = getUserEmailId('id',$ownerId);
+	}
+	if(!empty($ownerIdInfo['Groups'])) {
+		$ownerId = $ownerIdInfo['Groups'];
+		$to_email = implode(',', getDefaultAssigneeEmailIds($ownerId));
+	}
 	$wsParentId = $entityData->get('parent_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
@@ -46,7 +55,6 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 	$from_email = $contact_email;
 
 	//send mail to assigned to user
-	$to_email = getUserEmailId('id',getPortalUserid());
 	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
 	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
 
@@ -62,9 +70,19 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$parts = explode('x', $wsId);
 	$entityId = $parts[1];
 
-	$ownerId = getRecordOwnerId($entityId);
-	$ownerName = getOwnerName($ownerId['Users']);
-
+	$ownerIdInfo = getRecordOwnerId($entityId);
+	
+	if(!empty($ownerIdInfo['Users'])) {
+		$ownerId = $ownerIdInfo['Users'];
+		$ownerName = getOwnerName($ownerId);
+		$to_email = getUserEmailId('id',$ownerId);
+	}
+	if(!empty($ownerIdInfo['Groups'])) {
+		$ownerId = $ownerIdInfo['Groups'];
+		$groupInfo = getGroupName($ownerId);
+		$ownerName = $groupInfo[0];
+		$to_email = implode(',', getDefaultAssigneeEmailIds($ownerId));
+	}
 	$wsParentId = $entityData->get('parent_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
@@ -91,7 +109,6 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$from_email = $adb->query_result($result,0,'email');
 
 	//send mail to assigned to user
-	$to_email = getUserEmailId('id',$ownerId);
 	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
 	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
 }

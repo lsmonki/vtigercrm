@@ -806,9 +806,15 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 	$sql ="update vtiger_files set assigned_user_id=? where assigned_user_id=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
-	//update assigned_user_id in vtiger_users_last_import
-	$sql = "update vtiger_users_last_import set assigned_user_id=? where assigned_user_id=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
+	if(Vtiger_Utils::CheckTable('vtiger_customerportal_prefs')) {
+		$query = 'UPDATE vtiger_customerportal_prefs SET prefvalue = ? WHERE prefkey = ? AND prefvalue = ?';
+		$params = array($newOwnerId, 'defaultassignee', $ownerId);
+		$db->pquery($query, $params);
+
+		$query = 'UPDATE vtiger_customerportal_prefs SET prefvalue = ? WHERE prefkey = ? AND prefvalue = ?';
+		$params = array($newOwnerId, 'userid', $ownerId);
+		$db->pquery($query, $params);
+	}
 
 	//delete from vtiger_homestuff
 	if ($delete) {

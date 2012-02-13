@@ -812,9 +812,9 @@ function create_ticket($input_array)
 	$ticket->column_fields[parent_id]=$parent_id;
 	$ticket->column_fields[product_id]=$product_id;
 
-	$userid = getPortalUserid();
+	$defaultAssignee = getDefaultAssigneeId();
 		
-	$ticket->column_fields['assigned_user_id']=$userid;
+	$ticket->column_fields['assigned_user_id']=$defaultAssignee;
 	$ticket->column_fields['from_portal'] = 1;
 
 	$ticket->save("HelpDesk");
@@ -1362,7 +1362,7 @@ function add_ticket_attachment($input_array)
 	$relatedquery = "insert into vtiger_seattachmentsrel values(?,?)";
 	$relatedresult = $adb->pquery($relatedquery, array($ticketid, $attachmentid));
 
-	$user_id = getPortalUserid();
+	$user_id = getDefaultAssigneeId();
 
 	require_once('modules/Documents/Documents.php');
 	$focus = new Documents();
@@ -3201,6 +3201,26 @@ function getCurrencySymbol($result,$i,$column){
 	return $value;
 
 }
+
+function getDefaultAssigneeId() {
+	global $adb;
+	$adb->println("Entering customer portal function getPortalUserid");
+
+	// Look the value from cache first
+	$defaultassignee = Vtiger_Soap_CustomerPortal::lookupPrefValue('defaultassignee');
+	if($defaultassignee === false) {
+		$res = $adb->pquery("SELECT prefvalue FROM vtiger_customerportal_prefs WHERE prefkey = 'defaultassignee' AND tabid = 0", array());
+		$norows = $adb->num_rows($res);
+		if($norows > 0) {
+			$defaultassignee = $adb->query_result($res,0,'prefvalue');
+			// Update the cache information now.
+			Vtiger_Soap_CustomerPortal::updatePrefValue('defaultassignee', $defaultassignee);
+		}
+	}
+	return $defaultassignee;
+	$log->debug("Exiting customerportal function getPortalUserid");
+}
+
 /* Begin the HTTP listener service and exit. */
 if (!isset($HTTP_RAW_POST_DATA)){
 	$HTTP_RAW_POST_DATA = file_get_contents('php://input');

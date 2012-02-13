@@ -408,12 +408,8 @@ class Assets extends CRMEntity {
  		if($eventType == 'module.postinstall') {
 			//Add Assets Module to Customer Portal
 			global $adb;
-			$visible=1;
-			$query = $adb->pquery("SELECT max(sequence) AS max_tabseq FROM vtiger_customerportal_tabs",array());
-			$maxtabseq = $adb->query_result($query, 0, 'max_tabseq');
-			$newTabSeq = ++$maxtabseq;
-			$tabid = getTabid('Assets');
-			$adb->pquery("INSERT INTO vtiger_customerportal_tabs(tabid, visible, sequence) VALUES(?,?,?)", array($tabid,$visible,$newTabSeq));
+
+			$this->addModuleToCustomerPortal();
 
 			include_once('vtlib/Vtiger/Module.php');
 
@@ -446,8 +442,27 @@ class Assets extends CRMEntity {
 		} else if($eventType == 'module.preupdate') {
 		// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
-		// TODO Handle actions after this module is updated.
+			$this->addModuleToCustomerPortal();
 		}
  	}
+
+	function addModuleToCustomerPortal() {
+		$adb = PearDatabase::getInstance();
+
+		$assetsTabId = getTabid('Assets');
+		if(getTabid('CustomerPortal')) {
+			$checkAlreadyExists = $adb->pquery('SELECT 1 FROM vtiger_customerportal_tabs WHERE tabid=?', array($assetsTabId));
+			if($checkAlreadyExists && $adb->num_rows($checkAlreadyExists) < 1) {
+				$maxSequenceQuery = $adb->query("SELECT max(sequence) as maxsequence FROM vtiger_customerportal_tabs");
+				$maxSequence = $adb->query_result($maxSequenceQuery, 0, 'maxsequence');
+				$nextSequence = $maxSequence+1;
+				$adb->query("INSERT INTO vtiger_customerportal_tabs(tabid,visible,sequence) VALUES ($assetsTabId,1,$nextSequence)");
+			}
+			$checkAlreadyExists = $adb->pquery('SELECT 1 FROM vtiger_customerportal_prefs WHERE tabid=?', array($assetsTabId));
+			if($checkAlreadyExists && $adb->num_rows($checkAlreadyExists) < 1) {
+				$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($assetsTabId,'showrelatedinfo',1)");
+			}
+		}
+	}
 }
 ?>

@@ -293,6 +293,11 @@ for ($i = 0; $i < $adb->num_rows($result); $i++) {
 	}
 }
 
+$query = "INSERT INTO vtiger_customerportal_prefs (
+			SELECT tabid, 'defaultassignee', prefvalue FROM vtiger_customerportal_prefs WHERE prefkey='userid'
+		)";
+$adb->pquery($query, array());
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>
