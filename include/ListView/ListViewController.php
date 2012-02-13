@@ -194,13 +194,10 @@ class ListViewController {
 				if($module == 'Calendar') {
 					$activityType = $this->db->query_result($result, $i, 'activitytype');
 				}
-
-				if(stristr(html_entity_decode($rawValue), "<a href") === false &&
-						$field->getUIType() != 8){
-					$value = textlength_check($rawValue);
-				}elseif($uitype != 8){
+				
+				if($uitype != 8){
 					$value = html_entity_decode($rawValue,ENT_QUOTES);
-				}else{
+				} else {
 					$value = $rawValue;
 				}
 
@@ -254,12 +251,12 @@ class ListViewController {
 							$value = "<a href='index.php?module=uploads&action=downloadfile&".
 									"entityid=$recordId&fileid=$fileId' title='".
 									getTranslatedString("LBL_DOWNLOAD_FILE",$module).
-									"' onclick='javascript:dldCntIncrease($recordId);'>".$value.
+									"' onclick='javascript:dldCntIncrease($recordId);'>".textlength_check($value).
 									"</a>";
 						} elseif($downloadType == 'E') {
 							$value = "<a target='_blank' href='$fileName' onclick='javascript:".
 									"dldCntIncrease($recordId);' title='".
-									getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".$value.
+									getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".textlength_check($value).
 									"</a>";
 						} else {
 							$value = ' --';
@@ -345,18 +342,18 @@ class ListViewController {
                     $matchPattern = "^[\w]+:\/\/^";
                     preg_match($matchPattern, $rawValue, $matches);
                     if(!empty ($matches[0])){
-                        $value = '<a href="'.$rawValue.'" target="_blank">'.$value.'</a>';
+                        $value = '<a href="'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }else{
-                        $value = '<a href="http://'.$rawValue.'" target="_blank">'.$value.'</a>';
+                        $value = '<a href="http://'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }
 				} elseif ($field->getFieldDataType() == 'email') {
 					if($_SESSION['internal_mailer'] == 1) {
 						//check added for email link in user detailview
 						$fieldId = $field->getFieldId();
 						$value = "<a href=\"javascript:InternalMailer($recordId,$fieldId,".
-						"'$fieldName','$module','record_id');\">$value</a>";
+						"'$fieldName','$module','record_id');\">".textlength_check($value)."</a>";
 					}else {
-						$value = '<a href="mailto:'.$rawValue.'">'.$value.'</a>';
+						$value = '<a href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
 					}
 				} elseif($field->getFieldDataType() == 'boolean') {
 					if($value == 1) {
@@ -395,12 +392,13 @@ class ListViewController {
 							}
 						}
 						$value = implode(', ', $tmpArray);
+						$value = textlength_check($value);
 					}
 				} elseif ($field->getFieldDataType() == 'skype') {
-					$value = ($value != "") ? "<a href='skype:$value?call'>$value</a>" : "";
+					$value = ($value != "") ? "<a href='skype:$value?call'>".textlength_check($value)."</a>" : "";
 				} elseif ($field->getFieldDataType() == 'phone') {
 					$value = "<a href='javascript:;' onclick='startCall(&quot;$value&quot;, ".
-						"&quot;$recordId&quot;)'>$value</a>";
+						"&quot;$recordId&quot;)'>".textlength_check($value)."</a>";
 				} elseif($field->getFieldDataType() == 'reference') {
 					$referenceFieldInfoList = $this->queryGenerator->getReferenceFieldInfoList();
 					$moduleList = $referenceFieldInfoList[$fieldName];
@@ -437,9 +435,10 @@ class ListViewController {
 						$json = new Zend_Json();
 						$value = vt_suppressHTMLTags(implode(',',$json->decode($temp_val)));
 					}
-				}
-				if ( in_array($uitype,array(7,9,90)) ) {
-					$value = "<span align='right'>$value</div>";
+				} elseif ( in_array($uitype,array(7,9,90)) ) {
+					$value = "<span align='right'>".textlength_check($value)."</div>";
+				} else {
+					$value = textlength_check($value);
 				}
 
                                     $parenttab = getParentTab();

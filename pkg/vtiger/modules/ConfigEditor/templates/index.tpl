@@ -88,7 +88,7 @@
 				document.getElementById('msg_history_max_viewed').innerHTML=maxHistory;
 				history1.focus();
 				return false;
-			}else if((reg1.test(maxtext.value) == false) || (maxtext.value <= 0) || (maxtext.value > 100)){
+			}else if((reg1.test(maxtext.value) == false) || (maxtext.value < 0) || (maxtext.value > 100) || (maxtext.value === "")){
 				document.getElementById('msg_listview_max_textlength').innerHTML=maxTextLength;
 				maxtext.focus();
 				return false;
