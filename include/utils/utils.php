@@ -1448,6 +1448,66 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 	return $return_data;
 }
 
+
+/** Function to insert value to profile2fieldPermissions table
+  * @param $fld_module -- field module :: Type string
+  * @param $profileid -- profileid :: Type integer
+  * @returns $return_data -- return_data :: Type string
+  */
+
+function getProfile2ModuleFieldPermissionList($fld_module, $profileid) {
+	global $log;
+	$log->debug("Entering getProfile2ModuleFieldPermissionList(".$fld_module.",". $profileid.") method ...");
+    $log->info("in getProfile2ModuleFieldList ".$fld_module. ' vtiger_profile id is  '.$profileid);
+
+    // Cache information to re-use
+    static $_module_fieldpermission_cache = array();
+
+    if(!isset($_module_fieldpermission_cache[$fld_module])) {
+    	$_module_fieldpermission_cache[$fld_module] = array();
+    }
+
+	$return_data = array();
+
+	global $adb;
+	$tabid = getTabid($fld_module);
+
+	$query = "SELECT vtiger_profile2tab.tabid, vtiger_profile2tab.permissions, vtiger_field.fieldlabel, vtiger_field.uitype,
+		vtiger_field.fieldid, vtiger_field.displaytype, vtiger_field.typeofdata
+		FROM vtiger_profile2tab INNER JOIN vtiger_field ON vtiger_field.tabid=vtiger_profile2tab.tabid
+		WHERE vtiger_profile2tab.profileid=? AND vtiger_profile2tab.tabid=? AND vtiger_field.presence in (0,2)";
+	$qparams = array($profileid, $tabid);
+	$result = $adb->pquery($query, $qparams);
+
+	for($i=0; $i<$adb->num_rows($result); $i++) {
+		$fieldid = $adb->query_result($result,$i,"fieldid");
+		$checkentry = $adb->pquery("SELECT 1 FROM vtiger_profile2field WHERE profileid=? AND tabid=? AND fieldid =?",array($profileid,$tabid,$fieldid));
+		$visible_value = 0;
+		$readOnlyValue = 0;
+		if($adb->num_rows($checkentry) == 0) {
+			$sql11="INSERT INTO vtiger_profile2field VALUES(?,?,?,?,?)";
+			$adb->pquery($sql11, array($profileid, $tabid, $fieldid,$visible_value, $readOnlyValue));
+		}
+
+		$sql = "SELECT vtiger_profile2field.visible, vtiger_profile2field.readonly FROM vtiger_profile2field WHERE fieldid=? AND tabid=? AND profileid=?";
+		$params = array($fieldid,$tabid,$profileid);
+		$res = $adb->pquery($sql, $params);
+	
+		$return_data[]=array(
+				$adb->query_result($result,$i,"fieldlabel"),
+				$adb->query_result($res,0,"visible"), // From vtiger_profile2field.visible
+				$adb->query_result($result,$i,"uitype"),
+				$adb->query_result($res,0,"readonly"), // From vtiger_profile2field.readonly
+				$adb->query_result($result,$i,"fieldid"),
+				$adb->query_result($result,$i,"displaytype"),
+				$adb->query_result($result,$i,"typeofdata")
+			);
+	}
+
+	$log->debug("Exiting getProfile2ModuleFieldPermissionList method ...");
+	return $return_data;
+}
+
 /** Function to getProfile2allfieldsListinsert value to profile2fieldPermissions table
   * @param $mod_array -- mod_array :: Type string
   * @param $profileid -- profileid :: Type integer
@@ -1464,7 +1524,7 @@ function getProfile2AllFieldList($mod_array,$profileid)
 	$profilelist=array();
 	for($i=0;$i<count($mod_array);$i++)
 	{
-		$profilelist[key($mod_array)]=getProfile2FieldPermissionList(key($mod_array), $profileid);
+		$profilelist[key($mod_array)]=getProfile2ModuleFieldPermissionList(key($mod_array), $profileid);
 		next($mod_array);
 	}
 	$log->debug("Exiting getProfile2AllFieldList method ...");

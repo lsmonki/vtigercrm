@@ -211,7 +211,8 @@ function getTabsPermission($profileid)
         }
         else
         {
-                $sql = "select * from vtiger_profile2tab where profileid=?";
+				$sql = "select vtiger_profile2tab.tabid,vtiger_profile2tab.permissions from vtiger_profile2tab
+						INNER JOIN vtiger_tab ON vtiger_tab.tabid=vtiger_profile2tab.tabid WHERE vtiger_profile2tab.profileid=? AND vtiger_tab.presence=0";
                 $result = $adb->pquery($sql, array($profileid));
                 $tab_perr_array = Array();
                 $num_rows = $adb->num_rows($result);
@@ -4253,7 +4254,27 @@ function getFieldModuleAccessArray()
 	return $fldModArr;
 }
 
-/** Function to get the permitted module name Array with presence as 0
+/** Function to get the vtiger_field access module array
+  * @returns The vtiger_field Access module Array :: Type Array
+ */
+function getModuleAccessArray() {
+	global $log;
+	global $adb;
+	$log->debug("Entering getModuleAccessArray() method ...");
+
+	$fldModArr=Array();
+	$query = 'SELECT distinct(name) FROM vtiger_profile2field INNER JOIN vtiger_tab ON vtiger_tab.tabid=vtiger_profile2field.tabid WHERE vtiger_tab.presence=0';
+	$result = $adb->pquery($query, array());
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++) {
+		$mod_name = $adb->query_result($result,$i,'name');
+		$fldModArr[$mod_name] = $mod_name;
+	}
+	$log->debug("Exiting getModuleAccessArray method ...");
+	return $fldModArr;
+}
+
+/** Function to get the permitted module name Array with presence as 0 
   * @returns permitted module name Array :: Type Array
   *
  */
