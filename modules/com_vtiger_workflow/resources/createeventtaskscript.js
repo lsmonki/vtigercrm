@@ -71,7 +71,7 @@ function VTCreateTodoTask($){
 				if(dd<0){
 					result = failureResult;
 				}else if(dd==0){
-					if(parse12HoursTime(startTime)>=parse12HoursTime(startTime)){
+					if(parse12HoursTime(startTime)>=parse12HoursTime(endTime)){
 						result = failureResult;
 					}else{
 						result = successResult;
@@ -99,7 +99,7 @@ function VTCreateTodoTask($){
 				fillPicklist('event_status', fieldsMap['eventstatus'], eventStatus);
 				$('#event_status_busyicon').hide();
 				$('#event_status').show();
-				
+
 				fillPicklist('event_type', fieldsMap['activitytype'], eventType);
 				$('#event_type_busyicon').hide();
 				$('#event_type').show();
