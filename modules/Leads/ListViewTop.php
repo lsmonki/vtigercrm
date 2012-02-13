@@ -23,8 +23,7 @@
 /** Function to get the 5 New Leads
  *return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
 */
-function getNewLeads($maxval,$calCnt)
-{
+function getNewLeads($maxval,$calCnt) {
 	global $log;
 	$log->debug("Entering getNewLeads() method ...");
 	require_once("data/Tracker.php");
@@ -33,28 +32,22 @@ function getNewLeads($maxval,$calCnt)
 	global $adb, $current_language, $current_user;
 	$current_module_strings = return_module_language($current_language, 'Leads');
 
-	if($_REQUEST['lead_view']=='')
-	{
+	if($_REQUEST['lead_view']=='') {
 		$query = "select lead_view from vtiger_users where id =?";
 		$result=$adb->pquery($query, array($current_user->id));
 		$lead_view=$adb->query_result($result,0,'lead_view');
-	}
-	else
+	} else {
 		$lead_view=$_REQUEST['lead_view'];
+	}
 
 	$today = date("Y-m-d", time());
 
-	if($lead_view == 'Today')
-	{
-		$dbStartDateTime = new DateTimeField(date("Y-m-d H:i:s",strtotime("$today")));
-	}
-	else if($lead_view == 'Last 2 Days')
-	{
+	if($lead_view == 'Last 2 Days') {
 		$dbStartDateTime = new DateTimeField(date("Y-m-d H:i:s", strtotime("-2  days")));
-	}
-	else if($lead_view == 'Last Week')
-	{
+	} else if($lead_view == 'Last Week') {
 		$dbStartDateTime = new DateTimeField(date("Y-m-d H:i:s", strtotime("-1 week")));
+	} else {
+		$dbStartDateTime = new DateTimeField(date("Y-m-d H:i:s",strtotime("$today")));
 	}
 	$userStartDate = $dbStartDateTime->getDisplayDate();
 	$userStartDateTime = new DateTimeField($userStartDate.' 00:00:00');
@@ -78,8 +71,7 @@ function getNewLeads($maxval,$calCnt)
 
 	$open_lead_list =array();
 	if ($noofrows > 0) {
-		for($i=0;$i<$noofrows && $i<$maxval;$i++)
-		{
+		for($i=0;$i<$noofrows && $i<$maxval;$i++) {
 			$open_lead_list[] = Array('leadname' => $adb->query_result($list_result,$i,'firstname').' '.$adb->query_result($list_result,$i,'lastname'),
 					'company' => $adb->query_result($list_result,$i,'company'),
 					'id' => $adb->query_result($list_result,$i,'leadid'),
@@ -87,22 +79,12 @@ function getNewLeads($maxval,$calCnt)
 		}
 	}
 
-	$title=array();
-	$title[]='Leads.gif';
-	$title[]=$current_module_strings["LBL_NEW_LEADS"];
-	$title[]='home_mynewlead';
-	$title[]=getLeadView($lead_view);
-	$title[]='showLeadView';
-	$title[]='MyNewLeadFrm';
-	$title[]='lead_view';
-
 	$header=array();
 	$header[] =$current_module_strings['LBL_LIST_LEAD_NAME'];
 	$header[] =$current_module_strings['Company'];
 
     $entries=array();
-    foreach($open_lead_list as $lead)
-	{
+    foreach($open_lead_list as $lead) {
 		$value=array();
 		$lead_fields = array(
 				'LEAD_NAME' => $lead['leadname'],
@@ -151,46 +133,10 @@ function getNewLeads($maxval,$calCnt)
 	);
 	$search_qry = '&advft_criteria='.Zend_Json::encode($advft_criteria).'&advft_criteria_groups='.Zend_Json::encode($advft_criteria_groups).'&searchtype=advance&query=true';
 
-	$values=Array('ModuleName'=>'Leads','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
+	$values=Array('ModuleName'=>'Leads','Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	$log->debug("Exiting getNewLeads method ...");
 	if ((count($entries) == 0 ) || (count($entries)>0))
 		return $values;
 }
-/** Function to get the Lead View from the Combo List
- *  @param string $lead_view - (eg today, last 2 days)
- *  Returns the Lead view select option
-*/
-function getLeadView($lead_view)
-{
-	global $log;
-	$log->debug("Entering getLeadView(".$lead_view.") method ...");
 
-	if($lead_view == 'Today')
-	{
-		$selected1 = 'selected';
-	}
-	else if($lead_view == 'Last 2 Days')
-	{
-		$selected2 = 'selected';
-	}
-	else if($lead_view == 'Last Week')
-	{
-		$selected3 = 'selected';
-	}
-
-	$LEAD_VIEW_SELECT_OPTION = '<select class=small name="lead_view" onchange="showLeadView(this)">';
-	$LEAD_VIEW_SELECT_OPTION .= '<option value="Today" '.$selected1.'>';
-	$LEAD_VIEW_SELECT_OPTION .= 'Today';
-	$LEAD_VIEW_SELECT_OPTION .= '</option>';
-	$LEAD_VIEW_SELECT_OPTION .= '<option value="Last 2 Days" '.$selected2.'>';
-	$LEAD_VIEW_SELECT_OPTION .= 'Last 2 Days';
-	$LEAD_VIEW_SELECT_OPTION .= '</option>';
-	$LEAD_VIEW_SELECT_OPTION .= '<option value="Last Week" '.$selected3.'>';
-	$LEAD_VIEW_SELECT_OPTION .= 'Last Week';
-	$LEAD_VIEW_SELECT_OPTION .= '</option>';
-	$LEAD_VIEW_SELECT_OPTION .= '</select>';
-
-	$log->debug("Exiting getLeadView method ...");
-	return $LEAD_VIEW_SELECT_OPTION;
-}
 ?>
