@@ -1309,7 +1309,7 @@ class CustomView extends CRMEntity{
                 {
        	                $temp_value = "(CONCAT(vtiger_users.last_name,' ',vtiger_users.first_name)".$this->getAdvComparator($comparator,$value,$datatype);
 	                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype);
-	                $value=$temp_value.")";
+	                $value=$temp_value; // Hot fix: removed unbalanced closing bracket ")";
 		}elseif( $fieldname == "inventorymanager")
                 {
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value),$datatype);
