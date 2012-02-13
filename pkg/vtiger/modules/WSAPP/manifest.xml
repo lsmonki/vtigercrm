@@ -5,7 +5,7 @@
 <label>WSAPP</label>
 <parent></parent>
 <type>extension</type>
-<version>3.4.1</version>
+<version>3.4.3</version>
 <dependencies>
 <vtiger_version>5.1.0</vtiger_version>
 </dependencies>
@@ -57,6 +57,16 @@
   `details` varchar(300) default NULL,
   `flag` varchar(100) default NULL,
   `appid` int(19) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+</table>
+<table>
+<name>vtiger_wsapp_sync_state</name>
+<sql><![CDATA[CREATE TABLE `vtiger_wsapp_sync_state` (
+	`id` int(19) NOT NULL auto_increment,
+	`name` varchar(200) default NULL,
+	`stateencodedvalues` varchar(300) NOT NULL,
+	`userid` int(19) default NULL,
+	PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 </tables>

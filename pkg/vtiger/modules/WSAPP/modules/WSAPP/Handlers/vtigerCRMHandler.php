@@ -21,6 +21,7 @@ require_once 'modules/WSAPP/Handlers/SyncHandler.php';
 class vtigerCRMHandler extends SyncHandler {
 
     private $assignToChangedRecords;
+	protected $clientSyncType='user';
 
     public function  __construct($appkey){
         $this->key = $appkey;
@@ -31,7 +32,11 @@ class vtigerCRMHandler extends SyncHandler {
         $syncModule = $module;
         $this->user = $user;
         $syncModule = $module;
-        $result = vtws_sync($token, $syncModule, $this->user);
+		$syncType = 'user';
+		if(!$this->isClientUserSyncType()){
+			$syncType = 'application';
+		}
+		$result = vtws_sync($token, $syncModule, $syncType, $this->user);
         
         $result['updated']  = $this->translateTheReferenceFieldIdsToName($result['updated'],$syncModule,$user);
         return $this->nativeToSyncFormat($result);
@@ -229,6 +234,15 @@ class vtigerCRMHandler extends SyncHandler {
 			$recordList[$index]= $recordDetails;
 		}
 		return $recordList;
+	}
+
+	public function setClientSyncType($syncType='user'){
+		$this->clientSyncType = $syncType;
+		return $this;
+	}
+
+	public function isClientUserSyncType(){
+		return ($this->clientSyncType == 'user')?true:false;
 	}
 }
 ?>

@@ -365,7 +365,7 @@ class CRMEntity
 		// Preserve the timestamp
 		if(self::isBulkSaveMode()) {
 			if(!empty($this->column_fields['createdtime'])) $created_date_var = $adb->formatDate($this->column_fields['createdtime'], true);
-			if(!empty($this->column_fields['modifiedtime'])) $modified_date_var = $adb->formatDate($this->column_fields['modifiedtime'], true);
+			//NOTE : modifiedtime ignored to support vtws_sync API track changes.
 		}
 		// END
 
