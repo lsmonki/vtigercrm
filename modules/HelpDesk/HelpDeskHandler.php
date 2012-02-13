@@ -14,7 +14,7 @@ class HelpDeskHandler extends VTEventHandler {
 
 	function handleEvent($eventName, $entityData) {
 		global $log, $adb;
-		
+
 		if($eventName == 'vtiger.entity.aftersave.final') {
 			$moduleName = $entityData->getModuleName();
 			if ($moduleName == 'HelpDesk') {
@@ -71,7 +71,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$entityId = $parts[1];
 
 	$ownerIdInfo = getRecordOwnerId($entityId);
-	
+
 	if(!empty($ownerIdInfo['Users'])) {
 		$ownerId = $ownerIdInfo['Users'];
 		$ownerName = getOwnerName($ownerId);
@@ -86,7 +86,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$wsParentId = $entityData->get('parent_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
-	
+
 	$entityDelta = new VTEntityDelta();
 	$oldComments = $entityDelta->getOldValue($entityData->getModuleName(), $entityId, 'comments');
 	$newComments = $entityDelta->getCurrentValue($entityData->getModuleName(), $entityId, 'comments');
@@ -201,7 +201,7 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 
 function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 	global $HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID;
-	$adb = PearDatabase::getInstance();
+	
 	$moduleName = $entityData->getModuleName();
 	$wsId = $entityData->getId();
 	$parts = explode('x', $wsId);
@@ -224,11 +224,18 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 		require_once('modules/Emails/mail.php');
 		$wsAssignedUserId = $entityData->get('assigned_user_id');
 		$userIdParts = explode('x', $wsAssignedUserId);
-		$assignedUserId = $userIdParts[1];
-		$user_emailid = getUserEmailId('id',$assignedUserId);
-		if($user_emailid != '') {
+		$ownerId = $userIdParts[1];
+		$ownerType = vtws_getOwnerType($ownerId);
+
+		if($ownerType == 'Users') {
+			$to_email = getUserEmailId('id',$ownerId);
+		}
+		if($ownerType == 'Groups') {
+			$to_email = implode(',', getDefaultAssigneeEmailIds($ownerId));
+		}
+		if($to_email != '') {
 			if($isNew) {
-				$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+				$mail_status = send_mail('HelpDesk',$to_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 			} else {
 				$entityDelta = new VTEntityDelta();
 				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
@@ -237,14 +244,14 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 				$commentsHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'comments');
 				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
 
-					$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+					$mail_status = send_mail('HelpDesk',$to_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 				}
 			}
-			$mail_status_str = $user_emailid."=".$mail_status."&&&";
+			$mail_status_str = $to_email."=".$mail_status."&&&";
 
 		} else {
 			$mail_status_str = "'".$to_email."'=0&&&";
-		}		
+		}
 
 		if ($mail_status != '') {
 			$mail_error_status = getMailErrorString($mail_status_str);
