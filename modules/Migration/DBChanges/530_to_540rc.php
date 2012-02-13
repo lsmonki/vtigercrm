@@ -204,6 +204,95 @@ Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings
 
 $adb->pquery("DELETE FROM vtiger_settings_field WHERE name='LBL_ASSIGN_MODULE_OWNERS'", array());
 
+$adb->query("alter table vtiger_tab add parent varchar(30)");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Accounts'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Calendar'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Contacts'");
+$adb->query("update vtiger_tab set parent = 'Analytics' where name = 'Dashboard'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Leads'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Potentials'");
+$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Vendors'");
+$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Products'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Documents'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Emails'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'HelpDesk'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'Faq'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Faq'");
+$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'PriceBooks'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PriceBooks'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'SalesOrder'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'SalesOrder'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Quotes'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Quotes'");
+$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'PurchaseOrder'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PurchaseOrder'");
+$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Invoice'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Invoice'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'RSS'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'RSS'");
+$adb->query("update vtiger_tab set parent = 'Analytics' where name = 'Reports'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Reports'");
+$adb->query("update vtiger_tab set parent = 'Marketing' where name = 'Campaigns'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Campaigns'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Portal'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Portal'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'ServiceContracts'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ServiceContracts'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'PBX Manager'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PBX Manager'");
+$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Services'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Services'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'RecycleBin'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'RecycleBin'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'Assets'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Assets'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'ModComments'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ModComments'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'ProjectMilestone'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ProjectMilestone'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'ProjectTask'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ProjectTask'");
+$adb->query("update vtiger_tab set parent = 'Support' where name = 'Project'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Project'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'SMSNotifier'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'SMSNotifier'");
+$adb->query("update vtiger_tab set parent = 'Tools' where name = 'MailManager'");
+$adb->query("update vtiger_tab set tabsequence = -1 where name = 'MailManager'");
+
+$fieldId = $adb->getUniqueId("vtiger_settings_field");
+$adb->query("insert into vtiger_settings_field (fieldid,blockid,name,iconpath,description,linkto,sequence,active)
+					values ($fieldId,".	getSettingsBlockId('LBL_STUDIO') .",'LBL_MENU_EDITOR','menueditor.png','LBL_MENU_DESC',
+					'index.php?module=Settings&action=MenuEditor&parenttab=Settings',4,0)");
+
+$present_module = array();
+$result = $adb->query('select tabid,name,tablabel,tabsequence,parent from vtiger_tab where parent is not null and parent!=" "');
+for ($i = 0; $i < $adb->num_rows($result); $i++) {
+	$modulename = $adb->query_result($result, $i, 'name');
+	$modulelabel = $adb->query_result($result, $i, 'tablabel');
+	array_push($present_module, $modulelabel);
+}
+$result = $adb->query("select name,tablabel,parenttab_label,vtiger_tab.tabid
+							from vtiger_parenttabrel
+							inner join vtiger_tab on vtiger_parenttabrel.tabid = vtiger_tab.tabid
+							inner join vtiger_parenttab on vtiger_parenttabrel.parenttabid = vtiger_parenttab.parenttabid
+									and vtiger_parenttab.parenttab_label is not null
+									and vtiger_parenttab.parenttab_label != ' '");
+
+$skipModules = array("Webmails", "Home");
+for ($i = 0; $i < $adb->num_rows($result); $i++) {
+	$modulename = $adb->query_result($result, $i, 'name');
+	$modulelabel = $adb->query_result($result, $i, 'tablabel');
+	$parent = $adb->query_result($result, $i, 'parenttab_label');
+	if ((!(in_array($modulelabel, $present_module))) && (!(in_array($modulelabel, $skipModules)))) {
+		if ($modulelabel == "MailManager") {
+			$adb->pquery("update vtiger_tab set parent = ? where tablabel = ?", array("Tools", $modulelabel));
+			$adb->pquery("update vtiger_tab set tabsequence = -1 where tablabel = ?", array($modulelabel));
+		} else {
+			$adb->pquery("update vtiger_tab set parent = ? where tablabel = ?", array($parent, $modulelabel));
+		}
+	}
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>

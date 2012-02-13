@@ -1,6 +1,5 @@
-/*********************************************************************************
-
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -8,13 +7,12 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-
 /* WOOD SPICE  - COLOR THEME*/
 
 /*added to change color of disabled button: */
-input:disabled { 
+input:disabled {
     background-color : #cccccc;
-    color: #666666; 
+    color: #666666;
 }
 /*add ends: */
 
@@ -83,6 +81,14 @@ input:disabled {
     padding-top:2px;
     padding-bottom:2px;
 }
+.tabSelected a{	
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+	text-transform: uppercase;
+	font-size: 11px;
+}
 
 .tabUnSelected {
     background-color:#D7D5BE;
@@ -145,12 +151,12 @@ input:disabled {
 }
 
 .level2SelTab{
-    font-weight:bold;
-    color:#000000;
-    padding-left:20px;
-    padding-right:20px;
-    padding-top:5px;
-    padding-bottom:5px;
+	font-weight:bold;
+	color:#000000;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px;
 }
 
 .level2UnSelTab{
@@ -195,29 +201,27 @@ a:hover {
 }
 
 .searchBox {
-    border: 0px solid #999999;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    padding-left:2px;
-    width:100px;
-    background-color:#ffffef;
+	border: 0px solid #999999;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left:2px;
+	width:300px;
+	background-color:#ffffef;
 }
 
 .searchBtn {
-    border : 1px #cccccc solid;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    width:30px;
-    height:19px;
-    background-color:#cccccc;
+	border : 1px #cccccc solid;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color:#cccccc;
 }
 
 
 /* List View Table classes starts  +++++++++++++++++ */
 
 .lvt {
-    background-color:#e3e2d1;
-    border:1px solid #939281;
+	background-color:#e3e2d1;
+	border:1px solid #939281;
 }
 
 .lvtBg {
@@ -310,13 +314,19 @@ a:hover {
     padding-left:0px;
 }
 
-.dvtCellLabel, .cellLabel {
+.dvtCellLabel, .cellLabel ,.cellLabelnew {
     background-color:#efefe2;
     padding-right:10px;
     padding-left:10px;
     border-bottom:1px solid #dadacc ;
     color:#333333;
     white-space:nowrap;
+}
+.cellLabelnew {
+	background-color:#D3D3D3;
+	border-top:1px solid #efefef;
+	border-bottom:1px solid #dadada;
+	color:#555555;
 }
 
 .dvtCellInfo, .cellInfo {
@@ -343,9 +353,9 @@ a:hover {
 }
 
 .detailedViewHeader{
-    border-bottom:1px solid #ddddcc;
-    padding:5px;
-    background-color:#ddddcc;
+	border-bottom:1px solid #ddddcc;
+	padding:5px;
+	background-color:#ddddcc;
 
 }
 
@@ -372,14 +382,14 @@ a:hover {
 /* Detailed View classes ends  ------------------------------------------- */
 
 .advSearch {
-    padding:10px;
-    border-left:1px solid #eaeaea;
-    border-right:1px solid #eaeaea;
-    border-bottom:1px solid #eaeaea;
-    overflow:auto;
-    width:600px;
-    height:150px;
-    background-color:#ffffef;
+	padding:10px;
+	border-left:1px solid #eaeaea;
+	border-right:1px solid #eaeaea;
+	border-bottom:1px solid #eaeaea;
+	overflow:auto;
+	width:600px;
+	height:150px;
+	background-color:#ffffef;
 }
 
 .searchAlph {
@@ -562,11 +572,11 @@ a:hover {
 }
 
 .dash_count{
-    font-size:36px;
-    font-weight:bold;
-    text-decoration:none;
-    color:#000000;
-    padding-left:10px;padding-right:10px;
+	font-size:36px;
+	font-weight:bold;
+	text-decoration:none;
+	color:#000000;
+	padding-left:10px;padding-right:10px;
 }
 
 
@@ -807,8 +817,8 @@ a.submenu:Hover{
 }
 
 .calcCancBtn {
-    background: url(../images/calc_canc_btn.gif) no-repeat;
-    width:25px;
+	background: url(../images/calc_canc_btn.gif) no-repeat;
+	width:25px;
 
 }
 
@@ -1090,7 +1100,7 @@ ul li{
     padding-bottom:2px;
     padding-top:2px;
 }
-/* MY PREFERENCES */		
+/* MY PREFERENCES */
 
 
 /* CSS FOR REPORTS */
@@ -1150,7 +1160,7 @@ a.reportMnu:Hover{
     border-bottom:1px solid #E1E1E1;
     padding-left:20px;
     padding-top:3px;
-}	
+}
 
 #Generate{
     position:relative;
@@ -1172,7 +1182,7 @@ a.webMnu:Hover{
     font-size:11px;
     color:#0070BA;
     text-decoration:underline;
-} 
+}
 
 /*  END OF WEB MAIL */
 
@@ -1196,7 +1206,7 @@ a.alpha:Hover{
     padding-right:5px;
     border:1px dotted #CCCCCC;
     background-color:#FFFFCC;
-} 
+}
 
 /* Home Page */
 .MatrixLayer{
@@ -1226,22 +1236,20 @@ a.alpha:Hover{
 
 /* All Menu */
 #allMenu{
-    width:500px;
-    border:4px solid #C3C2a1;
-    left:300px;
-    top:100px;
-    position:absolute;
-    z-index:1000001;
-    display:none;
-    padding:10px;
-    background:#ffffff url(images/layerPopUpBg.gif);
+	border:4px solid #C3C2a1;
+	left:300px;
+	top:100px;
+	position:absolute;
+	z-index:1000001;
+	display:none;
+	padding:10px;
+	background:#ffffff url(images/layerPopUpBg.gif);
+}
+.searchBtn{
+    width:48px;
+    height:24px;
 }
 
-
-.allMnuTable{
-    width:100%;
-    background-color:#FFFFFF;
-}
 
 .allMnuHandle td{
     height:20px;
@@ -1303,9 +1311,9 @@ a.allMnu:Hover{
 
 /* Calendar */
 .calHdr{
-    background-image:url(images/mailSubHeaderBg.gif);
-    background-repeat:repeat-x;
-    background-position:left top;
+	background-image:url(images/mailSubHeaderBg.gif);
+	background-repeat:repeat-x;
+	background-position:left top;
 }
 
 .calSel{
@@ -1318,10 +1326,10 @@ a.allMnu:Hover{
 }
 
 .calAddButton {
-    border: 1px solid #666666;
-    background:#D6D2AB url(images/calAddButtonBg.gif) repeat-x;
-    cursor:pointer;
-    height:20px;
+	border: 1px solid #666666;
+	background:#D6D2AB url(images/calAddButtonBg.gif) repeat-x;
+	cursor:pointer;
+	height:20px;
 
 
 }
@@ -1332,14 +1340,14 @@ a.allMnu:Hover{
 }
 
 .calBorder {
-    border-left: 1px solid #939271;
-    border-right: 1px solid #939271;
-    border-bottom: 1px solid #939271;
-    background:#fefefe url(images/layerPopupBg.gif);
+	border-left: 1px solid #939271;
+	border-right: 1px solid #939271;
+	border-bottom: 1px solid #939271;
+	background:#fefefe url(images/layerPopupBg.gif);
 }
 
 .calTopRight {
-    border-right: 1px solid #939271;
+	border-right: 1px solid #939271;
 }
 
 
@@ -1358,7 +1366,7 @@ a.calMnu{
     height:20px;
     padding-left:5px;
     padding-top:3px;
-}	
+}
 
 a.calMnu:Hover{
     font-size:11px;
@@ -1698,8 +1706,8 @@ ul {
 }
 
 .tagCloudTopBg {
-    background-image: url(images/tagCloudBg.gif);
-    background-repeat: repeat-x;
+	background-image: url(images/tagCloudBg.gif);
+	background-repeat: repeat-x;
 }
 
 .tagCloudDisplay {
@@ -1804,7 +1812,7 @@ ul {
 .cellText {
     color:#333333;
     border-bottom:1px solid #dadada;
-} 
+}
 
 .listTable{
     border-left:1px solid #cccccc;
@@ -2015,7 +2023,7 @@ textarea {
 }
 
 .layerHeadingULine {
-    border-bottom:1px solid #717351;
+	border-bottom:1px solid #717351;
 }
 
 .layerPopupTransport {
@@ -2032,8 +2040,8 @@ textarea {
 }
 
 .reportsListTable {
-    background-color:white;
-    border:2px solid #a3a29f;
+	background-color:white;
+	border:2px solid #a3a29f;
 }
 
 .reportGenerateTable{
@@ -2078,24 +2086,6 @@ a.customMnuSelected{
 }
 
 /* Drop Down Menu */
-.drop_mnu{
-    position:absolute;
-    left:0px;
-    top:0px;
-    z-index:1000000001;
-    border-left:1px solid #E7E3C0;
-    border-right:1px solid #E7E3C0;
-    border-bottom:1px solid #E7E3C0;
-    width:150px;
-    display:none;
-    padding:0px;
-    text-align:left;
-    overflow-x:hidden;
-    overflow-y:hidden;
-    background-color:#F6F4E7;
-    margin-top: 0px; /* added */
-}
-
 a.drop_down{
     width:150px;
     text-align:left;
@@ -2128,18 +2118,18 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-    background: url(images/layerPopupBg.gif) ;
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
-    z-index: 10000;
-    Filter: Alpha(opacity = 70);
-    -moz-opacity: 0.7;
-    text-align: center;
-    vertical-align: middle;
-    position: absolute;
+   	background: url(images/layerPopupBg.gif) ;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
+	z-index: 10000;
+	Filter: Alpha(opacity = 70);
+	-moz-opacity: 0.7;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
 }
 
 .veil_new{
@@ -2158,24 +2148,24 @@ a.drop_down:Hover{
 }
 
 .optioncontainer{
-    vertical-align: middle;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    z-index: 90000;
+	vertical-align: middle;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 90000;
 }
 
 .options{
-    vertical-align: middle;   
-    margin-left: 25%;
-    margin-top: 16%;
-    color: #FFFFFF;
-    width:650px;
-    background-color: Black;
-    border: 2px solid #222;
+    vertical-align: middle;
+	margin-left: 25%;
+	margin-top: 16%;
+	color: #FFFFFF;
+	width:650px;
+	background-color: Black;
+	border: 2px solid #222;
     position: relative;
     text-align: left;
-    z-index: 80000;   
+    z-index: 80000;
 }
 
 .options h2{
@@ -2316,10 +2306,10 @@ a.drop_down:Hover{
 
 /* feedback or help message */
 .helpmessagebox {
-    background-color: #FFFABF;
-    padding: 2px;
-    margin: 0 0 2px 0;
-    border: 1px solid yellow;
+	background-color: #FFFABF;
+	padding: 2px;
+	margin: 0 0 2px 0;
+	border: 1px solid yellow;
 }
 /* feedback or help message end here*/
 
@@ -2395,11 +2385,11 @@ a.drop_down:Hover{
 }
 
 .vtigerHelpPopupLay .helppage .header .helpArrow .arrowDown{
-        margin-bottom:1px;
-        margin-right:2px;
+	margin-bottom:1px;
+	margin-right:2px;
 }
 .vtigerHelpPopupLay .helppage .header .helpArrow .arrowRight{
-        margin-right:2px;
+	margin-right:2px;
 }
 
 .vtigerHelpPopupLay .helppage .content {
@@ -2434,10 +2424,10 @@ div.goog-te-sectional-gadget-all{
 }
 
 .vtigerHelpPopupLay #vtigerHelpGTranslateEl {
-         bottom: 0;
-         background: url(images/help_header.png) repeat-x;
-         border-top:2px solid #717351;
-         heigth:30px;
+	bottom: 0;
+	background: url(images/help_header.png) repeat-x;
+	border-top:2px solid #717351;
+	heigth:30px;
 }
 div#vtigerHelpPopupLay{
     position : relative !important;
@@ -2563,5 +2553,122 @@ input {
 /* Mail Manager ends */
 
 .documentModuleFolderView{
-    padding-bottom:5px;
+	padding-bottom:5px;
+}
+a.drop_downnew{
+	width:100px;
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height:20px;
+	color:#000000;
+	background-color:#F6F4E7;
+	font-weight:normal;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+a.drop_downnew:Hover{
+	padding:2px 5px 2px 5px;
+	width:100px;
+	text-align:left;
+	font-weight:normal;
+	color:#FFFFFF;
+	background-color:#D7D5BE;
+
+}
+input:focus {
+	outline: none;
+}
+a.drop_downnew_parent{
+	width:100px;
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height:20px;
+	font-weight:bold;
+	color:#000000;
+	background-color:#F6F4E7;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+a.drop_down_usersettings{
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	color:#000000;
+	background-color:#F6F4E7;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+a.drop_down_usersettings:Hover{
+	padding:2px 5px 2px 5px;
+	text-align:left;
+	color:#FFFFFF;
+	text-decoration:underline;
+	background-color:#D7D5BE;
+}
+a.drop_down_usersettings_name{
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	color:#000000;
+	background-color:#F6F4E7;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+	text-decoration:none;
+}
+#search{
+	border:3px solid #999999;
+	background-color:#ffffef;
+	width :50%;
+}
+.drop_mnu_user{
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:1000000001;
+    border-left:1px solid #E7E3C0;
+    border-right:1px solid #E7E3C0;
+    border-bottom:1px solid #E7E3C0;
+    display:none;
+    padding:0px;
+    text-align:left;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-color:#F6F4E7;
+    margin-top: 0px; /* added */
+}
+.drop_mnu_user:Hover{
+	background-color:#D7D5BE;
+}
+.drop_mnu{
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:1000000001;
+    border-left:1px solid #E7E3C0;
+    border-right:1px solid #E7E3C0;
+    border-bottom:1px solid #E7E3C0;
+    display:none;
+    padding:0px;
+	width:150px;
+    text-align:left;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-color:#F6F4E7;
+    margin-top: 0px; /* added */
+}
+.searchBtn{
+	width:48px;
+	height:31px;
 }

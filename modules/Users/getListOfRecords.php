@@ -19,7 +19,7 @@ global $list_max_entries_per_page;
 
 $theme_path="themes/".$theme."/";
 
-require_once($theme_path.'layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 $iCurRecord = vtlib_purify($_REQUEST['CurRecordId']);
 $sModule = vtlib_purify($_REQUEST['CurModule']);

@@ -81,7 +81,7 @@ function getObj(n,d) {
 	if(typeof x == 'string') {
 		x=null;
 	}
-	
+
 	return x;
 }
 
@@ -1504,6 +1504,7 @@ function fnhide(divId)
 function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
 
+
 	var oform = document.forms['EditView'];
 	oform.action.value='Save';
 	//global variable to check the validation calling function to avoid validating when tab change
@@ -2190,8 +2191,8 @@ function fnDropDown(obj,Lay){
 	}
 	else
 		tagName.style.left= leftSide + 'px';
-	tagName.style.top= topSide + 28 +'px';
-	tagName.style.display = 'block';
+		tagName.style.top= topSide + 28 +'px';
+		tagName.style.display = 'block';
 }
 
 function fnShowDrop(obj){
@@ -4380,4 +4381,102 @@ function convertOptionsToJSONArray(objName,targetObjName) {
 		if(typeof(targetObj) != 'undefined') targetObj.value = JSON.stringify(arr);
 	}
 	return arr;
+}
+
+function fnvshobjMore(obj,Lay,announcement){
+	var tagName = document.getElementById(Lay);
+	var leftSide = findPosX(obj);
+	var topSide = findPosY(obj);
+	var maxW = tagName.style.width;
+	var widthM = maxW.substring(0,maxW.length-2);
+	if(Lay == 'editdiv') {
+		leftSide = leftSide - 225;
+		topSide = topSide - 225;
+	} else if(Lay == 'transferdiv') {
+		leftSide = leftSide - 10;
+		topSide = topSide;
+        }
+	var IE = document.all?true:false;
+	if(IE) {
+		if($("repposition1")) {
+			if(topSide > 1200) {
+				topSide = topSide-250;
+			}
+		}
+	}
+
+	var getVal = eval(leftSide) + eval(widthM);
+	if(getVal  > document.body.clientWidth ) {
+		leftSide = eval(leftSide) - eval(widthM);
+		tagName.style.left = leftSide + 34 + 'px';
+	} else{
+		if((leftSide > 100) && (leftSide < 500)){
+			tagName.style.left= leftSide -50 + 'px';
+		} else if((leftSide >= 500) && (leftSide < 800)){
+			tagName.style.left= leftSide -150 + 'px';
+		} else if((leftSide >= 800) && (leftSide < 1400)){
+			tagName.style.left= leftSide -550 + 'px';
+		} else{
+			tagName.style.left= leftSide  + 5 +'px';
+		}
+		if(announcement){
+			tagName.style.top = 110+'px';
+		}else{
+			tagName.style.top = 76+'px';
+		}
+		tagName.style.display = 'block';
+		tagName.style.visibility = "visible";
+	}
+}
+
+function fnvshobjsearch(obj,Lay){
+	var tagName = document.getElementById(Lay);
+	var leftSide = findPosX(obj);
+	var topSide = findPosY(obj);
+	var maxW = tagName.style.width;
+	var widthM = maxW.substring(0,maxW.length-2);
+	if(Lay == 'editdiv')
+	{
+		leftSide = leftSide - 225;
+		topSide = topSide - 125;
+	}else if(Lay == 'transferdiv')
+	{
+		leftSide = leftSide - 10;
+		topSide = topSide;
+	}
+	var IE = document.all?true:false;
+	if(IE) {
+		if($("repposition1")) {
+			if(topSide > 1200) {
+				topSide = topSide-250;
+			}
+		}
+	}
+
+	var getVal = eval(leftSide) + eval(widthM);
+	if(getVal  > document.body.clientWidth ) {
+		leftSide = eval(leftSide) - eval(widthM);
+		tagName.style.left = leftSide + 91 + 'px';
+	} else {
+		tagName.style.left= leftSide - 324 + 'px';
+	}
+	tagName.style.top= topSide + 33 + 'px';
+	tagName.style.display = 'block';
+	tagName.style.visibility = "visible";
+}
+function fnDropDownUser(obj,Lay){
+	var tagName = document.getElementById(Lay);
+	var leftSide = findPosX(obj);
+	var topSide = findPosY(obj);
+	var maxW = tagName.style.width;
+	var widthM = maxW.substring(0,maxW.length-2);
+	var getVal = eval(leftSide) + eval(widthM);
+	if(getVal  > document.body.clientWidth ){
+		leftSide = eval(leftSide) - eval(widthM);
+		tagName.style.left = leftSide + 34 + 'px';
+	}
+	else
+		tagName.style.left= leftSide  - 50 + 'px';
+		tagName.style.top= topSide + 28 +'px';
+		tagName.style.display = 'block';
 }

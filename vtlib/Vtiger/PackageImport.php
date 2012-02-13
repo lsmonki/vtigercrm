@@ -377,6 +377,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$moduleInstance = new Vtiger_Module();
 		$moduleInstance->name = $tabname;
 		$moduleInstance->label= $tablabel;
+        $moduleInstance->parent=$parenttab;
 		$moduleInstance->isentitytype = ($isextension != true);
 		$moduleInstance->version = (!$tabversion)? 0 : $tabversion;
 		$moduleInstance->minversion = (!$vtigerMinVersion)? false : $vtigerMinVersion;

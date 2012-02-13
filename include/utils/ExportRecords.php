@@ -18,7 +18,7 @@ $category = getParentTab();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 $idstring = rtrim($_REQUEST['idstring'],",");
 

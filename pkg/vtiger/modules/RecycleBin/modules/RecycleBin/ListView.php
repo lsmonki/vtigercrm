@@ -19,7 +19,7 @@ global $adb, $log, $list_max_entries_per_page;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 require("user_privileges/user_privileges_".$current_user->id.".php");
 

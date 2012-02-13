@@ -595,4 +595,14 @@ function vtlib_process_widget($widgetLinkInfo, $context = false) {
 	return "";
 }
 
+function vtlib_module_icon($modulename){
+	if($modulename == 'Events'){
+		return "modules/Calendar/Events.png";
+	}
+	if(file_exists("modules/$modulename/$modulename.png")){
+		return "modules/$modulename/$modulename.png";
+	}
+	return "modules/Vtiger/Vtiger.png";
+}
+
 ?>

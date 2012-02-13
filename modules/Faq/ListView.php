@@ -26,7 +26,7 @@ $current_module_strings = return_module_language($current_language, 'Faq');
 
 global $currentModule, $adb;
 
-require_once($theme_path.'layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
 {

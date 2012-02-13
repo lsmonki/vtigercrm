@@ -199,6 +199,7 @@
 			<default value="1" />
 		</field>
 		<field name="version" type="C" size="10" />
+        <field name="parent" type="C" size="30"/>
 
 		<index name="tab_name_idx">
 			<col>name</col>

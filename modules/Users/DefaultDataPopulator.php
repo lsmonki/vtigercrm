@@ -30,31 +30,31 @@ class DefaultDataPopulator extends CRMEntity {
 	function create_tables () {
 		global $app_strings;
 
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (3,'Home',0,1,'Home',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (7,'Leads',0,4,'Leads',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (6,'Accounts',0,5,'Accounts',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (4,'Contacts',0,6,'Contacts',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (2,'Potentials',0,7,'Potentials',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (8,'Documents',0,9,'Documents',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (9,'Calendar',0,3,'Calendar',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (10,'Emails',0,10,'Emails',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (13,'HelpDesk',0,11,'HelpDesk',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (14,'Products',0,8,'Products',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (15,'Faq',0,14,'Faq',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (16,'Events',2,13,'Events',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (18,'Vendors',0,15,'Vendors',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (19,'PriceBooks',0,16,'PriceBooks',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (20,'Quotes',0,17,'Quotes',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (22,'SalesOrder',0,19,'SalesOrder',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (23,'Invoice',0,20,'Invoice',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (24,'Rss',0,21,'Rss',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (25,'Reports',0,22,'Reports',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (26,'Campaigns',0,23,'Campaigns',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (27,'Portal',0,24,'Portal',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (28,'Webmails',0,25,'Webmails',0,1,1)");
-		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (29,'Users',0,26,'Users',0,1,0)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (3,'Home',0,1,'Home',0,1,0,null)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (7,'Leads',0,4,'Leads',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (6,'Accounts',0,5,'Accounts',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (4,'Contacts',0,6,'Contacts',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (2,'Potentials',0,7,'Potentials',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (8,'Documents',0,9,'Documents',0,0,1,'Tools')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (9,'Calendar',0,3,'Calendar',0,0,1,'Tools')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (10,'Emails',0,10,'Emails',0,1,1,'Tools')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (13,'HelpDesk',0,11,'HelpDesk',0,0,1,'Support')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (14,'Products',0,8,'Products',0,1,1,'Inventory')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0,'Analytics')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (15,'Faq',0,-1,'Faq',0,1,1,'Support')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (16,'Events',2,-1,'Events',0,0,1,null)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (18,'Vendors',0,-1,'Vendors',0,1,1,'Inventory')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (19,'PriceBooks',0,-1,'PriceBooks',0,1,1,'Inventory')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (20,'Quotes',0,-1,'Quotes',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (21,'PurchaseOrder',0,-1,'PurchaseOrder',0,0,1,'Inventory')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (22,'SalesOrder',0,-1,'SalesOrder',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (23,'Invoice',0,-1,'Invoice',0,0,1,'Sales')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (24,'Rss',0,-1,'Rss',0,1,0,'Tools')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (25,'Reports',0,-1,'Reports',0,1,0,'Analytics')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (26,'Campaigns',0,-1,'Campaigns',0,0,1,'Marketing')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (27,'Portal',0,-1,'Portal',0,1,0,'Tools')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (28,'Webmails',0,-1,'Webmails',0,1,1,null)");
+		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) values (29,'Users',0,-1,'Users',0,1,0,null)");
 
 		// Populate the vtiger_blocks vtiger_table
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0,1,0)");
@@ -2463,7 +2463,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				"terms.gif",
 				"settingsInvNumber.gif",
 				"mailScanner.gif",
-				"settingsWorkflow.png");
+				"settingsWorkflow.png",
+				"menueditor.png");
 
 		//labels for blocks
 		$blocks = array('LBL_MODULE_MANAGER',
@@ -2500,7 +2501,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'INVENTORYTERMSANDCONDITIONS',
 				'LBL_CUSTOMIZE_MODENT_NUMBER',
 				'LBL_MAIL_SCANNER',
-				'LBL_LIST_WORKFLOWS',);
+				'LBL_LIST_WORKFLOWS',
+				'LBL_MENU_EDITOR');
 
 
 		$name_blocks = array('LBL_USERS'=>'LBL_USER_MANAGEMENT',
@@ -2530,7 +2532,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'INVENTORYTERMSANDCONDITIONS'=>'LBL_OTHER_SETTINGS',
 				'LBL_CUSTOMIZE_MODENT_NUMBER'=>'LBL_OTHER_SETTINGS',
 				'LBL_MAIL_SCANNER'=>'LBL_OTHER_SETTINGS',
-				'LBL_LIST_WORKFLOWS'=>'LBL_OTHER_SETTINGS',);
+				'LBL_LIST_WORKFLOWS'=>'LBL_OTHER_SETTINGS',
+				'LBL_MENU_EDITOR'=>'LBL_STUDIO');
 
 
 		//description for fields
@@ -2561,7 +2564,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 					'LBL_INV_TANDC_DESCRIPTION',
 					'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION',
 					'LBL_MAIL_SCANNER_DESCRIPTION',
-					'LBL_LIST_WORKFLOWS_DESCRIPTION');
+					'LBL_LIST_WORKFLOWS_DESCRIPTION',
+					'LBL_MENU_DESC');
 
 		$links = array('index.php?module=Administration&action=index&parenttab=Settings',
 				'index.php?module=Settings&action=listroles&parenttab=Settings',
@@ -2590,7 +2594,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings',
 				'index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings',
 				'index.php?module=Settings&action=MailScanner&parenttab=Settings',
-				'index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings',);
+				'index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings',
+				'index.php?module=Settings&action=MenuEditor&parenttab=Settings');
 
 		//insert settings blocks
 		$count = count($blocks);

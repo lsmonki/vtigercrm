@@ -14,7 +14,6 @@
 <table border=0 cellspacing=0 cellpadding=5 width="50%" class="small homePageButtons">
 <tr style="cursor: pointer;">
 	<td style="padding-left:10px;padding-right:50px" width=10% class="moduleName" nowrap>
-		{$APP.$CATEGORY}&nbsp;&gt; 
 		<a class="hdrLink" href="index.php?action=index&module={$MODULE}">
 			{$APP.$MODULE}
 		</a>
@@ -51,9 +50,7 @@
 		<img width="27" height="27" src="{'btnL3Tracker.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border="0" onClick="fnvshobj(this,'tracker');">
 	</td>
 
-	<td>
-		<img width="27" height="27" src="{'btnL3AllMenu.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0" onmouseout="fninvsh('allMenu');" onClick="$('allMenu').style.display='block'; $('allMenu').style.visibility='visible';placeAtCenter($('allMenu'))">
-	</td>
+	
 	
 	<td align='left'>
 		<img width="27" height="27" onClick='showOptions("changeLayoutDiv");' src="{'orgshar.gif'|@vtiger_imageurl:$THEME}" border="0" title="{$MOD.LBL_HOME_LAYOUT}" alt"{$MOD.LBL_HOME_LAYOUT}" style="cursor:pointer;">

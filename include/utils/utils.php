@@ -847,7 +847,7 @@ function get_themes() {
 				   		require_once("./themes/$file/config.php");
 				   	}
 
-				   	if(is_file("./themes/$file/header.php"))
+				   	if(is_file("./themes/$file/style.css"))
 					{
 						$filelist[$file] = $name;
 					}
@@ -3715,9 +3715,7 @@ function getDuplicateRecordsArr($module)
 	
 	$nresult=$adb->query($dup_query);
 	$no_rows=$adb->num_rows($nresult);
-	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');	
+	require_once('modules/Vtiger/layout_utils.php');
 	if($no_rows == 0)
 	{
 		if ($_REQUEST['action'] == 'FindDuplicateRecords')

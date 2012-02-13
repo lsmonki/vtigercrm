@@ -1,6 +1,5 @@
-/*********************************************************************************
-
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -11,9 +10,9 @@
 
 /* ALPHA GRAY  - COLOR THEME*/
 /*added to change color of disabled button */
-input:disabled { 
+input:disabled {
     background-color : #cccccc;
-    color: #666666; 
+    color: #666666;
 }
 /*add ends:*/
 
@@ -70,7 +69,7 @@ input:disabled {
 
 .hdrTabBg {
     background-color:#dadada;
-}  
+}
 
 .tabSelected {
     background:#eeeeee url(images/tabSelectedBg.gif) repeat-x;
@@ -85,6 +84,12 @@ input:disabled {
 
 .tabSelected a{
     color:white;
+	text-transform: uppercase;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-size: 11px;
 }
 
 .tabUnSelected {
@@ -124,12 +129,12 @@ input:disabled {
 }
 
 .level2SelTab{
-    font-weight:bold;
-    color:#000000;
-    padding-left:20px;
-    padding-right:20px;
-    padding-top:5px;
-    padding-bottom:5px;
+	font-weight:bold;
+	color:#000000;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px;
 
 }
 
@@ -175,30 +180,28 @@ a:hover {
 }
 
 .searchBox {
-    border: 0px solid #0000aa;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    padding-left:2px;
-    width:100px;
-    background-color:#ffffef;
+	border: 0px solid #0000aa;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left:2px;
+	width:300px;
+	background-color:#ffffef;
 }
 
 .searchBtn {
-    border :0px #cccccc solid;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    font-weight:bold;
-    width:30px;
-    height:19px;
-    background-color:#555;
-    color:white;
+	border :0px #cccccc solid;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	background-color:#555;
+	color:white;
 }
 
 /* List View Table classes starts  +++++++++++++++++ */
 
 .lvt {
-    background-color:#ccc;
-    border:1px solid #ccc;
+	background-color:#ccc;
+	border:1px solid #ccc;
 }
 
 .lvtBg {
@@ -289,7 +292,7 @@ a:hover {
     padding-left:0px;
 }
 
-.dvtCellLabel, .cellLabel {
+.dvtCellLabel, .cellLabel ,.cellLabelnew {
     background-color:#efefef;
     padding-right:10px;
     padding-left:10px;
@@ -298,6 +301,12 @@ a:hover {
     color:#545454;
     white-space:nowrap;
     font-weight:bold;
+}
+.cellLabelnew {
+	background-color:#D3D3D3;
+	border-top:1px solid #efefef;
+	border-bottom:1px solid #dadada;
+	color:#555555;
 }
 
 .dvtCellInfo, .cellInfo {
@@ -348,14 +357,14 @@ a:hover {
 }
 
 .advSearch {
-    padding:10px;
-    border-left:1px solid #eaeaea;
-    border-right:1px solid #eaeaea;
-    border-bottom:1px solid #eaeaea;
-    overflow:auto;
-    width:600px;
-    height:150px;
-    background-color:#f5f5f5;
+	padding:10px;
+	border-left:1px solid #eaeaea;
+	border-right:1px solid #eaeaea;
+	border-bottom:1px solid #eaeaea;
+	overflow:auto;
+	width:600px;
+	height:150px;
+	background-color:#f5f5f5;
 }
 
 .searchAlph {
@@ -392,8 +401,8 @@ a:hover {
 }
 
 .calDIV {
-    width:100%;
-    border:1px solid #999999;
+	width:100%;
+	border:1px solid #999999;
 }
 
 .calDayHour {
@@ -556,11 +565,11 @@ a.dash_href{
 }
 
 .dash_count{
-    font-size:36px;
-    font-weight:bold;
-    text-decoration:none;
-    color:#000000;
-    padding-left:10px;padding-right:10px;
+	font-size:36px;
+	font-weight:bold;
+	text-decoration:none;
+	color:#000000;
+	padding-left:10px;padding-right:10px;
 }
 
 .dash_switch{
@@ -639,7 +648,7 @@ a.submenu:Hover{
     text-align:left;
     text-decoration:none;
     display:block;
-} 
+}
 
 #mnuKey{
     font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -671,10 +680,10 @@ a.submenu:Hover{
 /* clock */
 
 .citystyle{
-    position:relative;
-    top:0px;
-    left:0px;
-    text-align:left;
+	position:relative;
+	top:0px;
+	left:0px;
+	text-align:left;
 }
 
 #theClockLayer{
@@ -933,7 +942,7 @@ a.submenu:Hover{
 }
 
 .prvPrfHoverOn {
-    background-color:#ffffef;
+	background-color:#ffffef;
 
 }
 /*  Organization */
@@ -1077,7 +1086,7 @@ ul li{
     padding-bottom:2px;
     padding-top:2px;
 }
-/* MY PREFERENCES */		
+/* MY PREFERENCES */
 /* CSS FOR REPORTS */
 
 .reportHdr{
@@ -1134,7 +1143,7 @@ a.reportMnu:Hover{
     border-bottom:1px solid #E1E1E1;
     padding-left:20px;
     padding-top:3px;
-}	
+}
 
 #Generate{
     position:relative;
@@ -1155,7 +1164,7 @@ a.webMnu:Hover{
     font-size:11px;
     color:#0070BA;
     text-decoration:underline;
-} 
+}
 /*  END OF WEB MAIL */
 /* POPUP */
 a.alpha{
@@ -1176,7 +1185,7 @@ a.alpha:Hover{
     padding-right:5px;
     border:1px dotted #CCCCCC;
     background-color:#FFFFCC;
-} 
+}
 
 /* Home Page */
 .MatrixLayer{
@@ -1206,20 +1215,18 @@ a.alpha:Hover{
 
 /* All Menu */
 #allMenu{
-    width:500px;
-    border:4px solid #aaa;
-    left:200px;
-    top:100px;
-    position:absolute;
-    z-index:1000001;
-    display:none;
-    padding:10px;
-    background:#ffffff url(images/layerPopUpBg.gif);
+	border:4px solid #aaa;
+	left:200px;
+	top:100px;
+	position:absolute;
+	z-index:1000001;
+	display:none;
+	padding:10px;
+	background:#ffffff url(images/layerPopUpBg.gif);
 }
-
-.allMnuTable{
-    width:100%;
-    background-color:#FFFFFF;
+.searchBtn{
+    width:48px;
+    height:24px;
 }
 
 .allMnuHandle td{
@@ -1247,42 +1254,12 @@ a.alpha:Hover{
     padding-bottom:5px;
 }
 
-a.allMnu{
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-size:10px;
-    text-decoration:none;
-    font-weight:normal;
-    display:block;
-    width:125px;
-    height:15px;
-    padding-left:5px;
-    padding-top:0px;
-    padding-bottom:0px;
-    background-color:#FFFFFF;
-    border:1px solid #FFFFFF;
-    color:#000099;
-    margin-left:10px;
-}
-
-a.allMnu:Hover{
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-size:10px;
-    text-decoration:none;
-    font-weight:normal;
-    display:block;
-    width:125px;
-    height:15px;
-    padding-left:5px;
-    padding-top:0px;
-    padding-bottom:0px;
-    background-color:#ddd;
-}
 /* End Of All Menu */
 /* Calendar */
 .calHdr{
-    background-image:url(images/mailSubHeaderBg.gif);
-    background-repeat:repeat-x;
-    background-position:left top;
+	background-image:url(images/mailSubHeaderBg.gif);
+	background-repeat:repeat-x;
+	background-position:left top;
 }
 
 .calSel{
@@ -1308,14 +1285,14 @@ a.allMnu:Hover{
 }
 
 .calBorder {
-    border-left: 1px solid #a5a5a5;
-    border-right: 1px solid #a5a5a5;
-    border-bottom: 1px solid #a5a5a5;
-    background:#fefefe url(images/layerPopupBg.gif);
+	border-left: 1px solid #a5a5a5;
+	border-right: 1px solid #a5a5a5;
+	border-bottom: 1px solid #a5a5a5;
+	background:#fefefe url(images/layerPopupBg.gif);
 }
 
 .calTopRight {
-    border-right: 1px solid #a5a5a5;
+	border-right: 1px solid #a5a5a5;
 }
 
 .calUnSel{
@@ -1333,7 +1310,7 @@ a.calMnu{
     height:20px;
     padding-left:5px;
     padding-top:3px;
-}	
+}
 
 a.calMnu:Hover{
     font-size:11px;
@@ -1671,8 +1648,8 @@ ul {
 }
 
 .tagCloudTopBg {
-    background-image: url(images/tagCloudBg.gif);
-    background-repeat: repeat-x;
+	background-image: url(images/tagCloudBg.gif);
+	background-repeat: repeat-x;
 }
 
 .tagCloudDisplay {
@@ -1723,15 +1700,15 @@ ul {
 }
 
 .settingsTabSelected {
-    text-align:left;
-    font-family:  Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    line-height:20px;
-    font-weight:bold;
-    color:#000000;
-    background-color:#ffffff;
-    padding-left:30px;
-    border-left:1px solid #ddd;
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	font-weight:bold;
+	color:#000000;
+	background-color:#ffffff;
+	padding-left:30px;
+	border-left:1px solid #ddd;
 }
 
 .settingsSelectedUI {
@@ -1779,7 +1756,7 @@ ul {
 .cellText {
     color:#333333;
     border-bottom:1px solid #dadada;
-} 
+}
 
 .listTable{
     border-left:1px solid #cccccc;
@@ -1994,7 +1971,7 @@ textarea {
 }
 
 .layerHeadingULine {
-    border-bottom:1px solid #777;
+	border-bottom:1px solid #777;
 }
 
 .layerPopupTransport {
@@ -2012,8 +1989,8 @@ textarea {
 }
 
 .reportsListTable {
-    background-color:white;
-    border:2px solid #aaa;
+	background-color:white;
+	border:2px solid #aaa;
 }
 
 .reportGenerateTable{
@@ -2059,25 +2036,6 @@ a.customMnuSelected{
     text-decoration:none;
 }
 
-/* Drop Down Menu */
-.drop_mnu{
-    position:absolute;
-    left:0px;
-    top:0px;
-    z-index:1000000001;
-    border-left:1px solid #a5a5a5;
-    border-right:1px solid #a5a5a5;
-    border-bottom:1px solid #a5a5a5;
-    width:150px;
-    display:none;
-    padding:0px;
-    text-align:left;
-    overflow-x:hidden;
-    overflow-y:hidden;
-    background-color:#eee;
-    margin-top: 0px; /* added */
-}
-
 a.drop_down{
     width:150px;
     text-align:left;
@@ -2094,13 +2052,13 @@ a.drop_down{
 }
 
 a.drop_down:Hover{
-    padding:2px 5px 2px 5px;
-    width:150px;
-    text-align:left;
-    color:#33a;
-    font-weight:normal;
-    text-decoration:underline;
-    background-color:#dadada;
+	padding:2px 5px 2px 5px;
+	width:150px;
+	text-align:left;
+	color:#33a;
+	font-weight:normal;
+	text-decoration:underline;
+	background-color:#ffffcc;
 }
 
 .bgwhite{
@@ -2112,20 +2070,20 @@ a.drop_down:Hover{
     border:2px solid #a5a5a5;
 }
 
-.searchUIAdv1{ 
+.searchUIAdv1{
     background-image:url(images/layerPopupBg.gif);
     border-top:2px solid #a5a5a5;
     border-left:2px solid #a5a5a5;
     border-right:2px solid #a5a5a5;
 }
 
-.searchUIAdv2{ 
+.searchUIAdv2{
     background-image:url(images/layerPopupBg.gif);
     border-left:2px solid #a5a5a5;
     border-right:2px solid #a5a5a5;
 }
 
-.searchUIAdv3{ 
+.searchUIAdv3{
     background-image:url(images/layerPopupBg.gif);
     border-bottom:2px solid #a5a5a5;
     border-left:2px solid #a5a5a5;
@@ -2135,18 +2093,18 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-    background: url(images/layerPopupBg.gif) ;
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
-    z-index: 10000;
-    Filter: Alpha(opacity = 70);
-    -moz-opacity: 0.7;
-    text-align: center;
-    vertical-align: middle;
-    position: absolute;
+	background: url(images/layerPopupBg.gif) ;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
+	z-index: 10000;
+	Filter: Alpha(opacity = 70);
+	-moz-opacity: 0.7;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
 }
 
 .veil_new{
@@ -2165,24 +2123,24 @@ a.drop_down:Hover{
 }
 
 .optioncontainer{
-    vertical-align: middle;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    z-index: 90000;
+	vertical-align: middle;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 90000;
 }
 
 .options{
-    vertical-align: middle;
-    margin-left: 25%;
-    margin-top: 16%;
-    color: #FFFFFF;
-    width:650px;
-    background-color: Black;
-    border: 2px solid #222;
-    position: relative;
-    text-align: left;
-    z-index: 80000;
+	vertical-align: middle;
+	margin-left: 25%;
+	margin-top: 16%;
+	color: #FFFFFF;
+	width:650px;
+	background-color: Black;
+	border: 2px solid #222;
+	position: relative;
+	text-align: left;
+	z-index: 80000;
 }
 
 .options h2{
@@ -2229,7 +2187,7 @@ a.drop_down:Hover{
     background-image:url(../images/windowmarkDashboard.jpg);
     background-position:top right;
     background-repeat:no-repeat;
-}	
+}
 
 /*added for the hanlder of the div in the home page */
 .headerrow{
@@ -2334,6 +2292,7 @@ a.drop_down:Hover{
     white-space: nowrap;
 }
 
+
 .selectedCellIndex {
     background-color: #80E5FF;
     border: 2px dashed #EEEEEE;
@@ -2364,7 +2323,7 @@ a.drop_down:Hover{
     left: 25%;
 }
 
-.vtigerHelpPopupLay { 
+.vtigerHelpPopupLay {
     font-size:12px;
     border: 1px solid #999;
     background: #F5F5F5;
@@ -2374,21 +2333,21 @@ a.drop_down:Hover{
     border: 0;
 }
 
-.vtigerHelpPopupLay hr { 
+.vtigerHelpPopupLay hr {
     padding: 0;
     border-top: 0; border-left: 0; border-right: 0;
     border-bottom: 1px solid #999;
 }
-.vtigerHelpPopupLay .button { 
+.vtigerHelpPopupLay .button {
     background: #CCC;
     color: black;
     padding: 2px 5px;
     text-decoration: none;
 }
-.vtigerHelpPopupLay .button:hover { 
+.vtigerHelpPopupLay .button:hover {
     background: #F5F5F5;
-}			
-.vtigerHelpPopupLay .helppages { 
+}
+.vtigerHelpPopupLay .helppages {
     border-bottom: 1px solid #D3D3D3;
     padding: 5px 0px;
 }
@@ -2399,11 +2358,11 @@ a.drop_down:Hover{
 }
 
 .vtigerHelpPopupLay .helppage .header .helpArrow .arrowDown{
-        margin-bottom:1px;
-        margin-right:2px;
+	margin-bottom:1px;
+	margin-right:2px;
 }
 .vtigerHelpPopupLay .helppage .header .helpArrow .arrowRight{
-        margin-right:2px;
+	margin-right:2px;
 }
 
 .vtigerHelpPopupLay .helppage .content {
@@ -2413,7 +2372,7 @@ a.drop_down:Hover{
 .vtigerHelpPopupLay .helppage .content p {
     margin-top: 2px;
 }
-.vtigerHelpPopupLay .helppage .footer { 
+.vtigerHelpPopupLay .helppage .footer {
     color: gray;
     text-align: right;
     padding: 0 5px;
@@ -2436,10 +2395,10 @@ div.goog-te-sectional-gadget-all{
     overflow: auto;
 }
 .vtigerHelpPopupLay #vtigerHelpGTranslateEl {
-         bottom: 0;
-         background: url(images/help_header.png) repeat-x;
-         border-top:2px solid #717351;
-         heigth:30px;
+	bottom: 0;
+	background: url(images/help_header.png) repeat-x;
+	border-top:2px solid #717351;
+	heigth:30px;
 }
 
 div#vtigerHelpPopupLay{
@@ -2466,7 +2425,7 @@ a#helpLink:hover{
     cursor: pointer;
     margin-right:3px;
 }
-.vtigerHelpPopupLay .vtigerHelpGTranslateEl { 
+.vtigerHelpPopupLay .vtigerHelpGTranslateEl {
     bottom: 0;
 }
 
@@ -2569,5 +2528,125 @@ input {
 /* Mail Manager ends */
 
 .documentModuleFolderView{
-    padding-bottom:5px;
+	padding-bottom:5px;
+}
+a.drop_downnew{
+	width:100px;
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height:20px;
+	font-weight:normal;
+	color:#009;
+	background-color:#eee;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+a.drop_downnew:Hover{
+	padding:2px 5px 2px 5px;
+	width:100px;
+	text-align:left;
+	font-weight:normal;
+	color:#33a;
+	background-color:#ffffcc;
+
+}
+input:focus {
+	outline: none;
+}
+a.drop_down_usersettings{
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	color:#009;
+	background-color:#eee;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+a.drop_down_usersettings:Hover{
+	padding:2px 5px 2px 5px;
+	text-align:left;
+	color:#33a;
+	text-decoration:underline;
+	background-color:#ffffcc;
+}
+a.allMnu{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-decoration:none;
+	font-weight:normal;
+	display:block;
+	width:125px;
+	height:15px;
+	padding-left:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	background-color:#FFFFFF;
+	border:1px solid #FFFFFF;
+	color:#000099;
+	margin-left:10px;
+}
+a.allMnu:Hover{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-decoration:none;
+	font-weight:normal;
+	display:block;
+	width:125px;
+	height:15px;
+	padding-left:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	background-color:#ddd;
+}
+#search{
+	border:3px solid #999999;
+	background-color:#ffffef;
+	width :50%;
+}
+.drop_mnu_user{
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:1000000001;
+    border-left:1px solid #a5a5a5;
+    border-right:1px solid #a5a5a5;
+    border-bottom:1px solid #a5a5a5;
+	display:none;
+	padding:0px;
+	text-align:left;
+	overflow-x:hidden;
+	overflow-y:hidden;
+    background-color:#eee;
+    margin-top: 0px; /* added */
+}
+.drop_mnu_user:Hover{
+
+        background-color:#ffffcc;
+}
+.drop_mnu{
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:1000000001;
+    border-left:1px solid #a5a5a5;
+    border-right:1px solid #a5a5a5;
+    border-bottom:1px solid #a5a5a5;
+	display:none;
+	padding:0px;
+	width:150px;
+	text-align:left;
+	overflow-x:hidden;
+	overflow-y:hidden;
+    background-color:#eee;
+    margin-top: 0px; /* added */
+}
+.searchBtn{
+	width:48px;
+	height:31px;
 }

@@ -21,7 +21,7 @@ $parenttab = getParentTab();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') != '0'){
 	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	

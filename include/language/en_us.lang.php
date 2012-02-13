@@ -1302,6 +1302,9 @@ $app_strings = array (
 'Quantity' => 'Quantity',
 'Net Total' => 'Net Total',
 'Send SMS' => 'Send SMS',
+
+'LBL_MORE'=>'More',
+'LBL_CRM_SETTINGS' => 'CRM Settings',
 );
 
 $app_list_strings = array (

@@ -633,7 +633,7 @@ if(!$skipHeaders) {
 		{
 			$category = getParentTabFromModule($currentModule);
 		}
-		include('themes/'.$theme.'/header.php');
+		include('modules/Vtiger/header.php');
 	}
 	
 	if(isset($_SESSION['administrator_error']))
@@ -889,6 +889,6 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	// End
 	
 	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") && ($action != "ActivityAjax"))
-		include('themes/'.$theme.'/footer.php');
+		include('modules/Vtiger/footer.php');
 }
 ?>

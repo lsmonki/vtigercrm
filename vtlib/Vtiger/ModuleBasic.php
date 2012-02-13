@@ -124,6 +124,7 @@ class Vtiger_ModuleBasic {
 	function __handleVtigerCoreSchemaChanges() {
 		// Add version column to the table first
 		Vtiger_Utils::AddColumn('vtiger_tab', 'version', ' VARCHAR(10)');
+        Vtiger_Utils::AddColumn('vtiger_tab', 'parent', ' VARCHAR(30)');
 	}
 
 	/**
@@ -144,8 +145,8 @@ class Vtiger_ModuleBasic {
 		$this->__handleVtigerCoreSchemaChanges();
 
 		$adb->pquery("INSERT INTO vtiger_tab (tabid,name,presence,tabsequence,tablabel,modifiedby,
-			modifiedtime,customized,ownedby,version) VALUES (?,?,?,?,?,?,?,?,?,?)", 
-			Array($this->id, $this->name, $this->presence, $this->tabsequence, $this->label, NULL, NULL, $customized, $this->ownedby, $this->version));
+			modifiedtime,customized,ownedby,version,parent) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+			Array($this->id, $this->name, $this->presence, -1, $this->label, NULL, NULL, $customized, $this->ownedby, $this->version,$this->parent));
 
 		$useisentitytype = $this->isentitytype? 1 : 0;
 		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));

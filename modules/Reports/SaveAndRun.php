@@ -132,7 +132,7 @@ if($numOfRows > 0) {
 		if($_REQUEST['mode'] != 'ajax')
 		{
 			$list_report_form->assign("REPINFOLDER", $reports_array);
-			include('themes/'.$theme.'/header.php');
+			include('modules/Vtiger/header.php');
 			$list_report_form->display('ReportRun.tpl');
 		}
 		else
@@ -142,7 +142,7 @@ if($numOfRows > 0) {
 
 	} else {
 		if($_REQUEST['mode'] != 'ajax') {
-			include('themes/'.$theme.'/header.php');
+			include('modules/Vtiger/header.php');
 		}
 		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>

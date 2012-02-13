@@ -13,7 +13,7 @@ require_once('include/utils/utils.php');
 global $mod_strings, $app_strings, $app_list_strings;
 global $current_language, $currentModule, $current_userid, $theme;
 
-require_once('themes/'.$theme.'/layout_utils.php');
+require_once('modules/Vtiger/layout_utils.php');
 
 $req_module = vtlib_purify($_REQUEST['module']);
 $focus = CRMEntity::getInstance($req_module);
