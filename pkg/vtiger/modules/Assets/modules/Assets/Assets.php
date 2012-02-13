@@ -356,19 +356,7 @@ class Assets extends CRMEntity {
 	 * @param - $module primary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsQuery($module){
-		global $current_user;
-			$query = "from vtiger_assets
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_assets.assetsid
-				left join vtiger_assetscf on vtiger_assets.assetsid = vtiger_assetscf.assetsid
-				left join vtiger_account as vtiger_accountAssets on vtiger_accountAssets.accountid=vtiger_assets.account
-				left join vtiger_products as vtiger_productAssets on vtiger_productAssets.productid=vtiger_assets.product
-				left join vtiger_invoice as vtiger_invoiceAssets on vtiger_invoiceAssets.invoiceid=vtiger_assets.invoiceid
-				left join vtiger_users as vtiger_usersAssets on vtiger_usersAssets.id=vtiger_crmentity.smownerid
-				left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid
-                left join vtiger_users as vtiger_lastModifiedByAssets on vtiger_lastModifiedByAssets.id = vtiger_crmentity.modifiedby ";
-			return $query;
-	}
+	// function generateReportsQuery($module){ }
 
 	/*
 	 * Function to get the secondary query part of a report

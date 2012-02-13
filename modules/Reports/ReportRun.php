@@ -690,7 +690,7 @@ class ReportRun extends CRMEntity
 
 	function generateAdvFilterSql($advfilterlist) {
 
-		global $log;
+		global $adb;
 
 		$advfiltersql = "";
 
@@ -709,6 +709,9 @@ class ReportRun extends CRMEntity
 
 					if($fieldcolname != "" && $comparator != "") {
 						$selectedfields = explode(":",$fieldcolname);
+						$moduleFieldLabel = $selectedfields[2];
+						list($moduleName, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+						$fieldInfo = getFieldByReportLabel($moduleName, $fieldLabel);
                         $concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
 						// Added to handle the crmentity table name for Primary module
                         if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
@@ -780,7 +783,7 @@ class ReportRun extends CRMEntity
 							$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
 
 						} elseif($selectedfields[0] == 'vtiger_crmentityRelHelpDesk' && $selectedfields[1]=='setype') {
-							$fieldvalue = "(vtiger_accountRelHelpDesk.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.lastname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.firstname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
+							$fieldvalue = "(vtiger_accountRelHelpDesk.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
 						} elseif($selectedfields[1]=='modifiedby') {
                             $module_from_tablename = str_replace("vtiger_crmentity","",$selectedfields[0]);
                             if($module_from_tablename != '')
@@ -798,6 +801,41 @@ class ReportRun extends CRMEntity
 								$fieldvalue = "concat(vtiger_contactdetails". $this->secondarymodule .".lastname,' ',vtiger_contactdetails". $this->secondarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($comparator == 'e' && (trim($value) == "NULL" || trim($value) == '')) {
 							$fieldvalue = "(".$selectedfields[0].".".$selectedfields[1]." IS NULL OR ".$selectedfields[0].".".$selectedfields[1]." = '')";
+						} elseif($this->primarymodule == 'Potentials' && $selectedfields[1] == 'related_to') {
+							$comparatorValue = $this->getAdvComparator($comparator,trim($value),$datatype);
+							$fieldvalue = '(vtiger_accountPotentials.accountname'.$comparatorValue.' OR concat(vtiger_contactdetailsPotentials.lastname," ",vtiger_contactdetailsPotentials.firstname)'. $comparatorValue.')';
+						} elseif($selectedfields[0] == 'vtiger_inventoryproductrel' && ($selectedfields[1] == 'productid' || $selectedfields[1] == 'serviceid')) {
+							if($selectedfields[1] == 'productid'){
+								$fieldvalue = "vtiger_products{$this->primarymodule}.productname ".$this->getAdvComparator($comparator,trim($value),$datatype);
+							} else if($selectedfields[1] == 'serviceid'){
+								$fieldvalue = "vtiger_service{$this->primarymodule}.servicename ".$this->getAdvComparator($comparator,trim($value),$datatype);
+							}
+						}elseif($fieldInfo['uitype'] == '10') {
+							$comparatorValue = $this->getAdvComparator($comparator,trim($value),$datatype);
+							$fieldSqls = array();
+							$fieldInstance = WebserviceField::fromArray($adb, $fieldInfo);
+							$referenceModuleList = $fieldInstance->getReferenceList();
+							foreach($referenceModuleList as $referenceModule) {
+								$entityTableFieldNames = getEntityFieldNames($referenceModule);
+								$entityTableName = $entityTableFieldNames['tablename'];
+								$entityFieldNames = $entityTableFieldNames['fieldname'];
+								$referenceTableName = "{$entityTableName}Rel{$this->primarymodule}{$fieldInstance->getFieldId()}";
+								$columnList = array();
+								if(is_array($entityFieldNames)) {
+									foreach ($entityFieldNames as $entityColumnName) {
+										$columnList[] = "$referenceTableName.$entityColumnName";
+									}
+								} else {
+									$columnList[] = "$referenceTableName.$entityFieldNames";
+								}
+								if(count($columnList) > 1) {
+									$columnSql = getSqlForNameInDisplayFormat(array('f'=>$columnList[1],'l'=>$columnList[0]));
+								} else {
+									$columnSql = implode('', $columnList);
+								}
+								$fieldSqls[] = $columnSql.$comparatorValue;
+							}
+							$fieldvalue = ' ('. implode(' OR ', $fieldSqls).') ';
 						} else {
 							$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 						}
@@ -882,28 +920,15 @@ class ReportRun extends CRMEntity
 					$enddate = $startenddate[1];
 				}
 
-				if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $startdate != "" && $enddate != ""
-						&& $selectedfields[0] != "" && $selectedfields[1] != "") {
+					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != ""
+							&& $startdate != '' && $enddate != '') {
 
-					$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
-					$userStartDate = $startDateTime->getDisplayDate();
-					$userStartDateTime = new DateTimeField($userStartDate.' 00:00:00');
-					$startDateTime = $userStartDateTime->getDBInsertDateTimeValue();
+						$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
+						$startdate = DateTimeField::convertToDBFormat($startDateTime->getDisplayDate());
+						$endDateTime = new DateTimeField($enddate.' '. date('H:i:s'));
+						$enddate = DateTimeField::convertToDBFormat($endDateTime->getDisplayDate());
 
-					$endDateTime = new DateTimeField($enddate.' '. date('H:i:s'));
-					$userEndDate = $endDateTime->getDisplayDate();
-					$userEndDateTime = new DateTimeField($userEndDate.' 23:59:00');
-					$endDateTime = $userEndDateTime->getDBInsertDateTimeValue();
-
-					if($selectedfields[0] == 'vtiger_activity' && ($selectedfields[1] == 'date_start' || $selectedfields[1] == 'due_date')) {
-						$tableColumnSql = '';
-						if($selectedfields[1] == 'date_start') {
-							$tableColumnSql = "CAST((CONCAT(date_start,' ',time_start)) AS DATETIME)";
-						} else {
-							$tableColumnSql = "CAST((CONCAT(due_date,' ',time_end)) AS DATETIME)";
-						}
-					} else {
-						$tableColumnSql = $selectedfields[0].".".$selectedfields[1];
+						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:59'";
 					}
 
 					$stdfilterlist[$fieldcolname] = $tableColumnSql." between '".$startDateTime."' and '".$endDateTime."'";
@@ -1076,7 +1101,8 @@ class ReportRun extends CRMEntity
 					$selectedfields[0] = "vtiger_crmentity";
 				if($datefilter == "custom") {
 
-					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != "") {
+					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != ""
+							&& $startdate != '' && $enddate != '') {
 
 						$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
 						$startdate = $startDateTime->getDisplayDate();
