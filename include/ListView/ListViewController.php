@@ -194,9 +194,9 @@ class ListViewController {
 				if($module == 'Calendar') {
 					$activityType = $this->db->query_result($result, $i, 'activitytype');
 				}
-				
+
 				if($uitype != 8){
-					$value = html_entity_decode($rawValue,ENT_QUOTES);
+					$value = html_entity_decode($rawValue,ENT_QUOTES,$default_charset);
 				} else {
 					$value = $rawValue;
 				}
@@ -679,11 +679,11 @@ class ListViewController {
 			if($i++ == 0) {
 				$selected = "selected";
 			}
-						
+
 			// place option in array for sorting later
 			//$blockName = getTranslatedString(getBlockName($field->getBlockId()), $module);
 			$blockName = getTranslatedString($field->getBlockName(), $module);
-			
+
 			$fieldLabelEscaped = str_replace(" ","_",$field->getFieldLabelKey());
 			$optionvalue = $field->getTableName().":".$field->getColumnName().":".$fieldName.":".$module."_".$fieldLabelEscaped.":".$typeOfData;
 
@@ -692,14 +692,14 @@ class ListViewController {
 		}
 	   	// sort array on block label
 	    ksort($OPTION_SET, SORT_STRING);
-	    	    
+
 		foreach ($OPTION_SET as $key=>$value) {
 	  		$shtml .= "<optgroup label='$key' class='select' style='border:none'>";
 	   		// sort array on field labels
 	   		ksort($value, SORT_STRING);
 	  		$shtml .= implode('',$value);
 	  	}
-	    
+
 	    return $shtml;
 	}
 
