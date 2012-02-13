@@ -1333,16 +1333,6 @@ $log->info("in getOldFileName  ".$notesid);
 	function restore($module, $id) {
 		global $current_user, $adb;
 
-        require_once("include/events/include.inc");
-		$em = new VTEventsManager($adb);
-
-        // Initialize Event trigger cache
-		$em->initTriggerCache();
-
-		$entityData  = VTEntityData::fromEntityId($adb, $id);
-
-        $em->triggerEvent("vtiger.entity.beforerestore", $entityData);
-
 		$this->db->println("TRANS restore starts $module");
 		$this->db->startTransaction();
 
@@ -2485,7 +2475,7 @@ $log->info("in getOldFileName  ".$notesid);
 		global $current_user;
 		$adb = PearDatabase::getInstance();
 		$currentTime = date('Y-m-d H:i:s');
-		
+
 		$adb->pquery('UPDATE vtiger_crmentity SET modifiedtime = ?, modifiedby = ? WHERE crmid = ?',
 							array($currentTime, $current_user->id, $crmid));
 	}
