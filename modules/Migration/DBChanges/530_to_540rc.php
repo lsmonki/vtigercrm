@@ -557,5 +557,9 @@ $adb->pquery("ALTER TABLE vtiger_reportgroupbycolumn add constraint fk_1_vtiger_
 $adb->pquery("DELETE FROM vtiger_time_zone WHERE time_zone = 'Kwajalein'", array());
 $adb->pquery("UPDATE vtiger_users SET time_zone='UTC' WHERE time_zone='Kwajalein'", array());
 
+$serviceContractsInstance = Vtiger_Module::getInstance('ServiceContracts');
+$helpDeskInstance = Vtiger_Module::getInstance("HelpDesk");
+$helpDeskInstance->setRelatedList($serviceContractsInstance,"Service Contracts",Array('ADD','SELECT'));
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 ?>

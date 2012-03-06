@@ -1603,7 +1603,8 @@ class CRMEntity {
 			if ($with_module == 'Documents') {
 				$adb->pquery("DELETE FROM vtiger_senotesrel WHERE crmid=? AND notesid=?", Array($crmid, $relcrmid));
 			} else {
-				$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?", Array($crmid, $module, $relcrmid, $with_module));
+				$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND module=? AND relcrmid=? AND relmodule=?) OR (relcrmid=? AND relmodule=? AND crmid=? AND module=?)",
+					Array($crmid, $module, $relcrmid, $with_module,$crmid, $module, $relcrmid, $with_module));
 			}
 		}
 	}

@@ -45,12 +45,18 @@ class ServiceContracts extends CRMEntity {
 		/* Format: Field Label => Array(tablename, columnname) */
 		// tablename should not have prefix 'vtiger_'
 		'Subject' => Array('servicecontracts', 'subject'),
-		'Assigned To' => Array('crmentity','smownerid')
+		'Assigned To' => Array('crmentity','smownerid'),
+		'Contract No' => Array('servicecontracts','contract_no'),
+		'Used Units' => Array('servicecontracts','used_units'),
+		'Total Units' => Array('servicecontracts','total_units')
 	);
 	var $list_fields_name = Array (
 		/* Format: Field Label => fieldname */
 		'Subject' => 'subject',
-		'Assigned To' => 'assigned_user_id'
+		'Assigned To' => 'assigned_user_id',
+		'Contract No' =>  'contract_no',
+		'Used Units' => 'used_units',
+		'Total Units' => 'total_units'
 	);
 
 	// Make the field link to detail view
@@ -60,11 +66,19 @@ class ServiceContracts extends CRMEntity {
 	var $search_fields = Array(
 		/* Format: Field Label => Array(tablename, columnname) */
 		// tablename should not have prefix 'vtiger_'
-		'Subject' => Array('servicecontracts', 'subject')
+		'Subject' => Array('servicecontracts', 'subject'),
+		'Contract No' => Array('servicecontracts', 'contract_no'),
+		'Assigned To' => Array('vtiger_crmentity','assigned_user_id'),
+		'Used Units' => Array('servicecontracts','used_units'),
+		'Total Units' => Array('servicecontracts','total_units')
 	);
 	var $search_fields_name = Array (
 		/* Format: Field Label => fieldname */
-		'Subject' => 'subject'
+		'Subject' => 'subject',
+		'Contract No' => 'contract_no',
+		'Assigned To' => 'assigned_user_id',
+		'Used Units' => 'used_units',
+		'Total Units' => 'total_units'
 	);
 
 	// For Popup window record selection
@@ -100,6 +114,15 @@ class ServiceContracts extends CRMEntity {
 	}
 
 	function save_module($module) {
+		$return_action = $_REQUEST['return_action'];
+		$for_module = $_REQUEST['return_module'];
+		$for_crmid  = $_REQUEST['return_id'];
+		if ($return_action && $for_module && $for_crmid) {
+			if ($for_module == 'HelpDesk') {
+				$on_focus = CRMEntity::getInstance($for_module);
+				$on_focus->save_related_module($for_module, $for_crmid, $module, $this->id);
+			}
+		}
 	}
 
 	/**
@@ -318,6 +341,9 @@ class ServiceContracts extends CRMEntity {
 			$conModuleInstance = Vtiger_Module::getInstance('Contacts');
 			$conModuleInstance->setRelatedList($moduleInstance,'Service Contracts',array('add'),'get_dependents_list');
 
+			$helpDeskInstance = Vtiger_Module::getInstance("HelpDesk");
+			$helpDeskInstance->setRelatedList($moduleInstance,"Service Contracts",Array('ADD','SELECT'));
+
 			// Initialize module sequence for the module
 			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
 
@@ -386,8 +412,15 @@ class ServiceContracts extends CRMEntity {
 		$this->id = $focusId;
 		$this->retrieve_entity_info($focusId,'ServiceContracts');
 
-		$contractTicketsResult = $this->db->pquery("SELECT relcrmid FROM vtiger_crmentityrel WHERE module = 'ServiceContracts' AND crmid = ?" .
-								" AND relmodule = 'HelpDesk'", array($focusId));
+		$contractTicketsResult = $this->db->pquery("SELECT relcrmid FROM vtiger_crmentityrel
+														WHERE module = 'ServiceContracts'
+														AND relmodule = 'HelpDesk' AND crmid = ?
+													UNION
+														SELECT crmid FROM vtiger_crmentityrel
+														WHERE relmodule = 'ServiceContracts'
+														AND module = 'HelpDesk' AND relcrmid = ?",
+													array($focusId,$focusId));
+
 		$noOfTickets = $this->db->num_rows($contractTicketsResult);
 		$ticketFocus = CRMEntity::getInstance('HelpDesk');
 		$totalUsedUnits = 0;

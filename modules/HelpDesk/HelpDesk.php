@@ -116,9 +116,29 @@ class HelpDesk extends CRMEntity {
 	{
 		//Inserting into Ticket Comment Table
 		$this->insertIntoTicketCommentTable("vtiger_ticketcomments",$module);
-
+		
 		//Inserting into vtiger_attachments
 		$this->insertIntoAttachment($this->id,$module);
+		
+		//service contract update
+		$return_action = $_REQUEST['return_action'];
+		$for_module = $_REQUEST['return_module'];
+		$for_crmid  = $_REQUEST['return_id'];
+		if ($return_action && $for_module && $for_crmid) {
+			if ($for_module == 'ServiceContracts') {
+				$on_focus = CRMEntity::getInstance($for_module);
+				$on_focus->save_related_module($for_module, $for_crmid, $module, $this->id);
+			}
+		}
+	}
+
+	function save_related_module($module, $crmid, $with_module, $with_crmid) {		
+		parent::save_related_module($module, $crmid, $with_module, $with_crmid);
+		if ($with_module == 'ServiceContracts') {
+			$serviceContract = CRMEntity::getInstance("ServiceContracts");
+	 		$serviceContract->updateHelpDeskRelatedTo($with_crmid,$crmid);
+	 		$serviceContract->updateServiceContractState($with_crmid);
+	 	}
 	}
 
 	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
