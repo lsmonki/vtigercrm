@@ -93,7 +93,7 @@ class Vtiger_Cron {
      */
     function getLastStartDateTime() {
         $lastEndTimeDate = new DateTimeField(date('Y-m-d H:i:s', $this->data['laststart']));
-        return $lastEndTimeDate->getDisplayDateTimeValue();
+        return $lastEndTimeDate;
     }
 
     /**

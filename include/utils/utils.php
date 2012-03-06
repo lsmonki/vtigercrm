@@ -5035,4 +5035,27 @@ function getCampaignLeadIds($id) {
 	return $result;
 }
 
+/** Function to get the difference between 2 datetime strings or millisecond values */
+function dateDiff($d1, $d2){
+	$d1 = (is_string($d1) ? strtotime($d1) : $d1);
+	$d2 = (is_string($d2) ? strtotime($d2) : $d2);
+
+	$diffSecs = abs($d1 - $d2);
+	$baseYear = min(date("Y", $d1), date("Y", $d2));
+	$diff = mktime(0, 0, $diffSecs, 1, 1, $baseYear);
+	return array(
+		"years" => date("Y", $diff) - $baseYear,
+		"months_total" => (date("Y", $diff) - $baseYear) * 12 + date("n", $diff) - 1,
+		"months" => date("n", $diff) - 1,
+		"days_total" => floor($diffSecs / (3600 * 24)),
+		"days" => date("j", $diff) - 1,
+		"hours_total" => floor($diffSecs / 3600),
+		"hours" => date("G", $diff),
+		"minutes_total" => floor($diffSecs / 60),
+		"minutes" => (int) date("i", $diff),
+		"seconds_total" => $diffSecs,
+		"seconds" => (int) date("s", $diff)
+	);
+}
+
 ?>
