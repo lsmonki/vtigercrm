@@ -561,5 +561,8 @@ $serviceContractsInstance = Vtiger_Module::getInstance('ServiceContracts');
 $helpDeskInstance = Vtiger_Module::getInstance("HelpDesk");
 $helpDeskInstance->setRelatedList($serviceContractsInstance,"Service Contracts",Array('ADD','SELECT'));
 
+$adb->pquery("UPDATE vtiger_field SET uitype=11 WHERE fieldname IN ('phone_work', 'phone_mobile', 'phone_fax', 'phone_home', 'phone_other')
+							AND tabid IN (SELECT tabid FROM vtiger_tab WHERE name='Users')", array());
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 ?>
