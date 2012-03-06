@@ -554,5 +554,8 @@ $adb->pquery("CREATE TABLE if not exists vtiger_homereportchart (stuffid int(19)
 $adb->pquery("CREATE TABLE vtiger_reportgroupbycolumn(reportid int(19),sortid int(19),sortcolname varchar(250),dategroupbycriteria varchar(250))", array());
 $adb->pquery("ALTER TABLE vtiger_reportgroupbycolumn add constraint fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE", array());
 
+$adb->pquery("DELETE FROM vtiger_time_zone WHERE time_zone = 'Kwajalein'", array());
+$adb->pquery("UPDATE vtiger_users SET time_zone='UTC' WHERE time_zone='Kwajalein'", array());
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 ?>
