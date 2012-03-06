@@ -559,7 +559,26 @@ var $rel_serel_table = "vtiger_seactivityrel";
 }
 /** Function to get the emailids for the given ids form the request parameters 
  *  It returns an array which contains the mailids and the parentidlists
-*/
+ */
+function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
+	global $adb, $current_user, $log;
+	require_once 'include/Webservices/Query.php';
+	//$idlists1 = "";
+	$mailds = '';
+	$fieldids = explode(":", vtlib_purify($_REQUEST['field_lists']));
+	if($_REQUEST['idlist'] == 'all' || $_REQUEST['idlist'] == 'relatedListSelectAll'){
+		$idlist = getSelectedRecords($_REQUEST,vtlib_purify($_REQUEST['pmodule']),vtlib_purify($_REQUEST['idlist']),vtlib_purify($_REQUEST['execludedRecords']));
+	} else {
+		$idlist = explode(":", str_replace("undefined","",vtlib_purify($_REQUEST['idlist'])));
+	}
+
+	$entityids = array();
+	foreach ($idlist as $key => $id) {
+		$entityids[] = vtws_getWebserviceEntityId($module, $id);
+	}
+	$vtwsObject = VtigerWebserviceObject::fromName($adb, $module);
+	$vtwsCRMObjectMeta = new VtigerCRMObjectMeta($vtwsObject, $current_user);
+	$emailFields = $vtwsCRMObjectMeta->getEmailFields();
 
 function get_to_emailids($module)
 {
@@ -578,48 +597,40 @@ function get_to_emailids($module)
 			$columns[]=$row['columnname'];
 			$fieldid[]=$row['fieldid'];
 		}
-		$columnlists = implode(',',$columns);
-		$idstring = $_REQUEST["idlist"];
-                $single_record = false;
-		if(!strpos($idstring,':'))
-		{
-			$single_record = true;
-		}
-		$crmids = preg_replace('/:/',',',$idstring);
-		$crmids = explode(",", $crmids);
-		switch($module)
-		{
-			case 'Leads':
-				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.secondaryemail) != \'\')) and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
-				break;
-			case 'Contacts':
-				//email opt out funtionality works only when we do mass mailing.
-				if(!$single_record)
-				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
-				else
-				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and ';
-				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
-				break;
-			case 'Accounts':
-				//added to work out email opt out functionality.
-				if(!$single_record)
-					$concat_qry = '(((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and (vtiger_account.emailoptout != 1)) and ';
-				else
-					$concat_qry = '((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and ';
-					
-				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and '.$concat_qry.' vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
-				break;
-		}
-		$result = $adb->pquery($query, array($crmids));
-		while($row = $adb->fetch_array($result))
-		{
-			$name = $row['entityname'];
-			for($i=0;$i<count($columns);$i++)
-			{
-				if($row[$columns[$i]] != NULL && $row[$columns[$i]] !='')
-				{
-					$idlists .= $row['crmid'].'@'.$fieldid[$i].'|'; 
-					$mailids .= $name.'<'.$row[$columns[$i]].'>,';	
+	}
+	if(empty($emailFields))
+		return false;
+	if ($module == 'Leads') {
+		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_leaddetails.leadid as id
+				  FROM vtiger_leaddetails
+				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
+				  LEFT JOIN vtiger_leadscf ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
+				  WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.leadid IN ('.generateQuestionMarks($idlist).')';
+	} else if ($module == 'Contacts'){
+		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_contactdetails.contactid as id
+				  FROM vtiger_contactdetails
+				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
+				  LEFT JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+				  WHERE vtiger_crmentity.deleted=0 AND vtiger_contactdetails.contactid IN ('.generateQuestionMarks($idlist).') AND vtiger_contactdetails.emailoptout=0';
+	} else {
+		$query = 'SELECT vtiger_account.accountname, '.implode(",", $emailFields).',vtiger_account.accountid as id FROM vtiger_account
+				   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
+				   LEFT JOIN vtiger_accountscf ON vtiger_accountscf.accountid= vtiger_account.accountid
+				   WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid IN ('.generateQuestionMarks($idlist).') AND vtiger_account.emailoptout=0';
+	}
+	$result = $adb->pquery($query,$idlist);
+	
+	if($adb->num_rows($result)>0){
+		while($entityvalue = $adb->fetchByAssoc($result)){
+			$vtwsid = $entityvalue['id'];
+			foreach ($emailFields as $i => $emailFieldName) {
+				if ($entityvalue[$emailFieldName] != NULL || $entityvalue[$emailFieldName] != '') {
+					$idlists .= $vtwsid . '@' . $vtwsCRMObjectMeta->getFieldIdFromFieldName($emailFieldName) . '|';
+					if ($module == 'Leads' || $module == 'Contacts') {
+						$mailids .= $entityvalue['lastname'] . " " . $entityvalue['firstname'] . "<" . $entityvalue[$emailFieldName] . ">,";
+					} else {
+						$mailids .= $entityvalue['accountname'] . "<" . $entityvalue[$emailFieldName] . ">,";
+					}
 				}
 			}
 		}

@@ -66,6 +66,9 @@ class Vendors extends CRMEntity {
 	var $default_order_by = 'vendorname';
 	var $default_sort_order = 'ASC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'vendorname';
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Vendors() {
@@ -268,36 +271,6 @@ class Vendors extends CRMEntity {
 
 		$log->debug("Exiting get_contacts method ...");
 		return $return_value;
-	}
-
-	function getSortOrder()
-        {
-                global $log;
-                $log->debug("Entering getSortOrder() method ...");
-                if(isset($_REQUEST['sorder']))
-                        $sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-                else
-                        $sorder = (($_SESSION['VENDORS_SORT_ORDER'] != '')?($_SESSION['VENDORS_SORT_ORDER']):($this->default_sort_order));
-                $log->debug("Exiting getSortOrder() method ...");
-                return $sorder;
-        }
-
-	function getOrderBy()
-	{
-		global $log;
-		$log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['VENDORS_ORDER_BY'] != '')?($_SESSION['VENDORS_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
 	}
 
 	/**

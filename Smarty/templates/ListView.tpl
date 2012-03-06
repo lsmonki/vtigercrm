@@ -232,7 +232,8 @@ function alphabetic(module,url,dataid)
 			</select>
 			</div>
                         <input type="hidden" name="searchtype" value="BasicSearch">
-                        <input type="hidden" name="module" value="{$MODULE}">
+                        <input type="hidden" name="module" value="{$MODULE}" id="curmodule">
+						<input name="maxrecords" type="hidden" value="{$MAX_RECORDS}" id='maxrecords'>
                         <input type="hidden" name="parenttab" value="{$CATEGORY}">
 			<input type="hidden" name="action" value="index">
                         <input type="hidden" name="query" value="true">

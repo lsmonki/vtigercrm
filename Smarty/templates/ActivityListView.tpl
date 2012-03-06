@@ -226,7 +226,8 @@ function alphabetic(module,url,dataid)
                         </select>
                         </div>
                         <input type="hidden" name="searchtype" value="BasicSearch">
-                        <input type="hidden" name="module" value="{$MODULE}">
+                        <input type="hidden" name="module" value="{$MODULE}" id="curmodule">
+						<input name="maxrecords" type="hidden" value="{$MAX_RECORDS}" id='maxrecords'>
                         <input type="hidden" name="parenttab" value="{$CATEGORY}">
 			<input type="hidden" name="action" value="index">
                         <input type="hidden" name="query" value="true">
@@ -311,6 +312,8 @@ function alphabetic(module,url,dataid)
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
+	 <input name="numOfRows" id="numOfRows" type="hidden" value="{$NUMOFROWS}">
+	 <input name="excludedRecords" type="hidden" id="excludedRecords" value="{$excludedRecords}">
      <input name="allids" type="hidden" value="{$ALLIDS}">
      <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
      <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
@@ -428,11 +431,17 @@ function alphabetic(module,url,dataid)
                          <div  class="calDIV" style="overflow:auto;">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small" class="small">
 			      <tr>
-             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
+             			 <td class="lvtCol"><input type="checkbox"  name="selectall" id="selectCurrentPageRec" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
         			 <td class="lvtCol">{$header}</td>
 			         {/foreach}
 			      </tr>
+				  <tr>
+					  <td id="linkForSelectAll" class="linkForSelectAll" style="display:none;" colspan=10>
+						  <span id="selectAllRec" class="selectall" style="display:inline;" onClick="toggleSelectAll_Records('{$MODULE}',true,'selected_id')">{$APP.LBL_SELECT_ALL} <span id="count"> </span> {$APP.LBL_RECORDS_IN} {$MODULE|@getTranslatedString:$MODULE}</span>
+						  <span id="deSelectAllRec" class="selectall" style="display:none;" onClick="toggleSelectAll_Records('{$MODULE}',false,'selected_id')">{$APP.LBL_DESELECT_ALL} {$MODULE|@getTranslatedString:$MODULE}</span>
+					  </td>
+				  </tr>
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
 			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
 				 <td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick=check_object(this); toggleSelectAll(this.name,"selectall")></td>
@@ -627,12 +636,13 @@ function ajaxChangeStatus(statusname)
 {
 	$("status").style.display="inline";
 	var viewid = document.massdelete.viewname.value;
-	var idstring = document.getElementById('idlist').value;
+	var excludedRecords=document.getElementById("excludedRecords").value;
+	var idstring = document.getElementById('allselectedboxes').value;
 	if(statusname == 'status')
 	{
 		fninvsh('changestatus');
 		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
-		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+url+"&viewname="+viewid+"&idlist="+idstring;
+		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+url+"&viewname="+viewid+"&idlist="+idstring+"&excludedRecords="+excludedRecords;
 	}
 	else if(statusname == 'owner')
 	{
@@ -642,7 +652,7 @@ function ajaxChangeStatus(statusname)
 		    fninvsh('changeowner');
 		    var url='&owner_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value+'&owner_type=User';
 		    {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring+"&excludedRecords="+excludedRecords;
 		    {literal}
      }
     else
@@ -650,7 +660,7 @@ function ajaxChangeStatus(statusname)
         fninvsh('changeowner');
 		    var url='&owner_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value+'&owner_type=Group';
 	       {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring+"&excludedRecords="+excludedRecords;
 		    {literal}
     }
 

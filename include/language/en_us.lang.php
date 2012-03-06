@@ -1306,6 +1306,10 @@ $app_strings = array (
 
 'LBL_MORE'=>'More',
 'LBL_CRM_SETTINGS' => 'CRM Settings',
+'LBL_RELATED_TO_THIS' =>'related to this',
+'LBL_DESELECT_ALL' => 'Deselect all',
+'LBL_RECORDS_IN' => 'records in',
+'LBL_FOLDER' => 'folder',
 );
 
 $app_list_strings = array (

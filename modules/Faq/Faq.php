@@ -76,6 +76,9 @@ class Faq extends CRMEntity {
 	var $default_sort_order = 'DESC';
 
 	var $mandatory_fields = Array('question','faq_answer','createdtime' ,'modifiedtime');
+
+	// For Alphabetical search
+	var $def_basicsearch_col = 'question';
 	
 	/**	Constructor which will set the column_fields in this object
 	 */

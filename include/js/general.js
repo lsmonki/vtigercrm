@@ -2595,8 +2595,15 @@ function selectedRecords(module,category)
 {
 	var allselectedboxes = document.getElementById("allselectedboxes");
 	var idstring  =  (allselectedboxes == null)? '' : allselectedboxes.value;
+	var viewid = getviewId();
+	var url = '&viewname='+viewid;
+	if(document.getElementById('excludedRecords') != null && typeof(document.getElementById('excludedRecords')) != 'undefined') {
+		var excludedRecords = $('excludedRecords').value;
+		var searchurl = document.getElementById('search_url').value;
+		url = url+searchurl+'&excludedRecords='+excludedRecords;
+	}
 	if(idstring != '')
-		window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
+		window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring+url;
 	else
 		window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category;
 	return false;
@@ -2735,45 +2742,51 @@ function default_togglestate(obj_id,elementId)
 function rel_check_object(sel_id,module)
 {
 	var selected;
-	var select_global=new Array();
-	var cookie_val=get_cookie(module+"_all");
+	var select_global = new Array();
+	var cookie_val = get_cookie(module+"_all");
 	if(cookie_val == null)
-		selected=sel_id.value+";";
+		selected = sel_id.value+";";
 	else
-		selected=trim(cookie_val);
-	select_global=selected.split(";");
-	var box_value=sel_id.checked;
-	var id= sel_id.value;
-	var duplicate=select_global.indexOf(id);
-	var size=select_global.length-1;
-	var result="";
+		selected = trim(cookie_val);
+	select_global = selected.split(";");
+	var box_value = sel_id.checked;
+	var id = sel_id.value;
+	var duplicate = select_global.indexOf(id);
+	var size = select_global.length-1;
+	var result = "";
+	var currentModule = $('return_module').value;
+	var excluded = $(currentModule+'_'+module+'_excludedRecords').value;
 	if(box_value == true)
 	{
-		if(duplicate == "-1")
-		{
-			select_global[size]=id;
-		}
+		if($(currentModule+'_'+module+'_selectallActivate').value == 'true') {
+			$(currentModule+'_'+module+'_excludedRecords').value = excluded.replace(excluded.match(id+";"),'');
+		} else {
+			if(duplicate == "-1")
+			{
+				select_global[size]=id;
+			}
 
-		size=select_global.length-1;
-		var i=0;
-		for(i=0;i<=size;i++)
-		{
-			if(trim(select_global[i])!='')
-				result=select_global[i]+";"+result;
+			size = select_global.length-1;
+			var i=0;
+			for(i=0;i<=size;i++) {
+				if(trim(select_global[i])!='')
+					result = select_global[i]+";"+result;
+			}
 		}
 		rel_default_togglestate(module);
-
 	}
 	else
 	{
+		if($(currentModule+'_'+module+'_selectallActivate').value == 'true'){
+			$(currentModule+'_'+module+'_excludedRecords').value= id+";"+excluded;
+		}
 		if(duplicate != "-1")
 
 			select_global.splice(duplicate,1)
 
 		size=select_global.length-1;
 		var i=0;
-		for(i=size;i>=0;i--)
-		{
+		for(i=size;i>=0;i--) {
 			if(trim(select_global[i])!='')
 				result=select_global[i]+";"+result;
 		}
@@ -2788,8 +2801,26 @@ function rel_toggleSelect(state,relCheckName,module) {
 	var obj = document.getElementsByName(relCheckName);
 	if (obj) {
 		for (var i=0;i<obj.length;i++) {
-			obj[i].checked=state;
+			obj[i].checked = state;
 			rel_check_object(obj[i],module);
+		}
+	}
+	var current_module = $('return_module').value;
+	if(current_module == 'Campaigns') {
+		if(state == true) {
+			var count = $(current_module+'_'+module+'_numOfRows').value;
+			if(count == '')	{
+				getNoOfRelatedRows(current_module,module);
+			}
+			if(parseInt($('maxrecords').value) < parseInt(count)) {
+				$(current_module+'_'+module+'_linkForSelectAll').show();
+			}
+		} else {
+			if($(current_module+'_'+module+'_selectallActivate').value == 'true'){
+				$(current_module+'_'+module+'_linkForSelectAll').show();
+			} else {
+				$(current_module+'_'+module+'_linkForSelectAll').hide();
+			}
 		}
 	}
 }
@@ -2797,7 +2828,12 @@ function rel_toggleSelect(state,relCheckName,module) {
 function rel_default_togglestate(module)
 {
 	var all_state=true;
-	var groupElements = document.getElementsByName(module+"_selected_id");
+	var currentModule = $('return_module').value;
+	if(currentModule == 'Campaigns'){
+		var groupElements = document.getElementsByName(currentModule+'_'+module+"_selected_id");
+	} else {
+		var groupElements = document.getElementsByName(module+"_selected_id");
+	}
 	if(typeof(groupElements) == 'undefined') return;
 
 	for (var i=0;i<groupElements.length;i++) {
@@ -2841,7 +2877,43 @@ function toggleSelect_ListView(state,relCheckName,groupParentElementId) {
 			}
 		}
 	}
+	if($('curmodule') != undefined && $('curmodule').value == 'Documents') {
+		if(state==true)	{
+			var count = $('numOfRows_'+groupParentElementId).value;
+			if(count == '') {
+				getNoOfRows(groupParentElementId);
+			}
+			if(parseInt($('maxrecords').value) < parseInt(count)) {
+				$('linkForSelectAll_'+groupParentElementId).show();
+			}
+
+		} else {
+			if($('selectedboxes_'+groupParentElementId).value == 'all') {
+				$('linkForSelectAll_'+groupParentElementId).show();
+			} else {
+				$('linkForSelectAll_'+groupParentElementId).hide();
+			}
+		}
+	} else {
+		if(state==true)	{
+			var count = $('numOfRows').value;
+			if(count == '')	{
+				getNoOfRows();
+			}
+			if(parseInt($('maxrecords').value) < parseInt(count)) {
+				$('linkForSelectAll').show();
+			}
+
+		} else {
+			if($('allselectedboxes').value == 'all') {
+				$('linkForSelectAll').show();
+			} else {
+				$('linkForSelectAll').hide();
+			}
+		}
+	}
 }
+
 function gotourl(url)
 {
 	document.location.href=url;
@@ -4486,4 +4558,161 @@ function fnDropDownUser(obj,Lay){
 		tagName.style.left= leftSide  - 50 + 'px';
 		tagName.style.top= topSide + 28 +'px';
 		tagName.style.display = 'block';
+}
+
+//select the records across the pages
+function toggleSelectAll_Records(module,state,relCheckName) {
+
+	toggleSelect_ListView(state,relCheckName);
+	if(state == true) {
+		$('allselectedboxes').value = 'all';
+		$('selectAllRec').style.display = 'none';
+		$('deSelectAllRec').style.display = 'inline';
+	} else {
+		$('allselectedboxes').value = '';
+		$('excludedRecords').value = '';
+		$('selectCurrentPageRec').checked = false;
+		$('selectAllRec').style.display = 'inline';
+		$('deSelectAllRec').style.display = 'none';
+		$('linkForSelectAll').hide();
+	}
+}
+
+function toggleSelectDocumentRecords(module,state,relCheckName,parentEleId) {
+
+	toggleSelect_ListView(state,relCheckName,parentEleId);
+	if(state == true) {
+		$('selectedboxes_'+parentEleId).value = 'all';
+		$('selectAllRec_'+parentEleId).style.display = 'none';
+		$('deSelectAllRec_'+parentEleId).style.display = 'inline';
+	} else {
+		$('selectedboxes_'+parentEleId).value = '';
+		$('excludedRecords_'+parentEleId).value = '';
+		$('currentPageRec_'+parentEleId).checked = false;
+		$('selectAllRec_'+parentEleId).style.display = 'inline';
+		$('deSelectAllRec_'+parentEleId).style.display = 'none';
+		$('linkForSelectAll_'+parentEleId).hide();
+	}
+}
+
+//Compute the number of rows in the current module
+function getNoOfRows(id){
+	var module = $('curmodule').value;
+	var searchurl = $('search_url').value;
+	var viewid = getviewId();
+	var url = "module="+module+"&action="+module+"Ajax&file=ListViewCount&viewname="+viewid+searchurl;
+	if(module == 'Documents') {
+		var folderid = $('folderid_'+id).value;
+		url = url+"&folderidstring="+folderid;
+	}
+	new Ajax.Request(
+		'index.php',
+		{
+			queue: {
+				position: 'end',
+				scope: 'command'
+			},
+			method: 'post',
+			postBody:url,
+			onComplete: function(response) {
+				if(module != 'Documents') {
+					$('numOfRows').value = response.responseText;
+					$('count').innerHTML = response.responseText;
+					if(parseInt($('maxrecords').value) < parseInt(response.responseText)){
+						$('linkForSelectAll').show();
+					}
+				} else {
+					$('numOfRows_'+id).value = response.responseText;
+					$('count_'+id).innerHTML = response.responseText;
+					if(parseInt($('maxrecords').value) < parseInt(response.responseText)){
+						$('linkForSelectAll_'+id).show();
+					}
+				}
+			}
+		}
+	);
+}
+
+//select all function for related list of campaign module
+function rel_toggleSelectAll_Records(module,relmodule,state,relCheckName) {
+
+	 rel_toggleSelect(state,relCheckName,relmodule);
+	 if(state == true) {
+		$(module+'_'+relmodule+'_selectallActivate').value = 'true';
+		$(module+'_'+relmodule+'_selectAllRec').style.display = 'none';
+		$(module+'_'+relmodule+'_deSelectAllRec').style.display = 'inline';
+	} else {
+		$(module+'_'+relmodule+'_selectallActivate').value = 'false';
+		$(module+'_'+relmodule+'_excludedRecords').value = '';
+		$(module+'_'+relmodule+'_selectCurrentPageRec').checked = false;
+		$(module+'_'+relmodule+'_selectAllRec').style.display = 'inline';
+		$(module+'_'+relmodule+'_deSelectAllRec').style.display = 'none';
+		$(module+'_'+relmodule+'_linkForSelectAll').hide();
+	}
+}
+
+// Compute the number of records related to capmaign record
+function getNoOfRelatedRows(current_module,related_module){
+	var recordid = document.getElementById('recordid').value;
+	new Ajax.Request(
+		'index.php',
+		{
+			queue: {
+				position: 'end',
+				scope: 'command'
+			},
+			method: 'post',
+			postBody:"module="+current_module+"&related_module="+related_module+"&action="+current_module+"Ajax&idlist="+recordid+"&file=ListViewCount&mode=relatedlist",
+			onComplete: function(response) {
+				$(current_module+'_'+related_module+'_numOfRows').value = response.responseText;
+				$(related_module+'_count').innerHTML = response.responseText;
+				if(parseInt($('maxrecords').value) < parseInt(response.responseText)){
+					$(current_module+'_'+related_module+'_linkForSelectAll').show();
+				}
+			}
+		}
+	);
+}
+
+function updateParentCheckbox(obj,id){
+	var parentCheck=true;
+	if (obj) {
+		for (var i=0; i<obj.length; ++i) {
+			if(obj[i].checked != true){
+				var parentCheck=false;
+			}
+		}
+	}
+	if(parentCheck){
+		$(id+'_selectCurrentPageRec').checked=parentCheck;
+	}
+}
+
+function showSelectAllLink(obj,exculdedArray){
+	var viewForSelectLink = true;
+	for (var i=0; i<obj.length; ++i) {
+		obj[i].checked = true;
+		for(var j=0; j<exculdedArray.length; ++j) {
+			if(exculdedArray[j] == obj[i].value) {
+				obj[i].checked = false;
+				viewForSelectLink = false;
+			}
+		}
+	}
+	return viewForSelectLink;
+}
+
+function getMaxMassOperationLimit() {
+	return 500;
+}
+
+function getviewId()
+{
+	if(document.getElementById("viewname") != null && typeof(document.getElementById("viewname")) != 'undefined') {
+		var oViewname = document.getElementById("viewname");
+		var viewid = oViewname.options[oViewname.selectedIndex].value;
+	} else {
+		var viewid = '';
+	}
+	return viewid;
 }

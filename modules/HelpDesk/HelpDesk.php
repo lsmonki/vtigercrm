@@ -95,6 +95,9 @@ class HelpDesk extends CRMEntity {
         var $default_order_by = 'title';
         var $default_sort_order = 'DESC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'ticket_title';
+
 	//var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
 
 	/**	Constructor which will set the column_fields in this object
@@ -170,48 +173,11 @@ class HelpDesk extends CRMEntity {
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
-
-
-	/**	Function used to get the sort order for HelpDesk listview
-	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned.
-	 */
-	function getSortOrder()
-	{
-		global $log;
-                $log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['HELPDESK_SORT_ORDER'] != '')?($_SESSION['HELPDESK_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder() method ...");
-		return $sorder;
-	}
-
-	/**	Function used to get the order by value for HelpDesk listview
-	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned.
-	 */
-	function getOrderBy()
-	{
-		global $log;
-                $log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['HELPDESK_ORDER_BY'] != '')?($_SESSION['HELPDESK_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-
-	/**     Function to form the query to get the list of activities
-         *      @param  int $id - ticket id
+	
+	/** Function to form the query to get the list of activities
+     *  @param  int $id - ticket id
 	 *	@return array - return an array which will be returned from the function GetRelatedList
-        **/
+     **/
 	function get_activities($id, $cur_tab_id, $rel_tab_id, $actions=false) {
 		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_activities(".$id.") method ...");

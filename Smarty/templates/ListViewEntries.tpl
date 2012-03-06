@@ -21,6 +21,8 @@
      <input name="action" type="hidden">
      <input name="where_export" type="hidden" value="{php} echo to_html($_SESSION['export_where']);{/php}">
      <input name="step" type="hidden">
+	 <input name="excludedRecords" type="hidden" id="excludedRecords" value="">
+	 <input name="numOfRows" id="numOfRows" type="hidden" value="">
      <input name="allids" type="hidden" id="allids" value="{$ALLIDS}">
      <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
      <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
@@ -165,10 +167,16 @@
 			<table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small">
 			<!-- Table Headers -->
 			<tr>
-            <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
-				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
- 			<td class="lvtCol">{$header}</td>
+				<td class="lvtCol"><input type="checkbox"  name="selectall" id="selectCurrentPageRec" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
+				{foreach name="listviewforeach" item=header from=$LISTHEADER}
+ 				<td class="lvtCol">{$header}</td>
 				{/foreach}
+			</tr>
+			<tr>
+				<td id="linkForSelectAll" class="linkForSelectAll" style="display:none;" colspan=15>
+					<span id="selectAllRec" class="selectall" style="display:inline;" onClick="toggleSelectAll_Records('{$MODULE}',true,'selected_id')">{$APP.LBL_SELECT_ALL} <span id="count"> </span> {$APP.LBL_RECORDS_IN} {$MODULE|@getTranslatedString:$MODULE}</span>
+					<span id="deSelectAllRec" class="selectall" style="display:none;" onClick="toggleSelectAll_Records('{$MODULE}',false,'selected_id')">{$APP.LBL_DESELECT_ALL} {$MODULE|@getTranslatedString:$MODULE}</span>
+				</td>
 			</tr>
 			<!-- Table Contents -->
 			{foreach item=entity key=entity_id from=$LISTENTITY}

@@ -94,6 +94,9 @@ class Accounts extends CRMEntity {
 	var $default_order_by = 'accountname';
 	var $default_sort_order = 'ASC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'accountname';
+
 	function Accounts() {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = PearDatabase::getInstance();
@@ -108,48 +111,10 @@ class Accounts extends CRMEntity {
 
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
-	/**
-	 * Function to get sort order
- 	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
-	 */
-	function getSortOrder()
-	{
-		global $log;
-                $log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['ACCOUNTS_SORT_ORDER'] != '')?($_SESSION['ACCOUNTS_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder() method ...");
-		return $sorder;
-	}
-	/**
-	 * Function to get order by
-	 * return string  $order_by    - fieldname(eg: 'accountname')
- 	 */
-	function getOrderBy()
-	{
-		global $log;
-                $log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['ACCOUNTS_ORDER_BY'] != '')?($_SESSION['ACCOUNTS_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-	// Mike Crowe Mod --------------------------------------------------------
-
 	/** Returns a list of the associated Campaigns
-	  * @param $id -- campaign id :: Type Integer
-	  * @returns list of campaigns in array format
-	  */
+	 * @param $id -- campaign id :: Type Integer
+	 * @returns list of campaigns in array format
+	 */
 	function get_campaigns($id, $cur_tab_id, $rel_tab_id, $actions=false) {
 		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_campaigns(".$id.") method ...");
@@ -1304,6 +1269,27 @@ class Accounts extends CRMEntity {
 				parent::save_related_module($module, $crmid, $with_module, $with_crmid);
 			}
 		}
+	}
+
+	function getListButtons($app_strings,$mod_strings) {
+		$list_buttons = Array();
+
+		if(isPermitted('Accounts','Delete','') == 'yes') {
+			$list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
+		}
+		if(isPermitted('Accounts','EditView','') == 'yes') {
+			$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+			$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+		}
+		if(isPermitted('Emails','EditView','') == 'yes') {
+			$list_buttons['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+		}
+		// mailer export
+		if(isPermitted('Accounts','Export','') == 'yes') {
+			$list_buttons['mailer_exp'] = $mod_strings[LBL_MAILER_EXPORT];
+		}
+		// end of mailer export
+		return $list_buttons;
 	}
 }
 

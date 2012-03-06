@@ -2480,5 +2480,57 @@ $log->info("in getOldFileName  ".$notesid);
 							array($currentTime, $current_user->id, $crmid));
 	}
 
+	/**
+	 * Function to get sort order
+	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	 */
+	function getSortOrder() {
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
+		else
+			$sorder = (($_SESSION[$currentModule.'_SORT_ORDER'] != '')?($_SESSION[$currentModule.'_SORT_ORDER']):($this->default_sort_order));
+		$log->debug("Exiting getSortOrder() method ...");
+		return $sorder;
+	}
+	/**
+	 * Function to get order by
+	 * return string  $order_by    - fieldname(eg: 'accountname')
+	 */
+	function getOrderBy() {
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		
+		$use_default_order_by = '';
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+
+		if (isset($_REQUEST['order_by']))
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
+		else
+			$order_by = (($_SESSION[$currentModule.'_ORDER_BY'] != '')?($_SESSION[$currentModule.'_ORDER_BY']):($use_default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}
+	// Mike Crowe Mod --------------------------------------------------------
+
+	/**
+	 * Function to Listview buttons
+	 * return array  $list_buttons - for module (eg: 'Accounts')
+	 */
+	function getListButtons($app_strings) {
+		$list_buttons = Array();
+
+		if(isPermitted($currentModule,'Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
+		if(isPermitted($currentModule,'EditView','') == 'yes') {
+			$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+			// Mass Edit could be used to change the owner as well!
+			//$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+		}
+		return $list_buttons;
+	}
+
 }
 ?>

@@ -2133,8 +2133,6 @@ a.customMnuSelected{
 }
 
 /* Drop Down Menu */
-
-
 a.drop_down{
 	width:150px;
 	text-align:left;
@@ -2828,3 +2826,11 @@ a.allMnu:Hover{
 	width:48px;
 	height:31px;
 }
+
+.selectall{
+    cursor:pointer;
+    color:#0044AA;
+    text-decoration:underline;}
+#count,.folder{	font-weight:bold;
+}
+.linkForSelectAll{	text-align:center;	background-color:white;}

@@ -53,7 +53,10 @@ class PriceBooks extends CRMEntity {
 	var $default_sort_order = 'ASC';
 
 	var $mandatory_fields = Array('bookname','currency_id','pricebook_no','createdtime' ,'modifiedtime');
-	
+
+	// For Alphabetical search
+	var $def_basicsearch_col = 'bookname';
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function PriceBooks() {
@@ -97,42 +100,6 @@ class PriceBooks extends CRMEntity {
 		}
 		$log->debug("Exiting function updateListPrices...");
 	}
-
-	/**	Function used to get the sort order for PriceBook listview
-	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
-	 */
-	function getSortOrder()
-	{
-		global $log;
-                $log->debug("Entering getSortOrder() method ...");	
-		if(isset($_REQUEST['sorder'])) 
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['PRICEBOOK_SORT_ORDER'] != '')?($_SESSION['PRICEBOOK_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder() method ...");
-		return $sorder;
-	}
-
-	/**	Function used to get the order by value for PriceBook listview
-	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRICEBOOK_ORDER_BY'] if this session value is empty then default order by will be returned. 
-	 */
-	function getOrderBy()
-	{
-		global $log;
-                $log->debug("Entering getOrderBy() method ...");
-                
-		$use_default_order_by = '';		
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-		
-		if (isset($_REQUEST['order_by'])) 
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['PRICEBOOK_ORDER_BY'] != '')?($_SESSION['PRICEBOOK_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}	
 
 	/**	function used to get the products which are related to the pricebook
 	 *	@param int $id - pricebook id

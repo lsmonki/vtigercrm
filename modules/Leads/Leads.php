@@ -89,6 +89,9 @@ class Leads extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'lastname';
+
 	//var $groupTable = Array('vtiger_leadgrouprelation','leadid');
 
 	function Leads()	{
@@ -106,48 +109,6 @@ class Leads extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
-	/**
-	 * Function to get sort order
- 	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
-	 */
-	function getSortOrder()
-	{
-		global $log;
-		$log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['LEADS_SORT_ORDER'] != '')?($_SESSION['LEADS_SORT_ORDER']):($this->default_sort_order));
-
-		$log->debug("Exiting getSortOrder method ...");
-		return $sorder;
-	}
-
-	/**
-	 * Function to get order by
-	 * return string  $order_by    - fieldname(eg: 'leadname')
- 	 */
-	function getOrderBy()
-	{
-		global $log;
-		$log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['LEADS_ORDER_BY'] != '')?($_SESSION['LEADS_ORDER_BY']):($use_default_order_by));
-
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-	// Mike Crowe Mod --------------------------------------------------------
-
-
 
 	/** Function to export the lead records in CSV Format
 	* @param reference variable - where condition is passed when the query is executed
@@ -608,6 +569,23 @@ class Leads extends CRMEntity {
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 			$this->db->pquery($sql, $params);
 		}
+	}
+	
+	function getListButtons($app_strings) {
+		$list_buttons = Array();
+
+		if(isPermitted('Leads','Delete','') == 'yes') {
+			$list_buttons['del'] =	$app_strings[LBL_MASS_DELETE];
+		}
+		if(isPermitted('Leads','EditView','') == 'yes') {
+			$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+			$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+		}
+		if(isPermitted('Emails','EditView','') == 'yes')
+			$list_buttons['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+		
+		// end of mailer export
+		return $list_buttons;
 	}
 
 	function save_related_module($module, $crmid, $with_module, $with_crmids) {

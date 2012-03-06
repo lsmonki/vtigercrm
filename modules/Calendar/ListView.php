@@ -123,6 +123,7 @@ $smarty->assign("CHANGE_USER",$userList);
 $smarty->assign("CHANGE_GROUP",$groupList);
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
+$smarty->assign('MAX_RECORDS', $list_max_entries_per_page);
 $where = "";
 
 $url_string = ''; // assigning http url string

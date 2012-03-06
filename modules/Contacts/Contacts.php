@@ -133,50 +133,16 @@ class Contacts extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'lastname';
+
 	function Contacts() {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Contacts');
 	}
 
-    	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
-	/**
-	* Function to get sort order
-	* return string  $sorder    - sortorder string either 'ASC' or 'DESC'
-	*/
-	function getSortOrder()
-	{
-		global $log;
-                $log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['CONTACTS_SORT_ORDER'] != '')?($_SESSION['CONTACTS_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder method ...");
-		return $sorder;
-	}
-	/**
-	* Function to get order by
-	* return string  $order_by    - fieldname(eg: 'Contactname')
-	*/
-	function getOrderBy()
-	{
-		global $log;
-	        $log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['CONTACTS_ORDER_BY'] != '')?($_SESSION['CONTACTS_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-	// Mike Crowe Mod --------------------------------------------------------
+	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/** Function to get the number of Contacts assigned to a particular User.
 	*  @param varchar $user name - Assigned to User
 	*  Returns the count of contacts assigned to user.
@@ -1450,6 +1416,22 @@ function get_contactsforol($user_name)
 				parent::save_related_module($module, $crmid, $with_module, $with_crmid);
 			}
 		}
+	}
+
+	function getListButtons($app_strings) {
+		$list_buttons = Array();
+
+		if(isPermitted('Contacts','Delete','') == 'yes') {
+			$list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
+		}
+		if(isPermitted('Contacts','EditView','') == 'yes') {
+			$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+			$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+		}
+		if(isPermitted('Emails','EditView','') == 'yes'){
+			$list_buttons['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+		}
+		return $list_buttons;
 	}
 }
 

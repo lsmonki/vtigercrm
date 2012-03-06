@@ -91,6 +91,9 @@ class Potentials extends CRMEntity {
 	var $default_order_by = 'potentialname';
 	var $default_sort_order = 'ASC';
 
+	// For Alphabetical search
+	var $def_basicsearch_col = 'potentialname';
+	
 	//var $groupTable = Array('vtiger_potentialgrouprelation','potentialid');
 	function Potentials() {
 		$this->log = LoggerManager::getLogger('potential');
@@ -101,45 +104,7 @@ class Potentials extends CRMEntity {
 	function save_module($module)
 	{
 	}
-
-	/**
-	* Function to get sort order
-	* return string  $sorder    - sortorder string either 'ASC' or 'DESC'
-	*/
-	function getSortOrder()
-	{
-		global $log;
-                $log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['POTENTIALS_SORT_ORDER'] != '')?($_SESSION['POTENTIALS_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder() method ...");
-		return $sorder;
-	}
-
-	/**
-	* Function to get order by
-	* return string  $order_by    - fieldname(eg: 'Potentialname')
-	*/
-	function getOrderBy()
-	{
-		global $log;
-                $log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['POTENTIALS_ORDER_BY'] != '')?($_SESSION['POTENTIALS_ORDER_BY']):($use_default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-
+		
 	/** Function to create list query
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Query.

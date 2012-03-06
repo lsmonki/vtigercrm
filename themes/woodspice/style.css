@@ -1250,7 +1250,6 @@ a.alpha:Hover{
     height:24px;
 }
 
-
 .allMnuHandle td{
     height:20px;
     color:#FFFFFF;
@@ -2671,4 +2670,17 @@ a.drop_down_usersettings_name{
 .searchBtn{
 	width:48px;
 	height:31px;
+}
+
+.selectall{
+    cursor:pointer;
+    color:#57441e;
+    text-decoration:underline;
+}
+#count,.folder{
+	font-weight:bold;
+}
+.linkForSelectAll{
+	text-align:center;
+	background-color:white;
 }

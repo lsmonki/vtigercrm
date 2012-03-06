@@ -5050,4 +5050,124 @@ function isLeadConverted($leadId) {
 	return false;
 }
 
+function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
+	global $current_user, $adb;
+
+	if($idstring == 'relatedListSelectAll') {
+		
+		$recordid = vtlib_purify($input['recordid']);
+		if($module == 'Accounts') {
+			$result = getCampaignAccountIds($recordid);
+		}
+		if($module == 'Contacts') {
+			$result = getCampaignContactIds($recordid);
+		}
+		if($module == 'Leads') {
+			$result = getCampaignLeadIds($recordid);
+		}
+		$storearray = array();
+		for ($i = 0; $i < $adb->num_rows($result); $i++) {
+			$storearray[] = $adb->query_result($result, $i);
+		}
+
+		$excludedRecords=explode(';',$excludedRecords);
+		$storearray=array_diff($storearray,$excludedRecords);
+		
+	} else if($module == 'Documents') {
+		
+		if($input['selectallmode']=='true') {
+			$result = getSelectAllQuery($input,$module);
+			$storearray = array();
+			
+			for ($i = 0; $i < $adb->num_rows($result); $i++) {
+				$storearray[] = $adb->query_result($result, $i);
+			}
+			
+			$excludedRecords = explode(';',$excludedRecords);
+			$storearray = array_diff($storearray,$excludedRecords);
+			if($idstring != 'all') {
+				$storearray = array_merge($storearray,explode(';',$idstring));
+			}
+			$storearray = array_unique($storearray);
+			
+		} else {
+			$storearray = explode(";",$idstring);
+		}
+		
+	} elseif($idstring == 'all') {
+
+		$result = getSelectAllQuery($input,$module);
+		$storearray = array();
+
+		for ($i = 0; $i < $adb->num_rows($result); $i++) {
+			$storearray[] = $adb->query_result($result, $i);
+		}
+
+		$excludedRecords = explode(';',$excludedRecords);
+		$storearray = array_diff($storearray,$excludedRecords);
+
+	} else {
+		$storearray = explode(";",$idstring);
+	}
+
+	return $storearray;
+}
+
+function getSelectAllQuery($input,$module) {
+	global $adb,$current_user;
+	
+	$viewid = vtlib_purify($input['viewname']);
+	$queryGenerator = new QueryGenerator($module, $current_user);
+	$queryGenerator->initForCustomViewById($viewid);
+
+	if($input['query'] == 'true') {
+		$queryGenerator->addUserSearchConditions($input);
+	}
+
+	$queryGenerator->setFields(array('id'));
+	$query = $queryGenerator->getQuery();
+	
+	if($module == 'Documents') {
+		$folderid = vtlib_purify($input['folderidstring']);
+		$folderid = str_replace(';', ',', $folderid);
+		$query .= " AND vtiger_notes.folderid in (".$folderid.")";
+	}
+	if($module == 'Calendar') {
+		$query .= " AND activitytype != 'Emails'";
+	}
+		
+	$result = $adb->pquery($query, array());
+	return $result;
+}
+
+function getCampaignAccountIds($id) {
+	global $adb;
+	$sql="SELECT vtiger_account.accountid FROM vtiger_account
+		INNER JOIN vtiger_campaignaccountrel ON vtiger_campaignaccountrel.accountid = vtiger_account.accountid
+		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid
+		WHERE vtiger_campaignaccountrel.campaignid = ? AND vtiger_crmentity.deleted=0";
+	$result = $adb->pquery($sql, array($id));
+	return $result;
+}
+
+function getCampaignContactIds($id) {
+	global $adb;
+	$sql="SELECT vtiger_contactdetails.contactid FROM vtiger_contactdetails
+		INNER JOIN vtiger_campaigncontrel ON vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid
+		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+		WHERE vtiger_campaigncontrel.campaignid = ? AND vtiger_crmentity.deleted=0";
+	$result = $adb->pquery($sql, array($id));
+	return $result;
+}
+
+function getCampaignLeadIds($id) {
+	global $adb;
+	$sql="SELECT vtiger_leaddetails.leadid FROM vtiger_leaddetails
+		INNER JOIN vtiger_campaignleadrel ON vtiger_campaignleadrel.leadid = vtiger_leaddetails.leadid
+		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
+		WHERE vtiger_campaignleadrel.campaignid = ? AND vtiger_crmentity.deleted=0";
+	$result = $adb->pquery($sql, array($id));
+	return $result;
+}
+
 ?>

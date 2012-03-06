@@ -20,7 +20,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('modules/Vtiger/layout_utils.php');
 
-$idstring = rtrim($_REQUEST['idstring'],",");
+$idstring = getSelectedRecords($_REQUEST,$currentModule,$_REQUEST['idstring'],$_REQUEST['excludedRecords']);
+$idstring = join(';',$idstring);
 
 $smarty->assign("SESSION_WHERE",$_SESSION['export_where']);
 

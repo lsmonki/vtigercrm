@@ -97,7 +97,8 @@ if(count($module_name) > 0)
 	}
 	$count_result = $adb->query( mkCountQuery($list_query));
 	$noofrows = $adb->query_result($count_result,0,"count");
-	
+	$smarty->assign("NUMOFROWS", $noofrows);
+
 	$controller = new ListViewController($adb, $current_user, $queryGenerator);
 	$rb_listview_header = $controller->getListViewHeader($focus,$select_module,$url_string,$sorder,
 			$order_by, true);
@@ -138,6 +139,7 @@ if(count($module_name) > 0)
 
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign('MAX_RECORDS', $list_max_entries_per_page);
 
 //to get the field name that mentions the module
 $query = "select fieldname from vtiger_entityname where modulename =?";
@@ -174,6 +176,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", return_module_language($current_language,$select_module));
 $smarty->assign("lvEntries", $lvEntries);
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($lvEntries),";"));
 
 $smarty->assign("IS_ADMIN", $is_admin);
 

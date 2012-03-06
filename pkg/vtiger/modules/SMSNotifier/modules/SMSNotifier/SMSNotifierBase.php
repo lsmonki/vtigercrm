@@ -414,6 +414,14 @@ class SMSNotifierBase extends CRMEntity {
 		
 	}
 
+	function getListButtons($app_strings) {
+		$list_buttons = Array();
+
+		if(isPermitted('SMSNotifier','Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
+
+		return $list_buttons;
+	}
+
 	/** 
 	 * Handle saving related module information.
 	 * NOTE: This function has been added to CRMEntity (base class).

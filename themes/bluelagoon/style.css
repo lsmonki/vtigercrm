@@ -2654,3 +2654,16 @@ a.allMnu:Hover{
 	width:48px;
 	height:31px;
 }
+
+.selectall{
+    cursor:pointer;
+    color:#000099;
+    text-decoration:underline;
+}
+#count,.folder{
+	font-weight:bold;
+}
+.linkForSelectAll{
+	text-align:center;
+	background-color:white;
+}

@@ -73,7 +73,10 @@ class Campaigns extends CRMEntity {
 	// Refers to vtiger_field.fieldname values.
 	var $mandatory_fields = Array('campaignname','createdtime' ,'modifiedtime','assigned_user_id');
 
-	function Campaigns()
+	// For Alphabetical search
+	var $def_basicsearch_col = 'campaignname';
+	
+	function Campaigns() 
 	{
 		$this->log =LoggerManager::getLogger('campaign');
 		$this->db = PearDatabase::getInstance();
@@ -87,47 +90,6 @@ class Campaigns extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
-	/**
-	 * Function to get sort order
-	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
-	 */
-	function getSortOrder()
-	{
-		global $log;
-		$log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
-		else
-			$sorder = (($_SESSION['CAMPAIGN_SORT_ORDER'] != '')?($_SESSION['CAMPAIGN_SORT_ORDER']):($this->default_sort_order));
-
-		$log->debug("Exiting getSortOrder method ...");
-		return $sorder;
-	}
-
-	/**
-	 * Function to get order by
-	 * return string  $order_by    - fieldname(eg: 'campaignname')
-	 */
-	function getOrderBy()
-	{
-		global $log;
-		$log->debug("Entering getOrderBy() method ...");
-
-		$use_default_order_by = '';
-		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
-			$use_default_order_by = $this->default_order_by;
-		}
-
-		if (isset($_REQUEST['order_by']))
-			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
-		else
-			$order_by = (($_SESSION['CAMPAIGN_ORDER_BY'] != '')?($_SESSION['CAMPAIGN_ORDER_BY']):($use_default_order_by));
-
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
-	// Mike Crowe Mod --------------------------------------------------------
-
 	/**
 	 * Function to get Campaign related Accouts
 	 * @param  integer   $id      - campaignid

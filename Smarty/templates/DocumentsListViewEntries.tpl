@@ -69,8 +69,7 @@
 	<input name="where_export" type="hidden" value="{php} echo to_html($_SESSION['export_where']);{/php}">
 	<input name="step" type="hidden">
 	<input name="allids" type="hidden" id="allids" value="{$ALLIDS}">
-	<input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
-	<input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
+	<input name="allselectedboxes" id="allselectedboxes" type="hidden" value="">
 	<input name="current_page_boxes" id="current_page_boxes" type="hidden" value="{$CURRENT_PAGE_BOXES}">
 	<!-- List View Master Holder starts -->
 	<table border="0" cellspacing="1" cellpadding="0" width="100%" class="lvtBg">
@@ -150,6 +149,10 @@
                                                 {assign var=foldercount value=$FOLDERS|@count}
 		
                                                     <div id='{$folder.folderid}' class="documentModuleFolderView">
+													<input type="hidden" name="numOfRows" id="numOfRows_selectall{$folder.folderid}" value="">
+													<input type="hidden" name="folderidVal" id="folderid_selectall{$folder.folderid}" value="{$folder.folderid}">
+													<input type="hidden" name="selectedboxes" id="selectedboxes_selectall{$folder.folderid}" value="">
+													<input type="hidden" name="excludedRecords" id="excludedRecords_selectall{$folder.folderid}" value="">
                                                     <table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
                                                             <td class="mailSubHeader" width="40%" align="left">
@@ -170,11 +173,17 @@
                                                                 <!-- Table Headers -->
                                                                     {assign var="header_count" value=$folder.header|@count}
                                                                         <tr>
-                                                                            <td class="lvtCol" width="10px"><input type="checkbox"  name="selectall{$folder.folderid}" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}","selectall{$folder.folderid}");'></td>
+                                                                            <td class="lvtCol" width="10px"><input type="checkbox"  name="selectall{$folder.folderid}" id="currentPageRec_selectall{$folder.folderid}" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}","selectall{$folder.folderid}");'></td>
                                                                                 {foreach name="listviewforeach" item=header from=$folder.header}
                                                                                     <td class="lvtCol">{$header}</td>
                                                                                 {/foreach}
                                                                         </tr>
+																		<tr>
+																			<td id="linkForSelectAll_selectall{$folder.folderid}" class="linkForSelectAll" style="display:none;" colspan=10>
+																				<span id="selectAllRec_selectall{$folder.folderid}" class="selectall" style="display:inline;" onClick="toggleSelectDocumentRecords('{$MODULE}',true,'selected_id{$folder.folderid}','selectall{$folder.folderid}')">{$APP.LBL_SELECT_ALL} <span class="folder" id="count_selectall{$folder.folderid}"> </span> {$APP.LBL_RECORDS_IN} <span class="folder">{$folder.foldername}</span> {$APP.LBL_FOLDER}</span>
+																				<span id="deSelectAllRec_selectall{$folder.folderid}" class="selectall" style="display:none;" onClick="toggleSelectDocumentRecords('{$MODULE}',false,'selected_id{$folder.folderid}','selectall{$folder.folderid}')">{$APP.LBL_DESELECT_ALL} <span class="folder">{$folder.foldername}</span> {$APP.LBL_FOLDER}</span>
+																			</td>
+																		</tr>
 
                                                                     <!-- Table Contents -->
 
