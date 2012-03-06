@@ -160,11 +160,6 @@ function searchMapLocation(addressType)
 			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]))
 				mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]).innerHTML+' ';
 		}
-		if(fieldname.indexOf('pobox') > -1)
-		{
-			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]))
-				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]).innerHTML+' ';
-		}
 		if(fieldname.indexOf('city') > -1)
 		{
 			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('city')]))
