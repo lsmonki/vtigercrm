@@ -199,6 +199,10 @@ class SyncServer {
                             array($clientModifiedTime,$serverModifiedTime,$appid, $clientid));
     }
 
+	function getDestinationHandleDetails(){
+		return wsapp_getHandler('vtigerCRM');
+	}
+
 	
 	/*****************
 	 * Web services
@@ -240,6 +244,7 @@ class SyncServer {
 		return array ($name, $key);
 	}
 	
+	
 	/**
 	 * Handles Create/Update/Delete operations on record
 	 */
@@ -257,7 +262,7 @@ class SyncServer {
         //hardcoded since the destination handler will be vtigerCRM
         $serverKey = wsapp_getAppKey("vtigerCRM");
         $serverAppId = $this->appid_with_key($serverKey);
-        $handlerDetails  = wsapp_getHandler('vtigerCRM');
+        $handlerDetails  = $this->getDestinationHandleDetails();
         require_once $handlerDetails['handlerpath'];
         $this->destHandler = new $handlerDetails['handlerclass']($serverKey);
 
