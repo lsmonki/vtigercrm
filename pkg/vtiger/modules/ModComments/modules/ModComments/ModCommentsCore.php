@@ -17,9 +17,6 @@ class ModCommentsCore extends CRMEntity {
 	var $table_name = 'vtiger_modcomments';
 	var $table_index= 'modcommentsid';
 
-	/** Indicator if this is a custom module or standard module */
-	var $IsCustomModule = true;
-
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
