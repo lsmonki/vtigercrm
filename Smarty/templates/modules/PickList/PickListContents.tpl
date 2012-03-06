@@ -23,9 +23,9 @@
 		</select>
 	</td>
 	<td nowrap align="right">
-		<input type="button" value="{$APP.LBL_ADD_BUTTON}" name="add" class="crmButton small create" onclick="showAddDiv();">
- 		<input type="button" value="{$APP.LBL_EDIT_BUTTON}" name="del" class="crmButton small edit" onclick="showEditDiv();">
- 		<input type="button" value="{$APP.LBL_DELETE_BUTTON}" name="del" class="crmButton small delete" onclick="showDeleteDiv();">
+		<input type="button" value="{'LBL_ADD_BUTTON'|@getTranslatedString}" name="add" class="crmButton small create" onclick="showAddDiv();">
+ 		<input type="button" value="{'LBL_EDIT_BUTTON'|@getTranslatedString}" name="del" class="crmButton small edit" onclick="showEditDiv();">
+ 		<input type="button" value="{'LBL_DELETE_BUTTON'|@getTranslatedString}" name="del" class="crmButton small delete" onclick="showDeleteDiv();">
  	</td>
 </tr>
 </table>
