@@ -238,6 +238,7 @@ function export($type){
 /** Send the output header and invoke function for contents output */
 $moduleName = $_REQUEST['module'];
 $moduleName = getTranslatedString($moduleName, $moduleName);
+$moduleName = str_replace(" ","_",$moduleName);
 header("Content-Disposition:attachment;filename=$moduleName.csv");
 header("Content-Type:text/csv;charset=UTF-8");
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
