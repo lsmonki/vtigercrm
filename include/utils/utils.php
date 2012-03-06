@@ -4752,13 +4752,21 @@ function getValidDBInsertDateValue($value) {
 
 function getValidDBInsertDateTimeValue($value) {
 	$valueList = explode(' ',$value);
-	$date = new DateTimeField($value);
 	if(count($valueList) == 2) {
-		$value = $date->getDBInsertDateTimeValue();
+		$dbDateValue = getValidDBInsertDateValue($valueList[0]);
+		$dbTimeValue = $valueList[1];
+		if(!empty($dbTimeValue) && strpos($dbTimeValue, ':') === false) {
+			$dbTimeValue = $dbTimeValue.':';
+		}
+		$timeValueLength = strlen($dbTimeValue);
+		if(!empty($dbTimeValue) &&  strrpos($dbTimeValue, ':') == ($timeValueLength-1)) {
+			$dbTimeValue = $dbTimeValue.'00';
+		}
+		$dateTime = new DateTimeField($dbDateValue.' '.$dbTimeValue);
+		return $dateTime->getDBInsertDateTimeValue();
 	} elseif(count($valueList == 1)) {
-		$value = $date->getDBInsertDateValue();
+		return getValidDBInsertDateValue($value);
 	}
-	return $value;
 }
 
 /** Function to set the PHP memory limit to the specified value, if the memory limit set in the php.ini is less than the specified value
@@ -4911,7 +4919,7 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 	global $current_user, $adb;
 
 	if($idstring == 'relatedListSelectAll') {
-		
+
 		$recordid = vtlib_purify($input['recordid']);
 		if($module == 'Accounts') {
 			$result = getCampaignAccountIds($recordid);
@@ -4929,28 +4937,28 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 
 		$excludedRecords=explode(';',$excludedRecords);
 		$storearray=array_diff($storearray,$excludedRecords);
-		
+
 	} else if($module == 'Documents') {
-		
+
 		if($input['selectallmode']=='true') {
 			$result = getSelectAllQuery($input,$module);
 			$storearray = array();
-			
+
 			for ($i = 0; $i < $adb->num_rows($result); $i++) {
 				$storearray[] = $adb->query_result($result, $i);
 			}
-			
+
 			$excludedRecords = explode(';',$excludedRecords);
 			$storearray = array_diff($storearray,$excludedRecords);
 			if($idstring != 'all') {
 				$storearray = array_merge($storearray,explode(';',$idstring));
 			}
 			$storearray = array_unique($storearray);
-			
+
 		} else {
 			$storearray = explode(";",$idstring);
 		}
-		
+
 	} elseif($idstring == 'all') {
 
 		$result = getSelectAllQuery($input,$module);
@@ -4972,7 +4980,7 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 
 function getSelectAllQuery($input,$module) {
 	global $adb,$current_user;
-	
+
 	$viewid = vtlib_purify($input['viewname']);
 	$queryGenerator = new QueryGenerator($module, $current_user);
 	$queryGenerator->initForCustomViewById($viewid);
@@ -4983,7 +4991,7 @@ function getSelectAllQuery($input,$module) {
 
 	$queryGenerator->setFields(array('id'));
 	$query = $queryGenerator->getQuery();
-	
+
 	if($module == 'Documents') {
 		$folderid = vtlib_purify($input['folderidstring']);
 		$folderid = str_replace(';', ',', $folderid);
@@ -4992,7 +5000,7 @@ function getSelectAllQuery($input,$module) {
 	if($module == 'Calendar') {
 		$query .= " AND activitytype != 'Emails'";
 	}
-		
+
 	$result = $adb->pquery($query, array());
 	return $result;
 }

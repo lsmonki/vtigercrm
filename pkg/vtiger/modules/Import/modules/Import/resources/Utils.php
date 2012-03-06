@@ -20,7 +20,7 @@ class Import_Utils {
 
 	static $supportedFileEncoding = array('UTF-8'=>'UTF-8', 'ISO-8859-1'=>'ISO-8859-1');
 	static $supportedDelimiters = array(','=>'comma', ';'=>'semicolon');
-	static $supportedFileExtensions = array('csv');
+	static $supportedFileExtensions = array('csv','vcf');
 
 	public function getSupportedFileExtensions() {
 		return self::$supportedFileExtensions;
@@ -63,7 +63,7 @@ class Import_Utils {
 		if(isset($importTypeConfig[$type])) {
 			return $importTypeConfig[$type];
 		}
-		return $importTypeConfig['default'];
+		return null;
 	}
 
 	public static function getFileReader($userInputObject, $user) {
@@ -105,14 +105,14 @@ class Import_Utils {
 
 		$errorMessage = getTranslatedString('ERR_UNIMPORTED_RECORDS_EXIST', 'Import');
 		$customActions = array('LBL_CLEAR_DATA' => "location.href='index.php?module={$moduleName}&action=Import&mode=clear_corrupted_data'");
-		
+
 		self::showErrorPage($errorMessage, '', $customActions);
 	}
 
 	public static function isUserImportBlocked($user) {
-		$adb = PearDatabase::getInstance();		
+		$adb = PearDatabase::getInstance();
 		$tableName = self::getDbTableName($user);
-		
+
 		if(Vtiger_Utils::CheckTable($tableName)) {
 			$result = $adb->query('SELECT 1 FROM '.$tableName.' WHERE status = '.Import_Data_Controller::$IMPORT_RECORD_NONE);
 			if($adb->num_rows($result) > 0) {
@@ -125,7 +125,7 @@ class Import_Utils {
 	public static function clearUserImportInfo($user) {
 		$adb = PearDatabase::getInstance();
 		$tableName = self::getDbTableName($user);
-		
+
 		$adb->query('DROP TABLE IF EXISTS '.$tableName);
 		Import_Lock_Controller::unLock($user);
 		Import_Queue_Controller::removeForUser($user);
@@ -173,6 +173,6 @@ class Import_Utils {
 		return false;
 
 	}
-	
+
 }
 ?>

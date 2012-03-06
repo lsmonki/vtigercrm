@@ -13,7 +13,7 @@ class Import_Map {
 	static $tableName = 'vtiger_import_maps';
 	var $map;
 	var $user;
-	
+
 	public function  __construct($map, $user) {
 		$this->map = $map;
 		$this->user = $user;
@@ -27,10 +27,12 @@ class Import_Map {
 				$pairs = explode("&", $value);
 				foreach($pairs as $pair) {
 					list($mappedName, $sequence) = explode("=", $pair);
+					$mappedName = str_replace('/eq/', '=', $mappedName);
+					$mappedName = str_replace('/amp/', '&', $mappedName);
 					$content["$mappedName"] = $sequence;
 				}
 				$map[$key] = $content;
-				
+
 			} else {
 				$map[$key] = $value;
 			}
@@ -62,6 +64,8 @@ class Import_Map {
 		$content = $this->map['content'];
 		$keyValueStrings = array();
 		foreach($content as $key => $value) {
+			$key = str_replace('=', '/eq/', $key);
+			$key = str_replace('&', '/amp/', $key);
 			$keyValueStrings[] = $key.'='.$value;
 		}
 		$stringifiedContent = implode('&', $keyValueStrings);
@@ -80,7 +84,7 @@ class Import_Map {
 			$adb->updateBlob(self::$tableName,"content","name='". $adb->sql_escape_string($this->getValue('name')).
 						"' AND module='".$adb->sql_escape_string($this->getValue('module'))."'",$this->getStringifiedContent());
 		}
-	}	
+	}
 
 	public static function getAllByModule($moduleName) {
 		global $current_user;
@@ -97,6 +101,6 @@ class Import_Map {
 
 		return $savedMaps;
 	}
-	
+
 }
 ?>

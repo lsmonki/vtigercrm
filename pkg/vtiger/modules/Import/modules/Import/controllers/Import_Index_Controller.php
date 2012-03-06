@@ -15,7 +15,7 @@ require_once 'modules/Import/ui/Viewer.php';
 class Import_Index_Controller {
 
 	static $_cached_module_meta;
-	
+
 	public function  __construct() {
 	}
 
@@ -27,7 +27,7 @@ class Import_Index_Controller {
 				$fieldInstance->isReadOnly() == true ||
 				$fieldInstance->getUIType() ==  70 ||
 				$fieldInstance->getUIType() ==  4) {
-			
+
 			return false;
 		}
 		return true;
@@ -77,26 +77,36 @@ class Import_Index_Controller {
 	}
 
 	public function getMandatoryFields($moduleName) {
-		$moduleFields = $this->getAccessibleFields($moduleName);
-		$mandatoryFields = array();
-		foreach($moduleFields as $fieldName => $fieldInstance) {
-			if($fieldInstance->isMandatory() 
-					&& $fieldInstance->getFieldDataType() != 'owner'
-					&& $this->isEditableField($fieldInstance)) {
-				$mandatoryFields[$fieldName] = getTranslatedString($fieldInstance->getFieldLabelKey(), $moduleName);
+		$focus = CRMEntity::getInstance($moduleName);
+		if(method_exists($focus, 'getMandatoryImportableFields')) {
+			$mandatoryFields = $focus->getMandatoryImportableFields();
+		} else {
+			$moduleFields = $this->getAccessibleFields($moduleName);
+			$mandatoryFields = array();
+			foreach($moduleFields as $fieldName => $fieldInstance) {
+				if($fieldInstance->isMandatory()
+						&& $fieldInstance->getFieldDataType() != 'owner'
+						&& $this->isEditableField($fieldInstance)) {
+					$mandatoryFields[$fieldName] = getTranslatedString($fieldInstance->getFieldLabelKey(), $moduleName);
+				}
 			}
 		}
 		return $mandatoryFields;
 	}
 
 	public function getImportableFields($moduleName) {
-		$moduleFields = $this->getAccessibleFields($moduleName);
-		$importableFields = array();
-		foreach($moduleFields as $fieldName => $fieldInstance) {
-			if(($this->isEditableField($fieldInstance)
-						&& ($fieldInstance->getTableName() != 'vtiger_crmentity' || $fieldInstance->getColumnName() != 'modifiedby')
-					) || $fieldInstance->getUIType() == '70') {
-				$importableFields[$fieldName] = $fieldInstance;
+		$focus = CRMEntity::getInstance($moduleName);
+		if(method_exists($focus, 'getImportableFields')) {
+			$importableFields = $focus->getImportableFields();
+		} else {
+			$moduleFields = $this->getAccessibleFields($moduleName);
+			$importableFields = array();
+			foreach($moduleFields as $fieldName => $fieldInstance) {
+				if(($this->isEditableField($fieldInstance)
+							&& ($fieldInstance->getTableName() != 'vtiger_crmentity' || $fieldInstance->getColumnName() != 'modifiedby')
+						) || $fieldInstance->getUIType() == '70') {
+					$importableFields[$fieldName] = $fieldInstance;
+				}
 			}
 		}
 		return $importableFields;
@@ -121,6 +131,7 @@ class Import_Index_Controller {
 
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
+		$viewer->assign('SUPPORTED_FILE_TYPES', Import_Utils::getSupportedFileExtensions());
 		$viewer->assign('SUPPORTED_FILE_ENCODING', Import_Utils::getSupportedFileEncoding());
 		$viewer->assign('SUPPORTED_DELIMITERS', Import_Utils::getSupportedDelimiters());
 		$viewer->assign('AUTO_MERGE_TYPES', Import_Utils::getAutoMergeTypes());
@@ -132,32 +143,20 @@ class Import_Index_Controller {
 
 	public static function loadAdvancedSettings($userInputObject, $user) {
 		global $current_user;
-		
+
 		$moduleName = $userInputObject->get('module');
 		$indexController = new Import_Index_Controller();
 
-		$hasHeader = $userInputObject->get('has_header');
 		$fileReader = Import_Utils::getFileReader($userInputObject, $current_user);
-		$firstDataRowNo = 1;
-		if($hasHeader) {
-			$headers = $fileReader->getRow(1);
-			$firstDataRowNo = 2;
+		if($fileReader == null) {
+			$userInputObject->set('error_message', getTranslatedString('LBL_INVALID_FILE', 'Import'));
+			Import_Index_Controller::loadBasicSettings($userInputObject, $user);
+			exit;
 		}
-		$firstRow = $fileReader->getRow($firstDataRowNo);
 
-		if($hasHeader) {
-			$noOfHeaders = count($headers);
-			$noOfFirstRowData = count($firstRow);
-			// Adjust first row data to get in sync with the number of headers
-			if($noOfHeaders > $noOfFirstRowData) {
-				$firstRow = array_merge($firstRow, array_fill($noOfFirstRowData, $noOfHeaders-$noOfFirstRowData, ''));
-			} elseif($noOfHeaders < $noOfFirstRowData) {
-				$firstRow = array_slice($firstRow, 0, count($headers), true); 
-			}
-			$rowData = array_combine($headers, $firstRow);
-		} else {
-			$rowData = $firstRow;
-		}
+		$hasHeader = $fileReader->hasHeader();
+		$rowData = $fileReader->getFirstRowData($hasHeader);
+
 		$autoMerge = $userInputObject->get('auto_merge');
 		if(!$autoMerge) {
 			$userInputObject->set('merge_type', 0);
@@ -167,6 +166,7 @@ class Import_Index_Controller {
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('AVAILABLE_FIELDS', $indexController->getImportableFields($moduleName));
+		$viewer->assign('HAS_HEADER', $hasHeader);
 		$viewer->assign('ROW_1_DATA', $rowData);
 		$viewer->assign('USER_INPUT', $userInputObject);
 		$viewer->assign('ENCODED_MANDATORY_FIELDS',
@@ -179,7 +179,7 @@ class Import_Index_Controller {
 
 	public static function validateFileUpload($userInputObject) {
 		global $current_user;
-		
+
 		$uploadMaxSize = Import_Utils::getMaxUploadSize();
 		$importDirectory = Import_Utils::getImportDirectory();
 		$temporaryFileName = Import_Utils::getImportFilePath($current_user);
@@ -197,19 +197,21 @@ class Import_Index_Controller {
 			$userInputObject->set('error_message', getTranslatedString('LBL_IMPORT_DIRECTORY_NOT_WRITABLE', 'Import'));
 			return false;
 		}
+
 		$fileCopied = move_uploaded_file($_FILES['import_file']['tmp_name'], $temporaryFileName);
 		if(!$fileCopied) {
 			$userInputObject->set('error_message', getTranslatedString('LBL_IMPORT_FILE_COPY_FAILED', 'Import'));
 			return false;
 		}
-		$hasHeader = $userInputObject->get('has_header');
 		$fileReader = Import_Utils::getFileReader($userInputObject, $current_user);
-		$firstDataRowNo = 1;
-		if($hasHeader) {
-			$headers = $fileReader->getRow(1);
-			$firstDataRowNo = 2;
+
+		if($fileReader == null) {
+			$userInputObject->set('error_message', getTranslatedString('LBL_INVALID_FILE', 'Import'));
+			return false;
 		}
-		$firstRow = $fileReader->getRow($firstDataRowNo);
+
+		$hasHeader = $fileReader->hasHeader();
+		$firstRow = $fileReader->getFirstRowData($hasHeader);
 		if($firstRow === false) {
 			$userInputObject->set('error_message', getTranslatedString('LBL_NO_ROWS_FOUND', 'Import'));
 			return false;
@@ -264,10 +266,10 @@ class Import_Index_Controller {
 	}
 
 	public static function process($requestObject, $user) {
-		
+
 		$moduleName = $requestObject->get('module');
 		$mode = $requestObject->get('mode');
-		
+
 		if($mode == 'undo_import') {
 			Import_Index_Controller::undoLastImport($requestObject, $user);
 			exit;
@@ -295,7 +297,7 @@ class Import_Index_Controller {
 				exit;
 			}
 		}
-		
+
 		// Check if import on the module is locked
 		$lockInfo = Import_Lock_Controller::isLockedForModule($moduleName);
 		if($lockInfo != null) {
@@ -333,7 +335,7 @@ class Import_Index_Controller {
 			}
 		}
 		Import_Utils::clearUserImportInfo($user);
-		
+
 		if($mode == 'upload_and_parse') {
 			if(Import_Index_Controller::validateFileUpload($requestObject)) {
 				Import_Index_Controller::loadAdvancedSettings($requestObject, $user);

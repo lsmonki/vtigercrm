@@ -21,7 +21,7 @@ $mod_strings = array (
 	'Skip' => 'Skip',
 	'Overwrite' => 'Overwrite',
 	'Merge' => 'Merge',
-	'LBL_IMPORT_SUPPORTED_FILE_TYPES' => 'Supported File Type(s): .CSV',
+	'LBL_IMPORT_SUPPORTED_FILE_TYPES' => 'Supported File Type(s): .CSV, .VCF',
 	'LBL_IMPORT_STEP_3_DESCRIPTION_DETAILED' => 'Select this option to enable and set duplicate merge criteria',
 	'LBL_CHARACTER_ENCODING' => 'Character Encoding',
 	'LBL_DELIMITER' => 'Delimiter',
@@ -36,7 +36,7 @@ $mod_strings = array (
 	'semicolon' => '; (semi-colon)',
 	'LBL_USE_SAVED_MAPPING' => 'Use Saved Mapping',
 	'LBL_SAVE_AS_CUSTOM_MAPPING' => 'Save as Custom Mapping',
-	'LBL_FILE_COLUMN_HEADER' => 'CSV Header',
+	'LBL_FILE_COLUMN_HEADER' => 'Header',
 	'LBL_ROW_1' => 'Row 1',
 	'LBL_CRM_FIELDS' => 'CRM Fields',
 	'LBL_DEFAULT_VALUE' => 'Default Value',
@@ -79,5 +79,10 @@ $mod_strings = array (
 	'LBL_LOCKED_TIME' => 'Locked Time',
 	'LBL_CANCEL_IMPORT' => 'Cancel Import',
 	'ERR_IMPORT_INTERRUPTED' => 'Current Import has been interrupted. Please try again later.',
+
+	'LBL_INVALID_FILE' => 'Invalid File',
+	'LBL_FILE_TYPE' => 'File Type',
+	'csv' => 'CSV',
+	'vcf' => 'VCard',
 );
 ?>

@@ -28,7 +28,7 @@ class Import_ListView_Controller {
 		}
 		return self::$_cached_module_meta[$moduleName][$user->id];
 	}
-	
+
 	public static function render($userInputObject, $user) {
 		global $list_max_entries_per_page;
 		$adb = PearDatabase::getInstance();
@@ -47,7 +47,6 @@ class Import_ListView_Controller {
 
 		$moduleName = $userInputObject->get('module');
 		$moduleMeta = self::getModuleMeta($moduleName, $user);
-		$fieldColumnMapping = $moduleMeta->getFieldColumnMapping();
 
 		$result = $adb->query('SELECT recordid FROM '.$userDBTableName.' WHERE status is NOT NULL AND recordid IS NOT NULL');
 		$noOfRecords = $adb->num_rows($result);
@@ -58,16 +57,16 @@ class Import_ListView_Controller {
 		}
 		if(count($importedRecordIds) == 0) $importedRecordIds[] = 0;
 
-		
+
 		$focus = CRMEntity::getInstance($moduleName);
 		$queryGenerator = new QueryGenerator($moduleName, $user);
 		$customView = new CustomView($moduleName);
-		$viewId = $customView->getViewId($moduleName);		
+		$viewId = $customView->getViewId($moduleName);
 		$queryGenerator->initForCustomViewById($viewId);
 		$list_query = $queryGenerator->getQuery();
 
 		// Fetch only last imported records
-		$list_query .= ' AND '.$fieldColumnMapping['id'].' IN ('. implode(',', $importedRecordIds).')';
+		$list_query .= ' AND '.$focus->table_name.'.'.$focus->table_index.' IN ('. implode(',', $importedRecordIds).')';
 
 		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
 			$count_result = $adb->query( mkCountQuery( $list_query));
@@ -93,12 +92,11 @@ class Import_ListView_Controller {
 		$controller = new ListViewController($adb, $user, $queryGenerator);
 		$listview_header = $controller->getListViewHeader($focus,$moduleName,$url_string,$sorder,$order_by,true);
 		$listview_entries = $controller->getListViewEntries($focus,$moduleName,$list_result,$navigation_array,true);
-		$listview_header_search = $controller->getBasicSearchFieldInfoList();
 
 		$viewer->assign('CURRENT_PAGE', $start);
 		$viewer->assign('LISTHEADER', $listview_header);
 		$viewer->assign('LISTENTITY', $listview_entries);
-		
+
 		$viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('FOR_USER', $ownerId);
 

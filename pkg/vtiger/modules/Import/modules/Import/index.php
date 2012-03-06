@@ -15,9 +15,13 @@ require_once 'modules/Import/controllers/Import_Controller.php';
 
 global $current_user;
 
+$previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
 $VTIGER_BULK_SAVE_MODE = true;
+
 $requestObject = new Import_API_Request($_REQUEST);
 
 Import_Index_Controller::process($requestObject, $current_user);
+
+$VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 
 ?>

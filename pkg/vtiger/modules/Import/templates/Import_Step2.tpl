@@ -16,7 +16,18 @@
 		<td class="big">{'LBL_IMPORT_STEP_2_DESCRIPTION'|@getTranslatedString:$MODULE}</td>
 		<td>&nbsp;</td>
 	</tr>
-	<tr>
+	<tr id="file_type_container">
+		<td>&nbsp;</td>
+		<td><span>{'LBL_FILE_TYPE'|@getTranslatedString:$MODULE}</span></td>
+		<td>
+			<select name="type" id="type" class="small" onchange="ImportJs.handleFileTypeChange();">
+				{foreach item=_FILE_TYPE from=$SUPPORTED_FILE_TYPES}
+				<option value="{$_FILE_TYPE}">{$_FILE_TYPE|@getTranslatedString:$MODULE}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr id="file_encoding_container">
 		<td>&nbsp;</td>
 		<td><span>{'LBL_CHARACTER_ENCODING'|@getTranslatedString:$MODULE}</span></td>
 		<td>
@@ -27,7 +38,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr>
+	<tr id="delimiter_container">
 		<td>&nbsp;</td>
 		<td><span>{'LBL_DELIMITER'|@getTranslatedString:$MODULE}</span></td>
 		<td>
@@ -38,7 +49,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr>
+	<tr id="has_header_container">
 		<td>&nbsp;</td>
 		<td><span>{'LBL_HAS_HEADER'|@getTranslatedString:$MODULE}</span></td>
 		<td><input type="checkbox" class="small" id="has_header" name="has_header" checked /></td>

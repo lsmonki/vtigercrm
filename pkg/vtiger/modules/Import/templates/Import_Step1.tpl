@@ -20,7 +20,7 @@
 		<td>
 			<input type="hidden" name="type" value="csv" />
 			<input type="hidden" name="is_scheduled" value="1" />
-			<input type="file" name="import_file" id="import_file" class="small" size="60" />
+			<input type="file" name="import_file" id="import_file" class="small" size="60" onchange="ImportJs.checkFileType()"/>
 			<!-- input type="hidden" name="userfile_hidden" value=""/ -->
 		</td>
 	</tr>

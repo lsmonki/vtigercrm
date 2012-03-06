@@ -22,7 +22,27 @@ if (typeof(ImportJs) == 'undefined') {
 			}
 		},
 
-        uploadAndParse: function(){
+		checkFileType: function() {
+			var filePath = jQuery('#import_file').val();
+			if(filePath != '') {
+				var fileExtension = filePath.split('.').pop();
+				jQuery('#type').val(fileExtension);
+				ImportJs.handleFileTypeChange();
+			}
+		},
+
+		handleFileTypeChange: function() {
+			var fileType = jQuery('#type').val();
+			if(fileType != 'csv') {
+				jQuery('#delimiter_container').hide();
+				jQuery('#has_header_container').hide();
+			} else {
+				jQuery('#delimiter_container').show();
+				jQuery('#has_header_container').show();
+			}
+		},
+
+        uploadAndParse: function() {
 			if(!ImportJs.validateFilePath()) return false;
 			if(!ImportJs.validateMergeCriteria()) return false;
 			return true;
@@ -35,7 +55,7 @@ if (typeof(ImportJs) == 'undefined') {
 				jQuery('#import_file').focus();
 				return false;
 			}
-			if(!ImportJs.uploadFilter("import_file", "csv")) {
+			if(!ImportJs.uploadFilter("import_file", "csv|vcf")) {
 				return false;
 			}
 			return true;
@@ -162,7 +182,10 @@ if (typeof(ImportJs) == 'undefined') {
 			var mapping = {};
 			for(var i=0; i<mappingPairs.length; ++i) {
 				var mappingPair = mappingPairs[i].split('=');
-				mapping["'"+mappingPair[0]+"'"] = mappingPair[1];
+				var header = mappingPair[0];
+				header = header.replace(/\/eq\//g, '=');
+				header = header.replace(/\/amp\//g, '&');
+				mapping["'"+header+"'"] = mappingPair[1];
 			}
 			fieldsList.each(function(i, element) {
 				var fieldElement = jQuery(element);

@@ -12,22 +12,46 @@ require_once 'modules/Import/readers/FileReader.php';
 
 class Import_CSV_Reader extends Import_File_Reader {
 
-	public function getRow($rowNo) {
+	public function getFirstRowData($hasHeader=true) {
 		global $default_charset;
-		if($rowNo <= 0) return false;
+
 		$fileHandler = $this->getFileHandler();
+
+		$headers = array();
+		$firstRowData = array();
 		$currentRow = 0;
 		while($data = fgetcsv($fileHandler, 0, $this->userInputObject->get('delimiter'))) {
-			$currentRow++;
-			if($currentRow == $rowNo) {
-				break;
+			if($currentRow == 0 || ($currentRow == 1 && $hasHeader)) {
+				if($hasHeader && $currentRow == 0) {
+					foreach($data as $key => $value) {
+						$headers[$key] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+					}
+				} else {
+					foreach($data as $key => $value) {
+						$firstRowData[$key] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+					}
+					break;
+				}
 			}
+			$currentRow++;
 		}
-		foreach($data as $key => $value) {
-			$data[$key] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+
+		if($hasHeader) {
+			$noOfHeaders = count($headers);
+			$noOfFirstRowData = count($firstRowData);
+			// Adjust first row data to get in sync with the number of headers
+			if($noOfHeaders > $noOfFirstRowData) {
+				$firstRowData = array_merge($firstRowData, array_fill($noOfFirstRowData, $noOfHeaders-$noOfFirstRowData, ''));
+			} elseif($noOfHeaders < $noOfFirstRowData) {
+				$firstRowData = array_slice($firstRowData, 0, count($headers), true);
+			}
+			$rowData = array_combine($headers, $firstRowData);
+		} else {
+			$rowData = $firstRowData;
 		}
+
 		unset($fileHandler);
-		return $data;
+		return $rowData;
 	}
 
 	public function read() {

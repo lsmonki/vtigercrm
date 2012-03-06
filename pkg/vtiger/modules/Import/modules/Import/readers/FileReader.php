@@ -35,6 +35,19 @@ class Import_File_Reader {
 		return $this->numberOfRecordsRead;
 	}
 
+	public function hasHeader() {
+		if($this->userInputObject->get('has_header') == 'on'
+				|| $this->userInputObject->get('has_header') == 1
+				|| $this->userInputObject->get('has_header') == true) {
+			return true;
+		}
+		return false;
+	}
+
+	public function getFirstRowData($hasHeader=true) {
+		return null;
+	}
+
 	public function getFilePath() {
 		return Import_Utils::getImportFilePath($this->user);
 	}
@@ -64,7 +77,7 @@ class Import_File_Reader {
 		}
 		return $value;
 	}
-	
+
 	public function read() {
 		// Sub-class need to implement this
 	}
@@ -79,7 +92,7 @@ class Import_File_Reader {
 
 		$tableName = Import_Utils::getDbTableName($this->user);
 		$fieldMapping = $this->userInputObject->get('field_mapping');
-		
+
 		$columnsListQuery = 'id INT PRIMARY KEY AUTO_INCREMENT, status INT DEFAULT 0, recordid INT';
 		foreach($fieldMapping as $fieldName => $index) {
 			$columnsListQuery .= ','.$fieldName.' TEXT';

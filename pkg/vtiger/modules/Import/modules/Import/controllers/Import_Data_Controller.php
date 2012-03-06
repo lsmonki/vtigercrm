@@ -75,7 +75,9 @@ class Import_Data_Controller {
 				$fieldInstance = $moduleFields[$mandatoryFieldName];
 				if($fieldInstance->getFieldDataType() == 'owner') {
 					$defaultValues[$mandatoryFieldName] = $this->user->id;
-				} else {
+				} elseif($fieldInstance->getFieldDataType() != 'datetime'
+						&& $fieldInstance->getFieldDataType() != 'date'
+						&& $fieldInstance->getFieldDataType() != 'time') {
 					$defaultValues[$mandatoryFieldName] = '????';
 				}
 			}
@@ -146,6 +148,7 @@ class Import_Data_Controller {
 		$adb = PearDatabase::getInstance();
 		$moduleName = $this->module;
 
+		$focus = CRMEntity::getInstance($moduleName);
 		$moduleHandler = vtws_getModuleHandlerFromName($moduleName, $this->user);
 		$moduleMeta = $moduleHandler->getMeta();
 		$moduleObjectId = $moduleMeta->getEntityId();
@@ -180,81 +183,88 @@ class Import_Data_Controller {
 
 			$mergeType = $this->mergeType;
 			$createRecord = false;
-			if (!empty($mergeType) && $mergeType != Import_Utils::$AUTO_MERGE_NONE) {
 
-				$queryGenerator = new QueryGenerator($moduleName, $this->user);
-				$queryGenerator->initForDefaultCustomView();
-				$fieldsList = array('id');
-				$queryGenerator->setFields($fieldsList);
+			if(method_exists($focus, 'importRecord')) {
+				$entityInfo = $focus->importRecord($this, $fieldData);
+			} else {
+				if (!empty($mergeType) && $mergeType != Import_Utils::$AUTO_MERGE_NONE) {
 
-				$mergeFields = $this->mergeFields;
-				foreach ($mergeFields as $index => $mergeField) {
-					if ($index != 0) {
-						$queryGenerator->addConditionGlue(QueryGenerator::$AND);
+					$queryGenerator = new QueryGenerator($moduleName, $this->user);
+					$queryGenerator->initForDefaultCustomView();
+					$fieldsList = array('id');
+					$queryGenerator->setFields($fieldsList);
+
+					$mergeFields = $this->mergeFields;
+					foreach ($mergeFields as $index => $mergeField) {
+						if ($index != 0) {
+							$queryGenerator->addConditionGlue(QueryGenerator::$AND);
+						}
+						$comparisonValue = $fieldData[$mergeField];
+						$fieldInstance = $moduleFields[$mergeField];
+						if ($fieldInstance->getFieldDataType() == 'owner') {
+							$userId = getUserId_Ol($comparisonValue);
+							$comparisonValue = getUserFullName($userId);
+						}
+						if ($fieldInstance->getFieldDataType() == 'reference') {
+							if(strpos($comparisonValue, '::::') > 0) {
+								$referenceFileValueComponents = explode('::::', $comparisonValue);
+							} else {
+								$referenceFileValueComponents = explode(':::', $comparisonValue);
+							}
+							if (count($referenceFileValueComponents) > 1) {
+								$comparisonValue = trim($referenceFileValueComponents[1]);
+							}
+						}
+						$queryGenerator->addCondition($mergeField, $comparisonValue, 'e');
 					}
-					$comparisonValue = $fieldData[$mergeField];
-					$fieldInstance = $moduleFields[$mergeField];
-					if ($fieldInstance->getFieldDataType() == 'owner') {
-						$userId = getUserId_Ol($comparisonValue);
-						$comparisonValue = getUserFullName($userId);
-					}
-					if ($fieldInstance->getFieldDataType() == 'reference') {
-						if(strpos($comparisonValue, '::::') > 0) {
-							$referenceFileValueComponents = explode('::::', $comparisonValue);
+					$query = $queryGenerator->getQuery();
+					$duplicatesResult = $adb->query($query);
+					$noOfDuplicates = $adb->num_rows($duplicatesResult);
+
+					if ($noOfDuplicates > 0) {
+						if ($mergeType == Import_Utils::$AUTO_MERGE_IGNORE) {
+							$entityInfo['status'] = self::$IMPORT_RECORD_SKIPPED;
+						} elseif ($mergeType == Import_Utils::$AUTO_MERGE_OVERWRITE ||
+								$mergeType == Import_Utils::$AUTO_MERGE_MERGEFIELDS) {
+
+							for ($index = 0; $index < $noOfDuplicates - 1; ++$index) {
+								$duplicateRecordId = $adb->query_result($duplicatesResult, $index, $fieldColumnMapping['id']);
+								$entityId = vtws_getId($moduleObjectId, $duplicateRecordId);
+								vtws_delete($entityId, $this->user);
+							}
+							$baseRecordId = $adb->query_result($duplicatesResult, $noOfDuplicates - 1, $fieldColumnMapping['id']);
+							$baseEntityId = vtws_getId($moduleObjectId, $baseRecordId);
+
+							if ($mergeType == Import_Utils::$AUTO_MERGE_OVERWRITE) {
+								$fieldData = $this->transformForImport($fieldData, $moduleMeta);
+								$fieldData['id'] = $baseEntityId;
+								$entityInfo = vtws_update($fieldData, $this->user);
+								$entityInfo['status'] = self::$IMPORT_RECORD_UPDATED;
+							}
+
+							if ($mergeType == Import_Utils::$AUTO_MERGE_MERGEFIELDS) {
+								$filteredFieldData = array();
+								$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
+								foreach ($fieldData as $fieldName => $fieldValue) {
+									if (!empty($fieldValue)) {
+										$filteredFieldData[$fieldName] = $fieldValue;
+									}
+								}
+								$existingFieldValues = vtws_retrieve($baseEntityId, $this->user);
+								foreach ($existingFieldValues as $fieldName => $fieldValue) {
+									if (empty($fieldValue)
+											&& empty($filteredFieldData[$fieldName])
+											&& !empty($defaultFieldValues[$fieldName])) {
+										$filteredFieldData[$fieldName] = $fieldValue;
+									}
+								}
+								$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, false);
+								$filteredFieldData['id'] = $baseEntityId;
+								$entityInfo = vtws_revise($filteredFieldData, $this->user);
+								$entityInfo['status'] = self::$IMPORT_RECORD_MERGED;
+							}
 						} else {
-							$referenceFileValueComponents = explode(':::', $comparisonValue);
-						}
-						if (count($referenceFileValueComponents) > 1) {
-							$comparisonValue = trim($referenceFileValueComponents[1]);
-						}
-					}
-					$queryGenerator->addCondition($mergeField, $comparisonValue, 'e');
-				}
-				$query = $queryGenerator->getQuery();
-				$duplicatesResult = $adb->query($query);
-				$noOfDuplicates = $adb->num_rows($duplicatesResult);
-
-				if ($noOfDuplicates > 0) {
-					if ($mergeType == Import_Utils::$AUTO_MERGE_IGNORE) {
-						$entityInfo['status'] = self::$IMPORT_RECORD_SKIPPED;
-					} elseif ($mergeType == Import_Utils::$AUTO_MERGE_OVERWRITE ||
-							$mergeType == Import_Utils::$AUTO_MERGE_MERGEFIELDS) {
-
-						for ($index = 0; $index < $noOfDuplicates - 1; ++$index) {
-							$duplicateRecordId = $adb->query_result($duplicatesResult, $index, $fieldColumnMapping['id']);
-							$entityId = vtws_getId($moduleObjectId, $duplicateRecordId);
-							vtws_delete($entityId, $this->user);
-						}
-						$baseRecordId = $adb->query_result($duplicatesResult, $noOfDuplicates - 1, $fieldColumnMapping['id']);
-						$baseEntityId = vtws_getId($moduleObjectId, $baseRecordId);
-
-						if ($mergeType == Import_Utils::$AUTO_MERGE_OVERWRITE) {
-							$fieldData = $this->transformForImport($fieldData, $moduleMeta);
-							$fieldData['id'] = $baseEntityId;
-							$entityInfo = vtws_update($fieldData, $this->user);
-							$entityInfo['status'] = self::$IMPORT_RECORD_UPDATED;
-						}
-
-						if ($mergeType == Import_Utils::$AUTO_MERGE_MERGEFIELDS) {
-							$filteredFieldData = array();
-							$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
-							foreach ($fieldData as $fieldName => $fieldValue) {
-								if (!empty($fieldValue)) {
-									$filteredFieldData[$fieldName] = $fieldValue;
-								}
-							}
-							$existingFieldValues = vtws_retrieve($baseEntityId, $this->user);
-							foreach ($existingFieldValues as $fieldName => $fieldValue) {
-								if (empty($fieldValue)
-										&& empty($filteredFieldData[$fieldName])
-										&& !empty($defaultFieldValues[$fieldName])) {
-									$filteredFieldData[$fieldName] = $fieldValue;
-								}
-							}
-							$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, false);
-							$filteredFieldData['id'] = $baseEntityId;
-							$entityInfo = vtws_revise($filteredFieldData, $this->user);
-							$entityInfo['status'] = self::$IMPORT_RECORD_MERGED;
+							$createRecord = true;
 						}
 					} else {
 						$createRecord = true;
@@ -262,16 +272,14 @@ class Import_Data_Controller {
 				} else {
 					$createRecord = true;
 				}
-			} else {
-				$createRecord = true;
-			}
-			if ($createRecord) {
-				$fieldData = $this->transformForImport($fieldData, $moduleMeta);
-				if($fieldData == null) {
-					$entityInfo = null;
-				} else {
-					$entityInfo = vtws_create($moduleName, $fieldData, $this->user);
-					$entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
+				if ($createRecord) {
+					$fieldData = $this->transformForImport($fieldData, $moduleMeta);
+					if($fieldData == null) {
+						$entityInfo = null;
+					} else {
+						$entityInfo = vtws_create($moduleName, $fieldData, $this->user);
+						$entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
+					}
 				}
 			}
 
@@ -360,9 +368,6 @@ class Import_Data_Controller {
 						$fieldData[$fieldName] = '';
 					}
 				}
-				if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
-					return null;
-				}
 
 			} elseif ($fieldInstance->getFieldDataType() == 'picklist') {
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
@@ -380,9 +385,6 @@ class Import_Data_Controller {
 					$fieldObject->setPicklistValues(array($picklistValue));
 				}
 			} else {
-				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
-					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
-				}
 				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {
 					if($fieldValue == null || $fieldValue == '0000-00-00 00:00:00') {
 						$fieldValue = '';
@@ -390,6 +392,13 @@ class Import_Data_Controller {
 					$valuesList = explode(' ', $fieldValue);
 					if(count($valuesList) == 1) $fieldValue = '';
 					$fieldValue = getValidDBInsertDateTimeValue($fieldValue);
+					if (preg_match("/^[0-9]{2,4}[-][0-1]{1,2}?[0-9]{1,2}[-][0-3]{1,2}?[0-9]{1,2} ([0-1][0-9]|[2][0-3])([:][0-5][0-9]){1,2}$/",
+							$fieldValue) == 0) {
+						$fieldValue = '';
+					}
+					if (empty($fieldValue) && !empty($defaultFieldValues[$fieldName])) {
+						$fieldValue = $defaultFieldValues[$fieldName];
+					}
 					$fieldData[$fieldName] = $fieldValue;
 				}
 				if ($fieldInstance->getFieldDataType() == 'date' && !empty($fieldValue)) {
@@ -397,6 +406,12 @@ class Import_Data_Controller {
 						$fieldValue = '';
 					}
 					$fieldValue = getValidDBInsertDateValue($fieldValue);
+					if (preg_match("/^[0-9]{2,4}[-][0-1]{1,2}?[0-9]{1,2}[-][0-3]{1,2}?[0-9]{1,2}$/", $fieldValue) == 0) {
+						$fieldValue = '';
+					}
+					if (empty($fieldValue) && !empty($defaultFieldValues[$fieldName])) {
+						$fieldValue = $defaultFieldValues[$fieldName];
+					}
 					$fieldData[$fieldName] = $fieldValue;
 				}
 			}
@@ -406,6 +421,12 @@ class Import_Data_Controller {
 				if (!isset($fieldData[$fieldName])) {
 					$fieldData[$fieldName] = $defaultFieldValues[$fieldName];
 				}
+			}
+		}
+
+		foreach ($moduleFields as $fieldName => $fieldInstance) {
+			if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
+				return null;
 			}
 		}
 

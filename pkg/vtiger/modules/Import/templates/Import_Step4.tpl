@@ -36,7 +36,7 @@
 			<input type="hidden" name="default_values" id="default_values" value="" />
 			<table width="100%" cellspacing="0" cellpadding="5" class="listRow">
 				<tr>
-					{if $USER_INPUT->get('has_header') eq 'on'}
+					{if $HAS_HEADER eq true}
 					<td class="big tableHeading" width="25%"><b>{'LBL_FILE_COLUMN_HEADER'|@getTranslatedString:$MODULE}</b></td>
 					{/if}
 					<td class="big tableHeading" width="25%"><b>{'LBL_ROW_1'|@getTranslatedString:$MODULE}</b></td>
@@ -46,7 +46,7 @@
 				{foreach key=_HEADER_NAME item=_FIELD_VALUE from=$ROW_1_DATA name="headerIterator"}
 				{assign var="_COUNTER" value=$smarty.foreach.headerIterator.iteration}
 				<tr class="fieldIdentifier" id="fieldIdentifier{$_COUNTER}">
-					{if $USER_INPUT->get('has_header') eq 'on'}
+					{if $HAS_HEADER eq true}
 					<td class="cellLabel">
 						<span name="header_name">{$_HEADER_NAME}</span>
 					</td>
@@ -59,8 +59,9 @@
 						<select name="mapped_fields" class="txtBox" style="width: 100%" onchange="ImportJs.loadDefaultValueWidget('fieldIdentifier{$_COUNTER}')">
 							<option value="">{'LBL_NONE'|@getTranslatedString:$FOR_MODULE}</option>
 							{foreach key=_FIELD_NAME item=_FIELD_INFO from=$AVAILABLE_FIELDS}
-							<option value="{$_FIELD_NAME}" {if $_HEADER_NAME eq $_FIELD_INFO->getFieldLabelKey()} selected {/if} >
-								{$_FIELD_INFO->getFieldLabelKey()|@getTranslatedString:$FOR_MODULE}
+							{assign var="_TRANSLATED_FIELD_LABEL" value=$_FIELD_INFO->getFieldLabelKey()|@getTranslatedString:$FOR_MODULE}
+							<option value="{$_FIELD_NAME}" {if $_HEADER_NAME eq $_TRANSLATED_FIELD_LABEL} selected {/if} >
+								{$_TRANSLATED_FIELD_LABEL}
 								{if $_FIELD_INFO->isMandatory() eq 'true'}&nbsp; (*){/if}
 							</option>
 							{/foreach}

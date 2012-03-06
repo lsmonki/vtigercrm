@@ -11,6 +11,7 @@
 $ImportConfig = array(
 	'importTypes' => array(
 						'csv' => array('reader' => 'Import_CSV_Reader', 'classpath' => 'modules/Import/readers/CSVReader.php'),
+						'vcf' => array('reader' => 'Import_VCard_Reader', 'classpath' => 'modules/Import/readers/VCardReader.php'),
 						'default' => array('reader' => 'Import_File_Reader', 'classpath' => 'modules/Import/readers/FileReader.php')
 					),
 

@@ -126,10 +126,14 @@ class Import_Controller {
 		$mapName = $this->userInputObject->get('save_map_as');
 		if($saveMap && !empty($mapName)) {
 			$fieldMapping = $this->userInputObject->get('field_mapping');
-			$hasHeader = $this->userInputObject->get('has_header');
+			$fileReader = Import_Utils::getFileReader($this->userInputObject, $this->user);
+			if($fileReader == null) {
+				return false;
+			}
+			$hasHeader = $fileReader->hasHeader();
 			if($hasHeader) {
-				$fileReader = Import_Utils::getFileReader($this->userInputObject, $this->user);
-				$headers = $fileReader->getRow(1);
+				$firstRowData = $fileReader->getFirstRowData($hasHeader);
+				$headers = array_keys($firstRowData);
 				foreach($fieldMapping as $fieldName => $index) {
 					$saveMapping["$headers[$index]"] = $fieldName;
 				}

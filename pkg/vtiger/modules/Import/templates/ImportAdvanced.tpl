@@ -20,12 +20,12 @@
 	<input type="hidden" name="action" value="Import" />
 	<input type="hidden" name="mode" value="import" />
 	<input type="hidden" name="type" value="{$USER_INPUT->getString('type')}" />
-	<input type="hidden" name="has_header" value='{$USER_INPUT->getString('has_header')}' />
+	<input type="hidden" name="has_header" value='{$HAS_HEADER}' />
 	<input type="hidden" name="file_encoding" value='{$USER_INPUT->getString('file_encoding')}' />
 	<input type="hidden" name="delimiter" value='{$USER_INPUT->getString('delimiter')}' />
 	<input type="hidden" name="merge_type" value='{$USER_INPUT->getString('merge_type')}' />
 	<input type="hidden" name="merge_fields" value='{$USER_INPUT->getString('merge_fields')}' />
-	
+
 	<input type="hidden" id="mandatory_fields" name="mandatory_fields" value='{$ENCODED_MANDATORY_FIELDS}' />
 
 	<table style="width:80%;margin-left:auto;margin-right:auto;margin-top:10px;" cellpadding="5" cellspacing="12" class="searchUIBasic">
