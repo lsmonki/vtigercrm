@@ -1310,7 +1310,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
-						$unit_price = '';
+						$unitprice = '';
 					}
 					$sub_products = '';
 					$sub_prod = '';
@@ -1365,7 +1365,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
-						$unit_price = '';
+						$unitprice = '';
 					}
 
 					$slashes_temp_val = popup_from_html($adb->query_result($list_result,$list_result_count,'servicename'));
@@ -2035,7 +2035,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
-						$unit_price = '';
+						$unitprice = '';
 					}
 					$sub_products = '';
 					$sub_prod = '';
@@ -2086,7 +2086,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
-						$unit_price = '';
+						$unitprice = '';
 					}
 					$sub_products = '';
 					$sub_prod = '';
@@ -2133,7 +2133,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
-						$unit_price = '';
+						$unitprice = '';
 					}
 
 					$slashes_temp_val = popup_from_html($field_val);
