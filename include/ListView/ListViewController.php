@@ -172,6 +172,8 @@ class ListViewController {
 			}
 		}
 
+		$useAsterisk = get_use_asterisk($this->user->id);
+
 		$data = array();
 		for ($i = 0; $i < $rowCount; ++$i) {
 			//Getting the recordId
@@ -397,8 +399,12 @@ class ListViewController {
 				} elseif ($field->getFieldDataType() == 'skype') {
 					$value = ($value != "") ? "<a href='skype:$value?call'>".textlength_check($value)."</a>" : "";
 				} elseif ($field->getFieldDataType() == 'phone') {
-					$value = "<a href='javascript:;' onclick='startCall(&quot;$value&quot;, ".
-						"&quot;$recordId&quot;)'>".textlength_check($value)."</a>";
+					if($useAsterisk == 'true') {
+						$value = "<a href='javascript:;' onclick='startCall(&quot;$value&quot;, ".
+							"&quot;$recordId&quot;)'>".textlength_check($value)."</a>";
+					} else {
+						$value = textlength_check($value);
+					}
 				} elseif($field->getFieldDataType() == 'reference') {
 					$referenceFieldInfoList = $this->queryGenerator->getReferenceFieldInfoList();
 					$moduleList = $referenceFieldInfoList[$fieldName];
@@ -546,7 +552,7 @@ class ListViewController {
 		$requestAction = vtlib_purify($_REQUEST['action']);
 		$requestFile = vtlib_purify($_REQUEST['file']);
 		$isCustomModule = vtlib_isCustomModule($requestModule);
-		
+
 		if($isCustomModule && (!in_array($requestAction, Array('index','ListView')) &&
 				($requestAction == $requestModule.'Ajax' && !in_array($requestFile, Array('index','ListView'))))) {
 
