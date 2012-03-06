@@ -91,7 +91,7 @@ $mod_strings = Array(
 
 'LEADCUSTOMFIELDS'=>'Lead Custom Fields',
 
-'ACCOUNTCUSTOMFIELDS'=>'Account Custom Fields',
+'ACCOUNTCUSTOMFIELDS'=>'Organization Custom Fields',
 
 'CONTACTCUSTOMFIELDS'=>'Contact Custom Fields',
 
@@ -112,7 +112,7 @@ $mod_strings = Array(
 
 'EDITLEADPICKLISTVALUES'=>'Edit Lead Picklist ',
 
-'EDITACCOUNTPICKLISTVALUES'=>'Edit Account Picklist ',
+'EDITACCOUNTPICKLISTVALUES'=>'Edit Organization Picklist ',
 
 'EDITCONTACTPICKLISTVALUES'=>'Edit Contact Picklist ',
 
@@ -148,7 +148,7 @@ $mod_strings = Array(
 
 'Leads'=>'Lead',
 
-'Accounts'=>'Account',
+'Accounts'=>'Organization',
 
 'Contacts'=>'Contact',
 
@@ -382,7 +382,7 @@ $mod_strings = Array(
 //<<<<<<<<<<end>>>>>>>>>>>>>
 'LBL_LEAD_FIELD_ACCESS'=>'Lead Field Access',
 
-'LBL_ACCOUNT_FIELD_ACCESS'=>'Account Field Access',
+'LBL_ACCOUNT_FIELD_ACCESS'=>'Organization Field Access',
 
 'LBL_CONTACT_FIELD_ACCESS'=>'Contact Field Access',
 
@@ -482,7 +482,7 @@ $mod_strings = Array(
 
 'LBL_RATING'=>'Rating',
 
-'LBL_ACCOUNT_TYPE'=>'Account Type',
+'LBL_ACCOUNT_TYPE'=>'Organization Type',
 
 'LBL_BUSINESS_TYPE'=>'Business Type',
 
@@ -607,7 +607,7 @@ $mod_strings = Array(
 'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom account
 ,contact, or Opportunity fields. These mappings will be used when you convert leads',
 'LBL_MAPPING_INFO'=>'Mapping Information',
-'LBL_ACCOUNT_FIELD'=>'Account Custom Field',
+'LBL_ACCOUNT_FIELD'=>'Organization Custom Field',
 'LBL_CONTACT_FIELD'=>'Contact Custom Field',
 'LBL_POTENTIAL_FIELD'=>'Opportunity Custom Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
@@ -683,7 +683,7 @@ $mod_strings = Array(
 'LBL_SELECT_CRM_MODULE'=>'Select CRM Module',
 'LBL_TAX_SETTINGS'=>'Tax Calculations',
 'LBL_INVENTORY_TAX_CONFIG'=>'Inventory Tax Configuration',
-'LBL_CUSTOM_MAPP_INFO'=>'Only in Leads module you can map the fields with Accounts, Contacts, and Opportunities.',
+'LBL_CUSTOM_MAPP_INFO'=>'Only in Leads module you can map the fields with Organizations, Contacts, and Opportunities.',
 'LBL_MAPPING_OTHER_MODULES'=>'Mapping with other Modules',
 'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
 'LBL_ROLE_HIERARCHY_TREE'=>'Roles & Hierarchy Tree',
@@ -741,7 +741,7 @@ $mod_strings = Array(
 'LBL_NAME'=>'Name',
 'LBL_PERSONAL'=>'Personal',
 'LBL_PUBLIC'=>'Public',
-'LBL_ACCOUNT_FIELDS'=>'Account Fields',
+'LBL_ACCOUNT_FIELDS'=>'Organization Fields',
 'LBL_CONTACT_FIELDS'=>'Contact Fields',
 'LBL_LEAD_FIELDS'=>'Lead Fields',
 'LBL_USER_FIELDS'=>'User Fields',
@@ -1030,7 +1030,7 @@ $mod_strings = Array(
 'LBL_ADD'=>'Add',
 
 'LBL_CONTACT'=>'Contact',
-'LBL_ACCOUNT'=>'Account',
+'LBL_ACCOUNT'=>'Organization',
 
 'LBL_FROM_CAPS'=>'FROM',
 'LBL_TO_CAPS'=>'TO',
@@ -1176,7 +1176,7 @@ $mod_strings = Array(
 'ARRANGE_RELATEDLIST' => 'Arrange RelatedList',
 'CUSTOMFIELD_MAPPING' => 'CustomField Mapping',
 'LBL_MAPPED_FIELDS' => 'Mapped Fields',
-'LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION' => 'Map Your Leads Customfields with Accounts,Contacts and Opportunities',
+'LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION' => 'Map Your Leads Customfields with Organizations,Contacts and Opportunities',
 'LEADS_CUSTOM_FIELD_MAPPING'=> 'Leads Field Mapping',
 'LBL_CALENDER_CUSTOMFIELDS' => 'Calendar Custom Fields',
 'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calendar',

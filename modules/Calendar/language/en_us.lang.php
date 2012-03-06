@@ -292,8 +292,8 @@ $mod_strings = Array(
 'LBL_LIST_CLOSE'=>'Close',
 'LBL_LIST_STATUS'=>'Status',
 'LBL_LIST_CONTACT'=>'Contact',
-//Added for 4.2 release for Account column support as shown by Fredy
-'LBL_LIST_ACCOUNT'=>'Account',
+//Added for 4.2 release for Organization column support as shown by Fredy
+'LBL_LIST_ACCOUNT'=>'Organization',
 'LBL_LIST_RELATED_TO'=>'Related to',
 'LBL_LIST_DUE_DATE'=>'Due Date',
 'LBL_LIST_DATE'=>'Date',

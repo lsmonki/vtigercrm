@@ -140,7 +140,7 @@ $mod_strings = Array(
 'LBL_CREATE_EDIT'=>'Create/Edit',
 'LBL_DELETE'=>'Delete',
 'LBL_LEADS'=>'Leads',
-'LBL_ACCOUNTS'=>'Accounts',
+'LBL_ACCOUNTS'=>'Organizations',
 'LBL_CONTACTS'=>'Contacts',
 'LBL_OPPURTUNITIES'=>'Opportunities',
 'LBL_TASKS'=>'Tasks',
@@ -151,7 +151,7 @@ $mod_strings = Array(
 'LBL_CALLS'=>'Calls',
 'LBL_IMPORT_PERMISSIONS'=>'Import Permissions',
 'LBL_IMPORT_LEADS'=>'Import Leads',
-'LBL_IMPORT_ACCOUNTS'=>'Import Accounts',
+'LBL_IMPORT_ACCOUNTS'=>'Import Organizations',
 'LBL_IMPORT_CONTACTS'=>'Import Contacts',
 'LBL_IMPORT_OPPURTUNITIES'=>'Import Opportunities',
 
@@ -186,7 +186,7 @@ $mod_strings = Array(
 'LBL_SELECT_FIELD_TYPE'=>'Select Field Type',
 'LBL_SELECT_FIELD'=>'Select Field :',
 'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value :',
-'LBL_ACCOUNT_FIELDS'=>'Account Fields',
+'LBL_ACCOUNT_FIELDS'=>'Organization Fields',
 'LBL_CONTACT_FIELDS'=>'Contact Fields',
 'LBL_LEAD_FIELDS'=>'Lead Fields',
 'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge field value into your template below.',
@@ -435,7 +435,7 @@ $mod_strings = Array(
 //Added after pathc2
 'LBL_LEAD_FIELD_ACCESS'=>'Lead Field Access',
 
-'LBL_ACCOUNT_FIELD_ACCESS'=>'Account Field Access',
+'LBL_ACCOUNT_FIELD_ACCESS'=>'Organization Field Access',
 
 'LBL_CONTACT_FIELD_ACCESS'=>'Contact Field Access',
 
@@ -466,8 +466,8 @@ $mod_strings = Array(
 //Added to change Home page order
 'LBL_HOMEPAGE_ORDER_UPDATE'=>'Update Home Page Block Order',
 'LBL_HOMEPAGE_ID'=>'Block Order',
-'ERR_INVALID_USER'=>'Invalid access--Please call from My Accounts',
-'ALVT'=>'Top Accounts',
+'ERR_INVALID_USER'=>'Invalid access--Please call from My Organizations',
+'ALVT'=>'Top Organizations',
 'PLVT'=>'Top Opportunities',
 'QLTQ'=>'Top Quotes',
 'CVLVT'=>'Key Metrics',

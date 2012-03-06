@@ -21,8 +21,8 @@ $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Administration',
 'LBL_MODULE_TITLE'=>'Administration: Home',
 
-'LBL_NEW_FORM_TITLE'=>'New Account',
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'LBL_NEW_FORM_TITLE'=>'New Organization',
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the organization.",
 );
 
 ?>

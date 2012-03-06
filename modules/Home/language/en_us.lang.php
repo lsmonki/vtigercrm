@@ -22,8 +22,8 @@ $mod_strings = Array(
 'LBL_FIRST_NAME'=>'First Name:',
 'LBL_LAST_NAME'=>'Last Name:',
 'LBL_LIST_LAST_NAME'=>'Last Name',
-'LBL_ACCOUNT_NAME'=>'Account Name:',
-'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
+'LBL_ACCOUNT_NAME'=>'Organization Name:',
+'LBL_LIST_ACCOUNT_NAME'=>'Organization Name',
 'LBL_PHONE'=>'Phone:',
 'LBL_EMAIL_ADDRESS'=>'Email:',
 'LBL_TOTAL'=>'Total : ',
@@ -100,7 +100,7 @@ $mod_strings = Array(
 // END
 
 // Default home page widget's title
-'Top Accounts'=>'Top Accounts',
+'Top Accounts'=>'Top Organizations',
 'Top Potentials'=>'Top Opportunities',
 'Top Quotes'=>'Top Quotes',
 'Top Trouble Tickets'=>'Top Trouble Tickets',

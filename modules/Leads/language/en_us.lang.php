@@ -67,7 +67,7 @@ $mod_strings = Array(
 
 'LBL_CONVERT_LEAD'=>'Convert Lead:',
 'LBL_CONVERT_LEAD_INFORMATION'=>'Convert Lead Information',
-'LBL_ACCOUNT_NAME'=>'Account Name',
+'LBL_ACCOUNT_NAME'=>'Organization Name',
 'LBL_POTENTIAL_NAME'=>'Opportunity Name',
 'LBL_POTENTIAL_CLOSE_DATE'=>'Opportunity Close Date',
 'LBL_POTENTIAL_AMOUNT'=>'Opportunity Amount',

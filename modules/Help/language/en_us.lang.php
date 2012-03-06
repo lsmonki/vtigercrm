@@ -18,11 +18,11 @@
  ********************************************************************************/
  
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Accounts',
-'LBL_MODULE_TITLE'=>'Accounts: Home',
-'LBL_SEARCH_FORM_TITLE'=>'Account Search',
-'LBL_LIST_FORM_TITLE'=>'Account List',
-'LBL_NEW_FORM_TITLE'=>'New Account',
+'LBL_MODULE_NAME'=>'Organizations',
+'LBL_MODULE_TITLE'=>'Organizations: Home',
+'LBL_SEARCH_FORM_TITLE'=>'Organization Search',
+'LBL_LIST_FORM_TITLE'=>'Organization List',
+'LBL_NEW_FORM_TITLE'=>'New Organization',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 );
 

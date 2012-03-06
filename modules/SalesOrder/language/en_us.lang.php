@@ -30,7 +30,7 @@ $mod_strings = Array(
 'LBL_NEW_FORM_SO_TITLE'=>'New Sales Order',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Member Organizations',
 
-'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
+'LBL_LIST_ACCOUNT_NAME'=>'Organization Name',
 'LBL_LIST_CITY'=>'City',
 'LBL_LIST_WEBSITE'=>'Website',
 'LBL_LIST_STATE'=>'State',
@@ -45,8 +45,8 @@ $mod_strings = Array(
 
 //END DON'T CONVERT
 
-'LBL_ACCOUNT'=>'Account:',
-'LBL_ACCOUNT_NAME'=>'Account Name:',
+'LBL_ACCOUNT'=>'Organization:',
+'LBL_ACCOUNT_NAME'=>'Organization Name:',
 'LBL_PHONE'=>'Phone:',
 'LBL_WEBSITE'=>'Website:',
 'LBL_FAX'=>'Fax:',
@@ -65,7 +65,7 @@ $mod_strings = Array(
 'LBL_TYPE'=>'Type:',
 'LBL_ANNUAL_REVENUE'=>'Annual Revenue:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
-'LBL_Quote_INFORMATION'=>'Account Information',
+'LBL_Quote_INFORMATION'=>'Organization Information',
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_BILLING_ADDRESS'=>'Billing Address:',
 'LBL_SHIPPING_ADDRESS'=>'Shipping Address:',
@@ -80,13 +80,13 @@ $mod_strings = Array(
 'NTC_COPY_BILLING_ADDRESS'=>'Copy billing address to shipping address',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
-'LBL_DUPLICATE'=>'Opportunities Duplicate Accounts',
-'MSG_DUPLICATE' => 'Creating this vtiger_account may vtiger_potentialy create a duplicate vtiger_account. You may either select an vtiger_account from the list below or you may click on Create New Account to continue creating a new vtiger_account with the previously entered data.',
+'LBL_DUPLICATE'=>'Opportunities Duplicate Organizations',
+'MSG_DUPLICATE' => 'Creating this vtiger_account may vtiger_potentialy create a duplicate vtiger_account. You may either select an vtiger_account from the list below or you may click on Create New Organization to continue creating a new vtiger_account with the previously entered data.',
 
 'LBL_INVITEE'=>'Contacts',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 
-'LBL_SELECT_ACCOUNT'=>'Select Account',
+'LBL_SELECT_ACCOUNT'=>'Select Organization',
 'LBL_GENERAL_INFORMATION'=>'General Information',
 
 //for v4 release added
@@ -112,7 +112,7 @@ $mod_strings = Array(
 'LBL_PARTNER'=>'Partner',
 
 // Added for 4GA
-'LBL_TOOL_FORM_TITLE'=>'Account Tools',
+'LBL_TOOL_FORM_TITLE'=>'Organization Tools',
 //Added for 4GA
 'Subject'=>'Subject',
 'Quote Name'=>'Quote Name',
@@ -153,7 +153,7 @@ $mod_strings = Array(
 'Purchase Order'=>'Purchase Order',
 'Vendor Terms'=>'Vendor Terms',
 'Pending'=>'Pending',
-'Account Name'=>'Account Name',
+'Account Name'=>'Organization Name',
 'Terms & Conditions'=>'Terms & Conditions',
 //Quote Info
 'LBL_SO_INFORMATION'=>'Sales Order Information',
