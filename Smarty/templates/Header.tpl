@@ -604,7 +604,7 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* More menu items *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="z-index: 10000001;display:none;overflow-x:auto;">
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="z-index: 2147483647;display:none;overflow-x:auto;">
 	<table border=0 cellpadding="0" cellspacing="0" class="allMnuTable" padding="0" style="width:20px;">
 	<tr>
                 {foreach name=modulelist key=more item=childmodules from=$MENUSTRUCTURE}
