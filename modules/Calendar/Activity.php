@@ -852,6 +852,9 @@ function insertIntoRecurringTable(& $recurObj)
 		
 		$sql = 'DELETE FROM vtiger_recurringevents WHERE activityid=?';
 		$this->db->pquery($sql, array($id));
+
+		$sql = 'DELETE FROM vtiger_cntactivityrel WHERE activityid = ?';
+		$this->db->pquery($sql, array($id));
 		
 		parent::unlinkDependencies($module, $id);
 	}
@@ -919,7 +922,9 @@ function insertIntoRecurringTable(& $recurObj)
 	 */
 	function generateReportsSecQuery($module,$secmodule){
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_activity","activityid");
-		$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
+		$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0
+				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
+	            left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
 				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_activitycf on vtiger_activitycf.activityid = vtiger_activity.activityid

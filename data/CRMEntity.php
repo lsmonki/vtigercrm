@@ -2121,6 +2121,12 @@ $log->info("in getOldFileName  ".$notesid);
 			$sectableindex = $instance->tab_name_index[$sectablename];
 			$condition = "$table_name.$column_name=$tmpname.$secfieldname";
 			$query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname)";
+			if($secmodule == 'Calendar'){
+				$condition .= " AND $table_name.activitytype != 'Emails'";
+			}else if($secmodule == 'Leads'){
+				$condition .= " AND $table_name.converted = 0";
+			}
+
 		}
 
 		$query .= " left join ($secQuery) as $table_name on {$condition}";

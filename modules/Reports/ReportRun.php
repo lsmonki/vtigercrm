@@ -1901,7 +1901,7 @@ class ReportRun extends CRMEntity
 					'SalesOrder', 'PurchaseOrder'))) {
 				$selectedcolumns = ' distinct '. $selectedcolumns;
 			}
-			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+			$reportquery = "select DISTINCT ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
 		$reportquery = listQueryNonAdminChange($reportquery, $this->primarymodule);
 
