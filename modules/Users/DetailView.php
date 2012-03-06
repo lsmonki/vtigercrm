@@ -194,7 +194,7 @@ $smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
-$smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+$smarty->assign("USERNAME", getFullNameFromArray('Users', $focus->column_fields));
 $smarty->assign("HOUR_FORMAT",$focus->hour_format);
 $smarty->assign("START_HOUR",$focus->start_hour);
 $_SESSION['Users_FORM_TOKEN'] = rand(5, 2000) * rand(2, 7);

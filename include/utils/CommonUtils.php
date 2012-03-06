@@ -608,26 +608,21 @@ function getFullNameFromQResult($result, $row_count, $module) {
 	$log->info("In getFullNameFromQResult(" . print_r($result, true) . " - " . $row_count . "-" . $module . ") method ...");
 
 	$rowdata = $adb->query_result_rowdata($result, $row_count);
-
+	$entity_field_info = getEntityFieldNames($module);
+	$fieldsName = $entity_field_info['fieldname'];
 	$name = '';
 	if ($rowdata != '' && count($rowdata) > 0) {
-		if ($module == 'Users') {
-			$firstname = $rowdata["first_name"];
-			$lastname = $rowdata["last_name"];
-			$name = $lastname . ' ' . $firstname;
-		} else {
-			$firstname = $rowdata["firstname"];
-			$lastname = $rowdata["lastname"];
-
-			$name = $lastname;
-			// Asha: Check added for ticket 4788
-			if (getFieldVisibilityPermission($module, $current_user->id, 'firstname') == '0') {
-				$name .= ' ' . $firstname;
-			}
-		}
+		$name = getEntityFieldNameDisplay($module, $fieldsName, $rowdata );
 	}
 	$name = textlength_check($name);
 	return $name;
+}
+
+function getFullNameFromArray($module, $fieldValues) {
+	$entityInfo = getEntityFieldNames($module);
+	$fieldsName = $entityInfo['fieldname'];
+	$displayName = getEntityFieldNameDisplay($module, $fieldsName, $fieldValues);
+	return $displayName;
 }
 
 /**
@@ -784,11 +779,12 @@ function getUserFullName($userid) {
 	$log->info("in getUserFullName " . $userid);
 	global $adb;
 	if ($userid != '') {
-		$sql = "select first_name, last_name from vtiger_users where id=?";
-		$result = $adb->pquery($sql, array($userid));
-		$first_name = $adb->query_result($result, 0, "first_name");
-		$last_name = $adb->query_result($result, 0, "last_name");
-		$user_name = getDisplayName(array('f' => $first_name, 'l' => $last_name));
+		$displayValueArray = getEntityName('Users', $userid);
+		if (!empty($displayValueArray)) {
+			foreach ($displayValueArray as $key => $value) {
+				$user_name = $value;
+			}
+		}
 	}
 	$log->debug("Exiting getUserFullName method ...");
 	return $user_name;
@@ -1965,40 +1961,30 @@ function Button_Check($module) {
  * 	Returns the Record Names of each module that is not permitted to delete
  * */
 function getEntityName($module, $ids_list) {
-	global $adb;
-	global $log;
+	global $adb, $log;
 	$log->debug("Entering getEntityName(" . $module . ") method ...");
 	if ($module == 'Events') {
 		$module = 'Calendar';
 	}
 	if ($module != '') {
-		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
-		$result = $adb->pquery($query, array($module));
-		$fieldsname = $adb->query_result($result, 0, 'fieldname');
-		$tablename = $adb->query_result($result, 0, 'tablename');
-		$entityidfield = $adb->query_result($result, 0, 'entityidfield');
-		if (!(strpos($fieldsname, ',') === false)) {
-			$fieldlists = explode(',', $fieldsname);
-			$fieldsname = "concat(";
-			$fieldsname = $fieldsname . implode(",' ',", $fieldlists);
-			$fieldsname = $fieldsname . ")";
-		}
 		if (count($ids_list) <= 0) {
 			return array();
 		}
+		$entityDisplay = array();
+		$entity_field_info = getEntityFieldNames($module);
+		$tableName = $entity_field_info['tablename'];
+		$fieldsName = $entity_field_info['fieldname'];
+		$moduleName = $entity_field_info['modulename'];
+		$entityIdField = $entity_field_info['entityidfield'];
+		$entity_FieldValue = getEntityFieldValues($entity_field_info, $ids_list);
 
-		$query1 = "select $fieldsname as entityname,$entityidfield from $tablename where " .
-				"$entityidfield in (" . generateQuestionMarks($ids_list) . ")";
-		$params1 = array($ids_list);
-		$result = $adb->pquery($query1, $params1);
-		$numrows = $adb->num_rows($result);
-		$account_name = array();
-		$entity_info = array();
-		for ($i = 0; $i < $numrows; $i++) {
-			$entity_id = $adb->query_result($result, $i, $entityidfield);
-			$entity_info[$entity_id] = $adb->query_result($result, $i, 'entityname');
+		foreach($entity_FieldValue as $key => $entityInfo) {
+			foreach($entityInfo as $key => $entityName) {
+				$fieldValues = $entityName;
+				$entityDisplay[$key] = getEntityFieldNameDisplay($module, $fieldsName, $fieldValues);
+			}
 		}
-		return $entity_info;
+		return $entityDisplay;
 	}
 	$log->debug("Exiting getEntityName method ...");
 }
@@ -2229,7 +2215,7 @@ function get_announcements() {
 	$sql.=" AND vtiger_users.is_admin='on' AND vtiger_users.status='Active' AND vtiger_users.deleted = 0";
 	$result = $adb->pquery($sql, array());
 	for ($i = 0; $i < $adb->num_rows($result); $i++) {
-		$announce = getUserName($adb->query_result($result, $i, 'creatorid')) . ' :  ' . $adb->query_result($result, $i, 'announcement') . '   ';
+		$announce = getUserFullName($adb->query_result($result, $i, 'creatorid')) . ' :  ' . $adb->query_result($result, $i, 'announcement') . '   ';
 		if ($adb->query_result($result, $i, 'announcement') != '')
 			$announcement.=$announce;
 	}
@@ -2926,11 +2912,11 @@ function getOwnerNameList($idList) {
 
 	$nameList = array();
 	$db = PearDatabase::getInstance();
-	$sql = "select first_name,last_name,id from vtiger_users where id in (" . generateQuestionMarks($idList) . ")";
-	$result = $db->pquery($sql, $idList);
-	$it = new SqlResultIterator($db, $result);
-	foreach ($it as $row) {
-		$nameList[$row->id] = getDisplayName(array('f' => $row->first_name, 'l' => $row->last_name));
+	$displayValueArray = getEntityName('Users', $idList);
+	if (!empty($displayValueArray)) {
+		foreach ($displayValueArray as $key => $value) {
+			$nameList[$key] = $value;
+		}
 	}
 	$groupIdList = array_diff($idList, array_keys($nameList));
 	if (count($groupIdList) > 0) {
@@ -2984,39 +2970,113 @@ function isModuleSettingPermitted($module) {
  */
 function getEntityField($module) {
 	global $adb;
-	$data = getEntityFieldNames($module);
-	$tableName = $data['tablename'];
-	$fieldsList = $data['fieldname'];
-
-	if(is_array($fieldsList)) {
-		if(count($fieldsList) > 0) {
-			$fieldsName = "concat(";
-			$fieldsName = $fieldsName . implode(",' ',", $fieldsList);
-			$fieldsName = $fieldsName . ")";
-		} else {
-			$fieldsName = $fieldsList[0];
-		}
-	} else {
-		$fieldsName = $fieldsList;
-	}
-	$data = array("tablename" => $tableName, "fieldname" => $fieldsName);
-	return $data;
-}
-
-function getEntityFieldNames($module) {
-	global $adb;
 	$data = array();
 	if (!empty($module)) {
 		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
 		$result = $adb->pquery($query, array($module));
+		$fieldsname = $adb->query_result($result, 0, 'fieldname');
+		$tablename = $adb->query_result($result, 0, 'tablename');
+		$entityidfield = $adb->query_result($result, 0, 'entityidfield');
+		if (!(strpos($fieldsname, ',') === false)) {
+			$fieldlists = explode(',', $fieldsname);
+			$fieldsname = "concat(";
+			$fieldsname = $fieldsname . implode(",' ',", $fieldlists);
+			$fieldsname = $fieldsname . ")";
+		}
+	}
+	$data = array("tablename" => $tablename, "fieldname" => $fieldsname);
+	return $data;
+}
+
+/**
+ * this function returns the entity information for a given module; for e.g. for Contacts module
+ * it returns the information of tablename, modulename, fieldsname and id gets from vtiger_entityname
+ * @param string $module - the module name
+ * @return array $data - the entity information for the module
+ */
+function getEntityFieldNames($module) {
+	$adb = PearDatabase::getInstance();
+	$data = array();
+	if (!empty($module)) {
+		$query = "select fieldname,modulename,tablename,entityidfield from vtiger_entityname where modulename = ?";
+		$result = $adb->pquery($query, array($module));
 		$fieldsName = $adb->query_result($result, 0, 'fieldname');
 		$tableName = $adb->query_result($result, 0, 'tablename');
+		$entityIdField = $adb->query_result($result, 0, 'entityidfield');
+		$moduleName = $adb->query_result($result, 0, 'modulename');
 		if (!(strpos($fieldsName, ',') === false)) {
 			$fieldsName = explode(',', $fieldsName);
 		}
 	}
-	$data = array("tablename" => $tableName, "fieldname" => $fieldsName);
+	$data = array("tablename" => $tableName, "modulename" => $moduleName, "fieldname" => $fieldsName, "entityidfield" => $entityIdField);
 	return $data;
+}
+
+/**
+ * this function returns the fieldsname and its values in a array for the given ids
+ * @param1 array $entity_field_info - field information having modulename, tablename, fieldname, recordid
+ * @param2 array $ids_list - record ids
+ * @return array $entity_info - array of fieldname and its value with key as record id
+ */
+function getEntityFieldValues($entity_field_info, $ids_list) {
+	global $adb;
+	$tableName = $entity_field_info['tablename'];
+	$fieldsName = $entity_field_info['fieldname'];
+	$moduleName = $entity_field_info['modulename'];
+	$entityIdField = $entity_field_info['entityidfield'];
+	if (is_array($fieldsName)) {
+		$fieldsNameString = implode(",", $fieldsName);
+	} else {
+		$fieldsNameString = $fieldsName;
+	}
+	$query1 = "SELECT $fieldsNameString,$entityIdField FROM $tableName WHERE " .
+				"$entityIdField IN (" . generateQuestionMarks($ids_list) . ")";
+	if(is_array($ids_list)) {
+		$params1 = $ids_list;
+	} else {
+		$params1 = array($ids_list);
+	}
+	$result = $adb->pquery($query1, $params1);
+	$numrows = $adb->num_rows($result);
+	$entity_info = array();
+	for ($i = 0; $i < $numrows; $i++) {
+		if(is_array($fieldsName)) {
+			for($j = 0; $j < count($fieldsName); $j++)  {
+				$entity_id = $adb->query_result($result, $i, $entityIdField);
+				$entity_info[$i][$entity_id][$fieldsName[$j]] = $adb->query_result($result, $i, $fieldsName[$j]);
+			}
+		} else {
+			$entity_id = $adb->query_result($result, $i, $entityIdField);
+			$entity_info[$i][$entity_id][$fieldsName] = $adb->query_result($result, $i, $fieldsName);
+		}
+	}
+	return $entity_info;
+}
+
+/**
+ * this function returns the entity field name for a given module; for e.g. for Contacts module it return concat(lastname, ' ', firstname)
+ * @param1 $module - name of the module
+ * @param2 $fieldsName - fieldname with respect to module (ex : 'Accounts' - 'accountname', 'Contacts' - 'lastname','firstname')
+ * @param3 $fieldValues - array of fieldname and its value
+ * @return string $fieldConcatName - the entity field name for the module
+ */
+function getEntityFieldNameDisplay($module, $fieldsName, $fieldValues) {
+	global $current_user;
+	if(!is_array($fieldsName)) {
+		$fieldConcatName =  $fieldValues[$fieldsName];
+	} else {
+		foreach($fieldsName as $field) {
+
+			if($module != 'Users') {
+				if (getColumnVisibilityPermission($current_user->id, $field, $module) == '0') {
+					$fieldConcatName = $fieldConcatName." ".$fieldValues[$field];
+				}
+			} else {
+				$fieldConcatName = $fieldConcatName." ".$fieldValues[$field];
+			}
+		}
+	}
+	return $fieldConcatName;
 }
 
 // vtiger cache utility
@@ -3063,17 +3123,20 @@ function joinName($input, $glue = ' ') {
 	return $displayName;
 }
 
-function getSqlForNameInDisplayFormat($input, $dispFormat = "lf", $glue = ' ') {
-	$formattedNameList = getNameInDisplayFormat($input, $dispFormat);
-	$formattedNameListString = implode(",'" . $glue . "',", $formattedNameList);
+function getSqlForNameInDisplayFormat($input, $module, $glue = ' ') {
+	$entity_field_info = getEntityFieldNames($module);
+	$tableName = $entity_field_info['tablename'];
+	$fieldsName = $entity_field_info['fieldname'];
+	if(is_array($fieldsName)) {
+		foreach($fieldsName as $key => $value) {
+				$formattedNameList[] = $input[$value];
+			}
+		$formattedNameListString = implode(",'" . $glue . "',", $formattedNameList);
+	} else {
+		$formattedNameListString = $input[$fieldsName];
+	}
 	$sqlString = concatNamesSql($formattedNameListString);
 	return $sqlString;
-}
-
-function getDisplayName($input, $dispFormat = "lf", $glue = ' ') {
-	$formattedNameList = getNameInDisplayFormat($input, $dispFormat);
-	$displayName = joinName($formattedNameList);
-	return $displayName;
 }
 
 function getModuleSequenceNumber($module, $recordId) {

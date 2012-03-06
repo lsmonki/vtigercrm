@@ -109,7 +109,7 @@ class VTScheduledReport extends Reports {
 		$recipientsEmails = array();
 		if(!empty($recipientsList) && count($recipientsList) > 0) {
 			foreach($recipientsList as $userId) {
-				$userName = getUserName($userId);
+				$userName = getUserFullName($userId);
 				$userEmail = getUserEmail($userId);
 				if(!in_array($userEmail, $recipientsEmails)) {
 					$recipientsEmails[$userName] = $userEmail;
@@ -256,7 +256,7 @@ class VTScheduledReport extends Reports {
 
 	public static function generateRecipientOption($type, $value, $name='') {
 		switch($type) {
-			case "users"	:	if(empty($name)) $name = getUserName($value);
+			case "users"	:	if(empty($name)) $name = getUserFullName($value);
 								$optionName = 'User::'.addslashes(decode_html($name));
 								$optionValue = 'users::'.$value;
 								break;

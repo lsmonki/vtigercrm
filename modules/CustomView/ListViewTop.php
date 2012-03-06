@@ -161,7 +161,7 @@ function getMetricList()
 			$metricslist['id'] = $cvrow['cvid'];
 			$metricslist['name'] = $cvrow['viewname'];
 			$metricslist['module'] = $cvrow['entitytype'];
-			$metricslist['user'] = getUserName($cvrow['userid']);
+			$metricslist['user'] = getUserFullName($cvrow['userid']);
 			$metricslist['count'] = '';
 			if(isPermitted($cvrow['entitytype'],"index") == "yes"){
 				$metriclists[] = $metricslist;

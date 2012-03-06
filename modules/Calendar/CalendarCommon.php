@@ -18,14 +18,14 @@ function getSharedUserId($id)
 {
 	global $adb;
         $sharedid = Array();
-        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=?";
+        $query = "SELECT vtiger_users.*,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=?";
         $result = $adb->pquery($query, array($id));
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
         {
 
                 $id = $adb->query_result($result,$j,'sharedid');
-                $sharedname = $adb->query_result($result,$j,'user_name');
+                $sharedname = getFullNameFromQResult($result, $j, 'Users');
                 $sharedid[$id]=$sharedname;
 
         }
@@ -67,7 +67,7 @@ function getOtherUserName($id)
 		for($i=0;$i<$num_rows;$i++)
 		{
 			$userid=$adb->query_result($result,$i,'id');
-			$username=$adb->query_result($result,$i,'user_name');
+			$username = getFullNameFromQResult($result, $i, 'Users');
 			$user_details[$userid]=$username;
 		}
 		return $user_details;
@@ -342,14 +342,14 @@ function getActivityDetails($description,$user_id,$from='')
 		$end_date_lable=$mod_strings['Due Date'];
 	}
 
-	$name = getUserName($user_id);
+	$name = getUserFullName($user_id);
 	
 	if($from == "invite")
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_INVITATION']);
 	else
 		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_NOTIFICATION']);
 
-	$current_username = getUserName($current_user->id);
+	$current_username = getUserFullName($current_user->id);
 	$status = getTranslatedString($description['status'],'Calendar');
 	$list = $name.',';
 	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';

@@ -165,8 +165,7 @@ function getTopInvoiceSearch($output) {
             'groupid' => 1,
             'columnname' => 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V',
             'comparator' => 'e',
-            'value' => getDisplayName(array('l' => $current_user->column_fields['last_name'],
-											'f' => $current_user->column_fields['first_name'])),
+            'value' => getFullNameFromArray('Users', $current_user->column_fields),
             'columncondition' => null
         )
 	);

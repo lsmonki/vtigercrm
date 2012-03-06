@@ -459,8 +459,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid,
 			vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.related_to,
 			vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate,
@@ -521,8 +521,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT  case when (vtiger_users.user_name not like \"\") then $userNameSql else vtiger_groups.groupname end as user_name, vtiger_users.id,
 			vtiger_products.productid, vtiger_products.productname,
 			vtiger_troubletickets.ticketid,
@@ -576,8 +576,8 @@ class Products extends CRMEntity {
 			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_contactdetails.lastname,
 			vtiger_contactdetails.firstname,
 			vtiger_contactdetails.contactid,
@@ -644,8 +644,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
@@ -714,8 +714,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
@@ -781,8 +781,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
@@ -850,8 +850,8 @@ class Products extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,

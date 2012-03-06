@@ -703,7 +703,7 @@ function openwin()
 <script type="text/javascript">
 {literal}
 function vtiger_feedback() {
-	window.open("http://www.vtiger.com/products/crm/feedback.php?uid={/literal}{php}global $application_unique_key; echo $application_unique_key;{/php}{literal}","feedbackwin","height=300,width=515,top=200,left=300")
+	window.open("http://vtiger.com/products/crm/od-feedback.php?uid={/literal}{php}global $application_unique_key; echo $application_unique_key;{/php}&version={php}global $vtiger_current_version; echo $vtiger_current_version;{/php}&email={$CURRENT_USER_MAIL}{literal}","feedbackwin","height=300,width=515,top=200,left=300")
 }
 {/literal}
 </script>

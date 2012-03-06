@@ -427,12 +427,12 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 			if(is_admin($current_user))
 			{
-				$entries[] = $row['last_name'].' '.$row['first_name'];
+				$entries[] = getFullNameFromArray('Users', $row);
 			}
 			else
 			{
-				$entries[] = $row['last_name'].' '.$row['first_name'];
-			}		
+				$entries[] = getFullNameFromArray('Users', $row);
+			}
 
 			$entries[] = $row['user_name'];
 			$entries[] = $row['email1'];
@@ -597,40 +597,50 @@ function get_to_emailids($module)
 			$columns[]=$row['columnname'];
 			$fieldid[]=$row['fieldid'];
 		}
-	}
-	if(empty($emailFields))
-		return false;
-	if ($module == 'Leads') {
-		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_leaddetails.leadid as id
-				  FROM vtiger_leaddetails
-				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
-				  LEFT JOIN vtiger_leadscf ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
-				  WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.leadid IN ('.generateQuestionMarks($idlist).')';
-	} else if ($module == 'Contacts'){
-		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_contactdetails.contactid as id
-				  FROM vtiger_contactdetails
-				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
-				  LEFT JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
-				  WHERE vtiger_crmentity.deleted=0 AND vtiger_contactdetails.contactid IN ('.generateQuestionMarks($idlist).') AND vtiger_contactdetails.emailoptout=0';
-	} else {
-		$query = 'SELECT vtiger_account.accountname, '.implode(",", $emailFields).',vtiger_account.accountid as id FROM vtiger_account
-				   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
-				   LEFT JOIN vtiger_accountscf ON vtiger_accountscf.accountid= vtiger_account.accountid
-				   WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid IN ('.generateQuestionMarks($idlist).') AND vtiger_account.emailoptout=0';
-	}
-	$result = $adb->pquery($query,$idlist);
-	
-	if($adb->num_rows($result)>0){
-		while($entityvalue = $adb->fetchByAssoc($result)){
-			$vtwsid = $entityvalue['id'];
-			foreach ($emailFields as $i => $emailFieldName) {
-				if ($entityvalue[$emailFieldName] != NULL || $entityvalue[$emailFieldName] != '') {
-					$idlists .= $vtwsid . '@' . $vtwsCRMObjectMeta->getFieldIdFromFieldName($emailFieldName) . '|';
-					if ($module == 'Leads' || $module == 'Contacts') {
-						$mailids .= $entityvalue['lastname'] . " " . $entityvalue['firstname'] . "<" . $entityvalue[$emailFieldName] . ">,";
-					} else {
-						$mailids .= $entityvalue['accountname'] . "<" . $entityvalue[$emailFieldName] . ">,";
-					}
+		$columnlists = implode(',',$columns);
+		$idstring = $_REQUEST["idlist"];
+                $single_record = false;
+		if(!strpos($idstring,':'))
+		{
+			$single_record = true;
+		}
+		$crmids = preg_replace('/:/',',',$idstring);
+		$crmids = explode(",", $crmids);
+		switch($module)
+		{
+			case 'Leads':
+				$leadNameSql = getSqlForNameInDisplayFormat(array('firstname'=> 'firstname', 'lastname' => 'lastname'), 'Leads');
+				$query = 'select crmid,'.$leadNameSql.' as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.secondaryemail) != \'\')) and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+				break;
+			case 'Contacts':
+				//email opt out funtionality works only when we do mass mailing.
+				if(!$single_record)
+				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
+				else
+				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.secondaryemail) != \'\')) and ';
+				$contactNameSql = getSqlForNameInDisplayFormat(array('firstname'=> 'firstname', 'lastname' => 'lastname'), 'Contacts');
+				$query = 'select crmid,'.$contactNameSql.' as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+				break;
+			case 'Accounts':
+				//added to work out email opt out functionality.
+				if(!$single_record)
+					$concat_qry = '(((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and (vtiger_account.emailoptout != 1)) and ';
+				else
+					$concat_qry = '((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and ';
+
+				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and '.$concat_qry.' vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
+				break;
+		}
+		$result = $adb->pquery($query, array($crmids));
+		while($row = $adb->fetch_array($result))
+		{
+			$name = $row['entityname'];
+			for($i=0;$i<count($columns);$i++)
+			{
+				if($row[$columns[$i]] != NULL && $row[$columns[$i]] !='')
+				{
+					$idlists .= $row['crmid'].'@'.$fieldid[$i].'|';
+					$mailids .= $name.'<'.$row[$columns[$i]].'>,';
 				}
 			}
 		}

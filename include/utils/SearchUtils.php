@@ -956,7 +956,7 @@ function getdashboardcondition()
 		$url_string .= "&date_closed=".$date_closed;
 	}
 	if(isset($owner) && $owner != ""){
-		$column = getSqlForNameInDisplayFormat(array('l'=>'last_name', 'f'=>'first_name'));
+		$column = getSqlForNameInDisplayFormat(array('last_name'=>'last_name', 'first_name'=>'first_name'), 'Users');
 		$user_qry="select vtiger_users.id from vtiger_users where $column = ?";
 		$res = $adb->pquery($user_qry, array($owner));
 		$uid = $adb->query_result($res,0,'id');

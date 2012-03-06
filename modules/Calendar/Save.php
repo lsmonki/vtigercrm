@@ -212,7 +212,13 @@ function getRequestData($return_id)
 	$cont_name = '';
 	foreach($cont_id as $key=>$id) {
 		if($id != '') {
-			$cont_name .= getContactName($id).', ';
+			$displayValueArray = getEntityName('Contacts', $id);
+			if (!empty($displayValueArray)) {
+				foreach ($displayValueArray as $key => $field_value) {
+					$contact_name = $field_value;
+				}
+			}
+			$cont_name .= $contact_name .', ';
 		}
 	}
 	$cont_name  = trim($cont_name,', ');

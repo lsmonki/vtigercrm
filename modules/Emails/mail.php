@@ -185,9 +185,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
 	$rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
-	if($adb->num_rows($rs) > 0)
-		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
-
+	$num_rows = $adb->num_rows($rs);
+	if($num_rows > 0)
+		$from_name = getFullNameFromQResult($rs, 0, 'Users');
+	
 	$mail->FromName = decode_html($from_name);
 
 	if($to_email != '')

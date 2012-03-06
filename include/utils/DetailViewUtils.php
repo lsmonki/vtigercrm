@@ -447,7 +447,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$contact_id = $col_fields[$fieldname];
 		if ($contact_id != '') {
-			$contact_name = getContactName($contact_id);
+			$displayValueArray = getEntityName('Contacts', $contact_id);
+			if (!empty($displayValueArray)) {
+				foreach ($displayValueArray as $key => $field_value) {
+					$contact_name = $field_value;
+				}
+			} else {
+				$contact_name='';
+			}
 		}
 		$label_fld[] = $contact_name;
 		$label_fld["secid"] = $contact_id;
@@ -625,7 +632,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			$parent_module = getSalesEntityType($value);
 			if ($parent_module == "Leads") {
 				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-				$lead_name = getLeadName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$lead_name = $field_value;
+					}
+				}
 
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $lead_name . '</a>';
 			} elseif ($parent_module == "Accounts") {
@@ -710,7 +722,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			$parent_module = getSalesEntityType($value);
 			if ($parent_module == "Leads") {
 				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-				$lead_name = getLeadName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$lead_name = $field_value;
+					}
+				}
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $lead_name . '</a>';
 			} elseif ($parent_module == "Accounts") {
 				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
@@ -780,11 +797,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			$parent_module = getSalesEntityType($value);
 			if ($parent_module == "Leads") {
 				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-				$lead_name = getLeadName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$lead_name = $field_value;
+					}
+				}
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $lead_name . '</a>';
 			} elseif ($parent_module == "Contacts") {
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$contact_name = getContactName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$contact_name = $field_value;
+					}
+				} else {
+					$contact_name='';
+				}
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $contact_name . '</a>';
 			}
 		} else {
@@ -809,11 +838,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 				$parent_module = getSalesEntityType($value);
 				if ($parent_module == "Leads") {
 					$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-					$lead_name = getLeadName($value);
+					$displayValueArray = getEntityName($parent_module, $value);
+					if (!empty($displayValueArray)) {
+						foreach ($displayValueArray as $key => $field_value) {
+							$lead_name = $field_value;
+						}
+					}
 					$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $lead_name . '</a>';
 				} elseif ($parent_module == "Contacts") {
 					$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-					$contact_name = getContactName($value);
+					$displayValueArray = getEntityName($parent_module, $value);
+					if (!empty($displayValueArray)) {
+						foreach ($displayValueArray as $key => $field_value) {
+							$contact_name = $field_value;
+						}
+					} else {
+					$contact_name='';
+				}
 					$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $contact_name . '</a>';
 				} elseif ($parent_module == "Accounts") {
 					$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
@@ -834,7 +875,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			$parent_module = getSalesEntityType($value);
 			if ($parent_module == "Contacts") {
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$contact_name = getContactName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$contact_name = $field_value;
+					}
+				} else {
+					$contact_name='';
+				}
 				$label_fld[] = '<a href="index.php?module=' . $parent_module . '&action=DetailView&record=' . $value . '">' . $contact_name . '</a>';
 			} elseif ($parent_module == "Accounts") {
 				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];

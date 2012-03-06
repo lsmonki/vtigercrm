@@ -229,7 +229,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		// Get the id and the name.
 		while($row = $db->fetchByAssoc($result))
 		{
-			$temp_result[$row['id']] = getDisplayName(array('f'=>$row['first_name'],'l'=>$row['last_name']));
+			$temp_result[$row['id']] = getFullNameFromArray('Users', $row);
 		}
 
 		$user_array = &$temp_result;
@@ -3302,7 +3302,12 @@ function getRecordValues($id_array,$module) {
 				} elseif($ui_type ==57) {
 					$contact_id= $field_values[$j][$fld_name];
 					if($contact_id != '') {
-						$contactname=getContactName($contact_id);
+						$displayValueArray = getEntityName('Contacts', $contact_id);
+						if (!empty($displayValueArray)) {
+							foreach ($displayValueArray as $key => $field_value) {
+								$contactname = $field_value;
+							}
+						}
 					}
 					$value_pair['disp_value']=$contactname;
 				} elseif($ui_type == 75 || $ui_type ==81) {
@@ -3313,13 +3318,22 @@ function getRecordValues($id_array,$module) {
 					$value_pair['disp_value']=$vendor_name;
 				} elseif($ui_type == 52) {
 					$user_id = $field_values[$j][$fld_name];
-					$user_name=getUserName($user_id);
+					$user_name=getUserFullName($user_id);
 					$value_pair['disp_value']=$user_name;
 				} elseif($ui_type ==68) {
 					$parent_id = $field_values[$j][$fld_name];
 					$value_pair['disp_value'] = getAccountName($parent_id);
-					if($value_pair['disp_value'] == '' || $value_pair['disp_value'] == NULL)
-						$value_pair['disp_value'] = getContactName($parent_id);
+					if($value_pair['disp_value'] == '' || $value_pair['disp_value'] == NULL) {
+						$displayValueArray = getEntityName('Contacts', $parent_id);
+						if (!empty($displayValueArray)) {
+							foreach ($displayValueArray as $key => $field_value) {
+								$contact_name = $field_value;
+							}
+						} else {
+							$contact_name='';
+						}
+						$value_pair['disp_value'] = $contact_name;
+					}
 				} elseif($ui_type ==59) {
 					$product_name=getProductName($field_values[$j][$fld_name]);
 					if($product_name != '')
@@ -3689,7 +3703,13 @@ function getDuplicateRecordsArr($module)
 				$contact_id= $result[$col_arr[$k]];
 				if($contact_id != '')
 				{
-					$contactname=getContactName($contact_id);
+					$parent_module = 'Contacts';
+					$displayValueArray = getEntityName($parent_module, $contact_id);
+					if (!empty($displayValueArray)) {
+						foreach ($displayValueArray as $key => $field_value) {
+							$contactname = $field_value;
+						}
+					}
 				}
 
 				$result[$col_arr[$k]]=$contactname;
@@ -4860,7 +4880,15 @@ function getActivityRelatedContacts($activityId) {
 	$contactsList = array();
 	for ($i = 0; $i < $noOfContacts; ++$i) {
 		$contactId = $adb->query_result($result, $i, 'contactid');
-		$contactsList[$contactId] = getContactName($contactId);
+		$displayValueArray = getEntityName('Contacts', $contactId);
+		if (!empty($displayValueArray)) {
+			foreach ($displayValueArray as $key => $field_value) {
+				$contact_name = $field_value;
+			}
+		} else {
+			$contact_name='';
+		}
+		$contactsList[$contactId] = $contact_name;
 	}
 	return $contactsList;
 }

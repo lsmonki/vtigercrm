@@ -247,8 +247,7 @@ class CustomView extends CRMEntity{
 			if ($cvrow['status'] == CV_STATUS_DEFAULT || $cvrow['userid'] == $current_user->id) {
 				$disp_viewname = $viewname;
 			} else {
-				$userName = getDisplayName(array('f'=>$cvrow['first_name'],
-					'l'=>$cvrow['last_name']));
+				$userName = getFullNameFromArray('Users', $cvrow);
 				$disp_viewname = $viewname . " [" . $userName . "] ";
 			}
 
@@ -1064,8 +1063,8 @@ class CustomView extends CRMEntity{
 					//Added for assigned to sorting
 					if($list[1] == "smownerid")
 					{
-						$userNameSql = getSqlForNameInDisplayFormat(array('f'=>
-							'vtiger_users.first_name', 'l' => 'vtiger_users.last_name'));
+						$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 						$sqllist_column = "case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name";
 					}
 					if($list[0] == "vtiger_contactdetails" && $list[1] == "lastname")
@@ -1307,7 +1306,9 @@ class CustomView extends CRMEntity{
 
 		if($fieldname == "smownerid")
                 {
-       	                $temp_value = "(CONCAT(vtiger_users.last_name,' ',vtiger_users.first_name)".$this->getAdvComparator($comparator,$value,$datatype);
+					$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+       	                $temp_value = $userNameSql.$this->getAdvComparator($comparator,$value,$datatype);
 	                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype);
 	                $value=$temp_value; // Hot fix: removed unbalanced closing bracket ")";
 		}elseif( $fieldname == "inventorymanager")

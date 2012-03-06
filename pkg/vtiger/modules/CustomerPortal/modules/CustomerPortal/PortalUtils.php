@@ -72,7 +72,7 @@ function cp_getUsers(){
 	$users = array();
 	for($i = 0;$i < $norows;$i++) {
 		$users[$i]['id'] = $adb->query_result($res,$i,'id');
-		$users[$i]['name'] = getDisplayName(array('l' => $adb->query_result($res,$i,'last_name'), 'f' => $adb->query_result($res,$i,'first_name')));
+		$users[$i]['name'] = getFullNameFromQResult($res, $i, 'Users');
 	}
 	return $users;
 }

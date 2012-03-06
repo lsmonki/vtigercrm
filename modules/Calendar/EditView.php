@@ -58,40 +58,28 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);
     $focus->name=$focus->column_fields['subject'];
-    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
+    $sql = 'select vtiger_users.*,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
     $result = $adb->pquery($sql, array($focus->id));
     $num_rows=$adb->num_rows($result);
     $invited_users=Array();
     for($i=0;$i<$num_rows;$i++)
     {
 	    $userid=$adb->query_result($result,$i,'inviteeid');
-	    $username=$adb->query_result($result,$i,'user_name');
+	    $username = getFullNameFromQResult($result, $i, 'Users');
 	    $invited_users[$userid]=$username;
     }
     $smarty->assign("INVITEDUSERS",$invited_users);
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $related_array = getRelatedListsInformation("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
-	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');
-    $cnt_idlist = '';
-    $cnt_namelist = '';
-    if($cntlist != '')
-    {
-	    $i = 0;
-	    foreach($cntlist as $key=>$cntvalue)
-	    {
-		    if($i != 0)
-		    {
-			    $cnt_idlist .= ';';
-			    $cnt_namelist .= "\n";
-		    }
-		    $cnt_idlist .= $key;
-		    $contName = preg_replace("/(<a[^>]*>)(.*)(<\/a>)/i", "\\2", $cntvalue[0]);
-			if ($is_fname_permitted == '0') $contName .= ' '.preg_replace("/(<a[^>]*>)(.*)(<\/a>)/i", "\\2", $cntvalue[1]);
-		    $cnt_namelist .= '<option value="'.$key.'">'.$contName.'</option>';
-		    $i++;
-	    }
-    }
+
+	$entityIds = array_keys($cntlist);
+	$displayValueArray = getEntityName('Contacts', $entityIds);
+	if (!empty($displayValueArray)) {
+		foreach ($displayValueArray as $key => $field_value) {
+			$cnt_namelist[$key] =  $field_value;
+		}
+	}
     $smarty->assign("CONTACTSID",$cnt_idlist);
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
     $query = 'SELECT vtiger_recurringevents.*, vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.due_date, vtiger_activity.time_end
@@ -132,7 +120,13 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
 		$contactId = vtlib_purify($_REQUEST['contact_id']);
 		$smarty->assign("CONTACTSID",$contactId);
-		$contact_name = "<option value=".$contactId.">".getContactName($contactId)."</option>";
+		$displayValueArray = getEntityName('Contacts', $contactId);
+		if (!empty($displayValueArray)) {
+			foreach ($displayValueArray as $key => $field_value) {
+				$cont_name = $field_value;
+			}
+		}
+		$contact_name = "<option value=".$contactId.">".$cont_name."</option>";
 		$smarty->assign("CONTACTSNAME",$contact_name);
 		$account_id = vtlib_purify($_REQUEST['account_id']);
 		$account_name = getAccountName($account_id);

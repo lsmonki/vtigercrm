@@ -61,7 +61,7 @@ class ModTracker_Basic {
 	function getModifiedByLabel() {
 		global $current_user, $currentModule;
 		if (isset($current_user) && $current_user->id == $this->whodid) {
-			return getDisplayName(array('l' => $current_user->column_fields['last_name'], 'f' => $current_user->column_fields['first_name']));
+			return getFullNameFromArray('Users', $current_user->column_fields);
 		}
 		return getUserFullName($this->whodid);
 	}

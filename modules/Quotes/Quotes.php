@@ -150,8 +150,8 @@ class Quotes extends CRMEntity {
 		else
 			$returnset = '&return_module=Quotes&return_action=CallRelatedList&return_id='.$id;
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename
 			, vtiger_account.accountname,case when (vtiger_users.user_name not like '') then
 			$userNameSql else vtiger_groups.groupname end as user_name
@@ -203,8 +203,8 @@ class Quotes extends CRMEntity {
 			}
 		}
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else
 		vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid,
 		vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,
@@ -244,8 +244,8 @@ class Quotes extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
 			vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start,
 			vtiger_activity.due_date,vtiger_activity.time_start, vtiger_activity.time_end,

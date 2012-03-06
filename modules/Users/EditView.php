@@ -42,7 +42,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
     $focus->retrieve_entity_info($_REQUEST['record'],'Users');
-	$smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+	$smarty->assign("USERNAME", getFullNameFromArray('Users', $focus->column_fields));
 }else
 {
 	$mode='create';

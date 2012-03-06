@@ -36,6 +36,7 @@ $leadTab = $tabIdsList['Leads'];
 $accountTab = $tabIdsList['Accounts'];
 $contactTab = $tabIdsList['Contacts'];
 $potentialTab = $tabIdsList['Potentials'];
+$usersTab = $tabIdsList['Users'];
 
 $productsTabId = $tabIdsList['Products'];
 $servicesTabId = $tabIdsList['Services'];
@@ -423,6 +424,83 @@ Vtiger_Access::setDefaultSharing($serviceInstance);
 
 Vtiger_Module::syncfile();
 /* Replace 'Handler' field with 'Assigned to' field for Products and Services - ends */
+
+$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($contactTab));
+$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($leadTab));
+$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'first_name,last_name' WHERE tabid= ? ", array($usersTab));
+
+require_once 'include/utils/utils.php';
+
+$updatedCVIds = array();
+$updatedReportIds = array();
+$usersQuery = "SELECT * FROM vtiger_users";
+$usersInfo = $adb->query($usersQuery);
+$usersCount = $adb->num_rows($usersInfo);
+for($i=0;$i<$usersCount;$i++){
+	$username = $adb->query_result($usersInfo,$i,'user_name');
+	$usernames[$i] = $username;
+	$fullname = getFullNameFromQResult($usersInfo, $i, 'Users');
+	$fullnames[$i] = $fullname;
+}
+for($i=0;$i<$usersCount;$i++){
+	$cvQuery = "SELECT * FROM vtiger_cvadvfilter WHERE columnname LIKE '%:assigned_user_id%' AND value LIKE '%$usernames[$i]%'";
+	$cvResult = $adb->query($cvQuery);
+	$cvCount = $adb->num_rows($cvResult);
+	for($k=0;$k<$cvCount;$k++){
+		$id = $adb->query_result($cvResult,$k,'cvid');
+		if(!in_array($id, $updatedCVIds)){
+			$value = $adb->query_result($cvResult,$k,'value');
+			$value = explode(',',$value);
+			$fullname='';
+			if(count($value)>1){
+				for($m=0;$m<count($value);$m++){
+					$index = array_keys($usernames,$value[$m]);
+					if($m == count($value)-1){
+						$fullname .= trim($fullnames[$index[0]]);
+					}
+					else {
+						$fullname .= trim($fullnames[$index[0]]).',';
+					}
+				}
+			}else{
+				$fullname = $fullnames[$i];
+			}
+			$updatedCVIds[$k] = $id;
+			$adb->query("UPDATE vtiger_cvadvfilter SET value='$fullname' WHERE cvid=$id AND columnname LIKE '%:assigned_user_id%'");
+		}
+	}
+	$reportQuery = "SELECT * FROM vtiger_relcriteria WHERE columnname LIKE 'vtiger_users%:user_name%' AND value LIKE '%$usernames[$i]%'";
+	$reportResult = $adb->query($reportQuery);
+	$reportsCount = $adb->num_rows($reportResult);
+
+	$fullname='';
+	for($j=0;$j<$reportsCount;$j++){
+
+		$id = $adb->query_result($reportResult,$j,'queryid');
+		if(!in_array($id,$updatedReportIds)){
+
+			$value = $adb->query_result($reportResult,$j,'value');
+			$value = explode(',',$value);
+			$fullname='';
+			if(count($value)>1){
+				for($m=0;$m<count($value);$m++){
+					$index = array_keys($usernames,$value[$m]);
+					if($m == count($value)-1){
+						$fullname .= trim($fullnames[$index[0]]);
+					}
+					else {
+						$fullname .= trim($fullnames[$index[0]]).',';
+					}
+				}
+			}else{
+				$fullname = $fullnames[$i];
+			}
+
+			$updatedReportIds[$j] =$id;
+			$adb->query("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
+		}
+	}
+}
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 

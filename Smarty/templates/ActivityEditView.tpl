@@ -692,7 +692,9 @@ var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
 									<input name="deletecntlist" id="deletecntlist" type="hidden">
 									<select name="contactlist" size=5  style="height: 100px;width: 300px"  id="parentid" class="small" multiple>
-									{$CONTACTSNAME}	
+									{foreach item=contactname key=cntid from=$CONTACTSNAME}
+                                    	<option value="{$cntid}">{$contactname}</option>
+                                    {/foreach}
 									</select>  	 
 	
 									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}">

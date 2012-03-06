@@ -506,7 +506,7 @@ class Import_Data_Controller {
 							$importResult . '<br/><br/>'.
 							'We recommend you to login to the CRM and check few records to confirm that the import has been successful.';
 
-			$userName = getDisplayName(array('l' => $importDataController->user->last_name, 'f'=> $importDataController->user->first_name));
+			$userName = getFullNameFromArray('Users', $importDataController->user->column_fields);
 			$userEmail = $importDataController->user->email1;
 			$vtigerMailer->to = array( array($userEmail, $userName));
 			$vtigerMailer->Subject = $emailSubject;

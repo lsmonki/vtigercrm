@@ -489,13 +489,25 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 57){
 		if($value != ''){
-			$contact_name = getContactName($value);
+			$displayValueArray = getEntityName('Contacts', $value);
+			if (!empty($displayValueArray)) {
+				foreach ($displayValueArray as $key => $field_value) {
+					$contact_name = $field_value;
+				}
+			}
 		}elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != ''){
 			if($_REQUEST['module'] == 'Contacts' && $fieldname = 'contact_id'){
 				$contact_name = '';
 			}else{
 				$value = $_REQUEST['contact_id'];
-				$contact_name = getContactName($value);
+				$displayValueArray = getEntityName('Contacts', $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$contact_name = $field_value;
+					}
+				} else {
+					$contact_name='';
+				}
 			}
 
 		}
@@ -656,7 +668,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			if($parent_module == "Leads")
 			{
-				$parent_name = getLeadName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$parent_name = $field_value;
+					}
+				}
 				$lead_selected = "selected";
 
 			}
@@ -981,7 +998,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Contacts")
 			{
-				$parent_name = getContactName($value);
+				$displayValueArray = getEntityName($parent_module, $value);
+				if (!empty($displayValueArray)) {
+					foreach ($displayValueArray as $key => $field_value) {
+						$parent_name = $field_value;
+					}
+				}
 				$contact_selected = "selected";
 
 			}

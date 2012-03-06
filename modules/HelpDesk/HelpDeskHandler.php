@@ -149,7 +149,13 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 										array($parentId));
 			$emailoptout = $adb->query_result($result,0,'emailoptout');
 			$parent_email = $contact_mailid = $adb->query_result($result,0,'email');
-			$parentname = $contactname = getContactName($parentId);
+			$displayValueArray = getEntityName($parent_module, $parentId);
+			if (!empty($displayValueArray)) {
+				foreach ($displayValueArray as $key => $field_value) {
+					$contact_name = $field_value;
+				}
+			}
+			$parentname = $contactname = $contact_name;
 
 			//Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
 			if($contact_mailid != '') {

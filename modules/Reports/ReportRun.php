@@ -110,7 +110,7 @@ class ReportRun extends CRMEntity
 				//user has no access to this field, skip it.
 				continue;
 			}
-			$concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
+			$concatSql = getSqlForNameInDisplayFormat(array('first_name'=>$selectedfields[0].".first_name",'last_name'=>$selectedfields[0].".last_name"), 'Users');
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 
 			if(isset($module) && $module!="") {
@@ -312,22 +312,28 @@ class ReportRun extends CRMEntity
 		{
 			if($module == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
 			{
-				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
+				$concatSql = getSqlForNameInDisplayFormat(array('firstname'=>"vtiger_contactdetailsRelHelpDesk.firstname",'lastname'=>"vtiger_contactdetailsRelHelpDesk.lastname"), 'Contacts');
+				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then ".$concatSql." End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
 				return $querycolumn;
 			}
 			if($module == "Calendar") {
-				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject when 'SalesOrder' then vtiger_salesorderRelCalendar.subject when 'HelpDesk' then vtiger_troubleticketsRelCalendar.title when 'Campaigns' then vtiger_campaignRelCalendar.campaignname End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
+				$concatSql = getSqlForNameInDisplayFormat(array('firstname'=>"vtiger_leaddetailsRelCalendar.firstname",'lastname'=>"vtiger_leaddetailsRelCalendar.lastname"), 'Leads');
+				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then ".$concatSql." when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject when 'SalesOrder' then vtiger_salesorderRelCalendar.subject when 'HelpDesk' then vtiger_troubleticketsRelCalendar.title when 'Campaigns' then vtiger_campaignRelCalendar.campaignname End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
 			}
 		} elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name")) {
 			if(($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar') && $module==$this->primarymodule) {
+				$table = "vtiger_contactdetails".$this->primarymodule;
+				$concatSql = getSqlForNameInDisplayFormat(array('firstname'=>$table.".firstname",'lastname'=>$table.".lastname"), 'Contacts');
 				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
-					$querycolumn = " case when vtiger_crmentity.crmid!='' then concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) else '-' end as ".$selectedfields[2];
+					$querycolumn = " case when vtiger_crmentity.crmid!='' then ".$concatSql." else '-' end as ".$selectedfields[2];
 				else
 					$querycolumn = " case when vtiger_crmentity.crmid!='' then vtiger_contactdetails".$this->primarymodule.".lastname else '-' end as ".$selectedfields[2];
 			}
 			if(stristr($this->secondarymodule,$module) && ($module== 'Quotes' || $module== 'SalesOrder' || $module== 'PurchaseOrder' ||$module== 'Calendar' || $module == 'Invoice')) {
+				$table = "vtiger_contactdetails".$module;
+				$concatSql = getSqlForNameInDisplayFormat(array('firstname'=>$table.".firstname",'lastname'=>$table.".lastname"), 'Contacts');
 				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
-					$querycolumn = " case when vtiger_crmentity".$module.".crmid!='' then concat(vtiger_contactdetails".$module.".lastname,' ',vtiger_contactdetails".$module.".firstname) else '-' end as ".$selectedfields[2];
+					$querycolumn = " case when vtiger_crmentity".$module.".crmid!='' then ".$concatSql." else '-' end as ".$selectedfields[2];
 				else
 					$querycolumn = " case when vtiger_crmentity".$module.".crmid!='' then vtiger_contactdetails".$module.".lastname else '-' end as ".$selectedfields[2];
 			}
@@ -708,7 +714,7 @@ class ReportRun extends CRMEntity
 						$moduleFieldLabel = $selectedfields[2];
 						list($moduleName, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
 						$fieldInfo = getFieldByReportLabel($moduleName, $fieldLabel);
-                        $concatSql = getSqlForNameInDisplayFormat(array('f'=>$selectedfields[0].".first_name",'l'=>$selectedfields[0].".last_name"));
+                        $concatSql = getSqlForNameInDisplayFormat(array('first_name'=>$selectedfields[0].".first_name",'last_name'=>$selectedfields[0].".last_name"), 'Users');
 						// Added to handle the crmentity table name for Primary module
                         if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
                             $selectedfields[0] = "vtiger_crmentity";
@@ -817,7 +823,7 @@ class ReportRun extends CRMEntity
 									$columnList[] = "$referenceTableName.$entityFieldNames";
 								}
 								if(count($columnList) > 1) {
-									$columnSql = getSqlForNameInDisplayFormat(array('f'=>$columnList[1],'l'=>$columnList[0]));
+									$columnSql = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[1],'last_name'=>$columnList[0]), 'Users');
 								} else {
 									$columnSql = implode('', $columnList);
 								}

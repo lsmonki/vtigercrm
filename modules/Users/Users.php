@@ -646,7 +646,7 @@ class Users extends CRMEntity {
         $this->log->debug("additional detail query results: $row");
 
         if($row != null) {
-            $this->reports_to_name = stripslashes($row['first_name'].' '.$row['last_name']);
+            $this->reports_to_name = stripslashes(getFullNameFromArray('Users', $row));
         }
         else {
             $this->reports_to_name = '';

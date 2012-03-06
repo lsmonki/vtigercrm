@@ -799,7 +799,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$value="";
 								//Added to get the contactname for activities custom view - t=2190
 								if($contact_id != '' && !empty($contact_name)) {
-									$contact_name = getContactName($contact_id);
+									$displayValueArray = getEntityName('Contacts', $contact_id);
+									if (!empty($displayValueArray)) {
+										foreach ($displayValueArray as $key => $field_value) {
+											$contact_name = $field_value;
+										}
+									}
 								}
 								if(($contact_name != "") && ($contact_id !='NULL')) {
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
@@ -2227,7 +2232,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					} else if($relatedentity == 'Contacts') {
 
 						require_once('modules/Contacts/Contacts.php');
-						$contact_name = getContactName($relatedid);
+						$displayValueArray = getEntityName('Contacts', $relatedid);
+						if (!empty($displayValueArray)) {
+							foreach ($displayValueArray as $key => $field_value) {
+								$contact_name = $field_value;
+							}
+						} else {
+							$contact_name = '';
+						}
 
 						$slashes_contact_name = popup_from_html($contact_name);
 						$slashes_contact_name = htmlspecialchars($slashes_contact_name,ENT_QUOTES,$default_charset);
@@ -2335,9 +2347,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					}else
 					{
-						$firstname=$adb->query_result($list_result,$list_result_count,"first_name");
-						$lastname=$adb->query_result($list_result,$list_result_count,"last_name");
-						$name=$lastname.' '.$firstname;
+						$name = getFullNameFromQResult($list_result, $list_result_count, $module);
 						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
 
 						$slashes_name = popup_from_html($name);
@@ -2431,6 +2441,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					$value = $temp_val;
 				}
+				elseif(($module == "Users" && $colname == "last_name"))
+				{
+					$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
+					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.textlength_check($temp_val).'</a>';
+				}
 				else
 				{
 					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.textlength_check($temp_val).'</a>';
@@ -2486,8 +2501,8 @@ function getListQuery($module,$where='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$tab_id = getTabid($module);
-	$userNameSql = getSqlForNameInDisplayFormat(array('f'=>'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name' =>
+			'vtiger_users.last_name'),'Users');
 	switch($module)
 	{
 	Case "HelpDesk":

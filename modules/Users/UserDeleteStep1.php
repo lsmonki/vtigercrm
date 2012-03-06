@@ -17,7 +17,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 
 $delete_user_id = $_REQUEST['record'];
-$delete_user_name = getUserName($delete_user_id);
+$delete_user_name = getUserFullName($delete_user_id);
 
 
 $output='';

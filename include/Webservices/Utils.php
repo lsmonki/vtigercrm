@@ -43,7 +43,7 @@ function vtws_getUsersInTheSameGroup($id){
 		$usersInGroup = $groupUsers->group_users;
 		foreach ($usersInGroup as $user) {
 		if($user != $id){
-				$allUsers[$user] = getUserName($user);
+				$allUsers[$user] = getUserFullName($user);
 			}
 		}
 	}

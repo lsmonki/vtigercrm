@@ -407,10 +407,7 @@ function DeleteTag(id,recordid)
 											<td width="30%" valign="top" align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>	
 											<td width="70%" valign="top" align=left>
 											{foreach item=contactname key=cntid from=$CONTACTS}
-	                                        	{$contactname.0}
-	                                            {if $IS_PERMITTED_CNT_FNAME == '0'}
-	                                            	&nbsp;{$contactname.1}
-	                                            {/if}
+	                                        	{$contactname}
 	                                            <br>
                                             {/foreach}
 										</tr>

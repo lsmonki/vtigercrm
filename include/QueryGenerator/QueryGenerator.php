@@ -536,7 +536,7 @@ class QueryGenerator {
 							$columnList[] = "$referenceTable.$column";
 						}
 						if(count($columnList) > 1) {
-							$columnSql = getSqlForNameInDisplayFormat(array('f'=>$columnList[1],'l'=>$columnList[0]));
+							$columnSql = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users');
 						} else {
 							$columnSql = implode('', $columnList);
 						}
@@ -545,7 +545,7 @@ class QueryGenerator {
 						$fieldGlue = ' OR';
 					}
 				} elseif (in_array($fieldName, $this->ownerFields)) {
-					$concatSql = getSqlForNameInDisplayFormat(array('f'=>"vtiger_users.first_name",'l'=>"vtiger_users.last_name"));
+					$concatSql = getSqlForNameInDisplayFormat(array('first_name'=>"vtiger_users.first_name",'last_name'=>"vtiger_users.last_name"), 'Users');
 					$fieldSql .= "$fieldGlue $concatSql $valueSql or "."vtiger_groups.groupname $valueSql";
 				} else {
 					if($fieldName == 'birthday' && !$this->isRelativeSearchOperators(
