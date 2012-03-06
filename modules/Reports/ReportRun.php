@@ -2105,7 +2105,7 @@ class ReportRun extends CRMEntity
 						{
 							$fieldvalue = "-";
 						}
-						else if($fld->name == 'LBL_ACTION')
+						else if($fld->name == 'LBL_ACTION' && $fieldvalue != '-')
 						{
 							$fieldvalue = "<a href='index.php?module={$this->primarymodule}&action=DetailView&record={$fieldvalue}' target='_blank'>".getTranslatedString('LBL_VIEW_DETAILS')."</a>";
 						}
