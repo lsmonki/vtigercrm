@@ -1327,10 +1327,6 @@ class CustomView extends CRMEntity{
 			}
 			$value = $tmp_value.$change_table_field[$tablename.".".$fieldname].$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		elseif($fieldname == "handler")
-		{
-			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
-		}
 		elseif(($fieldname == "crmid" && $tablename != 'vtiger_crmentity') || $fieldname == "parent_id" || $fieldname == 'parentid')
 		{
 			//For crmentity.crmid the control should not come here. This is only to get the related to modules

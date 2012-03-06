@@ -25,6 +25,22 @@ global $migrationlog;
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Starts \n\n");
 
+$tabIdsResult = $adb->pquery('SELECT tabid, name FROM vtiger_tab', array());
+$noOfTabs = $adb->num_rows($tabIdsResult);
+$tabIdsList = array();
+
+for($i=0; $i<$noOfTabs; ++$i) {
+	$tabIdsList[$adb->query_result($tabIdsResult,$i,'name')] = $adb->query_result($tabIdsResult,$i,'tabid');
+}
+$leadTab = $tabIdsList['Leads'];
+$accountTab = $tabIdsList['Accounts'];
+$contactTab = $tabIdsList['Contacts'];
+$potentialTab = $tabIdsList['Potentials'];
+
+$productsTabId = $tabIdsList['Products'];
+$servicesTabId = $tabIdsList['Services'];
+$documentsTabId = $tabIdsList['Documents'];
+
 $moduleInstance = Vtiger_Module::getInstance('Home');
 $moduleInstance->addLink(
 		'HEADERSCRIPT',
@@ -32,7 +48,6 @@ $moduleInstance->addLink(
 		'modules/Home/js/HelpMeNow.js'
 );
 
-$documentsTabId = getTabid('Documents');
 $adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ? ", array(2, 'LBL_FILE_INFORMATION', $documentsTabId));
 $adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ?", array(3, 'LBL_DESCRIPTION', $documentsTabId));
 
@@ -331,10 +346,6 @@ $fieldMap = array(
 	array('annualrevenue','annual_revenue',null,null)
 );
 
-$leadTab=  getTabid('Leads');
-$accountTab=  getTabid('Accounts');
-$contactTab=  getTabid('Contacts');
-$potentialTab=  getTabid('Potentials');
 $mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
 
 foreach ($fieldMap as $values) {
@@ -351,10 +362,6 @@ $delete_empty_mapping="DELETE FROM vtiger_convertleadmapping WHERE accountfid=0 
 $adb->pquery($delete_empty_mapping,array());
 $alter_vtiger_convertleadmapping="ALTER TABLE vtiger_convertleadmapping ADD COLUMN editable int default 1";
 $adb->pquery($alter_vtiger_convertleadmapping,array());
-$leadTab=  getTabid('Leads');
-$accountTab=  getTabid('Accounts');
-$contactTab=  getTabid('Contacts');
-$potentialTab=  getTabid('Potentials');
 
 $check_mapping="SELECT 1 FROM vtiger_convertleadmapping WHERE leadfid=? AND accountfid=? AND contactfid=? AND  potentialfid=?";
 $insert_mapping="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) VALUES(?,?,?,?,?)";
@@ -386,6 +393,36 @@ if($adb->num_rows($check_res)>0){
 }else{
 	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'lastname'),null,getFieldid($contactTab,'lastname'),null,0));
 }
+
+$productInstance = Vtiger_Module::getInstance('Products');
+$serviceInstance = Vtiger_Module::getInstance('Services');
+
+/* Replace 'Handler' field with 'Assigned to' field for Products and Services - starts */
+$adb->query("UPDATE vtiger_crmentity, vtiger_products SET vtiger_crmentity.smownerid = vtiger_products.handler WHERE vtiger_crmentity.crmid = vtiger_products.productid");
+$adb->query("ALTER TABLE vtiger_products DROP COLUMN handler");
+$adb->pquery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 5
+				WHERE columnname = 'handler' AND tablename = 'vtiger_products' AND tabid = ?", array($productsTabId));
+$adb->query("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Products_Handler:I' WHERE columnname = 'vtiger_products:handler:assigned_user_id:Products_Handler'");
+
+$adb->query("UPDATE vtiger_crmentity, vtiger_service SET vtiger_crmentity.smownerid = vtiger_service.handler WHERE vtiger_crmentity.crmid = vtiger_service.serviceid");
+$adb->query("ALTER TABLE vtiger_service DROP COLUMN handler");
+$adb->pquery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 4
+				WHERE columnname = 'handler' AND tablename = 'vtiger_service' AND tabid = ?", array($servicesTabId));
+$adb->query("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Services_Owner:I' WHERE columnname = 'vtiger_service:handler:assigned_user_id:Services_Owner:I'");
+
+// Allow Sharing access and role-based security for Products and Services
+Vtiger_Access::deleteSharing($productInstance);
+Vtiger_Access::initSharing($productInstance);
+Vtiger_Access::allowSharing($productInstance);
+Vtiger_Access::setDefaultSharing($productInstance);
+
+Vtiger_Access::deleteSharing($serviceInstance);
+Vtiger_Access::initSharing($serviceInstance);
+Vtiger_Access::allowSharing($serviceInstance);
+Vtiger_Access::setDefaultSharing($serviceInstance);
+
+Vtiger_Module::syncfile();
+/* Replace 'Handler' field with 'Assigned to' field for Products and Services - ends */
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 

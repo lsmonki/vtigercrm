@@ -150,24 +150,24 @@ class VTScheduledReport extends Reports {
 		if($reportFormat == 'pdf' || $reportFormat == 'both') {
 			$fileName = $baseFileName.'.pdf';
 			$filePath = 'storage/'.$fileName;
-			$attachements[$fileName] = $filePath;
+			$attachments[$fileName] = $filePath;
 			$pdf = $oReportRun->getReportPDF();
 			$pdf->Output($filePath,'F');
 		}
 		if ($reportFormat == 'excel' || $reportFormat == 'both') {
 			$fileName = $baseFileName.'.xls';
 			$filePath = 'storage/'.$fileName;
-			$attachements[$fileName] = $filePath;
+			$attachments[$fileName] = $filePath;
 			$oReportRun->writeReportToExcelFile($filePath);
 		}
 
-		foreach($attachements as $attachmentName => $path) {
+		foreach($attachments as $attachmentName => $path) {
 			$vtigerMailer->AddAttachment($path, $attachmentName);
 		}
 
 		$vtigerMailer->Send(true);
 
-		foreach($attachements as $attachmentName => $path) {
+		foreach($attachments as $attachmentName => $path) {
 			unlink($path);
 		}
 	}

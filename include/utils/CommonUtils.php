@@ -2609,7 +2609,6 @@ function ChangeTypeOfData_Filter($table_name, $column_name, $type_of_data) {
 		//Product Related Fields
 		"vtiger_products:discontinued" => "C",
 		"vtiger_products:vendor_id" => "V",
-		"vtiger_products:handler" => "V",
 		"vtiger_products:parentid" => "V",
 		//Faq Related Fields
 		"vtiger_faq:product_id" => "V",
@@ -2665,7 +2664,6 @@ function ChangeTypeOfData_Filter($table_name, $column_name, $type_of_data) {
 		"vtiger_vendorcontactrel:vendorid" => "V",
 		"vtiger_vendorcontactrel:contactid" => "V",
 		"vtiger_pricebook:currency_id" => "V",
-		"vtiger_service:handler" => "V",
 	);
 
 	//If the Fields details does not match with the array, then we return the same typeofdata

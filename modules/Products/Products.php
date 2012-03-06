@@ -73,7 +73,7 @@ class Products extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'productname','imagename');
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'productname', 'imagename', 'assigned_user_id');
 	 // Josh added for importing and exporting -added in patch2
     var $unit_price;
 
@@ -899,7 +899,7 @@ class Products extends CRMEntity {
 		$button = '';
 		if($actions) {
 			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
-			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes' && isPermitted($currentModule,'EditView',$id) == 'yes') {
 				$button .= "<input title='".getTranslatedString('LBL_ADD_TO'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
 					" onclick='this.form.action.value=\"AddProductToPriceBooks\";this.form.module.value=\"$currentModule\"' type='submit' name='button'" .
 					" value='". getTranslatedString('LBL_ADD_TO'). " " . getTranslatedString($related_module) ."'>&nbsp;";
@@ -996,6 +996,10 @@ class Products extends CRMEntity {
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
 			LEFT JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_products.productid AND vtiger_seproductsrel.setype='Products'
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 AND vtiger_seproductsrel.productid = $id ";
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
@@ -1051,7 +1055,7 @@ class Products extends CRMEntity {
 	 */
 	function create_export_query($where)
 	{
-		global $log;
+		global $log, $current_user;
 		$log->debug("Entering create_export_query(".$where.") method ...");
 
 		include("include/utils/ExportUtils.php");
@@ -1065,20 +1069,19 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
-			INNER JOIN vtiger_users
-				ON vtiger_users.id=vtiger_products.handler
-
 			LEFT JOIN vtiger_vendor
-				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'";
+				ON vtiger_vendor.vendorid = vtiger_products.vendor_id";
 
+		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id AND vtiger_users.status='Active'";
+		$query .= $this->getNonAdminAccessControlQuery('Products',$current_user);
+		$where_auto = " vtiger_crmentity.deleted=0";
 
-		if($where != "")
-                        $query .= " AND ($where) ";
+		if($where != '') $query .= " WHERE ($where) AND $where_auto";
+		else $query .= " WHERE $where_auto";
 
 		$log->debug("Exiting create_export_query method ...");
-                return $query;
-
+		return $query;
 	}
 
 	/** Function to check if the product is parent of any other product
@@ -1165,7 +1168,8 @@ class Products extends CRMEntity {
 			) AS innerProduct ON innerProduct.productid = vtiger_products.productid
 			left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid and vtiger_crmentityProducts.deleted=0
 			left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
-			left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
+			left join vtiger_groups as vtiger_groupsProducts on vtiger_groupsProducts.groupid = vtiger_crmentityProducts.smownerid
+			left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
 			left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id
             left join vtiger_users as vtiger_lastModifiedByProducts on vtiger_lastModifiedByProducts.id = vtiger_crmentityProducts.modifiedby ";
 

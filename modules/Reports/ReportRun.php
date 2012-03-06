@@ -93,7 +93,7 @@ class ReportRun extends CRMEntity
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
 			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
-			list($module,$field) = split("_",$module_field);
+			list($module,$field) = split("_",$module_field,2);
 			$inventory_fields = array('quantity','listprice','serviceid','productid','discount','comment');
 			$inventory_modules = array('SalesOrder','Quotes','PurchaseOrder','Invoice');
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -169,7 +169,7 @@ class ReportRun extends CRMEntity
 					{
                                             $columnslist[$fieldcolname] = "cast(concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as DATETIME) as Calendar_Start_Date_and_Time";
 					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler' && $module_field!='Services_Owner')
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name'))
 					{
 						$temp_module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 						if($module!=$this->primarymodule){
@@ -178,14 +178,10 @@ class ReportRun extends CRMEntity
 							$condition = "and vtiger_crmentity.crmid!=''";
 						}
 						if($temp_module_from_tablename == $module)
-							$columnslist[$fieldcolname] = " case when(".$selectedfields[0].".last_name NOT LIKE '' $condition ) THEN ".$concatSql." else vtiger_groups".$module.".groupname end as '".$module."_Assigned_To'";
+							$columnslist[$fieldcolname] = " case when(".$selectedfields[0].".last_name NOT LIKE '' $condition ) THEN ".$concatSql." else vtiger_groups".$module.".groupname end as '".$module."_$field'";
 						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
 							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
 
-					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
-					{
-						$columnslist[$fieldcolname] =  $concatSql." as ".$module."_Handler";
 					}
                     elseif(stristr($selectedfields[0],"vtiger_crmentity") && ($selectedfields[1] == 'modifiedby'))
 					{
@@ -737,11 +733,7 @@ class ReportRun extends CRMEntity
 									$advcolsql[] = "(case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname else concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 		                        } elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 									$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
-									if($this->primarymodule == 'Products') {
-										$advcolsql[] = ($concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
-									} else {
-										$advcolsql[] = " ".$concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
-									}
+									$advcolsql[] = " ".$concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 								} elseif($selectedfields[1] == 'status') {//when you use comma seperated values.
 									if($selectedfields[2] == 'Calendar_Status')
 									$advcolsql[] = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
@@ -766,11 +758,7 @@ class ReportRun extends CRMEntity
 							$fieldvalue = " (".$advcolumnsql.") ";
 						} elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 							$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
-							if($this->primarymodule == 'Products') {
-								$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
-							} else {
-								$fieldvalue = " case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
-							}
+							$fieldvalue = " case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($comparator == 'bw' && count($valuearray) == 2) {
 							if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
 								$fieldvalue = "("."vtiger_crmentity.".$selectedfields[1]." between '".trim($valuearray[0])."' and '".trim($valuearray[1])."')";
@@ -1633,7 +1621,8 @@ class ReportRun extends CRMEntity
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid
 				left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
                 left join vtiger_users as vtiger_lastModifiedByProducts on vtiger_lastModifiedByProducts.id = vtiger_crmentity.modifiedby
-				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
+				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentity.smownerid
+				left join vtiger_groups as vtiger_groupsProducts on vtiger_groupsProducts.groupid = vtiger_crmentity.smownerid
 				left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id
 				LEFT JOIN (
 						SELECT vtiger_products.productid,

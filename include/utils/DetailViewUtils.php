@@ -80,7 +80,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			}
 			$label_fld = array($fieldlabel, '');
 		}
-	} // END	
+	} // END
 	else if ($uitype == 99) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$label_fld[] = $col_fields[$fieldname];
@@ -266,7 +266,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = $account_name;
 		$label_fld["secid"] = $account_id;
 		$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=" . $account_id;
-		//Account Name View	
+		//Account Name View
 	} elseif ($uitype == 52 || $uitype == 77 || $uitype == 101) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$user_id = $col_fields[$fieldname];
@@ -316,7 +316,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		}
 
 		//Security Checks
-		if ($fieldlabel == 'Assigned To' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0)) {
+		if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0)) {
 			$result = get_current_user_access_groups($module_name);
 		} else {
 			$result = get_group_options();
@@ -355,14 +355,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		}
 
 
-		if ($fieldlabel == 'Assigned To' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
+		if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id, 'private'), $assigned_user_id);
 		} else {
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id), $assigned_user_id);
 		}
 
 		if ($noof_group_rows != 0) {
-			if ($fieldlabel == 'Assigned To' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
+			if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
 				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id, 'private'), $current_user->id);
 			} else {
 				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
@@ -467,7 +467,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		if ($product_id != '') {
 			$product_name = getProductName($product_id);
 		}
-		//Account Name View	
+		//Account Name View
 		$label_fld[] = $product_name;
 		$label_fld["secid"] = $product_id;
 		$label_fld["link"] = "index.php?module=Products&action=DetailView&record=" . $product_id;
@@ -1033,7 +1033,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		if ($col_fields[$fieldname] == '0' && $fieldname != 'filedownloadcount' && $fieldname != 'filestatus' && $fieldname != 'filesize')
 			$col_fields[$fieldname] = '';
-		
+
 		//code for Documents module :start
 		if ($tabid == 8) {
 			$downloadtype = $col_fields['filelocationtype'];
@@ -1153,7 +1153,7 @@ function getDetailAssociatedProducts($module, $focus) {
 		$output .= '<td width=10% class="lvtCol"><b>' . $app_strings['LBL_QTY_IN_STOCK'] . '</b></td>';
 
 	$output .= '
-	
+
 		<td width=10% class="lvtCol"><b>' . $app_strings['LBL_QTY'] . '</b></td>
 		<td width=10% class="lvtCol" align="right"><b>' . $app_strings['LBL_LIST_PRICE'] . '</b></td>
 		<td width=12% nowrap class="lvtCol" align="right"><b>' . $app_strings['LBL_TOTAL'] . '</b></td>
@@ -1230,7 +1230,7 @@ function getDetailAssociatedProducts($module, $focus) {
 		} else {
 			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'];
 		}
-		//Product wise Discount calculation - ends 
+		//Product wise Discount calculation - ends
 
 		$totalAfterDiscount = number_format($totalAfterDiscount, 2,'.',''); //Convert to 2 decimals
 		$netprice = $totalAfterDiscount;
@@ -1311,7 +1311,7 @@ function getDetailAssociatedProducts($module, $focus) {
 			$output .= '<tr><td align="right" nowrap>' . CurrencyField::convertToUserFormat($taxtotal, null, true) . '</td></tr>';
 		}
 
-		$output .= '		   
+		$output .= '
 				</table>
 			</td>';
 		$output .= '<td class="crmTableRow small lineOnTop" valign="bottom" align="right">' . CurrencyField::convertToUserFormat($netprice, null, true) . '</td>';
@@ -1530,7 +1530,7 @@ function getRelatedLists($module, $focus) {
 
 /** This function returns whether related lists is present for this particular module or not
  * Param $module - module name
- * Param $activity_mode - mode of activity 
+ * Param $activity_mode - mode of activity
  * Return type true or false
  */
 function isPresentRelatedLists($module, $activity_mode='') {
@@ -1543,7 +1543,7 @@ function isPresentRelatedLists($module, $activity_mode='') {
 	}
 	require('user_privileges/user_privileges_' . $current_user->id . '.php');
 	$tab_id = getTabid($module);
-	// We need to check if there is atleast 1 relation, no need to use count(*)  
+	// We need to check if there is atleast 1 relation, no need to use count(*)
 	$query = "select relation_id,related_tabid, label from vtiger_relatedlists where tabid=? " .
 			"order by sequence";
 	$result = $adb->pquery($query, array($tab_id));
@@ -1571,7 +1571,7 @@ function isPresentRelatedLists($module, $activity_mode='') {
 /** This function returns the detailed block information of a record in a module.
  * Param $module - module name
  * Param $block - block id
- * Param $col_fields - column vtiger_fields array for the module 
+ * Param $col_fields - column vtiger_fields array for the module
  * Param $tabid - vtiger_tab id
  * Return type is an array
  */

@@ -474,7 +474,7 @@ class DefaultDataPopulator extends CRMEntity {
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qty_per_unit','vtiger_products',1,'1','qty_per_unit','Qty/Unit',1,2,'',100,2,33,1,'N~O',1,null,'ADV',1)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyinstock','vtiger_products',1,'1','qtyinstock','Qty In Stock',1,2,'',100,3,33,1,'NN~O',0,4,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'reorderlevel','vtiger_products',1,'1','reorderlevel','Reorder Level',1,2,'',100,4,33,1,'I~O',1,null,'ADV',1)");
- 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'handler','vtiger_products',1,'52','assigned_user_id','Handler',1,0,'',100,5,33,1,'I~O',1,null,'ADV',1)");
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Handler',1,0,'',100,5,33,1,'V~M',0,5,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyindemand','vtiger_products',1,'1','qtyindemand','Qty In Demand',1,2,'',100,6,33,1,'I~O',1,null,'ADV',1)");
 
 		//ProductImageInformation
@@ -1030,7 +1030,7 @@ class DefaultDataPopulator extends CRMEntity {
 
 
 		//Inserting for all vtiger_tabs
-                $def_org_tabid= Array(2,4,6,7,8,9,10,13,16,20,21,22,23,26);
+                $def_org_tabid= Array(2,4,6,7,8,9,10,13,14,16,20,21,22,23,26);
 
                 foreach($def_org_tabid as $def_tabid)
                 {

@@ -2590,11 +2590,10 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= getNonAdminAccessControlQuery($module,$current_user);
-		$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.converted = 0 ".
-			$where;
+		$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.converted = 0 ".$where;
 			break;
 	Case "Products":
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.description, vtiger_products.*, vtiger_productcf.*
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.description, vtiger_products.*, vtiger_productcf.*
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid
@@ -2602,11 +2601,15 @@ function getListQuery($module,$where='')
 				ON vtiger_products.productid = vtiger_productcf.productid
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_products.handler";
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
 		if((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) && (isset($_REQUEST["type"]) && $_REQUEST["type"] =="dbrd"))
                         $query .= " INNER JOIN vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid = vtiger_products.productid";
-                $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
+
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Documents":
 		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,

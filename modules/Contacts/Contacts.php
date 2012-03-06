@@ -676,13 +676,17 @@ class Contacts extends CRMEntity {
 		$query = 'SELECT vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode,
 		 		  vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price,
 				  vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname
-			   FROM vtiger_products
-			   INNER JOIN vtiger_seproductsrel
-			   	ON vtiger_seproductsrel.productid=vtiger_products.productid and vtiger_seproductsrel.setype="Contacts"
-			   INNER JOIN vtiger_crmentity
-			   	ON vtiger_crmentity.crmid = vtiger_products.productid
-			   INNER JOIN vtiger_contactdetails
-			   	ON vtiger_contactdetails.contactid = vtiger_seproductsrel.crmid
+				FROM vtiger_products
+				INNER JOIN vtiger_seproductsrel
+					ON vtiger_seproductsrel.productid=vtiger_products.productid and vtiger_seproductsrel.setype="Contacts"
+				INNER JOIN vtiger_crmentity
+					ON vtiger_crmentity.crmid = vtiger_products.productid
+				INNER JOIN vtiger_contactdetails
+					ON vtiger_contactdetails.contactid = vtiger_seproductsrel.crmid
+				LEFT JOIN vtiger_users
+					ON vtiger_users.id=vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_groups
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			   WHERE vtiger_contactdetails.contactid = '.$id.' and vtiger_crmentity.deleted = 0';
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);

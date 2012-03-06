@@ -1170,7 +1170,6 @@
 			<default value="0" />
 		</field>
 		<field name="usageunit" type="C" size="200" />
-		<field name="handler" type="I" size="11" />
 		<field name="reorderlevel" type="I" size="11" />
 		<field name="website" type="C" size="100" />
 		<field name="taxclass" type="C" size="200" />

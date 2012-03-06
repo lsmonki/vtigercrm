@@ -19,7 +19,7 @@ function getPermittedBlocks($module, $disp_view)
 {
 	global $adb, $log;
 	$log->debug("Entering into the function getPermittedBlocks($module, $disp_view)");
-	
+
         $tabid = getTabid($module);
         $block_detail = Array();
         $query="select blockid,blocklabel,show_title from vtiger_blocks where tabid=? and $disp_view=0 and visible = 0 order by sequence";
@@ -40,7 +40,7 @@ function getPermittedBlocks($module, $disp_view)
 	return $blockid_list;
 }
 
-/**	function used to get the query which will list the permitted fields 
+/**	function used to get the query which will list the permitted fields
  *	@param string $module - module name
  *	@param string $disp_view - view name, this may be create_view, edit_view or detail_view
  *	@return string $sql - query to get the list of fields which are permitted to the current user
@@ -55,7 +55,7 @@ function getPermittedFieldsQuery($module, $disp_view)
 
 	//To get the permitted blocks
 	$blockid_list = getPermittedBlocks($module, $disp_view);
-	
+
         $tabid = getTabid($module);
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users")
 	{
@@ -71,8 +71,8 @@ function getPermittedFieldsQuery($module, $disp_view)
 	return $sql;
 }
 
-/**	function used to get the list of fields from the input query as a comma seperated string 
- *	@param string $query - field table query which contains the list of fields 
+/**	function used to get the list of fields from the input query as a comma seperated string
+ *	@param string $query - field table query which contains the list of fields
  *	@return string $fields - list of fields as a comma seperated string
  */
 function getFieldsListFromQuery($query)
@@ -116,7 +116,7 @@ function getFieldsListFromQuery($query)
 		}
 		elseif($tablename == 'vtiger_seproductsrel' && $columnName == 'crmid')//Product - Related To
 		{
-			$fields .= "case vtiger_crmentityRelatedTo.setype 
+			$fields .= "case vtiger_crmentityRelatedTo.setype
 					when 'Leads' then concat('Leads :::: ',vtiger_ProductRelatedToLead.lastname,' ',vtiger_ProductRelatedToLead.firstname)
 					when 'Accounts' then concat('Accounts :::: ',vtiger_ProductRelatedToAccount.accountname)
 					when 'Potentials' then concat('Potentials :::: ',vtiger_ProductRelatedToPotential.potentialname)
@@ -129,11 +129,6 @@ function getFieldsListFromQuery($query)
 		elseif($tablename == 'vtiger_products' && $columnName == 'vendor_id')//Product - Vendor Name
 		{
 			$fields .= "vtiger_vendor.vendorname as '".$fieldlabel."',";
-		}
-		//Pavani- Handling product handler
-		elseif($tablename == 'vtiger_products' && $columnName == 'handler')//Product - Handler
-		{
-			$fields .= "vtiger_users.user_name as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_producttaxrel' && $columnName == 'taxclass')//avoid product - taxclass
 		{

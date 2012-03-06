@@ -84,7 +84,7 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
  	}
 	//Retreive the list from Database
 	//Appending the security parameter Security fix by Don
-	if($relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook'
+	if($relatedmodule != 'Faq' && $relatedmodule != 'PriceBook'
 			&& $relatedmodule != 'Vendors' && $relatedmodule != 'Users') {
 		global $current_user;
 		$secQuery = getNonAdminAccessControlQuery($relatedmodule, $current_user);
@@ -149,7 +149,7 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 	else 
 		$mod_listquery = strtolower($relatedmodule)."_listquery";
 	$_SESSION[$mod_listquery] = $query;
-	
+
 	$url_qry .="&order_by=".$order_by."&sorder=".$sorder;
 	$computeCount = $_REQUEST['withCount'];
 	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
@@ -613,7 +613,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 
 		$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
 		$action = "";
-		if(isPermitted("PriceBooks","EditView","") == 'yes')
+		if(isPermitted("PriceBooks","EditView","") == 'yes' && isPermitted('Products', 'EditView', $entity_id) == 'yes') {
 			$action .= '<img style="cursor:pointer;" src="'. vtiger_imageurl('editfield.gif', $theme).'" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
 		if(isPermitted("PriceBooks","Delete","") == 'yes')
 		{		
