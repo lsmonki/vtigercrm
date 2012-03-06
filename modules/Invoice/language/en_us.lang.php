@@ -198,6 +198,7 @@ $mod_strings = Array(
 'Documents'=>'Documents',
 
 'SINGLE_Invoice'=>'Invoice',
+'Invoice ID'=>'Invoice ID',
 );
 
 ?>

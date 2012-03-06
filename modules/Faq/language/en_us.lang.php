@@ -138,7 +138,7 @@ $mod_strings = Array(
 // Module Sequence Numbering
 'Faq No' => 'Faq No',
 // END
-
+'Faq ID' => 'FAQ ID',
 );
 
 ?>

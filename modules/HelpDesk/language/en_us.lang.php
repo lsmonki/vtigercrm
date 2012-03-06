@@ -223,6 +223,7 @@ $mod_strings = Array(
 'Days' => 'Days',
 
 'From Portal' => 'From Portal',
+'HelpDesk ID' => 'Trouble Tickets ID',
 );
 
 ?>

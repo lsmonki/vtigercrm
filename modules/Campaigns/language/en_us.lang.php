@@ -88,9 +88,9 @@ $mod_strings = Array(
 '--None--'=>'--None--',
 'Contacted - Successful' => 'Contacted - Successful',
 'Contacted - Unsuccessful' => 'Contacted - Unsuccessful',
-'Contacted - Never Contact Again' => 'Contacted - Never Contact Again'
+'Contacted - Never Contact Again' => 'Contacted - Never Contact Again',
 // END
-
+'Campaigns ID' => 'Campaigns ID',
 );
 
 ?>

@@ -449,6 +449,7 @@ $mod_strings = Array(
 'LBL_FAILURE'=>'Failed!',
     
 'LBL_ARE_YOU_SURE'=>'Are you sure?',
+'Calendar ID' => 'Calendar ID',
 );
 
 ?>

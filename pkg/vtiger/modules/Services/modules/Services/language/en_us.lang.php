@@ -59,7 +59,7 @@ $mod_strings = Array(
 'Migration'=>'Migration',
 'Customization'=>'Customization',
 'Training'=>'Training',
-
+'Services ID'=>'Services ID',
 );
 
 ?>

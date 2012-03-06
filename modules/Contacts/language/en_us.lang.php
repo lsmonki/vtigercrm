@@ -243,9 +243,9 @@ $mod_strings = Array(
 // Module Sequence Numbering
 'Contact Id' => 'Contact Id',
 'Secondary Email'=>'Secondary Email',
-
 // END
 
+'Contacts ID'=>'Contacts ID',
 );
 
 ?>

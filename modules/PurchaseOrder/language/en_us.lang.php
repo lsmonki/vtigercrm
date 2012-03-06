@@ -198,6 +198,7 @@ $mod_strings = Array(
 'PurchaseOrder No'=>'PurchaseOrder No',
 
 'SINGLE_PurchaseOrder'=>'Purchase Order',
+'PurchaseOrder ID'=>'Purchase Order ID',
 );
 
 ?>

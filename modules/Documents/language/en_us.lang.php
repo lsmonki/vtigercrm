@@ -139,6 +139,7 @@ $mod_strings = Array(
 'Document No'=>'Document No',
 
 'Documents' => 'Documents',
+'Documents ID' => 'Documents ID',
 );
 
 ?>

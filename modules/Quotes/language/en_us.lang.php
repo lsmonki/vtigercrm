@@ -185,6 +185,7 @@ $mod_strings = Array(
 
 'SINGLE_Quotes'=>'Quote',
 'Add Service Contract'=>'Add Service Contract',
+'Quotes ID'=>'Quotes ID',
 );
 
 ?>
