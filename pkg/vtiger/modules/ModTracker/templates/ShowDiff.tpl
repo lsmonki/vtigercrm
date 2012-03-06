@@ -6,7 +6,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************}
- 
+
 <div id="orgLay" class="layerPopup">
 
 <!-- Styles for highlighting the string diff -->
@@ -19,12 +19,9 @@ ins { text-decoration: none; background-color: #FDFF00; }
 
 <table class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-	<td class="layerPopupHeading" align="left" nowrap="nowrap" width="70%">
+	<td class="layerPopupHeading" align="left" width="70%">
 		{$TRACKRECORD->getDisplayName()}
-		
-	</td>
-	<td align="right" width="28%">
-	
+
 		{* Disabling highlighting triggers *}
 		{* START
 		{if $smarty.request.highlight eq 'true'}
@@ -33,9 +30,8 @@ ins { text-decoration: none; background-color: #FDFF00; }
 		<img src="{'onstar.gif'|@vtiger_imageurl:$THEME}" border=0> <a href='javascript:void(0);' style='display: inline' onclick="ModTrackerCommon.showdiff({$TRACKRECORD->id}, {$ATPOINT}, true);">{'LBL_TURN_ON_HIGHLIGHTING'|@getTranslatedString:$MODULE}</a>
 		{/if}
 		END *}
-		
 	</td>
-	<td align="right" width="2%">
+	<td align="right" width="2%" valign="top">
 		<a href='javascript:void(0);'><img src="{'close.gif'|@vtiger_imageurl:$THEME}" onclick="ModTrackerCommon.hide();" align="right" border="0"></a>
 	</td>
 </tr>
@@ -44,14 +40,14 @@ ins { text-decoration: none; background-color: #FDFF00; }
 <table class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
 	<td>{'LBL_CHANGED_BY'|@getTranslatedString:$MODULE} {$TRACKRECORD->getModifiedByLabel()} @ {$TRACKRECORD->getModifiedOn()}</td>
-	
+
 	<td align="right" width="10%">
 		{if $ATPOINT_PREV neq $ATPOINT}
 			<a href='javascript:void(0);'><img src="{'previous.gif'|@vtiger_imageurl:$THEME}" onclick="ModTrackerCommon.showhistory({$TRACKRECORD->crmid},{$ATPOINT_PREV});" border="0"></a>
 		{else}
 			<a href='javascript:void(0);'><img src="{'previous_disabled.gif'|@vtiger_imageurl:$THEME}" border="0"></a>
-		{/if}				
-		
+		{/if}
+
 		{if $ATPOINT gt 0}
 			<a href='javascript:void(0);'><img src="{'next.gif'|@vtiger_imageurl:$THEME}" onclick="ModTrackerCommon.showhistory({$TRACKRECORD->crmid},{$ATPOINT_NEXT});" border="0"></a>
 		{else}
@@ -85,11 +81,11 @@ ins { text-decoration: none; background-color: #FDFF00; }
 		{/foreach}
 		<tr>
 			<td class='lvtColData' colspan="3" align="center">
-				<input value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" onclick="ModTrackerCommon.hide();" type="button">					
+				<input value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" onclick="ModTrackerCommon.hide();" type="button">
 			</td>
 		</tr>
 		</table>
 	</td>
 </tr>
-</table>		
+</table>
 </div>
