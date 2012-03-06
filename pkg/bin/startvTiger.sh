@@ -113,12 +113,12 @@ fi
 echo ""
 echo "Checking if the vtigercrm540rc database already exists"
 echo ""
-echo "select 1" | ./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -D vtigercrm540 >/dev/null
+echo "select 1" | ./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -D vtigercrm540rc >/dev/null
 if [ $? -ne 0 ]; then
 	echo ""
-	echo "Database vtigercrm540 does not exist. Creating database vtigercrm540"
+	echo "Database vtigercrm540rc does not exist. Creating database vtigercrm540rc"
 	echo ""
-	./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm540"
+	./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm540rc"
 fi
 
 host=`hostname`
