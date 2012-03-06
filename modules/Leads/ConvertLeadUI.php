@@ -105,10 +105,6 @@ class ConvertLeadUI {
 		}
 	}
 
-	function getSelectedUserId() {
-		return $this->leadowner;
-	}
-
 	function getUserSelected() {
 		return $this->userselected;
 	}
@@ -138,33 +134,9 @@ class ConvertLeadUI {
 		return $this->leadid;
 	}
 
-	function getIndustry() {
-		global $default_charset;
-		$value = html_entity_decode($this->row['industry'], ENT_QUOTES, $default_charset);
-		return htmlentities($value, ENT_QUOTES, $default_charset);
-	}
-
-	function getLastName() {
-		global $default_charset;
-		$value = html_entity_decode($this->row['lastname'], ENT_QUOTES, $default_charset);
-		return htmlentities($value, ENT_QUOTES, $default_charset);
-	}
-
 	function getCompany() {
 		global $default_charset;
 		$value = html_entity_decode($this->row['company'], ENT_QUOTES, $default_charset);
-		return htmlentities($value, ENT_QUOTES, $default_charset);
-	}
-
-	function getFirstName() {
-		global $default_charset;
-		$value = html_entity_decode($this->row['firstname'], ENT_QUOTES, $default_charset);
-		return htmlentities($value, ENT_QUOTES, $default_charset);
-	}
-
-	function getEmail() {
-		global $default_charset;
-		$value = html_entity_decode($this->row['email'], ENT_QUOTES, $default_charset);
 		return htmlentities($value, ENT_QUOTES, $default_charset);
 	}
 
@@ -175,8 +147,11 @@ class ConvertLeadUI {
 
 		global $adb;
 		$industry_list = array();
-		$pick_list_values = getAssignedPicklistValues('industry', $this->current_user->roleid, $adb);
-		
+		if (is_admin($this->current_user)) {
+			$pick_list_values = getAllPickListValues('industry');
+		} else {
+			$pick_list_values = getAssignedPicklistValues('industry', $this->current_user->roleid, $adb);
+		}
 		foreach ($pick_list_values as $value) {
 			$industry_list[$value]["value"] = $value;
 		}
@@ -185,13 +160,16 @@ class ConvertLeadUI {
 
 	function getSalesStageList() {
 		global$adb;
-		
+
 		require_once 'modules/PickList/PickListUtils.php';
 
 		global $adb;
 		$sales_stage_list = array();
-		$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid, $adb);
-		
+		if (is_admin($this->current_user)) {
+			$pick_list_values = getAllPickListValues('sales_stage');
+		} else {
+			$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid, $adb);
+		}
 		foreach ($pick_list_values as $value) {
 			$sales_stage_list[$value]["value"] = $value;
 		}
@@ -243,7 +221,7 @@ class ConvertLeadUI {
 	}
 
 	function getMappedFieldValue($module, $fieldName, $editable) {
-		global $adb;
+		global $adb,$default_charset;
 		
 		$fieldid = getFieldid(getTabid($module), $fieldName);
 
@@ -253,10 +231,6 @@ class ConvertLeadUI {
 			OR potentialfid=? 
 			AND editable=?";
 		$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
-		if(!$adb->num_rows($result)>0){
-			$fieldinfo = $this->getFieldInfo($module, $fieldName);
-			return $fieldinfo['default'];
-		}
 		$leadfid = $adb->query_result($result, 0, 'leadfid');
 
 		$sql = "SELECT fieldname FROM vtiger_field WHERE fieldid=? AND tabid=?";
@@ -264,7 +238,7 @@ class ConvertLeadUI {
 		$leadfname = $adb->query_result($result, 0, 'fieldname');
 
 		$fieldinfo = $this->getFieldInfo($module, $fieldName);
-		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {
+		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {global $log;$log->fatal($this->row[$leadfname]);
 			$valuelist = null;
 			switch ($fieldName) {
 				case 'industry':$valuelist = $this->getIndustryList();
@@ -274,12 +248,18 @@ class ConvertLeadUI {
 			}
 			foreach ($fieldinfo['type']['picklistValues'] as $key => $values) {
 				if ($values['value'] == $this->row[$leadfname]) {
-					return $this->row[$leadfname];
+					$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
+					return htmlentities($value, ENT_QUOTES, $default_charset);
+					//return $this->row[$leadfname];
 				}
 			}
-			return $fieldinfo['default'];
+			$value = html_entity_decode($fieldinfo['default'], ENT_QUOTES, $default_charset);
+			return htmlentities($value, ENT_QUOTES, $default_charset);
+			//return $fieldinfo['default'];
 		}
-		return $this->row[$leadfname];
+		$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
+		return htmlentities($value, ENT_QUOTES, $default_charset);
+		//return $this->row[$leadfname];
 	}
 
 }

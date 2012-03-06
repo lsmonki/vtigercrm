@@ -24,8 +24,8 @@
 			<b>{$MOD.LBL_SELECT_TO_EDIT}</b>
 			<br>
 			<select id="edit_availPickList" name="availList" size="10" style="width:250px;border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px;" onchange="selectForEdit();">
-				{foreach item=pick_val from=$PICKVAL}
-					<option value="{$pick_val}">{$pick_val}</option>
+				{foreach item=pick_val key=pick_key from=$PICKVAL}
+					<option value="{$pick_key}">{$pick_val}</option>
 				{/foreach}
 			</select>
 			

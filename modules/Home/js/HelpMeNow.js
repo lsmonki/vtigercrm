@@ -582,8 +582,8 @@ function closePopup(){
 
 function vtiger_help_toggle(header){
     var heading=header.parentNode;
-    var arrow = vtiger_help_getElementsByClassName(header,'helpArrow','label');
-    var content =vtiger_help_getElementsByClassName(heading,'content','div');
+    var arrow = vtlib_getElementsByClassName(header,'helpArrow','label');
+    var content =vtlib_getElementsByClassName(heading,'content','div');
     var visible=content[0].style.display;
     if(visible=='none'){
         content[0].style.display="block";

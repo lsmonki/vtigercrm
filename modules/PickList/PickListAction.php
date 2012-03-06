@@ -72,6 +72,7 @@ if($mode == 'add'){
 		$oldVal = $oldValues[$i];
 		
 		if($newVal != $oldVal){
+			$oldVal = htmlentities($oldValues[$i], ENT_QUOTES, $default_charset);
 			$sql = "UPDATE vtiger_$tableName SET $tableName=? WHERE $tableName=?";
 			$adb->pquery($sql, array($newVal, $oldVal));
 			
@@ -123,13 +124,13 @@ if($mode == 'add'){
 				$adb->pquery($sql, array($replacePicklistID, $origPicklistID));
 			}
 		}
-		
+		$values[$i] = Array('encodedValue'=>htmlentities($values[$i], ENT_QUOTES, $default_charset),'rawValue'=>$values[$i]);
 		$sql = "delete from vtiger_$tableName where $tableName=?";
-		$adb->pquery($sql, array($values[$i]));
+		$adb->pquery($sql, array($values[$i]['encodedValue']));
 		$sql = "delete from vtiger_role2picklist where picklistvalueid=?";
 		$adb->pquery($sql, array($origPicklistID));
 		$sql = "DELETE FROM vtiger_picklist_dependency WHERE sourcevalue=? AND sourcefield=? AND tabid=?";
-		$adb->pquery($sql, array($values[$i], $tableName, getTabid($moduleName)));
+		$adb->pquery($sql, array($values[$i]['encodedValue'], $tableName, getTabid($moduleName)));
 		
 		//replace the value of this piclist with new one in all records
 		$qry="select tablename,columnname from vtiger_field where fieldname=? and presence in (0,2)";
@@ -141,10 +142,9 @@ if($mode == 'add'){
 				$columnName = $adb->query_result($result,$n,'columnname');
 				
 				$sql = "update $table_name set $columnName=? where $columnName=?";
-				$adb->pquery($sql, array($replaceVal, $values[$i]));
-					
+				$adb->pquery($sql, array($replaceVal, $values[$i]['rawValue']));
 				$sql = "UPDATE vtiger_field SET defaultvalue=? WHERE defaultvalue=? AND tablename=? AND columnname=?";
-				$adb->pquery($sql, array($replaceVal, $values[$i], $table_name, $columnName));
+				$adb->pquery($sql, array($replaceVal, $values[$i]['rawValue'], $table_name, $columnName));
 			}
 		}
 	}

@@ -120,6 +120,16 @@ function validate(blockid) {
 				}
 			}
 
+			//Empty Check validation
+			for (i=0;i<pickListAry.length;i++) {
+				if (pickListAry[i].search(/(\<|\>|\\|\/)/gi)!=-1) {
+					alert(alert_arr.SPECIAL_CHARACTERS+'"<" ">" "\\" "/"'+alert_arr.NOT_ALLOWED);
+
+					picklistObj.focus();
+					return false
+				}
+			}
+
 			return true
 		} else return false
 	}
@@ -465,41 +475,41 @@ function validateMapping(id,chngSelect,field_id){
 
 			case 'Accounts':
 				for(i=1;i<incId;i++){
-				if(i==id){
-					continue;
-				}
-				if(document.getElementById('map['+i+'][Accounts]').options[document.getElementById('map['+i+'][Accounts]').selectedIndex].value==document.getElementById('map['+id+'][Accounts]').options[document.getElementById('map['+id+'][Accounts]').selectedIndex].value){
+					if(i==id){
+						continue;
+					}
+					if(document.getElementById('map['+i+'][Accounts]').options[document.getElementById('map['+i+'][Accounts]').selectedIndex].value==document.getElementById('map['+id+'][Accounts]').options[document.getElementById('map['+id+'][Accounts]').selectedIndex].value){
 	
-					alert(alertmessage[5]);
-					document.getElementById('map['+id+'][Accounts]').value='';
-					return false;
+						alert(alertmessage[5]);
+						document.getElementById('map['+id+'][Accounts]').value='';
+						return false;
+					}
 				}
-			}
-			break;
+				break;
 			case 'Contacts':
 				for(i=1;i<incId-1;i++){
-				if(i==id){
-					continue;
+					if(i==id){
+						continue;
+					}
+					if(document.getElementById('map['+i+'][Contacts]').options[document.getElementById('map['+i+'][Contacts]').selectedIndex].value==document.getElementById('map['+id+'][Contacts]').options[document.getElementById('map['+id+'][Contacts]').selectedIndex].value){
+						alert(alertmessage[5]);
+						document.getElementById('map['+id+'][Contacts]').value='';
+						return false;
+					}
 				}
-				if(document.getElementById('map['+i+'][Contacts]').options[document.getElementById('map['+i+'][Contacts]').selectedIndex].value==document.getElementById('map['+id+'][Contacts]').options[document.getElementById('map['+id+'][Contacts]').selectedIndex].value){
-					alert(alertmessage[5]);
-					document.getElementById('map['+id+'][Contacts]').value='';
-					return false;
-				}
-			}
-			break;
+				break;
 			case 'Potentials':
 				for(i=1;i<incId;i++){
-				if(i==id){
-					continue;
+					if(i==id){
+						continue;
+					}
+					if(document.getElementById('map['+i+'][Potentials]').options[document.getElementById('map['+i+'][Potentials]').selectedIndex].value==document.getElementById('map['+id+'][Potentials]').options[document.getElementById('map['+id+'][Potentials]').selectedIndex].value){
+						alert(alertmessage[5]);
+						document.getElementById('map['+id+'][Potentials]').value='';
+						return false;
+					}
 				}
-				if(document.getElementById('map['+i+'][Potentials]').options[document.getElementById('map['+i+'][Potentials]').selectedIndex].value==document.getElementById('map['+id+'][Potentials]').options[document.getElementById('map['+id+'][Potentials]').selectedIndex].value){
-					alert(alertmessage[5]);
-					document.getElementById('map['+id+'][Potentials]').value='';
-					return false;
-				}
-			}
-			break;
+				break;
 		}
 	}
 

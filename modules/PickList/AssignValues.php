@@ -31,10 +31,10 @@ if($moduleName == 'Events'){
 }
 
 if(!empty($fieldName)){
-	$values = getAllPickListValues($fieldName);
+	$values = getAllPickListValues($fieldName,$temp_module_strings);
 }
 
-$assignedValues = getAssignedPicklistValues($fieldName, $roleid, $adb);
+$assignedValues = getAssignedPicklistValues($fieldName, $roleid, $adb, $temp_module_strings);
 
 $smarty->assign("THEME",$theme);
 $smarty->assign("FIELDNAME",$fieldName);
