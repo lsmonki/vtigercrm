@@ -122,7 +122,8 @@ function validate_sendmail(idlist,module){
 		var url1 = "&viewname="+viewid+"&excludedRecords="+excludedRecords+"&searchurl="+searchurl;
 	} else if(idlist == 'relatedListSelectAll'){
 		var recordid = $('recordid').value;
-		url1 = "&recordid="+recordid;
+		var excludedRecords = $('excludedRecords').value;
+		url1 = "&recordid="+recordid+"&excludedRecords="+excludedRecords;
 	} else {
 		url1 = '';
 	}

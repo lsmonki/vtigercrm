@@ -518,7 +518,7 @@ function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
 	$mailds = '';
 	$fieldids = explode(":", vtlib_purify($_REQUEST['field_lists']));
 	if($_REQUEST['idlist'] == 'all' || $_REQUEST['idlist'] == 'relatedListSelectAll'){
-		$idlist = getSelectedRecords($_REQUEST,vtlib_purify($_REQUEST['pmodule']),vtlib_purify($_REQUEST['idlist']),vtlib_purify($_REQUEST['execludedRecords']));
+		$idlist = getSelectedRecords($_REQUEST,vtlib_purify($_REQUEST['pmodule']),vtlib_purify($_REQUEST['idlist']),vtlib_purify($_REQUEST['excludedRecords']));
 	} else {
 		$idlist = explode(":", str_replace("undefined","",vtlib_purify($_REQUEST['idlist'])));
 	}

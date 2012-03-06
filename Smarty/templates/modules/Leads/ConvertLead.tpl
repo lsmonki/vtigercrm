@@ -105,7 +105,7 @@
 										<tr>
 											<td align="right" class="dvtCellLabel">{if $UIINFO->isMandatory('Potentials','sales_stage') eq true}<font color="red">*</font>{/if}{'LBL_SALES_STAGE'|@getTranslatedString:$MODULE}</td>
 											<td class="dvtCellInfo">
-												{assign var=sales_stage_map_value value=$UIINFO->getMappedFieldValue('Accounts','sales_stage',1)}
+												{assign var=sales_stage_map_value value=$UIINFO->getMappedFieldValue('Potentials','sales_stage',1)}
 												<select name="sales_stage" {if $UIINFO->isMandatory('Potentials','sales_stage') eq true}record="true"{/if} module="Potentials" class="small">
 													{foreach item=salesStage from=$UIINFO->getSalesStageList() name=salesStageLoop}
 														<option value="{$salesStage.value}" {if $salesStage.value eq $sales_stage_map_value}selected="selected"{/if} >{$salesStage.value|@getTranslatedString:$MODULE}</option>

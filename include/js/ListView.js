@@ -424,9 +424,9 @@ function getListViewEntries_js(module,url)
 			var getId = urlArray[i].split('=');
 			if(getId[0] == 'folderid'){
 				folderid = parseInt(getId[1]);
+				all_selected = $('selectedboxes_selectall'+folderid).value;
 			}
 		}
-		all_selected = $('selectedboxes_selectall'+folderid).value;
 	}
 
 	var select_options  =  document.getElementsByName('selected_id');

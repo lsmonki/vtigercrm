@@ -49,9 +49,9 @@ function Contacts_sendCustomerPortalLoginDetails($entityData){
 		if($insert == true || $update == true) {
 			require_once("modules/Emails/mail.php");
 			global $current_user;
-			$contents= Contacts::getPortalEmailContents($entityData,$password);
-			$subject = getTranslatedString('Customer Portal Login Details', $moduleName);
-
+			$emailData = Contacts::getPortalEmailContents($entityData,$password,'LoginDetails');
+			$subject = $emailData['subject'];
+			$contents = $emailData['body'];
 			$mail_status = send_mail('Contacts',$entityData->get('email'),$current_user->user_name,"",$subject,$contents);
 		}
 	} else {
