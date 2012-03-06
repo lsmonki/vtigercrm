@@ -652,57 +652,12 @@ class Reports extends CRMEntity{
 				$fieldtablename = "vtiger_users".$module;
 				$fieldcolname = "user_name";
 			}
-			if($fieldname == "account_id")
-			{
-				$fieldtablename = "vtiger_account".$module;
-				$fieldcolname = "accountname";
-			}
-			if($fieldname == "contact_id")
-			{
-				$fieldtablename = "vtiger_contactdetails".$module;
-				$fieldcolname = "lastname";
-			}
-			if($fieldname == "parent_id")
-			{
-				$fieldtablename = "vtiger_crmentityRel".$module;
-				$fieldcolname = "setype";
-			}
-			if($fieldname == "vendor_id")
-			{
-				$fieldtablename = "vtiger_vendorRel".$module;
-				$fieldcolname = "vendorname";
-			}
-			if($fieldname == "potential_id")
-			{
-				$fieldtablename = "vtiger_potentialRel".$module;
-				$fieldcolname = "potentialname";
-			}
 			if($fieldname == "assigned_user_id1")
 			{
 				$fieldtablename = "vtiger_usersRel1";
 				$fieldcolname = "user_name";
 			}
-			if($fieldname == 'quote_id')
-			{
-				$fieldtablename = "vtiger_quotes".$module;
-				$fieldcolname = "subject";
-			}
 
-			$product_id_tables = array(
-				"vtiger_troubletickets"=>"vtiger_productsRel",
-				"vtiger_campaign"=>"vtiger_productsCampaigns",
-				"vtiger_faq"=>"vtiger_productsFaq",
-				);
-			if($fieldname == 'product_id' && isset($product_id_tables[$fieldtablename]))
-			{
-				$fieldtablename = $product_id_tables[$fieldtablename];
-				$fieldcolname = "productname";
-			}
-			if($fieldname == 'campaignid' && $module=='Potentials')
-			{
-				$fieldtablename = "vtiger_campaign".$module;
-				$fieldcolname = "campaignname";
-			}
 			if($fieldname == 'currency_id' && $fieldtablename=='vtiger_pricebook')
 			{
 				$fieldtablename = "vtiger_currency_info".$module;

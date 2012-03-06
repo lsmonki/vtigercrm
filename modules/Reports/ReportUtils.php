@@ -29,6 +29,18 @@ function getFieldByReportLabel($module, $label) {
 	return null;
 }
 
+function isReferenceUIType($uitype) {
+	static $options = array('101', '116', '117', '26', '357',
+		'50', '51', '52', '53', '57', '58', '59', '66', '68',
+		'73', '75', '76', '77', '78', '80', '81'
+	);
+
+	if(in_array($uitype, $options)) {
+		return true;
+	}
+	return false;
+}
+
 /**
  *
  * @global Users $current_user
@@ -75,15 +87,17 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		if($value!='')
 			$fieldvalue = getCurrencyName($value);
 	}elseif ((in_array($dbField->name,$report->ui10_fields) || $fieldType == 'reference') &&
-			!empty($value)) {
+			!empty($value) && is_numeric($value)) {
 		$type = getSalesEntityType($value);
-		$tmp =getEntityName($type,$value);
-		if (is_array($tmp)){
-			foreach($tmp as $key=>$val){
-				$fieldvalue = $val;
-				break;
+		$referenceModules = $field->getReferenceList();
+		if(in_array($type, $referenceModules)) {
+			$tmp = getEntityName($type,$value);
+			if($tmp[$value] != null) {
+				$fieldvalue = $tmp[$value];
+			} else {
+				$fieldvalue = $value;
 			}
-		}else{
+		} else {
 			$fieldvalue = $value;
 		}
 	} elseif (in_array($dbField->name,$report->ui101_fields) && !empty($value)) {

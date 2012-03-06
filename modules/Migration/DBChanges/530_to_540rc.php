@@ -502,6 +502,57 @@ for($i=0;$i<$usersCount;$i++){
 	}
 }
 
+$replaceReportColumnsList = array (
+	'vtiger_accountAccounts:accountname:Accounts_Member_Of:account_id:V' =>
+		'vtiger_account:parentid:Accounts_Member_Of:account_id:V',
+	'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V' =>
+		'vtiger_contactdetails:accountid:Contacts_Account_Name:account_id:V',
+	'vtiger_contactdetailsContacts:lastname:Contacts_Reports_To:contact_id:V' =>
+		'vtiger_contactdetails:reportsto:Contacts_Reports_To:contact_id:V',
+	'vtiger_productsCampaigns:productname:Campaigns_Product:product_id:V' =>
+		'vtiger_campaign:product_id:Campaigns_Product:product_id:V',
+	'vtiger_productsFaq:productname:Faq_Product_Name:product_id:V' =>
+		'vtiger_faq:product_id:Faq_Product_Name:product_id:V',
+	'vtiger_contactdetailsInvoice:lastname:Invoice_Contact_Name:contact_id:V' =>
+		'vtiger_invoice:contactid:Invoice_Contact_Name:contact_id:V',
+	'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:V' =>
+		'vtiger_invoice:accountid:Invoice_Account_Name:account_id:V',
+	'vtiger_campaignPotentials:campaignname:Potentials_Campaign_Source:campaignid:V' =>
+		'vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V',
+	'vtiger_vendorRelProducts:vendorname:Products_Vendor_Name:vendor_id:V' =>
+		'vtiger_products:vendor_id:Products_Vendor_Name:vendor_id:V',
+	'vtiger_vendorRelPurchaseOrder:vendorname:PurchaseOrder_Vendor_Name:vendor_id:V' =>
+		'vtiger_purchaseorder:vendorid:PurchaseOrder_Vendor_Name:vendor_id:V',
+	'vtiger_contactdetailsPurchaseOrder:lastname:PurchaseOrder_Contact_Name:contact_id:V' =>
+		'vtiger_purchaseorder:contactid:PurchaseOrder_Contact_Name:contact_id:V',
+	'vtiger_potentialRelQuotes:potentialname:Quotes_Potential_Name:potential_id:V' =>
+		'vtiger_quotes:potentialid:Quotes_Potential_Name:potential_id:V',
+	'vtiger_contactdetailsQuotes:lastname:Quotes_Contact_Name:contact_id:V' =>
+		'vtiger_quotes:contactid:Quotes_Contact_Name:contact_id:V',
+	'vtiger_accountQuotes:accountname:Quotes_Account_Name:account_id:V' =>
+		'vtiger_quotes:accountid:Quotes_Account_Name:account_id:V',
+	'vtiger_quotesSalesOrder:subject:SalesOrder_Quote_Name:quote_id:V' =>
+		'vtiger_salesorder:quoteid:SalesOrder_Quote_Name:quote_id:V',
+	'vtiger_contactdetailsSalesOrder:lastname:SalesOrder_Contact_Name:contact_id:V' =>
+		'vtiger_salesorder:contactid:SalesOrder_Contact_Name:contact_id:V',
+	'vtiger_accountSalesOrder:accountname:SalesOrder_Account_Name:account_id:V' =>
+		'vtiger_salesorder:accountid:SalesOrder_Account_Name:account_id:V',
+	'vtiger_crmentityRelHelpDesk:setype:HelpDesk_Related_To:parent_id:V' =>
+		'vtiger_troubletickets:parent_id:HelpDesk_Related_To:parent_id:V',
+	'vtiger_productsRel:productname:HelpDesk_Product_Name:product_id:V' =>
+		'vtiger_troubletickets:product_id:HelpDesk_Product_Name:product_id:V',
+	'vtiger_crmentityRelCalendar:setype:Calendar_Related_To:parent_id:V' =>
+		'vtiger_seactivityrel:crmid:Calendar_Related_To:parent_id:V',
+	'vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:V' =>
+		'vtiger_cntactivityrel:contactid:Calendar_Contact_Name:contact_id:V',
+);
+
+foreach($replaceReportColumnsList as $oldName => $newName) {
+	$adb->pquery('UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?', array($newName, $oldName));
+	$adb->pquery('UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?', array($newName, $oldName));
+	$adb->pquery('UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?', array($newName, $oldName));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>
