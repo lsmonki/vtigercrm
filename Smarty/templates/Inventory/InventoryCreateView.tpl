@@ -94,9 +94,9 @@ function sensex_info()
 					<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 					   <tr>
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-                                        	<td class="dvtSelectedCell" align=center nowrap>{$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
-	                                        <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-                	                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
+						<td class="dvtSelectedCell" align=center nowrap> {$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</td>
+						<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+						<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					   </tr>
 					</table>
 				</td>

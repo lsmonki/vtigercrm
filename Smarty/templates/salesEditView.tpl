@@ -89,7 +89,18 @@ function AddressSync(Addform,id)
 				{$UPDATEINFO}	 
 			{/if}
 			{if $OP_MODE eq 'create_view'}
-				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD|@getTranslatedString:$MODULE}</span> <br>
+				{if $DUPLICATE neq 'true'}
+		            {assign var=create_new value="LBL_CREATING_NEW_"|cat:$SINGLE_MOD}
+					{* vtlib customization: use translation only if present *}
+					{assign var="create_newlabel" value=$APP.$create_new}
+					{if $create_newlabel neq ''}
+						<span class="lvtHeaderText">{$create_newlabel}</span> <br>
+					{else}
+						<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD|@getTranslatedString:$MODULE}</span> <br>
+					{/if}
+				{else}
+					<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
+				{/if}
 			{/if}
 
 			<hr noshade size=1>

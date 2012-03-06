@@ -79,7 +79,7 @@ $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('MODULE', $currentModule);
 // TODO: Update Single Module Instance name here.
-$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule));
+$smarty->assign('SINGLE_MOD', 'Product');
 $smarty->assign('CATEGORY', $category);
 $smarty->assign("THEME", $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
@@ -90,11 +90,11 @@ $smarty->assign('CREATEMODE', vtlib_purify($_REQUEST['createmode']));
 $smarty->assign('CHECK', Button_Check($currentModule));
 $smarty->assign('DUPLICATE', $isduplicate);
 
-if($focus->mode == 'edit') {
-	$recordName = array_values(getEntityName($currentModule, $focus->id));
+if($focus->mode == 'edit' || $isduplicate) {
+	$recordName = array_values(getEntityName($currentModule, $record));
 	$recordName = $recordName[0];
 	$smarty->assign('NAME', $recordName);
-	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+	$smarty->assign('UPDATEINFO',updateInfo($record));
 }
 
 if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
