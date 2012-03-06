@@ -68,10 +68,10 @@ $mod_strings = Array(
 'LBL_CONVERT_LEAD'=>'Convert Lead:',
 'LBL_CONVERT_LEAD_INFORMATION'=>'Convert Lead Information',
 'LBL_ACCOUNT_NAME'=>'Account Name',
-'LBL_POTENTIAL_NAME'=>'Potential Name',
-'LBL_POTENTIAL_CLOSE_DATE'=>'Potential Close Date',
-'LBL_POTENTIAL_AMOUNT'=>'Potential Amount',
-'LBL_POTENTIAL_SALES_STAGE'=>'Potential Sales Stage',
+'LBL_POTENTIAL_NAME'=>'Opportunity Name',
+'LBL_POTENTIAL_CLOSE_DATE'=>'Opportunity Close Date',
+'LBL_POTENTIAL_AMOUNT'=>'Opportunity Amount',
+'LBL_POTENTIAL_SALES_STAGE'=>'Opportunity Sales Stage',
 
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
@@ -94,11 +94,11 @@ $mod_strings = Array(
 'LBL_ASSIGNED_TO'=>'Assigned To:',
 'LBL_SELECT_LEAD'=>'Select Lead',
 'LBL_GENERAL_INFORMATION'=>'General Information',
-'LBL_DO_NOT_CREATE_NEW_POTENTIAL'=>'Do not create a New Potential upon Conversion',
+'LBL_DO_NOT_CREATE_NEW_POTENTIAL'=>'Do not create a New Opportunity upon Conversion',
 
 //for v4 release added
-'LBL_NEW_POTENTIAL'=>'New Potential',
-'LBL_POTENTIAL_TITLE'=>'Potentials',
+'LBL_NEW_POTENTIAL'=>'New Opportunity',
+'LBL_POTENTIAL_TITLE'=>'Opportunities',
 
 'LBL_NEW_TASK'=>'New Task',
 'LBL_TASK_TITLE'=>'Tasks',

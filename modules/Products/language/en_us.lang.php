@@ -57,8 +57,8 @@ $mod_strings = Array(
 'LBL_FILE'=>'File Name',
 
 //for v4 release added
-'LBL_NEW_POTENTIAL'=>'New Potential',
-'LBL_POTENTIAL_TITLE'=>'Potentials',
+'LBL_NEW_POTENTIAL'=>'New Opportunity',
+'LBL_POTENTIAL_TITLE'=>'Opportunities',
 
 'LBL_NEW_TICKET'=>'New Ticket',
 'LBL_TICKET_TITLE'=>'Tickets',

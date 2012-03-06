@@ -175,7 +175,7 @@ following values "Call","Meeting" or "Task".',
  
 //Strings added for Potential module fields 
  
-'Potential Name'=>'Potential Name', 
+'Potential Name'=>'Opportunity Name',
 'Amount'=>'Amount', 
 'Expected Close Date'=>'Expected Close Date', 
 'Next Step'=>'Next Step', 

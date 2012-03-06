@@ -11,7 +11,7 @@ var alert_arr = {
 	'DELETE':'Are you sure you want to delete the selected ',
 	'RECORDS':' records?',
 	'SELECT':'Please select at least one entity',
-	'DELETE_ACCOUNT':'Deleting this account(s) will remove its related Potentials & Quotes. Are you sure you want to delete the selected ',
+	'DELETE_ACCOUNT':'Deleting this account(s) will remove its related Opportunities & Quotes. Are you sure you want to delete the selected ',
 	'DELETE_VENDOR':'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected ',
 	'SELECT_MAILID':'Please Select a mailid',
 	'OVERWRITE_EXISTING_ACCOUNT1':'Overwrite the existing address with this selected account(',

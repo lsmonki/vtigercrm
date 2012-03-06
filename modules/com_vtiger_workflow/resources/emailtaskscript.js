@@ -186,7 +186,7 @@ function VTEmailTask($){
 				if(!contains(accessibleModulesInfo, moduleName)) return [];
 				
 				return map(function(field){					
-					return ['('+name+' : '+'('+moduleName+') '+field['name']+')',label+' : '+'('+moduleName+') '+field['label']];
+					return ['('+name+' : '+'('+moduleName+') '+field['name']+')',label+' : '+'('+modules[moduleName]['label']+') '+field['label']];
 					},
 					filteredFields(modules[moduleName]['fields']));
 			}

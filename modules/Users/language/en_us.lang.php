@@ -439,7 +439,7 @@ $mod_strings = Array(
 
 'LBL_CONTACT_FIELD_ACCESS'=>'Contact Field Access',
 
-'LBL_OPPORTUNITY_FIELD_ACCESS'=>'Potential Field Access',
+'LBL_OPPORTUNITY_FIELD_ACCESS'=>'Opportunity Field Access',
 
 'LBL_HELPDESK_FIELD_ACCESS'=>'HelpDesk Field Access',
 
@@ -468,7 +468,7 @@ $mod_strings = Array(
 'LBL_HOMEPAGE_ID'=>'Block Order',
 'ERR_INVALID_USER'=>'Invalid access--Please call from My Accounts',
 'ALVT'=>'Top Accounts',
-'PLVT'=>'Top Potentials',
+'PLVT'=>'Top Opportunities',
 'QLTQ'=>'Top Quotes',
 'CVLVT'=>'Key Metrics',
 'HLT'=>'Top Trouble Tickets',

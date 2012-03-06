@@ -21,22 +21,22 @@
  ********************************************************************************/
 
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Potentials',
+'LBL_MODULE_NAME'=>'Opportunities',
 'LBL_MODULE_TITLE'=>'Potentials: Home',
-'LBL_SEARCH_FORM_TITLE'=>'Potential Search',
-'LBL_LIST_FORM_TITLE'=>'Potential List',
-'LBL_OPPORTUNITY_NAME'=>'Potential Name:',
-'LBL_OPPORTUNITY'=>'Potential:',
-'LBL_NAME'=>'Potential Name',
+'LBL_SEARCH_FORM_TITLE'=>'Opportunity Search',
+'LBL_LIST_FORM_TITLE'=>'Opportunity List',
+'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
+'LBL_OPPORTUNITY'=>'Opportunity:',
+'LBL_NAME'=>'Opportunity Name',
 'LBL_INVITEE'=>'Contacts',
-'LBL_LIST_OPPORTUNITY_NAME'=>'Potential',
+'LBL_LIST_OPPORTUNITY_NAME'=>'Opportunity',
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_PRODUCT_NAME'=>'Product Name',
 'LBL_LIST_AMOUNT'=>'Amount',
 'LBL_LIST_DATE_CLOSED'=>'Expected Close',
 'LBL_LIST_SALES_STAGE'=>'Sales Stage',
 
-'LBL_OPPORTUNITY_NAME'=>'Potential Name:',
+'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
 'LBL_AMOUNT'=>'Amount:',
 'LBL_DATE_CLOSED'=>'Expected Close Date:',
@@ -46,27 +46,27 @@ $mod_strings = Array(
 'LBL_SALES_STAGE'=>'Sales Stage:',
 'LBL_PROBABILITY'=>'Probability (%):',
 'LBL_DESCRIPTION'=>'Description:',
-'LBL_OPPORTUNITY_INFORMATION'=>'Potential Information:',
+'LBL_OPPORTUNITY_INFORMATION'=>'Opportunity Information:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information:',
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 
-'LBL_NEW_FORM_TITLE'=>'New Potential',
+'LBL_NEW_FORM_TITLE'=>'New Opportunity',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the opportunity.",
-'LBL_TOP_OPPORTUNITIES'=>"My Top Open Potentials",
+'LBL_TOP_OPPORTUNITIES'=>"My Top Open Opportunities",
 
 'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
 
 'NTC_NONE_SCHEDULED'=>'None scheduled.',
 
-'LBL_SELECT_OPPOPTUNITY'=>'Select Potential',
+'LBL_SELECT_OPPOPTUNITY'=>'Select Opportunity',
 'LBL_GENERAL_INFORMATION'=>'General Information',
 
 
 
 //for v4 release added
-'LBL_NEW_POTENTIAL'=>'New Potential',
-'LBL_POTENTIAL_TITLE'=>'Potentials',
+'LBL_NEW_POTENTIAL'=>'New Opportunity',
+'LBL_POTENTIAL_TITLE'=>'Opportunities',
 
 'LBL_NEW_TASK'=>'New Task',
 'LBL_TASK_TITLE'=>'Tasks',
@@ -93,9 +93,9 @@ $mod_strings = Array(
 'LBL_PROSPECTING'=>'Prospecting',
 
 // Added for 4GA
-'LBL_TOOL_FORM_TITLE'=>'Potential Tools',
+'LBL_TOOL_FORM_TITLE'=>'Opportunity Tools',
 //Added for 4GA
-'Potential Name'=>'Potential Name',
+'Potential Name'=>'Opportunity Name',
 'Amount'=>'Amount',
 'Account Name'=>'Account Name',
 'Currency'=>'Currency',
@@ -112,7 +112,7 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 //Added for 4.2 Release -- CustomView
-'Potential'=>'Potential',
+'Potential'=>'Opportunity',
 'Expected Close'=>'Expected Close',
 
 //Added for Existing Picklist Strings
@@ -148,7 +148,7 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 // Module Sequence Numbering
-'Potential No' => 'Potential No',
+'Potential No' => 'Opportunity No',
 // END
 
 'Related To' => 'Related To', 

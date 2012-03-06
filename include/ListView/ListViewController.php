@@ -412,7 +412,7 @@ class ListViewController {
 						$value = textlength_check($this->nameList[$fieldName][$value]);
 						if ($parentMeta->isModuleEntity() && $parentModule != "Users") {
 							$value = "<a href='index.php?module=$parentModule&action=DetailView&".
-								"record=$rawValue' title='$parentModule'>$value</a>";
+								"record=$rawValue' title='".getTranslatedString($parentModule, $parentModule)."'>$value</a>";
 						}
 					} else {
 						$value = '--';
@@ -444,12 +444,12 @@ class ListViewController {
                                     $parenttab = getParentTab();
 				$nameFields = $this->queryGenerator->getModuleNameFields($module);
 				$nameFieldList = explode(',',$nameFields);
-				if(in_array($fieldName, $nameFieldList) && $module != 'Emails') {
+				if(in_array($fieldName, $nameFieldList) && $module != 'Emails' ) {
 					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
-					"$recordId' title='$module'>$value</a>";
+					"$recordId' title='".getTranslatedString($module, $module)."'>$value</a>";
 				} elseif($fieldName == $focus->list_link_field && $module != 'Emails') {
 					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
-					"$recordId' title='$module'>$value</a>";
+					"$recordId' title='".getTranslatedString($module, $module)."'>$value</a>";
 				}
 
 				// vtlib customization: For listview javascript triggers

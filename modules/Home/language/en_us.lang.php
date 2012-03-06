@@ -101,7 +101,7 @@ $mod_strings = Array(
 
 // Default home page widget's title
 'Top Accounts'=>'Top Accounts',
-'Top Potentials'=>'Top Potentials',
+'Top Potentials'=>'Top Opportunities',
 'Top Quotes'=>'Top Quotes',
 'Top Trouble Tickets'=>'Top Trouble Tickets',
 'Top Invoices'=>'Top Invoices',

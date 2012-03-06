@@ -99,7 +99,7 @@ $mod_strings = Array(
 'LBL_DESCRIPTION'=>'Description:',
 'LBL_CONTACT_ROLE'=>'Role:',
 'LBL_OPP_NAME'=>'Opportunity Name:',
-'LBL_DUPLICATE'=>'Potential Duplicate Contacts',
+'LBL_DUPLICATE'=>'Opportunities Duplicate Contacts',
 'MSG_DUPLICATE' => 'Creating this contact may vtiger_potentialy create a duplicate contact. You may either select a contact from the list below or you may click on Create New Contact to continue creating a new contact with the previously entered data.',
 
 'LNK_NEW_APPOINTMENT' => 'New Appointment',
@@ -118,8 +118,8 @@ $mod_strings = Array(
 
 
 //for v4 release added
-'LBL_NEW_POTENTIAL'=>'New Potential',
-'LBL_POTENTIAL_TITLE'=>'Potentials',
+'LBL_NEW_POTENTIAL'=>'New Opportunity',
+'LBL_POTENTIAL_TITLE'=>'Opportunities',
 
 'LBL_NEW_TASK'=>'New Task',
 'LBL_TASK_TITLE'=>'Tasks',
