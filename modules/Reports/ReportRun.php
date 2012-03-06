@@ -843,6 +843,12 @@ class ReportRun extends CRMEntity
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";
 
+				$moduleFieldLabel = $selectedfields[3];
+				list($moduleName, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+				$fieldInfo = getFieldByReportLabel($moduleName, $fieldLabel);
+				$typeOfData = $fieldInfo['typeofdata'];
+				list($type, $typeOtherInfo) = explode('~', $typeOfData, 2);
+
 				if($datefilter != "custom") {
 					$startenddate = $this->getStandarFiltersStartAndEndDate($datefilter);
 					$startdate = $startenddate[0];
@@ -852,15 +858,40 @@ class ReportRun extends CRMEntity
 					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != ""
 							&& $startdate != '' && $enddate != '') {
 
-						$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
-						$startdate = DateTimeField::convertToDBFormat($startDateTime->getDisplayDate());
-						$endDateTime = new DateTimeField($enddate.' '. date('H:i:s'));
-						$enddate = DateTimeField::convertToDBFormat($endDateTime->getDisplayDate());
+					$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
+					$userStartDate = $startDateTime->getDisplayDate();
+					if($type == 'DT') {
+						$userStartDate = $userStartDate.' 00:00:00';
+					}
+					$startDateTime = getValidDBInsertDateTimeValue($userStartDate);
 
-						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:59'";
+					$endDateTime = new DateTimeField($enddate.' '. date('H:i:s'));
+					$userEndDate = $endDateTime->getDisplayDate();
+					if($type == 'DT') {
+						$userEndDate = $userEndDate.' 23:59:00';
+					}
+					$endDateTime = getValidDBInsertDateTimeValue($userEndDate);
+
+					if ($selectedfields[1] == 'birthday') {
+						$tableColumnSql = "DATE_FORMAT(".$selectedfields[0].".".$selectedfields[1].", '%m%d')";
+						$startDateTime = "DATE_FORMAT('$startDateTime', '%m%d')";
+						$endDateTime = "DATE_FORMAT('$endDateTime', '%m%d')";
+					} else {
+						if($selectedfields[0] == 'vtiger_activity' && ($selectedfields[1] == 'date_start' || $selectedfields[1] == 'due_date')) {
+							$tableColumnSql = '';
+							if($selectedfields[1] == 'date_start') {
+								$tableColumnSql = "CAST((CONCAT(date_start,' ',time_start)) AS DATETIME)";
+							} else {
+								$tableColumnSql = "CAST((CONCAT(due_date,' ',time_end)) AS DATETIME)";
+							}
+						} else {
+							$tableColumnSql = $selectedfields[0].".".$selectedfields[1];
+						}
+						$startDateTime = "'$startDateTime'";
+						$endDateTime = "'$endDateTime'";
 					}
 
-					$stdfilterlist[$fieldcolname] = $tableColumnSql." between '".$startDateTime."' and '".$endDateTime."'";
+					$stdfilterlist[$fieldcolname] = $tableColumnSql." between ".$startDateTime." and ".$endDateTime;
 				}
 			}
 		}
