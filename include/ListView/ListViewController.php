@@ -544,8 +544,12 @@ class ListViewController {
 		$requestModule = vtlib_purify($_REQUEST['module']);
 		$requestRecord = vtlib_purify($_REQUEST['record']);
 		$requestAction = vtlib_purify($_REQUEST['action']);
+		$requestFile = vtlib_purify($_REQUEST['file']);
 		$isCustomModule = vtlib_isCustomModule($requestModule);
-		if($isCustomModule && !in_array($requestAction, Array('index','ListView'))) {
+		
+		if($isCustomModule && (!in_array($requestAction, Array('index','ListView')) &&
+				($requestAction == $requestModule.'Ajax' && !in_array($requestFile, Array('index','ListView'))))) {
+
 			$link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";
 			$link .= "&destination_module=$module&idlist=$entity_id&mode=delete&parenttab=$parenttab";
 		}
