@@ -18,6 +18,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once("modules/Reports/Reports.php");
 require_once 'modules/Reports/ReportUtils.php';
+require_once("vtlib/Vtiger/Module.php");
 
 class ReportRun extends CRMEntity
 {
@@ -47,6 +48,9 @@ class ReportRun extends CRMEntity
 						);
 	var $ui10_fields = array();
 	var $ui101_fields = array();
+	var $groupByTimeParent = array( 'Quarter'=>array('Year'),
+									'Month'=>array('Year')
+								);
 
 	/** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
 	 *  This function accepts the $reportid as argument
@@ -1319,8 +1323,9 @@ class ReportRun extends CRMEntity
 			return $this->_groupinglist;
 		}
 
-		$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report";
+		$sreportsortsql = " SELECT vtiger_reportsortcol.*, vtiger_reportgroupbycolumn.* FROM vtiger_report";
 		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid";
+        $sreportsortsql .= " LEFT JOIN vtiger_reportgroupbycolumn ON (vtiger_report.reportid = vtiger_reportgroupbycolumn.reportid AND vtiger_reportsortcol.sortcolid = vtiger_reportgroupbycolumn.sortid)";
 		$sreportsortsql .= " where vtiger_report.reportid =? AND vtiger_reportsortcol.columnname IN (SELECT columnname from vtiger_selectcolumn WHERE queryid=?) order by vtiger_reportsortcol.sortcolid";
 
 		$result = $adb->pquery($sreportsortsql, array($reportid,$reportid));
@@ -1350,6 +1355,20 @@ class ReportRun extends CRMEntity
 				} else {
 					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
 				}
+				/************** MONOLITHIC phase 6 customization********************************/
+				if($selectedfields[4]=="D" && strtolower($reportsortrow["dategroupbycriteria"])!="none"){
+					$groupField = $module_field;
+					$groupCriteria = $reportsortrow["dategroupbycriteria"];
+					if(in_array($groupCriteria,array_keys($this->groupByTimeParent))){
+						$parentCriteria = $this->groupByTimeParent[$groupCriteria];
+						foreach($parentCriteria as $criteria){
+						  $groupByCondition[]=$this->GetTimeCriteriaCondition($criteria, $groupField)." ".$sortorder;
+						}
+					}
+					$groupByCondition[] =$this->GetTimeCriteriaCondition($groupCriteria, $groupField)." ".$sortorder;
+					$sqlvalue = implode(", ",$groupByCondition);
+				}
+				$grouplist[$fieldcolname] = $sqlvalue;
 				$temp = split("_",$selectedfields[2],2);
 				$module = $temp[0];
 				if(CheckFieldPermission($fieldname,$module) == 'true')
@@ -1766,12 +1785,13 @@ class ReportRun extends CRMEntity
 	 *  this returns join query for the report
 	 */
 
-	function sGetSQLforReport($reportid,$filtersql,$type='')
+	function sGetSQLforReport($reportid,$filtersql,$type='',$chartReport=false)
 	{
 		global $log;
 
 		$columnlist = $this->getQueryColumnsList($reportid,$type);
 		$groupslist = $this->getGroupingList($reportid);
+		$groupTimeList = $this->getGroupByTimeList($reportid);
 		$stdfilterlist = $this->getStdFilterList($reportid);
 		$columnstotallist = $this->getColumnsTotal($reportid);
 		$advfiltersql = $this->getAdvFilterSql($reportid);
@@ -1785,12 +1805,18 @@ class ReportRun extends CRMEntity
 		if(isset($selectlist))
 		{
 			$selectedcolumns =  implode(", ",$selectlist);
+			if($chartReport == true){
+				$selectedcolumns .= ", count(*) AS 'groupby_count'";
+			}
 		}
 		//groups list
 		if(isset($groupslist))
 		{
 			$groupsquery = implode(", ",$groupslist);
 		}
+		if(isset($groupTimeList)){
+           	$groupTimeQuery = implode(", ",$groupTimeList);
+        }
 
 		//standard list
 		if(isset($stdfilterlist))
@@ -1842,9 +1868,13 @@ class ReportRun extends CRMEntity
 		}
 		$reportquery = listQueryNonAdminChange($reportquery, $this->primarymodule);
 
-		if(trim($groupsquery) != "" && !empty($type) && $type !== 'COLUMNSTOTOTAL')
+		if(trim($groupsquery) != "" && $type !== 'COLUMNSTOTOTAL')
 		{
-			$reportquery .= " order by ".$groupsquery ;
+            if($chartReport == true){
+                $reportquery .= "group by ".$this->GetFirstSortByField($reportid);
+            }else{
+                $reportquery .= " order by ".$groupsquery;
+			}
 		}
 
 		// Prasad: No columns selected so limit the number of rows directly.
@@ -1852,6 +1882,11 @@ class ReportRun extends CRMEntity
 			$reportquery .= " limit 0";
 		}
 
+		preg_match('/&amp;/', $reportquery, $matches);
+        if(!empty($matches)){
+            $report=str_replace('&amp;', '&', $reportquery);
+            $reportquery = $this->replaceSpecialChar($report);
+        }
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;
 
@@ -3129,5 +3164,70 @@ class ReportRun extends CRMEntity
 		}
 		$workbook->close();
 	}
+
+    function getGroupByTimeList($reportId){
+        global $adb;
+        $groupByTimeQuery = "SELECT * FROM vtiger_reportgroupbycolumn WHERE reportid=?";
+        $groupByTimeRes = $adb->pquery($groupByTimeQuery,array($reportId));
+        $num_rows = $adb->num_rows($groupByTimeRes);
+        for($i=0;$i<$num_rows;$i++){
+            $sortColName = $adb->query_result($groupByTimeRes, $i,'sortcolname');
+            list($tablename,$colname,$module_field,$fieldname,$single) = split(':',$sortColName);
+            $groupField = $module_field;
+            $groupCriteria = $adb->query_result($groupByTimeRes, $i,'dategroupbycriteria');
+            if(in_array($groupCriteria,array_keys($this->groupByTimeParent))){
+                $parentCriteria = $this->groupByTimeParent[$groupCriteria];
+                foreach($parentCriteria as $criteria){
+                  $groupByCondition[]=$this->GetTimeCriteriaCondition($criteria, $groupField);
+                }
+            }
+            $groupByCondition[] = $this->GetTimeCriteriaCondition($groupCriteria, $groupField);
+        }
+        return $groupByCondition;
+    }
+
+    function GetTimeCriteriaCondition($criteria,$dateField){
+        $condition = "";
+        if(strtolower($criteria)=='year'){
+            $condition = "DATE_FORMAT($dateField, '%Y' )";
+        }
+        else if (strtolower($criteria)=='month'){
+            $condition = "CEIL(DATE_FORMAT($dateField,'%m')%13)";
+        }
+        else if(strtolower($criteria)=='quarter'){
+            $condition = "CEIL(DATE_FORMAT($dateField,'%m')/3)";
+        }
+        return $condition;
+    }
+
+    function GetFirstSortByField($reportid)
+    {
+        global $adb;
+        $groupByField ="";
+        $sortFieldQuery = "SELECT * FROM vtiger_reportsortcol
+                            LEFT JOIN vtiger_reportgroupbycolumn ON (vtiger_reportsortcol.sortcolid = vtiger_reportgroupbycolumn.sortid and vtiger_reportsortcol.reportid = vtiger_reportgroupbycolumn.reportid)
+                            WHERE columnname!='none' and vtiger_reportsortcol.reportid=? ORDER By sortcolid";
+        $sortFieldResult= $adb->pquery($sortFieldQuery,array($reportid));
+        if($adb->num_rows($sortFieldResult)>0){
+            $fieldcolname = $adb->query_result($sortFieldResult,0,'columnname');
+            list($tablename,$colname,$module_field,$fieldname,$typeOfData) = split(":",$fieldcolname);
+            $groupByField = $module_field;
+            if($typeOfData == "D"){
+                $groupCriteria = $adb->query_result($sortFieldResult,0,'dategroupbycriteria');
+                if(strtolower($groupCriteria)!='none'){
+                    if(in_array($groupCriteria,array_keys($this->groupByTimeParent))){
+                        $parentCriteria = $this->groupByTimeParent[$groupCriteria];
+                        foreach($parentCriteria as $criteria){
+                          $groupByCondition[]=$this->GetTimeCriteriaCondition($criteria, $groupByField);
+                        }
+                    }
+                    $groupByCondition[] = $this->GetTimeCriteriaCondition($groupCriteria, $groupByField);
+                    $groupByField = implode(", ",$groupByCondition);
+                }
+
+            }
+        }
+        return $groupByField;
+    }
 }
 ?>

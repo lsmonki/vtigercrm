@@ -28,6 +28,13 @@ $now_action = vtlib_purify($_REQUEST['action']);
 $sql = "select * from vtiger_report where reportid=?";
 $res = $adb->pquery($sql, array($reportid));
 $Report_ID = $adb->query_result($res,0,'reportid');
+//Monolithic Phase 6 customization
+$reporttype = $adb->query_result($res,0,'reporttype');
+$showCharts = false;
+if($reporttype == 'summary'){
+	$showCharts = true;
+}
+//END Customization
 $numOfRows = $adb->num_rows($res);
 
 if($numOfRows > 0) {
@@ -73,19 +80,55 @@ if($numOfRows > 0) {
 		}
 
 		$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
-		if($_REQUEST['submode'] == 'generateReport' && empty($advft_criteria)) {
+		
+		$list_report_form = new vtigerCRM_Smarty;		
+		//Monolithic phase 6 changes
+		if($showCharts == true){
+			$list_report_form->assign("SHOWCHARTS",$showCharts);
+			require_once 'modules/Reports/CustomReportUtils.php';
+			require_once 'include/ChartUtils.php';
+
+			$groupBy = $oReportRun->getGroupingList($reportid);
+			if(!empty($groupBy)){
+				foreach ($groupBy as $key => $value) {
+					//$groupByConditon = explode(" ",$value);
+					//$groupByNew = explode("'",$groupByConditon[0]);
+					list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$key);
+					list($module,$field)= split("_",$module_field);
+					$fieldDetails = $key;
+					break;
+				}
+				//$groupByField = $oReportRun->GetFirstSortByField($reportid);
+				$queryReports = CustomReportUtils::getCustomReportsQuery($Report_ID,$filtersql);
+				$queryResult = $adb->pquery($queryReports,array());
+				//ChartUtils::generateChartDataFromReports($queryResult, strtolower($groupByNew[1]));
+                if($adb->num_rows($queryResult)){
+					$pieChart = ChartUtils::getReportPieChart($queryResult, strtolower($module_field),$fieldDetails,$reportid);
+					$barChart = ChartUtils::getReportBarChart($queryResult, strtolower($module_field),$fieldDetails,$reportid);
+					$list_report_form->assign("PIECHART",$pieChart);
+					$list_report_form->assign("BARCHART",$barChart);
+				}
+				else{
+					$showCharts = false;
+				}
+			}
+			else{
+				$showCharts = false;
+			}
+			$list_report_form->assign("SHOWCHARTS",$showCharts);
+		}
+		//Monolithic Changes Ends
+
+        // Performance Optimization: Direct output of the report result
+        if($_REQUEST['submode'] == 'generateReport' && empty($advft_criteria)) {
 			$filtersql = '';
 		}
-
-		// Performance Optimization: Direct output of the report result
-		$list_report_form = new vtigerCRM_Smarty;
-
-		$sshtml = array();
+        $sshtml = array();
 		$totalhtml = '';
 		$list_report_form->assign("DIRECT_OUTPUT", true);
 		$list_report_form->assign_by_ref("__REPORT_RUN_INSTANCE", $oReportRun);
 		$list_report_form->assign_by_ref("__REPORT_RUN_FILTER_SQL", $filtersql);
-		// END
+        //Ends
 
 		$ogReport->getPriModuleColumnsList($ogReport->primodule);
 		$ogReport->getSecModuleColumnsList($ogReport->secmodule);

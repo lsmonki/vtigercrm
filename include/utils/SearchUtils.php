@@ -416,9 +416,11 @@ function BasicSearch($module,$search_field,$search_string){
 							if ($stridx !== 0)
 							{
 								$search_string = $mod_key;
-								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus"))
+								if($_REQUEST['operator'] == 'e' && getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus")){
+									$where="(vtiger_activity.status ='". $search_string ."' or vtiger_activity.eventstatus ='". $search_string ."')";
+								}else if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus"))
 								{
-										$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
+									$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
 								}
 								else
 									$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
@@ -1142,6 +1144,7 @@ function generateAdvancedSearchSql($advfilterlist) {
 		if(count($groupcolumns) > 0) {
 
 			$advfiltergroupsql = "";
+			$advorsql = array();
 			foreach($groupcolumns as $columnindex => $columninfo) {
 				$fieldcolname = $columninfo["columnname"];
 				$comparator = $columninfo["comparator"];
@@ -1153,14 +1156,12 @@ function generateAdvancedSearchSql($advfilterlist) {
 
 				if($fieldcolname != "" && $comparator != "") {
 					$valuearray = explode(",",trim($value));
-
-					if(isset($valuearray) && count($valuearray) > 1 && $comparator != 'bw') {
-						$advorsql = "";
+					if(isset($valuearray) && count($valuearray) > 0 && $comparator != 'bw') {						
 						for($n=0;$n<count($valuearray);$n++) {
 							$advorsql[] = getAdvancedSearchValue($columns[0],$columns[1],$comparator,trim($valuearray[$n]),$datatype);
 						}
 						//If negative logic filter ('not equal to', 'does not contain') is used, 'and' condition should be applied instead of 'or'
-						if($comparator == 'n' || $comparator == 'k')
+						if($comparator == 'n' || $comparator == 'k' || $comparator == 'h' || $comparator == 'l')
 							$advorsqls = implode(" and ",$advorsql);
 						else
 							$advorsqls = implode(" or ",$advorsql);

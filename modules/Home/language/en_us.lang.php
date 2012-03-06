@@ -119,10 +119,15 @@ $mod_strings = Array(
 'MSG_NO_FILTERS' => 'No Filters Available',
 'MSG_NO_FIELDS' => 'No Fields Available',
 
+//Customization Phase 6 -- Monolithic
+'LBL_REPORTCHARTS' => 'ReportCharts',
+'LBL_HOME_REPORT_NAME'=> 'Report Name',
+'LBL_HOME_REPORT_TYPE' => 'Report Type',
+//END
+
 //added for Default Widgets
 'LBL_DEFAULT_WIDGET'=>'Default Widgets',
 'LBL_NO_WIDGETS_HIDDEN'=>'No default widgets are hidden',
-
 );
 
 ?>

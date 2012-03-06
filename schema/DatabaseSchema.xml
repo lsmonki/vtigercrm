@@ -7454,4 +7454,27 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
+	<table name="vtiger_homereportchart">
+		<field name="stuffid" type="I" size="11">
+			<key />
+		</field>
+		<field name="reportid" type="I" size="19" />
+		<field name="reportcharttype" type="V" size="100" />
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_reportgroupbycolumn">
+		<field name="reportid" type="I" size="19" />
+		<field name="sortid" type="I" size="19" />
+		<field name="sortcolname" type="V" size="250" />
+		<field name="dategroupbycriteria" type="V" size="250" />
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_reportgroupbycolumn" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE</constraint>
+		<opt>Engine=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 </schema>

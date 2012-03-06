@@ -224,6 +224,10 @@ $mod_strings = Array(
 'NO_REL_MODULES'=>'No Related Modules for the Selected Module',
 'LBL_REPORT_GENERATION_FAILED'=>'Report generation failed!',
 
+'LBL_OR'=>'or',
+'LBL_NEW_GROUP'=>'New Group',
+'LBL_DELETE_GROUP'=>'Delete Group',
+'LBL_NEW_CONDITION'=>'New Condition',
 'LBL_SHARING_TYPE'=>'Sharing Type',
 'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Select Sharing Type to Control Access to the Report', 
 'LBL_ACTION' => 'Action',
@@ -266,6 +270,18 @@ $mod_strings = Array(
 
 'LBL_SAVE_REPORT' => 'Save',
 'LBL_SAVE_REPORT_AS' => 'Save Report as...',
+
+//Report Charts
+'LBL_VIEW_CHARTS' => 'View Charts',
+'LBL_ADD_CHARTS' => 'Add Chart To HomePage',
+'LBL_HOME_REPORT_NAME' => 'Report Name',
+'LBL_HOME_HORIZONTAL_BARCHART' => 'Horizontal BarChart',
+'LBL_HOME_VERTICAL_BARCHART' => 'Vertical BarChart',
+'LBL_HOME_PIE_CHART' => 'Pie Chart',
+'LBL_HOME_REPORT_TYPE' => 'Report Type',
+'LBL_HOME_WINDOW_TITLE' => 'Window Title',
+'LBL_GROUPING_TIME' => 'Group By Time',
+'LBL_WIDGET_ADDED' => 'Widget Added Successfully.',
 )
 
 ?>

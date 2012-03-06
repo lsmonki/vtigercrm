@@ -93,7 +93,15 @@
 			<a href='javascript:;' class='drop_down' id="addNotebook">
 				{$MOD.LBL_NOTEBOOK}
 			</a>
+               </li>
+
+{if $ALLOW_REPORT eq "yes"}
+		<li>
+			<a href='javascript:;' class='drop_down' id="addReportCharts">
+				{'LBL_REPORTCHARTS'|@getTranslatedString:$MODULE}
+			</a>
 		</li>
+{/if}
         <li>
 			<a href='javascript:;' class='drop_down' id="defaultwidget">
 				{'LBL_DEFAULT_WIDGET'|@getTranslatedString:$MODULE}
@@ -195,7 +203,21 @@
 					</select>
 				</td>
 			</tr>
-			</table>
+			<tr id="reportNameRow" style="display:none">
+				<td class="dvtCellLabel"  width="110" align="right">{'LBL_HOME_REPORT_NAME'|@getTranslatedString:$MODULE}</td>
+				<td id="selReportName" class="dvtCellInfo" colspan="2" width="300"></td>
+			</tr>
+			<tr id="reportTypeRow" style="display:none">
+				<td class="dvtCellLabel" align="right" width="110">{'LBL_HOME_REPORT_TYPE'|@getTranslatedString:$MODULE}</td>
+				<td id="selReportType" class="dvtCellInfo" width="300" colspan="2">
+					<select name="selreporttype" id="selreportcharttype_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:60%">
+						<option value="horizontalbarchart">{$MOD.LBL_HOME_HORIZONTAL_BARCHART}</option>
+						<option value="verticalbarchart">{$MOD.LBL_HOME_VERTICAL_BARCHART}</option>
+						<option value="piechart">{$MOD.LBL_HOME_PIE_CHART}</option>
+					</select>
+				</td>
+			</tr>
+		</table>
 			{*<!-- popup specific content fill in ends -->*}
 			</td>
 		</tr>

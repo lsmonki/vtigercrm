@@ -29,8 +29,8 @@ $tabIdsResult = $adb->pquery('SELECT tabid, name FROM vtiger_tab', array());
 $noOfTabs = $adb->num_rows($tabIdsResult);
 $tabIdsList = array();
 
-for($i=0; $i<$noOfTabs; ++$i) {
-	$tabIdsList[$adb->query_result($tabIdsResult,$i,'name')] = $adb->query_result($tabIdsResult,$i,'tabid');
+for ($i = 0; $i < $noOfTabs; ++$i) {
+	$tabIdsList[$adb->query_result($tabIdsResult, $i, 'name')] = $adb->query_result($tabIdsResult, $i, 'tabid');
 }
 $leadTab = $tabIdsList['Leads'];
 $accountTab = $tabIdsList['Accounts'];
@@ -44,9 +44,7 @@ $documentsTabId = $tabIdsList['Documents'];
 
 $moduleInstance = Vtiger_Module::getInstance('Home');
 $moduleInstance->addLink(
-		'HEADERSCRIPT',
-		'Help Me',
-		'modules/Home/js/HelpMeNow.js'
+		'HEADERSCRIPT', 'Help Me', 'modules/Home/js/HelpMeNow.js'
 );
 
 $adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ? ", array(2, 'LBL_FILE_INFORMATION', $documentsTabId));
@@ -59,7 +57,7 @@ $block = Vtiger_Block::getInstance('LBL_TICKET_INFORMATION', $moduleInstance);
 $field = new Vtiger_Field();
 $field->name = 'from_portal';
 $field->label = 'From Portal';
-$field->table ='vtiger_troubletickets';
+$field->table = 'vtiger_troubletickets';
 $field->column = 'from_portal';
 $field->columntype = 'varchar(3)';
 $field->typeofdata = 'C~O';
@@ -72,19 +70,19 @@ $block->addField($field);
 $emm = new VTEntityMethodManager($adb);
 
 // Register Entity Method for Customer Portal Login details email notification task
-$emm->addEntityMethod("Contacts","SendPortalLoginDetails","modules/Contacts/ContactsHandler.php","Contacts_sendCustomerPortalLoginDetails");
+$emm->addEntityMethod("Contacts", "SendPortalLoginDetails", "modules/Contacts/ContactsHandler.php", "Contacts_sendCustomerPortalLoginDetails");
 
 // Register Entity Method for Email notification on ticket creation from Customer portal
-$emm->addEntityMethod("HelpDesk","NotifyOnPortalTicketCreation","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_nofifyOnPortalTicketCreation");
+$emm->addEntityMethod("HelpDesk", "NotifyOnPortalTicketCreation", "modules/HelpDesk/HelpDeskHandler.php", "HelpDesk_nofifyOnPortalTicketCreation");
 
 // Register Entity Method for Email notification on ticket comment from Customer portal
-$emm->addEntityMethod("HelpDesk","NotifyOnPortalTicketComment","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyOnPortalTicketComment");
+$emm->addEntityMethod("HelpDesk", "NotifyOnPortalTicketComment", "modules/HelpDesk/HelpDeskHandler.php", "HelpDesk_notifyOnPortalTicketComment");
 
 // Register Entity Method for Email notification to Record Owner on ticket change, which is not from Customer portal
-$emm->addEntityMethod("HelpDesk","NotifyOwnerOnTicketChange","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyOwnerOnTicketChange");
+$emm->addEntityMethod("HelpDesk", "NotifyOwnerOnTicketChange", "modules/HelpDesk/HelpDeskHandler.php", "HelpDesk_notifyOwnerOnTicketChange");
 
 // Register Entity Method for Email notification to Related Customer on ticket change, which is not from Customer portal
-$emm->addEntityMethod("HelpDesk","NotifyParentOnTicketChange","modules/HelpDesk/HelpDeskHandler.php","HelpDesk_notifyParentOnTicketChange");
+$emm->addEntityMethod("HelpDesk", "NotifyParentOnTicketChange", "modules/HelpDesk/HelpDeskHandler.php", "HelpDesk_notifyParentOnTicketChange");
 
 // Creating Default workflows
 $workflowManager = new VTWorkflowManager($adb);
@@ -166,17 +164,17 @@ $task->summary = 'Send Notification Email to Record Owner';
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
 $task->subject = "Event :  \$subject";
 $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
-				.'<b>Activity Notification Details:</b><br/>'
-				.'Subject             : $subject<br/>'
-				.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-				.'End date and time   : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-				.'Status              : $eventstatus <br/>'
-				.'Priority            : $taskpriority <br/>'
-				.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-				.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-				.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-				.'Location            : $location <br/>'
-				.'Description         : $description';
+		. '<b>Activity Notification Details:</b><br/>'
+		. 'Subject             : $subject<br/>'
+		. 'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+		. 'End date and time   : $due_date  $time_end ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+		. 'Status              : $eventstatus <br/>'
+		. 'Priority            : $taskpriority <br/>'
+		. 'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+		. '$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+		. 'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+		. 'Location            : $location <br/>'
+		. 'Description         : $description';
 $taskManager->saveTask($task);
 
 // Calendar workflow when Send Notification is checked
@@ -193,17 +191,17 @@ $task->summary = 'Send Notification Email to Record Owner';
 $task->recepient = "\$(assigned_user_id : (Users) email1)";
 $task->subject = "Task :  \$subject";
 $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
-				.'<b>Task Notification Details:</b><br/>'
-				.'Subject : $subject<br/>'
-				.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-				.'End date and time   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
-				.'Status              : $taskstatus <br/>'
-				.'Priority            : $taskpriority <br/>'
-				.'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
-				.'$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
-				.'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
-				.'Location            : $location <br/>'
-				.'Description         : $description';
+		. '<b>Task Notification Details:</b><br/>'
+		. 'Subject : $subject<br/>'
+		. 'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+		. 'End date and time   : $due_date ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
+		. 'Status              : $taskstatus <br/>'
+		. 'Priority            : $taskpriority <br/>'
+		. 'Related To          : $(parent_id : (Leads) lastname) $(parent_id : (Leads) firstname) $(parent_id : (Accounts) accountname) '
+		. '$(parent_id         : (Potentials) potentialname) $(parent_id : (HelpDesk) ticket_title) <br/>'
+		. 'Contacts List       : $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname) <br/>'
+		. 'Location            : $location <br/>'
+		. 'Description         : $description';
 $taskManager->saveTask($task);
 
 $adb->pquery("UPDATE com_vtiger_workflows SET defaultworkflow=1 WHERE
@@ -213,11 +211,11 @@ $em = new VTEventsManager($adb);
 // Registering event for HelpDesk - To reset from_portal value
 $em->registerHandler('vtiger.entity.aftersave.final', 'modules/HelpDesk/HelpDeskHandler.php', 'HelpDeskHandler');
 
-Vtiger_Cron::register( 'Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', '', '', 'Recommended frequency for Workflow is 15 mins');
-Vtiger_Cron::register( 'RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', '', '', 'Recommended frequency for RecurringInvoice is 12 hours');
-Vtiger_Cron::register( 'SendReminder', 'cron/SendReminder.service', 900, 'Calendar', '', '', 'Recommended frequency for SendReminder is 15 mins');
-Vtiger_Cron::register( 'ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', '', '', 'Recommended frequency for ScheduleReports is 15 mins');
-Vtiger_Cron::register( 'MailScanner', 'cron/MailScanner.service', 900, 'Settings', '', '', 'Recommended frequency for MailScanner is 15 mins');
+Vtiger_Cron::register('Workflow', 'cron/modules/com_vtiger_workflow/com_vtiger_workflow.service', 900, 'com_vtiger_workflow', '', '', 'Recommended frequency for Workflow is 15 mins');
+Vtiger_Cron::register('RecurringInvoice', 'cron/modules/SalesOrder/RecurringInvoice.service', 43200, 'SalesOrder', '', '', 'Recommended frequency for RecurringInvoice is 12 hours');
+Vtiger_Cron::register('SendReminder', 'cron/SendReminder.service', 900, 'Calendar', '', '', 'Recommended frequency for SendReminder is 15 mins');
+Vtiger_Cron::register('ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', '', '', 'Recommended frequency for ScheduleReports is 15 mins');
+Vtiger_Cron::register('MailScanner', 'cron/MailScanner.service', 900, 'Settings', '', '', 'Recommended frequency for MailScanner is 15 mins');
 
 $adb->pquery("DELETE FROM vtiger_settings_field WHERE name='LBL_ASSIGN_MODULE_OWNERS'", array());
 
@@ -278,7 +276,7 @@ $adb->query("update vtiger_tab set tabsequence = -1 where name = 'MailManager'")
 
 $fieldId = $adb->getUniqueId("vtiger_settings_field");
 $adb->query("insert into vtiger_settings_field (fieldid,blockid,name,iconpath,description,linkto,sequence,active)
-					values ($fieldId,".	getSettingsBlockId('LBL_STUDIO') .",'LBL_MENU_EDITOR','menueditor.png','LBL_MENU_DESC',
+					values ($fieldId," . getSettingsBlockId('LBL_STUDIO') . ",'LBL_MENU_EDITOR','menueditor.png','LBL_MENU_DESC',
 					'index.php?module=Settings&action=MenuEditor&parenttab=Settings',4,0)");
 
 $present_module = array();
@@ -316,83 +314,83 @@ $query = "INSERT INTO vtiger_customerportal_prefs (
 $adb->pquery($query, array());
 
 $fieldMap = array(
-	array('industry','industry',null,null),
-	array('phone','phone','phone',null),
-	array('fax','fax','fax',null),
-	array('rating','rating',null,null),
-	array('email','email1','email',null),
-	array('website','website',null,null),
-	array('city','bill_city','mailingcity',null),
-	array('code','bill_code','mailingcode',null),
-	array('country','bill_country','mailingcountry',null),
-	array('state','bill_state','mailingstate',null),
-	array('lane','bill_street','mailingstreet',null),
-	array('pobox','bill_pobox','mailingpobox',null),
-	array('city','ship_city',null,null),
-	array('code','ship_code',null,null),
-	array('country','ship_country',null,null),
-	array('state','ship_state',null,null),
-	array('lane','ship_street',null,null),
-	array('pobox','ship_pobox',null,null),
-	array('description','description','description','description'),
-	array('salutationtype',null,'salutationtype',null),
-	array('firstname',null,'firstname',null),
-	array('lastname',null,'lastname',null),
-	array('mobile',null,'mobile',null),
-	array('designation',null,'title',null),
-	array('secondaryemail',null,'secondaryemail',null),
-	array('leadsource',null,'leadsource','leadsource'),
-	array('leadstatus',null,null,null),
-	array('noofemployees','employees',null,null),
-	array('annualrevenue','annual_revenue',null,null)
+	array('industry', 'industry', null, null),
+	array('phone', 'phone', 'phone', null),
+	array('fax', 'fax', 'fax', null),
+	array('rating', 'rating', null, null),
+	array('email', 'email1', 'email', null),
+	array('website', 'website', null, null),
+	array('city', 'bill_city', 'mailingcity', null),
+	array('code', 'bill_code', 'mailingcode', null),
+	array('country', 'bill_country', 'mailingcountry', null),
+	array('state', 'bill_state', 'mailingstate', null),
+	array('lane', 'bill_street', 'mailingstreet', null),
+	array('pobox', 'bill_pobox', 'mailingpobox', null),
+	array('city', 'ship_city', null, null),
+	array('code', 'ship_code', null, null),
+	array('country', 'ship_country', null, null),
+	array('state', 'ship_state', null, null),
+	array('lane', 'ship_street', null, null),
+	array('pobox', 'ship_pobox', null, null),
+	array('description', 'description', 'description', 'description'),
+	array('salutationtype', null, 'salutationtype', null),
+	array('firstname', null, 'firstname', null),
+	array('lastname', null, 'lastname', null),
+	array('mobile', null, 'mobile', null),
+	array('designation', null, 'title', null),
+	array('secondaryemail', null, 'secondaryemail', null),
+	array('leadsource', null, 'leadsource', 'leadsource'),
+	array('leadstatus', null, null, null),
+	array('noofemployees', 'employees', null, null),
+	array('annualrevenue', 'annual_revenue', null, null)
 );
 
-$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
+$mapSql = "INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
 
 foreach ($fieldMap as $values) {
-	$leadfid=getFieldid($leadTab,$values[0]);
-	$accountfid=getFieldid($accountTab,$values[1]);
-	$contactfid=getFieldid($contactTab,$values[2]);
-	$potentialfid=getFieldid($potentialTab,$values[3]);
-	$adb->pquery($mapSql,array($leadfid,$accountfid,$contactfid,$potentialfid));
+	$leadfid = getFieldid($leadTab, $values[0]);
+	$accountfid = getFieldid($accountTab, $values[1]);
+	$contactfid = getFieldid($contactTab, $values[2]);
+	$potentialfid = getFieldid($potentialTab, $values[3]);
+	$adb->pquery($mapSql, array($leadfid, $accountfid, $contactfid, $potentialfid));
 }
 
 ModComments::addWidgetTo("Potentials");
 
-$delete_empty_mapping="DELETE FROM vtiger_convertleadmapping WHERE accountfid=0 AND contactfid=0 AND potentialfid=0";
-$adb->pquery($delete_empty_mapping,array());
-$alter_vtiger_convertleadmapping="ALTER TABLE vtiger_convertleadmapping ADD COLUMN editable int default 1";
-$adb->pquery($alter_vtiger_convertleadmapping,array());
+$delete_empty_mapping = "DELETE FROM vtiger_convertleadmapping WHERE accountfid=0 AND contactfid=0 AND potentialfid=0";
+$adb->pquery($delete_empty_mapping, array());
+$alter_vtiger_convertleadmapping = "ALTER TABLE vtiger_convertleadmapping ADD COLUMN editable int default 1";
+$adb->pquery($alter_vtiger_convertleadmapping, array());
 
-$check_mapping="SELECT 1 FROM vtiger_convertleadmapping WHERE leadfid=? AND accountfid=? AND contactfid=? AND  potentialfid=?";
-$insert_mapping="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) VALUES(?,?,?,?,?)";
-$update_mapping="UPDATE vtiger_convertleadmapping SET editable=0 WHERE leadfid=? AND accountfid=? AND contactfid=? AND potentialfid=?";
-$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),0,getFieldid($potentialTab,'potentialname')));
-if($adb->num_rows($check_res)>0){
-	$adb->pquery($update_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),0,getFieldid($potentialTab,'potentialname')));
-}else{
-	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),null,getFieldid($potentialTab,'potentialname'),0));
+$check_mapping = "SELECT 1 FROM vtiger_convertleadmapping WHERE leadfid=? AND accountfid=? AND contactfid=? AND  potentialfid=?";
+$insert_mapping = "INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) VALUES(?,?,?,?,?)";
+$update_mapping = "UPDATE vtiger_convertleadmapping SET editable=0 WHERE leadfid=? AND accountfid=? AND contactfid=? AND potentialfid=?";
+$check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), 0, getFieldid($potentialTab, 'potentialname')));
+if ($adb->num_rows($check_res) > 0) {
+	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), 0, getFieldid($potentialTab, 'potentialname')));
+} else {
+	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), null, getFieldid($potentialTab, 'potentialname'), 0));
 }
 
-$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),0));
-if($adb->num_rows($check_res)>0){
-	$adb->pquery($update_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),0));
-}else{
-	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),null,0));
+$check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), 0));
+if ($adb->num_rows($check_res) > 0) {
+	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), 0));
+} else {
+	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), null, 0));
 }
 
-$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'firstname'),0,getFieldid($contactTab,'firstname'),0));
-if($adb->num_rows($check_res)>0){
-	$adb->pquery($update_mapping,array(getFieldid($leadTab,'firstname'),0,getFieldid($contactTab,'firstname'),0));
-}else{
-	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'firstname'),null,getFieldid($contactTab,'firstname'),null,0));
+$check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'firstname'), 0, getFieldid($contactTab, 'firstname'), 0));
+if ($adb->num_rows($check_res) > 0) {
+	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'firstname'), 0, getFieldid($contactTab, 'firstname'), 0));
+} else {
+	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'firstname'), null, getFieldid($contactTab, 'firstname'), null, 0));
 }
 
-$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'lastname'),0,getFieldid($contactTab,'lastname'),0));
-if($adb->num_rows($check_res)>0){
-	$adb->pquery($update_mapping,array(getFieldid($leadTab,'lastname'),0,getFieldid($contactTab,'lastname'),0));
-}else{
-	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'lastname'),null,getFieldid($contactTab,'lastname'),null,0));
+$check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'lastname'), 0, getFieldid($contactTab, 'lastname'), 0));
+if ($adb->num_rows($check_res) > 0) {
+	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'lastname'), 0, getFieldid($contactTab, 'lastname'), 0));
+} else {
+	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'lastname'), null, getFieldid($contactTab, 'lastname'), null, 0));
 }
 
 $productInstance = Vtiger_Module::getInstance('Products');
@@ -436,33 +434,32 @@ $updatedReportIds = array();
 $usersQuery = "SELECT * FROM vtiger_users";
 $usersInfo = $adb->query($usersQuery);
 $usersCount = $adb->num_rows($usersInfo);
-for($i=0;$i<$usersCount;$i++){
-	$username = $adb->query_result($usersInfo,$i,'user_name');
+for ($i = 0; $i < $usersCount; $i++) {
+	$username = $adb->query_result($usersInfo, $i, 'user_name');
 	$usernames[$i] = $username;
 	$fullname = getFullNameFromQResult($usersInfo, $i, 'Users');
 	$fullnames[$i] = $fullname;
 }
-for($i=0;$i<$usersCount;$i++){
+for ($i = 0; $i < $usersCount; $i++) {
 	$cvQuery = "SELECT * FROM vtiger_cvadvfilter WHERE columnname LIKE '%:assigned_user_id%' AND value LIKE '%$usernames[$i]%'";
 	$cvResult = $adb->query($cvQuery);
 	$cvCount = $adb->num_rows($cvResult);
-	for($k=0;$k<$cvCount;$k++){
-		$id = $adb->query_result($cvResult,$k,'cvid');
-		if(!in_array($id, $updatedCVIds)){
-			$value = $adb->query_result($cvResult,$k,'value');
-			$value = explode(',',$value);
-			$fullname='';
-			if(count($value)>1){
-				for($m=0;$m<count($value);$m++){
-					$index = array_keys($usernames,$value[$m]);
-					if($m == count($value)-1){
+	for ($k = 0; $k < $cvCount; $k++) {
+		$id = $adb->query_result($cvResult, $k, 'cvid');
+		if (!in_array($id, $updatedCVIds)) {
+			$value = $adb->query_result($cvResult, $k, 'value');
+			$value = explode(',', $value);
+			$fullname = '';
+			if (count($value) > 1) {
+				for ($m = 0; $m < count($value); $m++) {
+					$index = array_keys($usernames, $value[$m]);
+					if ($m == count($value) - 1) {
 						$fullname .= trim($fullnames[$index[0]]);
-					}
-					else {
-						$fullname .= trim($fullnames[$index[0]]).',';
+					} else {
+						$fullname .= trim($fullnames[$index[0]]) . ',';
 					}
 				}
-			}else{
+			} else {
 				$fullname = $fullnames[$i];
 			}
 			$updatedCVIds[$k] = $id;
@@ -473,86 +470,89 @@ for($i=0;$i<$usersCount;$i++){
 	$reportResult = $adb->query($reportQuery);
 	$reportsCount = $adb->num_rows($reportResult);
 
-	$fullname='';
-	for($j=0;$j<$reportsCount;$j++){
+	$fullname = '';
+	for ($j = 0; $j < $reportsCount; $j++) {
 
-		$id = $adb->query_result($reportResult,$j,'queryid');
-		if(!in_array($id,$updatedReportIds)){
+		$id = $adb->query_result($reportResult, $j, 'queryid');
+		if (!in_array($id, $updatedReportIds)) {
 
-			$value = $adb->query_result($reportResult,$j,'value');
-			$value = explode(',',$value);
-			$fullname='';
-			if(count($value)>1){
-				for($m=0;$m<count($value);$m++){
-					$index = array_keys($usernames,$value[$m]);
-					if($m == count($value)-1){
+			$value = $adb->query_result($reportResult, $j, 'value');
+			$value = explode(',', $value);
+			$fullname = '';
+			if (count($value) > 1) {
+				for ($m = 0; $m < count($value); $m++) {
+					$index = array_keys($usernames, $value[$m]);
+					if ($m == count($value) - 1) {
 						$fullname .= trim($fullnames[$index[0]]);
-					}
-					else {
-						$fullname .= trim($fullnames[$index[0]]).',';
+					} else {
+						$fullname .= trim($fullnames[$index[0]]) . ',';
 					}
 				}
-			}else{
+			} else {
 				$fullname = $fullnames[$i];
 			}
 
-			$updatedReportIds[$j] =$id;
+			$updatedReportIds[$j] = $id;
 			$adb->query("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
 		}
 	}
 }
 
-$replaceReportColumnsList = array (
+$replaceReportColumnsList = array(
 	'vtiger_accountAccounts:accountname:Accounts_Member_Of:account_id:V' =>
-		'vtiger_account:parentid:Accounts_Member_Of:account_id:V',
+	'vtiger_account:parentid:Accounts_Member_Of:account_id:V',
 	'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V' =>
-		'vtiger_contactdetails:accountid:Contacts_Account_Name:account_id:V',
+	'vtiger_contactdetails:accountid:Contacts_Account_Name:account_id:V',
 	'vtiger_contactdetailsContacts:lastname:Contacts_Reports_To:contact_id:V' =>
-		'vtiger_contactdetails:reportsto:Contacts_Reports_To:contact_id:V',
+	'vtiger_contactdetails:reportsto:Contacts_Reports_To:contact_id:V',
 	'vtiger_productsCampaigns:productname:Campaigns_Product:product_id:V' =>
-		'vtiger_campaign:product_id:Campaigns_Product:product_id:V',
+	'vtiger_campaign:product_id:Campaigns_Product:product_id:V',
 	'vtiger_productsFaq:productname:Faq_Product_Name:product_id:V' =>
-		'vtiger_faq:product_id:Faq_Product_Name:product_id:V',
+	'vtiger_faq:product_id:Faq_Product_Name:product_id:V',
 	'vtiger_contactdetailsInvoice:lastname:Invoice_Contact_Name:contact_id:V' =>
-		'vtiger_invoice:contactid:Invoice_Contact_Name:contact_id:V',
+	'vtiger_invoice:contactid:Invoice_Contact_Name:contact_id:V',
 	'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:V' =>
-		'vtiger_invoice:accountid:Invoice_Account_Name:account_id:V',
+	'vtiger_invoice:accountid:Invoice_Account_Name:account_id:V',
 	'vtiger_campaignPotentials:campaignname:Potentials_Campaign_Source:campaignid:V' =>
-		'vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V',
+	'vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V',
 	'vtiger_vendorRelProducts:vendorname:Products_Vendor_Name:vendor_id:V' =>
-		'vtiger_products:vendor_id:Products_Vendor_Name:vendor_id:V',
+	'vtiger_products:vendor_id:Products_Vendor_Name:vendor_id:V',
 	'vtiger_vendorRelPurchaseOrder:vendorname:PurchaseOrder_Vendor_Name:vendor_id:V' =>
-		'vtiger_purchaseorder:vendorid:PurchaseOrder_Vendor_Name:vendor_id:V',
+	'vtiger_purchaseorder:vendorid:PurchaseOrder_Vendor_Name:vendor_id:V',
 	'vtiger_contactdetailsPurchaseOrder:lastname:PurchaseOrder_Contact_Name:contact_id:V' =>
-		'vtiger_purchaseorder:contactid:PurchaseOrder_Contact_Name:contact_id:V',
+	'vtiger_purchaseorder:contactid:PurchaseOrder_Contact_Name:contact_id:V',
 	'vtiger_potentialRelQuotes:potentialname:Quotes_Potential_Name:potential_id:V' =>
-		'vtiger_quotes:potentialid:Quotes_Potential_Name:potential_id:V',
+	'vtiger_quotes:potentialid:Quotes_Potential_Name:potential_id:V',
 	'vtiger_contactdetailsQuotes:lastname:Quotes_Contact_Name:contact_id:V' =>
-		'vtiger_quotes:contactid:Quotes_Contact_Name:contact_id:V',
+	'vtiger_quotes:contactid:Quotes_Contact_Name:contact_id:V',
 	'vtiger_accountQuotes:accountname:Quotes_Account_Name:account_id:V' =>
-		'vtiger_quotes:accountid:Quotes_Account_Name:account_id:V',
+	'vtiger_quotes:accountid:Quotes_Account_Name:account_id:V',
 	'vtiger_quotesSalesOrder:subject:SalesOrder_Quote_Name:quote_id:V' =>
-		'vtiger_salesorder:quoteid:SalesOrder_Quote_Name:quote_id:V',
+	'vtiger_salesorder:quoteid:SalesOrder_Quote_Name:quote_id:V',
 	'vtiger_contactdetailsSalesOrder:lastname:SalesOrder_Contact_Name:contact_id:V' =>
-		'vtiger_salesorder:contactid:SalesOrder_Contact_Name:contact_id:V',
+	'vtiger_salesorder:contactid:SalesOrder_Contact_Name:contact_id:V',
 	'vtiger_accountSalesOrder:accountname:SalesOrder_Account_Name:account_id:V' =>
-		'vtiger_salesorder:accountid:SalesOrder_Account_Name:account_id:V',
+	'vtiger_salesorder:accountid:SalesOrder_Account_Name:account_id:V',
 	'vtiger_crmentityRelHelpDesk:setype:HelpDesk_Related_To:parent_id:V' =>
-		'vtiger_troubletickets:parent_id:HelpDesk_Related_To:parent_id:V',
+	'vtiger_troubletickets:parent_id:HelpDesk_Related_To:parent_id:V',
 	'vtiger_productsRel:productname:HelpDesk_Product_Name:product_id:V' =>
-		'vtiger_troubletickets:product_id:HelpDesk_Product_Name:product_id:V',
+	'vtiger_troubletickets:product_id:HelpDesk_Product_Name:product_id:V',
 	'vtiger_crmentityRelCalendar:setype:Calendar_Related_To:parent_id:V' =>
-		'vtiger_seactivityrel:crmid:Calendar_Related_To:parent_id:V',
+	'vtiger_seactivityrel:crmid:Calendar_Related_To:parent_id:V',
 	'vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:V' =>
-		'vtiger_cntactivityrel:contactid:Calendar_Contact_Name:contact_id:V',
+	'vtiger_cntactivityrel:contactid:Calendar_Contact_Name:contact_id:V',
 );
 
-foreach($replaceReportColumnsList as $oldName => $newName) {
+foreach ($replaceReportColumnsList as $oldName => $newName) {
 	$adb->pquery('UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?', array($newName, $oldName));
 	$adb->pquery('UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?', array($newName, $oldName));
 	$adb->pquery('UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?', array($newName, $oldName));
 }
 
-$migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
+// Report Charts - tables creation
+$adb->pquery("CREATE TABLE if not exists vtiger_homereportchart (stuffid int(19) PRIMARY KEY, reportid int(19), reportcharttype varchar(100))", array());
+$adb->pquery("CREATE TABLE vtiger_reportgroupbycolumn(reportid int(19),sortid int(19),sortcolname varchar(250),dategroupbycriteria varchar(250))", array());
+$adb->pquery("ALTER TABLE vtiger_reportgroupbycolumn add constraint fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE", array());
 
+$migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 ?>

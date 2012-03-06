@@ -149,6 +149,14 @@ if(!empty($_REQUEST['dashVal'])){
 	echo "loadStuff(".$did.",'DashBoard')";
 }
 
+if(!empty($_REQUEST['reportVal'])){
+	$stuffid=$_REQUEST['stuffid'];
+	global $adb;
+	$qry="update vtiger_homereportchart set reportcharttype=? where stuffid=?";
+	$res=$adb->pquery($qry, array($_REQUEST['reportVal'], $stuffid));
+	echo "loadStuff(".$stuffid.",'ReportCharts')";
+}
+
 if(!empty($_REQUEST['homestuffid'])){
 	$sid=$_REQUEST['homestuffid'];
 	global $adb;
