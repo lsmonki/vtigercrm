@@ -2532,5 +2532,17 @@ $log->info("in getOldFileName  ".$notesid);
 		return $list_buttons;
 	}
 
+	/**
+	 * Function to track when a record is unlinked to a given record
+	 */
+	function trackUnLinkedInfo($module, $crmid, $with_module, $with_crmid) {
+		global $current_user;
+		$adb = PearDatabase::getInstance();
+		$currentTime = date('Y-m-d H:i:s');
+
+		$adb->pquery('UPDATE vtiger_crmentity SET modifiedtime = ?, modifiedby = ? WHERE crmid = ?',
+							array($currentTime, $current_user->id, $crmid));
+	}
+
 }
 ?>

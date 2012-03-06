@@ -4475,6 +4475,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id) {
 
 	if ($module != $return_module && !empty($return_module) && !empty($return_id)) {
 		$focus->unlinkRelationship($record, $return_module, $return_id);
+		$focus->trackUnLinkedInfo($return_module, $return_id, $module, $record);
 	} else {
 		$focus->trash($module, $record);
 	}
