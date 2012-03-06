@@ -28,7 +28,9 @@ $now_action = vtlib_purify($_REQUEST['action']);
 $sql = "select * from vtiger_report where reportid=?";
 $res = $adb->pquery($sql, array($reportid));
 $Report_ID = $adb->query_result($res,0,'reportid');
-//Monolithic Phase 6 customization
+if(empty($folderid)) {
+	$folderid = $adb->query_result($res,0,'folderid');
+}
 $reporttype = $adb->query_result($res,0,'reporttype');
 $showCharts = false;
 if($reporttype == 'summary'){
@@ -80,8 +82,8 @@ if($numOfRows > 0) {
 		}
 
 		$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
-		
-		$list_report_form = new vtigerCRM_Smarty;		
+
+		$list_report_form = new vtigerCRM_Smarty;
 		//Monolithic phase 6 changes
 		if($showCharts == true){
 			$list_report_form->assign("SHOWCHARTS",$showCharts);
@@ -151,9 +153,9 @@ if($numOfRows > 0) {
 		$list_report_form->assign("IMAGE_PATH", $image_path);
 		$list_report_form->assign("REPORTID", $reportid);
 		$list_report_form->assign("IS_EDITABLE", $ogReport->is_editable);
-		
+
 		$list_report_form->assign("REP_FOLDERS",$ogReport->sgetRptFldr());
-		
+
 		$list_report_form->assign("REPORTNAME", htmlspecialchars($ogReport->reportname,ENT_QUOTES,$default_charset));
 		if(is_array($sshtml))$list_report_form->assign("REPORTHTML", $sshtml);
 		else $list_report_form->assign("ERROR_MSG", getTranslatedString('LBL_REPORT_GENERATION_FAILED', $currentModule) . "<br>" . $sshtml);
@@ -223,7 +225,7 @@ if($numOfRows > 0) {
 		echo "</td></tr></table>";
 }
 
-/** Function to get the StdfilterHTML strings for the given  primary module 
+/** Function to get the StdfilterHTML strings for the given  primary module
  *  @ param $module : Type String
  *  @ param $selected : Type String(optional)
  *  This Generates the HTML Combo strings for the standard filter for the given reports module
@@ -267,10 +269,10 @@ function getPrimaryStdFilterHTML($module,$selected="")
 	return $shtml;
 }
 
-	/** Function to get the StdfilterHTML strings for the given secondary module 
+	/** Function to get the StdfilterHTML strings for the given secondary module
 	 *  @ param $module : Type String
-	 *  @ param $selected : Type String(optional)	
-	 *  This Generates the HTML Combo strings for the standard filter for the given reports module  
+	 *  @ param $selected : Type String(optional)
+	 *  This Generates the HTML Combo strings for the standard filter for the given reports module
 	 *  This Returns a HTML sring
 	 */
 function getSecondaryStdFilterHTML($module,$selected="")
@@ -312,32 +314,10 @@ function getSecondaryStdFilterHTML($module,$selected="")
 					}
                 		}
         		}
-		
+
 		}
 	}
 	return $shtml;
-}
-	/** Function to get the reports under a report folder 
-	 *  @ param $folderid : Type Integer 
-	 *  This Returns $reports_array in the following format 
-	 *  		$reports_array = array ($reportid=>$reportname,$reportid=>$reportname1,.............,$reportidn=>$reportname)
-	 */
-function getReportsinFolder($folderid)
-{
-	global $adb;
-	$query = 'select reportid,reportname from vtiger_report where folderid=?';
-	$result = $adb->pquery($query, array($folderid));
-	$reports_array = Array();
-	for($i=0;$i < $adb->num_rows($result);$i++)	
-	{
-		$reportid = $adb->query_result($result,$i,'reportid');
-		$reportname = $adb->query_result($result,$i,'reportname');
-		$reports_array[$reportid] = $reportname; 
-	}
-	if(count($reports_array) > 0)
-		return $reports_array;
-	else
-		return false;
 }
 
 function getPrimaryColumns_AdvFilter_HTML($module, $ogReport, $selected='') {
@@ -431,7 +411,7 @@ function getSecondaryColumns_AdvFilter_HTML($module, $ogReport, $selected="") {
 }
 
 function getAdvCriteria_HTML($adv_filter_options, $selected="") {
-		
+
 	 foreach($adv_filter_options as $key=>$value) {
 		if($selected == $key) {
 			$shtml .= "<option selected value=\"".$key."\">".$value."</option>";
@@ -439,7 +419,7 @@ function getAdvCriteria_HTML($adv_filter_options, $selected="") {
 			$shtml .= "<option value=\"".$key."\">".$value."</option>";
 		}
 	 }
-	
+
     return $shtml;
 }
 ?>

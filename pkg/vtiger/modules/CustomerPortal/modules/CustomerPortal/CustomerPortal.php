@@ -29,7 +29,8 @@ class CustomerPortal {
 			$tabseq = $adb->query_result($res,0,'max_tabseq');
 			$i = ++$tabseq;
 			foreach($portalModules as $module) {
-				$tabId = getTabid($module);
+				$tabIdResult = $adb->pquery('SELECT tabid FROM vtiger_tab WHERE name=?', array($module));
+				$tabId = $adb->query_result($tabIdResult, 0, 'tabid');
 				if($tabId) {
 					++$i;
 					$adb->query("INSERT INTO vtiger_customerportal_tabs (tabid,visible,sequence) VALUES ($tabId,1,$i)");

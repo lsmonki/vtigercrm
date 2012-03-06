@@ -1,7 +1,7 @@
-<?php 
+<?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -959,6 +959,17 @@ class Users extends CRMEntity {
         $this->column_fields["currency_code"]= $this->currency_code = $adb->query_result($currency_result,0,"currency_code");
         $this->column_fields["currency_symbol"]= $this->currency_symbol = $ui_curr;
         $this->column_fields["conv_rate"]= $this->conv_rate = $adb->query_result($currency_result,0,"conversion_rate");
+
+		// TODO - This needs to be cleaned up once default values for fields are picked up in a cleaner way.
+		// This is just a quick fix to ensure things doesn't start breaking when the user currency configuration is missing
+		if($this->column_fields['currency_grouping_pattern'] == ''
+				&& $this->column_fields['currency_symbol_placement'] == '') {
+
+			$this->column_fields['currency_grouping_pattern'] = $this->currency_grouping_pattern = '123,456,789';
+			$this->column_fields['currency_decimal_separator'] = $this->currency_decimal_separator = '.';
+			$this->column_fields['currency_grouping_separator'] = $this->currency_grouping_separator = ',';
+			$this->column_fields['currency_symbol_placement'] = $this->currency_symbol_placement = '$1.0';
+		}
 
 		// TODO - This needs to be cleaned up once default values for fields are picked up in a cleaner way.
 		// This is just a quick fix to ensure things doesn't start breaking when the user currency configuration is missing

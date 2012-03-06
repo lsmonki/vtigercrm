@@ -83,22 +83,9 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		}
 
 	} elseif ($dbField->name == "PurchaseOrder_Currency" || $dbField->name == "SalesOrder_Currency"
-				|| $dbField->name == "Invoice_Currency" || $dbField->name == "Quotes_Currency") {
-		if($value!='')
-			$fieldvalue = getCurrencyName($value);
-	}elseif ((in_array($dbField->name,$report->ui10_fields) || $fieldType == 'reference') &&
-			!empty($value) && is_numeric($value)) {
-		$type = getSalesEntityType($value);
-		$referenceModules = $field->getReferenceList();
-		if(in_array($type, $referenceModules)) {
-			$tmp = getEntityName($type,$value);
-			if($tmp[$value] != null) {
-				$fieldvalue = $tmp[$value];
-			} else {
-				$fieldvalue = $value;
-			}
-		} else {
-			$fieldvalue = $value;
+				|| $dbField->name == "Invoice_Currency" || $dbField->name == "Quotes_Currency" || $dbField->name == "PriceBooks_Currency") {
+		if($value!='') {
+			$fieldvalue = getTranslatedCurrencyString($value);
 		}
 	} elseif (in_array($dbField->name,$report->ui101_fields) && !empty($value)) {
 		$entityNames = getEntityName('Users', $value);

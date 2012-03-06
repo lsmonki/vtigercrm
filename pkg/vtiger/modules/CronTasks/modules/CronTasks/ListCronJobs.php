@@ -27,57 +27,17 @@ foreach ($cronTasks as $cronTask) {
 	$cron_freq = $cronTask->getFrequency();
 	$cron_st = $cronTask->getStatus();
 	if($cronTask->getLastStart() != 0) {
-		$start_ts = $cronTask->getLastStartDateTime();
-		$end_ts = new DateTimeField(date("Y-m-d H:i:s"));
- 	    $end_ts = $end_ts->getDBInsertDateTimeValue();
- 	    $difference = dateDiff($start_ts, $end_ts);
- 	    $years = $difference['years'];
- 	    $months = $difference['months'];
- 	    $days = $difference['days'];
- 	    $hours = $difference['hours'];
- 	    $minutes = $difference['minutes'];
- 	    $seconds = $difference['seconds'];
- 	    if($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes == 0){
-		    $cron_started = "$seconds ".getTranslatedString('LBL_SECONDS',$currentModule);
- 	    }else if($years == 0 && $months == 0 && $days == 0 && $hours == 0 ){
-		    $cron_started = "$minutes ".getTranslatedString('LBL_MINUTES',$currentModule);
- 	    }else if($years == 0 && $months == 0 && $days == 0 ){
-			$cron_started = "$hours ".getTranslatedString('LBL_HOURS',$currentModule);
-		}else if($years == 0 && $months == 0 ){
-			$cron_started = "$days ".getTranslatedString('LBL_DAYS',$currentModule);
-		}else if($years == 0 ){
-			$cron_started = "$months ".getTranslatedString('LBL_MONTHS',$currentModule);
-		}else {
-			$cron_started = "$years ".getTranslatedString('LBL_YEARS',$currentModule);
-		}
+		$start_ts = $cronTask->getLastStart();
+		$end_ts = time();
+ 	    $cron_started = dateDiffAsString($start_ts, $end_ts);
 	}
 	else {
 		$cron_started = '';
 	}
 	if($cronTask->getLastEnd() != 0) {
-		$start_ts = $cronTask->getLastEndDateTime();
-		$end_ts = new DateTimeField(date("Y-m-d H:i:s"));
- 	    $end_ts = $end_ts->getDBInsertDateTimeValue();
- 	    $difference = dateDiff($start_ts, $end_ts);
- 	    $years = $difference['years'];
- 	    $months = $difference['months'];
- 	    $days = $difference['days'];
- 	    $hours = $difference['hours'];
- 	    $minutes = $difference['minutes'];
- 	    $seconds = $difference['seconds'];
- 	    if($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes == 0){
-		    $cron_end = "$seconds ".getTranslatedString('LBL_SECONDS',$currentModule);
- 	    }else if($years == 0 && $months == 0 && $days == 0 && $hours == 0 ){
-		    $cron_end = "$minutes ".getTranslatedString('LBL_MINUTES',$currentModule);
- 	    }else if($years == 0 && $months == 0 && $days == 0 ){
-			$cron_end = "$hours ".getTranslatedString('LBL_HOURS',$currentModule);
-		}else if($years == 0 && $months == 0 ){
-			$cron_end = "$days ".getTranslatedString('LBL_DAYS',$currentModule);
-		}else if($years == 0 ){
-			$cron_end = "$months ".getTranslatedString('LBL_MONTHS',$currentModule);
-		}else {
-			$cron_end = "$years ".getTranslatedString('LBL_YEARS',$currentModule);
-		}
+		$start_ts = $cronTask->getLastEnd();
+		$end_ts = time();
+ 	    $cron_end = dateDiffAsString($start_ts, $end_ts);
 	}
 	else {
 		$cron_end = '';

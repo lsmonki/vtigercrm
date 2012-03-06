@@ -341,19 +341,7 @@ class Assets extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		global $current_user;
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_assets","assetsid");
-		$query .= " left join vtiger_crmentity as vtiger_crmentityAssets on vtiger_crmentityAssets.crmid=vtiger_assets.assetsid and vtiger_crmentityAssets.deleted=0
-                            left join vtiger_assetscf on vtiger_assets.assetsid = vtiger_assetscf.assetsid
-                            left join vtiger_account as vtiger_accountAssets on vtiger_accountAssets.accountid=vtiger_assets.account
-                            left join vtiger_products as vtiger_productAssets on vtiger_productAssets.productid=vtiger_assets.product
-                            left join vtiger_invoice as vtiger_invoiceAssets on vtiger_invoiceAssets.invoiceid=vtiger_assets.invoiceid
-                            left join vtiger_users as vtiger_usersAssets on vtiger_usersAssets.id=vtiger_crmentity.smownerid
-                            left join vtiger_groups as vtiger_groupsAssets on vtiger_groupsAssets.groupid=vtiger_crmentity.smownerid
-                            left join vtiger_users as vtiger_lastModifiedByAssets on vtiger_lastModifiedByAssets.id = vtiger_crmentityAssets.modifiedby ";
-                return $query;
-	}
+	// function generateReportsSecQuery($module,$secmodule){ }
 
 	// Function to unlink all the dependent entities of the given Entity by Id
 	function unlinkDependencies($module, $id) {
@@ -414,8 +402,9 @@ class Assets extends CRMEntity {
 	function addModuleToCustomerPortal() {
 		$adb = PearDatabase::getInstance();
 
-		$assetsTabId = getTabid('Assets');
-		if(getTabid('CustomerPortal')) {
+		$assetsResult = $adb->pquery('SELECT tabid FROM vtiger_tab WHERE name=?', array('Assets'));
+		$assetsTabId = $adb->query_result($assetsResult, 0, 'tabid');
+		if(getTabid('CustomerPortal') && $assetsTabId) {
 			$checkAlreadyExists = $adb->pquery('SELECT 1 FROM vtiger_customerportal_tabs WHERE tabid=?', array($assetsTabId));
 			if($checkAlreadyExists && $adb->num_rows($checkAlreadyExists) < 1) {
 				$maxSequenceQuery = $adb->query("SELECT max(sequence) as maxsequence FROM vtiger_customerportal_tabs");

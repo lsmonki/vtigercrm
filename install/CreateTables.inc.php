@@ -1185,7 +1185,7 @@ function populateDefaultWorkflows($adb) {
 	$task->summary = 'Send Notification Email to Record Owner';
 	$task->recepient = "\$(assigned_user_id : (Users) email1)";
 	$task->subject = "Event :  \$subject";
-	$task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
 					.'<b>Activity Notification Details:</b><br/>'
 					.'Subject             : $subject<br/>'
 					.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'
@@ -1212,7 +1212,7 @@ function populateDefaultWorkflows($adb) {
 	$task->summary = 'Send Notification Email to Record Owner';
 	$task->recepient = "\$(assigned_user_id : (Users) email1)";
 	$task->subject = "Task :  \$subject";
-	$task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name) ,<br/>'
+	$task->content = '$(assigned_user_id : (Users) first_name) $(assigned_user_id : (Users) last_name) ,<br/>'
 					.'<b>Task Notification Details:</b><br/>'
 					.'Subject : $subject<br/>'
 					.'Start date and time : $date_start  $time_start ( $(general : (__VtigerMeta__) dbtimezone) ) <br/>'

@@ -36,17 +36,17 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$oRep = new Reports();
 	$secondarymodule = '';
 	$secondarymodules =Array();
-	
+
 	if(!empty($oRep->related_modules[$oReport->primodule])) {
 		foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
 			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
 		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);
-	
+
 	if($secondarymodule!='')
 		$oReport->secmodule = $secondarymodule;
-		
+
 	$BLOCK1 = getPrimaryColumns_GroupingHTML($oReport->primodule,$list_array[0]);
 	$BLOCK1 .= getSecondaryColumns_GroupingHTML($oReport->secmodule,$list_array[0]);
 	$report_group->assign("BLOCK1",$BLOCK1);
@@ -92,11 +92,11 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 }
 
 
-	/** Function to get the combo values for the Primary module Columns 
+	/** Function to get the combo values for the Primary module Columns
 	 *  @ param $module(module name) :: Type String
 	 *  @ param $selected (<selected or ''>) :: Type String
-	 *  This function generates the combo values for the columns  for the given module 
-	 *  and return a HTML string 
+	 *  This function generates the combo values for the columns  for the given module
+	 *  and return a HTML string
 	 */
 
 function getPrimaryColumns_GroupingHTML($module,$selected="")
@@ -112,13 +112,15 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
         if(isset($ogReport->pri_module_columnslist[$module][$value]) && !$block_listed[$value])
         {
 			$block_listed[$value] = true;
-			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($value)."\" class=\"select\" style=\"border:none\">";
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($value, $module)."\" class=\"select\" style=\"border:none\">";
 			if($id_added==false){
 				$is_selected ='';
 				if($selected == "vtiger_crmentity:crmid:".$module."_ID:crmid:I"){
 					$is_selected = 'selected';
 				}
-				$shtml .= "<option value=\"vtiger_crmentity:crmid:".$module."_ID:crmid:I\" {$is_selected}>".getTranslatedString(getTranslatedString($module).' ID')."</option>";
+				$shtml .= "<option value=\"vtiger_crmentity:crmid:".$module."_ID:crmid:I\" {$is_selected}>".
+							getTranslatedString($module, $module).' '.getTranslatedString('ID', $module).
+						"</option>";
 				$id_added=true;
 			}
 			foreach($ogReport->pri_module_columnslist[$module][$value] as $field=>$fieldlabel)
@@ -141,7 +143,7 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
 					{
 						$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
 					}
-	
+
 				}
 			}
        }
@@ -149,18 +151,18 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
     return $shtml;
 }
 
-	/** Function to get the combo values for the Secondary module Columns 
+	/** Function to get the combo values for the Secondary module Columns
 	 *  @ param $module(module name) :: Type String
 	 *  @ param $selected (<selected or ''>) :: Type String
-	 *  This function generates the combo values for the columns for the given module 
-	 *  and return a HTML string 
+	 *  This function generates the combo values for the columns for the given module
+	 *  and return a HTML string
 	 */
 function getSecondaryColumns_GroupingHTML($module,$selected="")
 {
 	global $ogReport;
 	global $app_list_strings;
 	global $current_language;
-	
+
  	$selected = decode_html($selected);
 	if($module != "")
 	{

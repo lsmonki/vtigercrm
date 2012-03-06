@@ -62,7 +62,10 @@ elseif ($_REQUEST['formodule'] != '') {
 else
 	$fld_module = 'Leads';
 $smarty->assign("MODULE", $fld_module);
-$smarty->assign("CFENTRIES", getCFListEntries($fld_module));
+if ($fld_module == 'Calendar')
+	$smarty->assign("CFENTRIES", getCFListEntries($fld_module));
+else
+	$smarty->assign("CFENTRIES", getCFLeadMapping($fld_module));
 if (isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes") {
 	$error = getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME', 'Settings') . vtlib_purify($_REQUEST["fldlabel"]) . getTranslatedString('ERR_ALREADY_EXISTS', 'Settings') . ' ' . getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL', 'Settings');
 	$smarty->assign("DUPLICATE_ERROR", $error);
@@ -88,6 +91,54 @@ function getCFListEntries($module) {
 	if ($module == 'Calendar') {
 		$tabid = array(9, 16);
 	}
+	$theme_path = "themes/" . $theme . "/";
+	$image_path = "themes/images/";
+	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,tabid FROM vtiger_field LEFT JOIN vtiger_convertleadmapping
+				ON  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid WHERE tabid IN (" . generateQuestionMarks($tabid) . ")
+				AND vtiger_field.presence IN (0,2)
+				AND generatedtype = 2
+				ORDER BY sequence";
+	$result = $adb->pquery($dbQuery, array($tabid));
+	$row = $adb->fetch_array($result);
+	$count = 1;
+	$cflist = Array();
+	if ($row != '') {
+		do {
+			$cf_element = Array();
+			$cf_element['no'] = $count;
+			$cf_element['label'] = getTranslatedString($row["fieldlabel"], $module);
+			$fld_type_name = getCustomFieldTypeName($row["uitype"]);
+			$cf_element['type'] = $fld_type_name;
+			$cf_tab_id = $row["tabid"];
+			if ($module == 'Leads') {
+				$mapping_details = getListLeadMapping($row["cfmid"]);
+				$cf_element[] = $mapping_details['accountlabel'];
+				$cf_element[] = $mapping_details['contactlabel'];
+				$cf_element[] = $mapping_details['potentiallabel'];
+			}
+			if ($module == 'Calendar') {
+				if ($cf_tab_id == '9')
+					$cf_element['activitytype'] = getTranslatedString('Task', $module);
+				else
+					$cf_element['activitytype'] = getTranslatedString('Event', $module);
+
+				$cf_element['tool'] = '&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField(' . $row["fieldid"] . ',\'' . $module . '\', \'' . $row["columnname"] . '\', \'' . $row["uitype"] . '\')" src="' . vtiger_imageurl('delete.gif', $theme) . '" border="0"  alt="' . $app_strings['LBL_DELETE_BUTTON_LABEL'] . '" title="' . $app_strings['LBL_DELETE_BUTTON_LABEL'] . '"/></a>';
+			}
+			$cflist[] = $cf_element;
+			$count++;
+		}while ($row = $adb->fetch_array($result));
+	}
+	return $cflist;
+}
+
+/**
+ * Function to get customfield entries for leads
+ * @param string $module - Module name
+ * return array  $cflist - customfield entries
+ */
+function getCFLeadMapping($module) {
+	global $adb, $app_strings, $theme, $smarty, $log;
+	$tabid = getTabid($module);
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = "themes/images/";
 	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,vtiger_convertleadmapping.editable,tabid FROM vtiger_convertleadmapping LEFT JOIN vtiger_field
@@ -116,14 +167,6 @@ function getCFListEntries($module) {
 				$cf_element['map'][] = $mapping_details['accountlabel'];
 				$cf_element['map'][] = $mapping_details['contactlabel'];
 				$cf_element['map'][] = $mapping_details['potentiallabel'];
-			}
-			if ($module == 'Calendar') {
-				if ($cf_tab_id == '9')
-					$cf_element['activitytype'] = getTranslatedString('Task', $module);
-				else
-					$cf_element['activitytype'] = getTranslatedString('Event', $module);
-
-				$cf_element['tool'] = '&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField(' . $row["fieldid"] . ',\'' . $module . '\', \'' . $row["columnname"] . '\', \'' . $row["uitype"] . '\')" src="' . vtiger_imageurl('delete.gif', $theme) . '" border="0"  alt="' . $app_strings['LBL_DELETE_BUTTON_LABEL'] . '" title="' . $app_strings['LBL_DELETE_BUTTON_LABEL'] . '"/></a>';
 			}
 			$cflist[] = $cf_element;
 			$count++;
@@ -180,4 +223,5 @@ function getCustomFieldSupportedModules() {
 	}
 	return $modulelist;
 }
+
 ?>

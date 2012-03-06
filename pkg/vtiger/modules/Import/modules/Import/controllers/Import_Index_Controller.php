@@ -104,7 +104,7 @@ class Import_Index_Controller {
 			foreach($moduleFields as $fieldName => $fieldInstance) {
 				if(($this->isEditableField($fieldInstance)
 							&& ($fieldInstance->getTableName() != 'vtiger_crmentity' || $fieldInstance->getColumnName() != 'modifiedby')
-						) || $fieldInstance->getUIType() == '70') {
+						) || ($fieldInstance->getUIType() == '70' && $fieldName != 'modifiedtime')) {
 					$importableFields[$fieldName] = $fieldInstance;
 				}
 			}

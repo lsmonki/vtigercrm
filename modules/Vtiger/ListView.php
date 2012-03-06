@@ -208,6 +208,20 @@ $customlink_params = Array('MODULE'=>$currentModule, 'ACTION'=>vtlib_purify($_RE
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('LISTVIEWBASIC','LISTVIEW'), $customlink_params));
 // END
 
+if(isPermitted($currentModule, "Merge") == 'yes' && file_exists("modules/$currentModule/Merge.php")) {
+	$wordTemplates = array();
+	$wordTemplateResult = fetchWordTemplateList($currentModule);
+	$tempCount = $adb->num_rows($wordTemplateResult);
+	$tempVal = $adb->fetch_array($wordTemplateResult);
+	for ($templateCount = 0; $templateCount < $tempCount; $templateCount++) {
+		$wordTemplates[$tempVal["templateid"]] = $tempVal["filename"];
+		$tempVal = $adb->fetch_array($wordTemplateResult);
+	}
+	$smarty->assign('WORDTEMPLATES', $wordTemplates);
+}
+
+$smarty->assign('IS_ADMIN', is_admin($current_user));
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else

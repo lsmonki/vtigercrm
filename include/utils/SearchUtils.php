@@ -220,7 +220,8 @@ function get_usersid($table_name,$column_name,$search_string)
 	global $log;
 	$log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$where.="(CONCAT(vtiger_users.last_name,' ',vtiger_users.first_name) like '". formatForSqlLike($search_string) .
+	$concatSql = getSqlForNameInDisplayFormat(array('last_name'=>'vtiger_users.last_name', 'first_name'=>'vtiger_users.first_name'), 'Users');
+	$where.="($concatSql like '". formatForSqlLike($search_string) .
 			"' or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
 	$log->debug("Exiting get_usersid method ...");
 	return $where;
@@ -256,11 +257,8 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 			else
 			{
 				if($column_name == "contact_id" && $_REQUEST['type'] == "entchar") {
-					if (getFieldVisibilityPermission('Contacts', $current_user->id,'firstname') == '0') {
-						$where = "concat(vtiger_contactdetails.lastname, ' ', vtiger_contactdetails.firstname) = '$search_string'";
-					} else {
-						$where = "vtiger_contactdetails.lastname = '$search_string'";
-					}
+					$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
+					$where = "$concatSql = '$search_string'";
 				}
 				else {
 					$where="(";
@@ -1156,7 +1154,7 @@ function generateAdvancedSearchSql($advfilterlist) {
 
 				if($fieldcolname != "" && $comparator != "") {
 					$valuearray = explode(",",trim($value));
-					if(isset($valuearray) && count($valuearray) > 0 && $comparator != 'bw') {						
+					if(isset($valuearray) && count($valuearray) > 0 && $comparator != 'bw') {
 						for($n=0;$n<count($valuearray);$n++) {
 							$advorsql[] = getAdvancedSearchValue($columns[0],$columns[1],$comparator,trim($valuearray[$n]),$datatype);
 						}
@@ -1310,8 +1308,8 @@ function getAdvancedSearchValue($tablename,$fieldname,$comparator,$value,$dataty
 		$fieldname = "contactid";
 
 	$contactid = "vtiger_contactdetails.lastname";
-	if ($currentModule != "Contacts" && $currentModule != "Leads" && getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname') == '0' && $currentModule != 'Campaigns') {
-		$contactid = "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+	if ($currentModule != "Contacts" && $currentModule != "Leads" && $currentModule != 'Campaigns') {
+		$contactid = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
 	}
 	$change_table_field = Array(
 
@@ -1328,12 +1326,13 @@ function getAdvancedSearchValue($tablename,$fieldname,$comparator,$value,$dataty
 		"quoteid"=>"vtiger_quotes.subject",
 		"salesorderid"=>"vtiger_salesorder.subject",
 		"campaignid"=>"vtiger_campaign.campaignname",
-		"vtiger_contactdetails.reportsto"=>"concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname)",
+		"vtiger_contactdetails.reportsto"=> getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails2.lastname', 'firstname'=>'vtiger_contactdetails2.firstname'), 'Contacts'),
 		"vtiger_pricebook.currency_id"=>"vtiger_currency_info.currency_name",
 		);
 	if($fieldname == "smownerid")
     {
-        $temp_value = "( trim(concat(vtiger_users.last_name,' ',vtiger_users.first_name))".getAdvancedSearchComparator($comparator,$value,$datatype);
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name'=>'vtiger_users.last_name'), 'Users');
+        $temp_value = "( ".$userNameSql.getAdvancedSearchComparator($comparator,$value,$datatype);
         $temp_value.= " OR  vtiger_groups.groupname".getAdvancedSearchComparator($comparator,$value,$datatype);
         $value=$temp_value.")";
 	}elseif( $fieldname == "inventorymanager")
@@ -1436,13 +1435,12 @@ function getAdvancedSearchParentEntityValue($comparator,$value,$datatype,$tablen
 					$value .= 'vtiger_account.accountname';
 				}
 		}
-		if($modulename == 'Leads')
-		{
-			if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-			{
-				$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) IS NULL or ";
+		if($modulename == 'Leads') {
+			$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_leaddetails.lastname', 'firstname'=>'vtiger_leaddetails.firstname'), 'Leads');
+			if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '') {
+				$value .= " $concatSql IS NULL or ";
 			}
-			$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
+			$value .= " $concatSql";
 		}
 		if($modulename == 'Potentials')
 		{
@@ -1494,13 +1492,12 @@ function getAdvancedSearchParentEntityValue($comparator,$value,$datatype,$tablen
 			}
 			$value .= ' vtiger_quotes.subject';
 		}
-		if($modulename == 'Contacts')
-		{
-			if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-			{
-				$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) IS NULL or ";
+		if($modulename == 'Contacts') {
+			$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
+			if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '') {
+				$value .= " $concatSql IS NULL or ";
 			}
-			$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+			$value .= " $concatSql";
 		}
 		if($modulename == 'HelpDesk')
 		{

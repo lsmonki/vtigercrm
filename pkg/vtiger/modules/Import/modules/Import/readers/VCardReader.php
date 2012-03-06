@@ -13,7 +13,7 @@ require_once 'modules/Import/readers/FileReader.php';
 class Import_VCard_Reader extends Import_File_Reader {
 
 	protected $vCardPattern = '/BEGIN:VCARD.*?END:VCARD/si';
-	protected $skipLabels = array('BEGIN', 'END');
+	protected $skipLabels = array('BEGIN', 'END', 'VERSION');
 	static $fileContents = null;
 
 	public function hasHeader() {
@@ -38,6 +38,7 @@ class Import_VCard_Reader extends Import_File_Reader {
 		$data = array();
 		foreach($fieldValueMappings as $fieldValueMapping) {
 			list($label, $value) = explode(':', $fieldValueMapping, 2);
+			$value = str_replace(';', ' ', $value);
 			if(!in_array($label, $this->skipLabels)) {
 				$data[$label] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
 			}
@@ -70,6 +71,7 @@ class Import_VCard_Reader extends Import_File_Reader {
 			$valueCounter = 0;
 			foreach($fieldValueMappings as $fieldValueMapping) {
 				list($label, $value) = explode(':', $fieldValueMapping, 2);
+				$value = str_replace(';', ' ', $value);
 				if(!in_array($label, $this->skipLabels)) {
 					$data[$valueCounter++] = $value;
 				}

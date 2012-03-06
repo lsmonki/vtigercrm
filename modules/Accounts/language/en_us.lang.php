@@ -14,12 +14,12 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.18 2005/03/19 08:59:20 rank Exp $
- * Description:  Defines the English language pack 
+ * Description:  Defines the English language pack
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
- 
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Organizations',
 'LBL_MODULE_TITLE'=>'Organizations: Home',
@@ -80,7 +80,7 @@ $mod_strings = Array(
 'NTC_COPY_BILLING_ADDRESS'=>'Copy billing address to shipping address',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
-'LBL_DUPLICATE'=>'Opportunity Duplicate Organizations',
+'LBL_DUPLICATE'=>'Potential Duplicate Organizations',
 'MSG_DUPLICATE' => 'Creating this vtiger_account may vtiger_potentialy create a duplicate vtiger_account. You may either select an vtiger_account from the list below or you may click on Create New Organization to continue creating a new vtiger_account with the previously entered data.',
 
 'LBL_INVITEE'=>'Contacts',

@@ -44,7 +44,7 @@
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/json.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js?v={$VERSION}"></script>
-	<!-- vtlib customization: Javascript hook -->	
+	<!-- vtlib customization: Javascript hook -->
 	<script language="JavaScript" type="text/javascript" src="include/js/vtlib.js?v={$VERSION}"></script>
 	<!-- END -->
 	<script language="JavaScript" type="text/javascript" id="_current_language_" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
@@ -80,20 +80,20 @@
 	<!-- END -->
 {/if}
 {* END *}
-	
+
 	{* PREFECTHING IMAGE FOR BLOCKING SCREEN USING VtigerJS_DialogBox API *}
     <img src="{'layerPopupBg.gif'|@vtiger_imageurl:$THEME}" style="display: none;"/>
     {* END *}
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 	<tr>
-		<td valign=top align=left><img src="test/logo/{$LOGO}" alt="{$LOGO}" title="{$LOGO}" border=0 style="width: 15em;height: 3.5em;"></td>
+		<td valign=top align=left><img src="test/logo/{$LOGO}" alt="{$LOGO}" title="{$LOGO}" border=0 style="width: 15em;height: 4.2em;"></td>
 		<td align="center" valign=bottom  >
 			<div align ="center" width ="50%" border='3' style="padding:5px;">
 				<table border=0 cellspacing=0 cellpadding=0 id="search" align="center">
 			   		<tr>
 					<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
-						<td style="background-color:#ffffef border:1px;border-color:black;vertical-align:middle;" nowrap>
+						<td style="background-color:#ffffef;border:1px;border-color:black;vertical-align:middle;" nowrap>
 							<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 							<input type="hidden" name="module" value="Home" style="margin:0px">
 							<input type="hidden" name="parenttab" value="{$CATEGORY}" style="margin:0px">
@@ -674,7 +674,7 @@ function openwin()
         <tr>
 			<td style="padding-left:0px;padding-right:10px font-weight:bold" nowrap> <a href="javascript:void(0);" onclick="vtiger_feedback();" class="drop_down_usersettings">{$APP.LBL_FEEDBACK}</a></td>
         </tr>
-        </table>
+	</table>
 </div>
 <div  id="mainsettings" class="drop_mnu_user" onmouseout="fnHideDrop('mainsettings');" onmouseover="fnvshNrm('mainsettings');" style="width:110px;left:1226px;" >
 	<table border=0 width="100%" border="0" cellpadding="0" cellspacing="0" >

@@ -32,7 +32,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	 * @internal Creates picklist base if it does not exists
 	 */
 	function setPicklistValues($values) {
-		global $adb;
+		global $adb,$default_charset;
 
 		// Non-Role based picklist values
 		if($this->uitype == '16') {
@@ -75,6 +75,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		// Add value to picklist now
 		$sortid = 0; // TODO To be set per role
 		foreach($values as $value) {
+			$value = htmlentities($value,ENT_QUOTES,$default_charset);
 			$new_picklistvalueid = getUniquePicklistID();
 			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
 			$new_id = $adb->getUniqueID($picklist_table);

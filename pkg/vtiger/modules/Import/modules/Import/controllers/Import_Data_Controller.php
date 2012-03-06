@@ -370,19 +370,20 @@ class Import_Data_Controller {
 				}
 
 			} elseif ($fieldInstance->getFieldDataType() == 'picklist') {
+				global $default_charset;
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
 					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
 				}
-				$picklistValue = addslashes($fieldValue);
 				$allPicklistDetails = $fieldInstance->getPicklistDetails();
 				$allPicklistValues = array();
 				foreach ($allPicklistDetails as $picklistDetails) {
 					$allPicklistValues[] = $picklistDetails['value'];
 				}
-				if (!in_array($picklistValue, $allPicklistValues)) {
+				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
+				if (!in_array($encodePicklistValue, $allPicklistValues)) {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
-					$fieldObject->setPicklistValues(array($picklistValue));
+					$fieldObject->setPicklistValues(array($fieldValue));
 				}
 			} else {
 				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {

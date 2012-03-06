@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  
+ * $Header:
  * Description:  Defines the English language pack for the Reports module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -126,7 +126,7 @@ $mod_strings = Array(
 'PurchaseOrder Reports'=>'PurchaseOrder Reports',
 'SalesOrder Reports'=>'SalesOrder Reports', //Added for SO
 'Invoice Reports'=>'Invoice Reports',
-'Campaign Reports'=>'Campaign Reports', //Added for Campaigns 
+'Campaign Reports'=>'Campaign Reports', //Added for Campaigns
 'Contacts by Accounts'=>'Contacts by Organizations',
 'Contacts without Accounts'=>'Contacts without Organizations',
 'Contacts by Potentials'=>'Contacts by Opportunities',
@@ -163,10 +163,10 @@ $mod_strings = Array(
 'Create_Reports'=>'Create Reports',
 'Create_New_Folder'=>'Create New Folder',
 'Move_Reports'=>'Move Reports',
-'Delete_Report'=>'Delete Report', 
+'Delete_Report'=>'Delete Report',
 
 'Custom'=>'Custom',
-'Previous FY'=>'Previous FY', 
+'Previous FY'=>'Previous FY',
 'Current FY'=>'Current FY',
 'Next FY'=>'Next FY',
 'Previous FQ'=>'Previous FQ',
@@ -229,7 +229,7 @@ $mod_strings = Array(
 'LBL_DELETE_GROUP'=>'Delete Group',
 'LBL_NEW_CONDITION'=>'New Condition',
 'LBL_SHARING_TYPE'=>'Sharing Type',
-'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Select Sharing Type to Control Access to the Report', 
+'LBL_SELECT_REPORT_TYPE_TO_CONTROL_ACCESS'=>'Select Sharing Type to Control Access to the Report',
 'LBL_ACTION' => 'Action',
 'LBL_VIEW_DETAILS' => 'View Details',
 'LBL_SHOW_STANDARD_FILTERS' => 'Show Standard Filters',
@@ -282,6 +282,7 @@ $mod_strings = Array(
 'LBL_HOME_WINDOW_TITLE' => 'Window Title',
 'LBL_GROUPING_TIME' => 'Group By Time',
 'LBL_WIDGET_ADDED' => 'Widget Added Successfully.',
+'LBL_UNDEFINED' => 'Undefined',
 )
 
 ?>

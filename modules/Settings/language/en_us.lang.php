@@ -197,7 +197,7 @@ $mod_strings = Array(
 
 'LBL_PROVIDE_FIELD_INFORMATION'=>'Provide Field Information: ',
 
-'LBL_SELECT_FIELD_TYPE'=>'Select Field Type: ', 
+'LBL_SELECT_FIELD_TYPE'=>'Select Field Type: ',
 
 'LBL_PROVIDE_FIELD_DETAILS'=>'Provide Field Details: ',
 
@@ -837,7 +837,7 @@ $mod_strings = Array(
 'LBL_USR_CAN_ACCESS'=>'Users can ',
 'LBL_USR_OTHERS'=>' other users ',
 'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other users ',
- 
+
 'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
 'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
 'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
@@ -845,7 +845,7 @@ $mod_strings = Array(
 'LBL_EDIT_CREATE_ONLY'=>'Public: Read, Create/Edit',
 'LBL_READ_CREATE_EDIT_DEL'=>'Public: Read, Create/Edit, Delete',
 'LBL_PRIVATE'=>'Private',
- 
+
 'Public: Read Only'=>'Public: Read Only',
 
 'Public: Read, Create/Edit'=>'Public: Read, Create/Edit',
@@ -1223,8 +1223,8 @@ $mod_strings = Array(
 'LBL_HIDE' => 'Hide Details',
 'LBL_SHOW' => 'Show Details',
 // END
-'LBL_USER_ADDITION_INFO'=>"To add a new user, please click on  
-			   <span style='font-style:italic;color:blue;'>OD-Settings Menu -> On Demand Admin -> Add / Invite User </span>",
+'LBL_USER_ADDITION_INFO'=>"To add a new user, please click on
+			   <span style='font-style:italic;color:blue;'>Settings Icon -> On Demand Admin -> Add User </span>",
 
 'LBL_READ_ONLY_ACCESS_MSG' => 'Read-Only Access',
 'LBL_READ_WRITE_ACCESS_MSG' => 'Read-Write Access',
@@ -1242,6 +1242,9 @@ $mod_strings = Array(
 'Settings' => 'Settings',
 'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'This tax is already available.',
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
+'LBL_EDIT_COMPANY_INFO' => "To edit company details, please click on
+			   <span style='font-style:italic;color:blue;'>Settings Icon > On Demand Admin > Company </span>",
+
 'Configuration Editor'=>'Configuration Editor',
 
 'ModTracker' => 'ModTracker',

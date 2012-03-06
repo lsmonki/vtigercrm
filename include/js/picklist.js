@@ -221,7 +221,7 @@ function validateAdd(fieldname, module){
 	var pick_options = document.getElementsByClassName('picklist_existing_options');
 	for(var i=0;i<pick_options.length;i++){
 		if(pick_options[i].value != ''){
-			pickArr[i]=pick_options[i].innerHTML;
+			pickArr[i]=(pick_options[i].innerHTML).replace(/&amp;/i,'&');
 		}
 	}
 
@@ -412,7 +412,7 @@ function validateDelete(fieldname, module){
 		}else{
 			for(var j=0, k=0; j<node.length; j++){
 				if(node.options[j].selected == true){
-					arr[k++] = encodeURIComponent(node.options[j].value);
+					arr[k++] = encodeURIComponent((node.options[j].value).replace(/(")/ig,"\\$1"));
 				}
 			}
 		}

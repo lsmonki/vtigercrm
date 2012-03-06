@@ -3063,20 +3063,19 @@ function getEntityFieldValues($entity_field_info, $ids_list) {
 function getEntityFieldNameDisplay($module, $fieldsName, $fieldValues) {
 	global $current_user;
 	if(!is_array($fieldsName)) {
-		$fieldConcatName =  $fieldValues[$fieldsName];
+		return $fieldValues[$fieldsName];
 	} else {
+		$accessibleFieldNames = array();
 		foreach($fieldsName as $field) {
-
-			if($module != 'Users') {
-				if (getColumnVisibilityPermission($current_user->id, $field, $module) == '0') {
-					$fieldConcatName = $fieldConcatName." ".$fieldValues[$field];
-				}
-			} else {
-				$fieldConcatName = $fieldConcatName." ".$fieldValues[$field];
+			if($module == 'Users' || getColumnVisibilityPermission($current_user->id, $field, $module) == '0') {
+				$accessibleFieldNames[] = $fieldValues[$field];
 			}
 		}
+		if(count($accessibleFieldNames) > 0) {
+			return implode(' ', $accessibleFieldNames);
+		}
 	}
-	return $fieldConcatName;
+	return '';
 }
 
 // vtiger cache utility
@@ -3129,8 +3128,8 @@ function getSqlForNameInDisplayFormat($input, $module, $glue = ' ') {
 	$fieldsName = $entity_field_info['fieldname'];
 	if(is_array($fieldsName)) {
 		foreach($fieldsName as $key => $value) {
-				$formattedNameList[] = $input[$value];
-			}
+			$formattedNameList[] = $input[$value];
+		}
 		$formattedNameListString = implode(",'" . $glue . "',", $formattedNameList);
 	} else {
 		$formattedNameListString = $input[$fieldsName];

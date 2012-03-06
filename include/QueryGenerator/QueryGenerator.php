@@ -541,12 +541,12 @@ class QueryGenerator {
 							$columnSql = implode('', $columnList);
 						}
 
-						$fieldSql .= "$fieldGlue $columnSql $valueSql";
+						$fieldSql .= "$fieldGlue trim($columnSql) $valueSql";
 						$fieldGlue = ' OR';
 					}
 				} elseif (in_array($fieldName, $this->ownerFields)) {
 					$concatSql = getSqlForNameInDisplayFormat(array('first_name'=>"vtiger_users.first_name",'last_name'=>"vtiger_users.last_name"), 'Users');
-					$fieldSql .= "$fieldGlue $concatSql $valueSql or "."vtiger_groups.groupname $valueSql";
+					$fieldSql .= "$fieldGlue trim($concatSql) $valueSql or "."vtiger_groups.groupname $valueSql";
 				} else {
 					if($fieldName == 'birthday' && !$this->isRelativeSearchOperators(
 							$conditionInfo['operator'])) {
@@ -725,7 +725,7 @@ class QueryGenerator {
 	}
 
 	private function isStringType($type) {
-		return ($type == 'string' || $type == 'text' || $type == 'email');
+		return ($type == 'string' || $type == 'text' || $type == 'email' || $type == 'reference');
 	}
 
 	private function isDateType($type) {

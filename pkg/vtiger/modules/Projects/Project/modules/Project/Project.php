@@ -337,13 +337,14 @@ class Project extends CRMEntity {
 
 			include_once('vtlib/Vtiger/Module.php');
 			$moduleInstance = Vtiger_Module::getInstance($modulename);
-			$projectTabid = getTabid($modulename);
+			$projectsResult = $adb->pquery('SELECT tabid FROM vtiger_tab WHERE name=?', array('Project'));
+			$projectTabid = $adb->query_result($projectsResult, 0, 'tabid');
 
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($modulename));
 
 			// Add module to Customer portal
-			if(getTabid('CustomerPortal')) {
+			if(getTabid('CustomerPortal') && $projectTabid) {
 				$checkAlreadyExists = $adb->pquery('SELECT 1 FROM vtiger_customerportal_tabs WHERE tabid=?', array($projectTabid));
 				if($checkAlreadyExists && $adb->num_rows($checkAlreadyExists) < 1) {
 					$maxSequenceQuery = $adb->query("SELECT max(sequence) as maxsequence FROM vtiger_customerportal_tabs");
@@ -392,7 +393,9 @@ class Project extends CRMEntity {
 		} else if($event_type == 'module.postupdate') {
 			global $adb;
 
-			$projectTabid = getTabid($modulename);
+			$projectsResult = $adb->pquery('SELECT tabid FROM vtiger_tab WHERE name=?', array('Project'));
+			$projectTabid = $adb->query_result($projectsResult, 0, 'tabid');
+
 			// Add Gnatt chart to the related list of the module
 			$relation_id = $adb->getUniqueID('vtiger_relatedlists');
 			$max_sequence = 0;

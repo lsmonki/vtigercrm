@@ -44,11 +44,11 @@ Class CustomReportUtils {
 		//ChartUtils::generateChartDataFromReports($queryResult, strtolower($groupByNew[1]));
 		if ($chartType == 'horizontalbarchart') {
 			$Chart = ChartUtils::getReportBarChart($queryResult, strtolower($module_field), $fieldDetails, $reportid);
-		}
-		if ($chartType == 'verticalbarchart') {
+		} else if ($chartType == 'verticalbarchart') {
 			$Chart = ChartUtils::getReportBarChart($queryResult, strtolower($module_field), $fieldDetails, $reportid, 'vertical');
-		} else if ($chartType == 'piechart')
+		} else if ($chartType == 'piechart') {
 			$Chart = ChartUtils::getReportPieChart($queryResult, strtolower($module_field), $fieldDetails, $reportid);
+		}
 		return $Chart;
 	}
 
@@ -70,8 +70,9 @@ Class CustomReportUtils {
 		$lessCondititon = 'l';
 		$json = new Zend_Json();
 		$advft_criteria_groups = array('1' => array('groupcondition' => null));
+		$advft_criteria = array();
 		if (empty($fieldvalue)) {
-			$condition = 'advft_criteria=' . $advft_criteria . '&advft_criteria_groups=' . $advft_criteria_groups . '&searchtype=advance&matchtype=any';
+			$condition = 'query=true&searchtype=advance&advft_criteria=' . $json->encode($advft_criteria) . '&advft_criteria_groups=' . $json->encode($advft_criteria_groups);
 			return $condition;
 		}
 		if (strtolower($criteria) == 'year') {
@@ -94,7 +95,7 @@ Class CustomReportUtils {
 				)
 			);
 			$conditionJson = urlencode($json->encode($condition));
-			$condition = "searchtype=advance&matchtype=any&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
+			$condition = "query=true&searchtype=advance&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
 		} else if (strtolower($criteria) == 'month') {
 			$date = DateTimeField::convertToUserFormat($year . "-" . $month);
 			$endMonth = $month + 1;
@@ -119,7 +120,7 @@ Class CustomReportUtils {
 				)
 			);
 			$conditionJson = urlencode($json->encode($condition));
-			$condition = "searchtype=advance&matchtype=any&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
+			$condition = "query=true&searchtype=advance&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
 		} else if (strtolower($criteria) == 'quarter') {
 			$condition = "";
 			$quraterNum = $month / 3;
@@ -153,20 +154,20 @@ Class CustomReportUtils {
 				)
 			);
 			$conditionJson = urlencode($json->encode($condition));
-			$condition = "searchtype=advance&matchtype=any&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
+			$condition = "query=true&searchtype=advance&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
 		} elseif (strtolower($criteria) == 'none') {
 			$date = DateTimeField::convertToUserFormat($fieldvalue);
 			$condition = array(
 				array(
 					'groupid' => 1,
 					'columnname' => $tablename . ':' . $colname . ':' . $colname . ':' . $module_field . ':' . $single,
-					'comparator' => $grteqCondition,
+					'comparator' => $eqCondition,
 					'value' => $date,
 					'columncondition' => 'and'
 				)
 			);
 			$conditionJson = urlencode($json->encode($condition));
-			$condition = "searchtype=advance&matchtype=any&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
+			$condition = "query=true&searchtype=advance&advft_criteria=" . $conditionJson . "&advft_criteria_groups=" . urlencode($json->encode($advft_criteria_groups));
 		}
 		return $condition;
 	}
@@ -195,21 +196,30 @@ Class CustomReportUtils {
 		return $xaxisLabel;
 	}
 
-	public static function getCustomEntityId($entityname, $modules) {
+	public static function getEntityTypeFromName($entityName, $modules=false) {
 		global $adb;
-		//$entityname = str_replace(" "," ",$entityname);
+
+		if($modules == false) {
+			$modules = array();
+			$result = $adb->pquery('SELECT modulename FROM vtiger_entityname', array());
+			$noOfModules = $adb->num_rows($result);
+			for($i=0; $i<$noOfModules; ++$i) {
+				$modules[] = $adb->query_result($result, $i, 'modulename');
+			}
+		}
 		foreach ($modules as $referenceModule) {
-			$query = "SELECT * FROM vtiger_entityname WHERE  modulename=?";
-			$result = $adb->pquery($query, array($referenceModule));
-			$tablename = $adb->query_result($result, 0, 'tablename');
-			$fieldName = $adb->query_result($result, 0, 'fieldname');
-			//$nameComp = explode(',',$fieldName);
-			//if(count($nameComp)>1){
-			//	$whereField = "contact(".$fieldName
-			//}
-			$entityField = $adb->query_result($result, 0, 'entityidfield');
-			$entityQuery = "SELECT $entityField FROM $tablename WHERE concat(" . $fieldName . ")=?";
-			$entityResult = $adb->pquery($entityQuery, array($entityname));
+			$entityFieldInfo = getEntityFieldNames($referenceModule);
+			$tableName = $entityFieldInfo['tablename'];
+			$fieldsName = $entityFieldInfo['fieldname'];
+
+			if(is_array($fieldsName)) {
+				$concatSql = 'CONCAT('. implode(",' ',", $fieldsName). ')';
+			} else {
+				$concatSql = $fieldsName;
+			}
+
+			$entityQuery = "SELECT 1 FROM $tableName WHERE $concatSql = ?";
+			$entityResult = $adb->pquery($entityQuery, array($entityName));
 			$num_rows = $adb->num_rows($entityResult);
 			if ($num_rows > 0) {
 				return $referenceModule;

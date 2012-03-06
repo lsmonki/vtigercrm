@@ -106,7 +106,7 @@ class Quotes extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';
-	
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Quotes() {
@@ -353,6 +353,7 @@ class Quotes extends CRMEntity {
 			left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
 			left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 			left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
+			left join vtiger_currency_info as vtiger_currency_info$secmodule on vtiger_currency_info$secmodule.id = vtiger_quotes.currency_id
 			left join vtiger_inventoryproductrel as vtiger_inventoryproductrelQuotes on vtiger_quotes.quoteid = vtiger_inventoryproductrelQuotes.id
 			left join vtiger_products as vtiger_productsQuotes on vtiger_productsQuotes.productid = vtiger_inventoryproductrelQuotes.productid
 			left join vtiger_service as vtiger_serviceQuotes on vtiger_serviceQuotes.serviceid = vtiger_inventoryproductrelQuotes.productid

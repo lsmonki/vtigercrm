@@ -1285,8 +1285,8 @@ class CustomView extends CRMEntity{
 			$fieldname = "contactid";
 
 		$contactid = "vtiger_contactdetails.lastname";
-		if ($currentModule != "Contacts" && $currentModule != "Leads" && getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname') == '0' && $currentModule != 'Campaigns') {
-			$contactid = "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+		if ($currentModule != "Contacts" && $currentModule != "Leads" && $currentModule != 'Campaigns') {
+			$contactid = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
 		}
 		$change_table_field = Array(
 
@@ -1303,7 +1303,7 @@ class CustomView extends CRMEntity{
 			"quoteid"=>"vtiger_quotes.subject",
 			"salesorderid"=>"vtiger_salesorder.subject",
 			"campaignid"=>"vtiger_campaign.campaignname",
-			"vtiger_contactdetails.reportsto"=>"concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname)",
+			"vtiger_contactdetails.reportsto"=>  getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails2.lastname','firstname'=>'vtiger_contactdetails2.firstname'), 'Contacts'),
 			"vtiger_pricebook.currency_id"=>"vtiger_currency_info.currency_name",
 			);
 
@@ -1424,13 +1424,12 @@ class CustomView extends CRMEntity{
 						$value .= 'vtiger_account.accountname';
 					}
 			}
-			if($modulename == 'Leads')
-			{
-				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-				{
-					$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) IS NULL or ";
+			if($modulename == 'Leads') {
+				$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_leaddetails.lastname', 'firstname'=>'vtiger_leaddetails.firstname'), 'Leads');
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '') {
+					$value .= " $concatSql IS NULL or ";
 				}
-				$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
+				$value .= " $concatSql";
 			}
 			if($modulename == 'Potentials')
 			{
@@ -1482,13 +1481,12 @@ class CustomView extends CRMEntity{
 				}
 				$value .= ' vtiger_quotes.subject';
 			}
-			if($modulename == 'Contacts')
-			{
-				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-				{
-					$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) IS NULL or ";
+			if($modulename == 'Contacts') {
+				$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '') {
+					$value .= " $concatSql IS NULL or ";
 				}
-				$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+				$value .= " $concatSql";
 			}
 			if($modulename == 'HelpDesk')
 			{

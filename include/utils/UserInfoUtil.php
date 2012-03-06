@@ -4303,7 +4303,7 @@ function getModuleAccessArray() {
 	return $fldModArr;
 }
 
-/** Function to get the permitted module name Array with presence as 0 
+/** Function to get the permitted module name Array with presence as 0
   * @returns permitted module name Array :: Type Array
   *
  */

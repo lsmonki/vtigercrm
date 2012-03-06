@@ -106,7 +106,7 @@ class SalesOrder extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';
-	
+
 	/** Constructor Function for SalesOrder class
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of SalesOrder class.
@@ -334,6 +334,7 @@ class SalesOrder extends CRMEntity {
 			left join vtiger_salesordercf on vtiger_salesorder.salesorderid = vtiger_salesordercf.salesorderid
 			left join vtiger_sobillads on vtiger_salesorder.salesorderid=vtiger_sobillads.sobilladdressid
 			left join vtiger_soshipads on vtiger_salesorder.salesorderid=vtiger_soshipads.soshipaddressid
+			left join vtiger_currency_info as vtiger_currency_info$secmodule on vtiger_currency_info$secmodule.id = vtiger_salesorder.currency_id
 			left join vtiger_inventoryproductrel as vtiger_inventoryproductrelSalesOrder on vtiger_salesorder.salesorderid = vtiger_inventoryproductrelSalesOrder.id
 			left join vtiger_products as vtiger_productsSalesOrder on vtiger_productsSalesOrder.productid = vtiger_inventoryproductrelSalesOrder.productid
 			left join vtiger_service as vtiger_serviceSalesOrder on vtiger_serviceSalesOrder.serviceid = vtiger_inventoryproductrelSalesOrder.productid

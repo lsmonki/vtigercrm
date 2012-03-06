@@ -658,12 +658,6 @@ class Reports extends CRMEntity{
 				$fieldcolname = "user_name";
 			}
 
-			if($fieldname == 'currency_id' && $fieldtablename=='vtiger_pricebook')
-			{
-				$fieldtablename = "vtiger_currency_info".$module;
-				$fieldcolname = "currency_name";
-			}
-
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			$optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;

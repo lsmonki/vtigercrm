@@ -21,7 +21,7 @@ function c_toggleAssignType(currType){
 			document.getElementById("c_assign_user").style.display="none";
 			document.getElementById("c_assign_team").style.display="block";
 		}
-	}	 
+	}
 
 var gValidationCall='';
 
@@ -4208,12 +4208,8 @@ function validateInputData(value, fieldLabel, typeofdata) {
 	var type = typeinfo[0];
 
 	if(type == 'T') {
-		var datime = value.split(" ");
-		if(!re_dateValidate(datime[0],fieldLabel+" (Current User Date Time Format)","OTH"))
+		if(!re_patternValidate(value,fieldLabel+" (Time)","TIMESECONDS"))
 			return false;
-		if(datime.length > 1)
-			if(!re_patternValidate(datime[1],fieldLabel+" (Time)","TIMESECONDS"))
-				return false;
 	} else if(type == 'D' || type == 'DT') {
 		if(!re_dateValidate(value,fieldLabel+" (Current User Date Format)","OTH"))
 			return false

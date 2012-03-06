@@ -3617,7 +3617,7 @@ function getDuplicateRecordsArr($module)
 
 	$nresult=$adb->query($dup_query);
 	$no_rows=$adb->num_rows($nresult);
-	require_once($theme_path.'layout_utils.php');
+	require_once('modules/Vtiger/layout_utils.php');
 	if($no_rows == 0)
 	{
 		if ($_REQUEST['action'] == 'FindDuplicateRecords')
@@ -4193,7 +4193,7 @@ function get_tab_name_index($adb, $module){
  */
 function get_use_asterisk($id){
 	global $adb;
-	if(!vtlib_isModuleActive('PBXManager')){
+	if(!vtlib_isModuleActive('PBXManager') || isPermitted('PBXManager', 'index') == 'no'){
 		return false;
 	}
 	$sql = "select * from vtiger_asteriskextensions where userid = ?";
@@ -4729,16 +4729,16 @@ function isRecordExists($recordId) {
 function getValidDBInsertDateValue($value) {
 	global $log;
 	$log->debug("Entering getValidDBInsertDateValue(".$value.") method ...");
-        $delim = array('/','.');
-        foreach ($delim as $delimiter){
-            $x = strpos($value, $delimiter);
-	        if($x === false) continue;
-            else{
-                $value=str_replace($delimiter, '-', $value);
-                break;
-            }
-        }
-	global $current_user;
+	$value = trim($value);
+	$delim = array('/','.');
+	foreach ($delim as $delimiter){
+		$x = strpos($value, $delimiter);
+		if($x === false) continue;
+		else{
+			$value=str_replace($delimiter, '-', $value);
+			break;
+		}
+	}
 	list($y,$m,$d) = explode('-',$value);
 
 	if(strlen($y)<4){
@@ -4746,11 +4746,17 @@ function getValidDBInsertDateValue($value) {
 	} else {
 		$insert_date = $value;
 	}
+
+	if (preg_match("/^[0-9]{2,4}[-][0-1]{1,2}?[0-9]{1,2}[-][0-3]{1,2}?[0-9]{1,2}$/", $insert_date) == 0) {
+		return '';
+	}
+
 	$log->debug("Exiting getValidDBInsertDateValue method ...");
 	return $insert_date;
 }
 
 function getValidDBInsertDateTimeValue($value) {
+	$value = trim($value);
 	$valueList = explode(' ',$value);
 	if(count($valueList) == 2) {
 		$dbDateValue = getValidDBInsertDateValue($valueList[0]);
@@ -4762,8 +4768,12 @@ function getValidDBInsertDateTimeValue($value) {
 		if(!empty($dbTimeValue) &&  strrpos($dbTimeValue, ':') == ($timeValueLength-1)) {
 			$dbTimeValue = $dbTimeValue.'00';
 		}
-		$dateTime = new DateTimeField($dbDateValue.' '.$dbTimeValue);
-		return $dateTime->getDBInsertDateTimeValue();
+		try {
+			$dateTime = new DateTimeField($dbDateValue.' '.$dbTimeValue);
+			return $dateTime->getDBInsertDateTimeValue();
+		} catch (Exception $ex) {
+			return '';
+		}
 	} elseif(count($valueList == 1)) {
 		return getValidDBInsertDateValue($value);
 	}
@@ -5056,6 +5066,37 @@ function dateDiff($d1, $d2){
 		"seconds_total" => $diffSecs,
 		"seconds" => (int) date("s", $diff)
 	);
+}
+
+/**
+* Function to get the approximate difference between two date time values as string
+*/
+function dateDiffAsString($d1, $d2) {
+	global $currentModule;
+
+	$dateDiff = dateDiff($d1, $d2);
+
+	$years = $dateDiff['years'];
+	$months = $dateDiff['months'];
+	$days = $dateDiff['days'];
+	$hours = $dateDiff['hours'];
+	$minutes = $dateDiff['minutes'];
+	$seconds = $dateDiff['seconds'];
+
+	if($years > 0) {
+		$diffString = "$years ".getTranslatedString('LBL_YEARS',$currentModule);
+	} elseif($months > 0) {
+		$diffString = "$months ".getTranslatedString('LBL_MONTHS',$currentModule);
+	} elseif($days > 0) {
+		$diffString = "$days ".getTranslatedString('LBL_DAYS',$currentModule);
+	} elseif($hours > 0) {
+		$diffString = "$hours ".getTranslatedString('LBL_HOURS',$currentModule);
+	} elseif($minutes > 0) {
+		$diffString = "$minutes ".getTranslatedString('LBL_MINUTES',$currentModule);
+	} else {
+		$diffString = "$seconds ".getTranslatedString('LBL_SECONDS',$currentModule);
+	}
+	return $diffString;
 }
 
 ?>

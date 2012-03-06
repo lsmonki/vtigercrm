@@ -21,49 +21,49 @@ class MailManager_MailController extends MailManager_Controller {
      * @global Integer $list_max_entries_per_page - Number of entries per page
      * @global PearDataBase Instance $adb
      * @global Users Instance $current_user
-     * @global String $root_directory 
+     * @global String $root_directory
      * @param MailManager_Request $request
      * @return MailManager_Response
      */
 	function process(MailManager_Request $request) {
 		global $list_max_entries_per_page, $adb, $current_user;
-		
+
 		$response = new MailManager_Response();
-			
+
 		if ('open' == $request->getOperationArg()) {
 			$foldername = $request->get('_folder');
 			$connector = $this->getConnector($foldername);
 			$folder = $connector->folderInstance($foldername);
 
 			$connector->markMailRead($request->get('_msgno'));
-			
+
 			$mail = $connector->openMail($request->get('_msgno'));
-			
+
 			// Get updated count after opening the email
 			$connector->updateFolder($folder, SA_MESSAGES|SA_UNSEEN);
-			
+
 			$viewer = $this->getViewer();
 			$viewer->assign('FOLDER', $folder);
 			$viewer->assign('MAIL', $mail);
 			$uicontent = $viewer->fetch($this->getModuleTpl('Mail.Open.tpl'));
-			
-			$metainfo  = array( 
-				'from' => $mail->from(), 'subject' => $mail->subject(), 
+
+			$metainfo  = array(
+				'from' => $mail->from(), 'subject' => $mail->subject(),
 				'msgno' => $mail->msgNo(), 'msguid' => $mail->uniqueid(),
 				'folder' => $foldername );
-			
+
 			$response->isJson(true);
 			$response->setResult( array(
-				'folder' => $foldername, 'unread' => $folder->unreadCount(), 
-				'ui' => $uicontent, 'meta' => $metainfo ) 
+				'folder' => $foldername, 'unread' => $folder->unreadCount(),
+				'ui' => $uicontent, 'meta' => $metainfo )
 			);
-			
+
 		} else if ('mark' == $request->getOperationArg()) {
 			$foldername = $request->get('_folder');
 			$connector = $this->getConnector($foldername);
 			$folder = $connector->folderInstance($foldername);
 			$connector->updateFolder($folder, SA_UNSEEN);
-			
+
 			if ('unread' == $request->get('_markas')) {
 				$connector->markMailUnread($request->get('_msgno'));
 			}
@@ -71,7 +71,7 @@ class MailManager_MailController extends MailManager_Controller {
 			$response->isJson(true);
 			$response->setResult ( array('folder' => $foldername, 'unread' => $folder->unreadCount()+1,
                 'status' => true, 'msgno' => $request->get('_msgno') ));
-			
+
 		}else if('delete' == $request->getOperationArg()){
 			$msg_no = $request->get('_msgno');
 			$foldername = $request->get('_folder');
@@ -132,7 +132,7 @@ class MailManager_MailController extends MailManager_Controller {
 					}
 				}
 			}
-            
+
 			$cc_string = rtrim($request->get('cc'), ',');
 			$bcc_string= rtrim($request->get('bcc'), ',');
 			$subject   = $request->get('subject');
@@ -151,19 +151,19 @@ class MailManager_MailController extends MailManager_Controller {
             if($mailer->Signature != '') {
                $mailer->Body.= $mailer->Signature;
               }
-			
+
 			$tos = explode(',', $to_string);
 			$ccs = empty($cc_string)? array() : explode(',', $cc_string);
 			$bccs= empty($bcc_string)?array() : explode(',', $bcc_string);
 			$emailId = $request->get('emailid');
-			
+
 			$attachments = $connector->getAttachmentDetails($emailId);
-			
+
 			foreach($tos as $to) $mailer->AddAddress($to);
 			foreach($ccs as $cc) $mailer->AddCC($cc);
 			foreach($bccs as $bcc)$mailer->AddBCC($bcc);
 			global $root_directory;
-			
+
 			if(is_array($attachments)) {
 				foreach($attachments as $attachment){
 					$fileNameWithPath = $root_directory.$attachment['path'].$attachment['fileid']."_".$attachment['attachment'];
@@ -204,7 +204,7 @@ class MailManager_MailController extends MailManager_Controller {
 		} else if ('attachment_dld' == $request->getOperationArg()) {
 			$attachmentName = $request->get('_atname');
 			$attachmentName= str_replace(' ', '_', $attachmentName);
-			
+
 			if (MailManager_Utils::allowedFileExtension($attachmentName)) {
 				// This is to handle larger uploads
 				$memory_limit = ConfigPrefs::get('MEMORY_LIMIT');
@@ -213,7 +213,7 @@ class MailManager_MailController extends MailManager_Controller {
 				$mail = new MailManager_Model_Message(false, false);
 				$mail->readFromDB($request->get('_muid'));
 				$attachment = $mail->attachments(true, $attachmentName);
-                
+
                 if($attachment[$attachmentName]) {
                     // Send as downloadable
                     header("Content-type: application/octet-stream");
@@ -228,7 +228,7 @@ class MailManager_MailController extends MailManager_Controller {
 			} else {
 				header("Content-Disposition: attachment; filename=INVALIDFILE");
 				echo "";
-			}			
+			}
 			flush();
 			exit;
 		} elseif('getdraftmail' == $request->getOperationArg()) {
@@ -259,12 +259,12 @@ class MailManager_MailController extends MailManager_Controller {
 
 			$connector = $this->getConnector($folderName);
 			$mail = $connector->openMail($messageId);
-			
+
 			$attachments = $mail->attachments(true);
 
 			$draftConnector = $this->getConnector('__vt_drafts');
 			$draftId = $draftConnector->saveDraft($request);
-			
+
 			if (!empty($attachments)) {
 				foreach($attachments as $aName => $aValue) {
 					$attachInfo = $mail->__SaveAttachmentFile($aName, $aValue);
@@ -290,7 +290,7 @@ class MailManager_MailController extends MailManager_Controller {
 
 						//save email-attachment relation
 						$draftConnector->saveAttachmentRel($draftId, $attachInfo['attachid']);
-						
+
 						$attachmentInfo[] = array('name'=>$attachInfo['name'], 'size'=>$attachInfo['size'], 'emailid'=>$draftId, 'docid'=>$document->id);
 					}
 					unset($aValue);

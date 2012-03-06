@@ -1474,8 +1474,8 @@ class CRMEntity {
 		else
 			$returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
 
-		$userNameSql = getSqlForNameInDisplayFormat(array('f' => 'vtiger_users.first_name', 'l' =>
-			'vtiger_users.last_name'));
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name',
+														'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name," .
 				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,vtiger_crmentity.modifiedtime,
 				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,

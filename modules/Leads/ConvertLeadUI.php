@@ -222,13 +222,13 @@ class ConvertLeadUI {
 
 	function getMappedFieldValue($module, $fieldName, $editable) {
 		global $adb,$default_charset;
-		
+
 		$fieldid = getFieldid(getTabid($module), $fieldName);
 
 		$sql = "SELECT leadfid FROM vtiger_convertleadmapping
-			WHERE accountfid=? 
-			OR contactfid=? 
-			OR potentialfid=? 
+			WHERE accountfid=?
+			OR contactfid=?
+			OR potentialfid=?
 			AND editable=?";
 		$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
 		$leadfid = $adb->query_result($result, 0, 'leadfid');
@@ -238,7 +238,7 @@ class ConvertLeadUI {
 		$leadfname = $adb->query_result($result, 0, 'fieldname');
 
 		$fieldinfo = $this->getFieldInfo($module, $fieldName);
-		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {global $log;$log->fatal($this->row[$leadfname]);
+		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {
 			$valuelist = null;
 			switch ($fieldName) {
 				case 'industry':$valuelist = $this->getIndustryList();
@@ -248,14 +248,10 @@ class ConvertLeadUI {
 			}
 			foreach ($fieldinfo['type']['picklistValues'] as $key => $values) {
 				if ($values['value'] == $this->row[$leadfname]) {
-					$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
-					return htmlentities($value, ENT_QUOTES, $default_charset);
-					//return $this->row[$leadfname];
+					return $this->row[$leadfname];
 				}
 			}
-			$value = html_entity_decode($fieldinfo['default'], ENT_QUOTES, $default_charset);
-			return htmlentities($value, ENT_QUOTES, $default_charset);
-			//return $fieldinfo['default'];
+			return $fieldinfo['default'];
 		}
 		$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
 		return htmlentities($value, ENT_QUOTES, $default_charset);

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -69,8 +69,8 @@ class Emails extends CRMEntity {
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
 	var $mandatory_fields = Array('subject', 'assigned_user_id');
-	
-	/** This function will set the columnfields for Email module 
+
+	/** This function will set the columnfields for Email module
 	 */
 	function Emails() {
 		$this->log = LoggerManager::getLogger('email');
@@ -138,7 +138,7 @@ class Emails extends CRMEntity {
 		} elseif ($this->column_fields['contact_id'] == '' && $insertion_mode == "edit") {
 			$this->deleteRelation('vtiger_cntactivityrel');
 		}
-			
+
 		//Inserting into attachment
 
 		$this->insertIntoAttachment($this->id, $module);
@@ -147,9 +147,9 @@ class Emails extends CRMEntity {
 	function insertIntoAttachment($id, $module) {
 		global $log, $adb;
 		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
-		
+
 		$file_saved = false;
-		
+
 		//Added to send generated Invoice PDF with mail
 		$pdfAttached = $_REQUEST['pdf_attachment'];
 		//created Invoice pdf is attached with the mail
@@ -172,7 +172,7 @@ class Emails extends CRMEntity {
 					$sql_rel = 'insert into vtiger_seattachmentsrel values(?,?)';
 					$adb->pquery($sql_rel, array($id, $att_lists[$i]));
 				}
-			}			
+			}
 		}
 		if ($_REQUEST['att_module'] == 'Webmails') {
 			require_once("modules/Webmails/Webmails.php");
@@ -196,8 +196,8 @@ class Emails extends CRMEntity {
 			}
 		}
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
-	}	
-	
+	}
+
 	function saveForwardAttachments($id, $module, $file_details) {
 		global $log;
 		$log->debug("Entering into saveForwardAttachments($id,$module,$file_details) method.");
@@ -226,15 +226,15 @@ class Emails extends CRMEntity {
 			$ownerid = $current_user->id;
 		$upload_file_path = decideFilePath();
 		file_put_contents($upload_file_path . $current_id . "_" . $filename, $file);
-		
+
 		$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
 		$params1 = array($current_id, $current_user->id, $ownerid, $module . " Attachment", $this->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
 		$adb->pquery($sql1, $params1);
-						
+
 		$sql2 = "insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?,?,?,?,?)";
 		$params2 = array($current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path);
 		$result = $adb->pquery($sql2, $params2);
-						
+
 		if ($_REQUEST['mode'] == 'edit') {
 			if ($id != '' && $_REQUEST['fileid'] != '') {
 				$delquery = 'delete from vtiger_seattachmentsrel where crmid = ? and attachmentsid = ?';
@@ -262,13 +262,13 @@ class Emails extends CRMEntity {
 		$other = new $related_module();
 		vtlib_setup_modulevars($related_module, $other);
 		$singular_modname = vtlib_toSingular($related_module);
-		
+
 		$parenttab = getParentTab();
-		
+
 		$returnset = '&return_module=' . $this_module . '&return_action=DetailView&return_id=' . $id;
-		
+
 		$button = '';
-				
+
 		if ($actions) {
 			if (is_string($actions))
 				$actions = explode(',', strtoupper($actions));
@@ -281,19 +281,19 @@ class Emails extends CRMEntity {
 						" value='" . getTranslatedString('LBL_BULK_MAILS') . "'>";
 			}
 		}
-				
+
 		$query = 'select vtiger_contactdetails.accountid, vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_contactdetails.emailoptout, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_cntactivityrel.activityid=' . $adb->quote($id) . ' and vtiger_crmentity.deleted=0';
-				
-		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
-		
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+
 		if ($return_value == null)
 			$return_value = Array();
 		$return_value['CUSTOM_BUTTON'] = $button;
-		
-		$log->debug("Exiting get_contacts method ...");		
+
+		$log->debug("Exiting get_contacts method ...");
 		return $return_value;
 	}
-	
+
 	/** Returns the column name that needs to be sorted
 	 * Portions created by vtigerCRM are Copyright (C) vtigerCRM.
 	 * All Rights Reserved..
@@ -319,20 +319,20 @@ class Emails extends CRMEntity {
 	function getOrderBy() {
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
-		
-		$use_default_order_by = '';		
+
+		$use_default_order_by = '';
 		if (PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
 			$use_default_order_by = $this->default_order_by;
 		}
-		
-		if (isset($_REQUEST['order_by'])) 
+
+		if (isset($_REQUEST['order_by']))
 			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['EMAILS_ORDER_BY'] != '') ? ($_SESSION['EMAILS_ORDER_BY']) : ($use_default_order_by));
 
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
-	}	
+	}
 
 	// Mike Crowe Mod --------------------------------------------------------
 
@@ -356,7 +356,7 @@ class Emails extends CRMEntity {
 				<input title="' . getTranslatedString('LBL_BULK_MAILS') . '" accesskey="" tabindex="2" class="crmbutton small edit"
 				value="' . getTranslatedString('LBL_SELECT_USER_BUTTON_LABEL') . '" name="Button" language="javascript"
 				onclick=\"return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id=' . $id . '&recordid=' . $id . '","test","width=640,height=520,resizable=0,scrollbars=0");\"
-				type="button">';                  
+				type="button">';
 
 		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.secondaryemail , vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
 		$result = $adb->pquery($query, array($id));
@@ -405,12 +405,12 @@ class Emails extends CRMEntity {
 
 		if ($entries_list != '')
 			$return_data = array("header" => $header, "entries" => $entries);
-		
+
 		if ($return_data == null)
 			$return_data = Array();
 		$return_data['CUSTOM_BUTTON'] = $button;
-		
-		$log->debug("Exiting get_users method ..."); 
+
+		$log->debug("Exiting get_users method ...");
 		return $return_data;
 	}
 
@@ -428,9 +428,9 @@ class Emails extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Emails", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list FROM vtiger_activity 
-			INNER JOIN vtiger_crmentity 
-				ON vtiger_crmentity.crmid=vtiger_activity.activityid 
+		$query = "SELECT $fields_list FROM vtiger_activity
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid=vtiger_activity.activityid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_seactivityrel
@@ -446,9 +446,9 @@ class Emails extends CRMEntity {
 				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_emaildetails
 				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
-			LEFT JOIN vtiger_seattachmentsrel 
-				ON vtiger_activity.activityid=vtiger_seattachmentsrel.crmid 
-			LEFT JOIN vtiger_attachments 
+			LEFT JOIN vtiger_seattachmentsrel
+				ON vtiger_activity.activityid=vtiger_seattachmentsrel.crmid
+			LEFT JOIN vtiger_attachments
 				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid";
 		$query .= getNonAdminAccessControlQuery('Emails', $current_user);
 		$query .= "WHERE vtiger_activity.activitytype='Emails' AND vtiger_crmentity.deleted=0 ";
@@ -456,7 +456,7 @@ class Emails extends CRMEntity {
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
 	}
-        
+
 	/**
 	 * Used to releate email and contacts -- Outlook Plugin
 	 */
@@ -467,7 +467,7 @@ class Emails extends CRMEntity {
 		$this->db->pquery($query, array($contact_id, $email_id), true, "Error setting email to contact relationship: " . "<BR>$query");
 		$log->debug("Exiting set_emails_contact_invitee_relationship method ...");
 	}
-     
+
 	/**
 	 * Used to releate email and salesentity -- Outlook Plugin
 	 */
@@ -478,7 +478,7 @@ class Emails extends CRMEntity {
 		$this->db->pquery($query, array($contact_id, $email_id), true, "Error setting email to contact relationship: " . "<BR>$query");
 		$log->debug("Exiting set_emails_se_invitee_relationship method ...");
 	}
-     
+
 	/**
 	 * Used to releate email and Users -- Outlook Plugin
 	 */
@@ -489,19 +489,19 @@ class Emails extends CRMEntity {
 		$this->db->pquery($query, array($user_id, $email_id), true, "Error setting email to user relationship: " . "<BR>$query");
 		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
 	}
-	
+
 	// Function to unlink an entity with given Id from another entity
 	function unlinkRelationship($id, $return_module, $return_id) {
 		global $log;
-		
+
 		$sql = 'DELETE FROM vtiger_seactivityrel WHERE activityid=?';
 		$this->db->pquery($sql, array($id));
-			
+
 		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 		$this->db->pquery($sql, $params);
 	}
-	
+
 	public function getNonAdminAccessControlQuery($module, $user, $scope='') {
 		return " and vtiger_crmentity$scope.smownerid=$user->id ";
 	}
@@ -517,7 +517,12 @@ function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
 	//$idlists1 = "";
 	$mailds = '';
 	$fieldids = explode(":", vtlib_purify($_REQUEST['field_lists']));
-	$idlist = explode(":", str_replace("undefined","",vtlib_purify($_REQUEST['idlist'])));
+	if($_REQUEST['idlist'] == 'all' || $_REQUEST['idlist'] == 'relatedListSelectAll'){
+		$idlist = getSelectedRecords($_REQUEST,vtlib_purify($_REQUEST['pmodule']),vtlib_purify($_REQUEST['idlist']),vtlib_purify($_REQUEST['execludedRecords']));
+	} else {
+		$idlist = explode(":", str_replace("undefined","",vtlib_purify($_REQUEST['idlist'])));
+	}
+
 	$entityids = array();
 	foreach ($idlist as $key => $id) {
 		$entityids[] = vtws_getWebserviceEntityId($module, $id);
@@ -534,20 +539,37 @@ function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
 	}
 	if(empty($emailFields))
 		return false;
-	if ($module == 'Leads' || $module == ('Contacts')) {
-		$data = vtws_query(sprintf("SELECT firstname,lastname,%s FROM %s WHERE id IN(%s);", implode(",", $emailFields), $module, implode(",", $entityids)), $current_user);
+	if ($module == 'Leads') {
+		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_leaddetails.leadid as id
+				  FROM vtiger_leaddetails
+				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
+				  LEFT JOIN vtiger_leadscf ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
+				  WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.leadid IN ('.generateQuestionMarks($idlist).')';
+	} else if ($module == 'Contacts'){
+		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_contactdetails.contactid as id
+				  FROM vtiger_contactdetails
+				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
+				  LEFT JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+				  WHERE vtiger_crmentity.deleted=0 AND vtiger_contactdetails.contactid IN ('.generateQuestionMarks($idlist).') AND vtiger_contactdetails.emailoptout=0';
 	} else {
-		$data = vtws_query(sprintf("SELECT accountname,%s FROM %s WHERE id IN(%s);", implode(",", $emailFields), $module, implode(",", $entityids)), $current_user);
+		$query = 'SELECT vtiger_account.accountname, '.implode(",", $emailFields).',vtiger_account.accountid as id FROM vtiger_account
+				   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
+				   LEFT JOIN vtiger_accountscf ON vtiger_accountscf.accountid= vtiger_account.accountid
+				   WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid IN ('.generateQuestionMarks($idlist).') AND vtiger_account.emailoptout=0';
 	}
-	foreach ($data as $key => $entityvalue) {
-		$vtwsid = vtws_getIdComponents($entityvalue['id']);
-		foreach ($emailFields as $i => $emailFieldName) {
-			if ($entityvalue[$emailFieldName] != NULL || $entityvalue[$emailFieldName] != '') {
-				$idlists .= $vtwsid[1] . '@' . $vtwsCRMObjectMeta->getFieldIdFromFieldName($emailFieldName) . '|';
-				if ($module == 'Leads' || $module == 'Contacts') {
-					$mailids .= $entityvalue['lastname'] . " " . $entityvalue['firstname'] . "<" . $entityvalue[$emailFieldName] . ">,";
-				} else {
-					$mailids .= $entityvalue['accountname'] . "<" . $entityvalue[$emailFieldName] . ">,";
+	$result = $adb->pquery($query,$idlist);
+	
+	if($adb->num_rows($result)>0){
+		while($entityvalue = $adb->fetchByAssoc($result)){
+			$vtwsid = $entityvalue['id'];
+			foreach ($emailFields as $i => $emailFieldName) {
+				if ($entityvalue[$emailFieldName] != NULL || $entityvalue[$emailFieldName] != '') {
+					$idlists .= $vtwsid . '@' . $vtwsCRMObjectMeta->getFieldIdFromFieldName($emailFieldName) . '|';
+					if ($module == 'Leads' || $module == 'Contacts') {
+						$mailids .= $entityvalue['lastname'] . " " . $entityvalue['firstname'] . "<" . $entityvalue[$emailFieldName] . ">,";
+					} else {
+						$mailids .= $entityvalue['accountname'] . "<" . $entityvalue[$emailFieldName] . ">,";
+					}
 				}
 			}
 		}
@@ -589,8 +611,8 @@ function pdfAttach($obj, $module, $file_name, $id) {
 
 		$query3 = 'insert into vtiger_seattachmentsrel values(?,?)';
 		$adb->pquery($query3, array($id, $current_id));
-		
-		// Delete the file that was copied 
+
+		// Delete the file that was copied
 		unlink($source_file_path);
 
 		return true;

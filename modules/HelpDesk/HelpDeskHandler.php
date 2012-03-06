@@ -164,9 +164,10 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 			}
 		}
 		if($parent_module == 'Accounts') {
-			$result = $adb->pquery("SELECT accountname, emailoptout FROM vtiger_account WHERE accountid=?",
+			$result = $adb->pquery("SELECT accountname, emailoptout, email1 FROM vtiger_account WHERE accountid=?",
 										array($parentId));
-			$parent_email = $emailoptout = $adb->query_result($result,0,'emailoptout');
+			$emailoptout = $adb->query_result($result,0,'emailoptout');
+			$parent_email = $adb->query_result($result,0,'email1');
 			$parentname = $adb->query_result($result,0,'accountname');
 		}
 
@@ -207,7 +208,7 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 
 function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 	global $HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID;
-	
+
 	$moduleName = $entityData->getModuleName();
 	$wsId = $entityData->getId();
 	$parts = explode('x', $wsId);

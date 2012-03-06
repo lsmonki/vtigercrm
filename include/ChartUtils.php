@@ -345,9 +345,31 @@ Class ChartUtils {
 		$yaxisArray = array();
 		$ChartDataArray = array();
 		$target_val = array();
+
 		$report = new ReportRun($reportid);
+		$restrictedModules = array();
+		if($report->secondarymodule!='') {
+			$reportModules = explode(":",$report->secondarymodule);
+		} else {
+			$reportModules = array();
+		}
+		array_push($reportModules,$report->primarymodule);
+
+		$restrictedModules = false;
+		foreach($reportModules as $mod) {
+			if(isPermitted($mod,'index') != "yes" || vtlib_isModuleActive($mod) == false) {
+				if(!is_array($restrictedModules)) $restrictedModules = array();
+				$restrictedModules[] = $mod;
+			}
+		}
+
+		if(is_array($restrictedModules) && count($restrictedModules) > 0) {
+			$ChartDataArray['error'] = "<h4>".getTranslatedString('LBL_NO_ACCESS', 'Reports').' - '.implode(',', $restrictedModules)."</h4>";
+			return $ChartDataArray;
+		}
+
 		if ($fieldDetails != '') {
-			list($tablename, $colname, $module_field, $fieldname, $single) = split(":", $fieldDetails);
+			list($tablename, $colname, $module_field, $fieldname, $single) = explode(":", $fieldDetails);
 			list($module, $field) = split("_", $module_field);
 			$dateField = false;
 			if ($single == 'D') {
@@ -366,8 +388,17 @@ Class ChartUtils {
 		$meta = $handler->getMeta();
 		$meta->retrieveMeta();
 		$referenceFields = $meta->getReferenceFieldDetails();
+
+		if($rows > 0) {
+			$resultRow = $adb->query_result_rowdata($queryResult, 0);
+			if(!array_key_exists($groupbyField, $resultRow)) {
+				$ChartDataArray['error'] = "<h4>".getTranslatedString('LBL_NO_PERMISSION_FIELD', 'Dashboard')."</h4>";
+				return $ChartDataArray;
+			}
+		}
 		for ($i = 0; $i < $rows; $i++) {
 			$groupFieldValue = $adb->query_result($queryResult, $i, strtolower($groupbyField));
+			$decodedGroupFieldValue = html_entity_decode($groupFieldValue, ENT_QUOTES, $default_charset);
 			if (!empty($groupFieldValue)) {
 				if (in_array($module_field, $report->append_currency_symbol_to_value)) {
 					$valueComp = explode('::', $groupFieldValue);
@@ -381,31 +412,24 @@ Class ChartUtils {
 				}
 				else if (in_array($fieldname, array_keys($referenceFields))) {
 					if (count($referenceFields[$fieldname]) > 1) {
-						if (is_numeric($groupFieldValue))
-							$refenceModule = getSalesEntityType($groupFieldValue);
-						else
-							$refenceModule = CustomReportUtils::getCustomEntityId($groupFieldValue, $referenceFields[$fieldname]);
+						$refenceModule = CustomReportUtils::getEntityTypeFromName($decodedGroupFieldValue, $referenceFields[$fieldname]);
 					}
 					else {
 						$refenceModule = $referenceFields[$fieldname][0];
 					}
-					if (is_numeric($groupFieldValue)) {
-						$webServiceId = vtws_getWebserviceEntityId($refenceModule, $groupFieldValue);
-						$groupByFields[] = vtws_getName($webServiceId, $current_user);
-						$groupFieldValue = vtws_getName($webServiceId, $current_user);
+					$groupByFields[] = $groupFieldValue;
+
+					if ($fieldname == 'currency_id' && in_array($module, $inventorymodules)) {
+						$tablename = 'vtiger_currency_info';
+					} elseif ($refenceModule == 'DocumentFolders' && $fieldname == 'folderid') {
+						$tablename = 'vtiger_attachmentsfolder';
+						$colname = 'foldername';
 					} else {
-						$groupByFields[] = $groupFieldValue;
-					}
-					if ($fieldname != 'currency_id') {
 						require_once "modules/$refenceModule/$refenceModule.php";
 						$focus = new $refenceModule();
 						$tablename = $focus->table_name;
 						$colname = $focus->list_link_field;
 						$condition = "c";
-					} else if (!in_array($module, $inventorymodules)) {
-						$tablename = 'vtiger_currency_info';
-					} else {
-						$tablename = 'vtiger_currency_info';
 					}
 				} else {
 					$groupByFields[] = $groupFieldValue;
@@ -415,14 +439,14 @@ Class ChartUtils {
 					if ($dateField) {
 						$advanceSearchCondition = CustomReportUtils::getAdvanceSearchCondition($fieldDetails, $criteria, $groupFieldValue);
 						if ($module == 'Calendar') {
-							$link_val = "index.php?module=" . $module . "&query=true&action=ListView&search=true&" . $advanceSearchCondition;
+							$link_val = "index.php?module=" . $module . "&query=true&action=ListView&" . $advanceSearchCondition;
 						}else
-							$link_val = "index.php?module=" . $module . "&query=true&action=index&search=true&" . $advanceSearchCondition;
+							$link_val = "index.php?module=" . $module . "&query=true&action=index&" . $advanceSearchCondition;
 					}
 					else {
 						$cvid = getCvIdOfAll($module);
-						$esc_search_str = urlencode(html_entity_decode($groupFieldValue, ENT_QUOTES, $default_charset));
-						if ($single == 'T') {
+						$esc_search_str = urlencode($decodedGroupFieldValue);
+						if ($single == 'DT') {
 							$esc_search_str = urlencode($groupFieldValue);
 							if (strtolower($fieldname) == 'modifiedtime' || strtolower($fieldname) == 'createdtime') {
 								$tablename = 'vtiger_crmentity';
@@ -433,22 +457,20 @@ Class ChartUtils {
 							$tablename = 'vtiger_crmentity';
 							$colname = 'smownerid';
 						}
-						//$esc_search_str = htmlentities($search_str, ENT_QUOTES, $default_charset);
+
 						if ($module == 'Calendar') {
 							$link_val = "index.php?module=" . $module . "&action=ListView&search_text=" . $esc_search_str . "&search_field=" . $fieldname . "&searchtype=BasicSearch&query=true&operator=e&viewname=" . $cvid;
-						}else
+						} else {
 							$link_val = "index.php?module=" . $module . "&action=index&search_text=" . $esc_search_str . "&search_field=" . $fieldname . "&searchtype=BasicSearch&query=true&operator=e&viewname=" . $cvid;
-						//$link_val = "index.php?module=".$module."&query=true&action=index&search=true&Fields0='".$tablename.".".$colname."::::$single'"."&Condition0=$condition&Srch_value0=$esc_search_str&search_cnt=1&searchtype=advance&matchtype=any";
-					}
-					if (in_array($module, $inventorymodules) && $fieldname == 'contact_id') {
-						$contactComponents = explode(' ', $groupFieldValue);
-						$esc_search_str = urlencode($contactComponents[0]);
-						$link_val = "index.php?module=" . $module . "&query=true&action=index&search=true&Fields0='vtiger_contactdetails.lastname::::V'" . "&Condition0=cts&Srch_value0=$esc_search_str&search_cnt=1&searchtype=advance&matchtype=any";
+						}
 					}
 
 					$target_val[] = $link_val;
 				}
 			}
+		}
+		if(count($groupByFields) == 0) {
+			$ChartDataArray['error'] = "<div class='componentName'>".getTranslatedString('LBL_NO_DATA', 'Reports')."</div";
 		}
 		$ChartDataArray['xaxisData'] = $groupByFields;
 		$ChartDataArray['yaxisData'] = $yaxisArray;
@@ -468,8 +490,12 @@ Class ChartUtils {
 		} else {
 			$font_color = "#000000";
 		}
-		$barChart = ChartUtils::getBarChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
-		return $barChart;
+		if(!empty($BarChartDetails['error'])) {
+			return $BarChartDetails['error'];
+		} else {
+			$barChart = ChartUtils::getBarChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
+			return $barChart;
+		}
 	}
 
 	public static function getReportPieChart($queryResult, $groupbyField, $fieldDetails, $reportid) {
@@ -484,8 +510,12 @@ Class ChartUtils {
 		} else {
 			$font_color = "#000000";
 		}
-		$pieChart = ChartUtils::getPieChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
-		return $pieChart;
+		if(!empty($PieChartDetails['error'])) {
+			return $PieChartDetails['error'];
+		} else {
+			$pieChart = ChartUtils::getPieChart($groupbyFields, $yaxisArray, '', '350', '300', $charttype, false, $targerLinks, $font_color);
+			return $pieChart;
+		}
 	}
 
 }

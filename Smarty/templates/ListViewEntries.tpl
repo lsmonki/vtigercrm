@@ -33,7 +33,7 @@
 				<td>
 					<!-- List View's Buttons and Filters starts -->
 					<table width="100%" class="layerPopupTransport">
-						<tr>				
+						<tr>
 							<td width="25%" class="small" nowrap align="left">
 										{$recordListRange}
 							</td>
@@ -47,7 +47,7 @@
 												<td style="padding-left:5px;padding-right:5px" align="center">
                         										<b><font size=2>{$APP.LBL_VIEW}</font></b> <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
                    										</td>
-               
+
                             									{if $ALL eq 'All'}
 												<td style="padding-left:5px;padding-right:5px" align="center"><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
 													<span class="small">|</span>
@@ -71,13 +71,13 @@
 													<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
 													{/if}
 													{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
-													<span class="small">|</span>	
+													<span class="small">|</span>
 									   				<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
 													{/if}
 												</td>
 						    						{/if}
 											</tr>
-											</table> 
+											</table>
 				   						<!-- Filters  END-->
 				   						{/if}
 										</td>
@@ -112,7 +112,7 @@
 					    	<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
 								{/if}
 					{/foreach}
-				
+
 						{* vtlib customization: Custom link buttons on the List view basic buttons *}
 								{if $CUSTOM_LINKS && $CUSTOM_LINKS.LISTVIEWBASIC}
 									{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.LISTVIEWBASIC}
@@ -127,14 +127,14 @@
 										<input class="crmbutton small edit" type="button" value="{$customlink_label}" onclick="{$customlink_href}" />
 									{/foreach}
 				{/if}
-				
+
 				{* vtlib customization: Custom link buttons on the List view *}
 				{if $CUSTOM_LINKS && !empty($CUSTOM_LINKS.LISTVIEW)}
 					&nbsp;
 					<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_customLinksLay');" onclick="fnvshobj(this,'vtlib_customLinksLay');">
 							<b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} <img src="{'arrow_down.gif'|@vtiger_imageurl:$THEME}" border="0"></b>
 					</a>
-					<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay" 
+					<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay"
 						onmouseout="fninvsh('vtlib_customLinksLay')" onmouseover="fnvshNrm('vtlib_customLinksLay')">
 						<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
 						<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
@@ -157,12 +157,12 @@
 					</div>
 				{/if}
 				{* END *}
-			
+
                 </td>
        		  </tr>
 			</table>
 			<!-- List View's Buttons and Filters ends -->
-			
+
 			<div  >
 			<table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small">
 			<!-- Table Headers -->
@@ -183,7 +183,7 @@
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
 			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick="check_object(this)"></td>
 			{foreach item=data from=$entity}
-			{* vtlib customization: Trigger events on listview cell *}	
+			{* vtlib customization: Trigger events on listview cell *}
 			<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$data}</td>
 			{* END *}
 	        {/foreach}
@@ -201,7 +201,7 @@
 				{/if}
 
 				{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
-							
+
 				<table border="0" cellpadding="5" cellspacing="0" width="98%">
 				<tr>
 					<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
@@ -227,14 +227,14 @@
 					{/if}
 
 					{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
-					{if $MODULE neq 'Calendar'}	
+					{if $MODULE neq 'Calendar'}
 		  			&nbsp;&nbsp;- <b><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf}
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						 {$MOD.$MODULE_CREATE}
 					{else}
 						 {* vtlib customization: Use translation string only if available *}
 						 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
-						 
+
 						 {* Customization *}
 						 {if $MODULE eq 'Vendors' || $MODULE eq 'HelpDesk' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' || $MODULE eq 'Documents'|| $CUSTOM_MODULE eq 'true' }
 						 	{if $CHECK.Import eq 'yes' && $MODULE neq 'Documents'}
@@ -243,7 +243,7 @@
 						 	{/if}
 						 {/if}
 						 {* END *}
-						 
+
 					{/if}
 					</a></b><br>
 					{else}
@@ -252,7 +252,7 @@
 					{/if}
 					</td>
 				</tr>
-				</table> 
+				</table>
 			{else}
 				<table border="0" cellpadding="5" cellspacing="0" width="98%">
 				<tr>
@@ -278,12 +278,12 @@
 				</tr>
 				</table>
 				{/if}
-				</div>					
-				</td></tr>	
+				</div>
+				</td></tr>
 			     {/foreach}
 			 </table>
 			 </div>
-			 
+
 			 <table border=0 cellspacing=0 cellpadding=2 width=100%>
 			      <tr>
 				 <td style="padding-right:20px" nowrap>
@@ -302,8 +302,8 @@
                                         {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
 											<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
 										{/if}
-                                 {/foreach}						
-                
+                                 {/foreach}
+
 		                {* vtlib customization: Custom link buttons on the List view basic buttons *}
 						{if $CUSTOM_LINKS && $CUSTOM_LINKS.LISTVIEWBASIC}
 							{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.LISTVIEWBASIC}
@@ -318,14 +318,14 @@
 								<input class="crmbutton small edit" type="button" value="{$customlink_label}" onclick="{$customlink_href}" />
 							{/foreach}
 						{/if}
-						
+
 						{* vtlib customization: Custom link buttons on the List view *}
 						{if $CUSTOM_LINKS && !empty($CUSTOM_LINKS.LISTVIEW)}
 							&nbsp;
 							<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_customLinksLay');" onclick="fnvshobj(this,'vtlib_customLinksLay');">
 									<b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} <img src="{'arrow_down.gif'|@vtiger_imageurl:$THEME}" border="0"></b>
 							</a>
-							<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay" 
+							<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay"
 								onmouseout="fninvsh('vtlib_customLinksLay')" onmouseover="fnvshNrm('vtlib_customLinksLay')">
 								<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
 								<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
@@ -349,11 +349,30 @@
 						{/if}
 						{* END *}
                     </td>
-				
+
 				 <td align="right" width=40%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
-                                           {$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}
+						{if $WORDTEMPLATES neq ''}
+							{if $WORDTEMPLATES|@count gt 0}
+								<td>{'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'|@getTranslatedString:$MODULE}</td>
+								<td style="padding-left:5px;padding-right:5px">
+									<select class="small" name="mergefile">
+									{foreach key=_TEMPLATE_ID item=_TEMPLATE_NAME from=$WORDTEMPLATES}
+										<option value="{$_TEMPLATE_ID}">{$_TEMPLATE_NAME}</option>
+									{/foreach}
+									</select>
+								</td>
+								<td>
+									<input title="{'LBL_MERGE_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accessKey="{'LBL_MERGE_BUTTON_KEY'|@getTranslatedString:$MODULE}"
+										   class="crmbutton small create" onclick="return massMerge('{$MODULE}')" type="submit" name="Merge" value="{'LBL_MERGE_BUTTON_LABEL'|@getTranslatedString:$MODULE}">
+								</td>
+							{elseif $IS_ADMIN eq 'true'}
+								<td>
+									<a href='index.php?module=Settings&action=upload&tempModule={$MODULE}&parenttab=Settings'>{'LBL_CREATE_MERGE_TEMPLATE'|@getTranslatedString:$MODULE}</a>
+								</td>
+							{/if}
+						{/if}
 					</tr>
 				   </table>
 				 </td>
@@ -378,6 +397,6 @@
 		   </tr>
 	    </table>
 
-   </form>	
+   </form>
 {$SELECT_SCRIPT}
 <div id="basicsearchcolumns" style="display:none;"><select name="search_field" id="bas_searchfield" class="txtBox" style="width:150px">{html_options  options=$SEARCHLISTHEADER}</select></div>

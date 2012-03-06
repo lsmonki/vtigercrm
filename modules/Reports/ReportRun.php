@@ -187,9 +187,9 @@ class ReportRun extends CRMEntity
 							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
 
 					}
-                    elseif(stristr($selectedfields[0],"vtiger_crmentity") && ($selectedfields[1] == 'modifiedby'))
-					{
-                        $columnslist[$fieldcolname] = "CONCAT(vtiger_lastModifiedBy".$module.".last_name,' ',vtiger_lastModifiedBy".$module.".first_name) as $header_label";
+                    elseif(stristr($selectedfields[0],"vtiger_crmentity") && ($selectedfields[1] == 'modifiedby')) {
+                        $concatSql = getSqlForNameInDisplayFormat(array('last_name'=>'vtiger_lastModifiedBy'.$module.'.last_name', 'first_name'=>'vtiger_lastModifiedBy'.$module.'.first_name'), 'Users');
+						$columnslist[$fieldcolname] = "$concatSql as $header_label";
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
@@ -253,8 +253,7 @@ class ReportRun extends CRMEntity
 	 *  @ param $module : Type string
 	 *  returns permitted fields in array format
 	 */
-	function getaccesfield($module)
-	{
+	function getaccesfield($module) {
 		global $current_user;
 		global $adb;
 		$access_fields = Array();
@@ -265,20 +264,24 @@ class ReportRun extends CRMEntity
 		if($module == "Calendar")
 		{
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0
+								and vtiger_field.presence IN (0,2) and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0
+								and vtiger_field.presence IN (0,2) group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		else
 		{
 			array_push($params, $module);
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0
+								and vtiger_field.presence IN (0,2) and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?)) and vtiger_field.displaytype in (1,2,3,5) and vtiger_profile2field.visible=0
+								and vtiger_field.presence IN (0,2) and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->pquery($query, $params);
@@ -297,16 +300,32 @@ class ReportRun extends CRMEntity
 	 *  @ param $selectedfields : Type Array
 	 *  returns the case query for the escaped columns
 	 */
-	function getEscapedColumns($selectedfields)
-	{
-		global $current_user,$adb;
-		$fieldname = $selectedfields[3];
-		$tmp = split("_",$selectedfields[2]);
-		$module = $tmp[0];
-		if($fieldname == 'creator'){
-			$querycolumn .= "case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then vtiger_usersModComments.user_name end as 'ModComments_Creator'";
+	function getEscapedColumns($selectedfields) {
+
+		$tableName = $selectedfields[0];
+		$columnName = $selectedfields[1];
+		$moduleFieldLabel = $selectedfields[2];
+		$fieldName = $selectedfields[3];
+		list($moduleName, $fieldLabel) = explode('_', $moduleFieldLabel, 2);
+		$fieldInfo = getFieldByReportLabel($moduleName, $fieldLabel);
+
+		if($moduleName == 'ModComments' && $fieldName == 'creator') {
+			$concatSql = getSqlForNameInDisplayFormat(array('first_name' => 'vtiger_usersModComments.first_name',
+															'last_name' => 'vtiger_usersModComments.last_name'), 'Users');
+			$queryColumn = "case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then $concatSql end as 'ModComments_Creator'";
+
+		} elseif(($fieldInfo['uitype'] == '10' || isReferenceUIType($fieldInfo['uitype']))
+				&& $fieldInfo['uitype'] != '52' && $fieldInfo['uitype'] != '53') {
+			$fieldSqlColumns = $this->getReferenceFieldColumnList($moduleName, $fieldInfo);
+			if(count($fieldSqlColumns) > 0) {
+				$queryColumn = "(CASE WHEN $tableName.$columnName NOT LIKE '' THEN (CASE";
+				foreach($fieldSqlColumns as $columnSql) {
+					$queryColumn .= " WHEN $columnSql NOT LIKE '' THEN $columnSql";
+				}
+				$queryColumn .= " ELSE '' END) ELSE '' END) AS $moduleFieldLabel";
+			}
 		}
-		return $querycolumn;
+		return $queryColumn;
 	}
 
 	/** Function to get selectedcolumns for the given reportid
@@ -652,10 +671,13 @@ class ReportRun extends CRMEntity
 							$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
 						} elseif($selectedfields[1]=='modifiedby') {
                             $module_from_tablename = str_replace("vtiger_crmentity","",$selectedfields[0]);
-                            if($module_from_tablename != '')
-                                $fieldvalue = "vtiger_lastModifiedBy".$module_from_tablename.".user_name".$this->getAdvComparator($comparator,trim($value),$datatype);
-                            else
-                                $fieldvalue = "vtiger_lastModifiedBy".$this->primarymodule.".user_name".$this->getAdvComparator($comparator,trim($value),$datatype);
+                            if($module_from_tablename != '') {
+								$tableName = 'vtiger_lastModifiedBy'.$module_from_tablename;
+							} else {
+								$tableName = 'vtiger_lastModifiedBy'.$this->primarymodule;
+							}
+							$fieldvalue = getSqlForNameInDisplayFormat(array('last_name'=>"$tableName.last_name",'first_name'=>"$tableName.first_name"), 'Users').
+									$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($selectedfields[0] == "vtiger_activity" && $selectedfields[1] == 'status') {
 							$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($comparator == 'e' && (trim($value) == "NULL" || trim($value) == '')) {
@@ -666,103 +688,13 @@ class ReportRun extends CRMEntity
 							} else if($selectedfields[1] == 'serviceid'){
 								$fieldvalue = "vtiger_service{$this->primarymodule}.servicename ".$this->getAdvComparator($comparator,trim($value),$datatype);
 							}
-						}elseif($fieldInfo['uitype'] == '10' || isReferenceUIType($fieldInfo['uitype'])) {
+						} elseif($fieldInfo['uitype'] == '10' || isReferenceUIType($fieldInfo['uitype'])) {
 
 							$comparatorValue = $this->getAdvComparator($comparator,trim($value),$datatype);
 							$fieldSqls = array();
-							$fieldInstance = WebserviceField::fromArray($adb, $fieldInfo);
-							$referenceModuleList = $fieldInstance->getReferenceList();
-							foreach($referenceModuleList as $referenceModule) {
-								$entityTableFieldNames = getEntityFieldNames($referenceModule);
-								$entityTableName = $entityTableFieldNames['tablename'];
-								$entityFieldNames = $entityTableFieldNames['fieldname'];
-
-								if($this->primarymodule == 'HelpDesk' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountRelHelpDesk';
-								} elseif ($this->primarymodule == 'HelpDesk' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsRelHelpDesk';
-								} elseif ($this->primarymodule == 'HelpDesk' && $referenceModule == 'Products') {
-									$referenceTableName = 'vtiger_productsRel';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Leads') {
-									$referenceTableName = 'vtiger_leaddetailsRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Potentials') {
-									$referenceTableName = 'vtiger_potentialRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Invoice') {
-									$referenceTableName = 'vtiger_invoiceRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Quotes') {
-									$referenceTableName = 'vtiger_quotesRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'PurchaseOrder') {
-									$referenceTableName = 'vtiger_purchaseorderRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'SalesOrder') {
-									$referenceTableName = 'vtiger_salesorderRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'HelpDesk') {
-									$referenceTableName = 'vtiger_troubleticketsRelCalendar';
-								} elseif ($this->primarymodule == 'Calendar' && $referenceModule == 'Campaigns') {
-									$referenceTableName = 'vtiger_campaignRelCalendar';
-								} elseif ($this->primarymodule == 'Contacts' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountContacts';
-								} elseif ($this->primarymodule == 'Contacts' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsContacts';
-								} elseif ($this->primarymodule == 'Accounts' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountAccounts';
-								} elseif ($this->primarymodule == 'Campaigns' && $referenceModule == 'Products') {
-									$referenceTableName = 'vtiger_productsCampaigns';
-								} elseif ($this->primarymodule == 'Faq' && $referenceModule == 'Products') {
-									$referenceTableName = 'vtiger_productsFaq';
-								} elseif ($this->primarymodule == 'Invoice' && $referenceModule == 'SalesOrder') {
-									$referenceTableName = 'vtiger_salesorderInvoice';
-								} elseif ($this->primarymodule == 'Invoice' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsInvoice';
-								} elseif ($this->primarymodule == 'Invoice' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountInvoice';
-								} elseif ($this->primarymodule == 'Potentials' && $referenceModule == 'Campaigns') {
-									$referenceTableName = 'vtiger_campaignPotentials';
-								} elseif ($this->primarymodule == 'Products' && $referenceModule == 'Vendors') {
-									$referenceTableName = 'vtiger_vendorRelProducts';
-								} elseif ($this->primarymodule == 'PurchaseOrder' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsPurchaseOrder';
-								} elseif ($this->primarymodule == 'PurchaseOrder' && $referenceModule == 'Vendors') {
-									$referenceTableName = 'vtiger_vendorRelPurchaseOrder';
-								} elseif ($this->primarymodule == 'Quotes' && $referenceModule == 'Potentials') {
-									$referenceTableName = 'vtiger_potentialRelQuotes';
-								} elseif ($this->primarymodule == 'Quotes' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountQuotes';
-								} elseif ($this->primarymodule == 'Quotes' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsQuotes';
-								} elseif ($this->primarymodule == 'SalesOrder' && $referenceModule == 'Potentials') {
-									$referenceTableName = 'vtiger_potentialRelSalesOrder';
-								} elseif ($this->primarymodule == 'SalesOrder' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountSalesOrder';
-								} elseif ($this->primarymodule == 'SalesOrder' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsSalesOrder';
-								} elseif ($this->primarymodule == 'SalesOrder' && $referenceModule == 'Quotes') {
-									$referenceTableName = 'vtiger_quotesSalesOrder';
-								} elseif ($this->primarymodule == 'Potentials' && $referenceModule == 'Contacts') {
-									$referenceTableName = 'vtiger_contactdetailsPotentials';
-								} elseif ($this->primarymodule == 'Potentials' && $referenceModule == 'Accounts') {
-									$referenceTableName = 'vtiger_accountPotentials';
-								} else {
-									$referenceTableName = "{$entityTableName}Rel{$this->primarymodule}{$fieldInstance->getFieldId()}";
-								}
-
-								$columnList = array();
-								if(is_array($entityFieldNames)) {
-									foreach ($entityFieldNames as $entityColumnName) {
-										$columnList[] = "$referenceTableName.$entityColumnName";
-									}
-								} else {
-									$columnList[] = "$referenceTableName.$entityFieldNames";
-								}
-								if(count($columnList) > 1) {
-									$columnSql = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[1],'last_name'=>$columnList[0]), 'Users');
-								} else {
-									$columnSql = implode('', $columnList);
-								}
-								$fieldSqls[] = $columnSql.$comparatorValue;
+							$fieldSqlColumns = $this->getReferenceFieldColumnList($moduleName, $fieldInfo);
+							foreach($fieldSqlColumns as $columnSql) {
+							 	$fieldSqls[] = $columnSql.$comparatorValue;
 							}
 							$fieldvalue = ' ('. implode(' OR ', $fieldSqls).') ';
 						} else {
@@ -855,8 +787,8 @@ class ReportRun extends CRMEntity
 					$enddate = $startenddate[1];
 				}
 
-					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != ""
-							&& $startdate != '' && $enddate != '') {
+				if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $startdate != "" && $enddate != ""
+						&& $selectedfields[0] != "" && $selectedfields[1] != "") {
 
 					$startDateTime = new DateTimeField($startdate.' '. date('H:i:s'));
 					$userStartDate = $startDateTime->getDisplayDate();
@@ -1360,6 +1292,7 @@ class ReportRun extends CRMEntity
 		$sreportsortsql .= " where vtiger_report.reportid =? AND vtiger_reportsortcol.columnname IN (SELECT columnname from vtiger_selectcolumn WHERE queryid=?) order by vtiger_reportsortcol.sortcolid";
 
 		$result = $adb->pquery($sreportsortsql, array($reportid,$reportid));
+		$grouplist = array();
 
 		while($reportsortrow = $adb->fetch_array($result))
 		{
@@ -1405,19 +1338,10 @@ class ReportRun extends CRMEntity
 				if(CheckFieldPermission($fieldname,$module) == 'true')
 				{
 					$grouplist[$fieldcolname] = $sqlvalue;
-					$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 				} else {
 					$grouplist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1];
 				}
 			}
-		}
-
-		if(in_array($this->primarymodule, array('Invoice', 'Quotes', 'SalesOrder', 'PurchaseOrder')) ) {
-			$instance = CRMEntity::getInstance($this->primarymodule);
-			$grouplist[$instance->table_index] = $instance->table_name.'.'.$instance->table_index;
-			$grouplist['subject'] = $instance->table_name.'.subject';
-			$this->groupbylist[$fieldcolname] = $instance->table_name.'.'.$instance->table_index;
-			$this->groupbylist['subject'] = $instance->table_name.'.subject';
 		}
 
 		// Save the information
@@ -1681,7 +1605,8 @@ class ReportRun extends CRMEntity
 			$query = "from vtiger_quotes
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid
 				inner join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
-				inner join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid";
+				inner join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
+				left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_quotes.currency_id";
 			if($type !== 'COLUMNSTOTOTAL') {
 				$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelQuotes on vtiger_quotes.quoteid = vtiger_inventoryproductrelQuotes.id
 				left join vtiger_products as vtiger_productsQuotes on vtiger_productsQuotes.productid = vtiger_inventoryproductrelQuotes.productid
@@ -1707,7 +1632,8 @@ class ReportRun extends CRMEntity
 			$query = "from vtiger_purchaseorder
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid
 				inner join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
-				inner join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid";
+				inner join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
+				left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_purchaseorder.currency_id";
 			if($type !== 'COLUMNSTOTOTAL') {
 				$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelPurchaseOrder on vtiger_purchaseorder.purchaseorderid = vtiger_inventoryproductrelPurchaseOrder.id
 				left join vtiger_products as vtiger_productsPurchaseOrder on vtiger_productsPurchaseOrder.productid = vtiger_inventoryproductrelPurchaseOrder.productid
@@ -1731,7 +1657,8 @@ class ReportRun extends CRMEntity
 			$query = "from vtiger_invoice
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid
 				inner join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid
-				inner join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid";
+				inner join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid
+				left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_invoice.currency_id";
 			if($type !== 'COLUMNSTOTOTAL') {
 				$query .=" left join vtiger_inventoryproductrel as vtiger_inventoryproductrelInvoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrelInvoice.id
 					left join vtiger_products as vtiger_productsInvoice on vtiger_productsInvoice.productid = vtiger_inventoryproductrelInvoice.productid
@@ -1755,7 +1682,8 @@ class ReportRun extends CRMEntity
 			$query = "from vtiger_salesorder
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid
 				inner join vtiger_sobillads on vtiger_salesorder.salesorderid=vtiger_sobillads.sobilladdressid
-				inner join vtiger_soshipads on vtiger_salesorder.salesorderid=vtiger_soshipads.soshipaddressid";
+				inner join vtiger_soshipads on vtiger_salesorder.salesorderid=vtiger_soshipads.soshipaddressid
+				left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = vtiger_salesorder.currency_id";
 			if($type !== 'COLUMNSTOTOTAL') {
 				$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelSalesOrder on vtiger_salesorder.salesorderid = vtiger_inventoryproductrelSalesOrder.id
 				left join vtiger_products as vtiger_productsSalesOrder on vtiger_productsSalesOrder.productid = vtiger_inventoryproductrelSalesOrder.productid
@@ -3241,7 +3169,8 @@ class ReportRun extends CRMEntity
         $sortFieldResult= $adb->pquery($sortFieldQuery,array($reportid));
         if($adb->num_rows($sortFieldResult)>0){
             $fieldcolname = $adb->query_result($sortFieldResult,0,'columnname');
-            list($tablename,$colname,$module_field,$fieldname,$typeOfData) = split(":",$fieldcolname);
+            list($tablename,$colname,$module_field,$fieldname,$typeOfData) = explode(":",$fieldcolname);
+			list($modulename,$fieldlabel) = explode('_', $module_field, 2);
             $groupByField = $module_field;
             if($typeOfData == "D"){
                 $groupCriteria = $adb->query_result($sortFieldResult,0,'dategroupbycriteria');
@@ -3256,9 +3185,147 @@ class ReportRun extends CRMEntity
                     $groupByField = implode(", ",$groupByCondition);
                 }
 
-            }
+            } elseif(CheckFieldPermission($fieldname,$modulename) != 'true') {
+				$groupByField = $tablename.".".$colname;
+			}
         }
         return $groupByField;
     }
+
+	function getReferenceFieldColumnList($moduleName, $fieldInfo) {
+		$adb = PearDatabase::getInstance();
+
+		$columnsSqlList = array();
+
+		$fieldInstance = WebserviceField::fromArray($adb, $fieldInfo);
+		$referenceModuleList = $fieldInstance->getReferenceList();
+		$reportSecondaryModules = explode(':', $this->secondarymodule);
+
+		if($moduleName != $this->primarymodule && in_array($this->primarymodule, $referenceModuleList)) {
+			$entityTableFieldNames = getEntityFieldNames($this->primarymodule);
+			$entityTableName = $entityTableFieldNames['tablename'];
+			$entityFieldNames = $entityTableFieldNames['fieldname'];
+
+			$columnList = array();
+			if(is_array($entityFieldNames)) {
+				foreach ($entityFieldNames as $entityColumnName) {
+					$columnList["$entityColumnName"] = "$entityTableName.$entityColumnName";
+				}
+			} else {
+				$columnList[] = "$entityTableName.$entityFieldNames";
+			}
+			if(count($columnList) > 1) {
+				$columnSql = getSqlForNameInDisplayFormat($columnList, $this->primarymodule);
+			} else {
+				$columnSql = implode('', $columnList);
+			}
+			$columnsSqlList[] = $columnSql;
+
+		} else {
+			foreach($referenceModuleList as $referenceModule) {
+				$entityTableFieldNames = getEntityFieldNames($referenceModule);
+				$entityTableName = $entityTableFieldNames['tablename'];
+				$entityFieldNames = $entityTableFieldNames['fieldname'];
+
+				if($moduleName == 'HelpDesk' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountRelHelpDesk';
+				} elseif ($moduleName == 'HelpDesk' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsRelHelpDesk';
+				} elseif ($moduleName == 'HelpDesk' && $referenceModule == 'Products') {
+					$referenceTableName = 'vtiger_productsRel';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Leads') {
+					$referenceTableName = 'vtiger_leaddetailsRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Potentials') {
+					$referenceTableName = 'vtiger_potentialRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Invoice') {
+					$referenceTableName = 'vtiger_invoiceRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Quotes') {
+					$referenceTableName = 'vtiger_quotesRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'PurchaseOrder') {
+					$referenceTableName = 'vtiger_purchaseorderRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'HelpDesk') {
+					$referenceTableName = 'vtiger_troubleticketsRelCalendar';
+				} elseif ($moduleName == 'Calendar' && $referenceModule == 'Campaigns') {
+					$referenceTableName = 'vtiger_campaignRelCalendar';
+				} elseif ($moduleName == 'Contacts' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountContacts';
+				} elseif ($moduleName == 'Contacts' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsContacts';
+				} elseif ($moduleName == 'Accounts' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountAccounts';
+				} elseif ($moduleName == 'Campaigns' && $referenceModule == 'Products') {
+					$referenceTableName = 'vtiger_productsCampaigns';
+				} elseif ($moduleName == 'Faq' && $referenceModule == 'Products') {
+					$referenceTableName = 'vtiger_productsFaq';
+				} elseif ($moduleName == 'Invoice' && $referenceModule == 'SalesOrder') {
+					$referenceTableName = 'vtiger_salesorderInvoice';
+				} elseif ($moduleName == 'Invoice' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsInvoice';
+				} elseif ($moduleName == 'Invoice' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountInvoice';
+				} elseif ($moduleName == 'Potentials' && $referenceModule == 'Campaigns') {
+					$referenceTableName = 'vtiger_campaignPotentials';
+				} elseif ($moduleName == 'Products' && $referenceModule == 'Vendors') {
+					$referenceTableName = 'vtiger_vendorRelProducts';
+				} elseif ($moduleName == 'PurchaseOrder' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsPurchaseOrder';
+				} elseif ($moduleName == 'PurchaseOrder' && $referenceModule == 'Vendors') {
+					$referenceTableName = 'vtiger_vendorRelPurchaseOrder';
+				} elseif ($moduleName == 'Quotes' && $referenceModule == 'Potentials') {
+					$referenceTableName = 'vtiger_potentialRelQuotes';
+				} elseif ($moduleName == 'Quotes' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountQuotes';
+				} elseif ($moduleName == 'Quotes' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsQuotes';
+				} elseif ($moduleName == 'SalesOrder' && $referenceModule == 'Potentials') {
+					$referenceTableName = 'vtiger_potentialRelSalesOrder';
+				} elseif ($moduleName == 'SalesOrder' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountSalesOrder';
+				} elseif ($moduleName == 'SalesOrder' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsSalesOrder';
+				} elseif ($moduleName == 'SalesOrder' && $referenceModule == 'Quotes') {
+					$referenceTableName = 'vtiger_quotesSalesOrder';
+				} elseif ($moduleName == 'Potentials' && $referenceModule == 'Contacts') {
+					$referenceTableName = 'vtiger_contactdetailsPotentials';
+				} elseif ($moduleName == 'Potentials' && $referenceModule == 'Accounts') {
+					$referenceTableName = 'vtiger_accountPotentials';
+				} elseif (in_array($referenceModule, $reportSecondaryModules)) {
+					$referenceTableName = "{$entityTableName}Rel$referenceModule";
+				} elseif (in_array($moduleName, $reportSecondaryModules)) {
+					$referenceTableName = "{$entityTableName}Rel$moduleName";
+				} else {
+					$referenceTableName = "{$entityTableName}Rel{$moduleName}{$fieldInstance->getFieldId()}";
+				}
+
+				$columnList = array();
+				if(is_array($entityFieldNames)) {
+					foreach ($entityFieldNames as $entityColumnName) {
+						$columnList["$entityColumnName"] = "$referenceTableName.$entityColumnName";
+					}
+				} else {
+					$columnList[] = "$referenceTableName.$entityFieldNames";
+				}
+				if(count($columnList) > 1) {
+					$columnSql = getSqlForNameInDisplayFormat($columnList, $referenceModule);
+				} else {
+					$columnSql = implode('', $columnList);
+				}
+				if ($referenceModule == 'DocumentFolders' && $fieldInstance->getFieldName() == 'folderid') {
+					$columnSql = 'vtiger_attachmentsfolder.foldername';
+				}
+				if ($referenceModule == 'Currency' && $fieldInstance->getFieldName() == 'currency_id') {
+					$columnSql = "vtiger_currency_info$moduleName.currency_name";
+				}
+				$columnsSqlList[] = $columnSql;
+			}
+		}
+		return $columnsSqlList;
+	}
 }
 ?>

@@ -79,10 +79,9 @@ class Vtiger_Cron {
      */
     function getLastEndDateTime() {
         if($this->data['lastend'] != NULL){
-			$lastEndTimeDate = new DateTimeField(date('Y-m-d H:i:s', $this->data['lastend']));
-			return $lastEndTimeDate->getDisplayDateTimeValue();
-		}
-		else{
+			$lastEndDateTime = new DateTimeField(date('Y-m-d H:i:s', $this->data['lastend']));
+			return $lastEndDateTime->getDisplayDateTimeValue();
+		} else {
 			return '';
 		}
     }
@@ -92,8 +91,12 @@ class Vtiger_Cron {
      * get the last start datetime field
      */
     function getLastStartDateTime() {
-        $lastEndTimeDate = new DateTimeField(date('Y-m-d H:i:s', $this->data['laststart']));
-        return $lastEndTimeDate;
+        if($this->data['laststart'] != NULL){
+			$lastStartDateTime = new DateTimeField(date('Y-m-d H:i:s', $this->data['laststart']));
+			return $lastStartDateTime->getDisplayDateTimeValue();
+		} else {
+			return '';
+		}
     }
 
     /**
