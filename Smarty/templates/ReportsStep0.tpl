@@ -116,19 +116,11 @@
 													{foreach item=relmod from=$RELATEDMODULES}
 														{if $SEC_MODULE.$relmod eq 1}
 															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />
-																{if $APP.$relmod neq ''}
-																	{$APP.$relmod}
-																{else}
-																	{$relmod}
-																{/if}
+																{$relmod|@getTranslatedString:$relmod}
 															</td></tr>
 														{else}
 															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
-																{if $APP.$relmod neq ''}
-																	{$APP.$relmod}
-																{else}
-																	{$relmod}
-																{/if}
+																{$relmod|@getTranslatedString:$relmod}
 															</td></tr>
 														{/if}
 													{/foreach}

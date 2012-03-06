@@ -300,8 +300,14 @@ class Reports extends CRMEntity{
 					INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid
 					WHERE vtiger_tab.isentitytype=1
 					AND vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).")
-					AND vtiger_tab.presence=0 AND vtiger_relatedlists.label!='Activity History'",
-					array($restricted_modules)
+					AND vtiger_tab.presence = 0 AND vtiger_relatedlists.label!='Activity History'
+					UNION
+					SELECT module, vtiger_tab.tabid FROM vtiger_fieldmodulerel
+					INNER JOIN vtiger_tab on vtiger_tab.name = vtiger_fieldmodulerel.relmodule
+					WHERE vtiger_tab.isentitytype = 1
+					AND vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).")
+					AND vtiger_tab.presence = 0",
+					array($restricted_modules,$restricted_modules)
 				);
 				if($adb->num_rows($relatedmodules)) {
 					while($resultrow = $adb->fetch_array($relatedmodules)) {
