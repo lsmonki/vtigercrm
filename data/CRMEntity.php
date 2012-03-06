@@ -40,6 +40,7 @@ class CRMEntity {
 		if (isset($VTIGER_BULK_SAVE_MODE) && $VTIGER_BULK_SAVE_MODE) {
 			return true;
 		}
+		return false;
 	}
 
 	static function getInstance($module) {
