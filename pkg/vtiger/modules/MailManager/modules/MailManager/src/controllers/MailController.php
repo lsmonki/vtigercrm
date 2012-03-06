@@ -104,15 +104,30 @@ class MailManager_MailController extends MailManager_Controller {
 				$toArray = explode(',', $to_string);
 				foreach($toArray as $to) {
 					$relatedtos = MailManager::lookupMailInVtiger($to, $current_user);
-					if (!empty($relatedtos) && is_array($relatedtos)) {
-						for($i=0; $i<count($relatedtos); $i++) {
-							if($i == count($relatedtos)-1) {
-								$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
-								$parentIds .= $relateto[1]."@1";
-							} else {
-								$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
-								$parentIds .= $relateto[1]."@1|";
+					$referenceArray = Array('Contacts','Accounts','Leads');
+					for($j=0;$j<count($referenceArray);$j++){
+						$val=$referenceArray[$j];
+						if (!empty($relatedtos) && is_array($relatedtos)) {
+							for($i=0; $i<count($relatedtos); $i++) {
+								if($i == count($relatedtos)-1) {
+									$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
+									$parentIds .= $relateto[1]."@1";
+								}elseif($relatedtos[$i]['module'] == $val){
+									$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
+									$parentIds = $relateto[1]."@1";
+									break;
+								}
 							}
+						}
+						if(isset ($parentIds)){
+							break;
+						}
+					}
+					if($parentIds == ''){
+						if(count($relatedtos) > 0){
+							$relateto = vtws_getIdComponents($relatedtos[0]['record']);
+							$parentIds = $relateto[1]."@1";
+							break;
 						}
 					}
 				}
