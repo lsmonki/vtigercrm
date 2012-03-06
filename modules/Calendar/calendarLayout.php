@@ -147,7 +147,7 @@ function get_mini_calendar(& $cal){
 	$class = '';
 	for ($i = 0; $i < $rows; $i++){
 		$minical .= "<tr>";
-		
+
 		//calculate blank days for first week
 		for ($j = 0; $j < 7; $j ++){
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
@@ -467,8 +467,8 @@ function display_date($view,$date_time)
         }
 	elseif ($view == 'week')
         {
-                $week_start = $date_time->getThisweekDaysbyIndex(0);
-                $week_end = $date_time->getThisweekDaysbyIndex(6);
+                $week_start = $date_time->getThisweekDaysbyIndex(1);
+                $week_end = $date_time->getThisweekDaysbyIndex(7);
                 $label = $week_start->get_Date()." ";
                 $label .= $week_start->getmonthName()." ";
                 $label .= $week_start->year;
@@ -796,7 +796,7 @@ function getWeekViewLayout(& $cal)
 		} else {
 			//To display Days in Week
 			$cal['slice'] = $cal['calendar']->week_array[$cal['calendar']->slices[$col-1]];
-			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
+			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col);
 			$day = $date->getdayofWeek_inshort();
 			$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>';
 			$weekview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';

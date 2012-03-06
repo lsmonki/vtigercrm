@@ -133,22 +133,22 @@ $mod_strings = Array(
 ),
 
 'cal_weekdays_short'=>array(
-"Sun",
 "Mon",
 "Tue",
 "Wed",
 "Thu",
 "Fri",
 "Sat",
+"Sun",
 ),
 'cal_weekdays_long'=>array(
-"Sunday",
 "Monday",
 "Tuesday",
 "Wednesday",
 "Thursday",
 "Friday",
 "Saturday",
+"Sunday",
 ),
 'cal_month_short'=>array(
 "",
