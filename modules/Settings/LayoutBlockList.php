@@ -76,7 +76,7 @@ $cftextcombo = Array(
 	$mod_strings['LBL_MULTISELECT_COMBO'],
 	$mod_strings['Time']
 	);
-	
+
 
 $smarty->assign("MODULES",$module_array);
 $smarty->assign("CFTEXTCOMBO",$cftextcombo);
@@ -111,7 +111,7 @@ $smarty->assign("MODE", $mode);
 
 if($_REQUEST['ajax'] != 'true') {
 	$smarty->display('Settings/LayoutBlockList.tpl');
-}	
+}
 elseif(($subMode == 'getRelatedInfoOrder' || $subMode == 'changeRelatedInfoOrder') &&  $_REQUEST['ajax'] == 'true') {
 	$smarty->display('Settings/OrderRelatedList.tpl');
 }
@@ -560,7 +560,6 @@ function updateFieldProperties() {
 	$presence_check = $_REQUEST['isPresent'];
 	$massedit_check = $_REQUEST['massedit'];
 	$defaultvalue = vtlib_purify($_REQUEST['defaultvalue']);
-	$defaultvalue = str_replace('&amp;','&',$defaultvalue);//for utf8 characters
 
 	if(!empty($defaultvalue)) {
 		if($uitype == 56) {

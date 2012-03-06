@@ -112,7 +112,6 @@ if($_REQUEST['directmode'] == 'ajax') {
 
 		if($subMode == 'savedependency') {
 			$dependencyMapping = vtlib_purify($_REQUEST['dependencymapping']);
-			$dependencyMapping=str_replace('&amp;','&',$dependencyMapping);//for utf8 characters
 			$json = new Zend_Json();
 			$dependencyMappingData = $json->decode($dependencyMapping);
 			Vtiger_DependencyPicklist::savePickListDependencies($fld_module, $dependencyMappingData);

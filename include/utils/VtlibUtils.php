@@ -568,6 +568,7 @@ function vtlib_purify($input, $ignore=false) {
 			}
 		}
 	}
+	$value = str_replace('&amp;','&',$value);
 	return $value;
 }
 
