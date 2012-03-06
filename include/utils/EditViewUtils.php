@@ -1637,6 +1637,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['subprod_names'.$i]=$subprodname_str;
 		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
+		$discount_amount = number_format($discount_amount, 2,'.',''); //Convert to 2 decimals
 		$discountTotal = '0.00';
 		//Based on the discount percent or amount we will show the discount details
 
@@ -1723,10 +1724,12 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$product_Detail[1]['final_details']['discount_type_final'] = 'zero';
 
 	$subTotal = ($focus->column_fields['hdnSubTotal'] != '')?$focus->column_fields['hdnSubTotal']:'0.00';
+	$subTotal = number_format($subTotal, 2,'.',''); //Convert to 2 decimals
 
 	$product_Detail[1]['final_details']['hdnSubTotal'] = $subTotal;
 	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
 	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
+	$discountAmount = number_format($discountAmount, 2,'.',''); //Convert to 2 decimals
 
 	//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(For Final Discount)
 	$product_Detail[1]['final_details']['discount_percentage_final'] = 0;
@@ -1750,6 +1753,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:visible"';
 		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:hidden"';
 	}
+	$finalDiscount = number_format($finalDiscount, 2,'.',''); //Convert to 2 decimals
 	$product_Detail[1]['final_details']['discountTotal_final'] = $finalDiscount;
 
 	//To set the Final Tax values
@@ -1775,6 +1779,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		if($tax_percent == '' || $tax_percent == 'NULL')
 			$tax_percent = '0.00';
 		$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
+		$taxamount = number_format($taxamount, 2,'.',''); //Convert to 2 decimals
 		$taxtotal = $taxtotal + $taxamount;
 		$product_Detail[1]['final_details']['taxes'][$tax_count]['taxname'] = $tax_name;
 		$product_Detail[1]['final_details']['taxes'][$tax_count]['taxlabel'] = $tax_label;
@@ -1821,6 +1826,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	//To set the grand total
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
+	$grandTotal = number_format($grandTotal, 2,'.',''); //Convert to 2 decimals
 	$product_Detail[1]['final_details']['grandTotal'] = $grandTotal;
 
 	$log->debug("Exiting getAssociatedProducts method ...");

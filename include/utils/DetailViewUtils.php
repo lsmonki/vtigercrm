@@ -1218,7 +1218,6 @@ function getDetailAssociatedProducts($module, $focus) {
 			$productDiscount = $total * $discount_percent / 100;
 			$productDiscount = number_format($productDiscount, 2,'.','');
 			$totalAfterDiscount = $total - $productDiscount;
-			$totalAfterDiscount = number_format($totalAfterDiscount, 2,'.','');
 			//if discount is percent then show the percentage
 			$discount_info_message = "$discount_percent % of ".
 										CurrencyField::convertToUserFormat($total, null, true)." = ".
@@ -1227,13 +1226,13 @@ function getDetailAssociatedProducts($module, $focus) {
 			$productDiscount = $discount_amount;
 			$productDiscount = number_format($productDiscount, 2,'.','');
 			$totalAfterDiscount = $total - $productDiscount;
-			$totalAfterDiscount = number_format($totalAfterDiscount, 2,'.','');
 			$discount_info_message = $app_strings['LBL_DIRECT_AMOUNT_DISCOUNT'] . " = ". CurrencyField::convertToUserFormat($productDiscount, null, true);
 		} else {
 			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'];
 		}
 		//Product wise Discount calculation - ends 
 
+		$totalAfterDiscount = number_format($totalAfterDiscount, 2,'.',''); //Convert to 2 decimals
 		$netprice = $totalAfterDiscount;
 		//Calculate the individual tax if taxtype is individual
 		if ($taxtype == 'individual') {
@@ -1246,14 +1245,16 @@ function getDetailAssociatedProducts($module, $focus) {
 				$tax_value = getInventoryProductTaxValue($focus->id, $productid, $tax_name);
 
 				$individual_taxamount = $totalAfterDiscount * $tax_value / 100;
+				$individual_taxamount = number_format($individual_taxamount, 2,'.',''); //Convert to 2 decimals
 				$taxtotal = $taxtotal + $individual_taxamount;
+				$taxtotal = number_format($taxtotal, 2,'.',''); //Convert to 2 decimals
 				$tax_info_message .= "$tax_label : $tax_value % = ".
 										CurrencyField::convertToUserFormat($individual_taxamount, null, true).
 										" \\n";
 			}
 			$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($taxtotal, null, true);
 			$netprice = $netprice + $taxtotal;
-			$netprice = number_format($netprice, 2,'.','');
+			$netprice = number_format($netprice, 2,'.',''); //Convert to 2 decimals
 		}
 
 		$sc_image_tag = '';

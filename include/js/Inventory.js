@@ -244,6 +244,7 @@ function calcGrandTotal() {
 		}
 	}
 //	alert(netTotal);
+	netTotal = netTotal.toFixed(2);
 	document.getElementById("netTotal").innerHTML = netTotal;
 	document.getElementById("subtotal").value = netTotal;
 	setDiscount(this,'_final');
