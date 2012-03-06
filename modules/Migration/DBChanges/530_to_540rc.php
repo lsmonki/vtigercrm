@@ -14,6 +14,7 @@ require_once 'modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc';
 require_once 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
 require_once 'include/events/include.inc';
 include_once 'vtlib/Vtiger/Cron.php';
+require_once 'modules/ModComments/ModComments.php';
 
 //5.2.1 to 5.3.0RC database changes
 
@@ -343,6 +344,8 @@ foreach ($fieldMap as $values) {
 	$potentialfid=getFieldid($potentialTab,$values[3]);
 	$adb->pquery($mapSql,array($leadfid,$accountfid,$contactfid,$potentialfid));
 }
+
+ModComments::addWidgetTo("Potentials");
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
