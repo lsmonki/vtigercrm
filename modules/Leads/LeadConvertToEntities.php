@@ -22,12 +22,12 @@ if(!empty($_REQUEST['entities']))
 {
 	$entities=vtlib_purify($_REQUEST['entities']);
 
-	$assigned_to = vtlib_purify($_REQUEST["assigntype"]);
+	$assigned_to = vtlib_purify($_REQUEST["c_assigntype"]);
 	if ($assigned_to == "U") {
-		$assigned_user_id = vtlib_purify($_REQUEST["assigned_user_id"]);
+		$assigned_user_id = vtlib_purify($_REQUEST["c_assigned_user_id"]);
 		$assignedTo = vtws_getWebserviceEntityId('Users', $assigned_user_id);
 	} else {
-		$assigned_user_id = vtlib_purify($_REQUEST["assigned_group_id"]);
+		$assigned_user_id = vtlib_purify($_REQUEST["c_assigned_group_id"]);
 		$assignedTo = vtws_getWebserviceEntityId('Groups', $assigned_user_id);
 	}
 

@@ -1001,12 +1001,6 @@ else{
 					}
 				}
 			}
-			//Inserting into LeadMapping table - Jaguar
-			if($fldmodule == 'Leads' && $_REQUEST['fieldid'] == ''){
-				$sql_def = "insert into vtiger_convertleadmapping (leadfid) values(?)";
-				$adb->pquery($sql_def, array($custfld_fieldid));
-			}
-					
 		}	
 	}
 }

@@ -90,12 +90,12 @@ function getCFListEntries($module) {
 	}
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = "themes/images/";
-	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,tabid FROM vtiger_convertleadmapping LEFT JOIN vtiger_field
-				ON  vtiger_field.fieldid=vtiger_convertleadmapping.leadfid
+	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,vtiger_convertleadmapping.editable,tabid FROM vtiger_convertleadmapping LEFT JOIN vtiger_field
+				ON  vtiger_field.fieldid=vtiger_convertleadmapping.leadfid 
 				WHERE tabid IN (" . generateQuestionMarks($tabid) . ")
 				AND vtiger_field.presence IN (0,2)
 				AND generatedtype IN (1,2)
-				AND vtiger_field.fieldname NOT IN('assigned_user_id','company','createdtime','modifiedtime','lead_no','modifiedby','campaignrelstatus')
+				AND vtiger_field.fieldname NOT IN('assigned_user_id','createdtime','modifiedtime','lead_no','modifiedby','campaignrelstatus')
 				ORDER BY vtiger_field.fieldlabel";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
@@ -110,6 +110,7 @@ function getCFListEntries($module) {
 			$cf_element['map']['type'] = $fld_type_name;
 			$cf_tab_id = $row["tabid"];
 			$cf_element['cfmid'] = $row["cfmid"];
+			$cf_element['editable']=$row["editable"];
 			if ($module == 'Leads') {
 				$mapping_details = getListLeadMapping($row["cfmid"]);
 				$cf_element['map'][] = $mapping_details['accountlabel'];

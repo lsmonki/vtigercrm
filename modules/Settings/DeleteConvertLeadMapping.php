@@ -12,7 +12,7 @@ global $adb,$log,$current_user;
 
 $cfmid=vtlib_purify($_REQUEST['cfmid']);
 
-$deleteSql='UPDATE vtiger_convertleadmapping SET accountfid=NULL,contactfid=NULL,potentialfid=NULL WHERE cfmid=?';
+$deleteSql="DELETE FROM vtiger_convertleadmapping WHERE cfmid=?";
 $result=$adb->pquery($deleteSql,array($cfmid));
 
 $listURL='index.php?action=CustomFieldList&module=Settings&parenttab=Settings';

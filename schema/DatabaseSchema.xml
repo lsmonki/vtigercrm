@@ -4753,7 +4753,9 @@
 		<field name="accountfid" type="I" size="19" />
 		<field name="contactfid" type="I" size="19" />
 		<field name="potentialfid" type="I" size="19" />
-
+		<field name="editable" type="I" size="19">
+			<default value="1" />
+		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 

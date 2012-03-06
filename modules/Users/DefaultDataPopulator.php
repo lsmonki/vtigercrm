@@ -2631,42 +2631,43 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 		global $adb;
 
 		$fieldMap = array(
-			array('industry','industry',null,null),
-			array('phone','phone','phone',null),
-			array('fax','fax','fax',null),
-			array('rating','rating',null,null),
-			array('email','email1','email',null),
-			array('website','website',null,null),
-			array('city','bill_city','mailingcity',null),
-			array('code','bill_code','mailingcode',null),
-			array('country','bill_country','mailingcountry',null),
-			array('state','bill_state','mailingstate',null),
-			array('lane','bill_street','mailingstreet',null),
-			array('pobox','bill_pobox','mailingpobox',null),
-			array('city','ship_city',null,null),
-			array('code','ship_code',null,null),
-			array('country','ship_country',null,null),
-			array('state','ship_state',null,null),
-			array('lane','ship_street',null,null),
-			array('pobox','ship_pobox',null,null),
-			array('description','description','description','description'),
-			array('salutationtype',null,'salutationtype',null),
-			array('firstname',null,'firstname',null),
-			array('lastname',null,'lastname',null),
-			array('mobile',null,'mobile',null),
-			array('designation',null,'title',null),
-			array('secondaryemail',null,'secondaryemail',null),
-			array('leadsource',null,'leadsource','leadsource'),
-			array('leadstatus',null,null,null),
-			array('noofemployees','employees',null,null),
-			array('annualrevenue','annual_revenue',null,null)
+			array('company','accountname',null,'potentialname',0),
+			array('industry','industry',null,null,1),
+			array('phone','phone','phone',null),1,
+			array('fax','fax','fax',null,1),
+			array('rating','rating',null,null,1),
+			array('email','email1','email',null,0),
+			array('website','website',null,null,1),
+			array('city','bill_city','mailingcity',null,1),
+			array('code','bill_code','mailingcode',null,1),
+			array('country','bill_country','mailingcountry',null,1),
+			array('state','bill_state','mailingstate',null,1),
+			array('lane','bill_street','mailingstreet',null,1),
+			array('pobox','bill_pobox','mailingpobox',null,1),
+			array('city','ship_city',null,null,1),
+			array('code','ship_code',null,null,1),
+			array('country','ship_country',null,null,1),
+			array('state','ship_state',null,null,1),
+			array('lane','ship_street',null,null,1),
+			array('pobox','ship_pobox',null,null,1),
+			array('description','description','description','description',1),
+			array('salutationtype',null,'salutationtype',null,1),
+			array('firstname',null,'firstname',null,0),
+			array('lastname',null,'lastname',null,0),
+			array('mobile',null,'mobile',null,1),
+			array('designation',null,'title',null,1),
+			array('secondaryemail',null,'secondaryemail',null,1),
+			array('leadsource',null,'leadsource','leadsource',1),
+			array('leadstatus',null,null,null,1),
+			array('noofemployees','employees',null,null,1),
+			array('annualrevenue','annual_revenue',null,null,1)
 		);
 
 		$leadTab=  getTabid('Leads');
 		$accountTab=  getTabid('Accounts');
 		$contactTab=  getTabid('Contacts');
 		$potentialTab=  getTabid('Potentials');
-		$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
+		$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) values(?,?,?,?,?)";
 
 		foreach ($fieldMap as $values) {
 			$leadfid=getFieldid($leadTab,$values[0]);

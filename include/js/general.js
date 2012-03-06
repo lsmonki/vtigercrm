@@ -10,6 +10,19 @@
 
 //Utility Functions
 
+function c_toggleAssignType(currType){
+		if (currType=="U")
+		{
+			document.getElementById("c_assign_user").style.display="block";
+			document.getElementById("c_assign_team").style.display="none";
+		}
+		else
+		{
+			document.getElementById("c_assign_user").style.display="none";
+			document.getElementById("c_assign_team").style.display="block";
+		}
+	}	 
+
 var gValidationCall='';
 
 if (document.all)

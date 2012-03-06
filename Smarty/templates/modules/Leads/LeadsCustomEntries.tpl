@@ -57,9 +57,11 @@
 							<td class="listTableRow small" valign="top" nowrap>{$value}&nbsp;</td>
 						{/foreach}
 							<td class="listTableRow small" valign="top" nowrap>
+									{if $entries.editable eq 1}
 									<form name="form{$entries.cfmid}" method="post">
 										<img border="0"  style="cursor: pointer;" src="{'delete.gif'|@vtiger_imageurl:$THEME}"  alt="{'LBL_DELETE_BUTTON_LABEL'|@getTranslatedString:$MODULE}" title="{'LBL_DELETE_BUTTON_LABEL'|@getTranslatedString:$MODULE}" onclick="javascript: deleteForm('form{$entries.cfmid}','index.php?action=DeleteConvertLeadMapping&module=Settings&parenttab=Settings&cfmid={$entries.cfmid}' );">
 									</form>
+									{/if}
 							</td>
 					</tr>
 					{/foreach}

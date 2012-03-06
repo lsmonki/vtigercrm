@@ -1,5 +1,5 @@
 <?php
-/* +********************************************************************************
+/*+********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
@@ -31,7 +31,10 @@ class ConvertLeadUI {
 		global$adb;
 		$this->leadid = $leadid;
 		$this->current_user = $current_user;
-		$sql = "SELECT firstname, lastname, company, smownerid,email,industry from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.leadid =?";
+		$sql = "SELECT * FROM vtiger_leaddetails,vtiger_leadscf,vtiger_crmentity
+			WHERE vtiger_leaddetails.leadid=vtiger_leadscf.leadid
+			AND vtiger_leaddetails.leadid=vtiger_crmentity.crmid
+			AND vtiger_leaddetails.leadid =?";
 		$result = $adb->pquery($sql, array($this->leadid));
 		$this->row = $adb->fetch_array($result);
 		if (getFieldVisibilityPermission('Leads', $current_user->id, 'company') == '1') {
@@ -166,32 +169,29 @@ class ConvertLeadUI {
 	}
 
 	function getIndustryList() {
-		if (!self::$industry) {
-			global$adb;
-			$sql_industry = "SELECT industry  FROM vtiger_industry where presence=1";
-			$result_industry = $adb->pquery($sql_industry, array());
-			$no_of_industry = $adb->num_rows($result_industry);
-			$industry = array();
-			for ($i = 0; $i < $no_of_industry; $i++) {
-				array_push($industry, $adb->query_result($result_industry, $i, "industry"));
-			}
-			self::$industry = $industry;
-		}
-		return self::$industry;
-	}
-
-	function getSalesStageList() {
 		global$adb;
 
 		require_once 'modules/PickList/PickListUtils.php';
 
 		global $adb;
-		$sales_stage_list = array();
-		if (is_admin($this->current_user)) {
-			$pick_list_values = getAllPickListValues('sales_stage');
-		} else {
-			$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid,$adb);
+		$industry_list = array();
+		$pick_list_values = getAssignedPicklistValues('industry', $this->current_user->roleid, $adb);
+		
+		foreach ($pick_list_values as $value) {
+			$industry_list[$value]["value"] = $value;
 		}
+		return $industry_list;
+	}
+
+	function getSalesStageList() {
+		global$adb;
+		
+		require_once 'modules/PickList/PickListUtils.php';
+
+		global $adb;
+		$sales_stage_list = array();
+		$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid, $adb);
+		
 		foreach ($pick_list_values as $value) {
 			$sales_stage_list[$value]["value"] = $value;
 		}
@@ -216,10 +216,13 @@ class ConvertLeadUI {
 		if ($type === 'user')
 			$owner = get_user_array(false, "Active", $this->row["smownerid"], $private);
 		else
-			$owner=get_group_array(false, "Active", $this->row["smownerid"], $private);
+			$owner = get_group_array(false, "Active", $this->row["smownerid"], $private);
 		$owner_list = array();
 		foreach ($owner as $id => $name) {
-			$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name);
+			if ($id == $this->row['smownerid'])
+				$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => true);
+			else
+				$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => false);
 		}
 		return $owner_list;
 	}
@@ -237,6 +240,46 @@ class ConvertLeadUI {
 			}
 		}
 		return $private;
+	}
+
+	function getMappedFieldValue($module, $fieldName, $editable) {
+		global $adb;
+		
+		$fieldid = getFieldid(getTabid($module), $fieldName);
+
+		$sql = "SELECT leadfid FROM vtiger_convertleadmapping
+			WHERE accountfid=? 
+			OR contactfid=? 
+			OR potentialfid=? 
+			AND editable=?";
+		$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
+		if(!$adb->num_rows($result)>0){
+			$fieldinfo = $this->getFieldInfo($module, $fieldName);
+			return $fieldinfo['default'];
+		}
+		$leadfid = $adb->query_result($result, 0, 'leadfid');
+
+		$sql = "SELECT fieldname FROM vtiger_field WHERE fieldid=? AND tabid=?";
+		$result = $adb->pquery($sql, array($leadfid, getTabid('Leads')));
+		$leadfname = $adb->query_result($result, 0, 'fieldname');
+
+		$fieldinfo = $this->getFieldInfo($module, $fieldName);
+		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {
+			$valuelist = null;
+			switch ($fieldName) {
+				case 'industry':$valuelist = $this->getIndustryList();
+					break;
+				case 'sales_stage':$valuelist = $this->getSalesStageList();
+					break;
+			}
+			foreach ($fieldinfo['type']['picklistValues'] as $key => $values) {
+				if ($values['value'] == $this->row[$leadfname]) {
+					return $this->row[$leadfname];
+				}
+			}
+			return $fieldinfo['default'];
+		}
+		return $this->row[$leadfname];
 	}
 
 }

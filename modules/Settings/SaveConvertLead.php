@@ -10,23 +10,17 @@
 
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
+global $adb;
 
-$smarty=new vtigerCRM_Smarty;
-$sql="SELECT * from vtiger_convertleadmapping";
-$result = $adb->pquery($sql, array());
-$noofrows = $adb->num_rows($result);
+$deletSQL = "DELETE FROM vtiger_convertleadmapping WHERE editable=1";
+$adb->pquery($deletSQL, array());
+$insertSQL = "INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) VALUES(?,?,?,?)";
+$map = vtlib_purify($_REQUEST['map']);
+foreach ($map as $mapping) {
+	if (!((empty($mapping['Accounts'])) && (empty($mapping['Contacts'])) && (empty($mapping['Potentials'])))) {
 
-for($i=0;$i<$noofrows;$i++)
-{
-	$cfmid=$adb->query_result($result,$i,"cfmid");
-
-	$accountfid=vtlib_purify($_REQUEST[$cfmid.'_Accounts']);
-	$contactfid=vtlib_purify($_REQUEST[$cfmid.'_Contacts']);
-	$potentialfid=vtlib_purify($_REQUEST[$cfmid.'_Potentials']);
-
-	$update_sql="UPDATE vtiger_convertleadmapping SET accountfid=?, contactfid=?, potentialfid=? WHERE cfmid=?";
-	$update_params = array($accountfid, $contactfid, $potentialfid, $cfmid);
-	$adb->pquery($update_sql, $update_params);
+		$adb->pquery($insertSQL, array($mapping['Leads'], $mapping['Accounts'], $mapping['Contacts'], $mapping['Potentials']));
+	}
 }
 
 header("Location: index.php?action=CustomFieldList&module=Settings&parenttab=Settings");

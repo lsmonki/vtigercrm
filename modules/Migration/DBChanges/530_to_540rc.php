@@ -347,6 +347,46 @@ foreach ($fieldMap as $values) {
 
 ModComments::addWidgetTo("Potentials");
 
+$delete_empty_mapping="DELETE FROM vtiger_convertleadmapping WHERE accountfid=0 AND contactfid=0 AND potentialfid=0";
+$adb->pquery($delete_empty_mapping,array());
+$alter_vtiger_convertleadmapping="ALTER TABLE vtiger_convertleadmapping ADD COLUMN editable int default 1";
+$adb->pquery($alter_vtiger_convertleadmapping,array());
+$leadTab=  getTabid('Leads');
+$accountTab=  getTabid('Accounts');
+$contactTab=  getTabid('Contacts');
+$potentialTab=  getTabid('Potentials');
+
+$check_mapping="SELECT 1 FROM vtiger_convertleadmapping WHERE leadfid=? AND accountfid=? AND contactfid=? AND  potentialfid=?";
+$insert_mapping="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) VALUES(?,?,?,?,?)";
+$update_mapping="UPDATE vtiger_convertleadmapping SET editable=0 WHERE leadfid=? AND accountfid=? AND contactfid=? AND potentialfid=?";
+$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),0,getFieldid($potentialTab,'potentialname')));
+if($adb->num_rows($check_res)>0){
+	$adb->pquery($update_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),0,getFieldid($potentialTab,'potentialname')));
+}else{
+	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'company'),getFieldid($accountTab,'accountname'),null,getFieldid($potentialTab,'potentialname'),0));
+}
+
+$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),0));
+if($adb->num_rows($check_res)>0){
+	$adb->pquery($update_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),0));
+}else{
+	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'email'),getFieldid($accountTab,'email1'),getFieldid($contactTab,'email'),null,0));
+}
+
+$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'firstname'),0,getFieldid($contactTab,'firstname'),0));
+if($adb->num_rows($check_res)>0){
+	$adb->pquery($update_mapping,array(getFieldid($leadTab,'firstname'),0,getFieldid($contactTab,'firstname'),0));
+}else{
+	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'firstname'),null,getFieldid($contactTab,'firstname'),null,0));
+}
+
+$check_res=$adb->pquery($check_mapping,array(getFieldid($leadTab,'lastname'),0,getFieldid($contactTab,'lastname'),0));
+if($adb->num_rows($check_res)>0){
+	$adb->pquery($update_mapping,array(getFieldid($leadTab,'lastname'),0,getFieldid($contactTab,'lastname'),0));
+}else{
+	$adb->pquery($insert_mapping,array(getFieldid($leadTab,'lastname'),null,getFieldid($contactTab,'lastname'),null,0));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");
 
 ?>

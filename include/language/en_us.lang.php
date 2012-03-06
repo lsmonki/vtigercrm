@@ -1310,6 +1310,10 @@ $app_strings = array (
 'LBL_DESELECT_ALL' => 'Deselect all',
 'LBL_RECORDS_IN' => 'records in',
 'LBL_FOLDER' => 'folder',
+
+//added for creating a custom lead map row in UI
+'LBL_ADD_MAPPING'=> 'Add Mapping',
+'LBL_FIELD_MAPPING' => 'Field Mapping'
 );
 
 $app_list_strings = array (

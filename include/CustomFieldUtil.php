@@ -43,7 +43,7 @@ function getCustomFieldTypeName($uitype)
 	{
 		$fldname = $mod_strings['Percent'];
 	}
-	elseif($uitype == 5)
+	elseif($uitype == 5 || $uitype == 23)
 	{
 		$fldname = $mod_strings['Date'];
 	}
