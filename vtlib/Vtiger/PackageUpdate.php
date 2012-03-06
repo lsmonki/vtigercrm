@@ -392,15 +392,21 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 
 	function update_CronTasks($modulenode) {
 		if(empty($modulenode->crons) || empty($modulenode->crons->cron)) return;
+		$cronTasks = Vtiger_Cron::listAllInstancesByModule($modulenode->name);
 		foreach ($modulenode->crons->cron as $importCronTask) {
-			$cronTasks = Vtiger_Cron::listAllInstancesByModule($modulenode->name);
 			foreach($cronTasks as $cronTask) {
-				if($cronTask->getName() == $importCronTask->name && $importCronTask->handler == $cronTask->getHandlerFile()) {                    
+				if($cronTask->getName() == $importCronTask->name && $importCronTask->handler == $cronTask->getHandlerFile()) {
 					Vtiger_Cron::deregister($importCronTask->name);
 				}
+			}
+			if(empty($importCronTask->status)){
+				$importCronTask->status=Vtiger_Cron::$STATUS_ENABLED;
+			}
+			if((empty($importCronTask->sequence))){
+				$importCronTask->sequence=Vtiger_Cron::nextSequence();
 			}
 			Vtiger_Cron::register("$importCronTask->name","$importCronTask->handler", "$importCronTask->frequency", "$modulenode->name","$importCronTask->status","$importCronTask->sequence","$cronTask->description");
 		}
 	}
-}			
+}
 ?>
