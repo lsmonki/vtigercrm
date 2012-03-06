@@ -17,6 +17,9 @@ class Assets extends CRMEntity {
 	var $table_index= 'assetsid';
 	var $column_fields = Array();
 
+	/** Indicator if this is a custom module or standard module */
+	var $IsCustomModule = true;
+
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
