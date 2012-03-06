@@ -1379,6 +1379,28 @@ class Users extends CRMEntity {
         $this->mark_deleted($id);
     }
 
+	function transformOwnerShipAndDelete($userId,$transformToUserId){
+		$adb = PearDatabase::getInstance();
+		
+		$em = new VTEventsManager($adb);
+
+        // Initialize Event trigger cache
+		$em->initTriggerCache();
+
+		$entityData  = VTEntityData::fromUserId($adb, $userId);
+		
+		//set transform user id
+		$entityData->set('transformtouserid',$transformToUserId);
+
+        $em->triggerEvent("vtiger.entity.beforedelete", $entityData);
+
+		vtws_transferOwnership($userId, $transformToUserId);
+
+		//delete from user vtiger_table;
+		$sql = "delete from vtiger_users where id=?";
+		$adb->pquery($sql, array($userId));
+	}
+
     /**
      * This function should be overridden in each module.  It marks an item as deleted.
      * @param <type> $id

@@ -16,6 +16,7 @@ require_once('include/database/Postgres8.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/GetUserGroups.php');
 include('config.php');
+require_once("include/events/include.inc");
 global $log;
 
 /** To retreive the mail server info resultset for the specified user
@@ -2584,6 +2585,18 @@ function deleteGroup($groupId,$transferId)
 	global $log;
 	$log->debug("Entering deleteGroup(".$groupId.") method ...");
 	global $adb;
+
+	$em = new VTEventsManager($adb);
+
+	// Initialize Event trigger cache
+	$em->initTriggerCache();
+
+	$entityData = array();
+	$entityData['groupid'] = $groupId;
+	$entityData['transferToId'] = $transferId;
+
+	$em->triggerEvent("vtiger.entity.beforegroupdelete", $entityData);
+
 
 	tranferGroupOwnership($groupId,$transferId);
 	deleteGroupRelatedSharingRules($groupId);

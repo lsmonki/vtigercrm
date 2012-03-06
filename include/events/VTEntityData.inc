@@ -43,6 +43,28 @@
 			return $obj;
 		}
 		
+		/**
+		 * Get an entity data object.
+		 * @param $adb Pear database instance.
+		 * @param $userId The id of the entity to load.
+		 * @return The new entity data object.
+		 */
+		static function fromUserId($adb,$userId){
+			$obj = new VTEntityData();
+			$obj->entityId = $userId;
+
+			$obj->moduleName = 'Users';
+
+			require_once('data/CRMEntity.php');
+			$focus = CRMEntity::getInstance($obj->moduleName);
+
+			$focus->retrieve_entity_info($userId, $obj->moduleName);
+			$focus->id = $userId;
+			$obj->isNew = false;
+			$obj->focus = $focus;
+			return $obj;
+		}
+		
 		
 		/**
 		 * Get an entity data object from a crmentity object
