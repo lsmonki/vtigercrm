@@ -2667,7 +2667,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 		$accountTab=  getTabid('Accounts');
 		$contactTab=  getTabid('Contacts');
 		$potentialTab=  getTabid('Potentials');
-		$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) values(?,?,?,?,?)";
+		$mapSql="INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid) values(?,?,?,?)";
 
 		foreach ($fieldMap as $values) {
 			$leadfid=getFieldid($leadTab,$values[0]);
