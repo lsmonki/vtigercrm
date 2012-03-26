@@ -74,13 +74,15 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $cntlist = $related_array['Contacts']['entries'];
 
 	$entityIds = array_keys($cntlist);
+	$cnt_namelist = array();
 	$displayValueArray = getEntityName('Contacts', $entityIds);
 	if (!empty($displayValueArray)) {
 		foreach ($displayValueArray as $key => $field_value) {
 			$cnt_namelist[$key] =  $field_value;
 		}
 	}
-    $smarty->assign("CONTACTSID",$cnt_idlist);
+	$cnt_idlist = array_keys($cnt_namelist);
+    $smarty->assign("CONTACTSID",  implode(';', $cnt_idlist));
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
     $query = 'SELECT vtiger_recurringevents.*, vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.due_date, vtiger_activity.time_end
 				FROM vtiger_recurringevents
@@ -119,15 +121,17 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 {
 	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
 		$contactId = vtlib_purify($_REQUEST['contact_id']);
-		$smarty->assign("CONTACTSID",$contactId);
-		$displayValueArray = getEntityName('Contacts', $contactId);
+		$entityIds = array($contactId);
+		$displayValueArray = getEntityName('Contacts', $entityIds);
 		if (!empty($displayValueArray)) {
 			foreach ($displayValueArray as $key => $field_value) {
-				$cont_name = $field_value;
+				$cnt_namelist[$key] =  $field_value;
 			}
 		}
-		$contact_name = "<option value=".$contactId.">".$cont_name."</option>";
-		$smarty->assign("CONTACTSNAME",$contact_name);
+		$cnt_idlist = array_keys($cnt_namelist);
+		$smarty->assign("CONTACTSID",  implode(';', $cnt_idlist));
+		$smarty->assign("CONTACTSNAME",$cnt_namelist);
+		
 		$account_id = vtlib_purify($_REQUEST['account_id']);
 		$account_name = getAccountName($account_id);
 	}
