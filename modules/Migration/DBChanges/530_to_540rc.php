@@ -41,6 +41,35 @@ $productsTabId = $tabIdsList['Products'];
 $servicesTabId = $tabIdsList['Services'];
 $documentsTabId = $tabIdsList['Documents'];
 
+$skipForModules = array('ModComments');
+
+$result = $adb->pquery("SELECT presence,quickcreate,masseditable,tabid,block FROM vtiger_field WHERE fieldname=?", array('createdtime'));
+$rows = $adb->num_rows($result);
+for($i=0; $i<$rows; $i++){
+	$tabId = $adb->query_result($result,$i,'tabid');
+	$blockId = $adb->query_result($result,$i,'block');
+	$presence = $adb->query_result($result,$i,'presence');
+	$quickcreate = $adb->query_result($result,$i,'quickcreate');
+	$massedit = $adb->query_result($result,$i,'massedit');
+	$moduleName = getTabModuleName($tabId);
+	if(in_array($moduleName, $skipForModules)) continue;
+
+	$moduleInstance = Vtiger_Module::getInstance($moduleName);
+	$blockInstance = Vtiger_Block::getInstance($blockId,$moduleInstance);
+
+	$field = new Vtiger_Field();
+	$field->name = 'modifiedby';
+	$field->label= 'Last Modified By';
+	$field->table = 'vtiger_crmentity';
+	$field->column = 'modifiedby';
+	$field->uitype = 52;
+	$field->displaytype = 3;
+	$field->presence = $presence;
+	$field->quickcreate = $quickcreate;
+	$field->masseditable = $massedit;
+	$blockInstance->addField($field);
+}
+
 $moduleInstance = Vtiger_Module::getInstance('Home');
 $moduleInstance->addLink(
 		'HEADERSCRIPT', 'Help Me', 'modules/Home/js/HelpMeNow.js'

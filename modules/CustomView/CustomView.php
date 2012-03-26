@@ -1307,12 +1307,12 @@ class CustomView extends CRMEntity{
 			"vtiger_pricebook.currency_id"=>"vtiger_currency_info.currency_name",
 			);
 
-		if($fieldname == "smownerid")
+		if($fieldname == "smownerid" || $fieldname == 'modifiedby')
                 {
 					$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-       	                $temp_value = $userNameSql.$this->getAdvComparator($comparator,$value,$datatype);
-	                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype);
+       	                $temp_value = '( trim('.$userNameSql.')'.$this->getAdvComparator($comparator,$value,$datatype);
+	                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype) .')';
 	                $value=$temp_value; // Hot fix: removed unbalanced closing bracket ")";
 		}elseif( $fieldname == "inventorymanager")
                 {
