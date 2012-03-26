@@ -397,9 +397,6 @@ class Import_Data_Controller {
 							$fieldValue) == 0) {
 						$fieldValue = '';
 					}
-					if (empty($fieldValue) && !empty($defaultFieldValues[$fieldName])) {
-						$fieldValue = $defaultFieldValues[$fieldName];
-					}
 					$fieldData[$fieldName] = $fieldValue;
 				}
 				if ($fieldInstance->getFieldDataType() == 'date' && !empty($fieldValue)) {
@@ -410,10 +407,10 @@ class Import_Data_Controller {
 					if (preg_match("/^[0-9]{2,4}[-][0-1]{1,2}?[0-9]{1,2}[-][0-3]{1,2}?[0-9]{1,2}$/", $fieldValue) == 0) {
 						$fieldValue = '';
 					}
-					if (empty($fieldValue) && !empty($defaultFieldValues[$fieldName])) {
-						$fieldValue = $defaultFieldValues[$fieldName];
-					}
 					$fieldData[$fieldName] = $fieldValue;
+				}
+				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
+					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
 				}
 			}
 		}

@@ -61,7 +61,7 @@ class Import_ListView_Controller {
 		$focus = CRMEntity::getInstance($moduleName);
 		$queryGenerator = new QueryGenerator($moduleName, $user);
 		$customView = new CustomView($moduleName);
-		$viewId = $customView->getViewId($moduleName);
+		$viewId = $customView->getViewIdByName('All', $moduleName);
 		$queryGenerator->initForCustomViewById($viewId);
 		$list_query = $queryGenerator->getQuery();
 
