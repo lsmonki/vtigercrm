@@ -141,14 +141,15 @@ class vtigerCRMHandler extends SyncHandler {
             foreach($referenceFieldDetails as $referenceFieldName=>$referenceModuleDetails){
                 $recordReferenceFieldNames = array();
                 foreach($records as $index=>$recordDetails){
+                    if(!empty($recordDetails[$referenceFieldName])) {
                     $recordReferenceFieldNames[$recordDetails['id']] = $recordDetails[$referenceFieldName];
+                }
                 }
                 $entityNameIds = wsapp_getRecordEntityNameIds(array_values($recordReferenceFieldNames), $referenceModuleDetails, $user);
                 foreach($records as $index=>$recordInfo){
                     if(!empty($entityNameIds[$recordInfo[$referenceFieldName]])){
                         $recordInfo[$referenceFieldName] = $entityNameIds[$recordInfo[$referenceFieldName]];
-                    }
-                    else{
+                    } else {
                         $recordInfo[$referenceFieldName] = "";
                     }
                     $records[$index] = $recordInfo;
@@ -197,7 +198,7 @@ class vtigerCRMHandler extends SyncHandler {
                 $record = $records[$i];
                 if(!empty($record[$referenceFieldName])){
                     $wsId = vtws_getIdComponents($record[$referenceFieldName]);
-                    $record[$referenceFieldName] = $referenceIdsName[$wsId[1]];
+                    $record[$referenceFieldName] = decode_html($referenceIdsName[$wsId[1]]);
                 }
                 $records[$i]= $record;
             }

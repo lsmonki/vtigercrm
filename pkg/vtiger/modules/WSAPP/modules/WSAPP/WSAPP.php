@@ -128,7 +128,7 @@ class WSAPP {
         $appName = "vtigerCRM";
         $type  ="user";
         $uid = uniqid();
-        $db->pquery("INSERT INTO vtiger_wsapp (name, appkey,type) VALUES(?,?,?)", array($name, $uid,$type));
+        $db->pquery("INSERT INTO vtiger_wsapp (name, appkey,type) VALUES(?,?,?)", array($appName, $uid,$type));
     }
 
 	function registerWsappWorkflowhandler(){
