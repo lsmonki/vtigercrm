@@ -135,11 +135,13 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	function setRelatedModules($moduleNames) {
 
 		// We need to create core table to capture the relation between the field and modules.
-		Vtiger_Utils::CreateTable(
-			'vtiger_fieldmodulerel',
-			'(fieldid INT NOT NULL, module VARCHAR(100) NOT NULL, relmodule VARCHAR(100) NOT NULL, status VARCHAR(10), sequence INT)',
-			true
-		);
+		if(!Vtiger_Utils::CheckTable('vtiger_fieldmodulerel')) {
+			Vtiger_Utils::CreateTable(
+				'vtiger_fieldmodulerel',
+				'(fieldid INT NOT NULL, module VARCHAR(100) NOT NULL, relmodule VARCHAR(100) NOT NULL, status VARCHAR(10), sequence INT)',
+				true
+			);
+		}
 		// END
 
 		global $adb;
