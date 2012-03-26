@@ -138,7 +138,7 @@ class ReportRun extends CRMEntity
 			$fld_lbl = getTranslatedString($fld_lbl_str,$module); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
 			if(($selectedfields[0] == "vtiger_usersRel1")  && ($selectedfields[1] == 'user_name') && ($selectedfields[2] == 'Quotes_Inventory_Manager')){
-				$columnslist[$fieldcolname] = $concatSql." as ".$module."_Inventory_Manager";
+				$columnslist[$fieldcolname] = "trim( $concatSql ) as ".$module."_Inventory_Manager";
 				continue;
 			}
 
@@ -189,7 +189,7 @@ class ReportRun extends CRMEntity
 					}
                     elseif(stristr($selectedfields[0],"vtiger_crmentity") && ($selectedfields[1] == 'modifiedby')) {
                         $concatSql = getSqlForNameInDisplayFormat(array('last_name'=>'vtiger_lastModifiedBy'.$module.'.last_name', 'first_name'=>'vtiger_lastModifiedBy'.$module.'.first_name'), 'Users');
-						$columnslist[$fieldcolname] = "$concatSql as $header_label";
+						$columnslist[$fieldcolname] = "trim($concatSql) as $header_label";
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
@@ -312,7 +312,7 @@ class ReportRun extends CRMEntity
 		if($moduleName == 'ModComments' && $fieldName == 'creator') {
 			$concatSql = getSqlForNameInDisplayFormat(array('first_name' => 'vtiger_usersModComments.first_name',
 															'last_name' => 'vtiger_usersModComments.last_name'), 'Users');
-			$queryColumn = "case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then $concatSql end as 'ModComments_Creator'";
+			$queryColumn = "trim(case when (vtiger_usersModComments.user_name not like '' and vtiger_crmentity.crmid!='') then $concatSql end) as 'ModComments_Creator'";
 
 		} elseif(($fieldInfo['uitype'] == '10' || isReferenceUIType($fieldInfo['uitype']))
 				&& $fieldInfo['uitype'] != '52' && $fieldInfo['uitype'] != '53') {
@@ -633,7 +633,7 @@ class ReportRun extends CRMEntity
 
 		                		if(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 									$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
-									$advcolsql[] = " ".$concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
+									$advcolsql[] = " trim($concatSql)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 								} elseif($selectedfields[1] == 'status') {//when you use comma seperated values.
 									if($selectedfields[2] == 'Calendar_Status')
 									$advcolsql[] = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
@@ -645,7 +645,7 @@ class ReportRun extends CRMEntity
 									else
 										$advcolsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 								} elseif($selectedfields[2] == 'Quotes_Inventory_Manager'){
-									$advcolsql[] = ($concatSql."".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
+									$advcolsql[] = ("trim($concatSql)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
 								} else {
 									$advcolsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 								}
@@ -658,7 +658,7 @@ class ReportRun extends CRMEntity
 							$fieldvalue = " (".$advcolumnsql.") ";
 						} elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name') {
 							$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
-							$fieldvalue = " case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
+							$fieldvalue = " trim(case when (".$selectedfields[0].".last_name NOT LIKE '') then ".$concatSql." else vtiger_groups".$module_from_tablename.".groupname end) ".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($comparator == 'bw' && count($valuearray) == 2) {
 							if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
 								$fieldvalue = "("."vtiger_crmentity.".$selectedfields[1]." between '".trim($valuearray[0])."' and '".trim($valuearray[1])."')";
@@ -668,7 +668,7 @@ class ReportRun extends CRMEntity
 						} elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule) {
 							$fieldvalue = "vtiger_crmentity.".$selectedfields[1]." ".$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($selectedfields[2] == 'Quotes_Inventory_Manager'){
-							$fieldvalue = ($concatSql."".$this->getAdvComparator($comparator,trim($value),$datatype));
+							$fieldvalue = ("trim($concatSql)" . $this->getAdvComparator($comparator,trim($value),$datatype));
 						} elseif($selectedfields[1]=='modifiedby') {
                             $module_from_tablename = str_replace("vtiger_crmentity","",$selectedfields[0]);
                             if($module_from_tablename != '') {
@@ -697,7 +697,7 @@ class ReportRun extends CRMEntity
 							 	$fieldSqls[] = $columnSql.$comparatorValue;
 							}
 							$fieldvalue = ' ('. implode(' OR ', $fieldSqls).') ';
-						} else {
+							} else {
 							$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 						}
 
