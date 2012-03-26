@@ -39,11 +39,11 @@
                     <td align="right">&nbsp;</td>
                 </tr>
 			  </table>
-	
+
 	<div id="notifycontents">
 	{include file='modules/CronTasks/CronContents.tpl'}
 	</div>
-	
+
 	<table border=0 cellspacing=0 cellpadding=5 width=100% >
 	<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
 	</table>
@@ -56,7 +56,7 @@
 	</td>
 	</tr>
 	</table>
-		
+
 	</div>
 
 </td>
@@ -65,64 +65,3 @@
 </tbody>
 </table>
 	<div id="editdiv" style="display:none;position:absolute;width:450px;"></div>
-{literal}
-<script>
-function fetchSaveCron(id)
-{
-	
-	var status = $("cron_status").value;
-        var timeValue= $("CronTime").value;
-        var time = $("cron_time").value;
-        var min_freq =$("min_freq").value
-        if((timeValue < min_freq && time == "min") && timeValue != '' ){
-            alert($("desc").value);
-        }
-        else{
-        $("editdiv").style.display="none";
-	$("status").style.display="inline";
-        new Ajax.Request(
-                'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                        method: 'post',
-                        postBody: 'action=CronTasksAjax&module=CronTasks&file=SaveCron&record='+id+'&status='+status+'&timevalue='+timeValue+'&time='+time,
-                        onComplete: function(response) {
-                                $("status").style.display="none";
-                $("notifycontents").innerHTML=response.responseText;
-                        }
-                }
-        );
-        }
-}
-
-function fetchEditCron(id)
-{
-	$("status").style.display="inline";
-	new Ajax.Request(
-                'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                        method: 'post',
-                        postBody: 'action=CronTasksAjax&module=CronTasks&file=EditCron&record='+id,
-                        onComplete: function(response) {
-                                $("status").style.display="none";
-				$("editdiv").innerHTML=response.responseText;
-                        }
-                }
-        );
-}
-function move_module(tabid,move){
-
-	//$('vtbusy_info').style.display = "block";
-		new Ajax.Request(
-		'index.php',
-		{queue: {position: 'end', scope: 'command'},
-			method: 'post',
-			postBody: 'module=CronTasks&action=CronTasksAjax&file=CronSequence&parenttab=Settings&record='+tabid+'&move='+move,
-			onComplete: function(response) {
-			$("notifycontents").innerHTML=response.responseText;
-			
-			}
-		}
-	);
-}
-</script>
-{/literal}

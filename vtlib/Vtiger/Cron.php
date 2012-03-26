@@ -278,9 +278,9 @@ class Vtiger_Cron {
 			$row = $adb->fetch_array($result);
 		}
         if($row == NULL) {
-            $row[0] = 1;
+            $row['max(sequence)'] = 1;
         }
-        return $row[0]+1;
+        return $row['max(sequence)']+1;
     }
 
     /**

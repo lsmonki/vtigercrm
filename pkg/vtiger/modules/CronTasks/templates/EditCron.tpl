@@ -10,15 +10,15 @@
  ********************************************************************************/
 -->*}
 <div id="EditInv" class="layerPopup">
-<input id="min_freq" type="hidden" value={$MIN_CRON_FREQUENCY}>
-<input id="desc" type="hidden" value="{$MOD.LBL_MINIMUM_FREQUENCY}" size="35" maxlength="40">
+<input id="min_freq" type="hidden" value="{$MIN_CRON_FREQUENCY}">
+<input id="desc" type="hidden" value="{'LBL_MINIMUM_FREQUENCY'|@getTranslatedString:$MODULE} {$MIN_CRON_FREQUENCY} {'LBL_MINS'|@getTranslatedString:$MODULE}" size="35" maxlength="40">
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class="layerPopupHeading" align="left">{$CRON_DETAILS.label}</td>
 	<td align="right" class="small"><img onClick="hide('editdiv');" style="cursor:pointer;" src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0"></td>
 </tr>
 </table>
-<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center>
 <tr>
 	<td class="small">
 	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>

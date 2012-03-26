@@ -12,14 +12,9 @@
 require_once('Smarty_setup.php');
 require_once('config.php');
 require_once('vtlib/Vtiger/Cron.php');
-require_once('modules/Ondemand/Ondemand.config.php');
 require_once('config.inc.php');
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-
-global $adb;
-global $theme,$default_charset;
+global $mod_strings, $app_strings, $current_language;
+global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -52,10 +47,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $smarty->assign("IMAGE_PATH",$image_path);
     $smarty->assign("APP", $app_strings);
     $smarty->assign("CMOD", $mod_strings);
-    if($VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY']!='')
-        $smarty->assign("MIN_CRON_FREQUENCY",$VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY']);
-    else
-        $smarty->assign("MIN_CRON_FREQUENCY",$MINIMUM_CRON_FREQUENCY);
+    $smarty->assign("MIN_CRON_FREQUENCY", getMinimumCronFrequency());
     $smarty->display("modules/CronTasks/EditCron.tpl");
 }
 else {

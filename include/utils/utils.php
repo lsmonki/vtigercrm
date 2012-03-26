@@ -5099,4 +5099,19 @@ function dateDiffAsString($d1, $d2) {
 	return $diffString;
 }
 
+function getMinimumCronFrequency() {
+	if(file_exists('modules/Ondemand/Ondemand.config.php')) {
+		require_once('modules/Ondemand/Ondemand.config.php');
+		global $VtigerOndemandConfig;
+		if($VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY'] != '')
+			return $VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY'];
+	}
+	global $MINIMUM_CRON_FREQUENCY;
+
+	if(!empty($MINIMUM_CRON_FREQUENCY)) {
+		return $MINIMUM_CRON_FREQUENCY;
+	}
+	return 15;
+}
+
 ?>
