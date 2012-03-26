@@ -93,7 +93,7 @@ class DateTimeField {
 	 * @return string
 	 */
 	public static function __convertToDBFormat($date, $format) {
-		
+
 		if ($format == '') {
 			$format = 'dd-mm-yyyy';
 		}
@@ -272,7 +272,7 @@ class DateTimeField {
 		if(empty(self::$databaseTimeZone)) {
 			$defaultTimeZone = date_default_timezone_get();
 			if(empty($defaultTimeZone)) {
-				$defaultTimeZone = 'GMT';
+				$defaultTimeZone = 'UTC';
 			}
 			self::$databaseTimeZone = $defaultTimeZone;
 		}

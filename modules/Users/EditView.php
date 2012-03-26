@@ -57,6 +57,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->column_fields['user_password']='';
 	$focus->column_fields['confirm_password']='';
 }
+if(empty($focus->column_fields['time_zone'])) {
+	$focus->column_fields['time_zone'] = DateTimeField::getDBTimeZone();
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";

@@ -4740,6 +4740,10 @@ function getValidDBInsertDateValue($value) {
 		}
 	}
 	list($y,$m,$d) = explode('-',$value);
+	if(strlen($y) == 1) $y = '0'.$y;
+	if(strlen($m) == 1) $m = '0'.$m;
+	if(strlen($d) == 1) $d = '0'.$d;
+	$value = implode('-', array($y,$m,$d));
 
 	if(strlen($y)<4){
 		$insert_date = DateTimeField::convertToDBFormat($value);
