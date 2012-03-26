@@ -226,9 +226,9 @@ class ConvertLeadUI {
 		$fieldid = getFieldid(getTabid($module), $fieldName);
 
 		$sql = "SELECT leadfid FROM vtiger_convertleadmapping
-			WHERE accountfid=?
+			WHERE (accountfid=?
 			OR contactfid=?
-			OR potentialfid=?
+			OR potentialfid=?)
 			AND editable=?";
 		$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
 		$leadfid = $adb->query_result($result, 0, 'leadfid');
