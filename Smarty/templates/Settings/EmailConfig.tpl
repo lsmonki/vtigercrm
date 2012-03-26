@@ -59,28 +59,16 @@
 											<input class="crmButton small edit" title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='EmailConfig';this.form.emailconfig_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
 										{else}
 											<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save';" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
-											<input title="{$MOD.LBL_DEFAULT_SETTINGS_BUTTON_TITLE}" accessKey="{$MOD.LBL_DEFAULT_SETTINGS_BUTTON_TITLE}" class="crmButton small edit" onclick="if(!setDefaultMailServer())return false; this.form.action.value='Save'; this.form.mode.value='Default';"  type="submit"  value = "{$MOD.LBL_DEFAULT_SETTINGS_BUTTON_TITLE}">
 											<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.location.href = 'index.php?module=Settings&action=EmailConfig&parenttab=Settings';" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 										{/if}
 										</div>
 									</td>
 								</tr>
+								{if $ERROR_MSG neq ''}
 								<tr>
-									<td class="small cellLabel" style="white-space: normal;">
-										<div id="note">
-											{$MOD.LBL_DEFAULT}
-											<ul style="color: blue;">
-												<li>{$MOD.LBL_OPTIONS1}</li>
-												<li>{$MOD.LBL_OPTIONS2}</li>
-											</ul>
-										</div>
-										</td>
-									</tr>
-									{if $ERROR_MSG neq ''}
-									<tr>
-									{$ERROR_MSG}
-									</tr>
-									{/if}
+								{$ERROR_MSG}
+								</tr>
+								{/if}
 								</table>
 
 								{if $EMAILCONFIG_MODE neq 'edit'}

@@ -43,7 +43,7 @@ function vt530_addEmailFieldTypeInWs(){
 	$checkQuery = "SELECT * FROM vtiger_ws_fieldtype WHERE fieldtype=?";
 	$params = array ("email");
 	$checkResult = $db->pquery($checkQuery,$params);
-	if($db->num_rows($checkResult) <= 0) {		
+	if($db->num_rows($checkResult) <= 0) {
 		$fieldTypeId = $db->getUniqueID('vtiger_ws_fieldtype');
 		$sql = "INSERT INTO vtiger_ws_fieldtype(uitype,fieldtype) VALUES ('13','email')";
 		ExecuteQuery($sql);
@@ -132,7 +132,7 @@ for($i=0;$i<$usersCount;$i++){
 	$firstname = $adb->query_result($usersInfo,$i,'first_name');
 	$lastname = $adb->query_result($usersInfo,$i,'last_name');
 	$usernames[$i] = $username;
-	$fullname = getDisplayName(array('f'=>$firstname,'l'=>$lastname));
+	$fullname = $lastname.' '.$firstname;
 	$fullnames[$i] = $fullname;
 }
 

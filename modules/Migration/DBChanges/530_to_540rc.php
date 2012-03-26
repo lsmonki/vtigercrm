@@ -14,7 +14,6 @@ require_once 'modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc';
 require_once 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
 require_once 'include/events/include.inc';
 include_once 'vtlib/Vtiger/Cron.php';
-require_once 'modules/ModComments/ModComments.php';
 
 //5.2.1 to 5.3.0RC database changes
 
@@ -47,8 +46,8 @@ $moduleInstance->addLink(
 		'HEADERSCRIPT', 'Help Me', 'modules/Home/js/HelpMeNow.js'
 );
 
-$adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ? ", array(2, 'LBL_FILE_INFORMATION', $documentsTabId));
-$adb->pquery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ?", array(3, 'LBL_DESCRIPTION', $documentsTabId));
+ExecutePQuery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ? ", array(2, 'LBL_FILE_INFORMATION', $documentsTabId));
+ExecutePQuery("UPDATE vtiger_blocks SET sequence = ? WHERE blocklabel = ? AND tabid = ?", array(3, 'LBL_DESCRIPTION', $documentsTabId));
 
 // Adding 'from_portal' field to Trouble tickets module, to track the tickets created from customer portal
 $moduleInstance = Vtiger_Module::getInstance('HelpDesk');
@@ -204,7 +203,7 @@ $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (
 		. 'Description         : $description';
 $taskManager->saveTask($task);
 
-$adb->pquery("UPDATE com_vtiger_workflows SET defaultworkflow=1 WHERE
+ExecutePQuery("UPDATE com_vtiger_workflows SET defaultworkflow=1 WHERE
 			module_name='Invoice' and summary='UpdateInventoryProducts On Every Save'", array());
 
 $em = new VTEventsManager($adb);
@@ -217,65 +216,66 @@ Vtiger_Cron::register('SendReminder', 'cron/SendReminder.service', 900, 'Calenda
 Vtiger_Cron::register('ScheduleReports', 'cron/modules/Reports/ScheduleReports.service', 900, 'Reports', '', '', 'Recommended frequency for ScheduleReports is 15 mins');
 Vtiger_Cron::register('MailScanner', 'cron/MailScanner.service', 900, 'Settings', '', '', 'Recommended frequency for MailScanner is 15 mins');
 
-$adb->pquery("DELETE FROM vtiger_settings_field WHERE name='LBL_ASSIGN_MODULE_OWNERS'", array());
+ExecutePQuery("DELETE FROM vtiger_settings_field WHERE name='LBL_ASSIGN_MODULE_OWNERS'", array());
 
-$adb->query("alter table vtiger_tab add parent varchar(30)");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Accounts'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Calendar'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Contacts'");
-$adb->query("update vtiger_tab set parent = 'Analytics' where name = 'Dashboard'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Leads'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Potentials'");
-$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Vendors'");
-$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Products'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Documents'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Emails'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'HelpDesk'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'Faq'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Faq'");
-$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'PriceBooks'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PriceBooks'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'SalesOrder'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'SalesOrder'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Quotes'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Quotes'");
-$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'PurchaseOrder'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PurchaseOrder'");
-$adb->query("update vtiger_tab set parent = 'Sales' where name = 'Invoice'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Invoice'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'RSS'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'RSS'");
-$adb->query("update vtiger_tab set parent = 'Analytics' where name = 'Reports'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Reports'");
-$adb->query("update vtiger_tab set parent = 'Marketing' where name = 'Campaigns'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Campaigns'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'Portal'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Portal'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'ServiceContracts'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ServiceContracts'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'PBX Manager'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'PBX Manager'");
-$adb->query("update vtiger_tab set parent = 'Inventory' where name = 'Services'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Services'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'RecycleBin'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'RecycleBin'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'Assets'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Assets'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'ModComments'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ModComments'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'ProjectMilestone'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ProjectMilestone'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'ProjectTask'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'ProjectTask'");
-$adb->query("update vtiger_tab set parent = 'Support' where name = 'Project'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'Project'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'SMSNotifier'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'SMSNotifier'");
-$adb->query("update vtiger_tab set parent = 'Tools' where name = 'MailManager'");
-$adb->query("update vtiger_tab set tabsequence = -1 where name = 'MailManager'");
+Vtiger_Utils::AddColumn('vtiger_tab', 'parent','VARCHAR(30)');
+
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Accounts'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'Calendar'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Contacts'");
+ExecuteQuery("update vtiger_tab set parent = 'Analytics' where name = 'Dashboard'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Leads'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Potentials'");
+ExecuteQuery("update vtiger_tab set parent = 'Inventory' where name = 'Vendors'");
+ExecuteQuery("update vtiger_tab set parent = 'Inventory' where name = 'Products'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'Documents'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'Emails'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'HelpDesk'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'Faq'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Faq'");
+ExecuteQuery("update vtiger_tab set parent = 'Inventory' where name = 'PriceBooks'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'PriceBooks'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'SalesOrder'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'SalesOrder'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Quotes'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Quotes'");
+ExecuteQuery("update vtiger_tab set parent = 'Inventory' where name = 'PurchaseOrder'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'PurchaseOrder'");
+ExecuteQuery("update vtiger_tab set parent = 'Sales' where name = 'Invoice'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Invoice'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'RSS'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'RSS'");
+ExecuteQuery("update vtiger_tab set parent = 'Analytics' where name = 'Reports'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Reports'");
+ExecuteQuery("update vtiger_tab set parent = 'Marketing' where name = 'Campaigns'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Campaigns'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'Portal'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Portal'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'ServiceContracts'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'ServiceContracts'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'PBX Manager'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'PBX Manager'");
+ExecuteQuery("update vtiger_tab set parent = 'Inventory' where name = 'Services'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Services'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'RecycleBin'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'RecycleBin'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'Assets'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Assets'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'ModComments'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'ModComments'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'ProjectMilestone'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'ProjectMilestone'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'ProjectTask'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'ProjectTask'");
+ExecuteQuery("update vtiger_tab set parent = 'Support' where name = 'Project'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'Project'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'SMSNotifier'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'SMSNotifier'");
+ExecuteQuery("update vtiger_tab set parent = 'Tools' where name = 'MailManager'");
+ExecuteQuery("update vtiger_tab set tabsequence = -1 where name = 'MailManager'");
 
 $fieldId = $adb->getUniqueId("vtiger_settings_field");
-$adb->query("insert into vtiger_settings_field (fieldid,blockid,name,iconpath,description,linkto,sequence,active)
+ExecuteQuery("insert into vtiger_settings_field (fieldid,blockid,name,iconpath,description,linkto,sequence,active)
 					values ($fieldId," . getSettingsBlockId('LBL_STUDIO') . ",'LBL_MENU_EDITOR','menueditor.png','LBL_MENU_DESC',
 					'index.php?module=Settings&action=MenuEditor&parenttab=Settings',4,0)");
 
@@ -300,10 +300,10 @@ for ($i = 0; $i < $adb->num_rows($result); $i++) {
 	$parent = $adb->query_result($result, $i, 'parenttab_label');
 	if ((!(in_array($modulelabel, $present_module))) && (!(in_array($modulelabel, $skipModules)))) {
 		if ($modulelabel == "MailManager") {
-			$adb->pquery("update vtiger_tab set parent = ? where tablabel = ?", array("Tools", $modulelabel));
-			$adb->pquery("update vtiger_tab set tabsequence = -1 where tablabel = ?", array($modulelabel));
+			ExecutePQuery("update vtiger_tab set parent = ? where tablabel = ?", array("Tools", $modulelabel));
+			ExecutePQuery("update vtiger_tab set tabsequence = -1 where tablabel = ?", array($modulelabel));
 		} else {
-			$adb->pquery("update vtiger_tab set parent = ? where tablabel = ?", array($parent, $modulelabel));
+			ExecutePQuery("update vtiger_tab set parent = ? where tablabel = ?", array($parent, $modulelabel));
 		}
 	}
 }
@@ -311,7 +311,7 @@ for ($i = 0; $i < $adb->num_rows($result); $i++) {
 $query = "INSERT INTO vtiger_customerportal_prefs (
 			SELECT tabid, 'defaultassignee', prefvalue FROM vtiger_customerportal_prefs WHERE prefkey='userid'
 		)";
-$adb->pquery($query, array());
+ExecutePQuery($query, array());
 
 $fieldMap = array(
 	array('industry', 'industry', null, null),
@@ -352,62 +352,60 @@ foreach ($fieldMap as $values) {
 	$accountfid = getFieldid($accountTab, $values[1]);
 	$contactfid = getFieldid($contactTab, $values[2]);
 	$potentialfid = getFieldid($potentialTab, $values[3]);
-	$adb->pquery($mapSql, array($leadfid, $accountfid, $contactfid, $potentialfid));
+	ExecutePQuery($mapSql, array($leadfid, $accountfid, $contactfid, $potentialfid));
 }
 
-ModComments::addWidgetTo("Potentials");
-
 $delete_empty_mapping = "DELETE FROM vtiger_convertleadmapping WHERE accountfid=0 AND contactfid=0 AND potentialfid=0";
-$adb->pquery($delete_empty_mapping, array());
+ExecutePQuery($delete_empty_mapping, array());
 $alter_vtiger_convertleadmapping = "ALTER TABLE vtiger_convertleadmapping ADD COLUMN editable int default 1";
-$adb->pquery($alter_vtiger_convertleadmapping, array());
+ExecutePQuery($alter_vtiger_convertleadmapping, array());
 
 $check_mapping = "SELECT 1 FROM vtiger_convertleadmapping WHERE leadfid=? AND accountfid=? AND contactfid=? AND  potentialfid=?";
 $insert_mapping = "INSERT INTO vtiger_convertleadmapping(leadfid,accountfid,contactfid,potentialfid,editable) VALUES(?,?,?,?,?)";
 $update_mapping = "UPDATE vtiger_convertleadmapping SET editable=0 WHERE leadfid=? AND accountfid=? AND contactfid=? AND potentialfid=?";
 $check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), 0, getFieldid($potentialTab, 'potentialname')));
 if ($adb->num_rows($check_res) > 0) {
-	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), 0, getFieldid($potentialTab, 'potentialname')));
+	ExecutePQuery($update_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), 0, getFieldid($potentialTab, 'potentialname')));
 } else {
-	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), null, getFieldid($potentialTab, 'potentialname'), 0));
+	ExecutePQuery($insert_mapping, array(getFieldid($leadTab, 'company'), getFieldid($accountTab, 'accountname'), null, getFieldid($potentialTab, 'potentialname'), 0));
 }
 
 $check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), 0));
 if ($adb->num_rows($check_res) > 0) {
-	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), 0));
+	ExecutePQuery($update_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), 0));
 } else {
-	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), null, 0));
+	ExecutePQuery($insert_mapping, array(getFieldid($leadTab, 'email'), getFieldid($accountTab, 'email1'), getFieldid($contactTab, 'email'), null, 0));
 }
 
 $check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'firstname'), 0, getFieldid($contactTab, 'firstname'), 0));
 if ($adb->num_rows($check_res) > 0) {
-	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'firstname'), 0, getFieldid($contactTab, 'firstname'), 0));
+	ExecutePQuery($update_mapping, array(getFieldid($leadTab, 'firstname'), 0, getFieldid($contactTab, 'firstname'), 0));
 } else {
-	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'firstname'), null, getFieldid($contactTab, 'firstname'), null, 0));
+	ExecutePQuery($insert_mapping, array(getFieldid($leadTab, 'firstname'), null, getFieldid($contactTab, 'firstname'), null, 0));
 }
 
 $check_res = $adb->pquery($check_mapping, array(getFieldid($leadTab, 'lastname'), 0, getFieldid($contactTab, 'lastname'), 0));
 if ($adb->num_rows($check_res) > 0) {
-	$adb->pquery($update_mapping, array(getFieldid($leadTab, 'lastname'), 0, getFieldid($contactTab, 'lastname'), 0));
+	ExecutePQuery($update_mapping, array(getFieldid($leadTab, 'lastname'), 0, getFieldid($contactTab, 'lastname'), 0));
 } else {
-	$adb->pquery($insert_mapping, array(getFieldid($leadTab, 'lastname'), null, getFieldid($contactTab, 'lastname'), null, 0));
+	ExecutePQuery($insert_mapping, array(getFieldid($leadTab, 'lastname'), null, getFieldid($contactTab, 'lastname'), null, 0));
 }
 
 $productInstance = Vtiger_Module::getInstance('Products');
 $serviceInstance = Vtiger_Module::getInstance('Services');
 
 /* Replace 'Handler' field with 'Assigned to' field for Products and Services - starts */
-$adb->query("UPDATE vtiger_crmentity, vtiger_products SET vtiger_crmentity.smownerid = vtiger_products.handler WHERE vtiger_crmentity.crmid = vtiger_products.productid");
-$adb->query("ALTER TABLE vtiger_products DROP COLUMN handler");
-$adb->pquery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 5
+ExecuteQuery("UPDATE vtiger_crmentity, vtiger_products SET vtiger_crmentity.smownerid = vtiger_products.handler WHERE vtiger_crmentity.crmid = vtiger_products.productid");
+ExecuteQuery("ALTER TABLE vtiger_products DROP COLUMN handler");
+ExecutePQuery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 5
 				WHERE columnname = 'handler' AND tablename = 'vtiger_products' AND tabid = ?", array($productsTabId));
-$adb->query("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Products_Handler:I' WHERE columnname = 'vtiger_products:handler:assigned_user_id:Products_Handler'");
+ExecuteQuery("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Products_Handler:I' WHERE columnname = 'vtiger_products:handler:assigned_user_id:Products_Handler'");
 
-$adb->query("UPDATE vtiger_crmentity, vtiger_service SET vtiger_crmentity.smownerid = vtiger_service.handler WHERE vtiger_crmentity.crmid = vtiger_service.serviceid");
-$adb->query("ALTER TABLE vtiger_service DROP COLUMN handler");
-$adb->pquery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 4
+ExecuteQuery("UPDATE vtiger_crmentity, vtiger_service SET vtiger_crmentity.smownerid = vtiger_service.handler WHERE vtiger_crmentity.crmid = vtiger_service.serviceid");
+ExecuteQuery("ALTER TABLE vtiger_service DROP COLUMN handler");
+ExecutePQuery("UPDATE vtiger_field SET columnname = 'smownerid', tablename = 'vtiger_crmentity', uitype = '53', typeofdata = 'V~M', info_type = 'BAS', quickcreate = 0, quickcreatesequence = 4
 				WHERE columnname = 'handler' AND tablename = 'vtiger_service' AND tabid = ?", array($servicesTabId));
-$adb->query("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Services_Owner:I' WHERE columnname = 'vtiger_service:handler:assigned_user_id:Services_Owner:I'");
+ExecuteQuery("UPDATE vtiger_cvcolumnlist SET columnname = 'vtiger_crmentity:smownerid:assigned_user_id:Services_Owner:I' WHERE columnname = 'vtiger_service:handler:assigned_user_id:Services_Owner:I'");
 
 // Allow Sharing access and role-based security for Products and Services
 Vtiger_Access::deleteSharing($productInstance);
@@ -423,9 +421,9 @@ Vtiger_Access::setDefaultSharing($serviceInstance);
 Vtiger_Module::syncfile();
 /* Replace 'Handler' field with 'Assigned to' field for Products and Services - ends */
 
-$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($contactTab));
-$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($leadTab));
-$adb->pquery("UPDATE vtiger_entityname SET fieldname = 'first_name,last_name' WHERE tabid= ? ", array($usersTab));
+ExecutePQuery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($contactTab));
+ExecutePQuery("UPDATE vtiger_entityname SET fieldname = 'firstname,lastname' WHERE tabid= ? ", array($leadTab));
+ExecutePQuery("UPDATE vtiger_entityname SET fieldname = 'first_name,last_name' WHERE tabid= ? ", array($usersTab));
 
 require_once 'include/utils/utils.php';
 
@@ -463,7 +461,7 @@ for ($i = 0; $i < $usersCount; $i++) {
 				$fullname = $fullnames[$i];
 			}
 			$updatedCVIds[$k] = $id;
-			$adb->query("UPDATE vtiger_cvadvfilter SET value='$fullname' WHERE cvid=$id AND columnname LIKE '%:assigned_user_id%'");
+			ExecuteQuery("UPDATE vtiger_cvadvfilter SET value='$fullname' WHERE cvid=$id AND columnname LIKE '%:assigned_user_id%'");
 		}
 	}
 	$reportQuery = "SELECT * FROM vtiger_relcriteria WHERE columnname LIKE 'vtiger_users%:user_name%' AND value LIKE '%$usernames[$i]%'";
@@ -493,7 +491,7 @@ for ($i = 0; $i < $usersCount; $i++) {
 			}
 
 			$updatedReportIds[$j] = $id;
-			$adb->query("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
+			ExecuteQuery("UPDATE vtiger_relcriteria SET value='$fullname' WHERE queryid=$id AND columnname LIKE 'vtiger_users%:user_name%'");
 		}
 	}
 }
@@ -544,24 +542,24 @@ $replaceReportColumnsList = array(
 );
 
 foreach ($replaceReportColumnsList as $oldName => $newName) {
-	$adb->pquery('UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?', array($newName, $oldName));
-	$adb->pquery('UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?', array($newName, $oldName));
-	$adb->pquery('UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?', array($newName, $oldName));
+	ExecutePQuery('UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?', array($newName, $oldName));
+	ExecutePQuery('UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?', array($newName, $oldName));
+	ExecutePQuery('UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?', array($newName, $oldName));
 }
 
 // Report Charts - tables creation
-$adb->pquery("CREATE TABLE if not exists vtiger_homereportchart (stuffid int(19) PRIMARY KEY, reportid int(19), reportcharttype varchar(100))", array());
-$adb->pquery("CREATE TABLE vtiger_reportgroupbycolumn(reportid int(19),sortid int(19),sortcolname varchar(250),dategroupbycriteria varchar(250))", array());
-$adb->pquery("ALTER TABLE vtiger_reportgroupbycolumn add constraint fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE", array());
+ExecutePQuery("CREATE TABLE if not exists vtiger_homereportchart (stuffid int(19) PRIMARY KEY, reportid int(19), reportcharttype varchar(100))", array());
+ExecutePQuery("CREATE TABLE vtiger_reportgroupbycolumn(reportid int(19),sortid int(19),sortcolname varchar(250),dategroupbycriteria varchar(250))", array());
+ExecutePQuery("ALTER TABLE vtiger_reportgroupbycolumn add constraint fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE", array());
 
-$adb->pquery("DELETE FROM vtiger_time_zone WHERE time_zone = 'Kwajalein'", array());
-$adb->pquery("UPDATE vtiger_users SET time_zone='UTC' WHERE time_zone='Kwajalein'", array());
+ExecutePQuery("DELETE FROM vtiger_time_zone WHERE time_zone = 'Kwajalein'", array());
+ExecutePQuery("UPDATE vtiger_users SET time_zone='UTC' WHERE time_zone='Kwajalein'", array());
 
 $serviceContractsInstance = Vtiger_Module::getInstance('ServiceContracts');
 $helpDeskInstance = Vtiger_Module::getInstance("HelpDesk");
 $helpDeskInstance->setRelatedList($serviceContractsInstance,"Service Contracts",Array('ADD','SELECT'));
 
-$adb->pquery("UPDATE vtiger_field SET uitype=11 WHERE fieldname IN ('phone_work', 'phone_mobile', 'phone_fax', 'phone_home', 'phone_other')
+ExecutePQuery("UPDATE vtiger_field SET uitype=11 WHERE fieldname IN ('phone_work', 'phone_mobile', 'phone_fax', 'phone_home', 'phone_other')
 							AND tabid IN (SELECT tabid FROM vtiger_tab WHERE name='Users')", array());
 
 $migrationlog->debug("\n\nDB Changes from 5.3.0 to 5.4.0RC -------- Ends \n\n");

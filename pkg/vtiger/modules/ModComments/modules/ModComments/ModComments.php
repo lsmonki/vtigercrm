@@ -26,6 +26,9 @@ class ModComments extends ModCommentsCore {
 			global $adb;
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($modulename));
+
+		} elseif ($event_type == 'module.postupdate') {
+			self::addWidgetTo(array('Potentials'));
 		}
 	}
 

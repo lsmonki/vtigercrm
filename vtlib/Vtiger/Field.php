@@ -65,10 +65,11 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		);
 
 		// Fix Table ID column names
-		if(in_array($this->name.'_id', $adb->getColumnNames($picklist_table))) {
-			$picklist_idcol = $this->name.'_id';
-		} elseif(array_key_exists($this->name, $specialNameSpacedPicklists)) {
-			$picklist_idcol = $specialNameSpacedPicklists[$this->name];
+		$fieldName = (string)$this->name;
+		if(in_array($fieldName.'_id', $adb->getColumnNames($picklist_table))) {
+			$picklist_idcol = $fieldName.'_id';
+		} elseif(array_key_exists($fieldName, $specialNameSpacedPicklists)) {
+			$picklist_idcol = $specialNameSpacedPicklists[$fieldName];
 		}
 		// END
 
