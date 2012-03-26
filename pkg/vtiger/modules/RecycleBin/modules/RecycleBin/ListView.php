@@ -142,20 +142,22 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign('MAX_RECORDS', $list_max_entries_per_page);
 
 //to get the field name that mentions the module
-$query = "select fieldname from vtiger_entityname where modulename =?";
-$module_fielaname = $adb->query_result($adb->pquery($query, array($select_module)),0,'fieldname');
+$query = "SELECT fieldname,tablename FROM vtiger_entityname WHERE modulename =?";
+$queryResult = $adb->pquery($query, array($select_module));
+$moduleColumnName = $adb->query_result($queryResult,0,'fieldname');
+$moduleTableName = $adb->query_result($queryResult,0,'tablename');
 
-if(strpos($module_fielaname,','))
+if(strpos($moduleColumnName,','))
 {
-	$field_array = explode(',',$module_fielaname);
-	$index_field = $field_array[0];
-}
-else
-{
-	$index_field = $module_fielaname;
+	$field_array = explode(',',$moduleColumnName);
+	$moduleColumnName = $field_array[0];
 }
 
-$alphabetical = AlphabeticalSearch($currentModule,'index',$index_field,'true','basic',"","","","",$viewid);
+$query = "SELECT fieldname FROM vtiger_field WHERE tablename=? and columnname=?";
+$moduleFieldName = $adb->query_result($adb->pquery($query, array($moduleTableName,$moduleColumnName)),0,'fieldname');
+$indexField = $moduleFieldName;
+
+$alphabetical = AlphabeticalSearch($currentModule,'index',$indexField,'true','basic',"","","","",$viewid);
 
 $category = getParentTab();;
 

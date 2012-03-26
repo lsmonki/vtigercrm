@@ -104,7 +104,8 @@ function massRestore()
 
 	if(confirm_status){
 		var selectmodule = $('selected_module').value;
-		if(confirm(mod_alert_arr.MSG_RESTORE_CONFIRMATION + " " + count + " " + selectmodule + "?"))
+		var selectmoduletranslated =  $('selected_module_translated').value;
+		if(confirm(mod_alert_arr.MSG_RESTORE_CONFIRMATION + " " + count + " " + selectmoduletranslated + "?"))
 		{
 			$("status").style.display="inline";
 			new Ajax.Request(
