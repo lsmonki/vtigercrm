@@ -256,8 +256,7 @@ function loadMappingForSelectedValues() {
 	classElements.hide();
 
 	sourceElements.each(function(){
-		var selectedElementId = ((jQuery(this).val()).replace(/\s/i,'.')).replace(/(\W)/gi,"\\$1");
-		
+		var selectedElementId = (((jQuery(this).val()).replace(/(\W)/gi,"\\$1")).replace(/\\\s/gi,'.'));
 		var selectedElementCells = jQuery("."+selectedElementId);
 		selectedElementCells.show();
 	});
