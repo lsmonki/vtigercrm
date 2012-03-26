@@ -38,7 +38,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (9,'Calendar',0,3,'Calendar',0,0,1,'Tools')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (10,'Emails',0,10,'Emails',0,1,1,'Tools')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (13,'HelpDesk',0,11,'HelpDesk',0,0,1,'Support')");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (14,'Products',0,8,'Products',0,1,1,'Inventory')");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (14,'Products',0,8,'Products',0,0,1,'Inventory')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0,'Analytics')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (15,'Faq',0,-1,'Faq',0,1,1,'Support')");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,parent) VALUES (16,'Events',2,-1,'Events',0,0,1,null)");
@@ -1037,6 +1037,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_def_org_share values (" . $this->db->getUniqueID('vtiger_def_org_share') . ",23,2,0)");
 		$this->db->query("insert into vtiger_def_org_share values (" . $this->db->getUniqueID('vtiger_def_org_share') . ",26,2,0)");
 		$this->db->query("insert into vtiger_def_org_share values (" . $this->db->getUniqueID('vtiger_def_org_share') . ",8,2,0)");
+		$this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",14,2,0)");
 
 		//Populating the DataShare Related Modules
 		//Lead Related Module

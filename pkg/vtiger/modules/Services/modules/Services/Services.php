@@ -997,7 +997,7 @@ class Services extends CRMEntity {
 			require_once('vtlib/Vtiger/Module.php');
 
 			$moduleInstance = Vtiger_Module::getInstance($moduleName);
-			$moduleInstance->disallowSharing();
+			$moduleInstance->allowSharing();
 
 			$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
 			$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
@@ -1033,6 +1033,10 @@ class Services extends CRMEntity {
 		// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
 		// TODO Handle actions after this module is updated.
+		
+			//adds sharing accsess
+			$ServicesModule  = Vtiger_Module::getInstance('Services');
+			Vtiger_Access::setDefaultSharing($ServicesModule);
 		}
  	}
 }
