@@ -35,10 +35,19 @@
 				$workflowId = $adb->getUniqueID("com_vtiger_workflows");
 				$workflow->id = $workflowId;
 				$wf=$workflow;
-				$adb->pquery("insert into com_vtiger_workflows
-								(workflow_id, module_name, summary, test, execution_condition, type, defaultworkflow)
-								values (?,?,?,?,?,?,?)",
-					array($workflowId, $wf->moduleName, $wf->description, $wf->test,  $wf->executionCondition, $wf->type, $wf->defaultworkflow));
+
+				$result=$adb->getColumnNames("com_vtiger_workflows");
+				if(in_array("type",$result)) {
+					$adb->pquery("insert into com_vtiger_workflows
+									(workflow_id, module_name, summary, test, execution_condition, type, defaultworkflow)
+									values (?,?,?,?,?,?,?)",
+						array($workflowId, $wf->moduleName, $wf->description, $wf->test,  $wf->executionCondition, $wf->type, $wf->defaultworkflow));
+				} else {
+					$adb->pquery("insert into com_vtiger_workflows
+									(workflow_id, module_name, summary, test, execution_condition, defaultworkflow)
+									values (?,?,?,?,?,?)",
+						array($workflowId, $wf->moduleName, $wf->description, $wf->test,  $wf->executionCondition, $wf->defaultworkflow));
+				}
 			}
 		}
 
