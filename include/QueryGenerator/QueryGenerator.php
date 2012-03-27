@@ -705,11 +705,13 @@ class QueryGenerator {
 
 	private function makeGroupSqlReplacements($fieldSqlList, $groupSql) {
 		$pos = 0;
+		$nextOffset = 0;
 		foreach ($fieldSqlList as $index => $fieldSql) {
-			$pos = strrpos($groupSql, $index.'');
+			$pos = strpos($groupSql, $index.'', $nextOffset);
 			if($pos !== false) {
 				$beforeStr = substr($groupSql,0,$pos);
 				$afterStr = substr($groupSql, $pos + strlen($index));
+				$nextOffset = strlen($beforeStr.$fieldSql);
 				$groupSql = $beforeStr.$fieldSql.$afterStr;
 			}
 		}
@@ -775,7 +777,7 @@ class QueryGenerator {
 	}
 
 	public function startGroup($groupType) {
-		$this->groupInfo .= "$groupType (";
+		$this->groupInfo .= " $groupType (";
 	}
 
 	public function endGroup() {
@@ -783,7 +785,7 @@ class QueryGenerator {
 	}
 
 	public function addConditionGlue($glue) {
-		$this->groupInfo .= "$glue ";
+		$this->groupInfo .= " $glue ";
 	}
 
 	public function addUserSearchConditions($input) {
