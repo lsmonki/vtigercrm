@@ -304,11 +304,11 @@ function hideTabs()
 
 	if(objreportType.value == 'tabular')
 	{
-		divarray = new Array('step1','step2','step4','step5','step6'); //,'step7');
+		divarray = new Array('step1','step2','step4','step5','step6','step7');
 	}
 	else
 	{
-		divarray = new Array('step1','step2','step3','step4','step5','step6'); //,'step7');
+		divarray = new Array('step1','step2','step3','step4','step5','step6','step7');
 	}
 }
 
@@ -355,9 +355,9 @@ function changeSteps1()
 		}
 
 	}
-	//if (getObj('step7').style.display != 'none') {
-	if (getObj('step6').style.display != 'none') {
-		
+	if (getObj('step7').style.display != 'none') {
+	//if (getObj('step6').style.display != 'none') {
+
 		var isScheduledObj = getObj("isReportScheduled");
 		if(isScheduledObj.checked == true) {
 			var selectedRecipientsObj = getObj("selectedRecipients");
@@ -407,7 +407,7 @@ function changeSteps1()
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
 				}
-				if (divarray[i + 1] == 'step6') { //'step7') {
+				if (divarray[i + 1] == /*'step6') { //*/ 'step7') {
 					document.getElementById("next").value = finish_text;
 				}
 				hide(divarray[i]);
@@ -585,7 +585,7 @@ function re_patternValidate(fldval,fldLabel,type) {
 
 
 	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
-		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$|^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"); 
+		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$|^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
 	}
 	if (!re.test(fldval)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
@@ -710,7 +710,7 @@ function addChartsToHomepage(reportid){
 }
 function hidewidgetmessage(){
     Effect.Fade('widgetsuccess');
-                    
+
 }
 function getDateFieldGrouping(group1){
 	var selectfield = document.getElementById(group1).value;
