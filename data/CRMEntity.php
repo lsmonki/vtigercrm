@@ -576,7 +576,7 @@ class CRMEntity {
 		}
 
 		if ($insertion_mode == 'edit') {
-			if ($_REQUEST['module'] == 'Potentials') {
+			if ($module == 'Potentials') {
 				$dbquery = 'select sales_stage from vtiger_potential where potentialid = ?';
 				$sales_stage = $adb->query_result($adb->pquery($dbquery, array($this->id)), 0, 'sales_stage');
 				if ($sales_stage != $_REQUEST['sales_stage'] && $_REQUEST['sales_stage'] != '') {
@@ -587,7 +587,7 @@ class CRMEntity {
 					$params = array('', $this->id, $this->column_fields['amount'], decode_html($sales_stage), $this->column_fields['probability'], 0, $adb->formatDate($closingdate, true), $adb->formatDate($date_var, true));
 					$adb->pquery($sql, $params);
 				}
-			} elseif ($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice') {
+			} elseif ($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice') {
 				//added to update the history for PO, SO, Quotes and Invoice
 				$history_field_array = Array(
 					"PurchaseOrder" => "postatus",
@@ -596,7 +596,7 @@ class CRMEntity {
 					"Invoice" => "invoicestatus"
 				);
 
-				$inventory_module = $_REQUEST['module'];
+				$inventory_module = $module;
 
 				if ($_REQUEST['ajxaction'] == 'DETAILVIEW') {//if we use ajax edit
 					if ($inventory_module == "PurchaseOrder")
