@@ -23,8 +23,8 @@
 
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
-{literal}
 var gVTModule = '{$smarty.request.module|@vtlib_purify}';
+{literal}
 function callConvertLeadDiv(id)
 {
         new Ajax.Request(
@@ -115,7 +115,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 function tagvalidate()
 {ldelim}
 	if(trim(document.getElementById('txtbox_tagfields').value) != '')
-		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
+		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');
 	else
 	{ldelim}
 		alert("{$APP.PLEASE_ENTER_TAG}");
