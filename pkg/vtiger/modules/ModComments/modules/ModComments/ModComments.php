@@ -66,19 +66,19 @@ class ModComments extends ModCommentsCore {
 
 		if (is_string($moduleNames)) $moduleNames = array($moduleNames);
 
-		$commentWidgetCount = 0;
+		$commentWidgetModules = array();
 		foreach($moduleNames as $moduleName) {
 			$module = Vtiger_Module::getInstance($moduleName);
 			if($module) {
 				$module->addLink($widgetType, $widgetName, "block://ModComments:modules/ModComments/ModComments.php");
-				++$commentWidgetCount;
+				$commentWidgetModules[] = $moduleName;
 			}
 		}
-		if ($commentWidgetCount) {
+		if (count($commentWidgetModules) > 0) {
 			$modCommentsModule = Vtiger_Module::getInstance('ModComments');
 			$modCommentsModule->addLink('HEADERSCRIPT', 'ModCommentsCommonHeaderScript', 'modules/ModComments/ModCommentsCommon.js');
 			$modCommentsRelatedToField = Vtiger_Field::getInstance('related_to', $modCommentsModule);
-			$modCommentsRelatedToField->setRelatedModules($moduleNames);
+			$modCommentsRelatedToField->setRelatedModules($commentWidgetModules);
 		}
 	}
 
@@ -96,18 +96,18 @@ class ModComments extends ModCommentsCore {
 
 		if (is_string($moduleNames)) $moduleNames = array($moduleNames);
 
-		$commentWidgetCount = 0;
+		$commentWidgetModules = array();
 		foreach($moduleNames as $moduleName) {
 			$module = Vtiger_Module::getInstance($moduleName);
 			if($module) {
 				$module->deleteLink($widgetType, $widgetName, "block://ModComments:modules/ModComments/ModComments.php");
-				++$commentWidgetCount;
+				$commentWidgetModules[] = $moduleName;
 			}
 		}
-		if ($commentWidgetCount) {
+		if (count($commentWidgetModules) > 0) {
 			$modCommentsModule = Vtiger_Module::getInstance('ModComments');
 			$modCommentsRelatedToField = Vtiger_Field::getInstance('related_to', $modCommentsModule);
-			$modCommentsRelatedToField->unsetRelatedModules($moduleNames);
+			$modCommentsRelatedToField->unsetRelatedModules($commentWidgetModules);
 		}
 	}
 
