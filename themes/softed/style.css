@@ -1298,7 +1298,7 @@ a.alpha:Hover{
 	z-index:1000001;
 	display:none;
 	padding:10px;
-	background:#ffffff url(images/layerPopUpBg.gif);
+	background:#ffffff url(images/layerPopupBg.gif);
 }
 .searchBtn{
 	width:48px;
@@ -2830,7 +2830,12 @@ a.allMnu:Hover{
 .selectall{
     cursor:pointer;
     color:#0044AA;
-    text-decoration:underline;}
-#count,.folder{	font-weight:bold;
+    text-decoration:underline;
 }
-.linkForSelectAll{	text-align:center;	background-color:white;}
+#count,.folder{
+	font-weight:bold;
+}
+.linkForSelectAll{
+	text-align:center;
+	background-color:white;
+}

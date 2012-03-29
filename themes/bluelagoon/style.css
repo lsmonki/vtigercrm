@@ -1184,7 +1184,7 @@ a.alpha:Hover{
     z-index:1000001;
     display:none;
     padding:10px;
-    background:#ffffff url(images/layerPopUpBg.gif);
+    background:#ffffff url(images/layerPopupBg.gif);
 }
 a.drop_downnew_parent{
     width:100px;
