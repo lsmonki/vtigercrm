@@ -221,7 +221,7 @@ function get_usersid($table_name,$column_name,$search_string)
 	$log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
 	$concatSql = getSqlForNameInDisplayFormat(array('last_name'=>'vtiger_users.last_name', 'first_name'=>'vtiger_users.first_name'), 'Users');
-	$where.="($concatSql like '". formatForSqlLike($search_string) .
+	$where.="(trim($concatSql) like '". formatForSqlLike($search_string) .
 			"' or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
 	$log->debug("Exiting get_usersid method ...");
 	return $where;
@@ -442,6 +442,12 @@ function BasicSearch($module,$search_field,$search_string){
 			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);
+			}
+			elseif($table_name == "vtiger_crmentity" && $column_name == "modifiedby")
+			{
+				$concatSql = getSqlForNameInDisplayFormat(array('last_name'=>'vtiger_users2.last_name', 'first_name'=>'vtiger_users2.first_name'), 'Users');
+				$where.="(trim($concatSql) like '". formatForSqlLike($search_string) .
+							"' or vtiger_groups2.groupname like '". formatForSqlLike($search_string) ."')";
 			}
 			else if(in_array($column_name,$column_array))
 			{
@@ -1329,11 +1335,16 @@ function getAdvancedSearchValue($tablename,$fieldname,$comparator,$value,$dataty
 		"vtiger_contactdetails.reportsto"=> getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails2.lastname', 'firstname'=>'vtiger_contactdetails2.firstname'), 'Contacts'),
 		"vtiger_pricebook.currency_id"=>"vtiger_currency_info.currency_name",
 		);
-	if($fieldname == "smownerid")
+	if($fieldname == "smownerid" || $fieldname == 'modifiedby')
     {
-		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name'=>'vtiger_users.last_name'), 'Users');
-        $temp_value = "( ".$userNameSql.getAdvancedSearchComparator($comparator,$value,$datatype);
-        $temp_value.= " OR  vtiger_groups.groupname".getAdvancedSearchComparator($comparator,$value,$datatype);
+		if($fieldname == "smownerid") {
+			$tableNameSuffix = '';
+		} elseif($fieldname == "modifiedby") {
+			$tableNameSuffix = '2';
+		}
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users'.$tableNameSuffix.'.first_name', 'last_name'=>'vtiger_users'.$tableNameSuffix.'.last_name'), 'Users');
+        $temp_value = "( trim($userNameSql)".getAdvancedSearchComparator($comparator,$value,$datatype);
+        $temp_value.= " OR  vtiger_groups$tableNameSuffix.groupname".getAdvancedSearchComparator($comparator,$value,$datatype);
         $value=$temp_value.")";
 	}elseif( $fieldname == "inventorymanager")
             {

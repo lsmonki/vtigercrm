@@ -1234,10 +1234,15 @@ class CustomView extends CRMEntity {
 		);
 
 		if ($fieldname == "smownerid" || $fieldname == 'modifiedby') {
+			if($fieldname == "smownerid") {
+				$tableNameSuffix = '';
+			} elseif($fieldname == "modifiedby") {
+				$tableNameSuffix = '2';
+			}
 			$userNameSql = getSqlForNameInDisplayFormat(array('first_name' =>
-				'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+				'vtiger_users'.$tableNameSuffix.'.first_name', 'last_name' => 'vtiger_users'.$tableNameSuffix.'.last_name'), 'Users');
 			$temp_value = '( trim(' . $userNameSql . ')' . $this->getAdvComparator($comparator, $value, $datatype);
-			$temp_value.= " OR  vtiger_groups.groupname" . $this->getAdvComparator($comparator, $value, $datatype) . ')';
+			$temp_value.= " OR  vtiger_groups$tableNameSuffix.groupname" . $this->getAdvComparator($comparator, $value, $datatype) . ')';
 			$value = $temp_value; // Hot fix: removed unbalanced closing bracket ")";
 		} elseif ($fieldname == "inventorymanager") {
 			$value = $tablename . "." . $fieldname . $this->getAdvComparator($comparator, getUserId_Ol($value), $datatype);

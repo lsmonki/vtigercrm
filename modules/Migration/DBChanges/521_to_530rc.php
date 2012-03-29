@@ -131,10 +131,11 @@ for($i=0;$i<$usersCount;++$i){
 	$fullName = getFullNameFromQResult($usersResult, $i, 'Users');
 
 	ExecutePQuery("UPDATE vtiger_cvadvfilter SET value=? WHERE columnname LIKE '%:assigned_user_id:%' AND value=?", array($fullName, $userName));
+	ExecutePQuery("UPDATE vtiger_cvadvfilter SET value=? WHERE columnname LIKE '%:assigned_user_id1:%' AND value=?", array($fullName, $userName));
 	ExecutePQuery("UPDATE vtiger_relcriteria SET value=? WHERE columnname LIKE 'vtiger_users%:user_name%' AND value=?", array($fullName, $userName));
 
 	ExecutePQuery("UPDATE vtiger_cvadvfilter SET comparator='c'
-						WHERE (columnname LIKE '%:assigned_user_id%:' OR columnname LIKE '%:modifiedby%:')
+						WHERE (columnname LIKE '%:assigned_user_id%:' OR columnname LIKE '%:assigned_user_id1%:' OR columnname LIKE '%:modifiedby%:')
 								AND (comparator='s' OR comparator='ew')", array());
 }
 

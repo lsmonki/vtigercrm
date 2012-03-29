@@ -337,9 +337,9 @@ for ($i = 0; $i < $adb->num_rows($result); $i++) {
 	}
 }
 
-ExecuteQuery("ALTER TABLE `vtiger_customerportal_prefs` DROP INDEX tabid_idx");
+ExecuteQuery("ALTER TABLE `vtiger_customerportal_prefs` DROP PRIMARY KEY");
 ExecuteQuery("ALTER TABLE `vtiger_customerportal_prefs` ALTER COLUMN prefkey DROP DEFAULT");
-ExecuteQuery("ALTER TABLE `vtiger_customerportal_prefs` ADD INDEX tabid_idx(tabid,prefkey)");
+ExecuteQuery("ALTER TABLE `vtiger_customerportal_prefs` ADD PRIMARY KEY(tabid,prefkey)");
 
 $query = "INSERT INTO vtiger_customerportal_prefs (
 			SELECT tabid, 'defaultassignee', prefvalue FROM vtiger_customerportal_prefs WHERE prefkey='userid'
@@ -436,11 +436,6 @@ $oldProductHandlerColumnName = 'vtiger_products:handler:assigned_user_id:Product
 $newProductHandlerColumnName = 'vtiger_crmentity:smownerid:assigned_user_id:Products_Handler:V';
 ExecutePQuery("UPDATE vtiger_cvcolumnlist SET columnname=? WHERE columnname=?", array($newProductHandlerColumnName, $oldProductHandlerColumnName));
 ExecutePQuery("UPDATE vtiger_cvadvfilter SET columnname=? WHERE columnname=?", array($newProductHandlerColumnName, $oldProductHandlerColumnName));
-$oldProductHandlerColumnName = 'vtiger_usersProducts:user_name:Products_Handler:assigned_user_id:V';
-$newProductHandlerColumnName = 'vtiger_usersProducts:user_name:Products_Assigned_To:assigned_user_id:V';
-ExecutePQuery("UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?", array($newProductHandlerColumnName, $oldProductHandlerColumnName));
-ExecutePQuery("UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?", array($newProductHandlerColumnName, $oldProductHandlerColumnName));
-ExecutePQuery("UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?", array($newProductHandlerColumnName, $oldProductHandlerColumnName));
 
 ExecuteQuery("UPDATE vtiger_crmentity, vtiger_service SET vtiger_crmentity.smownerid = vtiger_service.handler WHERE vtiger_crmentity.crmid = vtiger_service.serviceid");
 ExecuteQuery("ALTER TABLE vtiger_service DROP COLUMN handler");
@@ -450,11 +445,6 @@ $oldServiceOwnerColumnName = 'vtiger_service:handler:assigned_user_id:Services_O
 $newServiceOwnerColumnName = 'vtiger_crmentity:smownerid:assigned_user_id:Services_Owner:V';
 ExecutePQuery("UPDATE vtiger_cvcolumnlist SET columnname=? WHERE columnname=?", array($newServiceOwnerColumnName, $oldServiceOwnerColumnName));
 ExecutePQuery("UPDATE vtiger_cvadvfilter SET columnname=? WHERE columnname=?", array($newServiceOwnerColumnName, $oldServiceOwnerColumnName));
-$oldServiceOwnerColumnName = 'vtiger_usersServices:user_name:Services_Owner:assigned_user_id:V';
-$newServiceOwnerColumnName = 'vtiger_usersServices:user_name:Services_Assigned_To:assigned_user_id:V';
-ExecutePQuery("UPDATE vtiger_relcriteria SET columnname=? WHERE columnname=?", array($newServiceOwnerColumnName, $oldServiceOwnerColumnName));
-ExecutePQuery("UPDATE vtiger_reportsortcol SET columnname=? WHERE columnname=?", array($newServiceOwnerColumnName, $oldServiceOwnerColumnName));
-ExecutePQuery("UPDATE vtiger_selectcolumn SET columnname=? WHERE columnname=?", array($newServiceOwnerColumnName, $oldServiceOwnerColumnName));
 
 // Allow Sharing access and role-based security for Products and Services
 Vtiger_Access::deleteSharing($productInstance);
@@ -489,11 +479,12 @@ for($i=0;$i<$usersCount;++$i){
 
 	ExecutePQuery("UPDATE vtiger_cvadvfilter SET value=? WHERE columnname LIKE '%:assigned_user_id:%' AND value=?", array($fullName, $oldFullName));
 	ExecutePQuery("UPDATE vtiger_cvadvfilter SET value=? WHERE columnname LIKE '%:modifiedby:%' AND value=?", array($fullName, $oldFullName));
+	ExecutePQuery("UPDATE vtiger_cvadvfilter SET value=? WHERE columnname LIKE '%:assigned_user_id1:%' AND value=?", array($fullName, $oldFullName));
 	ExecutePQuery("UPDATE vtiger_relcriteria SET value=? WHERE columnname LIKE 'vtiger_users%:user_name%' AND value=?", array($fullName, $oldFullName));
-	ExecutePQuery("UPDATE vtiger_relcriteria SET value=? WHERE columnname LIKE '%:modifiedby:%' AND value=?", array($fullName, $userName));
+	ExecutePQuery("UPDATE vtiger_relcriteria SET value=? WHERE columnname LIKE '%:modifiedby:%' AND value=?", array($fullName, $oldFullName));
 
 	ExecutePQuery("UPDATE vtiger_cvadvfilter SET comparator='c'
-						WHERE (columnname LIKE '%:assigned_user_id%:' OR columnname LIKE '%:modifiedby%:')
+						WHERE (columnname LIKE '%:assigned_user_id%:' OR columnname LIKE '%:assigned_user_id1%:' OR columnname LIKE '%:modifiedby%:')
 								AND (comparator='s' OR comparator='ew')", array());
 	ExecutePQuery("UPDATE vtiger_relcriteria SET comparator='c'
 						WHERE (columnname LIKE 'vtiger_users%:user_name%' OR columnname LIKE '%:modifiedby%:')

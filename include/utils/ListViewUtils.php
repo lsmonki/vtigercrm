@@ -2698,6 +2698,10 @@ function getListQuery($module,$where='')
 			ON vtiger_users.id = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_groups
 			ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+		LEFT JOIN vtiger_users vtiger_users2
+			ON vtiger_crmentity.modifiedby = vtiger_users2.id
+		LEFT JOIN vtiger_groups vtiger_groups2
+			ON vtiger_crmentity.modifiedby = vtiger_groups2.groupid
 		LEFT OUTER JOIN vtiger_account
 			ON vtiger_account.accountid = vtiger_contactdetails.accountid
 		LEFT OUTER JOIN vtiger_leaddetails
