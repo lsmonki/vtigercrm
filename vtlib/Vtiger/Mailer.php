@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 require_once('modules/Emails/class.phpmailer.php');
-
+include_once('include/utils/CommonUtils.php');
 include_once('config.inc.php');
 include_once('include/database/PearDatabase.php');
 include_once('vtlib/Vtiger/Utils.php');
@@ -57,6 +57,7 @@ class Vtiger_Mailer extends PHPMailer {
 			$this->ConfigSenderInfo($adb->query_result($result, 0, 'from_email_field'));
 
 			$this->_serverConfigured = true;
+			$this->Sender= getReturnPath($this->Host);
 		}
 	}
 

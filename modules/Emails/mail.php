@@ -11,6 +11,7 @@
 
 
 require_once("modules/Emails/class.phpmailer.php");
+require_once 'include/utils/CommonUtils.php';
 
 /**   Function used to send email
   *   $module 		-- current module
@@ -190,6 +191,8 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 		$from_name = getFullNameFromQResult($rs, 0, 'Users');
 	
 	$mail->FromName = decode_html($from_name);
+
+	$mail->Sender= getReturnPath($mail->Host);
 
 	if($to_email != '')
 	{
