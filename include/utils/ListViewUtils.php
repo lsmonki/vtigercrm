@@ -11,8 +11,8 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
- * ****************************************************************************** */
-/* * *******************************************************************************
+ ********************************************************************************/
+/*********************************************************************************
  * $Header: /cvsroot/vtigercrm/vtiger_crm/include/utils/ListViewUtils.php,v 1.32 2006/02/03 06:53:08 mangai Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -45,6 +45,7 @@ function getListViewHeader($focus, $module, $sort_qry = '', $sorder = '', $order
 	global $theme;
 	global $app_strings;
 	global $mod_strings;
+	global $counter;
 
 	$arrow = '';
 	$qry = getURLstring($focus);
@@ -1144,7 +1145,8 @@ function getSearchListViewEntries($focus, $module, $list_result, $navigation_arr
 							if (isset($forfield) && $forfield != '' && $focus->popup_type != 'detailview') {
 								$value1 = strip_tags($value);
 								$value = htmlspecialchars(addslashes(html_entity_decode(strip_tags($value), ENT_QUOTES, $default_charset)), ENT_QUOTES, $default_charset); // Remove any previous html conversion
-								$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")'>$value1</a>";
+								$count = counterValue();
+								$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")' id =$count >$value1</a>";
 							}
 						}
 						// END
@@ -1752,10 +1754,10 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
 
 					//Added to avoid the error when select SO from Invoice through AjaxEdit
-					if ($module == 'SalesOrder')
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '","' . $_REQUEST['form'] . '");\'>' . textlength_check($temp_val) . '</a>';
-
-					elseif ($module == 'Contacts') {
+					if ($module == 'SalesOrder') {
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '","' . $_REQUEST['form'] . '");\' id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+					} elseif ($module == 'Contacts') {
 						require_once('modules/Contacts/Contacts.php');
 						$cntct_focus = new Contacts();
 						$cntct_focus->retrieve_entity_info($entity_id, "Contacts");
@@ -1773,16 +1775,19 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						$form = !empty($_REQUEST['form']) ? $_REQUEST['form'] : '';
 						if (!empty($form))
 							$form = htmlspecialchars($form, ENT_QUOTES, $default_charset);
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingstreet']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherstreet']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingcity']) . '", "' . popup_decode_html($cntct_focus->column_fields['othercity']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingstate']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherstate']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingzip']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherzip']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingcountry']) . '", "' . popup_decode_html($cntct_focus->column_fields['othercountry']) . '","' . popup_decode_html($cntct_focus->column_fields['mailingpobox']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherpobox']) . '","' . $form . '");\'>' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingstreet']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherstreet']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingcity']) . '", "' . popup_decode_html($cntct_focus->column_fields['othercity']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingstate']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherstate']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingzip']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherzip']) . '", "' . popup_decode_html($cntct_focus->column_fields['mailingcountry']) . '", "' . popup_decode_html($cntct_focus->column_fields['othercountry']) . '","' . popup_decode_html($cntct_focus->column_fields['mailingpobox']) . '", "' . popup_decode_html($cntct_focus->column_fields['otherpobox']) . '","' . $form . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					}
 
 					else
-					if ($popuptype == 'toDospecific')
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_toDospecific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
-					else
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
-				}
-				elseif ($popuptype == "detailview") {
+					if ($popuptype == 'toDospecific') {
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_toDospecific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+					} else {
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+					}
+				} elseif ($popuptype == "detailview") {
 					if ($colname == "lastname" && ($module == 'Contacts' || $module == 'Leads')) {
 						$temp_val = getFullNameFromQResult($list_result, $list_result_count, $module);
 					}
@@ -1794,8 +1799,10 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$popupMode = $_REQUEST['popupmode'];
 					$callBack = $_REQUEST['callback'];
 					if ($_REQUEST['return_module'] == "Calendar") {
-						$value = '<a href="javascript:window.close();" id="calendarCont' . $entity_id . '" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("' . $entity_id . '","' . decode_html($slashes_temp_val) . '");\'>' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" id="calendarCont' . $entity_id . '" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("' . $entity_id . '","' . decode_html($slashes_temp_val) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					} else {
+						$count = counterValue();
 						if (empty($callBack)) {
 							$value = '<a style="cursor:pointer;" onclick=\'add_data_to_relatedlist("' . $entity_id . '","' . $focus->record_id . '","' . $module . '","' . $popupMode . '");\'>' . textlength_check($temp_val) . '</a>';
 						} else {
@@ -1805,8 +1812,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 				} elseif ($popuptype == "formname_specific") {
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_formname_specific("' . $_REQUEST['form'] . '", "' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_formname_specific("' . $_REQUEST['form'] . '", "' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($popuptype == "inventory_prod") {
 					$row_id = $_REQUEST['curr_row'];
 
@@ -1942,7 +1949,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$listprice = getListPrice($prod_id, $entity_id);
 
 					$temp_val = popup_from_html($temp_val);
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("' . $listprice . '", "' . $flname . '"); \'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("' . $listprice . '", "' . $flname . '"); \'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($popuptype == "specific_account_address") {
 					require_once('modules/Accounts/Accounts.php');
 					$acct_focus = new Accounts();
@@ -1959,8 +1967,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					}
 					$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['bill_street']));
 					$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				}
 				elseif ($popuptype == "specific_contact_account_address") {
 					require_once('modules/Accounts/Accounts.php');
@@ -1972,8 +1980,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 					$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['bill_street']));
 					$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($popuptype == "specific_potential_account_address") {
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
@@ -2001,8 +2009,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						}
 						$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['bill_street']));
 						$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
-
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $relatedid . '", "' . nl2br(decode_html($slashes_account_name)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'>' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $relatedid . '", "' . nl2br(decode_html($slashes_account_name)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					} else if ($relatedentity == 'Contacts') {
 
 						require_once('modules/Contacts/Contacts.php');
@@ -2017,8 +2025,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 						$slashes_contact_name = popup_from_html($contact_name);
 						$slashes_contact_name = htmlspecialchars($slashes_contact_name, ENT_QUOTES, $default_charset);
-
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $relatedid . '", "' . nl2br(decode_html($slashes_contact_name)) . '");\'>' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $relatedid . '", "' . nl2br(decode_html($slashes_contact_name)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					} else {
 						$value = $temp_val;
 					}
@@ -2052,8 +2060,9 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name, ENT_QUOTES, $default_charset);
+						$count = counterValue();
 
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'>' . textlength_check($name) . '</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'id = ' . $count . '>' . textlength_check($name) . '</a>';
 					}elseif ($module == 'Vendors') {
 						$name = $adb->query_result($list_result, $list_result_count, 'vendorname');
 						$venid = $adb->query_result($list_result, $list_result_count, 'vendorid');
@@ -2070,8 +2079,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name, ENT_QUOTES, $default_charset);
-
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'>' . textlength_check($name) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'id = ' . $count . '>' . textlength_check($name) . '</a>';
 					}elseif ($module == 'Contacts' || $module == 'Leads') {
 						$name = getFullNameFromQResult($list_result, $list_result_count, $module);
 						if (CheckFieldPermission('email', $module) == "true") {
@@ -2099,8 +2108,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name, ENT_QUOTES, $default_charset);
-
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'>' . textlength_check($name) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'id = ' . $count . '>' . $name . '</a>';
 					}else {
 						$name = getFullNameFromQResult($list_result, $list_result_count, $module);
 						$emailaddress = $adb->query_result($list_result, $list_result_count, "email1");
@@ -2108,7 +2117,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name, ENT_QUOTES, $default_charset);
 						$email_check = 1;
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',-1,"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'>' . textlength_check($name) . '</a>';
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',-1,"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'id = ' . $count . '>' . textlength_check($name) . '</a>';
 					}
 				} elseif ($popuptype == "specific_vendor_address") {
 					require_once('modules/Vendors/Vendors.php');
@@ -2126,14 +2136,14 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 							$acct_focus->column_fields[$xyz[$i]] = '';
 					}
 					$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['street']));
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . popup_decode_html($acct_focus->column_fields['city']) . '", "' . popup_decode_html($acct_focus->column_fields['state']) . '", "' . popup_decode_html($acct_focus->column_fields['postalcode']) . '", "' . popup_decode_html($acct_focus->column_fields['country']) . '","' . popup_decode_html($acct_focus->column_fields['pobox']) . '");\'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $bill_street . '", "' . popup_decode_html($acct_focus->column_fields['city']) . '", "' . popup_decode_html($acct_focus->column_fields['state']) . '", "' . popup_decode_html($acct_focus->column_fields['postalcode']) . '", "' . popup_decode_html($acct_focus->column_fields['country']) . '","' . popup_decode_html($acct_focus->column_fields['pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				}
 				elseif ($popuptype == "specific_campaign") {
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} else {
 					if ($colname == "lastname") {
 						$temp_val = getFullNameFromQResult($list_result, $list_result_count, $module);
@@ -2144,39 +2154,51 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
 
 					$log->debug("Exiting getValue method ...");
-					if ($_REQUEST['maintab'] == 'Calendar')
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_todo("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
-					else
-						$value = '<a href="javascript:window.close();" onclick=\'set_return("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'>' . textlength_check($temp_val) . '</a>';
+					if ($_REQUEST['maintab'] == 'Calendar') {
+						$count = counterValue();
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_todo("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+					} else {
+						$value = '<a href="javascript:window.close();" onclick=\'set_return("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'';
+						if (empty($_REQUEST['forfield']) && $focus->popup_type != 'detailview') {
+							$count = counterValue();
+							$value .= " id='$count' ";
+						}
+						$value .= '>' . textlength_check($temp_val) . '</a>';
+					}
 				}
-			}
-			else {
+			} else {
 				if (($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname")) {
-					$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($module == "Calendar") {
 					$actvity_type = $adb->query_result($list_result, $list_result_count, 'activitytype');
 					$actvity_type = ($actvity_type != '') ? $actvity_type : $adb->query_result($list_result, $list_result_count, 'type');
 					if ($actvity_type == "Task") {
-						$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&activity_mode=Task&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&activity_mode=Task&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					} else {
-						$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&activity_mode=Events&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+						$count = counterValue();
+						$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&activity_mode=Events&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					}
 				} elseif ($module == "Vendors") {
+					$count = counterValue();
 
-					$value = '<a href="index.php?action=DetailView&module=Vendors&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+					$value = '<a href="index.php?action=DetailView&module=Vendors&record=' . $entity_id . '&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($module == "PriceBooks") {
-
-					$value = '<a href="index.php?action=DetailView&module=PriceBooks&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="index.php?action=DetailView&module=PriceBooks&record=' . $entity_id . '&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($module == "SalesOrder") {
 
-					$value = '<a href="index.php?action=DetailView&module=SalesOrder&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="index.php?action=DetailView&module=SalesOrder&record=' . $entity_id . '&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($module == 'Emails') {
 					$value = $temp_val;
 				} elseif (($module == "Users" && $colname == "last_name")) {
 					$temp_val = getFullNameFromQResult($list_result, $list_result_count, $module);
 					$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
 				} else {
-					$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&parenttab=' . $tabname . '">' . textlength_check($temp_val) . '</a>';
+					$count = counterValue();
+					$value = '<a href="index.php?action=DetailView&module=' . $module . '&record=' . $entity_id . '&parenttab=' . $tabname . '" id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				}
 			}
 		} elseif ($module == 'Calendar' && ($fieldname == 'time_start' ||
@@ -2225,7 +2247,7 @@ function getListQuery($module, $where = '') {
 	require('user_privileges/sharing_privileges_' . $current_user->id . '.php');
 	$tab_id = getTabid($module);
 	$userNameSql = getSqlForNameInDisplayFormat(array('first_name' => 'vtiger_users.first_name', 'last_name' =>
-		'vtiger_users.last_name'), 'Users');
+				'vtiger_users.last_name'), 'Users');
 	switch ($module) {
 		Case "HelpDesk":
 			$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
@@ -4180,6 +4202,12 @@ function html_substr($str, $start, $length = NULL) {
 	} else { //negative $length. Omit $length characters from end
 		return substr($str, $real_start, $chars[$html_length + $length][1] - $real_start);
 	}
+}
+
+function counterValue() {
+	static $counter = 0;
+	$counter = $counter + 1;
+	return $counter;
 }
 
 ?>

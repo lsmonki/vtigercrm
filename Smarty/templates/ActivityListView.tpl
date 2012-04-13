@@ -437,7 +437,7 @@ function alphabetic(module,url,dataid)
 			         {/foreach}
 			      </tr>
 				  <tr>
-					  <td id="linkForSelectAll" class="linkForSelectAll" style="display:none;" colspan=10>
+					  <td id="linkForSelectAll" class="linkForSelectAll" style="display:none;" colspan=15>
 						  <span id="selectAllRec" class="selectall" style="display:inline;" onClick="toggleSelectAll_Records('{$MODULE}',true,'selected_id')">{$APP.LBL_SELECT_ALL} <span id="count"> </span> {$APP.LBL_RECORDS_IN} {$MODULE|@getTranslatedString:$MODULE}</span>
 						  <span id="deSelectAllRec" class="selectall" style="display:none;" onClick="toggleSelectAll_Records('{$MODULE}',false,'selected_id')">{$APP.LBL_DESELECT_ALL} {$MODULE|@getTranslatedString:$MODULE}</span>
 					  </td>

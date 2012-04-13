@@ -62,6 +62,18 @@ class CRMEntity {
 		global $current_user, $adb; //$adb added by raju for mass mailing
 		$insertion_mode = $this->mode;
 
+		$columnFields = $this->column_fields;
+		$anyValue = false;
+		foreach ($columnFields as $value) {
+			if(!empty($value)) {
+				$anyValue = true;
+				break;
+			}
+		}
+		if(!$anyValue) {
+			die("<center>" .getTranslatedString('LBL_MANDATORY_FIELD_MISSING')."</center>");
+		}
+
 		$this->db->println("TRANS saveentity starts $module");
 		$this->db->startTransaction();
 

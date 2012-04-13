@@ -178,30 +178,35 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 *Returns the where conditions and url_string values in string format
 */
 
-function Search($module)
+function Search($module, $input = '')
 {
 	global $log,$default_charset;
-        $log->debug("Entering Search(".$module.") method ...");
-	$url_string='';
-	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="") {
-		$search_column=vtlib_purify($_REQUEST['search_field']);
+
+	if(empty($input)) {
+		$input = $_REQUEST;
 	}
-	if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="") {
+	
+    $log->debug("Entering Search(".$module.") method ...");
+	$url_string='';
+	if(isset($input['search_field']) && $input['search_field'] !="") {
+		$search_column=vtlib_purify($input['search_field']);
+	}
+	if(isset($input['search_text']) && $input['search_text']!="") {
 		// search other characters like "|, ?, ?" by jagi
-		$search_string = $_REQUEST['search_text'];
+		$search_string = $input['search_text'];
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$search_string) : $search_string;
 		$search_string=trim($stringConvert);
 	}
-	if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="") {
-        $search_type=vtlib_purify($_REQUEST['searchtype']);
+	if(isset($input['searchtype']) && $input['searchtype']!="") {
+        $search_type=vtlib_purify($input['searchtype']);
     	if($search_type == "BasicSearch") {
-            $where=BasicSearch($module,$search_column,$search_string);
+            $where=BasicSearch($module,$search_column,$search_string,$input);
     	} else if ($search_type == "AdvanceSearch") {
     	} else { //Global Search
 		}
 		$url_string = "&search_field=".$search_column."&search_text=".urlencode($search_string)."&searchtype=BasicSearch";
-		if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
-			$url_string .= "&type=".vtlib_purify($_REQUEST['type']);
+		if(isset($input['type']) && $input['type'] != '')
+			$url_string .= "&type=".vtlib_purify($input['type']);
 		$log->debug("Exiting Search method ...");
 		return $where."#@@#".$url_string;
 	}
@@ -234,13 +239,17 @@ function get_usersid($table_name,$column_name,$search_string)
 */
 
 
-function getValuesforColumns($column_name,$search_string,$criteria='cts')
+function getValuesforColumns($column_name,$search_string,$criteria='cts',$input='')
 {
 	global $log, $current_user;
 	$log->debug("Entering getValuesforColumns(".$column_name.",".$search_string.") method ...");
 	global $column_array,$table_col_array;
+	
+	if(empty($input)) {
+		$input = $_REQUEST;
+	}
 
-	if($_REQUEST['type'] == "entchar")
+	if($input['type'] == "entchar")
 		$criteria = "is";
 
 	for($i=0; $i<count($column_array);$i++)
@@ -256,7 +265,7 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 			}
 			else
 			{
-				if($column_name == "contact_id" && $_REQUEST['type'] == "entchar") {
+				if($column_name == "contact_id" && $input['type'] == "entchar") {
 					$concatSql = getSqlForNameInDisplayFormat(array('lastname'=>'vtiger_contactdetails.lastname', 'firstname'=>'vtiger_contactdetails.firstname'), 'Contacts');
 					$where = "$concatSql = '$search_string'";
 				}
@@ -290,13 +299,18 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 *Returns the where conditions for list query in string format
 */
 
-function BasicSearch($module,$search_field,$search_string){
+function BasicSearch($module,$search_field,$search_string,$input=''){
 
 	global $log,$mod_strings,$current_user;
 	$log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	$search_string = ltrim(rtrim($adb->sql_escape_string($search_string)));
 	global $column_array,$table_col_array;
+
+	if(empty($input)) {
+		$input = $_REQUEST;
+	}
+
 	if($search_field =='crmid'){
 		$column_name='crmid';
 		$table_name='vtiger_crmentity';
@@ -414,7 +428,7 @@ function BasicSearch($module,$search_field,$search_string){
 							if ($stridx !== 0)
 							{
 								$search_string = $mod_key;
-								if($_REQUEST['operator'] == 'e' && getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus")){
+								if($input['operator'] == 'e' && getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus")){
 									$where="(vtiger_activity.status ='". $search_string ."' or vtiger_activity.eventstatus ='". $search_string ."')";
 								}else if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus"))
 								{
@@ -451,9 +465,9 @@ function BasicSearch($module,$search_field,$search_string){
 			}
 			else if(in_array($column_name,$column_array))
 			{
-				$where = getValuesforColumns($column_name,$search_string);
+				$where = getValuesforColumns($column_name,$search_string,'cts',$input);
 			}
-			else if($_REQUEST['type'] == 'entchar')
+			else if($input['type'] == 'entchar')
 			{
 				$where="$table_name.$column_name = '". $search_string ."'";
 			}
@@ -473,7 +487,7 @@ function BasicSearch($module,$search_field,$search_string){
 			$where = "(".$where_cond0." or ".$where_cond1.")";
 	}
 	// commented to support searching "%" with the search string.
-	if($_REQUEST['type'] == 'alpbt'){
+	if($input['type'] == 'alpbt'){
 	        $where = str_replace_once("%", "", $where);
 	}
 
@@ -813,19 +827,23 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 *Returns the where condition to be added in list query in string format
 */
 
-function getWhereCondition($currentModule)
+function getWhereCondition($currentModule, $input = '')
 {
 	global $log,$default_charset,$adb;
 	global $column_array,$table_col_array,$mod_strings,$current_user;
+	
+	$log->debug("Entering getWhereCondition(".$currentModule.") method ...");
 
-        $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
-
-	if($_REQUEST['searchtype']=='advance')
+	if(empty($input)) {
+		$input = $_REQUEST;
+	}
+	
+	if($input['searchtype']=='advance')
 	{
 		$json = new Zend_Json();
-		$advft_criteria = $_REQUEST['advft_criteria'];
+		$advft_criteria = $input['advft_criteria'];
 		if(!empty($advft_criteria))	$advft_criteria_decoded = $json->decode($advft_criteria);
-		$advft_criteria_groups = $_REQUEST['advft_criteria_groups'];
+		$advft_criteria_groups = $input['advft_criteria_groups'];
 		if(!empty($advft_criteria_groups))	$advft_criteria_groups_decoded = $json->decode($advft_criteria_groups);
 
 		$advfilterlist = getAdvancedSearchCriteriaList($advft_criteria_decoded, $advft_criteria_groups_decoded, $currentModule);
@@ -833,13 +851,13 @@ function getWhereCondition($currentModule)
 		if(!empty($adv_string)) $adv_string = '('.$adv_string.')';
 		$where = $adv_string.'#@@#'.'&advft_criteria='.$advft_criteria.'&advft_criteria_groups='.$advft_criteria_groups.'&searchtype=advance';
 	}
-	elseif($_REQUEST['type']=='dbrd')
+	elseif($input['type']=='dbrd')
 	{
-		$where = getdashboardcondition();
+		$where = getdashboardcondition($input);
 	}
 	else
 	{
- 		$where=Search($currentModule);
+ 		$where = Search($currentModule, $input);
 	}
 	$log->debug("Exiting getWhereCondition method ...");
 	return $where;
@@ -923,22 +941,27 @@ function getSearchURL($input) {
 *Returns the search criteria option (where condition) to be added in list query
 */
 
-function getdashboardcondition()
+function getdashboardcondition($input = '')
 {
 	global $adb;
+
+	if(empty($input)) {
+		$input = $_REQUEST;
+	}
+	
 	$where_clauses = Array();
 	$url_string = "";
 
-	if (isset($_REQUEST['leadsource'])) $lead_source = $_REQUEST['leadsource'];
-	if (isset($_REQUEST['date_closed'])) $date_closed = $_REQUEST['date_closed'];
-	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
-	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
-	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
-	if(isset($_REQUEST['owner'])) $owner = vtlib_purify($_REQUEST['owner']);
-	if(isset($_REQUEST['campaignid'])) $campaign = vtlib_purify($_REQUEST['campaignid']);
-	if(isset($_REQUEST['quoteid'])) $quote = vtlib_purify($_REQUEST['quoteid']);
-	if(isset($_REQUEST['invoiceid'])) $invoice = vtlib_purify($_REQUEST['invoiceid']);
-	if(isset($_REQUEST['purchaseorderid'])) $po = vtlib_purify($_REQUEST['purchaseorderid']);
+	if (isset($input['leadsource'])) $lead_source = $input['leadsource'];
+	if (isset($input['date_closed'])) $date_closed = $input['date_closed'];
+	if (isset($input['sales_stage'])) $sales_stage = $input['sales_stage'];
+	if (isset($input['closingdate_start'])) $date_closed_start = $input['closingdate_start'];
+	if (isset($input['closingdate_end'])) $date_closed_end = $input['closingdate_end'];
+	if(isset($input['owner'])) $owner = vtlib_purify($input['owner']);
+	if(isset($input['campaignid'])) $campaign = vtlib_purify($input['campaignid']);
+	if(isset($input['quoteid'])) $quote = vtlib_purify($input['quoteid']);
+	if(isset($input['invoiceid'])) $invoice = vtlib_purify($input['invoiceid']);
+	if(isset($input['purchaseorderid'])) $po = vtlib_purify($input['purchaseorderid']);
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
@@ -990,11 +1013,11 @@ function getdashboardcondition()
 		array_push($where_clauses, "vtiger_inventoryproductrel.id = ".$po);
 		$url_string .= "&purchaseorderid=".$po;
 	}
-	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] != '') {
-		$url_string .= "&from_homepagedb=".vtlib_purify($_REQUEST['from_homepagedb']);
+	if(isset($input['from_homepagedb']) && $input['from_homepagedb'] != '') {
+		$url_string .= "&from_homepagedb=".vtlib_purify($input['from_homepagedb']);
 	}
-	if(isset($_REQUEST['type']) && $_REQUEST['type'] != '') {
-		$url_string .= "&type=".vtlib_purify($_REQUEST['type']);
+	if(isset($input['type']) && $input['type'] != '') {
+		$url_string .= "&type=".vtlib_purify($input['type']);
 	}
 
 	$where = "";

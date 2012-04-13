@@ -130,49 +130,56 @@ class MailManager_MailController extends MailManager_Controller {
 							break;
 						}
 					}
-				}
-			}
+				
+					$cc_string = rtrim($request->get('cc'), ',');
+					$bcc_string= rtrim($request->get('bcc'), ',');
+					$subject   = $request->get('subject');
+					$body      = $request->get('body');
 
-			$cc_string = rtrim($request->get('cc'), ',');
-			$bcc_string= rtrim($request->get('bcc'), ',');
-			$subject   = $request->get('subject');
-			$body      = $request->get('body');
-
-			$fromEmail = $connector->getFromEmailAddress();
-			$userFullName = getFullNameFromArray('Users', $current_user->column_fields);
-			$userId = $current_user->id;
-
-			$mailer = new Vtiger_Mailer();
-			$mailer->IsHTML(true);
-			$mailer->ConfigSenderInfo($fromEmail, $userFullName, $current_user->email1);
-			$mailer->Subject = $subject;
-			$mailer->Body = $body;
-			$mailer->addSignature($userId);
-            if($mailer->Signature != '') {
-               $mailer->Body.= $mailer->Signature;
-              }
-
-			$tos = explode(',', $to_string);
-			$ccs = empty($cc_string)? array() : explode(',', $cc_string);
-			$bccs= empty($bcc_string)?array() : explode(',', $bcc_string);
-			$emailId = $request->get('emailid');
-
-			$attachments = $connector->getAttachmentDetails($emailId);
-
-			foreach($tos as $to) $mailer->AddAddress($to);
-			foreach($ccs as $cc) $mailer->AddCC($cc);
-			foreach($bccs as $bcc)$mailer->AddBCC($bcc);
-			global $root_directory;
-
-			if(is_array($attachments)) {
-				foreach($attachments as $attachment){
-					$fileNameWithPath = $root_directory.$attachment['path'].$attachment['fileid']."_".$attachment['attachment'];
-					if(is_file($fileNameWithPath)) {
-						$mailer->AddAttachment($fileNameWithPath, $attachment['attachment']);
+					if($relateto[1]!= NULL) {
+						$entityId = $relateto[1];
+						$parent_module = getSalesEntityType($entityId);
+						$description = getMergedDescription($body,$entityId,$parent_module);
+					} else {
+						$description = $body;
 					}
+
+					$fromEmail = $connector->getFromEmailAddress();
+					$userFullName = getFullNameFromArray('Users', $current_user->column_fields);
+					$userId = $current_user->id;
+
+					$mailer = new Vtiger_Mailer();
+					$mailer->IsHTML(true);
+					$mailer->ConfigSenderInfo($fromEmail, $userFullName, $current_user->email1);
+					$mailer->Subject = $subject;
+					$mailer->Body = $description;
+					$mailer->addSignature($userId);
+		            if($mailer->Signature != '') {
+		               $mailer->Body.= $mailer->Signature;
+					}
+
+					$ccs = empty($cc_string)? array() : explode(',', $cc_string);
+					$bccs= empty($bcc_string)?array() : explode(',', $bcc_string);
+					$emailId = $request->get('emailid');
+		
+					$attachments = $connector->getAttachmentDetails($emailId);
+
+					$mailer->AddAddress($to);
+					foreach($ccs as $cc) $mailer->AddCC($cc);
+					foreach($bccs as $bcc)$mailer->AddBCC($bcc);
+					global $root_directory;
+		
+					if(is_array($attachments)) {
+						foreach($attachments as $attachment){
+							$fileNameWithPath = $root_directory.$attachment['path'].$attachment['fileid']."_".$attachment['attachment'];
+							if(is_file($fileNameWithPath)) {
+								$mailer->AddAttachment($fileNameWithPath, $attachment['attachment']);
+							}
+						}
+					}
+					$status = $mailer->Send(true);
 				}
 			}
-			$status = $mailer->Send(true);
 
 			if ($status === true) {
 				$email = CRMEntity::getInstance('Emails');

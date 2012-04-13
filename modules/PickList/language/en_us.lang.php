@@ -49,5 +49,6 @@ $mod_strings = array(
 	'LBL_ADD_BUTTON' => 'Add Item',
 	'LBL_EDIT_BUTTON' => 'Rename Item',
 	'LBL_DELETE_BUTTON' => 'Delete Item',
+	'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this picklist dependency?', 
 );
 ?>

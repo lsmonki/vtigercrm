@@ -115,26 +115,30 @@ function editDependencyPicklist(module, sourceField, targetField) {
 		);
 }
 
-function deleteDependencyPicklist(module, sourceField, targetField) {
-	$("status").style.display="inline";
-
-	var urlstring = 'moduleName='+encodeURIComponent(module)+'&sourcefield='+sourceField+'&targetfield='+targetField;
-
-	new Ajax.Request(
-		'index.php',
-		{
-			queue: {
-				position: 'end',
-				scope: 'command'
-			},
-			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&directmode=ajax&file=PickListDependencySetup&submode=deletedependency&'+urlstring,
-			onComplete: function(response) {
-				$("status").style.display="none";
-				$("picklist_datas").update(response.responseText);
+function deleteDependencyPicklist(module, sourceField, targetField, msg) {
+	if(confirm(msg)) {
+		$("status").style.display="inline";
+	
+		var urlstring = 'moduleName='+encodeURIComponent(module)+'&sourcefield='+sourceField+'&targetfield='+targetField;
+	
+		new Ajax.Request(
+			'index.php',
+			{
+				queue: {
+					position: 'end',
+					scope: 'command'
+				},
+				method: 'post',
+				postBody: 'action=PickListAjax&module=PickList&directmode=ajax&file=PickListDependencySetup&submode=deletedependency&'+urlstring,
+				onComplete: function(response) {
+					$("status").style.display="none";
+					$("picklist_datas").update(response.responseText);
+				}
 			}
-		}
 		);
+	} else {
+		return false;
+	}
 }
 
 function saveDependency(module) {

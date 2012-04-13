@@ -1256,6 +1256,7 @@ function getEscapedColumns($selectedfields)
 		global $adb;
 		global $modules;
 		global $log;
+		global $current_user;
 
 		$advft_criteria = array();
 
@@ -1298,9 +1299,9 @@ function getEscapedColumns($selectedfields)
 				}
 				if($fieldType == 'currency') {
 					if($field->getUIType() == '71') {
-						$advfilterval = CurrencyField::convertToUserFormat($advfilterval, null, true);
-					} else {
-						$advfilterval = CurrencyField::convertToUserFormat($advfilterval);
+						$advfilterval = CurrencyField::convertToUserFormat($advfilterval,$current_user);
+					} else if($field->getUIType() == '72') {
+						$advfilterval = CurrencyField::convertToUserFormat($advfilterval,$current_user,true);
 					}
 				}
 

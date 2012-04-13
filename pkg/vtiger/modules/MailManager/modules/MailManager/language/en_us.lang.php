@@ -153,7 +153,14 @@ $mod_strings = Array (
     'LBL_MAILMANAGER_ADD_HelpDesk' => 'Add Ticket',
     'LBL_MAILMANAGER_ADD_Emails' => 'Attach Email',
     'LBL_MAILMANAGER_ADD_ModComments' => 'Add Comment',
-    'LBL_ADD' => 'Add'
+    'LBL_ADD' => 'Add',
+	'JSLBL_SendWith_EmptyText' => 'Send without text in the body?',
+	'LBL_ALLMAILS' => 'All Mails',
+	'LBL_TO_CONTACTS' => 'To Contacts',
+	'LBL_TO_ACCOUNTS' => 'To Organizations',
+	'LBL_TO_LEADS' => 'To Leads',
+	'LBL_TO_USERS' => 'To Users',
+	'LBL_SENT_MAILS' => 'Sent Mails'
 );
 
 ?>

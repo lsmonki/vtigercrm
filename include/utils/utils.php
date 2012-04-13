@@ -4996,23 +4996,34 @@ function getSelectAllQuery($input,$module) {
 	global $adb,$current_user;
 
 	$viewid = vtlib_purify($input['viewname']);
-	$queryGenerator = new QueryGenerator($module, $current_user);
-	$queryGenerator->initForCustomViewById($viewid);
 
-	if($input['query'] == 'true') {
-		$queryGenerator->addUserSearchConditions($input);
-	}
+	if($module == "Calendar") {
+		$listquery = getListQuery($module);
+		$oCustomView = new CustomView($module);
+		$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+		$where = '';
+		if($input['query'] == 'true') {
+			list($where, $ustring) = split("#@@#",getWhereCondition($module, $input));
+			if(isset($where) && $where != '') {
+				$query .= " AND " .$where;
+			}
+		}
+	} else {
+		$queryGenerator = new QueryGenerator($module, $current_user);
+		$queryGenerator->initForCustomViewById($viewid);
 
-	$queryGenerator->setFields(array('id'));
-	$query = $queryGenerator->getQuery();
+		if($input['query'] == 'true') {
+			$queryGenerator->addUserSearchConditions($input);
+		}
+		
+		$queryGenerator->setFields(array('id'));
+		$query = $queryGenerator->getQuery();
 
-	if($module == 'Documents') {
-		$folderid = vtlib_purify($input['folderidstring']);
-		$folderid = str_replace(';', ',', $folderid);
-		$query .= " AND vtiger_notes.folderid in (".$folderid.")";
-	}
-	if($module == 'Calendar') {
-		$query .= " AND activitytype != 'Emails'";
+		if($module == 'Documents') {
+			$folderid = vtlib_purify($input['folderidstring']);
+			$folderid = str_replace(';', ',', $folderid);
+			$query .= " AND vtiger_notes.folderid in (".$folderid.")";
+		}
 	}
 
 	$result = $adb->pquery($query, array());

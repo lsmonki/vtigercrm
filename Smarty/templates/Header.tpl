@@ -278,7 +278,7 @@
 				{/foreach}
 				{foreach key=maintabs item=detail from=$MENUSTRUCTURE}
 					{if $maintabs eq 'more' && $detail != null}
-						<td class="tabUnSelected"  align="center" onmouseout="fninvsh('allMenu');" onmouseover="fnvshobjMore(this,'allMenu','{$ANNOUNCEMENT}');"nowrap><a href="javascript:;" >{$APP.LBL_MORE}<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border=0 style="padding-left:5px" /></a></td>
+						<td class="tabUnSelected"  align="center" onmouseout="fnHide_Event('allMenu');" onmouseover="fnvshobjMore(this,'allMenu','{$ANNOUNCEMENT}');"nowrap><a href="javascript:;" >{$APP.LBL_MORE}<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border=0 style="padding-left:5px" /></a></td>
 						<td class="tabSeperator"><img src="{'spacer.gif'|@vtiger_imageurl:$THEME}"></td>
 					{/if}
 				{/foreach}
@@ -604,7 +604,7 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* More menu items *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="z-index: 2147483647;display:none;overflow-x:auto;">
+<div id="allMenu" onmouseout="fnHide_Event('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="z-index: 2147483647;visibility:hidden;display:block;overflow-x:auto;">
 	<table border=0 cellpadding="0" cellspacing="0" class="allMnuTable" padding="0" style="width:20px;">
 	<tr>
                 {foreach name=modulelist key=more item=childmodules from=$MENUSTRUCTURE}

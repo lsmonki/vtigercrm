@@ -56,13 +56,16 @@ var MailManageri18nInfo = {ldelim}{rdelim};
 				</td>
 				<td width="85%">
 					<span id="_messagediv_">{if $ERROR}<p>{$ERROR}</p>{/if}</span>
-					<div id="_contentdiv_"></div>
-					<div id="_contentdiv2_"></div>
-					<div id="_settingsdiv_"></div>
-					<div id="_relationpopupdiv_" style="display:none;position:absolute;width:800px;z-index:80000;"></div>
-					<div id="_replydiv_" style="display:none;">
-						{include file="modules/MailManager/Mail.Send.tpl"}
-					</div>
+						<div id="_contentdiv_"></div>
+						<div id="_contentdiv2_"></div>
+						<div id="_settingsdiv_"></div>
+						<div id="_relationpopupdiv_" style="display:none;position:absolute;width:800px;z-index:80000;"></div>
+						<div id="_replydiv_" style="display:none;">
+							{include file="modules/MailManager/Mail.Send.tpl"}
+						</div>
+						<div id="replycontentdiv" style="display:none;">
+							{include file="modules/MailManager/Mail.Send.tpl"}
+						</div>
 				</td>
 			</tr>
 			</table>

@@ -325,6 +325,13 @@ function getListViewEntries_js(module,url)
 		urlstring += '&record_id='+record_id;
 
 	urlstring += (gsorder !='') ? gsorder : '';
+	var return_module = document.getElementById('return_module').value;
+	if(module == 'Documents' && return_module == 'MailManager')
+	{ldelim}
+		urlstring += '&callback=MailManager.add_data_to_relatedlist';
+		urlstring += '&popupmode=ajax';
+	{rdelim}
+
 	$("status").style.display = "";
 	new Ajax.Request(
                 'index.php',

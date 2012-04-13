@@ -8,6 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-include_once('modules/Vtiger/Listview.php');
+include_once('modules/Vtiger/ListView.php');
 
 ?>

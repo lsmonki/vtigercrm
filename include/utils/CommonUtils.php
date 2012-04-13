@@ -3254,8 +3254,6 @@ function getReturnPath($host){
 	unset($arr[0]);
 	$domain=implode('.',$arr);
 	$Return_Path='noreply@'.$domain;
-	global $log;$log->fatal($Return_Path);
 	return $Return_Path;
 }
-
 ?>

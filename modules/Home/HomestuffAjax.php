@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ********************************************************************************/
 	
-global $adb,$current_user, $mod_strings;
+global $adb,$current_user, $mod_strings,$currentModule;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 $modval=trim($_REQUEST['modname']);
@@ -34,9 +34,11 @@ if(!empty($modval)){
 	}else{
 		$html = '<select id=selFilterid name=selFiltername onchange=setPrimaryFld(this) class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'"  style="width:60%">';
 		for($i=0;$i<$adb->num_rows($result);$i++){
-			if($adb->query_result($result,$i,'userid')==$current_user->id || $adb->query_result($result,$i,"viewname")=='All'){
+			if($adb->query_result($result,$i,"viewname")=='All'){
+				$html .= "<option value='".$adb->query_result($result,$i,'cvid')."'>".getTranslatedString('COMBO_ALL',$currentModule)."</option>";
+			} else if($adb->query_result($result,$i,'userid')==$current_user->id){
 				$html .= "<option value='".$adb->query_result($result,$i,'cvid')."'>".$adb->query_result($result,$i,"viewname")."</option>";
-			}else{
+			} else {
 				$html .= "<option value='".$adb->query_result($result,$i,'cvid')."'>".$adb->query_result($result,$i,"viewname")."[".$adb->query_result($result,$i,'user_name')."]</option>";
 			}
 		}

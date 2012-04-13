@@ -1313,7 +1313,9 @@ $app_strings = array (
 
 //added for creating a custom lead map row in UI
 'LBL_ADD_MAPPING'=> 'Add Mapping',
-'LBL_FIELD_MAPPING' => 'Field Mapping'
+'LBL_FIELD_MAPPING' => 'Field Mapping',
+
+'LBL_MANDATORY_FIELD_MISSING'=>'Mandatory Field value is missing',
 );
 
 $app_list_strings = array (

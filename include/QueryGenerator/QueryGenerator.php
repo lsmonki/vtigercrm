@@ -698,6 +698,9 @@ class QueryGenerator {
 							&& $this->isRelativeSearchOperators($operator)))){
 				$value = "'$value'";
 			}
+			if($this->isNumericType($field->getFieldDataType()) && empty($value)) {
+				$value = '0';
+			}
 			$sql[] = "$sqlOperator $value";
 		}
 		return $sql;

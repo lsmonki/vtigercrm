@@ -211,7 +211,7 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 			$this->_bcc  = Zend_Json::decode(decode_html($resultrow['mbcc']));
 
 			$this->_date	= decode_html($resultrow['mdate']);
-			$this->_subject = decode_html($resultrow['msubject']);
+			$this->_subject = str_replace("_"," ",decode_html($resultrow['msubject']));
 			$this->_body    = decode_html($resultrow['mbody']);
 			$this->_charset = decode_html($resultrow['mcharset']);
 
@@ -390,6 +390,7 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 * @param String $subject
 	 */
 	function setSubject($subject) {
+		$mailSubject = str_replace("_", " ", $subject);
 		$this->_subject = @self::__mime_decode($subject);
 	}
 
@@ -433,7 +434,8 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 * @param Email $from
 	 */
 	function setFrom($from) {
-		$this->_from = $from;
+		$mailFrom = str_replace("_", " ", $from);
+		$this->_from = @self::__mime_decode($mailFrom);
 	}
 
 	/**
@@ -491,7 +493,8 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 				$date = $m[1]; // Pick only date part
 			}
 		}
-		return $date;
+		$displayDate = getValidDisplayDate($date);
+		return $displayDate;
 	}
 
 	/**
