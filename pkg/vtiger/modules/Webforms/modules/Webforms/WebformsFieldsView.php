@@ -31,5 +31,7 @@ $smarty->assign('CHECK', $tool_buttons);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('CALENDAR_LANG','en');
 $smarty->assign('LANGUAGE',$current_language);
+$smarty->assign('DATE_FORMAT', $current_user->date_format);
+$smarty->assign('CAL_DATE_FORMAT', parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 $smarty->display(vtlib_getModuleTemplate($currentModule,'FieldsView.tpl'));
 ?>

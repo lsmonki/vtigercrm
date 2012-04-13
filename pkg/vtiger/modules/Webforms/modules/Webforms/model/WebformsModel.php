@@ -75,12 +75,30 @@ class Webforms_Model {
 	}
 
 	function setFields(array $fieldNames, $required, $value) {
+		require_once 'include/fields/DateTimeField.php';
 		foreach ($fieldNames as $ind => $fieldname) {
 			$fieldInfo = Webforms::getFieldInfo($this->getTargetModule(), $fieldname);
 			$fieldModel = new Webforms_Field_Model();
 			$fieldModel->setFieldName($fieldname);
 			$fieldModel->setNeutralizedField($fieldname, $fieldInfo['label']);
-			$fieldModel->setDefaultValue($value[$fieldname]);
+			$field = Webforms::getFieldInfo('Leads', $fieldname);
+			if (($field['type']['name'] == 'date')) {
+				$defaultvalue = DateTimeField::convertToDBFormat($value[$fieldname]);
+			}else if (($field['type']['name'] == 'boolean')){
+				if(in_array($fieldname,$required)){
+					if(empty($value[$fieldname])){
+						$defaultvalue='off';
+					}else{
+						$defaultvalue='on';
+					}
+				}else{
+					$defaultvalue=$value[$fieldname];
+				}
+			}
+			else {
+				$defaultvalue = vtlib_purify($value[$fieldname]);
+			}
+			$fieldModel->setDefaultValue($defaultvalue);
 			if ((!empty($required) && in_array($fieldname, $required))) {
 				$fieldModel->setRequired(1);
 			} else {
@@ -95,7 +113,7 @@ class Webforms_Model {
 	}
 
 	function getName() {
-		return vtlib_purify($this->data["name"]);
+		return html_entity_decode(vtlib_purify($this->data["name"]));
 	}
 
 	function getTargetModule() {
@@ -148,6 +166,9 @@ class Webforms_Model {
 
 		// Create?
 		if ($isNew) {
+			if (self::existWebformWithName($this->getName())) {
+				throw new Exception('LBL_DUPLICATE_NAME');
+			}
 			$this->setPublicId($this->generatePublicId($this->getName()));
 			$insertSQL = "INSERT INTO vtiger_webforms(name, targetmodule, publicid, enabled, description,ownerid,returnurl) VALUES(?,?,?,?,?,?,?)";
 			$result = $adb->pquery($insertSQL, array($this->getName(), $this->getTargetModule(), $this->getPublicid(), $this->getEnabled(), $this->getDescription(), $this->getOwnerId(), $this->getReturnUrl()));
@@ -251,16 +272,44 @@ class Webforms_Model {
 	}
 
 	static function retrieveDefaultValue($webformid, $fieldname) {
-		global $adb;
+		require_once 'include/fields/DateTimeField.php';
+		global $adb,$current_user,$current_;
+		$dateformat=$current_user->date_format;
 		$sql = "SELECT defaultvalue FROM vtiger_webforms_field WHERE webformid=? and fieldname=?";
 		$result = $adb->pquery($sql, array($webformid, $fieldname));
 		$defaultvalue = false;
 		if ($adb->num_rows($result)) {
 			$defaultvalue = $adb->query_result($result, 0, "defaultvalue");
+			$field = Webforms::getFieldInfo('Leads', $fieldname);
+			if (($field['type']['name'] == 'date') && !empty($defaultvalue)) {
+				$defaultvalue = DateTimeField::convertToUserFormat($defaultvalue);
+			}
+			$defaultvalue = explode(' |##| ', $defaultvalue);
 		}
 		return $defaultvalue;
 	}
 
+	static function existWebformWithName($name) {
+		global $adb;
+		$checkSQL = "SELECT 1 FROM vtiger_webforms WHERE name=?";
+		$check = $adb->pquery($checkSQL, array($name));
+		if ($adb->num_rows($check) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	static function isActive($field, $mod) {
+		global $adb;
+		$tabid = getTabid($mod);
+		$query = 'SELECT 1 FROM vtiger_field WHERE fieldname = ?  AND tabid = ? AND presence IN (0,2)';
+		$res = $adb->pquery($query, array($field, $tabid));
+		$rows = $adb->num_rows($res);
+		if ($rows > 0) {
+			return true;
+		}else
+			return false;
+	}
 }
 
 ?>

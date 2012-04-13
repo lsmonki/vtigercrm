@@ -76,7 +76,8 @@ class Webforms_Field_Model {
 	}
 
 	function getDefaultValue() {
-		return str_replace(',', ' |##| ', $this->data["defaultvalue"]);
+		$data=$this->data["defaultvalue"];
+		return $data;
 	}
 
 	function getRequired() {

@@ -11,6 +11,13 @@
 {include file='modules/Webforms/Buttons_List.tpl'}
 <script type="text/javascript" src="modules/{$MODULE}/language/{$LANGUAGE}.lang.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+<script type="text/javascript">
+	{if $WEBFORM->hasId()}
+		var mode="edit";
+	{else}
+		var mode="save";
+	{/if}
+</script>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	<tr>
 		<td class="showPanelBg" valign="top" width="100%">
@@ -28,7 +35,7 @@
 						<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 							<tr>
 								<td class="dvtTabCache" style="width:10px" nowrap="nowrap">&nbsp;</td>
-								<td class="dvtSelectedCell" nowrap="nowrap" align="center">{'LBL_BASIC_INFORMATION'|@getTranslatedString:$MODULE}</td>
+								<td class="dvtSelectedCell" nowrap="nowrap" align="center">{'LBL_MODULE_INFORMATION'|@getTranslatedString:$MODULE}</td>
 								<td class="dvtTabCache" style="width:65%">&nbsp;</td>
 							</tr>
 						</table>
@@ -50,7 +57,7 @@
 									<tr>
 										<td style="padding:10px">
 										<!-- General details -->
-										<form action="index.php?module=Webforms&action=Save" method="post">
+										<form name="webform_edit" id="webform_edit" action="index.php?module=Webforms&action=Save" method="post">
 											{if $WEBFORM->hasId()}
 											<input type="hidden" name="id" value={$WEBFORM->getId()}></input>
 											{/if}
@@ -58,7 +65,7 @@
 												<tr>
 													<td colspan="4" style="padding:5px">
 														<div align="center" >
-														<input title="{'LBL_SAVE_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_SAVE_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small save" onclick="javascript:return Webforms.validateForm()" name="button" value="{'LBL_SAVE_BUTTON_LABEL'|@getTranslatedString:$MODULE} " style="width:70px" type="submit">
+														<input title="{'LBL_SAVE_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_SAVE_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small save" onclick="javascript:return Webforms.validateForm('webform_edit','index.php?module=Webforms&action=Save')" name="button" value="{'LBL_SAVE_BUTTON_LABEL'|@getTranslatedString:$MODULE} " style="width:70px" type="submit">
 														<input title="{'LBL_CANCEL_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_CANCEL_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small cancel" onclick="window.history.back()" name="button" value="{'LBL_CANCEL_BUTTON_LABEL'|@getTranslatedString:$MODULE}" style="width:70px" type="button">
 														</div>
 													</td>
@@ -85,7 +92,7 @@
 														<font color="red">*</font>{'LBL_WEBFORM_NAME'|@getTranslatedString:$MODULE}
 													</td>
 													<td class="dvtCellInfo" align="left" width="40%">
-														<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="name"  name="name" value="{$WEBFORM->getName()}">
+														<input type="text" onblur="this.className='detailedViewTextBox';" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="name"  name="name" value="{$WEBFORM->getName()}" {if $WEBFORM->hasId()}readonly="readonly"{/if}>
 													</td>
 													<td class="dvtCellLabel" align="right" width="10%" nowrap="nowrap">
 														<font color="red">*</font>{'LBL_MODULE'|@getTranslatedString:$MODULE} :
@@ -93,7 +100,7 @@
 													<td class="dvtCellInfo" align="left" width="40%">
 														{if $WEBFORM->hasId()}
 															{$WEBFORM->getTargetModule()}
-															<input type="hidden" value="{$WEBFORM->getTargetModule()}" name="targetmodule"></input>
+															<input type="hidden" value="{$WEBFORM->getTargetModule()}" name="targetmodule" id="targetmodule"></input>
 														{else}
 															<select id="targetmodule" name="targetmodule" onchange='javascript:Webforms.fetchFieldsView(this.value);' class="small">
 																<option value="">--module--</option>
@@ -123,7 +130,7 @@
 														{'LBL_RETURNURL'|@getTranslatedString:$MODULE}
 													</td>
 													<td class="dvtCellInfo" align="left" >
-														<input type="text" onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="returnurl"  name="returnurl" value="{$WEBFORM->getReturnUrl()}">
+														http:// <input type="text" onblur="this.className='detailedViewTextBox';" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" id="returnurl"  name="returnurl" value="{$WEBFORM->getReturnUrl()}">
 													</td>
 												</tr>
 												{if $WEBFORM->hasId()}
@@ -147,7 +154,7 @@
 														{'LBL_DESCRIPTION'|@getTranslatedString:$MODULE}
 													</td>
 													<td  colspan="3">
-														<textarea  onblur="this.className='detailedViewTextBox';sensex_info()" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" rows="8" cols="90" onblur="this.className='detailedViewTextBox'" name="description" id="description" onfocus="this.className='detailedViewTextBoxOn'" tabindex="" class="detailedViewTextBox" >{if $WEBFORM->hasId()}{$WEBFORM->getDescription()}{/if}</textarea>
+														<textarea  onblur="this.className='detailedViewTextBox';" onfocus="this.className='detailedViewTextBoxOn';" class="detailedViewTextBox" rows="8" cols="90" onblur="this.className='detailedViewTextBox'" name="description" id="description" onfocus="this.className='detailedViewTextBoxOn'" tabindex="" class="detailedViewTextBox" >{if $WEBFORM->hasId()}{$WEBFORM->getDescription()}{/if}</textarea>
 													</td>
 												</tr>
 												<!--Cell Information end-->
@@ -176,7 +183,7 @@
 												<tr>
 													<td colspan="4" style="padding:5px">
 														<div align="center" >
-														<input title="{'LBL_SAVE_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_SAVE_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small save" onclick="javascript:return Webforms.validateForm()" name="button" value="{'LBL_SAVE_BUTTON_LABEL'|@getTranslatedString:$MODULE} " style="width:70px" type="submit">
+														<input title="{'LBL_SAVE_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_SAVE_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small save" onclick="javascript:return Webforms.validateForm('webform_edit','index.php?module=Webforms&action=Save')" name="button" value="{'LBL_SAVE_BUTTON_LABEL'|@getTranslatedString:$MODULE} " style="width:70px" type="submit">
 														<input title="{'LBL_CANCEL_BUTTON_TITLE'|@getTranslatedString:$MODULE}" accesskey="{'LBL_CANCEL_BUTTON_KEY'|@getTranslatedString:$MODULE}" class="crmbutton small cancel" onclick="window.history.back()" name="button" value="{'LBL_CANCEL_BUTTON_LABEL'|@getTranslatedString:$MODULE}" style="width:70px" type="button">
 														</div>
 													</td>

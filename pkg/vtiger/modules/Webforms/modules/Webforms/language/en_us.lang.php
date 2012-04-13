@@ -34,8 +34,9 @@ $mod_strings = Array (
 	'LBL_DELETE'=>'Delete',
 	'LBL_SAVE'=>'Save',
 	'LBL_SELECT_VALUE'=>'--Select Value--',
-	'LBL_BASIC_INFORMATION'=>'Basic Information',
-	'LBL_SELECT_USER'=>'Select User',
+	'LBL_DUPLICATE_NAME' => 'Webform with same name exists',
+	'ERR_CREATE_WEBFORM' => 'Webform creation failed',
+	'LBL_SELECT_USER' => 'Select User'
 );
 
 ?>

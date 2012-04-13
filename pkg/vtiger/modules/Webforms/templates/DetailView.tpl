@@ -138,7 +138,7 @@
 														{'LBL_RETURNURL'|@getTranslatedString:$MODULE}
 													</td>
 													<td class="dvtCellInfo" align="left" >
-														{$WEBFORMMODEL->getReturnUrl()}
+														http://{$WEBFORMMODEL->getReturnUrl()}
 													</td>
 												</tr>
 												<tr style="height:25px;">
@@ -194,31 +194,43 @@
 															</tr>
 															{foreach item=field from=$WEBFORMMODEL->getFields() name=fieldloop}
 															{assign var=fieldinfo value=$WEBFORM->getFieldInfo($WEBFORMMODEL->getTargetModule(), $field->getFieldName())}
-															<tr style="height:25px" id="field_row">
-																<td class="dvtCellLabel" align="left" colspan="1">
-																{if $fieldinfo.mandatory eq 1}
-																	<font color="red">*</font>
-																{/if}
-																	{$fieldinfo.label}
-																</td>
-																<td class="dvtCellInfo">
-																	{$WEBFORMMODEL->retrieveDefaultValue($WEBFORMMODEL->getId(),$fieldinfo.name)}
-																</td>
-																<td class="dvtCellInfo" align="center" colspan="1">
-																	{if  $WEBFORMMODEL->isRequired($WEBFORMMODEL->getId(),$fieldinfo.name) eq true}
-																		<img src="themes/images/prvPrfSelectedTick.gif">
-																	{else}
-																		<img src="themes/images/no.gif">
-																	{/if}														
-																</td>
-																<td class="dvtCellLabel" align="left" colspan="1">
-																	{if $WEBFORMMODEL->isCustomField($fieldinfo.name) eq true}
-																		label:{$fieldinfo.label}
-																	{else}
-																		{$fieldinfo.name}
+															{if $WEBFORMMODEL->isActive($fieldinfo.name,$WEBFORMMODEL->getTargetModule())}
+																<tr style="height:25px" id="field_row">
+																	<td class="dvtCellLabel" align="left" colspan="1">
+																	{if $fieldinfo.mandatory eq 1}
+																		<font color="red">*</font>
 																	{/if}
-																</td>
-															</tr>
+																		{$fieldinfo.label}
+																	</td>
+																	<td class="dvtCellInfo">
+																		{assign var="defaultvalueArray" value=$WEBFORMMODEL->retrieveDefaultValue($WEBFORMMODEL->getId(),$fieldinfo.name)}
+																		{if $fieldinfo.type.name eq 'boolean'}
+																			{if $defaultvalueArray[0] eq 'off'}
+																				no
+																			{elseif $defaultvalueArray[0] eq 'on'}
+																				yes
+																			{/if}
+																		{else}
+
+																		{','|implode:$defaultvalueArray}
+																		{/if}
+																	</td>
+																	<td class="dvtCellInfo" align="center" colspan="1">
+																		{if  $WEBFORMMODEL->isRequired($WEBFORMMODEL->getId(),$fieldinfo.name) eq true}
+																			<img src="themes/images/prvPrfSelectedTick.gif">
+																		{else}
+																			<img src="themes/images/no.gif">
+																		{/if}
+																	</td>
+																	<td class="dvtCellLabel" align="left" colspan="1">
+																		{if $WEBFORMMODEL->isCustomField($fieldinfo.name) eq true}
+																			label:{$fieldinfo.label}
+																		{else}
+																			{$fieldinfo.name}
+																		{/if}
+																	</td>
+																</tr>
+															{/if}
 														{/foreach}
 														</table>
 <!--Fields view ends here-->

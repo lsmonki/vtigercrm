@@ -26,20 +26,21 @@ var Webforms ={
 		var i;
 		var len=arguments.length;
 		for(i=0;i<len;i++){
-			if($(arguments[i]).style.display!="none"){
-				$(arguments[i]).style.display="none";
-			}else{
-				$(arguments[i]).style.display="inline";
+			if($(arguments[i])){
+				if($(arguments[i]).style.display!="none"){
+					$(arguments[i]).style.display="none";
+				}else{
+					$(arguments[i]).style.display="inline";
+				}
 			}
 		}
 	},
 
-	validateForm: function(form) {
+	validateForm: function(form,action) {
 		var name=$('name').value;
 		var ownerid=$('ownerid').value;
 		var module=$('targetmodule').value;
 		if((name=="")||(name==null)||(ownerid=="")||(ownerid==null)||(module=="")||(module==null)){
-
 			if (typeof webforms_alert_arr != 'undefined') {
 				alert(getTranslatedString('LBL_MADATORY_FIELDS', webforms_alert_arr));
 			} else {
@@ -47,8 +48,36 @@ var Webforms ={
 			}
 			return false;
 		}
+		elem=document.getElementById(form).elements;
+		elemNo=document.getElementById(form).elements.length;
+		for(i=0;i<elemNo;i++){
+			if((elem[i].value!='' && elem[i].value!=null) && (elem[i].getAttribute('fieldtype')!=null && elem[i].getAttribute('fieldtype')!='') && elem[i].style.display!='none' ){
+				switch(elem[i].getAttribute('fieldtype')){
+					case 'date' :if(!dateValidate(elem[i].name,elem[i].getAttribute('fieldlabel'),elem[i].getAttribute('fieldtype')))
+										return false;
+						break;
+					case 'time' :if(!timeValidate(elem[i].name,elem[i].getAttribute('fieldlabel'),elem[i].getAttribute('fieldtype')))
+										return false;
+						break;
+					case 'currency':
+					case 'number':
+					case 'double' :if(!numValidate(elem[i].name,elem[i].getAttribute('fieldlabel'),elem[i].getAttribute('fieldtype')))
+										return false;
+						break;
+					case 'email' :if(!patternValidate(elem[i].name,elem[i].getAttribute('fieldlabel'),elem[i].getAttribute('fieldtype')))
+										return false;
+						break;
+					default :break;
 
-		return true;
+
+				}
+			}
+		}
+		if(mode=="save")
+			Webforms.checkName(name,form,action);
+		else
+			Webforms.submitForm(form, action);
+		return false;
 	},
 
 	getHTMLSource:function(id){
@@ -86,10 +115,39 @@ var Webforms ={
 			postBody:url,
 			onComplete: function(response) {
 				VtigerJS_DialogBox.unblock();
-				var str = response.responseText
+				var str = response.responseText;
 				$('Webforms_FieldsView').innerHTML = str;
+				eval(document.getElementById('counter').innerHTML);
+				for(i=1;i<=count;i++){
+					if(document.getElementById("date_"+i)){
+						eval(document.getElementById("date_"+i).innerHTML);
+					}
+				}
 			}
 		});
+	},
+	checkName: function(name,form,action) {
+		if((name=="")||(name==null)) return;
+		var url = "module=Webforms&action=WebformsAjax&file=Save&ajax=true&name=" + encodeURIComponent(name);
+
+		new Ajax.Request('index.php', {
+			queue: {
+				position: 'end',
+				scope: 'command'
+			},
+			method: 'post',
+			postBody:url,
+			onComplete: function(response) {
+				var JSONres = JSON.parse(response.responseText);
+				if(JSONres.result==false){
+					alert(getTranslatedString('LBL_DUPLICATE_NAME', webforms_alert_arr));
+				}
+				else{
+					Webforms.submitForm(form, action);
+				}
+			}
+		});
+
 	}
 }
 
