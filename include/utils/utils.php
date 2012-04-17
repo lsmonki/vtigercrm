@@ -4946,7 +4946,7 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 		}
 		$storearray = array();
 		for ($i = 0; $i < $adb->num_rows($result); $i++) {
-			$storearray[] = $adb->query_result($result, $i);
+			$storearray[] = $adb->query_result($result, $i, 'id');
 		}
 
 		$excludedRecords=explode(';',$excludedRecords);
@@ -4957,9 +4957,10 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 		if($input['selectallmode']=='true') {
 			$result = getSelectAllQuery($input,$module);
 			$storearray = array();
+			$focus = CRMEntity::getInstance($module);
 
 			for ($i = 0; $i < $adb->num_rows($result); $i++) {
-				$storearray[] = $adb->query_result($result, $i);
+				$storearray[] = $adb->query_result($result, $i, $focus->table_index);
 			}
 
 			$excludedRecords = explode(';',$excludedRecords);
@@ -4977,9 +4978,10 @@ function getSelectedRecords($input,$module,$idstring,$excludedRecords) {
 
 		$result = getSelectAllQuery($input,$module);
 		$storearray = array();
-
+		$focus = CRMEntity::getInstance($module);
+		
 		for ($i = 0; $i < $adb->num_rows($result); $i++) {
-			$storearray[] = $adb->query_result($result, $i);
+			$storearray[] = $adb->query_result($result, $i, $focus->table_index);
 		}
 
 		$excludedRecords = explode(';',$excludedRecords);
@@ -5032,7 +5034,7 @@ function getSelectAllQuery($input,$module) {
 
 function getCampaignAccountIds($id) {
 	global $adb;
-	$sql="SELECT vtiger_account.accountid FROM vtiger_account
+	$sql="SELECT vtiger_account.accountid as id FROM vtiger_account
 		INNER JOIN vtiger_campaignaccountrel ON vtiger_campaignaccountrel.accountid = vtiger_account.accountid
 		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid
 		WHERE vtiger_campaignaccountrel.campaignid = ? AND vtiger_crmentity.deleted=0";
@@ -5042,7 +5044,7 @@ function getCampaignAccountIds($id) {
 
 function getCampaignContactIds($id) {
 	global $adb;
-	$sql="SELECT vtiger_contactdetails.contactid FROM vtiger_contactdetails
+	$sql="SELECT vtiger_contactdetails.contactid as id FROM vtiger_contactdetails
 		INNER JOIN vtiger_campaigncontrel ON vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid
 		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 		WHERE vtiger_campaigncontrel.campaignid = ? AND vtiger_crmentity.deleted=0";
@@ -5052,7 +5054,7 @@ function getCampaignContactIds($id) {
 
 function getCampaignLeadIds($id) {
 	global $adb;
-	$sql="SELECT vtiger_leaddetails.leadid FROM vtiger_leaddetails
+	$sql="SELECT vtiger_leaddetails.leadid as id FROM vtiger_leaddetails
 		INNER JOIN vtiger_campaignleadrel ON vtiger_campaignleadrel.leadid = vtiger_leaddetails.leadid
 		LEFT JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
 		WHERE vtiger_campaignleadrel.campaignid = ? AND vtiger_crmentity.deleted=0";

@@ -2383,7 +2383,7 @@ function getListQuery($module, $where = '') {
 			LEFT JOIN vtiger_attachmentsfolder
 				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid";
 			$query .= getNonAdminAccessControlQuery($module, $current_user);
-			$query .= "WHERE vtiger_crmentity.deleted = 0 " . $where;
+			$query .= "WHERE vtiger_notes.filestatus=1 AND vtiger_crmentity.deleted = 0 " . $where;
 			break;
 		Case "Contacts":
 			//Query modified to sort by assigned to

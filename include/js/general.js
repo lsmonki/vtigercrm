@@ -694,12 +694,12 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 
 function numValidate(fldName,fldLabel,format,neg) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-	if(typeof userCurrencySeparator != 'undefined') {
+	if(typeof userCurrencySeparator != 'undefined' && userCurrencySeparator != '') {
 		while(val.indexOf(userCurrencySeparator) != -1) {
 			val = val.replace(userCurrencySeparator,'');
 		}
 	}
-	if(typeof userDecimalSeparator != 'undefined') {
+	if(typeof userDecimalSeparator != 'undefined' && userDecimalSeparator != '') {
 		if(val.indexOf(userDecimalSeparator) != -1) {
 			val = val.replace(userDecimalSeparator,'.');
 		}
@@ -806,7 +806,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-	if(typeof userCurrencySeparator != 'undefined') {
+	if(typeof userCurrencySeparator != 'undefined' && userCurrencySeparator != '') {
 		while(val.indexOf(userCurrencySeparator) != -1) {
 			val = val.replace(userCurrencySeparator,'');
 		}
@@ -4492,7 +4492,7 @@ function fnvshobjMore(obj,Lay,announcement){
 			}
 		}
 	}
-	
+
 	if((leftSide > 100) && (leftSide < 500)){
 		tagName.style.left= leftSide -50 + 'px';
 	} else if((leftSide >= 500) && (leftSide < 800)){
@@ -4501,7 +4501,7 @@ function fnvshobjMore(obj,Lay,announcement){
 		if((widthM > 100) && (widthM < 250)) {
 			tagName.style.left= leftSide- 100  + 'px';
 		} else if((widthM >= 250) && (widthM < 350)) {
-			
+
 			tagName.style.left= leftSide- 200  + 'px';
 		}
 		else if((widthM >= 350) && (widthM < 500)) {
@@ -4521,7 +4521,7 @@ function fnvshobjMore(obj,Lay,announcement){
 	}
 	tagName.style.display = 'block';
 	tagName.style.visibility = "visible";
-	
+
 }
 
 function fnvshobjsearch(obj,Lay){

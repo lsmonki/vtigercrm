@@ -492,9 +492,13 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 			} else if (preg_match("/[a-zA-Z]{3}, ([0-9]{1,2} [a-zA-Z]{3} [0-9]{4})/", $date, $m)) {
 				$date = $m[1]; // Pick only date part
 			}
+			$userDate = str_replace('--','',getValidDisplayDate($date));
+			return $userDate;
+		} else {
+			$dateWithTime = new DateTimeField(date('Y-m-d H:i:s',$date));
+			$userDateTime = $dateWithTime->getDisplayDateTimeValue();
+			return $userDateTime;
 		}
-		$displayDate = getValidDisplayDate($date);
-		return $displayDate;
 	}
 
 	/**

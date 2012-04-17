@@ -104,7 +104,7 @@
 		
 		<tr>
 			<td width="100px" align=right>{'LBL_Date'|@getTranslatedString}:</td>
-			<td id="_mailopen_date">{"Y-m-d H:i:s O"|@date:$MAIL->date()}</td>
+			<td id="_mailopen_date">{$MAIL->date()}</td>
 		</tr>
 		
 		{if $MAIL->attachments(false)}
