@@ -1267,31 +1267,23 @@ $app_strings = array (
 		  is no longer applicable, please reset your password.',
 	'LBL_RESET_PASSWORD_DESCRIPTION' => 'you can reset password for all users using a script and set it to thier respective
 			  user names.',
-
 'LBL_CRITERIA_AND'=>'and',
 'LBL_CRITERIA_OR'=>'or',
 'LBL_NEW_GROUP'=>'New Group',
 'LBL_DELETE_GROUP'=>'Delete Group',
 'LBL_NEW_CONDITION'=>'New Condition',
 'LBL_ADVANCED_FILTER' => 'Advanced Search',
-
 'LBL_CHANGE'=>'Change',
 'LBL_CHANGE_TITLE'=>'Change [Alt+C]',
-
 'LBL_NEXT_BUTTON_LABEL' => 'Next',
-
 'LBL_MAX_SIZE'=> 'Maximum upload size is', //added for uploadsize limit message
 'LBL_FILESIZEIN_MB'=> 'MB', //added to show filesize in MB
-
-// Unified Cron Job language strings
 'LBL_DISABLED' => 'Disabled',
 'LBL_RUNNING' => 'Running',
 'LBL_LAST_SCAN_TIMED_OUT' => 'Last Scan Timed Out',
 'LBL_LAST_SCAN_AT' => 'Last Scan @',
 'LBL_TIME_TAKEN' => 'Time taken',
 'LBL_SHORT_SECONDS' => 'sec',
-
-//Added missing labels in the vtigercrm
 'Projects' => 'Projects',
 'End Time' => 'End Time',
 'Start Time' => 'Start Time',
@@ -1303,18 +1295,14 @@ $app_strings = array (
 'Quantity' => 'Quantity',
 'Net Total' => 'Net Total',
 'Send SMS' => 'Send SMS',
-
 'LBL_MORE'=>'More',
 'LBL_CRM_SETTINGS' => 'CRM Settings',
 'LBL_RELATED_TO_THIS' =>'related to this',
 'LBL_DESELECT_ALL' => 'Deselect all',
 'LBL_RECORDS_IN' => 'records in',
 'LBL_FOLDER' => 'folder',
-
-//added for creating a custom lead map row in UI
 'LBL_ADD_MAPPING'=> 'Add Mapping',
 'LBL_FIELD_MAPPING' => 'Field Mapping',
-
 'LBL_MANDATORY_FIELD_MISSING'=>'Mandatory Field value is missing',
 );
 
