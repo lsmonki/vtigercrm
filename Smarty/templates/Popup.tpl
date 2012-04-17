@@ -330,6 +330,7 @@ function getListViewEntries_js(module,url)
 	{ldelim}
 		urlstring += '&callback=MailManager.add_data_to_relatedlist';
 		urlstring += '&popupmode=ajax';
+		urlstring += '&srcmodule=MailManager';
 	{rdelim}
 
 	$("status").style.display = "";
