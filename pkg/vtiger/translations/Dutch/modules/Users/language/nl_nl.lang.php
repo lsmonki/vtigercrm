@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.5 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.6 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/Users/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -562,13 +562,14 @@ $mod_strings = Array(
 'Other Phone'=>'Telefoon Prive ',
 'Other Email'=>'Prive e-mail',
 'Fax'=>'Fax',
-'Yahoo id'=>'Secundair e-mailadres',
+'Yahoo id'=>'Tweede e-mailadres',
 'Home Phone'=>'Thuis telefoon',
 'User Image'=>'Foto Gebruiker ',
 'Date Format'=>'Datum formaat',
 'Tag Cloud'=>'Tag cloud',
 'Signature'=>'Handtekening',
 'Notes'=>'Notities',
+'Documents'=>'Documenten',
 'Street Address'=>'Adres',
 'City'=>'Plaats',
 'State'=>'Provincie',
@@ -710,8 +711,7 @@ $mod_strings = Array(
 
 // Added for Create Custom Fields 
 'LBL_USER_CUSTOMFIELDS_DESCRIPTION' => 'Create Custom Fields for Users ',
-'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
-'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
+'LBL_USER_CUSTOMFIELDS' => 'Gebruikers Eigen velden',
 
 'LBL_CURRENCY_CONFIGURATION'=> 'Currency Configuration',
 
@@ -813,6 +813,11 @@ $mod_strings = Array(
 'Pacific/Auckland' => '(UTC+12:00) Auckland',
 'Asia/Magadan' => '(UTC+12:00) Magadan',
 'Pacific/Tongatapu' => '(UTC+13:00) Nukualofa',
+
+'Theme'=>'Thema',
+'Language'=>'Taal',
+'Secondary Email'=>'Tweede E-mail',
+'Time Zone'=>'Tijdzone',
 );
 
 ?>

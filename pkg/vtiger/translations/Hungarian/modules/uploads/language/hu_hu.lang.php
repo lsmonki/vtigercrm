@@ -18,16 +18,13 @@
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array(
-
-//Added fields for uploads (attach files)
-'LBL_ATTACH_FILE'=>'Fájl Csatolmány',
-'LBL_ATTACH'=>'Csatol',
-'LBL_CANCEL'=>'Visszavon',
-'LBL_STEP_SELECT_FILE'=>'1. Lépés : Fájl kiválasztása',
-'LBL_BROWSE_FILES'=>'Kattints a Talózás... gombra és válaszd ki a csatolandó fájlt.',
-'LBL_DESCRIPTION'=>'2. Lépés : Írj egy megjegyzést',
-'LBL_OPTIONAL'=>'(opcionális)',
+$mod_strings = array(
+	'LBL_ATTACH_FILE' => 'Fájl Csatolmány',
+	'LBL_ATTACH' => 'Csatol',
+	'LBL_CANCEL' => 'Visszavon',
+	'LBL_STEP_SELECT_FILE' => '1. Lépés : Fájl kiválasztása',
+	'LBL_BROWSE_FILES' => 'Kattints a Tallózás/Fájl kiválasztás... gombra és válaszd ki a csatolandó fájlt.',
+	'LBL_DESCRIPTION' => '2. Lépés : Írj egy megjegyzést',
+	'LBL_OPTIONAL' => '(opcionális)'
 );
-
 ?>

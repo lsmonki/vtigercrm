@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.6 $ $Date: 2011/11/14 17:14:14 $
+ * @version 	$Revision: 1.7 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/Dashboard/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -199,13 +199,10 @@ $mod_strings = Array(
 "Negotiation/Review"=>"Onderhandeling/Afronding",
 "Closed Won"=>"Gesloten Gewonnen",
 "Closed Lost"=>"Gesloten Verloren",
-
-
 //	Vicus - T6909
 'LBL_AMOUNT_FORM_TITLE_TKS'=>'Pijplijn op gewaardeerde omzet (waarde x slagingskans)',
 'LBL_TOTAL_PIPELINE_TKS'=>'Totaal gewaardeerde omzet is ',
 'LBL_SALES_STAGE_FORM_DESC_TKS'=>'Toont cummulatieve opportunity bedragen bij geselecteerde verkoopstadia voor geselecteerde gebruikers waar de verwachte slutiignsdatum ligt binnen de gespecificeerde datumrange.'
 
 );
-
 ?>

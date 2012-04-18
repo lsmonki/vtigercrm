@@ -11,13 +11,13 @@
  * Description:  Defines the Hungarian language pack for the PBXManager module vtiger 5.3.x
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array(
+$mod_strings = array(
 	'Asterisk' => 'Asterisk',
-	'LBL_ASTERISK_INFORMATION' => 'ASTERISK Információ',
-		
-	'Call From'=>'Bejövő hívás',
-	'Call To'=>'Kimenő hívás',
-	'Time Of Call'=>'Hívás ideje',
+	'LBL_ASTERISK_INFORMATION' => 'ASTERISK Adatok',
+	'Call From' => 'Bejövő hívás',
+	'Call To' => 'Kimenő hívás',
+	'Time Of Call' => 'Hívás ideje',
+	'PBXManager ID' => 'PBX menedzser AZ',
+	'Status' => 'Állapot'
 );
-
 ?>

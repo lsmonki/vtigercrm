@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.5 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.6 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/Leads/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -259,6 +259,13 @@ $mod_strings = Array(
 // END   
 
 'LBL_TRANSFER_RELATED_RECORDS_TO' => 'Draag geselecteerde records over aan',
+
+
+'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Hetvolgende is een van de mogelijke redenen',
+'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'Niet alle verplichte velden zijn gekoppeld',
+'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Enkele van de verplichte velden zijn leeg',
+'LBL_LEADS_FIELD_MAPPING' => 'Leads Maatwerk Veldmapping',
+
 );
 
 ?>

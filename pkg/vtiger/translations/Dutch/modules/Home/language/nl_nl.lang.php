@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.3 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.4 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/Home/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -124,7 +124,7 @@ $mod_strings = Array(
 'My New Leads'=>'Mijn nieuwe Leads',
 'Key Metrics'=>'Kerngetallen',
 'My Group Allocation'=>'Mijn Groepstoewijzing',
-'My Recent FAQs'=>'Mijn recente FAQ\'s',
+'My Recent FAQs'=>'Mijn recente FAQs',
 'Upcoming Activities'=>'Aankomende activiteiten',
 'Pending Activities'=>'Geparkeerde activiteiten',
 'Home Page Dashboard'=>'Home Page Dashboard',
@@ -132,6 +132,10 @@ $mod_strings = Array(
 
 'MSG_NO_FILTERS' => 'Geen filters beschikbaar',
 'MSG_NO_FIELDS' => 'Geen Velden Beschikbaar',
+
+//added for Default Widgets
+'LBL_DEFAULT_WIDGET'=>'Standaard Widgets',
+'LBL_NO_WIDGETS_HIDDEN'=>'Er zijn Geen standaard widgets verborgen',
 
 );
 

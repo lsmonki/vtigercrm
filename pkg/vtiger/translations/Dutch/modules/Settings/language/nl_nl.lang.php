@@ -24,7 +24,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.4 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.6 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/Settings/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -143,6 +143,8 @@ $mod_strings = Array(
 'PickList'=>'Selectielijst',
 'LBL_MULTISELECT_COMBO'=>'Selectielijst',
 'Skype'=>'Skype',
+
+'Time'=>'Tijd',
 
 //added for patch2
 'USERGROUPLIST'=>'Groepen',
@@ -467,7 +469,7 @@ $mod_strings = Array(
 'LBL_NEW_CURRENCTY'=>'Nieuwe valuta',
 'LBL_BASE_CURRENCY'=>'Basis valuta - US Dollar',
 'LBL_DELETE_CURRENCY'=>'Verwijder valuta',
-//Added for singlepane view in modules 
+//Added for singlepane view in modules
 'LBL_DEFAULT_DETAIL_VIEW'=>'Standaard detail overzicht',
 'LBL_DEFAULT_MODULE_VIEW'=>'Standaard module overzicht',
 'LBL_DEFAULT_MODULE_VIEW_DESC'=>'Standaard detail overzicht voor alle modules instellen',
@@ -853,7 +855,7 @@ $mod_strings = Array(
 'LBL_WHEN_TO_RUN_WORKFLOW'=>'Wanneer een werkstroom starten',
 'LBL_ONLY_ON_FIRST_SAVE'=>'Alleen bij de eerste keer opslaan',
 'LBL_UNTIL_FIRST_TIME_CONDITION_TRUE'=>'Totdat de eerste keer een voorwaarde waar is',
-'LBL_EVERYTIME_RECORD_SAVED'=>'Elke keer dat een recors opgeslagen wordt',
+'LBL_EVERYTIME_RECORD_SAVED'=>'Elke keer dat een record opgeslagen wordt',
 'LBL_ON_MODIFY' => 'Elke keer als een record gewijzigd is',
 'LBL_CONDITIONS'=>'Voorwaarden',
 'LBL_NEW_CONDITION_BUTTON_LABEL'=>'Nieuwe Voorwaarde',
@@ -1019,7 +1021,23 @@ $mod_strings = Array(
 'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'Dit belastinglabel bestaat al.',
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Sommige belastinglabels bestaan al, maar nog niet opgeslagen.',
 
-'Configuration Editor' => 'Configuratie editor',
+'Configuration Editor' => 'Configuratie bewerker',
 'Update configuration file of the application' => 'Bewerk de configuratie van deze toepassing.',
+
+'ModTracker' => 'ModTracker',
+'LBL_MODTRACKER_DESCRIPTION' => 'Selecteer modules voor tracking',
+
+'LBL_MENUS_TO_SHOW'=>'Selecteer modules om in het hoofdmenu te tonen',
+'LBL_MENU_DESC'=>'Pas de Menuvolgorde aan',
+'LBL_MENU_EDITOR'=>'Menubewerker',
+'LBL_MENUS_TO_SHOW_DESCRIPTION' => 'Gebruik de pijlen om de voglenorde in ' .
+		'het menu aan te passen. De top 10 menuitems worden in het hoofdmenu getoond' .
+		'en de rest wordt getoond onder de <b><i>Meer</i></b> dropdown',
+'LBL_ALL_MODULES' => 'Alle Modules',
+'LBL_SELECTED_MODULES' => 'Geselecteerde Modules',
+
+'LBL_CRM_SETTINGS' => 'CRM Instellingen',
+
+
 );
 ?>

@@ -7,9 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-$mod_strings = Array (
-'WSAPP' => 'WSAPP',
-
+$mod_strings = array(
+	'WSAPP' => 'WSAPP'
 );
-
 ?>

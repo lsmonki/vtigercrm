@@ -12,33 +12,27 @@
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array (
-'SMSNotifier'                 => 'SMS Küldő',
-'SINGLE_SMSNotifier'          => 'SMS Infó',
-'LBL_SMSNOTIFIER_INFORMATION' => 'SMS adatok',
-'LBL_CUSTOM_INFORMATION'      => 'Egyedi adatok',
-'Assigned To'                 => 'Felelős',
-'Created Time'                => 'Létrehozva',
-'Modified Time'               => 'Módosítva',
-'message'                     => 'Üzenet',
-
-'Related To'                  => 'Kapcsolódik hozzá',
-'Status'                      => 'Állapot',
-
-'LBL_CHECK_STATUS'            => 'Állapot ellenőrzése',
-
-'SERVER_CONFIGURATION'        => 'Szerver Beállítások',
-'SERVER_CONFIGURATION_DESCRIPTION' => 'SMS Szerver Beállításai',
-
-'LBL_ADDNEW'                  => 'Új hozzáadása',
-'LBL_UPDATE'                  => 'Módosít',
-'LBL_PROVIDER'                => 'Szolgáltató',
-'LBL_SELECT_ONE'              => 'Válassz egyet',
-
-'LBL_RECEPIENTS'              => 'Címzettek',
-'SMSCheckStatus'              => 'Állapot ellenőrzése',
-'StatusInformation'           => 'Állapot Információ',
-
+$mod_strings = array(
+	'SMSNotifier' => 'SMS Küldő',
+	'SINGLE_SMSNotifier' => 'SMS Infó',
+	'LBL_SMSNOTIFIER_INFORMATION' => 'SMS adatok',
+	'LBL_CUSTOM_INFORMATION' => 'Egyedi adatok',
+	'Assigned To' => 'Felelős',
+	'Created Time' => 'Létrehozva',
+	'Modified Time' => 'Módosítva',
+	'message' => 'Üzenet',
+	'Related To' => 'Kapcsolódik hozzá',
+	'Status' => 'Állapot',
+	'LBL_CHECK_STATUS' => 'Állapot ellenőrzése',
+	'SERVER_CONFIGURATION' => 'Szerver Beállítások',
+	'SERVER_CONFIGURATION_DESCRIPTION' => 'SMS Szerver Beállításai',
+	'LBL_ADDNEW' => 'Új hozzáadása',
+	'LBL_UPDATE' => 'Módosít',
+	'LBL_PROVIDER' => 'Szolgáltató',
+	'LBL_SELECT_ONE' => 'Válassz egyet',
+	'LBL_RECEPIENTS' => 'Címzettek',
+	'SMSCheckStatus' => 'Állapot ellenőrzése',
+	'StatusInformation' => 'Állapot Információ',
+	'SMSNotifier ID' => 'SMS Küldő AZ'
 );
-
 ?>

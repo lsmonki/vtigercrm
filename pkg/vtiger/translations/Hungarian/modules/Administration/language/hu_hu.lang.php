@@ -19,12 +19,10 @@
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
  
-$mod_strings = Array(
-'LBL_MODULE_NAME'=>'Adminisztráció',
-'LBL_MODULE_TITLE'=>'Adminisztráció: Kezdőlap',
-
-'LBL_NEW_FORM_TITLE'=>'Új Cég',
-'ERR_DELETE_RECORD'=>"Adj meg egy rekord azonosítót a Cég törléséhez",
+$mod_strings = array(
+	'LBL_MODULE_NAME' => 'Adminisztráció',
+	'LBL_MODULE_TITLE' => 'Adminisztráció: Kezdőlap',
+	'LBL_NEW_FORM_TITLE' => 'Új Cég',
+	'ERR_DELETE_RECORD' => 'Adj meg egy rekord azonosítót a Cég törléséhez'
 );
-
 ?>

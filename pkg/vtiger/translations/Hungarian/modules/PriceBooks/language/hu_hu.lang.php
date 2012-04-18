@@ -14,32 +14,22 @@
  ********************************************************************************/
 
 $mod_strings = array(
-
-'LBL_PRICEBOOK_INFORMATION'=>'Csomagár adatai',
-'LBL_CUSTOM_INFORMATION'=>'Egyedi adatok',
-'LBL_DESCRIPTION_INFORMATION'=>'Leírás',
-//Mapping for price book
-'Price Book Name'=>'Csomagár megnevezése',
-'Product Name'=>'Termék neve',
-'Active'=>'Aktív',
-'Description'=>'Leírás:',
-'Created Time'=>'Létrehozva',
-'Modified Time'=>'Módosítva',
-'LBL_LIST_PRODUCT_NAME'=>'Termék neve',
-'LBL_PRODUCT_CODE'=>'Termék kód',
-'LBL_PRODUCT_UNIT_PRICE'=>'Egyedi ár',
-'LBL_PB_LIST_PRICE'=>'Ár csomagban',
-'LBL_ACTION'=>'Művelet',
-'PriceBook'=>'Csomagár',
-
-// Added after 5.0.4 GA
-'Currency'=>'Pénznem',
-
-// Module Sequence Numbering
-'PriceBook No' => 'Csomagár No.',
-// END
+	'LBL_PRICEBOOK_INFORMATION' => 'Csomagár adatai',
+	'LBL_CUSTOM_INFORMATION' => 'Egyedi adatok',
+	'LBL_DESCRIPTION_INFORMATION' => 'Leírás',
+	'Price Book Name' => 'Csomagár megnevezése',
+	'Product Name' => 'Termék neve',
+	'Active' => 'Aktív',
+	'Description' => 'Leírás:',
+	'Created Time' => 'Létrehozva',
+	'Modified Time' => 'Módosítva',
+	'LBL_LIST_PRODUCT_NAME' => 'Termék neve',
+	'LBL_PRODUCT_CODE' => 'Termék kód',
+	'LBL_PRODUCT_UNIT_PRICE' => 'Egyedi ár',
+	'LBL_PB_LIST_PRICE' => 'Ár csomagban',
+	'LBL_ACTION' => 'Művelet',
+	'PriceBook' => 'Csomagár',
+	'Currency' => 'Pénznem',
+	'PriceBook No' => 'Csomagár No.'
 );
-
-
-
 ?>

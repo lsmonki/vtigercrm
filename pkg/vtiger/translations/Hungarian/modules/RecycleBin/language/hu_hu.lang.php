@@ -12,27 +12,24 @@
  *
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array(
-'RecycleBin' => 'Szemetes kosár',
-'MSG_EMPTY_RB_CONFIRMATION'=>'Biztos vagy abban, hogy Véglegesen el akarod távolítani a törölt rekordokat az adatbázisodból?',
-'LBL_SELECT_MODULE'=>'Modul kiválasztása',
-'LBL_EMPTY_MODULE'=>'Nem voltak helyreállítható rekordok a modulban: ',
-'LBL_MASS_RESTORE'=>'Minden helyreállítása',
-'LBL_EMPTY_RECYCLEBIN'=>'Szemetes kosár ürítése',
-'LNK_RESTORE'=>'helyreállítás',
-'LBL_NO_PERMITTED_MODULES'=>'Nincsenek elérhető engedélyezett modulok',
-
-//5.2.0 fix
-'Recycle Bin' => 'Szemetes kosár',
-//For account module
-'Account No' => 'Cég sorszáma',
-'Account Name' => 'Cég neve',
-'Billing City' => 'Város (számlázási cím)',
-'Website' => 'Weboldal',
-'Phone' => 'Telefon',
-'Assigned To' => 'Felelős',
-
-
+$mod_strings = array(
+	'RecycleBin' => 'Szemetes kosár',
+	'MSG_EMPTY_RB_CONFIRMATION' => 'Biztos vagy abban, hogy Véglegesen el akarod távolítani a törölt rekordokat az adatbázisodból?',
+	'LBL_SELECT_MODULE' => 'Modul kiválasztása',
+	'LBL_EMPTY_MODULE' => 'Nem voltak helyreállítható rekordok a modulban: ',
+	'LBL_MASS_RESTORE' => 'Minden helyreállítása',
+	'LBL_EMPTY_RECYCLEBIN' => 'Szemetes kosár ürítése',
+	'LNK_RESTORE' => 'helyreállítás',
+	'LBL_NO_PERMITTED_MODULES' => 'Nincsenek elérhető engedélyezett modulok',
+	'Recycle Bin' => 'Szemetes kosár',
+	'Account No' => 'Cég sorszáma',
+	'Account Name' => 'Cég neve',
+	'Billing City' => 'Város (számlázási cím)',
+	'Website' => 'Weboldal',
+	'Phone' => 'Telefon',
+	'Assigned To' => 'Felelős',
+	'LBL_MANUALRESTORE' => 'Kézi helyreállítás',
+	'LBL_ALREADYEXISTS' => 'Már létezik',
+	'LBL_AUTOMATICRESTORE' => 'Automatikus helyreállítás'
 );
-
 ?>

@@ -18,8 +18,7 @@
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array(
-'LBL_SYSTEM_CONFIG'=>'Rendszer Beállítások',
+$mod_strings = array(
+	'LBL_SYSTEM_CONFIG' => 'Rendszer Beállítás'
 );
-
 ?>

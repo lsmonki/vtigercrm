@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.7 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.9 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/include/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -217,6 +217,7 @@ $app_strings = array (
 'NTC_LOGIN_MESSAGE' => 'Login',
 'LBL_NONE' => '--Geen--',
 'LBL_BACK' => 'Terug',
+'LBL_TIMEFIELD'=>'(HH:mm:ss)',
 'LBL_IMPORT' => 'Importeer',
 'LBL_EXPORT' => 'Exporteer',
 'LBL_EXPORT_ALL' => 'Exporteer Alles',
@@ -278,8 +279,8 @@ $app_strings = array (
 'LBL_GO_TO' => 'Ga naar',
 'LBL_FEWER_BUTTON' => 'Minder',
 'LBL_IN' => 'In',
-'LBL_ADV_SEARCH_MSG_ANY' => 'Hetzelfde als...',
-'LBL_ADV_SEARCH_MSG_ALL' => 'Hetzelfde als...',
+'LBL_ADV_SEARCH_MSG_ANY' => 'Voldoen aan alle voorwaarden..',
+'LBL_ADV_SEARCH_MSG_ALL' => 'Voldoen aan minstens 1 voorwaarde..',
 'COMBO_ALL' => 'Alle',
 'LBL_OPEN_ACTIVITIES' => 'Open Activiteit',
 'LBL_HISTORY' => 'Geschiedenis',
@@ -416,7 +417,7 @@ $app_strings = array (
 'Campaigns' => 'Campagnes',
 'PriceBooks' => 'Prijslijsten',
 'Notes' => 'Notities',
-'Faq' => 'FAQ\'s',
+'Faq' => 'FAQs',
 'Dashboards' => 'Dashboard',
 'Reports' => 'Rapporten',
 'Vendors' => 'Leveranciers',
@@ -474,7 +475,7 @@ $app_strings = array (
 'LBL_ADD_RSS_FEEDS' => 'Toevoegen nieuwe RSS Feed',
 'LNK_NEW_FAQ' => 'Nieuwe FAQ',
 'Vendor Name' => 'Naam Leverancier ',
-'LNK_WEARE' => 'Over oms',
+'LNK_WEARE' => 'Over ons',
 'LBL_ABOUTUS_TITLE' => 'vTiger CRM - Over Ons',
 'LBL_DISCUSS' => 'Discussieer met andere gebruikers',
 'Quote Stage' => 'Offerte stadium',
@@ -540,10 +541,11 @@ $app_strings = array (
 'LBL_JSCALENDAR_LANG' => 'nl',
 'LNK_CV_EDIT' => 'Bewerk',
 'LNK_CV_DELETE' => 'Verwijder',
-'LNK_CV_CREATEVIEW' => 'Nieuw',
+'LNK_CV_CREATEVIEW' => 'Maak filter',
 'LBL_UPD_FIELD_ORD' => 'Verander veldvolgorde',
 'LBL_SEND_CUSTOM_MAIL_BUTTON' => 'Verstuur standaard e-mail',
 'LBL_UPDATED_TODAY' => 'Vandaag bijgewerkt',
+'LBL_BY' => 'Door ',
 'LBL_UPDATED' => 'Bijgewerkt',
 'LBL_DAY_AGO' => 'dag geleden',
 'LBL_DAYS_AGO' => 'dagen geleden',
@@ -667,7 +669,7 @@ $app_strings = array (
 
 //Added for Taxmode in detail view of Product Details.
 'group'=>'Groep',
-'individual'=>'individueel',
+'individual'=>'Individueel',
 
 //Added for values of picklist in Advanced Zoek filter
 //Modified for 5.0.3 GA release
@@ -720,9 +722,9 @@ $app_strings = array (
 'Dear_Team_Time_to_Party' => 'Beste Team,<br>Gefeliciteerd! het is tijd om feest te vieren! <br>We hebben een deal gesloten waard meer dan 10000!!!!<br> tijd om een feestje te vieren!<br>',
 'Task_Not_completed' => 'Taak is niet gereed',
 'Too_many_pending_tickets' => 'Te veel tickets in de wacht',
-'Dear_Admin_too_ many_tickets_pending' => 'Beste Admin,<br> Deze e-mail is om u op de hoogte te brengen dat er teveel tickets open staan. Graag de noodzakelijke aktie nemen.<br><br> Met vriendelijke groet,<br> HelpDesk Team<br>',
+'Dear_Admin_too_many_tickets_pending' => 'Beste Admin,<br> Deze e-mail is om u op de hoogte te brengen dat er teveel tickets open staan. Graag de noodzakelijke aktie nemen.<br><br> Met vriendelijke groet,<br> HelpDesk Team<br>',
 
-//Added for java script alerts
+//Added for Java script alerts
 'DELETE_CONFIRMATION' => 'Weet u zeker dat u deze selectie wilt verwijderen ',
 'SELECT_ATLEAST_ONE' => 'Tenminste 1 item selecteren a.u.b.',
 'DELETING_ACCOUNT' => 'Als u deze account(s) verwijderd zullen ook de bijbehorende Verkoopkansen, offertes, verkooporders & facturen worden verwijderd. Wilt u dat? ',
@@ -911,7 +913,7 @@ $app_strings = array (
 'LBL_SEND_EMAIL_PDF' => 'Verstuur e-mail met PDF',
 //Added for incoming mail server settings form js validation
 'ERR_INVALID_PAGE_COUNT' => 'Fout in paginatelling ',
-//'Product Code' => 'Onderdeel nummer',
+//'Product Code' => 'Onderdeel nummer', / duplicate
 'Quotes' => 'Offertes',
 'PurchaseOrder' => 'Inkooporder',
 'SalesOrder' => 'Verkooporder',
@@ -1314,6 +1316,34 @@ $app_strings = array (
 'LBL_CHANGE_TITLE'=>'Wijzig [Alt+C]',
 
 'LBL_NEXT_BUTTON_LABEL' => 'Volgende',
+
+
+'LBL_MAX_SIZE'=> 'Maximale omvang upload is', //added for uploadsize limit message
+'LBL_FILESIZEIN_MB'=> 'MB', //added to show filesize in MB
+
+// Unified Cron Job language strings
+'LBL_DISABLED' => 'Uitgezet',
+'LBL_RUNNING' => 'Loopt',
+'LBL_LAST_SCAN_TIMED_OUT' => 'Laatste Scan Timed Out',
+'LBL_LAST_SCAN_AT' => 'Laatste Scan @',
+'LBL_TIME_TAKEN' => 'Doorlooptijd',
+'LBL_SHORT_SECONDS' => 'sec',
+
+//Added missing labels in the vtigercrm
+'Projects' => 'Projecten',
+'End Time' => 'Eind Tijd',
+'Start Time' => 'Start Tijd',
+'Email2' => 'Email2',
+'Comments' => 'Commentaar',
+'Issued Date' => 'Datum vrijgave',
+'Shipping & Handling Charges' => 'Transport  & Handling toeslagen',
+'Shipping & Handling Tax:' => 'Transport  & Handling Belasting:',
+'Quantity' => 'Hoeveelheid',
+'Net Total' => 'Netto Totaal',
+'Send SMS' => 'Stuur SMS',
+
+'LBL_MORE'=>'Meer',
+'LBL_CRM_SETTINGS' => 'CRM instellingen',
 
 );
 

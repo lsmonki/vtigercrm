@@ -11,7 +11,7 @@
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
 
-var mod_alert_arr = {       
-	SELECT_ATLEAST_ONE_ENTITY:'Kérjük, hogy legalább egy tételt válassz ki.',
-	MSG_RESTORE_CONFIRMATION:'Biztos vagy abban, hogy helyre akarod állítani a kiválasztott '
+var mod_alert_arr = {
+	'SELECT_ATLEAST_ONE_ENTITY' : 'Kérjük, válasszon legalább egy személy',
+	'MSG_RESTORE_CONFIRMATION' : 'Biztos benne, hogy vissza akarja állítani a kiválasztott'
 };

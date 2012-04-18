@@ -7,9 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-$mod_strings = Array (
-'Mobile' => 'Mobile',
-
+$mod_strings = array(
+	'Mobile' => 'Mobile'
 );
-
 ?>

@@ -18,13 +18,12 @@
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/ 
-$mod_strings = Array(
-'LBL_MODULE_NAME'=>'Cégek',
-'LBL_MODULE_NAME'=>'Cégek: Kezdőlap',
-'LBL_MODULE_NAME'=>'Cég Keresés',
-'LBL_LIST_FORM_TITLE'=>'Cég Lista',
-'LBL_NEW_FORM_TITLE'=>'Új Cég',
-'ERR_DELETE_RECORD'=>"Adj meg egy rekord azonosítót a Cég törléséhez",
+$mod_strings = array(
+	'LBL_MODULE_NAME' => 'Cégek',
+	'LBL_MODULE_TITLE' => 'Cégek: Kezdőlap',
+	'LBL_SEARCH_FORM_TITLE' => 'Cég Keresés',
+	'LBL_LIST_FORM_TITLE' => 'Cég Lista',
+	'LBL_NEW_FORM_TITLE' => 'Új Cég',
+	'ERR_DELETE_RECORD' => 'Adj meg egy rekord azonosítót a Cég törléséhez'
 );
-
 ?>

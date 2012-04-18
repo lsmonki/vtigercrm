@@ -25,7 +25,7 @@
  * @package 	NL-Dutch
  * Description	Dutch language pack for vtiger CRM version 5.3.x
  * @author	$Author: luuk $
- * @version 	$Revision: 1.5 $ $Date: 2011/11/14 17:07:26 $
+ * @version 	$Revision: 1.6 $ $Date: 2012/02/28 23:40:22 $
  * @source	$Source: /var/lib/cvs/vtiger530/Dutch/modules/SalesOrder/language/nl_nl.lang.php,v $
  * @copyright	Copyright (c)2005-2011 Vicus eBusiness Solutions bv <info@vicus.nl>
  * @license	vtiger CRM Public License Version 1.0 (by definition)
@@ -221,6 +221,12 @@ $mod_strings = Array(
 'Invoice Status' => 'Factuur Status',
 
 'SINGLE_SalesOrder'=>'Verkooporder',
+
+'Net 30 days' => 'Netto 30 dagen',
+'Net 45 days' => 'Netto 45 dagen',
+'Net 60 days' => 'Netto 60 dagen',
+
+
 );
 
 ?>

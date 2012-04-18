@@ -13,25 +13,21 @@
  * All Rights Reserved.
  * Contributor(s): Istvan Holbok,  e-mail: holbok@gmail.com , mobil: +3670-3420900 , Skype: holboki
  ********************************************************************************/
-$mod_strings = Array(
-// added for 5.0 beta
-'LBL_BOOKMARKED_URL'=>"Könyvjelzőzött URL-k",
-'LBL_MANAGE_BOOKMARKS'=>'Könyvjelzők kezelése',
-'LBL_BOOKMARK_LIST'=>'Könyvjelzők Listája',
-'LBL_MY_BOOKMARKS'=>'Könyvjelzőim',
-'LBL_NEW_BOOKMARK'=>'Új Könyvjelző',
-'LBL_BOOKMARK'=>'Könyvjelző',
-'LBL_NAME'=>'Neve :',
-'LBL_URL'=>'URL :',
-'LBL_ADD'=>'Hozzáadás',
-'LBL_SNO'=>'#',
-'LBL_BOOKMARK_NAME_URL'=>'Könyvjelző neve és URL',
-'LBL_TOOLS'=>'Eszközök',
-'LBL_MANAGE_SITES'=>'Weboldalak kezelése',
-'LBL_MY_SITES'=>'Weboldalak',
-
-// Added/Updated for vtiger CRM 5.0.4
-//added as an enhancement
-'LBL_SET_DEFAULT_BUTTON'=>'Alapértelmezettként beállít',
+$mod_strings = array(
+	'LBL_BOOKMARKED_URL' => 'Könyvjelzőzött URL-k',
+	'LBL_MANAGE_BOOKMARKS' => 'Könyvjelzők kezelése',
+	'LBL_BOOKMARK_LIST' => 'Könyvjelzők Listája',
+	'LBL_MY_BOOKMARKS' => 'Könyvjelzőim',
+	'LBL_NEW_BOOKMARK' => 'Új Könyvjelző',
+	'LBL_BOOKMARK' => 'Könyvjelző',
+	'LBL_NAME' => 'Neve :',
+	'LBL_URL' => 'URL :',
+	'LBL_ADD' => 'Hozzáadás',
+	'LBL_SNO' => '#',
+	'LBL_BOOKMARK_NAME_URL' => 'Könyvjelző neve és URL',
+	'LBL_TOOLS' => 'Eszközök',
+	'LBL_MANAGE_SITES' => 'Weboldalak kezelése',
+	'LBL_MY_SITES' => 'Weboldalak',
+	'LBL_SET_DEFAULT_BUTTON' => 'Alapértelmezettként beállít'
 );
 ?>
