@@ -37,7 +37,7 @@ vtiger_help_jsonp.prototype = Object.extend(Ajax.Base, (function() {
                     script.remove();
                     script = null;
                 } catch(error) { /* IE might complain about failure */ }
-                
+
                 window[callbackName] = undefined;
                 if (self.options.onComplete) {
                     self.options.onComplete.call(self, json);
@@ -87,7 +87,7 @@ vtiger_help_tmpl = function(str, data) {
  * Vtiger Help Controller
  */
 vtiger_help_controller = function() {
-	
+
     /**
 	 * API for quick help
 	 */
@@ -99,9 +99,9 @@ vtiger_help_controller = function() {
 	 * Runtime variables
 	 */
     this.runtimeVars = function(uri) {
-		
+
         if (typeof uri == 'undefined') uri = self.location.href;
-		
+
         var userid = $('_my_preferences_')? $('_my_preferences_').getAttribute('href').match(/record=([^&]+)/)[1] : 0;
         var module = uri.match(/module=([^&]+)/)[1];
         var action = uri.match(/action=([^&]+)/)[1];
@@ -136,7 +136,7 @@ vtiger_help_controller = function() {
     /**
      * Initialize the handler to trigger help.
      */
-    this.initHandler = function() {	
+    this.initHandler = function() {
         var linkDiv = document.createElement('div');
         var link = document.createElement('a');
         document.body.appendChild(linkDiv);
@@ -153,10 +153,10 @@ vtiger_help_controller = function() {
         var themePath = vtlib_vtiger_imageurl(gVTTheme);
         link.setAttribute('href',"javascript:void(0);");
         link.innerHTML="<span id='helpTipsHandlerPin'>&nbsp;</span><img src='"+themePath+"/help_sidebar.png' border=0 align='absmiddle' title="+getTranslatedString("LBL_HELP_TITLE")+">";
-        
+
     }
 
-	
+
     /**
 	 * Widget styling...
 	 */
@@ -224,7 +224,7 @@ vtiger_help_controller = function() {
         }
         return node;
     }
-	
+
     /**
      * Set / Get data attribute value of the node.
      */
@@ -234,30 +234,30 @@ vtiger_help_controller = function() {
         }
         node.setAttribute('data-'+key, value);
     }
-	
+
     /**
      * Add new help page (hidding existing ones)
      */
     this.pushPage = function(node) {
         var pages = this.closest(node, 'helppages');
-		
+
         for (var index=0, len=pages.children.length; index < len; ++index) {
             pages.children[index].style.display = 'none';
         }
-		
+
         var page = document.createElement('div');
         page.className = 'helppage';
         pages.appendChild(page);
-		
+
         return page;
     }
-	
+
     /**
      * Remove last help page.
      */
     this.popPage = function(node) {
         var pages = this.closest(node, 'helppages');
-		
+
         var lastPage = null;
         var totalPage = pages.children.length;
         if (totalPage > 0) {
@@ -269,10 +269,10 @@ vtiger_help_controller = function() {
                 lastPage.style.display = 'block';
             }
         }
-		
+
         return lastPage;
     }
-	
+
     /**
      * Handle helpMeNow request
      */
@@ -311,7 +311,7 @@ vtiger_help_controller = function() {
         var v = $('_vtiger_product_version_')? $('_vtiger_product_version_').innerHTML : '';
 
         $('status').style.display = 'inline';
-		
+
         new vtiger_help_jsonp(this.apiURL(), {
             parameters: 'operation=find&q=' + encodeURIComponent(q) + '&qtype=' + encodeURIComponent(qtype) + '&v=' + encodeURIComponent(v),
             onComplete: function(data) {
@@ -337,7 +337,7 @@ vtiger_help_controller = function() {
                         obj.innerHTML = thisInstance.recordsUI(records, '', true);
                     }
                 }
-				
+
                 if (typeof callback == 'function') {
                     callback(data.success);
                 }
@@ -353,14 +353,14 @@ vtiger_help_controller = function() {
         var parentid = this.data(obj, 'parentid');
         var id = this.data(obj, 'id');
         var navtype = this.data(obj, 'navtype');
-		
+
         // TODO Optimize loads: Instead of pop can we enable page navigations
         // by toggling the display style? Load the next page if not yet done.
         if (navtype == 'prev') {
             this.popPage(obj);
             return;
         }
-		
+
         var container = this.pushPage(obj);
         container.innerHTML = '<img src="themes/images/vtbusy.gif" border="0">';
         new vtiger_help_jsonp(this.apiURL(), {
@@ -382,18 +382,18 @@ vtiger_help_controller = function() {
     this.recordsUI = function(records, headerLabel, skipHeaderFooter) {
         if (typeof headerLabel == 'undefined') headerLabel = '';
         if (typeof skipHeaderFooter == 'undefined') skipHeaderFooter = false;
-	
+
         // NOTE update recordUI API below to match the helppage node-structure...
-        var tpl = 
+        var tpl =
         '<% if (SKIP_HEADER_FOOTER != true) {%><div id="helpHandle"  style="cursor:move;">'+
         '<table class="layerHeadingULine"  border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:3px 0px 0px 0px;height:30px;">' +
         '	<tr valign=top>' +
         '		<td align="left"   valign="middle"><b><label  style="margin-left:6px;">'+getTranslatedString("LBL_HELP_TITLE")+'</label><b></td>' +
         '		<td align="center" valign="middle"></td>' +
         '		<td align="right"  valign="middle">' +
-        '                       <a  href="http://help.vtiger.com/faqs" target="_blank"><img src="themes/images/faq.png" align="absmiddle" border="0" class="links" title='+getTranslatedString("LBL_FAQ_TITLE")+'></a>' +
-        '                       <a  href="http://wiki.vtiger.com" target="_blank"><img src="themes/images/manuals.png" align="absmiddle" border="0"  class="links" title='+getTranslatedString("LBL_WIKI_TITLE")+'></a>' +
-        '                       <a href="http://vtiger.com/video" target="_blank"><img src="themes/images/videos.png" align="absmiddle" border="0"  class="links"  title='+getTranslatedString("LBL_VIDEO_TITLE")+'></a>' +
+        '                       <a  href="https://help.vtiger.com/faqs" target="_blank"><img src="themes/images/faq.png" align="absmiddle" border="0" class="links" title='+getTranslatedString("LBL_FAQ_TITLE")+'></a>' +
+        '                       <a  href="https://wiki.vtiger.com" target="_blank"><img src="themes/images/manuals.png" align="absmiddle" border="0"  class="links" title='+getTranslatedString("LBL_WIKI_TITLE")+'></a>' +
+        '                       <a href="http://www.vtiger.com/crm/player/" target="_blank"><img src="themes/images/videos.png" align="absmiddle" border="0"  class="links"  title='+getTranslatedString("LBL_VIDEO_TITLE")+'></a>' +
         '			<a style="margin-right: 6px;margin-left:11px" href="javascript:;" onclick="closePopup()"><img src="themes/images/help_close_black.png" align="absmiddle" border="0" width="13px" height="13px" style="margin-top:3px;" title='+getTranslatedString("LBL_CLOSE_TITLE")+'></a>' +
         '		</td>' +
         '	</tr>' +
@@ -423,7 +423,7 @@ vtiger_help_controller = function() {
         '               </div>' +
         '       </div>' +
         '   <%   } %>' +
-        '	<% } %>' +		
+        '	<% } %>' +
         '</div>'+
         '</div>';
 
@@ -452,7 +452,7 @@ vtiger_help_controller = function() {
      * Handle single record display
      */
     this.recordUI = function(record, parentid) {
-        var tpl = 
+        var tpl =
         '	<div class="helppage">' +
         '		 <div class="header" onclick="vtiger_help_toggle(this)" style="cursor:pointer"><label class="helpArrow" ><img src="themes/images/arrow_down_black.png" width="8px" heigth="6px" class="arrowDown" ></img></label><%= RECORD.title %></div>'+
         '		<div class="content"><%= fnDataMerge(RECORD.content, runtimeVars) %>'+
@@ -462,7 +462,7 @@ vtiger_help_controller = function() {
         '	</div></div>'+
         '	<div class="helppage-tr"></div>'+
         '   </div>';
-		
+
         return vtiger_help_tmpl(tpl, {
             RECORD: record,
             PARENTID: parentid,
@@ -470,7 +470,7 @@ vtiger_help_controller = function() {
             runtimeVars: this.runtimeVars()
         });
     },
-	
+
     /**
      * Translate the helppage content using Google Translate Gadget.
      * Reference: http://translate.google.com/translate_tools
@@ -491,7 +491,7 @@ vtiger_help_controller = function() {
             return;
         }
         function tr() {
-			
+
             // Subsequent entries
             if (singleton && thisInstance.translatorInstance) {
                 thisInstance.translatorInstance.update();
@@ -503,17 +503,17 @@ vtiger_help_controller = function() {
                 controlNodeClassName: 'helppage-tr',
                 background: 'inherit'
             }, containerid);
-            
+
             /**
 	     * Singleton support does not work as expected.
 	     * Google Section Translate is unique for a page.
-	     */ 
+	     */
             if (singleton) {
                 thisInstance.translatorInstance = trInstance;
             }
-            
+
         }
-		
+
         if (typeof google == 'undefined' || typeof google.translate == 'undefined' || typeof google.translate.SectionalElement == 'undefined') {
             var url = '//translate.google.com/translate_a/element.js';
             new vtiger_help_jsonp(url, {
@@ -525,7 +525,7 @@ vtiger_help_controller = function() {
             tr();
         }
     }
-	
+
     /**
      * Determine the current language of user.
      */
@@ -634,4 +634,4 @@ function vtiger_help_welcome(obj, container) {
 Event.observe(window, 'load', function(){
     vtiger_help_controller_singleton.get();
 });
-                                                                                                                                                         
+
