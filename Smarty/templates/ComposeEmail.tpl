@@ -38,6 +38,7 @@
 <input type="hidden" name="module" value="{$MODULE}">
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">
+<input type="hidden" name="selectedIds" value="{$SELECTEDIDS}" id="selectedIds">
 <input type="hidden" name="action">
 <input type="hidden" name="popupaction" value="create">
 <input type="hidden" name="hidden_toid" id="hidden_toid">
@@ -80,7 +81,7 @@
 		&nbsp;
 		<span  class="mailClientCSSButton">
 		<img src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-		</span><span class="mailClientCSSButton" ><img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="$('parent_id').value=''; $('hidden_toid').value='';$('parent_name').value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+		</span><span class="mailClientCSSButton" ><img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="clearSendEmailToField(); return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>
    </tr>
@@ -96,13 +97,15 @@
 	{/if}
    <td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:100px;width:100%;position:relative;left:0px;top:0px;"></div>
    	</tr>
-   {if 'bccmail'|@emails_checkFieldVisiblityPermission:'readwrite' eq '0'}   
-   	<tr>
-	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
-	<td class="cellText" style="padding: 5px;">
-		<input name="bccmail" id="bcc_name" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
-	</td>
-   	</tr>
+	{if $ONE_RECORD}
+		{if 'bccmail'|@emails_checkFieldVisiblityPermission:'readwrite' eq '0'}
+   			<tr id="bccTr">
+				<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
+				<td class="cellText" style="padding: 5px;">
+					<input name="bccmail" id="bcc_name" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
+				</td>
+   			</tr>
+		{/if}
    	{/if}
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
@@ -208,7 +211,7 @@ function email_validate(oform,mode)
 		return false;
 	}
 	//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
-	var email_regex = /^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/;
+	var email_regex = /^[_/a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
 	
 	if(document.EditView.ccmail != null){
 		if(document.EditView.ccmail.value.length >= 1){
@@ -263,15 +266,13 @@ function email_validate(oform,mode)
 			return false;
 		}
 	}
-	if(mode == 'send')
-	{
+	if(mode == 'send') {
 		server_check()	
-	}else if(mode == 'save')
-	{
+	} else if(mode == 'save') {
+		VtigerJS_DialogBox.block();
 		oform.action.value='Save';
 		oform.submit();
-	}else
-	{
+	} else {
 		return false;
 	}
 }
@@ -312,6 +313,7 @@ function server_check()
 			onComplete: function(response) {
 			if(response.responseText.indexOf('SUCCESS') > -1)
 			{
+				VtigerJS_DialogBox.block();
 				oform.send_mail.value='true';
 				oform.action.value='Save';
 				oform.submit();
@@ -340,6 +342,16 @@ function delAttachments(id)
         }
     );
 
+}
+
+function clearSendEmailToField() {
+	var selectedIds = $('selectedIds').value;
+	if (selectedIds.search(':') === -1) {
+		$('bccTr').style.display = 'table-row';
+	}
+	$('parent_id').value = '';
+	$('hidden_toid').value='';
+	$('parent_name').value='';
 }
 {/literal}
 </script>

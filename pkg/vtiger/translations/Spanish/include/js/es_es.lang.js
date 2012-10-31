@@ -338,6 +338,8 @@ var alert_arr = {
 	'LBL_CLOSE_DATE':'Fecha Cierre',
 	'LBL_EMAIL':'Email',
 	'MORE_THAN_500' : 'Has seleccionado más de 500 registros. Esto puede tardar bastante tiempo. ¿Seguro que quieres continuar?',
-	'LBL_MAPPEDALERT':'Esta campo ya está vinculado'
+	'LBL_MAPPEDALERT':'Esta campo ya está vinculado',
+	//added for webforms module
+	'LBL_DELETE_MSG'      : '¿Estás seguro que quieres eliminar el formulario web?'
 
 };

@@ -24,7 +24,7 @@ class VtigerCompanyDetails extends VtigerActorOperation {
 			$id = $db->query_result($result,0,'organization_id');
 			$meta = $this->getMeta();
 			$element['id'] = vtws_getId($meta->getEntityId(), $id);
-			return $this->update($element);
+			return $this->revise($element);
 		}else{
 			$element = $this->handleFileUpload($element);
 			return parent::create($elementType, $element);
@@ -45,6 +45,11 @@ class VtigerCompanyDetails extends VtigerActorOperation {
 	public function update($element) {
 		$element = $this->handleFileUpload($element);
 		return parent::update($element);
+	}
+
+	public function revise($element) {
+		$element = $this->handleFileUpload($element);
+		return parent::revise($element);
 	}
 
 }

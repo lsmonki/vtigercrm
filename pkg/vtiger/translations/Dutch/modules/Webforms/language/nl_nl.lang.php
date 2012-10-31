@@ -68,7 +68,9 @@ $mod_strings = Array (
 	'LBL_SELECT_VALUE'=>'--Selecteer Waarde --',
 	'LBL_BASIC_INFORMATION'=>'Basisinformatie',
 	'LBL_SELECT_USER'=>'Selecteer gebruiker',
-
+	'LBL_DUPLICATE_NAME' => 'Webformulier met dezelfde naam bestaat',
+	'ERR_CREATE_WEBFORM' => 'Webformulier maken mislukt',
+	'LBL_CREATE_NEW_WEBFORM_NOW' => 'U kunt een Webformulier Nu. Klik op de link hieronder:'
 
 );
 

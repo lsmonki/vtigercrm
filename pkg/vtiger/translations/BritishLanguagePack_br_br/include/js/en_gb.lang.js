@@ -298,5 +298,7 @@ var alert_arr = {
 	'LBL_CLOSE_DATE' : 'Close Date',
 	'LBL_EMAIL' : 'Email',
 	'MORE_THAN_500' : 'You selected more than 500 records. This action may take a long time. Are you sure want to proceed?',
-	'LBL_MAPPEDALERT' : 'The field has been already mapped'
+	'LBL_MAPPEDALERT' : 'The field has been already mapped',
+	//added for webforms module
+	'LBL_DELETE_MSG' : 'Are you sure, you want to delete the webform?'
 };

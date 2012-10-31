@@ -19,7 +19,7 @@ class MailManager_FolderController extends MailManager_Controller {
      * @return MailManager_Response
      */
 	function process(MailManager_Request $request) {
-		global $list_max_entries_per_page;
+		global $list_max_entries_per_page, $current_user;
 		$response = new MailManager_Response();
         
 		if ('open' == $request->getOperationArg()) {
@@ -36,7 +36,20 @@ class MailManager_FolderController extends MailManager_Controller {
 				if(empty($type)) {
 					$type='ALL';
 				}
-				$q = ''.$type.' "'.vtlib_purify($q).'"';
+				if($type == 'ON') {
+					$dateFormat = $current_user->date_format;
+					if ($dateFormat == 'mm-dd-yyyy') {
+						$dateArray = explode('-', $q);
+						$temp = $dateArray[0];
+						$dateArray[0] = $dateArray[1];
+						$dateArray[1] = $temp;
+						$q = implode('-', $dateArray);
+					}
+					$query = date('d M Y',strtotime($q));
+					$q = ''.$type.' "'.vtlib_purify($query).'"';
+				} else {
+					$q = ''.$type.' "'.vtlib_purify($q).'"';
+				}
 				$connector->searchMails($q, $folder, intval($request->get('_page', 0)), $list_max_entries_per_page);
 			}
 			
@@ -49,6 +62,7 @@ class MailManager_FolderController extends MailManager_Controller {
 			$viewer->assign('FOLDER', $folder);
 			$viewer->assign('FOLDERLIST',  $folderList);
 			$viewer->assign('SEARCHOPTIONS' ,self::getSearchOptions());
+			$viewer->assign("JS_DATEFORMAT",parse_calendardate(getTranslatedString('NTC_DATE_FORMAT')));
 			
 			$response->setResult( $viewer->fetch( $this->getModuleTpl( 'Folder.Open.tpl' ) ) );
 		} elseif('drafts' == $request->getOperationArg()) {
@@ -79,7 +93,7 @@ class MailManager_FolderController extends MailManager_Controller {
      * @return string
      */
 	static function getSearchOptions(){
-		$options = array('SUBJECT','TO','BODY','BCC','CC','FROM');
+		$options = array('SUBJECT'=>'SUBJECT','TO'=>'TO','BODY'=>'BODY','BCC'=>'BCC','CC'=>'CC','FROM'=>'FROM','DATE'=>'ON');
 		return $options;
 	}
 }

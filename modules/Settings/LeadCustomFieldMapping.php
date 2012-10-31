@@ -54,8 +54,13 @@ function customFieldMappings() {
 			$lead_field['cfmname'] = $cfmid . '_cfmid';
 			$lead_field['fieldid'] = $adb->query_result($convert_result, $j, "fieldid");
 			$lead_field['leadid'] = getTranslatedString($adb->query_result($convert_result, $j, "fieldlabel"), 'Leads');
-			$lead_field['typeofdata'] = $adb->query_result($convert_result, $j, "typeofdata");
-			$lead_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($convert_result, $j, "uitype"));
+			$fld_type_ofdata= $adb->query_result($convert_result, $j, "typeofdata");
+			$lead_field['typeofdata']  = $fld_type_ofdata;
+			if($fld_type_ofdata === 'I~O') {
+				$lead_field['fieldtype'] = $mod_strings['Integer'];
+			} else {
+				$lead_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($convert_result, $j, "uitype"));
+			}
 			$lead_field['account'] = getModuleValues( $accountid, 'Accounts');
 			$lead_field['contact'] = getModuleValues( $contactid, 'Contacts');
 			$lead_field['potential'] = getModuleValues( $potentialid, 'Potentials');
@@ -111,9 +116,14 @@ function getModuleValues( $moduleid, $module) {
 	for ($i = 0; $i < $noofrows; $i++) {
 		$module_field['fieldid'] = $adb->query_result($result, $i, "fieldid");
 		$module_field['fieldlabel'] = getTranslatedString($adb->query_result($result, $i, "fieldlabel"), $module);
-		$module_field['typeofdata'] = $adb->query_result($result, $i, "typeofdata");
-		$module_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($result, $i, "uitype"));
-
+		$fld_type_ofdata = $adb->query_result($result, $i, "typeofdata");
+		$module_field['typeofdata'] = $fld_type_ofdata;
+		if($fld_type_ofdata === 'I~O') {
+			$module_field['fieldtype'] = $mod_strings['Integer'];
+		} else {
+			$module_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($result, $i, "uitype"));
+		}
+		
 		if ($module_field['fieldid'] == $moduleid)
 			$module_field['selected'] = "selected";
 		else

@@ -107,6 +107,9 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 	{
 		//send mail to the handler
 		$handler = getRecordOwnerId($product_id);
+		foreach($handler as $type=>$id){
+			$handler=$id;
+		}
 		$handler_name = getOwnerName($handler);
 		if(vtws_isRecordOwnerUser($handler)) {
 			$to_address = getUserEmail($handler);
@@ -234,7 +237,7 @@ function getTaxPercentage($type)
  */
 function getProductTaxPercentage($type,$productid,$default='')
 {
-	global $adb, $log;
+	global $adb, $log, $current_user;
 	$log->debug("Entering into getProductTaxPercentage($type,$productid) function.");
 
 	$taxpercentage = '';
@@ -253,7 +256,10 @@ function getProductTaxPercentage($type,$productid,$default='')
 
 
 	$log->debug("Exiting from getProductTaxPercentage($productid,$type) function. return value=$taxpercentage");
-	return $taxpercentage;
+    if($current_user->truncate_trailing_zeros == true)
+        return decimalFormat($taxpercentage);
+    else
+        return $taxpercentage;
 }
 
 /**	Function used to add the history entry in the relevant tables for PO, SO, Quotes and Invoice modules
@@ -458,19 +464,17 @@ function deleteInventoryProductDetails($focus)
 	$log->debug("Exit from function deleteInventoryProductDetails(".$focus->id.")");
 }
 
-function updateInventoryProductRel($entity)
-{
-	global $log, $adb,$updateInventoryProductRel_update_product_array;
+function updateInventoryProductRel($entity) {
+	global $log, $adb,$updateInventoryProductRel_update_product_array,$updateInventoryProductRel_deduct_stock;
 	$entity_id = vtws_getIdComponents($entity->getId());
 	$entity_id = $entity_id[1];
 	$update_product_array = $updateInventoryProductRel_update_product_array;
 	$log->debug("Entering into function updateInventoryProductRel(".$entity_id.").");
 
-	if(!empty($update_product_array)){
-		foreach($update_product_array as $id=>$seq){
-			foreach($seq as $seq=>$product_info)
-			{
-				foreach($product_info as $key=>$index){
+	if(!empty($update_product_array)) {
+		foreach($update_product_array as $id=>$seq) {
+			foreach($seq as $seq=>$product_info) {
+				foreach($product_info as $key=>$index) {
 					$updqtyinstk= getPrdQtyInStck($key);
 					$upd_qty = $updqtyinstk+$index;
 					updateProductQty($key, $upd_qty);
@@ -478,29 +482,53 @@ function updateInventoryProductRel($entity)
 			}
 		}
 	}
-	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
 
-	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($entity_id));
-	$numrows = $adb->num_rows($product_info);
-	for($index = 0;$index <$numrows;$index++){
-		$productid = $adb->query_result($product_info,$index,'productid');
-		$qty = $adb->query_result($product_info,$index,'quantity');
-		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
-		$qtyinstk= getPrdQtyInStck($productid);
-		$upd_qty = $qtyinstk-$qty;
-		updateProductQty($productid, $upd_qty);
-		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($entity_id,$sequence_no));
-		if($adb->num_rows($sub_prod_query)>0){
-			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
-				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
-				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
-				$supd_qty = $sqtyinstk-$qty;
-				updateProductQty($sub_prod_id, $supd_qty);
+	$statusChanged = false;
+	$vtEntityDelta = new VTEntityDelta ();
+	$oldEntity = $vtEntityDelta-> getOldValue('Invoice', $entity_id, 'invoicestatus');
+	$recordDetails = $entity->getData();
+	$statusChanged = $vtEntityDelta->hasChanged('Invoice', $entity_id, 'invoicestatus');
+	if($statusChanged) {
+		if($recordDetails['invoicestatus'] == 'Cancel') {
+			$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=0 WHERE id=?",array($entity_id));
+			$updateInventoryProductRel_deduct_stock = false;
+			if(empty($update_product_array)) {
+				addProductsToStock($entity_id);
 			}
+		} elseif($oldEntity == 'Cancel') {
+			$updateInventoryProductRel_deduct_stock = false;
+			deductProductsFromStock($entity_id);
 		}
+	} elseif($recordDetails['invoicestatus'] == 'Cancel') {
+		$updateInventoryProductRel_deduct_stock = false;
 	}
 
-	$log->debug("Exit from function updateInventoryProductRel(".$entity_id.")");
+
+	if($updateInventoryProductRel_deduct_stock) {
+		$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
+
+		$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($entity_id));
+		$numrows = $adb->num_rows($product_info);
+		for($index = 0;$index <$numrows;$index++) {
+			$productid = $adb->query_result($product_info,$index,'productid');
+			$qty = $adb->query_result($product_info,$index,'quantity');
+			$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+			$qtyinstk= getPrdQtyInStck($productid);
+			$upd_qty = $qtyinstk-$qty;
+			updateProductQty($productid, $upd_qty);
+			$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($entity_id,$sequence_no));
+			if($adb->num_rows($sub_prod_query)>0) {
+				for($j=0;$j<$adb->num_rows($sub_prod_query);$j++) {
+					$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+					$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+					$supd_qty = $sqtyinstk-$qty;
+					updateProductQty($sub_prod_id, $supd_qty);
+				}
+			}
+		}
+
+		$log->debug("Exit from function updateInventoryProductRel(".$entity_id.")");
+	}
 }
 
 /**	Function used to save the Inventory product details for the passed entity
@@ -647,8 +675,8 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams, $_REQUEST[$request_tax_name]);
 			}
-				$updatequery = trim($updatequery,',')." where id=? and productid=? and lineitem_id = ?";
-				array_push($updateparams, $focus->id,$prod_id, $lineitem_id);
+			$updatequery = trim($updatequery,',')." where id=? and productid=? and lineitem_id = ?";
+			array_push($updateparams, $focus->id,$prod_id, $lineitem_id);
 		}
 		// jens 2006/08/19 - protect against empy update queries
  		if( !preg_match( '/set\s+where/i', $updatequery)) {
@@ -1084,5 +1112,331 @@ function getPriceBookCurrency($pricebook_id) {
 	$result = $adb->pquery("select currency_id from vtiger_pricebook where pricebookid=?", array($pricebook_id));
 	$currency_id = $adb->query_result($result,0,'currency_id');
 	return $currency_id;
+}
+
+// deduct products from stock - if status will be changed from cancel to other status.
+function deductProductsFromStock($recordId) {
+	global $adb;
+	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($recordId));
+
+	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($recordId));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++) {
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+		$qtyinstk= getPrdQtyInStck($productid);
+		$upd_qty = $qtyinstk-$qty;
+		updateProductQty($productid, $upd_qty);
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($recordId,$sequence_no));
+		if($adb->num_rows($sub_prod_query)>0) {
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++) {
+				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+				$supd_qty = $sqtyinstk-$qty;
+				updateProductQty($sub_prod_id, $supd_qty);
+			}
+		}
+	}
+}
+
+// Add Products to stock - status changed to cancel or delete the invoice
+function addProductsToStock($recordId) {
+	global $adb;
+	
+	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($recordId));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++) {
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+		$qtyinstk= getPrdQtyInStck($productid);
+		$upd_qty = $qtyinstk+$qty;
+		updateProductQty($productid, $upd_qty);
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($recordId,$sequence_no));
+		if($adb->num_rows($sub_prod_query)>0) {
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++) {
+				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+				$supd_qty = $sqtyinstk+$qty;
+				updateProductQty($sub_prod_id, $supd_qty);
+			}
+		}
+	}
+}
+
+function getImportBatchLimit() {
+	$importBatchLimit = 100;
+	return $importBatchLimit;
+}
+
+function createRecords($obj) {
+	global $adb;
+	$moduleName = $obj->module;
+
+	$moduleHandler = vtws_getModuleHandlerFromName($moduleName, $obj->user);
+	$moduleMeta = $moduleHandler->getMeta();
+	$moduleObjectId = $moduleMeta->getEntityId();
+	$moduleFields = $moduleMeta->getModuleFields();
+	$focus = CRMEntity::getInstance($moduleName);
+
+	$tableName = Import_Utils::getDbTableName($obj->user);
+	$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' GROUP BY subject';
+
+	if($obj->batchImport) {
+		$importBatchLimit = getImportBatchLimit();
+		$sql .= ' LIMIT '. $importBatchLimit;
+	}
+	$result = $adb->query($sql);
+	$numberOfRecords = $adb->num_rows($result);
+
+	if ($numberOfRecords <= 0) {
+		return;
+	}
+
+	$fieldMapping = $obj->fieldMapping;
+	$fieldColumnMapping = $moduleMeta->getFieldColumnMapping();
+
+	for ($i = 0; $i < $numberOfRecords; ++$i) {
+		$row = $adb->raw_query_result_rowdata($result, $i);
+		$rowId = $row['id'];
+		$entityInfo = null;
+		$fieldData = array();
+		$lineItems = array();
+		$subject = $row['subject'];
+		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' AND subject = "'. $subject .'"';
+		$subjectResult = $adb->query($sql);
+		$count = $adb->num_rows($subjectResult);
+		$subjectRowIDs = array();
+		for ($j = 0; $j < $count; ++$j) {
+			$subjectRow = $adb->raw_query_result_rowdata($subjectResult, $j);
+			array_push($subjectRowIDs, $subjectRow['id']);
+			if ($subjectRow['productid'] == '' || $subjectRow['quantity'] == '' || $subjectRow['listprice'] == '') {
+				continue;
+			} else {
+				$lineItemData = array();
+				foreach ($fieldMapping as $fieldName => $index) {
+					if($moduleFields[$fieldName]->getTableName() == 'vtiger_inventoryproductrel') {
+						$lineItemData[$fieldName] = $subjectRow[$fieldName];
+					}
+				}
+				array_push($lineItems,$lineItemData);
+			}
+		}
+		foreach ($fieldMapping as $fieldName => $index) {
+			$fieldData[$fieldName] = $row[strtolower($fieldName)];
+		}
+		if (!array_key_exists('assigned_user_id', $fieldData)) {
+			$fieldData['assigned_user_id'] = $obj->user->id;
+		}
+
+		if (!empty($lineItems)) {
+			if(method_exists($focus, 'importRecord')) {
+				$entityInfo = $focus->importRecord($obj, $fieldData, $lineItems);
+			}
+		}
+
+		if($entityInfo == null) {
+			$entityInfo = array('id' => null, 'status' => $obj->getImportRecordStatus('failed'));
+		}
+		foreach ($subjectRowIDs as $id) {
+			$obj->importedRecordInfo[$id] = $entityInfo;
+			$obj->updateImportStatus($id, $entityInfo);
+		}
+	}
+	unset($result);
+	return true;
+}
+
+function isRecordExistInDB($fieldData, $moduleMeta, $user) {
+	global $adb, $log;
+	$moduleFields = $moduleMeta->getModuleFields();
+	$isRecordExist = false;
+	if (array_key_exists('productid', $fieldData)) {
+		$fieldName = 'productid';
+		$fieldValue = $fieldData[$fieldName];
+		$fieldInstance = $moduleFields[$fieldName];
+		if ($fieldInstance->getFieldDataType() == 'reference') {
+			$entityId = false;
+			if (!empty($fieldValue)) {
+				if(strpos($fieldValue, '::::') > 0) {
+					$fieldValueDetails = explode('::::', $fieldValue);
+				} else if (strpos($fieldValue, ':::') > 0) {
+					$fieldValueDetails = explode(':::', $fieldValue);
+				} else {
+					$fieldValueDetails = $fieldValue;
+				}
+				if (count($fieldValueDetails) > 1) {
+					$referenceModuleName = trim($fieldValueDetails[0]);
+					$entityLabel = trim($fieldValueDetails[1]);
+					$entityId = getEntityId($referenceModuleName, $entityLabel);
+				} else {
+					$referencedModules = $fieldInstance->getReferenceList();
+					$entityLabel = $fieldValue;
+					foreach ($referencedModules as $referenceModule) {
+						$referenceModuleName = $referenceModule;
+						$referenceEntityId = getEntityId($referenceModule, $entityLabel);
+						if ($referenceEntityId != 0) {
+							$entityId = $referenceEntityId;
+							break;
+						}
+					}
+				}
+				if (!empty($entityId) && $entityId != 0) {
+					$types = vtws_listtypes(null, $user);
+					$accessibleModules = $types['types'];
+					if (in_array($referenceModuleName, $accessibleModules)) {
+						$isRecordExist = true;
+					}
+				}
+			}
+		}
+	}
+	return $isRecordExist;
+}
+
+function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
+	global $adb, $log;
+	$moduleName = $obj->module;
+	$fieldMapping = $obj->fieldMapping;
+
+	$inventoryHandler = vtws_getModuleHandlerFromName($moduleName, $obj->user);
+	$inventoryMeta = $inventoryHandler->getMeta();
+	$moduleFields = $inventoryMeta->getModuleFields();
+	$isRecordExist = isRecordExistInDB($inventoryFieldData, $inventoryMeta, $obj->user);
+	$lineItemHandler = vtws_getModuleHandlerFromName('LineItem', $obj->user);
+	$lineItemMeta = $lineItemHandler->getMeta();
+
+	$lineItems = array();
+	foreach ($lineItemDetails as $index => $lineItemFieldData) {
+		$isLineItemExist = isRecordExistInDB($lineItemFieldData, $lineItemMeta, $obj->user);
+		if($isLineItemExist) {
+			$count = $index;
+			$lineItemData = array();
+			$lineItemFieldData = $obj->transformForImport($lineItemFieldData, $lineItemMeta);
+			foreach ($fieldMapping as $fieldName => $index) {
+				if($moduleFields[$fieldName]->getTableName() == 'vtiger_inventoryproductrel') {
+					$lineItemData[$fieldName] = $lineItemFieldData[$fieldName];
+				}
+			}
+			array_push($lineItems,$lineItemData);
+		}
+	}
+	if (empty ($lineItems)) {
+		return null;
+	} elseif ($isRecordExist == false) {
+		foreach ($lineItemDetails[$count] as $key => $value) {
+			$inventoryFieldData[$key] = $value;
+		}
+	}
+
+	$fieldData = $obj->transformForImport($inventoryFieldData, $inventoryMeta);
+	if(empty($fieldData) || empty($lineItemDetails)) {
+		return null;
+	}
+	if ($fieldData['currency_id'] == ' ') {
+		$fieldData['currency_id'] = '1';
+	}
+	$fieldData['LineItems'] = $lineItems;
+
+	$webserviceObject = VtigerWebserviceObject::fromName($adb, $moduleName);
+	$inventoryOperation = new VtigerInventoryOperation($webserviceObject, $obj->user, $adb, $log);
+
+	$entityInfo = $inventoryOperation->create($moduleName, $fieldData);
+	$entityInfo['status'] = $obj->getImportRecordStatus('created');
+	return $entityInfo;
+}
+
+function getImportStatusCount($obj) {
+	global $adb;
+	$tableName = Import_Utils::getDbTableName($obj->user);
+	$result = $adb->query('SELECT status FROM '.$tableName. ' GROUP BY subject');
+
+	$statusCount = array('TOTAL' => 0, 'IMPORTED' => 0, 'FAILED' => 0, 'PENDING' => 0,
+			'CREATED' => 0, 'SKIPPED' => 0, 'UPDATED' => 0, 'MERGED' => 0);
+
+	if($result) {
+		$noOfRows = $adb->num_rows($result);
+		$statusCount['TOTAL'] = $noOfRows;
+		for($i=0; $i<$noOfRows; ++$i) {
+			$status = $adb->query_result($result, $i, 'status');
+			if($obj->getImportRecordStatus('none') == $status) {
+				$statusCount['PENDING']++;
+
+			} elseif($obj->getImportRecordStatus('failed') == $status) {
+				$statusCount['FAILED']++;
+
+			} else {
+				$statusCount['IMPORTED']++;
+				switch($status) {
+					case $obj->getImportRecordStatus('created')	:	$statusCount['CREATED']++;
+						break;
+					case $obj->getImportRecordStatus('skipped')	:	$statusCount['SKIPPED']++;
+						break;
+					case $obj->getImportRecordStatus('updated')	:	$statusCount['UPDATED']++;
+						break;
+					case $obj->getImportRecordStatus('merged')	:	$statusCount['MERGED']++;
+						break;
+				}
+			}
+		}
+	}
+	return $statusCount;
+}
+
+function undoLastImport($obj, $user) {
+	global $adb;
+	$moduleName = $obj->get('module');
+	$ownerId = $obj->get('foruser');
+	$owner = new Users();
+	$owner->id = $ownerId;
+	$owner->retrieve_entity_info($ownerId, 'Users');
+	$dbTableName = Import_Utils::getDbTableName($owner);
+	if(!is_admin($user) && $user->id != $owner->id) {
+		$viewer = new Import_UI_Viewer();
+		$viewer->display('OperationNotPermitted.tpl', 'Vtiger');
+		exit;
+	}
+	$result = $adb->query("SELECT recordid FROM $dbTableName WHERE status = ". Import_Data_Controller::$IMPORT_RECORD_CREATED
+			." AND recordid IS NOT NULL GROUP BY subject");
+	$noOfRecords = $adb->num_rows($result);
+	$noOfRecordsDeleted = 0;
+	for($i=0; $i<$noOfRecords; ++$i) {
+		$recordId = $adb->query_result($result, $i, 'recordid');
+		if(isRecordExists($recordId) && isPermitted($moduleName, 'Delete', $recordId) == 'yes') {
+			$focus = CRMEntity::getInstance($moduleName);
+			$focus->id = $recordId;
+			$focus->trash($moduleName, $recordId);
+			$noOfRecordsDeleted++;
+		}
+	}
+
+	$viewer = new Import_UI_Viewer();
+	$viewer->assign('FOR_MODULE', $moduleName);
+	$viewer->assign('TOTAL_RECORDS', $noOfRecords);
+	$viewer->assign('DELETED_RECORDS_COUNT', $noOfRecordsDeleted);
+	$viewer->display('ImportUndoResult.tpl');
+}
+
+function getInventoryFieldsForExport($tableName) {
+
+	$sql = ','.$tableName.'.adjustment AS "Adjustment", '.$tableName.'.total AS "Total", '.$tableName.'.subtotal AS "Sub Total", ';
+	$sql .= $tableName.'.taxtype AS "Tax Type", '.$tableName.'.discount_amount AS "Discount Amount", ';
+	$sql .= $tableName.'.discount_percent AS "Discount Percent", '.$tableName.'.s_h_amount AS "S&H Amount", ';
+	$sql .= 'vtiger_currency_info.currency_name as "Currency" ';
+
+	return $sql;
+}
+
+function getCurrencyId($fieldValue) {
+	global $adb;
+
+	$sql = 'SELECT id FROM vtiger_currency_info WHERE currency_name = ? AND deleted = 0';
+	$result = $adb->pquery($sql, array($fieldValue));
+	$currencyId = 1;
+	if ($adb->num_rows($result) > 0) {
+		$currencyId = $adb->query_result($result, 0, 'id');
+	}
+	return $currencyId;
 }
 ?>

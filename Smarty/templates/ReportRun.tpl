@@ -100,12 +100,12 @@
 
 <table class="small reportGenHdr mailClient mailClientBg" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
-		<td align="right" valign="bottom" style="padding:5px">
+		<td align="left" valign="bottom" style="padding:5px">
 			<a href="javascript:void(0);" onclick="location.href='index.php?module=Reports&action=SaveAndRun&record={$REPORTID}&folderid={$FOLDERID}'"><img src="{'revert.png'|@vtiger_imageurl:$THEME}" align="abmiddle" alt="{$MOD.LBL_RELOAD_REPORT}" title="{$MOD.LBL_RELOAD_REPORT}" border="0"></a>
 			&nbsp;
 			<a href="javascript:void(0);" onclick="saveReportAs(this,'duplicateReportLayout');"><img src="{'saveas.png'|@vtiger_imageurl:$THEME}" align="abmiddle" alt="{$MOD.LBL_SAVE_REPORT_AS}" title="{$MOD.LBL_SAVE_REPORT_AS}" border="0"></a>
 			&nbsp;
-			<a href="javascript:void(0);" onclick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));"><img src="{'pdf-file.jpg'|@vtiger_imageurl:$THEME}" align="abmiddle" alt="{$MOD.LBL_EXPORTPDF_BUTTON}" title="{$MOD.LBL_EXPORTPDF_BUTTON}" border="0"></a>
+			<a href="javascript:void(0);" onclick="goToURL(CrearEnlace('ReportsAjax&file=CreateCSV',{$REPORTID}));"><img src="{'csv-file.png'|@vtiger_imageurl:$THEME}" align="abmiddle" alt="{$MOD.LBL_EXPORTCSV_BUTTON}" title="{$MOD.LBL_EXPORTCSV_BUTTON}" border="0"></a>
 			&nbsp;
 			<a href="javascript:void(0);" onclick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));"><img src="{'xls-file.jpg'|@vtiger_imageurl:$THEME}" align="abmiddle" alt="{$MOD.LBL_EXPORTXL_BUTTON}" title="{$MOD.LBL_EXPORTXL_BUTTON}" border="0"></a>
 			&nbsp;
@@ -234,8 +234,8 @@ function createDuplicateReport(id) {
 	
 	if(!checkAdvancedFilter()) return false;
 
-	var advft_criteria = $('advft_criteria').value;
-	var advft_criteria_groups = $('advft_criteria_groups').value;
+	var advft_criteria = encodeURIComponent($('advft_criteria').value);
+	var advft_criteria_groups = encodeURIComponent($('advft_criteria_groups').value);
 	
 	new Ajax.Request(
                 'index.php',
@@ -263,8 +263,8 @@ function generateReport(id) {
 	
 	VtigerJS_DialogBox.block();
 	
-	var advft_criteria = $('advft_criteria').value;
-	var advft_criteria_groups = $('advft_criteria_groups').value;
+	var advft_criteria = encodeURIComponent($('advft_criteria').value);
+	var advft_criteria_groups = encodeURIComponent($('advft_criteria_groups').value);
 
 	new Ajax.Request(
                 'index.php',
@@ -290,8 +290,8 @@ function saveReportAdvFilter(id) {
 	
 	VtigerJS_DialogBox.block();
 	
-	var advft_criteria = $('advft_criteria').value;
-	var advft_criteria_groups = $('advft_criteria_groups').value;
+	var advft_criteria = encodeURIComponent($('advft_criteria').value);
+	var advft_criteria_groups = encodeURIComponent($('advft_criteria_groups').value);
 
 	new Ajax.Request(
                 'index.php',

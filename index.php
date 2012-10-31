@@ -129,7 +129,7 @@ if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incompleted.</span></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incomplete!</span></td>
 			</tr>
 			<tr>
 			<td class='small' align='right' nowrap='nowrap'>Please contact your system administrator.<br></td>
@@ -150,7 +150,7 @@ if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incompleted.</span></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>Migration Incomplete.</span></td>
 			</tr>
 			<tr>
 			<td class='small' align='right' nowrap='nowrap'>Please contact your system administrator.<br></td>
@@ -407,6 +407,7 @@ if(isset($action) && isset($module))
 			preg_match("/^massdelete/", $action ) ||
 			preg_match("/^getListOfRecords/", $action) ||
 			preg_match("/^MassEditSave/", $action) ||
+			preg_match("/^Authenticate/", $action) ||
 			preg_match("/^iCalExport/",$action)
 			)
 			$skipFooters=true;
@@ -810,6 +811,10 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
+	if (isset($_COOKIE['vtigerui']) && $_COOKIE['vtigerui'] == '6') {
+		$skipFooters = true;
+	}
+	
 	if((!$skipFooters) && $action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax' && $action != 'getListOfRecords')
 	
 	{

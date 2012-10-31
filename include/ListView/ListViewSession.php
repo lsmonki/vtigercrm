@@ -96,7 +96,9 @@ class ListViewSession {
 			}
 		}
 
-		if($reUseData === false){
+		$list_query = $_SESSION[$currentModule.'_listquery'];
+
+		if($reUseData === false && !empty($list_query)){
 			$recordNavigationInfo = array();
 			if(!empty($_REQUEST['start'])){
 				$start = ListViewSession::getRequestStartPage();
@@ -108,7 +110,6 @@ class ListViewSession {
 				$startRecord = 0;
 			}
 
-			$list_query = $_SESSION[$currentModule.'_listquery'];
 			$instance = CRMEntity::getInstance($currentModule);
 			$instance->getNonAdminAccessControlQuery($currentModule, $current_user);
 			vtlib_setup_modulevars($currentModule, $instance);
@@ -213,6 +214,26 @@ class ListViewSession {
 		if(empty($_REQUEST['viewname'])) return false;
 		if($_REQUEST['viewname'] != $_SESSION['lvs'][$currentModule]['viewname']) return true;
 		return false;
+	}
+
+	/**
+	 * Function that sets the module filter in session
+	 * @param <String> $module - module name
+	 * @param <Integer> $viewId - filter id
+	 */
+	public static function setCurrentView($module, $viewId) {
+		$_SESSION['lvs'][$module]['viewname'] = $viewId;
+	}
+
+	/**
+	 * Function that reads current module filter
+	 * @param <String> $module - module name
+	 * @return <Integer>
+	 */
+	public static function getCurrentView($module) {
+		if(!empty($_SESSION['lvs'][$module]['viewname'])) {
+			return $_SESSION['lvs'][$module]['viewname'];
+		}
 	}
 }
 ?>

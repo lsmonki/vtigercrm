@@ -1,4 +1,4 @@
-<?php
+    <?php
 /*+********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -149,14 +149,6 @@ if(!empty($_REQUEST['dashVal'])){
 	$qry="update vtiger_homedashbd set dashbdtype=? where stuffid=?";	
 	$res=$adb->pquery($qry, array($_REQUEST['dashVal'], $did));
 	echo "loadStuff(".$did.",'DashBoard')";
-}
-
-if(!empty($_REQUEST['reportVal'])){
-	$stuffid=$_REQUEST['stuffid'];
-	global $adb;
-	$qry="update vtiger_homereportchart set reportcharttype=? where stuffid=?";
-	$res=$adb->pquery($qry, array($_REQUEST['reportVal'], $stuffid));
-	echo "loadStuff(".$stuffid.",'ReportCharts')";
 }
 
 if(!empty($_REQUEST['homestuffid'])){

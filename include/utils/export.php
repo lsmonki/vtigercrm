@@ -31,6 +31,10 @@ require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/CustomView/CustomView.php');
 require_once 'modules/PickList/PickListUtils.php';
+require_once('modules/Invoice/Invoice.php');
+require_once('modules/Quotes/Quotes.php');
+require_once('modules/PurchaseOrder/PurchaseOrder.php');
+require_once('modules/SalesOrder/SalesOrder.php');
 
 // Set the current language and the language strings, if not already set.
 setCurrentLanguage();
@@ -131,8 +135,10 @@ function export($type){
 	}
 	$params = array();
 
+	list($idstring, $export_data) = split("#@@#",getExportRecordIds($type, $viewid, $_REQUEST));
+	
 	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata'){
-		$idstring = explode(";", $_REQUEST['idstring']);
+		$idstring = getSelectedRecords($_REQUEST, $type, $idstring, vtlib_purify($_REQUEST['excludedRecords']));
 		if($type == 'Accounts' && count($idstring) > 0) {
 			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
@@ -157,7 +163,20 @@ function export($type){
 		} elseif($type == 'Vendors' && count($idstring) > 0) {
 			$query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
-		} else if(count($idstring) > 0) {
+		} elseif($type == 'Invoice' && count($idstring) > 0) {
+			$query .= ' and vtiger_invoice.invoiceid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Quotes' && count($idstring) > 0) {
+			$query .= ' and vtiger_quotes.quoteid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'SalesOrder' && count($idstring) > 0) {
+			$query .= ' and vtiger_salesorder.salesorderid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'PurchaseOrder' && count($idstring) > 0) {
+			$query .= ' and vtiger_purchaseorder.purchaseorderid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		}
+		else if(count($idstring) > 0) {
 			// vtlib customization: Hook to make the export feature available for custom modules.
 			$query .= " and $focus->table_name.$focus->table_index in (" . generateQuestionMarks($idstring) . ')';
 			array_push($params, $idstring);
@@ -188,7 +207,7 @@ function export($type){
 		if ($limit_start_rec < 0) $limit_start_rec = 0;
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
-	
+
     $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
     $fields_array = $adb->getFieldsArray($result);
     $fields_array = array_diff($fields_array,array("user_name"));
@@ -311,7 +330,13 @@ class ExportUtils{
 				} else {
 					$value = '';
 				}
-			}
+			}elseif($uitype == 71){
+                $value = CurrencyField::convertToUserFormat($value);
+            }elseif($uitype == 72){
+                $value = CurrencyField::convertToUserFormat($value, null, true);
+            }elseif($uitype == 7 && $fieldInfo['typeofdata'] == 'N~O' || $uitype == 9){
+                $value = decimalFormat($value);
+            }
 		}
 		return $arr;
 	}
@@ -335,6 +360,7 @@ class ExportUtils{
 			$arr['columnname'] = $adb->query_result($result, $i, "columnname");
 			$arr['tablename'] = $adb->query_result($result, $i, "tablename");
 			$arr['fieldlabel'] = $adb->query_result($result, $i, "fieldlabel");
+            $arr['typeofdata'] = $adb->query_result($result, $i, "typeofdata");
 			$fieldlabel = strtolower($arr['fieldlabel']);
 			$data[$fieldlabel] = $arr;
 		}

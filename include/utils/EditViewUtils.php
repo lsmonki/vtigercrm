@@ -1034,7 +1034,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 
 	elseif($uitype == 71 || $uitype == 72) {
-
 		$currencyField = new CurrencyField($value);
 		// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
 		if($col_fields['record_id'] != '' && $uitype == 72) {
@@ -1301,9 +1300,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$options[] = array(getTranslatedString($label), $prefix, $selected);
 		}
 		$fieldvalue [] = $options;
-	}
-	else
-	{
+	} elseif($uitype == 7){
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
+		$fld_info = getFieldRelatedInfo(getTabid($module_name), $fieldname);
+		if($fld_info['typeofdata'] != 'I~O' && $current_user->truncate_trailing_zeros == true){
+			$fieldvalue[] = decimalFormat($value);
+		}else{
+			$fieldvalue[] = $value;
+		}
+	} else {
 		//Added condition to set the subject if click Reply All from web mail
 		if($_REQUEST['module'] == 'Emails' && $_REQUEST['mg_subject'] != '')
 		{
@@ -1500,6 +1505,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$output = '';
 	global $theme,$current_user;
 
+	$no_of_decimal_places = getCurrencyDecimalPlaces();
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$product_Detail = Array();
@@ -1645,21 +1651,19 @@ function getAssociatedProducts($module,$focus,$seid='')
             $product_Detail[$i]['comment'.$i]= $comment;
 		}
 
-		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
-		{
-			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
+		if($module != 'PurchaseOrder' && $focus->object_name != 'Order') {
+			$product_Detail[$i]['qtyInStock'.$i]=decimalFormat($qtyinstock);
 		}
-		$qty = number_format($qty, 2,'.',''); //Convert to 2 decimals
-		$listprice = number_format($listprice, 2,'.',''); //Convert to 2 decimals
-		$product_Detail[$i]['qty'.$i]=$qty;
+		$listprice = number_format($listprice, $no_of_decimal_places,'.','');
+		$product_Detail[$i]['qty'.$i]=decimalFormat($qty);
 		$product_Detail[$i]['listPrice'.$i]=$listprice;
-		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
+		$product_Detail[$i]['unitPrice'.$i]=number_format($unitprice, $no_of_decimal_places,'.','');
 		$product_Detail[$i]['productTotal'.$i]=$productTotal;
 		$product_Detail[$i]['subproduct_ids'.$i]=$subprodid_str;
 		$product_Detail[$i]['subprod_names'.$i]=$subprodname_str;
-		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
-		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
-		$discount_amount = number_format($discount_amount, 2,'.',''); //Convert to 2 decimals
+		$discount_percent = decimalFormat($adb->query_result($result,$i-1,'discount_percent'));
+		$discount_amount = $adb->query_result($result,$i-1,'discount_amount');
+		$discount_amount = decimalFormat(number_format($discount_amount, $no_of_decimal_places,'.',''));
 		$discountTotal = '0.00';
 		//Based on the discount percent or amount we will show the discount details
 
@@ -1690,10 +1694,13 @@ function getAssociatedProducts($module,$focus,$seid='')
 			$product_Detail[$i]['checked_discount_zero'.$i] = ' checked';
 		}
 		$totalAfterDiscount = $productTotal-$discountTotal;
+		$totalAfterDiscount = number_format($totalAfterDiscount, $no_of_decimal_places,'.','');
+		$discountTotal = number_format($discountTotal, $no_of_decimal_places,'.','');
 		$product_Detail[$i]['discountTotal'.$i] = $discountTotal;
 		$product_Detail[$i]['totalAfterDiscount'.$i] = $totalAfterDiscount;
 
 		$taxTotal = '0.00';
+		$taxTotal = number_format($taxTotal, $no_of_decimal_places,'.','');
 		$product_Detail[$i]['taxTotal'.$i] = $taxTotal;
 
 		//Calculate netprice
@@ -1746,16 +1753,20 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$product_Detail[1]['final_details']['discount_type_final'] = 'zero';
 
 	$subTotal = ($focus->column_fields['hdnSubTotal'] != '')?$focus->column_fields['hdnSubTotal']:'0.00';
-	$subTotal = number_format($subTotal, 2,'.',''); //Convert to 2 decimals
+	$subTotal = number_format($subTotal, $no_of_decimal_places,'.','');
 
 	$product_Detail[1]['final_details']['hdnSubTotal'] = $subTotal;
 	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
 	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
-	$discountAmount = number_format($discountAmount, 2,'.',''); //Convert to 2 decimals
+    if($discountPercent != '0'){
+        $discountAmount = ($product_Detail[1]['final_details']['hdnSubTotal'] * $discountPercent / 100);
+    }
 
 	//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(For Final Discount)
-	$product_Detail[1]['final_details']['discount_percentage_final'] = 0;
-	$product_Detail[1]['final_details']['discount_amount_final'] = 0;
+	$discount_amount_final = '0.00';
+	$discount_amount_final = number_format($discount_amount_final, $no_of_decimal_places,'.','');
+    $product_Detail[1]['final_details']['discount_percentage_final'] = 0;
+	$product_Detail[1]['final_details']['discount_amount_final'] = $discount_amount_final;
 
 	if($focus->column_fields['hdnDiscountPercent'] != '0')
 	{
@@ -1775,7 +1786,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:visible"';
 		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:hidden"';
 	}
-	$finalDiscount = number_format($finalDiscount, 2,'.',''); //Convert to 2 decimals
+	$finalDiscount = number_format($finalDiscount, $no_of_decimal_places,'.','');
 	$product_Detail[1]['final_details']['discountTotal_final'] = $finalDiscount;
 
 	//To set the Final Tax values
@@ -1801,7 +1812,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		if($tax_percent == '' || $tax_percent == 'NULL')
 			$tax_percent = '0.00';
 		$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
-		$taxamount = number_format($taxamount, 2,'.',''); //Convert to 2 decimals
+		$taxamount = number_format($taxamount, $no_of_decimal_places,'.','');
 		$taxtotal = $taxtotal + $taxamount;
 		$product_Detail[1]['final_details']['taxes'][$tax_count]['taxname'] = $tax_name;
 		$product_Detail[1]['final_details']['taxes'][$tax_count]['taxlabel'] = $tax_label;
@@ -1812,7 +1823,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	//To set the Shipping & Handling charge
 	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
-	$shCharge = number_format($shCharge, 2,'.',''); //Convert to 2 decimals
+	$shCharge = number_format($shCharge, $no_of_decimal_places,'.','');
 	$product_Detail[1]['final_details']['shipping_handling_charge'] = $shCharge;
 
 	//To set the Shipping & Handling tax values
@@ -1839,16 +1850,17 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['percentage'] = $shtax_percent;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['amount'] = $shtaxamount;
 	}
+	$shtaxtotal = number_format($shtaxtotal, $no_of_decimal_places,'.','');
 	$product_Detail[1]['final_details']['shtax_totalamount'] = $shtaxtotal;
 
 	//To set the Adjustment value
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
-	$adjustment = number_format($adjustment, 2,'.',''); //Convert to 2 decimals
+	$adjustment = number_format($adjustment, $no_of_decimal_places,'.','');
 	$product_Detail[1]['final_details']['adjustment'] = $adjustment;
 
 	//To set the grand total
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
-	$grandTotal = number_format($grandTotal, 2,'.',''); //Convert to 2 decimals
+	$grandTotal = number_format($grandTotal, $no_of_decimal_places,'.','');
 	$product_Detail[1]['final_details']['grandTotal'] = $grandTotal;
 
 	$log->debug("Exiting getAssociatedProducts method ...");

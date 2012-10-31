@@ -13,23 +13,30 @@ global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 
+$viewid = vtlib_purify($_REQUEST['viewname']);
+$idstring = vtlib_purify($_REQUEST['idstring']);
 $excludedRecords = vtlib_purify($_REQUEST['excludedRecords']);
+$searchurl = '';
+if($_REQUEST['query'] == 'true') {
+	$ustring = getSearchURL($_REQUEST);
+	$searchurl .= "&query=true$ustring";
+}
 
 $focus = CRMEntity::getInstance($currentModule);
 $focus->mode = '';
 $mode = 'mass_edit';
 
 $disp_view = getView($focus->mode);
-$idstring = vtlib_purify($_REQUEST['idstring']);
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign('MODULE',$currentModule);
 $smarty->assign('APP',$app_strings);
 $smarty->assign('THEME', $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
-$storearray = getSelectedRecords($_REQUEST, $currentModule, $_REQUEST['idstring'],$excludedRecords);
-$idstringval=implode(';',$storearray);
-$smarty->assign("IDS",$idstringval);
+$smarty->assign("IDS",$idstring);
+$smarty->assign("VIEWID",$viewid);
+$smarty->assign("SEARCH_URL",$searchurl);
+$smarty->assign("EXCLUDED_REC",$excludedRecords);
 $smarty->assign('MASS_EDIT','1');
 $smarty->assign('BLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 $smarty->assign("CATEGORY",getParentTab());

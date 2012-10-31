@@ -40,11 +40,13 @@
 			{include file='modules/Import/Import_Step2.tpl'}
 			</td>
 		</tr>
+		{if in_array($FOR_MODULE, $INVENTORY_MODULES) eq FALSE}
 		<tr>
 			<td class="leftFormBorder1" colspan="2" valign="top">
 			{include file='modules/Import/Import_Step3.tpl'}
 			</td>
 		</tr>
+		{/if}
 		<tr>
 			<td align="right" colspan="2">
 			{include file='modules/Import/Import_Basic_Buttons.tpl'}

@@ -115,15 +115,19 @@ if($adb->num_rows($checkresult) > 0) {
 		$uitype = 1;
 		$type = "C(".$fldlength.") default ()"; // adodb type
 	}
-	elseif($fldType == 'Number')
-	{
+	elseif($fldType == 'Decimal') {
 		$uitype = 7;
 
 		//this may sound ridiculous passing decimal but that is the way adodb wants
 		$dbfldlength = $fldlength + $decimal + 1;
- 
+
 		$type="N(".$dbfldlength.".".$decimal.")";	// adodb type
-	$uichekdata='N~O~'.$fldlength .','.$decimal;
+		$uichekdata='N~O';
+	}
+	elseif($fldType == 'Integer') {
+		$uitype = 7;
+		$type = "I(".$dbfldlength.")"; //adodb type
+		$uichekdata='I~O';
 	}
 	elseif($fldType == 'Percent')
 	{
@@ -135,6 +139,7 @@ if($adb->num_rows($checkresult) > 0) {
 	{
 		$uitype = 71;
 		$dbfldlength = $fldlength + $decimal + 1;
+        $decimal = $decimal + 3;
 		$type="N(".$dbfldlength.".".$decimal.")"; //adodb type
 	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}

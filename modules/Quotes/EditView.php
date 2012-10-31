@@ -28,7 +28,7 @@ require_once('include/utils/utils.php');
 global $app_strings,$mod_strings,$log,$theme,$currentModule,$current_user;
 
 $log->debug("Inside Quote EditView");
-
+$no_of_decimal_places = getCurrencyDecimalPlaces();
 $focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty;
 //added to fix the issue4600
@@ -36,6 +36,10 @@ $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
 
+$smarty->assign("DECIMALPLACES", $no_of_decimal_places);
+$defaultcurrencydecimals = 0.00;
+$defaultcurrencydecimals = number_format($defaultcurrencydecimals, $no_of_decimal_places,'.','');
+$smarty->assign("DEFAULTDECIMALS", $defaultcurrencydecimals);
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -84,7 +88,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !=''){
 	for ($i=1; $i<=count($associated_prod);$i++) {
 		$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 		$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Products');
-		$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+		$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 	}
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -98,7 +102,7 @@ if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module'])){
 		for ($i=1; $i<=count($associated_prod);$i++) {
 			$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 			$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Services');
-			$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+			$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 		}
 	   	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -108,8 +112,10 @@ if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module'])){
 // Get Account address if vtiger_account is given
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Accounts.php');
+	$smarty->assign("ACCOUNT_ID", $_REQUEST['account_id']);
 	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
+	$acct_focus->apply_field_security("Accounts"); //Fields Visibility Checking
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
 	//added to fix the issue 4526
@@ -266,6 +272,12 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 // Gather the help information associated with fields
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
+
+//check if the products module is active or not
+$smarty->assign('PRODUCTMODULEACTIVE', vtlib_isModuleActive('Products') && ((isPermitted('Products', 'EditView') == 'yes')));
+
+//check if the services module is active or not
+$smarty->assign('SERVICESMODULEACTIVE',vtlib_isModuleActive('Services') && ((isPermitted('Services', 'EditView') == 'yes')));
 
 if($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");

@@ -69,6 +69,7 @@ if (isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '' && $_REQUEST
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
         $acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'], "Accounts");
+	$acct_focus->apply_field_security("Accounts"); //Fields Visibility Checking
 	$focus->column_fields['fax'] = $acct_focus->column_fields['fax'];
 	$focus->column_fields['otherphone'] = $acct_focus->column_fields['phone'];
 	$focus->column_fields['mailingcity'] = $acct_focus->column_fields['bill_city'];

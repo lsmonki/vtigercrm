@@ -245,12 +245,11 @@ class ModCommentsCore extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('ModComments', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 

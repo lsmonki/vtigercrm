@@ -11,6 +11,7 @@
 /*
  * class to manage all the UI related info
  */
+require_once 'modules/PickList/PickListUtils.php';
 
 class ConvertLeadUI {
 
@@ -25,10 +26,15 @@ class ConvertLeadUI {
 	var $account_fields;
 	var $contact_fields;
 	var $potential_fields;
-	static $industry = false;
+
+	static $cachedIndustryPicklistValues = false;
+	static $cachedSalesStagePicklistValues = false;
+	static $cachedDescribeInfos = array();
+	static $cachedMappedFieldValue = array();
+	static $cachedOwnerList = array();
 
 	function __construct($leadid, $current_user) {
-		global$adb;
+		global $adb;
 		$this->leadid = $leadid;
 		$this->current_user = $current_user;
 		$sql = "SELECT * FROM vtiger_leaddetails,vtiger_leadscf,vtiger_crmentity
@@ -73,7 +79,15 @@ class ConvertLeadUI {
 
 	function getFieldInfo($module, $fieldname) {
 		global $current_user;
-		$describe = vtws_describe($module, $current_user);
+
+		$describe = null;
+		if (!isset(self::$cachedDescribeInfos[$module])) {
+			$describe = vtws_describe($module, $current_user);
+			self::$cachedDescribeInfos[$module] = $describe;
+		} else {
+			$describe = self::$cachedDescribeInfos[$module];
+		}
+
 		foreach ($describe['fields'] as $index => $fieldInfo) {
 			if ($fieldInfo['name'] == $fieldname) {
 				return $fieldInfo;
@@ -141,68 +155,68 @@ class ConvertLeadUI {
 	}
 
 	function getIndustryList() {
-		global$adb;
 
-		require_once 'modules/PickList/PickListUtils.php';
+		if (!self::$cachedIndustryPicklistValues) {
+			global $adb;
+			$industry_list = array();
+			if (is_admin($this->current_user)) {
+				$pick_list_values = getAllPickListValues('industry');
+			} else {
+				$pick_list_values = getAssignedPicklistValues('industry', $this->current_user->roleid, $adb);
+			}
+			foreach ($pick_list_values as $value) {
+				$industry_list[$value]["value"] = $value;
+			}
+			self::$cachedIndustryPicklistValues = $industry_list;
+		}
 
-		global $adb;
-		$industry_list = array();
-		if (is_admin($this->current_user)) {
-			$pick_list_values = getAllPickListValues('industry');
-		} else {
-			$pick_list_values = getAssignedPicklistValues('industry', $this->current_user->roleid, $adb);
-		}
-		foreach ($pick_list_values as $value) {
-			$industry_list[$value]["value"] = $value;
-		}
-		return $industry_list;
+		return self::$cachedIndustryPicklistValues;
+
 	}
 
 	function getSalesStageList() {
-		global$adb;
 
-		require_once 'modules/PickList/PickListUtils.php';
+		if (!self::$cachedSalesStagePicklistValues) {
+			global$adb;
+			$sales_stage_list = array();
+			if (is_admin($this->current_user)) {
+				$pick_list_values = getAllPickListValues('sales_stage');
+			} else {
+				$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid, $adb);
+			}
+			foreach ($pick_list_values as $value) {
+				$sales_stage_list[$value]["value"] = $value;
+			}
 
-		global $adb;
-		$sales_stage_list = array();
-		if (is_admin($this->current_user)) {
-			$pick_list_values = getAllPickListValues('sales_stage');
-		} else {
-			$pick_list_values = getAssignedPicklistValues('sales_stage', $this->current_user->roleid, $adb);
+			self::$cachedSalesStagePicklistValues = $sales_stage_list;
 		}
-		foreach ($pick_list_values as $value) {
-			$sales_stage_list[$value]["value"] = $value;
-		}
-		return $sales_stage_list;
+
+		return self::$cachedSalesStagePicklistValues;
 	}
 
 	function getUserId() {
 		return $this->current_user->id;
 	}
 
-	/*
-	 * function to form the user/group list
-	 * array(
-	 * 	key=>
-	 * 		[<user/group>id]=>
-	 * 		[<user/group>name]=>
-	 * )
-	 */
-
 	function getOwnerList($type) {
-		$private = self::checkOwnership($this->current_user);
-		if ($type === 'user')
-			$owner = get_user_array(false, "Active", $this->row["smownerid"], $private);
-		else
-			$owner = get_group_array(false, "Active", $this->row["smownerid"], $private);
-		$owner_list = array();
-		foreach ($owner as $id => $name) {
-			if ($id == $this->row['smownerid'])
-				$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => true);
+
+		if (!isset(self::$cachedOwnerList[$type])) {
+			$private = self::checkOwnership($this->current_user);
+			if ($type === 'user')
+				$owner = get_user_array(false, "Active", $this->row["smownerid"], $private);
 			else
-				$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => false);
+				$owner = get_group_array(false, "Active", $this->row["smownerid"], $private);
+			$owner_list = array();
+			foreach ($owner as $id => $name) {
+				if ($id == $this->row['smownerid'])
+					$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => true);
+				else
+					$owner_list[] = array($type . 'id' => $id, $type . 'name' => $name, 'selected' => false);
+			}
+			self::$cachedOwnerList[$type] = $owner_list;
 		}
-		return $owner_list;
+
+		return self::$cachedOwnerList[$type];
 	}
 
 	static function checkOwnership($user) {
@@ -223,39 +237,66 @@ class ConvertLeadUI {
 	function getMappedFieldValue($module, $fieldName, $editable) {
 		global $adb,$default_charset;
 
-		$fieldid = getFieldid(getTabid($module), $fieldName);
+		if (!isset(self::$cachedMappedFieldValue[$module][$fieldName])) {
 
-		$sql = "SELECT leadfid FROM vtiger_convertleadmapping
-			WHERE (accountfid=?
-			OR contactfid=?
-			OR potentialfid=?)
-			AND editable=?";
-		$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
-		$leadfid = $adb->query_result($result, 0, 'leadfid');
+			$fieldid = getFieldid(getTabid($module), $fieldName);
 
-		$sql = "SELECT fieldname FROM vtiger_field WHERE fieldid=? AND tabid=?";
-		$result = $adb->pquery($sql, array($leadfid, getTabid('Leads')));
-		$leadfname = $adb->query_result($result, 0, 'fieldname');
+			$sql = "SELECT leadfid FROM vtiger_convertleadmapping
+				WHERE (accountfid=?
+				OR contactfid=?
+				OR potentialfid=?)
+				AND editable=?";
+			$result = $adb->pquery($sql, array($fieldid, $fieldid, $fieldid, $editable));
+			$leadfid = $adb->query_result($result, 0, 'leadfid');
 
-		$fieldinfo = $this->getFieldInfo($module, $fieldName);
-		if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {
-			$valuelist = null;
-			switch ($fieldName) {
-				case 'industry':$valuelist = $this->getIndustryList();
-					break;
-				case 'sales_stage':$valuelist = $this->getSalesStageList();
-					break;
-			}
-			foreach ($fieldinfo['type']['picklistValues'] as $key => $values) {
-				if ($values['value'] == $this->row[$leadfname]) {
-					return $this->row[$leadfname];
+			$sql = "SELECT fieldname FROM vtiger_field WHERE fieldid=? AND tabid=?";
+			$result = $adb->pquery($sql, array($leadfid, getTabid('Leads')));
+			$leadfname = $adb->query_result($result, 0, 'fieldname');
+
+			$fieldinfo = $this->getFieldInfo($module, $fieldName);
+            
+			//currency field value converted to userformat
+            if($fieldinfo['type']['name'] == 'currency'){
+                $currencyField = new CurrencyField($this->row[$leadfname]);
+                $value = $currencyField->getDisplayValue();
+                self::$cachedMappedFieldValue[$module][$fieldName] = $value;
+                return $value;
+            }
+
+			if ($fieldinfo['type']['name'] == 'picklist' || $fieldinfo['type']['name'] == 'multipicklist') {
+				$valuelist = null;
+				switch ($fieldName) {
+					case 'industry':$valuelist = $this->getIndustryList();
+						break;
+					case 'sales_stage':$valuelist = $this->getSalesStageList();
+						break;
 				}
+				foreach ($fieldinfo['type']['picklistValues'] as $key => $values) {
+					if ($values['value'] == $this->row[$leadfname]) {
+						$value = $this->row[$leadfname];
+						self::$cachedMappedFieldValue[$module][$fieldName] = $value;
+						return $value;
+					}
+				}
+				$value = $fieldinfo['default'];
+				self::$cachedMappedFieldValue[$module][$fieldName] = $value;
+				return $value;
 			}
-			return $fieldinfo['default'];
+            
+            if($fieldinfo['type']['name'] === 'date'){
+                if($this->row[$leadfname] != null) {
+                    $value = DateTimeField::convertToUserFormat($this->row[$leadfname]);
+                    self::$cachedMappedFieldValue[$module][$fieldName] = $value;
+                    return $value;
+                }
+            }
+           
+			$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
+			$value = htmlentities($value, ENT_QUOTES, $default_charset);
+			self::$cachedMappedFieldValue[$module][$fieldName] = $value;
 		}
-		$value = html_entity_decode($this->row[$leadfname], ENT_QUOTES, $default_charset);
-		return htmlentities($value, ENT_QUOTES, $default_charset);
-		//return $this->row[$leadfname];
+
+		return self::$cachedMappedFieldValue[$module][$fieldName];
 	}
 
 }

@@ -4,8 +4,8 @@ var Webforms ={
 		return confirm(msg);
 	},
 	deleteForm:function(formname,id){
-		if (typeof webforms_alert_arr != 'undefined') {
-			var status=Webforms.confirmAction(getTranslatedString('LBL_DELETE_MSG', webforms_alert_arr));
+		if (typeof alert_arr != 'undefined') {
+			var status=Webforms.confirmAction(alert_arr.LBL_DELETE_MSG);
 		} else {
 			var status=Webforms.confirmAction(getTranslatedString('LBL_DELETE_MSG'));
 		}

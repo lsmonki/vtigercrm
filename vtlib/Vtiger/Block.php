@@ -8,6 +8,7 @@
  * All Rights Reserved.
  ******************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
+require_once 'vtiger6/includes/runtime/Cache.php';
 
 /**
  * Provides API to work with vtiger CRM Module Blocks
@@ -25,6 +26,8 @@ class Vtiger_Block {
 	var $increateview = 0;
 	var $ineditview = 0;
 	var $indetailview = 0;
+
+    var $display_status=1;
 
 	var $module;
 
@@ -69,6 +72,7 @@ class Vtiger_Block {
 	function initialize($valuemap, $moduleInstance=false) {
 		$this->id = $valuemap[blockid];
 		$this->label= $valuemap[blocklabel];
+        $this->display_status = $valuemap[display_status];
 		$this->module=$moduleInstance? $moduleInstance: Vtiger_Module::getInstance($valuemap[tabid]);
 	}
 
@@ -160,8 +164,11 @@ class Vtiger_Block {
 	 */
 	static function getInstance($value, $moduleInstance=false) {
 		global $adb;
+		$cache = Vtiger_Cache::getInstance();
+		if($cache->getBlockInstance($value)){
+			return $cache->getBlockInstance($value);
+		} else {
 		$instance = false;
-
 		$query = false;
 		$queryParams = false;
 		if(Vtiger_Utils::isNumber($value)) {
@@ -176,7 +183,9 @@ class Vtiger_Block {
 			$instance = new self();
 			$instance->initialize($adb->fetch_array($result), $moduleInstance);
 		}
+			$cache->setBlockInstance($value,$instance);
 		return $instance;
+	}
 	}
 
 	/**
@@ -187,7 +196,7 @@ class Vtiger_Block {
 		global $adb;
 		$instances = false;
 
-		$query = "SELECT * FROM vtiger_blocks WHERE tabid=?";
+		$query = "SELECT * FROM vtiger_blocks WHERE tabid=? ORDER BY sequence";
 		$queryParams = Array($moduleInstance->id);
 		
 		$result = $adb->pquery($query, $queryParams);

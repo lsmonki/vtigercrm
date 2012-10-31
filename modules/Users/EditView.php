@@ -48,17 +48,26 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$mode='create';
 }
 
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$focus->id = "";
-	$focus->user_name = "";
-	$mode='create';
+if(empty($_REQUEST['record']) || empty($focus->column_fields['status']) ){
 
-	//When duplicating the user the password fields should be empty
-	$focus->column_fields['user_password']='';
-	$focus->column_fields['confirm_password']='';
-}
-if(empty($focus->column_fields['time_zone'])) {
-	$focus->column_fields['time_zone'] = DateTimeField::getDBTimeZone();
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src= " . vtiger_imageurl('denied.gif', $theme) . " ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
+			<span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>
+		</td>
+		</tr>
+		</tbody></table>
+		</div>";
+	echo "</td></tr></table>";
+	exit;
 }
 
 global $theme;
@@ -80,17 +89,14 @@ if (isset($_REQUEST['error_string'])) $smarty->assign("ERROR_STRING", "<font cla
 if (isset($_REQUEST['return_module']))
 {
         $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
-        $RETURN_MODULE=vtlib_purify($_REQUEST['return_module']);
 }
 if (isset($_REQUEST['return_action']))
 {
         $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
-        $RETURN_ACTION = vtlib_purify($_REQUEST['return_action']);
 }
 if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
 {
         $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
-        $RETURN_ID = vtlib_purify($_REQUEST['return_id']);
 }
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);

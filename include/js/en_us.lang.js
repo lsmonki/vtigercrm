@@ -102,7 +102,7 @@ var alert_arr = {
 	'NOT_EQUALS_TO':'not equal to',
 	'STARTS_WITH':'starts with',
 	'CONTAINS':'contains',
-	'DOES_NOT_CONTAINS':'does not contains',
+	'DOES_NOT_CONTAINS':'does not contain',
 	'LESS_THAN':'less than',
 	'GREATER_THAN':'greater than',
 	'LESS_OR_EQUALS':'less or equal',
@@ -343,6 +343,14 @@ var alert_arr = {
 	'LBL_CLOSE_DATE':'Close Date',
 	'LBL_EMAIL':'Email',
 	'MORE_THAN_500' : 'You selected more than 500 records. For this action it may take longer time. Are you sure want to proceed?',
-	'LBL_MAPPEDALERT':'The field has been already mapped'
+	'LBL_MAPPEDALERT':'The field has been already mapped',
+	'SELECT_CONTACT_NAME':'Please select contact name',
+	'SELECT_ORGANIZATION_NAME':'Please select organization name',
+	//added for webforms module
+	'LBL_DELETE_MSG' : 'Are you sure, you want to delete the webform?',
+
+	'SELECT_COMPANY_LOGO':'Select Company Logo',
+	'WRONG_IMAGE_TYPE':'.png or .gif are recommended formats for Company Logo',
+	'LOGO_MAXIMUM_SIZE':'Image size should be less than 1 MB only'
 
 };

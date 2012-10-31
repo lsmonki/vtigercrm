@@ -9,7 +9,7 @@
 <span class="moduleName" id="mail_fldrname">{$FOLDER->name()}</span>
 <div class="mailClientBg mm_outerborder" id="email_con" name="email_con">
 <table width="100%" cellpadding=3 cellspacing=0 border=0 class="small">
-	
+<input type="hidden" id="jscal_dateformat" name="jscal_dateformat" value="{$JS_DATEFORMAT}" />
 {if $FOLDER->mails()}
 <tr>
 	<td>
@@ -48,19 +48,20 @@
 				<select class='small' id="moveFolderList" onchange="MailManager.moveMail(this);">
 					<option value="">{'LBL_MOVE_TO'|@getTranslatedString:$MODULE}</option>
 					{foreach item=folder from=$FOLDERLIST}
-						<option value="{$folder|@htmlentities}" >{$folder|@htmlentities}</option>
+						<option value="{$folder}" >{$folder}</option>
 					{/foreach}
 				</select>
 			</td>
 			<td class="moduleName" align="right">{'LBL_Search'|@getTranslatedString}
 				<input type="text" id='search_txt' class='small' value="{$QUERY}" />
+				<img id="jscal_trigger_fval" width="20" onClick="MailManager.showCalendar();" align="absmiddle" height="20" src="themes/softed/images/btnL3Calendar.gif" style="display:none">
 				{'LBL_IN'|@getTranslatedString}
-				<select class='small' id="search_type">
-					{foreach item=arr from=$SEARCHOPTIONS}
+				<select class='small' id="search_type" onchange="MailManager.addRequiredElements()">
+					{foreach item=arr key=option from=$SEARCHOPTIONS}
 						{if $arr eq $TYPE}
-							<option value="{$arr}" selected>{$arr|getTranslatedString}</option>
+							<option value="{$arr}" selected >{$option|getTranslatedString}</option>
 						{else}
-							<option value="{$arr}" >{$arr|getTranslatedString}</option>
+							<option value="{$arr}" >{$option|getTranslatedString}</option>
 						{/if}
 					{/foreach}
 				</select>

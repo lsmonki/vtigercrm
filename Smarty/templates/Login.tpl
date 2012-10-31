@@ -62,8 +62,8 @@
 			</div>
 		</td>
 
-		<td valign="top" align="center" width="50%">
-			<div class="loginForm">
+		<td valign="top" width="50%">
+			<div class="loginForm" style="margin-top:0;">
 				<div class="poweredBy">Powered by vtiger CRM - {$VTIGER_VERSION}</div>
 				<form action="index.php" method="post" name="DetailView" id="form">
 					<input type="hidden" name="module" value="Users" />
@@ -92,6 +92,7 @@
 			<a href='javascript:mypopup()'>{$APP.LNK_READ_LICENSE}</a>
 			|
 			<a href='http://www.vtiger.com/products/crm/privacy_policy.html' target='_blank'>{$APP.LNK_PRIVACY_POLICY}</a>
+			{$STATIMAGE}
 			|
 			&copy; 2004- {php} echo date('Y'); {/php}
 			</div>

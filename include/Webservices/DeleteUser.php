@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *
  *********************************************************************************/
-
+ require_once("include/events/include.inc");
 /**
  * @author MAK
  */
@@ -25,7 +25,7 @@ function vtws_deleteUser($id, $newOwnerId,$user){
 		$meta = $handler->getMeta();
 		$entityName = $meta->getObjectEntityName($id);
 
-		$types = vtws_listtypes($user);
+		$types = vtws_listtypes(null, $user);
 		if(!in_array($entityName,$types['types'])){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,
 					"Permission to perform the operation is denied, EntityName = ".$entityName);
@@ -55,13 +55,11 @@ function vtws_deleteUser($id, $newOwnerId,$user){
 		$newIdComponents = vtws_getIdComponents($newOwnerId);
 		if(empty($newIdComponents[1])) {
 			//force the default user to be the default admin user.
-			//added cause eazybusiness team is sending this value empty
 			$newIdComponents[1] = 1;
 		}
-		vtws_transferOwnership($idComponents[1], $newIdComponents[1]);
-		//delete from user vtiger_table;
-		$sql = "delete from vtiger_users where id=?";
-		vtws_runQueryAsTransaction($sql, array($idComponents[1]), $result);
+
+		$userObj = new Users();
+		$userObj->transformOwnerShipAndDelete($idComponents[1], $newIdComponents[1]);		
 
 		VTWS_PreserveGlobal::flush();
 		return  array("status"=>"successful");

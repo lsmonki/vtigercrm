@@ -725,7 +725,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 			   {if $secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record}
-			   	<select id="user_status" name="{$fldname}" tabindex="{$vt_tab}" class="small">
+			   	<select id="user_status" disabled name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
 			   	<select id="user_status" disabled name="{$fldname}" class="small">
 			   {/if}

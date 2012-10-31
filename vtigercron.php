@@ -8,13 +8,16 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-
-
 /**
  * Start the cron services configured.
  */
 include_once 'vtlib/Vtiger/Cron.php';
 require_once 'config.inc.php';
+
+if (file_exists('config_override.php')) {
+	include_once 'config_override.php';
+}
+
 if(PHP_SAPI === "cli" || (isset($_SESSION["authenticated_user_id"]) &&	isset($_SESSION["app_unique_key"]) && $_SESSION["app_unique_key"] == $application_unique_key)){
 
 $cronTasks = false;

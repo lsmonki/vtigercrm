@@ -131,6 +131,14 @@ class Vtiger_PackageExport {
 		// Copy cron files of the module (if any)
 		if(is_dir("cron/modules/$module"))
 			$zip->copyDirectoryFromDisk("cron/modules/$module", "cron");
+		
+		// vtiger6 support
+		// Copy vtiger6 related files for module
+		if(is_dir("vtiger6/modules/$module"))
+			$zip->copyDirectoryFromDisk ("vtiger6/modules/$module", "vtiger6/modules/$module");
+		// TODO More than one layout support
+		if(is_dir("vtiger6/layouts/vlayout/modules/$module")) 
+			$zip->copyDirectoryFromDisk ("vtiger6/layouts/vlayout/modules/$module", "vtiger6/layouts/vlayout/modules/$module");
 
 		$zip->save();
 
@@ -599,7 +607,7 @@ class Vtiger_PackageExport {
 	 * @access private
 	 */
 	function export_CustomLinks($moduleInstance) {
-		$customlinks = $moduleInstance->getLinks();
+		$customlinks = $moduleInstance->getLinksForExport();
 		if(!empty($customlinks)) {
 			$this->openNode('customlinks');
 			foreach($customlinks as $customlink) {

@@ -9,7 +9,15 @@
   *
  ********************************************************************************/
 
-require('Smarty/libs/Smarty.class.php');
+/* 
+ * This is required to overcome apc-cache issues,
+ * when vtiger 5 view files need to co-exists with vtiger 6 Views.
+ * Example: Link / Widget inclusion etc...
+ */
+if (!class_exists('Smarty')) {
+	require_once ('Smarty/libs/Smarty.class.php');
+}
+
 class vtigerCRM_Smarty extends Smarty{
 	
 	/** Cache the tag cloud display information for re-use */

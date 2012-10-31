@@ -549,7 +549,7 @@ $mod_strings = array (
       'LBL_DOC_MSWORD' => 'El Archivo ha de ser un documento .doc/msword',
       //'LBL_DOC_MSWORD' => 'El Archivo ha de ser un documento Microsoft Word/doc, OpenOffice/odt o Rich Text Format/rtf',
       'LBL_NODOC' => 'No hay archivos .doc en el directorio. Pruebe de nuevo.',
-      'LOGO_ERROR' => 'El logotipo debe ser un archivo tipo .jpg /. png',
+      'LOGO_ERROR' => 'El logotipo debe ser un archivo tipo png/gif',
       'Error_Message' => 'Mensaje de Error',
       'Invalid_file' => 'Archivo erróneo o',
       'File_has_no_data' => 'El Archivo no tiene datos',
@@ -922,6 +922,8 @@ $mod_strings = array (
       'LBL_SELECTED_MODULES' => 'Módulos Seleccionados',
 
       'LBL_CRM_SETTINGS' => 'Configuración CRM',
+
+	  'LBL_WEBFORMS_DESCRIPTION' => 'Permite gestionar Webforms', //Description for webforms
 
 );
 $mod_list_strings = array (

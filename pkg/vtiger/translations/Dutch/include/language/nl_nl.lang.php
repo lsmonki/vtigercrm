@@ -1345,6 +1345,7 @@ $app_strings = array (
 'LBL_MORE'=>'Meer',
 'LBL_CRM_SETTINGS' => 'CRM instellingen',
 
+'LBL_CREATE_WEBFORM_TITLE' => 'Maak een webformulier'
 );
 
 $app_list_strings = array (

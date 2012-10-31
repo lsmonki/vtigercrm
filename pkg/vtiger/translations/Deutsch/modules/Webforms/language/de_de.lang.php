@@ -36,6 +36,7 @@ $mod_strings = Array (
 	'LBL_DUPLICATE_NAME'=>'Ein Webformular mit diesem Namen existiert bereits',
     'ERR_CREATE_WEBFORM' => 'Erstellung des Webformulars ist fehlgeschlagen',
 	'LBL_SELECT_USER'=>'Wähle Benutzer',
+	'LBL_CREATE_NEW_WEBFORM_NOW' => 'Sie können eine Webform Jetzt erstellen. Klicken Sie auf den unten stehenden Link:'
 );
 
 ?>

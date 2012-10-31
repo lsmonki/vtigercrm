@@ -347,17 +347,7 @@ function check_form() {
 							followuphour = followuphour;
 					}
 				}
-
-				if ( compareDates(date3,'Followup Date',date2,'End Date','GE')) {
-					if (date3 <= date2) {
-						if((followuphour*60+followupmin) <= (endhour*60+endmin)) {
-							alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
-							document.EditView.followup_starthr.focus();
-							return false;
-						}
-					}
-				}
-				else return false;
+				
 				//modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
 				date3.setMinutes(followupmin);
 				date3.setHours(followuphour);
@@ -376,6 +366,17 @@ function check_form() {
 				document.EditView.followup_due_date.value = tempdate;
 				document.EditView.followup_time_start.value = followuphour+':'+followupmin;
 				document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
+
+				if ( compareDates(date3,'Followup Date',date2,'End Date','GE')) {
+					if (date3 <= date2) {
+						if((followuphour*60+followupmin) <= (endhour*60+endmin)) {
+							alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
+							document.EditView.followup_starthr.focus();
+							return false;
+						}
+					}
+				}
+				else return false;
 			//end
 			}
 			// Added for Aydin Kurt-Elli requirement END -by Minnie -->

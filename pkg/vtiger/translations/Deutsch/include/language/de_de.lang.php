@@ -1313,7 +1313,9 @@ $app_strings = array(
 
 //added for creating a custom lead map row in UI
 'LBL_ADD_MAPPING'=> 'Zuordnung hinzufügen',
-'LBL_FIELD_MAPPING' => 'Feldzuordnung'
+'LBL_FIELD_MAPPING' => 'Feldzuordnung',
+
+'LBL_CREATE_WEBFORM_TITLE' => 'Erstelle ein Webformular'
 );
 
 $app_list_strings = array (

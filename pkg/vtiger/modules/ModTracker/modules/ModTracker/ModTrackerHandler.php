@@ -35,10 +35,10 @@ class ModTrackerHandler extends VTEventHandler {
                             if(!$inserted) {
                                 $checkRecordPresentResult = $adb->pquery('SELECT * FROM vtiger_modtracker_basic WHERE 
                                     crmid = ?', array($recordId));
-                                if($adb->num_rows($checkRecordPresentResult)) {
-                                    $status = ModTracker::$UPDATED;
-                                } else {
+                                if(!$adb->num_rows($checkRecordPresentResult) && $data->isNew()) {
                                     $status = ModTracker::$CREATED;
+                                } else {
+                                    $status = ModTracker::$UPDATED;
                                 }
                                 $this->id = $adb->getUniqueId('vtiger_modtracker_basic');
                                 $adb->pquery('INSERT INTO vtiger_modtracker_basic(id, crmid, module, whodid, changedon, status)
@@ -59,6 +59,14 @@ class ModTrackerHandler extends VTEventHandler {
                 $id = $adb->getUniqueId('vtiger_modtracker_basic');
                 $adb->pquery('INSERT INTO vtiger_modtracker_basic(id, crmid, module, whodid, changedon, status)
                     VALUES(?,?,?,?,?,?)', Array($id, $recordId, $moduleName, $current_user->id, date('Y-m-d H:i:s',time()), ModTracker::$DELETED));
+            }
+
+            if($eventName == 'vtiger.entity.afterrestore') {
+                $recordId = $data->getId();
+                $columnFields = $data->getData();
+                $id = $adb->getUniqueId('vtiger_modtracker_basic');
+                $adb->pquery('INSERT INTO vtiger_modtracker_basic(id, crmid, module, whodid, changedon, status)
+                    VALUES(?,?,?,?,?,?)', Array($id, $recordId, $moduleName, $current_user->id, date('Y-m-d H:i:s',time()), ModTracker::$RESTORED));
             }
 		}
 	}

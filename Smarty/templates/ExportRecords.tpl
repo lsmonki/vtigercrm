@@ -26,6 +26,7 @@
 							<input type="hidden" name="module" value="{$MODULE}">
 							<input type="hidden" name="action" value="Export">
 							<input type="hidden" name="idstring" value="{$IDSTRING}">
+							<input type="hidden" name="excludedRecords" value="{$EXCLUDED_RECORDS}">
 							<input type="hidden" name="id_cur_str" value="{$IDCURSTR}">
 							<table align="center" cellpadding="15" cellspacing="0" width="85%" class="mailClient importLeadUI small" border="0">
 								<tr>

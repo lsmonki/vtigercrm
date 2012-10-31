@@ -373,7 +373,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$tabid = $this->getTabId();
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-			$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4)";
+			$sql = "select *, '0' as readonly from vtiger_field where tabid =? and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4,5)";
 			$params = array($tabid, $block);	
 		}else{
 			$profileList = getCurrentUserProfileList();
@@ -387,7 +387,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 						ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 						WHERE vtiger_field.tabid =? AND vtiger_profile2field.visible = 0 
 						AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-						AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname";
+						AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4,5) and vtiger_field.presence in (0,2) group by columnname";
 				$params = array($tabid, $profileList, $block);
 			} else {
 				$sql = "SELECT vtiger_field.*, vtiger_profile2field.readonly
@@ -398,7 +398,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 						ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 						WHERE vtiger_field.tabid=? 
 						AND vtiger_profile2field.visible = 0 
-						AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname";
+						AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4,5) and vtiger_field.presence in (0,2) group by columnname";
 				$params = array($tabid, $block);
 			}
 		}
@@ -440,7 +440,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 				}
 			}
 		}else{
-			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
+			$sql = "select setype from vtiger_crmentity where crmid=? and deleted=0";
 			$result = $adb->pquery($sql , array($id));
 			if($result != null && isset($result)){
 				if($adb->num_rows($result)>0){
@@ -458,33 +458,51 @@ class VtigerCRMObjectMeta extends EntityMeta {
 	function exists($recordId){
 		global $adb;
 		
+		// Caching user existence value for optimizing repeated reads.
+		// 
+		// NOTE: We are not caching the record existence 
+		// to ensure only latest state from DB is sent.
+		static $user_exists_cache = array();
+		
 		$exists = false;
 		$sql = '';
 		if($this->objectName == 'Users'){
-			$sql = "select * from vtiger_users where id=? and deleted=0 and status='Active'";
+			if (array_key_exists($recordId, $user_exists_cache)) {
+				$exists = true;
+			} else {
+				$sql = "select 1 from vtiger_users where id=? and deleted=0 and status='Active'";
+			}
+			
 		}else{
-			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".
+			$sql = "select 1 from vtiger_crmentity where crmid=? and deleted=0 and setype='".
 				$this->getTabName()."'";
 		}
-		$result = $adb->pquery($sql , array($recordId));
-		if($result != null && isset($result)){
-			if($adb->num_rows($result)>0){
-				$exists = true;
+		
+		if ($sql) {
+			$result = $adb->pquery($sql , array($recordId));
+			if($result != null && isset($result)){
+				if($adb->num_rows($result)>0){
+					$exists = true;
+				}
+			}
+			// Cache the value for further lookup.
+			if ($this->objectName == 'Users') {
+				$user_exists_cache[$recordId] = $exists;
 			}
 		}
+		
 		return $exists;
 	}
 	
 	public function getNameFields(){
 		global $adb;
 		
-		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where tabid = ?";
-		$result = $adb->pquery($query, array($this->getEffectiveTabId()));
+		$data = getEntityFieldNames(getTabModuleName($this->getEffectiveTabId()));
 		$fieldNames = '';
-		if($result){
-			$rowCount = $adb->num_rows($result);
-			if($rowCount > 0){
-				$fieldNames = $adb->query_result($result,0,'fieldname');
+		if ($data) {
+			$fieldNames = $data['fieldname'];
+			if (is_array($fieldNames)) {
+				$fieldNames = implode(',', $fieldNames);
 			}
 		}
 		return $fieldNames;
@@ -517,5 +535,6 @@ class VtigerCRMObjectMeta extends EntityMeta {
 	public function isModuleEntity() {
 		return true;
 	}
+
 }
 ?>

@@ -77,7 +77,7 @@ class Import_Data_Controller {
 					$defaultValues[$mandatoryFieldName] = $this->user->id;
 				} elseif($fieldInstance->getFieldDataType() != 'datetime'
 						&& $fieldInstance->getFieldDataType() != 'date'
-						&& $fieldInstance->getFieldDataType() != 'time') {
+						&& $fieldInstance->getFieldDataType() != 'time' && $fieldInstance->getFieldDataType() != 'reference') {
 					$defaultValues[$mandatoryFieldName] = '????';
 				}
 			}
@@ -92,7 +92,10 @@ class Import_Data_Controller {
 				}
 			}
 		}
-		$cachedDefaultValues[$this->module] = $defaultValues;
+		$className = get_class($moduleMeta);
+		if ($className != 'VtigerLineItemMeta') {
+			$cachedDefaultValues[$this->module] = $defaultValues;
+		}
 		return $defaultValues;
 	}
 
@@ -103,7 +106,12 @@ class Import_Data_Controller {
 	}
 
 	public function importData() {
-		$this->createRecords();
+		$focus = CRMEntity::getInstance($this->module);
+		if(method_exists($focus, 'createRecords')) {
+			$focus->createRecords($this);
+		} else {
+			$this->createRecords();
+		}
 		$this->updateModuleSequenceNumber();
 	}
 
@@ -189,8 +197,11 @@ class Import_Data_Controller {
 			} else {
 				if (!empty($mergeType) && $mergeType != Import_Utils::$AUTO_MERGE_NONE) {
 
+					$customView = new CustomView($moduleName);
+					$viewId = $customView->getViewIdByName('All', $moduleName);
 					$queryGenerator = new QueryGenerator($moduleName, $this->user);
-					$queryGenerator->initForDefaultCustomView();
+					$queryGenerator->initForCustomViewById($viewId);
+					
 					$fieldsList = array('id');
 					$queryGenerator->setFields($fieldsList);
 
@@ -199,6 +210,7 @@ class Import_Data_Controller {
 						if ($index != 0) {
 							$queryGenerator->addConditionGlue(QueryGenerator::$AND);
 						}
+						
 						$comparisonValue = $fieldData[$mergeField];
 						$fieldInstance = $moduleFields[$mergeField];
 						if ($fieldInstance->getFieldDataType() == 'owner') {
@@ -244,21 +256,30 @@ class Import_Data_Controller {
 
 							if ($mergeType == Import_Utils::$AUTO_MERGE_MERGEFIELDS) {
 								$filteredFieldData = array();
-								$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
 								foreach ($fieldData as $fieldName => $fieldValue) {
 									if (!empty($fieldValue)) {
 										$filteredFieldData[$fieldName] = $fieldValue;
 									}
 								}
+								
+								// Custom handling for default values & mandatory fields
+								// need to be taken care than normal import as we merge
+								// existing record values with newer values.
+								$fillDefault = false;
+								$mandatoryValueChecks = false;
+								
 								$existingFieldValues = vtws_retrieve($baseEntityId, $this->user);
+								$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
+								
 								foreach ($existingFieldValues as $fieldName => $fieldValue) {
 									if (empty($fieldValue)
 											&& empty($filteredFieldData[$fieldName])
 											&& !empty($defaultFieldValues[$fieldName])) {
-										$filteredFieldData[$fieldName] = $fieldValue;
+										$filteredFieldData[$fieldName] = $defaultFieldValues[$fieldName];
 									}
 								}
-								$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, false);
+								
+								$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, $fillDefault, $mandatoryValueChecks);
 								$filteredFieldData['id'] = $baseEntityId;
 								$entityInfo = vtws_revise($filteredFieldData, $this->user);
 								$entityInfo['status'] = self::$IMPORT_RECORD_MERGED;
@@ -294,7 +315,7 @@ class Import_Data_Controller {
 		return true;
 	}
 
-	public function transformForImport($fieldData, $moduleMeta, $fillDefault=true) {
+	public function transformForImport($fieldData, $moduleMeta, $fillDefault=true, $checkMandatoryFieldValues=true) {
 		$moduleFields = $moduleMeta->getModuleFields();
 		$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
 		foreach ($fieldData as $fieldName => $fieldValue) {
@@ -318,8 +339,10 @@ class Import_Data_Controller {
 				if (!empty($fieldValue)) {
 					if(strpos($fieldValue, '::::') > 0) {
 						$fieldValueDetails = explode('::::', $fieldValue);
-					} else {
+					} else if (strpos($fieldValue, ':::') > 0) {
 						$fieldValueDetails = explode(':::', $fieldValue);
+					} else {
+						$fieldValueDetails = $fieldValue;
 					}
 					if (count($fieldValueDetails) > 1) {
 						$referenceModuleName = trim($fieldValueDetails[0]);
@@ -336,6 +359,8 @@ class Import_Data_Controller {
 										!Import_Utils::hasAssignPrivilege($moduleMeta->getEntityName(), $referenceEntityId)) {
 									$referenceEntityId = $this->user->id;
 								}
+							}elseif ($referenceModule == 'Currency') {
+								$referenceEntityId = getCurrencyId($entityLabel);
 							} else {
 								$referenceEntityId = getEntityId($referenceModule, $entityLabel);
 							}
@@ -347,10 +372,14 @@ class Import_Data_Controller {
 					}
 					if ((empty($entityId) || $entityId == 0) && !empty($referenceModuleName)) {
 						if(isPermitted($referenceModuleName, 'EditView') == 'yes') {
-							$wsEntityIdInfo = $this->createEntityRecord($referenceModuleName, $entityLabel);
-							$wsEntityId = $wsEntityIdInfo['id'];
-							$entityIdComponents = vtws_getIdComponents($wsEntityId);
-							$entityId = $entityIdComponents[1];
+							try {
+								$wsEntityIdInfo = $this->createEntityRecord($referenceModuleName, $entityLabel);
+								$wsEntityId = $wsEntityIdInfo['id'];
+								$entityIdComponents = vtws_getIdComponents($wsEntityId);
+								$entityId = $entityIdComponents[1];
+							} catch (Exception $e) {
+								$entityId = false;
+							}
 						}
 					}
 					$fieldData[$fieldName] = $entityId;
@@ -374,16 +403,23 @@ class Import_Data_Controller {
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
 					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
 				}
-				$allPicklistDetails = $fieldInstance->getPicklistDetails();
-				$allPicklistValues = array();
-				foreach ($allPicklistDetails as $picklistDetails) {
-					$allPicklistValues[] = $picklistDetails['value'];
-				}
+				
 				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
-				if (!in_array($encodePicklistValue, $allPicklistValues)) {
+				$allPicklistDetails = $fieldInstance->getPicklistDetails();
+				$existingPicklistValue = false;
+				foreach ($allPicklistDetails as $picklistDetails) {
+					if (strcasecmp($encodePicklistValue, $picklistDetails['value']) === 0) {
+						$existingPicklistValue = $picklistDetails['value'];
+						break;
+					}
+				}
+				if (!$existingPicklistValue) {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
+				} else {
+					// Replace the existing picklist value instead of the one read from CSV
+					$fieldData[$fieldName] = $existingPicklistValue;
 				}
 			} else {
 				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {
@@ -414,6 +450,7 @@ class Import_Data_Controller {
 				}
 			}
 		}
+		
 		if($fillDefault) {
 			foreach($defaultFieldValues as $fieldName => $fieldValue) {
 				if (!isset($fieldData[$fieldName])) {
@@ -421,14 +458,20 @@ class Import_Data_Controller {
 				}
 			}
 		}
-
-		foreach ($moduleFields as $fieldName => $fieldInstance) {
-			if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
-				return null;
+		
+		// We should sanitizeData before doing final mandatory check below.
+		$fieldData = DataTransform::sanitizeData($fieldData, $moduleMeta);
+                
+		if ($fieldData != null && $checkMandatoryFieldValues) {
+			foreach ($moduleFields as $fieldName => $fieldInstance) {
+				if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
+					return null;
+				}
 			}
 		}
+		
 
-		return DataTransform::sanitizeData($fieldData, $moduleMeta);
+		return $fieldData;
 	}
 
 	public function createEntityRecord($moduleName, $entityLabel) {
@@ -450,11 +493,12 @@ class Import_Data_Controller {
 				$fieldInstance = $moduleFields[$mandatoryField];
 				if ($fieldInstance->getFieldDataType() == 'owner') {
 					$fieldData[$mandatoryField] = $this->user->id;
-				} else {
+				} else if (!in_array($mandatoryField, $entityNameFields) && $fieldInstance->getFieldDataType() != 'reference') {
 					$fieldData[$mandatoryField] = '????';
 				}
 			}
 		}
+                
 		$fieldData = DataTransform::sanitizeData($fieldData, $moduleMeta);
 		$entityIdInfo = vtws_create($moduleName, $fieldData, $this->user);
 		$focus = CRMEntity::getInstance($moduleName);
@@ -518,6 +562,7 @@ class Import_Data_Controller {
 			$emailSubject = 'vtiger CRM - Scheduled Import Report for '.$importDataController->module;
 			$viewer = new Import_UI_Viewer();
 			$viewer->assign('FOR_MODULE', $importDataController->module);
+			$viewer->assign('INVENTORY_MODULES', getInventoryModules());
 			$viewer->assign('IMPORT_RESULT', $importStatusCount);
 			$importResult = $viewer->fetch('Import_Result_Details.tpl');
 			$importResult = str_replace('align="center"', '', $importResult);
@@ -550,6 +595,19 @@ class Import_Data_Controller {
 			$scheduledImports[$importId] = new Import_Data_Controller($importInfo, $user);
 		}
 		return $scheduledImports;
+	}
+
+	function getImportRecordStatus($value) {
+		$status = '';
+		switch ($value) {
+			case 'created': $status = self::$IMPORT_RECORD_CREATED;	break;
+			case 'skipped': $status = self::$IMPORT_RECORD_SKIPPED;	break;
+			case 'updated': $status = self::$IMPORT_RECORD_UPDATED;	break;
+			case 'merged' :	$status = self::$IMPORT_RECORD_MERGED;	break;
+			case 'failed' :	$status = self::$IMPORT_RECORD_FAILED;	break;
+			case 'none' :	$status = self::$IMPORT_RECORD_NONE;	break;
+		}
+		return $status;
 	}
 
 }

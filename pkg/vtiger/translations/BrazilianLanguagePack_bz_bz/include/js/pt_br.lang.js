@@ -343,6 +343,8 @@ var alert_arr = {
 	'LBL_CLOSE_DATE':'Feche Dados',
 	'LBL_EMAIL':'Email',
 	'MORE_THAN_500' : 'Você selecionou mais de 500 registros. Esta ação poderá demorar muito tempo. Tem certeza que deseja prosseguir?',
-	'LBL_MAPPEDALERT':'O campo já foi mapeado'
+	'LBL_MAPPEDALERT':'O campo já foi mapeado',
+	//added for webforms module
+	'LBL_DELETE_MSG'      : 'Tem certeza, você deseja apagar o webform?'
 
 };

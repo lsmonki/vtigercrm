@@ -343,6 +343,8 @@ var alert_arr = {
 	LBL_CLOSE_DATE:'geschlossen am',
 	LBL_EMAIL:'E-Mails',
 	MORE_THAN_500 : 'Sie mehr als 500 Datensätze ausgewählt, wodurch die gewählte Aktion wesentlich länger dauern kann. Sind Sie sicher, dass Sie fortsetzen wollen?',
-	LBL_MAPPEDALERT:'Dieses Feld wurde bereits zugewiesen.'
+	LBL_MAPPEDALERT:'Dieses Feld wurde bereits zugewiesen.',
+	//added for webforms module
+	LBL_DELETE_MSG: 'Sind Sie sicher, dass Sie die Webform löschen wollen?'
                 
 };

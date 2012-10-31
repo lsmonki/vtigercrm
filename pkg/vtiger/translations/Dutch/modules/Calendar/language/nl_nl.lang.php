@@ -146,22 +146,22 @@ $mod_strings = Array(
 ),
 
 'cal_weekdays_short'=>array(
-"zon",
 "maa",
 "din",
 "woe",
 "don",
 "vrij",
 "zat",
+"zon",
 ),
 'cal_weekdays_long'=>array(
-"zondag",
 "maandag",
 "dinsdag",
 "woensdag",
 "donderdag",
 "vrijdag",
 "zaterdag",
+"zondag",
 ),
 'cal_month_short'=>array(
 "",

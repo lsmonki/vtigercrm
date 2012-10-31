@@ -75,7 +75,12 @@ class Import_Controller {
 			$continueImport = false;
 		}
 
-		$importStatusCount = $importDataController->getImportStatusCount();
+		$focus = CRMEntity::getInstance($importInfo['module']);
+		if(method_exists($focus, 'getImportStatusCount')) {
+			$importStatusCount = $focus->getImportStatusCount($importDataController);
+		} else {
+			$importStatusCount = $importDataController->getImportStatusCount();
+		}
 		$totalRecords = $importStatusCount['TOTAL'];
 		if($totalRecords > ($importStatusCount['IMPORTED'] + $importStatusCount['FAILED'])) {
 //			if($importInfo['status'] == Import_Queue_Controller::$IMPORT_STATUS_SCHEDULED) {
@@ -95,6 +100,7 @@ class Import_Controller {
 		$importId = $importInfo['id'];
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
+		$viewer->assign('INVENTORY_MODULES', getInventoryModules());
 		$viewer->assign('IMPORT_ID', $importId);
 		$viewer->assign('IMPORT_RESULT', $importStatusCount);
 		$viewer->assign('CONTINUE_IMPORT', $continueImport);
@@ -106,6 +112,7 @@ class Import_Controller {
 		$ownerId = $importInfo['user_id'];
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
+		$viewer->assign('INVENTORY_MODULES', getInventoryModules());
 		$viewer->assign('OWNER_ID', $ownerId);
 		$viewer->assign('IMPORT_RESULT', $importStatusCount);
 		$viewer->assign('MERGE_ENABLED', $importInfo['merge_type']);

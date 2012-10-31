@@ -76,6 +76,7 @@ function add_data_to_relatedlist(entity_id,recordid) {
 }
 
 function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,curr_row,desc,subprod_id) {
+	var decimals = document.getElementById("inventory_currency_decimal_places").value;
 	var subprod = subprod_id.split("::");
 	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
 	window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
@@ -88,7 +89,7 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	getOpenerObj("qtyInStock"+curr_row).innerHTML = qtyinstock;
 
 	// Apply decimal round-off to value
-	if(!isNaN(parseFloat(unitprice))) unitprice = roundPriceValue(unitprice);
+	if(!isNaN(parseFloat(unitprice))) unitprice = parseFloat(unitprice).toFixed(decimals);
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
 	
 	var tax_array = new Array();
@@ -103,6 +104,7 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 }
 
 function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc,subprod_id) {
+	var decimals = document.getElementById("inventory_currency_decimal_places").value;
 	var subprod = subprod_id.split("::");
 	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
 	window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
@@ -114,7 +116,7 @@ function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_r
 	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
 	
 	// Apply decimal round-off to value
-	if(!isNaN(parseFloat(unitprice))) unitprice = roundPriceValue(unitprice);
+	if(!isNaN(parseFloat(unitprice))) unitprice = parseFloat(unitprice).toFixed(decimals);
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
 		
 	var tax_array = new Array();
@@ -155,13 +157,14 @@ function roundPriceValue(val) {
    val = parseFloat(val);
    val = Math.round(val*100)/100;
    val = val.toString();
-   
+   var decimals = document.getElementById("inventory_currency_decimal_places").value;
    if (val.indexOf(".")<0) {
       val+=".00"
+	  val = parseFloat(val).toFixed(decimals);
    } else {
       var dec=val.substring(val.indexOf(".")+1,val.length)
       if (dec.length>2)
-         val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,2)
+         val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,decimals)
       else if (dec.length==1)
          val=val+"0"
    }

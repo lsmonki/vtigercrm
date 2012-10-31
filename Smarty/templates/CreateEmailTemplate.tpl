@@ -189,8 +189,6 @@
 				<td style="border-left:2px dotted #cccccc;">{$UMOD.LBL_STEP}2
 				<td>
 
-				<td style="border-left:2px dotted #cccccc;">{$UMOD.LBL_STEP}3
-				<td>
 			</tr>
 			
 			<tr>
@@ -207,14 +205,16 @@
 				<td>
 			
 				<td style="border-left:2px dotted #cccccc;">
-					<select style="font-family: Arial, Helvetica, sans-serif;font-size: 11p
-x;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffff;" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>{$APP.LBL_NONE}</select>	
+					<script language="javascript" type="text/javascript" >
+						function insertExpression(value){literal}{
+							editor = CKEDITOR.instances.save_content;
+							editor.insertHtml(value);
+						}{/literal}
+					</script>
+					<select class="small" style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffff;" 
+								id="mergeFieldSelect" onchange="insertExpression(this.options[this.selectedIndex].value)" tabindex="7"><option value="0" selected>{$APP.LBL_NONE}</select>
 				<td>
 
-				<td style="border-left:2px dotted #cccccc;">	
-
-					<input type="text"  id="mergeFieldValue" name="variable" value="variable" style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffdd;" tabindex="8"/>
-				<td>
 			</tr>
 
 		</table>
@@ -229,7 +229,7 @@ x;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#fff
 
                               <tr>
                                 <td valign="top" width=10% class="cellLabel small">{$UMOD.LBL_MESSAGE}</td>
-                                 <td valign="top" colspan="2" width=60% class="cellText small"><p><textarea name="body" style="width:90%;height:200px" class=small tabindex="5">{$BODY}</textarea></p>
+                                 <td valign="top" colspan="2" width=60% class="cellText small"><p><textarea id="save_content" name="body" style="width:90%;height:200px" class=small tabindex="5">{$BODY}</textarea></p>
                               </tr>
                           </table></td>
                           

@@ -39,6 +39,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("THEME_PATH",$theme_path);
 $smarty->assign("MODULE",$currentModule);
 
+$smarty->assign("DECIMALPLACES", getCurrencyDecimalPlaces());
 $form = vtlib_purify($_REQUEST['form']);
 //added to get relatedto field value for todo, while selecting from the popup list, after done the alphabet or basic search.
 if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')

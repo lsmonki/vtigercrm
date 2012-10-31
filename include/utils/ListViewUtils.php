@@ -1274,9 +1274,11 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 	$tabid = getTabid($module);
 	$current_module_strings = return_module_language($current_language, $module);
 	$uicolarr = $field_result[$fieldname];
-	foreach ($uicolarr as $key => $value) {
-		$uitype = $key;
-		$colname = $value;
+	if (!empty($uicolarr)) {
+		foreach ($uicolarr as $key => $value) {
+			$uitype = $key;
+			$colname = $value;
+		}
 	}
 	//added for getting event status in Custom view - Jaguar
 	if ($module == 'Calendar' && ($colname == "status" || $colname == "eventstatus")) {
@@ -1289,8 +1291,11 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 	} else {
 		$temp_val = $field_val;
 	}
-	// vtlib customization: New uitype to handle relation between modules
-	if ($uitype == '10') {
+	if($uitype == '9'){
+        $value = $adb->query_result($list_result, $list_result_count, $colname);
+        if($current_user->truncate_trailing_zeros == true)
+            $value = decimalFormat($value);
+    }else if ($uitype == '10') { // vtlib customization: New uitype to handle relation between modules
 		$parent_id = $field_val;
 		if (!empty($parent_id)) {
 			$parent_module = getSalesEntityType($parent_id);
@@ -1398,6 +1403,17 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 	} elseif ($uitype == 16) {
 		$value = getTranslatedString($temp_val, $currentModule);
 		$value = textlength_check($value);
+	} elseif ($uitype == 7) {
+		if ($temp_val != '') {
+			$fld_info = getFieldRelatedInfo(getTabid($module), $fieldname);
+			if($fld_info['typeofdata'] != 'I~O' && $current_user->truncate_trailing_zeros == true){
+				$temp_val = decimalFormat($temp_val);
+			}
+		}else{
+			$temp_val = '';
+		}
+		$value = getTranslatedString($temp_val, $currentModule);
+		$value = textlength_check($value);
 	} elseif ($uitype == 71 || $uitype == 72) {
 		if ($temp_val != '') {
 			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
@@ -1414,10 +1430,7 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 				$value = CurrencyField::appendCurrencySymbol($currencyValue, $currency_symbol);
 			} else {
 				//changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
-				if ($temp_val != 0)
 					$value = CurrencyField::convertToUserFormat($temp_val);
-				else
-					$value = $temp_val;
 			}
 		}
 		else {
@@ -1848,8 +1861,8 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					}
 
 					$sub_det = $sub_products . "::" . str_replace(":", "<br>", $sub_prod);
-					$qty_stock = $adb->query_result($list_result, $list_result_count, 'qtyinstock');
-
+					$qty_stock = decimalFormat($adb->query_result($list_result, $list_result_count, 'qtyinstock'));
+					$unitprice = decimalFormat(number_format($unitprice, getCurrencyDecimalPlaces(),'.',''));
 					//fix for T6943
 
 					$slashes_temp_val = popup_from_html($field_val);
@@ -1935,7 +1948,7 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
 					$description = popup_from_html($adb->query_result($list_result, $list_result_count, 'description'));
 					$slashes_temp_desc = decode_html(htmlspecialchars($description, ENT_QUOTES, $default_charset));
-
+					$unitprice = number_format($unitprice, getCurrencyDecimalPlaces(),'.','');
 					$slashes_desc = str_replace(array("\r", "\n"), array('\r', '\n'), $slashes_temp_desc);
 					$tmp_arr = array("entityid" => $entity_id, "prodname" => "" . stripslashes(decode_html(nl2br($slashes_temp_val))) . "", "unitprice" => "$unitprice", "taxstring" => "$tax_str", "rowid" => "$row_id", "desc" => "$slashes_desc");
 					require_once('include/Zend/Json.php');
@@ -1950,7 +1963,7 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 
 					$temp_val = popup_from_html($temp_val);
 					$count = counterValue();
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("' . $listprice . '", "' . $flname . '"); \'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("' . number_format($listprice,getCurrencyDecimalPlaces(),'.','') . '", "' . $flname . '"); \'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 				} elseif ($popuptype == "specific_account_address") {
 					require_once('modules/Accounts/Accounts.php');
 					$acct_focus = new Accounts();
@@ -1975,6 +1988,14 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id, "Accounts");
 
+					$addressFields = array('bill_street', 'bill_city', 'bill_code', 'bill_pobox', 'bill_country', 'bill_state', 'ship_street', 'ship_city', 'ship_code', 'ship_pobox', 'ship_country', 'ship_state');
+					for ($i = 0; $i < 12; $i++) {
+						if (getFieldVisibilityPermission($module, $current_user->id, $addressFields[$i]) == '0') {
+							$acct_focus->column_fields[$addressFields[$i]] = $acct_focus->column_fields[$addressFields[$i]];
+						}
+						else
+							$acct_focus->column_fields[$addressFields[$i]] = '';
+					}
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
 
@@ -2501,9 +2522,9 @@ function getListQuery($module, $where = '') {
 			LEFT JOIN vtiger_salesmanactivityrel
 				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_emaildetails
-				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
-			WHERE vtiger_activity.activitytype = 'Emails'";
+				ON vtiger_emaildetails.emailid = vtiger_activity.activityid";
 			$query .= getNonAdminAccessControlQuery($module, $current_user);
+			$query .= "WHERE vtiger_activity.activitytype = 'Emails'";
 			$query .= "AND vtiger_crmentity.deleted = 0 " . $where;
 			break;
 		Case "Faq":
@@ -3815,9 +3836,10 @@ function getEntityId($module, $entityName) {
 	$entityidfield = $adb->query_result($result, 0, 'entityidfield');
 	if (!(strpos($fieldsname, ',') === false)) {
 		$fieldlists = explode(',', $fieldsname);
-		$fieldsname = "concat(";
+		$fieldsname = "trim(concat(";
 		$fieldsname = $fieldsname . implode(",' ',", $fieldlists);
-		$fieldsname = $fieldsname . ")";
+		$fieldsname = $fieldsname . "))";
+		$entityName = trim($entityName);
 	}
 
 	if ($entityName != '') {

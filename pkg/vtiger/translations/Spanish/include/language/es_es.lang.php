@@ -1269,6 +1269,7 @@ $app_strings = array (
      'LBL_FIELD_MAPPING' => 'Vinculación Campos',
 
 	'LBL_MANDATORY_FIELD_MISSING'=>'Falta rellenar un campo obligatorio',
+	'LBL_CREATE_WEBFORM_TITLE' => 'Crear un Formulario Web'
 );
 $app_list_strings = array (
       'moduleList' => array(

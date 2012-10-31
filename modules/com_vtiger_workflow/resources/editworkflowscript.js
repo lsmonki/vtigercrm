@@ -211,7 +211,7 @@ function editworkflowscript($, conditions){
 	var operations = function(){
 		var op = {
 			string:["is", "contains", "does not contain", "starts with",
-						"ends with", "has changed"],
+						"ends with", "has changed", "is empty", "is not empty"],
 			number:["equal to", "less than", "greater than", "does not equal",
 						"less than or equal to", "greater than or equal to", "has changed"],
 			value:['is', 'is not', "has changed"]
@@ -561,6 +561,16 @@ function editworkflowscript($, conditions){
 							var fullFieldName = $(this).attr('value');
 							resetFields(getFieldType(fullFieldName), condNo);
 						});
+
+						var condition = $('#save_condition_'+condid+'_operation');
+						condition.bind('change', function() {
+							var value = $(this).attr('value');
+							if(value == 'is empty' || value == 'is not empty') {
+								$('#save_condition_'+condid+'_value').hide();
+							} else {
+								$('#save_condition_'+condid+'_value').show();
+							}
+						});
 					}
 
 					var newTaskPopup = NewTaskPopup();
@@ -586,6 +596,11 @@ function editworkflowscript($, conditions){
 							$(format("#save_condition_%s_operation", condno)).attr("value", condition["operation"]);
 							$('#dump').html(condition["value"]);
 							var text = $('#dump').text();
+
+							if(condition["operation"] == 'is empty' || condition["operation"] == 'is not empty')  {
+								$(format("#save_condition_%s_value", condno)).hide();
+							}
+
 							$(format("#save_condition_%s_value", condno)).attr("value", text);
 							$(format("#save_condition_%s_value_type", condno)).attr("value", condition["valuetype"]);
 							if(condition["joincondition"] != '') {

@@ -53,9 +53,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 	$data_fld = Array();
 	require('user_privileges/user_privileges_' . $current_user->id . '.php');
 	require('user_privileges/sharing_privileges_' . $current_user->id . '.php');
-
-	// vtlib customization: New uitype to handle relation between modules
-	if ($uitype == '10') {
+    if($uitype == '9'){
+        $label_fld[] = getTranslatedString($fieldlabel, $module);
+        if($current_user->truncate_trailing_zeros == true)
+            $label_fld[] = decimalFormat($col_fields[$fieldname]);
+        else
+            $label_fld[] = $col_fields[$fieldname];
+    }else if ($uitype == '10') { // vtlib customization: New uitype to handle relation between modules
 		$fieldlabel = getTranslatedString($fieldlabel, $module);
 
 		$parent_id = $col_fields[$fieldname];
@@ -316,8 +320,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 		}
 
 		//Security Checks
-		if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0)) {
-			$result = get_current_user_access_groups($module_name);
+		if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
+			$result = get_current_user_access_groups($module);
 		} else {
 			$result = get_group_options();
 		}
@@ -363,9 +367,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 
 		if ($noof_group_rows != 0) {
 			if ($fieldname == 'assigned_user_id' && $is_admin == false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0)) {
-				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id, 'private'), $current_user->id);
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $assigned_group_id, 'private'), $assigned_group_id);
 			} else {
-				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $assigned_group_id), $assigned_group_id);
 			}
 		}
 
@@ -963,8 +967,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 				$label_fld["cursymb"] = $currency_info['currency_symbol'];
 			}
 		} else {
-			$label_fld[] = $currencyField->getDisplayValue();
-			$label_fld["cursymb"] = $currencyField->getCurrencySymbol();
+				$label_fld[] = $currencyField->getDisplayValue();
+				$label_fld["cursymb"] = $currencyField->getCurrencySymbol();
 		}
 	} elseif ($uitype == 75 || $uitype == 81) {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
@@ -1077,6 +1081,15 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			$options[] = array(getTranslatedString($label), $prefix, $selected);
 		}
 		$label_fld ["options"] = $options;
+	} elseif($uitype == 7) {
+		$label_fld[] = getTranslatedString($fieldlabel, $module);
+		$fld_info = getFieldRelatedInfo($tabid, $fieldname);
+		if($fld_info['typeofdata'] != 'I~O' && $current_user->truncate_trailing_zeros == true){
+			$label_fld[] = decimalFormat($col_fields[$fieldname]);
+		}else{
+			$label_fld[] = $col_fields[$fieldname];
+		}
+		//$label_fld[] = preg_replace("/(?<=\\.[0-9]{2})[0]+\$/","",$col_fields[$fieldname]);
 	} else {
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		if ($col_fields[$fieldname] == '0' && $fieldname != 'filedownloadcount' && $fieldname != 'filestatus' && $fieldname != 'filesize')
@@ -1136,7 +1149,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields, 
 			  } */
 		}
 		//code for Documents module :end
-		$label_fld[] = $col_fields[$fieldname];
+        if($fieldname == 'qtyinstock' || $fieldname == 'qty_per_unit'){
+            if($current_user->truncate_trailing_zeros == true)
+                $label_fld[] = decimalFormat($col_fields[$fieldname]);
+            else
+                $label_fld[] = $col_fields[$fieldname];
+        }else
+            $label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[] = $uitype;
 
@@ -1250,21 +1269,20 @@ function getDetailAssociatedProducts($module, $focus) {
 		$comment = $adb->query_result($result, $i - 1, 'comment');
 		$qtyinstock = $adb->query_result($result, $i - 1, 'qtyinstock');
 		$qty = $adb->query_result($result, $i - 1, 'quantity');
-		$qty = number_format($qty, 2,'.',''); //Convert to 2 decimals
 		$unitprice = $adb->query_result($result, $i - 1, 'unit_price');
 		$listprice = $adb->query_result($result, $i - 1, 'listprice');
 		$total = $qty * $listprice;
-		$listprice = number_format($listprice, 2,'.',''); //Convert to 2 decimals
-
+		
 		//Product wise Discount calculation - starts
 		$discount_percent = $adb->query_result($result, $i - 1, 'discount_percent');
 		$discount_amount = $adb->query_result($result, $i - 1, 'discount_amount');
+		$discount_amount = (float)($discount_amount);
+		$discount_percent = (float)($discount_percent);
 		$totalAfterDiscount = $total;
 
 		$productDiscount = '0.00';
 		if ($discount_percent != 'NULL' && $discount_percent != '') {
 			$productDiscount = $total * $discount_percent / 100;
-			$productDiscount = number_format($productDiscount, 2,'.','');
 			$totalAfterDiscount = $total - $productDiscount;
 			//if discount is percent then show the percentage
 			$discount_info_message = "$discount_percent % of ".
@@ -1272,7 +1290,6 @@ function getDetailAssociatedProducts($module, $focus) {
 										CurrencyField::convertToUserFormat($productDiscount, null, true);
 		} elseif ($discount_amount != 'NULL' && $discount_amount != '') {
 			$productDiscount = $discount_amount;
-			$productDiscount = number_format($productDiscount, 2,'.','');
 			$totalAfterDiscount = $total - $productDiscount;
 			$discount_info_message = $app_strings['LBL_DIRECT_AMOUNT_DISCOUNT'] . " = ". CurrencyField::convertToUserFormat($productDiscount, null, true);
 		} else {
@@ -1280,7 +1297,6 @@ function getDetailAssociatedProducts($module, $focus) {
 		}
 		//Product wise Discount calculation - ends
 
-		$totalAfterDiscount = number_format($totalAfterDiscount, 2,'.',''); //Convert to 2 decimals
 		$netprice = $totalAfterDiscount;
 		//Calculate the individual tax if taxtype is individual
 		if ($taxtype == 'individual') {
@@ -1293,16 +1309,13 @@ function getDetailAssociatedProducts($module, $focus) {
 				$tax_value = getInventoryProductTaxValue($focus->id, $productid, $tax_name);
 
 				$individual_taxamount = $totalAfterDiscount * $tax_value / 100;
-				$individual_taxamount = number_format($individual_taxamount, 2,'.',''); //Convert to 2 decimals
 				$taxtotal = $taxtotal + $individual_taxamount;
-				$taxtotal = number_format($taxtotal, 2,'.',''); //Convert to 2 decimals
 				$tax_info_message .= "$tax_label : $tax_value % = ".
 										CurrencyField::convertToUserFormat($individual_taxamount, null, true).
 										" \\n";
 			}
 			$tax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($taxtotal, null, true);
 			$netprice = $netprice + $taxtotal;
-			$netprice = number_format($netprice, 2,'.',''); //Convert to 2 decimals
 		}
 
 		$sc_image_tag = '';
@@ -1323,9 +1336,9 @@ function getDetailAssociatedProducts($module, $focus) {
 
 
 		if ($module != 'PurchaseOrder') {
-			$output .= '<td class="crmTableRow small lineOnTop">' . $qtyinstock . '</td>';
+			$output .= '<td class="crmTableRow small lineOnTop">' . decimalFormat($qtyinstock) . '</td>';
 		}
-		$output .= '<td class="crmTableRow small lineOnTop">' . $qty . '</td>';
+		$output .= '<td class="crmTableRow small lineOnTop">' . decimalFormat($qty) . '</td>';
 		$output .= '
 			<td class="crmTableRow small lineOnTop" align="right">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
@@ -1372,7 +1385,6 @@ function getDetailAssociatedProducts($module, $focus) {
 
 	//$netTotal should be equal to $focus->column_fields['hdnSubTotal']
 	$netTotal = $focus->column_fields['hdnSubTotal'];
-	$netTotal = number_format($netTotal, 2,'.',''); //Convert to 2 decimals
 
 	//Display the total, adjustment, S&H details
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="5" class="crmTable">';
@@ -1387,16 +1399,15 @@ function getDetailAssociatedProducts($module, $focus) {
 	//if($focus->column_fields['hdnDiscountPercent'] != '') - previously (before changing to prepared statement) the selected option (either percent or amount) will have value and the other remains empty. So we can find the non selected item by empty check. But now with prepared statement, the non selected option stored as 0
 	if ($focus->column_fields['hdnDiscountPercent'] != '0') {
 		$finalDiscount = ($netTotal * $focus->column_fields['hdnDiscountPercent'] / 100);
-		$finalDiscount = number_format($finalDiscount, 2,'.','');
 		$final_discount_info = $focus->column_fields['hdnDiscountPercent'] . " % of ".CurrencyField::convertToUserFormat($netTotal, null, true).
 											" = ". CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	} elseif ($focus->column_fields['hdnDiscountAmount'] != '0') {
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
-		$finalDiscount = number_format($finalDiscount, 2,'.','');
 		$final_discount_info = CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	}
-
+	
 	//Alert the Final Discount amount even it is zero
+	$final_discount_info = CurrencyField::convertToUserFormat($final_discount_info, null, true);
 	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT'] . " = $final_discount_info";
 	$final_discount_info = 'onclick="alert(\'' . $final_discount_info . '\');"';
 
@@ -1433,7 +1444,6 @@ function getDetailAssociatedProducts($module, $focus) {
 	}
 
 	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '') ? $focus->column_fields['hdnS_H_Amount'] : '0.00';
-	$shAmount = number_format($shAmount, 2,'.',''); //Convert to 2 decimals
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b>' . $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'] . '</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($shAmount, null, true) . '</td>';
@@ -1450,26 +1460,22 @@ function getDetailAssociatedProducts($module, $focus) {
 		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = getInventorySHTaxPercent($focus->id, $shtax_name);
 		$shtaxamount = $shAmount * $shtax_percent / 100;
-		$shtaxamount = number_format($shtaxamount, 2,'.','');
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$shtax_info_message .= "$shtax_label : $shtax_percent % = ". CurrencyField::convertToUserFormat($shtaxamount, null, true) ." \\n";
 	}
 	$shtax_info_message .= "\\n " . $app_strings['LBL_TOTAL_TAX_AMOUNT'] . " = ". CurrencyField::convertToUserFormat($shtaxtotal, null, true);
-
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\'' . $shtax_info_message . '\')">' . $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'] . '</a></b></td>';
 	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($shtaxtotal, null, true) . '</td>';
 	$output .= '</tr>';
 
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '') ? $focus->column_fields['txtAdjustment'] : '0.00';
-	$adjustment = number_format($adjustment, 2,'.',''); //Convert to 2 decimals
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small">&nbsp;<b>' . $app_strings['LBL_ADJUSTMENT'] . '</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">' . CurrencyField::convertToUserFormat($adjustment, null, true) . '</td>';
 	$output .= '</tr>';
 
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '') ? $focus->column_fields['hdnGrandTotal'] : '0.00';
-	$grandTotal = number_format($grandTotal, 2,'.',''); //Convert to 2 decimals
 	$output .= '<tr>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop"><b>' . $app_strings['LBL_GRAND_TOTAL'] . '</b></td>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop">' . CurrencyField::convertToUserFormat($grandTotal, null, true) . '</td>';

@@ -400,13 +400,32 @@ class Vendors extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_vendor","vendorid");
-		$query .=" left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendor.vendorid and vtiger_crmentityVendors.deleted=0
-				left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_crmentityVendors.crmid
-				left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid
-                left join vtiger_users as vtiger_lastModifiedByVendors on vtiger_lastModifiedByVendors.id = vtiger_crmentityVendors.modifiedby ";
-
+	function generateReportsSecQuery($module,$secmodule, $queryplanner) {
+		
+		$matrix = $queryplanner->newDependencyMatrix();
+		
+		$matrix->setDependency("vtiger_crmentityVendors",array("vtiger_usersVendors","vtiger_lastModifiedByVendors"));
+		$matrix->setDependency("vtiger_vendor",array("vtiger_crmentityVendors","vtiger_vendorcf","vtiger_email_trackVendors"));
+		if (!$queryplanner->requireTable('vtiger_vendor', $matrix)) {
+			return '';
+		}
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_vendor","vendorid", $queryplanner);
+		// TODO Support query planner
+		if ($queryplanner->requireTable("vtiger_crmentityVendors",$matrix)){
+		    $query .=" left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendor.vendorid and vtiger_crmentityVendors.deleted=0";
+		}
+		if ($queryplanner->requireTable("vtiger_vendorcf")){
+		    $query .=" left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_crmentityVendors.crmid";
+		}
+		if ($queryplanner->requireTable("vtiger_email_trackVendors")){
+		    $query .=" LEFT JOIN vtiger_email_track AS vtiger_email_trackVendors ON vtiger_email_trackVendors.crmid = vtiger_vendor.vendorid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersVendors")){
+		    $query .=" left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_lastModifiedByVendors")){
+		    $query .=" left join vtiger_users as vtiger_lastModifiedByVendors on vtiger_lastModifiedByVendors.id = vtiger_crmentityVendors.modifiedby ";
+		}
 		return $query;
 	}
 
@@ -420,6 +439,7 @@ class Vendors extends CRMEntity {
 			"Products" =>array("vtiger_products"=>array("vendor_id","productid"),"vtiger_vendor"=>"vendorid"),
 			"PurchaseOrder" =>array("vtiger_purchaseorder"=>array("vendorid","purchaseorderid"),"vtiger_vendor"=>"vendorid"),
 			"Contacts" =>array("vtiger_vendorcontactrel"=>array("vendorid","contactid"),"vtiger_vendor"=>"vendorid"),
+			"Emails" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_vendor"=>"vendorid"),
 		);
 		return $rel_tables[$secmodule];
 	}

@@ -24,7 +24,8 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $module_array = getCustomFieldSupportedModules();
 
 $cfimagecombo = Array($image_path . "text.gif",
-	$image_path . "number.gif",
+	$image_path . "number.png",
+	$image_path . "integer.png",
 	$image_path . "percent.gif",
 	$image_path . "currency.gif",
 	$image_path . "date.gif",
@@ -37,7 +38,8 @@ $cfimagecombo = Array($image_path . "text.gif",
 	$image_path . "picklist.gif");
 
 $cftextcombo = Array($mod_strings['Text'],
-	$mod_strings['Number'],
+	$mod_strings['Decimal'],
+	$mod_strings['Integer'],
 	$mod_strings['Percent'],
 	$mod_strings['Currency'],
 	$mod_strings['Date'],
@@ -93,7 +95,7 @@ function getCFListEntries($module) {
 	}
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = "themes/images/";
-	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,tabid FROM vtiger_field LEFT JOIN vtiger_convertleadmapping
+	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,typeofdata,displaytype,block,vtiger_convertleadmapping.cfmid,tabid FROM vtiger_field LEFT JOIN vtiger_convertleadmapping
 				ON  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid WHERE tabid IN (" . generateQuestionMarks($tabid) . ")
 				AND vtiger_field.presence IN (0,2)
 				AND generatedtype = 2
@@ -108,6 +110,8 @@ function getCFListEntries($module) {
 			$cf_element['no'] = $count;
 			$cf_element['label'] = getTranslatedString($row["fieldlabel"], $module);
 			$fld_type_name = getCustomFieldTypeName($row["uitype"]);
+			if($row['typeofdata'] == 'I~O')
+				$fld_type_name = 'Integer';
 			$cf_element['type'] = $fld_type_name;
 			$cf_tab_id = $row["tabid"];
 			if ($module == 'Leads') {
@@ -137,11 +141,11 @@ function getCFListEntries($module) {
  * return array  $cflist - customfield entries
  */
 function getCFLeadMapping($module) {
-	global $adb, $app_strings, $theme, $smarty, $log;
+	global $adb, $app_strings, $theme, $smarty, $mod_strings, $log;
 	$tabid = getTabid($module);
 	$theme_path = "themes/" . $theme . "/";
 	$image_path = "themes/images/";
-	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,vtiger_convertleadmapping.editable,tabid FROM vtiger_convertleadmapping LEFT JOIN vtiger_field
+	$dbQuery = "SELECT fieldid,columnname,fieldlabel,uitype,typeofdata,displaytype,block,vtiger_convertleadmapping.cfmid,vtiger_convertleadmapping.editable,tabid FROM vtiger_convertleadmapping LEFT JOIN vtiger_field
 				ON  vtiger_field.fieldid=vtiger_convertleadmapping.leadfid 
 				WHERE tabid IN (" . generateQuestionMarks($tabid) . ")
 				AND vtiger_field.presence IN (0,2)
@@ -157,8 +161,13 @@ function getCFLeadMapping($module) {
 			$cf_element = Array();
 			$cf_element['map']['no'] = $count;
 			$cf_element['map']['label'] = getTranslatedString($row["fieldlabel"], $module);
-			$fld_type_name = getCustomFieldTypeName($row["uitype"]);
-			$cf_element['map']['type'] = $fld_type_name;
+			$fld_type_ofdata = $row['typeofdata'];
+			if($fld_type_ofdata === 'I~O') {
+				$cf_element['map']['type'] = $mod_strings['Integer'];
+			} else {
+				$fld_type_name = getCustomFieldTypeName($row["uitype"]);
+				$cf_element['map']['type'] = $fld_type_name;
+			}
 			$cf_tab_id = $row["tabid"];
 			$cf_element['cfmid'] = $row["cfmid"];
 			$cf_element['editable']=$row["editable"];

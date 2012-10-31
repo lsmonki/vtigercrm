@@ -30,13 +30,17 @@ require_once ('include/utils/utils.php');
 
 global $app_strings, $mod_strings, $currentModule, $log, $current_user;
 
+$no_of_decimal_places = getCurrencyDecimalPlaces();
 $focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
-
+$smarty->assign("DECIMALPLACES", $no_of_decimal_places);
+$defaultcurrencydecimals = 0.00;
+$defaultcurrencydecimals = number_format($defaultcurrencydecimals, $no_of_decimal_places,'.','');
+$smarty->assign("DEFAULTDECIMALS", $defaultcurrencydecimals);
 $currencyid = fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -186,7 +190,7 @@ if (isset ($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
 	for ($i=1; $i<=count($associated_prod);$i++) {
 		$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 		$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Products');
-		$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+		$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 	}
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -199,32 +203,56 @@ if (!empty ($_REQUEST['parent_id']) && !empty ($_REQUEST['return_module'])) {
 	for ($i=1; $i<=count($associated_prod);$i++) {
 		$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 		$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Services');
-		$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+		$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 	}
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	}
 }
 
-if (isset ($_REQUEST['account_id']) && $_REQUEST['account_id'] != '' && ($_REQUEST['record'] == '' || $_REQUEST['convertmode'] == "potentoinvoice") && ($_REQUEST['convertmode'] != 'update_so_val')) {
-	require_once ('modules/Accounts/Accounts.php');
-	$acct_focus = new Accounts();
-	$acct_focus->retrieve_entity_info($_REQUEST['account_id'], "Accounts");
-	$focus->column_fields['bill_city'] = $acct_focus->column_fields['bill_city'];
-	$focus->column_fields['ship_city'] = $acct_focus->column_fields['ship_city'];
-	$focus->column_fields['bill_street'] = $acct_focus->column_fields['bill_street'];
-	$focus->column_fields['ship_street'] = $acct_focus->column_fields['ship_street'];
-	$focus->column_fields['bill_state'] = $acct_focus->column_fields['bill_state'];
-	$focus->column_fields['ship_state'] = $acct_focus->column_fields['ship_state'];
-	$focus->column_fields['bill_code'] = $acct_focus->column_fields['bill_code'];
-	$focus->column_fields['ship_code'] = $acct_focus->column_fields['ship_code'];
-	$focus->column_fields['bill_country'] = $acct_focus->column_fields['bill_country'];
-	$focus->column_fields['ship_country'] = $acct_focus->column_fields['ship_country'];
-	$focus->column_fields['bill_pobox'] = $acct_focus->column_fields['bill_pobox'];
-	$focus->column_fields['ship_pobox'] = $acct_focus->column_fields['ship_pobox'];
+if (($_REQUEST['record'] == '' || $_REQUEST['convertmode'] == "potentoinvoice") && ($_REQUEST['convertmode'] != 'update_so_val')) {
+	if (isset ($_REQUEST['account_id']) && $_REQUEST['account_id'] != '') {
+		require_once ('modules/Accounts/Accounts.php');
+		$smarty->assign("ACCOUNT_ID", $_REQUEST['account_id']);
+		$acct_focus = new Accounts();
+		$acct_focus->retrieve_entity_info($_REQUEST['account_id'], "Accounts");
+		$acct_focus->apply_field_security("Accounts"); //Field Visibility Checking
+		$focus->column_fields['bill_city'] = $acct_focus->column_fields['bill_city'];
+		$focus->column_fields['ship_city'] = $acct_focus->column_fields['ship_city'];
+		$focus->column_fields['bill_street'] = $acct_focus->column_fields['bill_street'];
+		$focus->column_fields['ship_street'] = $acct_focus->column_fields['ship_street'];
+		$focus->column_fields['bill_state'] = $acct_focus->column_fields['bill_state'];
+		$focus->column_fields['ship_state'] = $acct_focus->column_fields['ship_state'];
+		$focus->column_fields['bill_code'] = $acct_focus->column_fields['bill_code'];
+		$focus->column_fields['ship_code'] = $acct_focus->column_fields['ship_code'];
+		$focus->column_fields['bill_country'] = $acct_focus->column_fields['bill_country'];
+		$focus->column_fields['ship_country'] = $acct_focus->column_fields['ship_country'];
+		$focus->column_fields['bill_pobox'] = $acct_focus->column_fields['bill_pobox'];
+		$focus->column_fields['ship_pobox'] = $acct_focus->column_fields['ship_pobox'];
 
+	}
 }
 
+if (isset ($_REQUEST['contact_id']) && !empty($_REQUEST['contact_id'])) {
+	require_once ('modules/Contacts/Contacts.php');
+	$smarty->assign("CONTACT_ID", $_REQUEST['contact_id']);
+	$cnct_focus = new Contacts();
+	$cnct_focus->retrieve_entity_info($_REQUEST['contact_id'], "Contacts");
+	$cnct_focus->apply_field_security("Contacts"); //Fields Visibility Checking
+	$focus->column_fields['bill_city'] = $cnct_focus->column_fields['mailingcity'];
+	$focus->column_fields['ship_city'] = $cnct_focus->column_fields['othercity'];
+	$focus->column_fields['bill_street'] = $cnct_focus->column_fields['mailingstreet'];
+	$focus->column_fields['ship_street'] = $cnct_focus->column_fields['otherstreet'];
+	$focus->column_fields['bill_state'] = $cnct_focus->column_fields['mailingstate'];
+	$focus->column_fields['ship_state'] = $cnct_focus->column_fields['otherstate'];
+	$focus->column_fields['bill_code'] = $cnct_focus->column_fields['mailingzip'];
+	$focus->column_fields['ship_code'] = $cnct_focus->column_fields['otherzip'];
+	$focus->column_fields['bill_country'] = $cnct_focus->column_fields['mailingcountry'];
+	$focus->column_fields['ship_country'] = $cnct_focus->column_fields['othercountry'];
+	$focus->column_fields['bill_pobox'] = $cnct_focus->column_fields['mailingpobox'];
+	$focus->column_fields['ship_pobox'] = $cnct_focus->column_fields['otherpobox'];
+
+}
 global $theme;
 $theme_path = "themes/" . $theme . "/";
 $image_path = $theme_path . "images/";
@@ -379,6 +407,12 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 // Gather the help information associated with fields
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
+
+//check if the products module is active or not
+$smarty->assign('PRODUCTMODULEACTIVE', vtlib_isModuleActive('Products') && ((isPermitted('Products', 'EditView') == 'yes')));
+
+//check if the services module is active or not
+$smarty->assign('SERVICESMODULEACTIVE',vtlib_isModuleActive('Services') && ((isPermitted('Services', 'EditView') == 'yes')));
 
 if ($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");

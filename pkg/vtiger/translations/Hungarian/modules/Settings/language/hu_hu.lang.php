@@ -558,7 +558,7 @@ $mod_strings = array(
 	'LBL_PERMISSIONS' => 'Engedélyek',
 	'LBL_DOC_MSWORD' => 'A fájlnak doc/msword típusú Dokumentumnak kell lennie',
 	'LBL_NODOC' => 'Nincs doc fájl ebben a könyvtárban. Kérlek, próbáld meg ismét!',
-	'LOGO_ERROR' => 'A Logo-nak jpeg/png formátumú képnek kell lennie',
+	'LOGO_ERROR' => 'A Logo-nak png/gif formátumú képnek kell lennie',
 	'Error_Message' => 'Hibaüzenet',
 	'Invalid_file' => 'Érvénytelen fájl vagy',
 	'File_has_no_data' => 'a fájlban nincs adat',
@@ -875,6 +875,8 @@ $mod_strings = array(
 	'LBL_FIELDS_IN' => 'Mezők ebben',
 	'LBL_TOOLTIP_HELP_TEXT' => 'Súgó szövegek',
 	'LBL_FIELD' => 'Mező',
-	'LBL_COMPANY_INFO' => 'Cégadatok'
+	'LBL_COMPANY_INFO' => 'Cégadatok',
+
+	'LBL_WEBFORMS_DESCRIPTION' => 'Lehetővé teszi, hogy kezelje Webforms', //Description for webforms
 );
 ?>

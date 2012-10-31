@@ -28,11 +28,15 @@
 		<div class="popup_content" align="left">
 			{$MOD.LBL_CREATE_TASK_OF_TYPE}
 			<select name="task_type" class="small">
-		{foreach item=taskType from=$taskTypes}
-				<option value='{$taskType}'>
-					{$taskType|@getTranslatedString:$module->name}
-				</option>
-		{/foreach}
+				{foreach item=taskType key=taskName from=$taskTypes}
+					{assign var="sourcemodule" value=$taskType->get('sourcemodule')}
+					{if $sourcemodule eq ''}
+						{assign var="sourcemodule"  value=$module->name}
+					{/if}
+					<option value='{$taskName}'>
+						{$taskType->get('label')|@getTranslatedString:$sourcemodule}
+					</option>
+				{/foreach}
 			</select>
 			<input type="hidden" name="module_name" value="{$workflow->moduleName}">
 			<input type="hidden" name="save_type" value="new" id="save_type_new">

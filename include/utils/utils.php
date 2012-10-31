@@ -46,6 +46,8 @@ require_once('include/fields/DateTimeField.php');
 require_once('include/fields/CurrencyField.php');
 require_once('data/CRMEntity.php');
 require_once 'vtlib/Vtiger/Language.php';
+require_once 'vtiger6/includes/runtime/Cache.php';
+require_once 'vtiger6/modules/Vtiger/helpers/Util.php';
 
 // Constants to be defined here
 
@@ -208,7 +210,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 				else
 				{
 					$log->debug("Sharing is Public. All vtiger_users should be listed");
-					$query = "SELECT id, user_name,first_name,last_name from vtiger_users WHERE status=?";
+					$query = "SELECT id, user_name,first_name,last_name from vtiger_users WHERE status=? and id!=1"; //NOTE:OD_FIX-Added to remove Administrator
 					$params = array($status);
 				}
 		}
@@ -835,7 +837,7 @@ function get_themes() {
 	$log->debug("Entering get_themes() method ...");
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree" && $file != "Aqua" && $file != "nature" && $file != "orange" && $file != "blue") {
+           if ($file != ".." && $file != ".") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename
@@ -1014,6 +1016,12 @@ function to_html($string, $encode=true)
 	$search = $_REQUEST['search'];
 
 	$doconvert = false;
+	
+	// For optimization - default_charset can be either upper / lower case.
+	static $inUTF8 = NULL;
+	if ($inUTF8 === NULL) {
+		$inUTF8 = (strtoupper($default_charset) == 'UTF-8');
+	}
 
 	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView' && $_REQUEST['module'] != 'Portal' && $_REQUEST['module'] != "Reports")// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
@@ -1029,9 +1037,9 @@ function to_html($string, $encode=true)
 			// Fix for tickets #4647, #4648. Conversion required in case of search results also.
 			$doconvert = true;
 		}
-		if ($doconvert == true)
+		if ($doconvert == true || Vtiger_Util_Helper::inVtiger6UI())
 		{
-			if(strtolower($default_charset) == 'utf-8')
+			if($inUTF8)
 				$string = htmlentities($string, ENT_QUOTES, $default_charset);
 			else
 				$string = preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
@@ -1053,11 +1061,18 @@ function getTabname($tabid)
 	$log->debug("Entering getTabname(".$tabid.") method ...");
         $log->info("tab id is ".$tabid);
         global $adb;
-	$sql = "select tablabel from vtiger_tab where tabid=?";
-	$result = $adb->pquery($sql, array($tabid));
-	$tabname=  $adb->query_result($result,0,"tablabel");
+	
+	static $cache = array();
+	
+	if (!isset($cache[$tabid])) {
+		$sql = "select tablabel from vtiger_tab where tabid=?";
+		$result = $adb->pquery($sql, array($tabid));
+		$tabname=  $adb->query_result($result,0,"tablabel");
+		$cache[$tabid] = $tabname;
+	}
+	
 	$log->debug("Exiting getTabname method ...");
-	return $tabname;
+	return $cache[$tabid];
 
 }
 
@@ -1122,9 +1137,15 @@ function getColumnFields($module)
 	if($cachedModuleFields === false) {
 		global $adb;
 		$tabid = getTabid($module);
+		
 		if ($module == 'Calendar') {
     		$tabid = array('9','16');
     	}
+		
+		// To overcome invalid module names.
+		if (empty($tabid)) {
+			return array();
+		}
 
     	// Let us pick up all the fields first so that we can cache information
 		$sql = "SELECT tabid, fieldname, fieldid, fieldlabel, columnname, tablename, uitype, typeofdata, presence
@@ -1199,7 +1220,10 @@ function getUserId_Ol($username)
 	global $log;
 	$log->debug("Entering getUserId_Ol(".$username.") method ...");
 	$log->info("in getUserId_Ol ".$username);
-
+	$cache = Vtiger_Cache::getInstance();
+	if($cache->getUserId($username) || $cache->getUserId($username) === 0){
+		return $cache->getUserId($username);
+	} else {
 	global $adb;
 	$sql = "select id from vtiger_users where user_name=?";
 	$result = $adb->pquery($sql, array($username));
@@ -1213,7 +1237,9 @@ function getUserId_Ol($username)
 		$user_id = 0;
 	}
 	$log->debug("Exiting getUserId_Ol method ...");
+		$cache->setUserId($username,$user_id);
 	return $user_id;
+	}
 }
 
 
@@ -3584,7 +3610,7 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 /** Function to return the duplicate records data as a formatted array */
 function getDuplicateRecordsArr($module)
 {
-	global $adb,$app_strings,$list_max_entries_per_page,$theme;
+	global $adb,$app_strings,$list_max_entries_per_page,$theme, $current_user;
 	$field_values_array=getFieldValues($module);
 	$field_values=$field_values_array['fieldnames_list'];
 	$fld_arr=$field_values_array['fieldnames_array'];
@@ -3795,7 +3821,11 @@ function getDuplicateRecordsArr($module)
 			if($ui_type[$fld_arr[$k]] == 72) {
 				$result[$col_arr[$k]] = CurrencyField::convertToUserFormat($result[$col_arr[$k]], null, true);
 			}
-
+            if($ui_type[$fld_arr[$k]] == 7 || $ui_type[$fld_arr[$k]] == 9) {
+                if($current_user->truncate_trailing_zeros == true)
+                    $result[$col_arr[$k]] = decimalFormat($result[$col_arr[$k]]);
+			}
+            
 			$fld_values[$grp][$ii][$fld_labl_arr[$k]] = $result[$col_arr[$k]];
 
 		}
@@ -4847,14 +4877,19 @@ function getTabInfo($tabId) {
  */
 function getBlockName($blockid) {
 	global $adb;
-	if(!empty($blockid)){
+	
+	$blockname = VTCacheUtils::lookupBlockLabelWithId($blockid);
+	
+	if(!empty($blockid) && $blockname === false){
 		$block_res = $adb->pquery('SELECT blocklabel FROM vtiger_blocks WHERE blockid = ?',array($blockid));
 		if($adb->num_rows($block_res)){
 			$blockname = $adb->query_result($block_res,0,'blocklabel');
-			return $blockname;
+		} else {
+			$blockname = '';
 		}
+		VTCacheUtils::updateBlockLabelWithId($blockname, $blockid);
 	}
-	return '';
+	return $blockname;
 }
 
 function validateAlphaNumericInput($string){
@@ -5131,4 +5166,68 @@ function getMinimumCronFrequency() {
 	return 15;
 }
 
+//Function returns Email related Modules
+function getEmailRelatedModules() {
+	global $current_user;
+	$handler = vtws_getModuleHandlerFromName('Emails',$current_user);
+	$meta = $handler->getMeta();
+	$moduleFields = $meta->getModuleFields();
+	$fieldModel = $moduleFields['parent_id'];
+	$relatedModules = $fieldModel->getReferenceList();
+	foreach($relatedModules as $key=>$value) {
+		if($value == 'Users') {
+			unset($relatedModules[$key]);
+		}
+	}
+	return $relatedModules;
+}
+
+//Get the User selected NumberOfCurrencyDecimals
+function getCurrencyDecimalPlaces() {
+	global $current_user;
+	$currency_decimal_places = $current_user->no_of_currency_decimals;
+	if(isset($currency_decimal_places)) {
+		return $currency_decimal_places;
+	} else {
+		return 2;
+	}
+}
+
+function getInventoryModules() {
+	$inventoryModules = array('Invoice','Quotes','PurchaseOrder','SalesOrder');
+	return $inventoryModules;
+}
+
+function getExportRecordIds($moduleName, $viewid, $input) {
+	global $adb, $current_user, $list_max_entries_per_page;
+
+	$idstring = vtlib_purify($input['idstring']);
+	$export_data = vtlib_purify($input['export_data']);
+
+	if (in_array($moduleName, getInventoryModules()) && $export_data == 'currentpage') {
+		$queryGenerator = new QueryGenerator($moduleName, $current_user);
+		$queryGenerator->initForCustomViewById($viewid);
+
+		if($input['query'] == 'true') {
+			$queryGenerator->addUserSearchConditions($input);
+		}
+
+		$queryGenerator->setFields(array('id'));
+		$query = $queryGenerator->getQuery();
+		$current_page = ListViewSession::getCurrentPage($moduleName,$viewid);
+		$limit_start_rec = ($current_page - 1) * $list_max_entries_per_page;
+		if ($limit_start_rec < 0) $limit_start_rec = 0;
+		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
+
+		$result = $adb->pquery($query, array());
+		$idstring = array();
+		$focus = CRMEntity::getInstance($moduleName);
+		for ($i = 0; $i < $adb->num_rows($result); $i++) {
+			$idstring[] = $adb->query_result($result, $i, $focus->table_index);
+		}
+		$idstring = implode(';',$idstring);
+		$export_data = 'selecteddata';
+	}
+	return $idstring. '#@@#' .$export_data;
+}
 ?>

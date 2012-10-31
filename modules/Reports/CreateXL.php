@@ -11,8 +11,6 @@
 global $php_max_execution_time;
 set_time_limit($php_max_execution_time);
 
-require_once("include/php_writeexcel/class.writeexcel_workbook.inc.php");
-require_once("include/php_writeexcel/class.writeexcel_worksheet.inc.php");
 require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
 

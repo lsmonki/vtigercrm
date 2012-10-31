@@ -220,8 +220,8 @@ elseif($activity_mode == 'Events')
 	$related_array = getRelatedListsInformation("Calendar", $focus);
 	$fieldsname = $related_array['Contacts']['header'];
 	$contact_info = $related_array['Contacts']['entries'];
-
-	$entityIds = array_keys($contact_info);
+    if(!empty($contact_info))
+        $entityIds = array_keys($contact_info);
 	$displayValueArray = getEntityName('Contacts', $entityIds);
 	if (!empty($displayValueArray)) {
 		foreach ($displayValueArray as $key => $field_value) {
@@ -264,6 +264,12 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'].'&activity_mode='.$activity_mode);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("NAME", $focus->name);
+
+//Added to support vtiger6 schema changes
+unset($act_data['LBL_DESCRIPTION_INFORMATION']);
+unset($act_data['LBL_REMINDER_INFORMATION']);
+unset($act_data['LBL_RECURRENCE_INFORMATION']);
+
 $smarty->assign("BLOCKS", $act_data);
 $smarty->assign("LABEL", $fldlabel);
 $smarty->assign("VIEWTYPE", vtlib_purify($_REQUEST['viewtype']));

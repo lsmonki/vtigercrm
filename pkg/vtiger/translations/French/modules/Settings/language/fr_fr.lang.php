@@ -550,7 +550,7 @@ $mod_strings = array (
 		'LBL_PERMISSIONS' => 'Permissions',
 		'LBL_DOC_MSWORD' => 'Le fichier doit être de type doc/MS-Word',
 		'LBL_NODOC' => 'Aucun fichier doc dans ce dossier. Veuillez recommencer.',
-		'LOGO_ERROR' => 'Votre logo doit être un fichier jpeg/png',
+		'LOGO_ERROR' => 'Votre logo doit être un fichier png/gif',
 		'Error_Message' => 'Erreur :',
 		'Invalid_file' => 'Fichier non valide ou',
 		'File_has_no_data' => 'Le fichier est vide',
@@ -853,6 +853,8 @@ $mod_strings = array (
 		'LBL_SELECTED_MODULES' => 'Choix des Modules',
 
 		'LBL_CRM_SETTINGS' => 'Réglages CRM',
+
+		'LBL_WEBFORMS_DESCRIPTION' => 'Vous permet de gérer des Webforms', //Description for webforms
 );
 
 $mod_list_strings = array (

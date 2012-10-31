@@ -149,10 +149,10 @@ $mod_strings = Array(
 
 // Module Sequence Numbering
 'Potential No' => 'Opportunity No',
-// END
 
 'Related To' => 'Related To',
 'Potentials ID' => 'Opportunities ID',
+'Forecast Amount' => 'Forecast Amount',
 );
 
 ?>

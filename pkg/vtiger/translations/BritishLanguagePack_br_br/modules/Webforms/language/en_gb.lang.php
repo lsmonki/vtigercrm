@@ -43,6 +43,7 @@ $mod_strings = array(
 	'LBL_BASIC_INFORMATION' => 'Basic Information',
 	'LBL_SELECT_USER' => 'Select User',
 	'LBL_DUPLICATE_NAME' => 'Webform with same name exists',
-	'ERR_CREATE_WEBFORM' => 'Webform creation failed'
+	'ERR_CREATE_WEBFORM' => 'Webform creation failed',
+	'LBL_CREATE_NEW_WEBFORM_NOW' => 'You can Create a Webform Now. Click the link below:'
 );
 ?>

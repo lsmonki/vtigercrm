@@ -254,7 +254,7 @@ function patternValidate(fldName,fldLabel,type) {
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
 		//Changes made to fix tickets #4633, #5111  to accomodate all possible email formats
- 	    var re=new RegExp(/^[a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?@\^_`{|}~-]?[a-zA-Z0-9])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/);
+		var re=new RegExp(/^[_/a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/);
 	}
 
 	if (type.toUpperCase()=="DATE") {//DATE validation
@@ -726,9 +726,10 @@ function numValidate(fldName,fldLabel,format,neg) {
 				else if (splitval[0].length>format[0])
 					invalid=true
 			}
-			if (splitval[1])
-				if (splitval[1].length>format[1])
-					invalid=true
+			// removed decimal validation - odu 11 hotfix1
+//			if (splitval[1])
+//				if (splitval[1].length>format[1])
+//					invalid=true
 		}
 		if (invalid==true) {
 			alert(alert_arr.INVALID+fldLabel)
@@ -2754,28 +2755,22 @@ function default_togglestate(obj_id,elementId)
 
 function rel_check_object(sel_id,module)
 {
-	var selected;
+	var currentModule = $('return_module').value;
+	var selected = $(currentModule+'_'+module+'_selectedRecords').value;
+	var excluded = $(currentModule+'_'+module+'_excludedRecords').value;
 	var select_global = new Array();
-	var cookie_val = get_cookie(module+"_all");
-	if(cookie_val == null)
-		selected = sel_id.value+";";
-	else
-		selected = trim(cookie_val);
 	select_global = selected.split(";");
 	var box_value = sel_id.checked;
 	var id = sel_id.value;
 	var duplicate = select_global.indexOf(id);
 	var size = select_global.length-1;
 	var result = "";
-	var currentModule = $('return_module').value;
-	var excluded = $(currentModule+'_'+module+'_excludedRecords').value;
 	if(box_value == true)
 	{
 		if($(currentModule+'_'+module+'_selectallActivate').value == 'true') {
 			$(currentModule+'_'+module+'_excludedRecords').value = excluded.replace(excluded.match(id+";"),'');
 		} else {
-			if(duplicate == "-1")
-			{
+			if(duplicate == "-1") {
 				select_global[size]=id;
 			}
 
@@ -2804,9 +2799,8 @@ function rel_check_object(sel_id,module)
 				result=select_global[i]+";"+result;
 		}
 		getObj(module+"_selectall").checked=false;
-
 	}
-	set_cookie(module+"_all",result);
+	$(currentModule+'_'+module+'_selectedRecords').value = result;
 }
 
 //Function to select all the items in the current page for Campaigns related list:.
@@ -4493,28 +4487,41 @@ function fnvshobjMore(obj,Lay,announcement){
 		}
 	}
 
-	if((leftSide > 100) && (leftSide < 500)){
+	if((leftSide > 100) && (leftSide < 500)) {
 		tagName.style.left= leftSide -50 + 'px';
-	} else if((leftSide >= 500) && (leftSide < 800)){
-		tagName.style.left= leftSide -150 + 'px';
-	} else if((leftSide >= 800) && (leftSide < 1400)){
+	} else if((leftSide >= 500) && (leftSide < 800)) {
 		if((widthM > 100) && (widthM < 250)) {
 			tagName.style.left= leftSide- 100  + 'px';
 		} else if((widthM >= 250) && (widthM < 350)) {
-
 			tagName.style.left= leftSide- 200  + 'px';
 		}
 		else if((widthM >= 350) && (widthM < 500)) {
-			console.log(widthM);
 			tagName.style.left= leftSide- 300  + 'px';
 		}
+		else if((widthM >= 500) && (widthM < 600)) {
+			tagName.style.left= leftSide- 150  + 'px';
+		} else {
+			tagName.style.left= leftSide -500 + 'px';
+		}
+	} else if((leftSide >= 800) && (leftSide < 1400)) {
+		if((widthM > 100) && (widthM < 250)) {
+			tagName.style.left= leftSide- 100  + 'px';
+		} else if((widthM >= 250) && (widthM < 350)) {
+			tagName.style.left= leftSide- 200  + 'px';
+		}
+		else if((widthM >= 350) && (widthM < 500)) {
+			tagName.style.left= leftSide- 300  + 'px';
+		}
+		else if((widthM >= 500) && (widthM < 600)) {
+			tagName.style.left= leftSide- 150  + 'px';
+		}
 		else {
-			tagName.style.left= leftSide -550 + 'px';
+			tagName.style.left= leftSide -500 + 'px';
 		}
 	} else {
 		tagName.style.left= leftSide  + 5 +'px';
 	}
-	if(announcement){
+	if(announcement == 'true') {
 		tagName.style.top = 110+'px';
 	}else{
 		tagName.style.top = 76+'px';
@@ -4660,6 +4667,7 @@ function rel_toggleSelectAll_Records(module,relmodule,state,relCheckName) {
 	} else {
 		$(module+'_'+relmodule+'_selectallActivate').value = 'false';
 		$(module+'_'+relmodule+'_excludedRecords').value = '';
+		$(module+'_'+relmodule+'_selectedRecords').value = '';
 		$(module+'_'+relmodule+'_selectCurrentPageRec').checked = false;
 		$(module+'_'+relmodule+'_selectAllRec').style.display = 'inline';
 		$(module+'_'+relmodule+'_deSelectAllRec').style.display = 'none';

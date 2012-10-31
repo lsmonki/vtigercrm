@@ -1141,6 +1141,7 @@ $app_strings = array(
 	'LBL_FOLDER' => 'folder',
 	'LBL_ADD_MAPPING' => 'Add Mapping',
 	'LBL_FIELD_MAPPING' => 'Field Mapping',
+	'LBL_CREATE_WEBFORM_TITLE' => 'Create Webform'
 );
 
 $app_list_strings = array (

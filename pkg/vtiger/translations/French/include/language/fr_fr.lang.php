@@ -1219,6 +1219,7 @@ $app_strings = array (
 	//added for creating a custom lead map row in UI
 	'LBL_ADD_MAPPING'=> 'ajouter Mapping',
 	'LBL_FIELD_MAPPING' => 'champ de Mapping',
+	'LBL_CREATE_WEBFORM_TITLE' => 'Créer un formulaire Web'
 
 );
 

@@ -1267,6 +1267,8 @@ $app_strings = array (
      'LBL_FIELD_MAPPING' => 'Vinculación de Campos',
 
 	'LBL_NEXT_BUTTON_LABEL' => 'Siguiente',
+
+	'LBL_CREATE_WEBFORM_TITLE' => 'Crear un Formulario Web'
 );
 $app_list_strings = array (
       'moduleList' => array(

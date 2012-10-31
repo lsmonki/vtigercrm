@@ -486,7 +486,7 @@ class Campaigns extends CRMEntity {
 			vtiger_contactdetails.firstname,
 			vtiger_contactdetails.contactid,
 			vtiger_activity.*,
-			vtiger_seactivityrel.*,
+			vtiger_seactivityrel.crmid as parent_id,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
 			CASE when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
@@ -560,15 +560,35 @@ class Campaigns extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_campaign","campaignid");
-		$query .=" left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid and vtiger_crmentityCampaigns.deleted=0
-				left join vtiger_products as vtiger_productsCampaigns on vtiger_campaign.product_id = vtiger_productsCampaigns.productid
-				left join vtiger_campaignscf on vtiger_campaignscf.campaignid = vtiger_crmentityCampaigns.crmid
-				left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupid = vtiger_crmentityCampaigns.smownerid
-				left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid
-                left join vtiger_users as vtiger_lastModifiedByCampaigns on vtiger_lastModifiedByCampaigns.id = vtiger_crmentityCampaigns.modifiedby ";
-
+	function generateReportsSecQuery($module,$secmodule,$queryplanner){
+		$matrix = $queryplanner->newDependencyMatrix();
+        $matrix->setDependency('vtiger_crmentityCampaigns',array('vtiger_groupsCampaigns','vtiger_usersCampaignss','vtiger_lastModifiedByCampaigns','vtiger_campaignscf'));
+        $matrix->setDependency('vtiger_Campaigns', array('vtiger_crmentityCampaigns','vtiger_productsCampaigns'));
+		
+		if (!$queryplanner->requireTable("vtiger_campaign",$matrix)){
+			return '';
+		}
+		
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_campaign","campaignid", $queryplanner);
+		
+		if ($queryplanner->requireTable("vtiger_crmentityCampaigns",$matrix)){
+			$query .=" left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid and vtiger_crmentityCampaigns.deleted=0";
+		}
+		if ($queryplanner->requireTable("vtiger_productsCampaigns")){
+			$query .=" 	left join vtiger_products as vtiger_productsCampaigns on vtiger_campaign.product_id = vtiger_productsCampaigns.productid";
+		}
+		if ($queryplanner->requireTable("vtiger_campaignscf")){
+			$query .=" 	left join vtiger_campaignscf on vtiger_campaignscf.campaignid = vtiger_crmentityCampaigns.crmid";
+		}
+		if ($queryplanner->requireTable("vtiger_groupsCampaigns")){
+			$query .=" left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupid = vtiger_crmentityCampaigns.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersCampaigns")){
+			$query .=" left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_lastModifiedByCampaigns")){
+			$query .=" left join vtiger_users as vtiger_lastModifiedByCampaigns on vtiger_lastModifiedByCampaigns.id = vtiger_crmentityCampaigns.modifiedby ";
+		}
 		return $query;
 	}
 
@@ -602,6 +622,8 @@ class Campaigns extends CRMEntity {
 			$this->db->pquery($sql, array($id, $return_id));
 		} elseif($return_module == 'Accounts') {
 			$sql = 'DELETE FROM vtiger_campaignaccountrel WHERE campaignid=? AND accountid=?';
+			$this->db->pquery($sql, array($id, $return_id));
+			$sql = 'DELETE FROM vtiger_campaigncontrel WHERE campaignid=? AND contactid IN (SELECT contactid FROM vtiger_contactdetails WHERE accountid=?)';
 			$this->db->pquery($sql, array($id, $return_id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';

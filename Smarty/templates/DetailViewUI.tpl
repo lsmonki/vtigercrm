@@ -374,7 +374,7 @@
 					</td>
 
 				{elseif $keyid eq 69}<!-- for Image Reflection -->
-     				<td align="left" width=25%">&nbsp;{$keyval}</td>
+     				<td align="left" width=25%>&nbsp;{$keyval}</td>
 				{else}
-					<td class="dvtCellInfo" align="left" width=25%">&nbsp;{$keyval}</td>
+					<td class="dvtCellInfo" align="left" width=25%>&nbsp;{$keyval}</td>
 				{/if}

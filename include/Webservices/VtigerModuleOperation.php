@@ -11,6 +11,7 @@
 class VtigerModuleOperation extends WebserviceEntityOperation {
 	protected $tabId;
 	protected $isEntity = true;
+	protected $partialDescribeFields = null;
 	
 	public function VtigerModuleOperation($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
@@ -186,6 +187,13 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 				"idPrefix"=>$this->meta->getEntityId(),'isEntity'=>$this->isEntity,'labelFields'=>$this->meta->getNameFields());
 	}
 	
+	public function describePartial($elementType, $fields=null) {
+		$this->partialDescribeFields = $fields;
+		$result = $this->describe($elementType);
+		$this->partialDescribeFields = null;
+		return $result;
+	}
+	
 	function getModuleFields(){
 		
 		$fields = array();
@@ -209,7 +217,13 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		if(isset($mod_strings[$fieldLabel])){
 			$fieldLabel = $mod_strings[$fieldLabel];
 		}
-		$typeDetails = $this->getFieldTypeDetails($webserviceField);
+		
+		$typeDetails = array();
+		if (!is_array($this->partialDescribeFields)) {
+			$typeDetails = $this->getFieldTypeDetails($webserviceField);
+		} else if (in_array($webserviceField->getFieldName(), $this->partialDescribeFields)) {
+			$typeDetails = $this->getFieldTypeDetails($webserviceField);
+		}
 		
 		//set type name, in the type details array.
 		$typeDetails['name'] = $webserviceField->getFieldDataType();

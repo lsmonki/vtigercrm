@@ -66,8 +66,8 @@ else
 {
 	$to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
 }
-$cc = $_REQUEST['ccmail'];
-$bcc = $_REQUEST['bccmail'];
+$cc = vtlib_purify($_REQUEST['ccmail']);
+$bcc = vtlib_purify($_REQUEST['bccmail']);
 if($to_email == '' && $cc == '' && $bcc == '')
 {
 	$adb->println("Mail Error : send_mail function not called because To email id of assigned to user, CC and BCC are empty");
@@ -118,11 +118,11 @@ for ($i=0;$i<(count($myids)-1);$i++)
         {
                 //handle the mail send to vtiger_users
                 $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
-                $pmodule = 'Users';
-		$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
-                $all_to_emailids []= $emailadd;
-                $mail_status_str .= $emailadd."=".$mail_status."&&&";
+				$pmodule = 'Users';
+				$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+				$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
+				$all_to_emailids []= $emailadd;
+				$mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
         else
         {
@@ -188,7 +188,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'',$bcc,'all',$focus->id,$logo);
 				}	
 
 				$all_to_emailids []= $emailadd;
@@ -201,8 +201,16 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			}
 		}
 	}	
-
 }
+
+if(!empty($focus->id)) {
+	$focus->setEmailAccessCountValue($focus->id);
+}
+
+if (!empty ($cc)) {
+	$cc_mail_status = send_mail('Emails',$cc,$current_user->user_name,'',vtlib_purify($_REQUEST['subject']),$description,'','','all',$focus->id);
+}
+
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
 if($errorheader1 == 1 || $errorheader2 == 1)
 {

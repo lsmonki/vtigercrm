@@ -75,17 +75,26 @@ function validate(blockid) {
 		if (document.getElementById("fldDecimal_"+blockid).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
 			if (!intValidate("fldDecimal_"+blockid,"Decimal"))
 				return false
-		if (!numConstComp("fldDecimal_"+blockid,"Decimal","GE",0))
+		if (!numConstComp("fldDecimal_"+blockid,"Decimal","GE",1))
 			return false
 
-		if (!numConstComp("fldDecimal_"+blockid,"Decimal","LE",30))
+		if (!numConstComp("fldDecimal_"+blockid,"Decimal","LE",5))
 			return false
 	}
 	var decimallength = '';
 	if (decimalLayer != null && decimalLayer.style.visibility=="visible" && document.getElementById('fldDecimal_'+blockid) != null)
 		decimallength = document.getElementById("fldDecimal_"+blockid).value;
-        
-	if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
+    
+    re = /[^0-9]/g
+    if (re.test(decimallength)) {
+		alert(alert_arr.INVALID+'Decimal')
+		try {
+			document.getElementById("fldDecimal_"+blockid).focus()
+		} catch(error) { }
+		return false
+	}
+   
+	if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Decimal')
 	{
 		if(decimallength == '')
 			decimallength = 0;
@@ -135,8 +144,8 @@ function validate(blockid) {
 	}
 	return true;
 }
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time');
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype','time');
+var fieldValueArr=new Array('Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time');
+var fieldTypeArr=new Array('text','decimal','integer','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype','time');
 var currFieldIdx=0,totFieldType;
 var focusFieldType;
 
@@ -186,7 +195,8 @@ function selFieldType(id,scrollLayer,bool,blockid) {
 	var lengthLayer=document.getElementById("lengthdetails_"+blockid);
 	var decimalLayer=document.getElementById("decimaldetails_"+blockid);
 	var pickListLayer=document.getElementById("picklistdetails_"+blockid);
-	if (type=='text') {
+	var decimalField=document.getElementById("fldDecimal_"+blockid);
+	if (type=='text' || type=='integer') {
 		lengthLayer.style.visibility="visible"
 		decimalLayer.style.visibility="hidden"
 		pickListLayer.style.visibility="hidden"
@@ -194,10 +204,20 @@ function selFieldType(id,scrollLayer,bool,blockid) {
 		document.getElementById("lengthdetails_"+blockid).style.visibility="hidden"
 		decimalLayer.style.visibility="hidden"
 		pickListLayer.style.visibility="hidden"
-	} else if (type=='number' || type=='currency') {
+	} else if (type=='decimal') {
 		lengthLayer.style.visibility="visible"
 		decimalLayer.style.visibility="visible"
 		pickListLayer.style.visibility="hidden"
+		decimalField.value=''
+		decimalField.readOnly=false;
+		decimalField.disabled=false;
+	} else if (type=='currency') {
+		lengthLayer.style.visibility="visible"
+		decimalLayer.style.visibility="visible"
+		pickListLayer.style.visibility="hidden"
+		decimalField.value=5
+		decimalField.readOnly=true;
+		decimalField.disabled=true;
 	} else if (type=='picklist' || type=='multiselectcombo') {
 		lengthLayer.style.visibility="hidden"
 		decimalLayer.style.visibility="hidden"
@@ -345,57 +365,7 @@ function validateTypeforCFMapping(leadtype,leadtypeofdata,type,typeofdata,field_
 	{
 		if(leadtype == type)
 		{
-			if(leadtypeofdata == typeofdata)
-			{
-				return true;
-			}
-			else
-			{
-				var lead_tod = leadtypeofdata.split("~");
-				var tod = typeofdata.split("~");
-				switch (lead_tod[0]) {
-					case "V"  :
-						if(lead_tod[3] <= tod[3])
-							return true;
-						else
-						{
-							alert(alertmessage[3]);
-							document.getElementById(field_name).value = '';
-							return false;
-						}
-						break;
-					case "N"  :
-						if(lead_tod[2].indexOf(",")>0)
-						{
-							var lead_dec = lead_tod[2].split(",");
-							var dec = tod[2].split(",");
-						
-						}
-						else
-						{
-							var lead_dec = lead_tod[2].split("~");
-							var dec = tod[2].split("~");
-						}
-						if(lead_dec[0] <= dec[0])
-						{
-							if(lead_dec[1] <= dec[1])
-								return true;
-							else
-							{
-								alert(alertmessage[4]);
-								document.getElementById(field_name).value = '';
-								return false;
-							}
-						}
-						else
-						{
-							alert(alertmessage[3]);
-							document.getElementById(field_name).value = '';
-							return false;
-						}
-						break;
-				}	
-			}
+			return true;
 		}
 		else
 		{

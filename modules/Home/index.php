@@ -74,10 +74,6 @@ if(isPermitted('Dashboard','DetailView') == 'yes' && vtlib_isModuleActive('Dashb
 	$allow_dashbd='yes';
 }
 
-if(isPermitted('Reports','DetailView') == 'yes' && vtlib_isModuleActive('Reports')){
-	$allow_report='yes';
-}
-
 $homedetails = $homeObj->getHomePageFrame();
 $maxdiv = sizeof($homedetails)-1;
 $user_name = $current_user->column_fields['user_name'];
@@ -97,7 +93,6 @@ $smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
 $smarty->assign("MAXLEN",$maxdiv);
 $smarty->assign("ALLOW_RSS",$allow_rss);
 $smarty->assign("ALLOW_DASH",$allow_dashbd);
-$smarty->assign("ALLOW_REPORT",$allow_report);
 $smarty->assign("HOMEFRAME",$homedetails);
 $smarty->assign("MODULE_NAME",$modulenamearr);
 $smarty->assign("MOD",$mod_strings);

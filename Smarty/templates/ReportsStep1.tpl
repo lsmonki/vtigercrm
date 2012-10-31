@@ -65,7 +65,7 @@
 							<tr><td id="step4label" class="settingsTabList" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 							<tr><td id="step5label" class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
 							<tr><td id="step6label" class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
-							<tr><td id="step7label" class="settingsTabList" style="padding-left:10px;">9. {$MOD.LBL_SCHEDULE_EMAIL} </td></tr>
+							<!-- tr><td id="step7label" class="settingsTabList" style="padding-left:10px;">9. { $MOD.LBL_SCHEDULE_EMAIL} </td></tr -->
 						</table>
 					</td>
 					<td width="75%" valign="top" bgcolor=white>
@@ -134,7 +134,8 @@
 						</table>
 						</div>
 
-						<!-- Step 7 -->
+						<!-- Step 7 (Temporarily hiding this widget as we cannot support Scheduled Reports,
+							unitl Cron jobs are executed parallely for all the instances of a server for OD -->
 						<div id="step7" style="display:none;">
 						<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 							<tbody><tr>

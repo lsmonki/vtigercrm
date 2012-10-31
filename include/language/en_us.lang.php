@@ -330,7 +330,7 @@ $app_strings = array (
 'COMBO_CONTACTS' => 'Contacts',
 'COMBO_POTENTIALS' => 'Opportunities',
 'COMBO_PRODUCTS' => 'Products',
-'COMBO_HELPDESK' => 'Trouble Tickets',
+'COMBO_HELPDESK' => 'Tickets',
 'COMBO_USERS' => 'Users',
 'COMBO_CAMPAIGNS' => 'Campaigns',
 'LBL_SELECT' => 'Select',
@@ -379,7 +379,7 @@ $app_strings = array (
 'Potentials' => 'Opportunities',
 'Products' => 'Products',
 'Emails' => 'Email',
-'HelpDesk' => 'Trouble Tickets',
+'HelpDesk' => 'Tickets',
 'Activities' => 'Activities',
 'Events' => 'Events',
 'Tasks' => 'Tasks',
@@ -408,7 +408,7 @@ $app_strings = array (
 'SalesOrder Status History' => 'SalesOrder Status History',
 'Quote Stage History' => 'Quote Stage History',
 'Invoice Status History' => 'Invoice Status History',
-'LBL_TROUBLE_TICKET' => 'Trouble Ticket',
+'LBL_TROUBLE_TICKET' => 'Ticket',
 'My Home Page' => 'My Home Page',
 'Marketing' => 'Marketing',
 'Sales' => 'Sales',
@@ -483,7 +483,7 @@ $app_strings = array (
 'COMBO_INVOICES' => 'Invoice',
 'LBL_INVOICE_NAME' => 'Invoice',
 'LBL_QUOTES_NAME' => 'Quote',
-'LBL_HELPDESK_NAME' => 'Trouble Ticket',
+'LBL_HELPDESK_NAME' => 'Ticket',
 'LBL_CAMPAIGN_NAME' => 'Campaign Name',
 'LBL_NEW_INVOICE_BUTTON_TITLE' => 'New Invoice [Alt+I]',
 'LBL_NEW_INVOICE_BUTTON_KEY' => 'I',
@@ -617,7 +617,7 @@ $app_strings = array (
 'industry' => 'Industry',
 'Severity' => 'Severity',
 'Product Category' => 'Product Category',
-'GL Account' => 'GL Organization',
+'GL Account' => 'GL Account',
 'Usage Unit' => 'Usage Unit',
 'Carrier' => 'Carrier',
 'Expected Response' => 'Expected Response',
@@ -641,7 +641,7 @@ $app_strings = array (
 //Added for values of picklist in Advanced Search filter
 //Modified for 5.0.3 GA release
 'contains'=>'contains',
-'does_not_contains'=>'does not contains',
+'does_not_contains'=>'does not contain',
 'is'=>'is',
 'is_not'=>'is not',
 'begins_with'=>'begins with',
@@ -959,7 +959,7 @@ $app_strings = array (
 'Pending Input'=>'Pending Input',
 //Export Records <-----ENDS
 
-'Trouble Tickets'=>'Trouble Tickets',
+'Trouble Tickets'=>'Tickets',
 'LBL_NOT_ACCESSIBLE'=>'Not Accessible',
 
 //Added for Existing Picklist Strings for both Lead module (convert div) and for potential module.
@@ -1062,7 +1062,7 @@ $app_strings = array (
 // Added after 5.0.4 GA
 
 //Added to Fix i18N issue in Email Template
-'LBL_GENERAL_FIELDS'=>'General Fields', 
+'LBL_GENERAL_FIELDS'=>'General Fields',
 //For Users fields
 'HomePhone'=>'HomePhone',
 'Signature'=>'Signature',
@@ -1182,7 +1182,7 @@ $app_strings = array (
 // For Privacy Policy
 'LNK_PRIVACY_POLICY'=>'Privacy Policy',
 'LBL_MOVE_BLOCK_FIELD' => 'Move Fields',
- 
+
 //added for find duplicate
 'LBL_DUPLICATE_DATA_IN'=>'Duplicate ',
 'LBL_DELETE'=>'Delete',
@@ -1233,7 +1233,7 @@ $app_strings = array (
 
 // Unified Search extended support
 'LBL_SELECT_MODULES_FOR_SEARCH' => 'Select modules to search in',
-'LBL_SELECT_ALL' => 'Select All', 
+'LBL_SELECT_ALL' => 'Select All',
 'LBL_UNSELECT_ALL' => 'UnSelect All',
 'LBL_FIELD_FOR_COMPARISION' => 'Field for Comparision',
 'LBL_DONE' => ' Done ',
@@ -1245,7 +1245,7 @@ $app_strings = array (
 // For note link on the detailview
 'LBL_ADD_NOTE'=>'Add Note',
 
-// For Layout Editor 
+// For Layout Editor
 'LBL_UNHIDE_FIELDS'=>'Unhide Fields',
 
 // For Mass Edit
@@ -1304,10 +1304,12 @@ $app_strings = array (
 'LBL_ADD_MAPPING'=> 'Add Mapping',
 'LBL_FIELD_MAPPING' => 'Field Mapping',
 'LBL_MANDATORY_FIELD_MISSING'=>'Mandatory Field value is missing',
+'LBL_CREATE_WEBFORM_TITLE' => 'Create Webform',
+'LBL_UPLOAD_BUTTON_LABEL'=>'Upload',
 );
 
 $app_list_strings = array (
-  'moduleList' => 
+  'moduleList' =>
   array (
     'Home' => 'Home',
     'Dashboard' => 'Dashboard',
@@ -1319,7 +1321,7 @@ $app_list_strings = array (
     'Emails' => 'Emails',
     'Activities' => 'Activities',
     'Products' => 'Products',
-    'HelpDesk' => 'Trouble Tickets',
+    'HelpDesk' => 'Tickets',
     'Faq' => 'FAQ',
     'Calendar' => 'Calendar',
     'Quotes' => 'Quotes',
@@ -1331,12 +1333,12 @@ $app_list_strings = array (
     'PriceBooks' => 'PriceBooks',
     'SalesOrder' => 'SalesOrder',
     'Portal' => 'My Sites',
-	
+
 	// Added after 5.0.4 GA
     'Documents' => 'Documents',
   ),
   'opportunity_relationship_type_default_key' => 'Primary Decision Maker',
-  'opportunity_relationship_type_dom' => 
+  'opportunity_relationship_type_dom' =>
   array (
     '' => '',
     'Primary Decision Maker' => 'Primary Decision Maker',
@@ -1349,38 +1351,38 @@ $app_list_strings = array (
     'Other' => 'Other',
   ),
   'case_relationship_type_default_key' => 'Primary Contact',
-  'case_relationship_type_dom' => 
+  'case_relationship_type_dom' =>
   array (
     '' => '',
     'Primary Contact' => 'Primary Contact',
     'Alternate Contact' => 'Alternate Contact',
   ),
-  'task_priority_dom' => 
+  'task_priority_dom' =>
   array (
     'High' => 'High',
     'Medium' => 'Medium',
     'Low' => 'Low',
   ),
-  'task_status_dom' => 
+  'task_status_dom' =>
   array (
     'Planned' => 'Planned',
     'Completed' => 'Completed',
     'Deferred' => 'Deferred',
   ),
-  'meeting_status_dom' => 
+  'meeting_status_dom' =>
   array (
     'Planned' => 'Planned',
     'Held' => 'Held',
     'Not Held' => 'Not Held',
   ),
-  'call_status_dom' => 
+  'call_status_dom' =>
   array (
     'Planned' => 'Planned',
     'Held' => 'Held',
     'Not Held' => 'Not Held',
   ),
   'case_status_default_key' => 'New',
-  'case_status_dom' => 
+  'case_status_dom' =>
   array (
     'New' => 'New',
     'Assigned' => 'Assigned',
@@ -1388,20 +1390,20 @@ $app_list_strings = array (
     'Pending Input' => 'Pending Input',
     'Rejected' => 'Rejected',
   ),
-  'user_status_dom' => 
+  'user_status_dom' =>
   array (
     'Active' => 'Active',
     'Inactive' => 'Inactive',
   ),
   'record_type_default_key' => 'Organizations',
-  'record_type_display' => 
+  'record_type_display' =>
   array (
     'Accounts' => 'Organization',
     'Leads' => 'Lead',
     'Opportunities' => 'Opportunity',
   ),
 
-); 
+);
 
 // Translation for currency names
 $app_currency_strings = array(

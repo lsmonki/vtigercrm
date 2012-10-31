@@ -688,7 +688,7 @@ $mod_strings = Array(
 // Added for Create Custom Fields 
 'LBL_USER_CUSTOMFIELDS_DESCRIPTION' => 'Create Custom Fields for Users ',
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
-'LBL_CURRENCY_CONFIGURATION'=> 'Currency Configuration',
+'LBL_CURRENCY_CONFIGURATION'=> 'Currency and Number Field Configuration',
 
 //Time zones-Dont change any value
 'Kwajalein' => '(UTC-12:00) International Date Line West',

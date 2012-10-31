@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 
+define('INSTALLATION_MODE', true);
+
 include('adodb/adodb.inc.php');
 
 if(version_compare(phpversion(), '5.0') < 0) {

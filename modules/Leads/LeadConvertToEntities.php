@@ -53,9 +53,9 @@ if(!empty($_REQUEST['entities']))
 		$entityValues['entities']['Potentials']['create']=true;
 		$entityValues['entities']['Potentials']['name']='Potentials';
 		$entityValues['entities']['Potentials']['potentialname']=  vtlib_purify($_REQUEST['potentialname']);
-		$entityValues['entities']['Potentials']['closingdate']=  vtlib_purify($_REQUEST['closingdate']);
+		$entityValues['entities']['Potentials']['closingdate']= DateTimeField::convertToDBFormat(vtlib_purify($_REQUEST['closingdate']));
 		$entityValues['entities']['Potentials']['sales_stage']=  vtlib_purify($_REQUEST['sales_stage']);
-		$entityValues['entities']['Potentials']['amount']=  vtlib_purify($_REQUEST['amount']);
+		$entityValues['entities']['Potentials']['amount']=  CurrencyField::convertToDBFormat($_REQUEST['amount']);
 	}
 
 	if(vtlib_isModuleActive('Contacts')&& in_array('Contacts', $entities)){

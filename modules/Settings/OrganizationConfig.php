@@ -66,7 +66,7 @@ while ($file = readdir($dir_handle))
         $filetyp =str_replace(".",'',strtolower(substr($file, -4)));
    if($organization_logoname==$file)
    {    
-        if ($filetyp == 'jpeg' OR $filetyp == 'jpg' OR $filetyp == 'png')
+        if ($filetyp == 'jpeg' OR $filetyp == 'jpg' OR $filetyp == 'png' OR $filetyp == 'gif')
         {
 		if($file!="." && $file!="..")
 		{

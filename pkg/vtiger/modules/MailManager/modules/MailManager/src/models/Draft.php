@@ -121,6 +121,9 @@ class MailManager_Model_DraftEmail {
 
 	function getAttachmentDetails($crmid) {
 		global $adb;
+        
+        if(empty($crmid)) return false;
+        
 		$documentRes = $adb->pquery("SELECT * FROM vtiger_senotesrel
 									INNER JOIN vtiger_crmentity ON vtiger_senotesrel.notesid = vtiger_crmentity.crmid AND vtiger_senotesrel.crmid = ?
 									INNER JOIN vtiger_notes ON vtiger_notes.notesid = vtiger_senotesrel.notesid

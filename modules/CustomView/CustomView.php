@@ -365,8 +365,6 @@ class CustomView extends CRMEntity {
 			}
 			if ($fieldlabel == "Start Date & Time") {
 				$fieldlabel = "Start Date";
-				if ($module == 'Calendar' && $block == 19)
-					$module_columnlist['vtiger_activity:time_start::Calendar_Start_Time:I'] = 'Start Time';
 			}
 			$fieldlabel1 = str_replace(" ", "_", $fieldlabel);
 			$optionvalue = $fieldtablename . ":" . $fieldcolname . ":" . $fieldname . ":" . $module . "_" .

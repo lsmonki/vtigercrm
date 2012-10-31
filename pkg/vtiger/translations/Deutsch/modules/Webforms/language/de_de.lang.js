@@ -9,6 +9,5 @@
 
 var webforms_alert_arr = {
 	'LBL_MADATORY_FIELDS' : 'Bitte geben Sie Werte für Pflichtfelder an',
-	'LBL_DELETE_MSG'      : 'Sind Sie sicher, dass Sie die Webform löschen wollen?',
     'LBL_DUPLICATE_NAME'  : 'Ein Webformular mit diesem Namen existiert bereits!'
 };

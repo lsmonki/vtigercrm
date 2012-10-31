@@ -60,6 +60,6 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	</table> 
 	</td>
 	</tr> 
-	<tr><td colspan="4" height="215"></td></tr>
+	<tr><td colspan="4" height="180"></td></tr>
 	</tbody>
 </table>

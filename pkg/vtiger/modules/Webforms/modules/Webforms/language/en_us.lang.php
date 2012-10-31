@@ -36,7 +36,8 @@ $mod_strings = Array (
 	'LBL_SELECT_VALUE'=>'--Select Value--',
 	'LBL_DUPLICATE_NAME' => 'Webform with same name exists',
 	'ERR_CREATE_WEBFORM' => 'Webform creation failed',
-	'LBL_SELECT_USER' => 'Select User'
+	'LBL_SELECT_USER' => 'Select User',
+	'LBL_CREATE_NEW_WEBFORM_NOW' => 'You can Create a Webform Now. Click the link below:'
 );
 
 ?>

@@ -33,7 +33,7 @@ $mod_strings = Array(
 'LBL_CALENDAR_SHARING'=>'Share calendar with',
 'LBL_SHARING_OPTION'=>'Can see my calendar?',
 'LBL_LIST_TOOLS'=>'Tools',
-'LBL_SETTINGS'=>'Settings',
+'LBL_SETTINGS'=>'Sharing Settings',
 'LBL_CALSETTINGS'=>'Calendar Settings',
 'LBL_USE24'=>'Use 24 hours format',
 'LBL_CALSTART'=>'Start my calendar time at',
@@ -450,6 +450,7 @@ $mod_strings = Array(
     
 'LBL_ARE_YOU_SURE'=>'Are you sure?',
 'Calendar ID' => 'Calendar ID',
+'LBL_FIELD_SETTINGS'=>'Field Settings',
 );
 
 ?>

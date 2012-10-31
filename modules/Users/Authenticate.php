@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -35,37 +35,36 @@ $user_password = vtlib_purify($_REQUEST['user_password']);
 
 $focus->load_user($user_password);
 
-if($focus->is_authenticated())
-{
+$successURL = 'vtigerui.php?next=home';
+
+if($focus->is_authenticated()) {
 	session_regenerate_id();
 	//Inserting entries for audit trail during login
-	
-	if($audit_trail == 'true')
-	{
+
+	if($audit_trail == 'true') {
 		if($record == '')
-			$auditrecord = '';						
+			$auditrecord = '';
 		else
-			$auditrecord = $record;	
+			$auditrecord = $record;
 
 		$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);
- 	    $query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
-		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);				
+		$query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
+		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);
 		$adb->pquery($query, $params);
 	}
 
-	
+	require_once('modules/Users/LoginHistory.php');
 	// Recording the login info
-        $usip=$_SERVER['REMOTE_ADDR'];
-        $intime=date("Y/m/d H:i:s");
-        require_once('modules/Users/LoginHistory.php');
-        $loghistory=new LoginHistory();
-        $Signin = $loghistory->user_login($focus->column_fields["user_name"],$usip,$intime);
+	$usip=$_SERVER['REMOTE_ADDR'];
+	$intime=date("Y/m/d H:i:s");
+	$loghistory=new LoginHistory();
+	$Signin = $loghistory->user_login($focus->column_fields["user_name"],$usip,$intime);
 
 	//Security related entries start
 	require_once('include/utils/UserInfoUtil.php');
 
 	createUserPrivilegesfile($focus->id);
-	
+
 	//Security related entries end
 	session_unregister('login_password');
 	session_unregister('login_error');
@@ -80,7 +79,7 @@ if($focus->is_authenticated())
 	} else {
 		$authenticated_user_theme = $default_theme;
 	}
-	
+
 	// store the user's language in the session
 	if(!empty($focus->column_fields["language"])) {
 		$authenticated_user_language = $focus->column_fields["language"];
@@ -89,42 +88,36 @@ if($focus->is_authenticated())
 	}
 
 	// If this is the default user and the default user theme is set to reset, reset it to the default theme value on each login
-	if($reset_theme_on_default_user && $focus->user_name == $default_user_name)
-	{
+	if($reset_theme_on_default_user && $focus->user_name == $default_user_name) {
 		$authenticated_user_theme = $default_theme;
 	}
-	if(isset($reset_language_on_default_user) && $reset_language_on_default_user && $focus->user_name == $default_user_name)
-	{
-		$authenticated_user_language = $default_language;	
+	if(isset($reset_language_on_default_user) && $reset_language_on_default_user && $focus->user_name == $default_user_name) {
+		$authenticated_user_language = $default_language;
 	}
 
 	$_SESSION['vtiger_authenticated_user_theme'] = $authenticated_user_theme;
 	$_SESSION['authenticated_user_language'] = $authenticated_user_language;
-	
+
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
 	$log->debug("authenticated_user_language is $authenticated_user_language");
 	$log->debug("authenticated_user_id is ". $focus->id);
-        $log->debug("app_unique_key is $application_unique_key");
+	$log->debug("app_unique_key is $application_unique_key");
 
-	
-// Clear all uploaded import files for this user if it exists
-
+	// Clear all uploaded import files for this user if it exists
 	global $import_dir;
 
 	$tmp_file_name = $import_dir. "IMPORT_".$focus->id;
 
-	if (file_exists($tmp_file_name))
-	{
+	if (file_exists($tmp_file_name)) {
 		unlink($tmp_file_name);
 	}
 	$arr = $_SESSION['lastpage'];
-	if(isset($_SESSION['lastpage']))
-		header("Location: index.php?".$arr);
-	else
-		header("Location: index.php");
-}
-else
-{
+	if(isset($_SESSION['lastpage'])) {
+		header("Location: $successURL".$arr);
+	} else {
+		header("Location: $successURL");
+	}
+} else {
 	$sql = 'select user_name, id, crypt_type from vtiger_users where user_name=?';
 	$result = $adb->pquery($sql, array($focus->column_fields["user_name"]));
 	$rowList = $result->GetRows();
@@ -139,8 +132,8 @@ else
 	$_SESSION['login_user_name'] = $focus->column_fields["user_name"];
 	$_SESSION['login_password'] = $user_password;
 	$_SESSION['login_error'] = $mod_strings['ERR_INVALID_PASSWORD'];
-	
-	// go back to the login screen.	
+
+	// go back to the login screen.
 	// create an error message for the user.
 	header("Location: index.php");
 }

@@ -95,6 +95,22 @@ if(isset($login_error) && $login_error != "") {
 	$smarty->assign("LOGIN_ERROR", $login_error);
 }
 
+// Status tracking
+/**
+ * PLEASE KEEP THIS PIECE OF CODE TO ENABLE US GET MORE STATS ON USAGE.
+ */
+global $current_user, $disable_stats_tracking, $application_unique_key, $vtiger_current_version;
+$statimage = '';
+if(!$current_user || empty($current_user->id)) {
+	if(isset($disable_stats_tracking) && !empty($disable_stats_tracking)) {
+		$statimage = "";
+	} else {
+		$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=U' alt='' title='' border=0 width='1px' height='1px'>";
+	}
+}
+$smarty->assign('STATIMAGE', $statimage);
+// END
+
 $smarty->display('Login.tpl');
 
 ?>

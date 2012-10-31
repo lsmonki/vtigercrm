@@ -72,8 +72,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $related_array = getRelatedListsInformation("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
-
-	$entityIds = array_keys($cntlist);
+    
+    if(!empty($cntlist))
+        $entityIds = array_keys($cntlist);
 	$cnt_namelist = array();
 	$displayValueArray = getEntityName('Contacts', $entityIds);
 	if (!empty($displayValueArray)) {
@@ -156,6 +157,21 @@ else
 {
 	$act_data = getBlocks($tab_type,$disp_view,$mode,$focus->column_fields,'BAS');
 }
+
+
+//Added to support vtiger6 schema changes
+$descriptionBlock = $act_data['LBL_DESCRIPTION_INFORMATION'];
+if($activity_mode == 'Events') {
+	$act_data['Event Information'][] = $descriptionBlock[0];
+} else {
+	$act_data['Task Information'][] = $descriptionBlock[0];
+}
+
+
+unset($act_data['LBL_DESCRIPTION_INFORMATION']);
+unset($act_data['LBL_REMINDER_INFORMATION']);
+unset($act_data['LBL_RECURRENCE_INFORMATION']);
+
 $smarty->assign("BLOCKS",$act_data);
 foreach($act_data as $header=>$blockitem)
 {

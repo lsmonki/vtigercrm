@@ -1127,9 +1127,6 @@ function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups, 
 				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
 			} else {
 				$currencyField = new CurrencyField($adv_filter_value);
-				if($module == 'Potentials' && $fieldName == 'amount') {
-					$currencyField->setNumberofDecimals(2);
-				}
 				$adv_filter_value = $currencyField->getDBInsertedValue();
 			}
 		}

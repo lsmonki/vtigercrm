@@ -54,7 +54,7 @@
 									<tr><td class="settingsTabList" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
-									<tr><td class="settingsTabList" style="padding-left:10px;">9. {$MOD.LBL_SCHEDULE_EMAIL} </td></tr>
+									<!-- tr><td class="settingsTabList" style="padding-left:10px;">9. { $MOD.LBL_SCHEDULE_EMAIL} </td></tr -->
 								</table>
 							</td>
 							<td width="75%" valign="top"  bgcolor=white >
@@ -115,11 +115,11 @@
 													<table class="small">
 													{foreach item=relmod from=$RELATEDMODULES}
 														{if $SEC_MODULE.$relmod eq 1}
-															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />
+															<tr valign='top'><td><input type='checkbox' class="sec_module_list" name="secondarymodule_{$relmod}" checked value="{$relmod}" onClick="toggleActiveCheckBox(this.checked);" />
 																{$relmod|@getTranslatedString:$relmod}
 															</td></tr>
 														{else}
-															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
+															<tr valign='top'><td><input type='checkbox' class="sec_module_list" name="secondarymodule_{$relmod}" value="{$relmod}" onClick="toggleActiveCheckBox(this.checked);" />
 																{$relmod|@getTranslatedString:$relmod}
 															</td></tr>
 														{/if}
@@ -127,11 +127,16 @@
 													</table>
 													<!--/select-->
 												</td>
+											</tr>
+											{if $RELATEDMODULES|@count > 2}
+											<tr>
+												<td colspan="2"><span class="helpmessagebox" style="font-style: italic; align='right';">{$MOD.LBL_NEW_REP0_HDR3} {$MOD.LBL_MAX_NUM_OF_REL_MODULES}</span></td>
+											</tr>
+											{/if}
 											{else}
 												<td style="padding-right: 5px;" align="left" nowrap width="25%"><b>{$MOD.NO_REL_MODULES}</b></td>
 											{/if}
-										</tr>
-										<tr><td colspan="2" height="350">&nbsp;</td></tr>
+										<tr><td colspan="2" height="50">&nbsp;</td></tr>
 									</table>
 							</div>
 						</td>

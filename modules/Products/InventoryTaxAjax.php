@@ -28,7 +28,8 @@ $tax_div = '
 		   </tr>
 	   ';
 
-$net_tax_total = 0.00;
+$net_tax_total = '0.00';
+$net_tax_total = number_format($net_tax_total, getCurrencyDecimalPlaces(),'.','');
 for($i=0,$j=$i+1;$i<count($tax_details);$i++,$j++)
 {
 	$tax_name = $tax_details[$i]['taxname'];

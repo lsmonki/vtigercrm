@@ -647,7 +647,7 @@ $mod_strings = Array(
     'LBL_NODOC'=>'Keine doc Datei in diesem Verzeichnis gefunden. Bitte noch einmal versuchen!',
 
     //Added for error messages on Company Info.
-    'LOGO_ERROR'=>'Ein Logo muss im Dateiformat jpeg oder png vorliegen.',
+    'LOGO_ERROR'=>'Ein Logo muss im Dateiformat png oder gif vorliegen.',
     'Error_Message'=>'Fehlernachricht',
     'Invalid_file'=>'falsches Dateiformat ODER',
     'File_has_no_data'=>'Datei ist leer',
@@ -1030,5 +1030,7 @@ $mod_strings = Array(
     'LBL_SELECTED_MODULES' => 'gewählte Module',
 
     'LBL_CRM_SETTINGS' => 'CRM Einstellungen',
+
+	'LBL_WEBFORMS_DESCRIPTION' => 'Hiermee kunt u het beheer van webformulieren', //Description for webforms
 );
 ?>

@@ -104,6 +104,13 @@ function set_return_emails(entity_id,email_id,parentname,emailadd,emailadd2,perm
 		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
 		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>,';
 		window.opener.document.EditView.hidden_toid.value = emailadd+','+window.opener.document.EditView.hidden_toid.value;
+		var parent_ids = window.opener.document.EditView.parent_id.value;
+		var idlist = parent_ids.split('|');
+		var no_of_ids = idlist.length;
+		if (no_of_ids > 2) {
+			window.opener.document.getElementById('bccTr').style.display = 'none';
+			window.opener.document.EditView.bcc_name.value = '';
+		}
 		window.close();
 	} else {
 		alert('"'+parentname+alert_arr.DOESNOT_HAVE_AN_MAILID);
@@ -155,13 +162,18 @@ function sendmail(module,idstrings,url) {
 			method: 'post',
 			postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings+url,
 			onComplete: function(response) {
-				if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
-				{
-					var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
+				var responseArray = response.responseText.split("#@@#");
+				if (responseArray.length == 2 && responseArray[0] == 'OpenPopUp') {
+					var url= responseArray[1];
 					openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+				} else {
+					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids") {
+						url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true&idlist='+idstrings;
+						openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+					} else {
+						getObj('sendmail_cont').innerHTML = response.responseText;
+					}
 				}
-				else
-					getObj('sendmail_cont').innerHTML = response.responseText;
 			}
 		}
 	);
@@ -175,10 +187,7 @@ function rel_eMail(module,oButton,relmod){
 		allids = 'relatedListSelectAll';
 		var url = "&parent_module=Campaigns&excludedRecords="+excludedRec+"&recordid="+recordid;
 	} else {
-		var select_options = '';
-		var cookie_val = get_cookie(relmod+"_all");
-		if(cookie_val != null)
-			select_options = cookie_val;
+		var select_options = $(module+'_'+relmod+'_selectedRecords').value;
 		//Added to remove the semi colen ';' at the end of the string.done to avoid error.
 		var x = select_options.split(";");
 		var viewid = '';
@@ -196,5 +205,4 @@ function rel_eMail(module,oButton,relmod){
 	}
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(relmod,allids,url);
-	set_cookie(relmod+"_all","");
 }

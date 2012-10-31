@@ -876,7 +876,7 @@ $mod_strings = Array(
 'LBL_NODOC'=>'Nenhum arquivo <b>doc</b> neste diretório. Por favor, tente novamente!',
 
 //Added for error messages on Company Info.
-'LOGO_ERROR'=>'A logo deve ser uma imagem do tipo jpeg/png',
+'LOGO_ERROR'=>'A logo deve ser uma imagem do tipo png/gif',
 'Error_Message'=>'Mensagem de erro',
 'Invalid_file'=>'Arquivo inválido OU',
 'File_has_no_data'=>'O arquivo não contém dados',
@@ -1262,5 +1262,7 @@ $mod_strings = Array(
 //Fields missing vtiger CRM
 'Add New'=> 'Adicionar Novo', // Added by Valmir Carlos Trindade - valmir@ttcasolucoes.com.br
 'SMSNotifier'=>'Notificador SMS', // Added by Valmir Carlos Trindade - valmir@ttcasolucoes.com.br
+
+'LBL_WEBFORMS_DESCRIPTION' => 'Permite gerenciar Webforms', //Description for webforms
 );
 ?>

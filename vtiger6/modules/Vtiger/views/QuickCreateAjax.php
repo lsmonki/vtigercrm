@@ -1,0 +1,39 @@
+<?php
+/*+***********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ *************************************************************************************/
+
+class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
+
+	public function checkPermission(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+
+		if (!(Users_Privileges_Model::isPermitted($moduleName, 'EditView'))) {
+			throw new AppException(vtranslate('LBL_PERMISSION_DENIED', $moduleName));
+		}
+	}
+
+	public function process(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
+
+		$viewer = $this->getViewer($request);
+		$viewer->assign('CURRENTDATE', date('Y-n-j'));
+		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('SINGLE_MODULE', 'SINGLE_'.$moduleName);
+		$viewer->assign('MODULE_MODEL', $moduleModel);
+		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
+		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
+		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+
+		echo $viewer->view('QuickCreate.tpl',$moduleName,true);
+
+	}
+}

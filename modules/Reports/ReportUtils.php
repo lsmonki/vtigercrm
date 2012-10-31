@@ -141,7 +141,10 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		} else {
 			implode(', ', $translatedValueList);
 		}
-	}
+	} elseif ($fieldType == 'double') {
+        if($current_user->truncate_trailing_zeros == true)
+            $fieldvalue = decimalFormat($fieldvalue);            
+    }
 	if($fieldvalue == "") {
 		return "-";
 	}

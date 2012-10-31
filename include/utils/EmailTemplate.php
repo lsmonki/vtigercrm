@@ -24,8 +24,10 @@ class EmailTemplate {
 	protected $processed;
 	protected $templateFields;
 	protected $user;
+	protected $processedmodules;
+	protected $referencedFields;
 
-	public function __construct($module,$description,$recordId,$user) {
+	public function __construct($module, $description, $recordId, $user) {
 		$this->module = $module;
 		$this->recordId = $recordId;
 		$this->processed = false;
@@ -34,142 +36,211 @@ class EmailTemplate {
 		$this->processed = false;
 	}
 
-	public function setDescription($description){
+	public function setDescription($description) {
 		$this->rawDescription = $description;
 		$this->processedDescription = $description;
-		$templateVariablePair = explode('$',$this->rawDescription);
+		$templateVariablePair = explode('$', $this->rawDescription);
 		$this->templateFields = Array();
-		for($i=1;$i < count($templateVariablePair);$i+=2) {
-			list($module,$fieldName) = explode('-',$templateVariablePair[$i]);
-			$this->templateFields[$module][] = $fieldName;
+		for ($i = 1; $i < count($templateVariablePair); $i+=2) {
+			list($module, $columnName) = explode('-', $templateVariablePair[$i]);
+			list($parentColumn, $childColumn) = explode(':', $columnName);
+			$this->templateFields[$module][] = $parentColumn;
+			$this->referencedFields[$parentColumn][] = $childColumn;
+			$this->processedmodules[$module] = false;
 		}
 		$this->processed = false;
 	}
 
-	private function getTemplateVariableListForModule($module){
+	private function getTemplateVariableListForModule($module) {
 		return $this->templateFields[strtolower($module)];
 	}
 
-	public function process(){
-		$variableList = $this->getTemplateVariableListForModule($this->module);
-		$handler = vtws_getModuleHandlerFromName($this->module, $this->user);
+	public function process($params) {
+		$module = $this->module;
+		$recordId = $this->recordId;
+		$variableList = $this->getTemplateVariableListForModule($module);
+		$handler = vtws_getModuleHandlerFromName($module, $this->user);
 		$meta = $handler->getMeta();
 		$referenceFields = $meta->getReferenceFieldDetails();
 		$fieldColumnMapping = $meta->getFieldColumnMapping();
-
 		$columnTableMapping = $meta->getColumnTableMapping();
 
-		
+		if ($this->isProcessingReferenceField($params)) {
+			$parentFieldColumnMapping = $meta->getFieldColumnMapping();
+			$module = $params['referencedMeta']->getEntityName();
+			if ($this->processedmodules[$module] || (!$this->isModuleActive($module))) {
+				return;
+			}
+			$recordId = $params['id'];
+
+			$meta = $params['referencedMeta'];
+			$referenceFields = $meta->getReferenceFieldDetails();
+			$fieldColumnMapping = $meta->getFieldColumnMapping();
+			$columnTableMapping = $meta->getColumnTableMapping();
+			$referenceColumn = $parentFieldColumnMapping[$params['field']];
+			$variableList = $this->referencedFields[$referenceColumn];
+		}
+
 		$tableList = array();
 		$columnList = array();
 		$allColumnList = $meta->getUserAccessibleColumns();
-
-		if(count($variableList) > 0){
+		$fieldList = array();
+		if (count($variableList) > 0) {
 			foreach ($variableList as $column) {
-				if(in_array($column,$allColumnList)){
+				if (in_array($column, $allColumnList)) {
+					$fieldList[] = array_search($column, $fieldColumnMapping);
 					$columnList[] = $column;
-				
 				}
 			}
-		
-			foreach ($columnList as $column) {
-				if(!empty($columnTableMapping[$column])){
-					$tableList[$columnTableMapping[$column]]='';
+			foreach ($fieldList as $field) {
+				if (!empty($columnTableMapping[$fieldColumnMapping[$field]])) {
+					$tableList[$columnTableMapping[$fieldColumnMapping[$field]]] = '';
 				}
 			}
 			$tableList = array_keys($tableList);
 			$defaultTableList = $meta->getEntityDefaultTableList();
 			foreach ($defaultTableList as $defaultTable) {
-				if(!in_array($defaultTable,$tableList)){
+				if (!in_array($defaultTable, $tableList)) {
 					$tableList[] = $defaultTable;
 				}
 			}
 
-			// right now this is will be limited to module type, entities.
-			// need to extend it to non-module entities when we have a reliable way of getting
-			// record type from the given record id. non webservice id.
-			// can extend to non-module entity without many changes as long as the reference field
-			// refers to one type of entity, either module entities or non-module entities.
-			if(count($tableList) > 0){
-				$sql = 'select '.implode(', ', $columnList).' from '.$tableList[0];
+			if (count($tableList) > 0 && count($columnList) > 0) {
+				$sql = 'select ' . implode(', ', $columnList) . ' from ' . $tableList[0];
 				$moduleTableIndexList = $meta->getEntityTableIndexList();
-				foreach ($tableList as $index=>$tableName) {
-					if($tableName != $tableList[0]){
-						$sql .=' INNER JOIN '.$tableName.' ON '.$tableList[0].'.'.
-						$moduleTableIndexList[$tableList[0]].'='.$tableName.'.'.
-						$moduleTableIndexList[$tableName];
+				foreach ($tableList as $index => $tableName) {
+					if ($tableName != $tableList[0]) {
+						$sql .=' INNER JOIN ' . $tableName . ' ON ' . $tableList[0] . '.' .
+								$moduleTableIndexList[$tableList[0]] . '=' . $tableName . '.' .
+								$moduleTableIndexList[$tableName];
 					}
 				}
 				$sql .= ' WHERE';
 				$deleteQuery = $meta->getEntityDeletedQuery();
-				if(!empty($deleteQuery)){
-					$sql .= ' '.$meta->getEntityDeletedQuery().' AND';
+				if (!empty($deleteQuery)) {
+					$sql .= ' ' . $meta->getEntityDeletedQuery() . ' AND';
 				}
-				$sql .= ' '.$tableList[0].'.'.$moduleTableIndexList[$tableList[0]].'=?';
-				$params = array($this->recordId);
+				$sql .= ' ' . $tableList[0] . '.' . $moduleTableIndexList[$tableList[0]] . '=?';
+				$sqlparams = array($recordId);
 				$db = PearDatabase::getInstance();
-				$result = $db->pquery($sql, $params);
+				$result = $db->pquery($sql, $sqlparams);
 				$it = new SqlResultIterator($db, $result);
-				//assuming there can only be one row.
+			//assuming there can only be one row.
 				$values = array();
 				foreach ($it as $row) {
-					foreach ($columnList as $column) {
-						$values[$column] = $row->get($column);
+					foreach ($fieldList as $field) {
+						$values[$field] = $row->get($fieldColumnMapping[$field]);
 					}
 				}
 				$moduleFields = $meta->getModuleFields();
-				foreach ($moduleFields as $fieldName=>$webserviceField) {
-					if(isset($values[$fieldColumnMapping[$fieldName]]) &&
-						$values[$fieldColumnMapping[$fieldName]] !== null){
-						if(strcasecmp($webserviceField->getFieldDataType(),'reference') === 0){
+				foreach ($moduleFields as $fieldName => $webserviceField) {
+					if (!$this->isActive($fieldName, $module)) {
+						continue;
+					}
+					if (isset($values[$fieldName]) &&
+							$values[$fieldName] !== null) {
+						if (strcasecmp($webserviceField->getFieldDataType(), 'reference') === 0) {
 							$details = $webserviceField->getReferenceList();
-							if(count($details)==1){
+							if (count($details) == 1) {
 								$referencedObjectHandler = vtws_getModuleHandlerFromName(
-									$details[0],$this->user);
-							}else{
+										$details[0], $this->user);
+							} else {
 								$type = getSalesEntityType(
-										$values[$fieldColumnMapping[$fieldName]]);
+										$values[$fieldName]);
 								$referencedObjectHandler = vtws_getModuleHandlerFromName($type,
 										$this->user);
 							}
 							$referencedObjectMeta = $referencedObjectHandler->getMeta();
-							$values[$fieldColumnMapping[$fieldName]] =
-								$referencedObjectMeta->getName(vtws_getId(
+							if (!$this->isProcessingReferenceField($params)) {
+								$this->process(array('parentMeta' => $meta, 'referencedMeta' => $referencedObjectMeta, 'field' => $fieldName, 'id' => $values[$fieldName]));
+							}
+							$values[$fieldName] =
+									$referencedObjectMeta->getName(vtws_getId(
 									$referencedObjectMeta->getEntityId(),
-										$values[$fieldColumnMapping[$fieldName]]));
-						}elseif(strcasecmp($webserviceField->getFieldDataType(),'owner') === 0){
+									$values[$fieldName]));
+						} elseif (strcasecmp($webserviceField->getFieldDataType(), 'owner') === 0) {
 							$referencedObjectHandler = vtws_getModuleHandlerFromName(
-								vtws_getOwnerType($values[$fieldColumnMapping[$fieldName]]),
+									vtws_getOwnerType($values[$fieldName]),
 									$this->user);
 							$referencedObjectMeta = $referencedObjectHandler->getMeta();
-							$values[$fieldColumnMapping[$fieldName]] =
-								$referencedObjectMeta->getName(vtws_getId(
+							/*
+							* operation supported for format $module-parentcolumn:childcolumn$
+							*/
+							if (in_array($fieldColumnMapping[$fieldName], array_keys($this->referencedFields))) {
+								$this->process(array('parentMeta' => $meta, 'referencedMeta' => $referencedObjectMeta, 'field' => $fieldName, 'id' => $values[$fieldName], 'owner' => true));
+							}
+
+							$values[$fieldName] =
+									$referencedObjectMeta->getName(vtws_getId(
 									$referencedObjectMeta->getEntityId(),
-										$values[$fieldColumnMapping[$fieldName]]));
-						}elseif(strcasecmp($webserviceField->getFieldDataType(),'picklist') === 0){
-							$values[$fieldColumnMapping[$fieldName]] = getTranslatedString(
-								$values[$fieldColumnMapping[$fieldName]], $this->module);
-						}elseif(strcasecmp($webserviceField->getFieldDataType(),'datetime') === 0){
-							$values[$fieldColumnMapping[$fieldName]] = $values[$fieldColumnMapping[$fieldName]] .' '. DateTimeField::getDBTimeZone();
+									$values[$fieldName]));
+						} elseif (strcasecmp($webserviceField->getFieldDataType(), 'picklist') === 0) {
+							$values[$fieldName] = getTranslatedString(
+									$values[$fieldName], $module);
+						} elseif (strcasecmp($webserviceField->getFieldDataType(), 'datetime') === 0) {
+							$values[$fieldName] = $values[$fieldName] . ' ' . DateTimeField::getDBTimeZone();
 						}
 					}
 				}
-				foreach ($columnList as $column) {
-					$needle = '$'.strtolower($this->module)."-$column$";
-					$this->processedDescription = str_replace($needle,
-						$values[$column],$this->processedDescription);
+
+				if (!$this->isProcessingReferenceField($params)) {
+					foreach ($columnList as $column) {
+						$needle = '$' . strtolower($this->module) . "-$column$";
+						$this->processedDescription = str_replace($needle,
+								$values[array_search($column, $fieldColumnMapping)], $this->processedDescription);
+					}
+				} else {
+					foreach ($columnList as $column) {
+						$needle = '$' . strtolower($this->module) . '-' . $parentFieldColumnMapping[$params['field']] . ':' . $column . '$';
+						$this->processedDescription = str_replace($needle,
+								$values[array_search($column, $fieldColumnMapping)], $this->processedDescription);
+					}
+					if (!$params['owner'])
+						$this->processedmodules[$module] = true;
 				}
 			}
 		}
 		$this->processed = true;
 	}
 
-	public function getProcessedDescription(){
-		if(!$this->processed){
-			$this->process();
+	public function isProcessingReferenceField($params) {
+		if (!empty($params['referencedMeta'])
+				&& (!empty($params['id']))
+				&& (!empty($params['field']))
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getProcessedDescription() {
+		if (!$this->processed) {
+			$this->process(null);
 		}
 		return $this->processedDescription;
 	}
 
+	public function isModuleActive($module) {
+		include_once 'include/utils/VtlibUtils.php';
+		if (vtlib_isModuleActive($module) && ((isPermitted($module, 'EditView') == 'yes'))) {
+			return true;
+		}
+		return false;
+	}
+
+	public function isActive($field, $mod) {
+		global $adb;
+		$tabid = getTabid($mod);
+		$query = 'select * from vtiger_field where fieldname = ?  and tabid = ? and presence in (0,2)';
+		$res = $adb->pquery($query, array($field, $tabid));
+		$rows = $adb->num_rows($res);
+		if ($rows > 0) {
+			return true;
+		}else
+			return false;
+	}
+
 }
+
 ?>

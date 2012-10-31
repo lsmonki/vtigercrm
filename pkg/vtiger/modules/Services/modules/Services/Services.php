@@ -106,7 +106,7 @@ class Services extends CRMEntity {
 	 */
 	function __construct() {
 		global $log;
-		$this->column_fields = getColumnFields('Services');
+		$this->column_fields = getColumnFields(get_class($this));
 		$this->db = PearDatabase::getInstance();
 		$this->log = $log;
 	}
@@ -325,12 +325,11 @@ class Services extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('Services', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 
@@ -764,7 +763,7 @@ class Services extends CRMEntity {
 		global $app_strings;
 		global $current_language,$current_user;
 		$current_module_strings = return_module_language($current_language, 'Services');
-
+        $no_of_decimal_places = getCurrencyDecimalPlaces();
 		global $list_max_entries_per_page;
 		global $urlPrefix;
 
@@ -837,7 +836,7 @@ class Services extends CRMEntity {
 			$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
 			$action = "";
 			if(isPermitted("PriceBooks","EditView","") == 'yes' && isPermitted('Services', 'EditView', $entity_id) == 'yes') {
-				$action .= '<img style="cursor:pointer;" src="themes/images/editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
+				$action .= '<img style="cursor:pointer;" src="themes/images/editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.number_format($listprice, $no_of_decimal_places,'.','').'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
 			} else {
 				$action .= '<img src="'. vtiger_imageurl('blank.gif', $theme).'" border="0" />';
 			}
@@ -904,20 +903,42 @@ class Services extends CRMEntity {
 	 * @param - $module primary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsQuery($module){
-		global $current_user;
+	function generateReportsQuery($module,$queryPlanner){
+	   	global $current_user;
+		
+			$matrix = $queryPlanner->newDependencyMatrix();
+			$matrix->setDependency('vtiger_seproductsrel',array('vtiger_crmentityRelServices','vtiger_accountRelServices','vtiger_leaddetailsRelServices','vtiger_servicecf','vtiger_potentialRelServices'));
 			$query = "from vtiger_service
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid
-				left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid
-				left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_crmentity.smownerid
-				left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_crmentity.smownerid
-				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_service.serviceid
-				left join vtiger_crmentity as vtiger_crmentityRelServices on vtiger_crmentityRelServices.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelServices.deleted = 0
-				left join vtiger_account as vtiger_accountRelServices on vtiger_accountRelServices.accountid=vtiger_seproductsrel.crmid
-				left join vtiger_leaddetails as vtiger_leaddetailsRelServices on vtiger_leaddetailsRelServices.leadid = vtiger_seproductsrel.crmid
-				left join vtiger_potential as vtiger_potentialRelServices on vtiger_potentialRelServices.potentialid = vtiger_seproductsrel.crmid
-                left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentity.modifiedby
-				LEFT JOIN (
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid";
+			if ($queryPlanner->requireTable("vtiger_servicecf")){
+			    $query .= " left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid";
+			}
+			if ($queryPlanner->requireTable("vtiger_usersServices")){
+			    $query .= " left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_crmentity.smownerid";
+			}
+			if ($queryPlanner->requireTable("vtiger_groupsServices")){
+			    $query .= " left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_crmentity.smownerid";
+			}
+			if ($queryPlanner->requireTable("vtiger_seproductsrel")){
+			    $query .= " left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_service.serviceid";
+			}
+			if ($queryPlanner->requireTable("vtiger_crmentityRelServices")){
+			    $query .= " left join vtiger_crmentity as vtiger_crmentityRelServices on vtiger_crmentityRelServices.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelServices.deleted = 0";
+			}
+			if ($queryPlanner->requireTable("vtiger_accountRelServices")){
+			    $query .= " left join vtiger_account as vtiger_accountRelServices on vtiger_accountRelServices.accountid=vtiger_seproductsrel.crmid";
+			}
+			if ($queryPlanner->requireTable("vtiger_leaddetailsRelServices")){
+			    $query .= " left join vtiger_leaddetails as vtiger_leaddetailsRelServices on vtiger_leaddetailsRelServices.leadid = vtiger_seproductsrel.crmid";
+			}
+			if ($queryPlanner->requireTable("vtiger_potentialRelServices")){
+			    $query .= " left join vtiger_potential as vtiger_potentialRelServices on vtiger_potentialRelServices.potentialid = vtiger_seproductsrel.crmid";
+			}
+			if ($queryPlanner->requireTable("vtiger_lastModifiedByServices")){
+			    $query .= " left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentity.modifiedby";
+			}
+			if ($queryPlanner->requireTable("innerService")){
+			    $query .= " LEFT JOIN (
 					SELECT vtiger_service.serviceid,
 							(CASE WHEN (vtiger_service.currency_id = 1 ) THEN vtiger_service.unit_price
 								ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) END
@@ -927,6 +948,7 @@ class Services extends CRMEntity {
 					LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
 					AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
 				) AS innerService ON innerService.serviceid = vtiger_service.serviceid";
+			}
 			return $query;
 	}
 
@@ -936,25 +958,42 @@ class Services extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
+	function generateReportsSecQuery($module,$secmodule, $queryPlanner) {
 		global $current_user;
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_service","serviceid");
-		$query .= " LEFT JOIN (
-				SELECT vtiger_service.serviceid,
-						(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
-							WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
-							ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
-						) AS actual_unit_price
-				FROM vtiger_service
-				LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
-				LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
-				AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
-			) AS innerService ON innerService.serviceid = vtiger_service.serviceid
-			left join vtiger_crmentity as vtiger_crmentityServices on vtiger_crmentityServices.crmid=vtiger_service.serviceid and vtiger_crmentityServices.deleted=0
-			left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid
-			left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_crmentityServices.smownerid
-			left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_crmentityServices.smownerid
-            left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentityServices.modifiedby ";
+		$matrix = $queryPlanner->newDependencyMatrix();
+		$matrix->setDependency('vtiger_service',array('actual_unit_price','vtiger_currency_info','vtiger_productcurrencyrel','vtiger_servicecf','vtiger_crmentityServices'));
+		$matrix->setDependency('vtiger_crmentityServices',array('vtiger_usersServices','vtiger_groupsServices','vtiger_lastModifiedByServices'));
+		if (!$queryPlanner->requireTable("vtiger_service",$matrix)){
+			return '';
+		}
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_service","serviceid", $queryPlanner);
+		if ($queryPlanner->requireTable("innerService")){
+		    $query .= " LEFT JOIN (
+			SELECT vtiger_service.serviceid,
+			(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
+			WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+			ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+			) AS actual_unit_price FROM vtiger_service 
+            LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
+            LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
+			AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . ") 
+            AS innerService ON innerService.serviceid = vtiger_service.serviceid";
+		}
+		if ($queryPlanner->requireTable("vtiger_crmentityServices",$matrix)){
+		    $query .= " left join vtiger_crmentity as vtiger_crmentityServices on vtiger_crmentityServices.crmid=vtiger_service.serviceid and vtiger_crmentityServices.deleted=0";
+		}
+		if ($queryPlanner->requireTable("vtiger_servicecf")){
+		    $query .= " left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid";
+		}
+		if ($queryPlanner->requireTable("vtiger_usersServices")){
+		    $query .= " left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_crmentityServices.smownerid";
+		}
+		if ($queryPlanner->requireTable("vtiger_groupsServices")){
+		    $query .= " left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_crmentityServices.smownerid";
+		}
+		if ($queryPlanner->requireTable("vtiger_lastModifiedByServices")){
+		    $query .= " left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentityServices.modifiedby ";
+		}
 		return $query;
 	}
 
@@ -1039,5 +1078,24 @@ class Services extends CRMEntity {
 			Vtiger_Access::setDefaultSharing($ServicesModule);
 		}
  	}
+	
+	/** Function to unlink an entity with given Id from another entity */
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log, $currentModule;
+
+		if($return_module == 'Accounts') {
+			$focus = new $return_module;
+			$entityIds = $focus->getRelatedContactsIds($return_id);
+			array_push($entityIds, $return_id);
+			$entityIds = implode(',', $entityIds);
+			$return_modules = "'Accounts','Contacts'";
+		} else {
+			$entityIds = $return_id;
+			$return_modules = "'".$return_module."'";
+		}
+
+		$query = 'DELETE FROM vtiger_crmentityrel WHERE (relcrmid='.$id.' AND module IN ('.$return_modules.') AND crmid IN ('.$entityIds.')) OR (crmid='.$id.' AND relmodule IN ('.$return_modules.') AND relcrmid IN ('.$entityIds.'))';
+		$this->db->pquery($query, array());
+	}
 }
 ?>

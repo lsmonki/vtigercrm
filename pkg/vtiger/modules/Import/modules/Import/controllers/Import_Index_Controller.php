@@ -131,6 +131,7 @@ class Import_Index_Controller {
 
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
+		$viewer->assign('INVENTORY_MODULES', getInventoryModules());
 		$viewer->assign('SUPPORTED_FILE_TYPES', Import_Utils::getSupportedFileExtensions());
 		$viewer->assign('SUPPORTED_FILE_ENCODING', Import_Utils::getSupportedFileEncoding());
 		$viewer->assign('SUPPORTED_DELIMITERS', Import_Utils::getSupportedDelimiters());
@@ -165,6 +166,7 @@ class Import_Index_Controller {
 
 		$viewer = new Import_UI_Viewer();
 		$viewer->assign('FOR_MODULE', $moduleName);
+		$viewer->assign('INVENTORY_MODULES', getInventoryModules());
 		$viewer->assign('AVAILABLE_FIELDS', $indexController->getImportableFields($moduleName));
 		$viewer->assign('HAS_HEADER', $hasHeader);
 		$viewer->assign('ROW_1_DATA', $rowData);
@@ -271,7 +273,12 @@ class Import_Index_Controller {
 		$mode = $requestObject->get('mode');
 
 		if($mode == 'undo_import') {
-			Import_Index_Controller::undoLastImport($requestObject, $user);
+			$focus = CRMEntity::getInstance($moduleName);
+			if(method_exists($focus, 'undoLastImport')) {
+				$focus->undoLastImport($requestObject, $user);
+			} else {
+				Import_Index_Controller::undoLastImport($requestObject, $user);
+			}
 			exit;
 		} elseif($mode == 'listview') {
 			Import_ListView_Controller::render($requestObject, $user);

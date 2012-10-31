@@ -30,12 +30,6 @@
 			<input type="button" name="cancel" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " class="crmbutton small cancel" onclick="cancelEntries('editRowmodrss_{$HOME_STUFFID}')">
 			</td>
 		</tr>
-{elseif $HOME_STUFFTYPE eq "ReportCharts"}
-		<td  valign="top" align='center' class="homePageMatrixHdr" style="height:28px;" width=60%>
-			<input type="radio" id="reportradio_0" name="reportradio_{$HOME_STUFFID}" value="horizontalbarchart" {if $DASHDETAILS.$HOME_STUFFID.Chart eq 'horizontalbarchart'}checked{/if}>Horizontal
-			<input type="radio" id="reportradio_1" name="reportradio_{$HOME_STUFFID}" value="verticalbarchart"{if $DASHDETAILS.$HOME_STUFFID.Chart eq 'verticalbarchart'}checked{/if}>Vertical
-			<input type="radio" id="reportradio_2" name="reportradio_{$HOME_STUFFID}" value="piechart" {if $DASHDETAILS.$HOME_STUFFID.Chart eq 'piechart'}checked{/if}>Pie
-		</td>
 	</tr>
 	<tr>
 		<td  valign="top" align="center" class="homePageMatrixHdr" nowrap style="height:28px;" width="40%">
@@ -133,13 +127,6 @@
 
 {elseif $HOME_STUFFTYPE eq "DashBoard"}
 	<input type=hidden id=more_{$HOME_STUFFID} value="{$DASHDETAILS[$HOME_STUFFID].DashType}"/>
-	<table border=0 cellspacing=0 cellpadding=5 width=100%>
-		<tr>
-			<td align="left">{$HOME_STUFF}</td>
-		</tr>
-	</table>
-{elseif $HOME_STUFFTYPE eq "ReportCharts"}
-        <input type=hidden id=more_{$HOME_STUFFID} value="{$DASHDETAILS[$HOME_STUFFID].ReportId}"/>
 	<table border=0 cellspacing=0 cellpadding=5 width=100%>
 		<tr>
 			<td align="left">{$HOME_STUFF}</td>

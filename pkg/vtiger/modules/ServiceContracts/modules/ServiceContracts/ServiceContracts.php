@@ -108,7 +108,7 @@ class ServiceContracts extends CRMEntity {
 
 	function __construct() {
 		global $log;
-		$this->column_fields = getColumnFields('ServiceContracts');
+		$this->column_fields = getColumnFields(get_class($this));
 		$this->db = new PearDatabase();
 		$this->log = $log;
 	}
@@ -228,12 +228,11 @@ class ServiceContracts extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user,$currentModule;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('ServiceContracts', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 
@@ -479,8 +478,8 @@ class ServiceContracts extends CRMEntity {
 		$dueDate = $this->column_fields['due_date'];
 		$endDate = $this->column_fields['end_date'];
 
-		$usedUnits = $this->column_fields['used_units'];
-		$totalUnits = $this->column_fields['total_units'];
+		$usedUnits = decimalFormat($this->column_fields['used_units']);
+		$totalUnits = decimalFormat($this->column_fields['total_units']);
 
 		$contractStatus = $this->column_fields['contract_status'];
 
@@ -548,5 +547,39 @@ class ServiceContracts extends CRMEntity {
 	 * You can override the behavior by re-defining it here.
 	 */
 	//function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) { }
+
+	/** Function to unlink an entity with given Id from another entity */
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log, $currentModule;
+
+		if($return_module == 'Accounts') {
+			$focus = new $return_module;
+			$entityIds = $focus->getRelatedContactsIds($return_id);
+			array_push($entityIds, $return_id);
+			$entityIds = implode(',', $entityIds);
+			$return_modules = "'Accounts','Contacts'";
+		} else {
+			$entityIds = $return_id;
+			$return_modules = "'".$return_module."'";
+		}
+
+		$query = 'DELETE FROM vtiger_crmentityrel WHERE (relcrmid='.$id.' AND module IN ('.$return_modules.') AND crmid IN ('.$entityIds.')) OR (crmid='.$id.' AND relmodule IN ('.$return_modules.') AND relcrmid IN ('.$entityIds.'))';
+		$this->db->pquery($query, array());
+
+		$sql = 'SELECT tabid, tablename, columnname FROM vtiger_field WHERE fieldid IN (SELECT fieldid FROM vtiger_fieldmodulerel WHERE module=? AND relmodule IN ('.$return_modules.'))';
+		$fieldRes = $this->db->pquery($sql, array($currentModule));
+		$numOfFields = $this->db->num_rows($fieldRes);
+		for ($i = 0; $i < $numOfFields; $i++) {
+			$tabId = $this->db->query_result($fieldRes, $i, 'tabid');
+			$tableName = $this->db->query_result($fieldRes, $i, 'tablename');
+			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
+			$relatedModule = vtlib_getModuleNameById($tabId);
+			$focusObj = CRMEntity::getInstance($relatedModule);
+
+			$updateQuery = "UPDATE $tableName SET $columnName=? WHERE $columnName IN ($entityIds) AND $focusObj->table_index=?";
+			$updateParams = array(null, $id);
+			$this->db->pquery($updateQuery, $updateParams);
+		}
+	}
 }
 ?>

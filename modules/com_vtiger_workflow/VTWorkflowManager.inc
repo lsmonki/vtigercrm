@@ -9,6 +9,7 @@
  ************************************************************************************/
 	require_once("VTJsonCondition.inc");
 	require_once 'include/utils/ConfigReader.php';
+	require_once 'vtiger6/includes/runtime/Cache.php';
 
 	class VTWorkflowManager{
 
@@ -70,7 +71,10 @@
 
 		function getWorkflowsForModule($moduleName){
 			$adb=$this->adb;
-
+			$cache= Vtiger_Cache::getInstance();
+			if($cache->getWorkflowForModule($moduleName)){
+				return $this->getWorkflowsForResult($cache->getWorkflowForModule($moduleName)); 
+			} else {
 			//my changes
 			$result=$adb->getColumnNames("com_vtiger_workflows");
 			if(in_array(defaultworkflow,$result)){
@@ -81,7 +85,9 @@
 				$result = $adb->pquery("select workflow_id, module_name, summary, test, execution_condition, type
 									from com_vtiger_workflows where module_name=?",array($moduleName));
 			}
+				$cache->setWorkflowForModule($moduleName,$result);
 			return $this->getWorkflowsForResult($result);
+			}
 		}
 
 		protected function getWorkflowsForResult($result){

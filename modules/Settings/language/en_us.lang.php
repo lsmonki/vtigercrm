@@ -205,7 +205,7 @@ $mod_strings = Array(
 
 'LBL_LENGTH'=>'Length: ',
 
-'LBL_DECIMAL_PLACES'=>'Decimal Places: ',
+'LBL_DECIMAL_PLACES'=>'Decimals (Max 5) : ',
 
 'LBL_PICK_LIST_VALUES'=>'Pick list Values: ',
 
@@ -231,7 +231,9 @@ $mod_strings = Array(
 
 'Text'=>'Text',
 
-'Number'=>'Number',
+'Decimal'=>'Decimal',
+
+'Integer'=>'Integer',
 
 'Percent'=>'Percent',
 
@@ -654,7 +656,7 @@ $mod_strings = Array(
 'LBL_AUDIT_DESCRIPTION'=>'Display data opertions performed by users',
 'LBL_TAX_DESC'=>'Manage different types of tax rates for taxes, such as Sales Tax, VAT etc.,',
 'LBL_COMPANY_DESC'=>'Specify business address of your company',
-'LBL_SELECT_LOGO'=>'Select new logo:',
+'LBL_SELECT_LOGO'=>'Select New Logo',
 'LBL_INVEN_TANDC_DESC'=>'Specify text for the Terms & Conditions section of Quotes, Orders, and Invoices modules',
 'LBL_MAIL_SERVER_DESC'=>'Configure your Outgoing Mail Server details',
 'LBL_BACKUP_SERVER_DESC'=>'Manage your Backup Server',
@@ -876,7 +878,7 @@ $mod_strings = Array(
 'LBL_NODOC'=>'No doc File in this directory.Please try again!',
 
 //Added for error messages on Company Info.
-'LOGO_ERROR'=>'Logo has to be an Image of type jpeg/png',
+'LOGO_ERROR'=>'Logo has to be an Image of type png/gif',
 'Error_Message'=>'Error Message',
 'Invalid_file'=>'Invalid file OR',
 'File_has_no_data'=>'File has no data',
@@ -1258,6 +1260,11 @@ $mod_strings = Array(
 'LBL_SELECTED_MODULES' => 'Selected Modules',
 
 'LBL_CRM_SETTINGS' => 'CRM Settings',
+'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.',
 
+'LBL_WEBFORMS_DESCRIPTION' => 'Allows you to manage Webforms', //Description for webforms
+
+'LBL_CURRENT_LOGO'=>'Current Logo',
+'LBL_LOGO_RECOMMENDED_SIZE'=>'Recommended size 170X60 pixels( <b>.png</b> or <b>.gif</b> format).'
 );
 ?>

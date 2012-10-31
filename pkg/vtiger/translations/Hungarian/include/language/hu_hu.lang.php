@@ -1193,7 +1193,9 @@ $app_strings = array(
 	'LNK_RESTORE' => 'Helyreállítás',
 	'LBL_NO_PERMITTED_MODULES' => 'Nem engedélyezett modulok',
 	'FieldFormulas' => 'Mezőképletek',
-	'LBL_SEARCH_CRITRIA_RECORDS' => 'Rekordok keresési feltételei'
+	'LBL_SEARCH_CRITRIA_RECORDS' => 'Rekordok keresési feltételei',
+
+	'LBL_CREATE_WEBFORM_TITLE' => 'Webes űrlap létrehozása'
 );
 $app_list_strings = array(
 	'moduleList' =>

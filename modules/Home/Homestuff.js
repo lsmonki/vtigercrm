@@ -133,7 +133,7 @@ function chooseType(typeName){
 		$('reportTypeRow').style.display="none";
 		//$('homeURLField').style.display = "none";
 	}
-	else if(typeName == 'ReportCharts'){
+	/*else if(typeName == 'ReportCharts'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
 		$('modulePrimeRow').style.display="none";
@@ -159,7 +159,7 @@ function chooseType(typeName){
                         }
                     }
                  );
-	}
+	}*/
 	/*else if(typeName == 'URL'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -382,9 +382,6 @@ function loadStuff(stuffid,stufftype){
 				if(stufftype=="DashBoard"){
 					$('a_'+stuffid).href = "index.php?module=Dashboard&action=index&type="+$('more_'+stuffid).value;
 				}
-                if(stufftype=="ReportCharts"){
-                	$('a_'+stuffid).href = "index.php?module=Reports&action=SaveAndRun&record="+$('more_'+stuffid).value;
-                }
 				$('refresh_'+stuffid).innerHTML='';
 		    }
 		}
@@ -546,10 +543,6 @@ function frmValidate(){
 		}else if(stufftype=="Default"){
 			seldeftype=document.Homestuff.seldeftype[document.Homestuff.seldeftype.selectedIndex].value;
 		}
-    else if(stufftype=="ReportCharts"){
-    	selreport = $('selreportchart_id').value;
-        selreportcharttype = $('selreportcharttype_id').value;
-    }
 
 	var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+"&selreport="+selreport+"&selreportcharttype="+selreportcharttype;//+'&txtURL='+txtURL;
 		var stuffarr=new Array();
@@ -655,7 +648,8 @@ function positionDivInAccord(targetDiv,stufftitle,stufftype){
 			break;
 	}
 	var mainX = parseInt(document.getElementById("MainMatrix").style.width);
-	if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard" && stufftype != "ReportCharts"){
+    //if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard" && stufftype != "ReportCharts"){
+	if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard"){
 		var dx = mainX *  widgetWidth/ 100;
 	}else{
 		var dx = mainX * dashWidth / 100;

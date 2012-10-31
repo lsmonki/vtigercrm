@@ -101,7 +101,7 @@ ul {ldelim}color:black;{rdelim}
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_ROLES}</b></td>
 				</tr>
 				<tr>
-					<td valign=top class="small">{$MOD.LBL_ROLE_DESCRIPTION}</td>
+					<td valign=top class="small">{$MOD.LBL_ROLE_DESCRIPTION}<br><span style="padding-left: 2em;font-style: italic;">({$APP.LBL_DUP_PERMISSION} CEO{$APP.AND}Sales Person {$MOD.LBL_ROLES})</span></td>
 				</tr>
 				</table>
 				

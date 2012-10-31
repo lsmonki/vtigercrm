@@ -379,10 +379,11 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 * @return String
 	 */
 	function subject($safehtml=true) {
+		$mailSubject = str_replace("_", " ", $this->_subject);
 		if ($safehtml==true) {
-			return MailManager_Utils::safe_html_string($this->_subject);
+			return MailManager_Utils::safe_html_string($mailSubject);
 		}
-		return $this->_subject;
+		return $mailSubject;
 	}
 
 	/**
@@ -391,7 +392,7 @@ class MailManager_Model_Message extends Vtiger_MailRecord  {
 	 */
 	function setSubject($subject) {
 		$mailSubject = str_replace("_", " ", $subject);
-		$this->_subject = @self::__mime_decode($subject);
+		$this->_subject = @self::__mime_decode($mailSubject);
 	}
 
 	/**

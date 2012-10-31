@@ -42,21 +42,6 @@ if($ajaxaction == "DETAILVIEW")
 				return false;
 			}
 	     }
-	     if($fieldname=='accountname'){
-	     	$value = $fieldvalue;
-			$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
-			$params = array($value);
-			if(isset($crmid) && $crmid !='') {
-				$query .= " and vtiger_account.accountid != ?";
-				array_push($params, $crmid);
-			}
-			$result = $adb->pquery($query, $params);
-		    if($adb->num_rows($result) > 0)
-			{
-				echo ":#:ERR".$mod_strings['LBL_ACCOUNT_EXIST'];
-				return false;
-			}
-	     }   
 	     $modObj->id = $crmid;
   	     $modObj->mode = "edit";
        	 $modObj->save("Accounts");

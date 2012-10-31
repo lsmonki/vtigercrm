@@ -4207,17 +4207,17 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname, $accessm
 
 		if (count($profilelist) > 0) {
 			if($accessmode == 'readonly') {
-				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+				$query="SELECT vtiger_profile2field.visible FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
 			} else {
-				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+				$query="SELECT vtiger_profile2field.visible FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
 			}
 			$params = array($tabid, $profilelist, $fieldname);
 
 		} else {
 			if($accessmode == 'readonly') {
-				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+				$query="SELECT vtiger_profile2field.visible FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
  			} else {
-				$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+				$query="SELECT vtiger_profile2field.visible FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
 			}
 			$params = array($tabid, $fieldname);
 		}
@@ -4230,6 +4230,7 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname, $accessm
 
 		$log->debug("Exiting getFieldVisibilityPermission method ...");
 
+		// Returns value as a string
 		if($adb->num_rows($result) == 0) return '1';
 		return ($adb->query_result($result,"0","visible")."");
 	}
@@ -4494,6 +4495,57 @@ function appendFromClauseToQuery($query,$fromClause) {
 	$newQuery = substr($query, 0, strripos($query,' where '));
 	$query = $newQuery.$fromClause.$condition;
 	return $query;
+}
+
+/**
+ * @return an array with the list of currencies which are available in source
+ */
+function getCurrenciesList() {
+	global $adb;
+
+	$currency_query = 'SELECT currency_name, currency_code, currency_symbol FROM vtiger_currencies ORDER BY currency_name';
+	$result = $adb->pquery($currency_query, array());
+	$num_rows = $adb->num_rows($result);
+	for($i = 0; $i<$num_rows; $i++) {
+		$currencyname = decode_html($adb->query_result($result, $i, 'currency_name'));
+		$currencycode = decode_html($adb->query_result($result, $i, 'currency_code'));
+		$currencysymbol = decode_html($adb->query_result($result, $i, 'currency_symbol'));
+		$currencies[$currencyname] = array($currencycode,$currencysymbol);
+	}
+	return $currencies;
+}
+
+/**
+ * @return an array with the list of time zones which are availables in source
+ */
+function getTimeZonesList() {
+	global $adb;
+
+	$timezone_query = 'SELECT time_zone FROM vtiger_time_zone';
+	$result = $adb->pquery($timezone_query, array());
+	$num_rows = $adb->num_rows($result);
+	for($i = 0; $i<$num_rows; $i++) {
+		$time_zone = decode_html($adb->query_result($result, $i, 'time_zone'));
+		$time_zones_list[$time_zone] = $time_zone;
+	}
+	return $time_zones_list;
+}
+
+/**
+ * @return an array with the list of languages which are available in source
+ */
+function getLanguagesList() {
+	global $adb;
+
+	$language_query = 'SELECT prefix, label FROM vtiger_language';
+	$result = $adb->pquery($language_query, array());
+	$num_rows = $adb->num_rows($result);
+	for($i = 0; $i<$num_rows; $i++) {
+		$lang_prefix = decode_html($adb->query_result($result, $i, 'prefix'));
+		$label = decode_html($adb->query_result($result, $i, 'label'));
+		$languages_list[$lang_prefix] = $label;
+	}
+	return $languages_list;
 }
 
 ?>

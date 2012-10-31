@@ -70,6 +70,7 @@ $mod_strings = Array(
 'LBL_FILTER_OPTIONS'=>'Filter Options',
 'LBL_CUSTOMIZE_BUTTON'=>'Customize',
 'LBL_EXPORTPDF_BUTTON'=>'Export To PDF',
+'LBL_EXPORTCSV_BUTTON'=>'Export To CSV',
 'LBL_APPLYFILTER_BUTTON'=>'Apply Filter',
 'LBL_GENERATED_REPORT'=>'Generated Report',
 'LBL_GRAND_TOTAL'=>'Grand Total',
@@ -283,6 +284,19 @@ $mod_strings = Array(
 'LBL_GROUPING_TIME' => 'Group By Time',
 'LBL_WIDGET_ADDED' => 'Widget Added Successfully.',
 'LBL_UNDEFINED' => 'Undefined',
+//Report Charts End
+
+'Email Marketing'=>'Email Marketing',
+'Contacts Email Report'=>'Contacts Email Report',
+'Accounts Email Report'=>'Organizations Email Report',
+'Leads Email Report'=>'Leads Email Report',
+'Vendors Email Report'=>'Vendors Email Report',
+'LBL_MAX_NUM_OF_REL_MODULES'=>'Upto 2 related modules can be selected ',
+	
+'Only' => 'Only',
+'records found' => 'records are displayed',
+'Export to' => 'Use CSV or Excel Export to see all the records'
+
 )
 
 ?>

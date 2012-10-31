@@ -11,6 +11,16 @@ header('Content-Type: text/html;charset=utf-8');
 
 chdir (dirname(__FILE__) . '/../../');
 
+/**
+ * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode. 
+ */
+require_once 'config.php';
+if (file_exists('config_override.php')) {
+    include_once 'config_override.php';
+}
+
+
+
 include_once dirname(__FILE__) . '/api/Request.php';
 include_once dirname(__FILE__) . '/api/Response.php';
 include_once dirname(__FILE__) . '/api/Session.php';

@@ -235,6 +235,10 @@ function set_return_contact_address(contact_id,contact_name, mailingstreet, othe
                         form.bill_pobox.value = mailingpobox;
                 if(typeof(form.ship_pobox) != 'undefined')
                         form.ship_pobox.value = otherpobox;
+
+				//Check the  radio button-Copy Contact Address
+				form.cpy_address[0].checked=true;
+				form.checking[0].checked=true;
 		//end
 	}
 }

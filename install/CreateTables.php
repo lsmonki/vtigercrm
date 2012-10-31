@@ -13,6 +13,9 @@ set_time_limit($php_max_execution_time);
 
 session_start();
 
+// Start capturing the output
+ob_start();
+
 $auth_key = $_REQUEST['auth_key'];
 if($_SESSION['authentication_key'] != $auth_key) {
 	die($installationStrings['ERR_NOT_AUTHORIZED_TO_PERFORM_THE_OPERATION']);
@@ -38,6 +41,9 @@ require_once('install/CreateTables.inc.php');
 Common_Install_Wizard_Utils::installMandatoryModules();
 Installation_Utils::installOptionalModules($selected_optional_modules);
 
+// Migrate from 540 to 600
+include_once 'modules/Migration/DBChanges/540_to_600.php';
+
 // Unset all of the session variables.
 $_SESSION = array();
 
@@ -46,6 +52,10 @@ $_SESSION = array();
 if (isset($_COOKIE[session_name()])) {
    setcookie(session_name(), '', time()-42000, '/');
 }
+
+// Emit the captured output to log file
+global $log;
+$log->debug(ob_get_clean());
 
 // Finally, destroy the session.
 session_destroy(); 

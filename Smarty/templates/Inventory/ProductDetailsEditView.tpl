@@ -356,8 +356,15 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Add Product Button -->
    <tr>
 	<td colspan="3">
+        {if $PRODUCTMODULEACTIVE eq 'true' && $SERVICESMODULEACTIVE eq 'true'}
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			&nbsp;
+            <input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {elseif $PRODUCTMODULEACTIVE eq 'true'}
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {elseif $SERVICESMODULEACTIVE eq 'true'}
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {/if}
 	</td>
    </tr>
 
@@ -525,6 +532,7 @@ so we will get that array, parse that array and fill the details
 		<input type="hidden" name="totalProductCount" id="totalProductCount" value="{$row_no}">
 		<input type="hidden" name="subtotal" id="subtotal" value="">
 		<input type="hidden" name="total" id="total" value="">
+		<input type="hidden" id="inventory_currency_decimal_places" value="{$DECIMALPLACES}">
 </td></tr>
 <!-- Upto this Added to display the Product Details -->
 

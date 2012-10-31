@@ -300,7 +300,8 @@ function sendfile_email()
 																					</tr>
 
 																					<!-- This is added to display the existing comments -->
-																					{if $header eq $MOD.LBL_COMMENTS || $header eq $MOD.LBL_COMMENT_INFORMATION}
+																					<!-- remove as part of migration to vtiger6 -->
+																					{*if $header eq $MOD.LBL_COMMENTS || $header eq $MOD.LBL_COMMENT_INFORMATION}
 																						<tr>
 																							<td colspan=4 class="dvInnerHeader">
 																								<b>{$MOD.LBL_COMMENT_INFORMATION}</b>
@@ -310,7 +311,7 @@ function sendfile_email()
 																							<td colspan=4 class="dvtCellInfo">{$COMMENT_BLOCK}</td>
 																						</tr>
 																						<tr><td>&nbsp;</td></tr>
-																					{/if}
+																					{/if*}
 
 
 																					{if $header neq 'Comments'}

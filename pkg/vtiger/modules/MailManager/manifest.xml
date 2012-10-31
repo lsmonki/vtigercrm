@@ -5,7 +5,7 @@
 <label>MailManager</label>
 <parent>Tools</parent>
 <type>extension</type>
-<version>1.4</version>
+<version>1.7</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>

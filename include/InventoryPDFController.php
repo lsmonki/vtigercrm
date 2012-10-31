@@ -94,6 +94,7 @@ class Vtiger_InventoryPDFController {
 		$contentModels = array();
 		$productLineItemIndex = 0;
 		$totaltaxes = 0;
+		$no_of_decimal_places = getCurrencyDecimalPlaces();
 		foreach($associated_products as $productLineItem) {
 			++$productLineItemIndex;
 
@@ -110,7 +111,7 @@ class Vtiger_InventoryPDFController {
 			$listPrice	= $productLineItem["listPrice{$productLineItemIndex}"];
 			$discount	= $productLineItem["discountTotal{$productLineItemIndex}"];
 			$taxable_total = $quantity * $listPrice - $discount;
-			$taxable_total = number_format($taxable_total, 2,'.',''); //Convert to 2 decimals
+			$taxable_total = number_format($taxable_total, $no_of_decimal_places,'.','');
 			$producttotal = $taxable_total;
 			if($this->focus->column_fields["hdnTaxType"] == "individual") {
 				for($tax_count=0;$tax_count<count($productLineItem['taxes']);$tax_count++) {
@@ -121,12 +122,12 @@ class Vtiger_InventoryPDFController {
 				}
 			}
 
-			$producttotal_taxes = number_format($producttotal_taxes, 2,'.',''); //Convert to 2 decimals
+			$producttotal_taxes = number_format($producttotal_taxes, $no_of_decimal_places,'.','');
 			$producttotal = $taxable_total+$producttotal_taxes;
-			$producttotal = number_format($producttotal, 2,'.',''); //Convert to 2 decimals
+			$producttotal = number_format($producttotal, $no_of_decimal_places,'.','');
 			$tax = $producttotal_taxes;
 			$totaltaxes += $tax;
-			$totaltaxes = number_format($totaltaxes, 2,'.',''); //Convert to 2 decimals
+			$totaltaxes = number_format($totaltaxes, $no_of_decimal_places,'.','');
 			$discountPercentage = $productLineItem["discount_percent{$productLineItemIndex}"];
 			$productName = $productLineItem["productName{$productLineItemIndex}"];
 			//get the sub product
@@ -180,7 +181,7 @@ class Vtiger_InventoryPDFController {
 			++$productLineItemIndex;
 			$netTotal += $productLineItem["netPrice{$productLineItemIndex}"];
 		}
-		$netTotal = number_format(($netTotal + $this->totaltaxes), 2,'.', '');
+		$netTotal = number_format(($netTotal + $this->totaltaxes), getCurrencyDecimalPlaces(),'.', '');
 		$summaryModel->set(getTranslatedString("Net Total", $this->moduleName), $this->formatPrice($netTotal));
 		
 		$discount_amount = $final_details["discount_amount_final"];

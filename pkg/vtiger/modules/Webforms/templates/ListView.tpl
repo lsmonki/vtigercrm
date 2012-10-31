@@ -90,7 +90,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td nowrap="nowrap" align="left" class="small">You can Create a Webform Now. Click the link below:<br>
+									<td nowrap="nowrap" align="left" class="small">{'LBL_CREATE_NEW_WEBFORM_NOW'|@getTranslatedString:$MODULE}<br>
 										&nbsp;&nbsp;- <b><a href="index.php?module=Webforms&action=WebformsEditView&parenttab=Settings">{'LBL_CREATE_WEBFORM'|@getTranslatedString:$MODULE}</a></b><br>
 									</td>
 								</tr>

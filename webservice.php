@@ -8,7 +8,14 @@
  * All Rights Reserved.
  ********************************************************************************/
 	
-	require_once("config.inc.php");
+	require_once("config.php");
+    /**
+    * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode. 
+    */
+    if (file_exists('config_override.php')) {
+        include_once 'config_override.php';
+    }
+    
 	require_once("include/HTTP_Session/Session.php");
 	require_once 'include/Webservices/Utils.php';
 	require_once("include/Webservices/State.php");

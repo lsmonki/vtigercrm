@@ -67,7 +67,12 @@ class CurrencyField {
      * @param Number $value 
      */
     var $value = null;
-	
+
+	/**
+	 * Maximum Number Of Currency Decimals
+	 * @var Number
+	 */
+	var $maxNumberOfDecimals = 5;
     /**
      * Constructor
      * @param Number $value
@@ -102,15 +107,13 @@ class CurrencyField {
 		$this->currencySymbol = $currencyRateAndSymbol['symbol'];
 		$this->conversionRate = $currencyRateAndSymbol['rate'];
 		$this->currencySymbolPlacement = $user->currency_symbol_placement;
+		$this->numberOfDecimal = getCurrencyDecimalPlaces();
     }
 
 	public function getCurrencySymbol() {
 		return $this->currencySymbol;
 	}
 
-	public function setNumberofDecimals($numberOfDecimals) {
-		$this->numberOfDecimal = $numberOfDecimals;
-	}
     
     /**
      * Returns the Formatted Currency value for the User
@@ -119,9 +122,9 @@ class CurrencyField {
 	 * @param Boolean $skipConversion
      * @return String - Formatted Currency
      */
-    public static function convertToUserFormat($value, $user=null, $skipConversion=false) {
+    public static function convertToUserFormat($value, $user=null, $skipConversion=false, $skipFormatting=false) {
         $self = new self($value);
-		return $self->getDisplayValue($user,$skipConversion);
+		return $self->getDisplayValue($user,$skipConversion,$skipFormatting);
     }
 
     /**
@@ -130,7 +133,7 @@ class CurrencyField {
 	 * @param Boolean $skipConversion
      * @return Formatted Currency
      */
-    public function getDisplayValue($user=null, $skipConversion=false) {
+    public function getDisplayValue($user=null, $skipConversion=false, $skipFormatting=false) {
         global $current_user;
 		if(empty($user)) {
 			$user = $current_user;
@@ -141,9 +144,11 @@ class CurrencyField {
 		if($skipConversion == false) {
 			$value = convertFromDollar($value,$this->conversionRate);
 		}
-
-		$number = $this->_formatCurrencyValue($value);
-		return $number;
+		
+		if($skipFormatting == false) {
+			$value = $this->_formatCurrencyValue($value);
+		}
+		return currencyDecimalFormat($value);
     }
 
 	/**
@@ -189,6 +194,8 @@ class CurrencyField {
         $currencyPattern = $this->currencyFormat;
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
+		$currencyDecimalPlaces = $this->numberOfDecimal;
+		$value = number_format($value, $currencyDecimalPlaces,'.','');
 		if(empty($currencySeparator)) $currencySeparator = ' ';
 		if(empty($decimalSeparator)) $decimalSeparator = ' ';
 
@@ -307,8 +314,8 @@ class CurrencyField {
 		if($skipConversion == false) {
 			$value = convertToDollar($value,$this->conversionRate);
 		}
-		$value = round($value, $this->numberOfDecimal);
-		
+		//$value = round($value, $this->maxNumberOfDecimals);
+
         return $value;
     }
 

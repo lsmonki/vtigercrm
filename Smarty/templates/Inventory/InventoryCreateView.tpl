@@ -130,13 +130,31 @@ function sensex_info()
 									   {foreach key=header item=data from=$BLOCKS}
 									      <tr>
 										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
-                                                                        	<td colspan=2 class="detailedViewHeader">
-	                                                                        <b>{$header}</b></td>
-        	                                                                <td class="detailedViewHeader">
-                	                                                        <input name="cpy" onclick="return copyAddressLeft(EditView)" type="radio"><b>{$APP.LBL_RCPY_ADDRESS}</b></td>
-                        	                                                <td class="detailedViewHeader">
-                                	                                        <input name="cpy" onclick="return copyAddressRight(EditView)" type="radio"><b>{$APP.LBL_LCPY_ADDRESS}</b></td>
-                                        	                                {else}
+                                                                        	{if $MODULE neq 'PurchaseOrder'}
+																				<td class="detailedViewHeader">
+																				<b>{$header}</b></td>
+																				<td class="detailedViewHeader">
+																				{if $CONTACT_ID neq ''}
+																					<input name="cpy_address" class="address" onclick="return copyContactAddressDetails()" type="radio" checked><b>{'LBL_CPY_CONTACT_ADDRESS'|@getTranslatedString:$MODULE}</b>
+																					<div style="display:none"><input type="radio" name="checking" checked>contact</div>
+																				{else}
+																					<input name="cpy_address" class="address" onclick="return copyContactAddressDetails()" type="radio"><b>{'LBL_CPY_CONTACT_ADDRESS'|@getTranslatedString:$MODULE}</b>
+																					<div style="display:none"><input type="radio" name="checking">contact</div>
+																				{/if}
+																				{if $ACCOUNT_ID neq '' && $CONTACT_ID eq ''}
+																					<input name="cpy_address" class="address" onclick="return copyOrganizationAddressDetails()" type="radio" checked><b>{'LBL_CPY_ORGANIZATION_ADDRESS'|@getTranslatedString:$MODULE}</b>
+																					<div style="display:none"><input type="radio" name="checking" checked>account</div></td>
+																				{else}
+																					<input name="cpy_address" class="address" onclick="return copyOrganizationAddressDetails()" type="radio"><b>{'LBL_CPY_ORGANIZATION_ADDRESS'|@getTranslatedString:$MODULE}</b>
+																					<div style="display:none"><input type="radio" name="checking">account</div></td>
+																				{/if}
+																			{else}
+																				<td colspan="2" class="detailedViewHeader">
+																				<b>{$header}</b></td>
+																			{/if}
+																			<td colspan="2" class="detailedViewHeader">
+																				<input name="cpy" onclick="return copyAddressRight(EditView)" type="radio"><b>{$APP.LBL_LCPY_ADDRESS}</b></td>
+                                        	                               {else}
 										<td colspan=4 class="detailedViewHeader">
 											<b>{$header}</b>
 										{/if}

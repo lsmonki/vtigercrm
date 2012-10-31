@@ -21,6 +21,10 @@ $smarty->assign("APP", $app_strings);
 if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
 {	
 	$roleid= vtlib_purify($_REQUEST['roleid']);
+	if($roleid == 'H2' || $roleid == 'H5'){
+		$smarty->display(vtlib_getModuleTemplate('Vtiger', 'OperationNotPermitted.tpl'));
+		exit;
+	}
 	$mode = vtlib_purify($_REQUEST['mode']);
 	$roleInfo=getRoleInformation($roleid);
 	$thisRoleDet=$roleInfo[$roleid];

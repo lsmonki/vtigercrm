@@ -433,10 +433,14 @@ function getCVname($cvid) {
 	$log->debug("Entering getCVname method ...");
 
 	global $adb;
-	$sql = "select viewname from vtiger_customview where cvid=?";
-	$result = $adb->pquery($sql, array($cvid));
-	$cvname = $adb->query_result($result, 0, "viewname");
-
+	$cvname = '';
+	
+	if (!empty($cvid)) {
+		$sql = "select viewname from vtiger_customview where cvid=?";
+		$result = $adb->pquery($sql, array($cvid));
+		$cvname = $adb->query_result($result, 0, "viewname");
+	}
+	
 	$log->debug("Exiting getCVname method ...");
 	return $cvname;
 }
@@ -477,9 +481,13 @@ function getSalesEntityType($crmid) {
 	$log->debug("Entering getSalesEntityType(" . $crmid . ") method ...");
 	$log->info("in getSalesEntityType " . $crmid);
 	global $adb;
-	$sql = "select setype from vtiger_crmentity where crmid=?";
-	$result = $adb->pquery($sql, array($crmid));
-	$parent_module = $adb->query_result($result, 0, "setype");
+	
+	$parent_module = '';
+	if (!empty($crmid)) {
+		$sql = "select setype from vtiger_crmentity where crmid=?";
+		$result = $adb->pquery($sql, array($crmid));
+		$parent_module = $adb->query_result($result, 0, "setype");
+	}
 	$log->debug("Exiting getSalesEntityType method ...");
 	return $parent_module;
 }
@@ -495,7 +503,8 @@ function getAccountName($account_id) {
 	$log->info("in getAccountName " . $account_id);
 
 	global $adb;
-	if ($account_id != '') {
+	$accountname = '';
+	if (!empty($account_id)) {
 		$sql = "select accountname from vtiger_account where accountid=?";
 		$result = $adb->pquery($sql, array($account_id));
 		$accountname = $adb->query_result($result, 0, "accountname");
@@ -516,9 +525,12 @@ function getProductName($product_id) {
 	$log->info("in getproductname " . $product_id);
 
 	global $adb;
-	$sql = "select productname from vtiger_products where productid=?";
-	$result = $adb->pquery($sql, array($product_id));
-	$productname = $adb->query_result($result, 0, "productname");
+	$productname = '';
+	if (!empty($product_id)) {
+		$sql = "select productname from vtiger_products where productid=?";
+		$result = $adb->pquery($sql, array($product_id));
+		$productname = $adb->query_result($result, 0, "productname");
+	}
 	$log->debug("Exiting getProductName method ...");
 	return $productname;
 }
@@ -535,7 +547,7 @@ function getPotentialName($potential_id) {
 
 	global $adb;
 	$potentialname = '';
-	if ($potential_id != '') {
+	if (!empty($potential_id)) {
 		$sql = "select potentialname from vtiger_potential where potentialid=?";
 		$result = $adb->pquery($sql, array($potential_id));
 		$potentialname = $adb->query_result($result, 0, "potentialname");
@@ -556,7 +568,7 @@ function getContactName($contact_id) {
 
 	global $adb, $current_user;
 	$contact_name = '';
-	if ($contact_id != '') {
+	if (!empty($contact_id)) {
 		$sql = "select * from vtiger_contactdetails where contactid=?";
 		$result = $adb->pquery($sql, array($contact_id));
 		$firstname = $adb->query_result($result, 0, "firstname");
@@ -583,7 +595,7 @@ function getLeadName($lead_id) {
 
 	global $adb, $current_user;
 	$lead_name = '';
-	if ($lead_id != '') {
+	if (!empty($lead_id)) {
 		$sql = "select * from vtiger_leaddetails where leadid=?";
 		$result = $adb->pquery($sql, array($lead_id));
 		$firstname = $adb->query_result($result, 0, "firstname");
@@ -636,9 +648,12 @@ function getCampaignName($campaign_id) {
 	$log->info("in getCampaignName " . $campaign_id);
 
 	global $adb;
-	$sql = "select * from vtiger_campaign where campaignid=?";
-	$result = $adb->pquery($sql, array($campaign_id));
-	$campaign_name = $adb->query_result($result, 0, "campaignname");
+	$campaign_name = '';
+	if (!empty($campaign_id)) {
+		$sql = "select * from vtiger_campaign where campaignid=?";
+		$result = $adb->pquery($sql, array($campaign_id));
+		$campaign_name = $adb->query_result($result, 0, "campaignname");
+	}
 	$log->debug("Exiting getCampaignName method ...");
 	return $campaign_name;
 }
@@ -653,9 +668,13 @@ function getVendorName($vendor_id) {
 	$log->debug("Entering getVendorName(" . $vendor_id . ") method ...");
 	$log->info("in getVendorName " . $vendor_id);
 	global $adb;
-	$sql = "select * from vtiger_vendor where vendorid=?";
-	$result = $adb->pquery($sql, array($vendor_id));
-	$vendor_name = $adb->query_result($result, 0, "vendorname");
+	
+	$vendor_name = '';
+	if (!empty($vendor_id)) {
+		$sql = "select * from vtiger_vendor where vendorid=?";
+		$result = $adb->pquery($sql, array($vendor_id));
+		$vendor_name = $adb->query_result($result, 0, "vendorname");
+	}
 	$log->debug("Exiting getVendorName method ...");
 	return $vendor_name;
 }
@@ -669,14 +688,13 @@ function getQuoteName($quote_id) {
 	global $log;
 	$log->debug("Entering getQuoteName(" . $quote_id . ") method ...");
 	$log->info("in getQuoteName " . $quote_id);
+
 	global $adb;
-	if ($quote_id != NULL && $quote_id != '') {
+	$quote_name = '';
+	if (!empty($quote_id)) {
 		$sql = "select * from vtiger_quotes where quoteid=?";
 		$result = $adb->pquery($sql, array($quote_id));
 		$quote_name = $adb->query_result($result, 0, "subject");
-	} else {
-		$log->debug("Quote Id is empty.");
-		$quote_name = '';
 	}
 	$log->debug("Exiting getQuoteName method ...");
 	return $quote_name;
@@ -692,9 +710,13 @@ function getPriceBookName($pricebookid) {
 	$log->debug("Entering getPriceBookName(" . $pricebookid . ") method ...");
 	$log->info("in getPriceBookName " . $pricebookid);
 	global $adb;
-	$sql = "select * from vtiger_pricebook where pricebookid=?";
-	$result = $adb->pquery($sql, array($pricebookid));
-	$pricebook_name = $adb->query_result($result, 0, "bookname");
+	
+	$pricebook_name = '';
+	if (!empty($pricebookid)) {
+		$sql = "select * from vtiger_pricebook where pricebookid=?";
+		$result = $adb->pquery($sql, array($pricebookid));
+		$pricebook_name = $adb->query_result($result, 0, "bookname");
+	}
 	$log->debug("Exiting getPriceBookName method ...");
 	return $pricebook_name;
 }
@@ -708,9 +730,13 @@ function getPoName($po_id) {
 	$log->debug("Entering getPoName(" . $po_id . ") method ...");
 	$log->info("in getPoName " . $po_id);
 	global $adb;
-	$sql = "select * from vtiger_purchaseorder where purchaseorderid=?";
-	$result = $adb->pquery($sql, array($po_id));
-	$po_name = $adb->query_result($result, 0, "subject");
+	
+	$po_name = '';
+	if (!empty($po_id)) {
+		$sql = "select * from vtiger_purchaseorder where purchaseorderid=?";
+		$result = $adb->pquery($sql, array($po_id));
+		$po_name = $adb->query_result($result, 0, "subject");
+	}
 	$log->debug("Exiting getPoName method ...");
 	return $po_name;
 }
@@ -725,9 +751,13 @@ function getSoName($so_id) {
 	$log->debug("Entering getSoName(" . $so_id . ") method ...");
 	$log->info("in getSoName " . $so_id);
 	global $adb;
-	$sql = "select * from vtiger_salesorder where salesorderid=?";
-	$result = $adb->pquery($sql, array($so_id));
-	$so_name = $adb->query_result($result, 0, "subject");
+	
+	$so_name = '';
+	if (!empty($so_id)) {	
+		$sql = "select * from vtiger_salesorder where salesorderid=?";
+		$result = $adb->pquery($sql, array($so_id));
+		$so_name = $adb->query_result($result, 0, "subject");
+	}
 	$log->debug("Exiting getSoName method ...");
 	return $so_name;
 }
@@ -742,7 +772,7 @@ function getGroupName($groupid) {
 	$log->debug("Entering getGroupName(" . $groupid . ") method ...");
 	$group_info = Array();
 	$log->info("in getGroupName, entityid is " . $groupid);
-	if ($groupid != '') {
+	if (!empty($groupid)) {
 		$sql = "select groupname,groupid from vtiger_groups where groupid = ?";
 		$result = $adb->pquery($sql, array($groupid));
 		$group_info[] = decode_html($adb->query_result($result, 0, "groupname"));
@@ -760,7 +790,7 @@ function getUserName($userid) {
 	$log->debug("Entering getUserName(" . $userid . ") method ...");
 	$log->info("in getUserName " . $userid);
 
-	if ($userid != '') {
+	if (!empty($userid)) {
 		$sql = "select user_name from vtiger_users where id=?";
 		$result = $adb->pquery($sql, array($userid));
 		$user_name = $adb->query_result($result, 0, "user_name");
@@ -778,7 +808,7 @@ function getUserFullName($userid) {
 	$log->debug("Entering getUserFullName(" . $userid . ") method ...");
 	$log->info("in getUserFullName " . $userid);
 	global $adb;
-	if ($userid != '') {
+	if (!empty($userid)) {
 		$displayValueArray = getEntityName('Users', $userid);
 		if (!empty($displayValueArray)) {
 			foreach ($displayValueArray as $key => $value) {
@@ -849,13 +879,8 @@ function getValidDisplayDate($cur_date_val) {
 	if ($dat_fmt == '') {
 		$dat_fmt = 'dd-mm-yyyy';
 	}
-	$date_value = explode(' ', $cur_date_val);
-	list($y, $m, $d) = explode('-', $date_value[0]);
-	list($fy, $fm, $fd) = explode('-', $dat_fmt);
-	if ((strlen($fy) == 4 && strlen($y) == 4) || (strlen($fd) == 4 && strlen($d) == 4)) {
-		return "$y-$m-$d";
-	}
-	$date = new DateTimeField($cur_date_val);
+	
+    $date = new DateTimeField($cur_date_val);
 	return $date->getDisplayDate();
 }
 
@@ -907,9 +932,10 @@ function convertToDollar($amount, $crate) {
  */
 function convertFromDollar($amount, $crate) {
 	global $log;
+	$currencyField = new CurrencyField($amount);
 	$log->debug("Entering convertFromDollar(" . $amount . "," . $crate . ") method ...");
 	$log->debug("Exiting convertFromDollar method ...");
-	return round($amount * $crate, 2);
+	return round($amount * $crate, $currencyField->maxNumberOfDecimals);
 }
 
 /** This function returns the amount converted from master currency.
@@ -2219,7 +2245,8 @@ function get_announcements() {
 		if ($adb->query_result($result, $i, 'announcement') != '')
 			$announcement.=$announce;
 	}
-	return $announcement;
+    
+   return $announcement;
 }
 
 /**
@@ -2482,11 +2509,18 @@ function is_emailId($entity_id) {
  */
 function getCvIdOfAll($module) {
 	global $adb, $log;
-	$log->debug("Entering getCvIdOfAll($module)");
-	$qry_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
-	$cvid = $adb->query_result($qry_res, 0, "cvid");
-	$log->debug("Exiting getCvIdOfAll($module)");
-	return $cvid;
+	
+	static $cvidCache = array();
+	if (!isset($cvidCache[$module])) {
+		$log->debug("Entering getCvIdOfAll($module)");
+		$qry_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
+		$cvid = $adb->query_result($qry_res, 0, "cvid");
+		$log->debug("Exiting getCvIdOfAll($module)");
+		
+		$cvidCache[$module] = $cvid;
+	}
+	
+	return isset($cvidCache[$module])? $cvidCache[$module] : '0';
 }
 
 /** gives the option  to display  the tagclouds or not for the current user
@@ -2756,35 +2790,27 @@ function perform_post_migration_activities() {
 	create_parenttab_data_file();
 }
 
-/** Function To create Email template variables dynamically -- Pavani */
 function getEmailTemplateVariables() {
-	global $adb;
+	global $adb, $current_user;
 	$modules_list = array('Accounts', 'Contacts', 'Leads', 'Users');
 
+	$allRelFields = array();
 	foreach ($modules_list as $index => $module) {
-		if ($module == 'Calendar') {
-			$focus = new Activity();
-		} else {
-			$focus = new $module();
-		}
-		$field = array();
-		$tabid = getTabid($module);
-		//many to many relation information field campaignrelstatus(this is the column name of the
-		//field) has block set to '0', which should be ignored.
-		$result = $adb->pquery("select fieldlabel,columnname,displaytype from vtiger_field where tabid=? and vtiger_field.presence in (0,2) and displaytype in (1,2,3) and block !=0", array($tabid));
-		$norows = $adb->num_rows($result);
-		if ($norows > 0) {
-			for ($i = 0; $i < $norows; $i++) {
-				$field = $adb->query_result($result, $i, 'fieldlabel');
-				$columnname = $adb->query_result($result, $i, 'columnname');
-				if ($columnname == 'support_start_date' || $columnname == 'support_end_date') {
-					$tabname = 'vtiger_customerdetails';
+		$fieldList = getRelatedFields(array('modulename' => $module, 'user' => $current_user));
+		foreach ($fieldList as $key => $field) {
+			$option = array(getTranslatedString($field['module']) . ': ' . getTranslatedString($field['fieldlabel']), "$" . strtolower($field['module']) . "-" . $field['columnname'] . "$");
+			$allFields[] = $option;
+			if (!empty($field['referencelist'])) {
+				foreach ($field['referencelist'] as $key => $relField) {
+					$relOption = array(getTranslatedString($field['fieldlabel']) . ':' . '(' . getTranslatedString($relField['module']) . ')' . getTranslatedString($relField['fieldlabel']), "$" . strtolower($field['module']) . "-" . $field['columnname'] . ":" . $relField['columnname'] . "$");
+					$allRelFields[] = $relOption;
 				}
-				$option = array(getTranslatedString($module) . ': ' . getTranslatedString($adb->query_result($result, $i, 'fieldlabel')), "$" . strtolower($module) . "-" . $columnname . "$");
-				$allFields[] = $option;
 			}
 		}
-
+		if(is_array($allFields) && is_array($allRelFields)){
+			$allFields = array_merge($allFields, $allRelFields);	
+			$allRelFields="";
+		}
 		$allOptions[] = $allFields;
 		$allFields = "";
 	}
@@ -2793,6 +2819,7 @@ function getEmailTemplateVariables() {
 	$option = array('Current Time', '$custom-currenttime$');
 	$allFields[] = $option;
 	$allOptions[] = $allFields;
+
 	return $allOptions;
 }
 
@@ -2995,9 +3022,10 @@ function getEntityField($module) {
  * @return array $data - the entity information for the module
  */
 function getEntityFieldNames($module) {
-	$adb = PearDatabase::getInstance();
-	$data = array();
-	if (!empty($module)) {
+	$data = VTCacheUtils::lookupEntityNameInfo($module);
+	
+	if (!empty($module) && empty($data)) {
+		$adb = PearDatabase::getInstance();
 		$query = "select fieldname,modulename,tablename,entityidfield from vtiger_entityname where modulename = ?";
 		$result = $adb->pquery($query, array($module));
 		$fieldsName = $adb->query_result($result, 0, 'fieldname');
@@ -3007,8 +3035,10 @@ function getEntityFieldNames($module) {
 		if (!(strpos($fieldsName, ',') === false)) {
 			$fieldsName = explode(',', $fieldsName);
 		}
+		$data = array("tablename" => $tableName, "modulename" => $moduleName, "fieldname" => $fieldsName, "entityidfield" => $entityIdField);
+		VTCacheUtils::updateEntityNameInfo($module, $data);
 	}
-	$data = array("tablename" => $tableName, "modulename" => $moduleName, "fieldname" => $fieldsName, "entityidfield" => $entityIdField);
+	
 	return $data;
 }
 
@@ -3248,12 +3278,101 @@ function getMenuStructure($selectModule = '') {
 	return $resultant_array;
 }
 
+function getRelatedFields($params=array()) {
+	global $adb, $current_user;
 
-function getReturnPath($host){
-	$arr=explode('.',$host);
-	unset($arr[0]);
-	$domain=implode('.',$arr);
-	$Return_Path='noreply@'.$domain;
-	return $Return_Path;
+	$module = $params['modulename'];
+	$user = $params['user'];
+
+	$handler = vtws_getModuleHandlerFromName($module, $user);
+	$meta = $handler->getMeta();
+	$moduleFields = $meta->getModuleFields();
+
+	$returnData = array();
+	foreach ($moduleFields as $key => $field) {
+		$referencelist = array();
+		$relatedField = $field->getReferenceList();
+		if ($field->getFieldName() == 'assigned_user_id') {
+			$relModule = 'Users';
+			$referencelist = getRelatedModuleFieldList($relModule, $user);
+		}
+		if (!empty($relatedField)) {
+			foreach ($relatedField as $ind => $relModule) {
+				$referencelist = getRelatedModuleFieldList($relModule, $user);	
+			}
+		}
+		$returnData[] = array('module' => $module, 'fieldname' => $field->getFieldName(), 'columnname' => $field->getColumnName(), 'fieldlabel' => $field->getFieldLabelKey(), 'referencelist' => $referencelist);
+	}
+	return $returnData;
+}
+
+function getRelatedModuleFieldList($relModule, $user) {
+	global $adb;
+	$handler = vtws_getModuleHandlerFromName($relModule, $user);
+	$relMeta = $handler->getMeta();
+	if (!$relMeta->isModuleEntity()) {
+		return null;
+	}
+	$relModuleFields = $relMeta->getModuleFields();
+	$relModuleFieldList = array();
+	foreach ($relModuleFields as $relind => $relModuleField) {
+		$relModuleFieldList[] = array('module' => $relModule, 'fieldname' => $relModuleField->getFieldName(), 'columnname' => $relModuleField->getColumnName(), 'fieldlabel' => $relModuleField->getFieldLabelKey());
+	}
+	return $relModuleFieldList;
+}
+
+/**
+ * this function returns the invoice status
+ * @param int $invoiceId -- invoice id
+ * @return string $invoiceStatus - the invoice status field value for that invoice
+ */
+function getInvoiceStatus($invoiceId) {
+	global $log, $adb;
+	$log->debug("Entering getInvoiceStatus(" . $invoiceId . ") method ...");
+
+	$result = $adb->pquery("SELECT invoicestatus FROM vtiger_invoice where invoiceid=?", array($invoiceId));
+	$invoiceStatus = $adb->query_result($result,0,'invoicestatus');
+
+	$log->debug("Exiting getInvoiceStatus method ...");
+	return $invoiceStatus;
+}
+
+/**
+ * this function returns the field related data
+ */
+function getFieldRelatedInfo($tabId, $fieldName){
+	$fieldInfo = VTCacheUtils::lookupFieldInfo($tabId, $fieldName);
+	if($fieldInfo === false) {
+		getColumnFields(getTabModuleName($tabid));
+		$fieldInfo = VTCacheUtils::lookupFieldInfo($tabId, $fieldName);
+	}
+	return $fieldInfo;
+}
+
+function currencyDecimalFormat($value){
+	global $current_user;
+	if($current_user->truncate_trailing_zeros == true) {
+		$value = rtrim($value, '0');
+		$fld_value = explode($current_user->currency_decimal_separator, $value);
+		if(strlen($fld_value[1]) <= 1){
+			if(strlen($fld_value[1]) == 1)
+				return $value = $fld_value[0].$current_user->currency_decimal_separator.$fld_value[1].'0';
+			else
+				return $value = $fld_value[0].$current_user->currency_decimal_separator.'00';
+		}else{
+			return preg_replace("/(?<=\\.[0-9])[0]+\$/","",$value);
+		}
+	}else{
+		return $value;
+	}
+}
+
+function decimalFormat($value){
+	global $log;
+
+	$fld_value = rtrim($value, '0');
+	$value = rtrim($fld_value, '.');
+	
+	return $value;
 }
 ?>

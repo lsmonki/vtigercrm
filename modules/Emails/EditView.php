@@ -362,6 +362,22 @@ if($ret_error == 1) {
 	if($temp_id != '')
 		$smarty->assign('from_add',$temp_id);
 }
+//Checking is it single record or not
+$one_record = true;
+$idlists = vtlib_purify($_REQUEST['idlist']);
+if ($idlists == 'all') {
+	$one_record = false;
+} else if ($idlists == 'relatedListSelectAll') {
+	$one_record = false;
+} else {
+	$idlistsArray = explode(':', $idlists);
+	if (count($idlistsArray) != 1) {
+		$one_record = false;
+	}
+}
+$smarty->assign('ONE_RECORD', $one_record);
+$smarty->assign('SELECTEDIDS', $idlists);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 

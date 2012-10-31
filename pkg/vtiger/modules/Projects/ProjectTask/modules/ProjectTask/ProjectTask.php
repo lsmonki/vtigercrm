@@ -108,7 +108,7 @@ class ProjectTask extends CRMEntity {
 
     function __construct() {
         global $log, $currentModule;
-        $this->column_fields = getColumnFields($currentModule);
+        $this->column_fields = getColumnFields(get_class($this));
         $this->db = PearDatabase::getInstance();
         $this->log = $log;
     }
@@ -231,12 +231,11 @@ class ProjectTask extends CRMEntity {
     function create_export_query($where)
     {
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('ProjectTask', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 

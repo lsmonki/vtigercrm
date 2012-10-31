@@ -96,7 +96,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<td colspan="4" align="left">
 
 
-
+{assign var="currencydefaultvalue" value=$DEFAULTDECIMALS}
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
    	{if $MODULE neq 'PurchaseOrder'}
@@ -168,9 +168,15 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}" />
-				<input type="hidden" id="lineItemType1" name="lineItemType1" value="Products" />
-				&nbsp;<img id="searchIcon1" title="Products" src="{'products.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
-			</td>
+                {if $PRODUCTMODULEACTIVE eq 'true'}
+                    <input type="hidden" id="lineItemType1" name="lineItemType1" value="Products" />
+                    &nbsp;<img id="searchIcon1" title="Products" src="{'products.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
+                {elseif $SERVICESMODULEACTIVE eq 'true' }
+                    <input type="hidden" id="lineItemType1" name="lineItemType1" value="Services" />
+                    &nbsp;<img id="searchIcon1" title="Services" src="{'services.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}',1)" />
+				{/if}
+                
+            </td>
 		</tr>
 		<tr>
 			<td class="small">
@@ -215,6 +221,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 				(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'discount_div1','discount','1')" >{$APP.LBL_DISCOUNT}</a> : </b>
 				<div class="discountUI" id="discount_div1">
 					<input type="hidden" id="discount_type1" name="discount_type1" value="">
+					<input type="hidden" id="inventory_currency_decimal_places" value="{$DECIMALPLACES}">
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title1" nowrap align="left" ></td>
@@ -230,7 +237,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					   </tr>
 					   <tr>
 						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);calcTotal();"></td>
+						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="{$currencydefaultvalue}" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);calcTotal();"></td>
 					   </tr>
 					</table>
 				</div>
@@ -260,13 +267,13 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td id="productTotal1" align="right">&nbsp;</td>
 		   </tr>
 		   <tr>
-			<td id="discountTotal1" align="right">0.00</td>
+			<td id="discountTotal1" align="right">{$currencydefaultvalue}</td>
 		   </tr>
 		   <tr>
 			<td id="totalAfterDiscount1" align="right">&nbsp;</td>
 		   </tr>
 		   <tr>
-			<td id="taxTotal1" align="right">0.00</td>
+			<td id="taxTotal1" align="right">{$currencydefaultvalue}</td>
 		   </tr>
 		</table>
 	</td>
@@ -295,9 +302,15 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Add Product Button -->
    <tr>
 	<td colspan="3">
+        {if $PRODUCTMODULEACTIVE eq 'true' && $SERVICESMODULEACTIVE eq 'true'}
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
-			&nbsp;&nbsp;
+			&nbsp;
+            <input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {elseif $PRODUCTMODULEACTIVE eq 'true'}
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {elseif $SERVICESMODULEACTIVE eq 'true'}
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
+        {/if}
 	</td>
    </tr>
 
@@ -307,7 +320,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Product Details Final Total Discount, Tax and Shipping&Hanling  - Starts -->
    <tr valign="top">
 	<td width="88%" colspan="2" class="crmTableRow small lineOnTop" align="right"><b>{$APP.LBL_NET_TOTAL}</b></td>
-	<td width="12%" id="netTotal" class="crmTableRow small lineOnTop" align="right">0.00</td>
+	<td width="12%" id="netTotal" class="crmTableRow small lineOnTop" align="right">{$currencydefaultvalue}</td>
    </tr>
 
    <tr valign="top">
@@ -332,13 +345,13 @@ function displayCoords(currObj,obj,mode,curr_row)
 			   </tr>
 			   <tr>
 				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();calcTotal();"></td>
+				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="{$currencydefaultvalue}" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();calcTotal();"></td>
 			   </tr>
 			</table>
 		</div>
 		<!-- End Div -->
 	</td>
-	<td id="discountTotal_final" class="crmTableRow small lineOnTop" align="right">0.00</td>
+	<td id="discountTotal_final" class="crmTableRow small lineOnTop" align="right">{$currencydefaultvalue}</td>
    </tr>
 
 
@@ -387,7 +400,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		(+)&nbsp;<b>{$APP.LBL_SHIPPING_AND_HANDLING_CHARGES} </b>
 	</td>
 	<td class="crmTableRow small" align="right">
-		<input id="shipping_handling_charge" name="shipping_handling_charge" type="text" class="small" style="width:40px" align="right" value="0.00" onBlur="calcSHTax();">
+		<input id="shipping_handling_charge" name="shipping_handling_charge" type="text" class="small" style="width:40px" align="right" value="{$currencydefaultvalue}" onBlur="calcSHTax();">
 	</td>
    </tr>
 
@@ -424,7 +437,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<!-- End Popup Div for Shipping and Handling TAX -->
 
 	</td>
-	<td id="shipping_handling_tax" class="crmTableRow small" align="right">0.00</td>
+	<td id="shipping_handling_tax" class="crmTableRow small" align="right">{$currencydefaultvalue}</td>
    </tr>
    <tr valign="top">
 	<td class="crmTableRow small" style="border-right:1px #dadada;">&nbsp;</td>
@@ -436,7 +449,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		</select>
 	</td>
 	<td class="crmTableRow small" align="right">
-		<input id="adjustment" name="adjustment" type="text" class="small" style="width:40px" align="right" value="0.00" onBlur="calcTotal();">
+		<input id="adjustment" name="adjustment" type="text" class="small" style="width:40px" align="right" value="{$currencydefaultvalue}" onBlur="calcTotal();">
 	</td>
    </tr>
    <tr valign="top">

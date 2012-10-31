@@ -131,9 +131,11 @@ class Mobile_WS_FetchRecordWithGrouping extends Mobile_WS_FetchRecord {
 					// Template record requested send more details if available
 					if ($isTemplateRecord) {
 						$describeFieldInfo = $this->cachedDescribeFieldInfo($fieldname);
-						foreach($describeFieldInfo as $k=>$v) {
-							if (isset($field[$k])) continue;
-							$field[$k] = $v;
+						if ($describeFieldInfo) {
+							foreach($describeFieldInfo as $k=>$v) {
+								if (isset($field[$k])) continue;
+								$field[$k] = $v;
+							}
 						}
 						// Entity fieldnames
 						$labelFields = $this->cachedEntityFieldnames($module);

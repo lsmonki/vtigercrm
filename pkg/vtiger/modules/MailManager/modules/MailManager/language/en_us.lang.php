@@ -27,8 +27,8 @@ $mod_strings = Array (
 	'JSLBL_Sending'              => 'Sending',
 	'JSLBL_Replied'              => 'Replied',
 	'JSLBL_Failed_To_Send_Mail'  => 'Failed to send the mail',
-	'JSLBL_Recepient_Cannot_Be_Empty' => 'Recepient cannot be empty',
-	'JSLBL_SendWith_EmptySubject'     => 'Send with subject empty?',
+	'JSLBL_Recepient_Cannot_Be_Empty' => 'Recepient (To) cannot be empty',
+	'JSLBL_Subject_Cannot_Be_Empty'     => 'Subject cannot be empty',
 	'JSLBL_Removing'                  => 'Removing',
 	'JSLBL_Choose_Server_Type'        => 'Choose server type',
 	'JSLBL_Other'                     => 'Other',
@@ -154,13 +154,14 @@ $mod_strings = Array (
     'LBL_MAILMANAGER_ADD_Emails' => 'Attach Email',
     'LBL_MAILMANAGER_ADD_ModComments' => 'Add Comment',
     'LBL_ADD' => 'Add',
-	'JSLBL_SendWith_EmptyText' => 'Send without text in the body?',
+	'JSLBL_Body_Cannot_Be_Empty' => 'Body cannot be empty',
 	'LBL_ALLMAILS' => 'All Mails',
 	'LBL_TO_CONTACTS' => 'To Contacts',
 	'LBL_TO_ACCOUNTS' => 'To Organizations',
 	'LBL_TO_LEADS' => 'To Leads',
 	'LBL_TO_USERS' => 'To Users',
-	'LBL_SENT_MAILS' => 'Sent Mails'
+	'LBL_SENT_MAILS' => 'Sent Mails',
+	'LBL_Print' => 'Print'
 );
 
 ?>

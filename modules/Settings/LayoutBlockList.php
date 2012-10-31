@@ -47,7 +47,8 @@ $module_array=getCustomFieldSupportedModules();
 
 $cfimagecombo = Array(
 	$image_path."text.gif",
-	$image_path."number.gif",
+	$image_path."number.png",
+	$image_path."integer.png",
 	$image_path."percent.gif",
 	$image_path."currency.gif",
 	$image_path."date.gif",
@@ -63,7 +64,8 @@ $cfimagecombo = Array(
 
 $cftextcombo = Array(
 	$mod_strings['Text'],
-	$mod_strings['Number'],
+	$mod_strings['Decimal'],
+	$mod_strings['Integer'],
 	$mod_strings['Percent'],
 	$mod_strings['Currency'],
 	$mod_strings['Date'],
@@ -95,6 +97,8 @@ $smarty->assign("BLOCKS",$block_array);
 $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getFieldListEntries($fld_module));
 $smarty->assign("RELATEDLIST",getRelatedListInfo($fld_module));
+$currencyField = new CurrencyField($value);
+$smarty->assign("MAXDECIMALS", $currencyField->maxNumberOfDecimals);
 
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes" || $duplicate == 'yes') {
 	echo "ERROR";
@@ -154,7 +158,7 @@ function getFieldListEntries($module) {
 
 	$dbQuery = "select vtiger_blocks.*,vtiger_tab.presence as tabpresence  from vtiger_blocks" .
 			" inner join vtiger_tab on vtiger_tab.tabid = vtiger_blocks.tabid" .
-			" where vtiger_blocks.tabid=?  and vtiger_tab.presence = 0 order by sequence";
+			" where vtiger_blocks.tabid=?  and vtiger_tab.presence = 0 AND blocklabel != 'LBL_ITEM_DETAILS' order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 
@@ -377,7 +381,7 @@ function getCustomFieldSupportedModules() {
 function getModuleBlocks($module) {
 	global $adb;
 	$tabid = getTabid($module);
-	$blockquery = "select blocklabel,blockid from vtiger_blocks where tabid = ?";
+	$blockquery = "select blocklabel,blockid from vtiger_blocks where tabid = ? AND blocklabel != 'LBL_ITEM_DETAILS'";
 	$blockres = $adb->pquery($blockquery,array($tabid));
 	while($blockinfo = $adb->fetch_array($blockres)) {
 		$blocklist[$blockinfo['blockid']] = getTranslatedString($blockinfo['blocklabel'],$module);
@@ -716,6 +720,7 @@ function deleteCustomField() {
 	if($uitype == 15) {
 		$deltablequery = 'drop table vtiger_'.$adb->sql_escape_string($colName);
 		$adb->pquery($deltablequery, array());
+		$adb->pquery("delete from  vtiger_picklist_dependency where sourcefield=? or targetfield=?", array($colName,$colName));
 	}
 }
 
@@ -826,7 +831,7 @@ function addCustomField() {
 		$uitype='';
 		$fldPickList='';
 		if(isset($_REQUEST['fldDecimal']) && $_REQUEST['fldDecimal'] != '') {
-			$decimal=$_REQUEST['fldDecimal'];
+			$decimal=trim($_REQUEST['fldDecimal']);
 		}else {
 			$decimal=0;
 		}
@@ -836,13 +841,13 @@ function addCustomField() {
 			$uichekdata='V~O~LE~'.$fldlength;
 			$uitype = 1;
 			$type = "C(".$fldlength.") default ()"; // adodb type
-		}elseif($fldType == 'Number') {
+		}elseif($fldType == 'Decimal') {
 			$uitype = 7;
 			//this may sound ridiculous passing decimal but that is the way adodb wants
 			$dbfldlength = $fldlength + $decimal + 1;
 			$type="N(".$dbfldlength.".".$decimal.")";	// adodb type
 			// Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/6363
-			$uichekdata='NN~O~'.$fldlength .','.$decimal;
+			$uichekdata='NN~O';
 		}elseif($fldType == 'Percent') {
 			$uitype = 9;
 			$type="N(5.2)"; //adodb type
@@ -850,8 +855,9 @@ function addCustomField() {
 		}elseif($fldType == 'Currency') {
 			$uitype = 71;
 			$dbfldlength = $fldlength + $decimal + 1;
+            $decimal = $decimal + 3;
 			$type="N(".$dbfldlength.".".$decimal.")"; //adodb type
-			$uichekdata='N~O~'.$fldlength .','.$decimal;
+			$uichekdata='N~O';
 		}elseif($fldType == 'Date') {
 			$uichekdata='D~O';
 			$uitype = 5;
@@ -892,6 +898,10 @@ function addCustomField() {
 			$uitype = 85;
 			$type = "C(255) default () "; //adodb type
 			$uichekdata='V~O';
+		}elseif($fldType == 'Integer') {
+			$uitype = 7;
+			$type = "I(".$dbfldlength.")"; //adodb type
+			$uichekdata='I~O';
 		}
 
 		if(is_numeric($blockid)) {

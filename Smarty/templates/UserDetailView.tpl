@@ -131,8 +131,17 @@
 										   {assign var=keyadmin value=$data.isadmin}
 
 										   {if $label ne ''}
-										   <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
-											{include file="DetailViewUI.tpl"}
+										   	<td class="dvtCellLabel" align=right width=25%>
+
+                                                                                                <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
+                                                                                                {$label}
+
+                                                                                          </td>
+											{if !empty($DETAILVIEW_AJAX_EDIT) }
+												{include file="DetailViewUI.tpl"}
+											{else}
+												{include file="DetailViewFields.tpl"}
+											{/if}
 										   {else}
 										   <td class="dvtCellLabel" align=right>&nbsp;</td>
 										   <td class="dvtCellInfo" align=left >&nbsp;</td>

@@ -14,7 +14,14 @@
 <head>
 	<title>{$USER} - {$MODULE_NAME|@getTranslatedString:$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">
+	
+	{if $smarty.cookies.vtigerui neq 6}
 	<style type="text/css">@import url("themes/{$THEME}/style.css?v={$VERSION}");</style>
+	{else}
+		<style type="text/css">@import url("themes/softed/style.css?v={$VERSION}");</style>
+		<style type="text/css">@import url("themes/vtigerui6/{$THEME}.css?v={$VERSION}");</style>
+	{/if}
+	
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 {* vtlib customization: Inclusion of custom javascript and css as registered *}
 {if $HEADERCSS}
@@ -38,7 +45,11 @@
 {/literal}
 	<!-- End -->
 </head>
-	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small>
+	{* NOTE: trigger call to parent-window resize function when running in embed mode *}
+	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small 
+		{if $smarty.cookies.vtigerui eq 6}onload="if(parent.resizeUI5Iframe)parent.resizeUI5Iframe(self.document.body.scrollHeight);"{/if}
+		{if $smarty.cookies.vtigerui eq 6}onunload="if(parent.resizeUI5IframeReset)parent.resizeUI5IframeReset();"{/if}
+	>
 	<a name="top"></a>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
@@ -85,6 +96,9 @@
     <img src="{'layerPopupBg.gif'|@vtiger_imageurl:$THEME}" style="display: none;"/>
     {* END *}
 
+{* NOTE: To enable embedding UI in vtiger6 till its complete *}
+{if $smarty.cookies.vtigerui neq 6}
+
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 	<tr>
 		<td valign=top align=left><img src="test/logo/{$LOGO}" alt="{$LOGO}" title="{$LOGO}" border=0 style="width: 15em;height: 4.2em;"></td>
@@ -111,6 +125,7 @@
 				</table>
 			</div>
 		</td>
+		<td valign=center><a href="vtiger6/index.php" id="switchLook" style="background:#B22222;color:white;padding:5px;border-radius:5px;font-size:14px;">Switch to new look</td>
 		<td class=small nowrap align="right" style="padding-right:10px;">
 			<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
@@ -278,7 +293,7 @@
 				{/foreach}
 				{foreach key=maintabs item=detail from=$MENUSTRUCTURE}
 					{if $maintabs eq 'more' && $detail != null}
-						<td class="tabUnSelected"  align="center" onmouseout="fnHide_Event('allMenu');" onmouseover="fnvshobjMore(this,'allMenu','{$ANNOUNCEMENT}');"nowrap><a href="javascript:;" >{$APP.LBL_MORE}<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border=0 style="padding-left:5px" /></a></td>
+						<td class="tabUnSelected"  align="center" onmouseout="fnHide_Event('allMenu');" onmouseover="fnvshobjMore(this,'allMenu','{if $ANNOUNCEMENT}true{else}false{/if}');" nowrap><a href="javascript:;" >{$APP.LBL_MORE}<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border=0 style="padding-left:5px" /></a></td>
 						<td class="tabSeperator"><img src="{'spacer.gif'|@vtiger_imageurl:$THEME}"></td>
 					{/if}
 				{/foreach}
@@ -307,6 +322,7 @@
 	</tr>
 	</TABLE>
 
+{/if} {* END check for vtigerui neq 6 *}
 
 <div id="calculator_cont" style="position:absolute; z-index:10000" ></div>
 	{include file="Clock.tpl"}
@@ -662,16 +678,14 @@ function openwin()
 <div class="drop_mnu_user" id="ondemand_sub" onmouseout="fnHideDrop('ondemand_sub')" onmouseover="fnShowDrop('ondemand_sub')" >
 	<table border="0" cellpadding="0" cellspacing="0" border="0" cellpadding="0" cellspacing="0">
 		<tr><td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap> <a id="_my_preferences_" href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview" class="drop_down_usersettings" >{$APP.LBL_MY_PREFERENCES}</a></td></tr>
-		<tr><td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap> <a href="index.php?module=Users&action=Logout" class="drop_down_usersettings" >{$APP.LBL_LOGOUT}</a> </td></tr>
+		<tr><td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap><a class="drop_down_usersettings" href="index.php?module=Ondemand&amp;action=index&amp;mode=Profile">Profile</a></td></tr>
+        <tr><td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap> <a href="index.php?module=Users&action=Logout" class="drop_down_usersettings" >{$APP.LBL_LOGOUT}</a> </td></tr>
 	</table>
 </div>
 <div  id="usersettings" class="drop_mnu_user" onmouseout="fnHideDrop('usersettings');" onmouseover="fnvshNrm('usersettings');"  style="width:110px;left:1226px;">
 	<table border=0 width="100%" border="0" cellpadding="0" cellspacing="0" >
         <tr >
-			<td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap> <a href="http://wiki.vtiger.com/index.php/Main_Page" target="_blank" class="drop_down_usersettings">{$APP.LNK_HELP}</a> </td>
-        </tr>
-        <tr>
-			<td style="padding-left:0px;padding-right:10px font-weight:bold" nowrap> <a href="javascript:void(0);" onclick="vtiger_feedback();" class="drop_down_usersettings">{$APP.LBL_FEEDBACK}</a></td>
+			<td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap> <a href="http://www.vtiger.com/resources/help/" target="_blank" class="drop_down_usersettings">{$APP.LNK_HELP}</a> </td>
         </tr>
 	</table>
 </div>
@@ -702,7 +716,7 @@ function openwin()
 <script type="text/javascript">
 {literal}
 function vtiger_feedback() {
-	window.open("http://vtiger.com/products/crm/feedback.php?uid={/literal}{php}global $application_unique_key; echo $application_unique_key;{/php}&version={php}global $vtiger_current_version; echo $vtiger_current_version;{/php}&email={$CURRENT_USER_MAIL}{literal}","feedbackwin","height=300,width=515,top=200,left=300")
+	window.open("http://vtiger.com/products/crm/od-feedback.php?uid={/literal}{php}global $application_unique_key; echo $application_unique_key;{/php}&version={php}global $vtiger_current_version; echo $vtiger_current_version;{/php}&email={$CURRENT_USER_MAIL}{literal}","feedbackwin","height=300,width=515,top=200,left=300")
 }
 {/literal}
 </script>
@@ -755,3 +769,46 @@ function vtiger_news(obj) {
 	</table>
 </div>
 <!-- divs for asterisk integration :: end-->
+<script type="text/javascript">
+{literal}
+	jQuery(document).ready(function(){
+		jQuery('#switchLook').click(function(e){
+			var currentHref = window.location.href;
+			var splittedArr = currentHref.split('/');
+			var length = splittedArr.length;
+			var afterSlice = splittedArr.slice(0,length-1);
+            var switchLocation = currentHref.split('?');
+            var newUrl = switchLocation[1].split('&');
+            for(var i=0; i<newUrl.length; i++){
+                var value = newUrl[i].split('=');
+                if(value[0] == 'module'){
+                    var module = value[1];
+                    if(module == 'Settings' || module == 'Rss' || module == 'Integration' 
+						|| module == 'Portal' || module == 'PBXManager' || module == 'Dashboard')
+                        module = 'Home';
+                }else if(value[0] == 'action'){
+                    var action = value[1];
+                    if(action == 'DetailView' || action == 'SaveAndRun'){
+                        action = 'Detail';
+                    }else if(action == 'index' || action == 'ListView'){
+                        action = 'List';
+                    }else if(action == 'EditView'){
+                        action = 'Edit';
+                    }
+                }else if(value[0] == 'record' && value[1] != ''){
+                    var record = value[1];
+                }
+            }
+            if(module == 'Home')
+                action = 'DashBoard';
+			afterSlice.push('vtiger6');
+            if(record != undefined)
+                afterSlice.push('index.php?module='+module+'&view='+action+'&record='+record);
+            else
+                afterSlice.push('index.php?module='+module+'&view='+action);
+			window.location.href = afterSlice.join('/');
+			e.preventDefault();
+		});
+	});
+{/literal}
+</script>

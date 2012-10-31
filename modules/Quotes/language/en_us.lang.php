@@ -186,6 +186,18 @@ $mod_strings = Array(
 'SINGLE_Quotes'=>'Quote',
 'Add Service Contract'=>'Add Service Contract',
 'Quotes ID'=>'Quotes ID',
+'LBL_CPY_CONTACT_ADDRESS'=>'Copy Contact Address',
+'LBL_CPY_ORGANIZATION_ADDRESS'=>'Copy Organization Address',
+
+'Item Name'=>'Item Name',
+'Quantity'=>'Quantity',
+'Item Price'=>'Item Price',
+'Tax1'=>'Tax1',
+'Tax2'=>'Tax2',
+'Tax3'=>'Tax3',
+'Item Comment'=>'Item Comment',
+'Item Discount Amount'=>'Item Discount Amount',
+'Item Discount Percent'=>'Item Discount Percent',
 );
 
 ?>

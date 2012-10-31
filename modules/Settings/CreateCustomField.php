@@ -40,7 +40,8 @@ else
 $readonly = '';
 $smarty = new vtigerCRM_Smarty;
 $cfimagecombo = Array($image_path."text.gif",
-                        $image_path."number.gif",
+                        $image_path."number.png",
+						$image_path."integer.png",
                         $image_path."percent.gif",
                         $image_path."cfcurrency.gif",
                         $image_path."date.gif",
@@ -55,7 +56,8 @@ $cfimagecombo = Array($image_path."text.gif",
 						$image_path."time.PNG");
 
 $cftextcombo = Array($mod_strings['Text'],
-                        $mod_strings['Number'],
+                        $mod_strings['Decimal'],
+						$mod_strings['Integer'],
                         $mod_strings['Percent'],
                         $mod_strings['Currency'],
                         $mod_strings['Date'],
@@ -72,18 +74,19 @@ $cftextcombo = Array($mod_strings['Text'],
 				
 $typeVal = Array(
 	'0'=>'Text',
-	'1'=>'Number',
-	'2'=>'Percent',
-	'3'=>'Currency',
-	'4'=>'Date',
-	'5'=>'Email',
-	'6'=>'Phone',
-	'7'=>'Picklist',
-	'8'=>'URL',
-	'9'=>'Checkbox',
-	'11'=>'MultiSelectCombo',
-	'12'=>'Skype',
-	'13'=>'Time');
+	'1'=>'Decimal',
+	'2'=>'Integer',
+	'3'=>'Percent',
+	'4'=>'Currency',
+	'5'=>'Date',
+	'6'=>'Email',
+	'7'=>'Phone',
+	'8'=>'Picklist',
+	'9'=>'URL',
+	'11'=>'Checkbox',
+	'12'=>'MultiSelectCombo',
+	'13'=>'Skype',
+	'14'=>'Time');
 if(isset($fieldid) && $fieldid!='')
 {
 	$mode='edit';

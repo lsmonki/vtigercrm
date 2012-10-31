@@ -35,6 +35,7 @@
 		&nbsp;<button class="crmbutton small edit" onclick="MailManager.mail_forward({$MAIL->msgno()});">{'LBL_Forward'|@getTranslatedString}</button>
 		&nbsp;<button class="crmbutton small edit" onclick="MailManager.mail_mark_unread('{$FOLDER->name()}', {$MAIL->msgno()});">{'LBL_Mark_As_Unread'|@getTranslatedString}</button>
 		&nbsp;<button class="crmbutton small delete" id = 'mail_delete_dtlview' class="small" onclick="MailManager.maildelete('{$FOLDER->name()}',{$MAIL->msgno()},true);">{'LBL_Delete'|@getTranslatedString}</button>
+		&nbsp;<button class="crmbutton small edit" onclick="MailManager.mail_print();">{'LBL_Print'|@getTranslatedString}</button>
 	</td>
 	<td rowspan=3 align=right colspan=2>
 		<table cellpadding=0 cellspacing=0 border=0 width="100%">

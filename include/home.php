@@ -102,13 +102,6 @@ class Homestuff{
 			if(!$result){
 				return false;
 			}
-		}else if($this->stufftype == "ReportCharts"){
-			$querydb="insert into vtiger_homereportchart values(?,?,?)";
-			$params = array($stuffid,$this->selreport,$this->selreportcharttype);
-			$resultdb=$adb->pquery($querydb, $params);
-			if(!$resultdb){
-				return false;
-			}
 		}
 	 	return "loadAddedDiv($stuffid,'".$this->stufftype."')";
 	}
@@ -153,22 +146,6 @@ class Homestuff{
 					continue;
 				}
 			}
-            elseif($stufftype == 'ReportCharts'){
-				if(vtlib_isModuleActive('Reports') === false){
-					continue;
-				}else{
-					require_once('modules/Reports/CustomReportUtils.php');
-					$query = "SELECT * FROM vtiger_homereportchart WHERE stuffid=?";
-					$result= $adb->pquery($query,array($stuffid));
-					$reportId = $adb->query_result($result,0,'reportid');
-					$reportQuery = CustomReportUtils::getCustomReportsQuery($reportId);
-					$reportResult= $adb->query($reportQuery);
-					$num_rows = $adb->num_rows($reportResult);
-					if($num_rows <=0 ){
-						continue;
-					}
-				}
-            }
 
 			$nontrans_stufftitle = $adb->query_result($resultstuff,$i,'stufftitle');
 			$trans_stufftitle = getTranslatedString($nontrans_stufftitle);
@@ -178,8 +155,10 @@ class Homestuff{
 			}else{
 				$stuff_title = $stufftitle;
 			}
-
-			if($stufftype == 'Default' && $nontrans_stufftitle != 'Home Page Dashboard' && $nontrans_stufftitle != 'Tag Cloud'){
+            
+            if($stufftype == 'ReportCharts'){
+				continue;
+            }else if($stufftype == 'Default' && $nontrans_stufftitle != 'Home Page Dashboard' && $nontrans_stufftitle != 'Tag Cloud'){
 				if($modulename != 'NULL'){
 					if(isPermitted($modulename,'index') == "yes"){
 						$homeval[]=Array('Stuffid'=>$stuffid,'Stufftype'=>$stufftype,'Stufftitle'=>$stuff_title);
@@ -229,9 +208,6 @@ class Homestuff{
 			$details=$this->getDashDetails($sid);
 		}else if($stuffType=="Default"){
 			$details=$this->getDefaultDetails($sid,'');
-		}
-        else if($stuffType=="ReportCharts" && vtlib_isModuleActive("Reports")){
-        	$details = $this->getReportChartDetails($sid);
 		}
 		return $details;
 	}

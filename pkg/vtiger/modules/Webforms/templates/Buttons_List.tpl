@@ -28,7 +28,7 @@
 							<td>
 								<table border=0 cellspacing=0 cellpadding=5>
 								<tr>
-									<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module=Webforms&action=WebformsEditView&parenttab=Settings"><img id="createWebForm" src="{'btnL3Add.gif'|@vtiger_imageurl:$THEME}" border=0 title="Create Webform"></td>
+									<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module=Webforms&action=WebformsEditView&parenttab=Settings"><img id="createWebForm" src="{'btnL3Add.gif'|@vtiger_imageurl:$THEME}" border=0 title="{$APP.LBL_CREATE_WEBFORM_TITLE}"></td>
 								</tr>
 								</table>
 							</td>

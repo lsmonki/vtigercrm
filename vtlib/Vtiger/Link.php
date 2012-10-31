@@ -244,6 +244,21 @@ class Vtiger_Link {
 	}
 
 	/**
+	 * Extract the links of module for export.
+	 */
+	static function getAllForExport($tabid) {
+		global $adb;
+		$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=?', array($tabid));
+		$links  = array();
+		while($row = $adb->fetch_array($result)) {
+			$instance = new self();
+			$instance->initialize($row);
+			$links[] = $instance;
+		}
+		return $links;
+	}
+
+	/**
 	 * Helper function to log messages
 	 * @param String Message to log
 	 * @param Boolean true appends linebreak, false to avoid it

@@ -87,6 +87,7 @@ if($uitype == 15)
 {
 	$deltablequery = 'drop table vtiger_'.$adb->sql_escape_string($colName);
 	$adb->pquery($deltablequery, array());
+	$adb->pquery("delete from  vtiger_picklist_dependency where sourcefield=? or targetfield=?", array($colName,$colName));
 }
 
 header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module."&parenttab=Settings");

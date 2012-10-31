@@ -106,7 +106,7 @@ $mod_strings = Array(
 'LBL_TOOL_FORM_TITLE'=>'Email Tools',
 //Added for 4GA
 'Date & Time Sent'=>'Date & Time Sent',
-'Sales Enity Module'=>'Sales Enity Module',
+'Sales Enity Module'=>'Sales Entity Module',
 'Related To'=>'Related To',
 'Assigned To'=>'Assigned To',
 'Subject'=>'Subject',
@@ -178,6 +178,7 @@ or an update!',
 'LBL_NO_RECORDS' => 'No Records Found',
 'LBL_PRINT_EMAIL'=> 'Print',
 
+'Emails ID'=>'Email ID',
 );
 
 ?>

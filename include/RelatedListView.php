@@ -23,6 +23,12 @@ if(!function_exists('GetRelatedList')) {
 	}
 }
 
+if(!function_exists('GetHistory')) {
+	function GetHistory($parentmodule,$query,$id) {
+		return GetHistoryBase($parentmodule,$query,$id);
+	}
+}
+
 /** Function to get related list entries in detailed array format
   * @param $module -- modulename:: Type string
   * @param $relatedmodule -- relatedmodule:: Type string
@@ -159,8 +165,11 @@ function GetRelatedListBase($module,$relatedmodule,$focus,$query,$button,$return
 			//for calendar related list, count will increase when we have multiple contacts
 			//relationship for single activity
 			$count_query = mkCountQuery($query);
+            // There could be more than one contact for an activity.
+            if($module == 'Accounts' || $module == 'Contacts')
+                $count_query .= ' GROUP BY vtiger_activity.activityid';
 			$count_result = $adb->query($count_query);
-			$noofrows =$adb->query_result($count_result,0,"count");
+			$noofrows =$adb->num_rows($count_result);
 		} else {
 			$count_query = mkCountQuery($query);
 			$count_result = $adb->query($count_query);
@@ -417,10 +426,10 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
   *
   */
 
-function getHistory($parentmodule,$query,$id)
+function GetHistoryBase($parentmodule,$query,$id)
 {
 	global $log;
-	$log->debug("Entering getHistory(".$parentmodule.",".$query.",".$id.") method ...");
+	$log->debug("Entering getHistoryBase(".$parentmodule.",".$query.",".$id.") method ...");
 	$parentaction = vtlib_purify($_REQUEST['action']);
 	global $theme;
 	$theme_path="themes/".$theme."/";
@@ -534,7 +543,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $mod_strings;
 	global $current_language,$current_user;
 	$current_module_strings = return_module_language($current_language, 'PriceBook');
-
+    $no_of_decimal_places = getCurrencyDecimalPlaces();
 	global $list_max_entries_per_page;
 	global $urlPrefix;
 
@@ -614,7 +623,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
 		$action = "";
 		if(isPermitted("PriceBooks","EditView","") == 'yes' && isPermitted('Products', 'EditView', $entity_id) == 'yes') {
-			$action .= '<img style="cursor:pointer;" src="'. vtiger_imageurl('editfield.gif', $theme).'" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
+			$action .= '<img style="cursor:pointer;" src="'. vtiger_imageurl('editfield.gif', $theme).'" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.number_format($listprice, $no_of_decimal_places,'.','').'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
 		} else {
 			$action .= '<img src="'. vtiger_imageurl('blank.gif', $theme).'" border="0" />';
 		}
@@ -652,9 +661,16 @@ function CheckFieldPermission($fieldname,$module) {
 function CheckColumnPermission($tablename, $columnname, $module)
 {
 	global $adb;
+	
+	static $cache = array();
+	
+	$cachekey = $module . ":" . $tablename . ":" . $columnname;
+	if (!array_key_exists($cachekey, $cache)) {
+		$res = $adb->pquery("select fieldname from vtiger_field where tablename=? and columnname=? and vtiger_field.presence in (0,2)", array($tablename, $columnname));
+		$fieldname = $adb->query_result($res, 0, 'fieldname');
+		$cache[$cachekey] = CheckFieldPermission($fieldname, $module);
+	}
 
-	$res = $adb->pquery("select fieldname from vtiger_field where tablename=? and columnname=? and vtiger_field.presence in (0,2)", array($tablename, $columnname));
-	$fieldname = $adb->query_result($res, 0, 'fieldname');
-	return CheckFieldPermission($fieldname, $module);
+	return $cache[$cachekey];
 }
 ?>

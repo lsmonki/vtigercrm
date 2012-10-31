@@ -246,15 +246,6 @@ function getRequestData($return_id)
 	return $mail_data;
 }
 
-function getFieldRelatedInfo($tabId, $fieldName){
-	$fieldInfo = VTCacheUtils::lookupFieldInfo($tabId, $fieldName);
-	if($fieldInfo === false) {
-		getColumnFields(getTabModuleName($tabid));
-		$fieldInfo = VTCacheUtils::lookupFieldInfo($tabId, $fieldName);
-	}
-	return $fieldInfo;
-}
-
 if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 {
 	//split the string and store in an array

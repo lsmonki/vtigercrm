@@ -109,8 +109,8 @@ if(isset($query_string) && $query_string != ''){
 				}
 				
 				if(!(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')) {
-					$count_result = $adb->query($listquery);
-					$noofrows = $adb->num_rows($count_result);
+					$count_result = $adb->query( mkCountQuery($listquery));
+					$noofrows = $adb->query_result($count_result,0,"count");
 				} else {
 					$noofrows = vtlib_purify($_REQUEST['recordCount']);
 				}

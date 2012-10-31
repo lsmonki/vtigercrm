@@ -177,6 +177,7 @@ class VTJsonCondition {
 			case "contains":
 				return strpos($fieldValue, $value) !== FALSE;
 			case "does not contain":
+				if(empty($value)) unset($value);
 				return strpos($fieldValue, $value) === FALSE;
 			case "starts with":
 				return $this->startsWith($fieldValue, $value);
@@ -193,6 +194,16 @@ class VTJsonCondition {
 				} else {
 					return $hasChanged && $fieldValue == $value;
 				}
+			case "is empty":
+				if(empty($fieldValue)) {
+					return true;
+				}
+				return false;
+			case "is not empty":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				return true;
 			default:
 				//Unexpected condition
 				throw new Exception("Found an unexpected condition: " . $condition);

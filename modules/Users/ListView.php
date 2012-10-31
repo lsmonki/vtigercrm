@@ -58,6 +58,9 @@ if($norows  > 0){
 }
 $smarty->assign("USERNODELETE",$userid);
 
+// Forcefully disable edit of user (by id)
+$smarty->assign("USERNOEDIT",array());
+
 if(!$_SESSION['lvs'][$currentModule]) {
 	unset($_SESSION['lvs']);
 	$modObj = new ListViewSession();

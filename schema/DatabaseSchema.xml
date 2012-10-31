@@ -6856,6 +6856,29 @@
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
+
+	<table name="com_vtiger_workflow_tasktypes">
+		<field name="id" type="I" >
+			<key />
+			<autoincrement />
+		</field>
+		<field name="tasktypename" type="C" size="255" >
+		</field>
+		<field name="label" type="C" size="255" >
+		</field>
+		<field name="classname" type="C" size="255" >
+		</field>
+		<field name="classpath" type="C" size="255" >
+		</field>
+		<field name="templatepath" type="C" size="255" >
+		</field>
+		<field name="modules" type="C" size="500" >
+		</field>
+		<field name="sourcemodule" type="C" size="255" >
+		</field>
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+	
     <!-- com_vtiger_workflow ends-->
 
 	<!--  asterisk integration starts -->

@@ -13,160 +13,112 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
-<tbody><tr>
-        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
-        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
-<br>
-	<form action="index.php?module=Settings&action=add2db" method="post" name="index" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
- 	<input type="hidden" name="return_module" value="Settings">
- 	<input type="hidden" name="parenttab" value="Settings">
-    	<input type="hidden" name="return_action" value="OrganizationConfig">
-	<div align=center>
-			{include file="SetMenu.tpl"}	
-				<!-- DISPLAY -->
-				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{'company.gif'|@vtiger_imageurl:$THEME}" width="48" height="48" border=0 ></td>
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_EDIT} {$MOD.LBL_COMPANY_DETAILS} </b></td>
-				</tr>
-				<tr>
-					<td valign=top class="small">{$MOD.LBL_COMPANY_DESC}</td>
-				</tr>
-				</table>
-				
-				<br>
-				<table border=0 cellspacing=0 cellpadding=10 width=100% >
-				<tr>
-				<td>
-				
-					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
-					<tr>
-						<td class="big"><strong>{$MOD.LBL_COMPANY_DETAILS} </strong>
-						{$ERRORFLAG}<br>
-						</td>
-						<td class="small" align=right>
-							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="return verify_data(form,'{$MOD.LBL_ORGANIZATION_NAME}');" >
-							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
-						</td>
-					</tr>
-					</table>
-					
-					<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
-					<tr>
-						<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
-                          <tr>
-                            <td width="20%" class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_ORGANIZATION_NAME}</strong></td>
-                            <td width="80%" class="small cellText">
-				<input type="text" name="organization_name" class="detailedViewTextBox small" value="{$ORGANIZATIONNAME}">
-				<input type="hidden" name="org_name" value="{$ORGANIZATIONNAME}">
-			    </strong></td>
-                          </tr>
-                          <tr valign="top">
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_LOGO}</strong></td>
-			    {if $ORGANIZATIONLOGONAME neq ''}	
-                            <td class="small cellText" style="background-image: url(test/logo/{$ORGANIZATIONLOGONAME}); background-position: left; background-repeat: no-repeat;" width="48" height="48" border="0" >
-			    {else}
-                            <td class="small cellText" style="background-image: url(include/images/noimage.gif); background-position: left; background-repeat: no-repeat;" width="48" height="48" border="0" >
-			     {/if}	
-				<br><br><br><br>
-                             {$MOD.LBL_SELECT_LOGO} 
-				<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
-		                <INPUT TYPE="HIDDEN" NAME="PREV_FILE" VALUE="{$ORGANIZATIONLOGONAME}">	 
-                                <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}" onchange="validateFilename(this);">[{$ORGANIZATIONLOGONAME}]
-                                <input type="hidden" name="binFile_hidden" value="{$ORGANIZATIONLOGONAME}" />
-			      </td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_ADDRESS}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_address" class="detailedViewTextBox small" value="{$ORGANIZATIONADDRESS}"></td>
-                          </tr>
-                          <tr> 
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_CITY}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_city" class="detailedViewTextBox small" value="{$ORGANIZATIONCITY}"></td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_STATE}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_state" class="detailedViewTextBox small" value="{$ORGANIZATIONSTATE}"></td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_CODE}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_code" class="detailedViewTextBox small" value="{$ORGANIZATIONCODE}"></td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_COUNTRY}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_country" class="detailedViewTextBox small" value="{$ORGANIZATIONCOUNTRY}"></td>
-
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_PHONE}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_phone" class="detailedViewTextBox small" value="{$ORGANIZATIONPHONE}"></td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_FAX}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_fax" class="detailedViewTextBox small" value="{$ORGANIZATIONFAX}"></td>
-                          </tr>
-                          <tr>
-                            <td class="small cellLabel"><strong>{$MOD.LBL_ORGANIZATION_WEBSITE}</strong></td>
-                            <td class="small cellText"><input type="text" name="organization_website" class="detailedViewTextBox small" value="{$ORGANIZATIONWEBSITE}"></td>
-                          </tr>
+    <tbody>
+        <tr>
+            <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
+            <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+                <br>
+                <form action="index.php" method="post" name="index" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
+                    <input type="hidden" name="module" value="Settings">
+                    <input type="hidden" name="action" value="add2db">
+                    <input type="hidden" name="return_module" value="Settings">
+                    <input type="hidden" name="parenttab" value="Settings">
+                    <input type="hidden" name="return_action" value="OrganizationConfig">
+                    <input type="hidden" name="return_action2" value="EditCompanyDetails">
+                    <input type="hidden" name="org_name" value="{$ORGANIZATIONNAME}">
+                    <div align=center>
+                        {include file="SetMenu.tpl"}
+                        <!-- DISPLAY -->
+                        <table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+                            <tr>
+                                <td width=50 rowspan=2 valign=top><img src="{'company.gif'|@vtiger_imageurl:$THEME}" width="48" height="48" border=0 ></td>
+                                <td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_EDIT} {$MOD.LBL_COMPANY_DETAILS} </b></td>
+                            </tr>
+                            <tr>
+                                <td valign=top class="small">{$MOD.LBL_COMPANY_DESC}</td>
+                            </tr>
                         </table>
-						
-						</td>
-					  </tr>
-					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
-					<tr>
-					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
-					</tr>
-					</table>
-				</td>
-				</tr>
-				</table>
-			
-			
-			
-			</td>
-			</tr>
-			</table>
-		</td>
-	</tr>
-	</table>
-	</div>
-	</form>		
-</td>
-        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
-   </tr>
-</tbody>
+
+                        <br>
+                        <table border=0 cellspacing=0 cellpadding=10 width=100% >
+                            <tr>
+                                <td>
+                                    <table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+                                        <tr>
+                                            <td class="big"><strong>{$MOD.LBL_ORGANIZATION_LOGO}</strong>
+													{$ERRORFLAG}<br>
+                                            </td>
+                                            <td class="small" align=right>
+                                                <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+                                        <tr>
+                                            <td class="small" valign=top >
+                                                <table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                                                    <tr valign="top">
+                                                        <td class="small cellLabel" width="20%"><strong>{'LBL_CURRENT_LOGO'|@getTranslatedString:'Settings'}</strong></td>
+                                                        <td	class="small cellText">
+															{if $ORGANIZATIONLOGONAME neq ''}
+                                                            <img src="test/logo/{$ORGANIZATIONLOGONAME}" style="width: 15em;height: 4.2em;"/>
+															{else}
+                                                            <img src="include/images/noimage.gif" style="width: 15em;height: 4.2em;"/>
+															{/if}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="small cellLabel"><strong>{$MOD.LBL_SELECT_LOGO}</strong></td>
+                                                        <td class="small cellText">
+                                                            <INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
+                                                            <INPUT TYPE="HIDDEN" NAME="PREV_FILE" VALUE="{$ORGANIZATIONLOGONAME}">
+                                                            <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}" onchange="validateFilename(this);">
+                                                            <input title="{$APP.LBL_UPLOAD_BUTTON_LABEL}" accessKey="{$APP.LBL_UPLOAD_BUTTON_LABEL}" class="crmButton small save" type="submit" name="button" value="{'LBL_UPLOAD_BUTTON_LABEL'|@getTranslatedString:'Settings'}" onclick="return verify_data(form,'{$MOD.LBL_ORGANIZATION_NAME}');" >
+                                                            <input type="hidden" name="binFile_hidden" value="{$ORGANIZATIONLOGONAME}" />
+															<br><br>{'LBL_LOGO_RECOMMENDED_SIZE'|@getTranslatedString:'Settings'}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        </td>
+                        </tr>
+                        </table>
+                        </td>
+                        </tr>
+                        </table>
+                    </div>
+                </form>
+            </td>
+            <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
+        </tr>
+    </tbody>
 </table>
 {literal}
 <script>
-function verify_data(form,company_name)
-{
-	if (form.organization_name.value == "" )
-	{
-		{/literal}
-                alert(company_name +"{$APP.CANNOT_BE_NONE}");
-                form.organization_name.focus();
-                return false;
-                {literal}
-	}
-	else if (form.organization_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
-	{
-	{/literal}
-                alert(company_name +"{$APP.CANNOT_BE_EMPTY}");
-                form.organization_name.focus();
-                return false;
-                {literal}
-	}
-	else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG"))
-        {
-                form.binFile.focus();
-                return false;
+    function verify_data(form,company_name) {
+        if (form.organization_name.value == "" ) {
+            {/literal}
+            alert(company_name +"{$APP.CANNOT_BE_NONE}");
+            form.organization_name.focus();
+            return false;
+            {literal}
+        } else if (form.organization_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
+            {/literal}
+            alert(company_name +"{$APP.CANNOT_BE_EMPTY}");
+            form.organization_name.focus();
+            return false;
+            {literal}
+        } else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG")) {
+            form.binFile.focus();
+            return false;
+        } else {
+            return true;
         }
-	else
-	{
-		return true;
-	}
-}
+    }
 </script>
 {/literal}

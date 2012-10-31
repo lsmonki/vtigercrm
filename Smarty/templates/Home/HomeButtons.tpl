@@ -95,13 +95,6 @@
 			</a>
                </li>
 
-{if $ALLOW_REPORT eq "yes"}
-		<li>
-			<a href='javascript:;' class='drop_down' id="addReportCharts">
-				{'LBL_REPORTCHARTS'|@getTranslatedString:$MODULE}
-			</a>
-		</li>
-{/if}
         <li>
 			<a href='javascript:;' class='drop_down' id="defaultwidget">
 				{'LBL_DEFAULT_WIDGET'|@getTranslatedString:$MODULE}

@@ -59,12 +59,12 @@ function getPermittedFieldsQuery($module, $disp_view)
         $tabid = getTabid($module);
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users")
 	{
- 		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN $blockid_list AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
+ 		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN $blockid_list AND vtiger_field.displaytype IN (1,2,4,5) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
   	}
   	else
   	{
 		$profileList = getCurrentUserProfileList();
-		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". implode(",", $profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND vtiger_field.displaytype IN (1,2,4,5) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". implode(",", $profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
 	}
 
 	$log->debug("Exit from the function getPermittedFieldsQuery($module, $disp_view). Return value = $sql");
@@ -152,6 +152,28 @@ function getFieldsListFromQuery($query)
         }
 		elseif($tablename == 'vtiger_notes' && ($columnName == 'filename' || $columnName == 'filetype' || $columnName == 'filesize' || $columnName == 'filelocationtype' || $columnName == 'filestatus' || $columnName == 'filedownloadcount' ||$columnName == 'folderid')){
 			continue;
+		}
+		elseif(($tablename == 'vtiger_invoice' || $tablename == 'vtiger_quotes' || $tablename == 'vtiger_salesorder')&& $columnName == 'accountid') {
+			$fields .= 'concat("Accounts::::",vtiger_account.accountname) as "'.$fieldlabel.'",';
+		}
+		elseif(($tablename == 'vtiger_invoice' || $tablename == 'vtiger_quotes' || $tablename == 'vtiger_salesorder' || $tablename == 'vtiger_purchaseorder') && $columnName == 'contactid') {
+			$fields .= 'concat("Contacts::::",vtiger_contactdetails.lastname," ",vtiger_contactdetails.firstname) as "'.$fieldlabel.'",';
+		}
+		elseif($tablename == 'vtiger_invoice' && $columnName == 'salesorderid') {
+			$fields .= 'concat("SalesOrder::::",vtiger_salesorder.subject) as "'.$fieldlabel.'",';
+		}
+		elseif(($tablename == 'vtiger_quotes' || $tablename == 'vtiger_salesorder') && $columnName == 'potentialid') {
+			$fields .= 'concat("Potentials::::",vtiger_potential.potentialname) as "'.$fieldlabel.'",';
+		}
+		elseif($tablename == 'vtiger_quotes' && $columnName == 'inventorymanager') {
+			$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_inventoryManager.first_name', 'last_name' => 'vtiger_inventoryManager.last_name'), 'Users');
+			$fields .= $userNameSql. ' as "'.$fieldlabel.'",';
+		}
+		elseif($tablename == 'vtiger_salesorder' && $columnName == 'quoteid') {
+			$fields .= 'concat("Quotes::::",vtiger_quotes.subject) as "'.$fieldlabel.'",';
+		}
+		elseif($tablename == 'vtiger_purchaseorder' && $columnName == 'vendorid') {
+			$fields .= 'concat("Vendors::::",vtiger_vendor.vendorname) as "'.$fieldlabel.'",';
 		}
 		else
 		{

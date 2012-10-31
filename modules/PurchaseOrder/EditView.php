@@ -27,12 +27,18 @@ require_once('include/utils/utils.php');
 
 global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
+$no_of_decimal_places = getCurrencyDecimalPlaces();
 $focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
+
+$smarty->assign("DECIMALPLACES", $no_of_decimal_places);
+$defaultcurrencydecimals = 0.00;
+$defaultcurrencydecimals = number_format($defaultcurrencydecimals, $no_of_decimal_places,'.','');
+$smarty->assign("DEFAULTDECIMALS", $defaultcurrencydecimals);
 
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
@@ -64,7 +70,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 	for ($i=1; $i<=count($associated_prod);$i++) {
 		$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 		$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Products');
-		$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+		$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 	}
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -78,7 +84,7 @@ if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module']))
 		for ($i=1; $i<=count($associated_prod);$i++) {
 			$associated_prod_id = $associated_prod[$i]['hdnProductId'.$i];
 			$associated_prod_prices = getPricesForProducts($currencyid,array($associated_prod_id),'Services');
-			$associated_prod[$i]['listPrice'.$i] = $associated_prod_prices[$associated_prod_id];
+			$associated_prod[$i]['listPrice'.$i] = number_format($associated_prod_prices[$associated_prod_id], $no_of_decimal_places,'.','');
 		}
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -91,6 +97,7 @@ if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['rec
 	$vend_focus = new Vendors();
 
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
+	$vend_focus->apply_field_security("Vendors"); //Fields Visibility Checking
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
 	$focus->column_fields['ship_city']=$vend_focus->column_fields['city'];
 	$focus->column_fields['bill_street']=$vend_focus->column_fields['street'];
@@ -244,6 +251,12 @@ $smarty->assign("PICKIST_DEPENDENCY_DATASOURCE", Zend_Json::encode($picklistDepe
 // Gather the help information associated with fields
 $smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
+
+//check if the products module is active or not
+$smarty->assign('PRODUCTMODULEACTIVE', vtlib_isModuleActive('Products') && ((isPermitted('Products', 'EditView') == 'yes')));
+
+//check if the services module is active or not
+$smarty->assign('SERVICESMODULEACTIVE',vtlib_isModuleActive('Services') && ((isPermitted('Services', 'EditView') == 'yes')));
 
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');

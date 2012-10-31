@@ -25,7 +25,8 @@ function isRelatedListBlockLoaded(id,urldata){
 function loadRelatedListBlock(urldata,target,imagesuffix) {
 	if( $('return_module').value == 'Campaigns'){
 		var selectallActivation = $(imagesuffix+'_selectallActivate').value;
-		var excludedRecords = $(imagesuffix+'_excludedRecords').value = $(imagesuffix+'_excludedRecords').value;
+		var excludedRecords = $(imagesuffix+'_excludedRecords').value;
+		var selectedRecords = $(imagesuffix+'_selectedRecords').value;
 		var numofRows = $(imagesuffix+'_numOfRows').value;
 	}
 	var showdata = 'show_'+imagesuffix;
@@ -63,7 +64,7 @@ function loadRelatedListBlock(urldata,target,imagesuffix) {
 						var obj = document.getElementsByName(imagesuffix+'_selected_id');
 						var relatedModule = imagesuffix.replace('Campaigns_',"");
 						$(relatedModule+'_count').innerHTML = numofRows;
-						if(selectallActivation == 'true'){
+						if(selectallActivation == 'true') {
 							$(imagesuffix+'_selectallActivate').value='true';
 							$(imagesuffix+'_linkForSelectAll').show();
 							$(imagesuffix+'_selectAllRec').style.display='none';
@@ -72,11 +73,19 @@ function loadRelatedListBlock(urldata,target,imagesuffix) {
 							if (obj) {
 								var viewForSelectLink = showSelectAllLink(obj,exculdedArray);
 								$(imagesuffix+'_selectCurrentPageRec').checked = viewForSelectLink;
-								$(imagesuffix+'_excludedRecords').value = $(imagesuffix+'_excludedRecords').value+excludedRecords;
 							}
-						}else{
+						} else {
 							$(imagesuffix+'_linkForSelectAll').hide();
 							rel_toggleSelect(false,imagesuffix+'_selected_id',relatedModule);
+							var selectedArray = selectedRecords.split(';').sort();
+							for (var i=0; i<obj.length; ++i) {
+								for(var j=0; j<selectedArray.length; ++j) {
+									if(selectedArray[j] == obj[i].value) {
+										obj[i].checked = true;
+										rel_check_object(obj[i],relatedModule);
+									}
+								}
+							}
 						}
 						updateParentCheckbox(obj,imagesuffix);
 					}
@@ -164,6 +173,7 @@ function disableRelatedListBlock(urldata,target,imagesuffix){
 				</div>
 				{if $MODULE eq 'Campaigns'}
 				<input id="{$MODULE}_{$header|replace:' ':''}_numOfRows" type="hidden" value="">
+				<input id="{$MODULE}_{$header|replace:' ':''}_selectedRecords" type="hidden" value="">
 				<input id="{$MODULE}_{$header|replace:' ':''}_excludedRecords" type="hidden" value="">
 				<input id="{$MODULE}_{$header|replace:' ':''}_selectallActivate" type="hidden" value="false">
 				{/if}

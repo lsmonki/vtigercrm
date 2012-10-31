@@ -328,4 +328,6 @@ var alert_arr = {
 	'LBL_EMAIL':'Email',
 	'MORE_THAN_500' : 'Vous avez sélectionné plus de 500 enregistrements. Cette opération peut prendre du temps. Etes vous sur de continuer?',
 	'LBL_MAPPEDALERT':'Le champ est déjà mappé',
+	//added for webforms module
+	'LBL_DELETE_MSG' : 'Etes-vous sûr de vouloir supprimer le webform?'
 };

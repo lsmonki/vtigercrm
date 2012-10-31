@@ -38,6 +38,9 @@ $mod_strings = Array (
 'LBL_SELECT_VALUE'=>'--Selecciona Valor--',
 'LBL_BASIC_INFORMATION'=>'Información Básica',
 'LBL_SELECT_USER'=>'Selecciona Usuario',
+'LBL_DUPLICATE_NAME' => 'Un formulario con ese nombre ya existe',
+'ERR_CREATE_WEBFORM' => 'No se ha podido crear el formulario',
+'LBL_CREATE_NEW_WEBFORM_NOW' => 'Usted puede crear un webform ahora. Haga clic en este enlace:'
 );
 
 ?>

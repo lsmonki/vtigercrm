@@ -19,7 +19,10 @@ class ModTracker {
     public static $UPDATED = '0';
     public static $DELETED = '1';
     public static $CREATED = '2';
-
+    public static $RESTORED = '3';
+    public static $LINK = '4';
+    public static $UNLINK = '5';
+    
 	/* Entry point will invoke this function no need to act on */
 	function track_view($user_id, $current_module,$id='') {}
 	
@@ -139,21 +142,24 @@ class ModTracker {
 	static function isTrackingEnabledForModule($modulename){
 		global $adb;
 		$tabid = getTabid($modulename);
-		if(!self::getVisibilityForModule($tabid)) {
+		if(!self::getVisibilityForModule($tabid) || self::getVisibilityForModule($tabid) !== 0) {
 			$query = $adb->pquery("SELECT * FROM vtiger_modtracker_tabs WHERE vtiger_modtracker_tabs.visible = 1
 								   AND vtiger_modtracker_tabs.tabid=?", array($tabid));
 			$rows = $adb->num_rows($query);
-			$tabid=$adb->query_result($query,0,'tabid');
+			
 			$visible=$adb->query_result($query,0,'visible');
 			if($rows<1){
-				self::updateCache($tabid,$visible);
+				self::updateCache($tabid,0);
 				return false;
 			} else{
-				self::updateCache($tabid,$visible);
+				self::updateCache($tabid,1);
 				return true;
 			}
-		} else
+		} else if(self::getVisibilityForModule($tabid) === 0){
+			return false;
+		} else {
 			return true;
+		}
 	}
 
 	/**
@@ -219,12 +225,10 @@ class ModTracker {
 	 * @param Integer $tabid
 	 */
 	static function getVisibilityForModule($tabid){
-		for($i=0;$i<count(self::$__cache_modtracker);$i++) {
-			if(isset(self::$__cache_modtracker[$tabid])) {
-				return $__cache_modtracker[$i]['visible'];
-			}
-            return false;
+		if (isset(self::$__cache_modtracker[$tabid])) {
+			return $__cache_modtracker[$tabid]['visible'];
 		}
+		return false;
 	}
 
 
@@ -361,5 +365,25 @@ class ModTracker {
 		}
 		return false;
 	}
+
+    static function trackRelation($sourceModule, $sourceId, $targetModule, $targetId, $type) {
+        global $adb, $current_user;
+        $currentTime = date('Y-m-d H:i:s');
+
+        $id = $adb->getUniqueId('vtiger_modtracker_basic');
+        $adb->pquery('INSERT INTO vtiger_modtracker_basic(id, crmid, module, whodid, changedon, status) VALUES(?,?,?,?,?,?)',
+                array($id , $sourceId, $sourceModule, $current_user->id, $currentTime, $type));
+
+        $adb->pquery('INSERT INTO vtiger_modtracker_relations(id, targetmodule, targetid, changedon)
+            VALUES(?,?,?,?)', array($id, $targetModule, $targetId, $currentTime));
+    }
+    
+    static function linkRelation($sourceModule, $sourceId, $targetModule, $targetId) {
+        self::trackRelation($sourceModule, $sourceId, $targetModule, $targetId, self::$LINK);
+    }
+
+     static function unLinkRelation($sourceModule, $sourceId, $targetModule, $targetId) {
+        self::trackRelation($sourceModule, $sourceId, $targetModule, $targetId, self::$UNLINK);
+    }
 }
 ?>

@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ******************************************************************************/
-
+require_once 'vtiger6/includes/runtime/Cache.php';
 class WebserviceField{
 	private $fieldId;
 	private $uitype;
@@ -332,6 +332,10 @@ class WebserviceField{
 	}
 	
 	function getPicklistDetails(){
+		$cache = Vtiger_Cache::getInstance();
+		if($cache->getPicklistDetails($this->getTabId(),$this->getFieldName())){
+			return $cache->getPicklistDetails($this->getTabId(),$this->getFieldName());
+		} else {
 		$hardCodedPickListNames = array("hdntaxtype","email_flag");
 		$hardCodedPickListValues = array(
 				"hdntaxtype"=>array(
@@ -347,7 +351,10 @@ class WebserviceField{
 		if(in_array(strtolower($this->getFieldName()),$hardCodedPickListNames)){
 			return $hardCodedPickListValues[strtolower($this->getFieldName())];
 		}
-		return $this->getPickListOptions($this->getFieldName());
+			$picklistDetails = $this->getPickListOptions($this->getFieldName());
+			$cache->setPicklistDetails($this->getTabId(),$this->getFieldName(),$picklistDetails);
+			return $picklistDetails;
+		}
 	}
 
 	function getPickListOptions(){

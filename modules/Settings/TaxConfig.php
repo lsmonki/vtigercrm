@@ -217,6 +217,25 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 	}
 	$res = $adb->pquery($query, array());
 
+	$inventoryModules = getInventoryModules();
+	foreach ($inventoryModules as $moduleName) {
+		$moduleInstance = Vtiger_Module::getInstance($moduleName);
+		$blockInstance = Vtiger_Block::getInstance('LBL_ITEM_DETAILS',$moduleInstance);
+		$field = new Vtiger_Field();
+
+		$field->name = $taxname;
+		$field->label = $taxlabel;
+		$field->column = $taxname;
+		$field->table = 'vtiger_inventoryproductrel';
+		$field->uitype = '83';
+		$field->typeofdata = 'V~O';
+		$field->readonly = '0';
+		$field->displaytype = '5';
+		$field->masseditable = '0';
+
+		$blockInstance->addField($field);
+	}
+
 	//if the tax is added as a column then we should add this tax in the list of taxes
 	if($res)
 	{

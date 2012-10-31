@@ -81,7 +81,7 @@ class MailManager_Connector {
 		$boxUrl = $this->convertCharacterEncoding(html_entity_decode($url),'UTF7-IMAP','UTF-8'); //handle both utf8 characters and html entities
 		$this->mBoxUrl = $boxUrl;
 		$this->mBoxBaseUrl = $baseUrl; // Used for folder List
-		$this->mBox = @imap_open($url, $username, $password);
+		$this->mBox = @imap_open($boxUrl, $username, $password);
 		$this->isError();
 	}
 
@@ -154,7 +154,7 @@ class MailManager_Connector {
 		$folders = array();
 		foreach($result as $row) {
 			$folderName = str_replace($ref, "", $row->name);
-			$folder = $this->convertCharacterEncoding( $folderName, "ISO_8859-1", "UTF7-IMAP" ); //Decode folder name
+			$folder = $this->convertCharacterEncoding( $folderName, "UTF-8", "UTF7-IMAP"  ); //Decode folder name
 			$folders[] = $this->folderInstance($folder);
 		}
 		$this->mFolders = $folders;
@@ -368,7 +368,7 @@ class MailManager_Connector {
 			$list = @imap_list($this->mBox, $this->mBoxBaseUrl, '*');
 			if (is_array($list)) {
 				foreach ($list as $val) {
-					$folder = $this->convertCharacterEncoding( $val, 'ISO_8859-1', 'UTF7-IMAP' ); //Decode folder name
+					$folder = $this->convertCharacterEncoding( $val, 'UTF-8', 'UTF7-IMAP' ); //Decode folder name
 					$folderList[] =  preg_replace("/{(.*?)}/", "", $folder);
 				}
 			}

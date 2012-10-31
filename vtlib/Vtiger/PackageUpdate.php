@@ -227,7 +227,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
         if(empty($modulenode->blocks) || empty($modulenode->blocks->block)) return;
 
         foreach($modulenode->blocks->block as $blocknode) {
-            $blockInstance = Vtiger_Block::getInstance($blocknode->label, $moduleInstance);
+            $blockInstance = Vtiger_Block::getInstance((string)$blocknode->label, $moduleInstance);
             if(!$blockInstance) {
                 $blockInstance = $this->import_Block($modulenode, $moduleInstance, $blocknode);
             } else {
@@ -368,7 +368,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
      * @access private
      */
     function update_Relatedlist($modulenode, $moduleInstance, $relatedlistnode) {
-        $relModuleInstance = Vtiger_Module::getInstance($relatedlistnode->relatedmodule);
+        $relModuleInstance = Vtiger_Module::getInstance((string)$relatedlistnode->relatedmodule);
         $label = $relatedlistnode->label;
         $actions = false;
         if(!empty($relatedlistnode->actions) && !empty($relatedlistnode->actions->action)) {
@@ -405,7 +405,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 			if((empty($importCronTask->sequence))){
 				$importCronTask->sequence=Vtiger_Cron::nextSequence();
 			}
-			Vtiger_Cron::register("$importCronTask->name","$importCronTask->handler", "$importCronTask->frequency", "$modulenode->name","$importCronTask->status","$importCronTask->sequence","$cronTask->description");
+			Vtiger_Cron::register("$importCronTask->name","$importCronTask->handler", "$importCronTask->frequency", "$modulenode->name","$importCronTask->status","$importCronTask->sequence","$importCronTask->description");
 		}
 	}
 }

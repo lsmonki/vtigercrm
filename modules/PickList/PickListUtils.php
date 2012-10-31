@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-
+require_once 'vtiger6/includes/runtime/Cache.php';
 /**
  * this file will be used to store the functions to be used in the picklist module
  */
@@ -181,6 +181,10 @@ function getNonEditablePicklistValues($fieldName, $lang=array(), $adb){
  * @return array $val - the assigned picklist values in array format
  */
 function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
+	$cache = Vtiger_Cache::getInstance();
+	if($cache->getAssignedPicklistValues($tableName,$roleid)){
+		return $cache->getAssignedPicklistValues($tableName,$roleid);
+	} else {
 	$arr = array();
 	
 	$sub = getSubordinateRoleAndUsers($roleid);
@@ -217,7 +221,8 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 		}
 	}
 	// END
-	
+		$cache->setAssignedPicklistValues($tableName,$roleid,$arr);
 	return $arr;
+	}
 }
 ?>

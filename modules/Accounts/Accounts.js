@@ -109,6 +109,10 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
                 if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
                         window.opener.document.EditView.ship_pobox.value = ship_pobox;
 		}
+
+		//Check the radio button-Copy Organization Address
+		window.opener.document.EditView.cpy_address[1].checked=true;
+		window.opener.document.EditView.checking[1].checked=true;
 		//end
 	}
 }
@@ -116,39 +120,44 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
 function set_return_contact_address(account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox ) {
 	if(document.getElementById('from_link').value != '') {
 		if(typeof(window.opener.document.QcEditView.account_name) != 'undefined')
-                window.opener.document.QcEditView.account_name.value = account_name;
-        if(typeof(window.opener.document.QcEditView.account_id) != 'undefined')
-                window.opener.document.QcEditView.account_id.value = account_id;		
+			window.opener.document.QcEditView.account_name.value = account_name;
+		if(typeof(window.opener.document.QcEditView.account_id) != 'undefined')
+			window.opener.document.QcEditView.account_id.value = account_id;
 	} else {
-	if(typeof(window.opener.document.EditView.account_name) != 'undefined')
-                window.opener.document.EditView.account_name.value = account_name;
-        if(typeof(window.opener.document.EditView.account_id) != 'undefined')
-                window.opener.document.EditView.account_id.value = account_id;
-        if(typeof(window.opener.document.EditView.mailingstreet) != 'undefined')
-                window.opener.document.EditView.mailingstreet.value = bill_street;
-        if(typeof(window.opener.document.EditView.otherstreet) != 'undefined')
-                window.opener.document.EditView.otherstreet.value = ship_street;
-        if(typeof(window.opener.document.EditView.mailingcity) != 'undefined')
-                window.opener.document.EditView.mailingcity.value = bill_city;
-        if(typeof(window.opener.document.EditView.othercity) != 'undefined')
-                window.opener.document.EditView.othercity.value = ship_city;
-        if(typeof(window.opener.document.EditView.mailingstate) != 'undefined')
-                window.opener.document.EditView.mailingstate.value = bill_state;
-        if(typeof(window.opener.document.EditView.otherstate) != 'undefined')
-                window.opener.document.EditView.otherstate.value = ship_state;
-        if(typeof(window.opener.document.EditView.mailingzip) != 'undefined')
-                window.opener.document.EditView.mailingzip.value = bill_code;
-        if(typeof(window.opener.document.EditView.otherzip) != 'undefined')
-                window.opener.document.EditView.otherzip.value = ship_code;
-        if(typeof(window.opener.document.EditView.mailingcountry) != 'undefined')
-                window.opener.document.EditView.mailingcountry.value = bill_country;
-        if(typeof(window.opener.document.EditView.othercountry) != 'undefined')
-                window.opener.document.EditView.othercountry.value = ship_country;
-        if(typeof(window.opener.document.EditView.mailingpobox) != 'undefined')
-                window.opener.document.EditView.mailingpobox.value = bill_pobox;
-        if(typeof(window.opener.document.EditView.otherpobox) != 'undefined')
-                window.opener.document.EditView.otherpobox.value = ship_pobox;
-}
+		if(typeof(window.opener.document.EditView.account_name) != 'undefined')
+			window.opener.document.EditView.account_name.value = account_name;
+		if(typeof(window.opener.document.EditView.account_id) != 'undefined')
+			window.opener.document.EditView.account_id.value = account_id;
+
+		//Ask the user to overwite the address or not
+		if(confirm(alert_arr.OVERWRITE_EXISTING_ACCOUNT1+account_name+alert_arr.OVERWRITE_EXISTING_ACCOUNT2))
+		{
+			if(typeof(window.opener.document.EditView.mailingstreet) != 'undefined')
+				window.opener.document.EditView.mailingstreet.value = bill_street;
+			if(typeof(window.opener.document.EditView.otherstreet) != 'undefined')
+				window.opener.document.EditView.otherstreet.value = ship_street;
+			if(typeof(window.opener.document.EditView.mailingcity) != 'undefined')
+				window.opener.document.EditView.mailingcity.value = bill_city;
+			if(typeof(window.opener.document.EditView.othercity) != 'undefined')
+				window.opener.document.EditView.othercity.value = ship_city;
+			if(typeof(window.opener.document.EditView.mailingstate) != 'undefined')
+				window.opener.document.EditView.mailingstate.value = bill_state;
+			if(typeof(window.opener.document.EditView.otherstate) != 'undefined')
+				window.opener.document.EditView.otherstate.value = ship_state;
+			if(typeof(window.opener.document.EditView.mailingzip) != 'undefined')
+				window.opener.document.EditView.mailingzip.value = bill_code;
+			if(typeof(window.opener.document.EditView.otherzip) != 'undefined')
+				window.opener.document.EditView.otherzip.value = ship_code;
+			if(typeof(window.opener.document.EditView.mailingcountry) != 'undefined')
+				window.opener.document.EditView.mailingcountry.value = bill_country;
+			if(typeof(window.opener.document.EditView.othercountry) != 'undefined')
+				window.opener.document.EditView.othercountry.value = ship_country;
+			if(typeof(window.opener.document.EditView.mailingpobox) != 'undefined')
+				window.opener.document.EditView.mailingpobox.value = bill_pobox;
+			if(typeof(window.opener.document.EditView.otherpobox) != 'undefined')
+				window.opener.document.EditView.otherpobox.value = ship_pobox;
+		}
+	}
 }
 
 //added by rdhital/Raju for emails

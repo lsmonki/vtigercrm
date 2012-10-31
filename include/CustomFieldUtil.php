@@ -37,7 +37,7 @@ function getCustomFieldTypeName($uitype)
 	}
 	elseif($uitype == 7)
 	{
-		$fldname = $mod_strings['Number'];
+		$fldname = $mod_strings['Decimal'];
 	}
 	elseif($uitype == 9)
 	{

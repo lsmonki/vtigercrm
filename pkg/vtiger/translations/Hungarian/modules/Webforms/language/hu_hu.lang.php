@@ -48,6 +48,7 @@ $mod_strings = array(
 	'LBL_BASIC_INFORMATION' => 'Alapadatok',
 	'LBL_SELECT_USER' => 'Válassz egy felhasználót',
 	'LBL_DUPLICATE_NAME' => 'Ilyen nevű űrlap már létezik',
-	'ERR_CREATE_WEBFORM' => 'Űrlap létrehozási hiba'
+	'ERR_CREATE_WEBFORM' => 'Űrlap létrehozási hiba',
+	'LBL_CREATE_NEW_WEBFORM_NOW' => 'Tudod létrehozása Webform most. Kattintson az alábbi linkre:'
 );
 ?>

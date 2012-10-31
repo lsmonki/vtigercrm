@@ -150,6 +150,8 @@ if (typeof(MailManager) == 'undefined') {
 
                     var folderName = jQuery('#mm_selected_folder').val();
                     MailManager.updateSelectedFolder(folderName);
+					
+					MailManager.triggerUI5Resize();
                 }
             });
         },
@@ -174,6 +176,8 @@ if (typeof(MailManager) == 'undefined') {
             if (!responseJSON['result']['mailbox']) {
                 MailManager.open_settings();
             }
+			
+			MailManager.triggerUI5Resize();
         },
 
 
@@ -264,6 +268,8 @@ if (typeof(MailManager) == 'undefined') {
                     // Update the seleted folders to highlight them.
                     MailManager.updateSelectedFolder('mm_settings');
                     jQuery('#mm_selected_folder').val('mm_settings');
+					
+					MailManager.triggerUI5Resize();
                 }
             });
         },
@@ -413,7 +419,7 @@ if (typeof(MailManager) == 'undefined') {
 
                     // Update the current selected folder, which will be used to highlight the selected folder
                     jQuery('#mm_selected_folder').val(name);
-                    
+					
                     MailManager.mail_close();
                     var response = MailManager.removeHidElement(transport.responseText);
                     jQuery('#_contentdiv_').html(response);
@@ -422,13 +428,30 @@ if (typeof(MailManager) == 'undefined') {
                     jQuery('#_contentdiv2_').html('');
 					
                     // Updates the drop down used for move emails
-                    MailManager.updateMoveFolderList();
+					MailManager.updateMoveFolderList();
 
-                    // Bind "Enter" key for search on the Search text box
-                    MailManager.bindEnterKeyForSearch();
-                }
-            });
-        },
+					// Bind "Enter" key for search on the Search text box
+					MailManager.bindEnterKeyForSearch();
+
+					var type = jQuery('#search_type').val();
+					var dateformat = jQuery('#jscal_dateformat').val();
+					if(type == 'ON') {
+						if(jQuery('#search_txt').length != 0) {
+							jQuery('#jscal_trigger_fval').show();
+							Calendar.setup ({
+								inputField : 'search_txt',
+								ifFormat : dateformat,
+								button : "jscal_trigger_fval",
+								singleClick : true,
+								step : 1
+							});
+						}
+					}
+					
+					MailManager.triggerUI5Resize();
+				}
+			});
+		},
 
         updateSelectedFolder : function(currentSelectedFolder) {
             var prevFolderName = jQuery('#mm_selected_folder').val();
@@ -493,6 +516,8 @@ if (typeof(MailManager) == 'undefined') {
                     MailManager.mail_close();
                     var response = MailManager.removeHidElement(transport.responseText);
                     jQuery('#_contentdiv_').html(response);
+					
+					MailManager.triggerUI5Resize();
                 }
             });
 			
@@ -572,7 +597,28 @@ if (typeof(MailManager) == 'undefined') {
                 }
             });
         },
-		
+
+		/*Print email */
+		mail_print: function(){
+
+			var subject = jQuery('#_mailopen_subject').html();
+			var from = jQuery('#_mailopen_from').html();
+            var to = jQuery('#_mailopen_to').html();
+			var cc = jQuery('#_mailopen_cc') ? jQuery('#_mailopen_cc').html() : '';
+            var date = jQuery('#_mailopen_date').html();
+            var body = jQuery('#_mailopen_body').html();
+
+			var content = window.open();
+			content.document.write("<b>"+subject+"</b><br>");
+			content.document.write("<br>From :" +from +"<br>");
+			content.document.write("To :" +to+"<br>");
+			cc == null ? '' : content.document.write("CC :" +cc+"<br>");
+			content.document.write("Date :" + date+"<br>");
+			content.document.write("<br>"+body +"<br>");
+
+			content.print();
+		},
+
         /* Lookup for mail relations in CRM */
         mail_find_relationship: function(){
             jQuery('#_mailrecord_findrel_btn_').html(MailManager.i18n('JSLBL_Finding_Relation') + '...');
@@ -600,6 +646,8 @@ if (typeof(MailManager) == 'undefined') {
                     var resultJSON = responseJSON['result'];
 					
                     jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
+					
+					MailManager.triggerUI5Resize();
                 }
             });
         },
@@ -624,6 +672,8 @@ if (typeof(MailManager) == 'undefined') {
                     if (resultJSON['ui']) {
                         jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
                     }
+					
+					MailManager.triggerUI5Resize();
                 }
             });
         },
@@ -717,6 +767,8 @@ if (typeof(MailManager) == 'undefined') {
                     if (resultJSON['ui']) {
                         MailManager.mail_associate_create_cancel();
                         jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
+						
+						MailManager.triggerUI5Resize();
                         return true;
                     }
                 }
@@ -739,6 +791,8 @@ if (typeof(MailManager) == 'undefined') {
                     MailManager.placeAtCenter(jQuery('#_relationpopupdiv_'));
                     // Make it draggable
                     jQuery('#_relationpopupdiv_').draggable().css('cursor','move');
+					
+					MailManager.triggerUI5Resize();
                 }
             });
         },
@@ -784,6 +838,8 @@ if (typeof(MailManager) == 'undefined') {
             // Update the seleted folders to highlight them.
             MailManager.updateSelectedFolder('mm_compose');
             jQuery('#mm_selected_folder').val('mm_compose');
+			
+			MailManager.triggerUI5Resize();
         },
 
         createUploader : function (){
@@ -929,6 +985,8 @@ if (typeof(MailManager) == 'undefined') {
             // Update the seleted folders to highlight them.
             MailManager.updateSelectedFolder('mm_compose');
             jQuery('#mm_selected_folder').val('mm_compose');
+			
+			MailManager.triggerUI5Resize();
         },
 		
         /* Track and Initialize RTE instance for reply */
@@ -969,6 +1027,8 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.updateSelectedFolder(currentSelectedFolder);
 				jQuery('#mm_selected_folder').val(currentSelectedFolder);
 			}
+			
+			MailManager.triggerUI5Resize();
         },
 		
         /* Forward email */
@@ -1052,14 +1112,13 @@ if (typeof(MailManager) == 'undefined') {
                 MailManager.show_error(MailManager.i18n('JSLBL_Recepient_Cannot_Be_Empty'));
                 return false;
             }
-            if (form.subject.value == '' && !confirm(MailManager.i18n('JSLBL_SendWith_EmptySubject'))) {
-                return false;
+            if (form.subject.value == '') {
+                MailManager.show_error(MailManager.i18n('JSLBL_Subject_Cannot_Be_Empty'));
+				return false;
             }
 			var bodyval = $('_mail_replyfrm_body_').value.trim();
-			if (bodyval == '<br />' && !confirm(MailManager.i18n('JSLBL_SendWith_EmptyText'))) {
-				return false;
-			}
-			if (bodyval == '' && !confirm(MailManager.i18n('JSLBL_SendWith_EmptyText'))) {
+			if (bodyval == '<br />' || bodyval == '') {
+				MailManager.show_error(MailManager.i18n('JSLBL_Body_Cannot_Be_Empty'));
 				return false;
 			}
             MailManager.progress_show(MailManager.i18n('JSLBL_Sending'), ' ...');
@@ -1158,6 +1217,8 @@ if (typeof(MailManager) == 'undefined') {
                 MailManager.updateSelectedFolder('mm_drafts');
                 jQuery('#mm_selected_folder').val('mm_drafts');
                 jQuery('#mailbox_folder').val('mm_drafts');
+				
+				MailManager.triggerUI5Resize();
             });
         },
 		
@@ -1176,6 +1237,8 @@ if (typeof(MailManager) == 'undefined') {
                 MailManager.placeAtCenter(jQuery('#_popupsearch_'));
                 jQuery('#_popupsearch_').show().draggable();
                 MailManager.search_popup_init(target);
+				
+				MailManager.triggerUI5Resize();
             });
         },
 		
@@ -1230,6 +1293,8 @@ if (typeof(MailManager) == 'undefined') {
         popup_close: function(){
             jQuery('#_popupsearch_').html('');
             jQuery('#_popupsearch_').hide();
+			
+			MailManager.triggerUI5Resize();
         },
 		
         clear_input: function(id){
@@ -1352,6 +1417,8 @@ if (typeof(MailManager) == 'undefined') {
                 MailManager.mail_close();
                 var responseText = MailManager.removeHidElement(response.responseText);
                 jQuery('#_contentdiv_').html(responseText);
+				
+				MailManager.triggerUI5Resize();
             });
             
             return false;
@@ -1364,6 +1431,7 @@ if (typeof(MailManager) == 'undefined') {
                 return false;
             }
             var type   = jQuery('#search_type').val();
+			var dateformat = jQuery('#jscal_dateformat').val();
             MailManager.progress_show(MailManager.i18n('JSLBL_Searching'), ' ...');
 
              var params = {
@@ -1374,18 +1442,33 @@ if (typeof(MailManager) == 'undefined') {
                 '_folder':encodeURIComponent(foldername)
             };
             var baseurl = MailManager._baseurl();
-            MailManager.Request('index.php?'+baseurl, params, function(response){
-                MailManager.progress_hide();
-                MailManager.mail_close();
-                var responseText = MailManager.removeHidElement(response.responseText);
-                jQuery('#_contentdiv_').html(responseText);
-                jQuery('#_mailfolder_' + foldername).addClass('mm_folder_selected');
+			MailManager.Request('index.php?'+baseurl, params, function(response){
+				MailManager.progress_hide();
+				MailManager.mail_close();
+				var responseText = MailManager.removeHidElement(response.responseText);
+				jQuery('#_contentdiv_').html(responseText);
+				jQuery('#_mailfolder_' + foldername).addClass('mm_folder_selected');
+				if(type == 'ON') {
+					if(jQuery('#search_txt').length != 0) {
+						jQuery('#jscal_trigger_fval').show();
+						Calendar.setup ({
+							inputField : 'search_txt',
+							ifFormat : dateformat,
+							button : "jscal_trigger_fval",
+							singleClick : true,
+							step : 1
+						});
+					}
+				}
 
-                MailManager.bindEnterKeyForSearch();
-            });
+				MailManager.triggerUI5Resize();
+
+				MailManager.bindEnterKeyForSearch();
+				
+			});
                     
-            return false;
-        },
+			return false;
+		},
 
         add_data_to_relatedlist: function(res){
             var fileSize, attachContent, element;
@@ -1460,7 +1543,7 @@ if (typeof(MailManager) == 'undefined') {
         },
 
         mail_validate : function(str) {
-            var email_regex = /^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/;
+            var email_regex = /^[_/a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
             arr = new Array();
             arr = str.split(",");
             var tmp;
@@ -1640,6 +1723,28 @@ if (typeof(MailManager) == 'undefined') {
             if(state){
                 jQuery(element).addClass('mm_lvtColDataHover');
             }
-        }
-    }
+        },
+
+		addRequiredElements : function() {
+			var option = jQuery('#search_type').val();
+			var dateformat = jQuery('#jscal_dateformat').val();
+			if(option == 'ON') {
+				jQuery('#jscal_trigger_fval').show();
+				Calendar.setup ({
+					inputField : 'search_txt',
+					ifFormat : dateformat,
+					button : "jscal_trigger_fval",
+					singleClick : true,
+					step : 1
+				});
+			} else {
+				jQuery('#jscal_trigger_fval').hide();
+			}
+
+		},
+		
+		triggerUI5Resize: function() {
+			if (parent.resizeUI5Iframe) parent.resizeUI5Iframe(self.document.body.scrollHeight);
+		}
+	}
 }

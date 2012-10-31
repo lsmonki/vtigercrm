@@ -7,9 +7,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 
- var mod_alert_arr = {
+ var webforms_alert_arr = {
 	'The' : 'vtiger CRM Open Source',
 	'LBL_MADATORY_FIELDS' : 'Kérjük, add meg a kötelező mezők tartalmát.',
-	'LBL_DELETE_MSG' : 'Biztos, hogy törölni akarod a webes űrlapot?',
 	'LBL_DUPLICATE_NAME' : 'Az űrlap már létezik'
 };

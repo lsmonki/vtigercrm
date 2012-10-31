@@ -103,6 +103,7 @@ function mass_edit(obj,divid,module,parenttab) {
 function mass_edit_formload(idstring,module,parenttab) {
 	if(typeof(parenttab) == 'undefined') parenttab = '';
 	var excludedRecords=document.getElementById("excludedRecords").value;
+	var searchurl = document.getElementById('search_url').value;
 	var viewid =getviewId();
 	$("status").style.display="inline";
 	new Ajax.Request(
@@ -113,7 +114,8 @@ function mass_edit_formload(idstring,module,parenttab) {
 				scope: 'command'
 			},
 			method: 'post',
-			postBody:"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+"&parenttab="+encodeURIComponent(parenttab)+"&file=MassEdit&mode=ajax&idstring="+idstring+"&viewname="+viewid+"&excludedRecords="+excludedRecords,
+			postBody:"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+"&parenttab="+encodeURIComponent(parenttab)+
+				"&file=MassEdit&mode=ajax&idstring="+idstring+"&viewname="+viewid+"&excludedRecords="+excludedRecords+searchurl,
 			onComplete: function(response) {
 				$("status").style.display="none";
 				var result = response.responseText;

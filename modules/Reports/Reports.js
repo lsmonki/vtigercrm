@@ -304,11 +304,11 @@ function hideTabs()
 
 	if(objreportType.value == 'tabular')
 	{
-		divarray = new Array('step1','step2','step4','step5','step6','step7');
+		divarray = new Array('step1','step2','step4','step5','step6'); //,'step7');
 	}
 	else
 	{
-		divarray = new Array('step1','step2','step3','step4','step5','step6','step7');
+		divarray = new Array('step1','step2','step3','step4','step5','step6'); //,'step7');
 	}
 }
 
@@ -355,9 +355,9 @@ function changeSteps1()
 		}
 
 	}
-	if (getObj('step7').style.display != 'none') {
-	//if (getObj('step6').style.display != 'none') {
-
+	//if (getObj('step7').style.display != 'none') {
+	if (getObj('step6').style.display != 'none') {
+		
 		var isScheduledObj = getObj("isReportScheduled");
 		if(isScheduledObj.checked == true) {
 			var selectedRecipientsObj = getObj("selectedRecipients");
@@ -407,7 +407,7 @@ function changeSteps1()
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
 				}
-				if (divarray[i + 1] == /*'step6') { //*/ 'step7') {
+				if (divarray[i + 1] == 'step6') { //'step7') {
 					document.getElementById("next").value = finish_text;
 				}
 				hide(divarray[i]);
@@ -492,6 +492,19 @@ function changeSteps()
 	}
 	else
 	{
+		var checked = 0;
+		var obj = document.getElementsByClassName('sec_module_list');
+		for(var i=0; i<obj.length; i++) {
+			if (obj[i].checked == true) {
+				checked++;
+			}
+		}
+		if (checked > 2) {
+			for(var i=0; i<obj.length; i++) {
+				obj[i].checked = false;
+			}
+			return;
+		}
 		document.NewRep.submit();
 	}
 }
@@ -795,3 +808,48 @@ function placeAtCenterChartPopup(element){
 	element.css("left", ((jQuery(window).width() - element.outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
 }
 
+function toggleActiveCheckBox(state){
+	var checked = 0;
+	var checkedModulesList = new Array();
+	var obj = document.getElementsByClassName('sec_module_list');
+	for(var i=0; i<obj.length; i++) {
+		if (obj[i].checked == true) {
+			checked++;
+			checkedModulesList.push(obj[i].name);
+		}
+	}
+	if (state) {
+		if (checked == 2) {
+			for(var i=0; i<obj.length; i++) {
+				if (checkedModulesList.indexOf(obj[i].name) == -1) {
+					obj[i].disabled = true;
+				}
+			}
+		}
+	} else {
+		for(var i=0; i<obj.length; i++) {
+			obj[i].disabled = false;
+		}
+	}
+}
+
+function reportsTriggerLoadCharts(el, reportid) {
+	
+	var el = jQuery(el);
+	el.attr('disabled', true);
+	
+	VtigerJS_DialogBox.block();
+	$('status').show();
+	status = jQuery.post('index.php', {
+		module: 'Reports',
+		action: 'ReportsAjax',
+		file: 'ReportChartRun',
+		ajax: true,
+		record: reportid
+	}, function(data){
+		$('status').hide();
+		VtigerJS_DialogBox.unblock();
+		
+		el.before(data).remove();
+	});
+}

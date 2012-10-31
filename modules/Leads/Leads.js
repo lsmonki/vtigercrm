@@ -58,9 +58,21 @@ function verifyConvertLeadData(form) {
 				return false;
 			}
 		}
-		if(form.amount.value!=null && isNaN(form.amount.value)){
-			alert(alert_arr["ERR_POTENTIAL_AMOUNT"]);
-			return false;
+		if(form.amount.value!=null ){
+            if(typeof userCurrencySeparator != 'undefined' && userCurrencySeparator != '') {
+                while(form.amount.value.indexOf(userCurrencySeparator) != -1) {
+                    form.amount.value = form.amount.value.replace(userCurrencySeparator,'');
+                }
+            }
+            if(typeof userDecimalSeparator != 'undefined' && userDecimalSeparator != '') {
+                if(form.amount.value.indexOf(userDecimalSeparator) != -1) {
+                    form.amount.value = form.amount.value.replace(userDecimalSeparator,'.');
+                }
+            }
+            if(isNaN(form.amount.value)){
+                alert(alert_arr["ERR_POTENTIAL_AMOUNT"]);
+                return false;
+            }
 		}
 	}
 	if(form.select_contact!=null && form.select_contact.checked){

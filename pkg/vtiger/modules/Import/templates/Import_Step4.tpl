@@ -12,9 +12,15 @@
 
 <table width="100%" cellspacing="0" cellpadding="5">
 	<tr>
+		{if in_array($FOR_MODULE, $INVENTORY_MODULES) eq FALSE}
 		<td class="heading2" width="10%">
 			{'LBL_IMPORT_STEP_4'|@getTranslatedString:$MODULE}:
 		</td>
+		{else}
+		<td class="heading2" width="10%">
+			{'LBL_IMPORT_STEP_3'|@getTranslatedString:$MODULE}:
+		</td>
+		{/if}
 		<td>
 			<span class="big">{'LBL_IMPORT_STEP_4_DESCRIPTION'|@getTranslatedString:$MODULE}</span>
 		</td>

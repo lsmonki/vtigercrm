@@ -16,6 +16,9 @@ $image_path = 'themes/'.$theme.'/images/';
 $idlist = vtlib_purify($_REQUEST['idlist']);
 $pmodule=vtlib_purify($_REQUEST['return_module']);
 $excludedRecords=vtlib_purify($_REQUEST['excludedRecords']);
+$searchurl = vtlib_purify($_REQUEST['searchurl']);
+$viewid = vtlib_purify($_REQUEST['viewname']);
+$recordid = vtlib_purify($_REQUEST['recordid']);
 
 $single_record = false;
 if(!strpos($idlist,':'))
@@ -85,8 +88,20 @@ if($single_record && count($columnlists) > 0)
 				if($con_eval != "") $val_cnt++;
 			}	
 			$entity_name = $adb->query_result($result,0,'contactname');
-			break;	
-	}	
+			break;
+		case 'Vendors':
+			$query = 'SELECT vendorname, '.implode(",",$columnlists).' FROM vtiger_vendor 
+					  LEFT JOIN vtiger_vendorcf ON vtiger_vendorcf.vendorid = vtiger_vendor.vendorid 
+					  WHERE vtiger_vendor.vendorid = ?';
+			$result=$adb->pquery($query, array($idlist));
+			foreach($columnlists as $columnname) {
+				$con_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $con_eval;
+				if($con_eval != "") $val_cnt++;
+			}
+			$entity_name = $adb->query_result($result,0,'vendorname');
+			break;
+	}
 }
 $smarty->assign('PERMIT',$permit);
 $smarty->assign('ENTITY_NAME',$entity_name);
@@ -100,15 +115,40 @@ $smarty->assign("FROM_MODULE", $pmodule);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("EXE_REC", $excludedRecords);
-$smarty->assign("SEARCH_URL", vtlib_purify($_REQUEST['searchurl']));
-$smarty->assign("VIEWID", vtlib_purify($_REQUEST['viewname']));
-$smarty->assign('RECORDID',vtlib_purify($_REQUEST['recordid']));
+$smarty->assign("SEARCH_URL", $searchurl);
+$smarty->assign("VIEWID", $viewid);
+$smarty->assign('RECORDID', $recordid);
 
-if(($single_record && count($columnlists) > 0)){
+$field_count = count($columnlists);
+$emailid_count = 0;
+$selectedFieldKey = 0;
+if($single_record) {
+	if (!empty ($field_value)) {
+		foreach ($field_value as $key => $value) {
+			if ($value != NULL) {
+				$selectedFieldKey = $key;
+				$emailid_count++;
+			}
+		}
+	}
+}
+if ($field_count == 1 || $emailid_count == 1) {
+	$fieldIds = array_keys($returnvalue);
+	$field_list = $fieldIds[$selectedFieldKey];
+	if($idlist == 'all') {
+		$url1 = "&viewname=".$viewid."&excludedRecords=".$excludedRecords."&searchurl=".$searchurl;
+	} else if ($idlist == 'relatedListSelectAll') {
+		$url1 = "&recordid=".$recordid."&excludedRecords=".$excludedRecords;
+	} else {
+		$url1 = '';
+	}
+	$url = 'index.php?module=Emails&action=EmailsAjax&pmodule='.$pmodule.'&file=EditView&sendmail=true&idlist='.$idlist.'&field_lists='.$field_list.$url1;
+	echo 'OpenPopUp#@@#'.$url;
+} else if($single_record && $field_count > 0) {
 	$smarty->display("SelectEmail.tpl");
-} else if(!$single_record && count($columnlists) > 0){
+} else if(!$single_record && $field_count > 0) {
 	$smarty->display("SelectEmail.tpl");
-}elseif ($val_cnt < 0){
+} elseif ($val_cnt < 0) {
 	echo "Mail Ids not permitted";
 } else {
 	echo "No Mail Ids";

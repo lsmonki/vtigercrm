@@ -1,0 +1,212 @@
+//-------------------------------------------------------------------//
+//--------------------------- GLOBAL VALUES--------------------------//
+//-------------------------------------------------------------------//
+//Please Change the below colors only to change the Skin of vtiger
+
+// --------------------------------------------------------------------
+// -- Body Gradient Colors -- //
+@pagePatternurl:                    url('images/pattern.png');
+@bodyColor1:                        #ececec;
+@bodyColor2:                        @white;
+@borderBottomforbodyContents:       @secondaryBorderColor;
+//Color for Divider between Left Panel and content
+@pageDivider:                       #EEEEEE;
+// --------------------------------------------------------------------
+// -- Menu bar Gradient Colors -- //
+@menubarColor1:                     @gray;
+@menubarColor2:                     @grayDarker;
+@menuUnderlineColor:                @darkGray;
+// used for menu bar tabs
+@seperatorColor:                    #666666;
+//--------------------------------------------------------------------
+// -- Notification Background Color -- //
+@notificationBackground:            #FAFAD2;
+//---------------------------------------------------------------------
+//-- Tables Background color --//
+@tableBackground:                   @containerColor1;
+// --------------------------------------------------------------------
+// -- Hover Gradient Colors -- //
+@rowHoverColor1:                    #F7F7F7;
+@rowHoverColor2:                    #F7F7F7;
+// --------------------------------------------------------------------
+// -- Headers Gradient Colors -- //
+@headerColor1:                      #E6E6E6;
+@headerColor2:                      #E6E6E6;
+// --------------------------------------------------------------------
+// -- Component Containers Gradient Colors -- //
+@containerColor1:                   @white;
+@containerColor2:                   #f8f8f8;
+// --------------------------------------------------------------------
+// -- Dropdown Gradient Colors -- //
+@dropDownColor1:                    @containerColor1;
+@dropDownColor2:                    @containerColor2;
+// --------------------------------------------------------------------
+// -- Typography --//
+@baseFontSize:                      12px;
+@baseFontFamily:                    Verdana, 'Lucida Grande', Tahoma, sans-serif;
+@baseLineHeight:                    18px;
+@disableTextColor:                  @grayLight;
+@secondaryTextColor:                @darkBlue;
+@relatedListText:                   @black;
+@tabTextColor:                      @grayDark;
+@tabTextColorHover:                 @grayDarker;
+// Links
+@themeLinkColor:                    @grayDarker;
+@generalLinkColor:                  @grayDarker;
+@navLinkColor:                      @white;
+@linkColorHover:                    darken(@generalLinkColor, 100%);
+@userNameLinkColor:                 @black;
+// --------------------------------------------------------------------
+//--- Shadow Effects ----//
+//Text Shadow Effects
+@textColor:                         @black;
+@textShadowColor:                   @white;
+//Text Headers
+@headerTextColor:                   @black;
+@headerTextShadowColor:             @white;
+@dashboardWidgetHeaderTextColor:    @black;
+//Box Shadow color
+@boxShadowColor:                    @black;
+// SelectAll popup Color
+@selectAllMsgDivColor:              @lightYellow;
+
+// --------------------------------------------------------------------
+//Image used as background for top Links (A.K.A. logout,help,settings Link)
+@quickLinkImg: url('images/QuickLinkRibbon.png');
+// --------------------------------------------------------------------
+// -- Button Colors -- //
+// Basic Button Gradient Colors
+@basicButtonBorderColorOnHover:     @grayLight;
+
+
+@addButton:                         @menubarColor1;
+@saveButton:                        #45ab34;
+@deleteButton:                      #aa3434;
+@importNextButton:                  #51A351;
+@importLastImportedRecords:         #FAA732;
+@importUndoLastImport:              #DA4F49;
+
+//Border colors
+@lightColorBorder:                  @grayLight;
+@borderColor:                       @gray;
+@darkColorBorder:                   @darkGray;
+@secondaryBorderColor:              @white;
+
+// --------------------------------------------------------------------
+// Grays
+@black:                             #000000;
+@grayDarker:                        #333333;
+@grayDark:                          #555555;
+@gray:                              #777777;
+@grayLight:                         #D3D3D3;
+@grayLighter:                       #eeeeee;
+@white:                             #ffffff;
+
+// --------------------------------------------------------------------
+// Accent colors
+@blue:                              #3E78B3;
+@lightBlue:                         #63b6db;
+@blueDark:                          #033C73;
+@green:                             #73A839;
+@red:                               #C71C22;
+@yellow:                            #F7B42C;
+@orange:                            #DD5600;
+@pink:                              #F49AC1;
+@purple:                            #9760B3;
+@lightYellow:                       #f9ffc5;
+@darkBlue:                          #002476;
+@darkGray:                          #A9A9A9;
+//-------------------------------------------------------------------//
+//----------------------GLOBAL VALUES COMPLETED----------------------//
+//-------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------//
+//---------------------------LOCAL VALUES----------------------------//
+//-------------------------------------------------------------------//
+
+//Colors used for Table background
+@tableBackgroundColor:              @tableBackground;
+
+
+//Colors used for Body Background
+@gradient1StrtColor:                @bodyColor1;
+@gradient1EndColor:                 @bodyColor2;
+
+//Colors used for Table row hover
+@gradient2StrtColor:                @rowHoverColor1;
+@gradient2EndColor:                 @rowHoverColor2;
+
+//Colors used for empty container
+@gradient3StrtColor:                #F5F5F5;
+@gradient3EndColor:                 #F5F5F5;
+
+//Colors used for Common Action Container
+@gradient4StrtColor:                @containerColor1;
+@gradient4EndColor:                 @containerColor2;
+
+//Colors used for Table headers
+@gradient5StrtColor:                @headerColor1;
+@gradient5EndColor:                 @headerColor2;
+
+//Colors used for List view records Container
+@gradient6StrtColor:                @containerColor1;
+@gradient6EndColor:                 @containerColor2;
+
+//Colors Used for all dropdown Stylings
+@gradient7StrtColor:                @dropDownColor1;
+@gradient7EndColor:                 @dropDownColor2;
+
+//Colors Used for related list tabs hover in detail view
+@gradient8StrtColor:                @containerColor1;
+@gradient8EndColor:                 @containerColor2;
+
+//Colors used for active records (.quickWidgetContainer)
+@gradient9StrtColor:                @containerColor1;
+@gradient9EndColor:                 @containerColor2;
+@activeRecordsWidgetBorder:         @grayLighter;
+
+//Colors used for navbar-inner background
+@gradient10StrtColor:               @menubarColor1;
+@gradient10EndColor:                @menubarColor2;
+
+//Colors used as background color for main search icon
+@gradient12StrtColor:               @headerColor1;
+@gradient12EndColor:                @headerColor2;
+
+//Colors used as background color for dashboard header
+@gradient14StrtColor:               @headerColor1;
+@gradient14EndColor:                @headerColor1;
+
+//Colors given to .blockMessageContainer
+@gradient15StrtColor:               @containerColor1;
+@gradient15EndColor:                @containerColor2;
+
+//-------------------------------------------------------------------//
+//---------------------------LOCAL VALUES----------------------------//
+//-------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------//
+//---------------VARIABLES USED FOR SETTINGS ------------------------//
+//-------------------------------------------------------------------//
+
+//Groups Member Colors
+@users:                             #e2caca;
+@groups:                            #acd5ff;
+@roles:                             #f0ea89;
+@rolesAndSubordinates:              #c4dea2;
+
+
+//Full Calendar view
+@fc-style1:                         #3366CC;
+@fc-style2:                         #3A87AD;
+@fc-style3:                         #C67605;
+@fc-style4:                         #953B39;
+@fc-style5:                         #999999;
+@fc-style6:                         #CCCC99;
+
+//-------------------------------------------------------------------//
+//-------------VARIABLES USED FOR SETTINGS COMPLETED-----------------//
+//-------------------------------------------------------------------//
+
+//Global search header color
+@globalSearchHeader : @black;

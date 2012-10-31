@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<languagepack>
+<name>Romana</name>
+<version>5.1.0 GA</version>
+<creationDate>2009-08-31 10:15:46</creationDate>
+<author>Magister Software</author>
+<prefix>ro_ro</prefix>
+<lockfor>0</lockfor>
+<encoding>UTF-8</encoding>
+<license>MPL1.1</license>
+</languagepack>

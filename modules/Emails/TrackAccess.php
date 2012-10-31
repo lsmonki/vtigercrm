@@ -7,10 +7,10 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-echo header('Pragma: public');
-echo header('Expires: 0');
-echo header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-echo header('Cache-Control: private', false);
+header('Pragma: public');
+header('Expires: 0');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Cache-Control: private', false);
 ini_set("include_path","../../");
 
 require_once 'include/utils/utils.php';
@@ -23,8 +23,8 @@ if($_REQUEST['app_key'] != $application_unique_key) {
 
 global $adb;
 
-$crmid = $_REQUEST['record'];
-$mailid = $_REQUEST['mailid'];
+$crmid = vtlib_purify($_REQUEST['record']);
+$mailid = vtlib_purify($_REQUEST['mailid']);
 $adb->pquery("INSERT INTO vtiger_email_access(crmid, mailid, accessdate, accesstime) VALUES(?,?,?,?)", array($crmid, $mailid, date('Y-m-d'), date('H:i:s')));
 
 $result = $adb->pquery("select count(*) as count from vtiger_email_access where crmid=? and mailid=?",array($crmid, $mailid));

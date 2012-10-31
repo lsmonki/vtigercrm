@@ -37,8 +37,6 @@
 						fetch_homeDB({$tablestuff.Stuffid});
 					{elseif $tablestuff.Stufftype eq 'DashBoard'}
 						loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');
-					{elseif $tablestuff.Stufftype eq 'ReportCharts'}
-						loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');
 					{/if}
 				</script>
 			{/foreach}
@@ -54,7 +52,7 @@ var Vt_homePageWidgetInfoList = [
 	{assign var=HOMEFRAME value=$HOMEFRAME|@array_reverse}
 	{foreach item=tablestuff key=index from=$HOMEFRAME name="homeframe"}
 		{if ($tablestuff.Stufftype neq 'Default' || $tablestuff.Stufftitle neq 'Home Page Dashboard'|@getTranslatedString:'Home')
-				&& $tablestuff.Stufftype neq 'DashBoard' && $tablestuff.Stufftype neq 'ReportCharts'}
+				&& $tablestuff.Stufftype neq 'DashBoard'}
 			{ldelim}
 				'widgetId':{$tablestuff.Stuffid},
 				'widgetType':'{$tablestuff.Stufftype}'
@@ -89,9 +87,7 @@ function fnAddWindow(obj,CurrObj){
 {if $ALLOW_DASH eq "yes"}
 	document.getElementById("adddash").href="javascript:chooseType('DashBoard');fnRemoveWindow()";
 {/if}
-{if $ALLOW_REPORT eq "yes"}
-    document.getElementById("addReportCharts").href="javascript:chooseType('ReportCharts');fnRemoveWindow()";
-{/if}
+
 {literal}
 }
 {/literal}

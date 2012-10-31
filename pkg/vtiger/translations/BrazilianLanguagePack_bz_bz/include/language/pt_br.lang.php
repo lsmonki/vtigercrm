@@ -1319,6 +1319,8 @@ $app_strings = array (
 'LBL_FIELD_MAPPING' => 'Mapeamento Campo',
 
 'LBL_MANDATORY_FIELD_MISSING'=>'Esta faltando valor campo obrigatório',
+
+'LBL_CREATE_WEBFORM_TITLE' => 'Crie um Webform'
 );
 
 $app_list_strings = array (

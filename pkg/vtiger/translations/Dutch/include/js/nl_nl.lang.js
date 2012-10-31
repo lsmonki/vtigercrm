@@ -294,7 +294,10 @@
 				RSS: 'RSS',
 				Default: 'Standaard',
 				Notebook: 'Notebook',
-				SPECIAL_CHARS:'\\ / < > + \' " '
+				SPECIAL_CHARS:'\\ / < > + \' " ',
+				
+				//added for webforms module
+				LBL_DELETE_MSG : 'Weet je zeker dat, wil je het webformulier te verwijderen?'
 			};
 	
 

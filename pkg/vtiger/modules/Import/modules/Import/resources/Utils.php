@@ -10,6 +10,7 @@
 
 require_once 'include/utils/ConfigReader.php';
 require_once 'modules/Import/ui/Viewer.php';
+require_once 'vtiger6/includes/runtime/Cache.php';
 
 class Import_Utils {
 
@@ -132,32 +133,24 @@ class Import_Utils {
 	}
 
 	public static function getAssignedToUserList($module) {
-		global $current_user;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$tabId = getTabid($module);
-
-		if(!is_admin($current_user) && $profileGlobalPermission[2] == 1
-				&& ($defaultOrgSharingPermission[$tabId] == 3 or $defaultOrgSharingPermission[$tabId] == 0)) {
-
-			return get_user_array(FALSE, "Active", $current_user->id,'private');
+		$cache = Vtiger_Cache::getInstance();
+		if($cache->getUserList($module,$current_user->id)){
+			return $cache->getUserList($module,$current_user->id);
 		} else {
-			return get_user_array(FALSE, "Active", $current_user->id);
+			$userList = get_user_array(FALSE, "Active", $current_user->id);
+			$cache->setUserList($module,$userList,$current_user->id);
+			return $userList;
 		}
 	}
 
 	public static function getAssignedToGroupList($module) {
-		global $current_user;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$tabId = getTabid($module);
-
-		if(!is_admin($current_user) && $profileGlobalPermission[2] == 1
-				&& ($defaultOrgSharingPermission[$tabId] == 3 or $defaultOrgSharingPermission[$tabId] == 0)) {
-
-			return get_group_array(FALSE, "Active", $current_user->id,'private');
+		$cache = Vtiger_Cache::getInstance();
+		if($cache->getGroupList($module,$current_user->id)){
+			return $cache->getGroupList($module,$current_user->id);
 		} else {
-			return get_group_array(FALSE, "Active", $current_user->id);
+			$groupList = get_group_array(FALSE, "Active", $current_user->id);
+			$cache->setGroupList($module,$groupList,$current_user->id);
+			return $groupList;
 		}
 	}
 

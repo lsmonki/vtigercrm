@@ -92,7 +92,7 @@ vtiger_help_controller = function() {
 	 * API for quick help
 	 */
     this.apiURL = function() {
-        return 'http://help.vtiger.com/helpmenow/api.php';
+        return 'https://help.vtiger.com/helpmenow/api.php';
     }
 
     /**

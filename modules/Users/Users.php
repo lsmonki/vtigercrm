@@ -38,6 +38,7 @@ require_once('data/Tracker.php');
 require_once 'include/utils/CommonUtils.php';
 require_once 'include/Webservices/Utils.php';
 require_once('modules/Users/UserTimeZonesArray.php');
+require_once 'vtiger6/includes/runtime/Cache.php';
 
 // User is used to store customer information.
 /** Main class for the user module
@@ -129,6 +130,9 @@ class Users extends CRMEntity {
     var $new_schema = true;
 
     var $DEFAULT_PASSWORD_CRYPT_TYPE; //'BLOWFISH', /* before PHP5.3*/ MD5;
+    
+    //Default Widgests
+    var $default_widgets = array('PLVT', 'CVLVT', 'UA');
 
     /** constructor function for the main user class
      instantiates the Logger class and PearDatabase Class
@@ -959,6 +963,8 @@ class Users extends CRMEntity {
         $this->column_fields["currency_code"]= $this->currency_code = $adb->query_result($currency_result,0,"currency_code");
         $this->column_fields["currency_symbol"]= $this->currency_symbol = $ui_curr;
         $this->column_fields["conv_rate"]= $this->conv_rate = $adb->query_result($currency_result,0,"conversion_rate");
+		if($this->column_fields['no_of_currency_decimals'] == '')
+			$this->column_fields['no_of_currency_decimals'] = $this->no_of_currency_decimals = getCurrencyDecimalPlaces();
 
 		// TODO - This needs to be cleaned up once default values for fields are picked up in a cleaner way.
 		// This is just a quick fix to ensure things doesn't start breaking when the user currency configuration is missing
@@ -1117,17 +1123,23 @@ class Users extends CRMEntity {
             }
         }else {
             for($i = 0;$i < count($this->homeorder_array);$i++) {
+              if(in_array($this->homeorder_array[$i], $this->default_widgets)){                
                 $return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+              }else{
+                  $return_array[$this->homeorder_array[$i]] = '';
+              }
             }
         }
         return $return_array;
     }
 
     function getDefaultHomeModuleVisibility($home_string,$inVal) {
-        $homeModComptVisibility=0;
+        $homeModComptVisibility= 1;
         if($inVal == 'postinstall') {
             if($_REQUEST[$home_string] != '') {
-                $homeModComptVisibility=0;
+                $homeModComptVisibility = 0;
+            } else if(in_array($home_string, $this->default_widgets)){
+                $homeModComptVisibility = 0;
             }
         }
         return $homeModComptVisibility;
@@ -1430,6 +1442,10 @@ class Users extends CRMEntity {
      */
     public static function getActiveAdminId() {
         global $adb;
+        $cache = Vtiger_Cache::getInstance();
+		if($cache->getAdminUserId()){
+			return $cache->getAdminUserId();
+		} else {
         $sql = "SELECT id FROM vtiger_users WHERE is_admin='On' and status='Active' limit 1";
         $result = $adb->pquery($sql, array());
         $adminId = 1;
@@ -1437,7 +1453,9 @@ class Users extends CRMEntity {
         foreach ($it as $row) {
             $adminId = $row->id;
         }
+			$cache->setAdminUserId($adminId);
         return $adminId;
+		}
     }
 
     /**
@@ -1451,5 +1469,142 @@ class Users extends CRMEntity {
         return $user;
     }
 
+	/**
+    * Function to set the user time zone and language
+    * @param- $_REQUEST array
+    */
+    public function setUserPreferences($requestArray) {
+		global $adb;
+        if (isset ($requestArray['lang_name']) && isset ($requestArray['time_zone'])) {
+			$updateQuery = 'UPDATE vtiger_users SET language = ?, time_zone = ? WHERE id = ?';
+			$updateQueryParams = array(vtlib_purify($requestArray['lang_name']), vtlib_purify($requestArray['time_zone']), $this->id);
+			$adb->pquery($updateQuery, $updateQueryParams);
+		}
+	}
+	
+	/**
+	 * Function to set the Company Logo
+	 * @param- $_REQUEST array
+	 * @param- $_FILE array
+	 */
+	public function uploadOrgLogo($requestArray, $fileArray) {
+		global $adb;
+		$file = $fileArray['file'];
+		$logo_name = $file['name'];
+		$file_size = $file['size'];
+		$file_type = $file['type'];
+
+		$filetype_array = explode("/",$file_type);
+		$file_type_val = strtolower($filetype_array[1]);
+
+		$validFileFormats =  array('jpeg', 'png', 'jpg', 'pjpeg', 'x-png', 'gif');
+
+		if ($file_size != 0 && in_array($file_type_val, $validFileFormats)) {
+			//Uploading the selected Image
+			move_uploaded_file($file['tmp_name'], 'test/logo/'.$logo_name);
+
+			//Updating Database
+			$sql = 'UPDATE vtiger_organizationdetails SET logoname = ? WHERE organization_id = ?';
+			$params = array(decode_html($logo_name), '1');
+			$adb->pquery($sql, $params);
+			copy('test/logo/'.$logo_name, 'test/logo/application.ico');
+		}
+	}
+
+	/**
+    * Function to update Base Currency of Product
+    * @param- $_REQUEST array
+    */
+	public function updateBaseCurrency($requestArray) {
+		global $adb;
+		if (isset ($requestArray['currency_name'])) {
+			$currency_name = vtlib_purify($requestArray['currency_name']);
+
+			$result = $adb->pquery('SELECT currency_code, currency_symbol FROM vtiger_currencies WHERE currency_name = ?', array($currency_name));
+			$num_rows = $adb->num_rows($result);
+			if ($num_rows > 0) {
+				$currency_code = decode_html($adb->query_result($result, 0, 'currency_code'));
+				$currency_symbol = decode_html($adb->query_result($result, 0,'currency_symbol'));
+			}
+
+			//Updating Database
+			$query = 'UPDATE vtiger_currency_info SET currency_name = ?, currency_code = ?, currency_symbol = ? WHERE id = ?';
+			$params = array($currency_name, $currency_code, $currency_symbol, '1');
+			$adb->pquery($query, $params);
+
+		}
+	}
+
+	/**
+    * Function to update Config file
+    * @param- $_REQUEST array
+    */
+	public function updateConfigFile($requestArray) {
+	   if (isset ($requestArray['currency_name'])) {
+		   $currency_name = vtlib_purify($requestArray['currency_name']);
+		   $currency_name = '$currency_name = \''.$currency_name.'\'';
+
+		   //Updating in config inc file
+		   $filename = 'config.inc.php';
+		   if (file_exists($filename)) {
+			   $contents = file_get_contents($filename);
+			   $contents = str_replace('$currency_name = \'USA, Dollars\'', $currency_name, $contents);
+			   file_put_contents($filename, $contents);
+		   }
+	   }
+   }
+}
+
+class Users_CRMSetup {
+
+	/**
+	 * Function to get user setup status
+	 * @param- User id
+	 * @return-is First User or not
+	 */
+	public static function isFirstUser($user) {
+		global $adb;
+
+		$isFirstUser = false;
+		if (is_admin($user)) {
+			$query = 'SELECT COUNT(*) AS count FROM vtiger_crmsetup';
+			$result = $adb->pquery($query, array());
+			$count = $adb->query_result($result, 0, 'count');
+			if ($count <= 1) {
+				$isFirstUser = true;
+			}
+		}
+		return $isFirstUser;
+	}
+	
+	/**
+	 * Function to get user setup status
+	 * @return-is First User or not
+	 */
+	public static function insertEntryIntoCRMSetup($id) {
+		global $adb;
+
+		//updating user setup status into database
+		$insertQuery = 'INSERT INTO vtiger_crmsetup (userid, setup_status) VALUES (?, ?)';
+		$adb->pquery($insertQuery, array($id, '1'));
+
+	}
+	/**
+	 * Function to get user setup status
+	 * @param- User id
+	 * @return-Setup Status of user
+	 */
+	public static function getUserSetupStatus($id) {
+		global $adb;
+
+		$userSetupStatus = false;
+		$query = 'SELECT 1 FROM vtiger_crmsetup WHERE userid = ? AND setup_status = ?';
+		$result = $adb->pquery($query, array($id, '1'));
+		$num_rows = $adb->num_rows($result);
+		if ($num_rows === 0) {
+			$userSetupStatus = true;
+		}
+		return $userSetupStatus;
+	}
 }
 ?>

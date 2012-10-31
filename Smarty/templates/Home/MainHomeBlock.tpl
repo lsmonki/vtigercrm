@@ -61,7 +61,7 @@
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkModulesdef">
 {elseif $tablestuff.Stufftype eq "RSS"}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkRSS">
-{elseif $tablestuff.Stufftype eq "DashBoard" || $tablestuff.Stufftype eq "ReportCharts"}
+{elseif $tablestuff.Stufftype eq "DashBoard" }
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboardusr">
 {elseif $tablestuff.Stufftype eq "Default" && $tablestuff.Stufftitle eq $homepagedashboard_title}
 		<tr id="maincont_row_{$tablestuff.Stuffid}" class="show_tab winmarkDashboarddef">
@@ -84,7 +84,7 @@
 				{$MOD.LBL_SCROLL}
 			</a>
 		</td>
-{if $tablestuff.Stufftype eq "Module" || ($tablestuff.Stufftype eq "Default" &&  $tablestuff.Stufftitle neq "Key Metrics" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq "My Group Allocation" ) || $tablestuff.Stufftype eq "RSS" || $tablestuff.Stufftype eq "DashBoard"|| $tablestuff.Stufftype eq "ReportCharts"}
+{if $tablestuff.Stufftype eq "Module" || ($tablestuff.Stufftype eq "Default" &&  $tablestuff.Stufftitle neq "Key Metrics" && $tablestuff.Stufftitle neq $homepagedashboard_title && $tablestuff.Stufftitle neq "My Group Allocation" ) || $tablestuff.Stufftype eq "RSS" || $tablestuff.Stufftype eq "DashBoard"}
 		<td align="right">
 			<a href="#" id="a_{$tablestuff.Stuffid}">
 				{$MOD.LBL_MORE}

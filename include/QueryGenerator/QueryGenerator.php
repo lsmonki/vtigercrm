@@ -298,6 +298,17 @@ class QueryGenerator {
 		foreach ($this->fields as $field) {
 			$sql = $this->getSQLColumn($field);
 			$columns[] = $sql;
+
+			//To merge date and time fields 
+			if($this->meta->getEntityName() == 'Calendar' && ($field == 'date_start' || $field == 'due_date')) {
+				if($field=='date_start') {
+					$timeField = 'time_start';
+				}else if ($field == 'due_date') {
+					$timeField = 'time_end';
+				}
+				$sql = $this->getSQLColumn($timeField);
+				$columns[] = $sql;
+			}
 		}
 		$this->columns = implode(', ',$columns);
 		return $this->columns;
@@ -740,7 +751,7 @@ class QueryGenerator {
 	private function fixDateTimeValue($name, $value, $first = true) {
 		$moduleFields = $this->meta->getModuleFields();
 		$field = $moduleFields[$name];
-		$type = $field->getFieldDataType();
+		$type = $field ? $field->getFieldDataType() : false;
 		if($type == 'datetime') {
 			if(strrpos($value, ' ') === false) {
 				if($first) {
@@ -756,6 +767,9 @@ class QueryGenerator {
 	public function addCondition($fieldname,$value,$operator,$glue= null,$newGroup = false,
 			$newGroupType = null) {
 		$conditionNumber = $this->conditionInstanceCount++;
+		if($glue != null && $conditionNumber > 0)
+			$this->addConditionGlue ($glue);
+		
 		$this->groupInfo .= "$conditionNumber ";
 		$this->whereFields[] = $fieldname;
 		$this->reset();
@@ -912,9 +926,6 @@ class QueryGenerator {
 						$value = CurrencyField::convertToDBFormat($value, null, true);
 					} else {
 						$currencyField = new CurrencyField($value);
-						if($this->getModule() == 'Potentials' && $fieldName == 'amount') {
-							$currencyField->setNumberofDecimals(2);
-						}
 						$value = $currencyField->getDBInsertedValue();
 					}
 				}

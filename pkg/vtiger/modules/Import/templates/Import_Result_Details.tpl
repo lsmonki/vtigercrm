@@ -24,6 +24,7 @@
 					<td width="10%">:</td>
 					<td width="10%">{$IMPORT_RESULT.CREATED}</td>
 				</tr>
+				{if in_array($FOR_MODULE, $INVENTORY_MODULES) eq FALSE}
 				<tr>
 					<td>{'LBL_NUMBER_OF_RECORDS_UPDATED'|@getTranslatedString:$MODULE}</td>
 					<td width="10%">:</td>
@@ -39,6 +40,7 @@
 					<td width="10%">:</td>
 					<td width="10%">{$IMPORT_RESULT.MERGED}</td>
 				</tr>
+				{/if}
 			</table>
 		</td>
 	</tr>

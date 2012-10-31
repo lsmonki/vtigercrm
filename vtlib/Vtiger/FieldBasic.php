@@ -62,6 +62,12 @@ class Vtiger_FieldBasic {
 		$this->typeofdata = $valuemap['typeofdata'];
 		$this->helpinfo = $valuemap['helpinfo'];
 		$this->masseditable = $valuemap['masseditable'];
+		$this->displaytype   = $valuemap['displaytype'];
+		$this->generatedtype = $valuemap['generatedtype'];
+		$this->readonly      = $valuemap['readonly'];
+		$this->presence      = $valuemap['presence'];
+		$this->defaultvalue  = $valuemap['defaultvalue'];
+        $this->quickcreate = $valuemap['quickcreate'];
 		$this->block= $blockInstance? $blockInstance : Vtiger_Block::getInstance($valuemap['block'], $moduleInstance);
 	}
 

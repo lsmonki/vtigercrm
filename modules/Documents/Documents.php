@@ -39,7 +39,7 @@ class Documents extends CRMEntity {
 				'File Name'=>Array('notes'=>'filename'),
 				'Modified Time'=>Array('crmentity'=>'modifiedtime'),
 				'Assigned To' => Array('crmentity'=>'smownerid'),
-				'Folder Name' => Array('attachmentsfolder'=>'foldername')
+				'Folder Name' => Array('attachmentsfolder'=>'folderid')
 				);
 	var $list_fields_name = Array(
 					'Title'=>'notes_title',
@@ -324,18 +324,26 @@ class Documents extends CRMEntity {
 	 * @param - $module Primary module name
 	 * returns the query string formed on fetching the related data for report for primary module
 	 */
-	function generateReportsQuery($module){
-	 			$moduletable = $this->table_name;
-	 			$moduleindex = $this->tab_name_index[$moduletable];
-	 				$query = "from $moduletable
-			        inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
-			        inner join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=$moduletable.folderid
-					left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
-		            left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
-					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
-		            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-                    left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby ";
-		            return $query;
+	function generateReportsQuery($module,$queryplanner){
+		$moduletable = $this->table_name;
+		$moduleindex = $this->tab_name_index[$moduletable];
+		$query = "from $moduletable
+			inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex";
+		if ($queryplanner->requireTable("vtiger_attachmentsfolder")){
+		    $query .= " inner join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=$moduletable.folderid";
+		}
+		if ($queryplanner->requireTable("vtiger_groups".$module)){
+		    $query .= " left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_users".$module)){
+		    $query .= " left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid";
+		}
+		$query .= " left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= " left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+		if ($queryplanner->requireTable("vtiger_lastModifiedBy".$module)){
+		    $query .= " left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby ";
+		}
+		return $query;
 
 	}
 
@@ -345,14 +353,33 @@ class Documents extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_notes","notesid");
-		$query .=" left join vtiger_crmentity as vtiger_crmentityDocuments on vtiger_crmentityDocuments.crmid=vtiger_notes.notesid and vtiger_crmentityDocuments.deleted=0
-		        left join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=vtiger_notes.folderid
-				left join vtiger_groups as vtiger_groupsDocuments on vtiger_groupsDocuments.groupid = vtiger_crmentityDocuments.smownerid
-				left join vtiger_users as vtiger_usersDocuments on vtiger_usersDocuments.id = vtiger_crmentityDocuments.smownerid
-                left join vtiger_users as vtiger_lastModifiedByDocuments on vtiger_lastModifiedByDocuments.id = vtiger_crmentityDocuments.modifiedby ";
-
+	function generateReportsSecQuery($module,$secmodule,$queryplanner) {
+		
+		$matrix = $queryplanner->newDependencyMatrix();
+		
+		$matrix->setDependency("vtiger_crmentityDocuments",array("vtiger_groupsDocuments","vtiger_usersDocuments","vtiger_lastModifiedByDocuments"));
+		$matrix->setDependency("vtiger_notes",array("vtiger_crmentityDocuments","vtiger_attachmentsfolder"));
+		
+		if (!$queryplanner->requireTable('vtiger_notes', $matrix)) {
+			return '';
+		}
+		// TODO Support query planner
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_notes","notesid", $queryplanner);
+		if ($queryplanner->requireTable("vtiger_crmentityDocuments",$matrix)){
+		    $query .=" left join vtiger_crmentity as vtiger_crmentityDocuments on vtiger_crmentityDocuments.crmid=vtiger_notes.notesid and vtiger_crmentityDocuments.deleted=0";
+		}
+		if ($queryplanner->requireTable("vtiger_attachmentsfolder")){
+		    $query .=" left join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=vtiger_notes.folderid";
+		}
+		if ($queryplanner->requireTable("vtiger_groupsDocuments")){
+		    $query .=" left join vtiger_groups as vtiger_groupsDocuments on vtiger_groupsDocuments.groupid = vtiger_crmentityDocuments.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersDocuments")){
+		    $query .=" left join vtiger_users as vtiger_usersDocuments on vtiger_usersDocuments.id = vtiger_crmentityDocuments.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_lastModifiedByDocuments")){
+		    $query .=" left join vtiger_users as vtiger_lastModifiedByDocuments on vtiger_lastModifiedByDocuments.id = vtiger_crmentityDocuments.modifiedby ";
+		}
 		return $query;
 	}
 
@@ -391,12 +418,17 @@ class Documents extends CRMEntity {
 		global $log;
 		if(empty($return_module) || empty($return_id)) return;
 
-		$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ? AND crmid = ?';
-		$this->db->pquery($sql, array($id, $return_id));
+		if($return_module == 'Accounts') {
+			$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ? AND (crmid = ? OR crmid IN (SELECT contactid FROM vtiger_contactdetails WHERE accountid=?))';
+			$this->db->pquery($sql, array($id, $return_id, $return_id));
+		} else {
+			$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ? AND crmid = ?';
+			$this->db->pquery($sql, array($id, $return_id));
 
-		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
-		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
-		$this->db->pquery($sql, $params);
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
 	}
 
 

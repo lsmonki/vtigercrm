@@ -26,4 +26,8 @@ CKEDITOR.editorConfig = function( config )
 	];
 	CKEDITOR.config.toolbar = 'Vtiger';
 	CKEDITOR.config.height = '320';
+	
+	// For better line inserts
+    CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+    CKEDITOR.config.shiftEnterMode = CKEDITOR.ENTER_P;
 };
