@@ -65,17 +65,6 @@
 										</div>
 									</td>
 								</tr>
-								<tr>
-									<td class="small cellLabel" style="white-space: normal;">
-										<div id="note">
-											{$MOD.LBL_DEFAULT}
-											<ul style="color: blue;">
-												<li>{$MOD.LBL_OPTIONS1}</li>
-												<li>{$MOD.LBL_OPTIONS2}</li>
-											</ul>
-										</div>
-										</td>
-									</tr>
 									{if $ERROR_MSG neq ''}
 									<tr>
 									{$ERROR_MSG}
