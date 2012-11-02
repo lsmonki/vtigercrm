@@ -13,7 +13,6 @@ $module_import_step = vtlib_purify($_REQUEST['module_import']);
 require_once('Smarty_setup.php');
 require_once('vtlib/Vtiger/Package.php');
 require_once('vtlib/Vtiger/Language.php');
-require_once('modules/Settings/ModuleManager/Extension.php');
 
 global $mod_strings,$app_strings,$theme;
 $smarty = new vtigerCRM_Smarty;
@@ -26,8 +25,8 @@ global $modulemanager_uploaddir; // Defined in modules/Settings/ModuleManager.ph
 
 // Customization
 if ($module_import_step == 'Step1') {
-	$module_import_step = 'Step1.url'; // Rewrite module step	
-	$smarty->assign("EXTENSIONS", Module_Manager_Extension::listAll());
+	//$module_import_step = 'Step1.url'; // Rewrite module step	
+	//$smarty->assign("EXTENSIONS", Module_Manager_Extension::listAll());
 	
 } else if($module_import_step == 'Step2' || $module_import_step == 'Step2.url' ) {
 	if(!is_dir($modulemanager_uploaddir)) mkdir($modulemanager_uploaddir);
@@ -43,8 +42,8 @@ if ($module_import_step == 'Step1') {
 		}
 		
 	} else {
-		// Forcefully disable the upload feature for now
-		// $package_file_available = move_uploaded_file($_FILES['module_zipfile']['tmp_name'], $uploadfilename);
+		// Comment line below to forcefully disable the upload feature
+		$package_file_available = move_uploaded_file($_FILES['module_zipfile']['tmp_name'], $uploadfilename);
 	}
 		
 	if(!$package_file_available) {
@@ -85,8 +84,6 @@ if ($module_import_step == 'Step1') {
 	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";
 	checkFileAccess($uploadfilename);
 	
-	Module_Manager_Extension::trackInstall(vtlib_purify($_REQUEST['module_import_extensionid']));
-
 	//$overwritedir = ($_REQUEST['module_dir_overwrite'] == 'true')? true : false;
 	$overwritedir = false; // Disallowing overwrites through Module Manager UI
 
