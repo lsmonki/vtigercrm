@@ -42,7 +42,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
             // Unzip selectively
             $unzip->unzipAllEx( ".",
                     Array(
-                    'include' => Array('templates', "modules/$module"), // We don't need manifest.xml
+                    'include' => Array('templates', "modules/$module", 'vtiger6', 'layouts'), // We don't need manifest.xml
                     //'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
                     ),
                     // Templates folder to be renamed while copying
