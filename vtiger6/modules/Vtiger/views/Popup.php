@@ -9,7 +9,9 @@
  ************************************************************************************/
 
 class Vtiger_Popup_View extends Vtiger_Footer_View {
-
+	protected $listViewEntries = false;
+	protected $listViewHeaders = false;
+	
 	function checkPermission(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
@@ -121,9 +123,13 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 			$listViewModel->set('search_value', $searchValue);
 		}
 
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+		$noOfEntries = count($this->listViewEntries);
 
 		if(empty($sortOrder)){
 			$sortOrder = "ASC";
@@ -158,8 +164,8 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
 
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 	}

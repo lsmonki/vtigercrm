@@ -16,33 +16,33 @@
 		<div class="row-fluid detailViewTitle">
 			<div class="span10">
 				<div class="row-fluid">
-					<div class="span5">
+					<div class="span7">
 						<div class="row-fluid">
-							<span class="span0 textOverflowEllipsis" title='{$RECORD->getName()}'>
-								{include file="DetailViewHeaderTitle.tpl"|vtemplate_path:$MODULE}
+							{include file="DetailViewHeaderTitle.tpl"|vtemplate_path:$MODULE}
+							<span class="span2">
+								{if $NO_SUMMARY neq true}
+									<a class="changeDetailViewMode height20 cursorPointer"><sub>{vtranslate('LBL_COMPLETE_DETAILS',{$MODULE_NAME})}</sub></a>
+									{assign var="FULL_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=full'} }
+									{assign var="SUMMARY_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=summary'} }
+									<input type="hidden" name="viewMode" value="summary" data-nextviewname="full" data-currentviewlabel="{vtranslate('LBL_SUMMARY_DETAILS',{$MODULE_NAME})}"
+										data-summary-url="{$SUMMARY_MODE_URL}" data-full-url="{$FULL_MODE_URL}"  />
+								{/if}
 							</span>
-							{if $NO_SUMMARY neq true}
-								<a class="span0 changeDetailViewMode height20 cursorPointer"><sub>{vtranslate('LBL_COMPLETE_DETAILS',{$MODULE_NAME})}</sub></a>
-								{assign var="FULL_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=full'} }
-								{assign var="SUMMARY_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=summary'} }
-								<input type="hidden" name="viewMode" value="summary" data-nextviewname="full" data-currentviewlabel="{vtranslate('LBL_SUMMARY_DETAILS',{$MODULE_NAME})}"
-									data-summary-url="{$SUMMARY_MODE_URL}" data-full-url="{$FULL_MODE_URL}"  />
-							{/if}
 						</div>
 					</div>
 
-					<div class="span7">
+					<div class="span5">
 						<div class="pull-right detailViewButtoncontainer">
 							<div class="btn-toolbar">
-							{foreach item=DEVAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
+							{foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
 							<span class="btn-group">
-								<button class="btn"
-									{if $DEVAIL_VIEW_BASIC_LINK->isPageLoadLink()}
-										onclick="window.location.href='{$DEVAIL_VIEW_BASIC_LINK->getUrl()}'"
+								<button class="btn" id="{$MODULE_NAME}_detailView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_BASIC_LINK->getLabel())}"
+									{if $DETAIL_VIEW_BASIC_LINK->isPageLoadLink()}
+										onclick="window.location.href='{$DETAIL_VIEW_BASIC_LINK->getUrl()}'"
 									{else}
-										onclick={$DEVAIL_VIEW_BASIC_LINK->getUrl()}
+										onclick={$DETAIL_VIEW_BASIC_LINK->getUrl()}
 									{/if}>
-									<strong>{vtranslate($DEVAIL_VIEW_BASIC_LINK->getLabel(), $MODULE_NAME)}</strong>
+									<strong>{vtranslate($DETAIL_VIEW_BASIC_LINK->getLabel(), $MODULE_NAME)}</strong>
 								</button>
 							</span>
 							{/foreach}
@@ -53,7 +53,7 @@
 								</button>
 								<ul class="dropdown-menu pull-right">
 									{foreach item=DETAIL_VIEW_LINK from=$DETAILVIEW_LINKS['DETAILVIEW']}
-									<li>
+									<li id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
 										<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
 									</li>
 									{/foreach}

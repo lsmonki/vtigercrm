@@ -20,40 +20,37 @@
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
-				<td>
+				<th>
 					<input type="checkbox"  class="selectAllInCurrentPage" />
-				</td>
+				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<td>
+				<th>
 					<a class="listViewHeaderValues cursorPointer" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE_NAME)}
 						{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE_NAME)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE_NAME)}">{/if}</a>
-				</td>
+				</th>
 				{/foreach}
-				<td class="listViewHeaderValues noSorting">{vtranslate('LBL_LIST_PRICE',$MODULE)}</td>
+				<th class="listViewHeaderValues noSorting">{vtranslate('LBL_LIST_PRICE',$MODULE)}</th>
 			</tr>
 		</thead>
-		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES}
+		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=popupListView}
 		<tr class="listViewEntries" data-id="{$LISTVIEW_ENTRY->getId()}" data-name='{$LISTVIEW_ENTRY->getName()}'
-			{if $GETURL neq '' } data-url='{$LISTVIEW_ENTRY->$GETURL()}' {/if} >
+			{if $GETURL neq '' } data-url='{$LISTVIEW_ENTRY->$GETURL()}' {/if} id="{$MODULE}_popUpListView_row_{$smarty.foreach.popupListView.index+1}">
 			<td>
 				<input class="entryCheckBox" type="checkbox" />
 			</td>
 			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			<td>
-				{if $LISTVIEW_HEADERNAME eq 'unit_price'}
-					{$LISTVIEW_ENTRY->get('currencySymbol')}
-				{/if}
+			<td class="listViewEntryValue">
 				{if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
 					<a>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{else}
-					{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+					<a>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{/if}
 			</td>
 			{/foreach}
-			<td class="listPricetd">
+			<td class="listViewEntryValue">
 				<div class="row-fluid">
-					<input type="text" value="{$LISTVIEW_ENTRY->get('unit_price')}" class="invisible span10 listPrice" data-validation-engine="validate[required,funcCall[Vtiger_Currency_Validator_Js.invokeValidation]]" 
+					<input type="text" value="{$LISTVIEW_ENTRY->get('unit_price')}" name="listPrice" class="invisible span10 zeroPaddingAndMargin" data-validation-engine="validate[required,funcCall[Vtiger_Currency_Validator_Js.invokeValidation]]"
 						   data-decimal-seperator='{$USER_MODEL->get('currency_decimal_separator')}' data-group-seperator='{$USER_MODEL->get('currency_grouping_separator')}'/>
 				</div>
 			</td>
@@ -67,8 +64,8 @@
 		</div>
 	{/if}
 </div>
-<div> 
-	<a class="cancelLink cursorPointer pull-right padding1per"> Cancel </a> 
-	<button class="btn addButton select pull-right"><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate('LBL_ADD_TO_PRICEBOOKS',$MODULE)}</strong></button> 
-</div> 
+<div class="form-actions">
+	<a class="cancelLink cursorPointer pull-right horizontalLeftSpacing"> Cancel </a>
+	<button class="btn addButton select pull-right btn-primary"><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate('LBL_ADD_TO_PRICEBOOKS',$MODULE)}</strong></button>
+</div>
 {/strip}

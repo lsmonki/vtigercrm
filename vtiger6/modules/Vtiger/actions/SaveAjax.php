@@ -18,9 +18,11 @@ class Vtiger_SaveAjax_Action extends Vtiger_Save_Action {
 		$result = array();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
 			$fieldValue = $displayValue = Vtiger_Util_Helper::toSafeHTML($recordModel->get($fieldName));
-			if ($fieldModel->getFieldDataType() !== 'currency') {
-				$displayValue = $fieldModel->getDisplayValue($fieldValue, $recordModel->getId());
+			
+			if ($fieldModel->getFieldDataType() !== 'currency' && $fieldModel->getFieldDataType() !== 'datetime') { 
+				$displayValue = $fieldModel->getDisplayValue($fieldValue, $recordModel->getId()); 
 			}
+			
 			$result[$fieldName] = array('value' => $fieldValue, 'display_value' => $displayValue);
 		}
 

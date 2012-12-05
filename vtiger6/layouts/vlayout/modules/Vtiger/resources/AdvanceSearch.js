@@ -69,7 +69,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 			"mode"	: "showAdvancedSearch",
 			"source_module": searchModule
         };
-		
+
 		var progressInstance = jQuery.progressIndicator();
 		AppConnector.request(searchableModulesParams).then(
 			function(data){
@@ -166,7 +166,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 		var params = {};
 		params.data = data;
 		params.cb = postLoad;
-		params.css = {'width':'31%','text-align':'left'};
+		params.css = {'width':'29%','text-align':'left'};
 		params.overlayCss = {'opacity':'0.2'};
 		params.unblockcb = unblockcd;
 		app.showModalWindow(params);
@@ -309,11 +309,11 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 
 			thisInstance.setSearchModule(selectedModuleName);
 			//If no module is selected dont proceed
-			//TODO : see if you need to clear earlier loaded fields and conditions 
+			//TODO : see if you need to clear earlier loaded fields and conditions
 			if(selectedModuleName == '') {
 				return;
 			}
-			
+
 			thisInstance.initiateSearch();
 		});
 
@@ -359,7 +359,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 						.validationEngine('showPrompt', app.vtranslate('JS_SELECT_MODULE'), 'error','topRight',true)
 				return;
 			}
-			
+
 			thisInstance.performValidation().then(function(){
 				var params = {};
 				params.viewname = value;

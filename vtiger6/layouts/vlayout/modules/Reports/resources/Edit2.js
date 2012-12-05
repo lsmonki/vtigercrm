@@ -78,11 +78,14 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 	 * returns result
 	 */
 	isFormValidate : function(){
+		var thisInstance = this;
 		var selectElement = this.getReportsColumnsList();
 		var select2Element = app.getSelect2ElementFromSelect(selectElement);
 		var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
 		if(result != true){
 			select2Element.validationEngine('showPrompt', result , 'error','bottomLeft',true);
+			var form = thisInstance.getContainer();
+			app.formAlignmentAfterValidation(form);
 			return false;
 		} else {
 			select2Element.validationEngine('hide');
@@ -174,9 +177,11 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 		var orderedSelect2Options = select2Element.find('li.select2-search-choice').find('div');
 		orderedSelect2Options.each(function(index,element){
 			var chosenOption = jQuery(element);
+			var choiceElement = chosenOption.closest('.select2-search-choice');
+			var choiceValue = choiceElement.data('select2Data').id;
 			selectedOptions.each(function(optionIndex, domOption){
 				var option = jQuery(domOption);
-				if(option.html() == chosenOption.html()) {
+				if(option.val() == choiceValue) {
 					selectedValuesByOrder.push(option.val());
 					return false;
 				}

@@ -24,12 +24,12 @@ class Home_Module_Model extends Vtiger_Module_Model {
 	 * @return <Array>
 	 */
 	public function getComments($pagingModel) {
-		//TODO: need to handle security
 		$db = PearDatabase::getInstance();
 
 		$nonAdminAccessQuery = Users_Privileges_Model::getNonAdminAccessControlQuery('ModComments');
 
-		$result = $db->pquery('SELECT *, vtiger_crmentity.createdtime AS createdtime FROM vtiger_modcomments
+		$result = $db->pquery('SELECT *, vtiger_crmentity.createdtime AS createdtime, vtiger_crmentity.smownerid AS smownerid,
+						crmentity2.crmid AS parentId, crmentity2.setype AS parentModule FROM vtiger_modcomments
 						INNER JOIN vtiger_crmentity ON vtiger_modcomments.modcommentsid = vtiger_crmentity.crmid
 							AND vtiger_crmentity.deleted = 0
 						INNER JOIN vtiger_crmentity crmentity2 ON vtiger_modcomments.related_to = crmentity2.crmid
@@ -44,7 +44,7 @@ class Home_Module_Model extends Vtiger_Module_Model {
 			$commentModel = Vtiger_Record_Model::getCleanInstance('ModComments');
 			$commentModel->setData($row);
 			$time = $commentModel->get('createdtime');
-			$comments[$time] = $commentModel;
+			$comments[$time] = $commentModel;			
 		}
 
 		return $comments;
@@ -105,10 +105,12 @@ class Home_Module_Model extends Vtiger_Module_Model {
 	 * @param <Vtiger_Paging_Model> $pagingModel
 	 * @return <Array>
 	 */
-	function getCalendarActivities($pagingModel) {
+	function getCalendarActivities($mode, $pagingModel, $recordId = false) {
 		$db = PearDatabase::getInstance();
 
-		$currentDate = date('Y-m-d H:i:s');
+		$nowInUserFormat = Vtiger_Datetime_UIType::getDisplayDateValue(date('Y-m-d H:i:s'));
+		$nowInDBFormat = Vtiger_Datetime_UIType::getDBDateTimeValue($nowInUserFormat);
+		list($currentDate, $currentTime) = explode(' ', $nowInDBFormat);
 
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype, vtiger_activity.* FROM vtiger_activity
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -119,60 +121,36 @@ class Home_Module_Model extends Vtiger_Module_Model {
 		$query .= " WHERE vtiger_crmentity.deleted=0
 					AND (vtiger_activity.activitytype NOT IN ('Emails'))
 					AND (vtiger_activity.status is NULL OR vtiger_activity.status NOT IN ('Completed', 'Deferred'))
-					AND (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus NOT IN ('Held', 'Not Held'))
-					AND CAST((CONCAT(due_date, ' ', time_end)) AS DATETIME) > '$currentDate'
-					ORDER BY vtiger_crmentity.crmid DESC LIMIT ?, ?";
+					AND (vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus NOT IN ('Held'))";
+		
+		if ($mode === 'upcoming') {
+			$query .= " AND due_date >= '$currentDate'";
+		} elseif ($mode === 'overdue') {
+			$query .= " AND due_date < '$currentDate'";
+		}
 
- 		$result = $db->pquery($query, array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
+		$query .= " ORDER BY date_start, time_start LIMIT ?, ?";
+
+		$result = $db->pquery($query, array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()+1));
 		$numOfRows = $db->num_rows($result);
 
-		$upcomingActivitites = array();
+		$activities = array();
 		for($i=0; $i<$numOfRows; $i++) {
 			$row = $db->query_result_rowdata($result, $i);
 			$model = Vtiger_Record_Model::getCleanInstance('Calendar');
 			$model->setData($row);
 			$model->setId($row['crmid']);
-			$upcomingActivitites[] = $model;
+			$activities[] = $model;
 		}
 
-		return $upcomingActivitites;
-	}
-
-	/**
-	 * Function returns the Calendar Events for the module which are in overdue
-	 * @param <Vtiger_Paging_Model> $pagingModel
-	 * @return <Array>
-	 */
-	public function getCalendarOverDueActivities($pagingModel) {
-		$db = PearDatabase::getInstance();
-
-		$currentDate = date('Y-m-d H:i:s');
-
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype, vtiger_activity.* FROM vtiger_activity
-					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_activity.activityid
-					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
-		$query .= Users_Privileges_Model::getNonAdminAccessControlQuery('Calendar');
-
-		$query .= " WHERE vtiger_crmentity.deleted=0
-					AND (vtiger_activity.activitytype NOT IN ('Emails'))
-					AND (vtiger_activity.status is NULL OR vtiger_activity.status NOT IN ('Completed', 'Deferred'))
-					AND (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus NOT IN ('Held', 'Not Held'))
-					AND CAST((CONCAT(due_date, ' ', time_end)) AS DATETIME) < '$currentDate'
-					ORDER BY vtiger_crmentity.crmid DESC LIMIT ?, ?";
-
-		$result = $db->pquery($query, array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
-		$numOfRows = $db->num_rows($result);
-
-		$overDueActivities = array();
-		for($i=0; $i<$numOfRows; $i++) {
-			$row = $db->query_result_rowdata($result, $i);
-			$model = Vtiger_Record_Model::getCleanInstance('Calendar');
-			$model->setData($row);
-			$model->setId($row['crmid']);
-			$overDueActivities[] = $model;
+		$pagingModel->calculatePageRange($activities);
+		if($numOfRows > $pagingModel->getPageLimit()){
+			array_pop($activities);
+			$pagingModel->set('nextPageExists', true);
+		} else {
+			$pagingModel->set('nextPageExists', false);
 		}
 
-		return $overDueActivities;
+		return $activities;
 	}
 }

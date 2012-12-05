@@ -16,34 +16,41 @@
 			<ul class="unstyled">
 				{foreach item=RECENT_ACTIVITY from=$RECENT_ACTIVITIES}
 					{if $RECENT_ACTIVITY->isCreate()}
-						<li>{$RECENT_ACTIVITY->getModifiedBy()->getName()} {vtranslate('LBL_CREATED', $MODULE_NAME)} {vtranslate('LBL_ON', $MODULE_NAME)} {$RECENT_ACTIVITY->getParent()->get('createdtime')}
+						<li>
+							<div>
+								<span><strong>{$RECENT_ACTIVITY->getModifiedBy()->getName()}</strong> {vtranslate('LBL_CREATED', $MODULE_NAME)}</span>
+								<span class="pull-right"><p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getParent()->get('createdtime'))}</small></p></span>
+							</div>
 						</li>
 					{else if $RECENT_ACTIVITY->isUpdate()}
 						<li>
-							{$RECENT_ACTIVITY->getModifiedBy()->getDisplayName()} {vtranslate('LBL_UPDATED', $MODULE_NAME)} {vtranslate('LBL_ON', $MODULE_NAME)} {$RECENT_ACTIVITY->getActivityTime()}
-							
+							<div>
+								<span><strong>{$RECENT_ACTIVITY->getModifiedBy()->getDisplayName()}</strong> {vtranslate('LBL_UPDATED', $MODULE_NAME)}</span>
+								<span class="pull-right"><p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getActivityTime())}</small></p></span>
+							</div>
+
 							{foreach item=FIELDMODEL from=$RECENT_ACTIVITY->getFieldInstances()}
-								<div class='font-x-small'>
-									<i>{$FIELDMODEL->getName()}</i>:&nbsp;
+								<div class='font-x-small updateInfoContainer'>
+									<i>{vtranslate($FIELDMODEL->getName(),$MODULE_NAME)}</i>:&nbsp;
 									{if $FIELDMODEL->get('prevalue') neq ''}
-										{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('prevalue'))}&nbsp;
+										{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('prevalue'))}&nbsp;{vtranslate('LBL_TO', $MODULE_NAME)}&nbsp;
 									{else}
 										{* First time change *}
 									{/if}
-									&rightarrow; <b>{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('postvalue'))}</b>
+									<b>{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('postvalue'))}</b>
 								</div>
 							{/foreach}
-							
+
 						</li>
 					{else if $RECENT_ACTIVITY->isRelationLink()}
 						<li>
 							{assign var=RELATION value=$RECENT_ACTIVITY->getRelationInstance()}
-							{$RELATION->getLinkedRecord()->getModuleName()} {vtranslate('LBL_ADDED', $MODULE_NAME)} {$RELATION->getLinkedRecord()->getName()}
+							{vtranslate($RELATION->getLinkedRecord()->getModuleName(), $RELATION->getLinkedRecord()->getModuleName())} {vtranslate('LBL_ADDED', $MODULE_NAME)} {$RELATION->getLinkedRecord()->getName()} {vtranslate('LBL_ON', $MODULE_NAME)} {$RELATION->getLinkedRecord()->get('createdtime')}
 						</li>
 					{else if $RECENT_ACTIVITY->isRelationUnLink()}
 						<li>
 							{assign var=URELATION value=$RECENT_ACTIVITY->getRelationInstance()}
-							{$URELATION->getUnLinkedRecord()->getModuleName()} {vtranslate('LBL_REMOVED', $MODULE_NAME)} {$URELATION->getUnLinkedRecord()->getName()}
+							{vtranslate($URELATION->getUnLinkedRecord()->getModuleName(), $URELATION->getUnLinkedRecord()->getModuleName())} {vtranslate('LBL_REMOVED', $MODULE_NAME)} {$URELATION->getUnLinkedRecord()->getName()} {vtranslate('LBL_ON', $MODULE_NAME)} {$URELATION->getUnLinkedRecord()->get('modifiedtime')}
 						</li>
 					{else if $RECENT_ACTIVITY->isRestore()}
 						<li>
@@ -53,7 +60,7 @@
 				{/foreach}
 			</ul>
 			{else}
-				<div class="well">
+				<div class="summaryWidgetContainer">
 					<p class="textAlignCenter">{vtranslate('LBL_NO_RECENT_UPDATES')}</p>
 				</div>
 		{/if}
@@ -61,7 +68,7 @@
 	{if $PAGING_MODEL->isNextPageExists()}
 		<div class="row-fluid">
 			<div class="pull-right">
-				<a href="javascript:void(0)" class="moreRecentActivities">{vtranslate('LBL_MORE',$MODULE_NAME)}..</a>
+				<a href="javascript:void(0)" class="moreRecentUpdates">{vtranslate('LBL_MORE',$MODULE_NAME)}..</a>
 			</div>
 		</div>
 	{/if}

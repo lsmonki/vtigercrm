@@ -11,23 +11,30 @@
 -->*}
 {strip}
 	<span class="pull-right listViewActions">
-		<span class="btn-toolbar">
-			{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
-				<span class="btn-group">
-					<button class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0}onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
-				</span>
-			{/foreach}
-			{if $LISTVIEW_LINKS['LISTVIEWSETTING']|@count gt 0}
-				<span class="btn-group">
-					<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><img class="alignMiddle" src="{vimage_path('tools.png')}" alt="{vtranslate('LBL_SETTINGS', $MODULE)}" title="{vtranslate('LBL_SETTINGS', $MODULE)}">&nbsp;&nbsp;<i class="caret"></i></button>
-					<ul class="listViewSetting dropdown-menu">
-						{foreach item=LISTVIEW_SETTING from=$LISTVIEW_LINKS['LISTVIEWSETTING']}
-							<li><a href={$LISTVIEW_SETTING->getUrl()}>{vtranslate($LISTVIEW_SETTING->getLabel(), $MODULE)}</a></li>
-						{/foreach}
-					</ul>
-				</span>
-			{/if}
+		<span class="pageNumbers alignTop">
+			{if $LISTVIEW_ENTIRES_COUNT}{$PAGING_MODEL->getRecordStartRange()} {vtranslate('LBL_TO', $MODULE)} {$PAGING_MODEL->getRecordEndRange()}{if $LISTVIEW_COUNT} {vtranslate('LBL_OF', $MODULE)} {$LISTVIEW_COUNT}{/if}{/if}
 		</span>
+		<span class="btn-group alignTop">
+
+			<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
+			<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
+			<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
+
+			<span>
+				<button class="btn" id="listViewPreviousPageButton" {if !$PAGING_MODEL->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
+				<button class="btn" id="listViewNextPageButton" {if !$PAGING_MODEL->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
+			</span>
+		</span>
+	{if $LISTVIEW_LINKS['LISTVIEWSETTING']|@count gt 0}
+		<span class="btn-group">
+			<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><img class="alignMiddle" src="{vimage_path('tools.png')}" alt="{vtranslate('LBL_SETTINGS', $MODULE)}" title="{vtranslate('LBL_SETTINGS', $MODULE)}">&nbsp;&nbsp;<i class="caret"></i></button>
+			<ul class="listViewSetting dropdown-menu">
+				{foreach item=LISTVIEW_SETTING from=$LISTVIEW_LINKS['LISTVIEWSETTING']}
+					<li><a href={$LISTVIEW_SETTING->getUrl()}>{vtranslate($LISTVIEW_SETTING->getLabel(), $MODULE)}</a></li>
+				{/foreach}
+			</ul>
+		</span>
+	{/if}
 	</span>
 	<div class="clearfix"></div>
 	<input type="hidden" id="recordsCount" value=""/>

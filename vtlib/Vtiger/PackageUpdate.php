@@ -42,7 +42,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
             // Unzip selectively
             $unzip->unzipAllEx( ".",
                     Array(
-                    'include' => Array('templates', "modules/$module", 'vtiger6', 'layouts'), // We don't need manifest.xml
+                    'include' => Array('templates', "modules/$module", 'cron', 'vtiger6', 'layouts'), // We don't need manifest.xml
                     //'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
                     ),
                     // Templates folder to be renamed while copying
@@ -254,7 +254,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
         if(empty($blocknode->fields) || empty($blocknode->fields->field)) return;
 
         foreach($blocknode->fields->field as $fieldnode) {
-            $fieldInstance = Vtiger_Field::getInstance($fieldnode->fieldname, $moduleInstance);
+            $fieldInstance = Vtiger_Field::getInstance((string)$fieldnode->fieldname, $moduleInstance);
             if(!$fieldInstance) {
                 $fieldInstance = $this->import_Field($blocknode, $blockInstance, $moduleInstance, $fieldnode);
             } else {

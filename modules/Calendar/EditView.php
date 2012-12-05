@@ -72,7 +72,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $related_array = getRelatedListsInformation("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
-    
+
     if(!empty($cntlist))
         $entityIds = array_keys($cntlist);
 	$cnt_namelist = array();
@@ -132,7 +132,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		$cnt_idlist = array_keys($cnt_namelist);
 		$smarty->assign("CONTACTSID",  implode(';', $cnt_idlist));
 		$smarty->assign("CONTACTSNAME",$cnt_namelist);
-		
+
 		$account_id = vtlib_purify($_REQUEST['account_id']);
 		$account_name = getAccountName($account_id);
 	}
@@ -170,13 +170,14 @@ if($activity_mode == 'Events') {
 
 unset($act_data['LBL_DESCRIPTION_INFORMATION']);
 unset($act_data['LBL_REMINDER_INFORMATION']);
-unset($act_data['LBL_RECURRENCE_INFORMATION']);
+//unset($act_data['LBL_RECURRENCE_INFORMATION']);
 
 $smarty->assign("BLOCKS",$act_data);
 foreach($act_data as $header=>$blockitem)
 {
 	foreach($blockitem as $row=>$data)
 	{
+		if($data)
 		foreach($data as $key=>$maindata)
 		{
 			$uitype[$maindata[2][0]] = $maindata[0][0];
@@ -197,7 +198,7 @@ if (strlen($account_name) > 0)
 	$value['parent_id'] = $account_name;
 }
 
-$format = ($current_user->hour_format == '')?'am/pm':$current_user->hour_format;
+$format = ($current_user->hour_format == '')?12:$current_user->hour_format;
 $stdate = key($value['date_start']);
 $enddate = key($value['due_date']);
 $sttime = $value['date_start'][$stdate];

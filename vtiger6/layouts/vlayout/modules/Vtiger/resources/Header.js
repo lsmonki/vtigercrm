@@ -55,16 +55,31 @@ jQuery.Class("Vtiger_Header_Js",{
 	getContentsContainer : function() {
 		return this.contentContainer;
 	},
-
-	getQuickCreateForm : function(url, moduleName) {
+	
+	
+	getQuickCreateForm : function(url, moduleName, params) {
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
-		if(typeof Vtiger_Header_Js.quickCreateModuleCache[moduleName] != 'undefined') {
-			aDeferred.resolve(Vtiger_Header_Js.quickCreateModuleCache[moduleName]);
-			return aDeferred.promise();
+		var requestParams;
+        if(typeof params == 'undefined') {
+            params = {};
+        }
+		if((!params.noCache) || (typeof (params.noCache) == "undefined")){
+			if(typeof Vtiger_Header_Js.quickCreateModuleCache[moduleName] != 'undefined') {
+				aDeferred.resolve(Vtiger_Header_Js.quickCreateModuleCache[moduleName]);
+				return aDeferred.promise();
+			}
+		} 
+		requestParams = url;
+		if(typeof params.data != "undefined"){
+			var requestParams = {};
+			requestParams['data'] = params.data;
+			requestParams['url'] = url;
 		}
-		AppConnector.request(url).then(function(data){
-			Vtiger_Header_Js.quickCreateModuleCache[moduleName] = data;
+		AppConnector.request(requestParams).then(function(data){
+			if((!params.noCache) || (typeof (params.noCache) == "undefined")){
+				Vtiger_Header_Js.quickCreateModuleCache[moduleName] = data; 
+			}
 			aDeferred.resolve(data);
 		});
 		return aDeferred.promise();
@@ -84,7 +99,7 @@ jQuery.Class("Vtiger_Header_Js",{
 	 */
 	alignContentsContainer : function(topValue) {
 		if(typeof topValue == 'undefined'){
-			topValue = '80px';
+			topValue = '75px';
 		}
 		var contentsContainer = this.getContentsContainer();
 		contentsContainer.css({'margin-top':topValue, 'margin-bottom':'20px'});
@@ -192,7 +207,10 @@ jQuery.Class("Vtiger_Header_Js",{
 		var thisInstance = this;
 		app.showModalWindow(data, function(data){
 			var quickCreateForm = data.find('form[name="QuickCreate"]');
-			quickCreateForm.validationEngine();
+			quickCreateForm.validationEngine(app.validationEngineOptions);
+			if(typeof params.callbackPostShown != "undefined"){
+				params.callbackPostShown(quickCreateForm);
+			}
 			thisInstance.registerQuickCreatePostLoadEvents(quickCreateForm,params.callbackFunction);
 			app.registerEventForDatePickerFields(quickCreateForm);
 			var editViewObj = Vtiger_Edit_Js.getInstance();
@@ -205,35 +223,52 @@ jQuery.Class("Vtiger_Header_Js",{
 		if(typeof submitSuccessCallbackFunction == 'undefined') {
 			submitSuccessCallbackFunction = function() {};
 		}
-
+		
 		form.on('submit',function(e){
 			var form = jQuery(e.currentTarget);
+			
+			//Form should submit only once for multiple clicks also
+			if(typeof form.data('submit') != "undefined") {
+				return false;
+			} else {
+				var invalidFields = form.data('jqv').InvalidFields;
 
-			var invalidFields = form.data('jqv').InvalidFields;
-
-			if(invalidFields.length > 0 ) {
-				e.preventDefault();
-				return;
-			}
-			var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
-			form.trigger(recordPreSaveEvent, {'value' : 'edit'});
-			if(!(recordPreSaveEvent.isDefaultPrevented())) {
-				thisInstance.quickCreateSave(form).then(
-					function(data) {
-						app.hideModalWindow();
-						submitSuccessCallbackFunction(data);
-                        var registeredCallBackList = thisInstance.quickCreateCallBacks;
-                        for(var index=0; index < registeredCallBackList.length ; index++) {
-                            var callBack = registeredCallBackList[index];
-                            callBack({'data' : data, 'name' : form.find('[name="module"]').val()});
-                        }
-					},
-					function(error,err){
-					}
-				);
-			}
+				if(invalidFields.length > 0 ) {
+					//If validation fails, form should submit again
+					form.removeData('submit');
+					form.progressIndicator({'mode' : 'hide'});
+					e.preventDefault();
+					return;
+				} else {
+					//Once the form is submiting add data attribute to that form element
+					form.data('submit', 'true');
+					form.progressIndicator();
+				}
+				
+				var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+				form.trigger(recordPreSaveEvent, {'value' : 'edit'});
+				if(!(recordPreSaveEvent.isDefaultPrevented())) {
+					thisInstance.quickCreateSave(form).then(
+						function(data) {
+							app.hideModalWindow();
+							submitSuccessCallbackFunction(data);
+							var registeredCallBackList = thisInstance.quickCreateCallBacks;
+							for(var index=0; index < registeredCallBackList.length ; index++) {
+								var callBack = registeredCallBackList[index];
+								callBack({'data' : data, 'name' : form.find('[name="module"]').val()});
+							}
+						},
+						function(error,err){
+						}
+					);
+				} else {
+					//If validation fails in recordPreSaveEvent, form should submit again
+					form.removeData('submit');
+					form.progressIndicator({'mode' : 'hide'});
+				}
 			e.preventDefault();
-		});
+		}
+	});
 
 		form.find('#goToFullForm').on('click',function(e){
 			var form = jQuery(e.currentTarget).closest('form');
@@ -326,14 +361,14 @@ jQuery.Class("Vtiger_Header_Js",{
 				params = {};
 			}
 
-			if(typeof params.callbackFunction  == 'undefined') {
+			if(typeof params.callbackFunction == 'undefined') {
 				params.callbackFunction = function(){};
 			}
-
+			
 			var quickCreateElem = jQuery(e.currentTarget);
 			var quickCreateUrl = quickCreateElem.data('url');
 			var quickCreateModuleName = quickCreateElem.data('name');
-			thisInstance.getQuickCreateForm(quickCreateUrl,quickCreateModuleName).then(function(data){
+			thisInstance.getQuickCreateForm(quickCreateUrl,quickCreateModuleName,params).then(function(data){
 				thisInstance.handleQuickCreateData(data,params);
 			});
 

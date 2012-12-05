@@ -14,16 +14,17 @@ class Reports_Save_Action extends Vtiger_Save_Action {
 		$moduleName = $request->getModule();
 		$moduleModel = Reports_Module_Model::getInstance($moduleName);
 
+		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		if (!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
+			throw new AppException('LBL_PERMISSION_DENIED');
+		}
+
 		$record = $request->get('record');
 		if ($record) {
 			$reportModel = Reports_Record_Model::getCleanInstance($record);
 			if (!$reportModel->isEditable()) {
 				throw new AppException('LBL_PERMISSION_DENIED');
 			}
-		}
-		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		if (!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
-			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}
 
@@ -54,7 +55,6 @@ class Reports_Save_Action extends Vtiger_Save_Action {
 		$reportModel->set('standardFilter', $request->get('standard_fiter'));
 		$reportModel->set('advancedFilter', $request->get('advanced_filter'));
 		$reportModel->set('advancedGroupFilterConditions', $request->get('advanced_group_condition'));
-
 		
 		$reportModel->save();
 

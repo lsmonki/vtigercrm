@@ -82,20 +82,33 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 						'sortBy'=>$this->get('sortby'));
 
 		$reportClassInstance = Vtiger_Module_Model::getClassInstance('Reports');
-		$reportsList = $reportClassInstance->sgetRptsforFldr($this->getId(), $paramsList);
-		$rows = count($reportsList);
-
-		$reportModuleModel = Vtiger_Module_Model::getInstance('Reports');
-		$reportModels = array();
-
-		for($i=0; $i<$rows; $i++) {
-			$reportModel = new Reports_Record_Model();
-			
-			$reportModel->setData($reportsList[$i])->setModuleFromInstance($reportModuleModel);
-			$reportModels[] = $reportModel;
-			unset($reportModel);
+		
+		$fldrId = $this->getId ();
+		if($fldrId == 'All') {
+			$fldrId = false;
+			$paramsList = array( 'startIndex'=>$pagingModel->getStartIndex(),
+								 'pageLimit'=>100,
+								 'orderBy'=>$this->get('orderby'),
+								 'sortBy'=>$this->get('sortby')
+							);
 		}
-		return $reportModels;
+		
+		$reportsList = $reportClassInstance->sgetRptsforFldr($fldrId, $paramsList);		
+		$reportModuleModel = Vtiger_Module_Model::getInstance('Reports');
+		
+		if($fldrId == false) {
+			return $this->getAllReportModels($reportsList, $reportModuleModel);
+		} else {
+			$reportModels = array();
+			for($i=0; $i < count($reportsList); $i++) {
+				$reportModel = new Reports_Record_Model();
+
+				$reportModel->setData($reportsList[$i])->setModuleFromInstance($reportModuleModel);
+				$reportModels[] = $reportModel;
+				unset($reportModel);
+			}
+			return $reportModels;
+		}
 	}
 
 	/**
@@ -263,5 +276,26 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 		}
 		$result = $db->pquery($sql, $params);
 		return $db->query_result($result, 0, 'count');
+	}
+	
+    /**
+	 * Function to get all Report Record Models
+	 * @param <Array> $allReportsList
+	 * @param <Vtiger_Module_Model> - Reports Module Model
+	 * @return <Array> Reports Record Models
+	 */
+	public function getAllReportModels($allReportsList, $reportModuleModel){
+		$allReportModels = array();
+		foreach ($allReportsList as $key => $reportsList) {
+			$folderModel = self::getInstanceById($key);
+			for($i=0; $i < count($reportsList); $i++) {
+				$reportModel = new Reports_Record_Model();
+				$reportModel->setData($reportsList[$i])->setModuleFromInstance($reportModuleModel);
+				$reportModel->set('foldername', $folderModel->getName());
+				$allReportModels[] = $reportModel;
+				unset($reportModel);
+			}
+		}
+		return $allReportModels;
 	}
 }

@@ -11,7 +11,7 @@
 			<div class="row-fluid">
 				<span class="span6"><strong>{vtranslate('LBL_SEARCH_RESULTS',$MODULE)}&nbsp;({$totalCount})</strong></span>
 				{if $IS_ADVANCE_SEARCH }
-				<span class="span5">
+				<span class="span6">
 					<span class="pull-right">
 						<a href="javascript:void(0);" id="showFilter">{vtranslate('LBL_SAVE_MODIFY_FILTER',$MODULE)}</a>
 					</span>

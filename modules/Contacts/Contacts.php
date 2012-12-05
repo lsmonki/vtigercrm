@@ -463,7 +463,7 @@ class Contacts extends CRMEntity {
 			vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,
 			vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
 			vtiger_contactdetails.lastname, vtiger_crmentity.modifiedtime,
-			vtiger_crmentity.createdtime, vtiger_crmentity.description,
+			vtiger_crmentity.createdtime, vtiger_crmentity.description,vtiger_crmentity.crmid,
 			case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
 				from vtiger_activity
 				inner join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid

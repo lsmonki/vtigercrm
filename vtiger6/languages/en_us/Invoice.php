@@ -19,14 +19,13 @@ $languageStrings = array(
 
 	// Blocks
 	'LBL_INVOICE_INFORMATION' => 'Invoice Details',
-	
+
 	//Field labels
 	'Sales Order' => 'Sales Order',
 	'Customer No' => 'Customer No',
 	'Invoice Date' => 'Invoice Date',
 	'Purchase Order' => 'Purchase Order',
 	'Sales Commission' => 'Sales Commission',
-	'Account Name' => 'Account Name',
 	'Invoice No' => 'Invoice No',
 	//Added for existing Picklist Entries
 

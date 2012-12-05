@@ -15,8 +15,9 @@
 {assign var="dateFormat" value=$USER_MODEL->get('date_format')}
 <div class="input-append row-fluid">
 	<div class="span10 row-fluid date">
-		<input type="text" class="span9 dateField" name="{$FIELD_MODEL->get('name')}" data-date-format="{$dateFormat}"
-	type="text" value="{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"   {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} data-fieldinfo='{$FIELD_INFO}' />
+		{assign var=FIELD_NAME value=$FIELD_MODEL->get('name')}
+		<input id="{$MODULE}_editView_fieldName_{$FIELD_NAME}" type="text" class="span9 dateField" name="{$FIELD_NAME}" data-date-format="{$dateFormat}"
+			type="text" value="{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"   {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} data-fieldinfo='{$FIELD_INFO}' />
 		<span class="add-on"><i class="icon-calendar"></i></span>
 	</div>
 </div>

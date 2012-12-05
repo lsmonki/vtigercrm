@@ -98,7 +98,7 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 		$isRelationOperation = $request->get('relationOperation');
 
 		//if it is relation edit
-		$viewer->assign('IS_RELATION_OPERATION', $request->get('relationOperation'));
+		$viewer->assign('IS_RELATION_OPERATION', $isRelationOperation);
 		if($isRelationOperation) {
 			$viewer->assign('SOURCE_MODULE', $sourceModule);
 			$viewer->assign('SOURCE_RECORD', $sourceRecord);

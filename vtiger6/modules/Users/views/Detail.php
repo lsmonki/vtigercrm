@@ -89,6 +89,8 @@ class Users_Detail_View extends Vtiger_Detail_View {
             $viewer->assign('HEADER_LINKS',$this->getHeaderLinks());
             $viewer->assign('ANNOUNCEMENT', $this->getAnnouncement());
             $viewer->assign('CURRENT_VIEW', $request->get('view'));
+			$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
+			
             if($display) {
                 $this->preProcessDisplay($request);
             }
@@ -106,7 +108,12 @@ class Users_Detail_View extends Vtiger_Detail_View {
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 
+		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
+		
+		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructureInstance->getStructure());
+
 		$viewer = $this->getViewer($request);
+		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
 		return parent::process($request);

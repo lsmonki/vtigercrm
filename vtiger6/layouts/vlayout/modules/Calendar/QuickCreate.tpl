@@ -10,6 +10,10 @@
  ********************************************************************************/
 -->*}
 {strip}
+{foreach key=index item=jsModel from=$SCRIPTS}
+	<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
+{/foreach}
+		
 <div class="modelContainer">
 	<div class="modal-header">
 		<button class="close" aria-hidden="true" data-dismiss="modal" type="button" title="{vtranslate('LBL_CLOSE')}">x</button>
@@ -18,6 +22,8 @@
 <form class="form-horizontal recordEditView" id="quickCreate" name="QuickCreate" method="post" action="index.php">
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="action" value="SaveAjax">
+	<input type="hidden" name="defaultCallDuration" value="{$USER_MODEL->get('callduration')}" />
+	<input type="hidden" name="defaultOtherEventDuration" value="{$USER_MODEL->get('othereventduration')}" />
 	<!-- Random number is used to make specific tab is opened -->
 	{assign var="RAND_NUMBER" value=rand()}
 	<div class="modal-body tabbable" style="padding:0px">
@@ -53,7 +59,7 @@
 							<td class="fieldLabel alignMiddle">
 								{if {$isReferenceField} eq "reference"}
 									{if $refrenceListCount > 1}
-										<select style="width: 150px;" class="chzn-select" id="referenceModulesList">
+										<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
 											<optgroup>
 												{foreach key=index item=value from=$refrenceList}
 													<option value="{$value}">{vtranslate($value, $value)}</option>
@@ -72,8 +78,16 @@
 							<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 								{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE_NAME)}
 							</td>
+							{if $MODULE_NAME eq 'Events' && $smarty.foreach.blockfields.last }	
+								{include file=vtemplate_path('uitypes/FollowUp.tpl',$MODULE_NAME) MODULE=$MODULE_NAME}
+							{/if}
 						{/foreach}
 						</tr>
+						{if $smarty.request.parent_id neq ''}
+							<input type="hidden" name="parent_id" value="{$smarty.request.parent_id}" />
+						{else if $smarty.request.contact_id neq ''}
+							<input type="hidden" name="contact_id" value="{$smarty.request.contact_id}" />
+						{/if}
 					</table>
 				</div>
 				<div class="modal-footer quickCreateActions">

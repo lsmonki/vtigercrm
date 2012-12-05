@@ -69,6 +69,8 @@ class Vtiger_Dashboard_View extends Vtiger_Index_View {
 		$jsFileNames = array(
 			'~/libraries/jquery/gridster/jquery.gridster.min.js',
 			'~/libraries/jquery/jqplot/jquery.jqplot.min.js',
+			'~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
+			'~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
 			'modules.Vtiger.resources.DashBoard',
 			'modules.'.$moduleName.'.resources.DashBoard',
 			'modules.Vtiger.resources.dashboards.Widget'

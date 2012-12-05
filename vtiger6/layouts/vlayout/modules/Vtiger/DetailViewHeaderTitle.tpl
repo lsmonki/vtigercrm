@@ -10,5 +10,9 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<span class="recordLabel lead">{$RECORD->getName()}</span>
+	<span class="span10 margin0px">
+		<span class="row-fluid">
+			<span class="recordLabel font-x-x-large textOverflowEllipsis span pushDown" title="{$RECORD->getName()}">{$RECORD->getName()}</span>
+		</span>
+	</span>
 {/strip}

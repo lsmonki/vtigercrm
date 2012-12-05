@@ -19,10 +19,12 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Events Summary',
 	'LBL_EVENTS' => 'Events',
 	'LBL_TODOS' => 'To Do',
+	'LBL_HOLD_FOLLOWUP_ON' => 'Hold Followup on',
 	
 	// Blocks
 	'LBL_EVENT_INFORMATION' => 'Event Details',
 	'LBL_RECURRENCE_INFORMATION' => 'Recurrence Details',
+    'LBL_RELATED_TO' => 'Related To',
 	
 	//Fields
 	'Start Date & Time'=>'Start Date & Time',
@@ -33,6 +35,7 @@ $languageStrings = array(
 	'End Date & Time' => 'End Date & Time',
 	'Activity Type'=>'Activity Type',
 	'Visibility' => 'Visibility',
+	'Recurrence' => 'Repeat',
 	
 	//Visibility picklist values
 	'Private' => 'Private',
@@ -51,7 +54,45 @@ $languageStrings = array(
 	'LBL_DAYS' => 'Days',
 	'LBL_HOURS' => 'Hours',
 	
+	//Repeat Labels
+	'LBL_DAYS_TYPE' => 'Day(s)',
+	'LBL_WEEKS_TYPE' => 'Week(s)',
+	'LBL_MONTHS_TYPE' => 'Month(s)',
+	'LBL_YEAR_TYPE' => 'Year',
+	
+	'LBL_FIRST' => 'First',
+	'LBL_LAST' => 'Last',
+	
+	'LBL_SM_SUN' => 'Sun',
+	'LBL_SM_MON' => 'Mon',
+	'LBL_SM_TUE' => 'Tue',
+	'LBL_SM_WED' => 'Wed',
+	'LBL_SM_THU' => 'Thr',
+	'LBL_SM_FRI' => 'Fri',
+	'LBL_SM_SAT' => 'Sat',
+	
+	'LBL_DAY0' => 'Sunday',
+	'LBL_DAY1' => 'Monday',
+	'LBL_DAY2' => 'Tuesday',
+	'LBL_DAY3' => 'Wednesday',
+	'LBL_DAY4' => 'Thursday',
+	'LBL_DAY5' => 'Friday',
+	'LBL_DAY6' => 'Saturday',
+	
+	'Daily'=>'Day(s)',
+	'Weekly'=>'Week(s)',
+	'Monthly'=>'Month(s)',
+	'Yearly'=>'Year',
+	
+	'LBL_REPEATEVENT' => 'Repeat once in every',
+	'LBL_UNTIL' => 'Until',
+	'LBL_DAY_OF_THE_MONTH' => 'day of the month',
+	'LBL_ON' => 'on',
+	
 	'LBL_RECORDS_LIST' => 'List View',
-	'LBL_CALENDAR_VIEW' => 'Calendar View'
+	'LBL_CALENDAR_VIEW' => 'Calendar View',
+
+    'LBL_INVITE_USER_BLOCK' => 'Invite',
+    'LBL_INVITE_USERS' => 'Invite Users'
 
 );

@@ -17,7 +17,16 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	//This will store the editview form
 	editViewForm : false,
    
-		
+	//Address field mapping within module
+	addressFieldsMappingInModule : {
+										'bill_street':'ship_street',
+										'bill_pobox':'ship_pobox',
+										'bill_city'	:'ship_city',
+										'bill_state':'ship_state',
+										'bill_code'	:'ship_code',
+										'bill_country':'ship_country'
+								},
+								
 	/**
 	 * Function which will register basic events which will be used in quick create as well
 	 *
@@ -25,6 +34,7 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	registerBasicEvents : function(container) {
 		this._super(container);
 		this.registerRecordPreSaveEvent(container);
+		this.registerEventForCopyingAddress();
 			//container.trigger(Vtiger_Edit_Js.recordPreSave, {'value': 'edit'});
 	},
         
@@ -97,6 +107,63 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 				}
 			}
 			e.preventDefault();
+		})
+	},
+	
+	/**
+	 * Function to swap array
+	 * @param Array that need to be swapped
+	 */ 
+	swapObject : function(objectToSwap){
+		var swappedArray = {};
+		var newKey,newValue;
+		for(var key in objectToSwap){
+			newKey = objectToSwap[key];
+			newValue = key;
+			swappedArray[newKey] = newValue;
+		}
+		return swappedArray;
+	},
+	
+	/**
+	 * Function to copy address between fields
+	 * @param strings which accepts value as either odd or even
+	 */
+	copyAddress : function(swapMode){
+		var thisInstance = this;
+		var formElement = this.getForm();
+		var addressMapping = this.addressFieldsMappingInModule;
+		if(swapMode == "false"){
+			for(var key in addressMapping) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+addressMapping[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+		} else if(swapMode){
+			var swappedArray = thisInstance.swapObject(addressMapping);
+			for(var key in swappedArray) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+swappedArray[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+		}
+	},
+	
+	/**
+	 * Function to register event for copying address between two fileds
+	 */
+	registerEventForCopyingAddress : function(){
+		var thisInstance = this;
+		var swapMode;
+		jQuery('[name="copyAddress"]').on('click',function(e){
+			var element = jQuery(e.currentTarget);
+			var target = element.data('target');
+			if(target == "billing"){
+				swapMode = "false";
+			}else if(target == "shipping"){
+				swapMode = "true";
+			}
+			thisInstance.copyAddress(swapMode);
 		})
 	}
     

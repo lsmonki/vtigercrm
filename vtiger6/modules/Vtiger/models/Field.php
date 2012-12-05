@@ -79,12 +79,12 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 * @param <String> $value - value which need to be converted to display value
 	 * @return <String> - converted display value
 	 */
-	public function getDisplayValue($value, $record=false) {
+	public function getDisplayValue($value, $record=false, $recordInstance = false) {
 		if(!$this->uitype_instance) {
 			$this->uitype_instance = Vtiger_Base_UIType::getInstanceFromField($this);
 		}
 		$uiTypeInstance = $this->uitype_instance;
-		return $uiTypeInstance->getDisplayValue($value, $record);
+		return $uiTypeInstance->getDisplayValue($value, $record, $recordInstance);
 	}
 
 	/**
@@ -208,8 +208,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 * @return <Boolean> - true/false
 	 */
 	public function isMandatory() {
-		$webserviceField = $this->getWebserviceFieldObject();
-		return $webserviceField->isMandatory();
+		list($type,$mandatory)= explode('~',$this->get('typeofdata'));
+		return $mandatory=='M' ? true:false;
 	}
 
 	/**
@@ -394,6 +394,13 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
 		$escapedFieldLabel = str_replace(' ', '_', $fieldLabel);
 		$moduleFieldLabel = $moduleName.'_'.$escapedFieldLabel;
+		
+		if($tableName == 'vtiger_crmentity' && $columnName !='smownerid'){
+			$tableName = 'vtiger_crmentity'.$moduleName;
+		} elseif($columnName == 'smownerid') {
+			$tableName = 'vtiger_users'.$moduleName;
+			$columnName ='user_name';
+		}
 
 		return $tableName.':'.$columnName.':'.$moduleFieldLabel.':'.$fieldName.':'.$fieldType;
 	}
@@ -415,7 +422,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			$fieldInfo['picklistvalues'] = $pickListValues;
 		}
 
-		if($this->getFieldDataType() == 'date'){
+		if($this->getFieldDataType() == 'date' || $this->getFieldDataType() == 'datetime'){
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$fieldInfo['date-format'] = $currentUser->get('date_format');
 		}
@@ -670,8 +677,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			'T' => array('e','n','l','g','m','h','bw','b','a'),
 			'I' => array('e','n','l','g','m','h'),
 			'C' => array('e','n'),
-			'D' => array('e','n','l','g','m','h','bw','b','a'),
-			'DT' => array('e','n','l','g','m','h','bw','b','a'),
+			'D' => array('e','n','bw','b','a'),
+			'DT' => array('e','n','bw','b','a'),
 			'NN' => array('e','n','l','g','m','h'),
 			'E' => array('e','n','s','ew','c','k')
 		);

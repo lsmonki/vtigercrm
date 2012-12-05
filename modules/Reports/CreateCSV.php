@@ -32,7 +32,7 @@ if(!empty($startdate) && !empty($enddate) && $startdate != "0000-00-00" &&
 	$startdate = $date->getDBInsertDateValue();//Convert the user date format to DB date format
 	$enddate = $endDate->getDBInsertDateValue();//Convert the user date format to DB date format
 }
-$oReportRun = new ReportRun($reportid);
+$oReportRun = ReportRun::getInstance($reportid);
 $filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 
 $oReportRun->writeReportToCSVFile($fname, $filterlist);

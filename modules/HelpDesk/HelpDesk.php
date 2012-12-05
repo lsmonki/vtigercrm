@@ -116,10 +116,10 @@ class HelpDesk extends CRMEntity {
 	{
 		//Inserting into Ticket Comment Table
 		$this->insertIntoTicketCommentTable("vtiger_ticketcomments",$module);
-		
+
 		//Inserting into vtiger_attachments
 		$this->insertIntoAttachment($this->id,$module);
-		
+
 		//service contract update
 		$return_action = $_REQUEST['return_action'];
 		$for_module = $_REQUEST['return_module'];
@@ -132,7 +132,7 @@ class HelpDesk extends CRMEntity {
 		}
 	}
 
-	function save_related_module($module, $crmid, $with_module, $with_crmid) {		
+	function save_related_module($module, $crmid, $with_module, $with_crmid) {
 		parent::save_related_module($module, $crmid, $with_module, $with_crmid);
 		if ($with_module == 'ServiceContracts') {
 			$serviceContract = CRMEntity::getInstance("ServiceContracts");
@@ -193,7 +193,7 @@ class HelpDesk extends CRMEntity {
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
-	
+
 	/** Function to form the query to get the list of activities
      *  @param  int $id - ticket id
 	 *	@return array - return an array which will be returned from the function GetRelatedList
@@ -710,18 +710,18 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 	 */
 	function generateReportsSecQuery($module,$secmodule, $queryplanner) {
 		$matrix = $queryplanner->newDependencyMatrix();
-		
+
 		$matrix->setDependency("vtiger_crmentityHelpDesk",array("vtiger_groupsHelpDesk","vtiger_usersHelpDesk","vtiger_lastModifiedByHelpDesk"));
 		$matrix->setDependency("vtiger_troubletickets",array("vtiger_crmentityHelpDesk","vtiger_ticketcf","vtiger_crmentityRelHelpDesk","vtiger_productsRel"));
 		$matrix->setDependency("vtiger_crmentityRelHelpDesk",array("vtiger_accountRelHelpDesk","vtiger_contactdetailsRelHelpDesk"));
-		
-		
+
+
 		if (!$queryplanner->requireTable('vtiger_troubletickets', $matrix)) {
 			return '';
 		}
 		// TODO Support query planner
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_troubletickets","ticketid", $queryplanner);
-		
+
 		if ($queryplanner->requireTable("vtiger_crmentityHelpDesk",$matrix)){
 		    $query .=" left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubletickets.ticketid and vtiger_crmentityHelpDesk.deleted=0";
 		}
@@ -749,7 +749,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		if ($queryplanner->requireTable("vtiger_lastModifiedByHelpDesk")){
 		    $query .=" left join vtiger_users as vtiger_lastModifiedByHelpDesk on vtiger_lastModifiedByHelpDesk.id = vtiger_crmentityHelpDesk.modifiedby ";
 		}
-		
+
 		return $query;
 	}
 
@@ -789,7 +789,8 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 	}
 
 	public static function getTicketEmailContents($entityData) {
-	 $adb = PearDatabase::getInstance();
+		global $HELPDESK_SUPPORT_NAME;
+		$adb = PearDatabase::getInstance();
 		$moduleName = $entityData->getModuleName();
 		$wsId = $entityData->getId();
 		$parts = explode('x', $wsId);
@@ -823,19 +824,17 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$desc .= getTicketComments($entityId);
 
 		$sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = ?";
-		$result = $adb->pquery($sql, array($id));
+		$result = $adb->pquery($sql, array($entityId));
 		$cffields = $adb->getFieldsArray($result);
 		foreach ($cffields as $cfOneField) {
-			if ($cfOneField != 'ticketid') {
+			if ($cfOneField != 'ticketid' && $cfOneField != 'from_portal') {
 				$cfData = $adb->query_result($result, 0, $cfOneField);
 				$sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ? and vtiger_field.presence in (0,2)";
 				$cfLabel = $adb->query_result($adb->pquery($sql, array($cfOneField)), 0, 'fieldlabel');
-				$desc .= '<br><br>' . $cfLabel . ' : <br>' . $cfData;
+				$desc .= '<br>' . $cfLabel . ' : ' . $cfData;
 			}
 		}
-		// end of contribution
-		$desc .= '<br><br><br>';
-		$desc .= '<br>' . getTranslatedString("LBL_REGARDS", $moduleName) . ',<br>' . getTranslatedString("LBL_TEAM", $moduleName) . '.<br>';
+		$desc .= '<br><br>' . getTranslatedString("LBL_REGARDS", $moduleName) . ',<br>' . $HELPDESK_SUPPORT_NAME ;
 		return $desc;
 	}
 
@@ -845,9 +844,13 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 
 		$moduleName = $entityData->getModuleName();
 		$wsId = $entityData->getId();
-		$parts = explode('x', $wsId);
-		$entityId = $parts[1];
-
+		
+		if(strpos($wsId,'x')){
+			$parts = explode('x', $wsId);
+			$entityId = $parts[1];
+		} else{
+			$entityId = $wsId;
+		}
 		$wsParentId = $entityData->get('parent_id');
 		$parentIdParts = explode('x', $wsParentId);
 		$parentId = $parentIdParts[1];
@@ -855,10 +858,10 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
 		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName($parentId) . ",<br><br>";
 		$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $entityData->get('ticket_title')
-				. '</b>' . getTranslatedString('customer_portal', $moduleName);
+				. '</b> ' . getTranslatedString('customer_portal', $moduleName);
 		$contents .= getTranslatedString("link", $moduleName) . '<br>';
 		$contents .= $portalUrl;
-		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . $HELPDESK_SUPPORT_NAME;
+		$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br>' . $HELPDESK_SUPPORT_NAME;
 		return $contents;
 	}
 

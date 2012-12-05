@@ -64,7 +64,7 @@ if($numOfRows > 0) {
 	}
 
 	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true) {
-		$oReportRun = new ReportRun($reportid);
+		$oReportRun = ReportRun::getInstance($reportid);
 
 		require_once 'include/Zend/Json.php';
 		$json = new Zend_Json();

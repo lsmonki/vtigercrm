@@ -64,45 +64,6 @@
 						{include file='AdvanceFilter.tpl'|@vtemplate_path}
 					</span>
 				</div>
-				<hr class="horizontalDivider">
-				<h4>{vtranslate('LBL_FILTER_ON_DATE', $MODULE)}:</h4>
-				<div class="standardFilterDiv row-fluid">
-					<span class="span">
-						{assign var=STANDARD_FILTER_CONDITIONS value=$CUSTOMVIEW_MODEL->getStandardCriteria()}
-						<select class="chzn-select standardFilterChosenSelect standardFilterColumn">
-                            <option value="none">{vtranslate('LBL_NONE',$MODULE)}</option>
-                            {foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$RECORD_STRUCTURE}
-                            {foreach key=FIELD_NAME item=FIELD_MODEL from=$BLOCK_FIELDS}
-                                {if $FIELD_MODEL->getFieldDataType() eq 'datetime' || $FIELD_MODEL->getFieldDataType() eq 'time' || $FIELD_MODEL->getFieldDataType() eq 'date'}
-                                    <option value="{$FIELD_MODEL->getCVDateFilterColumnName()}"
-                                    {if in_array($FIELD_MODEL->getCVDateFilterColumnName(), $CUSTOMVIEW_MODEL->getStandardCriteria())}
-                                            selected
-                                    {/if}
-                                    >{vtranslate($SOURCE_MODULE,$SOURCE_MODULE)}-{vtranslate($FIELD_MODEL->get('label'), $SOURCE_MODULE)}</option>
-                                {/if}
-                            {/foreach}
-                            {/foreach}
-						</select>
-					</span>
-					<span class="span">
-						<select class="chzn-select standardFilterChosenSelect" id="standardDateFilter">
-						{foreach key=DATE_FILTER_LABEL item=DATE_FILTER from=$DATE_FILTERS}
-							<option value="{$DATE_FILTER_LABEL}" data-currentdate="{$DATE_FILTER['startdate']}" data-enddate="{$DATE_FILTER['enddate']}"
-							{if in_array($DATE_FILTER_LABEL, $CUSTOMVIEW_MODEL->getStandardCriteria())}
-									selected
-							{/if}
-							>{vtranslate($DATE_FILTER['label'],$MODULE)}</option>
-						{/foreach}
-						</select>
-					</span>
-					{assign var="dateFormat" value=$USER_MODEL->get('date_format')}
-					<span class="row-fluid span2">
-						<input  id="standardFilterCurrentDate" class="stndrdFilterDateSelect row-fluid span" type="text" data-date-format="{$dateFormat}" value="{$STANDARD_FILTER_CONDITIONS['startdate']}" />
-					</span>
-					<span class="row-fluid span2">
-						<input  id="standardFilterEndDate" class="stndrdFilterDateSelect row-fluid span" type="text" data-date-format="{$dateFormat}" value="{$STANDARD_FILTER_CONDITIONS['enddate']}"/>
-					</span>
-				</div>
 			</div>
 		</div>
 		<div class="filterActions">

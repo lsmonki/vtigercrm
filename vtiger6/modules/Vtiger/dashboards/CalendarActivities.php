@@ -23,7 +23,7 @@ class Vtiger_CalendarActivities_Dashboard extends Vtiger_IndexAjax_View {
 		$pagingModel->set('limit', 10);
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$calendarActivities = $moduleModel->getCalendarActivities($pagingModel);
+		$calendarActivities = $moduleModel->getCalendarActivities('upcoming', $pagingModel);
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 

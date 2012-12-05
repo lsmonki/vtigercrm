@@ -51,7 +51,22 @@ class PriceBooks_Detail_View extends Vtiger_Detail_View {
 		$header = $relationListView->getHeaders();
 		$noOfEntries = count($models);
 
+		$parentRecordCurrencyId = $parentRecordModel->get('currency_id');
+		if ($parentRecordCurrencyId) {
+			$relatedModuleModel = Vtiger_Module_Model::getInstance($relatedModuleName);
+
+			foreach ($models as $recordId => $recorModel) {
+				$productIdsList[$recordId] = $recordId;
+			}
+			$unitPricesList = $relatedModuleModel->getPricesForProducts($parentRecordCurrencyId, $productIdsList);
+
+			foreach ($models as $recordId => $recorModel) {
+				$recorModel->set('unit_price', $unitPricesList[$recordId]);
+			}
+		}
+
 		$relationModel = $relationListView->getRelationModel();
+		$relationField = $relationModel->getRelationField();
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_RECORDS' , $models);
@@ -59,7 +74,8 @@ class PriceBooks_Detail_View extends Vtiger_Detail_View {
 		$viewer->assign('RELATED_LIST_LINKS', $links);
 		$viewer->assign('RELATED_HEADERS', $header);
 		$viewer->assign('RELATED_MODULE', $relationModel->getRelationModuleModel());
-		$viewer->assign('RELATED_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('RELATED_ENTIRES_COUNT', $noOfEntries);
+		$viewer->assign('RELATION_FIELD', $relationField);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			$viewer->assign('TOTAL_ENTRIES', $relationListView->getRelatedEntriesCount());

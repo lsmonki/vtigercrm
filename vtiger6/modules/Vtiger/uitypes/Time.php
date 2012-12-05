@@ -43,6 +43,12 @@ class Vtiger_Time_UIType extends Vtiger_Base_UIType {
 			$format = vtranslate('AM');
 		}
 
+        //If hours zero then we need to make it as 12 AM
+        if($hours == '00') {
+            $hours = '12';
+            $format = vtranslate('AM');
+        }
+
 		return "$hours:$minutes $format";
 	}
 
@@ -59,6 +65,10 @@ class Vtiger_Time_UIType extends Vtiger_Base_UIType {
 		if ($timeDetails[1] === 'PM' && $hours != '12') {
 			$hours = $hours+12;
 		}
+
+        if($timeDetails[1] === 'AM' && $hours == '12'){
+            $hours = '00';
+        }
 		
 		if(empty($seconds)) {
 			$seconds = '00';

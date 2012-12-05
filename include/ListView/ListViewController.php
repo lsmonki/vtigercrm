@@ -874,7 +874,12 @@ class ListViewController {
 						$value = ' --';
 					}
 				}elseif ($field->getFieldDataType() == 'picklist') {
-					if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
+					//To not check for permissions for non admin users for task                     
+                    if($module == 'Calendar' && $value == 'Task') {
+                        $value = getTranslatedString($value,$module);
+						$value = textlength_check($value);
+                    }
+					else if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
 							!in_array($value, $this->picklistValueMap[$fieldName])) {
 						$value = "<font color='red'>".getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
@@ -888,15 +893,18 @@ class ListViewController {
 
 						$fieldDataType = $field->getFieldDataType();
 						if($module == 'Calendar' &&($fieldName == 'date_start' || $fieldName == 'due_date')) {
-							if($fieldName == 'date_start') {
+                            if($fieldName == 'date_start') {
 								$timeField = 'time_start';
 							}else if($fieldName == 'due_date') {
 								$timeField = 'time_end';
 							}
-							$value .= ' '. $this->db->query_result($result, $i, $timeField);
-							
-							//TO make sure it takes time value as well 
-							$fieldDataType = 'datetime';
+                            $timeFieldValue = $this->db->query_result($result, $i, $timeField);
+                            if(!empty($timeFieldValue)){
+                                $value .= ' '. $timeFieldValue;
+                                
+                                //TO make sure it takes time value as well
+                                $fieldDataType = 'datetime';
+                            }
 						}
 						
 						$date = new DateTimeField($value);
@@ -945,7 +953,7 @@ class ListViewController {
 						$value = "<a class='emailField' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId,".
 						"'$fieldName');\">".textlength_check($value)."</a>";
 					} else {
-						$value = '<a href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
+						$value = '<a class="emailField" href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
 					}
 				} elseif($field->getFieldDataType() == 'boolean') {
 					if($value == 1) {

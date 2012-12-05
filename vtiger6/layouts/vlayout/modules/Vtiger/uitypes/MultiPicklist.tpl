@@ -13,7 +13,7 @@
 {assign var="FIELD_INFO" value=Zend_Json::encode($FIELD_MODEL->getFieldInfo())}
 {assign var=PICKLIST_VALUES value=$FIELD_MODEL->getPicklistValues()}
 {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
-<select multiple class="chzn-select" name="{$FIELD_MODEL->get('name')}[]" data-fieldinfo='{$FIELD_INFO}' data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} >
+<select id="{$MODULE}_editView_fieldName_{$FIELD_MODEL->get('name')}" multiple class="chzn-select" name="{$FIELD_MODEL->get('name')}[]" data-fieldinfo='{$FIELD_INFO}' data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if} >
     {foreach item=PICKLIST_VALUE from=$PICKLIST_VALUES}
         <option value="{$PICKLIST_VALUE}" {if $FIELD_MODEL->get('fieldvalue') eq $PICKLIST_VALUE} selected {/if}>{vtranslate($PICKLIST_VALUE, $MODULE)}</option>
     {/foreach}

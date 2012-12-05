@@ -450,7 +450,23 @@ Vtiger_Integer_Validator_Js("Vtiger_Double_Validator_Js",{},{
 	}
 })
 
-Vtiger_Base_Validator_Js("Vtiger_Date_Validator_Js",{},{
+Vtiger_Base_Validator_Js("Vtiger_Date_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var dateValidatorInstance = new Vtiger_Date_Validator_Js();
+		dateValidatorInstance.setElement(field);
+		var response = dateValidatorInstance.validate();
+		if(response != true){
+			return dateValidatorInstance.getError();
+		}
+	}
+	
+},{
 
 	/**
 	 * Function to validate the Positive Numbers and whole Number
@@ -466,7 +482,8 @@ Vtiger_Base_Validator_Js("Vtiger_Date_Validator_Js",{},{
 			Vtiger_Helper_Js.getDateInstance(fieldValue,fieldDateFormat);
 		}
 		catch(err){
-			this.setError(err);
+			var errorInfo = app.vtranslate("JS_PLEASE_ENTER_VALID_DATE");
+			this.setError(errorInfo);
 			return false;
 		}
 		return true;
@@ -526,5 +543,40 @@ Vtiger_Base_Validator_Js('Calendar_greaterThanToday_Validator_Js',{},{
 			return false;
 		}
         return true;
+	}
+})
+
+Vtiger_Base_Validator_Js("Calendar_RepeatMonthDate_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var repeatMonthDateValidatorInstance = new Calendar_RepeatMonthDate_Validator_Js();
+		repeatMonthDateValidatorInstance.setElement(field);
+		var response = repeatMonthDateValidatorInstance.validate();
+		if(response != true){
+			return repeatMonthDateValidatorInstance.getError();
+		}
+	}
+	
+},{
+
+	/**
+	 * Function to validate the Positive Numbers and whole Number
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(){
+		var fieldValue = this.getFieldValue();
+		
+		if((parseInt(parseFloat(fieldValue))) != fieldValue || fieldValue == '' || parseInt(fieldValue) > '31' || parseInt(fieldValue) <= 0) {
+			var result = app.vtranslate('JS_NUMBER_SHOULD_BE_LESS_THAN_32');
+			this.setError(result);
+			return false;
+		}
+		return true;
 	}
 })

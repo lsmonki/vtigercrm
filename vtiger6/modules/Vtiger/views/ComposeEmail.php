@@ -20,6 +20,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = 'Emails';
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$sourceModule = $request->getModule();
 		$cvId = $request->get('viewname');
 		$selectedIds = $request->get('selected_ids');
@@ -37,6 +38,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('EMAIL_FIELDS', $emailFields);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize')/1000000);
+		$viewer->assign('RELATED_MODULES', $moduleModel->getEmailRelatedModules());
 
 		$to =array();
 		$toMailInfo = array();

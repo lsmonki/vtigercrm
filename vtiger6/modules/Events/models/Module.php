@@ -20,5 +20,23 @@ class Events_Module_Model extends Calendar_Module_Model {
 	public function getListViewUrl() {
 		return 'index.php?module=Calendar&view='.$this->getListViewName();
 	}
+
+   /**
+	 * Function to save a given record model of the current module
+	 * @param Vtiger_Record_Model $recordModel
+	 */
+	public function saveRecord(Vtiger_Record_Model $recordModel) {
+        $recordModel = parent::saveRecord($recordModel);
+        
+        //code added to send mail to the vtiger_invitees
+        $selectUsers = $recordModel->get('selectedusers');
+        if(!empty($selectUsers))
+        {
+            $invities = implode(';',$selectUsers);
+            $mail_contents = $recordModel->getInviteUserMailData();
+            $activityMode = ($recordModel->getModuleName()=='Calendar') ? 'Task' : 'Events';
+            sendInvitation($invities,$activityMode,$recordModel->get('subject'),$mail_contents);
+        }
+    }
 	
 }

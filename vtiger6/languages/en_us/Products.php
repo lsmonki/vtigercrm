@@ -88,4 +88,5 @@ $languageStrings = array(
 	'Sq Ft'=>'Sq Ft',
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'Add to PriceBooks',
+	'LBL_CONVERSION_RATE' => 'Conversion Rate',
 );

@@ -69,7 +69,8 @@ class Products_Record_Model extends Vtiger_Record_Model {
 	function getCreateQuoteUrl() {
 		$quotesModuleModel = Vtiger_Module_Model::getInstance('Quotes');
 
-		return "index.php?module=".$quotesModuleModel->getName()."&view=".$quotesModuleModel->getEditViewName()."&product_id=".$this->getId();
+		return "index.php?module=".$quotesModuleModel->getName()."&view=".$quotesModuleModel->getEditViewName()."&product_id=".$this->getId().
+				"&sourceModule=".$this->getModuleName()."&sourceRecord=".$this->getId()."&relationOperation=true";
 	}
 
 	/**
@@ -79,7 +80,8 @@ class Products_Record_Model extends Vtiger_Record_Model {
 	function getCreateInvoiceUrl() {
 		$invoiceModuleModel = Vtiger_Module_Model::getInstance('Invoice');
 
-		return "index.php?module=".$invoiceModuleModel->getName()."&view=".$invoiceModuleModel->getEditViewName()."&product_id=".$this->getId();
+		return "index.php?module=".$invoiceModuleModel->getName()."&view=".$invoiceModuleModel->getEditViewName()."&product_id=".$this->getId().
+				"&sourceModule=".$this->getModuleName()."&sourceRecord=".$this->getId()."&relationOperation=true";
 	}
 
 	/**
@@ -89,7 +91,8 @@ class Products_Record_Model extends Vtiger_Record_Model {
 	function getCreatePurchaseOrderUrl() {
 		$purchaseOrderModuleModel = Vtiger_Module_Model::getInstance('PurchaseOrder');
 
-		return "index.php?module=".$purchaseOrderModuleModel->getName()."&view=".$purchaseOrderModuleModel->getEditViewName()."&product_id=".$this->getId();
+		return "index.php?module=".$purchaseOrderModuleModel->getName()."&view=".$purchaseOrderModuleModel->getEditViewName()."&product_id=".$this->getId().
+				"&sourceModule=".$this->getModuleName()."&sourceRecord=".$this->getId()."&relationOperation=true";
 	}
 
 	/**
@@ -99,7 +102,8 @@ class Products_Record_Model extends Vtiger_Record_Model {
 	function getCreateSalesOrderUrl() {
 		$salesOrderModuleModel = Vtiger_Module_Model::getInstance('SalesOrder');
 
-		return "index.php?module=".$salesOrderModuleModel->getName()."&view=".$salesOrderModuleModel->getEditViewName()."&product_id=".$this->getId();
+		return "index.php?module=".$salesOrderModuleModel->getName()."&view=".$salesOrderModuleModel->getEditViewName()."&product_id=".$this->getId().
+				"&sourceModule=".$this->getModuleName()."&sourceRecord=".$this->getId()."&relationOperation=true";
 	}
 
 	/**
@@ -135,7 +139,7 @@ class Products_Record_Model extends Vtiger_Record_Model {
 
 		for ($i=1; $i<=count($productDetails); $i++) {
 			$productId = $productDetails[$i]['hdnProductId'.$i];
-			$productPrices = getPricesForProducts($currentUser->get('currency_id'), array($productId), $this->getModuleName());
+			$productPrices = $this->getModule()->getPricesForProducts($currentUser->get('currency_id'), array($productId), $this->getModuleName());
 			$productDetails[$i]['listPrice'.$i] = number_format($productPrices[$productId], $currentUser->get('no_of_currency_decimals'),'.','');
 		}
 		return $productDetails;

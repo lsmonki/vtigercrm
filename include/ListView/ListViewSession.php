@@ -115,6 +115,8 @@ class ListViewSession {
 			vtlib_setup_modulevars($currentModule, $instance);
 			if($currentModule=='Documents' && !empty($folderId)){
 				$list_query = preg_replace("/[\n\r\s]+/"," ",$list_query);
+				$list_query = explode('ORDER BY', $list_query);
+				$list_query = $list_query[0];
 				$list_query .= " AND vtiger_notes.folderid=$folderId";
 				$order_by = $instance->getOrderByForFolder($folderId);
 				$sorder = $instance->getSortOrderForFolder($folderId);

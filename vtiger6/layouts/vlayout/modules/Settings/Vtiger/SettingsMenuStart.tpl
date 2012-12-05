@@ -13,20 +13,19 @@
 {include file="BasicHeader.tpl"|vtemplate_path:$MODULE}
 
 {strip}
-<div class="bodyContents">
-	<div class="mainContainer row-fluid">
-		<div class="span12">
-			<iframe id="ui5frame" src="{$UI5_URL}" width="100%" height="650px" style="border:0;"></iframe>
-		</div>
-{/strip}
+{if $LOAD_OLD}
+    <div class="bodyContents">
+        <div class="mainContainer row-fluid">
+            <div class="span12">
+                <iframe id="ui5frame" src="{$UI5_URL}" width="100%" height="650px" style="border:0;"></iframe>
+            </div>
 
-{* NOTE: The above snippet embeds UI5 Settings.
-{strip}
-<div class="bodyContents">
-	<div class="mainContainer row-fluid">
-		<div class="span2 row-fluid">
-			<div class="minHeight100 fixedLayout span2">{include file='NavigationBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
-		</div>
-		<div class="contentsDiv span10 marginLeftZero">
+{else}
+    <div class="bodyContents">
+        <div class="mainContainer row-fluid">
+            <div class="span2 row-fluid">
+                <div>{include file='NavigationBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+            </div>
+    		<div class="contentsDiv span10 marginLeftZero">
+{/if}
 {/strip}
-*}

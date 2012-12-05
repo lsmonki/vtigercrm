@@ -19,6 +19,8 @@ $languageStrings = array(
 	'LBL_CONTACT_INFORMATION' => 'Basic Information',
 	'LBL_CUSTOMER_PORTAL_INFORMATION' => 'Customer Portal Details',
 	'LBL_IMAGE_INFORMATION' => 'Profile Picture',
+	'LBL_COPY_OTHER_ADDRESS' => 'Copy Other Address',
+	'LBL_COPY_MAILING_ADDRESS' => 'Copy Mailing Address',
 
 	//Field Labels
 	'Office Phone' => 'Office Phone',

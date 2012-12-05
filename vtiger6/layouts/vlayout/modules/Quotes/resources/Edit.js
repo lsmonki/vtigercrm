@@ -20,6 +20,12 @@ Inventory_Edit_Js("Quotes_Edit_Js",{},{
 		jQuery('input[name="account_id"]', formElement).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
 			thisInstance.referenceSelectionEventHandler(data);
 		});
+	},
+	
+	registerEvents: function(){
+		this._super();
+		this.registerForTogglingBillingandShippingAddress();
+		this.registerEventForCopyAddress();
 	}
 });
 

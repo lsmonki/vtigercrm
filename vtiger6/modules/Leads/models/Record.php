@@ -66,20 +66,27 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		if ($moduleModel->isActive()) {
 			$fieldModels = $moduleModel->getFields();
+            //Fields that need to be shown
+            $complusoryFields = array('industry');
 			foreach ($fieldModels as $fieldName => $fieldModel) {
 				if($fieldModel->isMandatory() && $fieldName != 'assigned_user_id') {
+                    $keyIndex = array_search($fieldName,$complusoryFields);
+                    if($keyIndex !== false) {
+                        unset($complusoryFields[$keyIndex]);
+                    }
 					$leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
 					$fieldModel->set('fieldvalue', $this->get($leadMappedField));
 					$accountsFields[] = $fieldModel;
 				}
 			}
-
-			if($privilegeModel->hasFieldWriteAccess($moduleName, 'industry')) {
-				$industryFieldModel = $moduleModel->getField('industry');
-				$industryLeadMappedField = $this->getConvertLeadMappedField('industry', $moduleName);
-				$industryFieldModel->set('fieldvalue', $this->get($industryLeadMappedField));
-				$accountsFields[] = $industryFieldModel;
-			}
+            foreach($complusoryFields as $complusoryField) {
+                if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+                    $industryFieldModel = $moduleModel->getField($complusoryField);
+                    $industryLeadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
+                    $industryFieldModel->set('fieldvalue', $this->get($industryLeadMappedField));
+                    $accountsFields[] = $industryFieldModel;
+                }
+            }
 		}
 		return $accountsFields;
 	}
@@ -100,23 +107,28 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		if ($moduleModel->isActive()) {
 			$fieldModels = $moduleModel->getFields();
-					foreach($fieldModels as $fieldName => $fieldModel) {
-						if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id') {
-							$leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
-							$fieldValue = $this->get($leadMappedField);
-							if ($fieldName === 'account_id') {
-								$fieldValue = $this->get('company');
-							}
-							$fieldModel->set('fieldvalue', $fieldValue);
-					$contactsFields[] = $fieldModel;
-				}
-			}
+            $complusoryFields = array('firstname', 'email');
+            foreach($fieldModels as $fieldName => $fieldModel) {
+                if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id') {
+                    $keyIndex = array_search($fieldName,$complusoryFields);
+                    if($keyIndex !== false) {
+                        unset($complusoryFields[$keyIndex]);
+                    }
 
-			$additionalFields = array('firstname', 'email');
-			foreach($additionalFields as $fieldName) {
-				if($privilegeModel->hasFieldWriteAccess($moduleName, $fieldName)) {
-					$leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
-					$fieldModel = $moduleModel->getField($fieldName);
+                    $leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
+                    $fieldValue = $this->get($leadMappedField);
+                    if ($fieldName === 'account_id') {
+                        $fieldValue = $this->get('company');
+                    }
+                    $fieldModel->set('fieldvalue', $fieldValue);
+                    $contactsFields[] = $fieldModel;
+                }
+            }
+
+			foreach($complusoryFields as $complusoryField) {
+				if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+					$leadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
+					$fieldModel = $moduleModel->getField($complusoryField);
 					$fieldModel->set('fieldvalue', $this->get($leadMappedField));
 					$contactsFields[] = $fieldModel;
 				}
@@ -141,20 +153,27 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		if ($moduleModel->isActive()) {
 			$fieldModels = $moduleModel->getFields();
+
+            $complusoryFields = array('amount');
 			foreach($fieldModels as $fieldName => $fieldModel) {
 				if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id' && $fieldName != 'related_to') {
+                    $keyIndex = array_search($fieldName,$complusoryFields);
+                    if($keyIndex !== false) {
+                        unset($complusoryFields[$keyIndex]);
+                    }
 					$leadMappedField = $this->getConvertLeadMappedField($fieldName, $moduleName);
 					$fieldModel->set('fieldvalue', $this->get($leadMappedField));
 					$potentialFields[] = $fieldModel;
 				}
 			}
-
-			if($privilegeModel->hasFieldWriteAccess($moduleName, 'amount')) {
-				$fieldModel = $moduleModel->getField('amount');
-				$amountLeadMappedField = $this->getConvertLeadMappedField('amount', $moduleName);
-				$fieldModel->set('fieldvalue', $this->get($amountLeadMappedField));
-				$potentialFields[] = $fieldModel;
-			}
+            foreach($complusoryFields as $complusoryField) {
+                if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+                    $fieldModel = $moduleModel->getField($complusoryField);
+                    $amountLeadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
+                    $fieldModel->set('fieldvalue', $this->get($amountLeadMappedField));
+                    $potentialFields[] = $fieldModel;
+                }
+            }
 		}
 		return $potentialFields;
 	}
@@ -173,38 +192,42 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 
 			$result = $db->pquery('SELECT * FROM vtiger_convertleadmapping', array());
 			$numOfRows = $db->num_rows($result);
-
+			
+			$accountInstance = Vtiger_Module_Model::getInstance('Accounts');
+			$accountFieldInstances = $accountInstance->getFieldsById();
+			
+			$contactInstance = Vtiger_Module_Model::getInstance('Contacts');
+			$contactFieldInstances = $contactInstance->getFieldsById();
+			
+			$potentialInstance = Vtiger_Module_Model::getInstance('Potentials');
+			$potentialFieldInstances = $potentialInstance->getFieldsById();
+			
+			$leadInstance = Vtiger_Module_Model::getInstance('Leads');
+			$leadFieldInstances = $leadInstance->getFieldsById();
+			
 			for($i=0; $i<$numOfRows; $i++) {
-				//Lead Field Name
-				$leadFieldId = $db->query_result($result, $i, 'leadfid');
-				$leadFieldInstance = Vtiger_Field_Model::getInstance($leadFieldId);
-				$leadFieldName = $leadFieldInstance->getName();
+				$row = $db->query_result_rowdata($result,$i);
+				if(empty($row['leadfid'])) continue;
 
-				//Account Field Name
-				$accountFieldId = $db->query_result($result, $i, 'accountfid');
-				if ($accountFieldId) {
-					$accountFieldInstance = Vtiger_Field_Model::getInstance($accountFieldId);
+				$leadFieldInstance = $leadFieldInstances[$row['leadfid']];
+				if(!$leadFieldInstance) continue;
+
+				$leadFieldName = $leadFieldInstance->getName();
+				$accountFieldInstance = $accountFieldInstances[$row['accountfid']];
+				if ($row['accountfid'] && $accountFieldInstance) {
 					$mappingFields['Accounts'][$accountFieldInstance->getName()] = $leadFieldName;
 				}
-
-				//Contact Field Name
-				$contactFieldId = $db->query_result($result, $i, 'contactfid');
-				if ($contactFieldId) {
-					$contactFieldInstance = Vtiger_Field_Model::getInstance($contactFieldId);
+				$contactFieldInstance = $contactFieldInstances[$row['contactfid']];
+				if ($row['contactfid'] && $contactFieldInstance) {
 					$mappingFields['Contacts'][$contactFieldInstance->getName()] = $leadFieldName;
 				}
-
-				//Potential Field Name
-				$potentialFieldId = $db->query_result($result, $i, 'potentialfid');
-				if ($potentialFieldId) {
-					$potentialFieldInstance = Vtiger_Field_Model::getInstance($potentialFieldId);
+				$potentialFieldInstance = $potentialFieldInstances[$row['potentialfid']];
+				if ($row['potentialfid'] && $potentialFieldInstance) {
 					$mappingFields['Potentials'][$potentialFieldInstance->getName()] = $leadFieldName;
 				}
 			}
-
 			$this->set('mappingFields', $mappingFields);
 		}
-
 		return $mappingFields[$moduleName][$fieldName];
 	}
 

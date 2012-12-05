@@ -34,9 +34,12 @@ class Events_Field_Model extends Calendar_Field_Model {
 				$displayValue = $value. ' ' . $recordInstance->get('time_end');
 				$value = $this->getUITypeModel()->getDisplayValue($displayValue);
 				list($endDate, $endTime) = explode(' ', $value);
-				$time = Vtiger_Time_UIType::getTimeValueInAMorPM($endTime);
+				
+				$currentUser = Users_Record_Model::getCurrentUserModel();
+				if($currentUser->get('hour_format') == '12')
+					$endTime = Vtiger_Time_UIType::getTimeValueInAMorPM($endTime);
 
-				return $endDate . ' ' . $time;
+				return $endDate . ' ' . $endTime;
 			}
 		}
 		return parent::getDisplayValue($value, $record, $recordInstance);
@@ -53,4 +56,12 @@ class Events_Field_Model extends Calendar_Field_Model {
 		}
 		return true;
 	}
+
+    public function getFieldDataType() {
+        if($this->getName() == 'contact_id' ) {
+            return 'multireference';
+        }
+        return parent::getFieldDataType();
+
+    }
 }

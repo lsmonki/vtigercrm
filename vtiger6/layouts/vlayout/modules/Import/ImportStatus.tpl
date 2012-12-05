@@ -10,12 +10,22 @@
  ********************************************************************************/
 -->*}
 {strip}
+	
+{literal}
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	setTimeout(function() {
+		jQuery("[name=importStatusForm]").get(0).submit();
+		}, 2000);
+});
+</script>
+{/literal}
 <div class="contentsDiv span10 marginLeftZero">
 	<form onsubmit="VtigerJS_DialogBox.block();" action="index.php" enctype="multipart/form-data" method="POST" name="importStatusForm">
 		<input type="hidden" name="module" value="{$FOR_MODULE}" />
 		<input type="hidden" name="view" value="Import" />
 		{if $CONTINUE_IMPORT eq 'true'}
-		<input type="hidden" name="mode" value="continue_import" />
+		<input type="hidden" name="mode" value="continueImport" />
 		{else}
 		<input type="hidden" name="mode" value="" />
 		{/if}
@@ -36,7 +46,7 @@
 		{/if}
 		<tr>
 			<td valign="top">
-				<table cellpadding="10" cellspacing="0" align="center" class="dvtSelectedCell thickBorder importContents fontBold font-x-small">
+				<table cellpadding="10" cellspacing="0" align="center" class="dvtSelectedCell thickBorder importContents">
 					<tr>
 						<td>{'LBL_TOTAL_RECORDS_IMPORTED'|@vtranslate:$MODULE}</td>
 						<td width="10%">:</td>

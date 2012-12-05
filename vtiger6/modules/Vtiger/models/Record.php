@@ -116,6 +116,15 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
+	
+	/**
+	 * Function to get the complete Detail View url for the record
+	 * @return <String> - Record Detail View Url
+	 */
+	public function getFullDetailViewUrl() {
+		$module = $this->getModule();
+		return 'index.php?module='.$this->getModuleName().'&view='.$module->getDetailViewName().'&record='.$this->getId().'&mode=showDetailViewByMode&requestMode=full';
+	}
 
 	/**
 	 * Function to get the Edit View url for the record
@@ -171,7 +180,15 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$fieldModel = $this->getModule()->getField($fieldName);
 		return $fieldModel->getDisplayValue($this->get($fieldName),$recordId);
 	}
-
+	
+	/**
+	 * Function returns the Vtiger_Field_Model
+	 * @param <String> $fieldName - field name
+	 * @return <Vtiger_Field_Model> 
+	 */
+	public function getField($fieldName) {
+		return $this->getModule()->getField($fieldName);
+	}
 	/**
 	 * Function to save the current Record Model
 	 */

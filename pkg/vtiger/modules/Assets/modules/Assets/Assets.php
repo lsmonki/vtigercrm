@@ -385,6 +385,12 @@ class Assets extends CRMEntity {
 			$InvoiceInstance = Vtiger_Module::getInstance('Invoice');
 			$InvoiceInstance->setRelatedlist($assetInstance,$assetLabel,array(ADD),'get_dependents_list');
 
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($moduleName));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+			}
+
 		} else if($eventType == 'module.disabled') {
 		// TODO Handle actions when this module is disabled.
 		} else if($eventType == 'module.enabled') {
@@ -395,6 +401,12 @@ class Assets extends CRMEntity {
 		// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
 			$this->addModuleToCustomerPortal();
+
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active =1 ", array($moduleName));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+			}
 		}
  	}
 

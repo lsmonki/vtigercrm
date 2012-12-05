@@ -58,7 +58,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	}
 
 	public function getListUrl($parentRecordModel) {
-		return 'module='.$this->getParentModuleModel()->get('name').'&relatedModule='.$this->getRelationModuleModel()->get('name').
+		return 'module='.$this->getParentModuleModel()->get('name').'&relatedModule='.$this->get('modulename').
 				'&view=Detail&record='.$parentRecordModel->getId().'&mode=showRelatedList';
 	}
 
@@ -104,15 +104,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 		$parentModuleName = $parentModuleModel->getName();
 		$relatedModuleName = $relatedModuleModel->getName();
 		$functionName = $this->get('name');
-		$focus = CRMEntity::getInstance($parentModuleName);
-		$result = $focus->$functionName($parentRecord->getId(), $parentModuleModel->getId(), $relatedModuleModel->getId(), $actions);
-
-		$query = $result['query'].' '.$parentModuleModel->getSpecificRelationQuery($relatedModuleName);
-
-		$nonAdminQuery = $this->getNonAdminAccessControlQuery($relatedModuleName);
-		if ($nonAdminQuery) {
-			$query = appendFromClauseToQuery($query, $nonAdminQuery);
-		}
+		$query = $parentModuleModel->getRelationQuery($parentRecord->getId(), $functionName, $relatedModuleModel);
 
 		return $query;
 	}
@@ -140,23 +132,9 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 
 	public function getRelationType(){
 		if(empty($this->relationType)){
-			$parentModuleModel = $this->getParentModuleModel();
-			$relationModuleModel = $this->getRelationModuleModel();
-
-			$found = false;
-			$fieldList = $relationModuleModel->getFields();
-			foreach($fieldList as $fieldName=>$fieldModel) {
-				if($fieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE) {
-					$referenceList = $fieldModel->getReferenceList();
-					if(in_array($parentModuleModel->get('name'), $referenceList)) {
-						$this->relationType = self::RELATION_DIRECT;
-						$found = true;
-						break;
-					}
-				}
-			}
-			if(!$found) {
-				$this->relationType = self::RELATION_INDIRECT;
+			$this->relationType = self::RELATION_INDIRECT;
+			if ($this->getRelationField()) {
+				$this->relationType = self::RELATION_DIRECT;
 			}
 		}
 		return $this->relationType;
@@ -165,7 +143,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	public static function getInstance($parentModuleModel, $relatedModuleModel, $label=false) {
 		$db = PearDatabase::getInstance();
 
-		$query = 'SELECT vtiger_relatedlists.* FROM vtiger_relatedlists
+		$query = 'SELECT vtiger_relatedlists.*,vtiger_tab.name as modulename FROM vtiger_relatedlists
 					INNER JOIN vtiger_tab on vtiger_tab.tabid = vtiger_relatedlists.related_tabid AND vtiger_tab.presence != 1
 					WHERE vtiger_relatedlists.tabid = ? AND related_tabid = ?';
 		$params = array($parentModuleModel->getId(), $relatedModuleModel->getId());
@@ -189,18 +167,22 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	public static function getAllRelations($parentModuleModel) {
 		$db = PearDatabase::getInstance();
 
-		$query = 'SELECT vtiger_relatedlists.* FROM vtiger_relatedlists WHERE tabid = ?
-					AND related_tabid NOT IN (SELECT tabid FROM vtiger_tab WHERE presence = 1)
-					AND related_tabid != 0 ORDER BY sequence'; // TODO: Need to handle entries that has related_tabid 0
-		$result = $db->pquery($query, array($parentModuleModel->getId()));
+		$skipReltionsList = array('get_history');
+
+		$query = 'SELECT vtiger_relatedlists.*,vtiger_tab.name as modulename FROM vtiger_relatedlists 
+					INNER JOIN vtiger_tab on vtiger_relatedlists.related_tabid = vtiger_tab.tabid
+					WHERE vtiger_relatedlists.tabid = ? AND related_tabid != 0
+						AND vtiger_tab.presence <> 1 AND vtiger_relatedlists.name NOT IN ('.generateQuestionMarks($skipReltionsList).')
+						ORDER BY sequence'; // TODO: Need to handle entries that has related_tabid 0
+		$result = $db->pquery($query, array($parentModuleModel->getId(), $skipReltionsList));
 
 		$relationModels = array();
 		$relationModelClassName = Vtiger_Loader::getComponentClassName('Model', 'Relation', $parentModuleModel->get('name'));
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$row = $db->query_result_rowdata($result, $i);
-			$relationModuleModel = Vtiger_Module_Model::getInstance($row['related_tabid']);
+			//$relationModuleModel = Vtiger_Module_Model::getCleanInstance($moduleName);
 			// Skip relation where target module does not exits or is no permitted for view.
-			if (!$relationModuleModel || !$relationModuleModel->isPermitted('DetailView')) {
+			if (!Users_Privileges_Model::isPermitted($row['modulename'],'DetailView')) {
 				continue;
 			}
 			$relationModel = new $relationModelClassName();
@@ -211,17 +193,29 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	}
 
 	/**
-	 * Function to get Non admin access control query
-	 * @param <String> $relatedModuleName
-	 * @return <String>
+	 * Function to get relation field for relation module and parent module
+	 * @return Vtiger_Field_Model
 	 */
-	public function getNonAdminAccessControlQuery($relatedModuleName) {
-		$modulesList = array('Faq', 'PriceBook', 'Vendors', 'Users');
-		
-		if (!in_array($relatedModuleName, $modulesList)) {
-			return Users_Privileges_Model::getNonAdminAccessControlQuery($relatedModuleName);
+	public function getRelationField() {
+		$relationField = $this->get('relationField');
+		if (!$relationField) {
+			$relationField = '';
+			$relatedModel = $this->getRelationModuleModel();
+			$parentModule = $this->getParentModuleModel();
+			$relatedModelFields = $relatedModel->getFields();
+
+			foreach($relatedModelFields as $fieldName => $fieldModel) {
+				if($fieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE) {
+					$referenceList = $fieldModel->getReferenceList();
+					if(in_array($parentModule->getName(), $referenceList)) {
+						$this->set('relationField', $fieldModel);
+						$relationField = $fieldModel;
+						break;
+					}
+				}
+			}
 		}
+		return $relationField;
 	}
+
 }
-
-

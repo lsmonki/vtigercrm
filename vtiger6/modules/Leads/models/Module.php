@@ -43,12 +43,13 @@ class Leads_Module_Model extends Vtiger_Module_Model {
 	public function getRecentRecords($limit=10) {
 		$db = PearDatabase::getInstance();
 
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
         $deletedCondition = $this->getDeletedRecordCondition();
 		$query = 'SELECT * FROM vtiger_crmentity '.
             ' INNER JOIN vtiger_leaddetails ON
                 vtiger_leaddetails.leadid = vtiger_crmentity.crmid
-                WHERE setype=? AND '.$deletedCondition.' ORDER BY modifiedtime DESC LIMIT ?';
-		$params = array($this->get('name'), $limit);
+                WHERE setype=? AND '.$deletedCondition.' AND modifiedby = ? ORDER BY modifiedtime DESC LIMIT ?';
+		$params = array($this->get('name'), $currentUserModel->id, $limit);
 		$result = $db->pquery($query, $params);
 		$noOfRows = $db->num_rows($result);
 
@@ -206,5 +207,58 @@ class Leads_Module_Model extends Vtiger_Module_Model {
 			$response[$i][2] = $industyValue;
 		}
 		return $response;
+	}
+
+	/**
+	 * Function to get list of field for summary view
+	 * @return <array> fields list
+	 */
+	public function getSummaryViewFieldsList() {
+		return array(
+				'email',
+				'phone',
+				'city',
+				'country',
+				'leadsource',
+				'assigned_user_id',
+				'createdtime',
+				'modifiedtime'
+		);
+	}
+
+	/**
+	 * Function to get relation query for particular module with function name
+	 * @param <record> $recordId
+	 * @param <String> $functionName
+	 * @param Vtiger_Module_Model $relatedModule
+	 * @return <String>
+	 */
+	public function getRelationQuery($recordId, $functionName, $relatedModule) {
+		if ($functionName === 'get_activities') {
+			$userNameSql = getSqlForNameInDisplayFormat(array('first_name' => 'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+
+			$query = "SELECT CASE WHEN (vtiger_users.user_name not like '') THEN $userNameSql ELSE vtiger_groups.groupname END AS user_name,
+						vtiger_crmentity.*, vtiger_activity.*, vtiger_seactivityrel.crmid AS parent_id,
+						CASE WHEN (vtiger_activity.activitytype = 'Task') THEN vtiger_activity.status ELSE vtiger_activity.eventstatus END AS status
+						FROM vtiger_activity
+						INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_activity.activityid
+						LEFT JOIN vtiger_seactivityrel ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+						LEFT JOIN vtiger_cntactivityrel ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+						LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							WHERE vtiger_crmentity.deleted = 0 AND vtiger_activity.activitytype <> 'Emails'
+								AND vtiger_seactivityrel.crmid = ".$recordId;
+
+			$relatedModuleName = $relatedModule->getName();
+			$query .= $this->getSpecificRelationQuery($relatedModuleName);
+			$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
+			if ($nonAdminQuery) {
+				$query = appendFromClauseToQuery($query, $nonAdminQuery);
+			}
+		} else {
+			$query = parent::getRelationQuery($recordId, $functionName, $relatedModule);
+		}
+
+		return $query;
 	}
 }

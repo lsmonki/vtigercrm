@@ -16,10 +16,23 @@ class Calendar_QuickCreateAjax_View extends Vtiger_QuickCreateAjax_View {
 		$moduleList = array('Calendar','Events');
 
 		$quickCreateContents = array();
-		foreach($moduleList as $module){
+		foreach($moduleList as $module) {
 			$info = array();
-			$moduleModel = Vtiger_Module_Model::getInstance($module);
-			$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
+
+			$recordModel = Vtiger_Record_Model::getCleanInstance($module);
+			$moduleModel = $recordModel->getModule();
+
+			$fieldList = $moduleModel->getFields();
+			$requestFieldList = array_intersect_key($request->getAll(), $fieldList);
+
+			foreach($requestFieldList as $fieldName => $fieldValue) {
+				$fieldModel = $fieldList[$fieldName];
+				if($fieldModel->isEditable()) {
+					$recordModel->set($fieldName, $fieldValue);
+				}
+			}
+
+			$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
 
 			$info['recordStructureModel'] = $recordStructureInstance;
 			$info['recordStructure'] = $recordStructureInstance->getStructure();
@@ -32,6 +45,7 @@ class Calendar_QuickCreateAjax_View extends Vtiger_QuickCreateAjax_View {
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUICK_CREATE_CONTENTS', $quickCreateContents);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+		$viewer->assign('SCRIPTS', $this->getHeaderScripts($request));
 
 		$viewer->view('QuickCreate.tpl', $moduleName);
 	}

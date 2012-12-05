@@ -184,26 +184,32 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder)){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
+			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
 		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
 
-		$listQueryWithNoLimit = $listQuery;
-		$listQuery .= " LIMIT $startIndex, $pageLimit";
+		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);
 
 		$listResult = $db->pquery($listQuery, array());
 
 		$listViewRecordModels = array();
 		$listViewEntries =  $listViewContoller->getListViewRecords($moduleFocus,$moduleName, $listResult);
+
 		$pagingModel->calculatePageRange($listViewEntries);
 
-		//To check if next page exists
-		$nextLimitQuery = $listQueryWithNoLimit. ' LIMIT '.($startIndex+$pageLimit).' , 1';
-		$nextPageLimitResult = $db->pquery($nextLimitQuery, array());
-		if($db->num_rows($nextPageLimitResult) > 0){
+		if($db->num_rows($listResult) > $pageLimit){
+			array_pop($listViewEntries);
 			$pagingModel->set('nextPageExists', true);
 		}else{
 			$pagingModel->set('nextPageExists', false);
@@ -248,7 +254,11 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 				$listQuery = $listQuery. ' FROM ' .$split[$i];
 			}
 		}
-
+		
+		if($this->getModule()->get('name') == 'Calendar'){
+			$listQuery .= ' AND activitytype <> "Emails"';
+		}
+		
 		$listResult = $db->pquery($listQuery, array());
 		return $db->query_result($listResult, 0, 'count');
 	}
@@ -351,28 +361,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 	 * @return array of setting links
 	 */
 	public function getSettingLinks() {
-		$moduleModel = $this->getModule();
-		$settingsLinks = array(
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_FIELDS',
-					'linkurl' => $moduleModel->getSettingsUrl('LayoutEditor'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_WORKFLOWS',
-					'linkurl' => $moduleModel->getSettingsUrl('EditWorkflows'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',
-					'linkurl' => $moduleModel->getSettingsUrl('PicklistEditor'),
-					'linkicon' => ''
-				)
-			);
-		return $settingsLinks;
+		return $this->getModule()->getSettingLinks();
 	}
 
 	/*
@@ -392,5 +381,15 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 			);
 		}
 		return $basicLinks;
+	}
+
+	public function extendPopupFields($fieldsList) {
+		$moduleModel = $this->get('module');
+		$queryGenerator = $this->get('query_generator');
+		$listFields = $moduleModel->getPopupFields();
+		$listFields[] = 'id';
+		$listFields = array_merge($listFields, $fieldsList);
+		$queryGenerator->setFields($listFields);
+		$this->get('query_generator', $queryGenerator);
 	}
 }

@@ -67,7 +67,7 @@ Vtiger_List_Js("Reports_List_Js",{
 			var excludedIds = listInstance.readExcludedIds(true);
 			var cvId = listInstance.getCurrentCvId();
 			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
-			Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
+			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
 					var deleteURL = url+'&viewname='+cvId+'&selected_ids='+selectedIds+'&excluded_ids='+excludedIds;
 					AppConnector.request(deleteURL).then(
@@ -175,7 +175,7 @@ Vtiger_List_Js("Reports_List_Js",{
 	},
 
 	constructOptionElement : function(info){
-		return '<option data-editable="'+info.isEditable+'" data-deletable="'+info.isDeletable+'" data-editurl="'+info.editURL+'" data-deleteurl="'+info.deleteURL+'" class="filterOptionId_'+info.folderId+'" id="filterOptionId_'+info.folderId+'" value="'+info.folderId+'" >'+info.folderName+'</option>';
+		return '<option data-editable="'+info.isEditable+'" data-deletable="'+info.isDeletable+'" data-editurl="'+info.editURL+'" data-deleteurl="'+info.deleteURL+'" class="filterOptionId_'+info.folderId+'" id="filterOptionId_'+info.folderId+'" value="'+info.folderId+'" data-id="'+info.folderId+'">'+info.folderName+'</option>';
 
 	},
 
@@ -214,14 +214,11 @@ Vtiger_List_Js("Reports_List_Js",{
 					var chosenOption = jQuery(event.currentTarget).closest('.select2-result-selectable');
 					var selectOption = thisInstance.getSelectOptionFromChosenOption(chosenOption);
 					selectOption.remove();
-
-					jQuery('#customFilter').trigger("liszt:updated");
-					var params = {
-						title : app.vtranslate('JS_ERROR'),
-						text : result.message,
-						type : 'info'
-					}
-					Vtiger_Helper_Js.showPnotify(params);
+					var customFilterElement = thisInstance.getFilterSelectElement();
+					customFilterElement.trigger("liszt:updated");
+					var defaultCvid = customFilterElement.find('option:first').val();
+					customFilterElement.select2("val", defaultCvid);
+					customFilterElement.trigger('change');
 				} else {
 					app.hideModalWindow();
 					var params = {
@@ -256,9 +253,11 @@ Vtiger_List_Js("Reports_List_Js",{
 		var listViewFilterBlock = this.getFilterBlock();
 		//used mouseup event to stop the propagation of customfilter select change event.
 		listViewFilterBlock.on('mouseup','li i.deleteFilter',function(event){
+			// To close the custom filter Select Element drop down
+			thisInstance.getFilterSelectElement().data('select2').close();
 			var liElement = jQuery(event.currentTarget).closest('.select2-result-selectable');
-			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
-			Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
+			var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE');
+			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
 					var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
 					var deleteUrl = currentOptionElement.data('deleteurl');

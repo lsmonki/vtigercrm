@@ -33,6 +33,8 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 	}
 
 	function Events($request, $moduleName) {
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        
 		$viewer = $this->getViewer ($request);
 		$record = $request->get('record');
 
@@ -67,13 +69,17 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 		if(!empty($viewMode)) {
 			$viewer->assign('VIEW_MODE', $viewMode);
 		}
-
+		
+		$viewer->assign('RECURRING_INFORMATION', $recordModel->getRecurrenceInformation());
+		$viewer->assign('TOMORROWDATE', Vtiger_Date_UIType::getDisplayDateValue(date('Y-m-d', time()+86400)));
+		
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+        $viewer->assign('RELATED_CONTACTS', $recordModel->getRelatedContactInfo());
 
 		$isRelationOperation = $request->get('relationOperation');
 
@@ -83,6 +89,11 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('SOURCE_MODULE', $request->get('sourceModule'));
 			$viewer->assign('SOURCE_RECORD', $request->get('sourceRecord'));
 		}
+        
+        $accessibleUsers = $currentUser->getAccessibleUsersForModule($moduleName);
+		$viewer->assign('ACCESSIBLE_USERS', $accessibleUsers);
+        $viewer->assign('INVITIES_SELECTED', $recordModel->getInvities());
+        $viewer->assign('CURRENT_USER', $currentUser);
 
 		$viewer->view('EditView.tpl', $moduleName);
 	}

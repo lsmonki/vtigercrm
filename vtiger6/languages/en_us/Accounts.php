@@ -48,9 +48,11 @@ $languageStrings = array(
 	
 	//Duplication error message
 	'LBL_DUPLICATES_EXIST' => 'Organization Name already exists',
+	'LBL_COPY_SHIPPING_ADDRESS' => 'Copy Shipping Address',
+	'LBL_COPY_BILLING_ADDRESS' => 'Copy Billing Address',
 );
 
 $jsLanguageStrings = array(
 	'LBL_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?',
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?',
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization(s) will remove its related Opportunities & Quotes. Are you sure you want to delete the selected records?',
 );

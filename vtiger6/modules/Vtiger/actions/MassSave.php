@@ -40,7 +40,7 @@ class Vtiger_MassSave_Action extends Vtiger_Mass_Action {
 	 * @param Vtiger_Request $request
 	 * @return Vtiger_Record_Model or Module specific Record Model instance
 	 */
-	private function getRecordModelsFromRequest(Vtiger_Request $request) {
+	function getRecordModelsFromRequest(Vtiger_Request $request) {
 
 		$moduleName = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);

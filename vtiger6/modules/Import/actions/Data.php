@@ -215,7 +215,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 								$comparisonValue = trim($referenceFileValueComponents[1]);
 							}
 						}
-						$queryGenerator->addCondition($mergeField, $comparisonValue, 'e');
+						$queryGenerator->addCondition($mergeField, $comparisonValue, 'e', '', '', '', true);
 					}
 					$query = $queryGenerator->getQuery();
 					$duplicatesResult = $adb->query($query);
@@ -279,6 +279,9 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					} else {
 						$entityInfo = vtws_create($moduleName, $fieldData, $this->user);
 						$entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
+						$entityIdComponents = vtws_getIdComponents($entityInfo['id']);
+						$recordId = $entityIdComponents[1];
+						updateRecordLabel($this->module, $recordId);
 					}
 				}
 			}
@@ -378,7 +381,10 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
 					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
 				}
+				$olderCacheEnable = Vtiger_Cache::$cacheEnable;
+				Vtiger_Cache::$cacheEnable = false;
 				$allPicklistDetails = $fieldInstance->getPicklistDetails();
+
 				$allPicklistValues = array();
 				foreach ($allPicklistDetails as $picklistDetails) {
 					$allPicklistValues[] = $picklistDetails['value'];
@@ -389,6 +395,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
 				}
+				Vtiger_Cache::$cacheEnable = $olderCacheEnable;
 			} else {
 				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {
 					if($fieldValue == null || $fieldValue == '0000-00-00 00:00:00') {

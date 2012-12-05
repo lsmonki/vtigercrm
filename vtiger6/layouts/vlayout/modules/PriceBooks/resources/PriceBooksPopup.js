@@ -17,9 +17,9 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
 			var elem = jQuery(e.currentTarget);
 			var parentRow = elem.closest('tr');
 			if(elem.is(':checked')) {
-				jQuery('input.listPrice',parentRow).removeClass('invisible');
+				jQuery('input[name=listPrice]',parentRow).removeClass('invisible');
 			}else{
-				jQuery('input.listPrice',parentRow).addClass('invisible');
+				jQuery('input[name=listPrice]',parentRow).addClass('invisible');
 			}
 	},
 
@@ -36,7 +36,7 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
 			var selectedRecords = jQuery('input.entryCheckBox', tableEntriesElement).filter(':checked');
 			if((selectedRecords.length) == 0){
 				var message = app.vtranslate("JS_PLEASE_SELECT_ONE_RECORD");
-				Vtiger_Helper_Js.showMessageBox({'message' : message})
+				Vtiger_Helper_Js.showConfirmationBox({'message' : message})
 				return;
 			}
 			var invalidFields = popupPageContentsContainer.data('jqv').InvalidFields;
@@ -45,7 +45,7 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
 				selectedRecords.each(function(index, checkBoxElement){
 					var checkBoxJqueryObject = jQuery(checkBoxElement)
 					var row = checkBoxJqueryObject.closest('tr');
-					var rowListPrice = row.find('.listPrice');
+					var rowListPrice = row.find('input[name=listPrice]');
 					var listPrice = rowListPrice.val();
 					var id = row.data('id');
 					selectedRecordDetails.push({'id' : id,'price' : listPrice});
@@ -65,9 +65,9 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
 		var isMainCheckBoxChecked = currentElement.is(':checked');
 		var tableElement = currentElement.closest('table');
 		if(isMainCheckBoxChecked) {
-			jQuery('input.entryCheckBox', tableElement).closest('tr').find('input.listPrice').removeClass('invisible');
+			jQuery('input.entryCheckBox', tableElement).closest('tr').find('input[name="listPrice"]').removeClass('invisible');
 		}else {
-			jQuery('input.entryCheckBox', tableElement).closest('tr').find('input.listPrice').addClass('invisible');
+			jQuery('input.entryCheckBox', tableElement).closest('tr').find('input[name="listPrice"]').addClass('invisible');
 		}
 	},
 

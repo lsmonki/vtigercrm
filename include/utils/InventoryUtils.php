@@ -104,7 +104,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 	$log->debug("Inside sendPrdStckMail function, module=".$module);
 	$log->debug("Prd reorder level ".$reorderlevel);
 	if($upd_qty < $reorderlevel)
-	{
+	{	
 		//send mail to the handler
 		$handler = getRecordOwnerId($product_id);
 		foreach($handler as $type=>$id){
@@ -1143,7 +1143,7 @@ function deductProductsFromStock($recordId) {
 // Add Products to stock - status changed to cancel or delete the invoice
 function addProductsToStock($recordId) {
 	global $adb;
-	
+
 	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($recordId));
 	$numrows = $adb->num_rows($product_info);
 	for($index = 0;$index <$numrows;$index++) {

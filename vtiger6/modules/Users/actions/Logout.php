@@ -13,11 +13,6 @@ class Users_Logout_Action extends Vtiger_Action_Controller {
 	function process(Vtiger_Request $request) {
 		Vtiger_Session::destroy();
 		
-		include 'modules/Ondemand/Ondemand.config.php';
-		if(!empty($VtigerOndemandConfig['LOGIN_URL'])) {
-			header('Location: '.$VtigerOndemandConfig['LOGIN_URL']);
-		} else {
-			header ('Location: index.php');
-		}
+		header ('Location: index.php');
 	}
 }

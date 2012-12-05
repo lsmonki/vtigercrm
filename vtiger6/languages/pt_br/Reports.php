@@ -1,0 +1,113 @@
+<?php
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
+$languageStrings = array(
+	'LBL_FOLDER_NOT_EMPTY'         => 'Folder is not empty'         , // TODO: Review
+	'LBL_MOVE_REPORT'              => 'Mover Relatórios'           , // KEY 5.x: Move_Reports
+	'LBL_CUSTOMIZE'                => 'Customizar'                  , // KEY 5.x: LBL_CUSTOMIZE_BUTTON
+	'LBL_REPORT_EXPORT_EXCEL'      => 'Export Excel'                , // TODO: Review
+	'LBL_REPORT_PRINT'             => 'Imprimir'                    , // KEY 5.x: LNK_PRINT
+	'LBL_STEP_1'                   => 'Step 1'                      , // TODO: Review
+	'LBL_STEP_2'                   => 'Step 2'                      , // TODO: Review
+	'LBL_STEP_3'                   => 'Step 3'                      , // TODO: Review
+	'LBL_REPORT_DETAILS'           => 'Detalhes Relatório'         , 
+	'LBL_SELECT_COLUMNS'           => 'Selecionar Colunas'          , 
+	'LBL_FILTERS'                  => 'Filtros'                     , 
+	'LBL_FOLDERS'                  => 'Folders'                     , // TODO: Review
+	'LBL_ADD_NEW_FOLDER'           => 'Adicionar Novo Grupo'        , // KEY 5.x: LBL_ADD_NEW_GROUP
+	'LBL_FOLDER_NAME'              => 'Folder Name'                 , // TODO: Review
+	'LBL_FOLDER_DESCRIPTION'       => 'Folder Description'          , // TODO: Review
+	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Enter Description'           , // TODO: Review
+	'LBL_DUPLICATES_EXIST'         => 'Duplicate Exists'            , // TODO: Review
+	'LBL_MOVE_REPORTS'             => 'Mover Relatórios'           , // KEY 5.x: Move_Reports
+	'LBL_FOLDERS_LIST'             => 'Folders List'                , // TODO: Review
+	'LBL_DENIED_REPORTS'           => 'Denied Reports'              , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Report'                  , // TODO: Review
+	'LBL_ADD_FOLDER'               => 'Add Folder'                  , // TODO: Review
+	'LBL_REPORT_DELETE_DENIED'     => 'Permission denied to delete the Report', // TODO: Review
+	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'This folder can not be deleted', // TODO: Review
+	'LBL_REPORTS_LIST'             => 'Reports list'                , // TODO: Review
+	'LBL_REPORT_NAME'              => 'Nome Relatório'             , 
+	'LBL_REPORT_FOLDER'            => 'Pasta Relatório'            , // KEY 5.x: LBL_REP_FOLDER
+	'LBL_DESCRIPTION'              => 'Descrição'                 , 
+	'PRIMARY_MODULE'               => 'Primary Module'              , // TODO: Review
+	'LBL_SELECT_RELATED_MODULES'   => 'Select Related Modules'      , // TODO: Review
+	'LBL_MAX'                      => 'MAX'                         , // KEY 5.x: MAX
+	'LBL_NEXT'                     => 'Próximo'                    , // KEY 5.x: LNK_LIST_NEXT
+	'LBL_REPORTS'                  => 'Reports List'                , // TODO: Review
+	'LBL_GROUP_BY'                 => 'Group By'                    , // TODO: Review
+	'LBL_SORT_ORDER'               => 'Sort Order'                  , // TODO: Review
+	'LBL_ASCENDING'                => 'Ascendente'                  , // KEY 5.x: Ascending
+	'LBL_DESCENDING'               => 'Descendente'                 , // KEY 5.x: Descending
+	'LBL_CALCULATIONS'             => 'Cálculos'                   , 
+	'LBL_COLUMNS'                  => 'Colunas'                     , 
+	'LBL_SUM_VALUE'                => 'Soma'                        , // KEY 5.x: LBL_COLUMNS_SUM
+	'LBL_AVERAGE'                  => 'Média'                      , // KEY 5.x: LBL_COLUMNS_AVERAGE
+	'LBL_LOWEST_VALUE'             => 'Valor Mínimo'               , // KEY 5.x: LBL_COLUMNS_LOW_VALUE
+	'LBL_HIGHEST_VALUE'            => 'Highest Value'               , // TODO: Review
+	'LBL_GENERATE_REPORT'          => 'Generate Report'             , // TODO: Review
+	'LBL_SUM'                      => 'SOMA'                        , // KEY 5.x: SUM
+	'LBL_AVG'                      => 'MED'                         , // KEY 5.x: AVG
+	'LBL_MIN'                      => 'MIN'                         , // KEY 5.x: MIN
+	'LBL_FIELD_NAMES'              => 'Nomes Campos'                , // KEY 5.x: Totals
+	'LBL_REPORT_CSV'               => 'Export CSV'                  , // TODO: Review
+	'LBL_VIEW_DETAILS'             => 'Detalhes Visualização'     , 
+	'Report Name'                  => 'Nome Relatório'             , // KEY 5.x: LBL_REPORT_NAME
+	'Account and Contact Reports'  => 'Relatórios de Organizações e Contatos', 
+	'Lead Reports'                 => 'Relatórios de Leads'        , 
+	'Potential Reports'            => 'Relatórios de Oportunidades', 
+	'Activity Reports'             => 'Relatórios de Atividades'   , 
+	'HelpDesk Reports'             => 'Relatórios de Tickets'      , 
+	'Product Reports'              => 'Relatórios de Produtos'     , 
+	'Quote Reports'                => 'Relatórios de Cotação'    , 
+	'PurchaseOrder Reports'        => 'Relatórios de Pedidos de Compras', 
+	'SalesOrder Reports'           => 'Relatórios de Pedidos de Vendas', 
+	'Invoice Reports'              => 'Relatórios de Faturas'      , 
+	'Campaign Reports'             => 'Relatórios de Campanhas'    , 
+	'Contacts by Accounts'         => 'Contatos por Organizações' , 
+	'Contacts without Accounts'    => 'Contatos sem Organizações' , 
+	'Contacts by Potentials'       => 'Contatos por Oportunidades'  , 
+	'Contacts related to Accounts' => 'Contatos relacionados às Organizações', 
+	'Contacts not related to Accounts' => 'Contatos não relacionados às Organizações', 
+	'Contacts related to Potentials' => 'Contatos relacionados às Oportunidades', 
+	'Lead by Source'               => 'Lead por Fonte'              , 
+	'Lead Status Report'           => 'Relatório Status do Lead'   , 
+	'Potential Pipeline'           => 'Oportunidade Funil de Vendas', 
+	'Closed Potentials'            => 'Oportunidade Fechada'        , 
+	'Potential that have Won'      => 'Oportunidade vitoriosa'      , 
+	'Tickets by Products'          => 'Tickets por Produtos'        , 
+	'Tickets by Priority'          => 'Tickets por Prioridade'      , 
+	'Open Tickets'                 => 'Tickets Abertos'             , 
+	'Tickets related to Products'  => 'Tickets relacionados aos Produtos', 
+	'Tickets that are Open'        => 'Tickets que estão Abertos'  , 
+	'Product Details'              => 'Detalhes do Produto'         , 
+	'Products by Contacts'         => 'Produtos por Contatos'       , 
+	'Product Detailed Report'      => 'Relatório Detalhado do Produto', 
+	'Products related to Contacts' => 'Produtos relacionados aos Contatos', 
+	'Open Quotes'                  => 'Cotações Abertas'          , 
+	'Quotes Detailed Report'       => 'Relatório Detalhado das Cotações', 
+	'Quotes that are Open'         => 'Cotações que estão Abertas', 
+	'PurchaseOrder by Contacts'    => 'Pedido Compra por Contatos'  , 
+	'PurchaseOrder Detailed Report' => 'Relatório Detalhado dos Pedidos Compras', 
+	'PurchaseOrder related to Contacts' => 'Pedidos Compras relacionados aos Contatos', 
+	'Invoice Detailed Report'      => 'Relatório Detalhado da Fatura', 
+	'Last Month Activities'        => 'Atividades do Último Mês'  , 
+	'This Month Activities'        => 'Atividades deste Mês'       , 
+	'Campaign Expectations and Actuals' => 'Campanha - Previsto/Realizado', 
+	'SalesOrder Detailed Report'   => 'Relatório Detalhado Pedido de Vendas', 
+	'Email Reports'                => 'Email Reports'               , // TODO: Review
+	'Contacts Email Report'        => 'Contacts Email Report'       , // TODO: Review
+	'Accounts Email Report'        => 'Organizations Email Report'  , // TODO: Review
+	'Leads Email Report'           => 'Leads Email Report'          , // TODO: Review
+	'Vendors Email Report'         => 'Vendors Email Report'        , // TODO: Review
+	'Emails sent to Contacts'      => 'Emails sent to Contacts'     , // TODO: Review
+	'Emails sent to Organizations' => 'Emails sent to Organizations', // TODO: Review
+	'Emails sent to Leads'         => 'Emails sent to Leads'        , // TODO: Review
+	'Emails sent to Vendors'       => 'Emails sent to Vendors'      , // TODO: Review
+);

@@ -130,7 +130,7 @@ foreach($act_data as $block=>$entry)
 //Start
 //To set user selected hour format
 if($current_user->hour_format == '')
-	$format = 'am/pm';
+	$format = 12;
 else
 	$format = $current_user->hour_format;
 list($stdate,$sttime) = split(' ',$finaldata['date_start']);
@@ -269,6 +269,7 @@ $smarty->assign("NAME", $focus->name);
 unset($act_data['LBL_DESCRIPTION_INFORMATION']);
 unset($act_data['LBL_REMINDER_INFORMATION']);
 unset($act_data['LBL_RECURRENCE_INFORMATION']);
+unset($act_data[getTranslatedString('LBL_RELATED_TO',$module)]);
 
 $smarty->assign("BLOCKS", $act_data);
 $smarty->assign("LABEL", $fldlabel);

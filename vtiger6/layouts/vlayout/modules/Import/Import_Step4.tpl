@@ -34,39 +34,43 @@
 		<td>
 			<input type="hidden" name="field_mapping" id="field_mapping" value="" />
 			<input type="hidden" name="default_values" id="default_values" value="" />
-			<table width="100%" cellspacing="0" cellpadding="2" class="listRow table table-bordered table-condensed table-striped listViewEntriesTable">
-				<tr class="listViewHeaders">
-					{if $HAS_HEADER eq true}
-					<td class="big tableHeading" width="25%"><b>{'LBL_FILE_COLUMN_HEADER'|@vtranslate:$MODULE}</b></td>
-					{/if}
-					<td class="big tableHeading" width="25%"><b>{'LBL_ROW_1'|@vtranslate:$MODULE}</b></td>
-					<td class="big tableHeading" width="23%"><b>{'LBL_CRM_FIELDS'|@vtranslate:$MODULE}</b></td>
-					<td class="big tableHeading" width="27%"><b>{'LBL_DEFAULT_VALUE'|@vtranslate:$MODULE}</b></td>
-				</tr>
-				{foreach key=_HEADER_NAME item=_FIELD_VALUE from=$ROW_1_DATA name="headerIterator"}
-				{assign var="_COUNTER" value=$smarty.foreach.headerIterator.iteration}
-				<tr class="fieldIdentifier" id="fieldIdentifier{$_COUNTER}">
-					{if $HAS_HEADER eq true}
-					<td class="cellLabel">
-						<span name="header_name">{$_HEADER_NAME}</span>
-					</td>
-					{/if}
-					<td class="cellLabel">
-						<span>{$_FIELD_VALUE|@textlength_check}</span>
-					</td>
-					<td class="cellLabel">
-						<input type="hidden" name="row_counter" value="{$_COUNTER}" />
-						<select name="mapped_fields" class="txtBox chzn-select" style="width: 100%" onchange="ImportJs.loadDefaultValueWidget('fieldIdentifier{$_COUNTER}')">
-							<option value="">{'LBL_NONE'|@vtranslate:$FOR_MODULE}</option>
-							{foreach key=_FIELD_NAME item=_FIELD_INFO from=$AVAILABLE_FIELDS}
-							{assign var="_TRANSLATED_FIELD_LABEL" value=$_FIELD_INFO->getFieldLabelKey()|@vtranslate:$FOR_MODULE}
-							<option value="{$_FIELD_NAME}" {if $_HEADER_NAME eq $_TRANSLATED_FIELD_LABEL} selected {/if} >{$_TRANSLATED_FIELD_LABEL}{if $_FIELD_INFO->isMandatory() eq 'true'}&nbsp; (*){/if}</option>
-							{/foreach}
-						</select>
-					</td>
-					<td class="cellLabel row-fluid" name="default_value_container">&nbsp;</td>
-				</tr>
-				{/foreach}
+			<table width="100%" cellspacing="0" cellpadding="2" class="listRow table table-bordered table-condensed listViewEntriesTable">
+				<thead>
+					<tr class="listViewHeaders">
+						{if $HAS_HEADER eq true}
+						<th width="25%"><a>{'LBL_FILE_COLUMN_HEADER'|@vtranslate:$MODULE}</a></th>
+						{/if}
+						<th width="25%"><a>{'LBL_ROW_1'|@vtranslate:$MODULE}</a></th>
+						<th width="23%"><a>{'LBL_CRM_FIELDS'|@vtranslate:$MODULE}</a></th>
+						<th width="27%"><a>{'LBL_DEFAULT_VALUE'|@vtranslate:$MODULE}</a></th>
+					</tr>
+				</thead>
+				<tbody>
+					{foreach key=_HEADER_NAME item=_FIELD_VALUE from=$ROW_1_DATA name="headerIterator"}
+					{assign var="_COUNTER" value=$smarty.foreach.headerIterator.iteration}
+					<tr class="fieldIdentifier" id="fieldIdentifier{$_COUNTER}">
+						{if $HAS_HEADER eq true}
+						<td class="cellLabel">
+							<span name="header_name">{$_HEADER_NAME}</span>
+						</td>
+						{/if}
+						<td class="cellLabel">
+							<span>{$_FIELD_VALUE|@textlength_check}</span>
+						</td>
+						<td class="cellLabel">
+							<input type="hidden" name="row_counter" value="{$_COUNTER}" />
+							<select name="mapped_fields" class="txtBox chzn-select" style="width: 100%" onchange="ImportJs.loadDefaultValueWidget('fieldIdentifier{$_COUNTER}')">
+								<option value="">{'LBL_NONE'|@vtranslate:$FOR_MODULE}</option>
+								{foreach key=_FIELD_NAME item=_FIELD_INFO from=$AVAILABLE_FIELDS}
+								{assign var="_TRANSLATED_FIELD_LABEL" value=$_FIELD_INFO->getFieldLabelKey()|@vtranslate:$FOR_MODULE}
+								<option value="{$_FIELD_NAME}" {if $_HEADER_NAME eq $_TRANSLATED_FIELD_LABEL} selected {/if} >{$_TRANSLATED_FIELD_LABEL}{if $_FIELD_INFO->isMandatory() eq 'true'}&nbsp; (*){/if}</option>
+								{/foreach}
+							</select>
+						</td>
+						<td class="cellLabel row-fluid" name="default_value_container">&nbsp;</td>
+					</tr>
+					{/foreach}
+			</tbody>
 			</table>
 		</td>
 		<td>&nbsp;</td>
@@ -75,7 +79,7 @@
 		<td>&nbsp;</td>
 		<td align="right">
 			<input type="checkbox" name="save_map" id="save_map" class="font-x-small" />
-			<span class="font-x-small">{'LBL_SAVE_AS_CUSTOM_MAPPING'|@vtranslate:$MODULE}</span>&nbsp; : &nbsp;
+			<span>{'LBL_SAVE_AS_CUSTOM_MAPPING'|@vtranslate:$MODULE}</span>&nbsp; : &nbsp;
 			<input type="text" name="save_map_as" id="save_map_as" class="font-x-small" />
 		</td>
 		<td>&nbsp;</td>

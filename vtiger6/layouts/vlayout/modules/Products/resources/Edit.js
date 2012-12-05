@@ -224,6 +224,7 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 						moreCurrenciesContainer.html(data);
 						form.validationEngine('detach');
 						form.validationEngine('attach');
+						thisInstance.registerSubmitEvent();
 						var multiCurrencyEditUI = jQuery('.multiCurrencyEditUI',moreCurrenciesContainer);
 						thisInstance.multiCurrencyContainer = multiCurrencyEditUI;
 						thisInstance.registerEventForEnableCurrency().registerEventForEnableBaseCurrency()
@@ -237,7 +238,6 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				);
 			}else{
 				moreCurrenciesDiv.removeClass('hide');
-				thisInstance.triggerForBaseCurrencyCalc();
 			}
 		});
 	},
@@ -256,10 +256,36 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 		})
 	},
 	
+	/**
+	 * Function to register onchange event for unit price
+	 */
+	registerEventForUnitPrice : function(){
+		var thisInstance = this;
+		var unitPrice = this.getUnitPrice();
+		unitPrice.on('change',function(){
+			thisInstance.triggerForBaseCurrencyCalc();
+		})
+	},
+
+	registerRecordPreSaveEvent : function(form) {
+		var thisInstance = this;
+		if(typeof form == 'undefined') {
+			form = this.getForm();
+		}
+
+		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
+			var unitPrice = form.find('[name="unit_price"]').val();
+			var baseCurrencyName = form.find('[name="base_currency"]').val();
+			form.find('[name="'+ baseCurrencyName +'"]').val(unitPrice);
+			form.find('#requstedUnitPrice').attr('name',baseCurrencyName).val(unitPrice);
+		})
+	},
 	
 	registerEvents : function(){
 		this._super();
 		this.registerEventForMoreCurrencies();
 		this.registerEventForTaxes();
+		this.registerEventForUnitPrice();
+		this.registerRecordPreSaveEvent();
 	}
 })

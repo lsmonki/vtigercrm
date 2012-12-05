@@ -12,11 +12,13 @@
 {strip}
 {assign var="FIELD_INFO" value=Zend_Json::encode($FIELD_MODEL->getFieldInfo())}
 {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
+{assign var="FIELD_NAME" value=$FIELD_MODEL->get('name')}
+
 {if $FIELD_MODEL->get('uitype') eq '71'}
 <div class="input-prepend">
 	<div class="row-fluid">
 		<span class="span1"><span class="add-on row-fluid">{$USER_MODEL->get('currency_symbol')}</span></span>
-		<span  class="span9"><input type="text" class="row-fluid" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" name="{$FIELD_MODEL->get('name')}"
+		<span class="span9"><input id="{$MODULE}_editView_fieldName_{$FIELD_NAME}" type="text" class="row-fluid" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" name="{$FIELD_MODEL->get('name')}"
 		data-fieldinfo='{$FIELD_INFO}' value="{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}" {if !empty($SPECIAL_VALIDATOR)}data-validator={Zend_Json::encode($SPECIAL_VALIDATOR)}{/if} data-decimal-seperator='{$USER_MODEL->get('currency_decimal_separator')}' data-group-seperator='{$USER_MODEL->get('currency_grouping_separator')}' /></span>
 	</div>
 </div>
@@ -27,12 +29,16 @@
 				<span class="add-on row-fluid">{$BASE_CURRENCY_SYMBOL}</span>
 			</span>
 			<span class="span10 row-fluid">
-				<input type="text" class="span6 unitPrice" name="{$FIELD_MODEL->get('name')}" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"
+				<input id="{$MODULE}-editview-fieldname-{$FIELD_NAME}" type="text" class="span6 unitPrice" name="{$FIELD_MODEL->get('name')}" data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"
 			data-fieldinfo='{$FIELD_INFO}'  value="{$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'))}" {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if}
 			data-decimal-seperator='{$USER_MODEL->get('currency_decimal_separator')}' data-group-seperator='{$USER_MODEL->get('currency_grouping_separator')}'/>
-				<a id="moreCurrencies" class="span">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
-				<span id="moreCurrenciesContainer"></span>
+				{if $smarty.request.view eq 'Edit'}
+					<a id="moreCurrencies" class="span">{vtranslate('LBL_MORE_CURRENCIES', $MODULE)}>></a>
+					<span id="moreCurrenciesContainer"></span>
+				{/if}
 				<input type="hidden" name="base_currency" value="{$BASE_CURRENCY_NAME}">
+				<input type="hidden" name="cur_{$BASE_CURRENCY_ID}_check" value="on">
+				<input type="hidden" id="requstedUnitPrice" name="{$BASE_CURRENCY_NAME}" value="">
 			</span>
 		</div>
 	</div>

@@ -22,7 +22,7 @@ class Leads_DetailView_Model extends Accounts_DetailView_Model {
 		$moduleModel = $this->getModule();
 		$recordModel = $this->getRecord();
 
-		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'ConvertLead')) {
+		if(Users_Privileges_Model::isPermitted($moduleModel->getName(), 'ConvertLead', $recordModel->getId()) && Users_Privileges_Model::isPermitted($moduleModel->getName(), 'EditView', $recordModel->getId())) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'LBL_CONVERT_LEAD',

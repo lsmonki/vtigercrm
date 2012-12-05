@@ -54,12 +54,8 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var dateTimeComponents = dateTime.split(" ");
 		var dateComponent = dateTimeComponents[0];
 		var timeComponent = dateTimeComponents[1];
-		
-		//Am/Pm component exits
-		if(typeof dateTimeComponents[2] != 'undefined') {
-			timeComponent += ' ' + dateTimeComponents[2];
-		}
-		
+        var seconds = '00';
+
 		var splittedDate = dateComponent.split("-");
 		var splittedDateFormat = dateFormat.split("-");
 		var year = splittedDate[splittedDateFormat.indexOf("yyyy")];
@@ -69,14 +65,33 @@ jQuery.Class("Vtiger_Helper_Js",{
 				var errorMsg = app.vtranslate("JS_INVALID_DATE");
 				throw errorMsg;
 		}
+        
 		//Before creating date object time is set to 00
 		//because as while calculating date object it depends system timezone
 		if(typeof timeComponent == "undefined"){
 			timeComponent = '00:00:00';
 		}
-		var finalDate = month+" "+date+","+year+" "+timeComponent;
-		
-		return new Date(finalDate);
+
+        var timeSections = timeComponent.split(':');
+        if(typeof timeSections[2] != 'undefined'){
+            seconds = timeSections[2];
+        }
+
+        //Am/Pm component exits
+		if(typeof dateTimeComponents[2] != 'undefined') {
+			timeComponent += ' ' + dateTimeComponents[2];
+            if(dateTimeComponents[2].toLowerCase() == 'pm' && timeSections[0] != '12') {
+                timeSections[0] = parseInt(timeSections[0]) + 12;
+            }
+
+            if(dateTimeComponents[2].toLowerCase() == 'am' && timeSections[0] == '12') {
+                timeSections[0] = '00';
+            }
+		}
+        
+        month = month-1;
+		var dateInstance = new Date(year,month,date,timeSections[0],timeSections[1],seconds);
+        return dateInstance;
 	},
 	requestToShowComposeEmailForm : function(selectedId,fieldname){
 		var selectedFields = new Array();
@@ -120,34 +135,14 @@ jQuery.Class("Vtiger_Helper_Js",{
 	/*
 	 * Function to show the confirmation messagebox
 	 */
-	showMessageBox : function(data){
+	showConfirmationBox : function(data){
 		var aDeferred = jQuery.Deferred();
-		var html = '<div class="modelContainer messageBox">'+
-						'<div class="conformationMsg"></div>'+
-						'<div class="messageBoxActions btn-toolbar">'+
-							'<button type="button" class="btn btn-small btn-success success"><strong>'+app.vtranslate('LBL_YES')+'</strong></button>&nbsp;'+
-							'<button type="button" class="btn btn-small btn-danger failure"><strong>'+app.vtranslate('LBL_NO')+'</strong></button>'+
-						'</div>'+
-					'</div>';
-		var messageContainer = jQuery(html);
-		messageContainer.find('.conformationMsg').html(data['message']);
-		
-		var callBackFunction = function(){
-			aDeferred.reject();
-		}
-		var params = {};
-		params.data = messageContainer ;
-		params.unblockcb = callBackFunction;
-		params.css = {'text-align': 'center'};
-		app.showModalWindow(params);
-		
-		jQuery('.success', messageContainer).on('click', function() {
-			app.hideModalWindow();
-			aDeferred.resolve();
-		});
-		jQuery('.failure', messageContainer).on('click', function() {
-			app.hideModalWindow();
-			aDeferred.reject();
+		bootbox.confirm(data['message'],app.vtranslate('LBL_NO'),app.vtranslate('LBL_YES'), function(result) {
+			if(result){
+				aDeferred.resolve();
+			} else{
+				aDeferred.reject();
+			}
 		});
 		return aDeferred.promise();
 	},
@@ -207,6 +202,15 @@ jQuery.Class("Vtiger_Helper_Js",{
 			var params = jQuery.extend(params,userParams);
 		}
 		jQuery.pnotify(params);
+	},
+	
+	/*
+	 * Function to add clickoutside event on the element - By using outside events plugin
+	 * @params element---On which element you want to apply the click outside event
+	 * @params callbackFunction---This function will contain the actions triggered after clickoutside event
+	 */
+	addClickOutSideEvent : function(element, callbackFunction) {
+		element.one('clickoutside',callbackFunction);
 	}
 
 	

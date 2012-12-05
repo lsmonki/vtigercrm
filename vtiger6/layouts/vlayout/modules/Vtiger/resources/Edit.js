@@ -11,12 +11,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 
 	//Event that will triggered when reference field is selected
 	referenceSelectionEvent : 'Vtiger.Reference.Selection',
-	
+
 	//Event that will triggered when reference field is selected
 	referenceDeSelectionEvent : 'Vtiger.Reference.DeSelection',
 
 	//Event that will triggered before saving the record
 	recordPreSave : 'Vtiger.Record.PreSave',
+
+    refrenceMultiSelectionEvent : 'Vtiger.MultiReference.Selection',
 
 	getInstance : function() {
 		var module = app.getModuleName();;
@@ -46,14 +48,22 @@ jQuery.Class("Vtiger_Edit_Js",{
 		return this;
 	},
 
+    getPopUpParams : function(container) {
+        var params = {};
+        var sourceModule = app.getModuleName();
+		var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',container).val();
+        var sourceFieldElement = jQuery('input[class="sourceField"]',container);
+		var sourceField = sourceFieldElement.attr('name');
+		var sourceRecordElement = jQuery('input[name="record"]');
+        if(sourceRecordElement.length > 0) {
+            var sourceRecordId = sourceRecordElement.val();
+        }
+		var sourceRecordId = '';
 
-	openPopUp : function(e){
-		var thisInstance = this;
-		var parentElem = jQuery(e.target).closest('td');
-		var sourceModule = app.getModuleName();
-		var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',parentElem).val();
-		var sourceField = jQuery('input[class="sourceField"]',parentElem).attr('name');
-		var sourceRecordId = jQuery('input[name="record"]').val();
+        var isMultiple = false;
+        if(sourceFieldElement.data('multiple') == true){
+            isMultiple = true;
+        }
 
 		var params = {
 			'module' : popupReferenceModule,
@@ -61,16 +71,45 @@ jQuery.Class("Vtiger_Edit_Js",{
 			'src_field' : sourceField,
 			'src_record' : sourceRecordId
 		}
+
+        if(isMultiple) {
+            params.multi_select = true ;
+        }
+        return params;
+    },
+
+
+	openPopUp : function(e){
+		var thisInstance = this;
+		var parentElem = jQuery(e.target).closest('td');
+
+        var params = this.getPopUpParams(parentElem);
+
+        var isMultiple = false;
+        if(params.multi_select) {
+            isMultiple = true;
+        }
+
+        var sourceFieldElement = jQuery('input[class="sourceField"]',parentElem);
+
 		var popupInstance =Vtiger_Popup_Js.getInstance();
-		popupInstance.show(params, function(data){
+		popupInstance.show(params,function(data){
 				var responseData = JSON.parse(data);
+                var dataList = new Array();
 				for(var id in responseData){
 					var data = {
 						'name' : responseData[id].name,
 						'id' : id
 					}
-					thisInstance.setReferenceFieldValue(parentElem, data);
+                    dataList.push(data);
+                    if(!isMultiple) {
+                        thisInstance.setReferenceFieldValue(parentElem, data);
+                    }
 				}
+
+                if(isMultiple) {
+                    sourceFieldElement.trigger(Vtiger_Edit_Js.refrenceMultiSelectionEvent,{'data':dataList});
+                }
 			});
 	},
 
@@ -80,10 +119,10 @@ jQuery.Class("Vtiger_Edit_Js",{
 		var sourceFieldDisplay = sourceField+"_display";
 		var fieldDisplayElement = container.find('input[name="'+sourceFieldDisplay+'"]');
 		var popupReferenceModule = container.find('input[name="popupReferenceModule"]').val();
-		
+
 		var selectedName = params.name;
 		var id = params.id;
-		
+
 		fieldElement.val(id)
 		fieldDisplayElement.val(selectedName).attr('readonly',true);
 		fieldElement.trigger(Vtiger_Edit_Js.referenceSelectionEvent, {'source_module' : popupReferenceModule, 'record' : id, 'selectedName' : selectedName});
@@ -199,7 +238,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 				}
 			},
 			'open' : function(event,ui) {
-				//To Make the menu come up in the case of quick create 
+				//To Make the menu come up in the case of quick create
 				jQuery(this).data('autocomplete').menu.element.css('z-index','100001');
 
 			}
@@ -237,7 +276,7 @@ jQuery.Class("Vtiger_Edit_Js",{
             }
 		})
 	},
-	
+
 	/**
 	 * Function which will give you all details of the selected record
 	 * @params - an Array of values like {'record' : recordId, 'source_module' : searchModule, 'selectedName' : selectedRecordName}
@@ -265,6 +304,23 @@ jQuery.Class("Vtiger_Edit_Js",{
 		app.registerEventForTimeFields(container);
 	},
 
+    referenceCreateHandler : function(container) {
+        var thisInstance = this;
+        var postQuickCreateSave  = function(data) {
+            var params = {};
+            params.name = data.result._recordLabel;
+            params.id = data.result._recordId;
+            thisInstance.setReferenceFieldValue(container, params);
+        }
+
+        var referenceModuleName = this.getReferencedModuleName(container);
+        var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
+        if(quickCreateNode.length <= 0) {
+            Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
+        }
+        quickCreateNode.trigger('click',{'callbackFunction':postQuickCreateSave});
+    },
+
 	/**
 	 * Function which will register event for create of reference record
 	 * This will allow users to create reference record from edit view of other record
@@ -274,21 +330,24 @@ jQuery.Class("Vtiger_Edit_Js",{
 		container.find('.createReferenceRecord').on('click', function(e){
 			var element = jQuery(e.currentTarget);
 			var controlElementTd = element.closest('td');
-			
-			var postQuickCreateSave  = function(data) {
-				var params = {};
-				params.name = data.result._recordLabel;
-				params.id = data.result._recordId;
-				thisInstance.setReferenceFieldValue(controlElementTd, params);
-			}
-			
-			var referenceModuleName = thisInstance.getReferencedModuleName(controlElementTd);
-			var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
-			if(quickCreateNode.length <= 0) {
-				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
-			}
-			quickCreateNode.trigger('click',{'callbackFunction':postQuickCreateSave});
+
+			thisInstance.referenceCreateHandler(controlElementTd);
 		})
+	},
+
+	/**
+	 * Function to register the event status change event
+	 */
+	registerEventStatusChangeEvent : function(container){
+		var followupContainer = container.find('.followUpContainer');
+		container.find('select[name="eventstatus"]').on('change',function(e){
+			var selectedOption = jQuery(e.currentTarget).val();
+			if(selectedOption == 'Held'){
+				followupContainer.show();
+			} else{
+				followupContainer.hide();
+			}
+		});
 	},
 	
 	/**
@@ -301,8 +360,10 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerClearReferenceSelectionEvent(container);
 		this.registerPreventingEnterSubmitEvent(container);
 		this.registerTimeFields(container);
+		//Added here instead of register basic event of calendar. because this should be registered all over the places like quick create, edit, list..
+		this.registerEventStatusChangeEvent(container);
 	},
-	
+
 	/**
 	 * Function to register event for image delete
 	 */
@@ -317,7 +378,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 				'action' : 'DeleteImage',
 				'imageid' : imageData.imageId,
 				'record' : recordId
-				
+
 			}
 			AppConnector.request(params).then(
 				function(data){
@@ -332,15 +393,16 @@ jQuery.Class("Vtiger_Edit_Js",{
 		});
 	},
 
-	registerEvents: function(){
-		var editViewForm = this.getForm();
-		var statusToProceed = this.proceedRegisterEvents();
-		if(!statusToProceed){
-			return;
+	triggerDisplayTypeEvent : function() {
+		var widthType = app.cacheGet('widthType', 'wideWidthType');
+		if(widthType) {
+			var elements = jQuery('#EditView').find('td');
+			elements.addClass(widthType);
 		}
-		
-		this.registerBasicEvents(this.getForm());
-		this.registerEventForImageDelete();
+	},
+
+	registerSubmitEvent: function() {
+		var editViewForm = this.getForm();
 		
 		editViewForm.submit(function(e){
 			//Form should submit only once for multiple clicks also
@@ -350,7 +412,6 @@ jQuery.Class("Vtiger_Edit_Js",{
 				if(editViewForm.validationEngine('validate')) {
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');
-					
 					//on submit form trigger the recordPreSave event
 					var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
 					editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
@@ -362,14 +423,29 @@ jQuery.Class("Vtiger_Edit_Js",{
 				} else {
 					//If validation fails, form should submit again
 					editViewForm.removeData('submit');
+					// to avoid hiding of error message under the fixed nav bar
+					app.formAlignmentAfterValidation(editViewForm);
 				}
 			}
 		});
+	},
+
+	registerEvents: function(){
+		var editViewForm = this.getForm();
+		var statusToProceed = this.proceedRegisterEvents();
+		if(!statusToProceed){
+			return;
+		}
+
+		this.registerBasicEvents(this.getForm());
+		this.registerEventForImageDelete();
+		this.registerSubmitEvent();
 		
 		app.registerEventForDatePickerFields('#EditView');
 		editViewForm.validationEngine(app.validationEngineOptions);
-		
+
 		this.registerReferenceCreate(editViewForm);
+		this.triggerDisplayTypeEvent();
 	}
 })
 jQuery(document).ready(function() {

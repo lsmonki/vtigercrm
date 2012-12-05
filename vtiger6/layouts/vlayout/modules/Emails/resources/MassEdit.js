@@ -122,18 +122,29 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			jQuery('#flag').val(thisInstance.sent);
 		});
 	},
+	
+	checkHiddenStatusofCcandBcc : function(){
+		var ccLink = jQuery('#ccLink');
+		var bccLink = jQuery('#bccLink');
+		if(ccLink.is(':hidden') && bccLink.is(':hidden')){
+			ccLink.closest('div.row-fluid').addClass('hide');
+		}
+	},
 
 	/*
 	 * Function to register the events for bcc and cc links
 	 */
 	registerCcAndBccEvents : function(){
+		var thisInstance = this;
 		jQuery('#ccLink').on('click',function(e){
 			jQuery('#ccContainer').show();
 			jQuery(e.currentTarget).hide();
+			thisInstance.checkHiddenStatusofCcandBcc();
 		});
 		jQuery('#bccLink').on('click',function(e){
 			jQuery('#bccContainer').show();
 			jQuery(e.currentTarget).hide();
+			thisInstance.checkHiddenStatusofCcandBcc();
 		});
 	},
 
@@ -196,10 +207,52 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			currentTarget.closest('.MultiFile-label').remove();
 		});
 	},
-
+	
+	/**
+	 * Function to register event for to field in compose email popup
+	 */
+	registerEventsForToField : function(){
+		var thisInstance = this;
+		this.getMassEmailForm().on('click','.selectEmail',function(e){
+			var moduleSelected = jQuery('.emailModulesList').val();
+			var parentElem = jQuery(e.target).closest('.toEmailField');
+			var sourceModule = jQuery('[name=module]').val();
+			var params = {
+				'module' : moduleSelected,
+				'src_module' : sourceModule,
+				'view': 'EmailsRelatedModulePopup'
+			}
+			var popupInstance =Vtiger_Popup_Js.getInstance();
+			popupInstance.show(params, function(data){
+					var responseData = JSON.parse(data);
+					for(var id in responseData){
+						var data = {
+							'name' : responseData[id].name,
+							'id' : id,
+							'emailid' : responseData[id].email
+						}
+						thisInstance.setReferenceFieldValue(parentElem, data);
+					}
+				},'relatedEmailModules');
+		});
+		
+	},
+	
+	setReferenceFieldValue : function(container,object){
+		var toEmailField = container.find('.sourceField');
+		var toEmailFieldExistingValue = toEmailField.val();
+		var toEmailFieldNewValue;
+		if(toEmailFieldExistingValue != ""){
+			toEmailFieldNewValue = toEmailFieldExistingValue+","+object.emailid;
+		} else {
+			toEmailFieldNewValue = object.emailid;
+		}
+		toEmailField.val(toEmailFieldNewValue);
+	},
+	
 	registerEvents : function(){
 		var thisInstance = this;
-		//this.registerSendEmailEvent();
+		this.registerSendEmailEvent();
 		var composeEmailForm = this.getMassEmailForm();
 		if(composeEmailForm.length > 0){
 			jQuery("input[type=file].multiFile").MultiFile({
@@ -207,7 +260,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 					thisInstance.fileAfterSelectHandler(element, value, master_element);
 				}
 			});
-			this.getMassEmailForm().validationEngine();
+			this.getMassEmailForm().validationEngine(app.validationEngineOptions);
 			var textAreaElement = jQuery('#description');
 			this.ckEditorInstance = new Vtiger_CkEditor_Js();
 			this.ckEditorInstance.loadCkEditor(textAreaElement);
@@ -216,6 +269,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			this.registerCcAndBccEvents();
 			this.registerSendEmailTemplateEvent();
 			this.registerBrowseCrmEvent();
+			this.registerEventsForToField();
 		}
 	}
 });

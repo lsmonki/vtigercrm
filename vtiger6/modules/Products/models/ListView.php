@@ -48,8 +48,17 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder)){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
+		$orderBy = $this->getForSql('orderby');
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
+			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);

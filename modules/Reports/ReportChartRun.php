@@ -68,7 +68,7 @@ if($numOfRows > 0) {
 	}
 
 	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true) {
-		$oReportRun = new ReportRun($reportid);
+		$oReportRun = ReportRun::getInstance($reportid);
 		$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
 
 		$smarty = new vtigerCRM_Smarty;

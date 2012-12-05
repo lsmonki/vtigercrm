@@ -10,16 +10,19 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<span class="recordLabel lead">{$RECORD->getName()}</span>
-	<div>
-		<label>
+	<span class="span2">
+		<img src="{vimage_path('summary_Oppurtunities.png')}" class="summaryImg" />
+	</span>
+	<span class="span8 margin0px">
+		<span class="row-fluid">
+			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getName()}">{$RECORD->getName()}</span>
+		</span>
 		{assign var=RELATED_TO value=$RECORD->get('related_to')}
 		{if !empty($RELATED_TO)}
-			<div>
-				<span class="muted">{vtranslate('Related to',$MODULE_NAME)} </span>
-				{$RECORD->getDisplayValue('related_to')}
-			</div>
+		<span class="row-fluid">
+			<span class="muted">{vtranslate('Related to',$MODULE_NAME)} </span>
+			{$RECORD->getDisplayValue('related_to')}
+		</span>
 		{/if}
-		<label>
-	</div>
+	</span>
 {/strip}

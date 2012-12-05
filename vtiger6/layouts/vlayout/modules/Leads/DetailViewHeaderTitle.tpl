@@ -10,14 +10,19 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<span class="recordLabel lead">{$RECORD->getName()}</span>
-	<div>
-		<label>
+	<span class="span2">
+		<img src="{vimage_path('summary_Leads.png')}" class="summaryImg" />
+	</span>
+	<span class="span8 margin0px">
+		<span class="row-fluid">
+			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getName()}">{$RECORD->getName()}</span>
+		</span>
+		<span class="row-fluid">
 			<span class="designation_label">{$RECORD->getDisplayValue('designation')}</span>
 			{if $RECORD->getDisplayValue('company') && $RECORD->getDisplayValue('designation')}
 				&nbsp;{vtranslate('LBL_AT')}&nbsp;
 			{/if}
 			<span class="company_label">{$RECORD->get('company')}</span>
-		</label>
-	</div>
+		</span>
+	</span>
 {/strip}

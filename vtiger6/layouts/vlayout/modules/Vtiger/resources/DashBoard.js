@@ -121,7 +121,7 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 		this.showWidgetIcons();
 		this.hideWidgetIcons();
 		this.removeWidget();
-		this.registerFilterIntiater();
+		this.registerFilterInitiater();
 
 		this.gridsterStop();
 
@@ -183,11 +183,22 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 		});
 	},
 
-	registerFilterIntiater : function() {
+	registerFilterInitiater : function() {
 		var container = this.getContainer();
-		container.on('click', 'a[name="dfilter"]', function(e){
+		container.on('click', 'a[name="dfilter"]', function(e) {
 			var widgetContainer = jQuery(e.currentTarget).closest('.dashboardWidget');
-			widgetContainer.find('.filterContainer').slideToggle(500);
+			var filterContainer = widgetContainer.find('.filterContainer');
+			var dashboardWidgetHeader = jQuery('.dashboardWidgetHeader', widgetContainer);
+			
+			filterContainer.slideToggle(500);
+			
+			var callbackFunction = function() {
+				filterContainer.slideUp(500);
+			}
+			//adding clickoutside event on the dashboardWidgetHeader
+			Vtiger_Helper_Js.addClickOutSideEvent(dashboardWidgetHeader, callbackFunction);
+			
+			return false;
 		})
 	}
 });

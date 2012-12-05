@@ -16,30 +16,19 @@ class Project_DetailView_Model extends Vtiger_DetailView_Model {
 			$relatedLinks = array();
 		}
 
-
 		// TODO : Check if related list can be get by from the table
-		$relatedLinkList = array(
-
-				array(
-					'linktype' => 'DETAILVIEWRELATED',
-					'linklabel' => vtranslate('LBL_CHARTS', 'Projects'),
-					//TODO : Assign the url which gives the chart
-					'linkurl' => '',
-					'linkicon' => ''
-				),
-
-				array(
-					'linktype' => 'DETAILVIEWRELATED',
-					'linklabel' => vtranslate('LBL_EVENTS', 'Calendar').' & '.vtranslate('LBL_TODOS', 'Calendar'),
-					//TODO : Assign the url which gives the chart
-					'linkurl' => '',
-					'linkicon' => ''
-				)
-		);
-
-		foreach($relatedLinkList as $relatedLinkEntry) {
-			$relatedLinks[] = $relatedLinkEntry;
-		}
+//		$relatedLinkList = array(
+//			array(
+//				'linktype' => 'DETAILVIEWRELATED',
+//				'linklabel' => vtranslate('LBL_CHARTS', 'Projects'),
+//				'linkurl' => '',
+//				'linkicon' => ''
+//			)
+//		);
+//
+//		foreach($relatedLinkList as $relatedLinkEntry) {
+//			$relatedLinks[] = $relatedLinkEntry;
+//		}
 
 		return $relatedLinks;
 	}

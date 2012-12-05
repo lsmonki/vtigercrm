@@ -19,8 +19,10 @@ class PriceBooks_Record_Model extends Vtiger_Record_Model {
 	 */
 	function getProductListPriceURL() {
 		$url = 'module=PriceBooks&action=ProductListPrice&record=' . $this->getId();
-		if ($this->has('src_record')) {
-			$url .= '&itemId=' . $this->get('src_record');
+		$rawData = $this->getRawData();
+		$src_record = $rawData['src_record'];
+		if (!empty($src_record)) {
+			$url .= '&itemId=' . $src_record;
 		}
 		return $url;
 	}
@@ -32,12 +34,11 @@ class PriceBooks_Record_Model extends Vtiger_Record_Model {
 	function getProductsListPrice($relatedRecordId) {
 		$db = PearDatabase::getInstance();
 
-		$result = $db->pquery('SELECT * FROM vtiger_pricebookproductrel WHERE pricebookid = ? AND productid = ?',
+		$result = $db->pquery('SELECT listprice FROM vtiger_pricebookproductrel WHERE pricebookid = ? AND productid = ?',
 				array($this->getId(), $relatedRecordId));
 
 		if($db->num_rows($result)) {
-			 $listPrice = $db->query_result($result, 0, 'listprice');
-			 return $listPrice;
+			 return $db->query_result($result, 0, 'listprice');
 		}
 		return false;
 	}

@@ -27,6 +27,12 @@ class Calendar_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mode
 		$recordExists = !empty($recordModel);
 		$moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
+		
+		//We should not allow the user to edit the send reminder information
+		if ($recordModel->getId() != '') {
+			unset($blockModelList['LBL_REMINDER_INFORMATION']);
+		}
+		
 		foreach($blockModelList as $blockLabel=>$blockModel) {
 			$fieldModelList = $blockModel->getFields();
 			if (!empty ($fieldModelList)) {

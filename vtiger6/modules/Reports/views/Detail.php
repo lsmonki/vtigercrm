@@ -18,7 +18,7 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$reportModel = Reports_Record_Model::getCleanInstance($record);
 
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		if(!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId()) || !$reportModel->isEditable()) {
+		if(!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId()) && !$reportModel->isEditable()) {
 			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}
@@ -44,11 +44,20 @@ class Reports_Detail_View extends Vtiger_Index_View {
 
 		if(!$permission) {
 			$viewer->assign('MODULE', $primaryModule);
+			$viewer->assign('MESSAGE', 'LBL_PERMISSION_DENIED');
 			$viewer->view('OperationNotPermitted.tpl', $primaryModule);
 			exit;
 		}
 
 		$detailViewLinks = $detailViewModel->getDetailViewLinks();
+		
+		// Advanced filter conditions
+		$viewer->assign('SELECTED_ADVANCED_FILTER_FIELDS', $reportModel->transformToNewAdvancedFilter());
+		$viewer->assign('PRIMARY_MODULE', $primaryModule);
+		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $reportModel->getPrimaryModuleRecordStructure());
+		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
 
 		$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
 		$viewer->assign('REPORT_MODEL', $reportModel);
@@ -88,7 +97,30 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('MODULE', $moduleName);
 
+		if (count($data) > self::REPORT_LIMIT) {
+			$viewer->assign('LIMIT_EXCEEDED', true);
+		}
+
 		$viewer->view('ReportContents.tpl', $moduleName);
+	}
+	
+	/**
+	 * Function to get the list of Script models to be included
+	 * @param Vtiger_Request $request
+	 * @return <Array> - List of Vtiger_JsScript_Model instances
+	 */
+	function getHeaderScripts(Vtiger_Request $request) {
+		$headerScriptInstances = parent::getHeaderScripts($request);
+		$moduleName = $request->getModule();
+
+		$jsFileNames = array(
+			'modules.Vtiger.resources.Detail',
+			"modules.$moduleName.resources.Detail"
+		);
+
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+		return $headerScriptInstances;
 	}
 
 }

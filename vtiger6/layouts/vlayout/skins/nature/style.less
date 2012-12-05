@@ -7,7 +7,6 @@ body {
 	width: 100%;
 	font-family : @baseFontFamily;
 	font-size : @baseFontSize !important;
-	min-width : 880px;
 }
 #page{
 	width:100%;
@@ -46,6 +45,10 @@ hr{
 .modal-footer-padding{
 	padding : 1px 24px 5px !important;
 }
+.zeroPaddingAndMargin{
+	padding: 0px;
+	margin: 0px;
+}
 
 .floatRight{
 	float: right;
@@ -53,14 +56,24 @@ hr{
 .marginLeftZero{
 	margin-left:0px !important;
 }
-.pushDown4per{
-	padding-top: 4%;
+.pushDownHalfper{
+	padding-top: 0.5%;
+}
+.pushDown2per{
+	padding-top: 2%;
 }
 .padding1per{
 	padding: 1%;
 }
+.horizontalLeftSpacing{
+	padding: 0.5%;
+}
 .paddingLeft10px{
 	padding-left: 10px !important;
+}
+.paddingLeftRight10px{
+	padding-left: 10px;
+	padding-right: 10px;
 }
 .marginRight5px{
 	margin-right: 5px;
@@ -71,11 +84,17 @@ hr{
 .marginBottom10px{
 	margin-bottom: 10px;
 }
+.margin0px{
+	margin: 0px !important;
+}
 .verticalBottomSpacing{
 	margin-bottom: 1.2em;
 }
 .textAlignCenter{
 	text-align : center;
+}
+.textAlignRight{
+	text-align : right !important;
 }
 .redColor {
 	color: red;
@@ -245,7 +264,7 @@ tr.collapseRow{
 }
 
 .font-x-x-large {
-	font-size : @baseFontSize + 5;
+	font-size : @baseFontSize + 6;
 }
 
 .font-x-large {
@@ -307,6 +326,11 @@ tr.collapseRow{
 	margin : 2%;
 }
 
+//Fix for background scroll when modal is open 
+.modal-open {
+	overflow : hidden;
+}
+
 /** General complete **/
 
 #topMenus{
@@ -337,7 +361,7 @@ tr.collapseRow{
 		left : 292px !important;
 	}
 	.gradientBar(@gradient7StrtColor,@gradient4EndColor);
-	width: 43em;
+	width: 50em;
 	padding: 24%;
 	left: -270px;
 	border-radius : 6px;
@@ -571,7 +595,6 @@ tr.collapseRow{
 		color: @generalLinkColor;
 		&:hover{
 		    color: @linkColorHover;
-			.fontBold;
 		}
 	}
 	th, td{
@@ -599,10 +622,11 @@ tr.collapseRow{
 
 .quickLinksDiv{
 	p{
-		padding: 8% 0 1% 11%;
+		padding: 6% 0 1% 11%;
 		margin-left: -7%;
 		height: 28px;
 		cursor: pointer;
+		margin-bottom: 0px;
 	}
 }
 
@@ -651,9 +675,10 @@ tr.collapseRow{
 	color: @generalLinkColor;
 }
 
-.modelContainer{
-	min-width: 450px;
+.modelContainer {
+	min-width:450px;
 }
+
 //override bootstrap form
 form {
 	margin:0px;
@@ -680,13 +705,18 @@ div.blockPage {
 
 .pageNumbers{
 	margin-right: 10px;
-	vertical-align: sub;
+	position: relative;
+	top: 5px;
 }
 
 .listViewActionsDiv{
-	padding: 10px;
+	padding: 5px;
 	border-radius:5px;
 	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
+	.btn-toolbar{
+		margin-top: 4px !important;
+		margin-bottom:	0px !important;
+	}
 }
 
 .listViewLoadingImage{
@@ -788,7 +818,7 @@ form#EditView table td.chznDropDown{
 .contentHeader {
 	padding: 15px;
 	padding-left: 5px;
-	font-size: 18px;
+	line-height: 20px;
 }
 
 .buttonNormal {
@@ -805,6 +835,9 @@ form#EditView table td.chznDropDown{
 
 .actionImages{
 	opacity:0;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	filter: alpha(opacity=0);
 }
 
 .hide{
@@ -812,6 +845,9 @@ form#EditView table td.chznDropDown{
 }
 .listViewEntries:hover td .actions .actionImages{
 	opacity :1;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	filter: alpha(opacity=100);
 }
 
 .listViewEntries{
@@ -879,16 +915,16 @@ footer {
 
 /* Footer */
 /* Detail View */
-
 .detailViewContainer{
-	margin: 10px 10px 10px 20px;
 	.detailViewTitle{
 		max-height: 50px;
+		padding:0px 10px 0px 10px;
+		width: 98%;
 		.detailViewPagingButton{
 			margin-top: 0.7em;
 		}
-		.textOverflowEllipsis {
-			width: 70%;
+		.recordLabel {
+			width: 100%;
 		}
     }
 }
@@ -907,9 +943,6 @@ footer {
 
 #detailView {
 	margin : 0px;
-	table{
-		.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
-	}
 	.summaryView{
 		p{
 			margin-bottom :  0 !important;
@@ -1004,46 +1037,34 @@ footer {
 
 /* CustomFilter View */
 
-.popupTopMenuDiv{
-	padding-right: 20px;
-	.gradientBar(@gradient4StrtColor,@gradient4EndColor);
+.popupBackgroundColor{
+	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
 }
 
 .popupContainer{
 	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
 	padding-top: 10px;
-	padding-right: 20px;
 }
 
 .popupSearchContainer {
-	padding: 20px;
-	width: 46em;
-	margin-left: auto;
-	margin-right: auto;
-	#popupSearchButton{
-		img{
-			padding : 0.6em 0 0 0.5em;
-			vertical-align : top !important;
-		}
-	}
+	text-align: center;
 }
 
 .popupPaging {
 	margin-bottom: 0px;
 	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
 	min-height : 3.5em;
-	padding : 0.2em;
+	.paddingLeftRight10px;
 }
 
 .popupEntriesDiv{
-	padding-left: 10px;
-	padding-right: 10px;
+	.paddingLeftRight10px;
 	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
 }
 
 .popupTable{
 	margin-left: 0 !important;
-    margin-bottom: 0 !important;
+	margin-bottom: 0 !important;
 	th {
 		.gradientBar(@gradient5StrtColor,@gradient5EndColor);
 		.textShadow(@headerTextColor,0,0,1px,@headerTextShadowColor);
@@ -1080,7 +1101,7 @@ footer {
     .gradientBar(@gradient1EndColor,@gradient1StrtColor);
     border: 7px solid @grayLighter;
     border-radius: 0 0 0 0;
-    hieght : 500px;
+    height : 500px;
 }
 
 .massEditTabs{
@@ -1090,6 +1111,7 @@ footer {
     li{
 		.gradientBar(@gradient1EndColor,@gradient1EndColor);
 		border: 1px solid @lightColorBorder;
+		border-bottom: 0;
 		border-radius: 6px 6px 0 0;
 		margin-right: 3px;
 		&:hover {
@@ -1122,6 +1144,7 @@ footer {
 
 .massEditContent{
 	margin-top:1px;
+	overflow: visible !important;
 }
 
 .massEditTable{
@@ -1129,8 +1152,7 @@ footer {
 	.border(1px, @lightColorBorder);
     td{
 		border-left: none !important;
-		padding: 3px !important;
-        font-size: 12px;
+		font-size: 12px;
         input#imagename{
             height : 25px;
         }
@@ -1240,7 +1262,7 @@ footer {
 //Recent Comments
 .commentContainer{
 	hr{
-		margin : 20px 0 10px 0 !important;
+		margin: 0 !important;
 		border-bottom: 1px solid @lightColorBorder;
     }
     .commentorName{
@@ -1252,31 +1274,36 @@ footer {
 	.addCommentBlock {
 		min-height: 115px;
 		.commentcontent{
-			min-width: 98%;
+			min-width: 100%;
 			box-shadow: inset 0 0 4px @boxShadowColor;
 			overflow-y: hidden;
-			padding : 6px !important;
-			float: right;
+			padding : 8px !important;
+			resize: none;
+			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+			box-sizing: border-box;         /* Opera/IE 8+ */
 		}
     }
     .singleComment .addCommentBlock .commentcontent{
-			min-width: 90%;
+			min-width: 100%;
     }
     .commentInfoContent{
-		padding: 2px 0;
+		padding: 1px 0;
+		word-wrap : break-word;
 	}
 }
 
 .commentTitle {
 	img {
 		width:32px;
-		height:32px;
+		height:30px;
 	}
 }
 
-.commentsList{
-	margin-left: -2%;
+.commentsList > ul{
+	margin-left: 0;
 }
+
 /******************************************************
 Please check for the below classes if it is being used
 *******************************************************/
@@ -1285,7 +1312,6 @@ Please check for the below classes if it is being used
 }
 /******************************************************/
 .commentActionsDiv{
-	margin-bottom: 10px;
 	a{
 		color : @generalLinkColor;
 		opacity : 0.6;
@@ -1306,6 +1332,9 @@ Please check for the below classes if it is being used
 			}
 		}
 	}
+	.updateInfoContainer{
+		word-wrap : break-word;
+	}
 }
 
 .rightAlignedCalendar{
@@ -1325,7 +1354,7 @@ Please check for the below classes if it is being used
 }
 
 .SendEmailFormStep2{
-	padding : 2%;
+	padding : 0% 2%;
 	line-height : 18px;
 	.contentsBackground();
 }
@@ -1347,10 +1376,10 @@ Please check for the below classes if it is being used
 .globalSearchResults{
 	.highlightedHeader{
 		.gradientBar(@gradient5StrtColor,@gradient5EndColor);
-		color:@globalSearchHeader;
+		.textShadow(@headerTextColor,0px,0px,1px,@headerTextShadowColor);
 	}
 	#showFilter{
-		color : @generalLinkColor;
+		color : @headerTextColor;
 	}
 	.dropdownStylings;
 	.contents{
@@ -1466,21 +1495,42 @@ Please check for the below classes if it is being used
 //Import
 
 //Line Items
+
 // fix for line item taxmode, currency background header block
 #lineItemTab.table{
 	tr:first-child{
-		&:hover th~td{
-			.gradientBar(@gradient5StrtColor,@gradient5EndColor);
-		}
+	    &:hover th~td{
+		.gradientBar(@gradient5StrtColor,@gradient5EndColor);
+	    }
 	}
+	tr:nth-child(2){
+	    &:hover td{
+		background : none;
+	    }
+	}
+
 }
 
-.lineItemTable td{
+.lineItemTable tr:hover td {
     width: 0%;
-	a:hover{
-		color: @themeLinkColor;
-	}
+    div.finalDiscountUI table tr td {
+	background: none !important;
+    }
+    div.discountUI table tr td{
+	background: none !important;
+    }
+    div#shipping_handling_div table tr td{
+	background: none !important;
+    }
+    span.taxDivContainer div table tr td{
+	background: none !important;
+    }
+	div.finalTaxUI table tr td{
+	background: none !important;
+    }
 }
+
+// Fix complete
 
 .lineItemResult{
 	width: 70.5% !important;
@@ -1521,6 +1571,12 @@ Please check for the below classes if it is being used
 	box-shadow : 1px 0px 7px @lightColorBorder;
 	background-color : @gradient7StrtColor;
 	border-radius : 6px;
+	.table tbody tr:first-child th:first-child{
+		border-radius : 4px 0 0 0 !important;
+	}
+	.table tbody tr:first-child th:last-child{
+		border-radius : 0 4px 0 0 !important;
+	}
 }
 .LineItemDirectPriceReduction{
 	width: 65% !important;
@@ -1557,8 +1613,8 @@ Please check for the below classes if it is being used
 .cursorDefault{
 	cursor: default;
 }
+
 .btn &:hover{
-	background-position: 0 0 !important;
 	box-shadow: 0 0 1px @boxShadowColor !important;
 }
 
@@ -1569,6 +1625,7 @@ Please check for the below classes if it is being used
 		box-shadow: 0 0 1px @boxShadowColor !important;
 		background-position: 0 0;
 		.textShadow(@textShadowColor,0px,0px,1px,@textColor);
+		.gradientBar(@addButton,@addButton);
 	}
 }
 .saveButton{
@@ -1585,7 +1642,7 @@ Please check for the below classes if it is being used
 	 color:	@deleteButton;
 	 margin-left: 8px;
 	 &:hover{
-	    color:	@deleteButton;
+	    color: @deleteButton !important;
 	 }
 }
 .importMore{
@@ -1668,7 +1725,7 @@ Please check for the below classes if it is being used
 	border : 0;
 	li {
 		display: inline-block;
-		.textShadow( @disableTextColor,0,0,0px,@textShadowColor);
+		.textShadow(@headerTextColor,0px,0px,1px,@headerTextShadowColor);
 	}
 	.divider {
 		color: @headerTextColor;
@@ -1676,7 +1733,8 @@ Please check for the below classes if it is being used
 		text-shadow : none;
 	}
 	.active  {
-		.textShadow(@textColor,1px,-1px,1px,@textShadowColor);
+		.textShadow(@headerTextColor,0px,0px,1px,@headerTextShadowColor);
+		.fontBold;
 	}
 }
 // BreadCrumbs CSS ends
@@ -1684,12 +1742,19 @@ Please check for the below classes if it is being used
 .textOverflowEllipsis{
 	.textOverflowEllipsisMixin(9em,ellipsis);
 }
+.widgetTextOverflowEllipsis{
+	.textOverflowEllipsisMixin(12em,ellipsis);
+}
 #detailView,#EditView{
+	#lineItemTab.table{
+		tr:last-child{
+			td{
+				border-bottom : 1px solid @lightColorBorder !important;
+			}
+		}
+	}
 	.table{
 		.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
-		td:nth-child(2) {
-			border-right:1px solid @lightColorBorder !important;
-		}
 		tr:hover td{
 			.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 		}
@@ -1897,7 +1962,9 @@ div#chart2{
 .fc-event-style4,.fc-event-style4 .fc-event-skin { background: @fc-style4; border-color: @fc-style4; font-weight: normal; text-shadow: none; }
 .fc-event-style5,.fc-event-style5 .fc-event-skin { background: @fc-style5; border-color: @fc-style5; font-weight: normal; text-shadow: none; }
 .fc-event-style6,.fc-event-style6 .fc-event-skin { background: @fc-style6; border-color: @fc-style6; font-weight: normal; text-shadow: none; }
-
+#calendarview th {
+    color : @black;
+}
 //Convert Lead
 .fieldInfo.in{
 	overflow:visible !important;
@@ -1953,7 +2020,7 @@ div#chart2{
 
 .logo, .imageContainer {
     img {
-        height: 2.5em !important;
+		height:40px;
         width: 10em !important;
     }
 }
@@ -1966,10 +2033,6 @@ div#chart2{
 //Used to remove border-right for my preferences heading
 #myPrefHeading{
 	border-right: 0 !important;
-}
-
-#prefPageHeader{
-    margin: 0 2% 1% 2%;
 }
 
 /* Calendar Mass Edit */
@@ -2039,9 +2102,115 @@ div#chart2{
 	-webkit-transform:rotate(270deg);
 	-moz-transform:rotate(270deg);
 	-o-transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
+	transform: rotate(270deg);
 	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 .feedback .handle:hover {
 	text-decoration: none;
+}
+#popupContents{
+	.form-actions{
+		margin: 0px !important;
+		background-color: @white !important;
+		border-top: none !important
+	}
+}
+.summaryImg{
+	box-shadow: 0 0 4px @black inset;
+	border-radius : 5px;
+}
+.massEditActiveField{
+	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+}
+.ui-pnotify{
+	z-index: 10002 !important;
+}
+.companyLogo {
+	img {
+		height: 2.5em;
+        width: 10em !important;
+    }
+}
+
+
+.wideWidthType{
+	padding-top:11px !important;
+	padding-bottom:11px !important;
+}
+.mediumWidthType {
+	padding-top:6px !important;
+	padding-bottom:6px !important;
+}
+.narrowWidthType {
+	padding-top:2px !important;
+	padding-bottom:2px !important;
+}
+
+
+//Summary view of contacts,leads,accounts
+.recordDetails, .summaryWidgetContainer{
+	background-color: @summaryWidgetColor;
+	padding: 15px;
+	border: 1px solid @summaryWidgetBorderColor;
+	margin-bottom: 10px;
+	border-radius : 4px;
+	.summaryViewEntries td{
+		vertical-align: top;
+	}
+}
+
+/*opacity applied for summary view edit, comment actions, activity widget edit*/
+.summaryViewEntries .summaryViewEdit, .commentActionsDiv, .activityStatus .editStatus{
+	opacity: 0;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    filter: alpha(opacity=0);
+}
+.summaryViewEntries:hover .fieldValue .summaryViewEdit, .activityStatus:hover .editStatus{
+	opacity: 1;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    filter: alpha(opacity=100);
+}
+
+.summary-table{
+	width: 100%;
+	background-color: @summaryWidgetColor;
+}
+
+.activityEntries, .recordDetails{
+	hr{
+		border-bottom: 1px solid @summaryWidgetBorderColor;
+		margin : 5px 0 10px 0 !important;
+	}
+}
+.singleComment:hover{
+	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+	.commentActionsDiv{
+		opacity: 1;
+		/*for IE*/
+		-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+		filter: alpha(opacity=100);
+	}
+}
+.singleComment{
+	padding: 10px 2px 0px 0px;
+}
+.widget_header h3{
+	color: @themeLinkColor;
+	font-weight: normal;
+}
+
+//Calendar Settings
+.calendarSettingsContainer{
+	width : 700px;
+	.control-label{
+		width : 26%;
+	}
+}
+//Edit view text color should be same for all fields
+input[type="text"], input, textarea{
+	color: #444444 !important;
 }

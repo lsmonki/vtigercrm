@@ -22,7 +22,7 @@ Class Vtiger_OverdueActivities_Dashboard extends Vtiger_IndexAjax_View {
 		$pagingModel->set('limit', 10);
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$overDueActivities = $moduleModel->getCalendarOverDueActivities($pagingModel);
+		$overDueActivities = $moduleModel->getCalendarActivities('overdue',$pagingModel);
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 		$viewer = $this->getViewer($request);

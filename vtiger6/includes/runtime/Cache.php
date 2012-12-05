@@ -11,7 +11,7 @@
 
 class Vtiger_Cache  {
     private static  $selfInstance = false;
-    private static $cacheEnable = true;
+    public static $cacheEnable = true;
     private function __construct() {}
     
     public static function getInstance(){
@@ -299,7 +299,7 @@ class Vtiger_Cache  {
 	private static $_field_write_premisions;
 	
 	public function getFieldWritePermision($moduleName,$fieldName){
-		if(isset($_field_write_premisions[$moduleName][$fieldName])){
+		if(isset(self::$_field_write_premisions[$moduleName][$fieldName])){
 			return self::$_field_write_premisions[$moduleName][$fieldName];
 		}
 		return false;
@@ -314,7 +314,7 @@ class Vtiger_Cache  {
 	private static $_field_read_premisions;
 	
 	public function getFieldReadPermision($moduleName,$fieldName){
-		if(isset($_field_Read_premisions[$moduleName][$fieldName])){
+		if(isset(self::$_field_read_premisions[$moduleName][$fieldName])){
 			return self::$_field_read_premisions[$moduleName][$fieldName];
 		}
 		return false;
@@ -326,4 +326,33 @@ class Vtiger_Cache  {
 		}
 	}
 	
+	private static $_block_fields;
+	
+	public function getBlockFields($block,$module){
+		if(isset(self::$_block_fields[$module][$block])){
+			return self::$_block_fields[$module][$block];
+		}
+		return false;
+	}
+	
+	public function setBlockFields($block,$module,$fields){
+		if(self::$cacheEnable){
+			self::$_block_fields[$module][$block] = $fields; 
+		}
+	}
+	
+	private static $_name_fields;
+	
+	public function getNameFields($module){
+		if(isset(self::$_name_fields[$module])){
+			return self::$_name_fields[$module];
+		}
+		return false;
+	}
+	
+	public function setNameFields($module,$nameFields){
+		if(self::$cacheEnable){
+			self::$_name_fields[$module] = $nameFields; 
+		}
+	}
 }

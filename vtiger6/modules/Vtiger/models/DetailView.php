@@ -56,13 +56,16 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	 *                   array('linktype'=>list of link models);
 	 */
 	public function getDetailViewLinks($linkParams) {
-		$currentUserModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$linkTypes = array('DETAILVIEWBASIC','DETAILVIEW');
 		$moduleModel = $this->getModule();
 		$recordModel = $this->getRecord();
+
+		$moduleName = $moduleModel->getName();
+		$recordId = $recordModel->getId();
+
 		$detailViewLink = array();
 
-		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'EditView')) {
+		if(Users_Privileges_Model::isPermitted($moduleName, 'EditView', $recordId)) {
 			$detailViewLinks[] = array(
 					'linktype' => 'DETAILVIEWBASIC',
 					'linklabel' => 'LBL_EDIT',
@@ -81,7 +84,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$detailViewBasiclinks = $linkModelListDetails['DETAILVIEWBASIC'];
 		unset($linkModelListDetails['DETAILVIEWBASIC']);
 
-		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'Delete')) {
+		if(Users_Privileges_Model::isPermitted($moduleName, 'Delete', $recordId)) {
 			$deletelinkModel = array(
 					'linktype' => 'DETAILVIEW',
 					'linklabel' => 'LBL_DELETE',
@@ -91,7 +94,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($deletelinkModel);
 		}
 
-		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'EditView')) {
+		if(Users_Privileges_Model::isPermitted($moduleName, 'EditView', $recordId)) {
 			$duplicateLinkModel = array(
 						'linktype' => 'DETAILVIEWBASIC',
 						'linklabel' => 'LBL_DUPLICATE',
@@ -184,7 +187,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		if($moduleModel->isCommentEnabled()) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
-					'linklabel' => vtranslate('ModComments'),
+					'linklabel' => 'ModComments',
 					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
 							'&mode=showRecentComments&page=1&limit=5'
 			);
@@ -193,7 +196,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		if($moduleModel->isTrackingEnabled()) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
-					'linklabel' => vtranslate('LBL_UPDATES'),
+					'linklabel' => 'LBL_UPDATES',
 					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
 							'&mode=showRecentActivities&page=1&limit=5',
 			);

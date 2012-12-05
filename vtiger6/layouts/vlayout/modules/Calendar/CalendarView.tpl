@@ -2,7 +2,10 @@
 {literal}<style type="text/css">
 
 </style>{/literal}
-<input type="hidden" name="acitivity_view" id="activity_view" value="{$ACTIVITY_VIEW}">
+<input type="hidden" id="activity_view" value="{$CURRENT_USER->get('activity_view')}" />
+<input type="hidden" id="time_format" value="{$CURRENT_USER->get('hour_format')}" />
+<input type="hidden" id="start_hour" value="{$CURRENT_USER->get('start_hour')}" />
+<input type="hidden" id="start_day" value="{$CURRENT_USER->get('dayoftheweek')}" />
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">

@@ -51,7 +51,8 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 		$result = $db->pquery('SELECT COUNT(*) count, sales_stage FROM vtiger_potential
 						INNER JOIN vtiger_crmentity ON vtiger_potential.potentialid = vtiger_crmentity.crmid
 						AND deleted = 0 '.Users_Privileges_Model::getNonAdminAccessControlQuery($this->getName()). $ownerSql . $dateFilterSql . ' AND sales_stage NOT IN ("Closed Won", "Closed Lost")
-							GROUP BY sales_stage', $params);
+							GROUP BY sales_stage ORDER BY count desc', $params);
+		
 		$response = array();
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$saleStage = $db->query_result($result, $i, 'sales_stage');
@@ -198,5 +199,41 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 		}
 		return $forecast;
 
+	}
+
+	/**
+	 * Function to get relation query for particular module with function name
+	 * @param <record> $recordId
+	 * @param <String> $functionName
+	 * @param Vtiger_Module_Model $relatedModule
+	 * @return <String>
+	 */
+	public function getRelationQuery($recordId, $functionName, $relatedModule) {
+		if ($functionName === 'get_activities') {
+			$userNameSql = getSqlForNameInDisplayFormat(array('first_name' => 'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+
+			$query = "SELECT CASE WHEN (vtiger_users.user_name not like '') THEN $userNameSql ELSE vtiger_groups.groupname END AS user_name,
+						vtiger_crmentity.*, vtiger_activity.*, vtiger_seactivityrel.crmid AS parent_id,
+						CASE WHEN (vtiger_activity.activitytype = 'Task') THEN vtiger_activity.status ELSE vtiger_activity.eventstatus END AS status
+						FROM vtiger_activity
+						INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_activity.activityid
+						LEFT JOIN vtiger_seactivityrel ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+						LEFT JOIN vtiger_cntactivityrel ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+						LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							WHERE vtiger_crmentity.deleted = 0 AND vtiger_activity.activitytype <> 'Emails'
+								AND vtiger_seactivityrel.crmid = ".$recordId;
+
+			$relatedModuleName = $relatedModule->getName();
+			$query .= $this->getSpecificRelationQuery($relatedModuleName);
+			$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
+			if ($nonAdminQuery) {
+				$query = appendFromClauseToQuery($query, $nonAdminQuery);
+			}
+		} else {
+			$query = parent::getRelationQuery($recordId, $functionName, $relatedModule);
+		}
+
+		return $query;
 	}
 }

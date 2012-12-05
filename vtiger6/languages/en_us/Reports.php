@@ -9,6 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	'Reports'=>'Reports',
+	'SINGLE_Reports' => 'Report',
 
 	// Basic Strings
 	'LBL_FOLDER_NOT_EMPTY' => 'Folder is not empty',
@@ -76,6 +77,7 @@ $languageStrings = array(
 	'LBL_FIELD_NAMES' => 'Field Names',
 	'LBL_REPORT_CSV' => 'Export CSV',
 	'LBL_VIEW_DETAILS' => 'View Details',
+	'LBL_GENERATE_NOW' => 'Generate now',
 
 	//List View Headers
 	'Report Name' => 'Report Name',
@@ -137,4 +139,7 @@ $languageStrings = array(
 
 	'LBL_PRINT_REPORT' => 'Print Report',
 	'LBL_RECORDS' => 'Records',
+	'LBL_LIMIT_EXCEEDED' => 'Only 1000 + records are displayed. Use CSV or Excel Export to see all the records',
+	'LBL_TOP' => 'Top',
+	'LBL_ALL_REPORTS' => 'All Reports',
 );

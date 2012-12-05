@@ -13,7 +13,7 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 	searchModule : false,
 
 	/**
-	 * Function to get the search module 
+	 * Function to get the search module
 	 */
 	getSearchModule : function() {
 		if(this.searchModule === false) {
@@ -24,7 +24,7 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 	},
 
 	/**
-	 * Function to set the search module 
+	 * Function to set the search module
 	 */
 	setSearchModule : function(moduleName) {
 		this.searchModule = moduleName;
@@ -32,7 +32,7 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 	},
 
 	/**
-	 * Function which will perform the search 
+	 * Function which will perform the search
 	 */
 	_search : function(params) {
 		var aDeferred = jQuery.Deferred();
@@ -47,7 +47,7 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 		if(typeof params.module == 'undefined') {
 			params.module = app.getModuleName();
 		}
-		
+
 		AppConnector.request(params).then(
 			function(data){
 				aDeferred.resolve(data);
@@ -88,13 +88,13 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 		var params = {};
 		params.data = data ;
 		params.cb = postLoad;
-		params.css = {'width':'31%','text-align':'left'};
+		params.css = {'width':'29%','text-align':'left'};
 		//not showing overlay
 		params.overlayCss = {'opacity':'0.2'};
 		app.showModalWindow(params);
 		return aDeferred.promise();
 	}
 
-	
+
 });
 

@@ -23,8 +23,7 @@
 			</span>
 			<span class="span4">
 				<input type="text" name="createdtime" class="dateRange widgetFilter" />
-			</span>	
-		</div>	
+			</span>
 		</div>
 	</div>			
 </div>

@@ -20,7 +20,7 @@ class Leads_LeadsByIndustry_Dashboard extends Vtiger_IndexAjax_View {
 		$jsFileNames = array(
 			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
 			'~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.jqplot.pointLabels.min.js',
+			'~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js'
 		);
 
 		$headerScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);

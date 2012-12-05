@@ -9,6 +9,9 @@
  ************************************************************************************/
 
 class Settings_Vtiger_List_View extends Settings_Vtiger_Index_View {
+	protected $listViewEntries = false;
+	protected $listViewHeaders = false;
+	
 	function __construct() {
 		parent::__construct();
 	}
@@ -54,9 +57,13 @@ class Settings_Vtiger_List_View extends Settings_Vtiger_Index_View {
 		if(!empty($forModule)) {
 			$listViewModel->set('formodule', $forModule);
 		}
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+		$noOfEntries = count($this->listViewEntries);
 
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
@@ -71,8 +78,8 @@ class Settings_Vtiger_List_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('SORT_IMAGE',$sortImage);
 
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 	}
 
 	/**

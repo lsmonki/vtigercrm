@@ -81,6 +81,53 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 								'ship_country' : 'country'
 								}
 							},
+							
+	//Address field mapping between modules specific for billing and shipping
+	addressFieldsMappingBetweenModules:{
+								'AccountsBillMap' : {
+									'bill_street' :  'bill_street',
+									'bill_pobox' : 'bill_pobox',
+									'bill_city' : 'bill_city',
+									'bill_state' : 'bill_state',
+									'bill_code' : 'bill_code',
+									'bill_country' : 'bill_country'
+									},
+								'AccountsShipMap' : {
+									'ship_street' : 'ship_street',
+									'ship_pobox' : 'ship_pobox',
+									'ship_city'  : 'ship_city',
+									'ship_state' : 'ship_state',
+									'ship_code' : 'ship_code',
+									'ship_country' : 'ship_country'
+									},
+								'ContactsBillMap' : {
+									'bill_street' :  'mailingstreet',
+									'bill_pobox' : 'mailingpobox',
+									'bill_city' : 'mailingcity',
+									'bill_state' : 'mailingstate',
+									'bill_code' : 'mailingzip',
+									'bill_country' : 'mailingcountry'
+									},
+								'ContactsShipMap' : {
+									'ship_street' : 'otherstreet',
+									'ship_pobox' : 'otherpobox',
+									'ship_city'  : 'othercity',
+									'ship_state' : 'otherstate',
+									'ship_code' : 'otherzip',
+									'ship_country' : 'othercountry'
+									}
+		
+	},
+							
+	//Address field mapping within module
+	addressFieldsMappingInModule : {
+										'bill_street':'ship_street',
+										'bill_pobox':'ship_pobox',
+										'bill_city'	:'ship_city',
+										'bill_state':'ship_state',
+										'bill_code'	:'ship_code',
+										'bill_country':'ship_country'
+								},
 
 	/**
 	 * Function that is used to get the line item container
@@ -137,7 +184,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	},
 
 	getAdjustmentTypeElement : function() {
-		return jQuery('#adjustmentType');
+		return jQuery('input:radio[name="adjustmentType"]');
 	},
 
 	getAdjustmentTextElement : function(){
@@ -365,18 +412,32 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	isAdjustMentAddType : function() {
 		var adjustmentSelectElement = this.getAdjustmentTypeElement();
-		var selectionOption = adjustmentSelectElement.find('option:selected');
-		if(selectionOption.val() == '+'){
-			return true;
+		var selectionOption;
+		adjustmentSelectElement.each(function(){
+			if(jQuery(this).is(':checked')){
+				selectionOption = jQuery(this);
+			}
+		})
+		if(typeof selectionOption != "undefined"){
+			if(selectionOption.val() == '+'){
+				return true;
+			}
 		}
 		return false;
 	},
 
 	isAdjustMentDeductType : function() {
 		var adjustmentSelectElement = this.getAdjustmentTypeElement();
-		var selectionOption = adjustmentSelectElement.find('option:selected');
-		if(selectionOption.val() == '-'){
-			return true;
+		var selectionOption;
+		adjustmentSelectElement.each(function(){
+			if(jQuery(this).is(':checked')){
+				selectionOption = jQuery(this);
+			}
+		})
+		if(typeof selectionOption != "undefined"){
+			if(selectionOption.val() == '-'){
+				return true;
+			}
 		}
 		return false;
 	},
@@ -413,7 +474,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var lineItemTable = this.getLineItemContentsContainer();
 			this.basicRow = jQuery('.lineItemCloneCopy',lineItemTable)
 		}
-		return this.basicRow.clone(true,true).removeClass('hide lineItemCloneCopy');
+		var newRow = this.basicRow.clone(true,true);
+		var individualTax = this.isIndividualTaxMode();
+		if(individualTax){
+			newRow.find('.individualTaxContainer').removeClass('hide');
+		}
+		return newRow.removeClass('hide lineItemCloneCopy');
 	},
 
     registerAddingNewProductsAndServices: function(){
@@ -446,7 +512,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var rowNumber = jQuery('input.rowNumber',parentRow).val();
 		var loopIterator = 1;
 		var taxDiv = '<div class="taxUI hide" id="tax_div'+rowNumber+'">'+
-			'<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-nobordered popupTable" id="tax_table'+rowNumber+'">'+
+			'<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable" id="tax_table'+rowNumber+'">'+
 			   '<tr>'+
 					'<th id="tax_div_title'+rowNumber+'" align="left" ><b>Set Tax for :</b></th>'+
 					'<th colspan="2"><button aria-hidden="true" data-dismiss="modal" class="close closeDiv" type="button">x</button>'+
@@ -536,7 +602,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			this.loadSubProducts(parentRow);
 		}
 
-		jQuery('.qty',parentRow).focus();
+		jQuery('.qty',parentRow).trigger('focusout');
     },
 
 	showPopup : function(params) {
@@ -596,6 +662,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		params.src_field = jQuery('img.lineItemPopup',lineItemProductOrServiceElement).data('fieldName');
 		params.src_record = jQuery('input.selectedModuleId',lineItemProductOrServiceElement).val();
 		params.get_url = 'getProductListPriceURL';
+		params.currency_id = jQuery('#currency_id option:selected').val();
 		this.showPopup(params).then(function(data){
 			var responseData = JSON.parse(data);
 			for(var id in responseData){
@@ -635,6 +702,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		rowAmountField.addClass('hide');
 
 		var discountValue = discountRow.find('.discountVal').val();
+		if(discountValue == ""){
+			discountValue = 0;
+		}
 		if(discountType == Inventory_Edit_Js.percentageDiscountType){
 				rowPercentageField.removeClass('hide').focus();
 				//since it is percentage
@@ -670,7 +740,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		jQuery.each(taxPercentages,function(index,domElement){
 			var taxPercentage = jQuery(domElement);
 			var individualTaxRow = taxPercentage.closest('tr');
-			var individualTaxPercentage = parseFloat(taxPercentage.val());
+			var individualTaxPercentage = taxPercentage.val();
+			if(individualTaxPercentage == ""){
+				individualTaxPercentage = "0.00";
+			}
+			var individualTaxPercentage = parseFloat(individualTaxPercentage);
 			var individualTaxTotal = (individualTaxPercentage * totalAfterDiscount)/100;
 			individualTaxTotal = individualTaxTotal.toFixed(2);
 			jQuery('.taxTotal',individualTaxRow).val(individualTaxTotal);
@@ -723,6 +797,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		rowAmountField.addClass('hide');
 
 		var discountValue = discountRow.find('.discountVal').val();
+		if(discountValue == ""){
+			discountValue = 0;
+		}
 		if(discountType == Inventory_Edit_Js.percentageDiscountType){
 				rowPercentageField.removeClass('hide').focus();
 				//since it is percentage
@@ -761,7 +838,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		jQuery.each(shippingTaxPercentage,function(index,domElement){
 			var currentTaxPer = jQuery(domElement);
 			var currentParentRow = currentTaxPer.closest('tr');
-			var currentTaxPerValue = parseFloat(currentTaxPer.val());
+			var currentTaxPerValue = currentTaxPer.val();
+			if(currentTaxPerValue == ""){
+				currentTaxPerValue = "0.00";
+			}
+			currentTaxPerValue = parseFloat(currentTaxPerValue);
 			var currentTaxTotal = (currentTaxPerValue * shippingHandlingCharge)/100;
 			jQuery('.shippingTaxTotal',currentParentRow).val(currentTaxTotal);
 		});
@@ -773,18 +854,18 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingHandlingTax = this.getShippingAndHandlingTaxTotal();
 		var adjustment = this.getAdjustmentValue();
-
-
 		var grandTotal = parseFloat(netTotal) - parseFloat(discountTotal) + parseFloat(shippingHandlingCharge) + parseFloat(shippingHandlingTax);
+		
+		if(this.isGroupTaxMode()){
+			grandTotal +=  this.getGroupTaxTotal();
+		}
+		
 		if(this.isAdjustMentAddType()) {
 			grandTotal +=  parseFloat(adjustment);
 		}else if(this.isAdjustMentDeductType()) {
 			grandTotal -=  parseFloat(adjustment);
 		}
-
-		if(this.isGroupTaxMode()){
-			grandTotal +=  this.getGroupTaxTotal();
-		}
+		
 		grandTotal = grandTotal.toFixed(2);
 		this.setGrandTotal(grandTotal);
 	},
@@ -843,8 +924,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	registerShippingAndHandlingChargesChange : function(){
 		var thisInstance = this;
 		this.getShippingAndHandlingControlElement().on('focusout', function(e){
+			var value = jQuery(e.currentTarget).val();
+			if(value == ""){
+				jQuery(e.currentTarget).val("0.00");
+			}
 			thisInstance.shippingAndHandlingChargesChangeActions();
-			thisInstance.setShippingAndHandlingTaxTotal();
 		});
 		jQuery('.shippingTaxPercentage').on('change',function(){
 			thisInstance.shippingAndHandlingChargesChangeActions();
@@ -873,6 +957,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	registerAdjustmentValueChange : function() {
 		var thisInstance = this;
 		this.getAdjustmentTextElement().on('focusout',function(e){
+			var value = jQuery(e.currentTarget).val();
+			if(value == ""){
+				jQuery(e.currentTarget).val("0.00");
+			}
 			thisInstance.calculateGrandTotal();
 		});
 	},
@@ -969,6 +1057,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	shippingAndHandlingChargesChangeActions : function(){
 		this.calculateShippingAndHandlingTaxCharges();
+		this.setShippingAndHandlingTaxTotal();
 		this.calculateGrandTotal();
 	},
 
@@ -1367,7 +1456,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	referenceSelectionEventHandler : function(data){
 		var thisInstance = this;
 		var message = app.vtranslate('OVERWRITE_EXISTING_MSG1')+app.vtranslate('SINGLE_'+data['source_module'])+' ('+data['selectedName']+') '+app.vtranslate('OVERWRITE_EXISTING_MSG2');
-		Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 		function(e) {
 			thisInstance.copyAddressDetails(data);
 			},
@@ -1378,13 +1467,42 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	/**
 	 * Function which will copy the address details
 	 */
-	copyAddressDetails : function(data) {
+	copyAddressDetails : function(data,addressMap,element) {
 		var thisInstance = this;
+		var formElement = this.getForm();
 		var sourceModule = data['source_module'];
+		var noAddress = true;
+		var errorMsg;
+		
 		thisInstance.getRecordDetails(data).then(
 			function(data){
 				var response = data['result'];
-				thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data']);
+				if(typeof addressMap != "undefined"){
+					var result = response['data'];
+					for(var key in addressMap) {
+						if(result[addressMap[key]] != ""){
+							noAddress = false;
+							break;
+						}
+					}
+					if(noAddress){
+						if(sourceModule == "Accounts"){
+							errorMsg = 'JS_SELECTED_ACCOUNT_DOES_NOT_HAVE_AN_ADDRESS';
+						} else if(sourceModule == "Contacts"){
+							errorMsg = 'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS';
+						}
+						Vtiger_Helper_Js.showPnotify(app.vtranslate(errorMsg));
+					} else{	
+						thisInstance.mapAddressDetails(addressMap, result);
+					}
+				} else{
+					thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data']);
+					if(sourceModule == "Accounts"){
+						formElement.find('.accountAddress').attr('checked','checked');
+					}else if(sourceModule == "Contacts"){
+						formElement.find('.contactAddress').attr('checked','checked');
+					}
+				}
 			},
 			function(error, err){
 
@@ -1511,6 +1629,170 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var lineItemTable = this.getLineItemContentsContainer();
 		lineItemTable.find('.deleteRow').hide();
 	},
+	
+	/**
+	 * Function to swap array
+	 * @param Array that need to be swapped
+	 */ 
+	swapObject : function(objectToSwap){
+		var swappedArray = {};
+		var newKey,newValue;
+		for(var key in objectToSwap){
+			newKey = objectToSwap[key];
+			newValue = key;
+			swappedArray[newKey] = newValue;
+		}
+		return swappedArray;
+	},
+	
+	/**
+	 * Function to copy address between fields
+	 * @param strings which accepts value as either odd or even
+	 */
+	copyAddress : function(swapMode){
+		var thisInstance = this;
+		var formElement = this.getForm();
+		var addressMapping = this.addressFieldsMappingInModule;
+		if(swapMode == "false"){
+			for(var key in addressMapping) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+addressMapping[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+		} else if(swapMode){
+			var swappedArray = thisInstance.swapObject(addressMapping);
+			for(var key in swappedArray) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+swappedArray[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+			toElement.val(fromElement.val());
+		}
+	},
+	
+	/**
+	 * Function to register event for copying addresses
+	 */
+	registerEventForCopyAddress : function(){
+		var thisInstance = this;
+		var formElement = this.getForm();
+		jQuery('[name="copyAddressFromRight"],[name="copyAddressFromLeft"]').change(function(){
+			var element = jQuery(this);
+			var elementClass = element.attr('class');
+			var targetCopyAddress = element.data('copyAddress');
+			var objectToMapAddress;
+			if(elementClass == "accountAddress"){
+				var recordRelativeAccountId = jQuery('[name="account_id"]').val();
+				if(recordRelativeAccountId == "" || recordRelativeAccountId == "0"){
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_PLEASE_SELECT_AN_ACCOUNT_TO_COPY_ADDRESS'));
+				} else {
+					var recordRelativeAccountName = jQuery('#account_id_display').val();
+					var data = {
+						'record' : recordRelativeAccountId,
+						'selectedName' : recordRelativeAccountName,
+						'source_module': "Accounts"
+					}
+					if(targetCopyAddress == "billing"){
+						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['AccountsBillMap'];
+					} else if(targetCopyAddress == "shipping"){
+						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['AccountsShipMap'];
+					}
+					thisInstance.copyAddressDetails(data,objectToMapAddress,element);
+					element.attr('checked','checked');
+				}
+			}else if(elementClass == "contactAddress"){
+				var recordRelativeContactId = jQuery('[name="contact_id"]').val();
+				if(recordRelativeContactId == "" || recordRelativeContactId == "0"){
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_PLEASE_SELECT_AN_CONTACT_TO_COPY_ADDRESS'));
+				} else {
+					var recordRelativeContactName = jQuery('#contact_id_display').val();
+					var data = {
+						'record' : recordRelativeContactId,
+						'selectedName' : recordRelativeContactName,
+						source_module: "Contacts"
+					}
+					if(targetCopyAddress == "billing"){
+						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['ContactsBillMap'];
+					} else if(targetCopyAddress == "shipping"){
+						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['ContactsShipMap'];
+					}
+					thisInstance.copyAddressDetails(data,objectToMapAddress);
+					element.attr('checked','checked');
+				}
+			} else if(elementClass == "shippingAddress"){
+				var target = element.data('target');
+				if(target == "shipping"){
+					var swapMode = "true";
+				}
+				thisInstance.copyAddress(swapMode);
+			} else if(elementClass == "billingAddress"){
+				var target = element.data('target');
+				if(target == "billing"){
+					var swapMode = "false";
+				}
+				thisInstance.copyAddress(swapMode);
+			}
+		})
+		jQuery('[name="copyAddress"]').on('click',function(e){
+			var element = jQuery(e.currentTarget);
+			var swapMode;
+			var target = element.data('target');
+			if(target == "billing"){
+				swapMode = "false";
+			}else if(target == "shipping"){
+				swapMode = "true";
+			}
+			thisInstance.copyAddress(swapMode);
+		})
+	},
+	
+	/**
+	 * Function to toggle shipping and billing address according to layout
+	 */
+	registerForTogglingBillingandShippingAddress : function(){
+		var billingAddressPosition = jQuery('[name="bill_street"]').closest('td').index();
+		var copyAddress1Block = jQuery('[name="copyAddress1"]');
+		var copyAddress2Block = jQuery('[name="copyAddress2"]');
+		var copyHeader1 = jQuery('[name="copyHeader1"]');
+		var copyHeader2 = jQuery('[name="copyHeader2"]');
+		var copyAddress1toggleAddressLeftContainer = copyAddress1Block.find('[name="togglingAddressContainerLeft"]');
+		var copyAddress1toggleAddressRightContainer = copyAddress1Block.find('[name="togglingAddressContainerRight"]');
+		var copyAddress2toggleAddressLeftContainer = copyAddress2Block.find('[name="togglingAddressContainerLeft"]')
+		var copyAddress2toggleAddressRightContainer = copyAddress2Block.find('[name="togglingAddressContainerRight"]');
+		var headerText1 = copyHeader1.html();
+		var headerText2 = copyHeader2.html();
+
+		if(billingAddressPosition == 3){
+				if(copyAddress1toggleAddressLeftContainer.hasClass('hide')){
+					copyAddress1toggleAddressLeftContainer.removeClass('hide');
+				}
+				copyAddress1toggleAddressRightContainer.addClass('hide');
+				if(copyAddress2toggleAddressRightContainer.hasClass('hide')){
+					copyAddress2toggleAddressRightContainer.removeClass('hide');
+				}
+				copyAddress2toggleAddressLeftContainer.addClass('hide');
+				copyHeader1.html(headerText2);
+				copyHeader2.html(headerText1);
+				copyAddress1Block.find('[data-copy-address]').each(function(){
+					jQuery(this).data('copyAddress','shipping');
+				})
+				copyAddress2Block.find('[data-copy-address]').each(function(){
+					jQuery(this).data('copyAddress','billing');
+				})
+			}
+		},
+	
+	/**
+	 * Function to check for relation operation
+	 * if relation exist calculation should happen by default
+	 */
+	registerForRealtionOperation : function(){
+		var form = this.getForm();
+		var relationExist = form.find('[name="relationOperation"]').val();
+		if(relationExist){
+			jQuery('.qty').trigger('focusout');
+		}
+	},
 
     registerEvents: function(){
 		this._super();
@@ -1522,5 +1804,6 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this.registerSubmitEvent();
 		this.registerReferenceSelectionEvent();
 		this.checkLineItemRow();
+		this.registerForRealtionOperation();
     }
 });

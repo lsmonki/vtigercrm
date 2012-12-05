@@ -94,9 +94,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 	 */
     deleteRecord : function(deleteRecordActionUrl) {
 		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
-		Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
-			function(e) {
-				window.location.href = deleteRecordActionUrl;
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
+				AppConnector.request(deleteRecordActionUrl+'&ajaxDelete=true').then(
+				function(data){
+					if(data.success == true){
+						window.location.href = data.result;
+					}else{
+						Vtiger_Helper_Js.showPnotify(data.error.message);
+					}
+				});
 			},
 			function(error, err){
 			}
@@ -109,7 +115,8 @@ jQuery.Class("Vtiger_Detail_Js",{
 	detailViewForm : false,
 	detailViewSummaryTabLabel : 'LBL_RECORD_SUMMARY',
 	detailViewRecentCommentsTabLabel : 'ModComments',
-	detailViewRecentActivitiesTabLabel : 'LBL_RECENT_ACTIVITIES',
+	detailViewRecentActivitiesTabLabel : 'Activities',
+	detailViewRecentUpdatesTabLabel : 'LBL_UPDATES',
 
 	fieldUpdatedEvent : 'Vtiger.Field.Updated',
 
@@ -117,6 +124,12 @@ jQuery.Class("Vtiger_Detail_Js",{
 	updatedFields : ['company','designation','title'],
 	//Event that will triggered before saving the ajax edit of fields
 	fieldPreSave : 'Vtiger.Field.PreSave',
+	
+	referenceFieldNames : {
+		'Accounts' : 'parent_id',
+		'Contacts' : 'contact_id',
+		'Leads' : 'parent_id'
+	},
 
 	//constructor
 	init : function() {
@@ -124,31 +137,35 @@ jQuery.Class("Vtiger_Detail_Js",{
 	},
 
 	loadWidgets : function(){
+		var thisInstance = this;
 		var widgetList = jQuery('[class^="widgetContainer_"]');
 		widgetList.each(function(index,widgetContainerELement){
 			var widgetContainer = jQuery(widgetContainerELement);
-			var contentContainer = jQuery('.widget_contents',widgetContainer);
-			var urlParams = widgetContainer.data('url');
-
-			var params = {
-				'type' : 'GET',
-				'dataType': 'html',
-				'data' : urlParams
-			};
-			contentContainer.progressIndicator({
-			});
-			AppConnector.request(params).then(
-				function(data){
-					contentContainer.progressIndicator({'mode': 'hide'});
-					contentContainer.html(data);
-				},
-				function(){
-
-				}
-			);
+			thisInstance.loadWidget(widgetContainer);
 		});
 	},
+	
+	loadWidget : function(widgetContainer) {
+		var contentContainer = jQuery('.widget_contents',widgetContainer);
+		var urlParams = widgetContainer.data('url');
 
+		var params = {
+			'type' : 'GET',
+			'dataType': 'html',
+			'data' : urlParams
+		};
+		contentContainer.progressIndicator({});
+		AppConnector.request(params).then(
+			function(data){
+				contentContainer.progressIndicator({'mode': 'hide'});
+				contentContainer.html(data);
+			},
+			function(){
+
+			}
+		);
+	},
+	
 	/**
 	 * Function to load only Comments Widget.
 	 */
@@ -489,7 +506,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			thisInstance.updateHeaderNameFields();
 			return true;
 		}
-		
+
 		var name = currentElement.attr('name');
 		var updatedFields = this.getUpdatefFieldsArray();
 		var detailContentsHolder =  thisInstance.getContentHolder();
@@ -562,7 +579,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			relatedController.sortHandler(element);
 		});
 	},
-	
+
 	registerBlockAnimationEvent : function(){
 		var detailContentsHolder = this.getContentHolder();
 		detailContentsHolder.on('click','.blockToggle',function(e){
@@ -572,28 +589,28 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var bodyContents = closestBlock.find('tbody');
 			var data = currentTarget.data();
 			var module = app.getModuleName();
-			var hideHandler = function() { 
+			var hideHandler = function() {
 				bodyContents.hide('slow');
 				app.cacheSet(module+'.'+blockId, 0)
-			} 
-			var showHandler = function() { 
-				bodyContents.show(); 
+			}
+			var showHandler = function() {
+				bodyContents.show();
 				app.cacheSet(module+'.'+blockId, 1)
 			}
-			var data = currentTarget.data(); 
-			if(data.mode == 'show'){ 
-				hideHandler(); 
+			var data = currentTarget.data();
+			if(data.mode == 'show'){
+				hideHandler();
 				currentTarget.hide();
 				closestBlock.find("[data-mode='hide']").show();
-			}else{ 
+			}else{
 				showHandler();
 				currentTarget.hide();
 				closestBlock.find("[data-mode='show']").show();
-			} 
+			}
 		});
-	
+
 	},
-	
+
 	registerBlockStatusCheckOnLoad : function(){
 		var blocks = this.getContentHolder().find('.detailview-table');
 		var module = app.getModuleName();
@@ -617,9 +634,279 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		});
 	},
+	
+	/**
+	 * Function to register event for adding related record for module
+	 */
+	registerEventForAddingRelatedRecord : function(){
+		var thisInstance = this;
+		var detailContentsHolder = this.getContentHolder();
+		detailContentsHolder.on('click','[name="addButton"]',function(e){
+			var element = jQuery(e.currentTarget);
+			var selectedTabElement = thisInstance.getSelectedTab();
+			var relatedModuleName = thisInstance.getRelatedModuleName();
+            var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ relatedModuleName +'"]');
+            if(quickCreateNode.length <= 0) {
+                window.location.href = element.data('url');
+                return;
+            }
+            
+			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
+			relatedController.addRelatedRecord(element);
+		})
+	},
+	
+	
+	/**
+	 * Function to handle the ajax edit for detailview and summary view fields
+	 * which will expects the currentTdElement
+	 */
+	ajaxEditHandling : function(currentTdElement) {
+			var thisInstance = this;
+			var detailViewValue = jQuery('.value',currentTdElement);
+			var editElement = jQuery('.edit',currentTdElement);
+			var actionElement = jQuery('.summaryViewEdit', currentTdElement);
 
+			if(editElement.length <= 0) {
+				return;
+			}
+
+			if(editElement.is(':visible')){
+				return;
+			}
+
+			detailViewValue.addClass('hide');
+			editElement.removeClass('hide').show().children().filter('input[type!="hidden"]input[type!="image"],select').filter(':first').focus();
+
+			var saveTriggred = false;
+			var preventDefault = false;
+
+			var saveHandler = function(e) {
+				var element = jQuery(e.target);
+				if((element.closest('td').is(currentTdElement))){
+					return;
+				}
+
+				currentTdElement.removeAttr('tabindex');
+
+				var fieldnameElement = jQuery('.fieldname', editElement);
+				var previousValue = fieldnameElement.data('prevValue');
+				var fieldName = fieldnameElement.val();
+				var fieldElement = jQuery('[name="'+ fieldName +'"]', editElement);
+				var formElement = thisInstance.getForm();
+				var formData = formElement.serializeFormData();
+				var ajaxEditNewValue = formData[fieldName];
+				//value that need to send to the server
+				var fieldValue = ajaxEditNewValue;
+                var fieldInfo = Vtiger_Field_Js.getInstance(fieldElement.data('fieldinfo'));
+
+                // Since checkbox will be sending only on and off and not 1 or 0 as currrent value
+				if(fieldElement.is('input:checkbox')) {
+					if(fieldElement.is(':checked')) {
+						ajaxEditNewValue = '1';
+					} else {
+						ajaxEditNewValue = '0';
+					}
+					fieldElement = fieldElement.filter('[type="checkbox"]');
+				}
+				var errorExists = fieldElement.validationEngine('validate');
+				//If validation fails
+				if(errorExists) {
+					return;
+				}
+
+				
+
+				
+
+                //Before saving ajax edit values we need to check if the value is changed then only we have to save
+                if(previousValue == ajaxEditNewValue) {
+                    editElement.addClass('hide');
+                    detailViewValue.removeClass('hide');
+					actionElement.show();
+					jQuery(document).off('click', '*', saveHandler);
+                } else {
+					var preFieldSaveEvent = jQuery.Event(thisInstance.fieldPreSave);
+					fieldElement.trigger(preFieldSaveEvent, {'fieldValue' : fieldValue,  'recordId' : thisInstance.getRecordId()});
+					if(preFieldSaveEvent.isDefaultPrevented()) {
+						//Stop the save
+						saveTriggred = false;
+						preventDefault = true;
+						return
+					}
+					preventDefault = false;
+					
+					jQuery(document).off('click', '*', saveHandler);
+					
+					if(!saveTriggred && !preventDefault) {
+						saveTriggred = true;
+					}else{
+						return;
+					}
+
+                    currentTdElement.progressIndicator();
+                    editElement.addClass('hide');
+                    var fieldNameValueMap = {};
+                    if(fieldInfo.getType() == 'multipicklist') {
+                        var multiPicklistFieldName = fieldName.split('[]');
+                        fieldName = multiPicklistFieldName[0];
+                    }
+                    fieldNameValueMap['value'] = fieldValue;
+					fieldNameValueMap['field'] = fieldName;
+                    thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
+						var postSaveRecordDetails = response.result;
+						currentTdElement.progressIndicator({'mode':'hide'});
+                        detailViewValue.removeClass('hide');
+						actionElement.show();
+                        detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
+						fieldElement.trigger(thisInstance.fieldUpdatedEvent,{'old':previousValue,'new':fieldValue});
+						fieldnameElement.data('prevValue', ajaxEditNewValue);
+					},
+                        function(error){
+                            //TODO : Handle error
+                            currentTdElement.progressIndicator({'mode':'hide'});
+                        }
+                    )
+                }
+			}
+
+			jQuery(document).on('click','*', saveHandler);
+	},
+	
+
+	triggerDisplayTypeEvent : function() {
+		var widthType = app.cacheGet('widthType', 'wideWidthType');
+		if(widthType) {
+			var elements = jQuery('#detailView').find('td');
+			elements.addClass(widthType);
+		}
+	},
+	
+	/**
+	 * Function to register all the events related to summary view widgets
+	 */
+	registerSummaryViewContainerEvents : function(summaryViewContainer) {
+		var thisInstance = this;
+
+		/**
+		 * Function to handle the ajax edit for summary view fields
+		 */
+		summaryViewContainer.on('click', '.summaryViewEdit', function(e){
+			var currentTarget = jQuery(e.currentTarget);
+			currentTarget.hide();
+			var currentTdElement = currentTarget.closest('td.fieldValue');
+			thisInstance.ajaxEditHandling(currentTdElement);
+		});
+		
+		/**
+		 * Function to handle actions after ajax save in summary view
+		 */
+		summaryViewContainer.on(thisInstance.fieldUpdatedEvent, '.recordDetails', function(e, params){
+			var updatesWidget = summaryViewContainer.find("[data-name='LBL_UPDATES']");
+			thisInstance.loadWidget(updatesWidget);
+		});
+		
+		/*
+		 * Register the event to edit the status for for related activities
+		 */
+		summaryViewContainer.on('click', '.editStatus', function(e){
+			var currentTarget = jQuery(e.currentTarget);
+			var currentDiv = currentTarget.closest('div.activityStatus');
+			var editElement = currentDiv.find('.edit');
+			var detailViewElement = currentDiv.find('.value');
+			
+			currentTarget.hide();
+			detailViewElement.addClass('hide');
+			editElement.removeClass('hide').show();
+			
+			var callbackFunction = function() {
+				var fieldnameElement = jQuery('.fieldname', editElement);
+				var fieldName = fieldnameElement.val();
+				var fieldElement = jQuery('[name="'+ fieldName +'"]', editElement);
+				var previousValue = fieldnameElement.data('prevValue');
+				var ajaxEditNewValue = fieldElement.find('option:selected').text();
+				
+				if(previousValue == ajaxEditNewValue) {
+                    editElement.addClass('hide');
+                    detailViewElement.removeClass('hide');
+					currentTarget.show();
+                } else {
+					var activityDiv = currentDiv.parent();
+					var activityId = activityDiv.find('.activityId').val();
+					var moduleName = activityDiv.find('.activityModule').val();
+					var activityType = activityDiv.find('.activityType').val();
+					
+					currentDiv.progressIndicator();
+                    editElement.addClass('hide');
+					var params = {
+						action : 'SaveAjax',
+						record : activityId,
+						field : fieldName,
+						value : ajaxEditNewValue,
+						module : moduleName,
+						activitytype : activityType
+					};
+					
+					AppConnector.request(params).then(
+						function(data) {
+							currentDiv.progressIndicator({'mode':'hide'});
+							detailViewElement.removeClass('hide');
+							currentTarget.show();
+							detailViewElement.html(ajaxEditNewValue);
+							fieldnameElement.data('prevValue', ajaxEditNewValue);
+						}
+					);
+				}
+			}
+			
+			//adding clickoutside event on the currentDiv - to save the ajax edit of status values
+			Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);
+		});
+		
+		/*
+		 * Register click event for add button in Related Activities widget
+		 */
+		summaryViewContainer.on('click', '.createActivity', function(e){
+			var referenceModuleName = "Calendar";
+			var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
+			var recordId = thisInstance.getRecordId();
+			var module = app.getModuleName();
+			
+			if(quickCreateNode.length <= 0) {
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
+			}
+			var fieldName = thisInstance.referenceFieldNames[module];
+			
+			var customParams = {};
+			customParams[fieldName] = recordId;
+			
+			var callbackFunction = function() {
+				var params = {};
+				params['record'] = recordId;
+				params['view'] = 'Detail';
+				params['module'] = module;
+				params['mode'] = 'getActivities';
+				
+				AppConnector.request(params).then(
+					function(data) {
+						var activitiesWidget = jQuery('#relatedActivities');
+						activitiesWidget.html(data);
+						app.changeSelectElementView(activitiesWidget);
+					}
+				);
+			}
+			
+			var QuickCreateParams = {};
+			QuickCreateParams['callbackFunction'] = callbackFunction;
+			QuickCreateParams['data'] = customParams;
+			QuickCreateParams['noCache'] = false;
+			quickCreateNode.trigger('click', QuickCreateParams);
+		});
+	},
+	
 	registerEvents : function(){
 		var thisInstance = this;
+		thisInstance.triggerDisplayTypeEvent();
 		thisInstance.registerSendSmsSubmitEvent();
 		thisInstance.registerAjaxEditEvent();
 		this.registerRelatedRowClickEvent();
@@ -628,6 +915,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		this.registerEmailFieldClickEvent();
 		this.registerEventForRelatedListSort();
 		this.registerEventForRelatedListPagination();
+		this.registerEventForAddingRelatedRecord();
 
 		var detailViewContainer = jQuery('div.detailViewContainer');
 		if(detailViewContainer.length <= 0) {
@@ -637,8 +925,11 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 		var detailContentsHolder = thisInstance.getContentHolder();
 		var detailContainer = detailContentsHolder.closest('div.detailViewInfo');
-		app.registerEventForDatePickerFields(detailContentsHolder); 
-        
+		app.registerEventForDatePickerFields(detailContentsHolder);
+		
+		//register all the events for summary view container
+		this.registerSummaryViewContainerEvents(detailContentsHolder);
+
 		jQuery('.related', detailContainer).on('click', 'li', function(e, urlAttributes){
 			var tabElement = jQuery(e.currentTarget);
 			var element = jQuery('<div></div>');
@@ -707,7 +998,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			e.stopImmediatePropagation();
 			var element = jQuery(e.currentTarget);
 			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
-			Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
+			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
 					var row = element.closest('tr');
 					var relatedRecordid = row.data('id');
@@ -758,101 +1049,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 		detailContentsHolder.on('click','table.detailview-table td.fieldValue', function(e) {
 			var currentTdElement = jQuery(e.currentTarget);
-			var detailViewValue = jQuery('.value',currentTdElement);
-			var editElement = jQuery('.edit',currentTdElement);
-
-			if(editElement.length <= 0) {
-				return;
-			}
-
-			if(editElement.is(':visible')){
-				return;
-			}
-
-			detailViewValue.addClass('hide');
-			editElement.removeClass('hide').show().children().filter('input[type!="hidden"]input[type!="image"],select').filter(':first').focus();
-
-			var saveTriggred = false;
-
-			var saveHandler = function(e) {
-				var element = jQuery(e.target);
-				if((element.closest('td').is(currentTdElement))){
-					return;
-				}
-
-				currentTdElement.removeAttr('tabindex');
-
-				var fieldnameElement = jQuery('.fieldname', editElement);
-				var previousValue = fieldnameElement.data('prevValue');
-				var fieldName = fieldnameElement.val();
-				var fieldElement = jQuery('[name="'+ fieldName +'"]', editElement);
-				var formElement = thisInstance.getForm();
-				var formData = formElement.serializeFormData();
-				var ajaxEditNewValue = formData[fieldName];
-				//value that need to send to the server
-				var fieldValue = ajaxEditNewValue;
-                var fieldInfo = Vtiger_Field_Js.getInstance(fieldElement.data('fieldinfo'));
-
-                // Since checkbox will be sending only on and off and not 1 or 0 as currrent value
-				if(fieldElement.is('input:checkbox')) {
-					if(fieldElement.is(':checked')) {
-						ajaxEditNewValue = '1';
-					} else {
-						ajaxEditNewValue = '0';
-					}
-				}
-				var errorExists = fieldElement.validationEngine('validate');
-				//If validation fails
-				if(errorExists) {
-					return;
-				}
-
-				jQuery(document).off('click', '*', saveHandler);
-
-				if(!saveTriggred) {
-					saveTriggred = true;
-				}else{
-					return;
-				}
-
-                //Before saving ajax edit values we need to check if the value is changed then only we have to save
-                if(previousValue == ajaxEditNewValue) {
-                    editElement.addClass('hide');
-                    detailViewValue.removeClass('hide');
-                } else {
-					var preFieldSaveEvent = jQuery.Event(thisInstance.fieldPreSave);
-					fieldElement.trigger(preFieldSaveEvent, {'fieldValue' : fieldValue,  'recordId' : thisInstance.getRecordId()});
-					if(preFieldSaveEvent.isDefaultPrevented()) {
-						//Stop the save
-						return
-					}
-
-                    currentTdElement.progressIndicator();
-                    editElement.addClass('hide');
-                    var fieldNameValueMap = {};
-                    if(fieldInfo.getType() == 'multipicklist') {
-                        var multiPicklistFieldName = fieldName.split('[]');
-                        fieldName = multiPicklistFieldName[0];
-                    }
-                    fieldNameValueMap['value'] = fieldValue;
-					fieldNameValueMap['field'] = fieldName;
-                    thisInstance.saveFieldValues(fieldNameValueMap).then(function(response) {
-						var postSaveRecordDetails = response.result;
-						currentTdElement.progressIndicator({'mode':'hide'});
-                        detailViewValue.removeClass('hide');
-                        detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
-						fieldElement.trigger(thisInstance.fieldUpdatedEvent,{'old':previousValue,'new':fieldValue});
-						fieldnameElement.data('prevValue', ajaxEditNewValue);
-                        },
-                        function(error){
-                            //TODO : Handle error
-                            currentTdElement.progressIndicator({'mode':'hide'});
-                        }
-                    )
-                }
-			}
-
-			jQuery(document).on('click','*', saveHandler);
+			thisInstance.ajaxEditHandling(currentTdElement);
 		});
 
 
@@ -928,7 +1125,8 @@ jQuery.Class("Vtiger_Detail_Js",{
 		detailContentsHolder.on('click','.detailViewSaveComment', function(e){
 			var dataObj = thisInstance.saveComment(e);
 			dataObj.then(function(data){
-				thisInstance.loadWidgets();
+				var commentsContainer = detailContentsHolder.find("[data-name='ModComments']");
+				thisInstance.loadWidget(commentsContainer);
 			});
 		});
 
@@ -971,17 +1169,21 @@ jQuery.Class("Vtiger_Detail_Js",{
 			recentCommentsTab.trigger('click');
 		});
 
+		detailContentsHolder.on('click','.moreRecentUpdates', function(){
+			var recentUpdatesTab = thisInstance.getTabByLabel(thisInstance.detailViewRecentUpdatesTabLabel);
+			recentUpdatesTab.trigger('click');
+		});
+		
 		detailContentsHolder.on('click','.moreRecentActivities', function(){
 			var recentActivitiesTab = thisInstance.getTabByLabel(thisInstance.detailViewRecentActivitiesTabLabel);
 			recentActivitiesTab.trigger('click');
 		});
-
-
-		thisInstance.getForm().validationEngine();
+		
+		thisInstance.getForm().validationEngine(app.validationEngineOptions);
 
 		thisInstance.loadWidgets();
-				}
-		});
+	}
+});
 
 //On Page Load
 jQuery(document).ready(function() {

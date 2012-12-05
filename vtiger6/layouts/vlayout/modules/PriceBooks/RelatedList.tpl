@@ -35,13 +35,13 @@
 			</div>
 			<div class="span4">
 				<span class="row-fluid">
-					<span class="span7">
+					<span class="span8 pushDown">
 						<span class="pull-right">
 						{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_TO', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{if $TOTAL_ENTRIES} {vtranslate('LBL_OF', $RELATED_MODULE->get('name'))} {$TOTAL_ENTRIES}{/if}{/if}
 						</span>
 					</span>
 					
-						<div class="btn-group pull-right">
+						<div class="span4 btn-group pull-right">
 							<button class="btn" id="listViewPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
 							<button class="btn" id="listViewNextPageButton" {if !$PAGING->isNextPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
 						</div>
@@ -70,22 +70,21 @@
 						{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
 						<td>
 						{if $HEADER_FIELD->get('name') == 'listprice'}
-								{$BASE_CURRENCY_DETAILS['symbol']}{$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
+								{$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
 								{assign var="LISTPRICE" value=$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
 							{else if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
 								<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
 						{else}
-								{if $RELATED_HEADERNAME eq 'unit_price'}{$BASE_CURRENCY_DETAILS['symbol']}{/if}
-								{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+							{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
 						{/if}
 						{if $HEADER_FIELD@last}
 						<div class="pull-right actions">
 							<span class="actionImages">
+								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
 								<a data-url="index.php?module=PriceBooks&view=ListPriceUpdate&record={$PARENT_RECORD->getId()}&relid={$RELATED_RECORD->getId()}&currentPrice={$LISTPRICE}"
 									class="editListPrice cursorPointer" data-related-recordid='{$RELATED_RECORD->getId()}' data-list-price={$LISTPRICE}>
 									<i class="icon-pencil alignMiddle"></i>
 								</a>
-								<span class="alignMiddle actionImagesAlignment"><b>|</b></span>
 								<a class="relationDelete"><i class="icon-trash alignMiddle"></i></a>
 							</span>
 						</div>

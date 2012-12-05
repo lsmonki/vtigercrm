@@ -16,6 +16,8 @@ $languageStrings = array(
 	'LBL_ADD_RECORD' => 'Add Purchase Order',
 	'LBL_RECORDS_LIST' => 'Purchase Order List',
 	'LBL_RECORD_SUMMARY' => 'Purchase Order Summary',
+	'LBL_COPY_SHIPPING_ADDRESS' => 'Copy Shipping Address',
+	'LBL_COPY_BILLING_ADDRESS' => 'Copy Billing Address',
 
 	// Blocks
 	'LBL_PO_INFORMATION' => 'Purchase Order Details',

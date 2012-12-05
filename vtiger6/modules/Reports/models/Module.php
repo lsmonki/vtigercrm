@@ -107,7 +107,7 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 	function getFolders() {
 		$db = PearDatabase::getInstance();
 
-		$result = $db->pquery('SELECT * FROM vtiger_reportfolder', array());
+		$result = $db->pquery('SELECT * FROM vtiger_reportfolder ORDER BY foldername ASC', array());
 		$rows = $db->num_rows($result);
 
 		$folders = array();

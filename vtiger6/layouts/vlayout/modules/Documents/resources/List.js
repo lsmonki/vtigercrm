@@ -150,7 +150,7 @@ Vtiger_List_Js("Documents_List_Js", {
 
 	constructOptionElement : function(info){
 		var cvId = this.getCurrentCvId();
-		return '<option data-foldername="'+info.folderName+'" id="filterOptionId_'+cvId+'" value="'+cvId+'" >'+info.folderName+'</option>';
+		return '<option data-foldername="'+info.folderName+'" data-id="'+cvId+'" >'+info.folderName+'</option>';
 
 	},
 

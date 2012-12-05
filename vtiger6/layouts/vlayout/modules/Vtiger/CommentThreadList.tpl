@@ -9,31 +9,35 @@
 *
  ********************************************************************************/
 -->*}
-
+<hr>
 <div class="commentDiv cursorPointer">
 	<div class="singleComment">
 		<div class="commentInfoHeader row-fluid"  data-commentid="{$COMMENT->getId()}">
 			<div class="commentTitle" id="{$COMMENT->getId()}">
 				{assign var=PARENT_COMMENT_MODEL value=$COMMENT->getParentCommentModel()}
 				{assign var=CHILD_COMMENTS_MODEL value=$COMMENT->getChildComments()}
-				<div>
-					<span>
+				<div class="row-fluid">
+					<div class="span1">
 						{assign var=IMAGE_PATH value=$COMMENT->getImagePath()}
-						<img class="alignMiddle pull-left" title="{vtranslate('LBL_USER_IMAGE')}" alt="{vtranslate('LBL_USER_IMAGE')}" src="{if !empty($IMAGE_PATH)}{$COMMENT->getImagePath()}{else}{vimage_path('Default_Image.png')}{/if}" style="width: 35px; height: 44px;">
-					</span>
-					<span class="commentorInfo">
+						<img class="alignMiddle pull-left" src="{if !empty($IMAGE_PATH)}{$COMMENT->getImagePath()}{else}{vimage_path('DefaultUserIcon.png')}{/if}">
+					</div>
+					<div class="span11 commentorInfo">
 						{assign var=COMMENTOR value=$COMMENT->getCommentedByModel()}
-						<span class="commentorName pull-left"><strong>{$COMMENTOR->getName()}</strong></span>
-						<span class="pull-right">
-							{$COMMENT->getCommentedTime()}
-						</span>
-					</span>
+						<div class="inner">
+							<span class="commentorName pull-left"><strong>{$COMMENTOR->getName()}</strong></span>
+							<span class="pull-right">
+								<p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getCommentedTime())}</small></p>
+							</span>
+							<div class="clearfix"></div>
+						</div>
+						<div class="commentInfoContent">
+							{nl2br($COMMENT->get('commentcontent'))}
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="commentInfoContent">
-			{$COMMENT->get('commentcontent')}
-		</div>
+		
 		<div class="row-fluid commentActionsDiv">
 			<span class="pull-right commentActions">
 				{assign var=CHILD_COMMENTS_COUNT value=$COMMENT->getChildCommentsCount()}

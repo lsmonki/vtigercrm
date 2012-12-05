@@ -67,11 +67,17 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$this->initTax($lineItem, $parent);
 		$this->_create($elementType, $lineItem);
 	}
-
+	
+	/**
+	 * Function gives all the line items related to inventory records
+	 * @param $parentId - record id or array of the inventory record id's 
+	 * @return <Array> - list of line items
+	 * @throws WebServiceException - Database error
+	 */
 	public function getAllLineItemForParent($parentId){
-		if(self::$lineItemCache[$parentId] == null){
+		if(is_array($parentId)){
 			$result = null;
-			$query = "select * from {$this->entityTableName} where id=?";
+			$query = "SELECT * FROM {$this->entityTableName} WHERE id IN (". generateQuestionMarks($parentId) .")";
 			$transactionSuccessful = vtws_runQueryAsTransaction($query,array($parentId),$result);
 			if(!$transactionSuccessful){
 				throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
@@ -82,12 +88,31 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 				$rowCount = $this->pearDB->num_rows($result);
 				for ($i = 0 ; $i < $rowCount ; ++$i) {
 					$element = $this->pearDB->query_result_rowdata($result,$i);
-					$lineItemList[] = DataTransform::filterAndSanitize($element,$this->meta);
+					$lineItemList[$element['id']][] = DataTransform::filterAndSanitize($element,$this->meta);
 				}
 			}
-			self::$lineItemCache[$parentId] = $lineItemList;
+			return $lineItemList;
+		}else{
+			if(self::$lineItemCache[$parentId] == null){
+				$result = null;
+				$query = "select * from {$this->entityTableName} where id=?";
+				$transactionSuccessful = vtws_runQueryAsTransaction($query,array($parentId),$result);
+				if(!$transactionSuccessful){
+					throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
+						"Database error while performing required operation");
+				}
+				$lineItemList = array();
+				if($result){
+					$rowCount = $this->pearDB->num_rows($result);
+					for ($i = 0 ; $i < $rowCount ; ++$i) {
+						$element = $this->pearDB->query_result_rowdata($result,$i);
+						$lineItemList[] = DataTransform::filterAndSanitize($element,$this->meta);
+					}
+				}
+				self::$lineItemCache[$parentId] = $lineItemList;
+			}
+			return self::$lineItemCache[$parentId];
 		}
-		return self::$lineItemCache[$parentId];
 	}
 
 	public function _create($elementType, $element){

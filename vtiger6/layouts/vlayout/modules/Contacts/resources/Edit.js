@@ -24,6 +24,17 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 									'othercountry' : 'ship_country'
 									}
 							},
+							
+	//Address field mapping within module
+	addressFieldsMappingInModule : {
+										'otherstreet' : 'mailingstreet',
+										'otherpobox' : 'mailingpobox',
+										'othercity' : 'mailingcity',
+										'otherstate' : 'mailingstate',
+										'otherzip' : 'mailingzip',
+										'othercountry' : 'mailingcountry'
+								},
+	
 	
 	/**
 	 * Function which will register event for Reference Fields Selection
@@ -44,7 +55,7 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	referenceSelectionEventHandler :  function(data) {
 		var thisInstance = this;
 		var message = app.vtranslate('OVERWRITE_EXISTING_MSG1')+app.vtranslate('SINGLE_'+data['source_module'])+' ('+data['selectedName']+') '+app.vtranslate('OVERWRITE_EXISTING_MSG2');
-		Vtiger_Helper_Js.showMessageBox({'message' : message}).then(
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 			function(e) {
 				thisInstance.copyAddressDetails(data);
 			},
@@ -79,11 +90,110 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	},
 	
 	/**
+	 * Function to swap array
+	 * @param Array that need to be swapped
+	 */ 
+	swapObject : function(objectToSwap){
+		var swappedArray = {};
+		var newKey,newValue;
+		for(var key in objectToSwap){
+			newKey = objectToSwap[key];
+			newValue = key;
+			swappedArray[newKey] = newValue;
+		}
+		return swappedArray;
+	},
+	
+	/**
+	 * Function to copy address between fields
+	 * @param strings which accepts value as either odd or even
+	 */
+	copyAddress : function(swapMode){
+		var thisInstance = this;
+		var formElement = this.getForm();
+		var addressMapping = this.addressFieldsMappingInModule;
+		if(swapMode == "false"){
+			for(var key in addressMapping) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+addressMapping[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+		} else if(swapMode){
+			var swappedArray = thisInstance.swapObject(addressMapping);
+			for(var key in swappedArray) {
+				var fromElement = formElement.find('[name="'+key+'"]');
+				var toElement = formElement.find('[name="'+swappedArray[key]+'"]');
+				toElement.val(fromElement.val());
+			}
+		}
+	},
+	
+	
+	/**
+	 * Function to register event for copying address between two fileds
+	 */
+	registerEventForCopyingAddress : function(){
+		var thisInstance = this;
+		var swapMode;
+		jQuery('[name="copyAddress"]').on('click',function(e){
+			var element = jQuery(e.currentTarget);
+			var target = element.data('target');
+			if(target == "other"){
+				swapMode = "false";
+			} else if(target == "mailing"){
+				swapMode = "true";
+			}
+			thisInstance.copyAddress(swapMode);
+		})
+	},
+
+    /**
+	 * Function to check for Portal User
+	 */
+	checkForPortalUser : function(form){
+		var element = jQuery('[name="portal"]',form);
+		var response = element.is(':checked');
+		var primaryEmailField = jQuery('[name="email"]');
+		var primaryEmailValue = primaryEmailField.val();
+		if(response){
+			if(primaryEmailField.length == 0){
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_PRIMARY_EMAIL_FIELD_DOES_NOT_EXISTS'));
+				return false;
+			}
+			if(primaryEmailValue == ""){
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER'));
+				return false;
+			}
+		}
+		return true;
+	},
+
+	/**
+	 * Function to register recordpresave event
+	 */
+	registerRecordPreSaveEvent : function(form){
+		var thisInstance = this;
+		if(typeof form == 'undefined') {
+			form = this.getForm();
+		}
+
+		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
+			var result = thisInstance.checkForPortalUser(form);
+			if(!result){
+				e.preventDefault();
+			}
+		})
+	},
+	
+	/**
 	 * Function which will register all the events
 	 */
     registerEvents : function() {
+		var form = this.getForm();
 		this._super();
 		this.registerReferenceSelectionEvent();
+		this.registerEventForCopyingAddress();
+        this.registerRecordPreSaveEvent(form);
 	}
 
 })

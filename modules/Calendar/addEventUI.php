@@ -83,7 +83,7 @@ if(empty($date_data))
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
 if($current_user->hour_format == '')
-	$calendar_arr['calendar']->hour_format = 'am/pm';
+	$calendar_arr['calendar']->hour_format = 12;
 else
 	$calendar_arr['calendar']->hour_format = $current_user->hour_format;
  

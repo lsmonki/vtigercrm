@@ -19,6 +19,15 @@ jQuery.Class("Calendar_CalendarView_Js",{
 
 	calendarView : false,
 	calendarCreateView : false,
+	//Hold the conditions for a hour format
+	hourFormatConditionMapping : false,
+	
+	//Hold the saved values of calendar settings
+	calendarSavedSettings : false,
+	
+	CalendarSettingsContainer : false,
+	
+	weekDaysArray : {Sunday : 0,Monday : 1, Tuesday : 2, Wednesday : 3,Thursday : 4, Friday : 5, Saturday : 6},
 
 	calendarfeedDS : {},
 
@@ -27,6 +36,10 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			this.calendarView = jQuery('#calendarview');
 		}
 		return this.calendarView;
+	},
+	
+	getCalendarSettingsForm : function() {
+		return this.CalendarSettingsContainer;
 	},
 
 	getCalendarCreateView : function() {
@@ -99,7 +112,11 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			AppConnector.request(params).then(function(events){
 				callback(events);
 				feedcheckbox.attr('disabled', false).attr('checked', true);
-			});
+			},
+            function(error){
+                //To send empty events if error occurs
+                callback([]);
+            });
 		}
 
 		this.getCalendarView().fullCalendar('addEventSource', this.calendarfeedDS[type]);
@@ -134,7 +151,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 				// NOTE: We are getting cache data fresh - as it shared between browser tabs
 				var disabledOnes = app.cacheGet('calendar.feeds.disabled',[]);
 				// http://stackoverflow.com/a/3596096
-				disabledOnes = jQuery.grep(disabledOnes, function(value){ return value != type; });
+				disabledOnes = jQuery.grep(disabledOnes, function(value){return value != type;});
 				app.cacheSet('calendar.feeds.disabled', disabledOnes);
 				
 				thisInstance.getCalendarView().fullCalendar('addEventSource', thisInstance.calendarfeedDS[type]);
@@ -161,8 +178,14 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			var startDateString = app.getDateInVtigerFormat(dateFormat,startDateInstance);
 			var startTimeString = startDateInstance.toString('hh:mm tt');
 
-			var endDateInstance = Date.parse(date)
-			endDateInstance.addHours(1);
+			var endDateInstance = Date.parse(date);
+			if(data.find('[name="activitytype"]').val() == 'Call'){
+				var defaulCallDuration = data.find('[name="defaultCallDuration"]').val();
+				endDateInstance.addMinutes(defaulCallDuration);
+			} else {
+				var defaultOtherEventDuration = data.find('[name="defaultOtherEventDuration"]').val();
+				endDateInstance.addMinutes(defaultOtherEventDuration);
+			}
 			var endDateString = app.getDateInVtigerFormat(dateFormat,endDateInstance);
 			var endTimeString = endDateInstance.toString('hh:mm tt');
 
@@ -180,24 +203,57 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		
 	},
 
-	registerCalendar : function() {
+	registerCalendar : function(customConfig) {
 		var thisInstance = this;
 		var calendarview = this.getCalendarView();
+		
+		//User preferred default view 
 		var userDefaultActivityView = jQuery('#activity_view').val();
-
-		calendarview.fullCalendar({
+		if(userDefaultActivityView == 'Today'){
+			userDefaultActivityView ='agendaDay';
+		}else if(userDefaultActivityView == 'This Week'){
+			userDefaultActivityView ='agendaWeek';
+		}else{
+			userDefaultActivityView ='month';
+		}
+		
+		//Default time format
+		var userDefaultTimeFormat = jQuery('#time_format').val();
+		if(userDefaultTimeFormat == 24){
+			userDefaultTimeFormat = 'H(:mm)tt';
+		} else {
+			userDefaultTimeFormat = 'h(:mm)tt';
+		}
+		
+		//Default first day of the week
+		var defaultFirstDay = jQuery('#start_day').val();
+		var convertedFirstDay = thisInstance.weekDaysArray[defaultFirstDay];
+		
+		//Default first hour of the day 
+		var defaultFirstHour = jQuery('#start_hour').val();
+		var explodedTime = defaultFirstHour.split(':');
+		defaultFirstHour = explodedTime['0'];
+		
+		var config = {
 			header: {
 				left: 'month,agendaWeek,agendaDay',
 				center: 'title today',
 				right: 'prev,next'
 			},
 			height: 600,
+			axisFormat: userDefaultTimeFormat,
+			firstHour : defaultFirstHour,
+			firstDay : convertedFirstDay,
 			defaultView: userDefaultActivityView,
 			dayClick : function(date, allDay, jsEvent, view){thisInstance.dayClick(date, allDay, jsEvent, view);}
-		});
+		}
+		if(typeof customConfig != 'undefined'){
+			config = jQuery.extend(config,customConfig);
+		}
+		calendarview.fullCalendar(config);
 
 		//To create custom button to create event or task
-		jQuery('<span class="pull-left"><button class="btn">'+ app.vtranslate('LBL_ADD_EVENT_TASK') +'</button></span>')
+		jQuery('<span class="pull-left"><button class="btn addButton">'+ app.vtranslate('LBL_ADD_EVENT_TASK') +'</button></span>')
 				.prependTo(calendarview.find('.fc-header .fc-header-right')).on('click', 'button', function(e){
 					thisInstance.getCalendarCreateView().then(function(data){
 						var headerInstance = new Vtiger_Header_Js();
@@ -207,7 +263,57 @@ jQuery.Class("Calendar_CalendarView_Js",{
 					});
 					
 				})
+	jQuery('<span class="pull-right marginLeft5px"><button class="btn"><i id="calendarSettings" class="icon-cog"></i></button></span>')
+	.prependTo(calendarview.find('.fc-header .fc-header-right')).on('click', 'button', function(e){
+		var params = {
+			module : 'Calendar',
+			view : 'Calendar',
+			mode : 'Settings'
+		}
+		var progressIndicatorInstance = jQuery.progressIndicator({
+			});
+		AppConnector.request(params).then(function(data){
+			var callBack = function(data){
+				thisInstance.CalendarSettingsContainer = jQuery(data);
+				app.showScrollBar(jQuery('div[name="contents"]',data), {'height':'400px'});
+				//register all select2 Elements
+				app.showSelect2ElementView(jQuery(data).find('select.select2'));
+				
+				progressIndicatorInstance.hide();
+				thisInstance.hourFormatConditionMapping = jQuery('input[name="timeFormatOptions"]',data).data('value');
+				thisInstance.changeStartHourValuesEvent();
+			}
+			app.showModalWindow({'data':data,'cb':callBack});
+			
+		});
+					
+	})
 
+	},
+	changeStartHourValuesEvent : function(e){
+		var form = this.getCalendarSettingsForm();
+		var thisInstance = this;
+		form.on('click','input[name="hour_format"]',function(e){
+			var hourFormatVal = jQuery(e.currentTarget).val();
+			var startHourElement = jQuery('select[name="start_hour"]',form);
+			var conditionSelected = startHourElement.val();
+			var list = thisInstance.hourFormatConditionMapping['hour_format'][hourFormatVal]['start_hour'];
+			var options = '';
+			for(var key in list) {
+				//IE Browser consider the prototype properties also, it should consider has own properties only.
+				if(list.hasOwnProperty(key)) {
+					var conditionValue = list[key];
+					options += '<option value="'+key+'"';
+					if(key == conditionSelected){
+						options += ' selected="selected" ';
+					}
+					options += '>'+conditionValue+'</option>';
+				}
+			}
+			startHourElement.html(options).trigger("change");
+		});
+		
+		
 	},
 
 	addCalendarEvent : function(calendarDetails) {
@@ -233,21 +339,8 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		this.getCalendarView().fullCalendar('renderEvent',eventObject);
 	},
 
-    registerHandlerForCalendarQuickCreate : function() {
-        var thisInstance = this;
-        var headerInstance = Vtiger_Header_Js.getInstance();
-        headerInstance.registerQuickCreateCallBack(function(params){
-            if(params.name != 'Calendar') {
-                return;
-            }
-
-            thisInstance.addCalendarEvent(params.data.result);
-        })
-    },
-
 	registerEvents : function() {
 		this.registerCalendar();
-        this.registerHandlerForCalendarQuickCreate();
 		jQuery('[data-widget-url="module=Calendar&view=ViewTypes&mode=getViewTypes"]').trigger('click');
 		return this;
 	}

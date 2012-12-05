@@ -13,7 +13,7 @@ global $adb;
 if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
 	$hour_format = $_REQUEST['hour_format'];
 else
-	$hour_format = 'am/pm';
+	$hour_format = 12;
 	
 $delquery = "delete from vtiger_sharedcalendar where userid=?";
 $adb->pquery($delquery, array($_REQUEST["current_userid"]));

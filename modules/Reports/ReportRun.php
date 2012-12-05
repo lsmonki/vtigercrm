@@ -78,7 +78,8 @@ class ReportRunQueryPlanner {
 	protected static $tempTableCounter   = 0;
 	protected $registeredCleanup = false;
 	
-	function addTable($table) {
+
+        function addTable($table) {
 		$this->tables[$table] = $table;
 	}
 	
@@ -208,11 +209,17 @@ class ReportRun extends CRMEntity
 	
 	var $queryPlanner = null;
 
-	/** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
+
+        protected static $instances = false;
+
+        /** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
 	 *  This function accepts the $reportid as argument
 	 *  It sets reportid,primarymodule,secondarymodule,reporttype,reportname for the given reportid
+         *  To ensure single-instance is present for $reportid
+         *  as we optimize using ReportRunPlanner and setup temporary tables.
 	 */
-	function ReportRun($reportid)
+
+        function ReportRun($reportid)
 	{
 		$oReport = new Reports($reportid);
 		$this->reportid = $reportid;
@@ -222,6 +229,13 @@ class ReportRun extends CRMEntity
 		$this->reportname = $oReport->reportname;
 		$this->queryPlanner = new ReportRunQueryPlanner();
 	}
+
+        public static function getInstance($reportid) {
+            if (!isset(self::$instances[$reportid])) {
+                self::$instances[$reportid] = new ReportRun($reportid);
+            }
+            return self::$instances[$reportid];
+        }
 
 	/** Function to get the columns for the reportid
 	 *  This function accepts the $reportid and $outputformat (optional)

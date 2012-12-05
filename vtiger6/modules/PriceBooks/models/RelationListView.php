@@ -70,7 +70,7 @@ class PriceBooks_RelationListView_Model extends Vtiger_RelationListView_Model {
 			$newRow['listprice'] = CurrencyField::convertToUserFormat($row['listprice'], null, true);
 
 			$record = Vtiger_Record_Model::getCleanInstance($relationModule->get('name'));
-			$relatedRecordList[] = $record->setData($newRow)->setModuleFromInstance($relationModule);
+			$relatedRecordList[$recordId] = $record->setData($newRow)->setModuleFromInstance($relationModule);
 		}
 		$pagingModel->calculatePageRange($relatedRecordList);
 

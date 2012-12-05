@@ -72,10 +72,14 @@ function validate(blockid) {
 	}
 
 	if (decimalLayer != null && decimalLayer.style.visibility=="visible") {
+		
+		if (!emptyCheck("fldDecimal_"+blockid,"Decimals","text"))
+			return false
+		
 		if (document.getElementById("fldDecimal_"+blockid).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
 			if (!intValidate("fldDecimal_"+blockid,"Decimal"))
 				return false
-		if (!numConstComp("fldDecimal_"+blockid,"Decimal","GE",1))
+		if (!numConstComp("fldDecimal_"+blockid,"Decimal","GE",2))
 			return false
 
 		if (!numConstComp("fldDecimal_"+blockid,"Decimal","LE",5))

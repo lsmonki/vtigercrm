@@ -199,8 +199,8 @@ jQuery.Class("Vtiger_Popup_Js",{
 			this.multiSelect = jQuery('#multi_select');
 		}
 		var value = this.multiSelect.val();
-		if(value == '1') {
-			return true;
+		if(value) {
+			return value;
 		}
 		return false;
 	},

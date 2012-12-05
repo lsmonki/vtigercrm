@@ -8,6 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'SINGLE_Emails' => 'Email',
+	'Emails' => 'Emails',
 	'LBL_SELECT_EMAIL_IDS' => 'Select Email Addresses',
 	'LBL_SUBJECT' => 'Subject',
 	'LBL_ATTACHMENT' => 'Attachment',
@@ -22,5 +24,5 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Add Bcc',
 	'LBL_MAX_UPLOAD_SIZE' => 'Maximum upload size is',
 	'LBL_EXCEEDED' => 'Exceeded',
-	
+
 );

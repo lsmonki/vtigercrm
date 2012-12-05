@@ -8,6 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 require_once 'modules/Emails/mail.php';
+require_once 'modules/HelpDesk/HelpDesk.php';
 
 class ModCommentsHandler extends VTEventHandler {
 
@@ -34,10 +35,8 @@ function CustomerCommentFromPortal($entityData) {
 	$relatedToId = explode('x', $relatedToWSId);
 	$moduleName = getSalesEntityType($relatedToId[1]);
 
-
 	if($moduleName == 'HelpDesk' && !empty($customerWSId)) {
 		$ownerIdInfo = getRecordOwnerId($relatedToId[1]);
-
 		if(!empty($ownerIdInfo['Users'])) {
 			$ownerId = $ownerIdInfo['Users'];
 			$ownerName = getOwnerName($ownerId);
@@ -49,7 +48,6 @@ function CustomerCommentFromPortal($entityData) {
 			$ownerName = $groupInfo[0];
 			$toEmail = implode(',', getDefaultAssigneeEmailIds($ownerId));
 		}
-
 		$subject = getTranslatedString('LBL_RESPONDTO_TICKETID', $moduleName)."##". $relatedToId[1]."## ". getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
 		$contents = getTranslatedString('Dear', $moduleName)." ".$ownerName.","."<br><br>"
 					.getTranslatedString('LBL_CUSTOMER_COMMENTS', $moduleName)."<br><br>
@@ -68,23 +66,33 @@ function CustomerCommentFromPortal($entityData) {
 }
 
 function TicketOwnerComments($entityData) {
-	global $HELPDESK_SUPPORT_NAME, $HELPDESK_SUPPORT_EMAIL_ID, $PORTAL_URL;
+	global $HELPDESK_SUPPORT_NAME, $HELPDESK_SUPPORT_EMAIL_ID;
 	$adb = PearDatabase::getInstance();
+
+	//if commented from portal by the customer, then ignore this
+	$customer = $entityData->get('customer');
+	if(!empty($customer)) continue;
 
 	$wsParentId = $entityData->get('related_to');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
 	$moduleName = getSalesEntityType($parentId);
 
+	$isNew = $entityData->isNew();
+
 	if($moduleName == 'HelpDesk') {
 		$ticketFocus = CRMEntity::getInstance($moduleName);
 		$ticketFocus->retrieve_entity_info($parentId, $moduleName);
+		$ticketFocus->id = $parentId;
+
+		if(!$isNew) {
+			$reply = 'Re : ';
+		} else {
+			$reply = '';
+		}
 
 		$subject = $ticketFocus->column_fields['ticket_no'] . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
-							.' : '.$parentId.' ] '.$ticketFocus->column_fields['ticket_title'];
-		$bodySubject = getTranslatedString('Ticket No', $moduleName) .":" . $ticketFocus->column_fields['ticket_no']
-							. "<br>" . getTranslatedString('LBL_TICKET_ID', $moduleName).' : '.$parentId.'<br> '
-							.getTranslatedString('LBL_SUBJECT', $moduleName).$ticketFocus->column_fields['ticket_title'];
+							.' : '.$parentId.' ] '.$reply.$ticketFocus->column_fields['ticket_title'];
 
 		$emailOptOut = 0;
 		$ticketParentId = $ticketFocus->column_fields['parent_id'];
@@ -103,7 +111,14 @@ function TicketOwnerComments($entityData) {
 					}
 				}
 				$parentName = $contactName;
+
+				//Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
+				if($parentEmail != '') {
+					$sql = "SELECT * FROM vtiger_portalinfo WHERE user_name=?";
+					$isPortalUser = $adb->query_result($adb->pquery($sql, array($parentEmail)),0,'isactive');
 			}
+			}
+
 			if($parentModule == 'Accounts') {
 				$result = $adb->pquery("SELECT accountname, emailoptout, email1 FROM vtiger_account WHERE accountid=?",
 											array($ticketParentId));
@@ -114,15 +129,17 @@ function TicketOwnerComments($entityData) {
 
 			//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
 			if($emailOptOut == 0) {
-				$portalUrl = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$parentId."&fun=detail'>".getTranslatedString('LBL_TICKET_DETAILS', $moduleName)."</a>";
-				$contents = getTranslatedString('Dear', $moduleName) . " " . $parentName . ",<br><br>";
-				$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $ticketFocus->column_fields['ticket_title']
-						. '</b> ' . getTranslatedString('customer_portal', $moduleName);
-				$contents .= getTranslatedString("link", $moduleName) . '<br>';
-				$contents .= $portalUrl;
-				$contents .= '<br><br>' . getTranslatedString("Thanks", $moduleName) . '<br><br>' . $HELPDESK_SUPPORT_NAME;
+				$entityData = VTEntityData::fromCRMEntity($ticketFocus);
 
-				$emailBody = $bodySubject.'<br><br>'.$contents;
+				if($isPortalUser == 1){
+					$bodysubject = getTranslatedString('Ticket No', $moduleName) .": " . $ticketFocus->column_fields['ticket_no']
+						. "<br>" . getTranslatedString('LBL_TICKET_ID', $moduleName).' : '.$parentId.'<br> '
+						.getTranslatedString('LBL_SUBJECT', $moduleName).$ticketFocus->column_fields['ticket_title'];
+
+					$emailBody = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData);
+				} else {
+					$emailBody = HelpDesk::getTicketEmailContents($entityData);
+				}
 
 				send_mail('HelpDesk', $parentEmail, $HELPDESK_SUPPORT_NAME, $HELPDESK_SUPPORT_EMAIL_ID, $subject, $emailBody);
 			}

@@ -9,6 +9,7 @@
  *************************************************************************************/
 
 class Vtiger_Detail_View extends Vtiger_Index_View {
+	private $record = false;
 
 	function __construct() {
 		parent::__construct();
@@ -21,6 +22,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$this->exposeMethod('showRelatedList');
 		$this->exposeMethod('showChildComments');
 		$this->exposeMethod('showAllComments');
+		$this->exposeMethod('getActivities');
 	}
 
 	function checkPermission(Vtiger_Request $request) {
@@ -39,9 +41,10 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
-
-		$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		$recordModel = $detailViewModel->getRecord();
+		if(!$this->record){
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+		}
+		$recordModel = $this->record->getRecord();
 		$recordStrucure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_DETAIL);
 		$summaryInfo = array();
 		// Take first block information as summary information
@@ -52,7 +55,8 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		}
 
 		$detailViewLinkParams = array('MODULE'=>$moduleName,'RECORD'=>$recordId);
-		$detailViewLinks = $detailViewModel->getDetailViewLinks($detailViewLinkParams);
+
+		$detailViewLinks = $this->record->getDetailViewLinks($detailViewLinkParams);
 		$navigationInfo = ListViewSession::getListViewNavigation($recordId);
 
 		$viewer = $this->getViewer($request);
@@ -96,14 +100,14 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 			$viewer->assign('NEXT_RECORD_URL', $moduleModel->getDetailViewUrl($nextRecordId));
 		}
 
-		$viewer->assign('MODULE_MODEL', $detailViewModel->getModule());
+		$viewer->assign('MODULE_MODEL', $this->record->getModule());
 		$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
 
-		$viewer->assign('IS_EDITABLE', $detailViewModel->getRecord()->isEditable($moduleName));
-		$viewer->assign('IS_DELETABLE', $detailViewModel->getRecord()->isDeletable($moduleName));
+		$viewer->assign('IS_EDITABLE', $this->record->getRecord()->isEditable($moduleName));
+		$viewer->assign('IS_DELETABLE', $this->record->getRecord()->isDeletable($moduleName));
 
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'));
-		$linkModels = $detailViewModel->getSideBarLinks($linkParams);
+		$linkModels = $this->record->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $linkModels);
 
 		if($display) {
@@ -127,11 +131,11 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 	public function postProcess(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
-
-		$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-
+		if(!$this->record){
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+		}
 		$detailViewLinkParams = array('MODULE'=>$moduleName,'RECORD'=>$recordId);
-		$detailViewLinks = $detailViewModel->getDetailViewLinks($detailViewLinkParams);
+		$detailViewLinks = $this->record->getDetailViewLinks($detailViewLinkParams);
 
 		$selectedTabLabel = $request->get('tab_label');
 		if(empty($selectedTabLabel) && !empty($detailViewLinks['DETAILVIEWTAB']) &&
@@ -142,7 +146,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$viewer = $this->getViewer($request);
 
 		$viewer->assign('SELECTED_TAB_LABEL', $selectedTabLabel);
-		$viewer->assign('MODULE_MODEL', $detailViewModel->getModule());
+		$viewer->assign('MODULE_MODEL', $this->record->getModule());
 		$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
 
 		$viewer->view('DetailViewPostProcess.tpl', $moduleName);
@@ -190,8 +194,10 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
 
-		$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		$recordModel = $detailViewModel->getRecord();
+		if(!$this->record){
+		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+		}
+		$recordModel = $this->record->getRecord();
 		$recordStrucure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_DETAIL);
 		$structuredValues = $recordStrucure->getStructure();
 
@@ -212,28 +218,22 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
 
-		$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		$recordModel = $detailViewModel->getRecord();
-		$recordStrucure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_DETAIL);
-		$summaryInfo = array();
-
-		// Take first block information as summary information
-		$stucturedValues = $recordStrucure->getStructure();
-		foreach($stucturedValues as $blockLabel=>$fieldList) {
-			$summaryInfo[$blockLabel] = $fieldList;
-			break;
+		if(!$this->record){
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
-
+		$recordModel = $this->record->getRecord();
+		$recordStrucure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_SUMMARY);
+		
         $moduleModel = $recordModel->getModule();
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD', $recordModel);
-		$viewer->assign('RECORD_STRUCTURE', $recordStrucure);
         $viewer->assign('BLOCK_LIST', $moduleModel->getBlocks());
-		$viewer->assign('SUMMARY_INFORMATION', $summaryInfo);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('IS_AJAX_ENABLED', $this->isAjaxEnabled($recordModel));
+		$viewer->assign('SUMMARY_RECORD_STRUCTURE', $recordStrucure->getStructure());
+		$viewer->assign('RELATED_ACTIVITIES', $this->getActivities($request));
 
 		return $viewer->view('ModuleSummaryView.tpl', $moduleName, true);
 	}
@@ -247,11 +247,13 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
 
-		$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		$recordModel = $detailViewModel->getRecord();
+		if(!$this->record){
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+		}
+		$recordModel = $this->record->getRecord();
 
 		$detailViewLinkParams = array('MODULE'=>$moduleName,'RECORD'=>$recordId);
-		$detailViewLinks = $detailViewModel->getDetailViewLinks($detailViewLinkParams);
+		$detailViewLinks = $this->record->getDetailViewLinks($detailViewLinkParams);
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD', $recordModel);
@@ -367,14 +369,17 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$noOfEntries = count($models);
 
 		$relationModel = $relationListView->getRelationModel();
+		$relatedModuleModel = $relationModel->getRelationModuleModel();
+		$relationField = $relationModel->getRelationField();
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_RECORDS' , $models);
 		$viewer->assign('PARENT_RECORD', $parentRecordModel);
 		$viewer->assign('RELATED_LIST_LINKS', $links);
 		$viewer->assign('RELATED_HEADERS', $header);
-		$viewer->assign('RELATED_MODULE', $relationModel->getRelationModuleModel());
-		$viewer->assign('RELATED_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('RELATED_MODULE', $relatedModuleModel);
+		$viewer->assign('RELATED_ENTIRES_COUNT', $noOfEntries);
+		$viewer->assign('RELATION_FIELD', $relationField);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			$viewer->assign('TOTAL_ENTRIES', $relationListView->getRelatedEntriesCount());
@@ -388,7 +393,10 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('NEXT_SORT_ORDER',$nextSortOrder);
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
-
+		
+		$viewer->assign('IS_EDITABLE', $relatedModuleModel->isPermitted('EditView'));
+		$viewer->assign('IS_DELETABLE', $relatedModuleModel->isPermitted('Delete'));
+		
 		return $viewer->view('RelatedList.tpl', $moduleName, 'true');
 	}
 
@@ -436,5 +444,14 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 	 */
 	function isAjaxEnabled($recordModel) {
 		return $recordModel->isEditable();
+	}
+
+	/**
+	 * Function to get activities
+	 * @param Vtiger_Request $request
+	 * @return <List of activity models>
+	 */
+	public function getActivities(Vtiger_Request $request) {
+		return '';
 	}
 }

@@ -92,7 +92,6 @@ class Vtiger_Language_Handler {
 	public static function getModuleStringsFromFile($module='Vtiger'){
 		$currentLanguage = self::getLanguage();
 		if(empty(self::$languageContainer[$currentLanguage][$module])){
-
 				$qualifiedName = 'languages.'.$currentLanguage.'.'.$module;
 				$file = Vtiger_Loader::resolveNameToPath($qualifiedName);
 
@@ -104,7 +103,7 @@ class Vtiger_Language_Handler {
 		}
 		return self::$languageContainer[$currentLanguage][$module];
 	}
-	
+
 	/**
 	 * Function that returns current language
 	 * @return <String> -

@@ -10,6 +10,10 @@
  ********************************************************************************/
 -->*}
 {strip}
+{foreach key=index item=jsModel from=$SCRIPTS}
+	<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
+{/foreach}
+		
 <div class="modelContainer">
 <div class="modal-header">
 	<button class="close" aria-hidden="true" data-dismiss="modal" type="button" title="{vtranslate('LBL_CLOSE')}">x</button>
@@ -37,10 +41,15 @@
 					{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
 					{if $isReferenceField eq "reference"}
 						{if $refrenceListCount > 1}
-							<select style="width: 150px;" class="chzn-select" id="referenceModulesList">
+                            {assign var="DISPLAYID" value=$FIELD_MODEL->get('fieldvalue')}
+                            {assign var="REFERENCED_MODULE_STRUCT" value=$FIELD_MODEL->getUITypeModel()->getReferenceModule($DISPLAYID)}
+                            {if !empty($REFERENCED_MODULE_STRUCT)}
+                                {assign var="REFERENCED_MODULE_NAME" value=$REFERENCED_MODULE_STRUCT->get('name')}
+                            {/if}
+							<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
 								<optgroup>
 									{foreach key=index item=value from=$refrenceList}
-										<option value="{$value}">{vtranslate($value, $value)}</option>
+										<option value="{$value}" {if $value eq $REFERENCED_MODULE_NAME} selected {/if} >{vtranslate($value, $value)}</option>
 									{/foreach}
 								</optgroup>
 							</select>
@@ -63,7 +72,7 @@
 		{assign var="EDIT_VIEW_URL" value=$MODULE_MODEL->getCreateRecordUrl()}
 			<a class="cancelLink cancelLinkContainer pull-right" type="reset" data-dismiss="modal">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 			<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
-			<button class="btn" id="goToFullForm" data-edit-view-url="{$EDIT_VIEW_URL}"><strong>{vtranslate('LBL_GO_TO_FULL_FORM', $MODULE)}</strong></button>
+			<button class="btn" id="goToFullForm" data-edit-view-url="{$EDIT_VIEW_URL}" type="button"><strong>{vtranslate('LBL_GO_TO_FULL_FORM', $MODULE)}</strong></button>
 	</div>
 </form>
 </div>

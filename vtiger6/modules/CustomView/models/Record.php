@@ -408,26 +408,27 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		$params = array($this->getId());
 		$result = $db->pquery($query, $params);
 		$stdfilterrow = $db->fetch_array($result);
+		if(!empty($stdfilterrow)){
+			$stdfilterlist = array();
+			$stdfilterlist["columnname"] = $stdfilterrow["columnname"];
+			$stdfilterlist["stdfilter"] = $stdfilterrow["stdfilter"];
 
-		$stdfilterlist = array();
-		$stdfilterlist["columnname"] = $stdfilterrow["columnname"];
-		$stdfilterlist["stdfilter"] = $stdfilterrow["stdfilter"];
-
-		if ($stdfilterrow["stdfilter"] == "custom" || $stdfilterrow["stdfilter"] == "") {
-			if ($stdfilterrow["startdate"] != "0000-00-00" && $stdfilterrow["startdate"] != "") {
-				$startDateTime = new DateTimeField($stdfilterrow["startdate"] . ' ' . date('H:i:s'));
+			if ($stdfilterrow["stdfilter"] == "custom" || $stdfilterrow["stdfilter"] == "") {
+				if ($stdfilterrow["startdate"] != "0000-00-00" && $stdfilterrow["startdate"] != "") {
+					$startDateTime = new DateTimeField($stdfilterrow["startdate"] . ' ' . date('H:i:s'));
+					$stdfilterlist["startdate"] = $startDateTime->getDisplayDate();
+				}
+				if ($stdfilterrow["enddate"] != "0000-00-00" && $stdfilterrow["enddate"] != "") {
+					$endDateTime = new DateTimeField($stdfilterrow["enddate"] . ' ' . date('H:i:s'));
+					$stdfilterlist["enddate"] = $endDateTime->getDisplayDate();
+				}
+			} else { //if it is not custom get the date according to the selected duration
+				$datefilter = self::getDateForStdFilterBytype($stdfilterrow["stdfilter"]);
+				$startDateTime = new DateTimeField($datefilter[0] . ' ' . date('H:i:s'));
 				$stdfilterlist["startdate"] = $startDateTime->getDisplayDate();
-			}
-			if ($stdfilterrow["enddate"] != "0000-00-00" && $stdfilterrow["enddate"] != "") {
-				$endDateTime = new DateTimeField($stdfilterrow["enddate"] . ' ' . date('H:i:s'));
+				$endDateTime = new DateTimeField($datefilter[1] . ' ' . date('H:i:s'));
 				$stdfilterlist["enddate"] = $endDateTime->getDisplayDate();
 			}
-		} else { //if it is not custom get the date according to the selected duration
-			$datefilter = self::getDateForStdFilterBytype($stdfilterrow["stdfilter"]);
-			$startDateTime = new DateTimeField($datefilter[0] . ' ' . date('H:i:s'));
-			$stdfilterlist["startdate"] = $startDateTime->getDisplayDate();
-			$endDateTime = new DateTimeField($datefilter[1] . ' ' . date('H:i:s'));
-			$stdfilterlist["enddate"] = $endDateTime->getDisplayDate();
 		}
 		return $stdfilterlist;
 	}
@@ -801,8 +802,8 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 				'T' => array('e','n','l','g','m','h','bw','b','a'),
 				'I' => array('e','n','l','g','m','h'),
 				'C' => array('e','n'),
-				'D' => array('e','n','l','g','m','h','bw','b','a'),
-				'DT' => array('e','n','l','g','m','h','bw','b','a'),
+				'D' => array('e','n','bw','b','a'),
+				'DT' => array('e','n','bw','b','a'),
 				'NN' => array('e','n','l','g','m','h'),
 				'E' => array('e','n','s','ew','c','k')
 		);
@@ -931,30 +932,68 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 	 * @return <Array>
 	 */
 	function transformToNewAdvancedFilter() {
+		$standardFilter = $this->transformStandardFilter();
 		$advancedFilter = $this->getAdvancedCriteria();
 		$allGroupColumns = $anyGroupColumns = array();
 		foreach($advancedFilter as $index=>$group) {
 			$columns = $group['columns'];
 			$and = $or = 0;
+            if(!empty($group['condition'])){
+                $block = $group['condition'];
+            }
 			if(count($columns) != 1) {
-				foreach($columns as $column) {
-					if($column['column_condition'] == 'and') {
-						++$and;
-					} else {
-						++$or;
-					}
-				}
-			}
-			if($and == count($columns)-1 && count($columns) != 1) {
-				$allGroupColumns = array_merge($allGroupColumns, $group['columns']);
-			} else {
-				$anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
-			}
+                foreach($columns as $column) {
+                        if($column['column_condition'] == 'and') {
+                                ++$and;
+                        } else {
+                                ++$or;
+                        }
+                }
+                if($and == count($columns)-1 && count($columns) != 1) {
+                        $allGroupColumns = array_merge($allGroupColumns, $group['columns']);
+                } else {
+                        $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
+                }
+            }else if($block == 'and'){
+                $allGroupColumns = array_merge($allGroupColumns, $group['columns']);
+            }else {
+                $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
+            }
+		}
+		if($standardFilter){
+			$allGroupColumns = array_merge($allGroupColumns,$standardFilter);
 		}
 		$transformedAdvancedCondition = array();
 		$transformedAdvancedCondition[1] = array('columns' => $allGroupColumns, 'condition' => 'and');
 		$transformedAdvancedCondition[2] = array('columns' => $anyGroupColumns, 'condition' => '');
 
 		return $transformedAdvancedCondition;
+	}
+	
+	/*
+	 *  Function used to tranform the standard filter as like as advanced filter format
+	 *	@returns array of tranformed standard filter
+	 */
+	public function transformStandardFilter(){
+		$standardFilter = $this->getStandardCriteria();
+		if(!empty($standardFilter)){
+			$tranformedStandardFilter = array();
+			$tranformedStandardFilter['comparator'] = 'bw';
+
+			$fields = explode(':',$standardFilter['columnname']);
+			
+			if($fields[1] == 'createdtime' || $fields[1] == 'modifiedtime' ||($fields[0] == 'vtiger_activity' && $fields[1] == 'date_start')){
+				$tranformedStandardFilter['columnname'] = $standardFilter['columnname'].':DT';
+				$date[] = $standardFilter['startdate'].' 00:00:00';
+				$date[] = $standardFilter['enddate'].' 00:00:00';
+				$tranformedStandardFilter['value'] =  implode(',',$date);
+			} else{
+				$tranformedStandardFilter['columnname'] = $standardFilter['columnname'].':D';
+				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate']; 
+			}
+			return array($tranformedStandardFilter);
+		} else{
+			return false;
+		}
 	}
 }

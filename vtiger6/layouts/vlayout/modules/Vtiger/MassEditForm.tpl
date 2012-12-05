@@ -52,7 +52,7 @@
 									{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
 									{if {$isReferenceField} eq "reference"}
 										{if $refrenceListCount > 1}
-											<select style="width: 150px;" class="chzn-select" id="referenceModulesList">
+											<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
 												<optgroup>
 													{foreach key=index item=value from=$refrenceList}
 														<option value="{$value}">{vtranslate($value, $value)}</option>

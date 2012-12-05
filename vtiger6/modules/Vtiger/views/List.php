@@ -9,6 +9,10 @@
  ************************************************************************************/
 
 class Vtiger_List_View extends Vtiger_Index_View {
+	protected $listViewEntries = false;
+	protected $listViewCount = false;
+	protected $listViewLinks = false;
+	protected $listViewHeaders = false;
 	function __construct() {
 		parent::__construct();
 	}
@@ -21,8 +25,6 @@ class Vtiger_List_View extends Vtiger_Index_View {
 
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName);
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'));
-		$linkModels = $listViewModel->getListViewLinks($linkParams);
-		$viewer->assign('LISTVIEW_LINKS', $linkModels);
 		$viewer->assign('CUSTOM_VIEWS', CustomView_Record_Model::getAllByGroup($moduleName));
 		$viewName = $request->get('viewname');
 		if(empty($viewName)){
@@ -35,6 +37,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 
 		$quickLinkModels = $listViewModel->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $quickLinkModels);
+		$this->initializeListViewContents($request, $viewer);
 
 		if($display) {
 			$this->preProcessDisplay($request);
@@ -42,6 +45,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	}
 
 	function preProcessTplName(Vtiger_Request $request) {
+		
 		return 'ListViewPreProcess.tpl';
 	}
 
@@ -143,17 +147,21 @@ class Vtiger_List_View extends Vtiger_Index_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
-
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+		$noOfEntries = count($this->listViewEntries);
 
 		$viewer->assign('VIEWID', $cvId);
 		$viewer->assign('MODULE', $moduleName);
 
-		//TODO : Need to call this only once in the page load, currently also doing this in preprocess
-		$listViewLinks = $listViewModel->getListViewLinks($linkParams);
-		$viewer->assign('LISTVIEW_LINKS', $listViewLinks);
+		if(!$this->listViewLinks){
+			$this->listViewLinks = $listViewModel->getListViewLinks($linkParams);
+		}
+		$viewer->assign('LISTVIEW_LINKS', $this->listViewLinks);
 
 		$viewer->assign('LISTVIEW_MASSACTIONS', $linkModels['LISTVIEWMASSACTION']);
 
@@ -167,11 +175,14 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$viewer->assign('COLUMN_NAME',$orderBy);
 
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
-			$viewer->assign('LISTVIEW_COUNT', $listViewModel->getListViewCount());
+			if(!$this->listViewCount){
+				$this->listViewCount = $listViewModel->getListViewCount();
+			}
+			$viewer->assign('LISTVIEW_COUNT', $this->listViewCount);
 		}
 
 		$viewer->assign('IS_MODULE_EDITABLE', $listViewModel->getModule()->isPermitted('EditView'));

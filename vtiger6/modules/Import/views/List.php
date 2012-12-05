@@ -9,6 +9,8 @@
  *************************************************************************************/
 
 class Import_List_View extends Vtiger_Popup_View{
+	protected $listViewEntries = false;
+	protected $listViewHeaders = false;
 
 	public function process(Vtiger_Request $request) {
 		$viewer = $this->getViewer ($request);
@@ -54,9 +56,13 @@ class Import_List_View extends Vtiger_Popup_View{
 			$listViewModel->set('orderby', $orderBy);
 			$listViewModel->set('sortorder',$sortOrder);
 		}
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+		$noOfEntries = count($this->listViewEntries);
 		$viewer->assign('MODULE', $moduleName);
 
 
@@ -73,7 +79,7 @@ class Import_List_View extends Vtiger_Popup_View{
 		$viewer->assign('COLUMN_NAME',$orderBy);
 
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 	}
 }

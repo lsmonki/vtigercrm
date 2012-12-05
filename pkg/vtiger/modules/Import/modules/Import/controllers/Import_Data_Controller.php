@@ -22,6 +22,7 @@ require_once 'modules/Import/resources/Utils.php';
 require_once 'modules/Import/controllers/Import_Lock_Controller.php';
 require_once 'modules/Import/controllers/Import_Queue_Controller.php';
 require_once 'vtlib/Vtiger/Mailer.php';
+require_once 'vtiger6/includes/runtime/Cache.php';
 
 class Import_Data_Controller {
 
@@ -227,7 +228,7 @@ class Import_Data_Controller {
 								$comparisonValue = trim($referenceFileValueComponents[1]);
 							}
 						}
-						$queryGenerator->addCondition($mergeField, $comparisonValue, 'e');
+						$queryGenerator->addCondition($mergeField, $comparisonValue, 'e', '', '', '', true);
 					}
 					$query = $queryGenerator->getQuery();
 					$duplicatesResult = $adb->query($query);
@@ -300,6 +301,9 @@ class Import_Data_Controller {
 					} else {
 						$entityInfo = vtws_create($moduleName, $fieldData, $this->user);
 						$entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
+						$entityIdComponents = vtws_getIdComponents($entityInfo['id']);
+						$recordId = $entityIdComponents[1];
+						updateRecordLabel($this->module, $recordId);
 					}
 				}
 			}
@@ -403,24 +407,21 @@ class Import_Data_Controller {
 				if (empty($fieldValue) && isset($defaultFieldValues[$fieldName])) {
 					$fieldData[$fieldName] = $fieldValue = $defaultFieldValues[$fieldName];
 				}
-				
-				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
+				$olderCacheEnable = Vtiger_Cache::$cacheEnable;
+				Vtiger_Cache::$cacheEnable = false;
 				$allPicklistDetails = $fieldInstance->getPicklistDetails();
-				$existingPicklistValue = false;
+
+				$allPicklistValues = array();
 				foreach ($allPicklistDetails as $picklistDetails) {
-					if (strcasecmp($encodePicklistValue, $picklistDetails['value']) === 0) {
-						$existingPicklistValue = $picklistDetails['value'];
-						break;
-					}
+					$allPicklistValues[] = $picklistDetails['value'];
 				}
-				if (!$existingPicklistValue) {
+				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
+				if (!in_array($encodePicklistValue, $allPicklistValues)) {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
-				} else {
-					// Replace the existing picklist value instead of the one read from CSV
-					$fieldData[$fieldName] = $existingPicklistValue;
 				}
+				Vtiger_Cache::$cacheEnable = $olderCacheEnable;
 			} else {
 				if ($fieldInstance->getFieldDataType() == 'datetime' && !empty($fieldValue)) {
 					if($fieldValue == null || $fieldValue == '0000-00-00 00:00:00') {

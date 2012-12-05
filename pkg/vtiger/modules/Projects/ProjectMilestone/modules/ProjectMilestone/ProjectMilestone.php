@@ -327,8 +327,8 @@ class ProjectMilestone extends CRMEntity {
 	 * @param String Event Type (module.postinstall, module.disabled, module.enabled, module.preuninstall)
 	 */
 	function vtlib_handler($modulename, $event_type) {
+		global $adb;
 		if($event_type == 'module.postinstall') {
-			global $adb;
 
 			$projectMilestoneResult = $adb->pquery('SELECT tabid FROM vtiger_tab WHERE name=?', array('ProjectMilestone'));
 			$projectmilestoneTabid = $adb->query_result($projectMilestoneResult, 0, 'tabid');
@@ -347,6 +347,12 @@ class ProjectMilestone extends CRMEntity {
 				}
 			}
 
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PM', 1, 1, 1));
+			}
+
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.
 		} else if($event_type == 'module.enabled') {
@@ -357,6 +363,12 @@ class ProjectMilestone extends CRMEntity {
 			// TODO Handle actions before this module is updated.
 		} else if($event_type == 'module.postupdate') {
 			// TODO Handle actions after this module is updated.
+
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PM', 1, 1, 1));
+			}
 		}
 	}
 

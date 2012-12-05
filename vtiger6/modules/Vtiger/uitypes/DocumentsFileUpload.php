@@ -15,5 +15,34 @@ class Vtiger_DocumentsFileUpload_UIType extends Vtiger_Base_UIType {
 	public function getTemplateName() {
 		return 'uitypes/DocumentsFileUpload.tpl';
 	}
+
+	/**
+	 * Function to get the Display Value, for the current field type with given DB Insert Value
+	 * @param <String> $value
+	 * @param <Integer> $recordId
+	 * @param <Vtiger_Record_Model>
+	 * @return <String>
+	 */
+	public function getDisplayValue($value, $recordId=false, $recordModel=false) {
+		if($recordModel) {
+			$fileLocationType = $recordModel->get('filelocationtype');
+			$fileStatus = $recordModel->get('filestatus');
+			if(!empty($value) && $fileStatus) {
+				if($fileLocationType == 'I') {
+					$db = PearDatabase::getInstance();
+					$fileIdRes = $db->pquery('SELECT attachmentsid FROM vtiger_seattachmentsrel WHERE crmid = ?', array($recordId));
+					$fileId = $db->query_result($fileIdRes, 0, 'attachmentsid');
+					if($fileId){
+						$value = '<a onclick="Javascript:Documents_Index_Js.updateDownloadCount(\'index.php?module=Documents&action=UpdateDownloadCount&record='.$recordId.'\');"'.
+									' href="index.php?module=Documents&action=DownloadFile&record='.$recordId.'&fileid='.$fileId.'"'.
+									' title="'.	vtranslate('LBL_DOWNLOAD_FILE', 'Documents').'" >'.$value.'</a>';
+					}
+				} else {
+					$value = '<a onclick="Javascript:Documents_Index_Js.updateDownloadCount(\'index.php?module=Documents&action=DownloadFile&record='.$recordId.'\');"'.
+								' href="'.$value.'" target="_blank" title="'. vtranslate('LBL_DOWNLOAD_FILE', 'Documents').'" >'.$value.'</a>';
+				}
+			}
+		}
+		return $value;
+	}
 }
-?>

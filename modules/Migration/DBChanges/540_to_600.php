@@ -706,6 +706,7 @@ updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
 updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
 updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
 updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
+installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
 
 // updated language packs.
 updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
@@ -854,4 +855,126 @@ if (!$customer) {
 $moduleInstance = Vtiger_Module::getInstance('Potentials');
 $filter = Vtiger_Filter::getInstance('All', $moduleInstance);
 $fieldInstance = Vtiger_Field::getInstance('amount', $moduleInstance);
-$filter->addField($fieldInstance,6);					
+$filter->addField($fieldInstance,6);
+
+
+if(file_exists('modules/ModTracker/ModTrackerUtils.php')) {
+	require_once 'modules/ModTracker/ModTrackerUtils.php';
+	$modules = $adb->pquery('SELECT * FROM vtiger_tab WHERE isentitytype = 1', array());
+	$rows = $adb->num_rows($modules);
+	for($i=0; $i<$rows; $i++) {
+		$tabid=$adb->query_result($modules, $i, 'tabid');
+		ModTrackerUtils::modTrac_changeModuleVisibility($tabid, 'module_enable');
+	}
+}	
+
+$operationId = vtws_addWebserviceOperation('retrieve_inventory', 'include/Webservices/LineItem/RetrieveInventory.php', 'vtws_retrieve_inventory', 'GET');
+vtws_addWebserviceOperationParam($operationId, 'id', 'String', 1);
+
+$moduleInstance = Vtiger_Module::getInstance('Events');
+$tabId = getTabid('Events');
+
+// Update/Increment the sequence for the succeeding blocks of Events module, with starting sequence 3
+$adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 3',
+											array($tabId));
+
+// Create Recurrence Information block
+$recurrenceBlock = new Vtiger_Block();
+$recurrenceBlock->label = 'LBL_RECURRENCE_INFORMATION';
+$recurrenceBlock->sequence = 3;
+$moduleInstance->addBlock($recurrenceBlock);
+
+$blockId = getBlockId($tabId, 'LBL_RECURRENCE_INFORMATION');
+$adb->pquery('UPDATE vtiger_field SET block=? WHERE fieldname=? and tabid=?', array($blockId, 'recurringtype', $tabId));
+
+// Update/Increment the sequence for the succeeding blocks of Users module, with starting sequence 2
+$tabId = getTabid('Users');
+$adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 2', array($tabId));
+
+// Create Calendar Settings block 
+$calendarSettings = new Vtiger_Block();
+$calendarSettings->label = 'LBL_CALENDAR_SETTINGS';
+$calendarSettings->sequence = 2;
+$moduleInstance->addBlock($calendarSettings);
+
+$calendarSettings = Vtiger_Block::getInstance('LBL_CALENDAR_SETTINGS', $moduleInstance);
+
+$dayOfTheWeek = new Vtiger_Field();
+$dayOfTheWeek->name = 'dayoftheweek';
+$dayOfTheWeek->label = 'Starting Day of the week';
+$dayOfTheWeek->table ='vtiger_users';
+$dayOfTheWeek->column = 'dayoftheweek';
+$dayOfTheWeek->columntype = 'varchar(100)';
+$dayOfTheWeek->typeofdata = 'V~O';
+$dayOfTheWeek->uitype = 16;
+$dayOfTheWeek->sequence = 2;
+$dayOfTheWeek->defaultvalue = 'Sunday';
+$calendarSettings->addField($dayOfTheWeek);
+$dayOfTheWeek->setPicklistValues(array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'));
+
+$defaultCallDuration = new Vtiger_Field();
+$defaultCallDuration->name = 'callduration';
+$defaultCallDuration->label = 'Default Call Duration';
+$defaultCallDuration->table ='vtiger_users';
+$defaultCallDuration->column = 'callduration';
+$defaultCallDuration->columntype = 'varchar(100)';
+$defaultCallDuration->typeofdata = 'V~O';
+$defaultCallDuration->uitype = 16;
+$defaultCallDuration->sequence = 3;
+$defaultCallDuration->defaultvalue = 5;
+$calendarSettings->addField($defaultCallDuration);
+$defaultCallDuration->setPicklistValues(array('5','10','30','60','120'));
+
+$otherEventDuration = new Vtiger_Field();
+$otherEventDuration->name = 'othereventduration';
+$otherEventDuration->label = 'Other Event Duration';
+$otherEventDuration->table ='vtiger_users';
+$otherEventDuration->column = 'othereventduration';
+$otherEventDuration->columntype = 'varchar(100)';
+$otherEventDuration->typeofdata = 'V~O';
+$otherEventDuration->uitype = 16;
+$otherEventDuration->sequence = 4;
+$otherEventDuration->defaultvalue = 5;
+$calendarSettings->addField($otherEventDuration);
+$otherEventDuration->setPicklistValues(array('5','10','30','60','120'));
+
+$blockId = getBlockId($tabId, 'LBL_CALENDAR_SETTINGS');
+$sql = 'UPDATE vtiger_field SET block = ? , displaytype = ? WHERE tabid = ? AND tablename = ? AND columnname in (?,?,?,?,?,?)';
+$adb->pquery($sql, array($blockId, 1, $tabId, 'vtiger_users', 'time_zone','activity_view','reminder_interval','date_format','start_hour', 'hour_format'));
+
+$adb->pquery('UPDATE vtiger_field SET uitype = ? WHERE tabid = ? AND tablename = ? AND columnname in (?,?)',
+		array(16, $tabId, 'vtiger_users', 'hour_format', 'start_hour'));
+
+$fieldid = getFieldid($tabId, 'hour_format');
+$hour_format = Vtiger_Field::getInstance($fieldid, $moduleInstance);
+$hour_format->setPicklistValues(array(12,24));
+
+$fieldid = getFieldid($tabId, 'start_hour');
+$start_hour = Vtiger_Field::getInstance($fieldid, $moduleInstance);
+$start_hour->setPicklistValues(array('00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00'
+								,'12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'));
+					
+//update hour_format value in existing customers
+$adb->pquery('UPDATE vtiger_users SET hour_format = ? WHERE hour_format = ? OR hour_format = ?', array(12, 'am/pm', ''));
+
+//add user default values			
+$adb->pquery('UPDATE vtiger_users SET dayoftheweek = ?, callduration = ?, othereventduration = ?, start_hour = ? ', array('Sunday', 5, 5, '00:00'));
+
+$moduleInstance = Vtiger_Module::getInstance('Events');
+$tabId = getTabid('Events');
+
+// Update/Increment the sequence for the succeeding blocks of Events module, with starting sequence 4
+$adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 4', array($tabId));
+
+// Create Recurrence Information block
+$recurrenceBlock = new Vtiger_Block();
+$recurrenceBlock->label = 'LBL_RELATED_TO';
+$recurrenceBlock->sequence = 4;
+$moduleInstance->addBlock($recurrenceBlock);
+
+$blockId = getBlockId($tabId, 'LBL_RELATED_TO');
+
+$adb->pquery('UPDATE vtiger_field SET block=? WHERE fieldname IN (?,?) and tabid=?', array($blockId, 'contact_id','parent_id', $tabId));
+$adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE fieldname=? and tabid=?',array('recurringtype',$tabId));
+
+// END 2012.12.02

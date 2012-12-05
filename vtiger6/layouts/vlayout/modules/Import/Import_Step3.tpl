@@ -12,9 +12,9 @@
 
 <table width="100%" cellspacing="0" cellpadding="2">
 	<tr> 
-		<td width="19%" class="fontBold">
+		<td width="8%">
 			<input type="checkbox" class="font-x-small" id="auto_merge" name="auto_merge" onclick="ImportJs.toogleMergeConfiguration();" />
-			{'LBL_IMPORT_STEP_3'|@vtranslate:$MODULE}:
+			<strong>{'LBL_IMPORT_STEP_3'|@vtranslate:$MODULE}:</strong>
 		</td>
 		<td>
 			<span class="big">{'LBL_IMPORT_STEP_3_DESCRIPTION'|@vtranslate:$MODULE}</span>

@@ -375,8 +375,8 @@ class Users extends CRMEntity {
                 }
                 $crypt_type = $this->db->query_result($result, 0, 'crypt_type');
                 $encrypted_password = $this->encrypt_password($user_password, $crypt_type);
-                $query = "SELECT * from $this->table_name where user_name=? AND user_password=?";
-                $result = $this->db->requirePsSingleResult($query, array($usr_name, $encrypted_password), false);
+                $query = "SELECT * from $this->table_name where user_name=? AND user_password=? AND status = ?";
+                $result = $this->db->requirePsSingleResult($query, array($usr_name, $encrypted_password, 'Active'), false);
                 if (empty($result)) {
                     return false;
                 } else {
@@ -693,6 +693,30 @@ class Users extends CRMEntity {
         }
         if(empty($this->column_fields['date_format'])) {
             $this->column_fields['date_format'] = 'yyyy-mm-dd';
+        }
+		
+		if(empty($this->column_fields['start_hour'])) {
+            $this->column_fields['start_hour'] = '00:00';
+        }
+		
+		if(empty($this->column_fields['dayoftheweek'])) {
+            $this->column_fields['dayoftheweek'] = 'Sunday';
+        }
+		
+		if(empty($this->column_fields['callduration'])) {
+            $this->column_fields['callduration'] = 5;
+        }
+		
+		if(empty($this->column_fields['othereventduration'])) {
+            $this->column_fields['othereventduration'] = 5;
+        }
+		
+		if(empty($this->column_fields['hour_format'])) {
+            $this->column_fields['hour_format'] = 12;
+        }
+		
+		if(empty($this->column_fields['activity_view'])) {
+            $this->column_fields['activity_view'] = 'Today';
         }
 
         $this->db->println("TRANS saveentity starts $module");
@@ -1225,23 +1249,6 @@ class Users extends CRMEntity {
         $visibility=0;
         $sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $uid, $visibility, 'Tag Cloud')";
         $adb->query($sql);
-
-        // Customization
-        global $VtigerOndemandConfig;
-        if (isset($VtigerOndemandConfig) && isset($VtigerOndemandConfig['DEFAULT_NOTEBOOK_WIDGET'])) {
-            $defaultNoteBookWidgetInfo = $VtigerOndemandConfig['DEFAULT_NOTEBOOK_WIDGET'];
-            $ntbkid = $adb->getUniqueID("vtiger_homestuff");
-            $visibility = 0;
-            $sql = "INSERT INTO vtiger_homestuff(stuffid, stuffsequence, stufftype, userid, visible, stufftitle) values(?, ?, ?, ?, ?, ?)";
-            $params = array($ntbkid,16,'Notebook',$uid,$visibility,$defaultNoteBookWidgetInfo['title']);
-            $adb->pquery($sql, $params);
-
-            $sql = "insert into vtiger_notebook_contents(userid, notebookid, contents) values(?,?,?)";
-            $params = array($uid,$ntbkid,$defaultNoteBookWidgetInfo['contents']);
-            $adb->pquery($sql, $params);
-        }
-        // END
-
 
         $sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
         $adb->query($sql);

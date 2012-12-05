@@ -55,6 +55,7 @@
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-collapse.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-modal.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-dropdown.js"></script>
+		<script type="text/javascript" src="libraries/bootstrap/js/bootbox.min.js"></script>
 		<script type="text/javascript" src="resources/jquery.additions.js"></script>
 		<script type="text/javascript" src="resources/app.js"></script>
         <script type="text/javascript" src="resources/helper.js"></script>
@@ -65,6 +66,7 @@
 		<script type="text/javascript" src="libraries/guidersjs/guiders-1.2.6.js"></script>
 		<script type="text/javascript" src="libraries/jquery/datepicker/js/datepicker.js"></script>
 		<script type="text/javascript" src="libraries/jquery/dangrossman-bootstrap-daterangepicker/date.js"></script>
+		<script type="text/javascript" src="libraries/jquery/jquery.ba-outside-events.min.js"></script>
 
 		{foreach key=index item=cssModel from=$STYLES}
 			<link rel="{$cssModel->getRel()}" href="{$cssModel->getHref()}" type="{$cssModel->getType()}" media="{$cssModel->getMedia()}" />

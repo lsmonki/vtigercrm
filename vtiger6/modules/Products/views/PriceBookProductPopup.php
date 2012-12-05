@@ -84,15 +84,33 @@ class Products_PriceBookProductPopup_View extends Vtiger_Popup_View {
 			$listViewModel->set('src_module', $sourceModule);
 			$listViewModel->set('src_field', $sourceField);
 			$listViewModel->set('src_record', $sourceRecord);
+			$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
+			$currencyId = $sourceRecordModel->get('currency_id');
 		}
 		if((!empty($searchKey)) && (!empty($searchValue)))  {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
 
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+
+		if ($currencyId) {
+			foreach ($this->listViewEntries as $recordId => $recordModel) {
+				$productIdsList[$recordId] = $recordId;
+			}
+			$unitPricesList = $moduleModel->getPricesForProducts($currencyId, $productIdsList);
+			
+			foreach ($this->listViewEntries as $recordId => $recordModel) {
+				$recordModel->set('unit_price', $unitPricesList[$recordId]);
+			}
+		}
+
+		$noOfEntries = count($this->listViewEntries);
 
 		if(empty($sortOrder)){
 			$sortOrder = "ASC";
@@ -127,8 +145,8 @@ class Products_PriceBookProductPopup_View extends Vtiger_Popup_View {
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
 
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 
 		$viewer->assign('VIEW', 'PriceBookProductPopup');
 	}

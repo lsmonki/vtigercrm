@@ -32,11 +32,13 @@ class Vtiger_MassEditRecordStructure_Model extends Vtiger_EditRecordStructure_Mo
 			if (!empty ($fieldModelList)) {
 				$values[$blockLabel] = array();
 				foreach($fieldModelList as $fieldName=>$fieldModel) {
-					if($fieldModel->isViewable() && $this->isFieldRestricted($fieldModel)) {
-						if($recordExists) {
-							$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
+					if($fieldModel->isEditable()) {
+						if($fieldModel->isViewable() && $this->isFieldRestricted($fieldModel)) {
+							if($recordExists) {
+								$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
+							}
+							$values[$blockLabel][$fieldName] = $fieldModel;
 						}
-						$values[$blockLabel][$fieldName] = $fieldModel;
 					}
 				}
 			}

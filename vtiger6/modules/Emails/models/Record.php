@@ -281,4 +281,16 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$focus = new $moduleName();
 		$focus->setEmailAccessCountValue($record);
 	}
+
+	/**
+	 * Function to get Access count value
+	 * @param <String> $parentId
+	 * @return <String>
+	 */
+	public function getAccessCountValue($parentId) {
+		$db = PearDatabase::getInstance();
+
+		$result = $db->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
+		return $db->query_result($result, 0, 'access_count');
+	}
 }

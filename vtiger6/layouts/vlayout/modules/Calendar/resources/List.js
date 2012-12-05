@@ -13,7 +13,7 @@ Vtiger_List_Js("Calendar_List_Js",{
 	triggerMassEdit : function(massEditUrl) {
 		Vtiger_List_Js.triggerMassAction(massEditUrl, function(container){
 			var massEditForm = container.find('#massEdit');
-			massEditForm.validationEngine();
+			massEditForm.validationEngine(app.validationEngineOptions);
 			var listInstance = Vtiger_List_Js.getInstance();
 			var editInstance = Vtiger_Edit_Js.getInstance();
 			editInstance.registerBasicEvents(jQuery(container));

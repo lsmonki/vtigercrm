@@ -41,7 +41,7 @@ class Vtiger_Base_UIType extends Vtiger_Base_Model {
 	 * @param <Object> $value
 	 * @return <Object>
 	 */
-	public function getDisplayValue($value, $record=false) {
+	public function getDisplayValue($value, $record=false, $recordInstance=false) {
 		return $value;
 	}
 
@@ -63,7 +63,7 @@ class Vtiger_Base_UIType extends Vtiger_Base_Model {
 
 		$moduleSpecificFilePath = Vtiger_Loader::resolveNameToPath($moduleSpecificFileName);
 		$completeFilePath = Vtiger_Loader::resolveNameToPath($uiTypeClassFileName);
-		
+
 		if(file_exists($moduleSpecificFilePath)) {
 			$instance = new $moduleSpecificUiTypeClassName();
 		}
@@ -84,7 +84,7 @@ class Vtiger_Base_UIType extends Vtiger_Base_Model {
 	public function getEditViewDisplayValue($value) {
 		return $value;
 	}
-    
+
     /**
 	 * Function to get the Detailview template name for the current UI Type Object
 	 * @return <String> - Template Name

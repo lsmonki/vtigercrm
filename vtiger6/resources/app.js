@@ -133,13 +133,13 @@ var app = {
 		}
 		return keyValueMap;
 	},
-	
+
 	showModalWindow: function(data, url, cb, css) {
 
 		var unBlockCb = function(){};
 		var overlayCss = {};
-		
-		//null is also an object 
+
+		//null is also an object
 		if(typeof data == 'object' && data != null && !(data instanceof jQuery)){
 			css = data.css;
 			cb = data.cb;
@@ -165,7 +165,7 @@ var app = {
 		if (typeof cb != 'function') {
 			cb = function() { }
 		}
-		
+
 		var id = 'globalmodal';
 		var container = jQuery('#'+id);
 		if (container.length) {
@@ -197,10 +197,10 @@ var app = {
 				effectiveOverlayCss = jQuery.extend(defaultOverlayCss,overlayCss);
 			}
 			container.html(data);
-			
+
 			// Mimic bootstrap modal action body state change
 			jQuery('body').addClass('modal-open');
-			
+
 			//container.modal();
 			jQuery.blockUI({
 					'message' : container,
@@ -219,7 +219,7 @@ var app = {
 			jQuery('.blockOverlay').click(unblockUi);
 			jQuery(document).on('keyup',escapeKeyHandler);
 			jQuery('[data-dismiss="modal"]', container).click(unblockUi);
-			
+
 			container.closest('.blockMsg').position({
 				'of' : jQuery(window),
 				'my' : 'center top',
@@ -237,16 +237,16 @@ var app = {
 			app.registerEventForDatePickerFields(container);
 			cb(container);
 		}
-		
+
 		if (data) {
 			showModalData(data)
-			
+
 		} else {
 			jQuery.get(url).then(function(response){
 				showModalData(response);
 			});
 		}
-		
+
 		return container;
 	},
 
@@ -258,7 +258,7 @@ var app = {
 		// Mimic bootstrap modal action body state change - helps to avoid body scroll
 		// when modal is shown using css: http://stackoverflow.com/a/11013994
 		jQuery('body').removeClass('modal-open');
-				
+
 		var id = 'globalmodal';
 		var container = jQuery('#'+id);
 		if (container.length <= 0) {
@@ -279,14 +279,42 @@ var app = {
 		}
 		return false;
 	},
-	
+
 	/**
 	 * Default validation eninge options
 	 */
 	validationEngineOptions: {
 		// Avoid scroll decision and let it scroll up page when form is too big
 		// Reference: http://www.position-absolute.com/articles/jquery-form-validator-because-form-validation-is-a-mess/
-		scroll: false
+		scroll: false,
+		promptPosition: 'topLeft'
+	},
+	
+	/**
+	 * Function to push down the error message size when validation is invoked
+	 * @params : form Element
+	 */
+	
+	formAlignmentAfterValidation : function(form){
+		// to avoid hiding of error message under the fixed nav bar
+		var destination = form.find(".formError:not('.greenPopup'):first").offset().top;
+		var resizedDestnation = destination-105;
+		jQuery('html').animate({
+			scrollTop:resizedDestnation
+		}, 'slow');
+	},
+
+	/**
+	 * Function to push down the error message size when validation is invoked
+	 * @params : form Element
+	 */
+	formAlignmentAfterValidation : function(form){
+		// to avoid hiding of error message under the fixed nav bar
+		var destination = form.find(".formError:not('.greenPopup'):first").offset().top;
+		var resizedDestnation = destination-105;
+		jQuery('html').animate({
+			scrollTop:resizedDestnation
+		}, 'slow');
 	},
 
 	convertToDatePickerFormat: function(dateFormat){
@@ -356,6 +384,7 @@ var app = {
 			onChange: function(formated){
 				var element = jQuery(this).data('datepicker').el;
 				jQuery(element).val(formated);
+				jQuery(element).trigger('change');
 			}
 		}
 		if(typeof customParams != 'undefined'){
@@ -406,13 +435,6 @@ var app = {
 	 */
 	registerEventForTimeFields : function(container, params) {
 
-		var defaultsTimePickerParams = {
-			'showSeconds' : false,
-			//To indicate time picker to take the value of the fields as time value
-			'defaultTime' : 'value',
-			'minuteStep' : 1
-		};
-
 		if(typeof cotainer == 'undefined') {
 			container = jQuery('body');
 		}
@@ -428,7 +450,19 @@ var app = {
 		if(typeof params == 'undefined') {
 			params = {};
 		}
-
+		var timeFormat = element.data('format');
+		if(timeFormat == '24') {
+			timeFormat = false;
+		} else {
+			timeFormat = true;
+		}
+		var defaultsTimePickerParams = {
+			'showSeconds' : false,
+			//To indicate time picker to take the value of the fields as time value
+			'defaultTime' : 'value',
+			'minuteStep' : 1,
+			'showMeridian' : timeFormat
+		};
 		var params = jQuery.extend(defaultsTimePickerParams, params);
 
 		element.timepicker(params).on('shown', function(e){
@@ -450,7 +484,7 @@ var app = {
 		var chosenEleId = selectId+"_chzn";
 		return jQuery('#'+chosenEleId);
 	},
-	
+
 	/**
 	 * Function to get the select2 element from the raw select element
 	 * @params: select element
@@ -485,8 +519,8 @@ var app = {
 			jQuery(element).width(parentWidth);
 		});
 	},
-	
-	
+
+
 	initGuiders: function (list) {
 		if (list) {
 			for (var index=0, len=list.length; index < len; ++index) {
@@ -498,7 +532,7 @@ var app = {
 				if (index < len-1) {
 					guiderData['buttons'] = [{name: 'Next'}];
 					guiderData['next'] = ""+(index+1);
-					
+
 				}
 				guiders.createGuider(guiderData);
 			}
@@ -546,7 +580,7 @@ var app = {
 		//Height should not include padding, margins and borders width. So reducing those values
 		bodyContentsElement.css('min-height',(jQuery(window).height()- (borderTopWidth + borderBottomWidth)));
 	},
-	
+
 	/**
 	 * Function will return the current users layout + skin path
 	 * @param <string> img - image name
@@ -555,9 +589,9 @@ var app = {
 	vimage_path : function(img) {
 		return jQuery('body').data('skinpath')+ '/images/' + img ;
 	},
-	
+
 	/*
-	 * Cache API on client-side 
+	 * Cache API on client-side
 	 */
 	cacheNSKey: function(key) { // Namespace in client-storage
 		return 'vtiger6.' + key;
@@ -585,11 +619,24 @@ var app = {
 		} else {
 			return '';
 		}
+	},
+
+	/**
+	 * Function places an element at the center of the page
+	 * @param <jQuery Element> element
+	 */
+	placeAtCenter : function(element) {
+		element.css("position","absolute");
+		element.css("top", ((jQuery(window).height() - element.outerHeight()) / 2) + jQuery(window).scrollTop() + "px");
+		element.css("left", ((jQuery(window).width() - element.outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
 	}
 }
 
 jQuery(document).ready(function(){
 	app.changeSelectElementView();
+
+	//register all select2 Elements
+	app.showSelect2ElementView(jQuery('body').find('select.select2'));
 
 	app.setInheritWidth(jQuery('.inheritWidth'));
 	app.setContentsHeight();

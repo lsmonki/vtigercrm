@@ -50,6 +50,7 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 
 			if (!$permission) {
 				$viewer->assign('MODULE', $primaryModule);
+				$viewer->assign('MESSAGE', 'LBL_PERMISSION_DENIED');
 				$viewer->view('OperationNotPermitted.tpl', $primaryModule);
 				exit;
 			}

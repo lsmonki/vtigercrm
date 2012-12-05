@@ -54,7 +54,10 @@ class QueryGenerator {
 	public static $AND = 'AND';
 	public static $OR = 'OR';
 	private $customViewFields;
-
+	/**
+	 * Import Feature
+	 */
+	private $ignoreComma;
 	public function __construct($module, $user) {
 		$db = PearDatabase::getInstance();
 		$this->module = $module;
@@ -300,13 +303,22 @@ class QueryGenerator {
 			$columns[] = $sql;
 
 			//To merge date and time fields 
-			if($this->meta->getEntityName() == 'Calendar' && ($field == 'date_start' || $field == 'due_date')) {
+			if($this->meta->getEntityName() == 'Calendar' && ($field == 'date_start' || $field == 'due_date' || $field == 'taskstatus' || $field == 'eventstatus')) {
 				if($field=='date_start') {
 					$timeField = 'time_start';
-				}else if ($field == 'due_date') {
+					$sql = $this->getSQLColumn($timeField);
+				} else if ($field == 'due_date') {
 					$timeField = 'time_end';
+					$sql = $this->getSQLColumn($timeField);
+				} else if ($field == 'taskstatus' || $field == 'eventstatus') {
+					//In calendar list view, Status value = Planned is not displaying
+					$sql = "CASE WHEN (vtiger_activity.status not like '') THEN vtiger_activity.status ELSE vtiger_activity.eventstatus END AS ";
+					if ( $field == 'taskstatus') {
+						$sql .= "status";
+					} else {
+						$sql .= $field;
+					}
 				}
-				$sql = $this->getSQLColumn($timeField);
 				$columns[] = $sql;
 			}
 		}
@@ -605,7 +617,7 @@ class QueryGenerator {
 		$operator = strtolower($operator);
 		$db = PearDatabase::getInstance();
 
-		if(is_string($value)) {
+		if(is_string($value) && $this->ignoreComma == false) {
 			$valueArray = explode(',' , $value);
 		} elseif(is_array($value)) {
 			$valueArray = $value;
@@ -765,13 +777,14 @@ class QueryGenerator {
 	}
 
 	public function addCondition($fieldname,$value,$operator,$glue= null,$newGroup = false,
-			$newGroupType = null) {
+			$newGroupType = null, $ignoreComma = false) {
 		$conditionNumber = $this->conditionInstanceCount++;
 		if($glue != null && $conditionNumber > 0)
 			$this->addConditionGlue ($glue);
 		
 		$this->groupInfo .= "$conditionNumber ";
 		$this->whereFields[] = $fieldname;
+		$this->ignoreComma = $ignoreComma;
 		$this->reset();
 		$this->conditionals[$conditionNumber] = $this->getConditionalArray($fieldname,
 				$value, $operator);

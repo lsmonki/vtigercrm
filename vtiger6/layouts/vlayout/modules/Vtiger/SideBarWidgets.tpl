@@ -14,17 +14,17 @@
 	{assign var=val value=1}
 	{foreach item=SIDEBARWIDGET key=index from=$QUICK_LINKS['SIDEBARWIDGET']}
 		<div class="quickWidget">
-			<div class="accordion-heading accordion-toggle quickWidgetHeader" data-target="#widget-{$val}"
+			<div class="accordion-heading accordion-toggle quickWidgetHeader" data-target="#{$MODULE}_sideBar_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($SIDEBARWIDGET->getLabel())}"
 					data-toggle="collapse" data-parent="#quickWidgets" data-label="{$SIDEBARWIDGET->getLabel()}"
 					data-widget-url="{$SIDEBARWIDGET->getUrl()}" >
-				<h5 class="title pull-left">{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}</h5>
+				<h5 class="title pull-left widgetTextOverflowEllipsis" title="{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}">{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}</h5>
 				<span class="pull-right"><i class="icon-chevron-up alignBottom"></i></span>
 				<div class="loadingImg hide pull-right">
 					<div class="loadingWidgetMsg"><strong>{vtranslate('LBL_LOADING_WIDGET', $MODULE)}</strong></div>
 				</div>
 				<div class="clearfix"></div>
 			</div>
-			<div class="widgetContainer accordion-body collapse" id="widget-{$val++}" data-url="{$SIDEBARWIDGET->getUrl()}">
+			<div class="widgetContainer accordion-body collapse" id="{$MODULE}_sideBar_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($SIDEBARWIDGET->getLabel())}" data-url="{$SIDEBARWIDGET->getUrl()}">
 			</div>
 		</div>
 	{/foreach}

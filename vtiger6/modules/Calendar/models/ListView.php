@@ -126,4 +126,80 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 
 		return $links;
 	}
+
+    /**
+	 * Function to get the list view entries
+	 * @param Vtiger_Paging_Model $pagingModel
+	 * @return <Array> - Associative array of record id mapped to Vtiger_Record_Model instance.
+	 */
+	public function getListViewEntries($pagingModel) {
+		$db = PearDatabase::getInstance();
+
+		$moduleName = $this->getModule()->get('name');
+		$moduleFocus = CRMEntity::getInstance($moduleName);
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+
+		$queryGenerator = $this->get('query_generator');
+		$listViewContoller = $this->get('listview_controller');
+
+		$searchKey = $this->get('search_key');
+		$searchValue = $this->get('search_value');
+		if(!empty($searchKey)) {
+			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue));
+		}
+
+		$listQuery = $this->getQuery();
+
+		$sourceModule = $this->get('src_module');
+		if(!empty($sourceModule)) {
+			if(method_exists($moduleModel, 'getQueryByModuleField')) {
+				$overrideQuery = $moduleModel->getQueryByModuleField($sourceModule, $this->get('src_field'), $this->get('src_record'), $listQuery);
+				if(!empty($overrideQuery)) {
+					$listQuery = $overrideQuery;
+				}
+			}
+		}
+
+		$startIndex = $pagingModel->getStartIndex();
+		$pageLimit = $pagingModel->getPageLimit();
+
+		$orderBy = $this->getForSql('orderby');
+        //To combine date and time fields for sorting 
+        if($orderBy == 'date_start') {
+            $orderBy = "str_to_date(concat(date_start,time_start),'%Y-%m-%d %H:%i:%s')";
+        }else if($orderBy == 'due_date') {
+            $orderBy = "str_to_date(concat(due_date,time_end),'%Y-%m-%d %H:%i:%s')";
+        }
+		if(!empty($orderBy)) {
+			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
+		}
+
+		$viewid = ListViewSession::getCurrentView($moduleName);
+		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
+
+		$listQueryWithNoLimit = $listQuery;
+		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);
+        
+		$listResult = $db->pquery($listQuery, array());
+
+		$listViewRecordModels = array();
+		$listViewEntries =  $listViewContoller->getListViewRecords($moduleFocus,$moduleName, $listResult);
+		
+		$pagingModel->calculatePageRange($listViewEntries);
+
+		if($db->num_rows($listResult) > $pageLimit){
+			array_pop($listViewEntries);
+			$pagingModel->set('nextPageExists', true);
+		}else{
+			$pagingModel->set('nextPageExists', false);
+		}
+
+		$index = 0;
+		foreach($listViewEntries as $recordId => $record) {
+			$rawData = $db->query_result_rowdata($listResult, $index++);
+			$record['id'] = $recordId;
+			$listViewRecordModels[$recordId] = $moduleModel->getRecordFromArray($record, $rawData);
+		}
+		return $listViewRecordModels;
+	}
 }

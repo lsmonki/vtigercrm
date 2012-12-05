@@ -19,7 +19,6 @@
 <input type="hidden" id="url" value="{$GETURL}" />
 <input type="hidden" id="multi_select" value="{$MULTI_SELECT}" />
 <input type="hidden" id="currencyId" value="{$CURRENCY_ID}" />
-
 <div class="popupContainer row-fluid">
 	<div class="span12">
 		<div class="row-fluid">
@@ -32,25 +31,25 @@
 		</div>
 	</div>
 </div>
-<div class="popupSearchContainer">
-	<span class="alignTop">
-		<span class="highLight"><strong>{vtranslate('LBL_SEARCH_FOR')}</strong> </span>
+
+<form class="form-horizontal popupSearchContainer">
+	<div class="control-group margin0px">
+		<span class="paddingLeft10px"><strong>{vtranslate('LBL_SEARCH_FOR')}</strong></span>
+		<span class="paddingLeft10px"></span>
 		<input type="text" placeholder="{vtranslate('LBL_TYPE_SEARCH')}" id="searchvalue"/>
-		<span class="highLight"> <strong>{vtranslate('LBL_IN')}</strong></span>
-	</span>
-	<span>
-		<select style="width: 150px;" class="chzn-select" id="searchableColumnsList">
-			{foreach key=block item=fields from=$RECORD_STRUCTURE}
-				{foreach key=fieldName item=fieldObject from=$fields}
-					<optgroup>
-						<option value="{$fieldName}">{vtranslate($fieldObject->get('label'),$MODULE)}</option>
-					</optgroup>
+		<span class="paddingLeft10px"><strong>{vtranslate('LBL_IN')}</strong></span>
+		<span class="paddingLeft10px help-inline pushDownHalfper">
+			<select style="width: 150px;" class="chzn-select help-inline" id="searchableColumnsList">
+				{foreach key=block item=fields from=$RECORD_STRUCTURE}
+					{foreach key=fieldName item=fieldObject from=$fields}
+						<optgroup>
+							<option value="{$fieldName}">{vtranslate($fieldObject->get('label'),$MODULE)}</option>
+						</optgroup>
+					{/foreach}
 				{/foreach}
-			{/foreach}
-		</select>
-	</span>
-	<span id="popupSearchButton" class="alignTop">
-		<a class="cursorPointer"><img src="{vimage_path('search.png')}" alt="{vtranslate('LBL_SEARCH_BUTTON')}" title="{vtranslate('LBL_SEARCH_BUTTON')}" class="searchButton" /></a>
-	</span>
+			</select>
+		</span>
+		<span class="paddingLeft10px cursorPointer help-inline" id="popupSearchButton"><img src="{vimage_path('search.png')}" alt="{vtranslate('LBL_SEARCH_BUTTON')}" title="{vtranslate('LBL_SEARCH_BUTTON')}" /></span>
 </div>
+</form>
 {/strip}

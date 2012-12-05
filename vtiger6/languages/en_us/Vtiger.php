@@ -45,6 +45,7 @@ $languageStrings = array(
 	'LBL_CLEAR' => 'Clear',
 	'LBL_YES' => 'Yes',
 	'LBL_NO' => 'No',
+	'LBL_SHOW_COMPLETE_DETAILS' => 'Complete Details',
     'LBL_MASS_EDITING' => 'Mass Editing',
 	'LBL_DESELECT_ALL_RECORDS' => 'Deselect All Records',
 	'LBL_QUICK_CREATE' => 'Quick Create',
@@ -78,10 +79,15 @@ $languageStrings = array(
 	'LBL_HELP' => 'Help',
 	'LBL_FEEDBACK' => 'Feedback',
 	'LBL_CRM_SETTINGS' => 'CRM Settings',
-	'LBL_ON_DEMAND_ADMIN' => 'Add/Delete Users',
+	'LBL_ON_DEMAND_ADMIN' => 'Add / Delete Users',
 	'LBL_ANNOUNCEMENT' => 'Announcement',
 	'LBL_CALENDAR' => 'Calendar',
 	'LBL_POST' => 'Post',
+	'LBL_GUIDER' => 'Guider',
+	'LBL_DISPLAY_TYPE' => 'Display Type',
+	'LBL_DISPLAY_WIDETYPE' => 'Wide',
+	'LBL_DISPLAY_MEDIUMTYPE' => 'Medium',
+	'LBL_DISPLAY_NARROWTYPE' => 'Narrow',
 
 	// Common Fields
 	'LBL_USER' => 'User',
@@ -103,6 +109,8 @@ $languageStrings = array(
 	'LBL_SUMMARY_DETAILS' => 'Summary Details',
 	'LBL_ADD_NEW_COMMENT' =>'Add New Comment',
 	'LBL_NO_UPDATES' => 'No Updates',
+	'LBL_ACTIVITIES' => 'Activities',
+	'LBL_NO_PENDING_ACTIVITIES' => 'No pending activities',
 
 	// Popup window
 	'LBL_SEARCH_FOR' => 'Search For',
@@ -124,7 +132,7 @@ $languageStrings = array(
 	'LBL_ADD_YOUR_COMMENT_HERE' => 'Add your comment here...',
 	'LBL_REPLY' => 'Reply',
 	'LBL_VIEW_THREAD' => 'View Thread',
-	'LBL_NO_COMMENTS' => 'No Comments',
+	'LBL_NO_COMMENTS' => 'No comments',
 	'LBL_REPLIES' => 'replies',
 
 	//Translation for all modules
@@ -227,7 +235,7 @@ $languageStrings = array(
 	'LBL_TAX' => 'Tax',
 	'LBL_ADD_PRODUCT' => 'Add Product',
 	'LBL_ADD_SERVICE' => 'Add Service',
-	'LBL_NET_TOTAL' => 'Net Total',
+	'LBL_ITEMS_TOTAL' => 'Items Total',
 	'LBL_SHIPPING_AND_HANDLING_CHARGES' => 'Shipping & Handling Charges',
 	'LBL_TAX_FOR_SHIPPING_AND_HANDLING' => 'Taxes For Shipping and Handling',
 	'LBL_SET_SHIPPING_AND_HANDLING_TAXES_FOR' => 'Set S&H Taxes For',
@@ -245,6 +253,12 @@ $languageStrings = array(
 	'LBL_DIRECT_AMOUNT_DISCOUNT' => 'Direct Amount Discount',
 	'LBL_FINAL_DISCOUNT_AMOUNT' => 'Final Discount Amount',
 	'LBL_MORE_CURRENCIES' => 'more currencies',
+	'LBL_SET_TAX_FOR' => 'Set Tax for',
+	'LBL_GROUP_TAX' => 'Group Tax',
+	'LBL_BILLING_ADDRESS_FROM' => 'Copy Billing Address from',
+	'LBL_SHIPPING_ADDRESS_FROM' => 'Copy Shipping Address from',
+	'LBL_COPY_SHIPPING_ADDRESS' => 'Shipping Address',
+	'LBL_COPY_BILLING_ADDRESS' => 'Billing Address',
 
 	//DetailView Actions
 	'LBL_CREATE' => 'Create',
@@ -299,9 +313,6 @@ $languageStrings = array(
 	'LBL_DAYS' => 'days',
 	'LBL_COMPLETED' => 'completed',
 	'LBL_AGO' => 'ago',
-	'LBL_TODAY' => 'today',
-	'LBL_TOMORROW' => 'tomorrow',
-	'LBL_YESTERDAY' => 'yesterday',
 	'LBL_CHANGED' => 'changed',
 	'Single_Users' => 'User',
 	'LBL_MATCHED_THIS_CRITERIA'=> 'matched this criteria',
@@ -405,7 +416,7 @@ $languageStrings = array(
 	'LBL_CUSTOM_VIEW_NAME_DUPLICATES_EXIST' => 'filter already exists',
 
 	'LBL_ADD_MANAGE_MODULES' => 'Add / Manage Modules',
-
+	
 	// Added Common Keys for all modules
 	'Account Name' => 'Organization Name',
 	'Add Comment' => 'Add Comment',
@@ -417,7 +428,7 @@ $languageStrings = array(
 	'Billing City' => 'Billing City',
 	'Billing Code' => 'Billing Code',
 	'Billing Country' => 'Billing Country',
-	'Billing Po Box' => 'Billing P.O. Box',
+	'Billing Po Box' => 'Billing PO Box',
 	'Billing State' => 'Billing State',
 	'Biotechnology'=>'Biotechnology',
 
@@ -491,7 +502,7 @@ $languageStrings = array(
 	'Shipping State' => 'Shipping State',
 	'Shipping Code' => 'Shipping Code',
 	'Shipping Country' => 'Shipping Country',
-	'Shipping Po Box' => 'Shipping P.O. Box',
+	'Shipping Po Box' => 'Shipping PO Box',
 	'Country' => 'Country',
 	'Description' => 'Description',
 
@@ -530,7 +541,7 @@ $languageStrings = array(
 
 	'Subject' => 'Subject',
 	'Shipping Address'=>'Shipping Address',
-	'Shipping Po Box'=>'Shipping P.O. Box',
+	'Shipping Po Box'=>'Shipping PO Box',
 	'Shipping City'=>'Shipping City',
 	'Shipping State'=>'Shipping State',
 	'Shipping Code'=>'Shipping Postal Code',
@@ -570,7 +581,7 @@ $languageStrings = array(
 	'Phone' => 'Primary Phone',
 
 	'State' =>  'State',
-	'Po Box' => 'P.O. Box',
+	'Po Box' => 'PO Box',
 	'Postal Code' => 'Postal Code',
 
 	'Potential Name' => 'Opportunity Name',
@@ -595,6 +606,36 @@ $languageStrings = array(
 
 	//PageTitle translations
 	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Honest Open Source',
+
+	//Weekdays in 3 letters translations
+	'LBL_Sun' => 'Sun',
+	'LBL_Mon' => 'Mon',
+	'LBL_Tue' => 'Tue',
+	'LBL_Wed' => 'Wed',
+	'LBL_Thu' => 'Thu',
+	'LBL_Fri' => 'Fri',
+	'LBL_Sat' => 'Sat',
+
+	//Months in 3 letters translations
+	'LBL_Jan' => 'Jan',
+	'LBL_Feb' => 'Feb',
+	'LBL_Mar' => 'Mar',
+	'LBL_Apr' => 'Apr',
+	'LBL_May' => 'May',
+	'LBL_Jun' => 'Jun',
+	'LBL_Jul' => 'Jul',
+	'LBL_Aug' => 'Aug',
+	'LBL_Sep' => 'Sep',
+	'LBL_Oct' => 'Oct',
+	'LBL_Nov' => 'Nov',
+	'LBL_Dec' => 'Dec',
+	
+	'LBL_CALENDAR_SETTINGS' => 'Calendar Settings',
+	
+	//Translations used in inventory modules for sopy address
+	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Contacts' => 'Contact',
+	'HelpDesk' => 'Tickets',
 );
 
 $jsLanguageStrings = array(
@@ -608,13 +649,15 @@ $jsLanguageStrings = array(
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'phone number length exceeded limit',
 	'JS_ACCEPT_POSITIVE_NUMBER' => 'accepts only positive values',
 	'JS_VALUE_SHOULD_BE_GREATER_THAN_ZERO' => 'value should be greater than zero',
+	'JS_NUMBER_SHOULD_BE_LESS_THAN_32' => 'Number should be less than 32',
+	'JS_PLEASE_ENTER_VALID_DATE' => 'Please Enter Valid Date',
 
 
 	'INVALID_NUMBER_OF' => 'Invalid number',
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Are you sure that you want to delete?',
 
-	'OVERWRITE_EXISTING_MSG1' => 'Overwrite the existing address with the selected address?',
-	'OVERWRITE_EXISTING_MSG2' => 'Address Details',
+	'OVERWRITE_EXISTING_MSG1' => 'Overwrite the existing address with the selected ',
+	'OVERWRITE_EXISTING_MSG2' => 'address details?',
 	'SINGLE_Accounts' => 'Organization',
 	'SINGLE_Contacts' => 'Contact',
 
@@ -677,4 +720,14 @@ $jsLanguageStrings = array(
 	'PM' => 'PM',
  	'JS_ERROR' => 'Error',
 	'JS_INFORMATION' => 'Information',
+	'JS_DO_NOT_HAVE_AN_EMAIL_ID' => 'does not have an email address',
+	'NONE_OF_THE_FIELD_VALUES_ARE_CHANGED_IN_MASS_EDIT' => 'None of the field values are changed in Mass Edit',
+	
+	//Notification messages for inventory module
+	'JS_PLEASE_SELECT_AN_ACCOUNT_TO_COPY_ADDRESS' => 'Please select an Organization to copy address',
+	'JS_PLEASE_SELECT_AN_CONTACT_TO_COPY_ADDRESS' => 'Please select a Contact to copy address',
+	'JS_SELECTED_ACCOUNT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Organization does not contain address to copy',
+	'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Contact does not contain address to copy',
+	'JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER' => 'Please enter Primary email address to enable portal user',
+	'JS_PRIMARY_EMAIL_FIELD_DOES_NOT_EXISTS' => 'Primary email field does not exist to enable portal user',
 );

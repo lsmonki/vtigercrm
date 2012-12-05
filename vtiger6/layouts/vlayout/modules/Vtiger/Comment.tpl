@@ -27,12 +27,12 @@
 						<div class="inner">
 							<span class="commentorName pull-left"><strong>{$COMMENTOR->getName()}</strong></span>
 							<span class="pull-right">
-								{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getCommentedTime())}
+								<p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getCommentedTime())}</small></p>
 							</span>
 							<div class="clearfix"></div>
 						</div>
 						<div class="commentInfoContent">
-							{$COMMENT->get('commentcontent')}
+							{nl2br($COMMENT->get('commentcontent'))}
 						</div>
 					</div>
 				</div>

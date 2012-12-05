@@ -337,7 +337,7 @@ class ModTracker {
     }
 
 
-    static function getRecordFieldChanges($crmid, $time) {
+    static function getRecordFieldChanges($crmid, $time, $decodeHTML = false) {
         global $adb;
 
         $date = date('Y-m-d H:i:s', $time);
@@ -352,6 +352,10 @@ class ModTracker {
 
             $field['postvalue'] = $adb->query_result($fieldResult, $i, 'postvalue');
             $field['prevalue'] = $adb->query_result($fieldResult, $i, 'prevalue');
+            if ($decodeHTML) {
+                $field['postvalue'] = decode_html($field['postvalue']);
+                $field['prevalue'] = decode_html($field['prevalue']);
+            }
             $fields[$fieldName] = $field;
         }
         return $fields;

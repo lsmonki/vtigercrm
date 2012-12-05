@@ -1,0 +1,113 @@
+<?php
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
+$languageStrings = array(
+	'LBL_FOLDER_NOT_EMPTY'         => 'Folder is not empty'         , // TODO: Review
+	'LBL_MOVE_REPORT'              => 'Jelentések Mozgatása'      , // KEY 5.x: Move_Reports
+	'LBL_CUSTOMIZE'                => 'Testreszabás'               , // KEY 5.x: LBL_CUSTOMIZE_BUTTON
+	'LBL_REPORT_EXPORT_EXCEL'      => 'Export Excel'                , // TODO: Review
+	'LBL_REPORT_PRINT'             => 'Nyomtat'                     , // KEY 5.x: LNK_PRINT
+	'LBL_STEP_1'                   => 'Step 1'                      , // TODO: Review
+	'LBL_STEP_2'                   => 'Step 2'                      , // TODO: Review
+	'LBL_STEP_3'                   => 'Step 3'                      , // TODO: Review
+	'LBL_REPORT_DETAILS'           => 'Jelentés részletei'        , 
+	'LBL_SELECT_COLUMNS'           => 'Válassz Oszlopokat'         , 
+	'LBL_FILTERS'                  => 'Szűrők'                    , 
+	'LBL_FOLDERS'                  => 'Folders'                     , // TODO: Review
+	'LBL_ADD_NEW_FOLDER'           => 'Új Mappát Hozzáad'        , // KEY 5.x: LBL_ADD_NEW_GROUP
+	'LBL_FOLDER_NAME'              => 'Folder Name'                 , // TODO: Review
+	'LBL_FOLDER_DESCRIPTION'       => 'Folder Description'          , // TODO: Review
+	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Enter Description'           , // TODO: Review
+	'LBL_DUPLICATES_EXIST'         => 'Duplicate Exists'            , // TODO: Review
+	'LBL_MOVE_REPORTS'             => 'Jelentések Mozgatása'      , // KEY 5.x: Move_Reports
+	'LBL_FOLDERS_LIST'             => 'Folders List'                , // TODO: Review
+	'LBL_DENIED_REPORTS'           => 'Denied Reports'              , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Report'                  , // TODO: Review
+	'LBL_ADD_FOLDER'               => 'Add Folder'                  , // TODO: Review
+	'LBL_REPORT_DELETE_DENIED'     => 'Permission denied to delete the Report', // TODO: Review
+	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'This folder can not be deleted', // TODO: Review
+	'LBL_REPORTS_LIST'             => 'Reports list'                , // TODO: Review
+	'LBL_REPORT_NAME'              => 'Jelentés neve'              , 
+	'LBL_REPORT_FOLDER'            => 'Jelentés Mappa'             , // KEY 5.x: LBL_REP_FOLDER
+	'LBL_DESCRIPTION'              => 'Megjegyzés'                 , 
+	'PRIMARY_MODULE'               => 'Primary Module'              , // TODO: Review
+	'LBL_SELECT_RELATED_MODULES'   => 'Select Related Modules'      , // TODO: Review
+	'LBL_MAX'                      => 'MAX'                         , // KEY 5.x: MAX
+	'LBL_NEXT'                     => 'Következő'                 , // KEY 5.x: LNK_LIST_NEXT
+	'LBL_REPORTS'                  => 'Reports List'                , // TODO: Review
+	'LBL_GROUP_BY'                 => 'Group By'                    , // TODO: Review
+	'LBL_SORT_ORDER'               => 'Sort Order'                  , // TODO: Review
+	'LBL_ASCENDING'                => 'Növekvő'                   , // KEY 5.x: Ascending
+	'LBL_DESCENDING'               => 'Csökkenő'                  , // KEY 5.x: Descending
+	'LBL_CALCULATIONS'             => 'Számítások'               , 
+	'LBL_COLUMNS'                  => 'Oszlopok'                    , 
+	'LBL_SUM_VALUE'                => 'Összesít'                  , // KEY 5.x: LBL_COLUMNS_SUM
+	'LBL_AVERAGE'                  => 'Átlag'                      , // KEY 5.x: LBL_COLUMNS_AVERAGE
+	'LBL_LOWEST_VALUE'             => 'Legalacsonyabb érték'      , // KEY 5.x: LBL_COLUMNS_LOW_VALUE
+	'LBL_HIGHEST_VALUE'            => 'Highest Value'               , // TODO: Review
+	'LBL_GENERATE_REPORT'          => 'Generate Report'             , // TODO: Review
+	'LBL_SUM'                      => 'ÖSSZ'                       , // KEY 5.x: SUM
+	'LBL_AVG'                      => 'ÁTL'                        , // KEY 5.x: AVG
+	'LBL_MIN'                      => 'MIN'                         , // KEY 5.x: MIN
+	'LBL_FIELD_NAMES'              => 'Mező nevek'                 , // KEY 5.x: Totals
+	'LBL_REPORT_CSV'               => 'Export CSV'                  , // TODO: Review
+	'LBL_VIEW_DETAILS'             => 'Adatok megtekintése'        , 
+	'Report Name'                  => 'Jelentés neve'              , // KEY 5.x: LBL_REPORT_NAME
+	'Account and Contact Reports'  => 'Cég és Kapcsolat Jelentések', 
+	'Lead Reports'                 => '(Vevő)Jelölt Jelentések'  , 
+	'Potential Reports'            => 'Lehetőség Jelentések'     , 
+	'Activity Reports'             => 'Aktivitás Jelentések'      , 
+	'HelpDesk Reports'             => 'Kérés Jelentések'         , 
+	'Product Reports'              => 'Termék Jelentések'         , 
+	'Quote Reports'                => 'Ajánlat Jelentések'        , 
+	'PurchaseOrder Reports'        => 'Beszerzések Jelentések'    , 
+	'SalesOrder Reports'           => 'Megrendelések Jelentések'  , 
+	'Invoice Reports'              => 'Díjbekérő Jelentések'    , 
+	'Campaign Reports'             => 'Kampány Jelentések'        , 
+	'Contacts by Accounts'         => 'Kapcsolatok Cégek szerint listázva', 
+	'Contacts without Accounts'    => 'Kapcsolatok Cégek nélkül' , 
+	'Contacts by Potentials'       => 'Kapcsolatok Lehetőségek szerint', 
+	'Contacts related to Accounts' => 'Kapcsolatok, amelyek Cégekhez tartoznak', 
+	'Contacts not related to Accounts' => 'Kapcsolatok, amelyek nem tartoznak Cégekhez', 
+	'Contacts related to Potentials' => 'Kapcsolatok, amelyek Lehetőségekhez tartoznak', 
+	'Lead by Source'               => 'Jelöltek Források szerint' , 
+	'Lead Status Report'           => 'Jelölt Állapot Jelentés'  , 
+	'Potential Pipeline'           => 'Lehetőségek értékesítési tölcsér', 
+	'Closed Potentials'            => 'Lezárt Lehetőségek'       , 
+	'Potential that have Won'      => 'Lehetőségek, amiket Megkötöttünk', 
+	'Tickets by Products'          => 'Kérések Termékek szerint' , 
+	'Tickets by Priority'          => 'Kérések Prioritásuk szerint', 
+	'Open Tickets'                 => 'Nyitott Kérések'           , 
+	'Tickets related to Products'  => 'Kérések, amelyek Termékekhez tartoznak', 
+	'Tickets that are Open'        => 'Kérések, amelyek nyitva vannak', 
+	'Product Details'              => 'Termék adatok'              , 
+	'Products by Contacts'         => 'Termékek a Kapcsolatok szerint', 
+	'Product Detailed Report'      => 'Termékek: részletes Jelentés', 
+	'Products related to Contacts' => 'Termékek, amelyek Kapcsolatokhoz tartoznak', 
+	'Open Quotes'                  => 'Nyitott Ajánlatok'          , 
+	'Quotes Detailed Report'       => 'Ajánlatok: részletes Jelentés', 
+	'Quotes that are Open'         => 'Ajánlatok, amelyek nyitva vannak', 
+	'PurchaseOrder by Contacts'    => 'Beszerzések Kapcsolatok szerint', 
+	'PurchaseOrder Detailed Report' => 'Beszerzések: részletes Jelentés', 
+	'PurchaseOrder related to Contacts' => 'Beszerzések, amelyek Kapcsolatokhoz tartoznak', 
+	'Invoice Detailed Report'      => 'Díjbekérők: részletes Jelentés', 
+	'Last Month Activities'        => 'Az elmúlt Hónap Aktivitásai', 
+	'This Month Activities'        => 'Az aktuális Hónap Aktivitásai', 
+	'Campaign Expectations and Actuals' => 'Kampány: Elvárt és aktuális adatok', 
+	'SalesOrder Detailed Report'   => 'Megrendelések: részletes Jelentés', 
+	'Email Reports'                => 'Email Reports'               , // TODO: Review
+	'Contacts Email Report'        => 'Contacts Email Report'       , // TODO: Review
+	'Accounts Email Report'        => 'Organizations Email Report'  , // TODO: Review
+	'Leads Email Report'           => 'Leads Email Report'          , // TODO: Review
+	'Vendors Email Report'         => 'Vendors Email Report'        , // TODO: Review
+	'Emails sent to Contacts'      => 'Emails sent to Contacts'     , // TODO: Review
+	'Emails sent to Organizations' => 'Emails sent to Organizations', // TODO: Review
+	'Emails sent to Leads'         => 'Emails sent to Leads'        , // TODO: Review
+	'Emails sent to Vendors'       => 'Emails sent to Vendors'      , // TODO: Review
+);

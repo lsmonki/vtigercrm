@@ -24,7 +24,7 @@
 						{foreach key=moduleName item=moduleModel from=$topMenus}
 							{assign var='translatedModuleLabel' value=vtranslate($moduleModel->get('label'),$moduleName)}
 							<li class="tabs">
-								<a href="{$moduleModel->getDefaultUrl()}" {if $MODULE eq $moduleName} class="selected" {/if}>{$translatedModuleLabel}</a>
+								<a id="menubar_item_{$moduleName}" href="{$moduleModel->getDefaultUrl()}" {if $MODULE eq $moduleName} class="selected" {/if}>{$translatedModuleLabel}</a>
 							</li>
 						{/foreach}
 						<li class="dropdown" id="moreMenu">
@@ -37,19 +37,21 @@
 									{if $smarty.foreach.more.index % 4 == 0}
 										<div class="row-fluid">
 									{/if}
+									{if $moduleList}
 									<span class="span3">
 										<strong><label>{vtranslate("LBL_$parent",$moduleName)}</label></strong><hr>
 										{foreach key=moduleName item=moduleModel from=$moduleList}
 											{assign var='translatedModuleLabel' value=vtranslate($moduleModel->get('label'),$moduleName)}
-											<label class="moduleNames"><a href="{$moduleModel->getDefaultUrl()}">{$translatedModuleLabel}</a></label>
+											<label class="moduleNames"><a id="menubar_item_{$moduleName}" href="{$moduleModel->getDefaultUrl()}">{$translatedModuleLabel}</a></label>
 										{/foreach}
 									</span>
+									{/if}
 									{if $smarty.foreach.more.last OR ($smarty.foreach.more.index+1) % 4 == 0}
 										</div>
 									{/if}
 									{/foreach}
 								{if $USER_MODEL->isAdminUser()}
-									<a href="index.php?module=Vtiger&parent=Settings&view=Index&item=ModuleManager" class="pull-right">{vtranslate('LBL_ADD_MANAGE_MODULES',$MODULE)}</a>
+									<a id="menubar_item_moduleManager" href="index.php?module=Vtiger&parent=Settings&view=Index&item=ModuleManager" class="pull-right">{vtranslate('LBL_ADD_MANAGE_MODULES',$MODULE)}</a>
 								{/if}
 							</div>
 						</li>
@@ -64,9 +66,14 @@
 							{assign var="childLinks" value=$obj->getChildLinks()}
 							<span class="dropdown span{if !empty($src)} settingIcons {/if}">
 									{if !empty($src)}
-										<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="{$src}" alt="{vtranslate($title,$MODULE)}" title="{vtranslate($title,$MODULE)}" /></a>
+										<a id="menubar_item_right_{$title}" class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="{$src}" alt="{vtranslate($title,$MODULE)}" title="{vtranslate($title,$MODULE)}" /></a>
 										{else}
-										<span class="dropdown-toggle row-fluid" data-toggle="dropdown" href="#"><a class="userName textOverflowEllipsis span" title="{$title}">{$title}</a> <i class="caret"></i></span>
+											{assign var=title value=$USER_MODEL->get('first_name')}
+											{if empty($title)} 
+												{assign var=title value=$USER_MODEL->get('last_name')}
+											{/if}
+										<span class="dropdown-toggle row-fluid" data-toggle="dropdown" href="#">
+											<a id="menubar_item_right_{$title}"  class="userName textOverflowEllipsis span" title="{$title}">{$title}</a> <i class="caret"></i></span>
 									{/if}
 									{if !empty($childLinks)}
 										<ul class="dropdown-menu pull-right">
@@ -83,7 +90,7 @@
 														{assign var="href" value="javascript:;"}
 													{/if}
 													<li>
-														<a id ="{$id}{if $label=='Switch to old look'}switchLook{/if}" href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
+														<a id="menubar_item_right_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($label)}" {if $label=='Switch to old look'}switchLook{/if} href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
 													</li>
 												{/if}
 											{/foreach}

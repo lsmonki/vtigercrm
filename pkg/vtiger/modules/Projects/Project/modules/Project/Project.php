@@ -381,6 +381,12 @@ class Project extends CRMEntity {
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
 			}
 
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PROJ', 1, 1, 1));
+			}
+
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.
 		} else if($event_type == 'module.enabled') {
@@ -409,6 +415,12 @@ class Project extends CRMEntity {
 			if($modcommentsModuleInstance && file_exists('modules/ModComments/ModComments.php')) {
 				include_once 'modules/ModComments/ModComments.php';
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
+			}
+
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PROJ', 1, 1, 1));
 			}
 		}
 	}

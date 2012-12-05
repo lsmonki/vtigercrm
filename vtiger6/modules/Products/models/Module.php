@@ -44,4 +44,14 @@ class Products_Module_Model extends Vtiger_Module_Model {
 			return $specificQuery;
 		}
  	}
+
+	/**
+	 * Function to get prices for specified products with specific currency
+	 * @param <Integer> $currenctId
+	 * @param <Array> $productIdsList
+	 * @return <Array>
+	 */
+	public function getPricesForProducts($currencyId, $productIdsList) {
+		return getPricesForProducts($currencyId, $productIdsList, $this->getName());
+	}
 }

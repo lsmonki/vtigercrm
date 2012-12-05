@@ -4303,6 +4303,13 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb, $us
 		}
 	}
 
+	$crmID = $adb->getUniqueID('vtiger_crmentity');
+	$timeOfCall = date('Y-m-d H:i:s');
+
+	$query = "INSERT INTO vtiger_crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,
+			modifiedtime,viewedtime,status,version,presence,deleted,label) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$adb->pquery($query, array($crmID, $userID, $userID, 0, "PBXManager", "", $timeOfCall, $timeOfCall, NULL, NULL, 0, 1, 0, $callerName));
+	
 	$sql = "insert into vtiger_pbxmanager (pbxmanagerid,callfrom,callto,timeofcall,status)values (?,?,?,?,?)";
 	$params = array($crmID, $callerName, $receiver, $timeOfCall, $status);
 	$adb->pquery($sql, $params);
@@ -5152,12 +5159,6 @@ function dateDiffAsString($d1, $d2) {
 }
 
 function getMinimumCronFrequency() {
-	if(file_exists('modules/Ondemand/Ondemand.config.php')) {
-		require_once('modules/Ondemand/Ondemand.config.php');
-		global $VtigerOndemandConfig;
-		if($VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY'] != '')
-			return $VtigerOndemandConfig['MINIMUM_CRON_FREQUENCY'];
-	}
 	global $MINIMUM_CRON_FREQUENCY;
 
 	if(!empty($MINIMUM_CRON_FREQUENCY)) {

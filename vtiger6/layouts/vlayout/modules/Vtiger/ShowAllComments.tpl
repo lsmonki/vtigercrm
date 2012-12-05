@@ -28,7 +28,7 @@
 		{include file='CommentsList.tpl'|@vtemplate_path}
 	</div>
 	<div class="hide basicAddCommentBlock">
-		<div>
+		<div class="offset1">
 			<textarea class="commentcontent fullWidthAlways" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}" name="commentcontent" onkeyup='this.rows = Math.max(this.value.split("\n").length, {$COMMENT_TEXTAREA_DEFAULT_ROWS});' placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}"></textarea>
 		</div>
 		<div class="pull-right">

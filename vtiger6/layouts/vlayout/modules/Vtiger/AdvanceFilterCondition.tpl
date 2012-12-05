@@ -18,6 +18,7 @@
 				<optgroup label='{vtranslate($BLOCK_LABEL, $SOURCE_MODULE)}'>
 				{foreach key=FIELD_NAME item=FIELD_MODEL from=$BLOCK_FIELDS}
 					{assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}
+					{assign var=MODULE_MODEL value=$FIELD_MODEL->getModule()}
 					{if !empty($COLUMNNAME_API)}
 						{assign var=columnNameApi value=$COLUMNNAME_API}
 					{else}
@@ -26,10 +27,19 @@
 					<option value="{$FIELD_MODEL->$columnNameApi()}" data-fieldtype="{$FIELD_MODEL->getFieldType()}"
 					{if $FIELD_MODEL->$columnNameApi() eq $CONDITION_INFO['columnname']}
 						{assign var=FIELD_TYPE value=$FIELD_MODEL->getFieldType()}
+						{if $FIELD_MODEL->getFieldDataType() == 'reference'}
+							{$FIELD_TYPE='V'}
+						{/if}	
 						{$FIELD_INFO['value'] = $CONDITION_INFO['value']|escape}
 						selected &nbsp;
 					{/if}
-					&nbsp; data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}' >{vtranslate($FIELD_MODEL->get('label'), $SOURCE_MODULE)}</option>
+					&nbsp; data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}' >
+					{if $SOURCE_MODULE neq $MODULE_MODEL->get('name')} 
+						({vtranslate($MODULE_MODEL->get('name'), $MODULE_MODEL->get('name'))})  {vtranslate($FIELD_MODEL->get('label'), $MODULE_MODEL->get('name'))}
+					{else}
+						{vtranslate($FIELD_MODEL->get('label'), $SOURCE_MODULE)}
+					{/if}
+				</option>
 				{/foreach}
 				</optgroup>
 			{/foreach}

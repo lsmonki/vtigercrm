@@ -9,7 +9,7 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-class Contacts_Detail_View extends Vtiger_Detail_View {
+class Contacts_Detail_View extends Accounts_Detail_View {
 
 	function __construct() {
 		parent::__construct();

@@ -23,13 +23,20 @@ class Vtiger_Delete_Action extends Vtiger_Action_Controller {
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
-
+		$ajaxDelete = $request->get('ajaxDelete');
+		
 		$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 		$moduleModel = $recordModel->getModule();
 
 		$recordModel->delete();
 
 		$listViewUrl = $moduleModel->getListViewUrl();
-		header("Location: $listViewUrl");
+		if($ajaxDelete) {
+			$response = new Vtiger_Response();
+			$response->setResult($listViewUrl);
+			return $response;
+		} else {
+			header("Location: $listViewUrl");
+		}
 	}
 }

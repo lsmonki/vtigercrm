@@ -3369,10 +3369,27 @@ function currencyDecimalFormat($value){
 
 function decimalFormat($value){
 	global $log;
-
-	$fld_value = rtrim($value, '0');
-	$value = rtrim($fld_value, '.');
-	
+	$fld_value = explode('.', $value);
+	if($fld_value[1] != ''){
+		$fld_value = rtrim($value, '0');
+		$value = rtrim($fld_value, '.');
+	}
 	return $value;
 }
+
+/*
+ * Function used to Update the label for a record
+ * @param <String> $module - module name
+ * @param <Integer> $recordId 
+ */
+function updateRecordLabel($module,$recordId){
+	global $adb;
+	$labelInfo = getEntityName($module,$recordId);
+
+	if ($labelInfo) {
+		$label = decode_html($labelInfo[$recordId]);
+		$adb->pquery('UPDATE vtiger_crmentity SET label=? WHERE crmid=?', array($label, $recordId));
+	}
+}
+
 ?>

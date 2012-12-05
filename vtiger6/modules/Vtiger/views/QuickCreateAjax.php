@@ -21,8 +21,20 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 
-		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
+		$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+		$moduleModel = $recordModel->getModule();
+		
+		$fieldList = $moduleModel->getFields();
+		$requestFieldList = array_intersect_key($request->getAll(), $fieldList);
+
+		foreach($requestFieldList as $fieldName => $fieldValue){
+			$fieldModel = $fieldList[$fieldName];
+			if($fieldModel->isEditable()) {
+				$recordModel->set($fieldName, $fieldValue);
+			}
+		}
+
+		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
@@ -32,8 +44,23 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+		
+		$viewer->assign('SCRIPTS', $this->getHeaderScripts($request));
 
 		echo $viewer->view('QuickCreate.tpl',$moduleName,true);
 
+	}
+	
+	
+	public function getHeaderScripts(Vtiger_Request $request) {
+		
+		$moduleName = $request->getModule();
+		
+		$jsFileNames = array(
+			"modules.$moduleName.resources.Edit"
+		);
+
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		return $jsScriptInstances;
 	}
 }

@@ -187,7 +187,8 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		var sortOrderVal = headerElement.data('nextsortorderval');
 		var sortingParams = {
 			"orderby" : fieldName,
-			"sortorder" : sortOrderVal
+			"sortorder" : sortOrderVal,
+			"tab_label" : this.selectedRelatedTabElement.data('label-key')
 		}
 		return this.loadRelatedList(sortingParams);
 	},
@@ -245,6 +246,56 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		}
 		return aDeferred.promise();
 	},
+	/**
+	 * Function to add related record for the module
+	 */
+	addRelatedRecord : function(element){
+		var thisInstance = this;
+		var	referenceModuleName = this.relatedModulename;
+		var parentId = this.getParentId();
+		var parentModule = this.parentModuleName;
+		var quickCreateParams = {};
+		var relatedParams = {};
+		var relatedField = element.data('name');
+		var fullFormUrl = element.data('url');
+		relatedParams[relatedField] = parentId;
+		var preQuickCreateSave = function(data){
+			data.find('#goToFullForm').data('editViewUrl',fullFormUrl);
+			if(typeof relatedField != "undefined"){
+				var field = data.find('[name="'+relatedField+'"]');
+				//If their is no element with the relatedField name,we are adding hidden element with
+				//name as relatedField name,for saving of record with relation to parent record
+				if(field.length == 0){
+					jQuery('<input type="hidden" name="'+relatedField+'" value="'+parentId+'" />').appendTo(data);
+				}
+			}
+		}
+		var postQuickCreateSave  = function(data) {
+			if(typeof relatedField == "undefined"){
+				var idList = new Array();
+				idList.push(data.result._recordId);
+				thisInstance.addRelations(idList).then(
+					function(data){
+						thisInstance.loadRelatedList();
+					}
+				)
+			}
+			thisInstance.loadRelatedList();
+		}
+		
+		if(typeof relatedField != "undefined"){
+			quickCreateParams['data'] = relatedParams;
+		}
+		quickCreateParams['callbackFunction'] = postQuickCreateSave;
+		quickCreateParams['callbackPostShown'] = preQuickCreateSave;
+		quickCreateParams['noCache'] = true;
+		var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
+		if(quickCreateNode.length <= 0) {
+			Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
+		}
+		quickCreateNode.trigger('click',quickCreateParams);
+	},
+
 	
 	init : function(parentId, parentModule, selectedRelatedTabElement, relatedModuleName){
 		this.selectedRelatedTabElement = selectedRelatedTabElement,

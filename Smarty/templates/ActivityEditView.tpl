@@ -100,7 +100,7 @@ var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 						     </table>
 						     <!-- included to handle the edit fields based on ui types -->
 						     {foreach key=header item=data from=$BLOCKS}
-							     {if $header neq $APP.LBL_CUSTOM_INFORMATION}
+							     {if $header neq $APP.LBL_CUSTOM_INFORMATION && $header neq 'LBL_RECURRENCE_INFORMATION' && $header neq getTranslatedString('LBL_RELATED_TO')}
 						     <table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 						     <tr>
 							<td colspan=4 class="tableHeading">

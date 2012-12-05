@@ -18,6 +18,9 @@ class Potentials_PipelinedAmountPerSalesPerson_Dashboard extends Vtiger_IndexAja
 	function getHeaderScripts(Vtiger_Request $request) {
 
 		$jsFileNames = array(
+			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
+			'~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
+			'~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js',
 			'~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
 			'~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
 			'~/libraries/jquery/jqplot/plugins/jqplot.logAxisRenderer.min.js',

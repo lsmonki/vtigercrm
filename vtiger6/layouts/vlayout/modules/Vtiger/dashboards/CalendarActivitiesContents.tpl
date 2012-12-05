@@ -15,15 +15,16 @@
 	<div>
 		<div class='pull-left'>
 			{if $ACTIVITY->get('activitytype') == 'Task'}
-				<image src="{vimage_path('tasks.png')}" width="24px"/>&nbsp;&nbsp;
+				<image src="{vimage_path('Tasks.png')}" width="24px"/>&nbsp;&nbsp;
 			{else}
-				<image src="{vimage_path('calendar.png')}" width="24px" />&nbsp;&nbsp;
+				<image src="{vimage_path('Calendar.png')}" width="24px" />&nbsp;&nbsp;
 			{/if}
 		</div>
 		<div>
 			<div class='pull-left' style='margin-top:5px'>
 				{assign var=PARENT_ID value=$ACTIVITY->get('parent_id')}
-				<a href="{$ACTIVITY->getDetailViewUrl()}">{$ACTIVITY->get('subject')}</a>{if $PARENT_ID} {vtranslate('LBL_FOR')} {$ACTIVITY->getDisplayValue('parent_id')}{/if}
+				{assign var=CONTACT_ID value=$ACTIVITY->get('contact_id')}
+				<a href="{$ACTIVITY->getDetailViewUrl()}">{$ACTIVITY->get('subject')}</a>{if $PARENT_ID} {vtranslate('LBL_FOR')} {$ACTIVITY->getDisplayValue('parent_id')}{else if $CONTACT_ID} {vtranslate('LBL_FOR')} {$ACTIVITY->getDisplayValue('contact_id')}{/if}
 			</div>
 				{assign var=DUE_DATE value=$ACTIVITY->get('due_date')}
 				{assign var=DUE_TIME value=$ACTIVITY->get('time_end')}

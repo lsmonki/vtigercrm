@@ -15,18 +15,41 @@
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="record" value="{$RECORD_ID}" />
+		<input type=hidden name="timeFormatOptions" data-value='{$DAY_STARTS}' />
 		{if $IS_RELATION_OPERATION }
 			<input type="hidden" name="sourceModule" value="{$SOURCE_MODULE}" />
 			<input type="hidden" name="sourceRecord" value="{$SOURCE_RECORD}" />
 			<input type="hidden" name="relationOperation" value="{$IS_RELATION_OPERATION}" />
 		{/if}
-		<div class="contentHeader">
+		<div class="contentHeader row-fluid">
 		{assign var=SINGLE_MODULE_NAME value='Single_'|cat:$MODULE}
 		{if $RECORD_ID neq ''}
-			<strong>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</strong>
+			<span class="span8 font-x-x-large textOverflowEllipsis" title='{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"'>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</span>
 		{else}
-			<strong>{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</strong>
+			<span class="span8 font-x-x-large textOverflowEllipsis" title="{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
 		{/if}
+			<div class='pull-right'>
+				&nbsp;&nbsp;<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
+				<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+			</div>
+			<span class="pull-right">
+				<div class='btn-group' title="{vtranslate('LBL_DISPLAY_TYPE', 'Vtiger')}">
+					<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
+						<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
+					</a>
+					<ul class='dropdown-menu pull-right' id='widthType' style='min-width:100px;'>
+						<li data-class='wideWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
+							<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
+						</li>
+						<li data-class='mediumWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
+							<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
+						</li>
+						<li data-class='narrowWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
+							<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
+						</li>
+					</ul>
+				</div>
+			</span>
 		</div>
 		<div style='padding:10px'>
 			<table class="table table-bordered marginLeftZero">

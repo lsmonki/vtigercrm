@@ -9,5 +9,5 @@
   *
  ********************************************************************************/
 -->*}
-{include file="EditViewBlocks.tpl"|@vtemplate_path:$MODULE_NAME}
-{include file="EditViewActions.tpl"|@vtemplate_path:$MODULE_NAME}
+{include file="EditViewBlocks.tpl"|@vtemplate_path:$MODULE}
+{include file="EditViewActions.tpl"|@vtemplate_path:$MODULE}

@@ -97,7 +97,7 @@
 			{assign var="DISCOUNT_TYPE" value="$data.$discount_type"}
 		{/if}
 			<input type="hidden" id="discount_type{$row_no}" name="discount_type{$row_no}" value="{$DISCOUNT_TYPE}" class="discount_type" />
-			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-nobordered popupTable">
+			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable">
 			   <tr>
 				   <!-- TODO : CLEAN : should not append product total it should added in the js because product total can change at any point of time -->
 					<th id="discount_div_title{$row_no}" nowrap><b>{vtranslate('LBL_SET_DISCOUNT_FOR',$MODULE)} : {$data.$productTotal}</b></th>
@@ -155,7 +155,7 @@
 		<span class="taxDivContainer">
 			<div class="taxUI hide" id="tax_div{$row_no}">
 			<!-- we will form the table with all taxes -->
-			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-nobordered popupTable" id="tax_table{$row_no}">
+			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable" id="tax_table{$row_no}">
 			   <tr>
 					<th id="tax_div_title{$row_no}" nowrap align="left" ><b>{vtranslate('LBL_SET_TAX_FOR',$MODULE)} : {$data.$totalAfterDiscount}</b></th>
 					<th colspan="2">

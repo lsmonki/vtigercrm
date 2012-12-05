@@ -16,6 +16,13 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Record Summary',
 	'LBL_EVENTS' => 'Events',
 	'LBL_TODOS' => 'To Do',
+	'LBL_CALENDAR_SETTINGS' => 'Calendar Settings',
+	'LBL_CALENDAR_SHARING' => 'Calendar Sharing',
+	'LBL_DEFAULT_EVENT_DURATION' => 'Default Event Duration',
+	'LBL_CALL' => 'Call',
+	'LBL_OTHER_EVENTS' => 'Other Events',
+	'LBL_MINUTES' => 'Minutes',
+	'LBL_SELECT_USERS' => 'Select Users',
 
 	// Blocks
 	'LBL_TASK_INFORMATION' => 'Task Details',
@@ -36,6 +43,7 @@ $languageStrings = array(
 	//Activity Type picklist values
 	'Call' => 'Call',
 	'Meeting' => 'Meeting',
+	'Task' => 'Task',
 
 	//Status picklist values
 	'Planned' => 'Planned',
@@ -53,7 +61,26 @@ $languageStrings = array(
 	'LBL_TASK' => 'Task',
 
 	'LBL_RECORDS_LIST' => 'List View',
-	'LBL_CALENDAR_VIEW' => 'Calendar View'
+	'LBL_CALENDAR_VIEW' => 'Calendar View',
+	
+	//Repeat Lables - used by getTranslatedString
+	'LBL_DAY0' => 'Sunday',
+	'LBL_DAY1' => 'Monday',
+	'LBL_DAY2' => 'Tuesday',
+	'LBL_DAY3' => 'Wednesday',
+	'LBL_DAY4' => 'Thursday',
+	'LBL_DAY5' => 'Friday',
+	'LBL_DAY6' => 'Saturday',
+	
+	'first' => 'First',
+	'last' => 'Last',
+	'LBL_DAY_OF_THE_MONTH' => 'day of the month',
+	'LBL_ON' => 'on',
+	
+	'Daily'=>'Day(s)',
+	'Weekly'=>'Week(s)',
+	'Monthly'=>'Month(s)',
+	'Yearly'=>'Year',
 
 );
 

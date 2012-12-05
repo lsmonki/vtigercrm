@@ -17,18 +17,18 @@
     -->
     {assign var="FINAL" value=$RELATED_PRODUCTS.1.final_details}
 
-    {assign var="IS_INDIVIDUAL_TAX_TYPE" value=true}
-    {assign var="IS_GROUP_TAX_TYPE" value=false}
+    {assign var="IS_INDIVIDUAL_TAX_TYPE" value=false}
+    {assign var="IS_GROUP_TAX_TYPE" value=true}
 
-    {if $FINAL.taxtype eq 'group'}
-        {assign var="IS_GROUP_TAX_TYPE" value=true}
-        {assign var="IS_INDIVIDUAL_TAX_TYPE" value=false}
+    {if $FINAL.taxtype eq 'individual'}
+        {assign var="IS_GROUP_TAX_TYPE" value=false}
+        {assign var="IS_INDIVIDUAL_TAX_TYPE" value=true}
     {/if}
 
     <table class="table table-bordered blockContainer lineItemTable" id="lineItemTab">
         <tr>
             <th colspan="3"><span class="inventoryLineItemHeader">{vtranslate('LBL_ITEM_DETAILS', $MODULE)}</span></th>
-            <td colspan="2" class="chznDropDown">
+            <td colspan="1" class="chznDropDown">
                 <b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
                 <!-- Assign first value as select value -->
                 {assign var=SELECTED_CURRENCY value=$CURRENCIES.0}
@@ -38,7 +38,12 @@
                             {assign var=currency_selected value="selected"}
                             {assign var=SELECTED_CURRENCY value=$currency_details}
                         {else}
-                            {assign var=currency_selected value=""}
+							{if $currency_details.curid eq $USER_MODEL->get('currency_id')}
+								{assign var=currency_selected value="selected"}
+								{assign var=SELECTED_CURRENCY value=$currency_details}
+							{else}
+								{assign var=currency_selected value=""}
+							{/if}
                         {/if}
                         <option value="{$currency_details.curid}" class="textShadowNone" data-conversion-rate="{$currency_details.conversionrate}" {$currency_selected}>
                             {$currency_details.currencylabel|@getTranslatedCurrencyString} ({$currency_details.currencysymbol})
@@ -50,7 +55,7 @@
                 <!-- TODO : To get default currency in even better way than depending on first element -->
                 <input type="hidden" id="default_currency_id" value="{$CURRENCIES.0.curid}" />
             </td>
-            <td colspan="4" class="chznDropDown">
+            <td colspan="2" class="chznDropDown">
                 <div class="pull-right">
                     <div class="inventoryLineItemHeader">
                         <span class="alignTop">{vtranslate('LBL_TAX_MODE', $MODULE)}</span>
@@ -67,7 +72,7 @@
             <td><span class="redColor">*</span><b>{vtranslate('LBL_ITEM_NAME',$MODULE)}</b></td>
             <td><b>{vtranslate('LBL_QTY',$MODULE)}</b></td>
             <td><b>{vtranslate('LBL_LIST_PRICE',$MODULE)}</b></td>
-            <td><b>{vtranslate('LBL_TOTAL',$MODULE)}</b></td>
+            <td><b class="pull-right">{vtranslate('LBL_TOTAL',$MODULE)}</b></td>
             <td><b class="pull-right">{vtranslate('LBL_NET_PRICE',$MODULE)}</b></td>
         </tr>
         <tr id="row0" class="hide lineItemCloneCopy">
@@ -120,7 +125,7 @@
     <table class="table table-bordered blockContainer lineItemTable" id="lineItemResult">
         <tr>
             <td  width="83%">
-                <div class="pull-right"><strong>{vtranslate('LBL_NET_TOTAL',$MODULE)}</strong></div>
+                <div class="pull-right"><strong>{vtranslate('LBL_ITEMS_TOTAL',$MODULE)}</strong></div>
             </td>
             <td>
                 <div id="netTotal" class="pull-right netTotal">{if !empty($FINAL.hdnSubTotal)}{$FINAL.hdnSubTotal}{else}0.00{/if}</div>
@@ -140,7 +145,7 @@
                         {assign var=DISCOUNT_TYPE_FINAL value=$FINAL.discount_type_final }
                     {/if}
                     <input type="hidden" id="discount_type_final" name="discount_type_final" value="{$DISCOUNT_TYPE_FINAL}" />
-                    <table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-nobordered popupTable">
+                    <table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable">
                         <thead>
                             <tr>
                                 <th id="discount_div_title_final"><b>{vtranslate('LBL_SET_DISCOUNT_FOR',$MODULE)}:{$data.$productTotal}</b></th>
@@ -177,13 +182,21 @@
                 <!-- End Popup Div -->
             </td>
         </tr>
-        <!-- Group Tax - starts -->
+        <tr>
+            <td width="83%">
+                <span class="pull-right">(+)&nbsp;<b>{vtranslate('LBL_SHIPPING_AND_HANDLING_CHARGES',$MODULE)} </b></span>
+            </td>
+            <td>
+                <span class="pull-right"><input id="shipping_handling_charge" name="shipping_handling_charge" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" type="text" class="lineItemInputBox" value="{if $FINAL.shipping_handling_charge}{$FINAL.shipping_handling_charge}{else}0.00{/if}" /></span>
+            </td>
+        </tr>
+		<!-- Group Tax - starts -->
         <tr id="group_tax_row" valign="top" class="{if $IS_INDIVIDUAL_TAX_TYPE}hide{/if}">
             <td width="83%">
                 <span class="pull-right">(+)&nbsp;<b><a href="javascript:void(0)" id="finalTax">{vtranslate('LBL_TAX',$MODULE)}</a></b></span>
                 <!-- Pop Div For Group TAX -->
                 <div class="hide finalTaxUI" id="group_tax_div">
-                    <table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-nobordered popupTable">
+                    <table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable">
                         <tr>
                             <th id="group_tax_div_title" colspan="2" nowrap align="left" >{vtranslate('LBL_GROUP_TAX',$MODULE)}</th>
                             <th align="right">
@@ -217,17 +230,9 @@
         <!-- Group Tax - ends -->
         <tr>
             <td width="83%">
-                <span class="pull-right">(+)&nbsp;<b>{vtranslate('LBL_SHIPPING_AND_HANDLING_CHARGES',$MODULE)} </b></span>
-            </td>
-            <td>
-                <span class="pull-right"><input id="shipping_handling_charge" name="shipping_handling_charge" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" type="text" class="lineItemInputBox" value="{if $FINAL.shipping_handling_charge}{$FINAL.shipping_handling_charge}{else}0.00{/if}" /></span>
-            </td>
-        </tr>
-        <tr>
-            <td width="83%">
                 <span class="pull-right">(+)&nbsp;<b><a href="javascript:void(0)" id="shippingHandlingTax">{vtranslate('LBL_TAX_FOR_SHIPPING_AND_HANDLING',$MODULE)} </a></b></span>
 
-                <!-- Pop Div For Shipping and Handlin TAX -->
+                <!-- Pop Div For Shipping and Handling TAX -->
                 <div class="hide" id="shipping_handling_div">
                     <table class="table table-nobordered popupTable">
                         <thead>
@@ -241,12 +246,12 @@
                         <tbody>
                             {foreach item=tax_detail name=sh_loop key=loop_count from=$SHIPPING_TAXES}
                                 <tr>
+				    <td>{$tax_detail.taxlabel}</td>
                                     <td>
                                         <input type="text" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" class="smallInputBox shippingTaxPercentage" />&nbsp;%
                                     </td>
-                                    <td>{$tax_detail.taxlabel}</td>
                                     <td>
-                                        <input type="text" name="{$tax_detail.taxname}_sh_amount" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" class="cursorPointer smallInputBox shippingTaxTotal" value="{$tax_detail.amount}" readonly />
+                                        <input type="text" name="{$tax_detail.taxname}_sh_amount" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" class="cursorPointer smallInputBox shippingTaxTotal pull-right" value="{$tax_detail.amount}" readonly />
                                     </td>
                                 </tr>
                             {/foreach}
@@ -270,10 +275,10 @@
             <td width="83%" >
                 <div class="pull-right"><b>{vtranslate('LBL_ADJUSTMENT',$MODULE)}&nbsp;&nbsp;</b>
                     <div class="radio pull-right">
-                        <input type="radio" id="adjustmentType" name="adjustmentType" option value="-">{vtranslate('LBL_DEDUCT',$MODULE)}
+                        <input type="radio" name="adjustmentType" option value="-">{vtranslate('LBL_DEDUCT',$MODULE)}
                     </div>
                     <div class="radio pull-right">
-                        <input type="radio" id="adjustmentType" name="adjustmentType" option value="+">{vtranslate('LBL_ADD',$MODULE)}&nbsp;&nbsp;
+                        <input type="radio" name="adjustmentType" option value="+" checked>{vtranslate('LBL_ADD',$MODULE)}&nbsp;&nbsp;
                     </div>
                 </div>
             </td>

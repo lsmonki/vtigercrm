@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 chdir (dirname(__FILE__) . '/..');
-
 //Overrides GetRelatedList : used to get related query
 //TODO : Eliminate below hacking solution
 include_once 'include/Webservices/Relation.php';

@@ -24,7 +24,7 @@ class Settings_Vtiger_MenuItem_Model extends Vtiger_Base_Model {
 		'index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings' => 'index.php?module=SharingAccess&parent=Settings&view=Index',
 		'index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings' => 'index.php?module=FieldAccess&parent=Settings&view=Index',
 		'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings' => 'index.php?module=Settings&submodule=Users&view=LoginHistory',
-		'index.php?module=Settings&action=ModuleManager&parenttab=Settings' => 'index.php?module=Settings&submodule=ModuleManager&view=Index',
+		'index.php?module=Settings&action=ModuleManager&parenttab=Settings' => 'index.php?module=ModuleManager&parent=Settings&view=Index',
 		'index.php?module=PickList&action=PickList&parenttab=Settings' => 'index.php?module=Settings&submodule=Picklist&view=Index',
 		'index.php?module=Settings&action=listemailtemplates&parenttab=Settings' => 'index.php?module=Emails&view=ListTemplates',
 		'index.php?module=Settings&action=listwordtemplates&parenttab=Settings' => 'index.php?module=Settings&submodule=ModuleManager&view=WordTemplates',

@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 
-<table cellpadding="5" cellspacing="0" align="center" class="dvtSelectedCell thickBorder importContents fontBold font-x-small">
+<table cellpadding="5" cellspacing="0" align="center" class="dvtSelectedCell thickBorder importContents">
 	<tr>
 		<td>{'LBL_TOTAL_RECORDS_IMPORTED'|@vtranslate:$MODULE}</td>
 		<td width="10%">:</td>

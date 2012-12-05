@@ -141,7 +141,7 @@ var Vtiger_Emails_Js = {
 				editor.setData(replaced_text);
 			});
 		});	
-		jQuery('#SendEmailFormStep2').validationEngine();
+		jQuery('#SendEmailFormStep2').validationEngine(app.validationEngineOptions);
 	}	
 }
 

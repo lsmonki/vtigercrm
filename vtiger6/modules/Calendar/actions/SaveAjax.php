@@ -52,7 +52,28 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 
 		$result['_recordLabel'] = $recordModel->getName();
 		$result['_recordId'] = $recordModel->getId();
+		
+		// Handled to save follow up event
+		$followupMode = $request->get('followup');
 
+        if($followupMode == 'on') {
+            //Start Date and Time values
+            $startTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('followup_time_start'));
+            $startDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('followup_date_start') . " " . $startTime);
+            list($startDate, $startTime) = explode(' ', $startDateTime);
+
+            $subject = $request->get('subject');
+            if($startTime != '' && $startDate != ''){
+                $recordModel->set('eventstatus', 'Planned');
+                $recordModel->set('subject','[Followup] '.$subject);
+                $recordModel->set('date_start',$startDate);
+                $recordModel->set('due_date',$startDate);
+                $recordModel->set('time_start',$startTime);
+                $recordModel->set('time_end',$startTime);
+                $recordModel->set('mode', 'create');
+                $recordModel->save();
+            }
+        }
 		$response = new Vtiger_Response();
 		$response->setEmitType(Vtiger_Response::$EMIT_JSON);
 		$response->setResult($result);

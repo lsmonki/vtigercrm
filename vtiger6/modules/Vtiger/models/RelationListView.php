@@ -40,17 +40,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$createViewUrl = $relatedModel->getCreateRecordUrl().'&sourceModule='.$parentModule->get('name').
 								'&sourceRecord='.$parentRecordModule->getId().'&relationOperation=true';
 
-		//To keep the reference fieldname and record value in the url if it is direcr relation
-		if($relationModel->isDirectRelation()){
-			$relatedModelFields = $relatedModel->getFields();
-			foreach($relatedModelFields as $fieldName=>$fieldModel){
-				if($fieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
-					$referenceList = $fieldModel->getReferenceList();
-					if(in_array($parentModule->get('name'), $referenceList)){
-						$createViewUrl .='&'.$fieldModel->get('name').'='.$parentRecordModule->getId();
-					}
-				}
-			}
+		//To keep the reference fieldname and record value in the url if it is direct relation
+		if($relationModel->isDirectRelation()) {
+			$relationField = $relationModel->getRelationField();
+			$createViewUrl .='&'.$relationField->getName().'='.$parentRecordModule->getId();
 		}
 		return $createViewUrl;
 	}
@@ -64,17 +57,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$createViewUrl = $relatedModel->getCreateEventRecordUrl().'&sourceModule='.$parentModule->get('name').
 								'&sourceRecord='.$parentRecordModule->getId().'&relationOperation=true';
 
-		//To keep the reference fieldname and record value in the url if it is direcr relation
-		if($relationModel->isDirectRelation()){
-			$relatedModelFields = $relatedModel->getFields();
-			foreach($relatedModelFields as $fieldName=>$fieldModel){
-				if($fieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
-					$referenceList = $fieldModel->getReferenceList();
-					if(in_array($parentModule->get('name'), $referenceList)){
-						$createViewUrl .='&'.$fieldModel->get('name').'='.$parentRecordModule->getId();
-					}
-				}
-			}
+		//To keep the reference fieldname and record value in the url if it is direct relation
+		if($relationModel->isDirectRelation()) {
+			$relationField = $relationModel->getRelationField();
+			$createViewUrl .='&'.$relationField->getName().'='.$parentRecordModule->getId();
 		}
 		return $createViewUrl;
 	}
@@ -88,17 +74,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$createViewUrl = $relatedModel->getCreateTaskRecordUrl().'&sourceModule='.$parentModule->get('name').
 								'&sourceRecord='.$parentRecordModule->getId().'&relationOperation=true';
 
-		//To keep the reference fieldname and record value in the url if it is direcr relation
-		if($relationModel->isDirectRelation()){
-			$relatedModelFields = $relatedModel->getFields();
-			foreach($relatedModelFields as $fieldName=>$fieldModel){
-				if($fieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
-					$referenceList = $fieldModel->getReferenceList();
-					if(in_array($parentModule->get('name'), $referenceList)){
-						$createViewUrl .='&'.$fieldModel->get('name').'='.$parentRecordModule->getId();
-					}
-				}
-			}
+		//To keep the reference fieldname and record value in the url if it is direct relation
+		if($relationModel->isDirectRelation()) {
+			$relationField = $relationModel->getRelationField();
+			$createViewUrl .='&'.$relationField->getName().'='.$parentRecordModule->getId();
 		}
 		return $createViewUrl;
 	}

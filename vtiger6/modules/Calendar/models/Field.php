@@ -45,6 +45,8 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 			return 'datetime';
 		} else if($this->get('uitype') == '30') {
 			return 'reminder';
+		} else if($this->getName() == 'recurringtype') {
+			return 'recurrence';
 		}
 		$webserviceField = $this->getWebserviceFieldObject();
 		return $webserviceField->getFieldDataType();
@@ -59,12 +61,15 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 				$dateTimeValue = $value . ' '. $recordInstance->get('time_start');
 				$value = $this->getUITypeModel()->getDisplayValue($dateTimeValue);
 				list($startDate, $startTime) = explode(' ', $value);
-				$time = Vtiger_Time_UIType::getTimeValueInAMorPM($startTime);
+				
+				$currentUser = Users_Record_Model::getCurrentUserModel();
+				if($currentUser->get('hour_format') == '12')
+					$startTime = Vtiger_Time_UIType::getTimeValueInAMorPM($startTime);
 
-				return $startDate . ' ' . $time;
+				return $startDate . ' ' . $startTime;
 			}
 		}
-		return parent::getDisplayValue($value, $record);
+		return parent::getDisplayValue($value, $record, $recordInstance);
 	}
 
 	/**
@@ -74,8 +79,7 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 	 */
 	public function getEditViewDisplayValue($value) {
 		if ($this->getName() == 'time_start' || $this->getName() == 'time_end') {
-			$time = Vtiger_Time_UIType::getDisplayTimeValue($value);
-			return Vtiger_Time_UIType::getTimeValueInAMorPM($time);
+			return $this->getUITypeModel()->getDisplayTimeDifferenceValue($this->getName(), $value);
 		}
 		return parent::getEditViewDisplayValue($value);
 	}

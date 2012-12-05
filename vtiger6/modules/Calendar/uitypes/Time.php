@@ -23,29 +23,39 @@ class Calendar_Time_UIType extends Vtiger_Time_UIType {
 
 		if(!in_array($fieldName, $specialTimeFields)){
 			return parent::getEditViewDisplayValue($value);
+		}else{
+			return $this->getDisplayTimeDifferenceValue($fieldName, $value);
 		}
+		
+	}
 
+	/**
+	 * Function to get the calendar event call duration value in hour format
+	 * @param type $fieldName
+	 * @param type $value
+	 * @return <Vtiger_Time_UIType> - getTimeValue 
+	 */
+	public function getDisplayTimeDifferenceValue($fieldName, $value){
 		$userModel = Users_Privileges_Model::getCurrentUserModel();
-		$timeZone = $userModel->get('time_zone');
-		$targetTimeZone = new DateTimeZone($timeZone);
+		$date = new DateTime($value);
 		
-		$date = new DateTime();
-		$date->setTimezone($targetTimeZone);
-		$hour = (int)$date->format('H');
-		$nextHour = $hour+1;
-		
-		$date->setTime($nextHour,0,0);
-		
-		if($fieldName == 'time_start') {
-			$dateTimeField = new DateTimeField($date->format('Y-m-d H:i:s'));
-			return $dateTimeField->getDisplayTime();
+		if(empty($value)) {
+			$timeZone = $userModel->get('time_zone');
+			$targetTimeZone = new DateTimeZone($timeZone);
+			$date->setTimezone($targetTimeZone);
 		}
-		else if($fieldName == 'time_end') {
-			$endDateHour = $nextHour + 1;
-			$date->setTime($endDateHour, 0, 0);
-			$dateTimeField = new DateTimeField($date->format('Y-m-d H:i:s'));
-			return $dateTimeField->getDisplayTime();
+		
+		if($fieldName == 'time_end' && empty($value)) {
+			$defaultCallDuration = $userModel->get('callduration');
+			$date->modify("+{$defaultCallDuration} minutes");
 		}
+		
+		$dateTimeField = new DateTimeField($date->format('Y-m-d H:i:s'));
+		$value = $dateTimeField->getDisplayTime();
+		if($userModel->get('hour_format') == '12'){
+			return Vtiger_Time_UIType::getTimeValueInAMorPM($value);
+		}
+		return $value;
 	}
 
 }

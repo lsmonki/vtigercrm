@@ -179,16 +179,16 @@ class Import_Utils_Helper {
 			return false;
 		}
 		if(!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-			$request->set('error_message', vtranslate('LBL_FILE_UPLOAD_FAILED'));
+			$request->set('error_message', vtranslate('LBL_FILE_UPLOAD_FAILED', 'Import'));
 			return false;
 		}
 		if ($_FILES['import_file']['size'] > $uploadMaxSize) {
 			$request->set('error_message', vtranslate('LBL_IMPORT_ERROR_LARGE_FILE', 'Import').
-												 $uploadMaxSize.' '.vtranslate('LBL_IMPORT_CHANGE_UPLOAD_SIZE'));
+												 $uploadMaxSize.' '.vtranslate('LBL_IMPORT_CHANGE_UPLOAD_SIZE', 'Import'));
 			return false;
 		}
 		if(!is_writable($importDirectory)) {
-			$request->set('error_message', vtranslate('LBL_IMPORT_DIRECTORY_NOT_WRITABLE'));
+			$request->set('error_message', vtranslate('LBL_IMPORT_DIRECTORY_NOT_WRITABLE', 'Import'));
 			return false;
 		}
 

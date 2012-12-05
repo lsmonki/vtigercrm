@@ -56,5 +56,15 @@ $languageStrings = array(
 	'ERR_UNIMPORTED_RECORDS_EXIST' => 'Unable to import more data in this batch. Please start a new import.',
 	'ERR_IMPORT_INTERRUPTED' => 'Current Import has been interrupted. Please try again later',
 	'ERR_FAILED_TO_LOCK_MODULE' => 'Failed to lock the module for import. Re-try again later',
-	'LBL_SELECT_SAVED_MAPPING' => 'Select Saved Mapping'
+	'LBL_SELECT_SAVED_MAPPING' => 'Select Saved Mapping',
+	'LBL_IMPORT_ERROR_LARGE_FILE' => 'Import Error Large file ',
+	'LBL_FILE_UPLOAD_FAILED' => 'File Upload Failed',
+	'LBL_IMPORT_CHANGE_UPLOAD_SIZE' => 'Import Change Upload Size',
+	'LBL_IMPORT_DIRECTORY_NOT_WRITABLE' => 'Import Directory is not writable',
+	'LBL_IMPORT_FILE_COPY_FAILED' => 'Import File copy failed',
+	'LBL_INVALID_FILE' => 'Invalid File',
+	'LBL_NO_ROWS_FOUND' => 'No rows found',
+	'LBL_SCHEDULED_IMPORT_DETAILS' => 'Your import has been scheduled and will start within 15 minutes. You will receive an email after import is completed.  <br> <br>
+										Please make sure that the Outgoing server and your email address is configured to receive email notification',
+	
 );

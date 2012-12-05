@@ -271,6 +271,8 @@ var Vtiger_CustomView_Js = {
 				jQuery('input[name="columnslist"]', contentsContainer).val(JSON.stringify(Vtiger_CustomView_Js.getSelectedColumns()));
 				Vtiger_CustomView_Js.saveAndViewFilter();
 				return false;
+			} else {
+				app.formAlignmentAfterValidation(jQuery(e.currentTarget));
 			}
 		});
 

@@ -9,6 +9,10 @@
  ************************************************************************************/
 
 class Reports_List_View extends Vtiger_Index_View {
+	
+	protected $listViewHeaders = false;
+	protected $listViewEntries = false;
+	protected $listViewCount   = false;
 
 	public function checkPermission(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
@@ -19,8 +23,8 @@ class Reports_List_View extends Vtiger_Index_View {
 			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}
-	
-	
+
+
 
 	function preProcess(Vtiger_Request $request, $display=true) {
 		parent::preProcess($request, false);
@@ -32,19 +36,47 @@ class Reports_List_View extends Vtiger_Index_View {
 		$folders = $moduleModel->getFolders();
 		$listViewModel = new Reports_ListView_Model();
 		$listViewModel->set('module', $moduleModel);
-		
+
 		$folderId = $request->get('viewname');
 		if(empty($folderId)){
-			$folderId = $folders[0]->getId();
+			$folderId = 'All';
 		}
 		$listViewModel->set('folderid', $folderId);
 
 		$linkModels = $listViewModel->getListViewLinks();
+		$pageNumber = $request->get('page');
+		$listViewMassActionModels = $listViewModel->getListViewMassActions();
+
+		if(empty ($pageNumber)){
+			$pageNumber = '1';
+		}
+		$pagingModel = new Vtiger_Paging_Model();
+		$pagingModel->set('page', $pageNumber);
+		$viewer->assign('PAGING_MODEL', $pagingModel);
+
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}	
+
+		$noOfEntries = count($this->listViewEntries);
 		
 		$viewer->assign('LISTVIEW_LINKS', $linkModels);
 		$viewer->assign('FOLDERS', $folders);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('VIEWNAME',$folderId);
+  		$viewer->assign('PAGE_NUMBER',$pageNumber);
+		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
+		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+
+		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
+			if(!$this->listViewCount){
+				$this->listViewCount = $listViewModel->getListViewCount();
+			}
+			$viewer->assign('LISTVIEW_COUNT', $this->listViewCount);
+		}
 
 		if($display) {
 			$this->preProcessDisplay($request);
@@ -61,7 +93,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$folders = $moduleModel->getFolders();
 		$folderId = $request->get('viewname');
 		if(empty($folderId)){
-			$folderId = $folders[0]->getId();
+			$folderId = 'All';
 		}
 		$pageNumber = $request->get('page');
 		$orderBy = $request->get('orderby');
@@ -69,12 +101,12 @@ class Reports_List_View extends Vtiger_Index_View {
 		$sortOrder = $request->get('sortorder');
 		if($sortOrder == "ASC"){
 			$nextSortOrder = "DESC";
-			$sortImage = "downArrowSmall.png";
+			$sortImage = "icon-chevron-down";
 		}else{
 			$nextSortOrder = "ASC";
-			$sortImage = "upArrowSmall.png";
+			$sortImage = "icon-chevron-up";
 		}
-		
+
 		$listViewModel = new Reports_ListView_Model();
 		$listViewModel->set('module', $moduleModel);
 		$listViewModel->set('folderid', $folderId);
@@ -91,22 +123,40 @@ class Reports_List_View extends Vtiger_Index_View {
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $pageNumber);
 		$viewer->assign('PAGING_MODEL', $pagingModel);
-	
-		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
 
-		$listViewHeaders = $listViewModel->getListViewHeaders();
-		$listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		$noOfEntries = count($listViewEntries);
+		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
+		
+		if(!$this->listViewHeaders){
+			$this->listViewHeaders = $listViewModel->getListViewHeaders();
+		}
+		if($folderId == 'All'){
+			$this->listViewHeaders['foldername']= 'LBL_FOLDER_NAME';
+		}
+
+		if(!$this->listViewEntries){
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+		}
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+
+		$noOfEntries = count($this->listViewEntries);
 		
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
-		$viewer->assign('LISTVIEW_HEADERS', $listViewHeaders);
-		$viewer->assign('LISTVIEW_ENTRIES', $listViewEntries);
+		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
+		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
+		$viewer->assign('MODULE_MODEL', $moduleModel);
+		$viewer->assign('VIEWNAME',$folderId);
+		
+		$viewer->assign('ORDER_BY',$orderBy);
+		$viewer->assign('SORT_ORDER',$sortOrder);
+		$viewer->assign('NEXT_SORT_ORDER',$nextSortOrder);
+		$viewer->assign('SORT_IMAGE',$sortImage);
+		$viewer->assign('COLUMN_NAME',$orderBy);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			$viewer->assign('LISTVIEW_COUNT', $listViewModel->getListViewCount());
 		}
-		
+
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
 

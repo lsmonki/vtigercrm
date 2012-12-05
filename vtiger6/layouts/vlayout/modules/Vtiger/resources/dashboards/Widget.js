@@ -205,7 +205,7 @@ jQuery.Class('Vtiger_Widget_Js',{
 				jQuery(element).val(formated);
 			},
 			onHide : function() {
-				container.find('a[name="drefresh"]').trigger('click');;
+				container.find('a[name="drefresh"]').trigger('click');
 			}
 		}
 		dateRangeElement.addClass('dateField').attr('data-date-format',thisInstance.getUserDateFormat());
@@ -213,7 +213,7 @@ jQuery.Class('Vtiger_Widget_Js',{
 	},
 
 	registerFilterChangeEvent : function() {
-		this.getContainer().on( 'change', '.widgetFilter', function(e){
+		this.getContainer().on('change', '.widgetFilter', function(e) {
 			var widgetContainer = jQuery(e.currentTarget).closest('li');
 			widgetContainer.find('a[name="drefresh"]').trigger('click');
 		})
@@ -267,7 +267,7 @@ Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
 			},
 			legend: {
 				show: true,
-				location: 'e',
+				location: 'ne',
 				placement: 'outside',
 				labels:labels,
 				xoffset:20

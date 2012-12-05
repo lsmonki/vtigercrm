@@ -7,6 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
+vimport('~~include/utils/RecurringType.php');
 
 class Calendar_Record_Model extends Vtiger_Record_Model {
 	
@@ -52,5 +53,77 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 	public function getDetailViewUrl() {
 		$module = $this->getModule();
 		return 'index.php?module=Calendar&view='.$module->getDetailViewName().'&record='.$this->getId();
+	}
+	
+	/**
+	 * Function returns recurring information for EditView
+	 * @return <Array> - which contains recurring Information
+	 */
+	public function getRecurrenceInformation() {
+		$recurringObject = $this->getRecurringObject();
+
+		if ($recurringObject) {
+			$recurringData['recurringcheck'] = 'Yes';
+			$recurringData['repeat_frequency'] = $recurringObject->getRecurringFrequency();
+			$recurringData['eventrecurringtype'] = $recurringObject->getRecurringType();
+			$recurringInfo = $recurringObject->getUserRecurringInfo();
+
+			if ($recurringObject->getRecurringType() == 'Weekly') {
+				$noOfDays = count($recurringInfo['dayofweek_to_repeat']);
+				for ($i = 0; $i < $noOfDays; ++$i) {
+					$recurringData['week'.$recurringInfo['dayofweek_to_repeat'][$i]] = 'checked';
+				}
+			} elseif ($recurringObject->getRecurringType() == 'Monthly') {
+				$recurringData['repeatMonth'] = $recurringInfo['repeatmonth_type'];
+				if ($recurringInfo['repeatmonth_type'] == 'date') {
+					$recurringData['repeatMonth_date'] = $recurringInfo['repeatmonth_date'];
+				} else {
+					$recurringData['repeatMonth_daytype'] = $recurringInfo['repeatmonth_daytype'];
+					$recurringData['repeatMonth_day'] = $recurringInfo['dayofweek_to_repeat'][0];
+				}
+			}
+		} else {
+			$recurringData['recurringcheck'] = 'No';
+		}
+		return $recurringData;
+	}
+	
+	function save() {
+		//Time should changed to 24hrs format
+		$_REQUEST['time_start'] = Vtiger_Time_UIType::getTimeValueWithSeconds($_REQUEST['time_start']);
+		$_REQUEST['time_end'] = Vtiger_Time_UIType::getTimeValueWithSeconds($_REQUEST['time_end']);
+		parent::save();
+	}
+	
+	/**
+	 * Function to get recurring information for the current record in detail view
+	 * @return <Array> - which contains Recurring Information
+	 */
+	public function getRecurringDetails() {
+		$recurringObject = $this->getRecurringObject();
+		if ($recurringObject) {
+			$recurringInfoDisplayData = $recurringObject->getDisplayRecurringInfo();
+		} else {
+			$recurringInfoDisplayData['recurringcheck'] = vtranslate('LBL_NO', $currentModule);
+			$recurringInfoDisplayData['repeat_str'] = '';
+		}
+		
+		return $recurringInfoDisplayData;
+	}
+	
+	/**
+	 * Function to get the recurring object
+	 * @return Object - recurring object
+	 */
+	public function getRecurringObject() {
+		$db = PearDatabase::getInstance();
+		$query = 'SELECT vtiger_recurringevents.*, vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.due_date, vtiger_activity.time_end FROM vtiger_recurringevents
+					INNER JOIN vtiger_activity ON vtiger_activity.activityid = vtiger_recurringevents.activityid
+					WHERE vtiger_recurringevents.activityid = ?';
+		$result = $db->pquery($query, array($this->getId()));
+		if ($db->num_rows($result)) {
+			return RecurringType::fromDBRequest($db->query_result_rowdata($result, 0));
+		}
+		return false;
 	}
 }

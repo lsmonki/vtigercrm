@@ -22,5 +22,23 @@ class Emails_Module_Model extends Vtiger_Module_Model{
 	public function isWorkflowSupported() {
 		return false;
 	}
+
+	/**
+	 * Function to get emails related modules
+	 * @return <Array> - list of modules 
+	 */	
+	public function getEmailRelatedModules() {
+		$userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		
+		$relatedModules = array('Contacts', 'Accounts', 'Vendors', 'Leads');
+		foreach ($relatedModules as $moduleName) {
+			$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+			if($userPrivModel->isAdminUser() || $userPrivModel->hasGlobalReadPermission() || $userPrivModel->hasModulePermission($moduleModel->getId())) {
+				$emailRelatedModules[] = $moduleName;
+			}
+		}
+		$emailRelatedModules[] = 'Users';
+		return $emailRelatedModules;
+	}
 }
 ?>

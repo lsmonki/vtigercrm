@@ -20,6 +20,11 @@ Inventory_Edit_Js("PurchaseOrder_Edit_Js",{},{
 		jQuery('input[name="vendor_id"]', formElement).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
 			thisInstance.copyAddressDetails(data);
 		});
+	},
+	
+	registerEvents: function(){
+		this._super();
+		this.registerEventForCopyAddress();
 	}
 });
 

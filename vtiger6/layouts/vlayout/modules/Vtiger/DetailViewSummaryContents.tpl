@@ -17,7 +17,7 @@
 	{/if}
 	<div class="widgetContainer">
 		{foreach item=DETAIL_VIEW_WIDGET from=$DETAILVIEW_LINKS['DETAILVIEWWIDGET'] name=count}
-			<div class="widgetContainer_{$smarty.foreach.count.index}" data-url={$DETAIL_VIEW_WIDGET->getUrl()}>
+			<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
 				<div class="widget_header">
 					<h3>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h3>
 				</div>

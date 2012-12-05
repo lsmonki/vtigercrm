@@ -33,15 +33,15 @@
 						<div><b>{$USER->getName()}</b> {vtranslate('LBL_UPDATED')} <a href="{$PARENT->getDetailViewUrl()}">{$PARENT->getName()}</a>
 						</div>
 						{foreach from=$FIELDS key=INDEX item=FIELD}
-						{if $INDEX lt 2}	
+						{if $INDEX lt 2}
 						<div class='font-x-small'>
 							<i>{$FIELD->getName()}</i>
 							{if $FIELD->get('prevalue') neq ''}
-								{vtranslate('LBL_FROM')} <b>{$FIELD->getDisplayValue($FIELD->get('prevalue'))}</b>
+								{vtranslate('LBL_FROM')} <b>{$FIELD->getDisplayValue(decode_html($FIELD->get('prevalue')))}</b>
 							{else}
 								{vtranslate('LBL_CHANGED')}
 							{/if}
-								{vtranslate('LBL_TO')} <b>{$FIELD->getDisplayValue($FIELD->get('postvalue'))}</b>
+								{vtranslate('LBL_TO')} <b>{$FIELD->getDisplayValue(decode_html($FIELD->get('postvalue')))}</b>
 						</div>
 						{else}
 							<a href="{$PARENT->getUpdatesUrl()}">{vtranslate('LBL_MORE')}</a>
@@ -71,7 +71,7 @@
 			{else if $MODELNAME == 'ModComments_Record_Model'}
 			<div class="row-fluid">
 				<div class="span1">
-					<image width='24px' src="{vimage_path('comments.png')}"/>&nbsp;&nbsp;
+					<image width='24px' src="{vimage_path('Comments.png')}"/>&nbsp;&nbsp;
 				</div>
 				<div class="span11">
 					{assign var=COMMENT_TIME value=$HISTORY->getCommentedTime()}

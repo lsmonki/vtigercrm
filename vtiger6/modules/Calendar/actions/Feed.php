@@ -179,17 +179,30 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		$query = "SELECT firstname,lastname,birthday,crmid FROM vtiger_contactdetails";
 		$query.= " INNER JOIN vtiger_contactsubdetails ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid";
 		$query.= " INNER JOIN vtiger_crmentity ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid";
-		$query.= " WHERE month(birthday) BETWEEN $startDateComponents[1] AND $endDateComponents[1]";
-		$query.= " AND	DayOfMonth(birthday) >= $startDateComponents[2] AND DayOfMonth(birthday) < $endDateComponents[2] AND";
-		$query.= " vtiger_crmentity.deleted=0 AND smownerid='{$user->getId()}'";
-		
+		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid='{$user->getId()}' AND";
+		$query.= " ((CONCAT('$year-', date_format(birthday,'%m-%d')) >= '$start'
+						AND CONCAT('$year-', date_format(birthday,'%m-%d')) <= '$end')";
+
+		$endDateYear = $endDateComponents[0];
+		if ($year !== $endDateYear) {
+			$query .= " OR
+						(CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) >= '$start'
+							AND CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) <= '$end')";
+		}
+		$query .= ")";
+
 		$queryResult = $db->pquery($query, array());
 
 		while($record = $db->fetchByAssoc($queryResult)){
 			$item = array();
 			$crmid = $record['crmid'];
 			$recordDateTime = new DateTime($record['birthday']);
-			$recordDateTime->setDate($year, $recordDateTime->format('m'), $recordDateTime->format('d'));
+
+			$calendarYear = $year;
+			if($recordDateTime->format('m') < $startDateComponents[1]) {
+				$calendarYear = $endDateYear;
+			}
+			$recordDateTime->setDate($calendarYear, $recordDateTime->format('m'), $recordDateTime->format('d'));
 			$item['id'] = $crmid;
 			$item['title'] = trim($record['firstname'] . ' ' . $record['lastname']);
 			$item['start'] = $recordDateTime->format('Y-m-d');

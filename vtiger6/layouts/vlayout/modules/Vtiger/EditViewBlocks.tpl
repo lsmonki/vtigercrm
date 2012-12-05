@@ -12,22 +12,28 @@
 
 {strip}
 <div class='editViewContainer'>
-	<form class="form-horizontal recordEditView equalSplit" id="EditView" name="EditView" method="post" action="index.php" enctype="multipart/form-data">
+	<form class="form-horizontal recordEditView" id="EditView" name="EditView" method="post" action="index.php" enctype="multipart/form-data">
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="record" value="{$RECORD_ID}" />
+		<input type="hidden" name="defaultCallDuration" value="{$USER_MODEL->get('callduration')}" />
+		<input type="hidden" name="defaultOtherEventDuration" value="{$USER_MODEL->get('othereventduration')}" />
 		{if $IS_RELATION_OPERATION }
 			<input type="hidden" name="sourceModule" value="{$SOURCE_MODULE}" />
 			<input type="hidden" name="sourceRecord" value="{$SOURCE_RECORD}" />
 			<input type="hidden" name="relationOperation" value="{$IS_RELATION_OPERATION}" />
 		{/if}
-		<div class="contentHeader">
+		<div class="contentHeader row-fluid">
 		{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
 		{if $RECORD_ID neq ''}
-			{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"
+			<span class="span8 font-x-x-large textOverflowEllipsis" title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</span>
 		{else}
-			{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}
+			<span class="span8 font-x-x-large textOverflowEllipsis">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
 		{/if}
+			<span class="pull-right">
+				<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
+				<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+			</span>
 		</div>
 		{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$RECORD_STRUCTURE name="EditViewBlockLevelLoop"}
 			{if $BLOCK_FIELDS|@count lte 0}{continue}{/if}
@@ -63,7 +69,7 @@
 								{if !empty($REFERENCED_MODULE_STRUCT)}
 									{assign var="REFERENCED_MODULE_NAME" value=$REFERENCED_MODULE_STRUCT->get('name')}
 								{/if}
-								<select class="chzn-select referenceModulesList streched" style="width:140px;">
+								<select id="{$MODULE}_editView_fieldName_{$FIELD_MODEL->getName()}_dropDown" class="chzn-select referenceModulesList streched" style="width:140px;">
 									<optgroup>
 										{foreach key=index item=value from=$REFERENCE_LIST}
 											<option value="{$value}" {if $value eq $REFERENCED_MODULE_NAME} selected {/if}>{vtranslate($value, $MODULE)}</option>
@@ -74,7 +80,7 @@
 								{vtranslate($FIELD_MODEL->get('label'), $MODULE)}
 							{/if}
 						{else if $FIELD_MODEL->get('uitype') eq "83"}
-							{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE) COUNTER=$COUNTER}
+							{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE) COUNTER=$COUNTER MODULE=$MODULE}
 						{else}
 							{vtranslate($FIELD_MODEL->get('label'), $MODULE)}
 						{/if}
@@ -85,7 +91,10 @@
 						{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE) BLOCK_FIELDS=$BLOCK_FIELDS}
 					</td>
 				{/if}
-				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20"}<td></td><td></td>{/if}
+				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20" and $FIELD_MODEL->get('uitype') neq "30" and $FIELD_MODEL->get('name') neq "recurringtype"}<td></td><td></td>{/if}
+				{if $MODULE eq 'Events' && $BLOCK_LABEL eq 'LBL_EVENT_INFORMATION' && $smarty.foreach.blockfields.last }	
+					{include file=vtemplate_path('uitypes/FollowUp.tpl',$MODULE) COUNTER=$COUNTER}
+				{/if}	
 			{/foreach}
 			</tr>
 			</table>

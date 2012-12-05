@@ -13,11 +13,16 @@ var Vtiger_Index_Js = {
 		var widgets = jQuery('div.widgetContainer');
 		widgets.on({
 				shown: function(e) {
-					Vtiger_Index_Js.loadWidgets(jQuery(e.currentTarget));
+					var widgetContainer = jQuery(e.currentTarget);
+					Vtiger_Index_Js.loadWidgets(widgetContainer);
+					var key = widgetContainer.attr('id');
+					app.cacheSet(key, 1);
 			},
 				hidden: function(e) {
-				var widgetContainer = jQuery(e.currentTarget);
-				widgetContainer.parent().find('.icon-chevron-down').removeClass('icon-chevron-down alignBottom').addClass('icon-chevron-up alignBottom');
+					var widgetContainer = jQuery(e.currentTarget);
+					widgetContainer.parent().find('.icon-chevron-down').removeClass('icon-chevron-down alignBottom').addClass('icon-chevron-up alignBottom');
+					var key = widgetContainer.attr('id');
+					app.cacheSet(key, 0);
 			}
 		});
 	},
@@ -31,7 +36,7 @@ var Vtiger_Index_Js = {
 			return;
 		}
 
-		widgetContainer.progressIndicator({ 'message' : message });
+		widgetContainer.progressIndicator({'message' : message});
 		var url = widgetContainer.data('url');
 
 		var listViewWidgetParams = {
@@ -47,9 +52,29 @@ var Vtiger_Index_Js = {
 			}
 		);
 	},
+	
+	loadWidgetsOnLoad : function(){
+		var widgets = jQuery('div.widgetContainer');
+		widgets.each(function(index,element){
+			var widgetContainer = jQuery(element);
+			var key = widgetContainer.attr('id');
+			var value = app.cacheGet(key);
+			if(value != null){
+				if(value == 1) {
+					Vtiger_Index_Js.loadWidgets(widgetContainer);
+					widgetContainer.addClass('in');
+				} else {
+					widgetContainer.parent().find('.icon-chevron-down').removeClass('icon-chevron-down alignBottom').addClass('icon-chevron-up alignBottom');
+				}
+			}
+			
+		});
+		
+	},
 
 	registerEvents : function(){
 		Vtiger_Index_Js.registerWidgetsEvents();
+		Vtiger_Index_Js.loadWidgetsOnLoad();
 	}
 }
 

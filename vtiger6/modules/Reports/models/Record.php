@@ -173,7 +173,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return boolean
 	 */
 	function isEditable() {
-		return ($this->get('sharingtype') == 'Public' || $this->report->isEditable());
+		return ($this->report->isEditable());
 	}
 
 	/**
@@ -285,10 +285,26 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$result = $db->pquery('SELECT * FROM vtiger_reportdatefilter WHERE datefilterid = ?', array($this->getId()));
 		$standardFieldInfo = array();
 		if($db->num_rows($result)) {
-			$standardFieldInfo['column'] = $db->query_result($result, 0, 'datecolumnname');
+			$standardFieldInfo['columnname'] = $db->query_result($result, 0, 'datecolumnname');
 			$standardFieldInfo['type'] = $db->query_result($result, 0, 'datefilter');
-			$standardFieldInfo['startDate'] = $db->query_result($result, 0, 'startdate'); //TODO : convert to displayDate
-			$standardFieldInfo['endDate'] = $db->query_result($result, 0, 'enddate'); //TODO : convert to displayDate
+			$standardFieldInfo['startdate'] = $db->query_result($result, 0, 'startdate'); 
+			$standardFieldInfo['enddate'] = $db->query_result($result, 0, 'enddate'); 
+			
+			if ($standardFieldInfo['type'] == "custom" || $standardFieldInfo['type'] == "") {
+				if ($standardFieldInfo["startdate"] != "0000-00-00" && $standardFieldInfo["startdate"] != "") {
+					$startDateTime = new DateTimeField($standardFieldInfo["startdate"] . ' ' . date('H:i:s'));
+					$standardFieldInfo["startdate"] = $startDateTime->getDisplayDate();
+				}
+				if ($standardFieldInfo["enddate"] != "0000-00-00" && $standardFieldInfo["enddate"] != "") {
+					$endDateTime = new DateTimeField($standardFieldInfo["enddate"] . ' ' . date('H:i:s'));
+					$standardFieldInfo["enddate"] = $endDateTime->getDisplayDate();
+				}
+			} else { 
+				$startDateTime = new DateTimeField($standardFieldInfo["startdate"] . ' ' . date('H:i:s'));
+				$standardFieldInfo["startdate"] = $startDateTime->getDisplayDate();
+				$endDateTime = new DateTimeField($standardFieldInfo["enddate"] . ' ' . date('H:i:s'));
+				$standardFieldInfo["enddate"] = $endDateTime->getDisplayDate();
+			}
 		}
 
 		return $standardFieldInfo;
@@ -368,8 +384,6 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$db->pquery('DELETE FROM vtiger_reportdatefilter WHERE datefilterid = ?', array($reportId));
 			$this->saveStandardFilter();
 
-			$db->pquery('DELETE FROM vtiger_relcriteria WHERE queryid = ?', array($reportId));
-			$db->pquery('DELETE FROM vtiger_relcriteria_grouping WHERE queryid = ?', array($reportId));
 			$this->saveAdvancedFilters();
 		}
 	}
@@ -459,6 +473,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$reportId = $this->getId();
 		$advancedFilter = $this->get('advancedFilter');
 		if(!empty($advancedFilter)) {
+
+			$db->pquery('DELETE FROM vtiger_relcriteria WHERE queryid = ?', array($reportId));
+			$db->pquery('DELETE FROM vtiger_relcriteria_grouping WHERE queryid = ?', array($reportId));
+
 			foreach($advancedFilter as $groupIndex => $groupInfo) {
 				if(empty($groupInfo)) continue;
 
@@ -562,7 +580,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <String>
 	 */
 	function getReportSQL($advancedFilterSQL=false, $format=false) {
-		$reportRun = new ReportRun($this->getId());
+		$reportRun = ReportRun::getInstance($this->getId());
 		$sql = $reportRun->sGetSQLforReport($this->getId(), $advancedFilterSQL, $format);
 		return $sql;
 	}
@@ -570,16 +588,17 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	/**
 	 * Function returns report's data
 	 * @param <Vtiger_Paging_Model> $pagingModel
+	 * @param <String> $filterQuery
 	 * @return <Array>
 	 */
-	function getReportData($pagingModel = false) {
-		$reportRun = new ReportRun($this->getId());
-		$data = $reportRun->GenerateReport('PDF', false, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
+	function getReportData($pagingModel = false, $filterQuery = false) {
+		$reportRun = ReportRun::getInstance($this->getId());
+		$data = $reportRun->GenerateReport('PDF', $filterQuery, true, $pagingModel->getStartIndex(), $pagingModel->getPageLimit());
 		return $data;
 	}
 
 	function getReportCalulationData() {
-		$reportRun = new ReportRun($this->getId());
+		$reportRun = ReportRun::getInstance($this->getId());
 		$data = $reportRun->GenerateReport('TOTALXLS', false, true);
 		return $data;
 	}
@@ -587,7 +606,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * Function exports reports data into a Excel file
 	 */
 	function getReportXLS() {
-		$reportRun = new ReportRun($this->getId());
+		$reportRun = ReportRun::getInstance($this->getId());
 		$rootDirectory = vglobal('root_directory');
 		$tmpDir = vglobal('tmp_dir');
 
@@ -613,7 +632,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * Function exports reports data into a csv file
 	 */
 	function getReportCSV() {
-		$reportRun = new ReportRun($this->getId());
+		$reportRun = ReportRun::getInstance($this->getId());
 		$rootDirectory = vglobal('root_directory');
 		$tmpDir = vglobal('tmp_dir');
 
@@ -639,7 +658,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array>
 	 */
 	function getReportPrint() {
-		$reportRun = new ReportRun($this->getId());
+		$reportRun = ReportRun::getInstance($this->getId());
 		$data = array();
 		$data['data'] = $reportRun->GenerateReport('PRINT', false);
 		$data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', false);
@@ -776,30 +795,103 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array>
 	 */
 	function transformToNewAdvancedFilter() {
+		$standardFilter = $this->transformStandardFilter();
 		$advancedFilter = $this->getSelectedAdvancedFilter();
 		$allGroupColumns = $anyGroupColumns = array();
 		foreach($advancedFilter as $index=>$group) {
 			$columns = $group['columns'];
 			$and = $or = 0;
+            if(!empty($group['condition'])){
+                $block = $group['condition'];
+            }
 			if(count($columns) != 1) {
-				foreach($columns as $column) {
-					if($column['column_condition'] == 'and') {
-						++$and;
-					} else {
-						++$or;
-					}
-				}
-			}
-			if($and == count($columns)-1 && count($columns) != 1) {
-				$allGroupColumns = array_merge($allGroupColumns, $group['columns']);
-			} else {
-				$anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
-			}
+                foreach($columns as $column) {
+                        if($column['column_condition'] == 'and') {
+                                ++$and;
+                        } else {
+                                ++$or;
+                        }
+                }
+                if($and == count($columns)-1 && count($columns) != 1) {
+                        $allGroupColumns = array_merge($allGroupColumns, $group['columns']);
+                } else {
+                        $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
+                }
+            }else if($block == 'and'){
+                $allGroupColumns = array_merge($allGroupColumns, $group['columns']);
+            }else {
+                $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
+            }
+		}
+		if($standardFilter){
+			$allGroupColumns = array_merge($allGroupColumns,$standardFilter);
 		}
 		$transformedAdvancedCondition = array();
 		$transformedAdvancedCondition[1] = array('columns' => $allGroupColumns, 'condition' => 'and');
 		$transformedAdvancedCondition[2] = array('columns' => $anyGroupColumns, 'condition' => '');
 
 		return $transformedAdvancedCondition;
+	}
+	
+	/*
+	 *  Function used to tranform the standard filter as like as advanced filter format
+	 *	@returns array of tranformed standard filter
+	 */
+	public function transformStandardFilter(){
+		$standardFilter = $this->getSelectedStandardFilter();
+		if(!empty($standardFilter)){
+			$tranformedStandardFilter = array();
+			$tranformedStandardFilter['comparator'] = 'bw';
+
+			$fields = explode(':',$standardFilter['columnname']);
+			
+			if($fields[1] == 'createdtime' || $fields[1] == 'modifiedtime' ||($fields[0] == 'vtiger_activity' && $fields[1] == 'date_start')){
+				$tranformedStandardFilter['columnname'] = "$fields[0]:$fields[1]:$fields[3]:$fields[2]:DT";
+				$date[] = $standardFilter['startdate'].' 00:00:00';
+				$date[] = $standardFilter['enddate'].' 00:00:00';
+				$tranformedStandardFilter['value'] =  implode(',',$date);
+			} else{
+				$tranformedStandardFilter['columnname'] = "$fields[0]:$fields[1]:$fields[3]:$fields[2]:D";
+				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate']; 
+			}
+			return array($tranformedStandardFilter);
+		} else{
+			return false;
+		}
+	}
+
+	/**
+	 * Function to generate data for advanced filter conditions
+	 * @param Vtiger_Paging_Model $pagingModel
+	 * @return <Array>
+	 */
+	public function generateData($pagingModel = false) {
+		$advancedFilter = $this->get('advancedFilter');
+		
+		$advancedFilterCriteria = array();
+		$advancedFilterCriteriaGroup = array();
+		foreach($advancedFilter as $groupIndex => $groupInfo) {
+			$groupColumns = $groupInfo['columns'];
+			$groupCondition = $groupInfo['condition'];
+
+			if (empty ($groupColumns)) {
+				unset($advancedFilter[1]['condition']);
+			} else {
+				if(!empty($groupCondition)){
+					$advancedFilterCriteriaGroup[$groupIndex] = array('groupcondition'=>$groupCondition);
+				} 
+			}
+			
+			foreach($groupColumns as $groupColumn){
+				$groupColumn['groupid'] = $groupIndex;
+				$groupColumn['columncondition'] = $groupColumn['column_condition'];
+				unset($groupColumn['column_condition']);
+				$advancedFilterCriteria[] = $groupColumn;
+			}
+		}
+
+		$reportRun = ReportRun::getInstance($this->getId());
+		$filterQuery = $reportRun->RunTimeAdvFilter($advancedFilterCriteria,$advancedFilterCriteriaGroup);
+		return $this->getReportData($pagingModel, $filterQuery);
 	}
 }

@@ -10,7 +10,7 @@
 $languageStrings = array(
 	// Basic Strings
 	'SINGLE_Assets' => 'Asset',
-	'LBL_ADD_RECORD' => 'Add Assets',
+	'LBL_ADD_RECORD' => 'Add Asset',
 	'LBL_RECORDS_LIST' => 'Assets List',
 	'LBL_RECORD_SUMMARY' => 'Assets Summary',
 

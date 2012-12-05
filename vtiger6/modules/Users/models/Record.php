@@ -313,4 +313,35 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return false;
 	}
+	
+	
+	/**
+	 * Function to get the Day Starts picklist values
+	 * @param type $name Description
+	 */
+	public static function getDayStartsPicklistValues($stucturedValues){
+		
+		$fieldModel = $stucturedValues['LBL_CALENDAR_SETTINGS'];
+		$hour_format = $fieldModel['hour_format']->getPicklistValues();
+		$start_hour = $fieldModel['start_hour']->getPicklistValues();
+		
+		$defaultValues = array('00:00'=>'12:00 AM','01:00'=>'01:00 AM','02:00'=>'02:00 AM','03:00'=>'03:00 AM','04:00'=>'04:00 AM','05:00'=>'05:00 AM',
+					'06:00'=>'06:00 AM','07:00'=>'07:00 AM','08:00'=>'08:00 AM','09:00'=>'09:00 AM','10:00'=>'10:00 AM','11:00'=>'11:00 AM','12:00'=>'12:00 PM',
+					'13:00'=>'01:00 PM','14:00'=>'02:00 PM','15:00'=>'03:00 PM','16:00'=>'04:00 PM','17:00'=>'05:00 PM','18:00'=>'06:00 PM','19:00'=>'07:00 PM',
+					'20:00'=>'08:00 PM','21:00'=>'09:00 PM','22:00'=>'10:00 PM','23:00'=>'11:00 PM');
+		
+		$picklistDependencyData = array();
+		foreach ($hour_format as $value) {
+			if($value == 24){
+				$picklistDependencyData['hour_format'][$value]['start_hour'] = $start_hour;
+			}else{
+				$picklistDependencyData['hour_format'][$value]['start_hour'] = $defaultValues; 
+			}
+		}		
+		if(empty($picklistDependencyData['hour_format']['__DEFAULT__']['start_hour'])) {
+			$picklistDependencyData['hour_format']['__DEFAULT__']['start_hour'] = $defaultValues;
+		}
+		return $picklistDependencyData;
+	}
+	
 }

@@ -33,6 +33,7 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 			$viewer->assign('MODULE', $moduleName);
 
 			if(!$permission) {
+				$viewer->assign('MESSAGE', 'LBL_PERMISSION_DENIED');
 				$viewer->view('OperationNotPermitted.tpl', $moduleName);
 				exit;
 			}

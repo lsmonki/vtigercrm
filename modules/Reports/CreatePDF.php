@@ -20,7 +20,7 @@ $oReport = new Reports($reportid);
 //Code given by Csar Rodrguez for Rwport Filter
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
-$oReportRun = new ReportRun($reportid);
+$oReportRun = ReportRun::getInstance($reportid);
 
 $startdate = ($_REQUEST['startdate']);
 $enddate = ($_REQUEST['enddate']);

@@ -16,7 +16,7 @@ Class CustomReportUtils {
 
 	public static function getCustomReportsQuery($reportid, $filterlist=null) {
 		global $current_user;
-		$reportnew = new ReportRun($reportid);
+		$reportnew = ReportRun::getInstance($reportid);
 		$groupby = $reportnew->getGroupingList($reportid);
 		$showcharts = false;
 		if (!empty($groupby)) {
@@ -28,7 +28,7 @@ Class CustomReportUtils {
 
 	public static function getReportChart($reportid, $chartType) {
 		global $log, $adb;
-		$oReportRun = new ReportRun($reportid);
+		$oReportRun = ReportRun::getInstance($reportid);
 		$groupBy = $oReportRun->getGroupingList($reportid);
 		foreach ($groupBy as $key => $value) {
 			// $groupByConditon = explode(" ",$value);

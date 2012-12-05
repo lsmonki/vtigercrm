@@ -67,8 +67,9 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
         foreach ($list_fields as $key => $fieldInfo) {
             foreach ($fieldInfo as $columnName) {
                 if(array_key_exists($key, $list_fields_name)){
-                    if($columnName == 'status' || $columnName == 'lastname') continue;
-                    $relatedListFields[$columnName] = $list_fields_name[$key];
+                    if($columnName == 'lastname' || $columnName == 'activity' || $columnName == 'due_date' || $columnName == 'time_end') continue;
+					if ($columnName == 'status') $relatedListFields[$columnName] = 'taskstatus';
+					else $relatedListFields[$columnName] = $list_fields_name[$key];
                 }
             }
         }
@@ -199,6 +200,29 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getDetailViewUrl($id) {
 		return 'index.php?module=Calendar&view='.$this->getDetailViewName().'&record='.$id;
+	}
+	
+	/**
+	* To get the lists of sharedids 
+	* @param $id --  user id 
+	* @returns <Array> $sharedids 
+	*/
+	public static function getCaledarSharedUsers($id){
+		$db = PearDatabase::getInstance();
+        
+        $query = "SELECT vtiger_users.user_name, vtiger_sharedcalendar.* FROM vtiger_sharedcalendar 
+				LEFT JOIN vtiger_users ON vtiger_sharedcalendar.sharedid=vtiger_users.id WHERE userid=?";
+        $result = $db->pquery($query, array($id));
+        $rows = $db->num_rows($result);
+		
+		$sharedids = Array();
+		$focus = new Users();
+        for($i=0; $i<$rows; $i++){
+			$sharedid = $db->query_result($result,$i,'sharedid');
+			$userId = $db->query_result($result, $i, 'userid');
+			$sharedids[$sharedid]=$userId;
+        }
+		return $sharedids;
 	}
 
 }

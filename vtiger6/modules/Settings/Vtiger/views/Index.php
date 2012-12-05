@@ -9,6 +9,10 @@
  ************************************************************************************/
 
 class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
+
+    //Variables which decalres whether the older setting need to be loaded or new one
+    public static $loadOlderSettingUi = true;
+
 	function __construct() {
 		parent::__construct();
 	}
@@ -77,14 +81,17 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 			$selectedMenu = $menuModels[$firstKey];
 		}
 
-		// Customization
-		$viewer->assign('UI5_URL', $this->transformToUI5URL($request));
-		// END
+        if(Settings_Vtiger_Index_View::$loadOlderSettingUi) {
+            // Customization
+            $viewer->assign('UI5_URL', $this->transformToUI5URL($request));
+            // END
+        }
 
 		$viewer->assign('SELECTED_MENU', $selectedMenu);
 		$viewer->assign('SETTINGS_MENUS', $menuModels);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+        $viewer->assign('LOAD_OLD', Settings_Vtiger_Index_View::$loadOlderSettingUi);
 		$viewer->view('SettingsMenuStart.tpl', $qualifiedModuleName);
 	}
 
@@ -101,11 +108,12 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 	}
 
 	public function process(Vtiger_Request $request) {
-		/* NOTE: We plan to embed UI5 Settings until we are complete.
-		$viewer = $this->getViewer($request);
-		$qualifiedModuleName = $request->getModule(false);
-		$viewer->view('Index.tpl', $qualifiedModuleName);
-		*/
+        if( !Settings_Vtiger_Index_View::$loadOlderSettingUi) {
+            //NOTE: We plan to embed UI5 Settings until we are complete.
+            $viewer = $this->getViewer($request);
+            $qualifiedModuleName = $request->getModule(false);
+            $viewer->view('Index.tpl', $qualifiedModuleName);
+        }
 	}
 
 	/**

@@ -19,4 +19,12 @@ class Documents_Detail_View extends Vtiger_Detail_View {
 		return false;
 	}
 
+	/**
+	 * Function shows basic detail for the record
+	 * @param <type> $request
+	 */
+	function showModuleBasicView($request) {
+		return $this->showModuleDetailView($request);
+	}
+
 }

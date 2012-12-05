@@ -36,6 +36,10 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 	}
 
 	function process(Vtiger_Request $request) {
+		global $VTIGER_BULK_SAVE_MODE;
+		$previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
+		$VTIGER_BULK_SAVE_MODE = true;
+		
 		$mode = $request->getMode();
 		if(!empty($mode)) {
 			// Added to check the status of import
@@ -47,6 +51,8 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 			$this->checkImportStatus($request);
 			$this->importBasicStep($request);
 		}
+		
+		$VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 	}
 
 	/**
@@ -138,13 +144,8 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 	}
 
 	function import(Vtiger_Request $request) {
-		global $VTIGER_BULK_SAVE_MODE;
-		$previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
-		$VTIGER_BULK_SAVE_MODE = true;
-
 		$user = Users_Record_Model::getCurrentUserModel();
 		Import_Main_View::import($request, $user);
-		$VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 	}
 
 	function undoImport(Vtiger_Request $request) {
@@ -158,6 +159,7 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		$dbTableName = Import_Utils_Helper::getDbTableName($user);
 
 		if(!$user->isAdminUser() && $user->id != $ownerId) {
+			$viewer->assign('MESSAGE', 'LBL_PERMISSION_DENIED');
 			$viewer->view('OperationNotPermitted.tpl', 'Vtiger');
 			exit;
 		}

@@ -143,7 +143,7 @@ class RecurringType {
 				}
 				$userStartDateTime->setDate($userStartDateTime->format('Y'), $userStartDateTime->format('m'), $date);
 				$userStartDateTime->setTimezone(new DateTimeZone(DateTimeField::getDBTimeZone()));
-				$requestArray['dayofweek_to_repeat'][0] = $userStartDateTime->format('N');
+				$requestArray['dayofweek_to_repeat'][0] = (int)$userStartDateTime->format('N')%7;
 			}
 		}
 
@@ -267,7 +267,7 @@ class RecurringType {
 				}
 				$dbStartDateTime->setDate($dbStartDateTime->format('Y'), $dbStartDateTime->format('m'), $date);
 				$userStartDateTime = DateTimeField::convertToUserTimeZone($dbStartDateTime->format('Y-m-d') . ' ' . $dbStartDateTime->format('H:i'));
-				$recurringInfo['dayofweek_to_repeat'][0] = $userStartDateTime->format('N');
+				$recurringInfo['dayofweek_to_repeat'][0] = (int)$userStartDateTime->format('N')%7;
 			}
 		}
 		return $recurringInfo;
@@ -349,11 +349,20 @@ class RecurringType {
 				}
 
 				for ($i = 0; $i < count($this->dayofweek_to_rpt); $i++) {
-					$repeatDay = $tempdateObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
-					$repeatDate = $repeatDay->get_DB_formatted_date();
-					if ($repeatDate > $startdate && $repeatDate <= $enddate) {
-						$recurringDates[] = $repeatDate;
+					$repeat = $this->dayofweek_to_rpt[$i];
+					if ($repeat == 0) {
+						$repeat = $repeat+1;
+						$isSunday = true;
 					}
+					$repeatDay = $tempdateObj->getThisweekDaysbyIndex($repeat);
+					$repeatDate = $repeatDay->get_DB_formatted_date();
+					if ($isSunday) {
+						$repeatDate = date('Y-m-d', strtotime('-1 day', strtotime($repeatDate)));
+						$isSunday = false;
+					}
+				   if ($repeatDate > $startdate && $repeatDate <= $enddate) {
+						   $recurringDates[] = $repeatDate;
+				   }
 				}
 
 				if (isset($this->recur_freq)) {

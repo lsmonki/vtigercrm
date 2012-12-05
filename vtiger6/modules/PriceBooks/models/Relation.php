@@ -22,6 +22,7 @@ class PriceBooks_Relation_Model extends Vtiger_Relation_Model{
 		$parentModuleName = $parentModuleModel->get('name');
 		$functionName = $this->get('name');
 		$focus = CRMEntity::getInstance($parentModuleName);
+		$focus->id = $recordModel->getId();
 		if(method_exists($parentModuleModel, $functionName)) {
 			$query = $parentModuleModel->$functionName($recordModel, $relatedModuleModel);
 			return $query;

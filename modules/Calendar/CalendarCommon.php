@@ -168,7 +168,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 		$jsfn = 'onChange="changeEndtime_StartTime(document.EditView.activitytype.value);"';
 	else
 		$jsfn = null;
-	if($format == 'am/pm')
+	if($format == 12)
 	{
 		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr" '.$jsfn.'>';
 		for($i=0;$i<12;$i++)
@@ -404,7 +404,7 @@ function formatUserTimeString($datetime,$fmt){
 		$min = $datetime['minute'];
 	}
 	$timeStr = "";
-	if($fmt != 'am/pm'){
+	if($fmt != 12){
 		$timeStr .= twoDigit($hr).":".twoDigit($min);
 	}else{
 		$am_pm = array('AM', 'PM');
