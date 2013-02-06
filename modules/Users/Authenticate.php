@@ -30,7 +30,7 @@ global $mod_strings, $default_charset;
 $focus = new Users();
 
 // Add in defensive code here.
-$focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
+$focus->column_fields["user_name"] = to_html(vtlib_purify($_REQUEST['user_name']));
 $user_password = vtlib_purify($_REQUEST['user_password']);
 
 $focus->load_user($user_password);
