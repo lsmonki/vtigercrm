@@ -15,9 +15,9 @@ require_once 'modules/Tooltip/TooltipUtils.php';
 
 global $current_user,$log;
 
-$modname = $_REQUEST['modname'];
-$id = $_REQUEST['id'];
-$fieldname = $_REQUEST['fieldname'];
+$modname = vtlib_purify($_REQUEST['modname']);
+$id = vtlib_purify($_REQUEST['id']);
+$fieldname = vtlib_purify($_REQUEST['fieldname']);
 $tabid = getTabid($modname);
 $result = ToolTipExists($fieldname,$tabid);
 if($result !== false){
