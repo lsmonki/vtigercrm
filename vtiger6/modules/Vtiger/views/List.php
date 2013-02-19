@@ -33,11 +33,11 @@ class Vtiger_List_View extends Vtiger_Index_View {
 			$customView = new CustomView();
 			$viewName = $customView->getViewId($moduleName);
 		}
-		$viewer->assign('VIEWID', $viewName);
 
 		$quickLinkModels = $listViewModel->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $quickLinkModels);
 		$this->initializeListViewContents($request, $viewer);
+		$viewer->assign('VIEWID', $viewName);
 
 		if($display) {
 			$this->preProcessDisplay($request);
@@ -45,7 +45,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	}
 
 	function preProcessTplName(Vtiger_Request $request) {
-		
+
 		return 'ListViewPreProcess.tpl';
 	}
 
@@ -67,6 +67,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 
 		$this->initializeListViewContents($request, $viewer);
 		$viewer->assign('MODULE_MODEL', $moduleModel);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
 
@@ -86,12 +87,6 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();
-
-		//Removing module specific edit file since its not needed, Its needed in quick create
-		//We are loading module specific file when quick create is performed
-		$mduleEditFile = 'modules.'.$moduleName.'.resources.Edit';
-		unset($headerScriptInstances[$mduleEditFile]);
-
 
 		$jsFileNames = array(
 			'modules.Vtiger.resources.List',
@@ -143,6 +138,12 @@ class Vtiger_List_View extends Vtiger_Index_View {
 
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+		if(!empty($operator)) {
+			$listViewModel->set('operator', $operator);
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+		}
 		if(!empty($searchKey) && !empty($searchValue)) {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
@@ -155,7 +156,6 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		}
 		$noOfEntries = count($this->listViewEntries);
 
-		$viewer->assign('VIEWID', $cvId);
 		$viewer->assign('MODULE', $moduleName);
 
 		if(!$this->listViewLinks){
@@ -196,17 +196,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	function getRecordsCount(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$cvId = $request->get('viewname');
-		if(empty($cvId)) {
-			$cvId = '0';
-		}
-		$searchKey = $request->get('search_key');
-		$searchValue = $request->get('search_value');
-
-		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
-		$listViewModel->set('search_key', $searchKey);
-		$listViewModel->set('search_value', $searchValue);
-
-		$count = $listViewModel->getListViewCount();
+		$count = $this->getListViewCount($request);
 
 		$result = array();
 		$result['module'] = $moduleName;
@@ -215,6 +205,49 @@ class Vtiger_List_View extends Vtiger_Index_View {
 
 		$response = new Vtiger_Response();
 		$response->setEmitType(Vtiger_Response::$EMIT_JSON);
+		$response->setResult($result);
+		$response->emit();
+	}
+
+	/**
+	 * Function to get listView count
+	 * @param Vtiger_Request $request
+	 */
+	function getListViewCount(Vtiger_Request $request){
+		$moduleName = $request->getModule();
+		$cvId = $request->get('viewname');
+		if(empty($cvId)) {
+			$cvId = '0';
+		}
+
+		$searchKey = $request->get('search_key');
+		$searchValue = $request->get('search_value');
+
+		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
+		$listViewModel->set('search_key', $searchKey);
+		$listViewModel->set('search_value', $searchValue);
+		$listViewModel->set('operator', $request->get('operator'));
+
+		$count = $listViewModel->getListViewCount();
+
+		return $count;
+	}
+
+
+
+	/**
+	 * Function to get the page count for list
+	 * @return total number of pages
+	 */
+	function getPageCount(Vtiger_Request $request){
+		$listViewCount = $this->getListViewCount($request);
+		$pagingModel = new Vtiger_Paging_Model();
+		$pageLimit = $pagingModel->getPageLimit();
+		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
+
+		$result = array();
+		$result['page'] = $pageCount;
+		$response = new Vtiger_Response();
 		$response->setResult($result);
 		$response->emit();
 	}

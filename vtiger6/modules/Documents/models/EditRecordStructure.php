@@ -22,6 +22,7 @@ class Documents_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mod
 		$values = array();
 		$recordModel = $this->getRecord();
 		$recordExists = !empty($recordModel);
+        $recordId = $recordModel->getId();
 		$moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
 		foreach($blockModelList as $blockLabel=>$blockModel) {
@@ -31,7 +32,7 @@ class Documents_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mod
 				foreach($fieldModelList as $fieldName=>$fieldModel) {
 					if($fieldModel->isEditable()) {
 						$fieldValue = $recordModel->get($fieldName);
-						if (empty($fieldValue)) {
+						if (empty($fieldValue) && !$recordId) {
 							$fieldValue = $fieldModel->getDefaultFieldValue();
 						}
 						//By default the file status should be active while creating a Document record

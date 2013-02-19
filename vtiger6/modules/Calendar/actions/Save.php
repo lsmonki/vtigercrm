@@ -27,7 +27,9 @@ class Calendar_Save_Action extends Vtiger_Save_Action {
 			$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentRecordId, $parentModuleName);
 			//TODO : Url should load the related list instead of detail view of record
 			$loadUrl = $parentRecordModel->getDetailViewUrl();
-		}else{
+		} else if ($request->get('returnToList') && $recordModel->get('visibility') === 'Private') {
+			$loadUrl = $recordModel->getModule()->getListViewUrl();
+		} else {
 			$loadUrl = $recordModel->getDetailViewUrl();
 		}
 		header("Location: $loadUrl");

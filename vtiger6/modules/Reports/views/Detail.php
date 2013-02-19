@@ -9,6 +9,9 @@
  *************************************************************************************/
 
 class Reports_Detail_View extends Vtiger_Index_View {
+	
+	protected $reportData;
+	protected $calculationFields;
 
 	public function checkPermission(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
@@ -31,9 +34,18 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
+		$page = $request->get('page');
 
 		$detailViewModel = Reports_DetailView_Model::getInstance($moduleName, $recordId);
 		$reportModel = $detailViewModel->getRecord();
+		$reportModel->setModule('Reports');
+
+		$pagingModel = new Vtiger_Paging_Model();
+		$pagingModel->set('page', $page);
+		$pagingModel->set('limit', self::REPORT_LIMIT);
+
+		$this->reportData = $reportModel->getReportData($pagingModel);
+		$this->calculationFields = $reportModel->getReportCalulationData();
 
 		$primaryModule = $reportModel->getPrimaryModule();
 		$primaryModuleModel = Vtiger_Module_Model::getInstance($primaryModule);
@@ -58,10 +70,19 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
-
+        $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
+        foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+            $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
+            $comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
+            $comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$module);
+            $dateFilters[$comparatorKey] = $comparatorInfo;
+        }
+        $viewer->assign('DATE_FILTERS', $dateFilters);
+        
 		$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
 		$viewer->assign('REPORT_MODEL', $reportModel);
 		$viewer->assign('RECORD_ID', $recordId);
+		$viewer->assign('COUNT',count($this->reportData));
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->view('ReportHeader.tpl', $moduleName);
 	}
@@ -81,16 +102,22 @@ class Reports_Detail_View extends Vtiger_Index_View {
 
 		$record = $request->get('record');
 		$page = $request->get('page');
+		
+		$data = $this->reportData;
+		$calculation = $this->calculationFields;
+		
+		if(empty($data)){
+			$reportModel = Reports_Record_Model::getInstanceById($record);
+			$reportModel->setModule('Reports');
 
-		$reportModel = Reports_Record_Model::getInstanceById($record);
-		$reportModel->setModule('Reports');
+			$pagingModel = new Vtiger_Paging_Model();
+			$pagingModel->set('page', $page);
+			$pagingModel->set('limit', self::REPORT_LIMIT);
 
-		$pagingModel = new Vtiger_Paging_Model();
-		$pagingModel->set('page', $page);
-		$pagingModel->set('limit', self::REPORT_LIMIT);
-
-		$data = $reportModel->getReportData($pagingModel);
-		$calculation = $reportModel->getReportCalulationData();
+			$data = $reportModel->getReportData($pagingModel);
+			$calculation = $reportModel->getReportCalulationData();
+		}
+		
 		$viewer->assign('CALCULATION_FIELDS',$calculation);
 		$viewer->assign('DATA', $data);
 		$viewer->assign('RECORD_ID', $record);
@@ -100,7 +127,7 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		if (count($data) > self::REPORT_LIMIT) {
 			$viewer->assign('LIMIT_EXCEEDED', true);
 		}
-
+		
 		$viewer->view('ReportContents.tpl', $moduleName);
 	}
 	

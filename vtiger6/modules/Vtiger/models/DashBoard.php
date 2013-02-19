@@ -46,16 +46,30 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$moduleModel = $this->getModule();
 
+		$sql = 'SELECT * FROM vtiger_links WHERE linktype = ?
+					AND tabid = ? AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets
+					WHERE userid = ?) AND linklabel NOT IN ('.generateQuestionMarks($defaultWidgets).')';
 		$params = array('DASHBOARDWIDGET', $moduleModel->getId(), $currentUser->getId());
 		$params = array_merge($params, $defaultWidgets);
-		$result = $db->pquery('SELECT * FROM vtiger_links WHERE linktype = ?
-					AND tabid = ? AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets
-					WHERE userid = ?) AND linklabel NOT IN ('.generateQuestionMarks($defaultWidgets).')', $params);
+
+		$sql .= ' UNION SELECT * FROM vtiger_links WHERE linklabel=?';
+		$params[] = 'Mini List';
+
+		$result = $db->pquery($sql, $params);
+
 		$widgets = array();
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$row = $db->query_result_rowdata($result, $i);
+
+			if($row['linklabel'] == 'Tag Cloud') {
+				$isTagCloudExists = getTagCloudView($currentUser->getId());
+				if($isTagCloudExists == 'false') {
+					continue;
+				}
+			}
 			$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
 		}
+
 		return $widgets;
 	}
 
@@ -69,26 +83,40 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$moduleModel = $this->getModule();
 
-		// NOTE: UNION might pose limitation if we need more data from vtiger_module_dashboard_widgets
-		// Review required on the schema structure or merging the default and user widgets.
-		$sql = "SELECT vtiger_links.*, {$currentUser->getId()} as userid, vtiger_links.linkid as id FROM vtiger_links WHERE tabid = ? AND linklabel IN (".generateQuestionMarks($defaultWidgets).")".
-				" UNION ". 
-				" SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_links.linkid as id FROM vtiger_links ".
+		$sql = " SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_links.linkid as id FROM vtiger_links ".
 				" INNER JOIN vtiger_module_dashboard_widgets ON vtiger_links.linkid=vtiger_module_dashboard_widgets.linkid".
 				" WHERE (vtiger_module_dashboard_widgets.userid = ? AND linktype = ? AND tabid = ?)";
-		
-		$params = array($moduleModel->getId());
-		$params = array_merge($params, $defaultWidgets);
-		$params = array_merge($params, array($currentUser->getId(), 'DASHBOARDWIDGET', $moduleModel->getId()));
-		
+		$params = array($currentUser->getId(), 'DASHBOARDWIDGET', $moduleModel->getId());
 		$result = $db->pquery($sql, $params);
-		
+
 		$widgets = array();
-		for($i=0; $i<$db->num_rows($result); $i++) {
+
+		for($i=0, $len=$db->num_rows($result); $i<$len; $i++) {
 			$row = $db->query_result_rowdata($result, $i);
 			$row['linkid'] = $row['id'];
 			$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
 		}
+
+		if (empty($widgets)) {
+			// No widgets found? Pull the default widgets.
+			$sql = "SELECT vtiger_links.*, {$currentUser->getId()} as userid, 0 as widgetid, NULL as position, vtiger_links.linkid as id FROM vtiger_links WHERE tabid = ? AND linklabel IN (".generateQuestionMarks($defaultWidgets).")";
+			$params = array($moduleModel->getId());
+			$params = array_merge($params, $defaultWidgets);
+			$result = $db->pquery($sql, $params);
+			for($i=0, $len=$db->num_rows($result); $i<$len; $i++) {
+				$row = $db->query_result_rowdata($result, $i);
+				$row['linkid'] = $row['id'];
+				$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
+			}
+		}
+		foreach ($widgets as $index => $widget) {
+			$label = $widget->get('linklabel');
+			if($label == 'Tag Cloud') {
+				$isTagCloudExists = getTagCloudView($currentUser->getId());
+				if($isTagCloudExists === 'false')  unset($widgets[$index]);
+			}
+		}
+
 		return $widgets;
 	}
 
@@ -117,7 +145,6 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		foreach($widgets as $widget) {
 			$widgetList[] = Vtiger_Widget_Model::getInstanceFromValues($widget);
 		}
-
 		return $widgetList;
 	}
 
@@ -136,5 +163,5 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		return $instance->setModule($moduleModel);
 	}
 
-	
+
 }

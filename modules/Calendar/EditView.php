@@ -168,10 +168,6 @@ if($activity_mode == 'Events') {
 }
 
 
-unset($act_data['LBL_DESCRIPTION_INFORMATION']);
-unset($act_data['LBL_REMINDER_INFORMATION']);
-//unset($act_data['LBL_RECURRENCE_INFORMATION']);
-
 $smarty->assign("BLOCKS",$act_data);
 foreach($act_data as $header=>$blockitem)
 {

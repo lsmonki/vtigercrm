@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_HelpDesk' => 'Ticket',
 	'LBL_ADD_RECORD' => 'Add Ticket',
 	'LBL_RECORDS_LIST' => 'Ticket List',
-	'LBL_RECORD_SUMMARY' => 'Ticket Summary',
 
 	// Blocks
 	'LBL_TICKET_INFORMATION' => 'Ticket Information',

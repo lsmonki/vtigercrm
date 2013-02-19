@@ -27,7 +27,9 @@ class Vtiger_Save_Action extends Vtiger_Action_Controller {
 			$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentRecordId, $parentModuleName);
 			//TODO : Url should load the related list instead of detail view of record
 			$loadUrl = $parentRecordModel->getDetailViewUrl();
-		}else{
+		} else if ($request->get('returnToList')) {
+			$loadUrl = $recordModel->getModule()->getListViewUrl();
+		} else {
 			$loadUrl = $recordModel->getDetailViewUrl();
 		}
 		header("Location: $loadUrl");
@@ -80,6 +82,10 @@ class Vtiger_Save_Action extends Vtiger_Action_Controller {
 		$fieldModelList = $moduleModel->getFields();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
 			$fieldValue = $request->get($fieldName, null);
+			$fieldDataType = $fieldModel->getFieldDataType();
+			if($fieldDataType == 'time'){
+				$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+			}
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
 					$fieldValue = trim($fieldValue);

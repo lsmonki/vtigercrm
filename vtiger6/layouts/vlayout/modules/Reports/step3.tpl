@@ -24,6 +24,7 @@
 		<input type="hidden" name="selected_calculation_fields" id="calculation_fields" value={$REPORT_MODEL->get('calculation_fields')} />
 		<input type="hidden" name="advanced_filter" id="advanced_filter" value="" />
 		<input type="hidden" class="step" value="3" />
+        <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		{assign var=RECORD_STRUCTURE value=array()}
 		{assign var=PRIMARY_MODULE_LABEL value=vtranslate($PRIMARY_MODULE, $PRIMARY_MODULE)}
 		{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$PRIMARY_MODULE_RECORD_STRUCTURE->getStructure()}

@@ -78,7 +78,7 @@
 		    </div>
 		    {if $FINAL_DETAILS.taxtype neq 'group'}
 			<div class="individualTaxContainer">
-			    {assign var=INDIVIDUAL_TAX_INFO value="{vtranslate('LBL_TOTAL_AFTER_DISCOUNT',$MODULE_NAME)} = {$LINE_ITEM_DETAIL["totalAfterDiscount$INDEX"]} \r\n \r\n{vtranslate('LBL_TOTAL_TAX_AMOUNT',$MODULE_NAME)} = {$LINE_ITEM_DETAIL["taxTotal$INDEX"]}"}
+			    {assign var=INDIVIDUAL_TAX_INFO value="{vtranslate('LBL_TOTAL_AFTER_DISCOUNT',$MODULE_NAME)} = {$LINE_ITEM_DETAIL["totalAfterDiscount$INDEX"]}\r\n{foreach item=tax_details from=$LINE_ITEM_DETAIL["taxes"]}{$tax_details["taxlabel"]} : {$tax_details["percentage"]} % = {$tax_details["amount"]}\r\n{/foreach}\r\n{vtranslate('LBL_TOTAL_TAX_AMOUNT',$MODULE_NAME)} = {$LINE_ITEM_DETAIL["taxTotal$INDEX"]}"}
 			    (+)&nbsp;<b><a href="javascript:void(0)" class="individualTax inventoryLineItemDetails" data-info='{$INDIVIDUAL_TAX_INFO}'>{vtranslate('LBL_TAX',$MODULE_NAME)} </a> : </b>
 			</div>
 		    {/if}
@@ -148,6 +148,18 @@
 		    </span>
 		</td>
 	    </tr>
+		<tr>
+		<td width="83%">
+		    <span class="pull-right">
+			<b>{vtranslate('LBL_PRE_TAX_TOTAL', $MODULE_NAME)} </b>
+		    </span>
+		</td>
+		<td>
+		    <span class="pull-right">
+			{$FINAL_DETAILS["preTaxTotal"]}
+		    </span>
+		</td>
+	    </tr>
 	    <tr>
 	    {if $FINAL_DETAILS.taxtype eq 'group'}
 		<tr>
@@ -203,4 +215,54 @@
 		    </span>
 		</td>
 	    </tr>
+		{if $MODULE_NAME eq 'Invoice' or $MODULE_NAME eq 'PurchaseOrder'}
+        <tr>
+            <td width="83%">
+                {if $MODULE_NAME eq 'Invoice'}
+                    <span class="pull-right">
+                        <b>{vtranslate('LBL_RECEIVED',$MODULE_NAME)}</b>
+                    </span>
+                {else}
+                    <span class="pull-right">
+                        <b>{vtranslate('LBL_PAID',$MODULE_NAME)}</b>
+                    </span>
+                {/if}
+            </td>
+
+            <td>
+                {if $MODULE_NAME eq 'Invoice'}
+                    <span class="pull-right">
+                        {if $RECORD->getDisplayValue('received')}
+							{$RECORD->getDisplayValue('received')}
+                        {else}
+                            0.00
+                        {/if}
+                    </span>
+                {else}
+                    <span class="pull-right">
+                        {if $RECORD->getDisplayValue('paid')}
+							{$RECORD->getDisplayValue('paid')}
+                        {else}
+                            0.00
+                        {/if}
+                    </span>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td width="83%">
+                <span class="pull-right">
+                    <b>{vtranslate('LBL_BALANCE',$MODULE_NAME)}</b>
+                </span>
+            </td>
+            <td>
+                <span class="pull-right">
+                    {if $RECORD->getDisplayValue('balance')}
+						{$RECORD->getDisplayValue('balance')}
+                    {else}0.00
+                    {/if}
+                </span>
+            </td>
+        </tr>
+        {/if}
 	</table>

@@ -11,14 +11,22 @@
 jQuery.Class('Vtiger_BasicSearch_Js',{},{
 	//stores the module that need to be searched
 	searchModule : false,
-
+	
+	//stores the module that need to be searched which is selected by the user
+	currentSearchModule : false,
+	
 	/**
 	 * Function to get the search module
 	 */
 	getSearchModule : function() {
 		if(this.searchModule === false) {
 			//default gives current module
-			this.setSearchModule(app.getModuleName());
+			var module = app.getModuleName();
+			if(typeof this.getCurrentSearchModule() != 'undefined') {
+				module = this.getCurrentSearchModule();
+			}
+			
+			this.setSearchModule(module);
 		}
 		return this.searchModule;
 	},
@@ -30,7 +38,17 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 		this.searchModule = moduleName;
 		return this;
 	},
-
+	
+	/**
+	 * Function to get the user selected search module
+	 */
+	getCurrentSearchModule : function() {
+		if(this.currentSearchModule === false) {
+			this.currentSearchModule = jQuery('#basicSearchModulesList').val();
+		}
+		return this.currentSearchModule;
+	},
+	
 	/**
 	 * Function which will perform the search
 	 */
@@ -64,8 +82,13 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 	 * Helper function whicn invokes search
 	 */
 	search : function(value) {
+		var searchModule = this.getCurrentSearchModule();
 		var params = {};
 		params.value = value;
+		if(typeof searchModule != 'undefined') {
+			params.searchModule = searchModule;
+		}
+		
 		return this._search(params);
 	},
 
@@ -88,13 +111,12 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 		var params = {};
 		params.data = data ;
 		params.cb = postLoad;
-		params.css = {'width':'29%','text-align':'left'};
+		params.css = {'width':'23%','text-align':'left'};
 		//not showing overlay
 		params.overlayCss = {'opacity':'0.2'};
 		app.showModalWindow(params);
 		return aDeferred.promise();
 	}
-
-
+	
 });
 

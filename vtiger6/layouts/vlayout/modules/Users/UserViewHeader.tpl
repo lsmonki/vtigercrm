@@ -41,14 +41,14 @@
 									<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
 										<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
 									</a>
-									<ul class='dropdown-menu pull-right' id='widthType' style='min-width:100px;'>
-										<li data-class='wideWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
+									<ul class='dropdown-menu pull-right' id='widthType'>
+										<li class="cursorPointer" data-class='wideWidthType' title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
 											<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
 										</li>
-										<li data-class='mediumWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
+										<li class="cursorPointer" data-class='mediumWidthType' title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
 											<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
 										</li>
-										<li data-class='narrowWidthType' style="margin-left:7px" title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
+										<li class="cursorPointer" data-class='narrowWidthType' title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
 											<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
 										</li>
 									</ul>

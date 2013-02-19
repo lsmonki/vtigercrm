@@ -17,7 +17,7 @@
 	<div class="commentTitle row-fluid">
 		<div class="addCommentBlock">
 			<div>
-				<textarea name="commentcontent" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}" class="commentcontent"  placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}" onkeyup='this.rows = Math.max(this.value.split("\n").length,{$COMMENT_TEXTAREA_DEFAULT_ROWS});'></textarea>
+				<textarea name="commentcontent" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}" class="commentcontent"  placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}"></textarea>
 			</div>
 			<div class="pull-right">
 				<button class="btn btn-success saveComment" type="button"><strong>{vtranslate('LBL_POST', $MODULE_NAME)}</strong></button>
@@ -28,8 +28,11 @@
 		{include file='CommentsList.tpl'|@vtemplate_path}
 	</div>
 	<div class="hide basicAddCommentBlock">
-		<div class="offset1">
-			<textarea class="commentcontent fullWidthAlways" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}" name="commentcontent" onkeyup='this.rows = Math.max(this.value.split("\n").length, {$COMMENT_TEXTAREA_DEFAULT_ROWS});' placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}"></textarea>
+		<div class="row-fluid">
+			<span class="span1">&nbsp;</span>
+			<div class="span11">
+				<textarea class="commentcontenthidden fullWidthAlways" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}" name="commentcontent" placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}"></textarea>
+			</div>
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-success saveComment" type="button"><strong>{vtranslate('LBL_POST', $MODULE_NAME)}</strong></button>

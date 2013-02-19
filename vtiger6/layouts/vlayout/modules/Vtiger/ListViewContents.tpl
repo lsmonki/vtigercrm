@@ -18,7 +18,19 @@
 <input type="hidden" id="pageNumberValue" value= "{$PAGE_NUMBER}"/>
 <input type="hidden" id="pageLimitValue" value= "{$PAGING_MODEL->getPageLimit()}" />
 <input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="alphabetSearchKey" value= "{$MODULE_MODEL->getAlphabetSearchField()}" />
+<input type="hidden" id="Operator" value="{$OPERATOR}" />
+<input type="hidden" id="alphabetValue" value="{$ALPHABET_VALUE}" />
+<input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 
+{assign var=ALPHABETS value=','|explode:'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'}
+<div class="pagination alphabetSorting">
+	<ul class="row-fluid">
+		{foreach item=ALPHABET from=$ALPHABETS}
+			<li class="alphabetSearch"><a id="{$ALPHABET}" {if $ALPHABET_VALUE eq $ALPHABET}class="highlightBackgroundColor" {/if}href="#">{$ALPHABET}</a></li>
+		{/foreach}
+	</ul>
+</div>
 <div id="selectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($MODULE ,$MODULE)}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>
 </div>
@@ -59,7 +71,12 @@
 				{if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
 					<a href="{$LISTVIEW_ENTRY->getDetailViewUrl()}">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{else if $LISTVIEW_HEADER->get('uitype') eq '72'}
-					{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+					{assign var=CURRENCY_SYMBOL_PLACEMENT value={$CURRENT_USER_MODEL->get('currency_symbol_placement')}}
+					{if $CURRENCY_SYMBOL_PLACEMENT eq '1.0$'}
+						{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}{$LISTVIEW_ENTRY->get('currencySymbol')}
+					{else}
+						{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+					{/if}
 				{else}
 					{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 				{/if}
@@ -89,7 +106,7 @@
 			<tr>
 				<td>
 					{assign var=SINGLE_MODULE value="SINGLE_$MODULE"}
-					{vtranslate('LBL_NO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}. {vtranslate('LBL_CREATE')} <a href="{$MODULE_MODEL->getCreateRecordUrl()}">{vtranslate($SINGLE_MODULE, $MODULE)}</a>
+					{vtranslate('LBL_NO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}.{if $IS_MODULE_EDITABLE} {vtranslate('LBL_CREATE')} <a href="{$MODULE_MODEL->getCreateRecordUrl()}">{vtranslate($SINGLE_MODULE, $MODULE)}</a>{/if}
 				</td>
 			</tr>
 		</tbody>

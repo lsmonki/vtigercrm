@@ -19,6 +19,7 @@ $languageStrings = array(
 	'LBL_USER_ADV_OPTIONS' => 'User Advanced Options',
 	'Asterisk Configuration'  =>  'Asterisk Configuration',
 	'LBL_HOME_PAGE_COMPONENTS' => 'Home Page Components',
+	'LBL_TAG_CLOUD_DISPLAY' => 'Tag Cloud Display',
 
 	//MyPreference Fields
 	'Role' => 'Role',
@@ -68,6 +69,10 @@ $languageStrings = array(
 	'Symbol Placement'  =>  'Symbol Placement',
 	'Number Of Currency Decimals'  =>  'Number Of Currency Decimals',
 	'Truncate Trailing Zeros'  =>   'Truncate Trailing Zeros',
+	'Default Call Duration' => 'Default Call Duration (Mins)',
+	'Other Event Duration' => 'Other Event Duration (Mins)',
+	'Calendar Hour Format' => 'Calendar Hour Format',
+	'Tag Cloud' => 'Tag Cloud',
 
 	//Time zones-Dont change any value
     'Kwajalein'  =>  '(UTC-12:00) International Date Line West',
@@ -167,4 +172,7 @@ $languageStrings = array(
     'Pacific/Auckland'  =>  '(UTC+12:00) Auckland',
     'Asia/Magadan'  =>  '(UTC+12:00) Magadan',
     'Pacific/Tongatapu'  =>  '(UTC+13:00) Nukualofa',
+
+	'Summary' => 'Summary',
+	'Detail' => 'Detail',
 );

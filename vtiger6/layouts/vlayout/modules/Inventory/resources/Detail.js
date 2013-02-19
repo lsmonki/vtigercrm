@@ -8,6 +8,12 @@
  *************************************************************************************/
 
 jQuery.Class("Inventory_Detail_Js",{
+
+
+    sendEmailPDFClickHandler : function(url){
+        var popupInstance = Vtiger_Popup_Js.getInstance();
+        popupInstance.show(url,function(){}, app.vtranslate('JS_SEND_PDF_MAIL') );
+    }
     
 },{
     /**

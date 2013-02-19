@@ -246,6 +246,35 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		}
 		return aDeferred.promise();
 	},
+	
+	/**
+	 * Function to handle page jump in related list
+	 */
+	pageJumpHandler : function(e){
+		var thisInstance = this;
+		if(e.which == 13){
+			var element = jQuery(e.currentTarget);
+			var response = Vtiger_WholeNumberGreaterThanZero_Validator_Js.invokeValidation(element);
+			if(typeof response != "undefined"){
+				element.validationEngine('showPrompt',response,'',"topLeft",true);
+				e.preventDefault();
+			} else {
+				element.validationEngine('hideAll');
+				var jumpToPage = element.val();
+				var jumptoPageParams = {
+					'page' : jumpToPage
+				}
+				this.loadRelatedList(jumptoPageParams).then(
+					function(data){
+						thisInstance.setCurrentPageNumber(jumpToPage);
+					},
+
+					function(textStatus, errorThrown){
+					}
+				);
+			}
+		}
+	},
 	/**
 	 * Function to add related record for the module
 	 */
@@ -269,17 +298,13 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 					jQuery('<input type="hidden" name="'+relatedField+'" value="'+parentId+'" />').appendTo(data);
 				}
 			}
+
+			jQuery('<input type="hidden" name="sourceModule" value="'+parentModule+'" />').appendTo(data);
+			jQuery('<input type="hidden" name="sourceRecord" value="'+parentId+'" />').appendTo(data);
+			jQuery('<input type="hidden" name="relationOperation" value="true" />').appendTo(data);
+
 		}
 		var postQuickCreateSave  = function(data) {
-			if(typeof relatedField == "undefined"){
-				var idList = new Array();
-				idList.push(data.result._recordId);
-				thisInstance.addRelations(idList).then(
-					function(data){
-						thisInstance.loadRelatedList();
-					}
-				)
-			}
 			thisInstance.loadRelatedList();
 		}
 		
@@ -294,6 +319,32 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 			Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
 		}
 		quickCreateNode.trigger('click',quickCreateParams);
+	},
+	
+	getRelatedPageCount : function(){
+		var params = {};
+		params['action'] = "RelationAjax";
+		params['module'] = this.parentModuleName;
+		params['record'] = this.getParentId(),
+		params['relatedModule'] = this.relatedModulename,
+		params['tab_label'] = this.selectedRelatedTabElement.data('label-key');
+		params['mode'] = "getRelatedListPageCount"
+		
+		var element = jQuery('#totalPageCount');
+		var totalPageNumber = element.text();
+		if(totalPageNumber == ""){
+			element.progressIndicator({});
+			AppConnector.request(params).then(
+				function(data) {
+					var pageCount = data['result']['page'];
+					element.text(pageCount);
+					element.progressIndicator({'mode': 'hide'});
+				},
+				function(error,err){
+
+				}
+			);
+		}
 	},
 
 	

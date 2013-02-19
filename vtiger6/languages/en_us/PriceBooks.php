@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_PriceBooks' => 'Price Book',
 	'LBL_ADD_RECORD' => 'Add Price Book',
 	'LBL_RECORDS_LIST' => 'Price Books List',
-	'LBL_RECORD_SUMMARY' => 'Price Books Summary',
 
 	// Blocks
 	'LBL_PRICEBOOK_INFORMATION' => 'Price Book Details',

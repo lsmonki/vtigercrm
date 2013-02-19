@@ -192,6 +192,37 @@ Vtiger_Field_Js('Vtiger_Picklist_Field_Js',{},{
 	}
 });
 
+Vtiger_Field_Js('Vtiger_Multipicklist_Field_Js',{},{
+	/**
+	 * Function to get the pick list values
+	 * @return <object> key value pair of options
+	 */
+	getPickListValues : function() {
+		return this.get('picklistvalues');
+	},
+	
+	/**
+	 * Function to get the ui
+	 * @return - select element and chosen element
+	 */
+	getUi : function() {
+		var html = '<select class="row-fluid chzn-select" multiple name="'+ this.getName() +'[]">';
+		var pickListValues = this.getPickListValues();
+		var selectedOption = this.getValue();
+		var selectedOptionsArray = selectedOption.split(',')
+		for(var option in pickListValues) {
+			html += '<option value="'+option+'" ';
+			if(jQuery.inArray(option,selectedOptionsArray) != -1){
+				html += ' selected ';
+			}
+			html += '>'+pickListValues[option]+'</option>';
+		}
+		html +='</select>';
+		var selectContainer = jQuery(html);
+		this.addValidationToElement(selectContainer);
+		return selectContainer;
+	}
+}),
 
 Vtiger_Field_Js('Vtiger_Boolean_Field_Js',{},{
 

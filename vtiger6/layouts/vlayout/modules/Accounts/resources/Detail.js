@@ -57,6 +57,10 @@ Vtiger_Detail_Js("Accounts_Detail_Js",{
 },{
 	//Cache which will store account name and whether it is duplicate or not
 	accountDuplicationCheckCache : {},
+
+	getDeleteMessageKey : function() {
+		return 'LBL_RELATED_RECORD_DELETE_CONFIRMATION';
+	},
 	
 	isAccountNameDuplicate : function(params) {
 		var thisInstance = this;

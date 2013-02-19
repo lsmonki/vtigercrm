@@ -52,6 +52,8 @@ Vtiger_Detail_Js("Reports_Detail_Js",{},{
 				function(data){
 					progressIndicatorElement.progressIndicator({mode:'hide'})
 					thisInstance.getContentHolder().find('#reportDetails').replaceWith(data);
+					var updatedCount = jQuery('#updatedCount',data).val();
+					jQuery('#countValue').text(updatedCount);
 				}
 			);
 		});

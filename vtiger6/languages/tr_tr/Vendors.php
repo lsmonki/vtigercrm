@@ -30,6 +30,7 @@ $languageStrings = array(
 	'308-Sales-Books'              => '308-Satış-Kitap'           , 
 );
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Are you sure you want to delete?',
 	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Vendor will remove its related PurchaseOrders. Are you sure you want to delete this Vendor?', // TODO: Review
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected Records?', // TODO: Review
 );

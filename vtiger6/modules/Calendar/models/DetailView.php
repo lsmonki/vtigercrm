@@ -16,12 +16,13 @@ class Calendar_DetailView_Model extends Vtiger_DetailView_Model {
 	 */
 	public function getDetailViewRelatedLinks() {
 		$recordModel = $this->getRecord();
+        $moduleName = $recordModel->getType();
 		$relatedLinks = array();
 		//link which shows the summary information(generally detail of record)
 		$relatedLinks[] = array(
 				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => 'LBL_RECORD_SUMMARY',
-				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=summary',
+				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName),
+				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=full',
 				'linkicon' => ''
 		);
 

@@ -47,7 +47,11 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 	}
 
 	function postProcess(Vtiger_Request $request) {
+		$viewer = $this->getViewer ($request);
+		$moduleName = $this->getModule($request);
+		$viewer->view('PopupFooter.tpl', $moduleName);
 	}
+	
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request
@@ -168,6 +172,7 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 	}
 
 }

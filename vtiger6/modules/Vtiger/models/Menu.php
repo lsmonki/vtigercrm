@@ -19,9 +19,15 @@ class Vtiger_Menu_Model extends Vtiger_Module_Model {
 	 * @return <Array> - List of Vtiger_Menu_Model instances
 	 */
 	public static function getAll($sequenced=false) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$db = PearDatabase::getInstance();
 		$restrictedModulesList = array('Emails', 'ProjectMilestone', 'ProjectTask', 'ModComments','RSS','Portal','Integration','PBXManager','DashBoard','Home');
+
+		// Ondemand Specific : Restrict Language Editor for now in menu for non-admin users
+		if(!$currentUser->isAdminUser()) {
+			array_push($restrictedModulesList, 'LanguageEditor');
+		}
 
 		$sql = "SELECT *
 				FROM vtiger_tab

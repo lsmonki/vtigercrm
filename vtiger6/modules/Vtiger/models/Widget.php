@@ -38,13 +38,34 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $this->get('height');
 	}
+	
+	public function getPositionCol($default=0) {
+		$position = $this->get('position');
+		if ($position) {
+			$position = Zend_Json::decode(decode_html($position));
+			return intval($position['col']);
+		}
+		return $default;
+	}
+	
+	public function getPositionRow($default=0) {
+		$position = $this->get('position');
+		if ($position) {
+			$position = Zend_Json::decode(decode_html($position));
+			return intval($position['row']);
+		}
+		return $default;
+	}
 
 	/**
 	 * Function to get the url of the widget
 	 * @return <String>
 	 */
 	public function getUrl() {
-		return decode_html($this->get('linkurl')).'&linkid='.$this->get('linkid');
+		$url = decode_html($this->get('linkurl')).'&linkid='.$this->get('linkid');
+		$widgetid = $this->has('widgetid')? $this->get('widgetid') : $this->get('id');
+		if ($widgetid) $url .= '&widgetid=' . $widgetid;
+		return $url;
 	}
 
 	/**
@@ -95,16 +116,59 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $self;
 	}
+	
+	public static function updateWidgetPosition($position, $linkId, $widgetId, $userId) {
+		if (!$linkId && !$widgetId) return;
+		
+		$db = PearDatabase::getInstance();
+		$sql = 'UPDATE vtiger_module_dashboard_widgets SET position=? WHERE userid=?';
+		$params = array($position, $userId);
+		if ($linkId) {
+			$sql .= ' AND linkid = ?';
+			$params[] = $linkId;
+		} else if ($widgetId) {
+			$sql .= ' AND id = ?';
+			$params[] = $widgetId;
+		}
+		$db->pquery($sql, $params);
+	}
+
+	public static function getInstanceWithWidgetId($widgetId, $userId) {
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery('SELECT * FROM vtiger_module_dashboard_widgets
+			INNER JOIN vtiger_links ON vtiger_links.linkid = vtiger_module_dashboard_widgets.linkid
+			WHERE linktype = ? AND vtiger_module_dashboard_widgets.id = ? AND userid = ?', array('DASHBOARDWIDGET', $widgetId, $userId));
+
+		$self = new self();
+		if($db->num_rows($result)) {
+			$row = $db->query_result_rowdata($result, 0);
+			$self->setData($row);
+		}
+		return $self;
+	}
+	
 	/**
 	 * Function to add a widget from the Users Dashboard
 	 */
 	public function add() {
 		$db = PearDatabase::getInstance();
-		$result = $db->pquery('SELECT 1 FROM vtiger_module_dashboard_widgets WHERE linkid = ? AND userid = ?',
-				array($this->get('linkid'), $this->get('userid')));
+		
+		$sql = 'SELECT id FROM vtiger_module_dashboard_widgets WHERE linkid = ? AND userid = ?';
+		$params = array($this->get('linkid'), $this->get('userid'));
+		
+		$filterid = $this->get('filterid');
+		if (!empty($filterid)) {
+			$sql .= ' AND filterid = ?';
+			$params[] = $this->get('filterid');
+		}
+		
+		$result = $db->pquery($sql, $params);
 		if(!$db->num_rows($result)) {
 			$db->pquery('INSERT INTO vtiger_module_dashboard_widgets(linkid, userid, filterid, title, data) VALUES(?,?,?,?,?)',
 					array($this->get('linkid'), $this->get('userid'), $this->get('filterid'), $this->get('title'), Zend_Json::encode($this->get('data'))));
+			$this->set('id', $db->getLastInsertID());
+		} else {
+			$this->set('id', $db->query_result($result, 'id', 0));
 		}
 	}
 
@@ -113,8 +177,8 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 	 */
 	public function remove() {
 		$db = PearDatabase::getInstance();
-		$db->pquery('DELETE FROM vtiger_module_dashboard_widgets WHERE linkid = ? AND userid = ?',
-				array($this->get('linkid'), $this->get('userid')));
+		$db->pquery('DELETE FROM vtiger_module_dashboard_widgets WHERE id = ? AND userid = ?',
+				array($this->get('id'), $this->get('userid')));
 	}
 
 	/**
@@ -122,7 +186,10 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 	 * @return <String>
 	 */
 	public function getDeleteUrl() {
-		return 'index.php?module=Vtiger&action=RemoveWidget&linkid='. $this->get('linkid');
+		$url = 'index.php?module=Vtiger&action=RemoveWidget&linkid='. $this->get('linkid');
+		$widgetid = $this->has('widgetid')? $this->get('widgetid') : $this->get('id');
+		if ($widgetid) $url .= '&widgetid=' . $widgetid;
+		return $url;
 	}
 
 	/**

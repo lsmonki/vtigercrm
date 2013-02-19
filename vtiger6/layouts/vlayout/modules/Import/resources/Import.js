@@ -50,7 +50,24 @@ if (typeof(ImportJs) == 'undefined') {
 			if(!ImportJs.validateMergeCriteria()) return false;
 			return true;
         },
-
+		
+		registerImportClickEvent : function(){
+			jQuery('#importButton').on('click',function(e){
+				var progressIndicatorElement = jQuery.progressIndicator({
+					'blockInfo' : {
+						'enabled' : true
+					}
+				});
+				var result = ImportJs.sanitizeAndSubmit()
+				if(result == false){
+					progressIndicatorElement.progressIndicator({
+						'mode' : 'hide'
+					});
+				}
+				return result;
+			});
+		},
+		
 		validateFilePath: function() {
 			var importFile = jQuery('#import_file');
 			var filePath = importFile.val();
@@ -328,5 +345,6 @@ if (typeof(ImportJs) == 'undefined') {
 	jQuery(document).ready(function() {
 		ImportJs.toogleMergeConfiguration();
 		ImportJs.loadDefaultValueWidgetForMappedFields();
+		ImportJs.registerImportClickEvent();
 	});
 }

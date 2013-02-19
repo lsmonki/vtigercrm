@@ -99,6 +99,9 @@ class Invoice extends CRMEntity {
 
 	var $entity_table = "vtiger_crmentity";
 
+	// For workflows update field tasks is deleted all the lineitems.
+	var $isLineItemUpdate = true;
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Invoice() {
@@ -126,10 +129,10 @@ class Invoice extends CRMEntity {
 		} else if(isset($_REQUEST)) {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-					&& $_REQUEST['action'] != 'SaveAjax') {
+					&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Invoice');
-			} else if($_REQUEST['action'] == 'InvoiceAjax') {
+			} else if($_REQUEST['action'] == 'InvoiceAjax' || $_REQUEST['action'] == 'MassEditSave') {
 				$updateInventoryProductRel_deduct_stock = false;
 			}
 		}

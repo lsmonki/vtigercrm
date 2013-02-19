@@ -22,8 +22,8 @@ Vtiger_List_Js("Reports_List_Js",{
 				var callBackFunction = function(data){
 					jQuery('#addFolder').validationEngine({
 						// to prevent the page reload after the validation has completed
-						'onValidationComplete' : function(){
-
+						'onValidationComplete' : function(form,valid){
+                            return valid;
 						}
 					});
 					Reports_List_Js.listInstance.folderSubmit().then(function(data){

@@ -93,7 +93,7 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 
 		$relatedModules = $reportModel->getReportRelatedModules();
 
-
+        $modulesList = $reportModel->getModulesList();
 
 		foreach ($relatedModules as $primaryModule => $relatedModuleList) {
 			$translatedRelatedModules = array();
@@ -104,6 +104,7 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 			$relatedModules[$primaryModule] = $translatedRelatedModules;
 		}
 
+        $viewer->assign('MODULELIST', $modulesList);
 		$viewer->assign('RELATED_MODULES', $relatedModules);
 		$viewer->assign('REPORT_MODEL', $reportModel);
 		$viewer->assign('REPORT_FOLDERS', $reportFolderModels);
@@ -114,8 +115,6 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 	}
 
 	function step2(Vtiger_request $request) {
-
-
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$record = $request->get('record');
@@ -185,7 +184,14 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('SECONDARY_MODULES',$secondaryModules);
 		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $reportModel->getPrimaryModuleRecordStructure());
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
-		$viewer->assign('DATE_FILTERS', Vtiger_Field_Model::getDateFilterTypes());
+        $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
+        foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+            $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
+            $comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
+            $comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$moduleName);
+            $dateFilters[$comparatorKey] = $comparatorInfo;
+        }
+		$viewer->assign('DATE_FILTERS', $dateFilters);
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
 		$viewer->assign('MODULE', $moduleName);

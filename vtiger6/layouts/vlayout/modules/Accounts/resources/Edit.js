@@ -28,17 +28,6 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 								},
 								
 	/**
-	 * Function which will register basic events which will be used in quick create as well
-	 *
-	 */
-	registerBasicEvents : function(container) {
-		this._super(container);
-		this.registerRecordPreSaveEvent(container);
-		this.registerEventForCopyingAddress();
-			//container.trigger(Vtiger_Edit_Js.recordPreSave, {'value': 'edit'});
-	},
-        
-	/**
 	 * This function will return the current form
 	 */
 	getForm : function(){
@@ -75,26 +64,28 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 			var accountName = thisInstance.getAccountName(form);
 			var recordId = thisInstance.getRecordId(form);
 			var params = {};
-			if(!(accountName in thisInstance.duplicateCheckCache)) {
-				Vtiger_Helper_Js.checkDuplicateName({
-					'accountName' : accountName, 
-					'recordId' : recordId
-				}).then(
-					function(data){
-						thisInstance.duplicateCheckCache[accountName] = data['success'];
-						form.submit();
-					},
-					function(data, err){
-						thisInstance.duplicateCheckCache[accountName] = data['success'];
-						thisInstance.duplicateCheckCache['message'] = data['message'];
-						params = {
-							title: app.vtranslate('JS_DUPLICATE_RECORD'),
-							text: data['message']
-						};
-						Vtiger_Helper_Js.showPnotify(params);
-					}
-					);
-			}
+            if(!(accountName in thisInstance.duplicateCheckCache)) {
+                Vtiger_Helper_Js.checkDuplicateName({
+                    'accountName' : accountName, 
+                    'recordId' : recordId,
+                    'moduleName' : 'Accounts'
+                }).then(
+                    function(data){
+                        thisInstance.duplicateCheckCache[accountName] = data['success'];
+                        form.submit();
+                    },
+                    function(data, err){
+                        thisInstance.duplicateCheckCache[accountName] = data['success'];
+                        thisInstance.duplicateCheckCache['message'] = data['message'];
+                        params = {
+                            title: app.vtranslate('JS_DUPLICATE_RECORD'),
+                            text: data['message']
+                        };
+                        Vtiger_Helper_Js.showPnotify(params);
+                    }
+                    );
+            }
+           
 			else {
 				if(thisInstance.duplicateCheckCache[accountName] == true){
 					params = {
@@ -129,21 +120,20 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	 * Function to copy address between fields
 	 * @param strings which accepts value as either odd or even
 	 */
-	copyAddress : function(swapMode){
+	copyAddress : function(swapMode, container){
 		var thisInstance = this;
-		var formElement = this.getForm();
 		var addressMapping = this.addressFieldsMappingInModule;
 		if(swapMode == "false"){
 			for(var key in addressMapping) {
-				var fromElement = formElement.find('[name="'+key+'"]');
-				var toElement = formElement.find('[name="'+addressMapping[key]+'"]');
+				var fromElement = container.find('[name="'+key+'"]');
+				var toElement = container.find('[name="'+addressMapping[key]+'"]');
 				toElement.val(fromElement.val());
 			}
 		} else if(swapMode){
 			var swappedArray = thisInstance.swapObject(addressMapping);
 			for(var key in swappedArray) {
-				var fromElement = formElement.find('[name="'+key+'"]');
-				var toElement = formElement.find('[name="'+swappedArray[key]+'"]');
+				var fromElement = container.find('[name="'+key+'"]');
+				var toElement = container.find('[name="'+swappedArray[key]+'"]');
 				toElement.val(fromElement.val());
 			}
 		}
@@ -152,7 +142,7 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	/**
 	 * Function to register event for copying address between two fileds
 	 */
-	registerEventForCopyingAddress : function(){
+	registerEventForCopyingAddress : function(container){
 		var thisInstance = this;
 		var swapMode;
 		jQuery('[name="copyAddress"]').on('click',function(e){
@@ -163,8 +153,72 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 			}else if(target == "shipping"){
 				swapMode = "true";
 			}
-			thisInstance.copyAddress(swapMode);
+			thisInstance.copyAddress(swapMode, container);
 		})
+	},
+	
+	/**
+	 * Function which will register event for Reference Fields Selection
+	 */
+	registerReferenceSelectionEvent : function(container) {
+		var thisInstance = this;
+		
+		jQuery('input[name="account_id"]', container).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
+			thisInstance.referenceSelectionEventHandler(data, container);
+		});
+	},
+	
+	/**
+	 * Reference Fields Selection Event Handler
+	 * On Confirmation It will copy the address details
+	 */
+	referenceSelectionEventHandler :  function(data, container) {
+		var thisInstance = this;
+		var message = app.vtranslate('OVERWRITE_EXISTING_MSG1')+app.vtranslate('SINGLE_'+data['source_module'])+' ('+data['selectedName']+') '+app.vtranslate('OVERWRITE_EXISTING_MSG2');
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+			function(e) {
+				thisInstance.copyAddressDetails(data, container);
+			},
+			function(error, err){
+			});
+	},
+	
+	/**
+	 * Function which will copy the address details - without Confirmation
+	 */
+	copyAddressDetails : function(data, container) {
+		var thisInstance = this;
+		thisInstance.getRecordDetails(data).then(
+			function(data){
+				var response = data['result'];
+				thisInstance.mapAddressDetails(thisInstance.addressFieldsMappingInModule, response['data'], container);
+			},
+			function(error, err){
+
+			});
+	},
+	
+	/**
+	 * Function which will map the address details of the selected record
+	 */
+	mapAddressDetails : function(addressDetails, result, container) {
+		for(var key in addressDetails) {
+			container.find('[name="'+key+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+key+'"]').trigger('change');
+			container.find('[name="'+addressDetails[key]+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+addressDetails[key]+'"]').trigger('change');
+		}
+	},
+	
+	/**
+	 * Function which will register basic events which will be used in quick create as well
+	 *
+	 */
+	registerBasicEvents : function(container) {
+		this._super(container);
+		this.registerRecordPreSaveEvent(container);
+		this.registerEventForCopyingAddress(container);
+		this.registerReferenceSelectionEvent(container);
+			//container.trigger(Vtiger_Edit_Js.recordPreSave, {'value': 'edit'});
 	}
-    
 });

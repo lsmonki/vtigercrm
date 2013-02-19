@@ -17,8 +17,8 @@
 			<div class="accordion-heading accordion-toggle quickWidgetHeader" data-target="#{$MODULE}_sideBar_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($SIDEBARWIDGET->getLabel())}"
 					data-toggle="collapse" data-parent="#quickWidgets" data-label="{$SIDEBARWIDGET->getLabel()}"
 					data-widget-url="{$SIDEBARWIDGET->getUrl()}" >
-				<h5 class="title pull-left widgetTextOverflowEllipsis" title="{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}">{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}</h5>
 				<span class="pull-right"><i class="icon-chevron-up alignBottom"></i></span>
+				<h5 class="title pull-left widgetTextOverflowEllipsis" title="{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}">{vtranslate($SIDEBARWIDGET->getLabel(), $MODULE)}</h5>
 				<div class="loadingImg hide pull-right">
 					<div class="loadingWidgetMsg"><strong>{vtranslate('LBL_LOADING_WIDGET', $MODULE)}</strong></div>
 				</div>

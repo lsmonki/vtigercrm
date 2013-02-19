@@ -10,7 +10,7 @@
 vimport('~~/modules/ModTracker/core/ModTracker_Basic.php');
 
 class ModTracker_Record_Model extends Vtiger_Record_Model {
-	
+
 	const UPDATE = 0;
 	const DELETE = 1;
 	const CREATE = 2;
@@ -22,7 +22,7 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 	 * Function to get the history of updates on a record
 	 * @param <type> $record - Record model
 	 * @param <type> $limit - number of latest changes that need to retrieved
-	 * @return <array> - list of  ModTracker_Record_Model 
+	 * @return <array> - list of  ModTracker_Record_Model
 	 */
 	public static function getUpdates($parentRecordId, $pagingModel) {
 		$db = PearDatabase::getInstance();
@@ -33,7 +33,7 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 
 		$listQuery = "SELECT * FROM vtiger_modtracker_basic WHERE crmid = ? ".
 						" ORDER BY changedon DESC LIMIT $startIndex, $pageLimit";
-		
+
 		$result = $db->pquery($listQuery, array($parentRecordId));
 		$rows = $db->num_rows($result);
 
@@ -104,7 +104,8 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 			$result = $db->pquery('SELECT * FROM vtiger_modtracker_detail WHERE id = ?', array($id));
 			$rows = $db->num_rows($result);
 			for($i=0; $i<$rows; $i++) {
-				$row = $db->query_result_rowdata($result, $i);
+				$data = $db->query_result_rowdata($result, $i);
+				$row = array_map('html_entity_decode', $data);
 
 				if($row['fieldname'] == 'record_id' || $row['fieldname'] == 'record_module') continue;
 

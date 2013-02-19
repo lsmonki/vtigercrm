@@ -28,6 +28,15 @@ class Documents_MoveDocuments_View extends Vtiger_Index_View {
 		$viewer->assign('SELECTED_IDS', $request->get('selected_ids'));
 		$viewer->assign('EXCLUDED_IDS', $request->get('excluded_ids'));
 		$viewer->assign('VIEWNAME',$request->get('viewname'));
+        
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
 
 		$viewer->view('MoveDocuments.tpl', $moduleName);
 	}

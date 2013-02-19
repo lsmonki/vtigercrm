@@ -21,8 +21,8 @@
 				{if $smarty.foreach.count.index % 2 == 0}
 					<div class="summaryWidgetContainer">
 						<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
-							<div class="widget_header">
-								<h3>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h3>
+							<div class="widget_header row-fluid">
+								<span class="span8 margin0px"><h4>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
 							</div>
 							<div class="widget_contents">
 							</div>
@@ -39,8 +39,8 @@
 				{if $smarty.foreach.count.index % 2 != 0}
 					<div class="summaryWidgetContainer">
 						<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
-							<div class="widget_header">
-								<h3>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h3>
+							<div class="widget_header row-fluid">
+								<span class="span8 margin0px"><h4>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
 							</div>
 							<div class="widget_contents">
 							</div>

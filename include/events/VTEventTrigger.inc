@@ -10,35 +10,35 @@
 
 	require_once("include/events/SqlResultIterator.inc");
 	class VTEventTrigger{
-		
+
 		/* EventTrigger cache management */
 		private static $cache = array();
 		private static $cacheLookupType = '';
 
 		private static $mandatoryEventClass = array('VTEntityDelta', 'ModTrackerHandler');
-		
+
 		const CACHE_LOOKUP_TYPE_ALL = 'ALL';
-				
+
 		static function initCache($name = false, $force = false) {
 			global $adb;
-			
+
 			if($name) {
-				$names = $name;				
+				$names = $name;
 				if(!is_array($names)) $names = array($name);
 
 				$evtinfos = self::getActiveEventInfos($adb, $names);
-				
+
 				foreach($evtinfos as $k=>$v) {
-					if(!self::isCached($k) || $force) {						
+					if(!self::isCached($k) || $force) {
 						self::$cache[$forname] = $evtinfos;
 					}
-				}								
+				}
 			} else {
 				if(!self::isCached() || $force) {
 					self::$cache = self::getActiveEventInfos($adb, $name);
-					self::$cacheLookupType = self::CACHE_LOOKUP_TYPE_ALL;	
+					self::$cacheLookupType = self::CACHE_LOOKUP_TYPE_ALL;
 				}
-			}			
+			}
 		}
 		static function isCached($name = false) {
 			if($name === false) {
@@ -54,21 +54,21 @@
 		static function clearCache($name = false) {
 			if($name === false) {
 				self::$cache = array();
-				self::$cacheLookupType = '';				
+				self::$cacheLookupType = '';
 			} else if(self::isCached($name)) {
 				unset(self::$cache[$name]);
-			}			
+			}
 		}
 		static function lookupCache($name) {
 			if(self::isCached($name)) {
 				return self::$cache[$name];
 			} else if(self::$cacheLookupType == self::CACHE_LOOKUP_TYPE_ALL) {
 				return array();
-			}			
+			}
 			return false;
 		}
-		
-		static function getActiveEventInfos($adb, $name = false) {			
+
+		static function getActiveEventInfos($adb, $name = false) {
 			$params = array();
 			$query = "SELECT * FROM vtiger_eventhandlers WHERE is_active=true";
 			if($name !== false) {
@@ -83,10 +83,10 @@
 				$query .= " AND handler_class IN (" . generateQuestionMarks(self::$mandatoryEventClass) . ")";
 				array_push($params, self::$mandatoryEventClass);
 			}
-			
+
 			$evtinfosbyname = array();
-			
-			$result= $adb->pquery($query, $params);			
+
+			$result= $adb->pquery($query, $params);
 			$it = new SqlResultIterator($adb, $result);
 			foreach($it as $row) {
 				$evtinfosbyname[$row->event_name][] = array(
@@ -96,20 +96,20 @@
 					'dependent_on'	=> $row->dependent_on,
 				);
 			}
-			
+
 			if($name) return $evtinfosbyname[$name];
 			else return $evtinfosbyname;
 		}
 		/** END **/
-		
+
 		function __construct($adb, $name){
 			$this->name=$name;
 			$this->adb = $adb;
 		}
-		
+
 		function trigger($data){
 			$adb = $this->adb;
-			
+
 			$eventInfos = self::lookupCache($this->name);
 			if($eventInfos === false) {
 				$eventInfos = self::getActiveEventInfos($this->adb, $this->name);
@@ -143,6 +143,9 @@
 							$handler->handleEvent($this->name, $data);
 							$completedEvents[] = $handler_class;
 							$handlerCounter++;
+						} else {
+							// Mark the event-handler as finished - without actually invoking.
+							$completedEvents[] = $eventInfo['handler_class'];
 						}
 					}
 					if($handlerCounter == 0 && count($eventInfos) > count($completedEvents)) {

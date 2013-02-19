@@ -30,13 +30,15 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		foreach($requestFieldList as $fieldName => $fieldValue){
 			$fieldModel = $fieldList[$fieldName];
 			if($fieldModel->isEditable()) {
-				$recordModel->set($fieldName, $fieldValue);
+				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_QUICKCREATE);
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
 		$viewer = $this->getViewer($request);
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('SINGLE_MODULE', 'SINGLE_'.$moduleName);

@@ -12,7 +12,6 @@ $languageStrings = array(
 	'SINGLE_ProjectMilestone' => 'Project Milestone',
 	'LBL_ADD_RECORD' => 'Add Project Milestone',
 	'LBL_RECORDS_LIST' => 'Project Milestones List',
-	'LBL_RECORD_SUMMARY' => 'Project Milestone Summary',
 
 	// Blocks
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details',

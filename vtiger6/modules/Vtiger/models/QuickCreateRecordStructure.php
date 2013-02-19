@@ -24,14 +24,19 @@ class Vtiger_QuickCreateRecordStructure_Model extends Vtiger_RecordStructure_Mod
 
 		$values = array();
 		$recordModel = $this->getRecord();
-		$recordExists = !empty($recordModel);
 		$moduleModel = $this->getModule();
 
 		$fieldModelList = $moduleModel->getQuickCreateFields();
 		foreach($fieldModelList as $fieldName=>$fieldModel) {
-			if($recordExists) {
-				$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
-			}
+            $recordModelFieldValue = $recordModel->get($fieldName);
+            if(!empty($recordModelFieldValue)) {
+                $fieldModel->set('fieldvalue', $recordModelFieldValue);
+            }else{
+                $defaultValue = $fieldModel->getDefaultFieldValue();
+                if($defaultValue) {
+                    $fieldModel->set('fieldvalue', $defaultValue);
+                }
+            }
 			$values[$fieldName] = $fieldModel;
 		}
 		$this->structuredValues = $values;

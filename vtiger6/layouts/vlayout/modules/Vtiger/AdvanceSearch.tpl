@@ -29,17 +29,23 @@
 			</div>
 			<div class="filterElements">
 				<form name="advanceFilterForm">
+                    <input type="hidden" name="labelFields" data-value='{ZEND_JSON::encode($SOURCE_MODULE_MODEL->getNameFields())}' />
+                    <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 					{include file='AdvanceFilter.tpl'|@vtemplate_path}
 				</form>
 				<div class="row-fluid actions">
 					<!-- TODO: should be done in better way to show right elements -->
 					<div class="span5">
+                        {if $SAVE_FILTER_PERMITTED}
 						<div class="row-fluid">
 							<span class="span4">&nbsp;</span>
 							<span class="span7">
 								<input class="zeroOpacity row-fluid" type="text" value="" name="viewname"/>
 							</span>
 						</div>
+                        {else}
+                            &nbsp;
+                        {/if}
 					</div>
 					<div class="span7">
 						<span class="btn-toolbar">
@@ -51,13 +57,14 @@
 							<span class="btn-group pull-right">
 								<button class="btn" id="advanceSearchButton" type="submit"><strong>{vtranslate('LBL_SEARCH', $MODULE)}</strong></button>
 							</span>
+                            {if $SAVE_FILTER_PERMITTED}
 							<span class="btn-group pull-right ">
 								<button class="btn hide" id="advanceSave"><strong>{vtranslate('LBL_SAVE_FILTER', $MODULE)}</strong></button>
 							</span>
 							<span class="btn-group pull-right">
 								<button class="btn" id="advanceIntiateSave"><strong>{vtranslate('LBL_SAVE_AS_FILTER', $MODULE)}</strong></button>
 							</span>
-
+                            {/if}
 						</span>
 					</div>
 				</div>

@@ -171,6 +171,14 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
 		$queryGenerator = $listViewModel->get('query_generator');
+
+        $searchKey = $this->get('search_key');
+		$searchValue = $this->get('search_value');
+		$operator = $this->get('operator');
+		if(!empty($searchValue)) {
+			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
+		}
+
 		$listQuery = $queryGenerator->getQuery();
 
 		if($skipRecords && !empty($skipRecords) && is_array($skipRecords) && count($skipRecords) > 0) {
@@ -258,11 +266,20 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 			$defaultModuleFilter = $db->pquery('SELECT cvid FROM vtiger_customview WHERE setdefault = 1 AND entitytype = ?',
 					array($moduleName));
 			$defaultViewId = $db->query_result($defaultModuleFilter, 0, 'cvid');
+
+			//User Specific filterId
 			if(empty($defaultViewId)) {
 				$userDefaultModuleFilter = $db->pquery('SELECT default_cvid FROM vtiger_user_module_preferences WHERE
 											userid = ? AND tabid = ?', array($currentUserModel->id, $moduleModel->getId()));
 				$defaultViewId = $db->query_result($userDefaultModuleFilter, 0, 'default_cvid');
 			}
+
+			//First filterid of module
+			if(empty($defaultViewId)) {
+				$firstDefaultFilter = $db->pquery('SELECT cvid FROM vtiger_customview WHERE entitytype = ?', array($moduleName));
+				$defaultViewId = $db->query_result($firstDefaultFilter, 0, 'cvid');
+			}
+
 			// Get the defaults filters columnlist
 			$columnSql = "INSERT INTO vtiger_cvcolumnlist (cvid, columnindex, columnname)
 							SELECT ?, columnindex, columnname FROM vtiger_cvcolumnlist WHERE cvid = ?";
@@ -844,7 +861,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		for ($i=0; $i<$noOfCVs; ++$i) {
 			$row = $db->query_result_rowdata($result, $i);
 			$customView = new self();
-			$customViews[$row['viewname']] = $customView->setData($row)->setModule($row['entitytype']);
+			$customViews[] = $customView->setData($row)->setModule($row['entitytype']);
 		}
 		return $customViews;
 	}
@@ -876,15 +893,15 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 	public static function getAllByGroup($moduleName='') {
 		$customViews = self::getAll($moduleName);
 		$groupedCustomViews = array();
-		foreach ($customViews as $viewName => $customView) {
+		foreach ($customViews as $index => $customView) {
 			if($customView->isMine()) {
-				$groupedCustomViews['Mine'][$viewName] = $customView;
+				$groupedCustomViews['Mine'][] = $customView;
 			} elseif($customView->isPublic()) {
-				$groupedCustomViews['Public'][$viewName] = $customView;
+				$groupedCustomViews['Public'][] = $customView;
 			} elseif($customView->isPending()) {
-				$groupedCustomViews['Pending'][$viewName] = $customView;
+				$groupedCustomViews['Pending'][] = $customView;
 			} else {
-				$groupedCustomViews['Others'][$viewName] = $customView;
+				$groupedCustomViews['Others'][] = $customView;
 			}
 		}
 		return $groupedCustomViews;
@@ -969,7 +986,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 
 		return $transformedAdvancedCondition;
 	}
-	
+
 	/*
 	 *  Function used to tranform the standard filter as like as advanced filter format
 	 *	@returns array of tranformed standard filter
@@ -981,7 +998,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 			$tranformedStandardFilter['comparator'] = 'bw';
 
 			$fields = explode(':',$standardFilter['columnname']);
-			
+
 			if($fields[1] == 'createdtime' || $fields[1] == 'modifiedtime' ||($fields[0] == 'vtiger_activity' && $fields[1] == 'date_start')){
 				$tranformedStandardFilter['columnname'] = $standardFilter['columnname'].':DT';
 				$date[] = $standardFilter['startdate'].' 00:00:00';
@@ -989,7 +1006,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 				$tranformedStandardFilter['value'] =  implode(',',$date);
 			} else{
 				$tranformedStandardFilter['columnname'] = $standardFilter['columnname'].':D';
-				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate']; 
+				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate'];
 			}
 			return array($tranformedStandardFilter);
 		} else{

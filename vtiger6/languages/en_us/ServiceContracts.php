@@ -14,7 +14,6 @@ $languageStrings = array(
 	'SINGLE_ServiceContracts' => 'Service Contract',
 	'LBL_ADD_RECORD' => 'Add Service Contract',
 	'LBL_RECORDS_LIST' => 'Service Contracts List',
-	'LBL_RECORD_SUMMARY' => 'Service Contracts Summary',
 	// Blocks
 	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Service Contract Details',
 	

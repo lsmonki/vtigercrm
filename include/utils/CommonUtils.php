@@ -434,13 +434,13 @@ function getCVname($cvid) {
 
 	global $adb;
 	$cvname = '';
-	
+
 	if (!empty($cvid)) {
 		$sql = "select viewname from vtiger_customview where cvid=?";
 		$result = $adb->pquery($sql, array($cvid));
 		$cvname = $adb->query_result($result, 0, "viewname");
 	}
-	
+
 	$log->debug("Exiting getCVname method ...");
 	return $cvname;
 }
@@ -481,7 +481,7 @@ function getSalesEntityType($crmid) {
 	$log->debug("Entering getSalesEntityType(" . $crmid . ") method ...");
 	$log->info("in getSalesEntityType " . $crmid);
 	global $adb;
-	
+
 	$parent_module = '';
 	if (!empty($crmid)) {
 		$sql = "select setype from vtiger_crmentity where crmid=?";
@@ -668,7 +668,7 @@ function getVendorName($vendor_id) {
 	$log->debug("Entering getVendorName(" . $vendor_id . ") method ...");
 	$log->info("in getVendorName " . $vendor_id);
 	global $adb;
-	
+
 	$vendor_name = '';
 	if (!empty($vendor_id)) {
 		$sql = "select * from vtiger_vendor where vendorid=?";
@@ -710,7 +710,7 @@ function getPriceBookName($pricebookid) {
 	$log->debug("Entering getPriceBookName(" . $pricebookid . ") method ...");
 	$log->info("in getPriceBookName " . $pricebookid);
 	global $adb;
-	
+
 	$pricebook_name = '';
 	if (!empty($pricebookid)) {
 		$sql = "select * from vtiger_pricebook where pricebookid=?";
@@ -730,7 +730,7 @@ function getPoName($po_id) {
 	$log->debug("Entering getPoName(" . $po_id . ") method ...");
 	$log->info("in getPoName " . $po_id);
 	global $adb;
-	
+
 	$po_name = '';
 	if (!empty($po_id)) {
 		$sql = "select * from vtiger_purchaseorder where purchaseorderid=?";
@@ -751,9 +751,9 @@ function getSoName($so_id) {
 	$log->debug("Entering getSoName(" . $so_id . ") method ...");
 	$log->info("in getSoName " . $so_id);
 	global $adb;
-	
+
 	$so_name = '';
-	if (!empty($so_id)) {	
+	if (!empty($so_id)) {
 		$sql = "select * from vtiger_salesorder where salesorderid=?";
 		$result = $adb->pquery($sql, array($so_id));
 		$so_name = $adb->query_result($result, 0, "subject");
@@ -879,7 +879,7 @@ function getValidDisplayDate($cur_date_val) {
 	if ($dat_fmt == '') {
 		$dat_fmt = 'dd-mm-yyyy';
 	}
-	
+
     $date = new DateTimeField($cur_date_val);
 	return $date->getDisplayDate();
 }
@@ -2245,7 +2245,7 @@ function get_announcements() {
 		if ($adb->query_result($result, $i, 'announcement') != '')
 			$announcement.=$announce;
 	}
-    
+
    return $announcement;
 }
 
@@ -2414,10 +2414,10 @@ function getTicketComments($ticketid) {
 
 	$moduleName = getSalesEntityType($ticketid);
 	$commentlist = '';
-	$sql = "select * from vtiger_ticketcomments where ticketid=?";
+	$sql = "SELECT commentcontent FROM vtiger_modcomments WHERE related_to = ?";
 	$result = $adb->pquery($sql, array($ticketid));
 	for ($i = 0; $i < $adb->num_rows($result); $i++) {
-		$comment = $adb->query_result($result, $i, 'comments');
+		$comment = $adb->query_result($result, $i, 'commentcontent');
 		if ($comment != '') {
 			$commentlist .= '<br><br>' . $comment;
 		}
@@ -2509,17 +2509,17 @@ function is_emailId($entity_id) {
  */
 function getCvIdOfAll($module) {
 	global $adb, $log;
-	
+
 	static $cvidCache = array();
 	if (!isset($cvidCache[$module])) {
 		$log->debug("Entering getCvIdOfAll($module)");
 		$qry_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
 		$cvid = $adb->query_result($qry_res, 0, "cvid");
 		$log->debug("Exiting getCvIdOfAll($module)");
-		
+
 		$cvidCache[$module] = $cvid;
 	}
-	
+
 	return isset($cvidCache[$module])? $cvidCache[$module] : '0';
 }
 
@@ -2808,7 +2808,7 @@ function getEmailTemplateVariables() {
 			}
 		}
 		if(is_array($allFields) && is_array($allRelFields)){
-			$allFields = array_merge($allFields, $allRelFields);	
+			$allFields = array_merge($allFields, $allRelFields);
 			$allRelFields="";
 		}
 		$allOptions[] = $allFields;
@@ -2867,6 +2867,36 @@ function checkFileAccessForInclusion($filepath) {
 	if (stripos($realfilepath, $rootdirpath) !== 0 || in_array($filePathParts[0], $unsafeDirectories)) {
 		die("Sorry! Attempt to access restricted file.");
 	}
+}
+
+/** Function to check the file deletion within the deletable (safe) directories*/
+function checkFileAccessForDeletion($filepath) {
+	global $root_directory;
+	// Set the base directory to compare with
+	$use_root_directory = $root_directory;
+	if (empty($use_root_directory)) {
+		$use_root_directory = realpath(dirname(__FILE__) . '/../../.');
+	}
+
+	$safeDirectories = array('storage', 'cache', 'test');
+
+	$realfilepath = realpath($filepath);
+
+	/** Replace all \\ with \ first */
+	$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+	$rootdirpath = str_replace('\\\\', '\\', $use_root_directory);
+
+	/** Replace all \ with / now */
+	$realfilepath = str_replace('\\', '/', $realfilepath);
+	$rootdirpath = str_replace('\\', '/', $rootdirpath);
+
+	$relativeFilePath = str_replace($rootdirpath, '', $realfilepath);
+	$filePathParts = explode('/', $relativeFilePath);
+
+	if (stripos($realfilepath, $rootdirpath) !== 0 || !in_array($filePathParts[0], $safeDirectories)) {
+		die("Sorry! Attempt to access restricted file.");
+	}
+	
 }
 
 /** Function to check the file access is made within web root directory. */
@@ -3023,7 +3053,7 @@ function getEntityField($module) {
  */
 function getEntityFieldNames($module) {
 	$data = VTCacheUtils::lookupEntityNameInfo($module);
-	
+
 	if (!empty($module) && empty($data)) {
 		$adb = PearDatabase::getInstance();
 		$query = "select fieldname,modulename,tablename,entityidfield from vtiger_entityname where modulename = ?";
@@ -3038,7 +3068,7 @@ function getEntityFieldNames($module) {
 		$data = array("tablename" => $tableName, "modulename" => $moduleName, "fieldname" => $fieldsName, "entityidfield" => $entityIdField);
 		VTCacheUtils::updateEntityNameInfo($module, $data);
 	}
-	
+
 	return $data;
 }
 
@@ -3298,7 +3328,7 @@ function getRelatedFields($params=array()) {
 		}
 		if (!empty($relatedField)) {
 			foreach ($relatedField as $ind => $relModule) {
-				$referencelist = getRelatedModuleFieldList($relModule, $user);	
+				$referencelist = getRelatedModuleFieldList($relModule, $user);
 			}
 		}
 		$returnData[] = array('module' => $module, 'fieldname' => $field->getFieldName(), 'columnname' => $field->getColumnName(), 'fieldlabel' => $field->getFieldLabelKey(), 'referencelist' => $referencelist);
@@ -3380,7 +3410,7 @@ function decimalFormat($value){
 /*
  * Function used to Update the label for a record
  * @param <String> $module - module name
- * @param <Integer> $recordId 
+ * @param <Integer> $recordId
  */
 function updateRecordLabel($module,$recordId){
 	global $adb;

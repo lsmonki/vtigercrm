@@ -8,6 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TEMPLATE_NAME'            => 'Template name'               , // TODO: Review
-	'LBL_DESCRIPTION'              => 'Megjegyzés'                 , 
+	'LBL_TEMPLATE_NAME'            => 'Sablon neve'				,
+	'LBL_DESCRIPTION'              => 'Megjegyzés'				,
 );

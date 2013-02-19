@@ -76,6 +76,16 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	}
 
 	/**
+	 * Function to save the current Record Model
+	 */
+	public function save() {
+		parent::save();
+
+		$this->saveTagCloud();
+	}
+
+
+	/**
 	 * Function to get all the Home Page components list
 	 * @return <Array> List of the Home Page components
 	 */
@@ -159,7 +169,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		if($subordinateRoleUsers) {
 			foreach($subordinateRoleUsers as $role=>$users) {
 				foreach($users as $user) {
-					$subordinateUsers[$user] = $privilegesModel->get('first_name').' '.$privilegesModel->get('first_name');
+					$subordinateUsers[$user] = $privilegesModel->get('first_name').' '.$privilegesModel->get('last_name');
 				}
 			}
 		}
@@ -218,6 +228,29 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return $users;
 	}
+
+	/**
+	 * Function returns List of Accessible Users for a Module
+	 * @param <String> $module
+	 * @return <Array of Users_Record_Model>
+	 */
+	public function getAccessibleGroupForModule($module) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$curentUserPrivileges = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+
+		if($currentUser->isAdminUser() || $curentUserPrivileges->hasGlobalWritePermission()) {
+			$groups = $this->getAccessibleGroups();
+		} else {
+			$sharingAccessModel = Settings_SharingAccess_Module_Model::getInstance($module);
+			if($sharingAccessModel->isPrivate()) {
+				$groups = $this->getAccessibleGroups('private');
+			} else {
+				$groups = $this->getAccessibleGroups();
+			}
+		}
+		return $groups;
+	}
+
 	/**
 	 * Function to get Images Data
 	 * @return <Array> list of Image names and paths
@@ -313,35 +346,73 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Function to get the Day Starts picklist values
 	 * @param type $name Description
 	 */
 	public static function getDayStartsPicklistValues($stucturedValues){
-		
+
 		$fieldModel = $stucturedValues['LBL_CALENDAR_SETTINGS'];
 		$hour_format = $fieldModel['hour_format']->getPicklistValues();
 		$start_hour = $fieldModel['start_hour']->getPicklistValues();
-		
+
 		$defaultValues = array('00:00'=>'12:00 AM','01:00'=>'01:00 AM','02:00'=>'02:00 AM','03:00'=>'03:00 AM','04:00'=>'04:00 AM','05:00'=>'05:00 AM',
 					'06:00'=>'06:00 AM','07:00'=>'07:00 AM','08:00'=>'08:00 AM','09:00'=>'09:00 AM','10:00'=>'10:00 AM','11:00'=>'11:00 AM','12:00'=>'12:00 PM',
 					'13:00'=>'01:00 PM','14:00'=>'02:00 PM','15:00'=>'03:00 PM','16:00'=>'04:00 PM','17:00'=>'05:00 PM','18:00'=>'06:00 PM','19:00'=>'07:00 PM',
 					'20:00'=>'08:00 PM','21:00'=>'09:00 PM','22:00'=>'10:00 PM','23:00'=>'11:00 PM');
-		
+
 		$picklistDependencyData = array();
 		foreach ($hour_format as $value) {
 			if($value == 24){
 				$picklistDependencyData['hour_format'][$value]['start_hour'] = $start_hour;
 			}else{
-				$picklistDependencyData['hour_format'][$value]['start_hour'] = $defaultValues; 
+				$picklistDependencyData['hour_format'][$value]['start_hour'] = $defaultValues;
 			}
-		}		
+		}
 		if(empty($picklistDependencyData['hour_format']['__DEFAULT__']['start_hour'])) {
 			$picklistDependencyData['hour_format']['__DEFAULT__']['start_hour'] = $defaultValues;
 		}
 		return $picklistDependencyData;
 	}
-	
+
+	/**
+	 * Function returns if tag cloud is enabled or not
+	 */
+	function getTagCloudStatus() {
+		$db = PearDatabase::getInstance();
+		$query = "SELECT visible FROM vtiger_homestuff WHERE userid=? AND stufftype='Tag Cloud'";
+		$visibility = $db->query_result($db->pquery($query, array($this->getId())), 0, 'visible');
+		if($visibility == 0) {
+			return true;
+		} 
+		return false; 
+	}
+
+	/**
+	 * Function saves tag cloud
+	 */
+	function saveTagCloud() {
+		$db = PearDatabase::getInstance();
+		$db->pquery("UPDATE vtiger_homestuff SET visible = ? WHERE userid=? AND stufftype='Tag Cloud'",
+				array($this->get('tagcloud'), $this->getId()));
+	}
+
+	/**
+	 * Function to get user groups
+	 * @param type $userId
+	 * @return <array> - groupId's
+	 */
+	public static function getUserGroups($userId){
+		$db = PearDatabase::getInstance();
+		$groupIds = array();
+		$query = "SELECT groupid FROM vtiger_users2group WHERE userid=?";
+		$result = $db->pquery($query, array($userId));
+		for($i=0; $i<$db->num_rows($result); $i++){
+			$groupId = $db->query_result($result, $i, 'groupid');
+			$groupIds[] = $groupId;
+		}
+		return $groupIds;
+	}
 }

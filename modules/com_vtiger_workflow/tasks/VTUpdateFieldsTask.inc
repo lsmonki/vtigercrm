@@ -96,7 +96,22 @@ class VTUpdateFieldsTask extends VTTask {
 			}
 			$_REQUEST['file'] = '';
 			$_REQUEST['ajxaction'] = '';
+
+			// Added as Mass Edit triggers workflow and date and currency fields are set to user format
+			// When saving the information in database saveentity API should convert to database format
+			// and save it. But it converts in database format only if that date & currency fields are
+			// changed(massedit) other wise they wont be converted thereby changing the values in user
+			// format, CRMEntity.php line 474 has the login to check wheather to convert to database format
+			$actionName = $_REQUEST['action'];
+			$_REQUEST['action'] = '';
+			
+			// For workflows update field tasks is deleted all the lineitems.
+			$focus->isLineItemUpdate = false;
+			
 			$focus->saveentity($moduleName);
+
+			// Reverting back the action name as there can be some dependencies on this.
+			$_REQUEST['action'] = $actionName;
 			$util->revertUser();
 		}
 		$util->revertUser();

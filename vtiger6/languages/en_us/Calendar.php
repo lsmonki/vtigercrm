@@ -13,7 +13,6 @@ $languageStrings = array(
 	'LBL_ADD_TASK' => 'Add Task',
 	'LBL_ADD_EVENT' => 'Add Event',
 	'LBL_RECORDS_LIST' => 'Calendar List',
-	'LBL_RECORD_SUMMARY' => 'Record Summary',
 	'LBL_EVENTS' => 'Events',
 	'LBL_TODOS' => 'To Do',
 	'LBL_CALENDAR_SETTINGS' => 'Calendar Settings',
@@ -39,6 +38,8 @@ $languageStrings = array(
 	'LBL_ACTIVITY_TYPES' => 'Activity Types',
 	'LBL_CONTACTS_SUPPORT_END_DATE' => 'Support End Date',
 	'LBL_CONTACTS_BIRTH_DAY' => 'Date of Birth',
+	'LBL_ADDED_CALENDARS' => 'Added Calendars',
+	
 
 	//Activity Type picklist values
 	'Call' => 'Call',
@@ -61,7 +62,8 @@ $languageStrings = array(
 	'LBL_TASK' => 'Task',
 
 	'LBL_RECORDS_LIST' => 'List View',
-	'LBL_CALENDAR_VIEW' => 'Calendar View',
+	'LBL_CALENDAR_VIEW' => 'My Calendar',
+	'LBL_SHARED_CALENDAR' => 'Shared Calendar',
 	
 	//Repeat Lables - used by getTranslatedString
 	'LBL_DAY0' => 'Sunday',
@@ -85,6 +87,11 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-
-	'LBL_ADD_EVENT_TASK' => 'Add Event / Task'
+	'LBL_ADD_EVENT_TASK' => 'Add Event/Task',
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your calendar',
+    'LBL_SYNC_BUTTON' => 'Synchronize Now',
+    'LBL_SYNCRONIZING' => 'Synchronizing....',
+    'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
+    'LBL_FIELD_MAPPING' => 'Field Mapping',
+    'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related contacts for leads'
 );

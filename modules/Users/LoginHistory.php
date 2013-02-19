@@ -100,36 +100,37 @@ class LoginHistory {
 **/
 	function getHistoryListViewEntries($username, $navigation_array, $sorder='', $orderby='')
 	{
-		global $log;
+		global $adb, $log;
 		$log->debug("Entering getHistoryListViewEntries() method ...");
-		global $adb, $current_user;	
-		
-		if($sorder != '' && $order_by != '')
-	       		$list_query = "Select * from vtiger_loginhistory where user_name=? order by ".$order_by." ".$sorder;
+
+		if ($sorder != '' && $orderby != '')
+			$list_query = "Select * from vtiger_loginhistory where user_name=? order by " . $orderby . " " . $sorder;
 		else
-				$list_query = "Select * from vtiger_loginhistory where user_name=? order by ".$this->default_order_by." ".$this->default_sort_order;
+			$list_query = "Select * from vtiger_loginhistory where user_name=? order by " . $this->default_order_by . " " . $this->default_sort_order;
 
 		$result = $adb->pquery($list_query, array($username));
 		$entries_list = array();
-		
-	if($navigation_array['end_val'] != 0)
-	{
-		for($i = $navigation_array['start']; $i <= $navigation_array['end_val']; $i++)
-		{
-			$entries = array();
-			$loginid = $adb->query_result($result, $i-1, 'login_id');
-
-			$entries[] = $adb->query_result($result, $i-1, 'user_name');
-			$entries[] = $adb->query_result($result, $i-1, 'user_ip');
-			$entries[] = $adb->query_result($result, $i-1, 'login_time');
-			$entries[] = $adb->query_result($result, $i-1, 'logout_time');
-			$entries[] = $adb->query_result($result, $i-1, 'status');
-
-			$entries_list[] = $entries;
+		if ($navigation_array['end_val'] != 0) {
+			for ($i = $navigation_array['start']; $i <= $navigation_array['end_val']; $i++) {
+				$entries = array();
+				$entries[] = $adb->query_result($result, $i - 1, 'user_name');
+				$entries[] = $adb->query_result($result, $i - 1, 'user_ip');
+				$loginTime = $adb->query_result($result, $i - 1, 'login_time');
+				$date = new DateTimeField($loginTime);
+				$entries[] = $date->getDisplayDateTimeValue();
+				$logoutTime = $adb->query_result($result, $i - 1, 'logout_time');
+				if($logoutTime != '0000-00-00 00:00:00'){
+					$date = new DateTimeField($logoutTime);
+					$entries[] = $date->getDisplayDateTimeValue();
+				}else{
+					$entries[] = $logoutTime;
+				}
+				$entries[] = $adb->query_result($result, $i - 1, 'status');
+				$entries_list[] = $entries;
+			}
+			$log->debug("Exiting getHistoryListViewEntries() method ...");
+			return $entries_list;
 		}	
-		$log->debug("Exiting getHistoryListViewEntries() method ...");
-		return $entries_list;
-	}	
 	}
 	
 	/** Function that Records the Login info of the User 

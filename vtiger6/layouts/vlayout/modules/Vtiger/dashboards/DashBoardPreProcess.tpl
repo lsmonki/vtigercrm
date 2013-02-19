@@ -18,5 +18,5 @@
 			{include file="ListViewSidebar.tpl"|vtemplate_path:$MODULE_NAME}
 		</div>
 		<div class="contentsDiv span10 marginLeftZero">
-			{include file="dashboards/DashBoardHeader.tpl"|vtemplate_path:$MODULE_NAME}
+			{include file="dashboards/DashBoardHeader.tpl"|vtemplate_path:$MODULE_NAME DASHBOARDHEADER_TITLE=vtranslate($MODULE, $MODULE)}
 {/strip}

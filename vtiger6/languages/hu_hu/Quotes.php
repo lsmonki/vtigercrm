@@ -8,16 +8,16 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Quotes'                => 'Ajánlat'                    , 
-	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'         , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Ajánlatok Lista'            , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
-	'LBL_QUOTE_INFORMATION'        => 'Quote Details'               , // TODO: Review
-	'Quote No'                     => 'Ajánlat No.'                , 
-	'Quote Stage'                  => 'Ajánlati fázis'            , 
-	'Valid Till'                   => 'Érvényes eddig: '          , 
-	'Inventory Manager'            => 'Termelési menedzser'        , 
-	'Accepted'                     => 'Elfogadott'                  , 
-	'Rejected'                     => 'Elutasított'                , 
+	'SINGLE_Quotes'                => 'Ajánlat'						,
+	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'			,
+	'LBL_ADD_RECORD'               => 'Ajánlat hozzáadása'			,
+	'LBL_RECORDS_LIST'             => 'Ajánlatok listája'			, // KEY 5.x: LBL_LIST_FORM_TITLE
+	'LBL_RECORD_SUMMARY'           => 'Ajánlat összefoglaló'		,
+	'LBL_QUOTE_INFORMATION'        => 'Ajánlat adatai'				,
+	'Quote No'                     => 'Ajánlat No.'					,
+	'Quote Stage'                  => 'Ajánlati fázis'				,
+	'Valid Till'                   => 'Érvényes eddig: '			,
+	'Inventory Manager'            => 'Raktár menedzser'			,
+	'Accepted'                     => 'Elfogadott'					,
+	'Rejected'                     => 'Elutasított'					,
 );

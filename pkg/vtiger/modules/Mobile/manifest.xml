@@ -5,9 +5,9 @@
 <label>Mobile</label>
 <parent></parent>
 <type>extension</type>
-<version>1.8</version>
+<version>1.9</version>
 <dependencies>
-<vtiger_version>5.1.0</vtiger_version>
+<vtiger_version>5.4.0</vtiger_version>
 </dependencies>
 <license>
 <inline><![CDATA[/*+**********************************************************************************

@@ -24,7 +24,7 @@ if (typeof(MailManager) == 'undefined') {
             for (var i = 1; i < arguments.length; ++i) {
                 // Replace any %s, %d, %c with the variables.
                 // TODO Format the argument w.r.t to format specifier
-                printString = printString.replace(/(%[a-z]+)/, arguments[i]);
+                printString = printString.replace(/%[a-z]+/, arguments[i]);
             }
             return printString;
         },

@@ -19,19 +19,19 @@
 						<li>
 							<div>
 								<span><strong>{$RECENT_ACTIVITY->getModifiedBy()->getName()}</strong> {vtranslate('LBL_CREATED', $MODULE_NAME)}</span>
-								<span class="pull-right"><p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getParent()->get('createdtime'))}</small></p></span>
+								<span class="pull-right"><p class="muted"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($RECENT_ACTIVITY->getParent()->get('createdtime'))}">{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getParent()->get('createdtime'))}</small></p></span>
 							</div>
 						</li>
 					{else if $RECENT_ACTIVITY->isUpdate()}
 						<li>
 							<div>
 								<span><strong>{$RECENT_ACTIVITY->getModifiedBy()->getDisplayName()}</strong> {vtranslate('LBL_UPDATED', $MODULE_NAME)}</span>
-								<span class="pull-right"><p class="muted"><small>{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getActivityTime())}</small></p></span>
+								<span class="pull-right"><p class="muted"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($RECENT_ACTIVITY->getActivityTime())}">{Vtiger_Util_Helper::formatDateDiffInStrings($RECENT_ACTIVITY->getActivityTime())}</small></p></span>
 							</div>
 
 							{foreach item=FIELDMODEL from=$RECENT_ACTIVITY->getFieldInstances()}
 								<div class='font-x-small updateInfoContainer'>
-									<i>{vtranslate($FIELDMODEL->getName(),$MODULE_NAME)}</i>:&nbsp;
+									<i>{vtranslate($FIELDMODEL->getName(),$MODULE_NAME)}</i> :&nbsp;
 									{if $FIELDMODEL->get('prevalue') neq ''}
 										{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('prevalue'))}&nbsp;{vtranslate('LBL_TO', $MODULE_NAME)}&nbsp;
 									{else}
@@ -44,13 +44,19 @@
 						</li>
 					{else if $RECENT_ACTIVITY->isRelationLink()}
 						<li>
-							{assign var=RELATION value=$RECENT_ACTIVITY->getRelationInstance()}
-							{vtranslate($RELATION->getLinkedRecord()->getModuleName(), $RELATION->getLinkedRecord()->getModuleName())} {vtranslate('LBL_ADDED', $MODULE_NAME)} {$RELATION->getLinkedRecord()->getName()} {vtranslate('LBL_ON', $MODULE_NAME)} {$RELATION->getLinkedRecord()->get('createdtime')}
+							<div class="row-fluid">
+								{assign var=RELATION value=$RECENT_ACTIVITY->getRelationInstance()}
+								<span>{vtranslate($RELATION->getLinkedRecord()->getModuleName(), $RELATION->getLinkedRecord()->getModuleName())} {vtranslate('LBL_ADDED', $MODULE_NAME)} <strong>{$RELATION->getLinkedRecord()->getName()}</strong></span>
+								<span class="pull-right"><p class="muted"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($RELATION->getLinkedRecord()->get('createdtime'))}">{Vtiger_Util_Helper::formatDateDiffInStrings($RELATION->getLinkedRecord()->get('createdtime'))}</small></p></span>
+							</div>
 						</li>
 					{else if $RECENT_ACTIVITY->isRelationUnLink()}
 						<li>
-							{assign var=URELATION value=$RECENT_ACTIVITY->getRelationInstance()}
-							{vtranslate($URELATION->getUnLinkedRecord()->getModuleName(), $URELATION->getUnLinkedRecord()->getModuleName())} {vtranslate('LBL_REMOVED', $MODULE_NAME)} {$URELATION->getUnLinkedRecord()->getName()} {vtranslate('LBL_ON', $MODULE_NAME)} {$URELATION->getUnLinkedRecord()->get('modifiedtime')}
+							<div class="row-fluid">
+								{assign var=URELATION value=$RECENT_ACTIVITY->getRelationInstance()}
+								<span>{vtranslate($URELATION->getUnLinkedRecord()->getModuleName(), $URELATION->getUnLinkedRecord()->getModuleName())} {vtranslate('LBL_REMOVED', $MODULE_NAME)} <strong>{$URELATION->getUnLinkedRecord()->getName()}</strong></span>
+								<span class="pull-right"><p class="muted"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($URELATION->getUnLinkedRecord()->get('modifiedtime'))}">{Vtiger_Util_Helper::formatDateDiffInStrings($URELATION->getUnLinkedRecord()->get('modifiedtime'))}</small></p></span>
+							</div>
 						</li>
 					{else if $RECENT_ACTIVITY->isRestore()}
 						<li>

@@ -115,5 +115,19 @@ class HelpDesk_Module_Model extends Vtiger_Module_Model {
 
 		return $query;
 	}
+	
+	/**
+	 * Function to get list of field for summary view
+	 * @return <array> fields list
+	 */
+	public function getSummaryViewFieldsList() {
+		return array(
+				'ticketstatus',
+				'parent_id',
+				'ticketseverities',
+				'description',
+				'assigned_user_id',
+		);
+	}
 
 }

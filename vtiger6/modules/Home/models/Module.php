@@ -44,7 +44,7 @@ class Home_Module_Model extends Vtiger_Module_Model {
 			$commentModel = Vtiger_Record_Model::getCleanInstance('ModComments');
 			$commentModel->setData($row);
 			$time = $commentModel->get('createdtime');
-			$comments[$time] = $commentModel;			
+			$comments[$time] = $commentModel;
 		}
 
 		return $comments;
@@ -102,13 +102,21 @@ class Home_Module_Model extends Vtiger_Module_Model {
 
 	/**
 	 * Function returns the Calendar Events for the module
-	 * @param <Vtiger_Paging_Model> $pagingModel
+	 * @param <String> $mode - upcoming/overdue mode
+	 * @param <Vtiger_Paging_Model> $pagingModel - $pagingModel
+	 * @param <String> $user - all/userid
+	 * @param <String> $recordId - record id
 	 * @return <Array>
 	 */
-	function getCalendarActivities($mode, $pagingModel, $recordId = false) {
+	function getCalendarActivities($mode, $pagingModel, $user) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$db = PearDatabase::getInstance();
 
-		$nowInUserFormat = Vtiger_Datetime_UIType::getDisplayDateValue(date('Y-m-d H:i:s'));
+		if (!$user) {
+			$user = $currentUser->getId();
+		}
+
+		$nowInUserFormat = Vtiger_Datetime_UIType::getDisplayDateTimeValue(date('Y-m-d H:i:s'));
 		$nowInDBFormat = Vtiger_Datetime_UIType::getDBDateTimeValue($nowInUserFormat);
 		list($currentDate, $currentTime) = explode(' ', $nowInDBFormat);
 
@@ -122,16 +130,26 @@ class Home_Module_Model extends Vtiger_Module_Model {
 					AND (vtiger_activity.activitytype NOT IN ('Emails'))
 					AND (vtiger_activity.status is NULL OR vtiger_activity.status NOT IN ('Completed', 'Deferred'))
 					AND (vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus NOT IN ('Held'))";
-		
+
 		if ($mode === 'upcoming') {
 			$query .= " AND due_date >= '$currentDate'";
 		} elseif ($mode === 'overdue') {
 			$query .= " AND due_date < '$currentDate'";
 		}
 
-		$query .= " ORDER BY date_start, time_start LIMIT ?, ?";
+		$params = array();
+		if($user != 'all' && $user != '') {
+			if($user === $currentUser->id) {
+				$query .= " AND vtiger_crmentity.smownerid = ?";
+				$params[] = $user;
+			}
+		}
 
-		$result = $db->pquery($query, array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()+1));
+		$query .= " ORDER BY date_start, time_start LIMIT ?, ?";
+		$params[] = $pagingModel->getStartIndex();
+		$params[] = $pagingModel->getPageLimit()+1;
+
+		$result = $db->pquery($query, $params);
 		$numOfRows = $db->num_rows($result);
 
 		$activities = array();

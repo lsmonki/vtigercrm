@@ -17,7 +17,7 @@ class Vtiger_Link_Model extends Vtiger_Link {
 
 	// Class variable to store the child links
 	protected $childlinks = array();
-	
+
 
 	/**
 	 * Function to get the value of a given property
@@ -181,10 +181,10 @@ class Vtiger_Link_Model extends Vtiger_Link {
 			if(strcmp($key, 'sourceRecord') == 0) {
 				$sourceRecord = $value;
 			}
-			
+
 			if(strcmp($key, 'sourceModule') == 0) {
 				$sourceModule = $value;
-				
+
 			}
 			$newUrlParts = array();
 			array_push($newUrlParts, $key);
@@ -209,7 +209,7 @@ class Vtiger_Link_Model extends Vtiger_Link {
 				}
 			}
 		}
-		
+
 		return implode('&', $parametersParts);
 	}
 
@@ -221,6 +221,14 @@ class Vtiger_Link_Model extends Vtiger_Link {
 	public static function getInstanceFromValues($valueMap) {
 		$linkModel = new self();
 		$linkModel->initialize($valueMap);
+
+		// To set other properties for Link Model
+		foreach($valueMap as $property => $value) {
+			if(!isset($linkModel->$property)) {
+				$linkModel->$property = $value;
+			}
+		}
+
 		return $linkModel;
 	}
 

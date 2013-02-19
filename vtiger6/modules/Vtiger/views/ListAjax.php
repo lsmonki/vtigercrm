@@ -12,7 +12,9 @@ class Vtiger_ListAjax_View extends Vtiger_List_View {
 
 	function __construct() {
 		parent::__construct();
+		$this->exposeMethod('getListViewCount');
 		$this->exposeMethod('getRecordsCount');
+		$this->exposeMethod('getPageCount');
 	}
 
 	function preProcess(Vtiger_Request $request) {

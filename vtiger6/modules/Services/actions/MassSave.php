@@ -9,4 +9,5 @@
  *************************************************************************************/
 
 class Services_MassSave_Action extends Products_MassSave_Action {
+
 }

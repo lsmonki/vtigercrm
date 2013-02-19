@@ -38,14 +38,31 @@
 			</div>
 			<div class="span4">
 				<span class="row-fluid">
-					<span class="span8 pushDown">
+					<span class="span7 pushDown">
 						<span class="pull-right">
 						{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_TO', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{if $TOTAL_ENTRIES} {vtranslate('LBL_OF', $RELATED_MODULE->get('name'))} {$TOTAL_ENTRIES}{/if}{/if}
 						</span>
 					</span>
-					<span class="span4 pull-right">
+					<span class="span5 pull-right">
 						<span class="btn-group pull-right">
 							<button class="btn" id="listViewPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
+							<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+								<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
+							</button>
+							<ul class="listViewBasicAction dropdown-menu" id="listViewPageJumpDropDown">
+								<li>
+									<span class="row-fluid">
+										<span class="span3"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
+										<span class="span4">
+											<input type="text" id="pageToJump" class="listViewPagingInput" value="{$PAGING->getCurrentPage()}"/>
+										</span>
+										<span class="span2 textAlignCenter">
+											{vtranslate('LBL_OF',$moduleName)}
+										</span>
+										<span class="span2" id="totalPageCount"></span>
+									</span>
+								</li>
+							</ul>
 							<button class="btn" id="listViewNextPageButton" {if !$PAGING->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
 						</span>
 					</span>
@@ -59,7 +76,7 @@
 				<tr class="listViewHeaders">
 					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
 						<th>
-							{if $HEADER_FIELD->get('column') eq 'access_count'}
+							{if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
 								<a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
 							{elseif $HEADER_FIELD->get('column') eq 'time_start'}
 							{else}
@@ -91,10 +108,10 @@
 							<span class="actionImages">
 								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
 								{if $IS_EDITABLE}
-									<a href='{$RELATED_RECORD->getEditViewUrl()}'><i class="icon-pencil alignMiddle"></i></a>	
+									<a href='{$RELATED_RECORD->getEditViewUrl()}'><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>	
 								{/if}
 								{if $IS_DELETABLE}
-									<a class="relationDelete"><i class="icon-trash alignMiddle"></i></a>
+									<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
 								{/if}
 							</span>
 						</div>

@@ -23,6 +23,7 @@
 	require_once("include/Webservices/SessionManager.php");
 	require_once("include/Zend/Json.php");
 	require_once('include/logging.php');
+	checkFileAccessForInclusion("include/language/$default_language.lang.php");
 	require_once "include/language/$default_language.lang.php";
 	
 	$API_VERSION = "0.22";
@@ -122,6 +123,7 @@
 		$includes = $operationManager->getOperationIncludes();
 		
 		foreach($includes as $ind=>$path){
+			checkFileAccessForInclusion($path);
 			require_once($path);
 		}
 		$rawOutput = $operationManager->runOperation($operationInput,$current_user);

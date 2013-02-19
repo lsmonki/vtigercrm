@@ -10,15 +10,15 @@
 $languageStrings = array(
 	// Basic Strings
 	'SINGLE_Documents' => 'Document',
+	'Documents' => 'Documents',
 	'LBL_ADD_RECORD' => 'Add Document',
 	'LBL_RECORDS_LIST' => 'Documents List',
-	'LBL_RECORD_SUMMARY' => 'Documents Summary',
 
 	// Blocks
 	'LBL_NOTE_INFORMATION' => 'Basic Information',
 	'LBL_FILE_INFORMATION' => 'File Details',
 	'LBL_DESCRIPTION' => 'Description',
-	
+
 	//Field Labels
 	'Title' => 'Title',
 	'File Name' => 'File Name',
@@ -32,7 +32,7 @@ $languageStrings = array(
 	'Folder Name' => 'Folder Name',
 	'Document No' => 'Document No',
 	'Last Modified By' => 'Last Modified By',
-	
+
 	//Folder
 	'LBL_FOLDER_HAS_DOCUMENTS' => 'Please move documents from folder before deleting',
 
@@ -53,7 +53,7 @@ $languageStrings = array(
 	'LBL_DOCUMENTS_MOVED_SUCCESSFULLY' => 'Documents Moved Successfully',
 	'LBL_DENIED_DOCUMENTS' => 'Denied Documents',
 	'MB' => 'MB',
-	
+
 	'LBL_ADD_NEW_FOLDER' => 'Add New Folder',
 	'LBL_FOLDER_NAME' => 'Folder Name',
 	'LBL_FOLDER_DESCRIPTION' => 'Folder Description',

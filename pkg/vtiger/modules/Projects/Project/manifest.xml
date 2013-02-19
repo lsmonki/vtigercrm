@@ -4,7 +4,7 @@
 <name>Project</name>
 <label>Project</label>
 <parent>Support</parent>
-<version>3.0</version>
+<version>3.1</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>
@@ -506,7 +506,6 @@
 <presence>0</presence>
 <actions>
 <action>ADD</action>
-<action>SELECT</action>
 </actions>
 <relatedmodule>ProjectTask</relatedmodule>
 </relatedlist>
@@ -517,7 +516,6 @@
 <presence>0</presence>
 <actions>
 <action>ADD</action>
-<action>SELECT</action>
 </actions>
 <relatedmodule>ProjectMilestone</relatedmodule>
 </relatedlist>

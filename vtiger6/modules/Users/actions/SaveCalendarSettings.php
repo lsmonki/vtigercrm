@@ -15,9 +15,7 @@ class Users_SaveCalendarSettings_Action extends Users_Save_Action {
 		$recordModel = $this->getRecordModelFromRequest($request);
 		
 		$recordModel->save();
-		if($request->get('shared_ids')){
-			$this->updateCalendarSharing($request);
-		}
+		$this->saveCalendarSharing($request);
 		header("Location: index.php?module=Calendar&view=Calendar");
 	}
 
@@ -25,16 +23,31 @@ class Users_SaveCalendarSettings_Action extends Users_Save_Action {
 	 * Function to update Calendar Sharing information
 	 * @params - Vtiger_Request $request
 	 */
-	public function updateCalendarSharing(Vtiger_Request $request){
-		$db = PearDatabase::getInstance();
+	public function saveCalendarSharing(Vtiger_Request $request){
+		
+		$sharedIds = $request->get('sharedIds');
+		$sharedType = $request->get('sharedtype');
+
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		$sharedIds = $request->get('shared_ids');
-		if(!empty($sharedIds)){
-			$delquery = "DELETE FROM vtiger_sharedcalendar WHERE userid=?";
-			$db->pquery($delquery, array($currentUserModel->id));
-			foreach ($sharedIds as $id) {
-				$sql = "INSERT INTO vtiger_sharedcalendar VALUES (?,?)";
-				$db->pquery($sql, array($currentUserModel->id, $id));
+		$calendarModuleModel = Vtiger_Module_Model::getInstance('Calendar');
+		$accessibleUsers = $currentUserModel->getAccessibleUsersForModule('Calendar');
+
+		if($sharedType == 'private'){
+			$calendarModuleModel->deleteSharedUsers($currentUserModel->id);
+		}else if($sharedType == 'public'){
+            $allUsers = $currentUserModel->getAll(true);
+			$accessibleUsers = array();
+			foreach ($allUsers as $id => $userModel) {
+				$accessibleUsers[$id] = $id;
+			}
+			$calendarModuleModel->deleteSharedUsers($currentUserModel->id);
+			$calendarModuleModel->insertSharedUsers($currentUserModel->id, array_keys($accessibleUsers));
+		}else{
+			if(!empty($sharedIds)){
+				$calendarModuleModel->deleteSharedUsers($currentUserModel->id);
+				$calendarModuleModel->insertSharedUsers($currentUserModel->id, $sharedIds);
+			}else{
+				$calendarModuleModel->deleteSharedUsers($currentUserModel->id);
 			}
 		}
 	}

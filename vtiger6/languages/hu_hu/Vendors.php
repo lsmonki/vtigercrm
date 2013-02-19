@@ -8,28 +8,28 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Vendors'                      => 'Beszállítók'              , 
-	'SINGLE_Vendors'               => 'Beszállító'               , 
-	'LBL_ADD_RECORD'               => 'Add Vendor'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Vendors List'                , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Vendors Summary'             , // TODO: Review
-	'LBL_VENDOR_INFORMATION'       => 'Beszállító adatai'        , 
-	'LBL_VENDOR_ADDRESS_INFORMATION' => 'Cím adatok'                 , 
-	'Vendor Name'                  => 'Beszállító neve'          , 
-	'Vendor No'                    => 'Beszállító No.'           , 
-	'Website'                      => 'Weboldal'                    , 
-	'GL Account'                   => 'Főkönyvi szám'            , 
-	'300-Sales-Software'           => '300-Sales-Software'          , 
-	'301-Sales-Hardware'           => '301-Sales-Hardware'          , 
-	'302-Rental-Income'            => '302-Rental-Income'           , 
-	'303-Interest-Income'          => '303-Interest-Income'         , 
-	'304-Sales-Software-Support'   => '304-Sales-Software-Support'  , 
-	'305-Sales Other'              => '305-Sales Other'             , 
-	'306-Internet Sales'           => '306-Internet Sales'          , 
-	'307-Service-Hardware Labor'   => '307-Service-Hardware Labor'  , 
-	'308-Sales-Books'              => '308-Sales-Books'             , 
+	'Vendors'                      => 'Beszállítók'					,
+	'SINGLE_Vendors'               => 'Beszállító'					,
+	'LBL_ADD_RECORD'               => 'Beszállító hozzáadása'		,
+	'LBL_RECORDS_LIST'             => 'Beszállítók listája'			,
+	'LBL_RECORD_SUMMARY'           => 'Beszállító összefoglaló'		,
+	'LBL_VENDOR_INFORMATION'       => 'Beszállító adatai'			,
+	'LBL_VENDOR_ADDRESS_INFORMATION' => 'Cím adatok'				,
+	'Vendor Name'                  => 'Beszállító neve'				,
+	'Vendor No'                    => 'Beszállító No.'				,
+	'Website'                      => 'Weboldal'					,
+	'GL Account'                   => 'Főkönyvi szám'				,
+	'300-Sales-Software'           => '300-Sales-Software'			,
+	'301-Sales-Hardware'           => '301-Sales-Hardware'			,
+	'302-Rental-Income'            => '302-Rental-Income'			,
+	'303-Interest-Income'          => '303-Interest-Income'			,
+	'304-Sales-Software-Support'   => '304-Sales-Software-Support'	,
+	'305-Sales Other'              => '305-Sales Other'				,
+	'306-Internet Sales'           => '306-Internet Sales'			,
+	'307-Service-Hardware Labor'   => '307-Service-Hardware Labor'	,
+	'308-Sales-Books'              => '308-Sales-Books'				,
 );
 $jsLanguageStrings = array(
-	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Vendor will remove its related PurchaseOrders. Are you sure you want to delete this Vendor?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected Records?', // TODO: Review
+	'LBL_DELETE_CONFIRMATION'      => 'A Beszállító törlése el fogja távolítani a hozzá kapcsolódó Beszerzéseket is az adatbázisból. Biztos, hogy el akarod távolítani a Beszállítót?',
+	'LBL_MASS_DELETE_CONFIRMATION' => 'A kiválasztott Beszállítók törlése el fogja távolítani a hozzájuk kapcsolódó Beszerzéseket is az adatbázisból. Biztos, hogy el akarod távolítani a Beszállítókat?',
 );

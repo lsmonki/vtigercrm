@@ -54,6 +54,9 @@
 		thisInstance.options = $.extend(true, this.defaults, options);
 		thisInstance.container = element;
 		thisInstance.position = options.position;
+		if(typeof options.imageContainerCss != 'undefined'){
+			thisInstance.imageContainerCss = $.extend(true,this.imageContainerCss,options.imageContainerCss);
+		}
 		if(this.isBlockMode()) {
 			thisInstance.elementToBlock = $(thisInstance.options.blockInfo.elementToBlock);
 		}
@@ -65,6 +68,14 @@
 			this.show();
 		}else if(this.options.mode == 'hide') {
 			this.hide();
+		}
+	}
+	
+	this.getImagePath = function() {
+		if(this.options.smallLoadingImage == true && typeof this.options.smallLoadingImage != 'undefined' ) {
+			return app.vimage_path('loadingSmall.gif');
+		} else {
+			return app.vimage_path('loading.gif');
 		}
 	}
 
@@ -84,9 +95,9 @@
 
 	this.show = function(){
 		// TODO use app.vimage_path
-		var imagePath = app.vimage_path('loading.gif');
+		var imagePath = this.getImagePath();
 		var imageHtml = '<div class="imageHolder">'+
-							'<img class="loadinImg" src="'+imagePath+'" />'+
+							'<img class="loadinImg alignMiddle" src="'+imagePath+'" />'+
 						'</div>';
 		var jQImageHtml = jQuery(imageHtml).css(this.imageContainerCss);
 		if(thisInstance.options.message.length > 0) {

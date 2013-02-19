@@ -49,6 +49,8 @@ var Vtiger_Index_Js = {
 				widgetContainer.parent().find('.icon-chevron-up').removeClass('icon-chevron-up alignBottom').addClass('icon-chevron-down alignBottom');
 				widgetContainer.css('height', 'auto');
 				widgetContainer.html(data);
+				var label = widgetContainer.closest('.quickWidget').find('.quickWidgetHeader').data('label');
+				jQuery('.bodyContents').trigger('Vtiger.Widget.Load.'+label,jQuery(widgetContainer));
 			}
 		);
 	},
@@ -69,6 +71,49 @@ var Vtiger_Index_Js = {
 			}
 			
 		});
+		
+	},
+	
+	/**
+	 * Function to show compose email popup based on number of 
+	 * email fields in given module,if email fields are more than
+	 * one given option for user to select email for whom mail should 
+	 * be sent,or else straight away open compose email popup
+	 * @params : accepts params object
+	 */
+	
+	showComposeEmailPopup : function(params){
+		var currentModule = "Emails";
+		Vtiger_Helper_Js.checkServerConfig(currentModule).then(function(data){
+			if(data == true){
+				var css = jQuery.extend({'text-align' : 'left'},css);
+				AppConnector.request(params).then(
+					function(data) {
+						if(data) {
+							data = jQuery(data);
+							var form = data.find('#SendEmailFormStep1');
+							var emailFields = form.find('.emailField');
+							var length = emailFields.length;
+							var emailEditInstance = new Emails_MassEdit_Js();
+							if(length > 1) {
+								app.showModalWindow(data,function(data){
+									emailEditInstance.registerEmailFieldSelectionEvent();
+								},css)
+							} else {
+								emailFields.attr('checked','checked');
+								var params = form.serializeFormData();
+								emailEditInstance.showComposeEmailForm(params);
+							}
+						}
+					},
+					function(error,err){
+
+					}
+				);
+			} else {
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_EMAIL_SERVER_CONFIGURATION'));
+			}
+		})
 		
 	},
 

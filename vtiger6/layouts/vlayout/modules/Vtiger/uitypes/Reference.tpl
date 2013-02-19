@@ -30,7 +30,7 @@
 		<input name="popupReferenceModule" type="hidden" value="{$REFERENCE_LIST[0]}" />
 	{/if}
 {/if}
-<input name="{$FIELD_NAME}" type="hidden" value="{$FIELD_MODEL->get('fieldvalue')}" class="sourceField" data-displayvalue='{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}' data-fieldinfo='{$FIELD_INFO}' data-validation-engine="validate[{if $FIELD_MODEL->isMandatory() eq true} required,{/if}funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" {if !empty($SPECIAL_VALIDATOR)}data-validator={Zend_Json::encode($SPECIAL_VALIDATOR)}{/if}>
+<input name="{$FIELD_NAME}" type="hidden" value="{$FIELD_MODEL->get('fieldvalue')}" class="sourceField" data-displayvalue='{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}' data-fieldinfo='{$FIELD_INFO}' />
 {assign var="displayId" value=$FIELD_MODEL->get('fieldvalue')}
 <div class="row-fluid input-prepend input-append">
 <span class="add-on clearReferenceSelection cursorPointer">

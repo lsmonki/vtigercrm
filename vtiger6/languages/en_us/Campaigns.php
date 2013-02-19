@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Campaigns' => 'Campaign',
 	'LBL_ADD_RECORD' => 'Add Campaign',
 	'LBL_RECORDS_LIST' => 'Campaigns List',
-	'LBL_RECORD_SUMMARY' => 'Campaigns Summary',
 
 	// Blocks
 	'LBL_CAMPAIGN_INFORMATION' => 'Campaign Details',

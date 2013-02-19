@@ -16,7 +16,6 @@ $languageStrings = array(
 	'SINGLE_Events' => 'Event',
 	'LBL_ADD_RECORD' => 'Add Event',
 	'LBL_RECORDS_LIST' => 'Events List',
-	'LBL_RECORD_SUMMARY' => 'Events Summary',
 	'LBL_EVENTS' => 'Events',
 	'LBL_TODOS' => 'To Do',
 	'LBL_HOLD_FOLLOWUP_ON' => 'Hold Followup on',

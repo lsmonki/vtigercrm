@@ -43,8 +43,18 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 		$excludedModuleForSearch = array('Vtiger');
 
 		$viewer = $this->getViewer($request);
-		$moduleName = $request->get('source_module');
-
+		$moduleName = $request->getModule();
+		
+		if($request->get('source_module')) {
+			$moduleName = $request->get('source_module');
+		}
+        
+		$saveFilterPermitted = true;
+        $saveFilterexcludedModules =  array('ModComments','RSS','Portal','Integration','PBXManager','DashBoard');
+        if(in_array($moduleName, $saveFilterexcludedModules)){
+            $saveFilterPermitted = false;
+        }
+        
 		//See if it is an excluded module, If so search in home module
 		if(in_array($moduleName, $excludedModuleForSearch)) {
 			$moduleName = 'Home';
@@ -60,9 +70,20 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 		$viewer->assign('CUSTOMVIEW_MODEL', $customViewModel);
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
+        $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
+        foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+            $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
+            $comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
+            $comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$module);
+            $dateFilters[$comparatorKey] = $comparatorInfo;
+        }
+        $viewer->assign('DATE_FILTERS', $dateFilters);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('SOURCE_MODULE',$moduleName);
+        $viewer->assign('SOURCE_MODULE_MODEL', $moduleModel);
 		$viewer->assign('MODULE', $module);
+        
+        $viewer->assign('SAVE_FILTER_PERMITTED', $saveFilterPermitted);
 
 		echo $viewer->view('AdvanceSearch.tpl',$moduleName, true);
 	}
@@ -86,19 +107,36 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 			$user = Users_Record_Model::getCurrentUserModel();
 			$queryGenerator = new QueryGenerator($moduleName, $user);
 			$queryGenerator->setFields(array('id'));
+          
+            vimport('~~/modules/CustomView/CustomView.php');
+            $customView = new CustomView($moduleName);
+            $dateSpecificConditions = $customView->getStdFilterConditions();
 
 			foreach ($advFilterList as $groupindex=>$groupcolumns) {
 				$filtercolumns = $groupcolumns['columns'];
 				if(count($filtercolumns) > 0) {
 					$queryGenerator->startGroup('');
 					foreach ($filtercolumns as $index=>$filter) {
-						$name = explode(':',$filter['columnname']);
-						if(empty($name[2]) && $name[1] == 'crmid' && $name[0] == 'vtiger_crmentity') {
+						$nameComponents = explode(':',$filter['columnname']);
+						if(empty($nameComponents[2]) && $nameComponents[1] == 'crmid' && $nameComponents[0] == 'vtiger_crmentity') {
 							$name = $queryGenerator->getSQLColumn('id');
 						} else {
-							$name = $name[2];
+							$name = $nameComponents[2];
 						}
-						$queryGenerator->addCondition($name, $filter['value'], $filter['comparator']);
+                        if(($nameComponents[4] == 'D' || $nameComponents[4] == 'DT') && in_array($filter['comparator'], $dateSpecificConditions)) {
+                            $filter['stdfilter'] = $filter['comparator'];
+                            $valueComponents = explode(',',$filter['value']);
+                            if($filter['comparator'] == 'custom') {
+                                $filter['startdate'] = DateTimeField::convertToDBFormat($valueComponents[0]);
+                                $filter['enddate'] = DateTimeField::convertToDBFormat($valueComponents[1]);
+                            }
+                            $dateFilterResolvedList = $customView->resolveDateFilterValue($filter);
+                            $value[] = $queryGenerator->fixDateTimeValue($name, $dateFilterResolvedList['startdate']);
+                            $value[] = $queryGenerator->fixDateTimeValue($name, $dateFilterResolvedList['enddate'], false);
+                            $queryGenerator->addCondition($name, $value, 'BETWEEN');
+                        }else{
+                            $queryGenerator->addCondition($name, $filter['value'], $filter['comparator']);
+                        }
 						$columncondition = $filter['column_condition'];
 						if(!empty($columncondition)) {
 							$queryGenerator->addConditionGlue($columncondition);
@@ -111,6 +149,8 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 				}
 			}
 			$query = $queryGenerator->getQuery();
+			//Remove the ordering for now to improve the speed
+			//$query .= ' ORDER BY createdtime DESC';
 			$result = $db->pquery($query, array());
 			$rows = $db->num_rows($result);
 
@@ -120,16 +160,32 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 				$moduleName = $recordInstance->getModuleName();
 				$matchingRecords[$moduleName][$row[0]] = $recordInstance;
 			}
+			$viewer->assign('SEARCH_MODULE', $moduleName);
 		} else {
 			$searchKey = $request->get('value');
+			$searchModule = false;
+			
+			if($request->get('searchModule')) {
+				$searchModule = $request->get('searchModule');
+			}
+			
 			$viewer->assign('SEARCH_KEY', $searchKey);
-			$matchingRecords =  Vtiger_Record_Model::getSearchResult($searchKey);
+			$viewer->assign('SEARCH_MODULE', $searchModule);
+			$matchingRecords =  Vtiger_Record_Model::getSearchResult($searchKey, $searchModule);
+		}
+		
+		$matchingRecordsList = array();
+		if ($matchingRecords[$moduleName]) {
+			$matchingRecordsList[$moduleName] = $matchingRecords[$moduleName];
+		}
+		foreach ($matchingRecords as $module => $recordModelsList) {
+			$matchingRecordsList[$module] = $recordModelsList;
 		}
 
 		$viewer->assign('MODULE', $moduleName);
-		$viewer->assign('MATCHING_RECORDS', $matchingRecords);
+		$viewer->assign('MATCHING_RECORDS', $matchingRecordsList);
 		$viewer->assign('IS_ADVANCE_SEARCH', $isAdvanceSearch);
 
 		echo $viewer->view('UnifiedSearchResults.tpl', '', true);
-	}
+	}	
 }

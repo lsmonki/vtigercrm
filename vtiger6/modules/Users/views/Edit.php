@@ -61,7 +61,7 @@ Class Users_Edit_View extends Vtiger_Edit_View {
             $viewer->assign('STYLES',$this->getHeaderCss($request));
             $viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
 			$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
-			
+
             if($display) {
                 $this->preProcessDisplay($request);
             }
@@ -84,12 +84,13 @@ Class Users_Edit_View extends Vtiger_Edit_View {
 		}
 
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
-		
+
 		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructureInstance->getStructure());
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
+		$viewer->assign('TAG_CLOUD', $recordModel->getTagCloudStatus());
 
 		parent::process($request);
 	}

@@ -52,22 +52,23 @@ class Import_ListView_Model extends Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$importedRecordIds = $this->getLastImportedRecord();
+        $listViewRecordModels = array();
 		if(count($importedRecordIds) != 0) {
-			$moduleModel = $this->get('module');
-			$listQuery .= ' AND '.$moduleModel->basetable.'.'.$moduleModel->basetableid.' IN ('. implode(',', $importedRecordIds).')';
-		}
+            $moduleModel = $this->get('module');
+            $listQuery .= ' AND '.$moduleModel->basetable.'.'.$moduleModel->basetableid.' IN ('. implode(',', $importedRecordIds).')';
 
-		$listQuery .= " LIMIT $startIndex, $pageLimit";
+            $listQuery .= " LIMIT $startIndex, $pageLimit";
 
-		$listResult = $db->pquery($listQuery, array());
+            $listResult = $db->pquery($listQuery, array());
 
-		$listViewRecordModels = array();
-		$listViewEntries =  $listViewContoller->getListViewRecords($moduleFocus,$moduleName, $listResult);
-		$pagingModel->calculatePageRange($listViewEntries);
-		foreach($listViewEntries as $recordId => $record) {
-			$record['id'] = $recordId;
-			$listViewRecordModels[$recordId] = $moduleModel->getRecordFromArray($record);
-		}
+            $listViewEntries =  $listViewContoller->getListViewRecords($moduleFocus,$moduleName, $listResult);
+            $pagingModel->calculatePageRange($listViewEntries);
+            foreach($listViewEntries as $recordId => $record) {
+                $record['id'] = $recordId;
+                $listViewRecordModels[$recordId] = $moduleModel->getRecordFromArray($record);
+            }
+
+        }
 		return $listViewRecordModels;
 	}
 
@@ -125,7 +126,7 @@ class Import_ListView_Model extends Vtiger_ListView_Model {
 		$user = Users_Record_Model::getCurrentUserModel();
 		$userDBTableName = Import_Utils_Helper::getDbTableName($user);
 
-		$result = $db->query('SELECT recordid FROM '.$userDBTableName.' WHERE status IS NOT NULL AND recordid IS NOT NULL');
+		$result = $db->pquery('SELECT recordid FROM '.$userDBTableName.' WHERE status NOT IN (?,?) AND recordid IS NOT NULL',Array(Import_Data_Action::$IMPORT_RECORD_FAILED,  Import_Data_Action::$IMPORT_RECORD_SKIPPED));
 		$noOfRecords = $db->num_rows($result);
 
 		$importedRecordIds = array();

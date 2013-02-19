@@ -65,6 +65,7 @@ class Users_Detail_View extends Vtiger_Detail_View {
             $viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
             $viewer->assign('STYLES',$this->getHeaderCss($request));
             $viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
+			$viewer->assign('SEARCHABLE_MODULES', Vtiger_Module_Model::getSearchableModules());
 
             $menuModelsList = Vtiger_Menu_Model::getAll(true);
             $selectedModule = $request->getModule();

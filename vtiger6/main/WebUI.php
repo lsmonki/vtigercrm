@@ -93,20 +93,18 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 
 		global $default_language;
 		vglobal('default_language', $default_language);
-
-		global $default_language;
-		vglobal('default_language', $default_language);
+		$currentLanguage = Vtiger_Language_Handler::getLanguage();
 
 		$module = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
 
 		if ($currentUser && $qualifiedModuleName) {
-			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($qualifiedModuleName);
+			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage,$qualifiedModuleName);
 			vglobal('mod_strings', $moduleLanguageStrings['languageStrings']);
 		}
 
 		if ($currentUser) {
-			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile();
+			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage);
 			vglobal('app_strings', $moduleLanguageStrings['languageStrings']);
 		}
 
@@ -151,7 +149,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 					$this->triggerCheckPermission($handler, $request);
 				}
 
-				$notPermittedModules = array( 'ProjectTask', 'ModComments','RSS','Portal','Integration','PBXManager','DashBoard');
+				$notPermittedModules = array('ModComments','RSS','Portal','Integration','PBXManager','DashBoard');
 
 				if(in_array($module, $notPermittedModules) && $view == 'List'){
 					header('Location:index.php');

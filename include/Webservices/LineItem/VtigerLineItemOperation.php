@@ -48,12 +48,12 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 	}
 
 	protected function getNextId($elementType, $element) {
-		$sql = 'SELECT MAX('.$this->meta->getIdColumn().') as maxvalue FROM '.$this->entityTableName;
+		$sql = 'SELECT MAX('.$this->meta->getIdColumn().') as maxvalue_lineitem_id FROM '.$this->entityTableName;
 		$result = $this->pearDB->pquery($sql,array());
 		$numOfRows = $this->pearDB->num_rows($result);
 
 		for ($i=0; $i<$numOfRows; $i++) {
-			$row = $this->pearDB->query_result($result, $i, 'maxvalue');
+			$row = $this->pearDB->query_result($result, $i, 'maxvalue_lineitem_id');
 		}
 
 		$id = $row + 1;
@@ -88,30 +88,29 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 				$rowCount = $this->pearDB->num_rows($result);
 				for ($i = 0 ; $i < $rowCount ; ++$i) {
 					$element = $this->pearDB->query_result_rowdata($result,$i);
+					$element['parent_id'] = $parentId;
 					$lineItemList[$element['id']][] = DataTransform::filterAndSanitize($element,$this->meta);
 				}
 			}
 			return $lineItemList;
 		}else{
-			if(self::$lineItemCache[$parentId] == null){
-				$result = null;
-				$query = "select * from {$this->entityTableName} where id=?";
-				$transactionSuccessful = vtws_runQueryAsTransaction($query,array($parentId),$result);
-				if(!$transactionSuccessful){
-					throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
-						"Database error while performing required operation");
-				}
-				$lineItemList = array();
-				if($result){
-					$rowCount = $this->pearDB->num_rows($result);
-					for ($i = 0 ; $i < $rowCount ; ++$i) {
-						$element = $this->pearDB->query_result_rowdata($result,$i);
-						$lineItemList[] = DataTransform::filterAndSanitize($element,$this->meta);
-					}
-				}
-				self::$lineItemCache[$parentId] = $lineItemList;
+			$result = null;
+			$query = "select * from {$this->entityTableName} where id=?";
+			$transactionSuccessful = vtws_runQueryAsTransaction($query,array($parentId),$result);
+			if(!$transactionSuccessful){
+				throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
+					"Database error while performing required operation");
 			}
-			return self::$lineItemCache[$parentId];
+			$lineItemList = array();
+			if($result){
+				$rowCount = $this->pearDB->num_rows($result);
+				for ($i = 0 ; $i < $rowCount ; ++$i) {
+					$element = $this->pearDB->query_result_rowdata($result,$i);
+					$element['parent_id'] = $parentId;
+					$lineItemList[] = DataTransform::filterAndSanitize($element,$this->meta);
+				}
+			}
+			return $lineItemList;
 		}
 	}
 
@@ -264,7 +263,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			$this->initTax($lineItem, $parent);
 			$id = vtws_getIdComponents($lineItem['parent_id']);
 			$this->newId = $id[1];
-			$updatedLineItemList[] = $this->create($elementType, $lineItem);
+			$this->create($elementType, $lineItem);
 		}
 	}
 
@@ -272,43 +271,21 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$parentId = vtws_getIdComponents($element['parent_id']);
 		$parentId = $parentId[1];
 
-		$parentTypeHandler = vtws_getModuleHandlerFromId($element['parent_id'], $this->user);
-		$parentTypeMeta = $parentTypeHandler->getMeta();
-		$parentType = $parentTypeMeta->getEntityName();
-
-		$parentObject = CRMEntity::getInstance($parentType);
-		$parentObject->id = $parentId;
-		$lineItemList = $this->getAllLineItemForParent($parentId);
-		if (!empty ($lineItemList)) {
-			for($i=0;$i < count($lineItemList); $i++) {
-				$lineItemList[$i]['parent_id'] = $element['parent_id'];
-			}
-		}
 		$parent = $this->getParentById($element['parent_id']);
 		if(empty($element['listprice'])){
 			$productId = vtws_getIdComponents($element['productid']);
 			$productId = $productId[1];
 			$element['listprice'] = $this->getProductPrice($productId);
 		}
-		$lineItemList[] = $element;
-		deleteInventoryProductDetails($parentObject);
-		$this->resetInventoryStock($element, $parent);
-		$updatedLineItemList = array();
-		foreach ($lineItemList as $lineItem) {
-			$id = vtws_getIdComponents($lineItem['parent_id']);
-			$this->newId = $id[1];
-			$updatedLineItemList[] = $this->_create($elementType, $lineItem);
-			if($element == $lineItem){
-				$createdElement = $updatedLineItemList[count($updatedLineItemList) - 1];
-			}
-		}
-		for($i=0;$i < count($updatedLineItemList); $i++) {
-			$updatedLineItemList[$i]['parent_id'] = $element['parent_id'];
-		}
+		$id = vtws_getIdComponents($element['parent_id']);
+		$this->newId = $id[1];
+		$createdLineItem = $this->_create($elementType, $element);
+		$updatedLineItemList = $createdLineItem;
+		$updatedLineItemList['parent_id'] = $element['parent_id'];
 		$this->setCache($parentId, $updatedLineItemList);
 		$this->updateInventoryStock($element,$parent);
 		$this->updateParent($element, $parent);
-		return $createdElement;
+		return $createdLineItem;
 	}
 
 	public function retrieve($id) {

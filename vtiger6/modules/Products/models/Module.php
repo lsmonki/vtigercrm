@@ -19,10 +19,16 @@ class Products_Module_Model extends Vtiger_Module_Model {
 	 * @return <String> Listview Query
 	 */
 	public function getQueryByModuleField($sourceModule, $field, $record, $listQuery) {
-		if ($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList') {
+		if (($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList') || $sourceModule === $this->getName() || in_array($sourceModule, getInventoryModules())) {
+			$condition = " vtiger_products.discontinued = 1 ";
+
+			if ($sourceModule === $this->getName()) {
+				$condition .= " AND vtiger_products.productid NOT IN (SELECT crmid FROM vtiger_seproductsrel WHERE productid = $record) AND vtiger_products.productid <> $record ";
+			} elseif ($sourceModule === $this->getName()) {
+				$condition .= " AND vtiger_products.productid NOT IN (SELECT productid FROM vtiger_pricebookproductrel WHERE pricebookid = $record) ";
+			}
+
 			$pos = stripos($listQuery, 'where');
-			$condition = " vtiger_products.discontinued = 1 AND vtiger_products.productid NOT IN (SELECT productid
-                                                                       FROM vtiger_pricebookproductrel WHERE pricebookid = $record)";
 			if ($pos) {
 				$split = spliti('where', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;

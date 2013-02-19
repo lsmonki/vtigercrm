@@ -10,4 +10,35 @@
 
 class ProjectTask_Module_Model extends Vtiger_Module_Model {
 
+	public function getSideBarLinks($linkParams) {
+		$linkTypes = array('SIDEBARLINK', 'SIDEBARWIDGET');
+		$links = parent::getSideBarLinks($linkParams);
+		unset($links['SIDEBARLINK']);
+
+		$quickLinks = array(
+			array(
+				'linktype' => 'SIDEBARLINK',
+				'linklabel' => 'LBL_PROJECTS_LIST',
+				'linkurl' => $this->getProjectsListUrl(),
+				'linkicon' => '',
+			),
+			array(
+				'linktype' => 'SIDEBARLINK',
+				'linklabel' => 'LBL_TASKS_LIST',
+				'linkurl' => $this->getListViewUrl(),
+				'linkicon' => '',
+			),
+		);
+		foreach($quickLinks as $quickLink) {
+			$links['SIDEBARLINK'][] = Vtiger_Link_Model::getInstanceFromValues($quickLink);
+		}
+
+		return $links;
+	}
+
+	public function getProjectsListUrl() {
+		$taskModel = Vtiger_Module_Model::getInstance('Project');
+		return $taskModel->getListViewUrl();
+	}
+
 }

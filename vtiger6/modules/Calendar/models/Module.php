@@ -94,6 +94,12 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 			),
 			array(
 				'linktype' => 'SIDEBARLINK',
+				'linklabel' => 'LBL_SHARED_CALENDAR',
+				'linkurl' => $this->getSharedCalendarViewUrl(),
+				'linkicon' => '',
+			),
+			array(
+				'linktype' => 'SIDEBARLINK',
 				'linklabel' => 'LBL_RECORDS_LIST',
 				'linkurl' => $this->getListViewUrl(),
 				'linkicon' => '',
@@ -110,6 +116,15 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 				'linktype' => 'SIDEBARWIDGET',
 				'linklabel' => 'LBL_ACTIVITY_TYPES',
 				'linkurl' => 'module='.$this->get('name').'&view=ViewTypes&mode=getViewTypes',
+				'linkicon' => ''
+			);
+		}
+		
+		if (vtlib_purify($_REQUEST['view']) == 'SharedCalendar') {
+			$quickWidgets[] = array(
+				'linktype' => 'SIDEBARWIDGET',
+				'linklabel' => 'LBL_ADDED_CALENDARS',
+				'linkurl' => 'module='.$this->get('name').'&view=ViewTypes&mode=getSharedUsersList',
 				'linkicon' => ''
 			);
 		}
@@ -224,5 +239,113 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
         }
 		return $sharedids;
 	}
+	
+	/**
+	* To get the lists of sharedids 
+	* @param $id --  user id 
+	* @returns <Array> $sharedids 
+	*/
+	public static function getSharedUsersOfCurrentUser($id){
+		$db = PearDatabase::getInstance();
+        
+		$query = "SELECT vtiger_users.first_name,vtiger_users.last_name, vtiger_users.id as userid 
+			FROM vtiger_sharedcalendar RIGHT JOIN vtiger_users ON vtiger_sharedcalendar.userid=vtiger_users.id and status= 'Active' 
+			WHERE sharedid=? OR (vtiger_users.status='Active' AND vtiger_users.calendarsharedtype='public' AND vtiger_users.id <> ?);";
+        $result = $db->pquery($query, array($id, $id));
+        $rows = $db->num_rows($result);
+		
+		$userIds = Array();
+        for($i=0; $i<$rows; $i++){
+			$id = $db->query_result($result,$i,'userid');
+			$userName = $db->query_result($result,$i,'first_name').' '.$db->query_result($result,$i,'last_name');
+			$userIds[$id] =$userName;
+        }
+		
+		return $sharedids[$id] = $userIds;
+	}
+	
+	/**
+	 *  Function returns the url for Shared Calendar view
+	 * @return <String>
+	 */
+	public function getSharedCalendarViewUrl() {
+		return 'index.php?module='.$this->get('name').'&view=SharedCalendar';
+	}
+	
+	/**
+	 * Function to delete shared users
+	 * @param type $currentUserId
+	 */
+	public function deleteSharedUsers($currentUserId){
+		$db = PearDatabase::getInstance();
+		$delquery = "DELETE FROM vtiger_sharedcalendar WHERE userid=?";
+		$db->pquery($delquery, array($currentUserId));
+	}
+	
+	/**
+	 * Function to insert shared users 
+	 * @param type $currentUserId
+	 * @param type $sharedIds
+	 */
+	public function insertSharedUsers($currentUserId, $sharedIds, $sharedType = FALSE){
+		$db = PearDatabase::getInstance();
+		foreach ($sharedIds as $sharedId) {
+			if($sharedId != $currentUserId && $sharedId != 1) {
+				$sql = "INSERT INTO vtiger_sharedcalendar VALUES (?,?)";
+				$db->pquery($sql, array($currentUserId, $sharedId));
+			}
+		}
+	}
+	
+	/**
+	 * Function to get shared type 
+	 * @param type $currentUserId
+	 * @param type $sharedIds
+	 */
+	public function getSharedType($currentUserId){
+		$db = PearDatabase::getInstance();
+		
+		$query = "SELECT calendarsharedtype FROM vtiger_users WHERE id=?";
+        $result = $db->pquery($query, array($currentUserId));
+		if($db->num_rows($result) > 0){
+			$sharedType = $db->query_result($result,0,'calendarsharedtype');
+        }
+		return $sharedType;
+	}
+	
+	/**
+	 * Function to get Alphabet Search Field 
+	 */
+	public function getAlphabetSearchField(){
+		return 'subject';
+	}
+	
+	/**
+	 * Function to get the list of recently visisted records
+	 * @param <Number> $limit
+	 * @return <Array> - List of Calendar_Record_Model 
+	 */
+	public function getRecentRecords($limit=10) {
+		$db = PearDatabase::getInstance();
 
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+        $deletedCondition = parent::getDeletedRecordCondition();
+		$nonAdminQuery .= Users_Privileges_Model::getNonAdminAccessControlQuery($this->getName());
+		
+		$query = 'SELECT * FROM vtiger_crmentity ';
+		if($nonAdminQuery){
+			$query .= " INNER JOIN vtiger_activity ON vtiger_crmentity.crmid = vtiger_activity.activityid ".$nonAdminQuery;
+		}
+		$query .= ' WHERE setype=? AND '.$deletedCondition.' AND modifiedby = ? ORDER BY modifiedtime DESC LIMIT ?';
+		$params = array($this->getName(), $currentUserModel->id, $limit);
+		$result = $db->pquery($query, $params);
+		$noOfRows = $db->num_rows($result);
+		$recentRecords = array();
+		for($i=0; $i<$noOfRows; ++$i) {
+			$row = $db->query_result_rowdata($result, $i);
+			$row['id'] = $row['crmid'];
+			$recentRecords[$row['id']] = $this->getRecordFromArray($row);
+		}
+		return $recentRecords;
+	}
 }

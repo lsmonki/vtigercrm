@@ -14,7 +14,7 @@
 {include file="Header.tpl"|vtemplate_path:$MODULE}
 {include file="BasicHeader.tpl"|vtemplate_path:$MODULE}
 
-<div class="bodyContents">
+<div class="bodyContents" style='min-width:1200px'>
 	<div class="mainContainer row-fluid">
 		<div class="span2 row-fluid">
 			{include file="ListViewSidebar.tpl"|vtemplate_path:$MODULE}

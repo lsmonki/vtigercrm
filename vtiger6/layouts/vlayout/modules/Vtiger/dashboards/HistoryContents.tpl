@@ -26,7 +26,7 @@
 					<img width='24px' src="{vimage_path($MOD_NAME|cat:'.png')}" alt="{$TRANSLATED_MODULE_NAME}" title="{$TRANSLATED_MODULE_NAME}" />&nbsp;&nbsp;
 				</div>
 				<div class="span11">
-				<p class="pull-right muted" style="padding-right:5px;"><small>{Vtiger_Util_Helper::formatDateDiffInStrings("$TIME")}</small></p>
+				<p class="pull-right muted" style="padding-right:5px;"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString("$TIME")}">{Vtiger_Util_Helper::formatDateDiffInStrings("$TIME")}</small></p>
 				{if $HISTORY->isUpdate()}
 					{assign var=FIELDS value=$HISTORY->getFieldInstances()}
 					<div class="">
@@ -37,11 +37,11 @@
 						<div class='font-x-small'>
 							<i>{$FIELD->getName()}</i>
 							{if $FIELD->get('prevalue') neq ''}
-								{vtranslate('LBL_FROM')} <b>{$FIELD->getDisplayValue(decode_html($FIELD->get('prevalue')))}</b>
+								{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toSafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
 							{else}
 								{vtranslate('LBL_CHANGED')}
 							{/if}
-								{vtranslate('LBL_TO')} <b>{$FIELD->getDisplayValue(decode_html($FIELD->get('postvalue')))}</b>
+								{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toSafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
 						</div>
 						{else}
 							<a href="{$PARENT->getUpdatesUrl()}">{vtranslate('LBL_MORE')}</a>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="span11">
 					{assign var=COMMENT_TIME value=$HISTORY->getCommentedTime()}
-					<p class="pull-right muted" style="padding-right:5px;"><small>{Vtiger_Util_Helper::formatDateDiffInStrings("$COMMENT_TIME")}</small></p>
+					<p class="pull-right muted" style="padding-right:5px;"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString("$COMMENT_TIME")}">{Vtiger_Util_Helper::formatDateDiffInStrings("$COMMENT_TIME")}</small></p>
 					<div>
 						<b>{$HISTORY->getCommentedByModel()->getName()}</b> {vtranslate('LBL_COMMENTED')} {vtranslate('LBL_ON')} <a class="textOverflowEllipsis" href="{$HISTORY->getParentRecordModel()->getDetailViewUrl()}">{$HISTORY->getParentRecordModel()->getName()}</a>
 					</div>

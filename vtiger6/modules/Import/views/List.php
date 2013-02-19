@@ -12,16 +12,25 @@ class Import_List_View extends Vtiger_Popup_View{
 	protected $listViewEntries = false;
 	protected $listViewHeaders = false;
 
+    public function  __construct() {
+        $this->exposeMethod('getImportDetails');
+    }
+
 	public function process(Vtiger_Request $request) {
-		$viewer = $this->getViewer ($request);
-		$this->initializeListViewContents($request, $viewer);
-		$moduleName = $request->get('for_module');
-		
-		$companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
-		$companyLogo = $companyDetails->getLogo();
-		$viewer->assign('COMPANY_LOGO',$companyLogo);
-		
-		$viewer->view('PopupContents.tpl', $moduleName);
+		$viewer = $this->getViewer($request);
+        $mode = $request->get('mode');
+        if(!empty($mode)){
+            $this->invokeExposedMethod($mode,$request);
+        } else{
+            $this->initializeListViewContents($request, $viewer);
+            $moduleName = $request->get('for_module');
+
+            $companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
+            $companyLogo = $companyDetails->getLogo();
+            $viewer->assign('COMPANY_LOGO',$companyLogo);
+
+            $viewer->view('PopupContents.tpl', $moduleName);
+        }
 	}
 	
 	/*
@@ -82,4 +91,17 @@ class Import_List_View extends Vtiger_Popup_View{
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 	}
+
+    public function getImportDetails(Vtiger_Request $request) {
+        $viewer = $this->getViewer($request);
+		$moduleName = $request->getModule();
+        $user = Users_Record_Model::getCurrentUserModel();
+        $importRecords= Import_Data_Action::getImportDetails($user);
+        $viewer->assign('IMPORT_RECORDS', $importRecords);
+        $viewer->assign('TYPE',$request->get('type'));
+		$viewer->assign('MODULE', $moduleName);
+        $viewer->view('ImportDetails.tpl', 'Import');
+        
+    }
+
 }

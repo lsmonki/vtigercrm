@@ -24,7 +24,7 @@ class Vtiger_EditRecordStructure_Model extends Vtiger_RecordStructure_Model {
 
 		$values = array();
 		$recordModel = $this->getRecord();
-		$recordExists = !empty($recordModel);
+		$recordId = $recordModel->getId();
 		$moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
 		foreach($blockModelList as $blockLabel=>$blockModel) {
@@ -37,7 +37,7 @@ class Vtiger_EditRecordStructure_Model extends Vtiger_RecordStructure_Model {
 							$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
 						}else{
 							$defaultValue = $fieldModel->getDefaultFieldValue();
-							if(!empty($defaultValue))
+							if(!empty($defaultValue) && !$recordId)
 								$fieldModel->set('fieldvalue', $defaultValue);
 						}
 						$values[$blockLabel][$fieldName] = $fieldModel;

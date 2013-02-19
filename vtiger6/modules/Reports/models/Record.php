@@ -185,7 +185,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		return $report->related_modules;
 	}
 
-
+    function getModulesList() {
+        return $this->report->getModulesList();
+    }
 	/**
 	 * Function returns Primary Module Fields
 	 * @return <Array>
@@ -401,6 +403,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$db->pquery('INSERT INTO vtiger_reportsortcol(sortcolid, reportid, columnname, sortorder) VALUES (?,?,?,?)',
 					array($i, $this->getId(), $fieldInfo[0], $fieldInfo[1]));
 			if(CustomReportUtils::IsDateField($fieldInfo[0])) {
+                if(empty($fieldInfo[2])){
+                    $fieldInfo[2] = 'None';
+                }
 				$db->pquery("INSERT INTO vtiger_reportgroupbycolumn(reportid, sortid, sortcolname, dategroupbycriteria)
 					VALUES(?,?,?,?)", array($this->getId(), $i, $fieldInfo[0], $fieldInfo[2]));
 			}
@@ -893,5 +898,28 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$reportRun = ReportRun::getInstance($this->getId());
 		$filterQuery = $reportRun->RunTimeAdvFilter($advancedFilterCriteria,$advancedFilterCriteriaGroup);
 		return $this->getReportData($pagingModel, $filterQuery);
+	}
+	
+	/**
+	 * Function to check duplicate exists or not
+	 * @return <boolean>
+	 */
+	public function checkDuplicate() {
+		$db = PearDatabase::getInstance();
+
+		$query = "SELECT 1 FROM vtiger_report WHERE reportname = ?";
+		$params = array($this->getName());
+
+		$record = $this->getId();
+		if ($record) {
+			$query .= " AND reportid != ?";
+			array_push($params, $record);
+		}
+		
+		$result = $db->pquery($query, $params);
+		if ($db->num_rows($result)) {
+			return true;
+		}
+		return false;
 	}
 }

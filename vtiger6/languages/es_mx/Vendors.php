@@ -30,6 +30,7 @@ $languageStrings = array(
 	'308-Sales-Books'              => '308-Ventas-Libros'           , 
 );
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Seguro que lo quieres borrar?',
 	'LBL_DELETE_CONFIRMATION'      => 'Borrando a este proveedor, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar a este proveedor?', // TODO: Review
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Borrando a estos proveedores, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar estos registros?', // TODO: Review
 );

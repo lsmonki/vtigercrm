@@ -24,7 +24,7 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_
 echo '<br><br>';
 
 
-if($_REQUEST['problem'])
+if(vtlib_purify($_REQUEST['problem']))
 {
   echo '<font color=red><b>Error in incoming mail server configuration! </b></font>';
 }

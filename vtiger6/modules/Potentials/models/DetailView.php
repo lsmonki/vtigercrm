@@ -31,14 +31,14 @@ class Potentials_DetailView_Model extends Vtiger_DetailView_Model {
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
-        
+
         $CalendarActionLinks[] = array(
 				'linktype' => 'DETAILVIEW',
 				'linklabel' => 'LBL_ADD_EVENT',
 				'linkurl' => $recordModel->getCreateEventUrl(),
 				'linkicon' => ''
         );
-        
+
         $CalendarActionLinks[] = array(
 				'linktype' => 'DETAILVIEW',
 				'linklabel' => 'LBL_ADD_TASK',
@@ -50,5 +50,88 @@ class Potentials_DetailView_Model extends Vtiger_DetailView_Model {
 		}
 
 		return $linkModelList;
+	}
+
+
+	/**
+	 * Function to get the detail view widgets
+	 * @return <Array> - List of widgets , where each widget is an Vtiger_Link_Model
+	 */
+	public function getWidgets() {
+		$userPrivilegesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		$widgetLinks = parent::getWidgets();
+		$widgets = array();
+
+		$documentsInstance = Vtiger_Module_Model::getInstance('Documents');
+		if($userPrivilegesModel->hasModuleActionPermission($documentsInstance->getId(), 'DetailView')) {
+			$createPermission = $userPrivilegesModel->hasModuleActionPermission($documentsInstance->getId(), 'EditView');
+			$widgets[] = array(
+					'linktype' => 'DETAILVIEWWIDGET',
+					'linklabel' => 'Documents',
+					'linkName'	=> $documentsInstance->getName(),
+					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
+							'&relatedModule=Documents&mode=showRelatedRecords&page=1&limit=5',
+					'action'	=>	($createPermission == true) ? array('Add') : array(),
+					'actionURL' =>	$documentsInstance->getQuickCreateUrl()
+			);
+		}
+
+		$contactsInstance = Vtiger_Module_Model::getInstance('Contacts');
+		if($userPrivilegesModel->hasModuleActionPermission($contactsInstance->getId(), 'DetailView')) {
+			$createPermission = $userPrivilegesModel->hasModuleActionPermission($contactsInstance->getId(), 'EditView');
+			$widgets[] = array(
+					'linktype' => 'DETAILVIEWWIDGET',
+					'linklabel' => 'LBL_RELATED_CONTACTS',
+					'linkName'	=> $contactsInstance->getName(),
+					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
+							'&relatedModule=Contacts&mode=showRelatedRecords&page=1&limit=5',
+					'action'	=>	($createPermission == true) ? array('Add') : array(),
+					'actionURL' =>	$contactsInstance->getQuickCreateUrl()
+			);
+		}
+
+		$productsInstance = Vtiger_Module_Model::getInstance('Products');
+		if($userPrivilegesModel->hasModuleActionPermission($productsInstance->getId(), 'DetailView')) {
+			$createPermission = $userPrivilegesModel->hasModuleActionPermission($productsInstance->getId(), 'EditView');
+			$widgets[] = array(
+					'linktype' => 'DETAILVIEWWIDGET',
+					'linklabel' => 'LBL_RELATED_PRODUCTS',
+					'linkName'	=> $productsInstance->getName(),
+					'linkurl' => 'module='.$this->getModuleName().'&view=Detail&record='.$this->getRecord()->getId().
+							'&relatedModule=Products&mode=showRelatedRecords&page=1&limit=5',
+					'action'	=>	($createPermission == true) ? array('Add') : array(),
+					'actionURL' =>	$productsInstance->getQuickCreateUrl()
+			);
+		}
+
+		foreach ($widgets as $widgetDetails) {
+			$widgetLinks[] = Vtiger_Link_Model::getInstanceFromValues($widgetDetails);
+		}
+
+		return $widgetLinks;
+	}
+
+	/**
+	 * Function to get the detail view related links
+	 * @return <array> - list of links parameters
+	 */
+	public function getDetailViewRelatedLinks() {
+		$recordModel = $this->getRecord();
+		$moduleName = $recordModel->getModuleName();
+		$relatedLinks = array(array(
+				'linktype' => 'DETAILVIEWTAB',
+				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_SUMMARY', $moduleName),
+				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=summary',
+                'linkKey' => 'LBL_RECORD_SUMMARY',
+				'linkicon' => ''
+		));
+
+		$relatedLinksFromParent = parent::getDetailViewRelatedLinks();
+
+		foreach ($relatedLinksFromParent as $link) {
+			array_push($relatedLinks, $link);
+		}
+
+		return $relatedLinks;
 	}
 }

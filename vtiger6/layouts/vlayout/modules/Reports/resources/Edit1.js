@@ -98,28 +98,86 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 			thisInstance.loadRelatedModules(primaryModule);
 		});
 	},
+	
+	/*
+	 * Function to check Duplication of report Name
+	 * returns boolean true or false
+	 */
+	checkDuplicateName : function(details) {
+		var aDeferred = jQuery.Deferred();
+		var moduleName = app.getModuleName();
+		var params = {
+			'module' : moduleName,
+			'action' : "CheckDuplicate",
+			'reportname' : details.reportName,
+			'record' : details.reportId
+		}
+		
+		AppConnector.request(params).then(
+			function(data) {
+				var response = data['result'];
+				var result = response['success'];
+				if(result == true) {
+					aDeferred.reject(response);
+				} else {
+					aDeferred.resolve(response);
+				}
+			},
+			function(error,err){
+				aDeferred.reject();
+			}
+			);
+		return aDeferred.promise();
+	},
+	
+	
 	submit : function(){
+		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
 		var form = this.getContainer();
 		var formData = form.serializeFormData();
+		
+		var params = {};
+		var reportName = formData.reportname;
+		var reportId = formData.record;
+		
 		var progressIndicatorElement = jQuery.progressIndicator({
 			'position' : 'html',
 			'blockInfo' : {
 				'enabled' : true
 			}
 		});
-		AppConnector.request(formData).then(
-			function(data) {
-				form.hide();
+		
+		thisInstance.checkDuplicateName({
+			'reportName' : reportName, 
+			'reportId' : reportId
+		}).then(
+			function(data){
+				AppConnector.request(formData).then(
+					function(data) {
+						form.hide();
+						progressIndicatorElement.progressIndicator({
+							'mode' : 'hide'
+						})
+						aDeferred.resolve(data);
+					},
+					function(error,err){
+
+					}
+					);
+			},
+			function(data, err){
 				progressIndicatorElement.progressIndicator({
 					'mode' : 'hide'
 				})
-				aDeferred.resolve(data);
-			},
-			function(error,err){
-
+				params = {
+					title: app.vtranslate('JS_DUPLICATE_RECORD'),
+					text: data['message']
+				};
+				Vtiger_Helper_Js.showPnotify(params);
+				aDeferred.reject();
 			}
-		);
+			);
 		return aDeferred.promise();
 	},
 	
@@ -138,7 +196,10 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 		
 		var opts = app.validationEngineOptions;
 		// to prevent the page reload after the validation has completed 
-		opts['onValidationComplete'] = function() {};
+		opts['onValidationComplete'] = function(form,valid) {
+            //returns the valid status
+            return valid;
+        };
 		opts['promptPosition'] = "bottomRight";
 		container.validationEngine(opts);
 	}

@@ -77,6 +77,8 @@ $languageStrings = array(
 	'LBL_MY_PREFERENCES' => 'My Preferences',
 	'LBL_SIGN_OUT' => 'Sign Out',
 	'LBL_HELP' => 'Help',
+	'LBL_DOCUMENTATION' => 'Documentation',
+	'LBL_VIDEO_TUTORIAL' => 'Video Tutorial',
 	'LBL_FEEDBACK' => 'Feedback',
 	'LBL_CRM_SETTINGS' => 'CRM Settings',
 	'LBL_ON_DEMAND_ADMIN' => 'Add / Delete Users',
@@ -88,6 +90,9 @@ $languageStrings = array(
 	'LBL_DISPLAY_WIDETYPE' => 'Wide',
 	'LBL_DISPLAY_MEDIUMTYPE' => 'Medium',
 	'LBL_DISPLAY_NARROWTYPE' => 'Narrow',
+	'LBL_TAG_THIS_RECORD' => 'Tag this Record',
+	'LBL_PAGE' => 'Page',
+	'LBL_LISTVIEW_PAGE_JUMP' => 'Page Jump',
 
 	// Common Fields
 	'LBL_USER' => 'User',
@@ -105,12 +110,14 @@ $languageStrings = array(
 
 	// Detail View
 	'LBL_UPDATES' => 'Updates',
-	'LBL_COMPLETE_DETAILS' => 'Show Details',
+	'LBL_SHOW_FULL_DETAILS' => 'Show Full Details',
 	'LBL_SUMMARY_DETAILS' => 'Summary Details',
 	'LBL_ADD_NEW_COMMENT' =>'Add New Comment',
 	'LBL_NO_UPDATES' => 'No Updates',
 	'LBL_ACTIVITIES' => 'Activities',
 	'LBL_NO_PENDING_ACTIVITIES' => 'No pending activities',
+	'LBL_SUMMARY' => 'Summary',
+	'LBL_DETAILS' => 'Details',
 
 	// Popup window
 	'LBL_SEARCH_FOR' => 'Search For',
@@ -158,6 +165,7 @@ $languageStrings = array(
 	'PurchaseOrder'=>'Purchase Order',
 	'SalesOrder'=>'Sales Order',
 	'Invoice'=>'Invoice',
+	'MailManager' => 'Mail Manager',
 
 
 	//Basic String Translation
@@ -165,12 +173,15 @@ $languageStrings = array(
 	'LBL_RECENTLY_MODIFIED' => 'Recently Modified',
 	'LBL_RECORDS_LIST' => 'Records List',
 	'LBL_RECORD_SUMMARY' => 'Module Summary',
+	'LBL_RECORD_SUMMARY' => 'Module Details',
 	'LBL_ACCESS_DENIED_FOR' => 'Access Denied for',
 	'LBL_GO_BACK' => 'Go back',
 	'LBL_NO_DATA_AVAILABLE' => 'No data available',
 
 	// Global Search
 	'LBL_GLOBAL_SEARCH' => 'Type keyword and press enter',
+	'LBL_ALL_RECORDS' => 'All Records',
+	'LBL_NO_RECORDS_FOUND' => 'No records found',
 
 	//Filters & Advance Filter
 	'LBL_AND' => 'and',
@@ -237,6 +248,7 @@ $languageStrings = array(
 	'LBL_ADD_SERVICE' => 'Add Service',
 	'LBL_ITEMS_TOTAL' => 'Items Total',
 	'LBL_SHIPPING_AND_HANDLING_CHARGES' => 'Shipping & Handling Charges',
+	'LBL_PRE_TAX_TOTAL' => 'Pre Tax Total',
 	'LBL_TAX_FOR_SHIPPING_AND_HANDLING' => 'Taxes For Shipping and Handling',
 	'LBL_SET_SHIPPING_AND_HANDLING_TAXES_FOR' => 'Set S&H Taxes For',
 	'LBL_ADJUSTMENT' => 'Adjustment',
@@ -319,6 +331,9 @@ $languageStrings = array(
 	'LBL_NO_SCHEDULED_ACTIVITIES' => 'No scheduled activities',
 	'LBL_NO_OVERDUE_ACTIVITIES' => 'No overdue activities',
 	'LBL_NO_UPDATES_OR_COMMENTS' => 'No updates or comments',
+	'LBL_MINI_LIST' => 'Mini List',
+	'Mini List' => 'Mini List',
+	'LBL_RESULT_FOR_THE_TAG' => 'Results for the tag',
 
 	// Basic Strings- custom view
 	'LBL_VIEW_NAME' => 'View Name',
@@ -349,10 +364,10 @@ $languageStrings = array(
 	'LBL_YESTERDAY' => 'Yesterday',
 	'LBL_TODAY' => 'Today',
 	'LBL_TOMORROW' => 'Tomorrow',
-	'LBL_LAST_WEEK' => 'Last Week',
+	'LBL_LAST_WEEK' => 'Previous Week',
 	'LBL_CURRENT_WEEK' => 'Current Week',
 	'LBL_NEXT_WEEK' => 'Next Week',
-	'LBL_LAST_MONTH' => 'Last Month',
+	'LBL_LAST_MONTH' => 'Previous Month',
 	'LBL_CURRENT_MONTH' => 'Current Month',
 	'LBL_NEXT_MONTH' => 'Next Month',
 	'LBL_LAST_7_DAYS' => 'Last 7 Days',
@@ -416,7 +431,7 @@ $languageStrings = array(
 	'LBL_CUSTOM_VIEW_NAME_DUPLICATES_EXIST' => 'filter already exists',
 
 	'LBL_ADD_MANAGE_MODULES' => 'Add / Manage Modules',
-	
+
 	// Added Common Keys for all modules
 	'Account Name' => 'Organization Name',
 	'Add Comment' => 'Add Comment',
@@ -603,9 +618,14 @@ $languageStrings = array(
 
 	//Dashboard list of widgets translation
 	'Open Ticktes' => 'Open Tickets',
+	'LBL_SELECT_STATUS' => 'Select Status',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Honest Open Source',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand',
+
+	//Translations used in inventory modules for sopy address
+	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Contacts' => 'Contact',
 
 	//Weekdays in 3 letters translations
 	'LBL_Sun' => 'Sun',
@@ -629,13 +649,20 @@ $languageStrings = array(
 	'LBL_Oct' => 'Oct',
 	'LBL_Nov' => 'Nov',
 	'LBL_Dec' => 'Dec',
-	
+
 	'LBL_CALENDAR_SETTINGS' => 'Calendar Settings',
-	
-	//Translations used in inventory modules for sopy address
+
+	//Translations used in inventory modules for address
 	'SINGLE_Accounts' => 'Organization',
 	'SINGLE_Contacts' => 'Contact',
 	'HelpDesk' => 'Tickets',
+	'LBL_TAG_CLOUD' => 'Tag Cloud',
+
+	'LBL_NO_RECORDS' => 'No Records',
+	'LBL_NO_RELATED' => 'No Related',
+	'LBL_GLOBAL_SEARCH_MAX_MESSAGE' => 'Only the first 100 results of all modules are shown below. For module specific results, please select respective module and search',
+	'LBL_GLOBAL_SEARCH_MAX_MESSAGE_FOR_MODULE' => 'Only the first 100 results are shown below. Please do Advanced Search if you are not satisfied with the result',
+
 );
 
 $jsLanguageStrings = array(
@@ -647,13 +674,16 @@ $jsLanguageStrings = array(
 	'JS_PLEASE_ENTER_VALID_EMAIL_ADDRESS' => 'Please enter a valid email address',
 	'JS_CONTAINS_ILLEGAL_CHARACTERS' => 'contains illegal characters',
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'phone number length exceeded limit',
-	'JS_ACCEPT_POSITIVE_NUMBER' => 'accepts only positive values',
+	'JS_ACCEPT_POSITIVE_NUMBER' => 'Accepts only positive numbers',
 	'JS_VALUE_SHOULD_BE_GREATER_THAN_ZERO' => 'value should be greater than zero',
 	'JS_NUMBER_SHOULD_BE_LESS_THAN_32' => 'Number should be less than 32',
 	'JS_PLEASE_ENTER_VALID_DATE' => 'Please Enter Valid Date',
+	'JS_PLEASE_ENTER_VALID_TIME' => 'Please Enter Valid Time',
+	'JS_INVALID_PAGE_NUMBER' => 'Invalid Page Number',
 
 
-	'INVALID_NUMBER_OF' => 'Invalid number',
+	'INVALID_NUMBER_OF' => 'Invalid number of',
+	'INVALID_NUMBER' => 'Invalid number',
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Are you sure that you want to delete?',
 
 	'OVERWRITE_EXISTING_MSG1' => 'Overwrite the existing address with the selected ',
@@ -677,6 +707,12 @@ $jsLanguageStrings = array(
 	'JS_SHOULD_BE_LESS_THAN_CURRENT_DATE' => 'should be less than Current Date',
 	'JS_SHOULD_BE_GREATER_THAN_CURRENT_DATE' => 'should be greater than Current Date',
 	'JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO' => 'should be greater than or equal to',
+    'JS_SHOULD_BE_LESS_THAN_OR_EQUAL_TO' => 'should be less than or equal to',
+	'JS_PERCENTAGE_VALUE_SHOULD_BE_LESS_THAN_100' => 'Percentage value should be less than 100',
+	'JS_ACCEPT_ONLY_NUMBER' => 'Accepts only numbers',
+	'JS_THIS_FILE_HAS_ALREADY_BEEN_SELECTED' => 'This File has already been selected',
+	'JS_MAX_FILE_UPLOAD_EXCEEDS' => 'max file Upload exceeds',
+	'JS_THIS_DOCUMENT_HAS_ALREADY_BEEN_SELECTED' => 'This Document has already been attached',
 
 
 	//Roles
@@ -722,7 +758,7 @@ $jsLanguageStrings = array(
 	'JS_INFORMATION' => 'Information',
 	'JS_DO_NOT_HAVE_AN_EMAIL_ID' => 'does not have an email address',
 	'NONE_OF_THE_FIELD_VALUES_ARE_CHANGED_IN_MASS_EDIT' => 'None of the field values are changed in Mass Edit',
-	
+
 	//Notification messages for inventory module
 	'JS_PLEASE_SELECT_AN_ACCOUNT_TO_COPY_ADDRESS' => 'Please select an Organization to copy address',
 	'JS_PLEASE_SELECT_AN_CONTACT_TO_COPY_ADDRESS' => 'Please select a Contact to copy address',
@@ -730,4 +766,11 @@ $jsLanguageStrings = array(
 	'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Contact does not contain address to copy',
 	'JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER' => 'Please enter Primary email address to enable portal user',
 	'JS_PRIMARY_EMAIL_FIELD_DOES_NOT_EXISTS' => 'Primary email field does not exist to enable portal user',
+	
+	//Tag Cloud validation messages
+	'JS_PLEASE_ENTER_A_TAG' => 'Please enter a tag',
+	'JS_TAG_NAME_ALREADY_EXIST' => 'Tag name already exist',
+	'JS_MAX_TAG_LENGTH_EXCEEDS' => 'Tag length exceeds max size',
+	
+	'JS_NO_VIEW_PERMISSION_AFTER_SAVE'=> 'You will not have permissions to view this record after save. Would you like to continue?'
 );

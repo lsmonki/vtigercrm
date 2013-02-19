@@ -143,6 +143,10 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			return 'productTax';
 		} else if($this->get('uitype') == '117') {
 			return 'currencyList';
+		} else if($this->get('uitype') == '55' && $this->getName() === 'salutationtype') {
+			return 'picklist';
+		} else if($this->get('uitype') == '55' && $this->getName() === 'firstname') {
+			return 'salutation';
 		}
 		$webserviceField = $this->getWebserviceFieldObject();
 		return $webserviceField->getFieldDataType();
@@ -758,11 +762,26 @@ class Vtiger_Field_Model extends Vtiger_Field {
 														'params' => array('support_start_date'));
 									array_push($validator, $funcName);
 									break;
+            case 'support_start_date' : $funcName = array('name' => 'lessThanDependentField',
+														'params' => array('support_end_date'));
+									array_push($validator, $funcName);
+									break;
 			case 'targetenddate' :
 			case 'actualenddate':
 			case 'enddate':
 							$funcName = array('name' => 'greaterThanDependentField',
 								'params' => array('startdate'));
+							array_push($validator, $funcName);
+							break;
+            case 'startdate': 
+                            if($this->getModule()->get('name') == 'Project') {
+                                $params = array('targetenddate');
+                            }else{
+                                //for project task
+                                $params = array('enddate');
+                            }
+                            $funcName = array('name' => 'lessThanDependentField',
+								'params' => $params);
 							array_push($validator, $funcName);
 							break;
 			case 'expiry_date':
@@ -774,6 +793,11 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			case 'sales_end_date':
 								$funcName = array('name' => 'greaterThanDependentField',
 									'params' => array('sales_start_date'));
+								array_push($validator, $funcName);
+								break;
+            case 'sales_start_date':
+								$funcName = array('name' => 'lessThanDependentField',
+									'params' => array('sales_end_date'));
 								array_push($validator, $funcName);
 								break;
 			case 'qty_per_unit' :
@@ -791,6 +815,15 @@ class Vtiger_Field_Model extends Vtiger_Field {
 								$funcName = array('name'=>'ReferenceField');
 							  array_push($validator, $funcName);
 								break;
+            //SalesOrder field sepecial validators
+            case 'end_period' : $funcName = array('name' => 'greaterThanDependentField',
+									'params' => array('start_period'));
+								array_push($validator, $funcName);
+								break;
+             case 'start_period' : $funcName = array('name' => 'lessThanDependentField',
+									'params' => array('end_period'));
+								array_push($validator, $funcName);
+								break;                            
 		}
 		return $validator;
 	}
@@ -851,4 +884,18 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	public function getDefaultFieldValue(){
 		return $this->defaultvalue;
 	}
+    
+    
+    /**
+     * Function whcih will get the databse insert value format from user format
+     * @param type $value in user format
+     * @return type
+     */
+    public function getDBInsertValue($value) {
+        if(!$this->uitype_instance) {
+			$this->uitype_instance = Vtiger_Base_UIType::getInstanceFromField($this);
+		}
+		$uiTypeInstance = $this->uitype_instance;
+        return $uiTypeInstance->getDBInsertValue($value);
+    }
 }

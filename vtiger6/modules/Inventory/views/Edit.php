@@ -87,7 +87,7 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 		foreach($requestFieldList as $fieldName=>$fieldValue) {
 			$fieldModel = $fieldList[$fieldName];
 			if($fieldModel->isEditable()) {
-				$recordModel->set($fieldName, $fieldValue);
+				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel,
@@ -104,13 +104,16 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('SOURCE_RECORD', $sourceRecord);
 		}
 		$currencies = Inventory_Module_Model::getAllCurrencies();
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
+        $viewer->assign('RECORD',$recordModel);
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
-
+        
 		$viewer->assign('RELATED_PRODUCTS', $relatedProducts);
 		$viewer->assign('SHIPPING_TAXES', $shippingTaxes);
 		$viewer->assign('TAXES', $taxes);

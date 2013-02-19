@@ -37,8 +37,8 @@
 	
 	if($mode == 'addnew')
 	{
-		$newValues = $_REQUEST['newValues'];
-		$selectedRoles = $_REQUEST['selectedRoles'];
+		$newValues = vtlib_purify($_REQUEST['newValues']);
+		$selectedRoles = vtlib_purify($_REQUEST['selectedRoles']);
 		
 		$newPicklist = explode(",",$newValues);
 		$roleIds = explode(":",$selectedRoles);

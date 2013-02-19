@@ -36,6 +36,15 @@ class Vtiger_Export_View extends Vtiger_Index_View {
 		$viewer->assign('PAGE', $page);
 		$viewer->assign('SOURCE_MODULE', $source_module);
 		$viewer->assign('MODULE','Export');
+        
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
 		
 		$viewer->view('Export.tpl', $source_module);
 	}

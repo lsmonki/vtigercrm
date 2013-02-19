@@ -37,6 +37,13 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 	public function getPotentialsCountBySalesStage($owner, $dateFilter) {
 		$db = PearDatabase::getInstance();
 
+		if (!$owner) {
+			$currenUserModel = Users_Record_Model::getCurrentUserModel();
+			$owner = $currenUserModel->getId();
+		} else if ($owner === 'all') {
+			$owner = '';
+		}
+
 		$params = array();
 		if(!empty($owner)) {
 			$ownerSql =  ' AND smownerid = ? ';
@@ -235,5 +242,18 @@ class Potentials_Module_Model extends Vtiger_Module_Model {
 		}
 
 		return $query;
+	}
+	
+	/**
+	 * Function to get list of field for summary view
+	 * @return <array> fields list
+	 */
+	public function getSummaryViewFieldsList() {
+		return array(
+				'amount',
+				'sales_stage',
+				'closingdate',
+				'assigned_user_id',
+		);
 	}
 }

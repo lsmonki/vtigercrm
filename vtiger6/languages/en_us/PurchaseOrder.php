@@ -11,11 +11,11 @@ $languageStrings = array(
 	//DetailView Actions
 	'SINGLE_PurchaseOrder' => 'Purchase Order',
 	'LBL_EXPORT_TO_PDF' => 'Export to PDF',
+    'LBL_SEND_MAIL_PDF' => 'Send Email with PDF',
 
 	//Basic strings
 	'LBL_ADD_RECORD' => 'Add Purchase Order',
 	'LBL_RECORDS_LIST' => 'Purchase Order List',
-	'LBL_RECORD_SUMMARY' => 'Purchase Order Summary',
 	'LBL_COPY_SHIPPING_ADDRESS' => 'Copy Shipping Address',
 	'LBL_COPY_BILLING_ADDRESS' => 'Copy Billing Address',
 
@@ -27,6 +27,8 @@ $languageStrings = array(
 	'Requisition No' => 'Requisition Number',
 	'Tracking Number' => 'Tracking Number',
 	'Sales Commission' => 'Sales Commission',
+    'LBL_PAID' => 'Paid',
+    'LBL_BALANCE' => 'Balance',
 
 	//Added for existing Picklist Entries
 

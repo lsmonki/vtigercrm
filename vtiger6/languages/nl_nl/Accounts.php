@@ -47,6 +47,7 @@ $languageStrings = array(
 	'LBL_DUPLICATES_EXIST'         => 'Organisatienaam bestaat al', // TODO: Review
 );
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Weet u zeker dat u wilt verwijderen?',
 	'LBL_DELETE_CONFIRMATION'      => 'Bij het verwijderen van deze organisatie worden ook de gerelateerde Verkoopkansen en Offertes verwijderd. Weet u zeker dat u deze Organisatie wilt verwijderen?', // TODO: Review
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Bij het verwijderen van deze organisatie(s) worden ook de gerelateerde Verkoopkansen en Offertes verwijderd. Weet u zeker dat u deze Organisatie(s) wilt verwijderen?', // TODO: Review
 );

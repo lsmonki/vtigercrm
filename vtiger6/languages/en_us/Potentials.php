@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Potentials' => 'Opportunity',
 	'LBL_ADD_RECORD' => 'Add Opportunity',
 	'LBL_RECORDS_LIST' => 'Opportunities List',
-	'LBL_RECORD_SUMMARY' => 'Opportunities Summary',
 
 	// Blocks
 	'LBL_OPPORTUNITY_INFORMATION' => 'Opportunity Details',
@@ -50,5 +49,9 @@ $languageStrings = array(
 	'--None--'=>'--None--',
 	'Existing Business'=>'Existing Business',
 	'New Business'=>'New Business',
-	'LBL_EXPECTED_CLOSE_DATE_ON' => 'Expected to close on'
+	'LBL_EXPECTED_CLOSE_DATE_ON' => 'Expected to close on',
+	
+	//widgets headers
+	'LBL_RELATED_CONTACTS' => 'Related Contacts',
+	'LBL_RELATED_PRODUCTS' => 'Related Products',
 );

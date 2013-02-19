@@ -8,9 +8,9 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Projekt Feladat'             , 
-	'LBL_ADD_RECORD'               => 'Add Project Task'            , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Project Task List'           , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Project Task Summary'        , // TODO: Review
-	'LBL_PROJECT_TASK_INFORMATION' => 'Projekt Feladat adatai'      , 
+	'SINGLE_ProjectTask'           => 'Projekt Feladat'				,
+	'LBL_ADD_RECORD'               => 'Projekt Feladat hozzáadása'	,
+	'LBL_RECORDS_LIST'             => 'Projekt Feladatok listája'	,
+	'LBL_RECORD_SUMMARY'           => 'Projekt Feladat összefoglaló',
+	'LBL_PROJECT_TASK_INFORMATION' => 'Projekt Feladat adatai'		,
 );

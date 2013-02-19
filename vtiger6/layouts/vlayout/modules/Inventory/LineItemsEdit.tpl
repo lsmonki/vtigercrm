@@ -30,28 +30,31 @@
             <th colspan="3"><span class="inventoryLineItemHeader">{vtranslate('LBL_ITEM_DETAILS', $MODULE)}</span></th>
             <td colspan="1" class="chznDropDown">
                 <b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
-                <!-- Assign first value as select value -->
-                {assign var=SELECTED_CURRENCY value=$CURRENCIES.0}
+                {assign var=SELECTED_CURRENCY value=$CURRENCINFO}
+				{* Lookup the currency information if not yet set - create mode *}
+				{if $SELECTED_CURRENCY eq ''}
+					{assign var=USER_CURRENCY_ID value=$USER_MODEL->get('currency_id')}
+					{foreach item=currency_details from=$CURRENCIES}
+						{if $currency_details.curid eq $USER_CURRENCY_ID}
+							{assign var=SELECTED_CURRENCY value=$currency_details}
+						{/if}
+					{/foreach}
+				{/if}
+				
                 <select class="chzn-select" id="currency_id" name="currency_id">
                     {foreach item=currency_details key=count from=$CURRENCIES}
-                        {if $currency_details.curid eq $CURRENCINFO.currency_id}
-                            {assign var=currency_selected value="selected"}
-                            {assign var=SELECTED_CURRENCY value=$currency_details}
-                        {else}
-							{if $currency_details.curid eq $USER_MODEL->get('currency_id')}
-								{assign var=currency_selected value="selected"}
-								{assign var=SELECTED_CURRENCY value=$currency_details}
-							{else}
-								{assign var=currency_selected value=""}
-							{/if}
-                        {/if}
-                        <option value="{$currency_details.curid}" class="textShadowNone" data-conversion-rate="{$currency_details.conversionrate}" {$currency_selected}>
+                        <option value="{$currency_details.curid}" class="textShadowNone" data-conversion-rate="{$currency_details.conversionrate}" {if $SELECTED_CURRENCY.currency_id eq $currency_details.curid} selected {/if}>
                             {$currency_details.currencylabel|@getTranslatedCurrencyString} ({$currency_details.currencysymbol})
                         </option>
                     {/foreach}
                 </select>
-                <input type="hidden" name="conversion_rate" id="conversion_rate" value="{$SELECTED_CURRENCY.conversionrate}" />
-                <input type="hidden" value="{$SELECTED_CURRENCY.curid}" id="prev_selected_currency_id" />
+				
+				{assign var="RECORD_CURRENCY_RATE" value=$RECORD_STRUCTURE_MODEL->getRecord()->get('conversion_rate')}
+				{if $RECORD_CURRENCY_RATE eq ''}
+					{assign var="RECORD_CURRENCY_RATE" value=$SELECTED_CURRENCY.conversionrate}
+				{/if}
+                <input type="hidden" name="conversion_rate" id="conversion_rate" value="{$RECORD_CURRENCY_RATE}" />
+                <input type="hidden" value="{$SELECTED_CURRENCY.currency_id}" id="prev_selected_currency_id" />
                 <!-- TODO : To get default currency in even better way than depending on first element -->
                 <input type="hidden" id="default_currency_id" value="{$CURRENCIES.0.curid}" />
             </td>
@@ -164,11 +167,11 @@
                             </tr>
                             <tr>
                                 <td><input type="radio" name="discount_final" class="finalDiscounts" data-discount-type="percentage" {if $DISCOUNT_TYPE_FINAL eq 'percentage'}checked{/if} />&nbsp; % {vtranslate('LBL_OF_PRICE',$MODULE)}</td>
-                                <td><span class="pull-right">&nbsp;%</span><input type="text" id="discount_percentage_final" name="discount_percentage_final" value="{$FINAL.discount_percentage_final}" class="discount_percentage_final smallInputBox pull-right hide discountVal" /></td>
+                                <td><span class="pull-right">&nbsp;%</span><input type="text" id="discount_percentage_final" name="discount_percentage_final" value="{$FINAL.discount_percentage_final}" class="discount_percentage_final smallInputBox pull-right discountVal {if $DISCOUNT_TYPE_FINAL neq 'percentage'}hide{/if}" /></td>
                             </tr>
                             <tr>
                                 <td><input type="radio" name="discount_final" class="finalDiscounts" data-discount-type="amount" {if $DISCOUNT_TYPE_FINAL eq 'amount'}checked{/if} />&nbsp;{vtranslate('LBL_DIRECT_PRICE_REDUCTION',$MODULE)}</td>
-                                <td><input type="text" id="discount_amount_final" name="discount_amount_final" value="{$data.$discount_amount}" class="smallInputBox pull-right hide discount_amount_final discountVal" /></td>
+                                <td><input type="text" id="discount_amount_final" name="discount_amount_final" value="{$FINAL.discount_amount_final}" class="smallInputBox pull-right discount_amount_final discountVal {if $DISCOUNT_TYPE_FINAL neq 'amount'}hide{/if}" /></td>
                             </tr>
                         </tbody>
                     </table>
@@ -189,6 +192,16 @@
             <td>
                 <span class="pull-right"><input id="shipping_handling_charge" name="shipping_handling_charge" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" type="text" class="lineItemInputBox" value="{if $FINAL.shipping_handling_charge}{$FINAL.shipping_handling_charge}{else}0.00{/if}" /></span>
             </td>
+        </tr>
+		<tr>
+			<td width="83%">
+				<span class="pull-right"><b>{vtranslate('LBL_PRE_TAX_TOTAL', $MODULE_NAME)} </b></span>
+			</td>
+			<td>
+				{assign var=PRE_TAX_TOTAL value=$FINAL.preTaxTotal}
+				<span class="pull-right" id="preTaxTotal">{if $PRE_TAX_TOTAL}{$PRE_TAX_TOTAL}{else}0.00{/if}</span>
+				<input type="hidden" id="pre_tax_total" name="pre_tax_total" value="{if $PRE_TAX_TOTAL}{$PRE_TAX_TOTAL}{else}0.00{/if}"/>
+			</td>
         </tr>
 		<!-- Group Tax - starts -->
         <tr id="group_tax_row" valign="top" class="{if $IS_INDIVIDUAL_TAX_TYPE}hide{/if}">
@@ -275,15 +288,15 @@
             <td width="83%" >
                 <div class="pull-right"><b>{vtranslate('LBL_ADJUSTMENT',$MODULE)}&nbsp;&nbsp;</b>
                     <div class="radio pull-right">
-                        <input type="radio" name="adjustmentType" option value="-">{vtranslate('LBL_DEDUCT',$MODULE)}
+                        <input type="radio" name="adjustmentType" option value="-" {if $FINAL.adjustment lt 0}checked{/if}>{vtranslate('LBL_DEDUCT',$MODULE)}
                     </div>
                     <div class="radio pull-right">
-                        <input type="radio" name="adjustmentType" option value="+" checked>{vtranslate('LBL_ADD',$MODULE)}&nbsp;&nbsp;
+                        <input type="radio" name="adjustmentType" option value="+" {if $FINAL.adjustment gte 0}checked{/if}>{vtranslate('LBL_ADD',$MODULE)}&nbsp;&nbsp;
                     </div>
                 </div>
             </td>
             <td>
-                <span class="pull-right"><input id="adjustment" name="adjustment" type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $FINAL.adjustment}{$FINAL.adjustment}{else}0.00{/if}"></span>
+                <span class="pull-right"><input id="adjustment" name="adjustment" type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $FINAL.adjustment lt 0} {abs($FINAL.adjustment)} {elseif $FINAL.adjustment}{$FINAL.adjustment}{else}0.00{/if}"></span>
             </td>
         </tr>
         <tr valign="top">
@@ -294,6 +307,44 @@
                 <span id="grandTotal" name="grandTotal" class="pull-right grandTotal">{$FINAL.grandTotal}</span>
             </td>
         </tr>
+        {if $MODULE eq 'Invoice' or $MODULE eq 'PurchaseOrder'}
+            <tr valign="top">
+                <td width="83%" >
+                    <div class="pull-right">
+                        {if $MODULE eq 'Invoice'}
+                            <b>{vtranslate('LBL_RECEIVED',$MODULE)}</b>
+                        {else}
+                            <b>{vtranslate('LBL_PAID',$MODULE)}</b>
+                        {/if}
+                    </div>
+                </td>
+                <td>
+                    {if $MODULE eq 'Invoice'}
+                        {if (vtlib_isModuleActive("Payments"))} 
+                            <span class="pull-right"><input id="received" name="received" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received')}{$RECORD->getDisplayValue('received')}{else}0.00{/if}" readonly></span>
+                            {else}
+                            <span class="pull-right"><input id="received" name="received" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received')}{$RECORD->getDisplayValue('received')}{else}0.00{/if}"></span>
+                         {/if}
+                    {else}
+                        {if (vtlib_isModuleActive("Payments"))} 
+                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}" readonly></span>                        
+                         {else}   
+                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}"></span>                        
+                        {/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr valign="top">
+                <td width="83%" >
+                    <div class="pull-right">
+                        <b>{vtranslate('LBL_BALANCE',$MODULE)}</b>
+                    </div>
+                </td>
+                <td>
+                    <span class="pull-right"><input id="balance" name="balance" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('balance')}{$RECORD->getDisplayValue('balance')}{else}0.00{/if}" readonly></span>
+                </td>
+            </tr>
+        {/if}
     </table>
     <input type="hidden" name="totalProductCount" id="totalProductCount" value="{$row_no}" />
     <input type="hidden" name="subtotal" id="subtotal" value="" />

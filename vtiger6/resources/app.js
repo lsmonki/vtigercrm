@@ -62,7 +62,12 @@ var app = {
 		if(parent.is('select.chzn-select')) {
 			selectElement = parent;
 		}
-
+		
+		//fix for multiselect error prompt hide when validation is success
+		selectElement.filter('[multiple]').filter('[data-validation-engine*="validate"]').on('change',function(e){
+			jQuery(e.currentTarget).trigger('focusout');
+		});
+		
 		var chosenElement = selectElement.chosen();
 		var chosenSelectConainer = jQuery('.chzn-container');
 		//Fix for z-index issue in IE 7
@@ -95,6 +100,9 @@ var app = {
 			}
 			params.formatSelectionTooBig = formatSelectionExceeds;
 		}
+		if(selectElement.attr('multiple') != 'undefined' && typeof params.closeOnSelect == 'undefined') {
+			params.closeOnSelect = false;
+		}
 
 		selectElement.select2(params)
 					 .on("open", function(e) {
@@ -102,6 +110,31 @@ var app = {
 						 var instance = element.data('select2');
 						 instance.dropdown.css('z-index',1000002);
 					 });
+		if(typeof params.maximumSelectionSize != "undefined") {
+			app.registerChangeEventForMultiSelect(selectElement,params);
+		}
+		return selectElement;
+	},
+
+	/**
+	 * Function to check the maximum selection size of multiselect and update the results
+	 * @params <object> multiSelectElement
+	 * @params <object> select2 params
+	 */
+
+	registerChangeEventForMultiSelect :  function(selectElement,params) {
+		if(typeof selectElement == 'undefined') {
+			return;
+		}
+		var instance = selectElement.data('select2');
+		var limit = params.maximumSelectionSize;
+		selectElement.on('change',function(e){
+			var data = instance.data()
+			if (jQuery.isArray(data) && data.length >= limit ) {
+				instance.updateResults();
+            }
+		});
+
 	},
 
 	/**
@@ -287,14 +320,17 @@ var app = {
 		// Avoid scroll decision and let it scroll up page when form is too big
 		// Reference: http://www.position-absolute.com/articles/jquery-form-validator-because-form-validation-is-a-mess/
 		scroll: false,
-		promptPosition: 'topLeft'
+		promptPosition: 'topLeft',
+		//to support validation for chosen select box
+		prettySelect : true,
+		useSuffix: "_chzn"
 	},
-	
+
 	/**
 	 * Function to push down the error message size when validation is invoked
 	 * @params : form Element
 	 */
-	
+
 	formAlignmentAfterValidation : function(form){
 		// to avoid hiding of error message under the fixed nav bar
 		var destination = form.find(".formError:not('.greenPopup'):first").offset().top;
@@ -347,6 +383,24 @@ var app = {
 		return date;
 	},
 
+	registerEventForTextAreaFields : function(parentElement) {
+		if(typeof parentElement == 'undefined') {
+			parentElement = jQuery('body');
+		}
+
+		parentElement = jQuery(parentElement);
+
+		if(parentElement.is('textarea')){
+			var element = parentElement;
+		}else{
+			var element = jQuery('textarea', parentElement);
+		}
+		if(element.length == 0){
+			return;
+		}
+		element.autosize();
+	},
+
 	registerEventForDatePickerFields : function(parentElement,registerForAddon,customParams){
 		if(typeof parentElement == 'undefined') {
 			parentElement = jQuery('body');
@@ -382,9 +436,17 @@ var app = {
 			starts: 1,
 			eventName : 'focus',
 			onChange: function(formated){
-				var element = jQuery(this).data('datepicker').el;
-				jQuery(element).val(formated);
-				jQuery(element).trigger('change');
+                var element = jQuery(this).data('datepicker').el;
+                element = jQuery(element);
+                var datePicker = jQuery('#'+ jQuery(this).data('datepicker').id);
+                var viewDaysElement = datePicker.find('table.datepickerViewDays');
+                //If it is in day mode and the prev value is not eqaul to current value
+                //Second condition is manily useful in places where user navigates to other month
+                if(viewDaysElement.length > 0 && element.val() != formated) {
+                    element.DatePickerHide();
+                    element.blur();
+                }
+				element.val(formated).trigger('change');
 			}
 		}
 		if(typeof customParams != 'undefined'){
@@ -402,7 +464,7 @@ var app = {
 			params.current = selectedDate;
 			jQelement.DatePicker(params)
 		});
-
+        
 	},
 	registerEventForDateFields : function(parentElement) {
 		if(typeof parentElement == 'undefined') {
@@ -429,14 +491,18 @@ var app = {
 	 * Function which will register time fields
 	 *
 	 * @params : container - jquery object which contains time fields with class timepicker-default or itself can be time field
+	 *			 registerForAddon - boolean value to register the event for Addon or not
 	 *			 params  - params for the  plugin
 	 *
 	 * @return : container to support chaining
 	 */
-	registerEventForTimeFields : function(container, params) {
+	registerEventForTimeFields : function(container, registerForAddon, params) {
 
 		if(typeof cotainer == 'undefined') {
 			container = jQuery('body');
+		}
+		if(typeof registerForAddon == 'undefined'){
+			registerForAddon = true;
 		}
 
 		container = jQuery(container);
@@ -447,30 +513,32 @@ var app = {
 			var element = container.find('.timepicker-default');
 		}
 
+		if(registerForAddon == true){
+			var parentTimeElem = element.closest('.time');
+			jQuery('.add-on',parentTimeElem).on('click',function(e){
+				var elem = jQuery(e.currentTarget);
+				elem.closest('.time').find('.timepicker-default').focus();
+			});
+		}
+
 		if(typeof params == 'undefined') {
 			params = {};
 		}
+
 		var timeFormat = element.data('format');
 		if(timeFormat == '24') {
-			timeFormat = false;
+			timeFormat = 'H:i';
 		} else {
-			timeFormat = true;
+			timeFormat = 'h:i A';
 		}
 		var defaultsTimePickerParams = {
-			'showSeconds' : false,
-			//To indicate time picker to take the value of the fields as time value
-			'defaultTime' : 'value',
-			'minuteStep' : 1,
-			'showMeridian' : timeFormat
+			'timeFormat' : timeFormat,
+			'className'  : 'timePicker'
 		};
 		var params = jQuery.extend(defaultsTimePickerParams, params);
 
-		element.timepicker(params).on('shown', function(e){
-			var element = jQuery(e.currentTarget);
-			var widget = element.data('timepicker').$widget;
-			//To make sure widget appears in modal
-			widget.css('z-index', '100001');
-		});
+		element.timepicker(params);
+
 		return container;
 	},
 
@@ -603,6 +671,10 @@ var app = {
 	cacheSet: function(key, value) {
 		key = this.cacheNSKey(key);
 		jQuery.jStorage.set(key, value);
+	},
+	cacheClear : function(key) {
+		key = this.cacheNSKey(key);
+		return jQuery.jStorage.deleteKey(key);
 	},
 
 	htmlEncode : function(value){

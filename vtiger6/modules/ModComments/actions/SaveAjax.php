@@ -20,11 +20,10 @@ class ModComments_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	}
 
 	public function process(Vtiger_Request $request) {
-		$recordModel = $this->getRecordModelFromRequest($request);
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		$recordModel->set('assigned_user_id', $currentUserModel->getId());
+		$request->set('assigned_user_id', $currentUserModel->getId());
 
-		$recordModel->save();
+		$recordModel = $this->saveRecord($request);
 
 		$fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();

@@ -36,7 +36,7 @@ class Users_UI5_Action extends Vtiger_Action_Controller {
 			} else if ($params['view'] == 'List') {
 				$action = 'ListView';
 			} else if ($params['view'] == 'Edit') {
-				if ($module == 'Calendar') {
+				if ($module == 'Calendar' || $module == 'Reports') {
 					$action = 'ListView';
 				} else {
 					$action = 'EditView';

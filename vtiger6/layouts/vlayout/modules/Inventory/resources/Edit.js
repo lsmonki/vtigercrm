@@ -377,7 +377,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	getFinalDiscountTotal : function() {
 		return parseFloat(jQuery('#discountTotal_final').text());
 	},
-
+	
 	setGroupTaxTotal : function(groupTaxTotalValue) {
 		jQuery('#tax_final').text(groupTaxTotalValue);
 	},
@@ -597,6 +597,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			jQuery('textarea.lineItemCommentBox',parentRow).val(description);
 			var taxUI = this.getTaxDiv(taxes,parentRow);
 			jQuery('.taxDivContainer',parentRow).html(taxUI);
+            if(this.isIndividualTaxMode()) {
+                parentRow.find('.productTaxTotal').removeClass('hide')
+            }else{
+                parentRow.find('.productTaxTotal').addClass('hide')
+            }
 		}
 		if(referenceModule == 'Products'){
 			this.loadSubProducts(parentRow);
@@ -810,8 +815,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		}
 		discountValue = parseFloat(discountValue).toFixed(2);
 		this.setFinalDiscountTotal(discountValue);
+		this.calculatePreTaxTotal();
     },
-
+	
 	calculateGroupTax : function() {
 		var netTotal = this.getNetTotal();
 		var finalDiscountValue = this.getFinalDiscountTotal();
@@ -829,7 +835,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		});
 		this.setGroupTaxTotal(groupTaxTotal);
 	},
-
+	
 	calculateShippingAndHandlingTaxCharges : function() {
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingTaxDiv = jQuery('#shipping_handling_div');
@@ -1015,7 +1021,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		//this.calculateShippingAndHandlingTaxCharges();
 		this.calculateGrandTotal();
 	},
-
+	
 	/**
 	 * Function which will handle the actions that need to be preformed once the qty is changed like below
 	 *  - calculate line item total -> discount and tax -> net price of line item -> grand total
@@ -1058,6 +1064,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	shippingAndHandlingChargesChangeActions : function(){
 		this.calculateShippingAndHandlingTaxCharges();
 		this.setShippingAndHandlingTaxTotal();
+		this.calculatePreTaxTotal();
 		this.calculateGrandTotal();
 	},
 
@@ -1386,7 +1393,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var expectedRowId = 'row'+expectedRowIndex;
 			var actualRowId = lineItemRow.attr('id');
 			if(expectedRowId != actualRowId) {
-				thisInstance.updateLineItemsElementWithSequenceNumber(lineItemRow, expectedRowIndex, actualRowId);
+				var actualIdComponents = actualRowId.split('row');
+				thisInstance.updateLineItemsElementWithSequenceNumber(lineItemRow, expectedRowIndex, actualIdComponents[1]);
 			}
 		});
 	},
@@ -1430,35 +1438,36 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	registerSubmitEvent : function () {
 		var thisInstance = this;
+		this._super();
 		this.getForm().submit(function(e){
 			thisInstance.updateLineItemElementByOrder();
 			thisInstance.saveProductCount();
 			thisInstance.saveSubTotalValue();
 			thisInstance.saveTotalValue();
+			thisInstance.savePreTaxTotalValue();
 		})
 	},
 
 	/**
 	 * Function which will register event for Reference Fields Selection
 	 */
-	registerReferenceSelectionEvent : function() {
+	registerReferenceSelectionEvent : function(container) {
 		var thisInstance = this;
-		var formElement = this.getForm();
 
-		jQuery('input[name="contact_id"]', formElement).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
-			thisInstance.referenceSelectionEventHandler(data);
+		jQuery('input[name="contact_id"]', container).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
+			thisInstance.referenceSelectionEventHandler(data, container);
 		});
 	},
 
 	/**
 	 * Reference Fields Selection Event Handler
 	 */
-	referenceSelectionEventHandler : function(data){
+	referenceSelectionEventHandler : function(data,container){
 		var thisInstance = this;
 		var message = app.vtranslate('OVERWRITE_EXISTING_MSG1')+app.vtranslate('SINGLE_'+data['source_module'])+' ('+data['selectedName']+') '+app.vtranslate('OVERWRITE_EXISTING_MSG2');
 		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 		function(e) {
-			thisInstance.copyAddressDetails(data);
+			thisInstance.copyAddressDetails(data, container);
 			},
 		function(error, err){
 		});
@@ -1467,9 +1476,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	/**
 	 * Function which will copy the address details
 	 */
-	copyAddressDetails : function(data,addressMap,element) {
+	copyAddressDetails : function(data,container,addressMap) {
 		var thisInstance = this;
-		var formElement = this.getForm();
 		var sourceModule = data['source_module'];
 		var noAddress = true;
 		var errorMsg;
@@ -1493,14 +1501,14 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 						}
 						Vtiger_Helper_Js.showPnotify(app.vtranslate(errorMsg));
 					} else{	
-						thisInstance.mapAddressDetails(addressMap, result);
+						thisInstance.mapAddressDetails(addressMap, result, container);
 					}
 				} else{
-					thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data']);
+					thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data'], container);
 					if(sourceModule == "Accounts"){
-						formElement.find('.accountAddress').attr('checked','checked');
+						container.find('.accountAddress').attr('checked','checked');
 					}else if(sourceModule == "Contacts"){
-						formElement.find('.contactAddress').attr('checked','checked');
+						container.find('.contactAddress').attr('checked','checked');
 					}
 				}
 			},
@@ -1512,10 +1520,10 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	/**
 	 * Function which will copy the address details of the selected record
 	 */
-	mapAddressDetails : function(addressDetails, result) {
-		var formElement = this.getForm();
+	mapAddressDetails : function(addressDetails, result, container) {
 		for(var key in addressDetails) {
-			formElement.find('[name="'+key+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+key+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+key+'"]').trigger('change');
 		}
 	},
 
@@ -1697,7 +1705,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 					} else if(targetCopyAddress == "shipping"){
 						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['AccountsShipMap'];
 					}
-					thisInstance.copyAddressDetails(data,objectToMapAddress,element);
+					thisInstance.copyAddressDetails(data,element.closest('table'),objectToMapAddress);
 					element.attr('checked','checked');
 				}
 			}else if(elementClass == "contactAddress"){
@@ -1716,7 +1724,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 					} else if(targetCopyAddress == "shipping"){
 						objectToMapAddress = thisInstance.addressFieldsMappingBetweenModules['ContactsShipMap'];
 					}
-					thisInstance.copyAddressDetails(data,objectToMapAddress);
+					thisInstance.copyAddressDetails(data,element.closest('table'),objectToMapAddress);
 					element.attr('checked','checked');
 				}
 			} else if(elementClass == "shippingAddress"){
@@ -1793,7 +1801,51 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			jQuery('.qty').trigger('focusout');
 		}
 	},
-
+	
+	//Related to preTaxTotal Field
+	
+	/**
+	 * Function to set the pre tax total
+	 */
+	setPreTaxTotal : function(preTaxTotalValue){
+		jQuery('#preTaxTotal').text(preTaxTotalValue);
+		return this;
+	},
+	
+	/**
+	 * Function to get the pre tax total
+	 */
+	getPreTaxTotal : function() {
+		return parseFloat(jQuery('#preTaxTotal').text());
+	},
+	
+	/**
+	 * Function to calculate the preTaxTotal value
+	 */
+	calculatePreTaxTotal : function() {
+		var netTotal = this.getNetTotal();
+		var shippingHandlingCharge = this.getShippingAndHandling();
+		var finalDiscountValue = this.getFinalDiscountTotal();
+		var preTaxTotal = netTotal+shippingHandlingCharge-finalDiscountValue;
+		var preTaxTotalValue = parseFloat(preTaxTotal).toFixed(2);
+		this.setPreTaxTotal(preTaxTotalValue);
+	},
+	
+	/**
+	 * Function to save the pre tax total value
+	 */
+	savePreTaxTotalValue : function() {
+		jQuery('#pre_tax_total').val(this.getPreTaxTotal());
+	},
+	
+	/**
+	 * Function which will register all the events
+	 */
+    registerBasicEvents : function(container) {
+		this._super(container);
+		this.registerReferenceSelectionEvent(container);
+	},
+	
     registerEvents: function(){
 		this._super();
 		this.registerAddingNewProductsAndServices();
@@ -1801,8 +1853,6 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this.lineItemResultActions();
 		//TODO : this might be costier operation. This we added to calculate tax for each line item
 		this.makeLineItemsSortable();
-		this.registerSubmitEvent();
-		this.registerReferenceSelectionEvent();
 		this.checkLineItemRow();
 		this.registerForRealtionOperation();
     }

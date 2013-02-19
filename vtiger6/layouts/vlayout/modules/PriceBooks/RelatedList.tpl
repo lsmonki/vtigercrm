@@ -35,14 +35,31 @@
 			</div>
 			<div class="span4">
 				<span class="row-fluid">
-					<span class="span8 pushDown">
+					<span class="span7 pushDown">
 						<span class="pull-right">
 						{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_TO', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{if $TOTAL_ENTRIES} {vtranslate('LBL_OF', $RELATED_MODULE->get('name'))} {$TOTAL_ENTRIES}{/if}{/if}
 						</span>
 					</span>
 					
-						<div class="span4 btn-group pull-right">
+						<div class="span5 btn-group pull-right">
 							<button class="btn" id="listViewPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
+							<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+								<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
+							</button>
+							<ul class="listViewBasicAction dropdown-menu" id="listViewPageJumpDropDown">
+								<li>
+									<span class="row-fluid">
+										<span class="span3"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
+										<span class="span4">
+											<input type="text" id="pageToJump" class="listViewPagingInput" value="{$PAGING->getCurrentPage()}"/>
+										</span>
+										<span class="span2 textAlignCenter">
+											{vtranslate('LBL_OF',$moduleName)}
+										</span>
+										<span class="span2" id="totalPageCount"></span>
+									</span>
+								</li>
+							</ul>
 							<button class="btn" id="listViewNextPageButton" {if !$PAGING->isNextPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
 						</div>
 					</span>
@@ -83,9 +100,9 @@
 								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
 								<a data-url="index.php?module=PriceBooks&view=ListPriceUpdate&record={$PARENT_RECORD->getId()}&relid={$RELATED_RECORD->getId()}&currentPrice={$LISTPRICE}"
 									class="editListPrice cursorPointer" data-related-recordid='{$RELATED_RECORD->getId()}' data-list-price={$LISTPRICE}>
-									<i class="icon-pencil alignMiddle"></i>
+									<i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $MODULE)}"></i>
 								</a>
-								<a class="relationDelete"><i class="icon-trash alignMiddle"></i></a>
+								<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
 							</span>
 						</div>
 						{/if}

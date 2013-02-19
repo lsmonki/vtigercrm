@@ -23,15 +23,19 @@ class Vtiger_ShowWidget_View extends Vtiger_IndexAjax_View {
 		if(!empty($componentName)) {
 			$className = Vtiger_Loader::getComponentClassName('Dashboard', $componentName, $moduleName);
 			if(!empty($className)) {
+				$widget = NULL;
 				if(!empty($linkId)) {
 					$widget = new Vtiger_Widget_Model();
 					$widget->set('linkid', $linkId);
 					$widget->set('userid', $currentUser->getId());
-					$widget->set('data', $request->get('data'));
+					$widget->set('filterid', $request->get('filterid', NULL));
+					if ($request->has('data')) {
+						$widget->set('data', $request->get('data'));
+					}
 					$widget->add();
 				}
 				$classInstance = new $className();
-				$classInstance->process($request);
+				$classInstance->process($request, $widget);
 				return;
 			}
 	}

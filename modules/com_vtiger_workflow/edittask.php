@@ -65,11 +65,11 @@ require_once("VTWorkflowUtils.php");
 		$smarty->assign("task", $task);
 		$smarty->assign("taskType", $taskClass);
 		$smarty->assign("saveType", $request['save_type']);
-		
+
 		$taskTypeInstance = VTTaskType::getInstanceFromTaskType($taskClass);
 		$taskTemplateClass = $tm->retrieveTemplatePath($module->name, $taskTypeInstance);
 		$smarty->assign("taskTemplate", $taskTemplateClass);
-		
+
 		$et = VTWSEntityType::usingGlobalCurrentUser($workflow->moduleName);
 		$smarty->assign("entityType", $et);
 		$smarty->assign('entityName', $workflow->moduleName);
@@ -123,6 +123,13 @@ require_once("VTWorkflowUtils.php");
 		$smarty->assign("PAGE_NAME", $mod['LBL_EDIT_TASK']);
 		$smarty->assign("PAGE_TITLE", $mod['LBL_EDIT_TASK_TITLE']);
 
+		$users = $group = array();
+		$users = get_user_array();
+		$group = get_group_array();
+		foreach($group as $id => $name) {
+			$users[$id] = $name;
+		}
+		$smarty->assign('ASSIGNED_TO', $users);
 		$smarty->assign("module", $module);
 		$smarty->display("{$module->name}/EditTask.tpl");
 	}

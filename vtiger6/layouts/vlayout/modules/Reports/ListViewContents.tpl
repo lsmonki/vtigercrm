@@ -54,7 +54,7 @@
 							<span class="actionImages">
 								<a href='{$LISTVIEW_ENTRY->getEditViewUrl()}'><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>&nbsp;
 								{if $LISTVIEW_ENTRY->isDefault() eq false}
-									<a href='javascript:Vtiger_List_Js.deleteRecord({$LISTVIEW_ENTRY->getId()})'><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
+									<a class="deleteRecordButton"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
 								{/if}
 							</span>
 						</div>

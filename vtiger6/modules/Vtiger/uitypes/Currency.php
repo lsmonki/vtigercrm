@@ -32,8 +32,9 @@ class Vtiger_Currency_UIType extends Vtiger_Base_UIType {
 			} else {
 				$value = CurrencyField::convertToUserFormat($value);
 			}
+			return $value;
 		}
-		return currencyDecimalFormat($value);
+		return null;
 	}
 
 	/**
@@ -44,14 +45,30 @@ class Vtiger_Currency_UIType extends Vtiger_Base_UIType {
 	public function getUserRequestValue($value) {
 		return $this->getDisplayValue($value);
 	}
+    
+    /**
+	 * Function to get the DB Insert Value, for the current field type with given User Value
+	 * @param <Object> $value
+	 * @return <Object>
+	 */
+	public function getDBInsertValue($value) {
+        $uiType = $this->get('field')->get('uitype');
+        if($uiType == 72) {
+            return self::convertToDBFormat($value,null,true);
+        }else {
+            return self::convertToDBFormat($value);
+        }
+	}
 
 	/**
 	 * Function to transform display value for currency field
 	 * @param $value
+	 * @param Current User
+	 * @param <Boolean> Skip Conversion
 	 * @return converted user format value
 	 */
-	public static function transformDisplayValue($value) {
-		return CurrencyField::convertToUserFormat($value);
+	public static function transformDisplayValue($value, $user=null, $skipConversion=false) {
+		return CurrencyField::convertToUserFormat($value, $user, $skipConversion);
 	}
 
 	/**
@@ -70,6 +87,8 @@ class Vtiger_Currency_UIType extends Vtiger_Base_UIType {
 	 * @return <String>
 	 */
 	public function getEditViewDisplayValue($value) {
-		return $this->getDisplayValue($value);
+		$value = (float)$value;
+		if(!empty($value))
+			return $this->getDisplayValue($value);
 	}
 }

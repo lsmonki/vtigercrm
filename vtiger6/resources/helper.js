@@ -137,13 +137,22 @@ jQuery.Class("Vtiger_Helper_Js",{
 	 */
 	showConfirmationBox : function(data){
 		var aDeferred = jQuery.Deferred();
-		bootbox.confirm(data['message'],app.vtranslate('LBL_NO'),app.vtranslate('LBL_YES'), function(result) {
-			if(result){
+		var bootBoxModal = bootbox.confirm(data['message'],app.vtranslate('LBL_NO'),app.vtranslate('LBL_YES'), function(result) {
+			if(result){   
 				aDeferred.resolve();
 			} else{
 				aDeferred.reject();
 			}
 		});
+        
+        bootBoxModal.on('hidden',function(e){
+            //In Case of multiple modal. like mass edit and quick create, if bootbox is shown and hidden , it will remove
+            // modal open
+            if(jQuery('#globalmodal').length > 0) {
+                // Mimic bootstrap modal action body state change
+                jQuery('body').addClass('modal-open');
+            }
+        })
 		return aDeferred.promise();
 	},
 	
@@ -156,7 +165,10 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var accountName = details.accountName;
 		var recordId = details.recordId;
 		var aDeferred = jQuery.Deferred();
-		var moduleName = app.getModuleName();
+		var moduleName = details.moduleName;
+		if(typeof moduleName == "undefined"){
+			moduleName = app.getModuleName();
+		}
 		var params = {
 		'module' : moduleName,
 		'action' : "CheckDuplicate",

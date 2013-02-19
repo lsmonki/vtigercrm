@@ -19,10 +19,14 @@ class Services_Module_Model extends Products_Module_Model {
 	 * @return <String> Listview Query
 	 */
 	public function getQueryByModuleField($sourceModule, $field, $record, $listQuery) {
-		if ($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList') {
+		if (($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList') || in_array($sourceModule, getInventoryModules())) {
+			$condition = " vtiger_service.discontinued = 1 ";
+
+			if ($sourceModule == 'PriceBooks' && $field == 'priceBookRelatedList') {
+				$condition .= " AND vtiger_service.serviceid NOT IN (SELECT productid FROM vtiger_pricebookproductrel WHERE pricebookid = $record) ";
+			}
+
 			$pos = stripos($listQuery, 'where');
-			$condition = " vtiger_service.discontinued = 1 AND vtiger_service.serviceid NOT IN (SELECT productid
-                                                                       FROM vtiger_pricebookproductrel WHERE pricebookid = $record)";
 			if ($pos) {
 				$split = spliti('where', $listQuery);
 				$overRideQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
@@ -32,5 +36,4 @@ class Services_Module_Model extends Products_Module_Model {
 			return $overRideQuery;
 		}
 	}
-
 }

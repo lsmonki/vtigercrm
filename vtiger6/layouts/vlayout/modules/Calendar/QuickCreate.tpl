@@ -19,7 +19,10 @@
 		<button class="close" aria-hidden="true" data-dismiss="modal" type="button" title="{vtranslate('LBL_CLOSE')}">x</button>
 		<h3>{vtranslate('LBL_QUICK_CREATE', $MODULE)} {vtranslate($MODULE, $MODULE)}</h3>
 	</div>
-<form class="form-horizontal recordEditView" id="quickCreate" name="QuickCreate" method="post" action="index.php">
+<form class="form-horizontal recordEditView contentsBackground" id="quickCreate" name="QuickCreate" method="post" action="index.php">
+	{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
+		<input type="hidden" name="picklistDependency" value='{$PICKIST_DEPENDENCY_DATASOURCE}' />
+	{/if}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="action" value="SaveAjax">
 	<input type="hidden" name="defaultCallDuration" value="{$USER_MODEL->get('callduration')}" />
@@ -35,7 +38,7 @@
 				<a href="javascript:void(0);" data-target=".CalendarQuikcCreateContents_{$RAND_NUMBER} " data-toggle="tab">{vtranslate('LBL_TASK',$MODULE)}</a>
 			</li>
 		</ul>
-		<div class="tab-content">
+		<div class="tab-content overflowVisible">
 			{assign var="CALENDAR_MODULE_MODEL" value=$QUICK_CREATE_CONTENTS['Calendar']['moduleModel']}
 			{foreach item=MODULE_DETAILS key=MODULE_NAME from=$QUICK_CREATE_CONTENTS}
 			<div class="{$MODULE_NAME}QuikcCreateContents_{$RAND_NUMBER} tab-pane {if $MODULE_NAME eq 'Events'} active in {/if}fade">
@@ -57,6 +60,7 @@
 								{assign var=COUNTER value=$COUNTER+1}
 							{/if}
 							<td class="fieldLabel alignMiddle">
+                                {if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
 								{if {$isReferenceField} eq "reference"}
 									{if $refrenceListCount > 1}
 										<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
@@ -73,7 +77,6 @@
 								{else}
 									{vtranslate($FIELD_MODEL->get('label'), $MODULE)}
 								{/if}
-							{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor"></span> {/if}
 							</td>
 							<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 								{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE_NAME)}

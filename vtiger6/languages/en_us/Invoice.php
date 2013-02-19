@@ -11,11 +11,11 @@ $languageStrings = array(
 	//DetailView Actions
 	'SINGLE_Invoice' => 'Invoice',
 	'LBL_EXPORT_TO_PDF' => 'Export to PDF',
+    'LBL_SEND_MAIL_PDF' => 'Send Email with PDF',
 
 	//Basic strings
 	'LBL_ADD_RECORD' => 'Add Invoice',
 	'LBL_RECORDS_LIST' => 'Invoice List',
-	'LBL_RECORD_SUMMARY' => 'Invoice Summary',
 
 	// Blocks
 	'LBL_INVOICE_INFORMATION' => 'Invoice Details',
@@ -27,6 +27,8 @@ $languageStrings = array(
 	'Purchase Order' => 'Purchase Order',
 	'Sales Commission' => 'Sales Commission',
 	'Invoice No' => 'Invoice No',
+	'LBL_RECEIVED' => 'Received',
+	'LBL_BALANCE' => 'Balance',
 	//Added for existing Picklist Entries
 
 	'Sent'=>'Sent',

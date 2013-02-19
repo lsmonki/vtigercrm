@@ -10,6 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
+{assign var=SELECTED_FIELDS value=$CUSTOMVIEW_MODEL->getSelectedFields()}
 <div class="row-fluid span">
 	<form class="form-horizontal" id="CustomView" name="CustomView" method="post" action="index.php">
 		<input type=hidden name="record" id="record" value="{$RECORD_ID}" />
@@ -21,16 +22,14 @@
         <input type="hidden" id="status" name="status" value="{$CV_PRIVATE_VALUE}"/>
 		<h3>{vtranslate('LBL_CREATE_VIEW',$MODULE)}</h3>
 		<input type="hidden" id="sourceModule" value="{$SOURCE_MODULE}">
+        <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		<div class="filterBlocksAlignment">
 			<h4 class="filterHeaders">{vtranslate('LBL_BASIC_DETAILS',$MODULE)} :</h4>
 			<div class="row-fluid">
 				<span class="span">{vtranslate('LBL_VIEW_NAME',$MODULE)}*</span>
 				<input  class="span" type="text" id="viewname" data-validation-engine='validate[required]' name="viewname" value="{$CUSTOMVIEW_MODEL->get('viewname')}">
                 <span class="span"><input id="setdefault" type="checkbox" name="setdefault" value="1" {if $CUSTOMVIEW_MODEL->isDefault()} checked="checked"{/if}><span class="alignMiddle"> {vtranslate('LBL_SET_AS_DEFAULT',$MODULE)}</span></span>
-				{* NOTE: disabled till home page "KeyMetrics" widget is not made available *}
-				{*
                 <span class="span"><input id="setmetrics" name="setmetrics" type="checkbox" value="1" {if $CUSTOMVIEW_MODEL->get('setmetrics') eq '1'} checked="checked"{/if}><span class="alignMiddle"> {vtranslate('LBL_LIST_IN_METRICS',$MODULE)}</span></span>
-				*}
                 <span class="span"><input id="status" name="status" type="checkbox" {if $CUSTOMVIEW_MODEL->isSetPublic()} value="{$CUSTOMVIEW_MODEL->get('status')}" checked="checked" {else} value="{$CV_PENDING_VALUE}" {/if}><span class="alignMiddle"> {vtranslate('LBL_SET_AS_PUBLIC',$MODULE)}</span></span>
 			</div>
 			<h4 class="filterHeaders">{vtranslate('LBL_CHOOSE_COLUMNS',$MODULE)} ({vtranslate('LBL_MAX_NUMBER_FILTER_COLUMNS')}):</h4>
@@ -43,8 +42,8 @@
 						{if $FIELD_MODEL->isMandatory()}
 							{array_push($MANDATORY_FIELDS, $FIELD_MODEL->getCustomViewColumnName())}
 						{/if}
-						<option value="{$FIELD_MODEL->getCustomViewColumnName()}"
-						{if in_array($FIELD_MODEL->getCustomViewColumnName(), $CUSTOMVIEW_MODEL->getSelectedFields())}
+						<option value="{$FIELD_MODEL->getCustomViewColumnName()}" data-field-name="{$FIELD_NAME}"
+						{if in_array($FIELD_MODEL->getCustomViewColumnName(), $SELECTED_FIELDS)}
 							selected
 						{/if}
 						>{vtranslate($FIELD_MODEL->get('label'), $SOURCE_MODULE)}
@@ -54,7 +53,7 @@
 					</optgroup>
 				{/foreach}
 				</select>
-				<input type="hidden" name="columnslist" value='{ZEND_JSON::encode($CUSTOMVIEW_MODEL->getSelectedFields())}' />
+				<input type="hidden" name="columnslist" value='{ZEND_JSON::encode($SELECTED_FIELDS)}' />
 				<input id="mandatoryFieldsList" type="hidden" value='{ZEND_JSON::encode($MANDATORY_FIELDS)}' />
 			</div>
 			<h4 class="filterHeaders">{vtranslate('LBL_CHOOSE_FILTER_CONDITIONS', $MODULE)}:</h4>

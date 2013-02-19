@@ -11,6 +11,12 @@
                     "alertTextCheckboxe": "* This checkbox is required",
                     "alertTextDateRange": "* Both date range fields are required"
                 },
+                "requiredInFunction": { 
+                    "func": function(field, rules, i, options){
+                        return (field.val() == "test") ? true : false;
+                    },
+                    "alertText": "* Field must equal test"
+                },
                 "dateRange": {
                     "regex": "none",
                     "alertText": "* Invalid ",
@@ -24,7 +30,7 @@
                 "minSize": {
                     "regex": "none",
                     "alertText": "* Minimum ",
-                    "alertText2": " characters allowed"
+                    "alertText2": " characters required"
                 },
                 "maxSize": {
                     "regex": "none",
@@ -76,7 +82,7 @@
                 },
                 "email": {
                     // HTML5 compatible email regex ( http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#    e-mail-state-%28type=email%29 )
-                    "regex": /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    "regex": /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                     "alertText": "* Invalid email address"
                 },
                 "integer": {
@@ -85,12 +91,25 @@
                 },
                 "number": {
                     // Number, including positive, negative, and floating decimal. credit: orefalo
-                    "regex": /^[\-\+]?(([0-9]+)([\.,]([0-9]+))?|([\.,]([0-9]+))?)$/,
+                    "regex": /^[\-\+]?((([0-9]{1,3})([,][0-9]{3})*)|([0-9]+))?([\.]([0-9]+))?$/,
                     "alertText": "* Invalid floating decimal number"
                 },
-                "date": {
-                    "regex": /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/,
-                    "alertText": "* Invalid date, must be in YYYY-MM-DD format"
+                "date": {                    
+                    //	Check if date is valid by leap year
+			"func": function (field) {
+					var pattern = new RegExp(/^(\d{4})[\/\-\.](0?[1-9]|1[012])[\/\-\.](0?[1-9]|[12][0-9]|3[01])$/);
+					var match = pattern.exec(field.val());
+					if (match == null)
+					   return false;
+	
+					var year = match[1];
+					var month = match[2]*1;
+					var day = match[3]*1;					
+					var date = new Date(year, month - 1, day); // because months starts from 0.
+	
+					return (date.getFullYear() == year && date.getMonth() == (month - 1) && date.getDate() == day);
+				},                		
+			 "alertText": "* Invalid date, must be in YYYY-MM-DD format"
                 },
                 "ipv4": {
                     "regex": /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/,

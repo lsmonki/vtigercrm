@@ -8,13 +8,13 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_CUSTOM_RULE'          => 'Jogosultsági Szabály Hozzáadás', 
-	'Read Only'                    => 'R'                           , // TODO: Review
-	'Read Write'                   => 'R+W'                         , // TODO: Review
-	'LBL_CREATE_CUSTOM_RULE'       => 'Create New Custom Rule'      , // TODO: Review
-	'LBL_CAN_ACCESSED_BY'          => 'Hozzáférhető '            , // KEY 5.x: LBL_CAN_BE_ACCESSED_BY
-	'LBL_PRIVILEGES'               => 'Jogosultságok'              , 
-	'LBL_SHARING_RULE'             => 'Sharing Rules'               , // TODO: Review
-	'LBL_RULE_NO'                  => 'Szabály #'                  , 
-	'LBL_PRIVILAGES'               => 'Jogosultságok'              , // KEY 5.x: LBL_PRIVILEGES
+	'LBL_ADD_CUSTOM_RULE'          => 'Jogosultsági Szabály Hozzáadás',
+	'Read Only'                    => 'Csak megnéz'					,
+	'Read Write'                   => 'Megnéz/Szerkeszt'			,
+	'LBL_CREATE_CUSTOM_RULE'       => 'Új Egyedi Szabály létrehozása',
+	'LBL_CAN_ACCESSED_BY'          => 'Hozzáférhető '				, // KEY 5.x: LBL_CAN_BE_ACCESSED_BY
+	'LBL_PRIVILEGES'               => 'Jogosultságok'				,
+	'LBL_SHARING_RULE'             => 'Megosztási Szabályok'		,
+	'LBL_RULE_NO'                  => 'Szabály #'					,
+	'LBL_PRIVILAGES'               => 'Jogosultságok'				, // KEY 5.x: LBL_PRIVILEGES
 );

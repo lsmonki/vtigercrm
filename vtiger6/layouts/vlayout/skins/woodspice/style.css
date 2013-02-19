@@ -80,6 +80,9 @@ th a:hover {
 hr {
   border-bottom: 1px solid #777777;
 }
+.floatNone {
+  float: none !important;
+}
 .dropdownStylings {
   background-color: #faf6d9;
   background-image: -moz-linear-gradient(top, #faf6d9, #faf6d9);
@@ -110,6 +113,12 @@ hr {
 .pushDownHalfper {
   padding-top: 0.5%;
 }
+.pushUpandDown2per {
+  margin: 2% 0% 2% 0%;
+}
+.pushDown1per {
+  padding-top: 1%;
+}
 .pushDown2per {
   padding-top: 2%;
 }
@@ -125,6 +134,9 @@ hr {
 .paddingLeftRight10px {
   padding-left: 10px;
   padding-right: 10px;
+}
+.padding5per {
+  padding: 5%;
 }
 .marginRight5px {
   margin-right: 5px;
@@ -155,6 +167,12 @@ hr {
 }
 .width100per {
   width: 100%;
+}
+.width80per {
+  width: 80%;
+}
+.width27em {
+  width: 27em !important;
 }
 .btn-x-small {
   font-size: 11px;
@@ -308,6 +326,20 @@ hr {
   border-color: #faf6d9 #faf6d9 #f1e695;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+.modelContainer .modal-header {
+  background-color: #faf6d9;
+  background-image: -moz-linear-gradient(top, #faf6d9, #faf6d9);
+  background-image: -ms-linear-gradient(top, #faf6d9, #faf6d9);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#faf6d9), to(#faf6d9));
+  background-image: -webkit-linear-gradient(top, #faf6d9, #faf6d9);
+  background-image: -o-linear-gradient(top, #faf6d9, #faf6d9);
+  background-image: linear-gradient(top, #faf6d9, #faf6d9);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faf6d9', endColorstr='#faf6d9', GradientType=0);
+  border-color: #faf6d9 #faf6d9 #f1e695;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 6px 6px 0 0;
+}
 tr.collapseRow > td {
   border-left-width: 0px;
   background-color: #faf6d9;
@@ -400,10 +432,6 @@ tr.collapseRow + tr > td {
 .highLight {
   font-size: 15px;
 }
-/** modal will be having z-index as 10001 **/
-.datepicker {
-  z-index: 10002;
-}
 .zeroOpacity {
   opacity: 0;
 }
@@ -426,6 +454,12 @@ tr.collapseRow + tr > td {
 }
 .modal-open {
   overflow: hidden;
+  /** modal will be having z-index as 10001 **/
+
+}
+.modal-open .datepicker,
+.modal-open .timePicker {
+  z-index: 10002 !important;
 }
 /** General complete **/
 #topMenus {
@@ -630,30 +664,24 @@ tr.collapseRow + tr > td {
   border-color: #777777;
   padding-left: 30px;
   margin-left: 1%;
-  width: 60%;
+  width: 70%;
 }
 .commonActionsContainer #globalSearch {
   border-color: #777777 !important;
-  background-color: #d9b574;
-  background-image: -moz-linear-gradient(top, #e4c386, #c99f58);
-  background-image: -ms-linear-gradient(top, #e4c386, #c99f58);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e4c386), to(#c99f58));
-  background-image: -webkit-linear-gradient(top, #e4c386, #c99f58);
-  background-image: -o-linear-gradient(top, #e4c386, #c99f58);
-  background-image: linear-gradient(top, #e4c386, #c99f58);
+  background-color: #e0e0e0;
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eeeeee), to(#cccccc));
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(top, #eeeeee, #cccccc);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e4c386', endColorstr='#c99f58', GradientType=0);
-  border-color: #c99f58 #c99f58 #a17834;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0);
+  border-color: #cccccc #cccccc #a6a6a6;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .commonActionsContainer :before {
   clear: both;
-}
-.commonActionsContainer .actionsContainer .span8 {
-  width: 72%;
-}
-.commonActionsContainer .actionsContainer .span8 .pull-right {
-  width: 63%;
 }
 #quickCreateModules {
   padding: 8px;
@@ -830,6 +858,44 @@ tr.collapseRow + tr > td {
   border-color: #feffe2 #feffe2 #fbff96;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+.alphabetSorting {
+  margin: 4px 0 !important;
+  height: 19px;
+}
+.alphabetSorting a {
+  line-height: 18px;
+  padding: 0  1.35%;
+}
+.alphabetSorting a:hover {
+  background-color: #feffe2;
+  background-image: -moz-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -ms-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#feffe2), to(#feffe2));
+  background-image: -webkit-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -o-linear-gradient(top, #feffe2, #feffe2);
+  background-image: linear-gradient(top, #feffe2, #feffe2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#feffe2', endColorstr='#feffe2', GradientType=0);
+  border-color: #feffe2 #feffe2 #fbff96;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border: 1px solid #d3d3d3;
+  border-width: 1px 1px 1px 0;
+}
+.alphabetSorting a.highlightBackgroundColor {
+  background-color: #feffe2;
+  background-image: -moz-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -ms-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#feffe2), to(#feffe2));
+  background-image: -webkit-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -o-linear-gradient(top, #feffe2, #feffe2);
+  background-image: linear-gradient(top, #feffe2, #feffe2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#feffe2', endColorstr='#feffe2', GradientType=0);
+  border-color: #feffe2 #feffe2 #fbff96;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border: 1px solid #d3d3d3;
+  border-width: 1px 1px 1px 0;
+}
 .listViewEntriesTable tbody tr:hover td .action {
   display: inline;
 }
@@ -992,7 +1058,7 @@ div.blockPage {
 }
 .btn-group.open .listViewBasicAction,
 .btn-group.open .listViewSetting {
-  float: none;
+  float: none !important;
   left: auto;
   right: 0;
 }
@@ -1134,7 +1200,8 @@ form#EditView table td.chznDropDown {
 }
 .dropdown-menu li > a:hover,
 .dropdown-menu .active > a,
-.dropdown-menu .active > a:hover {
+.dropdown-menu .active > a:hover,
+#widthType li:hover {
   color: #333333;
   background-color: #feffe2;
   background-image: -moz-linear-gradient(top, #feffe2, #feffe2);
@@ -1171,6 +1238,9 @@ form#EditView table td.chznDropDown {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#feffe2', endColorstr='#feffe2', GradientType=0);
   border-color: #feffe2 #feffe2 #fbff96;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.chzn-container {
+  font-size: 12px !important;
 }
 .chzn-container .chzn-results .highlighted {
   color: #333333;
@@ -1278,16 +1348,6 @@ footer a:hover {
 }
 .related .nav li a:hover {
   background-color: #faf6d9;
-  background-image: -moz-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -ms-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#faf6d9), to(#faf6d9));
-  background-image: -webkit-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -o-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: linear-gradient(top, #faf6d9, #faf6d9);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faf6d9', endColorstr='#faf6d9', GradientType=0);
-  border-color: #faf6d9 #faf6d9 #f1e695;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .related .nav li.active {
   opacity: 1;
@@ -1548,9 +1608,33 @@ footer a:hover {
   overflow: visible !important;
 }
 .massEditTable {
+  background-color: #ffffff;
+  background-image: -moz-linear-gradient(top, #ffffff, #ffffff);
+  background-image: -ms-linear-gradient(top, #ffffff, #ffffff);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ffffff));
+  background-image: -webkit-linear-gradient(top, #ffffff, #ffffff);
+  background-image: -o-linear-gradient(top, #ffffff, #ffffff);
+  background-image: linear-gradient(top, #ffffff, #ffffff);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
+  border-color: #ffffff #ffffff #d9d9d9;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   border-radius: 6px;
   border: 1px solid;
   border-color: #d3d3d3 !important;
+}
+.massEditTable tr:hover td {
+  background-color: #feffe2;
+  background-image: -moz-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -ms-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#feffe2), to(#feffe2));
+  background-image: -webkit-linear-gradient(top, #feffe2, #feffe2);
+  background-image: -o-linear-gradient(top, #feffe2, #feffe2);
+  background-image: linear-gradient(top, #feffe2, #feffe2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#feffe2', endColorstr='#feffe2', GradientType=0);
+  border-color: #feffe2 #feffe2 #fbff96;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .massEditTable td {
   border-left: none !important;
@@ -1634,7 +1718,6 @@ footer a:hover {
 }
 .widget_contents {
   margin-top: 5px;
-  padding: 0 1%;
 }
 .commentContainer hr {
   margin: 0 !important;
@@ -1816,6 +1899,37 @@ Please check for the below classes if it is being used
 .searchHolder .globalSearchResults {
   position: relative;
   z-index: 10001;
+}
+#basicSearchModulesList_chzn .chzn-single {
+  background-color: #e0e0e0;
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eeeeee), to(#cccccc));
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(top, #eeeeee, #cccccc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0);
+  border-color: #cccccc #cccccc #a6a6a6;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-color: #777777 !important;
+  box-shadow: 0 0 0 #ffffff inset !important;
+  text-align: center;
+}
+#basicSearchModulesList_chzn .chzn-single div {
+  background-color: #e0e0e0;
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eeeeee), to(#cccccc));
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(top, #eeeeee, #cccccc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0);
+  border-color: #cccccc #cccccc #a6a6a6;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 0px !important;
+  border-left: 0px !important;
 }
 /** Global Search **/
 /** Advance Search **/
@@ -2322,6 +2436,10 @@ Please check for the below classes if it is being used
 #EditView .table tr:last-child td {
   border-bottom: none !important;
 }
+#detailView select[name*="time_zone"],
+#EditView select[name*="time_zone"] {
+  width: 350px !important;
+}
 .gridster ul li {
   list-style: none outside none;
   border-radius: 3px 3px 0 0;
@@ -2450,6 +2568,9 @@ div#chart2 {
   nowrap: nowrap;
   width: 70%;
 }
+.convertLeadName {
+  width: 13em !important;
+}
 .printReport {
   width: 100%;
   border: 1px solid #000000;
@@ -2549,6 +2670,20 @@ div#chart2 {
   font-weight: normal;
   text-shadow: none;
 }
+.fc-event-style7,
+.fc-event-style7 .fc-event-skin {
+  background: #c71585;
+  border-color: #c71585;
+  font-weight: normal;
+  text-shadow: none;
+}
+.fc-event-style8,
+.fc-event-style8 .fc-event-skin {
+  background: #006400;
+  border-color: #006400;
+  font-weight: normal;
+  text-shadow: none;
+}
 #calendarview th {
   color: #000000;
 }
@@ -2595,7 +2730,7 @@ div#chart2 {
 .moduleBlock {
   border-radius: 0px !important;
 }
-.convertLeadInfo {
+.overflowVisible {
   overflow: visible !important;
 }
 .ui-timepicker-div .ui-widget-header {
@@ -2620,6 +2755,10 @@ div#chart2 {
   margin: 0;
   padding: 0;
 }
+.timePicker {
+  width: 8.5em !important;
+  z-index: 0 !important;
+}
 #accountHierarchyContainer .listViewEntries td a {
   color: #333333 !important;
 }
@@ -2636,10 +2775,9 @@ div#chart2 {
   border-color: #feffe2 #feffe2 #fbff96;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
-.logo img,
-.imageContainer img {
+.logo img {
   height: 40px;
-  width: 10em !important;
+  width: 16em !important;
 }
 .messageBox {
   padding: 7%;
@@ -2699,13 +2837,11 @@ div#chart2 {
   border: 1px solid gray;
   text-decoration: none;
   outline: none;
-  writing-mode: tb-rl;
   -webkit-transform: rotate(270deg);
   -moz-transform: rotate(270deg);
   -o-transform: rotate(270deg);
   -ms-transform: rotate(270deg);
   transform: rotate(270deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 .feedback .handle:hover {
   text-decoration: none;
@@ -2733,7 +2869,7 @@ div#chart2 {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .ui-pnotify {
-  z-index: 10002 !important;
+  z-index: 10002;
 }
 .companyLogo img {
   height: 2.5em;
@@ -2751,17 +2887,35 @@ div#chart2 {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
+#widthType {
+  min-width: 100px !important;
+}
+#widthType li i {
+  margin-left: 7px;
+}
 .recordDetails,
 .summaryWidgetContainer {
   background-color: #fffded;
   padding: 15px;
   border: 1px solid #ddba7a;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border-radius: 4px;
 }
-.recordDetails .summaryViewEntries td,
-.summaryWidgetContainer .summaryViewEntries td {
+.recordDetails .summaryViewEntries td.fieldLabel,
+.summaryWidgetContainer .summaryViewEntries td.fieldLabel {
+  width: 25%;
+  text-align: right;
   vertical-align: top;
+}
+.recordDetails .summaryViewEntries td.fieldValue,
+.summaryWidgetContainer .summaryViewEntries td.fieldValue {
+  width: 75%;
+  vertical-align: top;
+  padding-left: 15px !important;
+}
+.recordDetails .summaryViewEntries .wideWidthType,
+.summaryWidgetContainer .summaryViewEntries .wideWidthType {
+  padding: 5px 8px !important;
 }
 /*opacity applied for summary view edit, comment actions, activity widget edit*/
 .summaryViewEntries .summaryViewEdit,
@@ -2827,4 +2981,54 @@ input[type="text"],
 input,
 textarea {
   color: #444444 !important;
+}
+#listViewPageJumpDropDown {
+  padding: 5%;
+}
+#listViewPageJumpDropDown .listViewPagingInput {
+  height: 12px;
+  width: 75%;
+  margin: 0px 5px 0px 5px;
+}
+.emailPreview {
+  padding: 20px 0px 15px 0px;
+  background-color: #ffffff;
+}
+.emailPreview .mailInfo {
+  color: #d3d3d3;
+  text-shadow: 0px 0px 1px #d3d3d3;
+}
+.emailPreview .well {
+  background-color: none !important;
+}
+.emailPreview hr {
+  border-bottom: 1px solid #ddba7a;
+  margin: 5px 0 10px 0 !important;
+}
+.emailPreviewHeader h3 {
+  color: #000000;
+}
+.tagCloudContainer .deleteTag {
+  opacity: 0;
+}
+.tagCloudContainer .tag:hover .deleteTag {
+  opacity: 1;
+}
+#tagCloud {
+  word-wrap: break-word;
+}
+.relatedPopup {
+  border-radius: 0px !important;
+}
+.horizontalLeftSpacingForSummaryWidgetHeader {
+  margin-left: 2.4em !important;
+}
+.horizontalLeftSpacingForSummaryWidgetContents {
+  margin-left: 1.8em !important;
+}
+.bootbox {
+  z-index: 1000003;
+}
+.modal-backdrop {
+  z-index: 1000002;
 }

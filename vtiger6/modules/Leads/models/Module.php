@@ -220,9 +220,9 @@ class Leads_Module_Model extends Vtiger_Module_Model {
 				'city',
 				'country',
 				'leadsource',
-				'assigned_user_id',
 				'createdtime',
-				'modifiedtime'
+				'modifiedtime',
+				'assigned_user_id',
 		);
 	}
 

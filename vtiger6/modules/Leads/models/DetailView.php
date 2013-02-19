@@ -34,4 +34,5 @@ class Leads_DetailView_Model extends Accounts_DetailView_Model {
         
 		return $linkModelList;
 	}
+	
 }

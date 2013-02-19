@@ -55,23 +55,26 @@
 					{if $COUNTER eq 2}
 						</tr><tr>
 						{assign var=COUNTER value=0}
-					{else}
-						<td></td><td></td></tr><tr>
-						{assign var=COUNTER value=0}
 					{/if}
 				{/if}
-				<td class="fieldLabel" colspan="2"><label class="muted pull-right marginRight10px">{vtranslate({$FIELD_MODEL->get('label')},{$MODULE_NAME})}</label></td>
-				<td class="fieldValue" colspan="2">
+				<td class="fieldLabel"><label class="muted pull-right marginRight10px">{vtranslate({$FIELD_MODEL->get('label')},{$MODULE_NAME})}</label></td>
+				<td class="fieldValue">
 					{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
-						<div class="imageContainer">
+						<div class="row-fluid">
 							{if !empty($IMAGE_INFO.path) && !empty({$IMAGE_INFO.orgname})}
-								<img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}">&nbsp;&nbsp;
+								<span class="span11"><img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}"></span>
 							{/if}
 						</div>
 					{/foreach}
 				</td>
-				</tr><tr>
+				{assign var=COUNTER value=$COUNTER+1}
 			{else}
+				{if $FIELD_MODEL->get('uitype') eq "20" or $FIELD_MODEL->get('uitype') eq "19"}
+					{if $COUNTER eq '1'}
+						<td></td><td></td></tr><tr>
+						{assign var=COUNTER value=0}
+					{/if}
+				{/if}
 				 {if $COUNTER eq 2}
 					 </tr><tr>
 					{assign var=COUNTER value=1}
@@ -79,7 +82,7 @@
 					{assign var=COUNTER value=$COUNTER+1}
 				 {/if}
 				 <td class="fieldLabel" id="{$MODULE}_detailView_fieldLabel_{$FIELD_MODEL->getName()}"><label class="muted pull-right marginRight10px">{vtranslate({$FIELD_MODEL->get('label')},{$MODULE_NAME})}</label></td>
-				 <td class="fieldValue" id="{$MODULE}_detailView_fieldValue_{$FIELD_MODEL->getName()}">
+				 <td class="fieldValue" id="{$MODULE}_detailView_fieldValue_{$FIELD_MODEL->getName()}" {if $FIELD_MODEL->get('uitype') eq '19' or $FIELD_MODEL->get('uitype') eq '20'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 					 <span class="value">
                         {include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getDetailViewTemplateName(),$MODULE_NAME) FIELD_MODEL=$FIELD_MODEL USER_MODEL=$USER_MODEL MODULE=$MODULE_NAME RECORD=$RECORD}
 					 </span>

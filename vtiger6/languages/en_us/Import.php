@@ -66,5 +66,8 @@ $languageStrings = array(
 	'LBL_NO_ROWS_FOUND' => 'No rows found',
 	'LBL_SCHEDULED_IMPORT_DETAILS' => 'Your import has been scheduled and will start within 15 minutes. You will receive an email after import is completed.  <br> <br>
 										Please make sure that the Outgoing server and your email address is configured to receive email notification',
+	'LBL_DETAILS' => 'Details',
+	'skipped' => 'Skipped Records',
+	'failed' => 'Failed Records',
 	
 );

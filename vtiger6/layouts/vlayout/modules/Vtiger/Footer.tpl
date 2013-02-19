@@ -14,15 +14,15 @@
 		{if $HEADER_LINKS}
 		{assign var="FIRSTHEADERLINK" value=$HEADER_LINKS.0}
 		{assign var="FIRSTHEADERLINKCHILDRENS" value=$FIRSTHEADERLINK->get('childlinks')}
-		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.1}
+		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.2}
 		<div id="userfeedback" class="feedback">
-			<a href="javascript:;" onclick="{$FEEDBACKLINKMODEL->get('linkurl')}" class="handle">Feedback</a>
+			<a href="javascript:;" onclick="{$FEEDBACKLINKMODEL->get('linkurl')}" class="handle">{vtranslate("LBL_FEEDBACK", "Vtiger")}</a>
 		</div>
 		{/if}
-		
+
 		<footer>
 			<p style="margin-top:5px;margin-bottom:0;" align="center">
-				{vtranslate('POWEREDBY')} - 6.0 beta {*$VTIGER_VERSION*} 
+				{vtranslate('POWEREDBY')} - 6.0 beta {*$VTIGER_VERSION*}
 				&copy; 2004 - {date('Y')}&nbsp;
 				<a href="//www.vtiger.com" target="_blank">vtiger.com</a>
 				&nbsp;|&nbsp;
@@ -31,7 +31,8 @@
 				<a href="//www.vtiger.com/products/crm/privacy_policy.html" target="_blank">{vtranslate('LBL_PRIVACY_POLICY')}</a>
 			</p>
 		</footer>
-
+		{* javascript files *}
+		{include file='JSResources.tpl'|@vtemplate_path}
 		</div>
 	</body>
 </html>

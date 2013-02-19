@@ -8,13 +8,13 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'PriceBooks'                   => 'Csomagárak'                 , 
-	'SINGLE_PriceBooks'            => 'Csomagár'                   , 
-	'LBL_ADD_RECORD'               => 'Add Price Book'              , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Price Books List'            , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Price Books Summary'         , // TODO: Review
-	'LBL_PRICEBOOK_INFORMATION'    => 'Csomagár adatai'            , 
-	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , // TODO: Review
-	'Price Book Name'              => 'Csomagár megnevezése'      , 
-	'PriceBook No'                 => 'Csomagár No.'               , 
+	'PriceBooks'                   => 'Csomagárak'					,
+	'SINGLE_PriceBooks'            => 'Csomagár'					,
+	'LBL_ADD_RECORD'               => 'Csomagár hozzáadása'			,
+	'LBL_RECORDS_LIST'             => 'Csomagárak listája'			,
+	'LBL_RECORD_SUMMARY'           => 'Csomagár összefoglaló'		,
+	'LBL_PRICEBOOK_INFORMATION'    => 'Csomagár adatai'				,
+	'LBL_EDIT_LIST_PRICE'          => 'Csomagár lista szerkesztése'	,
+	'Price Book Name'              => 'Csomagár megnevezése'		,
+	'PriceBook No'                 => 'Csomagár No.'				,
 );

@@ -69,7 +69,7 @@
 										<a id="menubar_item_right_{$title}" class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="{$src}" alt="{vtranslate($title,$MODULE)}" title="{vtranslate($title,$MODULE)}" /></a>
 										{else}
 											{assign var=title value=$USER_MODEL->get('first_name')}
-											{if empty($title)} 
+											{if empty($title)}
 												{assign var=title value=$USER_MODEL->get('last_name')}
 											{/if}
 										<span class="dropdown-toggle row-fluid" data-toggle="dropdown" href="#">
@@ -90,7 +90,7 @@
 														{assign var="href" value="javascript:;"}
 													{/if}
 													<li>
-														<a id="menubar_item_right_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($label)}" {if $label=='Switch to old look'}switchLook{/if} href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
+														<a target="{$obj->target}" id="menubar_item_right_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($label)}" {if $label=='Switch to old look'}switchLook{/if} href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
 													</li>
 												{/if}
 											{/foreach}

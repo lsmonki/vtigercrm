@@ -10,58 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="row-fluid">
-	<span class="span6">
-
-		{assign var=TICKET_STATUS value=$RECORD->getDisplayValue('ticketstatus')}
-		{assign var=RELATED_TO value=$RECORD->getDisplayValue('parent_id')}
-		{assign var=SEVERITY value=$RECORD->getDisplayValue('ticketseverities')}
-		{if empty($TICKET_STATUS) && empty($RELATED_TO) && empty($SEVERITY)}
-			&nbsp;
-		{else}
-			{if $TICKET_STATUS && $RECORD->getField('ticketstatus')->isViewableInDetailView()}
-				<div>
-					<span class="muted">{vtranslate('LBL_STATUS',$MODULE_NAME)}</span>
-					<strong>
-						&nbsp;:&nbsp;{$TICKET_STATUS}
-					</strong>
-
-				</div>
-			{/if}
-			{if $RELATED_TO && $RECORD->getField('parent_id')->isViewableInDetailView()}
-				<div>
-					<span class="muted">
-						{vtranslate('LBL_RELATED_TO',$MODULE_NAME)}&nbsp;
-					</span>
-					<strong>
-						&nbsp;:&nbsp;{$RELATED_TO}
-					</strong>
-				</div>
-			{/if}
-			{if $SEVERITY && $RECORD->getField('ticketseverities')->isViewableInDetailView() }
-				<div>
-					<span class="muted">{vtranslate('LBL_SEVERITY',$MODULE_NAME)}</span>
-					<strong>&nbsp;:&nbsp;{$SEVERITY}</strong>
-				</div>
-			{/if}
-		{/if}
-	</span>
-	<span class="span6">
-		<p class="clearfix pull-right">
-			<strong>{vtranslate('LBL_OWNER',$MODULE_NAME)} : </strong>
-			{getOwnerName($RECORD->get('assigned_user_id'))}
-		</p>
-
-		<p class="clearfix pull-right">
-			<small>
-				<em>{vtranslate('LBL_CREATED_ON',$MODULE_NAME)} {$RECORD->getDisplayValue('createdtime')}</em>
-			</small>
-		</p>
-		<p class="clearfix pull-right">
-			<small>
-				<em>{vtranslate('LBL_MODIFIED_ON',$MODULE_NAME)} {$RECORD->getDisplayValue('modifiedtime')}</em>
-			</small>
-		</p>
-	</span>
-</div>
+	<div class="recordDetails">
+		{include file='SummaryViewContents.tpl'|@vtemplate_path}
+	</div>
 {/strip}

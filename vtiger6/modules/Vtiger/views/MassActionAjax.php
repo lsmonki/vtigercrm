@@ -39,7 +39,14 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_MASSEDIT);
+		$fieldInfo = array();
+		$fieldList = $moduleModel->getFields();
+		foreach ($fieldList as $fieldName => $fieldModel) {
+			$fieldInfo[$fieldName] = $fieldModel->getFieldInfo();
+		}
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('MODE', 'massedit');
 		$viewer->assign('MODULE', $moduleName);
@@ -47,12 +54,23 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('SELECTED_IDS', $selectedIds);
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
+		$viewer->assign('MODULE_MODEL',$moduleModel); 
+		$viewer->assign('MASS_EDIT_FIELD_DETAILS',$fieldInfo); 
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+        $viewer->assign('MODULE_MODEL', $moduleModel);
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
 
 		echo $viewer->view('MassEditForm.tpl',$moduleName,true);
 	}
-
+	
 	/**
 	 * Function returns the Add Comment form
 	 * @param Vtiger_Request $request
@@ -71,6 +89,15 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('SELECTED_IDS', $selectedIds);
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+        
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
 
 		echo $viewer->view('AddCommentForm.tpl',$moduleName,true);
 	}
@@ -87,9 +114,93 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$excludedIds = $request->get('excluded_ids');
 		$step = $request->get('step');
 		$selectedFields = $request->get('selectedFields');
+		$relatedLoad = $request->get('relatedLoad');
 
 		$moduleModel = Vtiger_Module_Model::getInstance($sourceModule);
 		$emailFields = $moduleModel->getFieldsByType('email');
+        $accesibleEmailFields = array();
+        $emailColumnNames = array();
+        $emailColumnModelMapping = array();
+
+        foreach($emailFields as $index=>$emailField) {
+            $fieldName = $emailField->getName();
+            if($emailField->isViewable()) {
+                $accesibleEmailFields[] = $emailField;
+                $emailColumnNames[] = $emailField->get('column');
+                $emailColumnModelMapping[$emailField->get('column')] = $emailField;
+            }
+        }
+        $emailFields = $accesibleEmailFields;
+
+        $emailFieldCount = count($emailFields);
+        $tableJoined = array();
+        if($emailFieldCount > 1) {
+            $recordIds = $this->getRecordsListFromRequest($request);
+
+            $moduleMeta = $moduleModel->getModuleMeta();
+            $wsModuleMeta = $moduleMeta->getMeta();
+            $tabNameIndexList = $wsModuleMeta->getEntityTableIndexList();
+
+            $queryWithFromClause = 'SELECT '. implode(',',$emailColumnNames). ' FROM vtiger_crmentity ';
+            foreach($emailFields as $emailFieldModel) {
+                $fieldTableName = $emailFieldModel->table;
+                if(in_array($fieldTableName, $tableJoined)){
+                    continue;
+                }
+
+                $tableJoined[] = $fieldTableName;
+                $queryWithFromClause .= ' INNER JOIN '.$fieldTableName .
+                            ' ON '.$fieldTableName.'.'.$tabNameIndexList[$fieldTableName].'= vtiger_crmentity.crmid';
+            }
+            $query =  $queryWithFromClause . ' WHERE vtiger_crmentity.deleted = 0 AND crmid IN ('.  generateQuestionMarks($recordIds).') AND (';
+
+            for($i=0; $i<$emailFieldCount;$i++) {
+                for($j=($i+1);$j<$emailFieldCount;$j++){
+                    $query .= ' (' . $emailFields[$i]->getName() .' != \'\' and '. $emailFields[$j]->getName().' != \'\')';
+                    if(!($i == ($emailFieldCount-2) && $j == ($emailFieldCount-1))) {
+                        $query .= ' or ';
+                    }
+                }
+            }
+            $query .=') LIMIT 1';
+
+            $db = PearDatabase::getInstance();
+            $result = $db->pquery($query,$recordIds);
+
+            $num_rows = $db->num_rows($result);
+
+            if($num_rows == 0) {
+                $query = $queryWithFromClause . ' WHERE vtiger_crmentity.deleted = 0 AND crmid IN ('.  generateQuestionMarks($recordIds).') AND (';
+                foreach($emailColumnNames as $index =>$columnName) {
+                    $query .= " $columnName != ''";
+                    //add glue or untill unless it is the last email field
+                    if($index != ($emailFieldCount -1 ) ){
+                        $query .= ' or ';
+                    }
+                }
+                $query .= ') LIMIT 1';
+                $result = $db->pquery($query, $recordIds);
+                if($db->num_rows($result) > 0) {
+                    //Expecting there will atleast one row 
+                    $row = $db->query_result_rowdata($result,0);
+
+                    foreach($emailColumnNames as $emailColumnName) {
+                        if(!empty($row[$emailColumnName])) {
+                            //To send only the single email field since it is only field which has value
+                            $emailFields = array($emailColumnModelMapping[$emailColumnName]);
+                            break;
+                        }
+                    }
+                }else{
+                    //No Record which has email field value
+                    foreach($emailColumnNames as $emailColumnName) {
+                        //To send only the single email field since it has no email value
+                        $emailFields = array($emailColumnModelMapping[$emailColumnName]);
+                        break;
+                    }
+                }
+            }
+        }
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODULE', $moduleName);
@@ -98,7 +209,19 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
 		$viewer->assign('EMAIL_FIELDS', $emailFields);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
-		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize')/1000000);
+        
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
+		
+		if($relatedLoad){
+			$viewer->assign('RELATED_LOAD', true);
+		}
 
 		if($step == 'step1') {
 			echo $viewer->view('SelectEmailFields.tpl', $moduleName, true);
@@ -130,6 +253,15 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
 		$viewer->assign('USER_MODEL', $user);
 		$viewer->assign('PHONE_FIELDS', $phoneFields);
+        
+        $searchKey = $request->get('search_key');
+        $searchValue = $request->get('search_value');
+		$operator = $request->get('operator');
+        if(!empty($operator)) {
+			$viewer->assign('OPERATOR',$operator);
+			$viewer->assign('ALPHABET_VALUE',$searchValue);
+            $viewer->assign('SEARCH_KEY',$searchKey);
+		}
 
 		echo $viewer->view('SendSMSForm.tpl', $moduleName, true);
 	}
@@ -152,6 +284,14 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 
 		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
 		if($customViewModel) {
+            $searchKey = $request->get('search_key');
+            $searchValue = $request->get('search_value');
+            $operator = $request->get('operator');
+            if(!empty($operator)) {
+                $customViewModel->set('operator', $operator);
+                $customViewModel->set('search_key', $searchKey);
+                $customViewModel->set('search_value', $searchValue);
+            }
 			return $customViewModel->getRecordIds($excludedIds);
 		}
 	}

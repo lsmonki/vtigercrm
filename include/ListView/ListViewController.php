@@ -874,7 +874,7 @@ class ListViewController {
 						$value = ' --';
 					}
 				}elseif ($field->getFieldDataType() == 'picklist') {
-					//To not check for permissions for non admin users for task                     
+					//To not check for permissions for non admin users for task
                     if($module == 'Calendar' && $value == 'Task') {
                         $value = getTranslatedString($value,$module);
 						$value = textlength_check($value);
@@ -887,10 +887,8 @@ class ListViewController {
 						$value = getTranslatedString($value,$module);
 						$value = textlength_check($value);
 					}
-				}elseif($field->getFieldDataType() == 'date' ||
-						$field->getFieldDataType() == 'datetime') {
+				}elseif($field->getFieldDataType() == 'date' || $field->getFieldDataType() == 'datetime') {
 					if($value != '' && $value != '0000-00-00') {
-
 						$fieldDataType = $field->getFieldDataType();
 						if($module == 'Calendar' &&($fieldName == 'date_start' || $fieldName == 'due_date')) {
                             if($fieldName == 'date_start') {
@@ -901,20 +899,22 @@ class ListViewController {
                             $timeFieldValue = $this->db->query_result($result, $i, $timeField);
                             if(!empty($timeFieldValue)){
                                 $value .= ' '. $timeFieldValue;
-                                
                                 //TO make sure it takes time value as well
                                 $fieldDataType = 'datetime';
                             }
 						}
-						
-						$date = new DateTimeField($value);
-						$value = $date->getDisplayDate();
 						if($fieldDataType == 'datetime') {
-							$value .= (' ' . $date->getDisplayTime());
+							$value = Vtiger_Datetime_UIType::getDateTimeValue($value);
+						} else if($fieldDataType == 'date') {
+							$date = new DateTimeField($value);
+							$value = $date->getDisplayDate();
 						}
 					} elseif ($value == '0000-00-00') {
 						$value = '';
 					}
+				} elseif($field->getFieldDataType() == 'time') {
+					if(!empty($value))
+						$value = Vtiger_Time_UIType::getTimeValueInAMorPM($value);
 				} elseif($field->getFieldDataType() == 'currency') {
 					if($value != '') {
 						if($field->getUIType() == 72) {
@@ -931,9 +931,7 @@ class ListViewController {
 							$row['currencySymbol'] = $currencySymbol;
 //							$value = CurrencyField::appendCurrencySymbol($currencyValue, $currencySymbol);
 						} else {
-							//changes made to remove vtiger_currency symbol infront of each
-							//vtiger_potential amount
-							if ($value != 0) {
+							if (!empty($value)) {
 								$value = CurrencyField::convertToUserFormat($value);
 							}
 						}

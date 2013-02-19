@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Vendors' => 'Vendor',
 	'LBL_ADD_RECORD' => 'Add Vendor',
 	'LBL_RECORDS_LIST' => 'Vendors List',
-	'LBL_RECORD_SUMMARY' => 'Vendors Summary',
 
 	// Blocks
 	'LBL_VENDOR_INFORMATION' => 'Vendor Details',
@@ -39,6 +38,7 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Are you sure you want to delete?',
 	'LBL_DELETE_CONFIRMATION' => 'Deleting this Vendor will remove its related PurchaseOrders. Are you sure you want to delete this Vendor?',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected Records?',
 );

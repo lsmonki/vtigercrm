@@ -8,14 +8,14 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ModComments'           => 'Feljegyzés'                 , 
-	'LBL_RECORDS_LIST'             => 'Comments List'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Comments Summary'            , // TODO: Review
-	'LBL_MODCOMMENTS_INFORMATION'  => 'Feljegyzések'               , 
-	'LBL_OTHER_INFORMATION'        => 'Egyéb adatok'               , 
-	'LBL_ADDING_COMMENT'           => 'Adding Comment'              , // TODO: Review
-	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Enter comments here'         , // TODO: Review
-	'Comment'                      => 'Feljegyzés'                 , 
-	'Creator'                      => 'Létrehozó'                 , 
-	'Related To Comments'          => 'Kapcsolódó feljegyzések'  , 
+	'SINGLE_ModComments'           => 'Feljegyzés'					,
+	'LBL_RECORDS_LIST'             => 'Feljegyzések listája'		,
+	'LBL_RECORD_SUMMARY'           => 'Feljegyzések összefoglaló'	,
+	'LBL_MODCOMMENTS_INFORMATION'  => 'Feljegyzések'				,
+	'LBL_OTHER_INFORMATION'        => 'Egyéb adatok'				,
+	'LBL_ADDING_COMMENT'           => 'Feljegyzés hozzáadása'		,
+	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Írd a Feljegyzést ide:'		,
+	'Comment'                      => 'Feljegyzés'					,
+	'Creator'                      => 'Létrehozó'					,
+	'Related To Comments'          => 'Kapcsolódó feljegyzések'		,
 );

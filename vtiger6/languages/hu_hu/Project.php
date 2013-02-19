@@ -8,22 +8,22 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Project'               => 'Projekt'                     , 
-	'LBL_ADD_RECORD'               => 'Add Project'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Projects List'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Projects Summary'            , // TODO: Review
-	'LBL_PROJECT_INFORMATION'      => 'Projekt adatok'              , 
-	'Project Name'                 => 'Projekt megnevezése'        , 
-	'Start Date'                   => 'Kezdő dátum'               , 
-	'Target End Date'              => 'Befejezés kitűzött dátuma', 
-	'Actual End Date'              => 'Befejezés aktuális dátuma', 
-	'Project No'                   => 'Projekt No.'                 , 
-	'Target Budget'                => 'Tervezett költségkeret'    , 
-	'Project Url'                  => 'Projekt webcíme (URL)'      , 
-	'Progress'                     => 'Haladás'                    , 
-	'LBL_TASKS_OPEN'               => 'Tasks Open'                  , // TODO: Review
-	'LBL_TASKS_DUE'                => 'Tasks Due'                   , // TODO: Review
-	'LBL_TASKS_COMPLETED'          => 'Tasks Completed'             , // TODO: Review
-	'LBL_PEOPLE'                   => 'People'                      , // TODO: Review
-	'LBL_CHARTS'                   => 'Haladási tábla'            , // KEY 5.x: Charts
+	'SINGLE_Project'               => 'Projekt'						,
+	'LBL_ADD_RECORD'               => 'Projekt hozzáadása'			,
+	'LBL_RECORDS_LIST'             => 'Projektek listája'			,
+	'LBL_RECORD_SUMMARY'           => 'Projekt összefoglaló'		,
+	'LBL_PROJECT_INFORMATION'      => 'Projekt adatok'				,
+	'Project Name'                 => 'Projekt megnevezése'			,
+	'Start Date'                   => 'Kezdő dátum'					,
+	'Target End Date'              => 'Befejezés kitűzött dátuma'	,
+	'Actual End Date'              => 'Befejezés aktuális dátuma'	,
+	'Project No'                   => 'Projekt No.'					,
+	'Target Budget'                => 'Tervezett költségkeret'		,
+	'Project Url'                  => 'Projekt webcíme (URL)'		,
+	'Progress'                     => 'Haladás'						,
+	'LBL_TASKS_OPEN'               => 'Feladatok nyitva'			,
+	'LBL_TASKS_DUE'                => 'Feladatok késésben'			,
+	'LBL_TASKS_COMPLETED'          => 'Feladatok lezárva'			,
+	'LBL_PEOPLE'                   => 'Személyek'					,
+	'LBL_CHARTS'                   => 'Haladási tábla'				, // KEY 5.x: Charts
 );

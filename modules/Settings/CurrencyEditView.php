@@ -15,7 +15,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty=new vtigerCRM_Smarty;
 
-if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+if(isset($_REQUEST['record']) && vtlib_purify($_REQUEST['record']!=''))
 {
 	$tempid = vtlib_purify($_REQUEST['record']);
     $currency = '';
@@ -87,7 +87,7 @@ $smarty->assign("PARENTTAB",getParentTab());
 $smarty->assign("MASTER_CURRENCY",$currency_name);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-if(isset($_REQUEST['detailview']) && $_REQUEST['detailview'] != '')
+if(isset($_REQUEST['detailview']) && vtlib_purify($_REQUEST['detailview']) != '')
 	$smarty->display('CurrencyDetailView.tpl');
 else
 	$smarty->display("CurrencyEditView.tpl");

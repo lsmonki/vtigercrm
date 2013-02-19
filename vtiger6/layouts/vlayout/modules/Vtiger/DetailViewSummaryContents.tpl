@@ -10,20 +10,5 @@
  ********************************************************************************/
 -->*}
 {strip}
-	{if !empty($MODULE_SUMMARY)}
-		<div class="summaryView">
-		{$MODULE_SUMMARY}
-		</div>
-	{/if}
-	<div class="widgetContainer">
-		{foreach item=DETAIL_VIEW_WIDGET from=$DETAILVIEW_LINKS['DETAILVIEWWIDGET'] name=count}
-			<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
-				<div class="widget_header">
-					<h3>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h3>
-				</div>
-				<div class="widget_contents">
-				</div>
-			</div>
-		{/foreach}
-	</div>
+	{include file="DetailViewFullContents.tpl"|vtemplate_path:$MODULE}
 {/strip}

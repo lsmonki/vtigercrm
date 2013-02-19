@@ -11,7 +11,19 @@
 jQuery.Class("Calendar_CalendarView_Js",{
 
 	currentInstance : false,
-	
+
+	getInstanceByView : function(){
+	    var view = jQuery('#currentView').val();
+		var jsFileName = view+'View';
+	    var moduleClassName = view+"_"+jsFileName+"_Js";
+	    if(typeof window[moduleClassName] != 'undefined'){
+			var instance = new window[moduleClassName]();
+		} else {
+			instance = new Calendar_CalendarView_Js();
+		}
+	    return instance;
+	},
+
 	initiateCalendarFeeds : function() {
 		Calendar_CalendarView_Js.currentInstance.performCalendarFeedIntiate();
 	}
@@ -21,12 +33,12 @@ jQuery.Class("Calendar_CalendarView_Js",{
 	calendarCreateView : false,
 	//Hold the conditions for a hour format
 	hourFormatConditionMapping : false,
-	
+
 	//Hold the saved values of calendar settings
 	calendarSavedSettings : false,
-	
+
 	CalendarSettingsContainer : false,
-	
+
 	weekDaysArray : {Sunday : 0,Monday : 1, Tuesday : 2, Wednesday : 3,Thursday : 4, Friday : 5, Saturday : 6},
 
 	calendarfeedDS : {},
@@ -37,7 +49,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		}
 		return this.calendarView;
 	},
-	
+
 	getCalendarSettingsForm : function() {
 		return this.CalendarSettingsContainer;
 	},
@@ -45,7 +57,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 	getCalendarCreateView : function() {
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
-		
+
 		if(this.calendarCreateView !== false) {
 			aDeferred.resolve(this.calendarCreateView.clone(true,true));
 			return aDeferred.promise();
@@ -92,9 +104,13 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			m = (m <= 9)? ("0"+m) : m;
 			return y + "-" + m + "-" + d;
 		}
-		
-		var type = feedcheckbox.data('calendar-feed');
+
+		var type = feedcheckbox.data('calendar-sourcekey');
 		this.calendarfeedDS[type] = function(start, end, callback) {
+			if(feedcheckbox.not(':checked').length > 0) {
+				callback([]);
+				return;
+			}
 			feedcheckbox.attr('disabled', true);
 			var params = {
 				module: 'Calendar',
@@ -102,6 +118,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 				start: toDateString(start),
 				end: toDateString(end),
 				type: feedcheckbox.data('calendar-feed'),
+				userid : feedcheckbox.data('calendar-userid'),
 				cssClass: feedcheckbox.data('calendar-feed-css')
 			}
 			var customData = feedcheckbox.data('customData');
@@ -130,9 +147,10 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		calendarfeeds.each(function(index,element){
 			var feedcheckbox = jQuery(element);
 			var	disabledOnes = app.cacheGet('calendar.feeds.disabled',[]);
-			if (disabledOnes.indexOf(feedcheckbox.data('calendar-feed')) == -1) {
-				thisInstance.fetchCalendarFeed(feedcheckbox);
+			if (disabledOnes.indexOf(feedcheckbox.data('calendar-sourcekey')) == -1) {
+				feedcheckbox.attr('checked',true);
 			}
+			thisInstance.fetchCalendarFeed(feedcheckbox);
 		});
 	},
 
@@ -146,21 +164,21 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		var calendarfeeds = jQuery('[data-calendar-feed]');
 
 		calendarfeeds.bind('change', function(){
-			var type = $(this).data('calendar-feed');
+			var type = $(this).data('calendar-sourcekey');
 			if($(this).is(':checked')) {
 				// NOTE: We are getting cache data fresh - as it shared between browser tabs
 				var disabledOnes = app.cacheGet('calendar.feeds.disabled',[]);
 				// http://stackoverflow.com/a/3596096
 				disabledOnes = jQuery.grep(disabledOnes, function(value){return value != type;});
 				app.cacheSet('calendar.feeds.disabled', disabledOnes);
-				
+
 				thisInstance.getCalendarView().fullCalendar('addEventSource', thisInstance.calendarfeedDS[type]);
 			} else {
 				// NOTE: We are getting cache data fresh - as it shared between browser tabs
 				var disabledOnes = app.cacheGet('calendar.feeds.disabled',[]);
 				if (disabledOnes.indexOf(type) == -1) disabledOnes.push(type);
 				app.cacheSet('calendar.feeds.disabled', disabledOnes);
-				
+
 				thisInstance.getCalendarView().fullCalendar('removeEventSource', thisInstance.calendarfeedDS[type]);
 			}
 		});
@@ -200,14 +218,14 @@ jQuery.Class("Calendar_CalendarView_Js",{
 					thisInstance.addCalendarEvent(data.result);
 			}});
 		});
-		
+
 	},
 
 	registerCalendar : function(customConfig) {
 		var thisInstance = this;
 		var calendarview = this.getCalendarView();
-		
-		//User preferred default view 
+
+		//User preferred default view
 		var userDefaultActivityView = jQuery('#activity_view').val();
 		if(userDefaultActivityView == 'Today'){
 			userDefaultActivityView ='agendaDay';
@@ -216,24 +234,24 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		}else{
 			userDefaultActivityView ='month';
 		}
-		
+
 		//Default time format
 		var userDefaultTimeFormat = jQuery('#time_format').val();
 		if(userDefaultTimeFormat == 24){
-			userDefaultTimeFormat = 'H(:mm)tt';
+			userDefaultTimeFormat = 'H(:mm)';
 		} else {
 			userDefaultTimeFormat = 'h(:mm)tt';
 		}
-		
+
 		//Default first day of the week
 		var defaultFirstDay = jQuery('#start_day').val();
 		var convertedFirstDay = thisInstance.weekDaysArray[defaultFirstDay];
-		
-		//Default first hour of the day 
+
+		//Default first hour of the day
 		var defaultFirstHour = jQuery('#start_hour').val();
 		var explodedTime = defaultFirstHour.split(':');
 		defaultFirstHour = explodedTime['0'];
-		
+
 		var config = {
 			header: {
 				left: 'month,agendaWeek,agendaDay',
@@ -261,35 +279,49 @@ jQuery.Class("Calendar_CalendarView_Js",{
 								thisInstance.addCalendarEvent(data.result);
 						}});
 					});
-					
+
 				})
-	jQuery('<span class="pull-right marginLeft5px"><button class="btn"><i id="calendarSettings" class="icon-cog"></i></button></span>')
-	.prependTo(calendarview.find('.fc-header .fc-header-right')).on('click', 'button', function(e){
-		var params = {
-			module : 'Calendar',
-			view : 'Calendar',
-			mode : 'Settings'
-		}
-		var progressIndicatorInstance = jQuery.progressIndicator({
-			});
-		AppConnector.request(params).then(function(data){
-			var callBack = function(data){
-				thisInstance.CalendarSettingsContainer = jQuery(data);
-				app.showScrollBar(jQuery('div[name="contents"]',data), {'height':'400px'});
-				//register all select2 Elements
-				app.showSelect2ElementView(jQuery(data).find('select.select2'));
-				
-				progressIndicatorInstance.hide();
-				thisInstance.hourFormatConditionMapping = jQuery('input[name="timeFormatOptions"]',data).data('value');
-				thisInstance.changeStartHourValuesEvent();
+		jQuery('<span class="pull-right marginLeft5px"><button class="btn"><i id="calendarSettings" class="icon-cog"></i></button></span>')
+		.prependTo(calendarview.find('.fc-header .fc-header-right')).on('click', 'button', function(e){
+			var params = {
+				module : 'Calendar',
+				view : 'Calendar',
+				mode : 'Settings'
 			}
-			app.showModalWindow({'data':data,'cb':callBack});
-			
-		});
-					
-	})
+			var progressIndicatorInstance = jQuery.progressIndicator({
+				});
+			AppConnector.request(params).then(function(data){
+				var callBack = function(data){
+					thisInstance.CalendarSettingsContainer = jQuery(data);
+					app.showScrollBar(jQuery('div[name="contents"]',data), {'height':'400px'});
+					//register all select2 Elements
+					app.showSelect2ElementView(jQuery(data).find('select.select2'));
+
+					progressIndicatorInstance.hide();
+					thisInstance.hourFormatConditionMapping = jQuery('input[name="timeFormatOptions"]',data).data('value');
+					thisInstance.changeStartHourValuesEvent();
+					thisInstance.changeCalendarSharingType(data);
+				}
+				app.showModalWindow({'data':data,'cb':callBack});
+			});
+
+		})
 
 	},
+
+	changeCalendarSharingType : function(data) {
+		jQuery('[name="sharedtype"]').on('change',function(e) {
+			var sharingType = jQuery(e.currentTarget).data('sharingtype');
+			var selectedUsersContainer = app.getSelect2ElementFromSelect(jQuery('#selectedUsers',data));
+
+			if(sharingType == 'selectedusers') {
+				selectedUsersContainer.show();
+			} else {
+				selectedUsersContainer.hide();
+			}
+		});
+	},
+
 	changeStartHourValuesEvent : function(e){
 		var form = this.getCalendarSettingsForm();
 		var thisInstance = this;
@@ -312,13 +344,24 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			}
 			startHourElement.html(options).trigger("change");
 		});
-		
-		
+
+
 	},
 
+	isAllowedToAddCalendarEvent : function (calendarDetails) {
+		var activityType = calendarDetails.activitytype.value;
+		if(activityType == 'Tasks'  && jQuery('[data-calendar-feed="Tasks"]').is(':checked')) {
+			return true;
+		} else if(jQuery('[data-calendar-feed="Events"]').is(':checked')){
+			return true;
+		} else {
+			return false;
+		}
+	},
 	addCalendarEvent : function(calendarDetails) {
 		//If type is not shown then dont render the created event
-		if(jQuery('[data-calendar-feed="Tasks"]').length <= 0 ) return;
+		var isAllowed = this.isAllowedToAddCalendarEvent(calendarDetails);
+		if(isAllowed == false) return;
 
 		var eventObject = {};
 		eventObject.id = calendarDetails._recordId;
@@ -326,6 +369,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		var startDate = Date.parse(calendarDetails.date_start.calendar_display_value);
 		eventObject.start = startDate.toString();
 		var endDate = Date.parse(calendarDetails.due_date.calendar_display_value);
+		var assignedUserId = calendarDetails.assigned_user_id.value;
 		eventObject.end = endDate.toString();
 		eventObject.url = 'index.php?module=Calendar&view=Detail&record='+calendarDetails._recordId;
 		if(calendarDetails.activitytype.value == 'Task'){
@@ -333,9 +377,11 @@ jQuery.Class("Calendar_CalendarView_Js",{
 			eventObject.allDay = true;
 		}else{
 			var cssClass = jQuery('[data-calendar-feed="Events"]').data('calendarFeedCss');
+			var color = jQuery('[data-calendar-userid='+assignedUserId+']').data('calendar-feed-color');
 			eventObject.allDay = false;
 		}
 		eventObject.className = cssClass;
+		eventObject.color = color;
 		this.getCalendarView().fullCalendar('renderEvent',eventObject);
 	},
 
@@ -347,7 +393,7 @@ jQuery.Class("Calendar_CalendarView_Js",{
 });
 
 jQuery(document).ready(function() {
-	var instance = new Calendar_CalendarView_Js();
+	var instance = Calendar_CalendarView_Js.getInstanceByView();
 	instance.registerEvents()
 	Calendar_CalendarView_Js.currentInstance = instance;
 })

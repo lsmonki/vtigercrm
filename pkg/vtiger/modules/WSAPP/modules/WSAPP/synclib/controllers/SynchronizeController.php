@@ -81,8 +81,7 @@ abstract class WSAPP_SynchronizeController {
 		$transformedRecords = $this->targetConnector->transformToTargetRecord($sourceRecords);
 		$targetRecords = $this->targetConnector->push($transformedRecords);
 		$targetSyncStateModel = $this->getSyncStateModel($this->targetConnector);
-		
-		foreach($sourceRecords as $sourceRecord){
+        foreach($sourceRecords as $sourceRecord){
 			$sourceId = $sourceRecord->getId();
 			foreach($targetRecords as $targetRecord){
 				if($sourceRecord->getSyncIdentificationKey() == $targetRecord->getSyncIdentificationKey()){
@@ -92,17 +91,21 @@ abstract class WSAPP_SynchronizeController {
 					$synchronizedRecords[] = $sychronizeRecord;
 					break;
 				}
+                
 			}
 		}
+        
 		$this->sourceConnector->postEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PULL_EVENT, $synchronizedRecords, $syncStateModel);
-		$this->targetConnector->postEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PUSH_EVENT, $synchronizedRecords, $targetSyncStateModel);		
+		$this->targetConnector->postEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PUSH_EVENT, $synchronizedRecords, $targetSyncStateModel);
+        
+        return $synchronizedRecords;
 	}
 
 	function synchronizePush(){
 		$synchronizedRecords = array();
 		$sourceType = $this->getSourceType();
 
-		$this->sourceConnector->preEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PUSH_EVENT);
+        	$this->sourceConnector->preEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PUSH_EVENT);
 		$this->targetConnector->preEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PULL_EVENT);
 		
 		$syncStateModel = $this->getSyncStateModel($this->targetConnector);
@@ -111,11 +114,11 @@ abstract class WSAPP_SynchronizeController {
 			$record->setSyncIdentificationKey(uniqid());
 		}
 		$transformedRecords = $this->targetConnector->transformToSourceRecord($targetRecords);
-	
-		$sourceSyncStateModel = $this->getSyncStateModel($this->sourceConnector);
-		$sourceRecords = $this->sourceConnector->push($transformedRecords,$sourceSyncStateModel);
 
-		foreach($targetRecords as $targetRecord){
+        	$sourceSyncStateModel = $this->getSyncStateModel($this->sourceConnector);
+        	$sourceRecords = $this->sourceConnector->push($transformedRecords,$sourceSyncStateModel);
+
+     		foreach($targetRecords as $targetRecord){
 			$targetId = $targetRecord->getId();
 			foreach($sourceRecords as $sourceRecord){
 				if($sourceRecord->getSyncIdentificationKey() == $targetRecord->getSyncIdentificationKey()){
@@ -125,23 +128,28 @@ abstract class WSAPP_SynchronizeController {
 					$synchronizedRecords[] = $sychronizeRecord;
 					break;
 				}
+               
 			}
 		}
-		
 		$this->targetConnector->postEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PULL_EVENT, $synchronizedRecords,$syncStateModel);
 		$this->sourceConnector->postEvent(self::WSAPP_SYNCHRONIZECONTROLLER_PUSH_EVENT, $synchronizedRecords, $sourceSyncStateModel);
 		$this->updateSyncStateModel($this->sourceConnector,$sourceSyncStateModel);
+        
+        return $synchronizedRecords;
 	}
 
 	public function synchronize($pullTargetFirst = true){
-		if($pullTargetFirst){
-			$this->synchronizePush();
-			$this->synchronizePull();
+		$records = array();
+        	if($pullTargetFirst){
+			$records['push'] = $this->synchronizePush();
+			$records['pull'] = $this->synchronizePull();
 		}
 		else{
-			$this->synchronizePull();
-			$this->synchronizePush();
+			$records['push'] =$this->synchronizePull();
+			$records['push'] = $this->synchronizePush();
 		}
+        
+        	return $records;
 	}
 
 }

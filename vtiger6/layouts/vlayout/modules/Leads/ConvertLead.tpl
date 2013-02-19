@@ -17,7 +17,14 @@
 	{else}
 		<div class="modal-header">
 			<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
-			<h3>{vtranslate('LBL_CONVERT_LEAD', $MODULE)} : {$RECORD->getName()}</h3>
+			<div class="row-fluid">
+				<span class="span5">
+					<h3>{vtranslate('LBL_CONVERT_LEAD', $MODULE)} :</h3>
+				</span>
+				<span class=" span6 margin0px">
+					<h3 class="convertLeadName textOverflowEllipsis">{$RECORD->getName()}</h3>
+				</span>
+			</div>
 		</div>
 		<form class="form-horizontal contentsBackground" id="convertLeadForm" method="post" action="index.php">
 			<input type="hidden" name="module" value="{$MODULE}"/>
@@ -60,7 +67,7 @@
 						</div>
 					</div>
 				{/foreach}
-				<div class="convertLeadInfo">
+				<div class="overflowVisible">
 					<table class="table table-bordered">
 						{assign var=FIELD_MODEL value=$ASSIGN_TO}
 						<tr>

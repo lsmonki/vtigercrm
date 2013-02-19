@@ -37,7 +37,9 @@ th{
 hr{
       border-bottom: 1px solid @borderColor;
 }
-
+.floatNone {
+	float : none !important;
+}
 .dropdownStylings{
 	.gradientBar(@gradient7StrtColor,@gradient4EndColor);
 	box-shadow : 1px 0px 7px @boxShadowColor;
@@ -61,6 +63,13 @@ hr{
 .pushDown2per{
 	padding-top: 2%;
 }
+.pushUpandDown2per{
+	margin : 2% 0% 2% 0%;
+}
+
+.pushDown1per{
+	padding-top: 1%;
+}
 .padding1per{
 	padding: 1%;
 }
@@ -76,6 +85,9 @@ hr{
 .paddingLeftRight10px{
 	padding-left: 10px;
 	padding-right: 10px;
+}
+.padding5per{
+	padding : 5%;
 }
 .marginRight10px{
 	margin-right:10px;
@@ -103,6 +115,12 @@ hr{
 }
 .width100per{
 	width: 100%;
+}
+.width80per{
+	width: 80%;
+}
+.width27em{
+	width: 27em !important;
 }
 .btn-x-small {
 	font-size: 11px;
@@ -193,6 +211,12 @@ hr{
 
 .contentsBackground {
 	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
+}
+
+//modal-header
+.modelContainer .modal-header {
+	.contentsBackground();
+	border-radius: 6px 6px 0 0;
 }
 
 tr.collapseRow{
@@ -290,11 +314,6 @@ tr.collapseRow{
 	.font-x-large;
 }
 
-/** modal will be having z-index as 10001 **/
-.datepicker{
-	z-index : 10002;
-}
-
 .zeroOpacity {
 	opacity : 0;
 }
@@ -325,9 +344,13 @@ tr.collapseRow{
 	margin : 2%;
 }
 
-//Fix for background scroll when modal is open 
+//Fix for background scroll when modal is open
 .modal-open {
 	overflow : hidden;
+	/** modal will be having z-index as 10001 **/
+	.datepicker, .timePicker{
+		z-index : 10002 !important;
+	}
 }
 
 /** General complete **/
@@ -468,7 +491,7 @@ tr.collapseRow{
 		border-color: @borderColor;
 		padding-left: 30px;
 		margin-left : 1%;
-		width:60%;
+		width:70%;
 	}
 	#globalSearch{
 		border-color: @borderColor !important;
@@ -478,12 +501,7 @@ tr.collapseRow{
 .commonActionsContainer :before {
 	clear: both;
 }
-.commonActionsContainer .actionsContainer .span8 {
-	width : 72%;
-}
-.commonActionsContainer .actionsContainer .span8 .pull-right{
-	width : 63%;
-}
+
 #quickCreateModules{
 	padding: 8px;
     width: 450px;
@@ -614,7 +632,26 @@ tr.collapseRow{
 .listViewEntriesTable tbody tr:hover td{
 	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 }
-
+.alphabetSorting {
+	margin : 4px 0 !important;
+	height : 19px;
+	a {
+		line-height : 18px;
+		padding : 0  1.35%;
+		&:hover {
+			.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+			//IE 8 Fix
+			border : 1px solid @grayLight;
+			border-width: 1px 1px 1px 0;
+		}
+	}
+	a.highlightBackgroundColor {
+		.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+		//IE 8 Fix
+		border : 1px solid @grayLight;
+		border-width: 1px 1px 1px 0;
+	}
+}
 .listViewEntriesTable tbody tr:hover td .action{
 	display: inline;
 }
@@ -767,7 +804,7 @@ div.blockPage {
 }
 
 .btn-group.open .listViewBasicAction ,.btn-group.open .listViewSetting{
-	float: none;
+	.floatNone;
     left: auto;
     right: 0;
 }
@@ -872,7 +909,7 @@ form#EditView table td.chznDropDown{
 	cursor: pointer;
 }
 
-.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, #widthType li:hover {
     color: @generalLinkColor;
 	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 }
@@ -894,9 +931,12 @@ form#EditView table td.chznDropDown{
 	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 }
 
-.chzn-container .chzn-results .highlighted {
-	color: @generalLinkColor;
-	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+.chzn-container{
+	font-size: 12px !important;
+	.chzn-results .highlighted {
+		color: @generalLinkColor;
+		.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+	}
 }
 
 /* Footer */
@@ -978,7 +1018,7 @@ footer {
 				border-radius : 0 5px 5px 0;
 				color: @relatedListText !important;
 				&:hover{
-					.gradientBar(@gradient8StrtColor,@gradient8EndColor);
+					background-color: @gradient8StrtColor;
 				}
 			}
 		}
@@ -1146,8 +1186,12 @@ footer {
 }
 
 .massEditTable{
+	.gradientBar(@gradient1EndColor,@gradient1EndColor);
 	border-radius: 6px;
 	.border(1px, @lightColorBorder);
+	tr:hover td {
+		.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+	}
     td{
 		border-left: none !important;
 		font-size: 12px;
@@ -1401,6 +1445,21 @@ Please check for the below classes if it is being used
 	.globalSearchResults{
 		position:relative;
 		z-index:10001;
+	}
+}
+
+//Stylings added for global search modules list chzn element
+#basicSearchModulesList_chzn{
+	.chzn-single{
+		.gradientBar(@gradient12StrtColor,@gradient12EndColor);
+		border-color: @borderColor !important;
+		box-shadow: 0 0 0 @white inset !important;
+		text-align: center;
+		div{
+			.gradientBar(@gradient12StrtColor,@gradient12EndColor);
+			border-radius: 0px !important;
+			border-left: 0px !important;
+		}
 	}
 }
 /** Global Search **/
@@ -1770,6 +1829,9 @@ Please check for the below classes if it is being used
 			}
 		}
 	}
+	select[name*="time_zone"]{
+		width: 350px !important;
+	}
 }
 
 //Dashboard style
@@ -1891,6 +1953,9 @@ div#chart2{
 		width:70%;
 	}
 }
+.convertLeadName {
+	width : 13em !important;
+}
 
 //Report stylings
 .printReport{
@@ -1960,6 +2025,8 @@ div#chart2{
 .fc-event-style4,.fc-event-style4 .fc-event-skin { background: @fc-style4; border-color: @fc-style4; font-weight: normal; text-shadow: none; }
 .fc-event-style5,.fc-event-style5 .fc-event-skin { background: @fc-style5; border-color: @fc-style5; font-weight: normal; text-shadow: none; }
 .fc-event-style6,.fc-event-style6 .fc-event-skin { background: @fc-style6; border-color: @fc-style6; font-weight: normal; text-shadow: none; }
+.fc-event-style7,.fc-event-style7 .fc-event-skin { background: @fc-style7; border-color: @fc-style7; font-weight: normal; text-shadow: none; }
+.fc-event-style8,.fc-event-style8 .fc-event-skin { background: @fc-style8; border-color: @fc-style8; font-weight: normal; text-shadow: none; }
 #calendarview th {
     color : @black;
 }
@@ -1988,7 +2055,7 @@ div#chart2{
 .moduleBlock{
 	border-radius: 0px !important;
 }
-.convertLeadInfo{
+.overflowVisible{
 	overflow:visible !important;
 }
 //Convert Lead CSS Ends
@@ -2000,6 +2067,12 @@ div#chart2{
 .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+//Time picker styles
+.timePicker{
+	width: 8.5em !important;
+	z-index: 0 !important;
+}
 
 //Account Hierarchy
 #accountHierarchyContainer {
@@ -2017,10 +2090,10 @@ div#chart2{
 	}
 }
 
-.logo, .imageContainer {
+.logo{
     img {
 		height:40px;
-        width: 10em !important;
+        width: 16em !important;
     }
 }
 //Used for confirmation message box
@@ -2097,13 +2170,11 @@ div#chart2{
 	outline: none;
 
 	// http://scottgale.com/blog/css-vertical-text/2010/03/01/
-	writing-mode:tb-rl;
 	-webkit-transform:rotate(270deg);
 	-moz-transform:rotate(270deg);
 	-o-transform: rotate(270deg);
 	-ms-transform: rotate(270deg);
 	transform: rotate(270deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 .feedback .handle:hover {
@@ -2146,17 +2217,34 @@ div#chart2{
 	padding-top:2px !important;
 	padding-bottom:2px !important;
 }
-
+#widthType{
+	min-width: 100px !important;
+	li i{
+		margin-left: 7px;
+	}
+}
 
 //Summary view of contacts,leads,accounts
 .recordDetails, .summaryWidgetContainer{
 	background-color: @summaryWidgetColor;
 	padding: 15px;
-	border: 1px solid @lightColorBorder;
-	margin-bottom: 10px;
+	border: 1px solid @summaryWidgetBorderColor;
+	margin-bottom: 20px;
 	border-radius : 4px;
-	.summaryViewEntries td{
-		vertical-align: top;
+	.summaryViewEntries {
+		td.fieldLabel {
+			width : 25%;
+			text-align : right;
+			vertical-align: top;
+		}
+		td.fieldValue{
+			width : 75%;
+			vertical-align: top;
+			padding-left: 15px !important;
+		}
+		.wideWidthType{
+			padding : 5px 8px !important;
+		}
 	}
 }
 
@@ -2212,4 +2300,62 @@ div#chart2{
 //Edit view text color should be same for all fields
 input[type="text"], input, textarea{
 	color: #444444 !important;
+}
+#listViewPageJumpDropDown{
+	.padding5per;
+	.listViewPagingInput {
+		height : 12px;
+		width : 75%;
+		margin : 0px 5px 0px 5px;
+	}
+}
+.emailPreview{
+	padding : 20px 0px 15px 0px;
+	background-color: @white;
+	.mailInfo{
+		color : @grayLight;
+		.textShadow(@grayLight,0px,0px,1px,@grayLight);
+	}
+	.well{
+		background-color : none !important;
+	}
+	hr{
+		border-bottom: 1px solid @summaryWidgetBorderColor;
+		margin : 5px 0 10px 0 !important;
+	}
+}
+.emailPreviewHeader{
+	h3{
+		color : @black;
+	}
+}
+
+//tagCloud
+.tagCloudContainer{
+	.deleteTag{
+		opacity : 0;
+	}
+	.tag:hover .deleteTag {
+		opacity : 1;
+	}
+}
+#tagCloud {
+	word-wrap: break-word;
+}
+.relatedPopup {
+	border-radius : 0px !important;
+}
+
+.horizontalLeftSpacingForSummaryWidgetHeader{
+	margin-left: 2.4em !important;
+}
+.horizontalLeftSpacingForSummaryWidgetContents{
+	margin-left: 1.8em !important;
+}
+
+.bootbox {
+	z-index : 1000003; 
+}
+.modal-backdrop {
+	z-index : 1000002;
 }

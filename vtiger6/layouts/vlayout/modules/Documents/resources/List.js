@@ -16,8 +16,8 @@ Vtiger_List_Js("Documents_List_Js", {
 				var callBackFunction = function(data){
 					jQuery('#addDocumentsFolder').validationEngine({
 						// to prevent the page reload after the validation has completed
-						'onValidationComplete' : function(){
-
+						'onValidationComplete' : function(form,valid){
+                             return valid;
 						}
 					});
 					Vtiger_List_Js.getInstance().folderSubmit().then(function(data){
@@ -70,6 +70,14 @@ Vtiger_List_Js("Documents_List_Js", {
 				"excluded_ids" : excludedIds,
 				"viewname" : cvId
 			};
+            
+            var searchValue = listInstance.getAlphabetSearchValue();
+
+            if(searchValue.length > 0) {
+                postData['search_key'] = listInstance.getAlphabetSearchField();
+                postData['search_value'] = searchValue;
+                postData['operator'] = "s";
+            }
 
 			var params = {
 				"url":url,
@@ -171,8 +179,8 @@ Vtiger_List_Js("Documents_List_Js", {
 	getDefaultParams : function() {
 		var search_value = jQuery('#customFilter').find('option:selected').data('foldername');
 		var customParams = {
-					'search_key' : 'folderid',
-					'search_value' : search_value
+					'folder_id' : 'folderid',
+					'folder_value' : search_value
 					}
 		var params = this._super();
 		jQuery.extend(params,customParams);

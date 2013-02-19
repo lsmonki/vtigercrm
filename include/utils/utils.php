@@ -204,7 +204,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name
 							  from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union
 							  select shareduserid as id,vtiger_users.user_name as user_name ,
-							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";
+							  vtiger_users.first_name as first_name ,vtiger_users.last_name as last_name  from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=? and id!=1"; //NOTE:OD_FIX-Added to remove Administrator
 					$params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));
 				}
 				else
@@ -1037,7 +1037,13 @@ function to_html($string, $encode=true)
 			// Fix for tickets #4647, #4648. Conversion required in case of search results also.
 			$doconvert = true;
 		}
-		if ($doconvert == true || Vtiger_Util_Helper::inVtiger6UI())
+
+		//In Vtiger6 mode and request not from Embeded UI5, then we need to treat it as if its coming from vtiger5
+		// In vtiger5 ajax request are treated specially and the data is encoded
+		global $site_URL;
+		$vtiger6UIPage = (Vtiger_Util_Helper::inVtiger6UI() && strpos($_SERVER['HTTP_REFERER'], $site_URL.'/vtiger6') === 0);
+
+		if ($doconvert == true || $vtiger6UIPage)
 		{
 			if($inUTF8)
 				$string = htmlentities($string, ENT_QUOTES, $default_charset);
@@ -4258,13 +4264,6 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb, $us
 		// we have observed call to extension not configured in Vtiger will returns NULL
 		return;
 	}
-	$crmID = $adb->getUniqueID('vtiger_crmentity');
-	$timeOfCall = date('Y-m-d H:i:s');
-
-	$sql = "insert into vtiger_crmentity values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	$params = array($crmID, $userID, $userID, 0, "PBXManager", "", $timeOfCall, $timeOfCall, NULL, NULL, 0, 1, 0);
-	$adb->pquery($sql, $params);
-
 	if(empty($callfrom)){
 		$callfrom = "Unknown";
 	}

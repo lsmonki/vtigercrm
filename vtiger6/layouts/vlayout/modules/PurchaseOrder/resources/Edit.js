@@ -12,13 +12,12 @@ Inventory_Edit_Js("PurchaseOrder_Edit_Js",{},{
 	/**
 	 * Function which will register event for Reference Fields Selection
 	 */
-	registerReferenceSelectionEvent : function() {
-		this._super();
+	registerReferenceSelectionEvent : function(container) {
+		this._super(container);
 		var thisInstance = this;
-		var formElement = thisInstance.getForm();
 		
-		jQuery('input[name="vendor_id"]', formElement).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
-			thisInstance.copyAddressDetails(data);
+		jQuery('input[name="vendor_id"]', container).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
+			thisInstance.copyAddressDetails(data, container);
 		});
 	},
 	

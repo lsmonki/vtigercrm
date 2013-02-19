@@ -29,4 +29,11 @@ class Vtiger_Multipicklist_UIType extends Vtiger_Base_UIType {
         }
 		return str_ireplace(' |##| ', ', ', $value);
 	}
+    
+    public function getDBInsertValue($value) {
+		if(is_array($value)){
+            $value = implode(' |##| ', $value);
+        }
+        return $value;
+	}
 }

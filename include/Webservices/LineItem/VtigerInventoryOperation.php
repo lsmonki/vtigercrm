@@ -19,8 +19,8 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 	public function create($elementType, $element) {
 		$element = $this->sanitizeInventoryForInsert($element);
         $lineItems = $element['LineItems'];
-        $element = parent::create($elementType, $element);
         if(!empty ($lineItems)){
+			$element = parent::create($elementType, $element);
             $handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
             $handler->setLineItems('LineItem', $lineItems, $element);
         }else{
@@ -31,14 +31,46 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 
 	public function update($element) {
 		$element = $this->sanitizeInventoryForInsert($element);
+		$lineItemList = $element['LineItems'];
+		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
+		if (!empty($lineItemList)) {
+			$updatedElement = parent::update($element);
+			$handler->cleanLineItemList($updatedElement['id']);
+			$handler->setLineItems('LineItem', $lineItemList, $updatedElement);
+		} else {
+			$updatedElement = $this->revise($element);
+		}
+		return $updatedElement;
+	}
+
+	public function revise($element) {
+        $element = $this->sanitizeInventoryForInsert($element);
+		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 		$components = vtws_getIdComponents($element['id']);
 		$parentId = $components[1];
-        $handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
-        $lineItemList = $handler->getAllLineItemForParent($parentId);
-        $handler->cleanLineItemList($element['id']);
-        $updatedElement = parent::update($element);
-        $r = $handler->setLineItems('LineItem', $lineItemList, $element);
+		$lineItemList = $handler->getAllLineItemForParent($parentId);
+		if (!empty($element['LineItems'])) {
+			unset($element['LineItems']);
+		}
+		$updatedElement = parent::revise($element);
+		$handler->cleanLineItemList($updatedElement['id']);
+		$handler->setLineItems('LineItem', $lineItemList, $updatedElement);
 		return $updatedElement;
+	}
+
+	public function retrieve($id) {
+		$element = parent::retrieve($id);
+		$skipLineItemFields = getLineItemFields();
+		foreach ($skipLineItemFields as $key => $field) {
+			if(array_key_exists($field, $element)){
+				unset ($element[$field]);
+			}
+		}
+		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
+		$idComponents = vtws_getIdComponents($id);
+		$lineItems = $handler->getAllLineItemForParent($idComponents[1]);
+		$element['LineItems'] = $lineItems;
+		return $element;
 	}
 
 	public function delete($id) {
@@ -66,7 +98,7 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 			$_REQUEST['discount_percentage_final'] = $element['hdnDiscountPercent'];
 		}
 
-		if(!empty($element['hdnS_H_Amount'])){
+		if($element['hdnS_H_Amount'] != ''){
 			$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
 		}
 

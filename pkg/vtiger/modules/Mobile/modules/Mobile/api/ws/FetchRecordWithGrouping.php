@@ -166,6 +166,10 @@ class Mobile_WS_FetchRecordWithGrouping extends Mobile_WS_FetchRecord {
 		$modifiedResult = array('blocks' => $blocks, 'id' => $resultRecord['id']);
 		if($labelFields) $modifiedResult['labelFields'] = $labelFields;
 		
+		if (isset($resultRecord['LineItems'])) {
+			$modifiedResult['LineItems'] = $resultRecord['LineItems'];
+		}
+		
 		return $modifiedResult;
 	}
 }

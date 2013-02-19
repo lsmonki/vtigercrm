@@ -47,6 +47,65 @@ class Inventory_Detail_View extends Vtiger_Detail_View {
 		$recordModel = Inventory_Record_Model::getInstanceById($record);
 		$relatedProducts = $recordModel->getProducts();
 
+		//##Final details convertion started
+		$finalDetails = $relatedProducts[1]['final_details'];
+
+		//Final tax details convertion started
+		$taxtype = $finalDetails['taxtype'];
+		if ($taxtype == 'group') {
+			$taxDetails = $finalDetails['taxes'];
+			$taxCount = count($taxDetails);
+			for($i=0; $i<$taxCount; $i++) {
+				$taxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$i]['amount'], null, true);
+			}
+			$finalDetails['taxes'] = $taxDetails;
+		}
+		//Final tax details convertion ended
+
+		//Final shipping tax details convertion started
+		$shippingTaxDetails = $finalDetails['sh_taxes'];
+		$taxCount = count($shippingTaxDetails);
+		for($i=0; $i<$taxCount; $i++) {
+			$shippingTaxDetails[$i]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($shippingTaxDetails[$i]['amount'], null, true);
+		}
+		$finalDetails['sh_taxes'] = $shippingTaxDetails;
+		//Final shipping tax details convertion ended
+
+		$currencyFieldsList = array('adjustment', 'grandTotal', 'hdnSubTotal', 'preTaxTotal', 'tax_totalamount',
+									'shtax_totalamount', 'discountTotal_final', 'discount_amount_final', 'shipping_handling_charge');
+		foreach ($currencyFieldsList as $fieldName) {
+			$finalDetails[$fieldName] = Vtiger_Currency_UIType::transformDisplayValue($finalDetails[$fieldName], null, true);
+		}
+
+		$relatedProducts[1]['final_details'] = $finalDetails;
+		//##Final details convertion ended
+
+		//##Product details convertion started
+		$productsCount = count($relatedProducts);
+		for ($i=1; $i<=$productsCount; $i++) {
+			$product = $relatedProducts[$i];
+
+			//Product tax details convertion started
+			if ($taxtype == 'individual') {
+				$taxDetails = $product['taxes'];
+				$taxCount = count($taxDetails);
+				for($j=0; $j<$taxCount; $j++) {
+					$taxDetails[$j]['amount'] = Vtiger_Currency_UIType::transformDisplayValue($taxDetails[$j]['amount'], null, true);
+				}
+				$product['taxes'] = $taxDetails;
+			}
+			//Product tax details convertion ended
+
+			$currencyFieldsList = array('taxTotal', 'netPrice', 'listPrice', 'unitPrice', 'productTotal',
+										'discountTotal', 'discount_amount', 'totalAfterDiscount');
+			foreach ($currencyFieldsList as $fieldName) {
+				$product[$fieldName.$i] = Vtiger_Currency_UIType::transformDisplayValue($product[$fieldName.$i], null, true);
+			}
+
+			$relatedProducts[$i] = $product;
+		}
+		//##Product details convertion ended
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $relatedProducts);
 		$viewer->assign('RECORD', $recordModel);

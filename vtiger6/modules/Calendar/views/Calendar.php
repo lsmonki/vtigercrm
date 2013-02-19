@@ -78,14 +78,17 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$recordStructure = $userRecordStructure->getStructure();
 		$allUsers = Users_Record_Model::getAll(true);
 		$sharedUsers = Calendar_Module_Model::getCaledarSharedUsers($currentUserModel->id);
+		$sharedType = Calendar_Module_Model::getSharedType($currentUserModel->id);
 		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructure);
-
+		
+		$viewer->assign('CURRENTUSER_MODEL',$currentUserModel);
 		$viewer->assign('SHAREDUSERS', $sharedUsers);
 		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
 		$viewer->assign('ALL_USERS',$allUsers);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructure);
 		$viewer->assign('MODULE',$module);
 		$viewer->assign('RECORD', $currentUserModel->id);
+		$viewer->assign('SHAREDTYPE', $sharedType);
 		
 		$viewer->view('CalendarSettings.tpl', $request->getModule());
 	}

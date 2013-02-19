@@ -288,7 +288,7 @@ class SyncServer {
                 $createRecords[$clientRecordId]['module'] = $record['module'];
                 $clientModifiedTimeList[$clientRecordId] = $record['values']['modifiedtime'];
 			} else {
-                if (empty($record['values']) && !(empty($lookupRecordId)) ) {
+                if (empty($record['values']['id']) && !(empty($lookupRecordId)) ) {
                     $deleteRecords[$clientRecordId] = $lookupRecordId;
                 }
                 else if (!(empty($lookupRecordId))) {
@@ -306,7 +306,6 @@ class SyncServer {
        $recordDetails['created'] = $createRecords;
        $recordDetails['updated'] = $updateRecords;
        $recordDetails['deleted'] = $deleteRecords;
-
        $result = $this->destHandler->put($recordDetails,$user);
 	   
 	   $response= array();

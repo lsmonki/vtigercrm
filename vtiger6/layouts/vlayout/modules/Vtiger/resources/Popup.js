@@ -549,6 +549,8 @@ jQuery.Class("Vtiger_Popup_Js",{
 jQuery(document).ready(function() {
 	var popupInstance = Vtiger_Popup_Js.getInstance();
 	var triggerEventName = jQuery('.triggerEventName').val();
+	var documentHeight = (jQuery(document).height())+'px';
+	jQuery('#popupPageContainer').css('height',documentHeight);
 	popupInstance.setEventName(triggerEventName);
 	popupInstance.registerEvents();
 });

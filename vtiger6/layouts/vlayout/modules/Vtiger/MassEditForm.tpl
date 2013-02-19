@@ -10,17 +10,28 @@
  ********************************************************************************/
 -->*}
 {strip}
+{foreach key=index item=jsModel from=$SCRIPTS}
+	<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
+{/foreach}
 <div id="massEditContainer" class='modelContainer'>
 	<div class="modal-header">
 		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
 		<h3 id="massEditHeader">{vtranslate('LBL_MASS_EDITING', $MODULE)} {vtranslate($MODULE, $MODULE)}</h3>
 	</div>
 	<form class="form-horizontal contentsBackground" id="massEdit" name="MassEdit" method="post" action="index.php">
+		{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
+			<input type="hidden" name="picklistDependency" value='{$PICKIST_DEPENDENCY_DATASOURCE}' />
+		{/if}
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="action" value="MassSave" />
 		<input type="hidden" name="viewname" value="{$CVID}" />
 		<input type="hidden" name="selected_ids" value={ZEND_JSON::encode($SELECTED_IDS)}>
 		<input type="hidden" name="excluded_ids" value={ZEND_JSON::encode($EXCLUDED_IDS)}>
+        <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
+        <input type="hidden" name="operator" value="{$OPERATOR}" />
+        <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
+        
+        <input type="hidden" id="massEditFieldsNameList" data-value='{ZEND_JSON::encode($MASS_EDIT_FIELD_DETAILS)}' />
 		<div name='massEditContent'>
 			<div class="modal-body tabbable">
 				<ul class="nav nav-tabs massEditTabs">
@@ -67,11 +78,16 @@
 									{/if}
 									&nbsp;&nbsp;
 								</td>
-								<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
+								<td class="fieldValue" {if $FIELD_MODEL->getFieldDataType() eq 'boolean'} style="width:25%" {/if} {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 									{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE)}
 								</td>
 							{/if}
 							{/foreach}
+							{*If their are odd number of fields in MassEdit then border top is missing so adding the check*}
+							{if $COUNTER is odd}
+								<td></td>
+								<td></td>
+							{/if}
 							</tr>
 						</table>
 					</div>

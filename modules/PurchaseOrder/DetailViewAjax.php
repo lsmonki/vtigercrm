@@ -27,13 +27,6 @@ if($ajaxaction == "DETAILVIEW")
 	{
 		$modObj->retrieve_entity_info($crmid,"PurchaseOrder");
 
-		//Added code for auto product stock updation on receiving goods
-		$prev_postatus = $modObj->column_fields['postatus'];
-		if($fieldname == 'postatus' && $prev_postatus != $fieldvalue && $fieldvalue == 'Received Shipment')
-		{
-        	        $modObj->update_prod_stock = 'true';
-		}
-
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";

@@ -33,6 +33,14 @@ Class CustomView_EditAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('DATE_FILTERS', Vtiger_Field_Model::getDateFilterTypes());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
+        $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
+        foreach($dateFilters as $comparatorKey => $comparatorInfo) {
+            $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
+            $comparatorInfo['enddate'] = DateTimeField::convertToUserFormat($comparatorInfo['enddate']);
+            $comparatorInfo['label'] = vtranslate($comparatorInfo['label'],$module);
+            $dateFilters[$comparatorKey] = $comparatorInfo;
+        }
+        $viewer->assign('DATE_FILTERS', $dateFilters);
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('CUSTOMVIEW_MODEL', $customViewModel);

@@ -13,8 +13,7 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	public function process(Vtiger_Request $request) {
         $user = Users_Record_Model::getCurrentUserModel();
 
-		$recordModel = $this->getRecordModelFromRequest($request);
-		$recordModel->save();
+		$recordModel = $this->saveRecord($request);
 
 		$fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();
@@ -116,9 +115,20 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		}
 
 		$activityType = $request->get('activitytype');
+		$visibility = $request->get('visibility');
 		if(empty($activityType)) {
 			$recordModel->set('activitytype', 'Task');
-			$recordModel->set('visibility', 'Private');
+			$visibility = 'Private';
+			$recordModel->set('visibility', $visibility);
+		}
+		
+		if(empty($visibility)) {
+			$assignedUserId = $recordModel->get('assigned_user_id');
+			$sharedType = Calendar_Module_Model::getSharedType($assignedUserId);
+			if($sharedType == 'selectedusers') {
+				$sharedType = 'private';
+			}
+			$recordModel->set('visibility', ucfirst($sharedType));
 		}
 
 		return $recordModel;

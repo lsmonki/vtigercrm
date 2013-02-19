@@ -604,7 +604,8 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 */
 	public static function getAll($presence=false) {
 		$db = PearDatabase::getInstance();
-
+		self::preModuleInitialize2();
+		
 		$moduleModels = array();
 
 		$query = 'SELECT * FROM vtiger_tab';
@@ -624,7 +625,8 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
 	public static function getEntityModules() {
 		$db = PearDatabase::getInstance();
-
+		self::preModuleInitialize2();
+		
 		$presence = array(0, 2);
 		$restrictedModules = array('Webmails', 'Emails', 'Integration', 'Dashboard');
 		$result = $db->pquery('SELECT * FROM vtiger_tab WHERE presence IN ('.generateQuestionMarks($presence).')
@@ -645,7 +647,8 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	public static function getQuickCreateModules() {
 		$userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$db = PearDatabase::getInstance();
-
+		self::preModuleInitialize2();
+		
 		$sql = 'SELECT DISTINCT vtiger_tab.*
 					FROM vtiger_field
 					INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_field.tabid
@@ -672,12 +675,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	public static function getSearchableModules() {
 		$userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$db = PearDatabase::getInstance();
-
+		self::preModuleInitialize2();
+		
 		//TODO : check the query, it can be optimized
 		$sql = 'SELECT DISTINCT vtiger_tab.*
 					FROM vtiger_tab
 					INNER JOIN vtiger_field ON vtiger_tab.tabid = vtiger_field.tabid
-					WHERE vtiger_field.presence in (0,2) AND vtiger_tab.presence != 1 AND vtiger_tab.name NOT IN ("Users", "Emails")';
+					WHERE vtiger_field.presence in (0,2) AND vtiger_tab.presence != 1 AND vtiger_tab.name NOT IN ("Users", "Emails", "Events")';
 		$params = array();
 		$result = $db->pquery($sql, $params);
 		$noOfModules = $db->num_rows($result);
@@ -691,6 +695,20 @@ class Vtiger_Module_Model extends Vtiger_Module {
 			}
 		}
 		return $searchableModules;
+	}
+	
+	protected static function preModuleInitialize2() {
+		$db = PearDatabase::getInstance();
+		// Initialize meta information - to speed up instance creation (Vtiger_ModuleBasic::initialize2)
+		$result = $db->pquery('SELECT modulename,tablename,entityidfield FROM vtiger_entityname', array());
+		$cache = Vtiger_Cache::getInstance();
+		for($index = 0, $len = $db->num_rows($result); $index < $len; ++$index) {
+			$entiyObj = new stdClass();
+			$entiyObj->basetable = $db->query_result($result, $index, 'tablename');
+			$entiyObj->basetableid =  $db->query_result($result, $index, 'entityidfield');
+			$modulename = $db->query_result($result, $index, 'modulename');
+			$cache->setEntityField($modulename,$entiyObj);
+		}
 	}
 
 	public static function getCleanInstance($moduleName){
@@ -850,11 +868,19 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
 	/**
 	 * Function returns the Calendar Events for the module
-	 * @param <Vtiger_Paging_Model> $pagingModel
+	 * @param <String> $mode - upcoming/overdue mode
+	 * @param <Vtiger_Paging_Model> $pagingModel - $pagingModel
+	 * @param <String> $user - all/userid
+	 * @param <String> $recordId - record id
 	 * @return <Array>
 	 */
-	function getCalendarActivities($mode, $pagingModel, $recordId = false) {
+	function getCalendarActivities($mode, $pagingModel, $user, $recordId = false) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$db = PearDatabase::getInstance();
+
+		if (!$user) {
+			$user = $currentUser->getId();
+		}
 
 		$nowInUserFormat = Vtiger_Datetime_UIType::getDisplayDateValue(date('Y-m-d H:i:s'));
 		$nowInDBFormat = Vtiger_Datetime_UIType::getDBDateTimeValue($nowInUserFormat);
@@ -881,9 +907,17 @@ class Vtiger_Module_Model extends Vtiger_Module {
 			$query .= " AND due_date < '$currentDate'";
 		}
 
+		$params = array($this->getName());
+		if($user != 'all' && $user != '') {
+			if($user === $currentUser->id) {
+				$query .= " AND vtiger_crmentity.smownerid = ?";
+				array_push($params, $user);
+			}
+		}
+
 		$query .= " ORDER BY date_start, time_start LIMIT ". $pagingModel->getStartIndex() .", ". ($pagingModel->getPageLimit()+1);
 
-		$params = array($this->getName());
+
 		if ($recordId) {
 			array_push($params, $recordId);
 		}
@@ -934,7 +968,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @return <boolean>
 	 */
 	public function isPermitted($actionName) {
-		return Users_Privileges_Model::isPermitted($this->getName(), $actionName);
+		return ($this->isActive() && Users_Privileges_Model::isPermitted($this->getName(), $actionName));
 	}
 
 	/**
@@ -1028,7 +1062,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		return array();
 	}
 
-	
+
 	/**
 	 * Function returns query for module record's search
 	 * @param <String> $searchValue - part of record name (label column of crmentity table)
@@ -1088,7 +1122,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		$relatedModuleName = $relatedModule->getName();
 
 		$focus = CRMEntity::getInstance($this->getName());
-		$focus->id = $this->getId();
+		$focus->id = $recordId;
 
 		$result = $focus->$functionName($recordId, $this->getId(), $relatedModule->getId());
 		$query = $result['query'].' '.$this->getSpecificRelationQuery($relatedModuleName);
@@ -1111,5 +1145,14 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		if (!in_array($relatedModuleName, $modulesList)) {
 			return Users_Privileges_Model::getNonAdminAccessControlQuery($relatedModuleName);
 		}
+	}
+
+	/**
+	 * Function returns the default column for Alphabetic search
+	 * @return <String> columnname
+	 */
+	public function getAlphabetSearchField(){
+		$focus = CRMEntity::getInstance($this->get('name'));
+		return $focus->def_basicsearch_col;
 	}
 }

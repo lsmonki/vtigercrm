@@ -59,7 +59,7 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 		foreach($requestFieldList as $fieldName=>$fieldValue){
 			$fieldModel = $fieldList[$fieldName];
 			if($fieldModel->isEditable()) {
-				$recordModel->set($fieldName, $fieldValue);
+				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel,
@@ -79,7 +79,15 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
-        $viewer->assign('RELATED_CONTACTS', $recordModel->getRelatedContactInfo());
+		$existingRelatedContacts = $recordModel->getRelatedContactInfo();
+
+		//To add contact ids that is there in the request . Happens in gotoFull form mode of quick create
+		$requestContactIdValue = $request->get('contact_id');
+		if(!empty($requestContactIdValue)) {
+			$existingRelatedContacts[] = array('name' => Vtiger_Util_Helper::getRecordName($requestContactIdValue) ,'id' => $requestContactIdValue);
+		}
+		
+        $viewer->assign('RELATED_CONTACTS', $existingRelatedContacts);
 
 		$isRelationOperation = $request->get('relationOperation');
 
@@ -89,8 +97,10 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('SOURCE_MODULE', $request->get('sourceModule'));
 			$viewer->assign('SOURCE_RECORD', $request->get('sourceRecord'));
 		}
-        
-        $accessibleUsers = $currentUser->getAccessibleUsersForModule($moduleName);
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
+        $accessibleUsers = $currentUser->getAccessibleUsers();
+		
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('ACCESSIBLE_USERS', $accessibleUsers);
         $viewer->assign('INVITIES_SELECTED', $recordModel->getInvities());
         $viewer->assign('CURRENT_USER', $currentUser);

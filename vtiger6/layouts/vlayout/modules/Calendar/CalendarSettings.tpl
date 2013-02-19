@@ -11,11 +11,11 @@
 -->*}
 {strip}
 <div class='modelContainer calendarSettingsContainer'>
-	<div class="modal-header contentsBackground">
+	<div class="modal-header">
 		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
 		<h3>{vtranslate('LBL_CALENDAR_SETTINGS', $MODULE)}</h3>
 	</div>
-	<form class="form-horizontal" id="CalendarSettings" name="CalendarSettings" method="post" action="index.php">
+	<form class="form-horizontal contentsBackground" id="CalendarSettings" name="CalendarSettings" method="post" action="index.php">
 		<input type="hidden" name="module" value="Users" />
 		<input type="hidden" name="action" value="SaveCalendarSettings" />
 		<input type="hidden" name="record" value="{$RECORD}" />
@@ -80,17 +80,22 @@
 							</select>
 						</div>	
 					</div>	
-<!--					It will be handled in next phase		-->
-<!--					<div class="control-group">
-						<label class="control-label">{*vtranslate('LBL_CALENDAR_SHARING',$MODULE)*}</label>
+					{assign var=SHARED_TYPE value=$SHAREDTYPE}
+					<div class="control-group">
+						<label class="control-label">{vtranslate('LBL_CALENDAR_SHARING',$MODULE)}</label>
 						<div class="controls">
-							<select class="select2 row-fluid" name="shared_ids[]" multiple="" data-placeholder="{vtranslate('LBL_SELECT_USERS',$MODULE)}">
-								{*foreach key=ID item=USER_MODEL from=$ALL_USERS}
-									<option value="{$ID}" {if array_key_exists($ID, $SHAREDUSERS)} selected="" {/if}>{vtranslate($USER_MODEL->getName(),$MODULE)}</option> 
-								{/foreach*}	
+							<label class="radio inline"><input type="radio" value="private"{if $SHARED_TYPE == 'private'} checked="" {/if} name="sharedtype" />&nbsp;{vtranslate('Private',$MODULE)}&nbsp;</label>
+							<label class="radio inline"><input type="radio" value="public" {if $SHARED_TYPE == 'public'} checked="" {/if} name="sharedtype" />&nbsp;{vtranslate('Public',$MODULE)}&nbsp;</label>
+							<label class="radio inline"><input type="radio" value="selectedusers" {if $SHARED_TYPE == 'selectedusers'} checked="" {/if} data-sharingtype="selectedusers" name="sharedtype" id="selectedUsers" />&nbsp;{vtranslate('Selected Users',$MODULE)}</label><br><br>
+							<select class="select2 row-fluid {if $SHARED_TYPE != 'selectedusers'} hide {/if}" id="selectedUsers" name="sharedIds[]" multiple="" data-placeholder="{vtranslate('LBL_SELECT_USERS',$MODULE)}">
+								{foreach key=ID item=USER_MODEL from=$ALL_USERS}
+									{if $ID neq $CURRENTUSER_MODEL->get('id') && $ID neq 1}
+										<option value="{$ID}" {if array_key_exists($ID, $SHAREDUSERS)} selected="" {/if}>{vtranslate($USER_MODEL->getName(),$MODULE)}</option> 
+									{/if}
+								{/foreach}	
 							</select>	
 						</div>	
-					</div>-->
+					</div>
 					<br>
 				</div>
 			</div>				

@@ -76,14 +76,14 @@ Vtiger_Detail_Js("Leads_Detail_Js",{
 	 * function to enable all the input and textarea elements
 	 */
 	removeDisableAttr : function(moduleBlock) {
-		moduleBlock.find('input,textarea').removeAttr('disabled');
+		moduleBlock.find('input,textarea,select').removeAttr('disabled');
 	},
 	
 	/*
 	 * function to disable all the input and textarea elements
 	 */
 	addDisableAttr : function(moduleBlock) {
-		moduleBlock.find('input,textarea').attr('disabled', 'disabled');
+		moduleBlock.find('input,textarea,select').attr('disabled', 'disabled');
 	},
 	
 	/*
@@ -124,7 +124,7 @@ Vtiger_Detail_Js("Leads_Detail_Js",{
 				});
 				instance.registerForReferenceField();
 				instance.registerConvertLeadEvents();
-				instance.getConvertLeadForm().validationEngine({promptPosition : "topLeft"});
+				instance.getConvertLeadForm().validationEngine(app.validationEngineOptions);
 				instance.registerConvertLeadSubmit();
 			}
 			app.showModalWindow(data,function(data){

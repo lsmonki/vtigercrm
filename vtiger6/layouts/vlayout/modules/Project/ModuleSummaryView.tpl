@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div>
+	<div class="recordDetails">
 		<div>
 			<label>
 				<strong>{vtranslate('LBL_RECORD_SUMMARY',$MODULE_NAME)}</strong>
@@ -18,7 +18,7 @@
 		</div>
 		<div class="row-fluid textAlignCenter roundedCorners">
 			{foreach key=FIELD_NAME item=FIELD_VALUE from=$SUMMARY_INFORMATION}
-				<span class="shade7 well squeezedWell span2 marginLeftZero">
+				<span class="shade7 well squeezedWell marginLeftZero span" style='width:100px'>
 					<div>
 						<label class="font-x-small">
 							{vtranslate($FIELD_NAME,$MODULE_NAME)}
@@ -32,5 +32,6 @@
 				</span>
 			{/foreach}
 		</div>
+		{include file='SummaryViewContents.tpl'|@vtemplate_path}
 	</div>
 {/strip}

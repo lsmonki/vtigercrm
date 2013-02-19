@@ -19,6 +19,7 @@ jQuery.Class('Vtiger_Widget_Js',{
 		var widgetClassName = widgetName.toCamelCase();
 		var moduleClass = window[moduleName+"_"+widgetClassName+"_Widget_Js"];
 		var fallbackClass = window["Vtiger_"+widgetClassName+"_Widget_Js"];
+		
 		var basicClass = Vtiger_Widget_Js;
 		if(typeof moduleClass != 'undefined') {
 			var instance = new moduleClass(container);
@@ -470,7 +471,81 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 	  });
 	}
 
-})
+});
+
+// NOTE Widget-class name camel-case convention
+Vtiger_Widget_Js('Vtiger_Minilist_Widget_Js', {}, {
+	
+	postLoadWidget: function() {
+		app.hideModalWindow();
+	}
+});
+
+Vtiger_Widget_Js('Vtiger_Tagcloud_Widget_Js',{},{
+
+	postLoadWidget : function() {
+		this._super();
+		this.registerTagCloud();
+		this.registerTagClickEvent();
+	},
+	
+	registerTagCloud : function() {
+		jQuery('#tagCloud').find('a').tagcloud({
+			size: {
+			  start: parseInt('12'), 
+			  end: parseInt('30'), 
+			  unit: 'px'
+			}, 
+			color: {
+			  start: "#0266c9", 
+			  end: "#759dc4"
+			}
+		});
+	},
+	
+	registerChangeEventForModulesList : function() {
+		jQuery('#tagSearchModulesList').on('change',function(e) {
+			var modulesSelectElement = jQuery(e.currentTarget);
+			if(modulesSelectElement.val() == 'all'){
+				jQuery('[name="tagSearchModuleResults"]').removeClass('hide');
+			} else{
+				jQuery('[name="tagSearchModuleResults"]').removeClass('hide');
+				var selectedOptionValue = modulesSelectElement.val();
+				jQuery('[name="tagSearchModuleResults"]').filter(':not(#'+selectedOptionValue+')').addClass('hide');        
+			}
+		});
+	},
+	
+	registerTagClickEvent : function(){
+		var thisInstance = this;
+		var container = this.getContainer();
+		container.on('click','.tagName',function(e) {
+			var tagElement = jQuery(e.currentTarget);
+			var tagId = tagElement.data('tagid');
+			var params = {
+				'module' : app.getModuleName(),
+				'view' : 'TagCloudSearchAjax',
+				'tag_id' : tagId,
+				'tag_name' : tagElement.text()
+			}
+			AppConnector.request(params).then(
+				function(data) {
+					var params = {
+						'data' : data,
+						'css'  : {'min-width' : '40%'}
+					}
+					app.showModalWindow(params);
+					thisInstance.registerChangeEventForModulesList();
+				}
+			)			
+		});
+	},
+
+	postRefreshWidget : function() {
+		this._super();
+		this.registerTagCloud();
+	}
+});
 
 
 

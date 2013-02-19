@@ -28,7 +28,7 @@ class Calendar_QuickCreateAjax_View extends Vtiger_QuickCreateAjax_View {
 			foreach($requestFieldList as $fieldName => $fieldValue) {
 				$fieldModel = $fieldList[$fieldName];
 				if($fieldModel->isEditable()) {
-					$recordModel->set($fieldName, $fieldValue);
+					$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 				}
 			}
 
@@ -39,8 +39,10 @@ class Calendar_QuickCreateAjax_View extends Vtiger_QuickCreateAjax_View {
 			$info['moduleModel'] = $moduleModel;
 			$quickCreateContents[$module] = $info;
 		}
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
 		$viewer = $this->getViewer($request);
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUICK_CREATE_CONTENTS', $quickCreateContents);

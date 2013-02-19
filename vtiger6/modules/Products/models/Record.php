@@ -116,6 +116,11 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		$productId = $this->getId();
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$productDetails = getAssociatedProducts($this->getModuleName(), $focus, $productId);
+
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$convertedPriceDetails = $this->getModule()->getPricesForProducts($currentUserModel->get('currency_id'), array($productId));
+		$productDetails[1]['listPrice1'] = number_format($convertedPriceDetails[$productId], $currentUserModel->get('no_of_currency_decimals'),'.','');
+
 		$totalAfterDiscount = $productDetails[1]['totalAfterDiscount1'];
 		$productTaxes = $productDetails[1]['taxes'];
 		if (!empty ($productDetails)) {

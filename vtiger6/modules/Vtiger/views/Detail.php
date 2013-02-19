@@ -110,6 +110,9 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$linkModels = $this->record->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $linkModels);
 
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$viewer->assign('DEFAULT_RECORD_VIEW', $currentUserModel->get('default_record_view'));
+
 		if($display) {
 			$this->preProcessDisplay($request);
 		}
@@ -125,7 +128,14 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 			echo $this->invokeExposedMethod($mode, $request);
 			return;
 		}
-		echo $this->showModuleBasicView($request);
+
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+
+		if ($currentUserModel->get('default_record_view') === 'Summary') {
+			echo $this->showModuleBasicView($request);
+		} else {
+			echo $this->showModuleDetailView($request);
+		}
 	}
 
 	public function postProcess(Vtiger_Request $request) {
@@ -258,11 +268,20 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD', $recordModel);
 		$viewer->assign('MODULE_SUMMARY', $this->showModuleSummaryView($request));
-
+		
 		$viewer->assign('DETAILVIEW_LINKS', $detailViewLinks);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('IS_AJAX_ENABLED', $this->isAjaxEnabled($recordModel));
+		$viewer->assign('MODULE_NAME', $moduleName);
 
+		$recordStrucure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_DETAIL);
+		$structuredValues = $recordStrucure->getStructure();
+
+        $moduleModel = $recordModel->getModule();
+
+		$viewer->assign('RECORD_STRUCTURE', $structuredValues);
+        $viewer->assign('BLOCK_LIST', $moduleModel->getBlocks());
+		
 		echo $viewer->view('DetailViewSummaryContents.tpl', $moduleName, true);
 	}
 
@@ -382,7 +401,13 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('RELATION_FIELD', $relationField);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
-			$viewer->assign('TOTAL_ENTRIES', $relationListView->getRelatedEntriesCount());
+			$totalCount = $relationListView->getRelatedEntriesCount();
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('TOTAL_ENTRIES', $totalCount);
+			$viewer->assign('PERFORMANCE', true);
 		}
 
 		$viewer->assign('MODULE', $moduleName);
@@ -394,8 +419,12 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
 		
-		$viewer->assign('IS_EDITABLE', $relatedModuleModel->isPermitted('EditView'));
-		$viewer->assign('IS_DELETABLE', $relatedModuleModel->isPermitted('Delete'));
+		$viewer->assign('IS_EDITABLE', $relationModel->isEditable());
+		$viewer->assign('IS_DELETABLE', $relationModel->isDeletable());
+
+		if($relatedModuleName == "Emails"){
+			return $viewer->view('EmailRelatedList.tpl', $moduleName, 'true');
+		}
 		
 		return $viewer->view('RelatedList.tpl', $moduleName, 'true');
 	}
@@ -453,5 +482,43 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 	 */
 	public function getActivities(Vtiger_Request $request) {
 		return '';
+	}
+	
+	
+	/**
+	 * Function returns related records based on related moduleName
+	 * @param Vtiger_Request $request
+	 * @return <type>
+	 */
+	function showRelatedRecords(Vtiger_Request $request) {
+		$parentId = $request->get('record');
+		$pageNumber = $request->get('page');
+		$limit = $request->get('limit');
+		$relatedModuleName = $request->get('relatedModule');
+		$moduleName = $request->getModule();
+
+		if(empty($pageNumber)) {
+			$pageNumber = 1;
+		}
+
+		$pagingModel = new Vtiger_Paging_Model();
+		$pagingModel->set('page', $pageNumber);
+		if(!empty($limit)) {
+			$pagingModel->set('limit', $limit);
+		}
+
+		$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId, $moduleName);
+		$relationListView = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $relatedModuleName);
+		$models = $relationListView->getEntries($pagingModel);
+		$header = $relationListView->getHeaders();
+
+		$viewer = $this->getViewer($request);
+		$viewer->assign('MODULE' , $moduleName);
+		$viewer->assign('RELATED_RECORDS' , $models);
+		$viewer->assign('RELATED_HEADERS', $header);
+		$viewer->assign('RELATED_MODULE' , $relatedModuleName);
+		$viewer->assign('PAGING_MODEL', $pagingModel);
+
+		return $viewer->view('SummaryWidgets.tpl', $moduleName, 'true');
 	}
 }

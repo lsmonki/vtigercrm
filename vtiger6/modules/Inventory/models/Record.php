@@ -59,6 +59,14 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		$relatedProducts = getAssociatedProducts($this->getModuleName(), $this->getEntity());
 		$productsCount = count($relatedProducts);
 
+		//Updating Pre tax total
+		$preTaxTotal = (float)$relatedProducts[1]['final_details']['hdnSubTotal']
+						+ (float)$relatedProducts[1]['final_details']['shipping_handling_charge']
+						- (float)$relatedProducts[1]['final_details']['discountTotal_final'];
+
+		$relatedProducts[1]['final_details']['preTaxTotal'] = number_format($preTaxTotal, getCurrencyDecimalPlaces(),'.','');
+
+		//Updating Tax details
 		$taxtype = $relatedProducts[1]['final_details']['taxtype'];
 
 		for ($i=1;$i<=$productsCount; $i++) {
@@ -148,6 +156,14 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 	public function getExportPDFUrl() {
 		return "index.php?module=".$this->getModuleName()."&action=ExportPDF&record=".$this->getId();
 	}
+	
+	/**
+	  * Function to get the send email pdf url
+	  * @return <string>
+	  */
+    public function getSendEmailPDFUrl() {
+        return 'module='.$this->getModuleName().'&view=SendEmail&mode=composeMailData&record='.$this->getId();
+    }
 
 	/**
 	 * Function to get this record and details as PDF
@@ -164,4 +180,25 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		$fileName = $moduleName.'_'.getModuleSequenceNumber($moduleName, $recordId);
 		$controller->Output($fileName.'.pdf', 'D');
 	}
+
+    /**
+     * Function to get the pdf file name . This will conver the invoice in to pdf and saves the file 
+     * @return <String>
+     *
+     */
+    public function getPDFFileName() {
+       vimport('~~/modules/Invoice/InvoicePDFController.php');
+
+        $moduleName = $this->getModuleName();
+        $recordId = $this->getId();
+        
+        $controller = new Vtiger_InvoicePDFController($moduleName);
+        $controller->loadRecord($recordId);
+
+        $invoice_no = getModuleSequenceNumber($moduleName,$recordId);
+        $filePath="storage/Invoice_".$invoice_no.".pdf";
+        //added file name to make it work in IE, also forces the download giving the user the option to save
+        $controller->Output($filePath,'F');
+        return $filePath;
+    }
 }

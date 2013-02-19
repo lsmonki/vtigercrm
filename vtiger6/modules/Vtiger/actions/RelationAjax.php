@@ -13,6 +13,7 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 		parent::__construct();
 		$this->exposeMethod('addRelation');
 		$this->exposeMethod('deleteRelation');
+		$this->exposeMethod('getRelatedListPageCount');
 	}
 
 	function checkPermission(Vtiger_Request $request) { }
@@ -60,7 +61,6 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 	/**
 	 * Function to delete the relation for specified source record id and related record id list
 	 * @param <array> $request
-	 *	       * @param <array> $request
 	 *		keys					Content
 	 *		src_module				source module name
 	 *		src_record				source record id
@@ -74,6 +74,9 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 		$relatedModule = $request->get('related_module');
 		$relatedRecordIdList = $request->get('related_record_list');
 
+		//Setting related module as current module to delete the relation
+		vglobal('currentModule', $relatedModule);
+
 		$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
 		$relatedModuleModel = Vtiger_Module_Model::getInstance($relatedModule);
 		$relationModel = Vtiger_Relation_Model::getInstance($sourceModuleModel, $relatedModuleModel);
@@ -81,5 +84,28 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 			$response = $relationModel->deleteRelation($sourceRecordId,$relatedRecordId);
 		}
 		echo $response;
+	}
+	
+	/**
+	 * Function to get the page count for reltedlist
+	 * @return total number of pages
+	 */
+	function getRelatedListPageCount(Vtiger_Request $request){
+		$moduleName = $request->getModule();
+		$relatedModuleName = $request->get('relatedModule');
+		$parentId = $request->get('record');
+		$label = $request->get('tab_label');
+		$pagingModel = new Vtiger_Paging_Model();
+		$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId, $moduleName);
+		$relationListView = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $relatedModuleName, $label);
+		$totalCount = $relationListView->getRelatedEntriesCount();
+		$pageLimit = $pagingModel->getPageLimit();
+		$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+		$result = array();
+		$result['page'] = $pageCount;
+		$response = new Vtiger_Response();
+		$response->setResult($result);
+		$response->emit();
 	}
 }

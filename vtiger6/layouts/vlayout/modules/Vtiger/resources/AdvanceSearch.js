@@ -42,10 +42,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 	},
 
 	getFilterForm : function() {
-		if(this.filterForm == false){
-			this.filterForm = jQuery('form[name="advanceFilterForm"]',this.getContainer());
-		}
-		return this.filterForm;
+		return jQuery('form[name="advanceFilterForm"]',this.getContainer());
 	},
 
 	/**
@@ -90,6 +87,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 	 * Function which intializes search
 	 */
 	initiateSearch : function() {
+        var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var postLoad = function(uiData) {
 			thisInstance.setContainer(jQuery('#advanceSearchContainer'));
@@ -102,6 +100,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 				of: "#globalSearchValue",
 				offset: "1 -29"
 			});
+            aDeferred.resolve();
 		}
 
 		this.getAdvanceSearch().then(
@@ -118,10 +117,48 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 
 			},
 			function(error) {
-
+                aDeferred.reject();
 			}
 		)
+        return aDeferred.promise();
 	},
+    
+    getNameFields : function() {
+        var form = this.getFilterForm();
+        return form.find('[name="labelFields"]').data('value');
+    },
+    
+    selectBasicSearchValue : function() {
+      var value = jQuery('#globalSearchValue').val();
+      if(value.length > 0 ) {
+          var form = this.getFilterForm();
+          var labelFieldList = this.getNameFields();
+          if(typeof labelFieldList == 'undefined' || labelFieldList.length == 0) {
+              return;
+          }
+          var anyConditionContainer = form.find('.anyConditionContainer');
+          for(var index in labelFieldList){
+            var labelFieldName = labelFieldList[index];
+            if(index !=0 ) {
+                //By default one condition exits , only if you have multiple label fields you have add one more condition
+                anyConditionContainer.find('.addCondition').find('button').trigger('click');
+            }
+            var conditionRow = anyConditionContainer.find('.conditionList').find('.conditionRow:last');
+            var fieldSelectElemnt = conditionRow.find('select[name="columnname"]');
+            fieldSelectElemnt.find('option[data-field-name="'+ labelFieldName +'"]').attr('selected','selected');
+            fieldSelectElemnt.trigger('change').trigger('liszt:updated');
+
+            var comparatorSelectElemnt = conditionRow.find('select[name="comparator"]');
+            //select the contains value
+            comparatorSelectElemnt.find('option[value="c"]').attr('selected','selected');
+            comparatorSelectElemnt.trigger('liszt:updated');
+
+            var valueElement = conditionRow.find('[name="value"]');
+            valueElement.val(value);
+          }
+          
+      }
+    },
 
 	/**
 	 * Function which invokes search
@@ -166,7 +203,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 		var params = {};
 		params.data = data;
 		params.cb = postLoad;
-		params.css = {'width':'29%','text-align':'left'};
+		params.css = {'width':'23%','text-align':'left'};
 		params.overlayCss = {'opacity':'0.2'};
 		params.unblockcb = unblockcd;
 		app.showModalWindow(params);
@@ -255,7 +292,7 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 		var filterHolder = jQuery('.filterHolder', modalData);
 		filterHolder.removeClass('hide').html(this.getContainer());
 		searchHolder.removeClass('span12').addClass('span4');
-		modalData.closest('.blockMsg').css('width' , '80%');
+		modalData.closest('.blockMsg').css('width' , '73%');
 	},
 
 	/**
@@ -314,7 +351,9 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 				return;
 			}
 
-			thisInstance.initiateSearch();
+			thisInstance.initiateSearch().then(function(){
+                thisInstance.selectBasicSearchValue();
+            });
 		});
 
 		jQuery('#advanceSearchButton').on('click', function(e){

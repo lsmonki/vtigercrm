@@ -675,6 +675,17 @@ function save_faq_comment($input_array)
 
 function get_tickets_list($input_array) {
 
+	//To avoid SQL injection we are type casting as well as bound the id variable.
+	$id = (int) vtlib_purify($input_array['id']);
+	
+	$only_mine = $input_array['onlymine'];
+	$where = vtlib_purifyForSql($input_array['where']); //addslashes is already added with where condition fields in portal itself
+	$match = $input_array['match'];
+	$sessionid = $input_array['sessionid'];
+
+	if(!validateSession($id,$sessionid))
+		return null;
+	
 	require_once('modules/HelpDesk/HelpDesk.php');
 	require_once('include/utils/UserInfoUtil.php');
 
@@ -687,15 +698,6 @@ function get_tickets_list($input_array) {
 
 	$show_all = show_all('HelpDesk');
 	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
-
-	$id = $input_array['id'];
-	$only_mine = $input_array['onlymine'];
-	$where = $input_array['where']; //addslashes is already added with where condition fields in portal itself
-	$match = $input_array['match'];
-	$sessionid = $input_array['sessionid'];
-
-	if(!validateSession($id,$sessionid))
-		return null;
 
 	// Prepare where conditions based on search query
 	$join_type = '';
@@ -1209,9 +1211,12 @@ function get_picklists($input_array)
 	$adb->println("INPUT ARRAY for the function get_picklists");
 	$adb->println($input_array);
 
-	$id = $input_array['id'];
+	//To avoid SQL injection we are type casting as well as bound the id variable
+	$id = (int) vtlib_purify($input_array['id']);
 	$sessionid = $input_array['sessionid'];
-	$picklist_name = $adb->sql_escape_string($input_array['picklist_name']);
+	//To avoid SQL injection.
+	$picklist_name = vtlib_purifyForSql($input_array['picklist_name']);
+	if(empty($picklist_name)) return null;
 
 	if(!validateSession($id,$sessionid))
 	return null;
@@ -1430,18 +1435,17 @@ function validateSession($id, $sessionid)
 {
 	global $adb;
 	$adb->println("Inside function validateSession($id, $sessionid)");
-
+	
+	if(empty($sessionid)) return false;
+	
 	$server_sessionid = getServerSessionId($id);
 
 	$adb->println("Checking Server session id and customer input session id ==> $server_sessionid == $sessionid");
 
-	if($server_sessionid == $sessionid)
-	{
+	if($server_sessionid == $sessionid) {
 		$adb->println("Session id match. Authenticated to do the current operation.");
 		return true;
-	}
-	else
-	{
+	} else {
 		$adb->println("Session id does not match. Not authenticated to do the current operation.");
 		return false;
 	}
@@ -1463,8 +1467,11 @@ function getServerSessionId($id)
 	$sessionid = Vtiger_Soap_CustomerPortal::lookupSessionId($id);
 	if($sessionid === false) {
 		$query = "select * from vtiger_soapservice where type='customer' and id=?";
-		$sessionid = $adb->query_result($adb->pquery($query, array($id)),0,'sessionid');
-		Vtiger_Soap_CustomerPortal::updateSessionId($id, $sessionid);
+		$result = $adb->pquery($query, array($id));
+		if($adb->num_rows($result) > 0) {
+			$sessionid = $adb->query_result($result,0,'sessionid');
+			Vtiger_Soap_CustomerPortal::updateSessionId($id, $sessionid);
+		}
 	}
 	return $sessionid;
 }
@@ -1562,6 +1569,7 @@ function get_vendor_name($vendorid)
 
 function get_list_values($id,$module,$sessionid,$only_mine='true')
 {
+	checkFileAccessForInclusion('modules/'.$module.'/'.$module.'.php');
 	require_once('modules/'.$module.'/'.$module.'.php');
 	require_once('include/utils/UserInfoUtil.php');
 	global $adb,$log,$current_user;
@@ -1570,6 +1578,9 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 	if($check == false){
 		return array("#MODULE INACTIVE#");
 	}
+	
+	//To avoid SQL injection we are type casting as well as bound the id variable.
+	$id = (int) vtlib_purify($id);
 	$user = new Users();
 	$userid = getPortalUserid();
 	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
@@ -2816,6 +2827,7 @@ function get_documents($id,$module,$customerid,$sessionid)
  * 			$customerid :: INT contact's Id'
  */
 function get_project_components($id,$module,$customerid,$sessionid) {
+	checkFileAccessForInclusion("modules/$module/$module.php");
 	require_once("modules/$module/$module.php");
 	require_once('include/utils/UserInfoUtil.php');
 
@@ -2857,7 +2869,7 @@ function get_project_components($id,$module,$customerid,$sessionid) {
 				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projectmilestone.projectmilestoneid AND vtiger_crmentity.deleted = 0";
 	}
 
-	$res = $adb->pquery($query,array($id));
+	$res = $adb->pquery($query,array(vtlib_purify($id)));
 	$noofdata = $adb->num_rows($res);
 
 	for( $j= 0;$j < $noofdata; ++$j) {
@@ -2976,6 +2988,8 @@ function get_service_list_values($id,$modulename,$sessionid,$only_mine='true')
 	$user = new Users();
 	$userid = getPortalUserid();
 	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
+	//To avoid SQL injection we are type casting as well as bound the id variable
+	$id = (int) vtlib_purify($id);
 	$entity_ids_list = array();
 	$show_all=show_all($modulename);
 

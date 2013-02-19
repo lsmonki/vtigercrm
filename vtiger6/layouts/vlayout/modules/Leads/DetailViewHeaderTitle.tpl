@@ -15,7 +15,7 @@
 	</span>
 	<span class="span8 margin0px">
 		<span class="row-fluid">
-			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getName()}">{$RECORD->getName()}</span>
+			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}">{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}</span>
 		</span>
 		<span class="row-fluid">
 			<span class="designation_label">{$RECORD->getDisplayValue('designation')}</span>

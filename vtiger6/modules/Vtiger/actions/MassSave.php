@@ -47,14 +47,18 @@ class Vtiger_MassSave_Action extends Vtiger_Mass_Action {
 		$recordIds = $this->getRecordsListFromRequest($request);
 		$recordModels = array();
 
+		$fieldModelList = $moduleModel->getFields();
 		foreach($recordIds as $recordId) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleModel);
 			$recordModel->set('id', $recordId);
 			$recordModel->set('mode', 'edit');
 
-			$fieldModelList = $moduleModel->getFields();
 			foreach ($fieldModelList as $fieldName => $fieldModel) {
 				$fieldValue = $request->get($fieldName, null);
+				$fieldDataType = $fieldModel->getFieldDataType();
+				if($fieldDataType == 'time'){
+					$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+				}
 				if(isset($fieldValue) && $fieldValue != null) {
 					if(!is_array($fieldValue)) {
 						$fieldValue = trim($fieldValue);

@@ -8,6 +8,11 @@
  * All Rights Reserved.
  *************************************************************************************/
 $mod_strings=Array(
-	'Map' => 'Map'
+	'Map' => 'Map',
+    'LBL_UPDATES_CRM' => 'Updates in CRM',
+    'LBL_UPDATES_GOOGLE' => 'Updates in Google',
+    'LBL_UPDATED' => 'Updated',
+    'LBL_ADDED' => 'Added'
+     
 )
 ?>

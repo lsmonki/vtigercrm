@@ -47,7 +47,7 @@
 		<td class="dvtCellInfo">
 		{if $WEBFORMID && $WEBFORM->isWebformField($WEBFORMID,$field.name) eq true }
 		{assign var="defaultvalue" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}
-			{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
+			{if $field.type.name eq picklist | $field.type.name eq multipicklist}
 				<select fieldtype="{$field.type.name}" fieldlabel="{$field.label}" class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
 						<option value="">{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 					{foreach item=option from=$field.type.picklistValues name=optionloop}
@@ -63,7 +63,7 @@
 												</script>
 			{elseif $field.type.name eq text}
 					<textarea fieldtype="{$field.type.name}" fieldlabel="{$field.label}" rows="2" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" class="detailedViewTextBox"  id="value[{$field.name}]" name="value[{$field.name}]"  value="{$defaultvalue[0]}">{$defaultvalue[0]}</textarea>
-			
+
 			{elseif $field.type.name eq boolean}
 					<input fieldtype="{$field.type.name}" fieldlabel="{$field.label}" type="checkbox"  id="value[{$field.name}]" name="value[{$field.name}]" {if $defaultvalue[0] eq 'on'}checked="checked"{/if}" >
 			{else}
@@ -82,7 +82,7 @@
 			{/if}
 		{else}
 			{if $field.mandatory eq 1}
-				{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
+				{if $field.type.name eq picklist | $field.type.name eq multipicklist}
 					<select fieldtype="{$field.type.name}" fieldlabel="{$field.label}" class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:inline;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
 							<option value="" {if $field.default eq $option.value} selected="selected"{/if}>{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 						{foreach item=option from=$field.type.picklistValues name=optionloop}
@@ -115,7 +115,7 @@
 						{/if}
 				{/if}
 			{else}
-				{if $field.type.name eq picklist | $field.type.name eq multipicklist}{assign var="val_arr" value=$WEBFORM->retrieveDefaultValue($WEBFORMID,$field.name)}{assign var="values" value=","|explode:$val_arr}
+				{if $field.type.name eq picklist | $field.type.name eq multipicklist}
 					<select fieldtype="{$field.type.name}" fieldlabel="{$field.label}" class="small" name="value[{$field.name}][]" id="value[{$field.name}]" style="display:none;" class="small" {if $field.type.name eq multipicklist}multiple="multiple" size="5"{/if}>
 							<option value="" {if $field.default eq $option.value} selected="selected"{/if}>{'LBL_SELECT_VALUE'|@getTranslatedString:$MODULE}</option>
 						{foreach item=option from=$field.type.picklistValues name=optionloop}

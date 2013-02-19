@@ -12,6 +12,7 @@ class Documents_ListAjax_View extends Documents_List_View {
 	function __construct() {
 		parent::__construct();
 		$this->exposeMethod('getRecordsCount');
+		$this->exposeMethod('getPageCount');
 	}
 
 	function preProcess(Vtiger_Request $request) {

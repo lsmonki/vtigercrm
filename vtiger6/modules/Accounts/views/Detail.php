@@ -39,7 +39,7 @@ class Accounts_Detail_View extends Vtiger_Detail_View {
 			$recordModel = $this->record->getRecord();
 			$moduleModel = $recordModel->getModule();
 
-			$relatedActivities = $moduleModel->getCalendarActivities('', $pagingModel, $recordId);
+			$relatedActivities = $moduleModel->getCalendarActivities('', $pagingModel, 'all', $recordId);
 
 			$viewer = $this->getViewer($request);
 			$viewer->assign('RECORD', $recordModel);

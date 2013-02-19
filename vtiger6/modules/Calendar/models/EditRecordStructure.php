@@ -28,11 +28,6 @@ class Calendar_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mode
 		$moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
 		
-		//We should not allow the user to edit the send reminder information
-		if ($recordModel->getId() != '') {
-			unset($blockModelList['LBL_REMINDER_INFORMATION']);
-		}
-		
 		foreach($blockModelList as $blockLabel=>$blockModel) {
 			$fieldModelList = $blockModel->getFields();
 			if (!empty ($fieldModelList)) {
@@ -45,6 +40,11 @@ class Calendar_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mode
 								$fieldValue = $fieldValue.' '.$recordModel->get('time_start');
 							} else if($fieldName == 'due_date') {
 								$fieldValue = $fieldValue.' '.$recordModel->get('time_end');
+							} else if($fieldName == 'visibility' && empty($fieldValue)) {
+								$currentUserModel = Users_Record_Model::getCurrentUserModel();
+								$sharedType = $currentUserModel->get('calendarsharedtype');
+								if($sharedType == 'public' || $sharedType == 'selectedusers')
+									$fieldValue = 'Public';
 							}
 							$fieldModel->set('fieldvalue', $fieldValue);
 						}

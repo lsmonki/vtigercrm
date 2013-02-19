@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Contacts' => 'Contact',
 	'LBL_ADD_RECORD' => 'Add Contact',
 	'LBL_RECORDS_LIST' => 'Contacts List',
-	'LBL_RECORD_SUMMARY' => 'Contacts Summary',
 
 	// Blocks
 	'LBL_CONTACT_INFORMATION' => 'Basic Information',
@@ -57,3 +56,10 @@ $languageStrings = array(
 
 	'User List'=>'User List',
 );
+
+$jsLanguageStrings = array(
+        'LBL_SYNC_BUTTON' => 'Synchronize Now',
+        'LBL_SYNCRONIZING' => 'Synchronizing....',
+        'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
+        'LBL_FIELD_MAPPING' => 'Field Mapping'
+ );

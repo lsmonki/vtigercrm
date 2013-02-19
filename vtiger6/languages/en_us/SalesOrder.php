@@ -11,11 +11,11 @@ $languageStrings = array(
 	//DetailView Actions
 	'SINGLE_SalesOrder' => 'Sales Order',
 	'LBL_EXPORT_TO_PDF' => 'Export to PDF',
+    'LBL_SEND_MAIL_PDF' => 'Send Email with PDF',
 
 	//Basic strings
 	'LBL_ADD_RECORD' => 'Add Sales Order',
 	'LBL_RECORDS_LIST' => 'Sales Order List',
-	'LBL_RECORD_SUMMARY' => 'Sales Order Summary',
 
 	// Blocks
 	'LBL_SO_INFORMATION' => 'Sales Order Details',

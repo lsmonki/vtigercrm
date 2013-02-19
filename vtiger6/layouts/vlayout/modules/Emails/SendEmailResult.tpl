@@ -10,8 +10,11 @@
  ********************************************************************************/
 -->*}
 {if $SUCCESS}
-<script>
+<script language="Javascript" type="text/javascript">
 	window.close();
+	{if $RELATED_LOAD eq true}
+        window.opener.Vtiger_Detail_Js.reloadRelatedList();
+    {/if}
 </script>
 {else}
 <table border='0' cellpadding='5' cellspacing='0' width='100%' height='600px'>

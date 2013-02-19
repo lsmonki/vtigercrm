@@ -50,7 +50,7 @@ if(isPermitted('Calendar','index') == 'yes'){
 		$date = date('Y-m-d', strtotime("+$intervalInMinutes minutes", $time));
 		$time = date('H:i',   strtotime("+$intervalInMinutes minutes", $time));
 		$callback_query =
-		"SELECT * FROM vtiger_activity_reminder_popup inner join vtiger_crmentity where " .
+		"SELECT reminderid,recordid,semodule,date_start,time_start  FROM vtiger_activity_reminder_popup inner join vtiger_crmentity where " .
 		" vtiger_activity_reminder_popup.status = 0 and " .
 		" vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid " .
 		" and vtiger_crmentity.smownerid = ".$current_user->id." and vtiger_crmentity.deleted = 0 " .
@@ -128,7 +128,7 @@ if(isPermitted('Calendar','index') == 'yes'){
 			}
 		} else {
 			$callback_query =
-			"SELECT * FROM vtiger_activity_reminder_popup inner join vtiger_crmentity where " .
+			"SELECT date_start,time_start FROM vtiger_activity_reminder_popup inner join vtiger_crmentity where " .
 			" vtiger_activity_reminder_popup.status = 0 and " .
 			" vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid " .
 			" and vtiger_crmentity.smownerid = ".$current_user->id." and vtiger_crmentity.deleted = 0 ".

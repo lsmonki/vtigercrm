@@ -55,6 +55,7 @@ class Reports_SaveAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('NEW_COUNT',count($data));
 
 		$viewer->view('ReportContents.tpl', $moduleName);
 	}

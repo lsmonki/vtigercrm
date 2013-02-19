@@ -24,9 +24,10 @@
 					{else}
 						{assign var=columnNameApi value=getCustomViewColumnName}
 					{/if}
-					<option value="{$FIELD_MODEL->$columnNameApi()}" data-fieldtype="{$FIELD_MODEL->getFieldType()}"
+					<option value="{$FIELD_MODEL->$columnNameApi()}" data-fieldtype="{$FIELD_MODEL->getFieldType()}" data-field-name="{$FIELD_NAME}"
 					{if $FIELD_MODEL->$columnNameApi() eq $CONDITION_INFO['columnname']}
 						{assign var=FIELD_TYPE value=$FIELD_MODEL->getFieldType()}
+						{assign var=SELECTED_FIELD_MODEL value=$FIELD_MODEL}
 						{if $FIELD_MODEL->getFieldDataType() == 'reference'}
 							{$FIELD_TYPE='V'}
 						{/if}	
@@ -49,6 +50,10 @@
 		<select class="{if empty($NOCHOSEN)}chzn-select{/if} row-fluid" name="comparator">
 			 <option value="none">{vtranslate('LBL_NONE',$MODULE)}</option>
 			{assign var=ADVANCE_FILTER_OPTIONS value=$ADVANCED_FILTER_OPTIONS_BY_TYPE[$FIELD_TYPE]}
+            {if $FIELD_TYPE eq 'D' || $FIELD_TYPE eq 'DT'}
+                {assign var=DATE_FILTER_CONDITIONS value=array_keys($DATE_FILTERS)}
+                {assign var=ADVANCE_FILTER_OPTIONS value=array_merge($ADVANCE_FILTER_OPTIONS,$DATE_FILTER_CONDITIONS)}
+            {/if}
 			{foreach item=ADVANCE_FILTER_OPTION from=$ADVANCE_FILTER_OPTIONS}
 				<option value="{$ADVANCE_FILTER_OPTION}"
 				{if $ADVANCE_FILTER_OPTION eq $CONDITION_INFO['comparator']}
@@ -59,7 +64,7 @@
 		</select>
 	</span>
 	<span class="span4 fieldUiHolder">
-		<input name="value" class="row-fluid" type="text" value="{$CONDITION_INFO['value']|escape}" />
+		<input name="{if $SELECTED_FIELD_MODEL}{$SELECTED_FIELD_MODEL->get('name')}{/if}" data-value="value" class="row-fluid" type="text" value="{$CONDITION_INFO['value']|escape}" />
 	</span>
 	<span class="hide">
 		<!-- TODO : see if you need to respect CONDITION_INFO condition or / and  -->

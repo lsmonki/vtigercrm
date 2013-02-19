@@ -11,19 +11,29 @@
 class Vtiger_SaveAjax_Action extends Vtiger_Save_Action {
 
 	public function process(Vtiger_Request $request) {
-		$recordModel = $this->getRecordModelFromRequest($request);
-		$recordModel->save();
+		$recordModel = $this->saveRecord($request);
 
 		$fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
-			$fieldValue = $displayValue = Vtiger_Util_Helper::toSafeHTML($recordModel->get($fieldName));
-			
-			if ($fieldModel->getFieldDataType() !== 'currency' && $fieldModel->getFieldDataType() !== 'datetime') { 
+            $recordFieldValue = $recordModel->get($fieldName);
+            if(is_array($recordFieldValue) && $fieldModel->getFieldDataType() == 'multipicklist') {
+                $recordFieldValue = implode(' |##| ', $recordFieldValue);
+            }
+			$fieldValue = $displayValue = Vtiger_Util_Helper::toSafeHTML($recordFieldValue);
+			if ($fieldModel->getFieldDataType() !== 'currency' && $fieldModel->getFieldDataType() !== 'datetime' && $fieldModel->getFieldDataType() !== 'time' && $fieldModel->getFieldDataType() !== 'date') { 
 				$displayValue = $fieldModel->getDisplayValue($fieldValue, $recordModel->getId()); 
 			}
 			
 			$result[$fieldName] = array('value' => $fieldValue, 'display_value' => $displayValue);
+		}
+
+		//Handling salutation type
+		if ($request->get('field') === 'firstname' && in_array($request->getModule(), array('Contacts', 'Leads'))) {
+			$salutationType = $recordModel->getDisplayValue('salutationtype');
+			$firstNameDetails = $result['firstname'];
+			$firstNameDetails['display_value'] = $salutationType. " " .$firstNameDetails['display_value'];
+			if ($salutationType != '--None--') $result['firstname'] = $firstNameDetails;
 		}
 
 		$result['_recordLabel'] = $recordModel->getName();

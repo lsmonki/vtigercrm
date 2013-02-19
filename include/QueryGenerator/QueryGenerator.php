@@ -211,19 +211,33 @@ class QueryGenerator {
 		} elseif($this->conditionInstanceCount > 0 && is_array($this->advFilterList) && count($this->advFilterList) > 0) {
 			$this->addConditionGlue(self::$AND);
 		}
+        $dateSpecificConditions = $customView->getStdFilterConditions();
 		if(is_array($this->advFilterList) && count($this->advFilterList) > 0) {
 			foreach ($this->advFilterList as $groupindex=>$groupcolumns) {
 				$filtercolumns = $groupcolumns['columns'];
 				if(count($filtercolumns) > 0) {
 					$this->startGroup('');
 					foreach ($filtercolumns as $index=>$filter) {
-						$name = explode(':',$filter['columnname']);
-						if(empty($name[2]) && $name[1] == 'crmid' && $name[0] == 'vtiger_crmentity') {
+						$nameComponents = explode(':',$filter['columnname']);
+						if(empty($nameComponents[2]) && $nameComponents[1] == 'crmid' && $nameComponents[0] == 'vtiger_crmentity') {
 							$name = $this->getSQLColumn('id');
 						} else {
-							$name = $name[2];
+							$name = $nameComponents[2];
 						}
-						$this->addCondition($name, $filter['value'], $filter['comparator']);
+                        if(($nameComponents[4] == 'D' || $nameComponents[4] == 'DT') && in_array($filter['comparator'], $dateSpecificConditions)) {
+                            $filter['stdfilter'] = $filter['comparator'];
+                            $valueComponents = explode(',',$filter['value']);
+                            if($filter['comparator'] == 'custom') {
+                                $filter['startdate'] = DateTimeField::convertToDBFormat($valueComponents[0]);
+                                $filter['enddate'] = DateTimeField::convertToDBFormat($valueComponents[1]);
+                            }
+                            $dateFilterResolvedList = $customView->resolveDateFilterValue($filter);
+                            $value[] = $this->fixDateTimeValue($name, $dateFilterResolvedList['startdate']);
+                            $value[] = $this->fixDateTimeValue($name, $dateFilterResolvedList['enddate'], false);
+                            $this->addCondition($name, $value, 'BETWEEN');
+                        }else{
+                            $this->addCondition($name, $filter['value'], $filter['comparator']);
+                        }
 						$columncondition = $filter['column_condition'];
 						if(!empty($columncondition)) {
 							$this->addConditionGlue($columncondition);
@@ -760,7 +774,7 @@ class QueryGenerator {
 		return ($type == 'date' || $type == 'datetime');
 	}
 
-	private function fixDateTimeValue($name, $value, $first = true) {
+	public function fixDateTimeValue($name, $value, $first = true) {
 		$moduleFields = $this->meta->getModuleFields();
 		$field = $moduleFields[$name];
 		$type = $field ? $field->getFieldDataType() : false;

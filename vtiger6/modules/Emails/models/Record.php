@@ -10,6 +10,10 @@
 
 class Emails_Record_Model extends Vtiger_Record_Model {
 
+    public function getPrintViewUrl() {
+        return 'index.php?module='.$this->getModuleName().'&view=ComposeEmail&mode=previewPrint&record='.$this->getId();
+    }
+
 	/**
 	 * Function to save an Email
 	 */
@@ -23,6 +27,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$this->getModule()->saveRecord($this);
 		$documentIds = $this->get('documentids');
 		if (!empty ($documentIds)) {
+            $this->deleteDocumentLink();
 			$this->saveDocumentDetails();
 		}
 	}
@@ -38,7 +43,8 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$mailer->IsHTML(true);
 
 		$fromEmail = $this->getFromEmailAddress();
-		$mailer->ConfigSenderInfo($fromEmail, $currentUserModel->getName(), $currentUserModel->get('email1'));
+		$replyTo = $currentUserModel->get('email1');
+		$userName = $currentUserModel->getName();
 
 		// To eliminate the empty value of an array
 		$toEmailInfo = array_filter($this->get('toemailinfo'));
@@ -46,8 +52,9 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$status = false;
 
 		foreach($toEmailInfo as $id => $emails) {
-			$parentModule = getSalesEntityType($id);
+			$parentModule = $this->getEntityType($id);
 			$mailer->reinitialize();
+			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
 
 			$description = getMergedDescription($this->get('description'), $id, $parentModule);
 			if (strpos($description, '$logo$')) {
@@ -123,12 +130,15 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 						INNER JOIN vtiger_seattachmentsrel ON vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid
 						WHERE vtiger_seattachmentsrel.crmid = ?", array($this->getId()));
 		$numOfRows = $db->num_rows($attachmentRes);
-
+        $attachmentsList = array();
 		if($numOfRows) {
 			for($i=0; $i<$numOfRows; $i++) {
 				$attachmentsList[$i]['fileid'] = $db->query_result($attachmentRes, $i, 'attachmentsid');
 				$attachmentsList[$i]['attachment'] = $db->query_result($attachmentRes, $i, 'name');
-				$attachmentsList[$i]['path'] = $db->query_result($attachmentRes, $i, 'path');
+                $path = $db->query_result($attachmentRes, $i, 'path');
+				$attachmentsList[$i]['path'] = $path;
+                $attachmentsList[$i]['size'] = filesize($path.$attachmentsList[$i]['fileid'].'_'.$attachmentsList[$i]['attachment']);
+                $attachmentsList[$i]['type'] = $db->query_result($attachmentRes, $i, 'type');
 			}
 		}
 
@@ -166,6 +176,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				$documentsList[$i]['path'] = $db->query_result($documentRes, $i, 'path');
 				$documentsList[$i]['fileid'] = $db->query_result($documentRes, $i, 'attachmentsid');
 				$documentsList[$i]['attachment'] = $db->query_result($documentRes, $i, 'name');
+                $documentsList[$i]['type'] = $db->query_result($documentRes, $i, 'type');
 			}
 		}
 		return $documentsList;
@@ -194,12 +205,50 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$db = PearDatabase::getInstance();
 		$record = $this->getId();
 
-		$documentIds = $this->get('documentids');
+		$documentIds = array_unique($this->get('documentids'));
+
 		$count = count($documentIds);
 		for ($i=0; $i<$count; $i++) {
 			$db->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?, ?)", array($record, $documentIds[$i]));
 		}
 	}
+
+    /**
+     * Function which will remove all the exising document links with email
+     * @param <Array> $idList - array of ids
+     */
+    public function deleteDocumentLink($idList = array()){
+        $db = PearDatabase::getInstance();
+        $query =  'DELETE FROM vtiger_senotesrel where crmid=?';
+        $params = array($this->getId());
+        if(count($idList) > 0) {
+            $query .= 'AND notesid IN ('.generateQuestionMarks($idList).')';
+            $params = array_merge($params,$idList);
+        }
+        $db->pquery($query,$params);
+    }
+
+    /**
+     * Function which will delete the existing attachments for the emails
+     * @param <Array> $emailAttachmentDetails - array of value which will be having fileid key as attachement id which need to be deleted
+     */
+    public function deleteAttachment($emailAttachmentDetails = array()) {
+        $db = PearDatabase::getInstance();
+        
+        if(count($emailAttachmentDetails) <= 0) {
+            return;
+        }
+        $attachmentIdList = array();
+        foreach($emailAttachmentDetails as $index => $attachInfo){
+            $attachmentIdList[] = $attachInfo['fileid'];
+        }
+
+        $db->pquery('UPDATE vtiger_crmentity SET deleted=0 WHERE crmid IN('.generateQuestionMarks($attachmentIdList).')',$attachmentIdList);
+        $db->pquery('DELETE FROM vtiger_attachments WHERE attachmentsid IN('.generateQuestionMarks($attachmentIdList).')',$attachmentIdList);
+        $db->pquery('DELETE FROM vtiger_seattachmentsrel WHERE crmid=? and attachmentsid IN('.generateQuestionMarks($attachmentIdList).')',
+                array_merge(array($this->getId()),$attachmentIdList));
+        
+    }
 
 	/**
 	 * Function to check the total size of files is morethan max upload size or not
@@ -292,5 +341,48 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 
 		$result = $db->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid = ? AND mailid = ?", array($parentId, $this->getId()));
 		return $db->query_result($result, 0, 'access_count');
+	}
+	
+	/**
+	 * Function checks if the mail is sent or not
+	 * @return <Boolean>
+	 */
+	public function isSentMail(){
+		if(!array_key_exists('email_flag', $this->getData())){
+			$db = PearDatabase::getInstance();
+			$query = 'SELECT email_flag FROM vtiger_emaildetails WHERE emailid=?';
+			$result = $db->pquery($query,array($this->getId()));
+			if($db->num_rows($result)>0) {
+				$this->set('email_flag',$db->query_result($result,0,'email_flag'));
+			} else {
+				//If not row exits then make it as false
+				return false;
+			}
+		}
+		if($this->get('email_flag') == "SENT"){
+			return true;
+		}
+		return false;
+	}
+	
+	function getEntityType($id) {
+		$db = PearDatabase::getInstance();
+		$moduleModel = $this->getModule();
+		$emailRelatedModules = $moduleModel->getEmailRelatedModules();
+		$relatedModule = '';
+		if (!empty($id)) {
+			$sql = "SELECT setype FROM vtiger_crmentity WHERE crmid=?";
+			$result = $db->pquery($sql, array($id));
+			$relatedModule = $db->query_result($result, 0, "setype");
+			
+			if(!in_array($relatedModule, $emailRelatedModules)){
+				$sql = 'SELECT id FROM vtiger_users WHERE id=?';
+				$result = $db->pquery($sql, array($id));
+				if($db->num_rows($result) > 0){
+					$relatedModule = 'Users';
+				}
+			}
+		}
+		return $relatedModule;
 	}
 }

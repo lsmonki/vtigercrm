@@ -8,20 +8,20 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Faq'                          => 'TudásTár'                  , 
-	'SINGLE_Faq'                   => 'TudásTár'                  , 
-	'LBL_RECORDS_LIST'             => 'FAQs List'                   , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add FAQ'                     , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'FAQs Summary'                , // TODO: Review
-	'LBL_FAQ_INFORMATION'          => 'TudásTár adatai'           , 
-	'LBL_COMMENT_INFORMATION'      => 'Megjegyzés Információ'    , 
-	'Question'                     => 'Kérdés'                    , 
-	'Answer'                       => 'Válasz'                     , 
-	'Comments'                     => 'Megjegyzések'               , 
-	'Faq No'                       => 'TudásTár No.'              , 
-	'General'                      => 'Általános'                 , 
-	'Draft'                        => 'Vázlat'                     , 
-	'Published'                    => 'Közzétett'                 , 
-	'Obsolete'                     => 'Elavult'                     , 
-	'LBL_SOLUTION'                 => 'MEGOLDÁS'                   , 
+	'Faq'                          => 'TudásTár'						,
+	'SINGLE_Faq'                   => 'TudásTár'						,
+	'LBL_RECORDS_LIST'             => 'TudásTár lista'					,
+	'LBL_ADD_RECORD'               => 'TudásTár bejegyzés hozzáadása'	,
+	'LBL_RECORD_SUMMARY'           => 'TudásTár összefoglaló'			,
+	'LBL_FAQ_INFORMATION'          => 'TudásTár adatai'					,
+	'LBL_COMMENT_INFORMATION'      => 'Megjegyzés adatai'				,
+	'Question'                     => 'Kérdés'							,
+	'Answer'                       => 'Válasz'							,
+	'Comments'                     => 'Hozzászólások'					,
+	'Faq No'                       => 'TudásTár No.'					,
+	'General'                      => 'Általános'						,
+	'Draft'                        => 'Piszkozat'						,
+	'Published'                    => 'Közzétett'						,
+	'Obsolete'                     => 'Elavult'							,
+	'LBL_SOLUTION'                 => 'MEGOLDÁS'						,
 );

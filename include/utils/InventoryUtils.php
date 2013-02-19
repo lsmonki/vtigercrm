@@ -483,26 +483,34 @@ function updateInventoryProductRel($entity) {
 		}
 	}
 
+	$moduleName = $entity->getModuleName();
+	if ($moduleName === 'Invoice') {
+		$statusFieldName = 'invoicestatus';
+		$statusFieldValue = 'Cancel';
+	} elseif ($moduleName === 'PurchaseOrder') {
+		$statusFieldName = 'postatus';
+		$statusFieldValue = 'Received Shipment';
+	}
+
 	$statusChanged = false;
 	$vtEntityDelta = new VTEntityDelta ();
-	$oldEntity = $vtEntityDelta-> getOldValue('Invoice', $entity_id, 'invoicestatus');
+	$oldEntity = $vtEntityDelta-> getOldValue($moduleName, $entity_id, $statusFieldName);
 	$recordDetails = $entity->getData();
-	$statusChanged = $vtEntityDelta->hasChanged('Invoice', $entity_id, 'invoicestatus');
+	$statusChanged = $vtEntityDelta->hasChanged($moduleName, $entity_id, $statusFieldName);
 	if($statusChanged) {
-		if($recordDetails['invoicestatus'] == 'Cancel') {
+		if($recordDetails[$statusFieldName] == $statusFieldValue) {
 			$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=0 WHERE id=?",array($entity_id));
 			$updateInventoryProductRel_deduct_stock = false;
 			if(empty($update_product_array)) {
 				addProductsToStock($entity_id);
 			}
-		} elseif($oldEntity == 'Cancel') {
+		} elseif($oldEntity == $statusFieldValue) {
 			$updateInventoryProductRel_deduct_stock = false;
 			deductProductsFromStock($entity_id);
 		}
-	} elseif($recordDetails['invoicestatus'] == 'Cancel') {
+	} elseif($recordDetails[$statusFieldName] == $statusFieldValue) {
 		$updateInventoryProductRel_deduct_stock = false;
 	}
-
 
 	if($updateInventoryProductRel_deduct_stock) {
 		$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
@@ -877,6 +885,8 @@ function getAllCurrencies($available='available') {
 		$currency_details[$i]['currencycode'] = $adb->query_result($res,$i,'currency_code');
 		$currency_details[$i]['currencysymbol'] = $adb->query_result($res,$i,'currency_symbol');
 		$currency_details[$i]['curid'] = $adb->query_result($res,$i,'id');
+		/* alias key added to be consistent with result of InventoryUtils::getInventoryCurrencyInfo */
+		$currency_details[$i]['currency_id'] = $adb->query_result($res,$i,'id');
 		$currency_details[$i]['conversionrate'] = $adb->query_result($res,$i,'conversion_rate');
 		$currency_details[$i]['curname'] = 'curname' . $adb->query_result($res,$i,'id');
 	}
@@ -1084,7 +1094,7 @@ function getPricesForProducts($currencyid, $product_ids, $module='Products') {
 		{
 			$product_id = $adb->query_result($result, $i, 'productid');
 			if(getFieldVisibilityPermission($module,$current_user->id,'unit_price') == '0') {
-				$actual_price = $adb->query_result($result, $i, 'actual_price');
+				$actual_price = (float)$adb->query_result($result, $i, 'actual_price');
 
 				if ($actual_price == null || $actual_price == '') {
 					$unit_price = $adb->query_result($result, $i, 'unit_price');
@@ -1439,4 +1449,23 @@ function getCurrencyId($fieldValue) {
 	}
 	return $currencyId;
 }
+
+/**
+ * Function used to get the lineitems fields
+ * @global type $adb
+ * @return type <array> - list of lineitem fields
+ */
+function getLineItemFields(){
+	global $adb;
+	
+	$sql = 'SELECT DISTINCT columnname FROM vtiger_field WHERE tablename=?';
+	$result = $adb->pquery($sql, array('vtiger_inventoryproductrel'));
+	$lineItemdFields = array();
+	$num_rows = $adb->num_rows($result);
+	for($i=0; $i<$num_rows; $i++){
+		$lineItemdFields[] = $adb->query_result($result,$i, 'columnname');
+	}
+	return $lineItemdFields;
+}
+
 ?>

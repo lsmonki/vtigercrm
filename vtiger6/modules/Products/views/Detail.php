@@ -10,7 +10,7 @@
  * *********************************************************************************** */
 
 class Products_Detail_View extends Vtiger_Detail_View {
-
+	
 	public function showModuleDetailView(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
@@ -22,5 +22,9 @@ class Products_Detail_View extends Vtiger_Detail_View {
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
 		return parent::showModuleDetailView($request);
+	}
+
+	public function showModuleBasicView(Vtiger_Request $request) {
+		return $this->showModuleDetailView($request);
 	}
 }

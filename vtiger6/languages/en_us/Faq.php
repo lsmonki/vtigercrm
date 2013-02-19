@@ -12,7 +12,6 @@ $languageStrings = array(
 	'SINGLE_Faq' => 'FAQ',
 	'LBL_RECORDS_LIST' => 'FAQs List',
 	'LBL_ADD_RECORD' => 'Add FAQ',
-	'LBL_RECORD_SUMMARY' => 'FAQs Summary',
 	
 	//Blocks
 	'LBL_FAQ_INFORMATION' => 'FAQ Information',

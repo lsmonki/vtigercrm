@@ -24,4 +24,5 @@ $languageStrings = array(
 
 	//Blocks
 	'LBL_SMSNOTIFIER_INFORMATION' => 'SMS Information',
+	'SINGLE_SMSNotifier' => 'SMS Notifier',
 );

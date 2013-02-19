@@ -20,6 +20,9 @@
     <h3>{vtranslate('LBL_QUICK_CREATE', $MODULE)} {vtranslate($SINGLE_MODULE, $MODULE)}</h3>
 </div>
 <form class="form-horizontal recordEditView contentsBackground" name="QuickCreate" method="post" action="index.php">
+	{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
+		<input type="hidden" name="picklistDependency" value='{$PICKIST_DEPENDENCY_DATASOURCE}' />
+	{/if}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="action" value="SaveAjax">
 	<div class="modal-body">
@@ -37,8 +40,8 @@
 					{assign var=COUNTER value=$COUNTER+1}
 				{/if}
 				<td class='fieldLabel'>
-					<label class='muted pull-right'>
-					{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
+					{if $isReferenceField neq "reference"}<label class="muted pull-right">{/if}
+					{if $FIELD_MODEL->isMandatory() eq true && $isReferenceField neq "reference"} <span class="redColor">*</span> {/if}
 					{if $isReferenceField eq "reference"}
 						{if $refrenceListCount > 1}
                             {assign var="DISPLAYID" value=$FIELD_MODEL->get('fieldvalue')}
@@ -46,20 +49,23 @@
                             {if !empty($REFERENCED_MODULE_STRUCT)}
                                 {assign var="REFERENCED_MODULE_NAME" value=$REFERENCED_MODULE_STRUCT->get('name')}
                             {/if}
-							<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
-								<optgroup>
-									{foreach key=index item=value from=$refrenceList}
-										<option value="{$value}" {if $value eq $REFERENCED_MODULE_NAME} selected {/if} >{vtranslate($value, $value)}</option>
-									{/foreach}
-								</optgroup>
-							</select>
+							<span class="pull-right">
+								{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
+								<select style="width: 150px;" class="chzn-select referenceModulesList" id="referenceModulesList">
+									<optgroup>
+										{foreach key=index item=value from=$refrenceList}
+											<option value="{$value}" {if $value eq $REFERENCED_MODULE_NAME} selected {/if} >{vtranslate($value, $value)}</option>
+										{/foreach}
+									</optgroup>
+								</select>
+							</span>		
 						{else}
-							{vtranslate($FIELD_MODEL->get('label'), $MODULE)}
+							<label class="muted pull-right">{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}{vtranslate($FIELD_MODEL->get('label'), $MODULE)}</label>
 						{/if}
 					{else}
 						{vtranslate($FIELD_MODEL->get('label'), $MODULE)}
 					{/if}
-				</label>
+				{if $isReferenceField neq "reference"}</label>{/if}
 				</td>
 				<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 					{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE)}

@@ -20,8 +20,27 @@
 			<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
 			<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
 
-			<span>
+			<span class="btn-group">
 				<button class="btn" id="listViewPreviousPageButton" {if !$PAGING_MODEL->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
+				{if $MODULE neq 'Reports'}
+					<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+						<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
+					</button>
+					<ul class="listViewBasicAction dropdown-menu" id="listViewPageJumpDropDown">
+						<li>
+							<span class="row-fluid">
+								<span class="span3 pushUpandDown2per"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
+								<span class="span4">
+									<input type="text" id="pageToJump" class="listViewPagingInput" value="{$PAGE_NUMBER}"/>
+								</span>
+								<span class="span2 textAlignCenter pushUpandDown2per">
+									{vtranslate('LBL_OF',$moduleName)}&nbsp;
+								</span>
+								<span class="span2 pushUpandDown2per" id="totalPageCount"></span>
+							</span>
+						</li>
+					</ul>
+				{/if}
 				<button class="btn" id="listViewNextPageButton" {if !$PAGING_MODEL->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
 			</span>
 		</span>

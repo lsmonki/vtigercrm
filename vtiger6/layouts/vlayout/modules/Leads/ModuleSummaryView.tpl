@@ -10,5 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-	{include file='SummaryViewContents.tpl'|@vtemplate_path}
+	<div class="recordDetails">
+		{include file='SummaryViewContents.tpl'|@vtemplate_path}
+	</div>
 {/strip}

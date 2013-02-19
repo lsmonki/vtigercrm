@@ -22,6 +22,9 @@
 		<input type="hidden" name="viewname" value="{$VIEWNAME}" />
 		<input type="hidden" name="selected_ids" value={ZEND_JSON::encode($SELECTED_IDS)}>
 		<input type="hidden" name="excluded_ids" value={ZEND_JSON::encode($EXCLUDED_IDS)}>
+        <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
+        <input type="hidden" name="operator" value="{$OPERATOR}" />
+        <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
 		<div class="modal-body tabbable">
 			<div>
 				<span><strong>{vtranslate('LBL_STEP_1',$MODULE)}</strong></span>

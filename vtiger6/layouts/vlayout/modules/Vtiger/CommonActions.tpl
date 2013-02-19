@@ -21,8 +21,16 @@
 		</div>
 		<div class="span10 marginLeftZero">
 			<div class="row-fluid">
-				<div class="searchElement span6">
-					<div class="input-append row-fluid">
+				<div class="searchElement span6 row-fluid">
+					<div class="span4">
+						<select class="chzn-select row-fluid" id="basicSearchModulesList">
+							<option value="" class="globalSearch_module_All">{vtranslate('LBL_ALL_RECORDS', $MODULE_NAME)}</option>
+							{foreach key=MODULE_NAME item=fieldObject from=$SEARCHABLE_MODULES}
+								<option value="{$MODULE_NAME}" class="globalSearch_module_{$MODULE_NAME}">{vtranslate($MODULE_NAME,$MODULE_NAME)}</option>
+							{/foreach}
+						</select>
+					</div>
+					<div class="input-append row-fluid span8">
 						<input type="text" class="span5" id="globalSearchValue" placeholder="{vtranslate('LBL_GLOBAL_SEARCH')}" results="10" />
 						<span class="add-on" id="globalSearch" data-toggle="dropdown">
 							<img class="alignMiddle" src="{vimage_path('downArrow.png')}" alt="{vtranslate('LBL_SEARCH_BUTTON',$MODULE)}" title="{vtranslate('LBL_SEARCH_BUTTON',$MODULE)}" id="globalSearch" />

@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div id="sendEmailContainer modelContainer">
+	<div id="sendEmailContainer" class="modelContainer">
 		<div class="modal-header">
 			<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
 			<h3>{vtranslate('LBL_SELECT_EMAIL_IDS', $MODULE)}</h3>
@@ -21,6 +21,9 @@
 			<input type="hidden" name="viewname" value="{$VIEWNAME}" />
 			<input type="hidden" name="module" value="{$MODULE}"/>
 			<input type="hidden" name="view" value="ComposeEmail"/>
+            <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
+            <input type="hidden" name="operator" value="{$OPERATOR}" />
+            <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
 			<div class='padding10'>
 				<small>{vtranslate('LBL_MUTIPLE_EMAIL_SELECT_ONE', $SOURCE_MODULE)}</small>
 			</div>
@@ -54,6 +57,9 @@
 				</div>
 				<button class="btn addButton" type="submit" name="selectfield"><strong>{vtranslate('LBL_SELECT', $MODULE)}</strong></button>
 			</div>
+			{if $RELATED_LOAD eq true}
+				<input type="hidden" name="relatedLoad" value={$RELATED_LOAD} />
+			{/if}
 		</form>
 	</div>
 {/strip}

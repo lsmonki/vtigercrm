@@ -34,23 +34,6 @@ $search=vtlib_purify($_REQUEST['search_url']);
 global $current_user;
 setObjectValuesFromRequest($focus);
 
-//Added code for auto product stock updation on receiving goods
-$focus->update_prod_stock='';
-if($focus->column_fields['postatus'] == 'Received Shipment')
-{
-	if($focus->mode != 'edit')
-		$focus->update_prod_stock='true';
-	else
-	{
-        	$prev_postatus=getPoStatus($focus->id);
-        	if($focus->column_fields['postatus'] != $prev_postatus)
-        	{
-        	        $focus->update_prod_stock='true';
-        	}
-	}
-
-}
-
 $focus->column_fields['currency_id'] = $_REQUEST['inventory_currency'];
 $cur_sym_rate = getCurrencySymbolandCRate($_REQUEST['inventory_currency']);
 $focus->column_fields['conversion_rate'] = $cur_sym_rate['rate'];

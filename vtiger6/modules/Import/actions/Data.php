@@ -92,7 +92,10 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 				}
 			}
 		}
-		$cachedDefaultValues[$this->module] = $defaultValues;
+		$className = get_class($moduleMeta);
+		if ($className != 'VtigerLineItemMeta') {
+			$cachedDefaultValues[$this->module] = $defaultValues;
+		}
 		return $defaultValues;
 	}
 
@@ -103,7 +106,12 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 	}
 
 	public function importData() {
-		$this->createRecords();
+		$focus = CRMEntity::getInstance($this->module);
+		if(method_exists($focus, 'createRecords')) {
+			$focus->createRecords($this);
+		} else {
+			$this->createRecords();
+		}
 		$this->updateModuleSequenceNumber();
 	}
 
@@ -244,21 +252,30 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 
 							if ($mergeType == Import_Utils_Helper::$AUTO_MERGE_MERGEFIELDS) {
 								$filteredFieldData = array();
-								$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
 								foreach ($fieldData as $fieldName => $fieldValue) {
 									if (!empty($fieldValue)) {
 										$filteredFieldData[$fieldName] = $fieldValue;
 									}
 								}
+								
+								// Custom handling for default values & mandatory fields
+								// need to be taken care than normal import as we merge
+								// existing record values with newer values.
+								$fillDefault = false;
+								$mandatoryValueChecks = false;
+								
 								$existingFieldValues = vtws_retrieve($baseEntityId, $this->user);
+								$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
+								
 								foreach ($existingFieldValues as $fieldName => $fieldValue) {
 									if (empty($fieldValue)
 											&& empty($filteredFieldData[$fieldName])
 											&& !empty($defaultFieldValues[$fieldName])) {
-										$filteredFieldData[$fieldName] = $fieldValue;
+										$filteredFieldData[$fieldName] = $defaultFieldValues[$fieldName];
 									}
 								}
-								$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, false);
+								
+								$filteredFieldData = $this->transformForImport($filteredFieldData, $moduleMeta, $fillDefault, $mandatoryValueChecks);
 								$filteredFieldData['id'] = $baseEntityId;
 								$entityInfo = vtws_revise($filteredFieldData, $this->user);
 								$entityInfo['status'] = self::$IMPORT_RECORD_MERGED;
@@ -297,7 +314,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 		return true;
 	}
 
-	public function transformForImport($fieldData, $moduleMeta, $fillDefault=true) {
+	public function transformForImport($fieldData, $moduleMeta, $fillDefault=true, $checkMandatoryFieldValues=true) {
 		$moduleFields = $moduleMeta->getModuleFields();
  		$defaultFieldValues = $this->getDefaultFieldValues($moduleMeta);
 		foreach ($fieldData as $fieldName => $fieldValue) {
@@ -323,6 +340,8 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 						$fieldValueDetails = explode('::::', $fieldValue);
 					} else if (strpos($fieldValue, ':::') > 0) {
 						$fieldValueDetails = explode(':::', $fieldValue);
+					} else {
+						$fieldValueDetails = $fieldValue;
 					}
 					if (count($fieldValueDetails) > 1) {
 						$referenceModuleName = trim($fieldValueDetails[0]);
@@ -339,6 +358,8 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 										!Import_Utils_Helper::hasAssignPrivilege($moduleMeta->getEntityName(), $referenceEntityId)) {
 									$referenceEntityId = $this->user->id;
 								}
+							}elseif ($referenceModule == 'Currency') {
+								$referenceEntityId = getCurrencyId($entityLabel);
 							} else {
 								$referenceEntityId = getEntityId($referenceModule, $entityLabel);
 							}
@@ -390,7 +411,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					$allPicklistValues[] = $picklistDetails['value'];
 				}
 				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
-				if (!in_array($encodePicklistValue, $allPicklistValues)) {
+				if (!in_array(strtolower($encodePicklistValue), array_map('strtolower',$allPicklistValues))) {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
@@ -433,13 +454,19 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 			}
 		}
 
-		foreach ($moduleFields as $fieldName => $fieldInstance) {
-			if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
-				return null;
+		// We should sanitizeData before doing final mandatory check below.
+		$fieldData = DataTransform::sanitizeData($fieldData, $moduleMeta);
+                
+		if ($fieldData != null && $checkMandatoryFieldValues) {
+			foreach ($moduleFields as $fieldName => $fieldInstance) {
+				if(empty($fieldData[$fieldName]) && $fieldInstance->isMandatory()) {
+					return null;
+				}
 			}
 		}
+		
 
-		return DataTransform::sanitizeData($fieldData, $moduleMeta);
+		return $fieldData;
 	}
 
 	public function createEntityRecord($moduleName, $entityLabel) {
@@ -564,6 +591,41 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 		return $scheduledImports;
 	}
 
+
+    /*
+     *  Function to get Record details of import
+     *  @parms $user <User Record Model> Current Users
+     *  @returns <Array> Import Records with the list of skipped records and failed records
+     */
+    public static function getImportDetails($user){
+        $adb = PearDatabase::getInstance();
+        $tableName = Import_Utils_Helper::getDbTableName($user);
+		$result = $adb->pquery("SELECT * FROM $tableName where status IN (?,?)",array(self::$IMPORT_RECORD_SKIPPED,self::$IMPORT_RECORD_FAILED));
+        $importRecords = array();
+        if($result) {
+            $headers = $adb->getColumnNames($tableName);
+			$numOfHeaders = count($headers);
+            for($i=0;$i<10;$i++){
+                if($i>=3 && $i<$numOfHeaders){
+                    $importRecords['headers'][] = $headers[$i];
+                }
+            }
+			$noOfRows = $adb->num_rows($result);
+			for($i=0; $i<$noOfRows; ++$i) {
+                $row = $adb->fetchByAssoc($result,$i);
+                $record= new Vtiger_Base_Model();
+                foreach($importRecords['headers'] as $header){
+                    $record->set($header,$row[$header]);
+                }
+                if($row['status'] == self::$IMPORT_RECORD_SKIPPED){
+                    $importRecords['skipped'][] = $record;
+                } else {
+                    $importRecords['failed'][] = $record;
+                }
+            }
+        return $importRecords;
+        }
+    }
 }
 
 ?>

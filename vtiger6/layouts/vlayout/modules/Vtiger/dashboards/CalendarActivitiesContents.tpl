@@ -28,7 +28,7 @@
 			</div>
 				{assign var=DUE_DATE value=$ACTIVITY->get('due_date')}
 				{assign var=DUE_TIME value=$ACTIVITY->get('time_end')}
-			<p class='pull-right muted' style='margin-top:5px;padding-right:5px;'><small>{Vtiger_Util_Helper::formatDateDiffInStrings("$DUE_DATE $DUE_TIME")}</small></p>
+			<p class='pull-right muted' style='margin-top:5px;padding-right:5px;'><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString("$DUE_DATE $DUE_TIME")}">{Vtiger_Util_Helper::formatDateDiffInStrings("$DUE_DATE $DUE_TIME")}</small></p>
 			<div class='clearfix'></div>
 		</div>
 		<div class='clearfix'></div>

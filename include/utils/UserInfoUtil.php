@@ -4272,7 +4272,7 @@ function getFieldModuleAccessArray()
 	$log->debug("Entering getFieldModuleAccessArray() method ...");
 
 	$fldModArr=Array();
-	$query = 'select distinct(name) from vtiger_profile2field inner join vtiger_tab on vtiger_tab.tabid=vtiger_profile2field.tabid';
+	$query = 'select distinct(name) from vtiger_profile2field inner join vtiger_tab on vtiger_tab.tabid=vtiger_profile2field.tabid and vtiger_tab.name not in ("Users")';
 	$result = $adb->pquery($query, array());
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)

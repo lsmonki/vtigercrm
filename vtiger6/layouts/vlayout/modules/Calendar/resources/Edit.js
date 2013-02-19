@@ -199,14 +199,23 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 	 * Function to change the end time based on default call duration
 	 */
 	registerTimeStartChangeEvent : function(container) {
-		container.on('change','input[name="time_start"]',function(e) {
+		container.on('changeTime','input[name="time_start"]',function(e) {
 			var strtTimeElement = jQuery(e.currentTarget);
 			var endTimeElement = container.find('[name="time_end"]');
 			var dateStartElement = container.find('[name="date_start"]');
+            var endDateElement = container.find('[name="due_date"]');
 			
+            if(endDateElement.data('userChangedTime') == true) {
+                return;
+            }
 			
 			var startDate = dateStartElement.val();
 			var strtTime = strtTimeElement.val();
+			
+			var result = Vtiger_Time_Validator_Js.invokeValidation(strtTimeElement);
+			if(result != true){
+				return;
+			}
 			var dateTime = startDate+' '+strtTime;
 			var dateFormat = container.find('[name="date_start"]').data('dateFormat');
 			var timeFormat = endTimeElement.data('format');
@@ -227,19 +236,82 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 				defaultTimeFormat = 'hh:mm tt';
 			}
 			var endTimeString = endDateInstance.toString(defaultTimeFormat);
-			
-			container.find('[name="due_date"]').val(endDateString);
+
+			endDateElement.val(endDateString);
 			endTimeElement.val(endTimeString);
-			
+		});
+        
+        container.find('[name="date_start"]').on('change',function(e) {
+            var startDateElement = jQuery(e.currentTarget);
+            var result = Vtiger_Date_Validator_Js.invokeValidation(startDateElement);
+            if(result != true){
+				return;
+			}
+            var timeStartElement = startDateElement.closest('td.fieldValue').find('[name="time_start"]');
+            timeStartElement.trigger('changeTime');
+        });
+		
+		container.find('input[name="time_start"]').on('focus',function(e){
+			var element = jQuery(e.currentTarget);
+			element.data('prevValue',element.val());
+		})
+		
+		container.find('input[name="time_start"]').on('blur', function(e,data){
+            if(typeof data =='undefined'){
+                data = {};
+            }
+            
+            if(typeof data.forceChange == 'undefined') {
+                data.forceChange = false;
+            }
+			var element = jQuery(e.currentTarget);
+			var currentValue = element.val();
+			var prevValue = element.data('prevValue');
+			if(currentValue != prevValue || data.forceChange) {
+				var list = element.data('timepicker-list');
+                if(!list) {
+                    //To generate the list 
+                    element.timepicker('show');
+                    element.timepicker('hide');
+                    list = element.data('timepicker-list');
+                }
+				list.show();
+				e = jQuery.Event("keydown");
+				e.which = 13;
+				e.keyCode = 13;
+				element.trigger(e)
+				list.hide();
+			}
 		});
 	},
+    
+    registerEndDateTimeChangeLogger : function(container) {
+        container.find('[name="time_end"]').on('changeTime',function(e) {
+            var timeElement = jQuery(e.currentTarget);
+            var result = Vtiger_Time_Validator_Js.invokeValidation(timeElement);
+			if(result != true){
+				return;
+			}
+            var timeDateElement = timeElement.closest('td.fieldValue').find('[name="due_date"]');
+            timeDateElement.data('userChangedTime',true);
+        });
+        
+        container.find('[name="due_date"]').on('change',function(e) {
+            var dueDateElement = jQuery(e.currentTarget);
+            var result = Vtiger_Date_Validator_Js.invokeValidation(dueDateElement);
+            if(result != true){
+				return;
+			}
+            dueDateElement.data('userChangedTime',true);
+        });
+    },
 	
 	/**
 	 * Function to change the Other event Duration
 	 */
 	registerActivityTypeChangeEvent : function(container) {
 		container.on('change','[name="activitytype"]',function(e) {
-			container.find('input[name="time_start"]').trigger('change');
+			container.find('input[name="time_start"]').trigger('changeTime');
 		});
 	},
 	
@@ -259,13 +331,17 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
             if(thisInstance.isEvents()) {
                 jQuery('<input type="hidden" name="contactidlist" /> ').appendTo(form).val(thisInstance.getRelatedContactElement().val().split(',').join(';'));
                 form.find('[name="contact_id"]').attr('name','');
-
-                jQuery('<input type="hidden" name="inviteesid" />').appendTo(form).val(jQuery('#selectedUsers').val().join(';'));
+				var inviteeIdsList = jQuery('#selectedUsers').val();
+				if(inviteeIdsList != null) {
+					inviteeIdsList = jQuery('#selectedUsers').val().join(';')
+				}
+                jQuery('<input type="hidden" name="inviteesid" />').appendTo(form).val(inviteeIdsList);
             }
 		})
 	},
 
     registerRelatedContactSpecificEvents : function() {
+        var thisInstance = this;
         //If module is not events then we dont have to register events
         if(!this.isEvents()) {
             return;
@@ -308,6 +384,18 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
         form.find('[name="contact_id"]').on(Vtiger_Edit_Js.refrenceMultiSelectionEvent,function(e,result){
             thisInstance.addNewContactToRelatedList(result);
         });
+        
+        form.find('[name="contact_id"]').on(Vtiger_Edit_Js.preReferencePopUpOpenEvent,function(e){
+            var form = thisInstance.getForm();
+            var parentIdElement  = form.find('[name="parent_id"]');
+            var container = parentIdElement.closest('td');
+            var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',container).val();
+            
+            if(popupReferenceModule == 'Leads' && parentIdElement.val().length > 0) {
+                e.preventDefault();
+                Vtiger_Helper_Js.showPnotify(app.vtranslate('LBL_CANT_SELECT_CONTACT_FROM_LEADS'));
+            }
+        })
 
         this.fillRelatedContacts();
     },
@@ -316,6 +404,7 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 		this._super(container);
 		this.registerActivityTypeChangeEvent(container);
 		this.registerTimeStartChangeEvent(container);
+        this.registerEndDateTimeChangeLogger(container);
 	},
 	
 	registerEvents : function(){
@@ -323,7 +412,6 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 		if(!statusToProceed){
 			return;
 		}
-		this.registerBasicEvents(this.getForm());
 	 	this.registerReminderFieldCheckBox();
 		this.registerRecurrenceFieldCheckBox();
 		this.registerFormSubmitEvent();

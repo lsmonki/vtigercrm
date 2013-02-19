@@ -8,18 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_SELECT_EMAIL_IDS'         => 'Select Email Addresses'      , // TODO: Review
-	'LBL_SUBJECT'                  => 'Tárgy:'                     , 
-	'LBL_ATTACHMENT'               => 'Melléklet'                  , 
-	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , // TODO: Review
-	'LBL_SEND'                     => 'Küldés'                    , 
-	'LBL_SAVE_AS_DRAFT'            => 'Save as Draft'               , // TODO: Review
-	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Válaszd ki az Email sablont', // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
-	'LBL_COMPOSE_EMAIL'            => 'Email szerkesztése'         , 
-	'LBL_CC'                       => 'Másolat :'                  , 
-	'LBL_BCC'                      => 'Rejtett másolat :'          , 
-	'LBL_ADD_CC'                   => 'Add Cc'                      , // TODO: Review
-	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
-	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum feltöltési méret:', // KEY 5.x: LBL_MAX_SIZE
-	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	'LBL_SELECT_EMAIL_IDS'         => 'Válasszál Email címeket'		,
+	'LBL_SUBJECT'                  => 'Tárgy:'						,
+	'LBL_ATTACHMENT'               => 'Melléklet'					,
+	'LBL_BROWSE_CRM'               => 'Keresés a CRM-ben'			,
+	'LBL_SEND'                     => 'Küldés'						,
+	'LBL_SAVE_AS_DRAFT'            => 'Piszkozatként ment'			,
+	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Válaszd ki az Email sablont'	, // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
+	'LBL_COMPOSE_EMAIL'            => 'Email szerkesztése'			,
+	'LBL_CC'                       => 'Másolat :'					,
+	'LBL_BCC'                      => 'Rejtett másolat :'			,
+	'LBL_ADD_CC'                   => 'Másolat hozzáadása'			,
+	'LBL_ADD_BCC'                  => 'Rejtett másolat hozzáadása'	,
+	'LBL_MAX_UPLOAD_SIZE'          => 'Maximális feltölthető méret:', // KEY 5.x: LBL_MAX_SIZE
+	'LBL_EXCEEDED'                 => 'Túllépve'					,
 );

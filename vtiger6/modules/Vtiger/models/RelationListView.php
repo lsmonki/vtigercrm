@@ -152,7 +152,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				array(
 					'linktype' => 'LISTVIEWBASIC',
 					// NOTE: $relatedModel->get('label') assuming it to be a module name - we need singular label for Add action.
-					'linklabel' => vtranslate('LBL_ADD')." ".vtranslate('SINGLE_' . $relatedModel->get('label'), $relatedModel->get('label')),
+					'linklabel' => vtranslate('LBL_ADD')." ".vtranslate('SINGLE_' . $relatedModel->getName(), $relatedModel->getName()),
 					'linkurl' => $this->getCreateViewUrl(),
 					'linkicon' => '',
 				)
@@ -171,6 +171,10 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$relationModule = $this->getRelationModel()->getRelationModuleModel();
 		$relatedColumnFields = $relationModule->getRelatedListFields();
 		$query = $this->getRelationQuery();
+
+		if ($this->get('whereCondition')) {
+			$query = $this->updateQueryWithWhereCondition($query);
+		}
 
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
@@ -277,4 +281,37 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$result = $db->pquery($relationQuery, array());
 		return $db->query_result($result, 0, 'count');
 	}
+
+	/**
+	 * Function to update relation query
+	 * @param <String> $relationQuery
+	 * @return <String> $updatedQuery
+	 */
+	public function updateQueryWithWhereCondition($relationQuery) {
+		$condition = '';
+
+		$whereCondition = $this->get("whereCondition");
+		$count = count($whereCondition);
+		if ($count > 1) {
+			$appendAndCondition = true;
+		}
+
+		$i = 1;
+		foreach ($whereCondition as $fieldName => $fieldValue) {
+			$condition .= " $fieldName = '$fieldValue' ";
+			if ($appendAndCondition && ($i++ != $count)) {
+				$condition .= " AND ";
+			}
+		}
+
+		$pos = stripos($relationQuery, 'where');
+		if ($pos) {
+			$split = spliti('where', $relationQuery);
+			$updatedQuery = $split[0] . ' WHERE ' . $split[1] . ' AND ' . $condition;
+		} else {
+			$updatedQuery = $relationQuery . ' WHERE ' . $condition;
+		}
+		return $updatedQuery;
+	}
+
 }

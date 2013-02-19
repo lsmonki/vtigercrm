@@ -54,14 +54,14 @@
 			{if $row_no eq 0}
 				<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ServicesPopup" title="{vtranslate('Services',$MODULE)}" data-module-name="Services" data-field-name="serviceid" src="{vimage_path('Services.png')}"/>
 				<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid" src="{vimage_path('Products.png')}"/>
-				<i class="icon-remove-sign clearLineItem" style="vertical-align:middle"></i>
+				&nbsp;<i class="icon-remove-sign clearLineItem cursorPointer" title="{vtranslate('LBL_CLEAR',$MODULE)}" style="vertical-align:middle"></i>
 			{else}
 				{if $entityType eq 'Services'}
 					<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ServicesPopup" data-module-name="Services" title="{vtranslate('Services',$MODULE)}" data-field-name="serviceid" src="{vimage_path('Services.png')}"/>
-					<i class="icon-remove-sign clearLineItem" style="vertical-align:middle"></i>
+					&nbsp;<i class="icon-remove-sign clearLineItem cursorPointer" title="{vtranslate('LBL_CLEAR',$MODULE)}" style="vertical-align:middle"></i>
 				{else}
 					<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ProductsPopup" data-module-name="Products" title="{vtranslate('Products',$MODULE)}" data-field-name="productid" src="{vimage_path('Products.png')}"/>
-					<i class="icon-remove-sign clearLineItem" style="vertical-align:middle"></i>
+					&nbsp;<i class="icon-remove-sign clearLineItem cursorPointer" title="{vtranslate('LBL_CLEAR',$MODULE)}" style="vertical-align:middle"></i>
 				{/if}
 			{/if}
 		</div>
@@ -94,7 +94,7 @@
 		<div class="discountUI hide" id="discount_div{$row_no}">
 		{assign var="DISCOUNT_TYPE" value="zero"}
 		{if !empty($data.$discount_type)}
-			{assign var="DISCOUNT_TYPE" value="$data.$discount_type"}
+			{assign var="DISCOUNT_TYPE" value=$data.$discount_type}
 		{/if}
 			<input type="hidden" id="discount_type{$row_no}" name="discount_type{$row_no}" value="{$DISCOUNT_TYPE}" class="discount_type" />
 			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable">
@@ -125,7 +125,7 @@
 					</td>
 					<td>
 						<span class="pull-right">&nbsp;%</span>
-						<input type="text" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" class="discount_percentage smallInputBox pull-right hide discountVal" />
+						<input type="text" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" class="discount_percentage smallInputBox pull-right discountVal {if empty($data.$checked_discount_percent)}hide{/if}" />
 					</td>
 			   </tr>
 			   <tr>
@@ -135,7 +135,7 @@
 						{vtranslate('LBL_DIRECT_PRICE_REDUCTION',$MODULE)}
 					</td>
 					<td>
-						<input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" value="{$data.$discount_amount}" class="smallInputBox pull-right hide discount_amount discountVal"/>
+						<input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" value="{$data.$discount_amount}" class="smallInputBox pull-right discount_amount discountVal {if empty($data.$checked_discount_amount)}hide{/if}"/>
 					</td>
 			   </tr>
 			</table>

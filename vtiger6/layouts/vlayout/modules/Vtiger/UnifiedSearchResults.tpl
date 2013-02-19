@@ -1,3 +1,14 @@
+{*<!--
+/*********************************************************************************
+  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+   * ("License"); You may not use this file except in compliance with the License
+   * The Original Code is:  vtiger CRM Open Source
+   * The Initial Developer of the Original Code is vtiger.
+   * Portions created by vtiger are Copyright (C) vtiger.
+   * All Rights Reserved.
+  *
+ ********************************************************************************/
+-->*}
 {strip}
 {assign var="totalCount" value=0}
 {assign var="totalModulesSearched" value=count($MATCHING_RECORDS)}
@@ -20,16 +31,34 @@
 			</div>
 		</div>
 		<div class="contents">
-		{foreach key=module item=searchRecords from=$MATCHING_RECORDS}
+			{if $totalCount eq 100}
+				<div class='alert alert-block'>
+					<button type=button class="close" data-dismiss="alert">&times;</button>
+					{if $SEARCH_MODULE}
+						{vtranslate('LBL_GLOBAL_SEARCH_MAX_MESSAGE_FOR_MODULE', 'Vtiger')}
+					{else}
+						{vtranslate('LBL_GLOBAL_SEARCH_MAX_MESSAGE', 'Vtiger')}
+					{/if}
+				</div>
+			{/if}
+		{foreach key=module item=searchRecords from=$MATCHING_RECORDS name=matchingRecords}
 			{assign var="modulesCount" value=count($searchRecords)}
-			<label>
+			<label class="clearfix">
 				<strong>{vtranslate($module)}&nbsp;({$modulesCount})</strong>
+				{if {$smarty.foreach.matchingRecords.index+1} eq 1}
+					<span class="pull-right"><p class="muted">{vtranslate('LBL_CREATED_ON', $MODULE)}</small></p></span>
+				{/if}
 			</label>
 			<ul class="nav">
-			{foreach item=recordObject from=$searchRecords}
-				<li><a href="{$recordObject->getDetailViewUrl()}">{$recordObject->getName()}</a></li>
+			{foreach item=recordObject from=$searchRecords name=globalSearch}
+				{assign var="ID" value="{$module}_globalSearch_row_{$smarty.foreach.globalSearch.index+1}"}
+				<li id="{$ID}">
+					<a id="{$ID}_link" href="{$recordObject->getDetailViewUrl()}">{$recordObject->getName()}
+						<span id="{$ID}_time" class="pull-right" title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($recordObject->get('createdtime'))}">{Vtiger_Util_Helper::formatDateDiffInStrings($recordObject->get('createdtime'))}</span>
+					</a>
+				</li>
 			{foreachelse}
-				<li>No records</li>
+				<li>{vtranslate('LBL_NO_RECORDS', $module)}</li>
 			{/foreach}
 			</ul>
 		{/foreach}

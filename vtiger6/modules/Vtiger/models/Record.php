@@ -116,7 +116,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
-	
+
 	/**
 	 * Function to get the complete Detail View url for the record
 	 * @return <String> - Record Detail View Url
@@ -178,13 +178,13 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 			$recordId = $this->getId();
 		}
 		$fieldModel = $this->getModule()->getField($fieldName);
-		return $fieldModel->getDisplayValue($this->get($fieldName),$recordId);
+		return $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
 	}
-	
+
 	/**
 	 * Function returns the Vtiger_Field_Model
 	 * @param <String> $fieldName - field name
-	 * @return <Vtiger_Field_Model> 
+	 * @return <Vtiger_Field_Model>
 	 */
 	public function getField($fieldName) {
 		return $this->getModule()->getField($fieldName);
@@ -250,13 +250,16 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	public static function getSearchResult($searchKey, $module=false) {
 		$db = PearDatabase::getInstance();
 
-        $query = 'SELECT * FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
+        $query = 'SELECT label, crmid, setype, createdtime
+					FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
 		$params = array("%$searchKey%");
 
 		if($module !== false) {
 			$query .= ' AND setype = ?';
 			$params[] = $module;
 		}
+		//Remove the ordering for now to improve the speed
+		//$query .= ' ORDER BY createdtime DESC';
 
 		// TODO: limiting fetch per module is better option
 		$query .= ' LIMIT 100';
@@ -335,6 +338,20 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Function to get Descrption value for this record
+	 * @return <String> Descrption
+	 */
+	public function getDescriptionValue() {
+		$description = $this->get('description');
+		if(empty($description)) {
+			$db = PearDatabase::getInstance();
+			$result = $db->pquery("SELECT description FROM vtiger_crmentity WHERE crmid = ?", array($this->getId()));
+			$description =  $db->query_result($result, 0, "description");
+		}
+		return $description;
 	}
 
 }

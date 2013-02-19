@@ -38,9 +38,9 @@ class Contacts_Module_Model extends Vtiger_Module_Model {
 				'phone',
 				'mailingcity',
 				'mailingcountry',
-				'assigned_user_id',
 				'createdtime',
-				'modifiedtime'
+				'modifiedtime',
+				'assigned_user_id',
 		);
 	}
 
@@ -49,8 +49,13 @@ class Contacts_Module_Model extends Vtiger_Module_Model {
 	 * @param <Vtiger_Paging_Model> $pagingModel
 	 * @return <Array>
 	 */
-	public function getCalendarActivities($mode, $pagingModel, $recordId = false) {
+	public function getCalendarActivities($mode, $pagingModel, $user, $recordId = false) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$db = PearDatabase::getInstance();
+
+		if (!$user) {
+			$user = $currentUser->getId();
+		}
 
 		$nowInUserFormat = Vtiger_Datetime_UIType::getDisplayDateValue(date('Y-m-d H:i:s'));
 		$nowInDBFormat = Vtiger_Datetime_UIType::getDBDateTimeValue($nowInUserFormat);
@@ -77,12 +82,19 @@ class Contacts_Module_Model extends Vtiger_Module_Model {
 			$query .= " AND due_date < '$currentDate'";
 		}
 
-		$query .= " ORDER BY date_start, time_start LIMIT ". $pagingModel->getStartIndex() .", ". ($pagingModel->getPageLimit()+1);
-
 		$params = array($this->getName());
 		if ($recordId) {
 			array_push($params, $recordId);
 		}
+
+		if($user != 'all' && $user != '') {
+			if($user === $currentUser->id) {
+				$query .= " AND vtiger_crmentity.smownerid = ?";
+				array_push($params, $user);
+			}
+		}
+
+		$query .= " ORDER BY date_start, time_start LIMIT ". $pagingModel->getStartIndex() .", ". ($pagingModel->getPageLimit()+1);
 
 		$result = $db->pquery($query, $params);
 		$numOfRows = $db->num_rows($result);
@@ -138,7 +150,7 @@ class Contacts_Module_Model extends Vtiger_Module_Model {
                         INNER JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid
                         INNER JOIN vtiger_campaigncontrel ON vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid
                         WHERE deleted=0 AND vtiger_campaigncontrel.campaignid = $parentId AND label like '%$searchValue%'";
-            
+
             return $query;
         }
 

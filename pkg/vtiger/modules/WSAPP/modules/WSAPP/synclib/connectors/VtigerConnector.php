@@ -64,7 +64,11 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 		$model =  WSAPP_SyncStateModel::getInstanceFromQueryResult($stateValues);
 		return $model;
 	}
-
+    
+    public function moreRecordsExits(){
+        $syncState = $this->getSyncState();
+        return $syncState->get('more');
+    }
 	public function intialSync(){
 		$registrationDetails = $this->registerWithTracker();
 		return $this->getSyncStateModelFromTrackerRegisterDetails($registrationDetails);
@@ -81,7 +85,7 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 	}
 
 	function updateSyncState(WSAPP_SyncStateModel $syncStateModel) {
-		$encodedValues = Zend_Json::encode(array('synctrackerid'=>$syncStateModel->getSyncTrackerId(),'synctoken'=>$syncStateModel->getSyncToken()));
+        $encodedValues = Zend_Json::encode(array('synctrackerid'=>$syncStateModel->getSyncTrackerId(),'synctoken'=>$syncStateModel->getSyncToken(),'more'=>$syncStateModel->get('more')));
 		$query = 'INSERT INTO vtiger_wsapp_sync_state(stateencodedvalues,name,userid) VALUES (?,?,?)';
 		$parameters = array($encodedValues,$this->getName(),$this->getSynchronizeController()->user->id);
 		if($this->isSyncStateExists()){
@@ -122,16 +126,15 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 		}
 
 		foreach($deletedRecords as $record){
-			$model = $this->getRecordModelFromData(array('_id'=>$record));
+			$model = $this->getRecordModelFromData($record);
 			$recordModels[] = $model->setMode(WSAPP_SyncRecordModel::WSAPP_DELETE_MODE);
 		}
-
 		$nextSyncState = clone $syncStateModel;
-		$nextSyncState->setSyncToken($records['lastModifiedTime']);
+        $nextSyncState->setSyncToken($records['lastModifiedTime'])->set('more',$records['more']);
 		$pullResultModel = new WSAPP_PullResultModel();
 		$pullResultModel->setPulledRecords($recordModels)->setNextSyncState($nextSyncState)->setPrevSyncState($syncStateModel);
 		$this->nextSyncSate = $nextSyncState;
-		return $recordModels;
+        return $recordModels;
 	}
 
 	public function push($recordList,$syncStateModel){
@@ -157,7 +160,7 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 	public function  postEvent($type, $synchronizedRecords,$syncStateModel) {
 		if($type == WSAPP_SynchronizeController::WSAPP_SYNCHRONIZECONTROLLER_PULL_EVENT){
 			$this->map($synchronizedRecords,$syncStateModel);
-			$this->updateSyncState($this->nextSyncSate);
+            $this->updateSyncState($this->nextSyncSate);
 		}
 	}
 
@@ -196,7 +199,9 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 				$syncTrackerRecord['values'] = $record->getData();
 				$syncTrackerRecord['values']['modifiedtime'] = $record->getModifiedTime();
 				$syncTrackerRecord['values']['id'] = $record->getId();
-			}
+			} else {
+                $syncTrackerRecord['values']['_syncidentificationkey'] = $record->getSyncIdentificationKey();
+            }
 			$syncTrackerRecordList[] = $syncTrackerRecord;
 		}
 		return $syncTrackerRecordList;

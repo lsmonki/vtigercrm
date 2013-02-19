@@ -22,31 +22,45 @@ var taskPriority = '{$task->priority}';
 <div id="view">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
 	<tr valign="top">
-		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b><font color=red>*</font> Todo</b></td>
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b><font color=red>*</font>{'LBL_TITLE'|getTranslatedString}</b></td>
 		<td class='dvtCellInfo'><input type="text" name="todo" value="{$task->todo}" id="workflow_todo" class="form_input"></td>
 	</tr>
 	<tr valign="top">
-		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>Description</b></td>
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>{'LBL_DESCRIPTION'|getTranslatedString}</b></td>
 		<td class='dvtCellInfo'><textarea name="description" rows="8" cols="40" class='detailedViewTextBox'>{$task->description}</textarea></td>
 	</tr>
 	<tr valign="top">
-		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>Status</b></td>
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>{'LBL_STATUS'|getTranslatedString}</b></td>
 		<td class='dvtCellLabel'>
 			<span id="task_status_busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 			<select id="task_status" value="{$task->status}" name="status" class="small" style="display: none;"></select>
 		</td>
-	</tr> 
+	</tr>
 	<tr valign="top">
-		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>Priority</b></td>
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>{'LBL_PRIORITY'|getTranslatedString}</b></td>
 		<td class='dvtCellLabel'>
 			<span id="task_priority_busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 			<select id="task_priority" value="{$task->priority}" name="priority" class="small" style="display: none;"></select>
 		</td>
 	</tr>
+	<tr valign="top">
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>{'LBL_ASSIGNED_TO'|getTranslatedString}</b></td>
+		<td class='dvtCellLabel'>
+			<select id="task_assigned_user_id" value="{$task->assigned_user_id}" name="assigned_user_id" class="small">
+				{foreach key=id item=assignedToName from=$ASSIGNED_TO}
+					{if $id eq $task->assigned_user_id}
+						<option value="{$id}" selected>{$assignedToName}</option>
+					{else}
+						<option value="{$id}">{$assignedToName}</option>
+					{/if}
+				{/foreach}
+			</select>
+		</td>
+	</tr>
 	<tr><td colspan="2"><hr size="1" noshade="noshade" /></td></tr>
 	<tr>
-		<td align="right"><b>Time</b></td>
-		{if $task->time neq ''} 
+		<td align="right"><b>{'LBL_TIME'|getTranslatedString}</b></td>
+		{if $task->time neq ''}
 			{assign var=now value=$task->time}
 		{else}
 			{assign var=now value=$USER_TIME}
@@ -54,9 +68,9 @@ var taskPriority = '{$task->priority}';
 		<td><input type="hidden" name="time" value="{$now}" id="workflow_time" style="width:60px" class="time_field"></td>
 	</tr>
 	<tr>
-		<td align="right"><b>Due Date</b></td>
+		<td align="right"><b>{'LBL_DUE_DATE'|getTranslatedString}</b></td>
 		<td>
-			<input type="text" name="days" value="{$task->days}" id="days" style="width:30px" class="small"> days 
+			<input type="text" name="days" value="{$task->days}" id="days" style="width:30px" class="small"> days
 			<select name="direction" value="{$task->direction}" class="small">
 				<option>After</option>
 				<option>Before</option>
@@ -71,7 +85,7 @@ var taskPriority = '{$task->priority}';
 			(The same value is used for the start date)</td>
 		</tr>
 		<tr valign="top">
-			<td align="right"><b>Send Notification</b></td>
+			<td align="right"><b>{'Send Notification'|getTranslatedString}</b></td>
 			<td><input type="checkbox" name="sendNotification" value="true" id="sendNotification" {if $task->sendNotification}checked{/if}></td>
 		</tr>
 	</table>

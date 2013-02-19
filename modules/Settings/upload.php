@@ -42,7 +42,7 @@ if(isset($_REQUEST['flag']) && $_REQUEST['flag'] != '')
 	}		
 }
 
-$tempModule=$_REQUEST['tempModule'];
+$tempModule= vtlib_purify($_REQUEST['tempModule']);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);

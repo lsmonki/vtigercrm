@@ -97,5 +97,26 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 	public function getAddFolderUrl() {
 		return 'index.php?module='.$this->getName().'&view=AddFolder';
 	}
+	
+	/**
+	 * Function to get Alphabet Search Field 
+	 */
+	public function getAlphabetSearchField(){
+		return 'notes_title';
+	}
+	
+	/**
+     * Function that returns related list header fields that will be showed in the Related List View
+     * @return <Array> returns related fields list.
+     */
+	public function getRelatedListFields() {
+		$relatedListFields = parent::getRelatedListFields();
+		
+		//Adding filestatus, filelocationtype in the related list to be used for file download
+		$relatedListFields['filestatus'] = 'filestatus';
+		$relatedListFields['filelocationtype'] = 'filelocationtype';
+		
+		return $relatedListFields;
+	}
 }
 ?>

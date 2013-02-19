@@ -793,8 +793,13 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$adb = PearDatabase::getInstance();
 		$moduleName = $entityData->getModuleName();
 		$wsId = $entityData->getId();
-		$parts = explode('x', $wsId);
-		$entityId = $parts[1];
+
+		if (strpos($wsId,'x')) {
+			$parts = explode('x', $wsId);
+			$entityId = $parts[1];
+		} else {
+			$entityId = $wsId;
+		}
 
 		$isNew = $entityData->isNew();
 

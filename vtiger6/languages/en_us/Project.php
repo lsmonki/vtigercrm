@@ -12,7 +12,6 @@ $languageStrings = array(
 	'SINGLE_Project' => 'Project',
 	'LBL_ADD_RECORD' => 'Add Project',
 	'LBL_RECORDS_LIST' => 'Projects List',
-	'LBL_RECORD_SUMMARY' => 'Projects Summary',
 
 	// Blocks
 	'LBL_PROJECT_INFORMATION' => 'Project Details',
@@ -35,4 +34,14 @@ $languageStrings = array(
 
 	//Related List
 	'LBL_CHARTS' => 'Charts',
+	'LBL_TASKS_LIST' => 'Tasks List',
+	'LBL_MILESTONES' => 'Milestones',
+	'LBL_TASKS' => 'Tasks',
+	'LBL_STATUS_IS' => 'Status is',
+	'LBL_STATUS' => 'Status',
+	'LBL_TICKET_PRIORITY' => 'Priority',
+	'LBL_MORE' => 'more',
+	
+	//Summary View Widgets
+	'LBL_DOWNLOAD_FILE' => 'Download File',
 );

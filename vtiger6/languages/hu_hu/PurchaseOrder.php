@@ -8,15 +8,15 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_PurchaseOrder'         => 'Beszerzés'                  , 
-	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'         , 
-	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Beszerzési Rendelés Lista' , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Purchase Order Summary'      , // TODO: Review
-	'LBL_PO_INFORMATION'           => 'Beszerzés adatai'           , 
-	'PurchaseOrder No'             => 'Beszerzés No.'              , 
-	'Requisition No'               => 'Igény száma'               , 
-	'Tracking Number'              => 'Követő szám'              , 
-	'Sales Commission'             => 'Értékesítési jutalék'   , 
-	'Received Shipment'            => 'Fogadott szállítmány'     , 
+	'SINGLE_PurchaseOrder'         => 'Beszerzés'					,
+	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'			,
+	'LBL_ADD_RECORD'               => 'Beszerzés hozzáadása'		,
+	'LBL_RECORDS_LIST'             => 'Beszerzések listája'			, // KEY 5.x: LBL_LIST_FORM_TITLE
+	'LBL_RECORD_SUMMARY'           => 'Beszerzés összefoglaló'		,
+	'LBL_PO_INFORMATION'           => 'Beszerzés adatai'			,
+	'PurchaseOrder No'             => 'Beszerzés No.'				,
+	'Requisition No'               => 'Igénylőlap sorszáma'			,
+	'Tracking Number'              => 'Nyomkövető szám'				,
+	'Sales Commission'             => 'Értékesítési jutalék'		,
+	'Received Shipment'            => 'Beérkezett beszerzés'		,
 );

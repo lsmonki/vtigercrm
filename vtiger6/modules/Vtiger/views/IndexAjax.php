@@ -60,6 +60,14 @@ class Vtiger_IndexAjax_View extends Vtiger_Index_View {
 
 		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
 		if($customViewModel) {
+            $searchKey = $request->get('search_key');
+            $searchValue = $request->get('search_value');
+            $operator = $request->get('operator');
+            if(!empty($operator)) {
+                $customViewModel->set('operator', $operator);
+                $customViewModel->set('search_key', $searchKey);
+                $customViewModel->set('search_value', $searchValue);
+            }
 			return $customViewModel->getRecordIds($excludedIds);
 		}
 	}

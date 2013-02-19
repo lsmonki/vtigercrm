@@ -104,8 +104,8 @@ function constructGroupMemberArray($member_array)
 	//Inserting values into Role Table
 	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'edit')
 	{
-		$groupId = $_REQUEST['groupId'];
-		$selected_col_string = 	$_REQUEST['selectedColumnsString'];
+		$groupId = vtlib_purify($_REQUEST['groupId']);
+		$selected_col_string = vtlib_purify($_REQUEST['selectedColumnsString']);
 		$member_array = explode(';',$selected_col_string);
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
@@ -114,7 +114,7 @@ function constructGroupMemberArray($member_array)
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
-		$selected_col_string = 	$_REQUEST['selectedColumnsString'];
+		$selected_col_string = vtlib_purify($_REQUEST['selectedColumnsString']);
 		$member_array = explode(';',$selected_col_string);
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		$groupId=createGroup($groupName,$groupMemberArray,$description);

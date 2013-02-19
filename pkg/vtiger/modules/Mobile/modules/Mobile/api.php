@@ -53,6 +53,7 @@ class Mobile_API_Controller {
 		'deleteRecords'              => array('file' => '/api/ws/DeleteRecords.php', 'class' => 'Mobile_WS_DeleteRecords'),
 	
 		'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),
+		'history'                    => array('file' => '/api/ws/History.php', 'class' => 'Mobile_WS_History')
 	);
 	
 	static function process(Mobile_API_Request $request) {

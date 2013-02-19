@@ -45,6 +45,15 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 	public function getUserRequestValue($value) {
 		return $this->getDisplayValue($value);
 	}
+    
+    /**
+	 * Function to get the DB Insert Value, for the current field type with given User Value
+	 * @param <Object> $value
+	 * @return <Object>
+	 */
+	public function getDBInsertValue($value) {
+		return self::getDBInsertedValue($value);
+	}
 
 	/**
 	 * Function converts the date to database format
@@ -61,7 +70,7 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 	 * @return converted value
 	 */
 	public function getEditViewDisplayValue($value) {
-		if (empty ($value) || $value === ' ') {
+		if (empty($value) || $value === ' ') {
 			$value = trim($value);
 			$fieldInstance = $this->get('field')->getWebserviceFieldObject();
 			$moduleName = $this->get('field')->getModule()->getName();
@@ -74,12 +83,11 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 				return $value;
 			}
 
-			//Getting Default Value for Date field
-			$value = Vtiger_Date_UIType::getDisplayDateValue($value);
-
 			//Special Condition for field 'support_end_date' in Contacts Module
 			if ($fieldName === 'support_end_date' && $moduleName === 'Contacts') {
 				$value = DateTimeField::convertToUserFormat(date('Y-m-d', strtotime("+1 year")));
+			} elseif ($fieldName === 'support_start_date' && $moduleName === 'Contacts') {
+				$value = DateTimeField::convertToUserFormat(date('Y-m-d'));
 			}
 		} else {
 			$value = DateTimeField::convertToUserFormat($value);
@@ -96,5 +104,5 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 		$date = new DateTimeField($date);
 		return $date->getDisplayDate();
 	}
-	
+
 }

@@ -12,16 +12,19 @@ require_once 'vtiger6/includes/runtime/Cache.php';
 
 class VTWorkflowEntity{
 	function __construct($user, $id){
-		$this->moduleName = null;
-		$this->id = $id;
-		$this->user = $user;
-		$data = vtws_retrieve($id, $user);
-		foreach($data as $key => $value){
-			if(is_string($value)){
-				$data[$key] = html_entity_decode($value, ENT_QUOTES, 'utf-8');
+		try {
+			$this->moduleName = null;
+			$this->id = $id;
+			$this->user = $user;
+			$data = vtws_retrieve($id, $user);
+			foreach($data as $key => $value){
+				if(is_string($value)){
+					$data[$key] = html_entity_decode($value, ENT_QUOTES, 'utf-8');
+				}
 			}
+			$this->data = $data;
+		}catch(Exception $ex) {
 		}
-		$this->data = $data;
 	}
 	/**
 	 * Get the data from the entity object as an array.

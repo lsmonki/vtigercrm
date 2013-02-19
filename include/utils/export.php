@@ -115,8 +115,8 @@ function export($type){
 	$sorder = $focus->getSortOrder();
 	$order_by = $focus->getOrderBy();
 
-    $search_type = $_REQUEST['search_type'];
-    $export_data = $_REQUEST['export_data'];
+    $search_type = vtlib_purify($_REQUEST['search_type']);
+    $export_data = vtlib_purify($_REQUEST['export_data']);
 	
 	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch'){
 		$where =$_SESSION['export_where'];
@@ -255,7 +255,7 @@ function export($type){
 }
 
 /** Send the output header and invoke function for contents output */
-$moduleName = $_REQUEST['module'];
+$moduleName = vtlib_purify($_REQUEST['module']);
 $moduleName = getTranslatedString($moduleName, $moduleName);
 $moduleName = str_replace(" ","_",$moduleName);
 header("Content-Disposition:attachment;filename=$moduleName.csv");

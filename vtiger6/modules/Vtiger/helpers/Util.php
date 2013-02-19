@@ -63,7 +63,7 @@ class Vtiger_Util_Helper {
 			$suffix = '';
 			$seconds = -($seconds);
 		}
-		
+
 		$minutes = floor($seconds/60);
 		$hours = floor($minutes/60);
 		$days = floor($hours/24);
@@ -76,7 +76,7 @@ class Vtiger_Util_Helper {
 		if ($months < 12)	return $prefix . self::pluralize($months,	"LBL_MONTH") . $suffix;
 		if ($months > 11)	return $prefix . self::pluralize(floor($days/365), "LBL_YEAR") . $suffix;
 	}
-	
+
 	/**
 	 * Function returns singular or plural text
 	 * @param <Number> $count
@@ -128,7 +128,7 @@ class Vtiger_Util_Helper {
 	public static function formatDateIntoStrings($date, $time = false) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$dateTimeInUserFormat = Vtiger_Datetime_UIType::getDisplayDateTimeValue($date . ' ' . $time);
-		
+
 		list($dateInUserFormat, $timeInUserFormat) = explode(' ', $dateTimeInUserFormat);
 		list($hours, $minutes, $seconds) = explode(':', $timeInUserFormat);
 
@@ -151,9 +151,9 @@ class Vtiger_Util_Helper {
 				$formatedDate .= ' '. vtranslate('LBL_AT') .' '. $displayTime;
 			}
 		} else {
-			$date = strtotime($dateInUserFormat);
+			$date = strtotime($date.' '.$time);
 			$formatedDate = vtranslate('LBL_'.date('D', $date)) . ' ' . date('d', $date) . ' ' . vtranslate('LBL_'.date('M', $date));
-			if (date('Y', $date) > date('Y')) {
+			if (date('Y', $date) != date('Y')) {
 				$formatedDate .= ', '.date('Y', $date);
 			}
 		}
@@ -185,6 +185,30 @@ class Vtiger_Util_Helper {
         return false;
     }
 
+	/**
+	 * Function to parse dateTime into Days
+	 * @param <DateTime> $dateTime
+	 * @return <String>
+	 */
+	public static function formatDateTimeIntoDayString($dateTime) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$dateTimeInUserFormat = Vtiger_Datetime_UIType::getDisplayDateTimeValue($dateTime);
+
+		list($dateInUserFormat, $timeInUserFormat) = explode(' ', $dateTimeInUserFormat);
+		list($hours, $minutes, $seconds) = explode(':', $timeInUserFormat);
+
+		$displayTime = $hours .':'. $minutes;
+		if ($currentUser->get('hour_format') === '12') {
+			$displayTime = Vtiger_Time_UIType::getTimeValueInAMorPM($displayTime);
+		}
+
+		$date = strtotime($dateTime);
+		//Adding date details
+		$formatedDate = vtranslate('LBL_'.date('D', $date)). ', ' .vtranslate('LBL_'.date('M', $date)). ' ' .date('d', $date). ', ' .date('Y', $date);
+		//Adding time details
+		$formatedDate .= ' ' .vtranslate('LBL_AT'). ' ' .$displayTime;
+
+		return $formatedDate;
+	}
+
 }
-
-

@@ -164,8 +164,9 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 
 		$searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
+		$operator = $this->get('operator');
 		if(!empty($searchKey)) {
-			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue));
+			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
 		$listQuery = $this->getQuery();
@@ -187,7 +188,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$sortOrder = $this->getForSql('sortorder');
 
 		//List view will be displayed on recently created/modified records
-		if(empty($orderBy) && empty($sortOrder)){
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
 			$orderBy = 'modifiedtime';
 			$sortOrder = 'DESC';
 		}
@@ -233,7 +234,16 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$db = PearDatabase::getInstance();
 
 		$queryGenerator = $this->get('query_generator');
+
+        $searchKey = $this->get('search_key');
+		$searchValue = $this->get('search_value');
+		$operator = $this->get('operator');
+		if(!empty($searchKey)) {
+			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
+		}
+
 		$listQuery = $queryGenerator->getQuery();
+		
 
 		$sourceModule = $this->get('src_module');
 		if(!empty($sourceModule)) {
@@ -254,11 +264,11 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 				$listQuery = $listQuery. ' FROM ' .$split[$i];
 			}
 		}
-		
+
 		if($this->getModule()->get('name') == 'Calendar'){
 			$listQuery .= ' AND activitytype <> "Emails"';
 		}
-		
+
 		$listResult = $db->pquery($listQuery, array());
 		return $db->query_result($listResult, 0, 'count');
 	}
@@ -282,12 +292,15 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$instance = new $modelClassName();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$queryGenerator = new QueryGenerator($moduleModel->get('name'), $currentUser);
+		$customView = new CustomView();
 		if (!empty($viewId) && $viewId != "0") {
 			$queryGenerator->initForCustomViewById($viewId);
+
+			//Used to set the viewid into the session which will be used to load the same filter when you refresh the page
+			$viewId = $customView->getViewId($moduleName);
 		} else {
-			$customView = new CustomView();
-			$defaultViewId = $customView->getViewId($moduleName);
-			if(!empty($defaultViewId) && $defaultViewId != 0) {
+			$viewId = $customView->getViewId($moduleName);
+			if(!empty($viewId) && $viewId != 0) {
 				$queryGenerator->initForDefaultCustomView();
 			} else {
 				$entityInstance = CRMEntity::getInstance($moduleName);

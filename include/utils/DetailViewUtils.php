@@ -1272,7 +1272,7 @@ function getDetailAssociatedProducts($module, $focus) {
 		$unitprice = $adb->query_result($result, $i - 1, 'unit_price');
 		$listprice = $adb->query_result($result, $i - 1, 'listprice');
 		$total = $qty * $listprice;
-		
+
 		//Product wise Discount calculation - starts
 		$discount_percent = $adb->query_result($result, $i - 1, 'discount_percent');
 		$discount_amount = $adb->query_result($result, $i - 1, 'discount_amount');
@@ -1398,17 +1398,17 @@ function getDetailAssociatedProducts($module, $focus) {
 	$final_discount_info = '0';
 	//if($focus->column_fields['hdnDiscountPercent'] != '') - previously (before changing to prepared statement) the selected option (either percent or amount) will have value and the other remains empty. So we can find the non selected item by empty check. But now with prepared statement, the non selected option stored as 0
 	if ($focus->column_fields['hdnDiscountPercent'] != '0') {
-		$finalDiscount = ($netTotal * $focus->column_fields['hdnDiscountPercent'] / 100);
-		$final_discount_info = $focus->column_fields['hdnDiscountPercent'] . " % of ".CurrencyField::convertToUserFormat($netTotal, null, true).
+		$finalDiscount = $final_discount_info = ($netTotal * $focus->column_fields['hdnDiscountPercent'] / 100);
+		$final_discount_info_string = $focus->column_fields['hdnDiscountPercent'] . " % of ".CurrencyField::convertToUserFormat($netTotal, null, true).
 											" = ". CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	} elseif ($focus->column_fields['hdnDiscountAmount'] != '0') {
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
-		$final_discount_info = CurrencyField::convertToUserFormat($finalDiscount, null, true);
+		$final_discount_info_string = $final_discount_info = CurrencyField::convertToUserFormat($finalDiscount, null, true);
 	}
-	
+
 	//Alert the Final Discount amount even it is zero
 	$final_discount_info = CurrencyField::convertToUserFormat($final_discount_info, null, true);
-	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT'] . " = $final_discount_info";
+	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT'] . " = $final_discount_info_string";
 	$final_discount_info = 'onclick="alert(\'' . $final_discount_info . '\');"';
 
 	$output .= '<tr>';

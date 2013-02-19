@@ -44,10 +44,10 @@ else{
 	$smarty->assign("THEME", $theme);
 	$smarty->assign("IMAGE_PATH", "themes/$theme/images/");
 	
-	$module_disable = $_REQUEST['module_disable'];
-	$module_name = $_REQUEST['module_name'];
-	$module_enable = $_REQUEST['module_enable'];
-	$module_type = $_REQUEST['module_type'];
+	$module_disable = vtlib_purify($_REQUEST['module_disable']);
+	$module_name = vtlib_purify($_REQUEST['module_name']);
+	$module_enable = vtlib_purify($_REQUEST['module_enable']);
+	$module_type = vtlib_purify($_REQUEST['module_type']);
 	
 	if($module_name != '') {
 		if($module_type == 'language') {

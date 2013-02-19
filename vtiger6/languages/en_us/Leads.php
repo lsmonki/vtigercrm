@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Leads' => 'Lead',
 	'LBL_RECORDS_LIST' => 'Leads List',
 	'LBL_ADD_RECORD' => 'Add Lead',
-	'LBL_RECORD_SUMMARY' => 'Leads Summary',
 
 	// Blocks
 	'LBL_LEAD_INFORMATION' => 'Lead Details',

@@ -8,22 +8,22 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Assets'                => 'Vagyontárgy'                , 
-	'LBL_ADD_RECORD'               => 'Add Assets'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Assets List'                 , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Assets Summary'              , // TODO: Review
-	'LBL_ASSET_INFORMATION'        => 'Vagyontárgy adatok'         , 
-	'Asset No'                     => 'Vagyontárgy No.'            , 
-	'Serial Number'                => 'Gyári sorozat szám'        , 
-	'Date Sold'                    => 'Értékesítés dátuma'     , 
-	'Date in Service'              => 'Karbantartás kezdő dátuma', 
-	'Tag Number'                   => 'Címke száma'               , 
-	'Invoice Name'                 => 'Számla/Díjbekérő megnevezése ', 
-	'Shipping Method'              => 'Szállítási mód'          , 
-	'Shipping Tracking Number'     => 'Szállítási azonosító szám', 
-	'Asset Name'                   => 'Vagyontárgy neve'           , 
-	'Customer Name'                => 'Vásárló neve '            , 
-	'Notes'                        => 'Leírás:'                   , 
-	'In Service'                   => 'Karbantartás alatt'         , 
-	'Out-of-service'               => 'Üzemképes'                 , 
+	'SINGLE_Assets'                => 'Vagyontárgy'					,
+	'LBL_ADD_RECORD'               => 'Vagyontárgy hozzáadása'		,
+	'LBL_RECORDS_LIST'             => 'Vagyontárgyak listája'		,
+	'LBL_RECORD_SUMMARY'           => 'Vagyontárgy összefoglaló'	,
+	'LBL_ASSET_INFORMATION'        => 'Vagyontárgy adatok'			,
+	'Asset No'                     => 'Vagyontárgy No.'				,
+	'Serial Number'                => 'Gyári sorozat szám'			,
+	'Date Sold'                    => 'Értékesítés dátuma'			,
+	'Date in Service'              => 'Karbantartás kezdő dátuma'	,
+	'Tag Number'                   => 'Címke száma'					,
+	'Invoice Name'                 => 'Számla/Díjbekérő megnevezése',
+	'Shipping Method'              => 'Szállítási mód'				,
+	'Shipping Tracking Number'     => 'Szállítási azonosító szám'	,
+	'Asset Name'                   => 'Vagyontárgy neve'			,
+	'Customer Name'                => 'Vásárló neve'				,
+	'Notes'                        => 'Leírás:'						,
+	'In Service'                   => 'Karbantartás alatt'			,
+	'Out-of-service'               => 'Üzemképes'					,
 );

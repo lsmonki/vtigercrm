@@ -21,6 +21,9 @@ class VTSimpleTemplate{
 
 	private function matchHandler($match){
 		preg_match('/\((\w+) : \(([_\w]+)\) (\w+)\)/', $match[1], $matches);
+		if ($match[1] == 'logo') {
+			return $this->getMetaValue($match[1]);
+		}
 		if(count($matches)==0){
 			$fieldname = $match[1];
 			$data = $this->parent->getData();
@@ -106,6 +109,7 @@ class VTSimpleTemplate{
 											return $PORTAL_URL.'/index.php?module='.$moduleName.'&action=index&'.$recorIdName.'='.$recordId.'&fun=detail';
 			case 'siteurl'				: return $site_URL;
 			case 'portalurl'			: return $PORTAL_URL;
+			case 'logo'					: return '<img src="cid:logo" />';
 			default: '';
 		}
 	}

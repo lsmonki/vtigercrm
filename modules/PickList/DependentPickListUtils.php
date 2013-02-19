@@ -160,6 +160,7 @@ class Vtiger_DependencyPicklist {
 
 		$picklistDependencyDatasource = array();
 		for($i=0; $i<$noofrows; ++$i) {
+			$pickArray = array();
 			$sourceField = $adb->query_result($result, $i, 'sourcefield');
 			$targetField = $adb->query_result($result, $i, 'targetfield');
 			$sourceValue = decode_html($adb->query_result($result, $i, 'sourcevalue'));

@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Accounts' => 'Organization',
 	'LBL_ADD_RECORD' => 'Add Organization',
 	'LBL_RECORDS_LIST' => 'Organization List',
-	'LBL_RECORD_SUMMARY' => 'Organization Summary',
 
 	// Blocks
 	'LBL_ACCOUNT_INFORMATION' => 'Organization Details',
@@ -53,6 +52,7 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Are you sure you want to delete?',
 	'LBL_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization(s) will remove its related Opportunities & Quotes. Are you sure you want to delete the selected records?',
 );

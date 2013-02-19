@@ -18,10 +18,13 @@
 	{if $MODULE eq 'Products'}<div id="MultiFile1_wrap_list" class="MultiFile-list"></div>{/if}
 
 	{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
-		<div class="imageContainer">
+		<div class="row-fluid">
 			{if !empty($IMAGE_INFO.path) && !empty({$IMAGE_INFO.orgname})}
-				<img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" data-image-id="{$IMAGE_INFO.id}">&nbsp;&nbsp;[{$IMAGE_INFO.name}]
-				<input type="button" id="file_{$ITER}" value="Delete" class="imageDelete">
+				<span class="span8"><img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" data-image-id="{$IMAGE_INFO.id}"></span>
+				<span class="span3 row-fluid">
+					<span class="row-fluid">[{$IMAGE_INFO.name}]</span>
+					<span class="row-fluid"><input type="button" id="file_{$ITER}" value="Delete" class="imageDelete"></span>
+				</span>
 			{/if}
 		</div>
 	{/foreach}

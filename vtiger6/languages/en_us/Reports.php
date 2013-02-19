@@ -28,9 +28,10 @@ $languageStrings = array(
 	'LBL_FOLDER_NAME' => 'Folder Name',
 	'LBL_FOLDER_DESCRIPTION' => 'Folder Description',
 	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Enter Description',
-	'LBL_DUPLICATES_EXIST' => 'Duplicate Exists',
+	'LBL_DUPLICATES_EXIST' => 'Report Name already Exists',
 	'LBL_FOLDERS_LIST' => 'Folders List',
 	'LBL_DENIED_REPORTS' => 'Denied Reports',
+	'LBL_NO_OF_RECORDS' => 'Number of records',
 	//ListView Actions
 	'LBL_ADD_RECORD' => 'Add Report',
 	'LBL_ADD_FOLDER' => 'Add Folder',
@@ -142,4 +143,7 @@ $languageStrings = array(
 	'LBL_LIMIT_EXCEEDED' => 'Only 1000 + records are displayed. Use CSV or Excel Export to see all the records',
 	'LBL_TOP' => 'Top',
 	'LBL_ALL_REPORTS' => 'All Reports',
+);
+$jsLanguageStrings = array(
+	'JS_DUPLICATE_RECORD' => 'Duplicate Report',
 );

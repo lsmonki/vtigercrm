@@ -97,7 +97,11 @@ class vtigerCRMHandler extends SyncHandler {
             }
             if($hasDeleteAccess){
                 if(in_array($idComp[1], $assignedDeletedRecordIds)){
-                    vtws_delete($record, $this->user);
+                    try{
+                        vtws_delete($record, $this->user);
+                    } catch(Exception $e){
+                        
+                    }
                 }
             }
         }

@@ -11,11 +11,11 @@ $languageStrings = array(
 	//DetailView Actions
 	'SINGLE_Quotes' => 'Quote',
 	'LBL_EXPORT_TO_PDF' => 'Export to PDF',
+    'LBL_SEND_MAIL_PDF' => 'Send Email with PDF',
 
 	//Basic strings
 	'LBL_ADD_RECORD' => 'Add Quote',
 	'LBL_RECORDS_LIST' => 'Quotes List',
-	'LBL_RECORD_SUMMARY' => 'Quotes Summary',
 
 	// Blocks
 	'LBL_QUOTE_INFORMATION' => 'Quote Details',

@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.18 2005/04/19 14:45:38 ray Exp $
  * Description:  Defines the English language pack for the Users module.
  ********************************************************************************/
- 
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Users',
 'LBL_MODULE_TITLE'=>'Users: Home',
@@ -409,7 +409,7 @@ $mod_strings = Array(
 //added for inventory terms and conditions
 'INV_TANDC'=>'Terms & Coditions',
 'INV_TERMSANDCONDITIONS'=>'Inventory Terms & Coditions',
-'LBL_INV_TERMSANDCONDITIONS'=>'Inventory Management', 
+'LBL_INV_TERMSANDCONDITIONS'=>'Inventory Management',
 
 
 'INVENTORYNOTIFICATION'=>'Inventory Notifications',
@@ -685,7 +685,7 @@ $mod_strings = Array(
 'Asterisk Extension' => 'Asterisk Extension',
 ' Receive Incoming Calls' => 'Receive Incoming Calls',
 
-// Added for Create Custom Fields 
+// Added for Create Custom Fields
 'LBL_USER_CUSTOMFIELDS_DESCRIPTION' => 'Create Custom Fields for Users ',
 'LBL_USER_CUSTOMFIELDS' => 'Users Custom Fields',
 'LBL_CURRENCY_CONFIGURATION'=> 'Currency and Number Field Configuration',
@@ -788,12 +788,12 @@ $mod_strings = Array(
 'Pacific/Auckland' => '(UTC+12:00) Auckland',
 'Asia/Magadan' => '(UTC+12:00) Magadan',
 'Pacific/Tongatapu' => '(UTC+13:00) Nukualofa',
-    
+
 'Theme'=>'Theme',
 'Language'=>'Language',
 'Secondary Email'=>'Secondary Email',
 'Time Zone'=>'Time Zone',
-	
+'LBL_CALENDAR_SETTINGS' => 'Calendar Settings'
 );
 
 ?>

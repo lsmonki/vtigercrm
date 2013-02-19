@@ -46,4 +46,23 @@ class Vtiger_Datetime_UIType extends Vtiger_Date_UIType {
 		$date = new DateTimeField($date);
 		return $date->getDBInsertDateTimeValue();
 	}
+	
+	/**
+	 * Function to get the datetime value in user preferred hour format
+	 * @param <type> $dateTime
+	 * @return <String> date and time with hour format
+	 */
+	public static function getDateTimeValue($dateTime){
+		$userModel = Users_Privileges_Model::getCurrentUserModel();
+		$date = new DateTime($dateTime);
+		
+		$dateTimeField = new DateTimeField($date->format('Y-m-d H:i:s'));
+		$date = $dateTimeField->getDisplayDate();
+		$time = $dateTimeField->getDisplayTime();
+		
+		if($userModel->get('hour_format') == '12'){
+			$time = Vtiger_Time_UIType::getTimeValueInAMorPM($time);
+		}
+		return $date . ' ' .$time;
+	}
 }

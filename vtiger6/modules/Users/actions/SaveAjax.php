@@ -11,8 +11,7 @@
 class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 
 	public function process(Vtiger_Request $request) {
-		$recordModel = $this->getRecordModelFromRequest($request);
-		$recordModel->save();
+		$recordModel = $this->saveRecord($request);
 
 		$fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();

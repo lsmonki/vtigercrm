@@ -39,12 +39,11 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	/**
 	 * Function which will register event for Reference Fields Selection
 	 */
-	registerReferenceSelectionEvent : function() {
+	registerReferenceSelectionEvent : function(container) {
 		var thisInstance = this;
-		var formElement = thisInstance.getForm();
 		
-		jQuery('input[name="account_id"]', formElement).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
-			thisInstance.referenceSelectionEventHandler(data);
+		jQuery('input[name="account_id"]', container).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
+			thisInstance.referenceSelectionEventHandler(data, container);
 		});
 	},
 	
@@ -52,12 +51,12 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	 * Reference Fields Selection Event Handler
 	 * On Confirmation It will copy the address details
 	 */
-	referenceSelectionEventHandler :  function(data) {
+	referenceSelectionEventHandler :  function(data, container) {
 		var thisInstance = this;
 		var message = app.vtranslate('OVERWRITE_EXISTING_MSG1')+app.vtranslate('SINGLE_'+data['source_module'])+' ('+data['selectedName']+') '+app.vtranslate('OVERWRITE_EXISTING_MSG2');
 		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 			function(e) {
-				thisInstance.copyAddressDetails(data);
+				thisInstance.copyAddressDetails(data, container);
 			},
 			function(error, err){
 			});
@@ -66,13 +65,13 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	/**
 	 * Function which will copy the address details - without Confirmation
 	 */
-	copyAddressDetails : function(data) {
+	copyAddressDetails : function(data, container) {
 		var thisInstance = this;
 		var sourceModule = data['source_module'];
 		thisInstance.getRecordDetails(data).then(
 			function(data){
 				var response = data['result'];
-				thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data']);
+				thisInstance.mapAddressDetails(thisInstance.addressFieldsMapping[sourceModule], response['data'], container);
 			},
 			function(error, err){
 
@@ -82,10 +81,10 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	/**
 	 * Function which will map the address details of the selected record
 	 */
-	mapAddressDetails : function(addressDetails, result) {
-		var formElement = this.getForm();
+	mapAddressDetails : function(addressDetails, result, container) {
 		for(var key in addressDetails) {
-			formElement.find('[name="'+key+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+key+'"]').val(result[addressDetails[key]]);
+			container.find('[name="'+key+'"]').trigger('change');
 		}
 	},
 	
@@ -108,21 +107,20 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	 * Function to copy address between fields
 	 * @param strings which accepts value as either odd or even
 	 */
-	copyAddress : function(swapMode){
+	copyAddress : function(swapMode, container){
 		var thisInstance = this;
-		var formElement = this.getForm();
 		var addressMapping = this.addressFieldsMappingInModule;
 		if(swapMode == "false"){
 			for(var key in addressMapping) {
-				var fromElement = formElement.find('[name="'+key+'"]');
-				var toElement = formElement.find('[name="'+addressMapping[key]+'"]');
+				var fromElement = container.find('[name="'+key+'"]');
+				var toElement = container.find('[name="'+addressMapping[key]+'"]');
 				toElement.val(fromElement.val());
 			}
 		} else if(swapMode){
 			var swappedArray = thisInstance.swapObject(addressMapping);
 			for(var key in swappedArray) {
-				var fromElement = formElement.find('[name="'+key+'"]');
-				var toElement = formElement.find('[name="'+swappedArray[key]+'"]');
+				var fromElement = container.find('[name="'+key+'"]');
+				var toElement = container.find('[name="'+swappedArray[key]+'"]');
 				toElement.val(fromElement.val());
 			}
 		}
@@ -132,7 +130,7 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	/**
 	 * Function to register event for copying address between two fileds
 	 */
-	registerEventForCopyingAddress : function(){
+	registerEventForCopyingAddress : function(container){
 		var thisInstance = this;
 		var swapMode;
 		jQuery('[name="copyAddress"]').on('click',function(e){
@@ -143,7 +141,7 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 			} else if(target == "mailing"){
 				swapMode = "true";
 			}
-			thisInstance.copyAddress(swapMode);
+			thisInstance.copyAddress(swapMode, container);
 		})
 	},
 
@@ -185,15 +183,10 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 		})
 	},
 	
-	/**
-	 * Function which will register all the events
-	 */
-    registerEvents : function() {
-		var form = this.getForm();
-		this._super();
-		this.registerReferenceSelectionEvent();
-		this.registerEventForCopyingAddress();
-        this.registerRecordPreSaveEvent(form);
+	registerBasicEvents : function(container){
+		this._super(container);
+		this.registerReferenceSelectionEvent(container);
+		this.registerEventForCopyingAddress(container);
+		this.registerRecordPreSaveEvent(container);
 	}
-
 })

@@ -23,6 +23,9 @@ class Users_Save_Action extends Vtiger_Save_Action {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 			$modelData = $recordModel->getData();
 			$recordModel->set('id', $recordId);
+			$sharedType = $request->get('sharedtype');
+			if(!empty($sharedType))
+				$recordModel->set('calendarsharedtype', $request->get('sharedtype'));
 			$recordModel->set('mode', 'edit');
 		} else {
 			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
@@ -52,9 +55,17 @@ class Users_Save_Action extends Vtiger_Save_Action {
 				$request->setGlobal($key, '');
 			}
 		}
+
+		// Tag cloud save
+		$tagCloud = $request->get('tagcloudview');
+		if($tagCloud == "on") {
+			$recordModel->set('tagcloud', 0);
+		} else {
+			$recordModel->set('tagcloud', 1);
+		}
 		return $recordModel;
 	}
-	
+
 	public function process(Vtiger_Request $request) {
 		$result = Vtiger_Util_Helper::transformUploadedFiles($_FILES, true);
 		$_FILES = $result['imagename'];

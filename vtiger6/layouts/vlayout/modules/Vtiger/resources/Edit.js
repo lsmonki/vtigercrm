@@ -19,10 +19,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 	recordPreSave : 'Vtiger.Record.PreSave',
 
     refrenceMultiSelectionEvent : 'Vtiger.MultiReference.Selection',
+    
+    preReferencePopUpOpenEvent : 'Vtiger.Referece.Popup.Pre',
 
-	getInstance : function() {
-		var module = app.getModuleName();;
-	    var moduleClassName = module+"_Edit_Js";
+	getInstance : function(moduleName) {
+		if(typeof moduleName == "undefined"){
+			moduleName = app.getModuleName();
+		}
+	    var moduleClassName = moduleName+"_Edit_Js";
 		var fallbackClassName = Vtiger_Edit_Js;
 		if(typeof window[moduleClassName] != 'undefined'){
 			var instance = new window[moduleClassName]();
@@ -91,6 +95,13 @@ jQuery.Class("Vtiger_Edit_Js",{
         }
 
         var sourceFieldElement = jQuery('input[class="sourceField"]',parentElem);
+        
+        var prePopupOpenEvent = jQuery.Event(Vtiger_Edit_Js.preReferencePopUpOpenEvent);
+        sourceFieldElement.trigger(prePopupOpenEvent);
+        
+        if(prePopupOpenEvent.isDefaultPrevented()) {
+            return ;
+        }
 
 		var popupInstance =Vtiger_Popup_Js.getInstance();
 		popupInstance.show(params,function(data){
@@ -362,6 +373,8 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerTimeFields(container);
 		//Added here instead of register basic event of calendar. because this should be registered all over the places like quick create, edit, list..
 		this.registerEventStatusChangeEvent(container);
+		this.registerRecordAccessCheckEvent(container);
+		this.registerEventForPicklistDependencySetup(container);
 	},
 
 	/**
@@ -394,7 +407,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 	},
 
 	triggerDisplayTypeEvent : function() {
-		var widthType = app.cacheGet('widthType', 'wideWidthType');
+		var widthType = app.cacheGet('widthType', 'narrowWidthType');
 		if(widthType) {
 			var elements = jQuery('#EditView').find('td');
 			elements.addClass(widthType);
@@ -405,6 +418,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 		var editViewForm = this.getForm();
 		
 		editViewForm.submit(function(e){
+			
 			//Form should submit only once for multiple clicks also
 			if(typeof editViewForm.data('submit') != "undefined") {
 				return false;
@@ -412,14 +426,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 				if(editViewForm.validationEngine('validate')) {
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');
-					//on submit form trigger the recordPreSave event
-					var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
-					editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
-					if(recordPreSaveEvent.isDefaultPrevented()) {
-						//If duplicate record validation fails, form should submit again
-						editViewForm.removeData('submit');
-						e.preventDefault();
-					}
+						//on submit form trigger the recordPreSave event
+						var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+						editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
+						if(recordPreSaveEvent.isDefaultPrevented()) {
+							//If duplicate record validation fails, form should submit again
+							editViewForm.removeData('submit');
+							e.preventDefault();
+						}
 				} else {
 					//If validation fails, form should submit again
 					editViewForm.removeData('submit');
@@ -429,7 +443,108 @@ jQuery.Class("Vtiger_Edit_Js",{
 			}
 		});
 	},
+	
+	/*
+	 * Function to check the view permission of a record after save
+	 */
+	
+	registerRecordAccessCheckEvent : function(form) {
+		
+		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
+			var assignedToSelectElement = jQuery('[name="assigned_user_id"]',form); 
+			if(assignedToSelectElement.data('recordaccessconfirmation') == true) {
+				return;
+			}else{
+				if(assignedToSelectElement.data('recordaccessconfirmationprogress') != true) {
+					var recordAccess = assignedToSelectElement.find('option:selected').data('recordaccess');
+					if(recordAccess == false) {
+						var message = app.vtranslate('JS_NO_VIEW_PERMISSION_AFTER_SAVE');
+						Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+						function(e) {
+							assignedToSelectElement.data('recordaccessconfirmation',true);
+							assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+							form.append('<input type="hidden" name="returnToList" value="true" />');
+							form.submit();
+						},
+						function(error, err){
+							assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+							e.preventDefault();	
+						});
+						assignedToSelectElement.data('recordaccessconfirmationprogress',true);
+					} else {
+						return true;
+					}
+				} 
+			}
+			e.preventDefault();
+		});
+	},
+	
+	/**
+	 * Function to register event for setting up picklistdependency
+	 * for a module if exist on change of picklist value
+	 */
+	registerEventForPicklistDependencySetup : function(container){
+        var picklistDependcyElemnt = jQuery('[name="picklistDependency"]',container);
+        if(picklistDependcyElemnt.length <= 0) {
+            return;
+        }
+		var picklistDependencyMapping = JSON.parse(picklistDependcyElemnt.val());
+		
+		var sourcePicklists = Object.keys(picklistDependencyMapping);
+		if(sourcePicklists.length <= 0){
+			return;
+		}
+		
+		var sourcePickListNames = "";
+		for(var i=0;i<sourcePicklists.length;i++){
+			sourcePickListNames += '[name="'+sourcePicklists[i]+'"],';
+		}
+		var sourcePickListElements = container.find(sourcePickListNames);
+		
+		sourcePickListElements.on('change',function(e){
+			var currentElement = jQuery(e.currentTarget);
+			var sourcePicklistname = currentElement.attr('name');
+			
+			var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
+			var selectedValue = currentElement.val();
+			var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
+			var picklistmap = configuredDependencyObject["__DEFAULT__"];
+			
+			if(typeof targetObjectForSelectedSourceValue == 'undefined'){
+				targetObjectForSelectedSourceValue = picklistmap;
+			}
+			jQuery.each(picklistmap,function(targetPickListName,targetPickListValues){
+				var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
+				if(typeof targetPickListMap == "undefined"){
+					targetPickListMap = targetPickListValues;
+				}
+				var targetPickList = jQuery('[name="'+targetPickListName+'"]',container);
+				if(targetPickList.length <= 0){
+					return;
+				}
 
+				var listOfAvailableOptions = targetPickList.data('availableOptions');
+
+				if(typeof listOfAvailableOptions == "undefined"){
+					listOfAvailableOptions = jQuery('option',targetPickList);
+					targetPickList.data('available-options', listOfAvailableOptions);
+				}
+
+
+				var optionSelector = '';
+				for(var i=0; i<targetPickListMap.length; i++){
+					optionSelector += '[value="'+targetPickListMap[i]+'"],';
+				}
+				var targetOptions = listOfAvailableOptions.filter(optionSelector);
+				targetPickList.html(targetOptions).trigger("liszt:updated");
+			})
+		});
+		
+		//To Trigger the change on load 
+		sourcePickListElements.trigger('change');
+	},
+	
 	registerEvents: function(){
 		var editViewForm = this.getForm();
 		var statusToProceed = this.proceedRegisterEvents();

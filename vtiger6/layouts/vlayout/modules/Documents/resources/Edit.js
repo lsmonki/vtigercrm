@@ -109,7 +109,8 @@ Vtiger_Edit_Js("Documents_Edit_Js", {} ,{
 	 * Function to register event for ckeditor for description field
 	 */
 	registerEventForCkEditor : function(){
-		var noteContentElement = jQuery('#notecontent');
+		var form = this.getForm();
+		var noteContentElement = form.find('[name="notecontent"]');
 		if(noteContentElement.length > 0){
 			var ckEditorInstance = new Vtiger_CkEditor_Js();
 			ckEditorInstance.loadCkEditor(noteContentElement);

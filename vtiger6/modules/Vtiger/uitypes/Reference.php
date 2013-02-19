@@ -29,6 +29,8 @@ class Vtiger_Reference_UIType extends Vtiger_Base_UIType {
 		$referenceEntityType = getSalesEntityType($value);
 		if(in_array($referenceEntityType, $referenceModuleList)) {
 			return Vtiger_Module_Model::getInstance($referenceEntityType);
+		} elseif (in_array('Users', $referenceModuleList)) {
+			return Vtiger_Module_Model::getInstance('Users');
 		}
 		return null;
 	}
@@ -40,12 +42,20 @@ class Vtiger_Reference_UIType extends Vtiger_Base_UIType {
 	 */
 	public function getDisplayValue($value) {
 		$referenceModule = $this->getReferenceModule($value);
-		if($referenceModule) {
+		if($referenceModule && !empty($value)) {
 			$referenceModuleName = $referenceModule->get('name');
-			$entityNames = getEntityName($referenceModuleName, array($value));
-			$linkValue = "<a href='index.php?module=$referenceModuleName&view=".$referenceModule->getDetailViewName()."&record=$value'
-						title='".vtranslate($referenceModuleName, $referenceModuleName)."'>$entityNames[$value]</a>";
-			return $linkValue;
+			if($referenceModuleName == 'Users') {
+				$db = PearDatabase::getInstance();
+				$nameResult = $db->pquery('SELECT first_name, last_name FROM vtiger_users WHERE id = ?', array($value));
+				if($db->num_rows($nameResult)) {
+					return $db->query_result($nameResult, 0, 'first_name').' '.$db->query_result($nameResult, 0, 'last_name');
+				}
+			} else {
+				$entityNames = getEntityName($referenceModuleName, array($value));
+				$linkValue = "<a href='index.php?module=$referenceModuleName&view=".$referenceModule->getDetailViewName()."&record=$value'
+							title='".vtranslate($referenceModuleName, $referenceModuleName)."'>$entityNames[$value]</a>";
+				return $linkValue;
+			}
 		}
 		return '';
 	}

@@ -142,7 +142,7 @@ class Calendar_Detail_View extends Vtiger_Detail_View {
 
         if($moduleName=='Events') {
             $currentUser = Users_Record_Model::getCurrentUserModel();
-            $accessibleUsers = $currentUser->getAccessibleUsersForModule($moduleName);
+            $accessibleUsers = $currentUser->getAccessibleUsers();
             $viewer->assign('ACCESSIBLE_USERS', $accessibleUsers);
             $viewer->assign('INVITIES_SELECTED', $recordModel->getInvities());
         }

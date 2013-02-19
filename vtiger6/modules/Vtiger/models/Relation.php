@@ -91,7 +91,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 
 		$label = $this->get('label');
 		// No actions for Activity history
-		if($label == 'Activity History' || $label == 'Emails') {
+		if($label == 'Activity History') {
 			return array();
 		}
 
@@ -139,6 +139,22 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 		}
 		return $this->relationType;
 	}
+    
+    /**
+     * Function which will specify whether the relation is editable
+     * @return <Boolean>
+     */
+    public function isEditable() {
+        return $this->getRelationModuleModel()->isPermitted('EditView');
+    }
+    
+    /**
+     * Function which will specify whether the relation is deletable
+     * @return <Boolean>
+     */
+    public function isDeletable() {
+        return $this->getRelationModuleModel()->isPermitted('Delete');
+    }
 
 	public static function getInstance($parentModuleModel, $relatedModuleModel, $label=false) {
 		$db = PearDatabase::getInstance();
@@ -199,7 +215,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	public function getRelationField() {
 		$relationField = $this->get('relationField');
 		if (!$relationField) {
-			$relationField = '';
+			$relationField = false;
 			$relatedModel = $this->getRelationModuleModel();
 			$parentModule = $this->getParentModuleModel();
 			$relatedModelFields = $relatedModel->getFields();

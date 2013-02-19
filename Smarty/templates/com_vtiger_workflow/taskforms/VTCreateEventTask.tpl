@@ -43,6 +43,20 @@ var eventType = '{$task->eventType}';
 			<select id="event_type" value="{$task->eventType}" name="eventType" class="small" style="display: none;"></select>
 		</td>
 	</tr>
+	<tr valign="top">
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>{'LBL_ASSIGNED_TO'|getTranslatedString}</b></td>
+		<td class='dvtCellLabel'>
+			<select id="task_assigned_user_id" value="{$task->assigned_user_id}" name="assigned_user_id" class="small">
+				{foreach key=id item=assignedToName from=$ASSIGNED_TO}
+					{if $id eq $task->assigned_user_id}
+						<option value="{$id}" selected>{$assignedToName}</option>
+					{else}
+						<option value="{$id}">{$assignedToName}</option>
+					{/if}
+				{/foreach}
+			</select>
+		</td>
+	</tr>
 	<tr><td colspan="2"><hr size="1" noshade="noshade" /></td></tr>
 	<tr>
 		<td colspan="2" align="right">

@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Profiles'                     => 'Profilok'                    , // KEY 5.x: LBL_PROFILES
-	'SINGLE_Profiles'              => 'Profil'                      , // KEY 5.x: LBL_PROFILE_M
-	'LBL_ADD_RECORD'               => 'Add Profile'                 , // TODO: Review
-	'LBL_VIEW_PRVILIGE'            => 'Mutat'                       , // KEY 5.x: LBL_VIEW
-	'LBL_EDIT_PRVILIGE'            => 'Létrehoz/Szerkeszt'         , // KEY 5.x: LBL_CREATE_EDIT
-	'LBL_DELETE_PRVILIGE'          => 'Töröl'                     , // KEY 5.x: LBL_DELETE
-	'LBL_FIELD_PRVILIGES'          => 'Field Privileges'            , // TODO: Review
-	'LBL_TOOL_PRVILIGES'           => 'Tool Privileges'             , // TODO: Review
+	'Profiles'                     => 'Profilok'				, // KEY 5.x: LBL_PROFILES
+	'SINGLE_Profiles'              => 'Profil'					, // KEY 5.x: LBL_PROFILE_M
+	'LBL_ADD_RECORD'               => 'Profil hozzáadása'		,
+	'LBL_VIEW_PRVILIGE'            => 'Jogosultságok mutatása'	, // KEY 5.x: LBL_VIEW
+	'LBL_EDIT_PRVILIGE'            => 'Jogosultságot Létrehoz/Szerkeszt', // KEY 5.x: LBL_CREATE_EDIT
+	'LBL_DELETE_PRVILIGE'          => 'Jogosultságot Töröl'		, // KEY 5.x: LBL_DELETE
+	'LBL_FIELD_PRVILIGES'          => 'Mező Jogosultságok'		,
+	'LBL_TOOL_PRVILIGES'           => 'Eszköz Jogosultságok'	,
 );

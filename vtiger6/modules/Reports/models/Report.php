@@ -114,4 +114,14 @@ class Vtiger_Report_Model extends Reports {
 	function isEditable() {
 		return $this->is_editable;
 	}
+    
+    function getModulesList() {
+        foreach($this->module_list as $key=>$value) {
+            if(isPermitted($key,'index') == "yes") {
+                $modules [$key] = vtranslate($key, $key);
+            }
+        }
+        asort($modules);
+        return $modules;
+    }
 }

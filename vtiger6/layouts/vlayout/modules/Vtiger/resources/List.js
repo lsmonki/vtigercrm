@@ -10,6 +10,8 @@
 jQuery.Class("Vtiger_List_Js",{
 
 	listInstance : false,
+	
+	massEditPreSave : 'Vtiger.MassEdit.PreSave',
 
     getInstance: function(){
 		if(Vtiger_List_Js.listInstance == false){
@@ -34,32 +36,32 @@ jQuery.Class("Vtiger_List_Js",{
 		var listInstance = Vtiger_List_Js.getInstance();
 		var validationResult = listInstance.checkListRecordSelected();
 		if(validationResult != true){
-		Vtiger_Helper_Js.checkServerConfig(module).then(function(data){
-			if(data == true){
-				var callBackFunction = function(data){
-					var emailEditInstance = new Emails_MassEdit_Js();
-					emailEditInstance.registerEmailFieldSelectionEvent();
-				}
+			var selectedIds = listInstance.readSelectedIds(true);
+			var excludedIds = listInstance.readExcludedIds(true);
+			var cvId = listInstance.getCurrentCvId();
+			var postData = {
+				"viewname" : cvId,
+				"selected_ids":selectedIds,
+				"excluded_ids" : excludedIds
+			};
 
-				Vtiger_List_Js.triggerMassAction(massActionUrl,callBackFunction, function(data){
-					data = jQuery(data);
-					var form = data.find('#SendEmailFormStep1');
-					var emailFields = form.find('.emailField');
-					var length = emailFields.length;
-					if(length > 1) {
-						return true;
-					}
-					emailFields.attr('checked','checked');
-					var form = data.find('form');
-					var params = form.serializeFormData();
-					var emailEditInstance = new Emails_MassEdit_Js();
-					emailEditInstance.showComposeEmailForm(params);
-					return false;
-				},{'width':'30%'});
-			} else {
-				alert(app.vtranslate('JS_EMAIL_SERVER_CONFIGURATION'));
-			}
-		});
+            var listViewInstance = Vtiger_List_Js.getInstance();
+            var searchValue = listViewInstance.getAlphabetSearchValue();
+
+			if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+                postData['search_key'] = listViewInstance.getAlphabetSearchField();
+                postData['search_value'] = searchValue;
+                postData['operator'] = "s";
+            }
+
+			var actionParams = {
+				"type":"POST",
+				"url":massActionUrl,
+				"dataType":"html",
+				"data" : postData
+			};
+
+			Vtiger_Index_Js.showComposeEmailPopup(actionParams);
 		} else {
 			listInstance.noRecordSelectedAlert();
 		}
@@ -97,24 +99,35 @@ jQuery.Class("Vtiger_List_Js",{
 			var message = app.vtranslate('LBL_MASS_DELETE_CONFIRMATION');
 			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
+
 					var deleteURL = url+'&viewname='+cvId+'&selected_ids='+selectedIds+'&excluded_ids='+excludedIds;
+                    var listViewInstance = Vtiger_List_Js.getInstance();
+                    var searchValue = listViewInstance.getAlphabetSearchValue();
+
+                   	if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+                        deleteURL += '&search_key='+listViewInstance.getAlphabetSearchField();
+                        deleteURL += '&search_value='+searchValue;
+                        deleteURL += '&operator=s';
+                    }
 					AppConnector.request(deleteURL).then(
 						function(data) {
 							app.hideModalWindow();
 							var module = app.getModuleName();
-							AppConnector.request('index.php?module='+module+'&view=List&viewname='+cvId).then(
+							var params = listInstance.getDefaultParams();
+							AppConnector.request(params).then(
 								function(data) {
 									var listViewContainer = listInstance.getListViewContentContainer();
 									listViewContainer.html(data);
+									listInstance.triggerDisplayTypeEvent();
 									jQuery('#deSelectAllMsg').trigger('click');
+									listInstance.updatePagination();
 							});
 							jQuery('#recordsCount').val('');
 						}
 					);
 				},
 				function(error, err){
-				}
-			);
+				})
 		} else {
 			listInstance.noRecordSelectedAlert();
 		}
@@ -143,7 +156,9 @@ jQuery.Class("Vtiger_List_Js",{
 								"orderby": orderBy,
 								"sortorder": sortOrder
 							}
-							listInstance.getListViewRecords(urlParams);
+							listInstance.getListViewRecords(urlParams).then(function(){
+								listInstance.updatePagination();
+							});
 							jQuery('#recordsCount').val('');
 						} else {
 							var  params = {
@@ -188,6 +203,15 @@ jQuery.Class("Vtiger_List_Js",{
 			"excluded_ids" : excludedIds
 		};
 
+        var listViewInstance = Vtiger_List_Js.getInstance();
+        var searchValue = listViewInstance.getAlphabetSearchValue();
+
+		if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+            postData['search_key'] = listViewInstance.getAlphabetSearchField();
+            postData['search_value'] = searchValue;
+            postData['operator'] = "s";
+        }
+
 		var actionParams = {
 			"type":"POST",
 			"url":massActionUrl,
@@ -210,6 +234,7 @@ jQuery.Class("Vtiger_List_Js",{
 					app.showModalWindow(data,function(data){
 						if(typeof callBackFunction == 'function'){
 							callBackFunction(data);
+							listInstance.triggerDisplayTypeEvent();
 						}
 					},css)
 
@@ -234,14 +259,17 @@ jQuery.Class("Vtiger_List_Js",{
 			listInstance.registerReferenceFieldsForValidation(massEditForm);
 			listInstance.registerFieldsForValidation(massEditForm);
 			listInstance.registerEventForTabClick(massEditForm);
+			listInstance.registerRecordAccessCheckEvent(massEditForm);
 			var editInstance = Vtiger_Edit_Js.getInstance();
-			editInstance.registerBasicEvents(jQuery(container));
+			editInstance.registerBasicEvents(massEditForm);
+			//To remove the change happended for select elements due to picklist dependency
+			container.find('select').trigger('change',{'forceDeSelect':true});
 			listInstance.postMassEdit(container);
 
 			listInstance.registerSlimScrollMassEdit();
 		},{'width':'65%'});
 	},
-
+	
 	/*
 	 * function to trigger export action
 	 * returns UI
@@ -253,7 +281,16 @@ jQuery.Class("Vtiger_List_Js",{
 		var excludedIds = listInstance.readExcludedIds(true);
 		var cvId = listInstance.getCurrentCvId();
 		var pageNumber = jQuery('#pageNumber').val();
-		window.location.href = exportActionUrl+'&selected_ids='+selectedIds+'&excluded_ids='+excludedIds+'&viewname='+cvId+'&page='+pageNumber;
+
+        exportActionUrl += '&selected_ids='+selectedIds+'&excluded_ids='+excludedIds+'&viewname='+cvId+'&page='+pageNumber;
+
+        var listViewInstance = Vtiger_List_Js.getInstance();
+        var searchValue = listViewInstance.getAlphabetSearchValue();
+
+		if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+            exportActionUrl += '&search_key='+listViewInstance.getAlphabetSearchField()+'&search_value='+searchValue+'&operator=s';
+        }
+        window.location.href = exportActionUrl;
 	}
 
 },{
@@ -328,6 +365,14 @@ jQuery.Class("Vtiger_List_Js",{
 			'orderby' : orderBy,
 			'sortorder' : sortOrder
 		}
+
+        var searchValue = this.getAlphabetSearchValue();
+
+        if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+            params['search_key'] = this.getAlphabetSearchField();
+            params['search_value'] = searchValue;
+            params['operator'] = "s";
+        }
 		return params;
 	},
 
@@ -352,13 +397,13 @@ jQuery.Class("Vtiger_List_Js",{
 
 		var defaultParams = this.getDefaultParams();
 		var urlParams = jQuery.extend(defaultParams, urlParams);
-
 		AppConnector.requestPjax(urlParams).then(
 			function(data){
 				progressIndicatorElement.progressIndicator({
 					'mode' : 'hide'
 				})
                 jQuery('#listViewContents').html(data);
+				thisInstance.triggerDisplayTypeEvent();
 
 				var selectedIds = thisInstance.readSelectedIds();
 				if(selectedIds != ''){
@@ -410,22 +455,47 @@ jQuery.Class("Vtiger_List_Js",{
 		var massActionUrl = form.serializeFormData();
 		if(isMassEdit) {
 			var fieldsChanged = false;
-			var allowedKeys = new Array("module","action","excluded_ids","selected_ids","viewname");
-			for(var key in massActionUrl){
-				if(jQuery.inArray(key,allowedKeys) == '-1'){
-					var validationElement = form.find('[name='+key+'][data-validation-engine]');
-					if(validationElement.length == 0){
-						delete massActionUrl[key];
-						if(fieldsChanged != true){
-							fieldsChanged = false;
-						}
-					} else {
-						fieldsChanged = true;
-					}
-				}
+            var massEditFieldList = jQuery('#massEditFieldsNameList').data('value');
+			for(var fieldName in massEditFieldList){
+                var fieldInfo = massEditFieldList[fieldName];
+
+                var fieldElement = form.find('[name="'+fieldInfo.name+'"]');
+                if(fieldInfo.type == "reference") {
+                    //get the element which will be shown which has "_display" appended to actual field name
+                    fieldElement = form.find('[name="'+fieldInfo.name+'_display"]');
+                }else if(fieldInfo.type == "multipicklist") {
+                    fieldElement = form.find('[name="'+fieldInfo.name+'[]"]');
+                }
+                
+                //Not all fields will be enabled for mass edit 
+                if(fieldElement.length == 0) {
+                    continue;
+                }
+                
+                var validationElement = fieldElement.filter('[data-validation-engine]');
+                //check if you have element enabled has changed
+                if(validationElement.length == 0){
+                    if(fieldInfo.type == "multipicklist") {
+                        fieldName = fieldName+"[]";
+                    }
+                    delete massActionUrl[fieldName];
+                    if(fieldsChanged != true){
+                        fieldsChanged = false;
+                    }
+                } else {
+                    fieldsChanged = true;
+                }
 			}
 			if(fieldsChanged == false){
 				Vtiger_Helper_Js.showPnotify(app.vtranslate('NONE_OF_THE_FIELD_VALUES_ARE_CHANGED_IN_MASS_EDIT'));
+				form.find('[name="saveButton"]').removeAttr('disabled');
+				aDeferred.reject();
+				return aDeferred.promise();
+			}
+			//on submit form trigger the massEditPreSave event
+			var massEditPreSaveEvent = jQuery.Event(Vtiger_List_Js.massEditPreSave);
+			form.trigger(massEditPreSaveEvent);
+			if(massEditPreSaveEvent.isDefaultPrevented()) {
 				form.find('[name="saveButton"]').removeAttr('disabled');
 				aDeferred.reject();
 				return aDeferred.promise();
@@ -442,6 +512,46 @@ jQuery.Class("Vtiger_List_Js",{
 			}
 		);
 		return aDeferred.promise();
+	},
+	
+	/*
+	 * Function to check the view permission of a record after save
+	 */
+	registerRecordAccessCheckEvent : function(form) {
+		
+		form.on(Vtiger_List_Js.massEditPreSave, function(e) {
+			var assignedToSelectElement = form.find('[name="assigned_user_id"][data-validation-engine]');
+			if(assignedToSelectElement.length > 0){
+				if(assignedToSelectElement.data('recordaccessconfirmation') == true) {
+					return;
+				}else{
+					if(assignedToSelectElement.data('recordaccessconfirmationprogress') != true) {
+						var recordAccess = assignedToSelectElement.find('option:selected').data('recordaccess');
+						if(recordAccess == false) {
+							var message = app.vtranslate('JS_NO_VIEW_PERMISSION_AFTER_SAVE');
+							Vtiger_Helper_Js.showConfirmationBox({
+								'message' : message
+							}).then(
+								function(e) {
+									assignedToSelectElement.data('recordaccessconfirmation',true);
+									assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+									form.submit();
+								},
+								function(error, err){
+									assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+									e.preventDefault();	
+								});
+							assignedToSelectElement.data('recordaccessconfirmationprogress',true);
+						} else {
+							return true;
+						}
+					} 
+				}
+			} else{
+				return true;
+			}
+			e.preventDefault();
+		});
 	},
 
 	checkSelectAll : function(){
@@ -478,6 +588,14 @@ jQuery.Class("Vtiger_List_Js",{
 				"viewname": cvId,
 				"mode": "getRecordsCount"
 			}
+
+            var searchValue = this.getAlphabetSearchValue();
+            if((typeof searchValue != "undefined") && (searchValue.length > 0)) {
+                postData['search_key'] = this.getAlphabetSearchField();
+                postData['search_value'] = this.getAlphabetSearchValue();
+                postData['operator'] = "s";
+            }
+
 			AppConnector.request(postData).then(
 				function(data) {
 					var response = JSON.parse(data);
@@ -558,6 +676,14 @@ jQuery.Class("Vtiger_List_Js",{
 		return jQuery('#customFilter').find('option:selected').data('id');
 	},
 
+	getAlphabetSearchField : function() {
+		return jQuery("#alphabetSearchKey").val();
+	},
+
+	getAlphabetSearchValue : function() {
+		return jQuery("#alphabetValue").val();
+	},
+
 
 	/*
 	 * Function to check whether atleast one record is checked
@@ -613,6 +739,7 @@ jQuery.Class("Vtiger_List_Js",{
 				var pageNumber = jQuery('#pageNumber').val();
 				var nextPageNumber = parseInt(parseFloat(pageNumber)) + 1;
 				jQuery('#pageNumber').val(nextPageNumber);
+				jQuery('#pageToJump').val(nextPageNumber);
 				thisInstance.getListViewRecords(urlParams).then(
 					function(data){
 						thisInstance.updatePagination();
@@ -640,6 +767,7 @@ jQuery.Class("Vtiger_List_Js",{
 				}
 				var previousPageNumber = parseInt(parseFloat(pageNumber)) - 1;
 				jQuery('#pageNumber').val(previousPageNumber);
+				jQuery('#pageToJump').val(previousPageNumber);
 				thisInstance.getListViewRecords(urlParams).then(
 					function(data){
 						thisInstance.updatePagination();
@@ -652,7 +780,73 @@ jQuery.Class("Vtiger_List_Js",{
 				);
 			}
 		});
-		return aDeferred.promise();
+
+		jQuery('#listViewPageJump').on('click',function(e){
+			var module = app.getModuleName();
+			var cvId = thisInstance.getCurrentCvId();
+			var pageCountParams = {
+				'module' : module,
+				'view' : "ListAjax",
+				'mode' : "getPageCount",
+				"viewname": cvId
+			}
+			var searchValue = thisInstance.getAlphabetSearchValue();
+
+			if(searchValue.length > 0) {
+				pageCountParams['search_key'] = thisInstance.getAlphabetSearchField();
+				pageCountParams['search_value'] = searchValue;
+				pageCountParams['operator'] = "s";
+			}
+			var element = jQuery('#totalPageCount');
+			var totalPageNumber = element.text();
+			if(totalPageNumber == ""){
+				var totalRecordCount = jQuery('#totalCount').val();
+				if(totalRecordCount != '') {
+					var recordPerPage = jQuery('#numberOfEntries').val();
+					pageCount = Math.round(totalRecordCount/recordPerPage);
+					element.text(pageCount);
+					return;
+				}
+				element.progressIndicator({});
+				AppConnector.request(pageCountParams).then(
+					function(data) {
+						var response = JSON.parse(data);
+						var pageCount = response['result']['page'];
+						element.text(pageCount);
+						element.progressIndicator({'mode': 'hide'});
+					},
+					function(error,err){
+
+					}
+				);
+			}
+		})
+
+		jQuery('#listViewPageJumpDropDown').on('click','li',function(e){
+			e.stopImmediatePropagation();
+		}).on('keypress','#pageToJump',function(e){
+			if(e.which == 13){
+				e.stopImmediatePropagation();
+				var element = jQuery(e.currentTarget);
+				var response = Vtiger_WholeNumberGreaterThanZero_Validator_Js.invokeValidation(element);
+				if(typeof response != "undefined"){
+					element.validationEngine('showPrompt',response,'',"topLeft",true);
+				} else {
+					element.validationEngine('hideAll');
+					var pageNumber = jQuery(e.currentTarget).val();
+					jQuery('#pageNumber').val(pageNumber);
+					thisInstance.getListViewRecords().then(
+						function(data){
+							thisInstance.updatePagination();
+							element.closest('.btn-group ').removeClass('open');
+						},
+						function(textStatus, errorThrown){
+						}
+					);
+				}
+				return false;
+		}
+		});
 	},
 
 	/**
@@ -668,6 +862,7 @@ jQuery.Class("Vtiger_List_Js",{
 		var listViewEntriesCount = jQuery('#listViewEntriesCount').val();
 		var pageStartRange = jQuery('#pageStartRange').val();
 		var pageEndRange = jQuery('#pageEndRange').val();
+		var totalCount = jQuery('#totalCount').val();
 
 		jQuery('#pageLimit').val(pageLimitValue);
 		jQuery('#noOfEntries').val(numberOfEntries);
@@ -683,10 +878,14 @@ jQuery.Class("Vtiger_List_Js",{
 		} else if(nextPageExist == "") {
 			nextPageButton.attr("disabled","disabled");
 		}
-
-		if(listViewEntriesCount != ""){
+		if(listViewEntriesCount != 0){
 			var pageNumberText = pageStartRange+" "+app.vtranslate('to')+" "+pageEndRange;
+			if(totalCount != '') {
+				pageNumberText += " "+app.vtranslate('of')+" "+totalCount;
+			}
 			jQuery('.pageNumbers').html(pageNumberText);
+		} else {
+			jQuery('.pageNumbers').html("");
 		}
 	},
 	/*
@@ -702,21 +901,18 @@ jQuery.Class("Vtiger_List_Js",{
 			var cvId = thisInstance.getCurrentCvId();
 			selectedIds = new Array();
 			excludedIds = new Array();
-			var module = app.getModuleName();
-			//TODO move it to Documents.js
-			if(module == 'Documents'){
-				var search_value = filterSelectElement.find('option:selected').data('foldername');
-				var urlParams = {
-					"viewname" : cvId,
-					"search_key" : 'folderid',
-					"search_value" : search_value
-				}
-			} else {
-				var urlParams ={
-					"viewname" : cvId
-				}
-			}
-			thisInstance.getListViewRecords(urlParams);
+
+            var urlParams ={
+                "viewname" : cvId,
+                //to make alphabetic search empty
+                "search_key" : thisInstance.getAlphabetSearchField(),
+                "search_value" : ""
+            }
+			thisInstance.getListViewRecords(urlParams).then (function(){
+                //Make the select all count as empty
+                jQuery('#recordsCount').val('');
+				thisInstance.updatePagination();
+            });
 		});
 	},
 
@@ -1033,13 +1229,34 @@ jQuery.Class("Vtiger_List_Js",{
 	 * @param Accepts form as a parameter
 	 */
 	inactiveFieldValidation : function(form){
-		var validationFields = form.find('[data-validation-engine]');
-		jQuery.each(validationFields,function(index,element){
-			var elemData = jQuery(element).data();
-			elemData.invalidValidationEngine = elemData.validationEngine;
-			delete elemData.validationEngine;
-			jQuery(element).removeAttr('data-validation-engine');
-		})
+        var massEditFieldList = jQuery('#massEditFieldsNameList').data('value');
+		for(var fieldName in massEditFieldList){
+            var fieldInfo = massEditFieldList[fieldName];
+            
+            var fieldElement = form.find('[name="'+fieldInfo.name+'"]');
+            if(fieldInfo.type == "reference") {
+                //get the element which will be shown which has "_display" appended to actual field name
+                fieldElement = form.find('[name="'+fieldInfo.name+'_display"]');
+            }else if(fieldInfo.type == "multipicklist") {
+                fieldElement = form.find('[name="'+fieldInfo.name+'[]"]');
+            }
+            
+            //Not all the fields will be enabled for mass edit
+            if(fieldElement.length == 0 ) {
+                continue;
+            }
+            
+			var elemData = fieldElement.data();
+            
+            //Blank validation by default
+            var validationVal = "validate[]"
+            if('validationEngine' in elemData) {
+                validationVal =  elemData.validationEngine;
+                delete elemData.validationEngine;
+            }
+            fieldElement.data('invalidValidationEngine',validationVal);
+			fieldElement.removeAttr('data-validation-engine');
+		}
 	},
 
 	/**
@@ -1049,11 +1266,18 @@ jQuery.Class("Vtiger_List_Js",{
 	 * @param Accepts form as a parameter
 	 */
 	registerFieldsForValidation : function(form){
-		form.find('.fieldValue').on('change','input,select,textarea',function(e){
+		form.find('.fieldValue').on('change','input,select,textarea',function(e, params){
+			if(typeof params == 'undefined'){
+				params = {};
+			}
+			
+			if(typeof params.forceDeSelect == 'undefined') {
+				params.forceDeSelect = false;
+			}
 			var element = jQuery(e.currentTarget);
 			var fieldValue = element.val();
 			var parentTd = element.closest('td');
-			if((fieldValue == "") && (typeof(element.attr('data-validation-engine')) != "undefined")){
+			if(((fieldValue == "" || fieldValue == null) && (typeof(element.attr('data-validation-engine')) != "undefined")) || params.forceDeSelect){
 				if(parentTd.hasClass('massEditActiveField')){
 					parentTd.removeClass('massEditActiveField');
 				}
@@ -1092,15 +1316,21 @@ jQuery.Class("Vtiger_List_Js",{
 			if(params.selectedName == ""){
 				return;
 			}
-			element.attr('data-validation-engine', element.data('invalidValidationEngine'));
-			fieldDisplayElement.attr('data-validation-engine', element.data('invalidValidationEngine'));
+			fieldDisplayElement.attr('data-validation-engine', fieldDisplayElement.data('invalidValidationEngine'));
+            var parentTd = fieldDisplayElement.closest('td');
+            if(!parentTd.hasClass('massEditActiveField')){
+                parentTd.addClass('massEditActiveField');
+            }
 		})
 		form.find('.clearReferenceSelection').on(Vtiger_Edit_Js.referenceDeSelectionEvent,function(e){
 			var sourceField = form.find('.sourceField');
 			var sourceFieldName = sourceField.attr('name');
 			var fieldDisplayName = sourceFieldName+"_display";
-			sourceField.removeAttr('data-validation-engine');
-			form.find('input[name="'+fieldDisplayName+'"]').removeAttr('data-validation-engine');
+			var fieldDisplayElement = form.find('input[name="'+fieldDisplayName+'"]').removeAttr('data-validation-engine');
+            var parentTd = fieldDisplayElement.closest('td');
+            if(parentTd.hasClass('massEditActiveField')){
+                parentTd.removeClass('massEditActiveField');
+            }
 		})
 	},
 
@@ -1115,6 +1345,15 @@ jQuery.Class("Vtiger_List_Js",{
         var thisInstance = this;
 		jQuery('body').on('submit','#massSave',function(e){
 			var form = jQuery(e.currentTarget);
+			var commentContent = form.find('#commentcontent')
+			var commentContentValue = commentContent.val();
+			if(commentContentValue == "") {
+				var errorMsg = app.vtranslate('JS_LBL_COMMENT_VALUE_CANT_BE_EMPTY')
+				commentContent.validationEngine('showPrompt', errorMsg , 'error','bottomLeft',true);
+				e.preventDefault();
+				return;
+			}
+			commentContent.validationEngine('hide');
 			thisInstance.massActionSave(form);
 			e.preventDefault();
 		});
@@ -1136,11 +1375,43 @@ jQuery.Class("Vtiger_List_Js",{
 	},
 
 	triggerDisplayTypeEvent : function() {
-		var widthType = app.cacheGet('widthType', 'wideWidthType');
+		var widthType = app.cacheGet('widthType', 'narrowWidthType');
 		if(widthType) {
 			var elements = jQuery('.listViewEntriesTable').find('td,th');
 			elements.attr('class', widthType);
 		}
+	},
+
+	registerEventForAlphabetSearch : function() {
+		var thisInstance = this;
+		var listViewPageDiv = this.getListViewContainer();
+		listViewPageDiv.on('click','.alphabetSearch',function(e) {
+			var alphabet = jQuery(e.currentTarget).find('a').text();
+			var cvId = thisInstance.getCurrentCvId();
+			var AlphabetSearchKey = thisInstance.getAlphabetSearchField();
+			var urlParams = {
+				"viewname" : cvId,
+				"search_key" : AlphabetSearchKey,
+				"search_value" : alphabet,
+				"operator" : 's',
+				"page"	:	1
+			}
+			thisInstance.getListViewRecords(urlParams).then(
+					function(data){
+						thisInstance.updatePagination();
+                        jQuery('#recordsCount').val('');
+                        //To Set the page number as first page
+                        jQuery('#pageNumber').val('1');
+						jQuery('#pageToJump').val('1');
+						jQuery('#totalPageCount').text("");
+                        //To unmark the all the selected ids
+                        jQuery('#deSelectAllMsg').trigger('click');
+					},
+
+					function(textStatus, errorThrown){
+					}
+			);
+		});
 	},
 
 	registerEvents : function(){
@@ -1165,7 +1436,8 @@ jQuery.Class("Vtiger_List_Js",{
 		this.registerEmailFieldClickEvent();
 		this.registerMassActionSubmitEvent();
 		this.triggerDisplayTypeEvent();
-		
+		this.registerEventForAlphabetSearch();
+
 		//Just reset all the checkboxes on page load: added for chrome issue.
 		var listViewContainer = this.getListViewContentContainer();
 		listViewContainer.find('#listViewEntriesMainCheckBox,.listViewEntriesCheckBox').prop('checked', false);

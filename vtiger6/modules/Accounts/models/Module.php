@@ -62,9 +62,9 @@ class Accounts_Module_Model extends Vtiger_Module_Model {
 				'phone',
 				'bill_city',
 				'bill_country',
-				'assigned_user_id',
 				'createdtime',
-				'modifiedtime'
+				'modifiedtime',
+				'assigned_user_id',
 		);
 	}
 

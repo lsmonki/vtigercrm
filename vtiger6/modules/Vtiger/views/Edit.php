@@ -49,11 +49,13 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
 		foreach($requestFieldList as $fieldName=>$fieldValue){
 			$fieldModel = $fieldList[$fieldName];
 			if($fieldModel->isEditable()) {
-				$recordModel->set($fieldName, $fieldValue);
+				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('MODULE', $moduleName);
@@ -68,7 +70,7 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
 			$viewer->assign('SOURCE_MODULE', $request->get('sourceModule'));
 			$viewer->assign('SOURCE_RECORD', $request->get('sourceRecord'));
 		}
-
+		
 		$viewer->assign('MAX_UPLOAD_LIMIT_MB', vglobal('upload_maxsize')/1000000);
 		$viewer->assign('MAX_UPLOAD_LIMIT', vglobal('upload_maxsize'));
 		$viewer->view('EditView.tpl', $moduleName);

@@ -128,8 +128,8 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
 		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
-		$viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
 		$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
+		$viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
 		if($display) {
 			$this->preProcessDisplay($request);
 		}

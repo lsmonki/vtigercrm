@@ -57,9 +57,7 @@
 			'Progress' => $this->get('progress'),
 			'LBL_TASKS_OPEN' => $tasksOpen,
 			'LBL_TASKS_DUE' => $taskDue,
-			'Deferred' => $taskDeferred,
 			'LBL_TASKS_COMPLETED' => $taskCompleted,
-			'LBL_PEOPLE' => $numOfPeople,
 		);
 	}
  }

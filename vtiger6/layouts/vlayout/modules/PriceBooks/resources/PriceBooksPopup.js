@@ -145,6 +145,13 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
         return true;
     },
 
+	registerEventForListViewEntries : function(){
+		var popupPageContentsContainer = this.getPopupPageContainer();
+		popupPageContentsContainer.on('click','.listViewEntries',function(e){
+		    return;
+		});
+	},
+	
 	/**
 	 * Function to register events
 	 */

@@ -49,8 +49,8 @@
 					<span class="span7 row-fluid">
 						<select class="span6 chzn-select" id="primary_module" name="primary_module">
 							<optgroup>
-								{foreach key=RELATED_MODULE_KEY item=RELATED_MODULE from=$RELATED_MODULES}
-									<option value={$RELATED_MODULE_KEY} {if $REPORT_MODEL->getPrimaryModule() eq $RELATED_MODULE_KEY } selected="selected" {/if}>
+								{foreach key=RELATED_MODULE_KEY item=RELATED_MODULE from=$MODULELIST}
+									<option value="{$RELATED_MODULE_KEY}" {if $REPORT_MODEL->getPrimaryModule() eq $RELATED_MODULE_KEY } selected="selected" {/if}>
 										{vtranslate($RELATED_MODULE_KEY,$RELATED_MODULE_KEY)}
 									</option>
 								{/foreach}

@@ -23,13 +23,28 @@
 			</button>
 
 			<ul class="dropdown-menu widgetsList pull-right" style="min-width:100%;text-align:left;">
+				{assign var="MINILISTWIDGET" value=""}
 				{foreach from=$WIDGETS item=WIDGET}
+					{if $WIDGET->getName() eq 'MiniList'}
+						{assign var="MINILISTWIDGET" value=$WIDGET} {* Defer to display as a separate group *}
+					{else}
 					<li>
 						<a onclick="Vtiger_DashBoard_Js.addWidget(this, '{$WIDGET->getUrl()}')" href="javascript:void(0);"
 							data-linkid="{$WIDGET->get('linkid')}" data-name="{$WIDGET->getName()}" data-width="{$WIDGET->getWidth()}" data-height="{$WIDGET->getHeight()}">
 							{vtranslate($WIDGET->getTitle(), $MODULE_NAME)}</a>
 					</li>
+					{/if}
 				{/foreach}
+				
+				{if $MINILISTWIDGET && $MODULE_NAME == 'Home'}
+				<li class="divider"></li>
+				<li>
+					<a onclick="Vtiger_DashBoard_Js.addMiniListWidget(this, '{$MINILISTWIDGET->getUrl()}')" href="javascript:void(0);"
+						data-linkid="{$MINILISTWIDGET->get('linkid')}" data-name="{$MINILISTWIDGET->getName()}" data-width="{$MINILISTWIDGET->getWidth()}" data-height="{$MINILISTWIDGET->getHeight()}">
+						{vtranslate($MINILISTWIDGET->getTitle(), $MODULE_NAME)}</a>
+				</li>
+				{/if}
+				
 			</ul>
 			{else}
 				<button class='btn addButton dropdown-toggle' disabled="disabled" data-toggle='dropdown'>

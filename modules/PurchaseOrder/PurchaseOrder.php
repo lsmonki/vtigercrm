@@ -96,6 +96,9 @@ class PurchaseOrder extends CRMEntity {
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';
 
+	// For workflows update field tasks is deleted all the lineitems.
+	var $isLineItemUpdate = true;
+
 	//var $groupTable = Array('vtiger_pogrouprelation','purchaseorderid');
 	/** Constructor Function for Order class
 	 *  This function creates an instance of LoggerManager class using getLogger method
@@ -109,29 +112,71 @@ class PurchaseOrder extends CRMEntity {
 
 	function save_module($module)
 	{
-		global $adb;
+		global $adb, $updateInventoryProductRel_deduct_stock;
+		$updateInventoryProductRel_deduct_stock = false;
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-				&& $_REQUEST['action'] != 'SaveAjax') {
+				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
+
+			$totalNoOfProducts = $_REQUEST['totalProductCount'];
+			for($i=1; $i<=$totalNoOfProducts; $i++) {
+				$productId = $_REQUEST['hdnProductId'.$i];
+				$requestProductIdsList[$productId] = $productId;
+				$requestQuantitiesList[$productId] =  $_REQUEST['qty'.$i];
+			}
+
+			if($this->mode == '' && $this->column_fields['postatus'] === 'Received Shipment') {																			//Updating Product stock quantity during create mode
+				foreach ($requestProductIdsList as $productId) {
+					addToProductStock($productId, $requestQuantitiesList[$productId]);
+				}
+			} else if ($this->column_fields['postatus'] === 'Received Shipment' && $this->mode != '') {		//Updating Product stock quantity during edit mode
+				$recordId = $this->id;
+				$result = $adb->pquery("SELECT productid, quantity FROM vtiger_inventoryproductrel WHERE id = ?", array($recordId));
+				$numOfRows = $adb->num_rows($result);
+				for ($i=0; $i<$numOfRows; $i++) {
+					$productId = $adb->query_result($result, $i, 'productid');
+					$productIdsList[$productId] = $productId;
+					$quantitiesList[$productId] = $adb->query_result($result, $i, 'quantity');
+				}
+
+				$newProductIds = array_diff($requestProductIdsList, $productIdsList);
+				if ($newProductIds) {
+					foreach ($newProductIds as $productId) {
+						addToProductStock($productId, $requestQuantitiesList[$productId]);
+					}
+				}
+
+				$deletedProductIds = array_diff($productIdsList, $requestProductIdsList);
+				if ($deletedProductIds) {
+					foreach ($deletedProductIds as $productId) {
+						$productStock= getPrdQtyInStck($productId);
+						$quantity = $productStock - $quantitiesList[$productId];
+						updateProductQty($productId, $quantity);
+					}
+				}
+
+				$updatedProductIds = array_intersect($productIdsList, $requestProductIdsList);
+				if ($updatedProductIds) {
+					foreach ($updatedProductIds as $productId) {
+						$quantityDiff = $quantitiesList[$productId] - $requestQuantitiesList[$productId];
+						if ($quantityDiff < 0) {
+							$quantityDiff = -($quantityDiff);
+							addToProductStock($productId, $quantityDiff);
+						} elseif ($quantityDiff > 0) {
+							$productStock= getPrdQtyInStck($productId);
+							$quantity = $productStock - $quantityDiff;
+							updateProductQty($productId, $quantity);
+						}
+					}
+				}
+			}
+
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails($this, 'PurchaseOrder', $this->update_prod_stock);
-		}
 
-		//In Ajax edit, if the status changed to Received Shipment then we have to update the product stock
-		if($_REQUEST['action'] == 'PurchaseOrderAjax' && $this->update_prod_stock == 'true')
-		{
-			$inventory_res = $this->db->pquery("select productid, quantity from vtiger_inventoryproductrel where id=?",array($this->id));
-			$noofproducts = $this->db->num_rows($inventory_res);
-
-			//We have to update the stock for all the products in this PO
-			for($prod_count=0;$prod_count<$noofproducts;$prod_count++)
-			{
-				$productid = $this->db->query_result($inventory_res,$prod_count,'productid');
-				$quantity = $this->db->query_result($inventory_res,$prod_count,'quantity');
-				$this->db->println("Stock is going to be updated for the productid - $productid with quantity - $quantity");
-
-				addToProductStock($productid,$quantity);
+			if ($this->mode != '') {
+				$updateInventoryProductRel_deduct_stock = true;
 			}
 		}
 
@@ -291,18 +336,18 @@ class PurchaseOrder extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
-		
+
 		$matrix = $queryPlanner->newDependencyMatrix();
-		$matrix->setDependency('vtiger_crmentityPurchaseOrder', array('vtiger_usersPurchaseOrder', 'vtiger_groupsPurchaseOrder', 'vtiger_lastModifiedByPurchaseOrder'));		
+		$matrix->setDependency('vtiger_crmentityPurchaseOrder', array('vtiger_usersPurchaseOrder', 'vtiger_groupsPurchaseOrder', 'vtiger_lastModifiedByPurchaseOrder'));
 		$matrix->setDependency('vtiger_inventoryproductrelPurchaseOrder', array('vtiger_productsPurchaseOrder', 'vtiger_servicePurchaseOrder'));
 		$matrix->setDependency('vtiger_purchaseorder',array('vtiger_crmentityPurchaseOrder', "vtiger_currency_info$secmodule",
 				'vtiger_purchaseordercf', 'vtiger_vendorRelPurchaseOrder', 'vtiger_pobillads',
 				'vtiger_poshipads', 'vtiger_inventoryproductrelPurchaseOrder', 'vtiger_contactdetailsPurchaseOrder'));
-		
+
 		if (!$queryPlanner->requireTable('vtiger_purchaseorder', $matrix)) {
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_purchaseorder","purchaseorderid",$queryPlanner);
 		if ($queryPlanner->requireTable("vtiger_crmentityPurchaseOrder", $matrix)){
 			$query .= " left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0";
@@ -342,7 +387,7 @@ class PurchaseOrder extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByPurchaseOrder")){
 			$query .= " left join vtiger_users as vtiger_lastModifiedByPurchaseOrder on vtiger_lastModifiedByPurchaseOrder.id = vtiger_crmentityPurchaseOrder.modifiedby ";
-		}	
+		}
 		return $query;
 	}
 

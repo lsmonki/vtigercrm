@@ -8,6 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transfer ownership'          , // TODO: Review
-	'LBL_TO_OTHER_GROUP'           => 'To Other Group '             , // TODO: Review
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Tulajdonosság átruházása'	,
+	'LBL_TO_OTHER_GROUP'           => 'Másik csoportra'				,
 );

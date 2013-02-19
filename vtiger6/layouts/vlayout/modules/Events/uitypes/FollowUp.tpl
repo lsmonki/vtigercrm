@@ -35,9 +35,9 @@
 		</div>		
 	</div>
 	<div>
-		<div class="input-append bootstrap-timepicker-component">
+		<div class="input-append time">
 			<input type="text" name="followup_time_start" class="timepicker-default input-small" value="{$currentTimeInVtigerFormat}" />
-			<span class="add-on">
+			<span class="add-on cursorPointer">
 				<i class="icon-time"></i>
 			</span>
 		</div>	

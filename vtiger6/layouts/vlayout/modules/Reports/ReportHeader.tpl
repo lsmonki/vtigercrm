@@ -11,6 +11,7 @@
 -->*}
 {strip}
 	<div class="reportsDetailHeader row-fluid">
+        <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		<div class="reportHeader row-fluid span12">
 			<div class='span4' style="position:relative;left:10px">
 				{if $REPORT_MODEL->isEditable() eq true}
@@ -19,7 +20,10 @@
 					&nbsp;
 				{/if}
 			</div>
-			<div class='span4'><h3>{$REPORT_MODEL->getName()}</h3></div>
+			<div class='span4 textAlignCenter'>
+				<h3>{$REPORT_MODEL->getName()}</h3>
+				<div id="noOfRecords">{vtranslate('LBL_NO_OF_RECORDS',$MODULE)} <span id="countValue">{$COUNT}</span></div>
+			</div>
 			<div class='span4'>
 				<span class="pull-right">
 					{foreach item=DETAILVIEW_LINK from=$DETAILVIEW_LINKS}

@@ -13,7 +13,6 @@ $languageStrings = array(
 	'SINGLE_Products' => 'Product',
 	'LBL_ADD_RECORD' => 'Add Product',
 	'LBL_RECORDS_LIST' => 'Products List',
-	'LBL_RECORD_SUMMARY' => 'Products Summary',
 
 	// Blocks
 	'LBL_PRODUCT_INFORMATION' => 'Product Details',

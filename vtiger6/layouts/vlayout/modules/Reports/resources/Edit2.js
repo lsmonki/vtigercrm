@@ -160,7 +160,7 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 	 */
 	registerSelect2ElementForReportColumns : function() {
 		var selectElement = this.getReportsColumnsList();
-		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 12});
+		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 12,dropdownCss : {'z-index' : 0}});
 	},
 
 	/**
@@ -249,8 +249,8 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 		app.changeSelectElementView(container);
 		container.validationEngine({
 			// to prevent the page reload after the validation has completed
-			'onValidationComplete' : function(){
-
+			'onValidationComplete' : function(form,valid){
+                return valid;
 			}
 		});
 	}

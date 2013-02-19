@@ -22,6 +22,9 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 	 * Function to initialize the required data in smarty to display the List View Contents
 	 */
 	public function initializeListViewContents(Vtiger_Request $request, Vtiger_Viewer $viewer) {
+		//src_module value is added to just to stop showing inactive products
+		$request->set('src_module', $request->getModule());
+
 		parent::initializeListViewContents($request, $viewer);
 		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('GETURL', 'getTaxesURL');

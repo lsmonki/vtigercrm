@@ -35,6 +35,15 @@ class Vtiger_Cron {
     }
 
     /**
+     * set the value to the data
+     * @param type $value,$key
+     */
+    protected function set($key,$value){
+        $this->data[$key] = $value;
+        return $this;
+    }
+    
+    /**
      * Get id reference of this instance.
      */
     function getId() {
@@ -147,9 +156,10 @@ class Vtiger_Cron {
 
         if (!$this->isDisabled()) {
             // Take care of last time (end - on success, start - if timedout)
-            $lastTime = ($this->getLastEnd() > 0) ? $this->getLastEnd() : $this->getLastStart();
+            // Take care to start the cron im
+            $lastTime = ($this->getLastStart() > 0) ? $this->getLastStart() : $this->getLastEnd();
             $elapsedTime = time() - $lastTime;
-            $runnable = ($elapsedTime >= $this->getFrequency());
+            $runnable = ($elapsedTime >= ($this->getFrequency()-1));
         }
         return $runnable;
     }
@@ -209,16 +219,18 @@ class Vtiger_Cron {
      * Mark this instance as running.
      */
     function markRunning() {
-        self::querySilent('UPDATE vtiger_cron_task SET status=?, laststart=?, lastend=? WHERE id=?', array(self::$STATUS_RUNNING, time(), 0, $this->getId()));
-        return $this;
+        $time = time();
+        self::querySilent('UPDATE vtiger_cron_task SET status=?, laststart=?, lastend=? WHERE id=?', array(self::$STATUS_RUNNING, $time, 0, $this->getId()));
+        return $this->set('laststart',$time);
     }
 
     /**
      * Mark this instance as finished.
      */
     function markFinished() {
-        self::querySilent('UPDATE vtiger_cron_task SET status=?, lastend=? WHERE id=?', array(self::$STATUS_ENABLED, time(), $this->getId()));
-        return $this;
+        $time = time();
+        self::querySilent('UPDATE vtiger_cron_task SET status=?, lastend=? WHERE id=?', array(self::$STATUS_ENABLED, $time, $this->getId()));
+        return $this->set('lastend',$time);
     }
 
     /**
@@ -265,7 +277,7 @@ class Vtiger_Cron {
                 Vtiger_Utils::CreateTable('vtiger_cron_task',
                         '(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 					name VARCHAR(100) UNIQUE KEY, handler_file VARCHAR(100) UNIQUE KEY,
-					frequency int, laststart long, lastend long, status int,module VARCHAR(100),
+					frequency int, laststart int(11) unsigned, lastend int(11) unsigned, status int,module VARCHAR(100),
                                         sequence int,description TEXT )',true);
             }
             self::$schemaInitialized = true;
@@ -461,7 +473,7 @@ class Vtiger_Cron {
 		 if(!Vtiger_Utils::CheckTable('vtiger_cron_log')) {
                 Vtiger_Utils::CreateTable('vtiger_cron_log',
                         '(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-					name VARCHAR(100),start long,end long,iteration int,status int,logmessage TEXT)',true);
+					name VARCHAR(100),start int(11) unsigned,end int(11) unsigned,iteration int,status int,logmessage TEXT)',true);
             }
 	 }
 }

@@ -8,19 +8,19 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ServiceContracts'             => 'Szolgáltatási Szerződések', 
-	'SINGLE_ServiceContracts'      => 'Szolgáltatási Szerződés' , 
-	'LBL_ADD_RECORD'               => 'Add Service Contract'        , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Service Contracts Summary'   , // TODO: Review
-	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szolgáltatási Szerződés adatai', 
-	'Contract No'                  => 'Szerződés No.'             , 
-	'Start Date'                   => 'Kezdés dátuma'             , 
-	'End Date'                     => 'Befejezés dátuma'          , 
-	'Tracking Unit'                => 'Nyomkövető Egység'        , 
-	'Total Units'                  => 'Összes Egység'             , 
-	'Used Units'                   => 'Használt Egység'           , 
-	'Progress'                     => 'Előrehaladás (%-ban)'      , 
-	'Planned Duration'             => 'Tervezett időtartam (Napokban)', 
-	'Actual Duration'              => 'Tényleges időtartam (Napokban)', 
+	'ServiceContracts'             => 'Szolgáltatási Szerződések'			,
+	'SINGLE_ServiceContracts'      => 'Szolgáltatási Szerződés'				,
+	'LBL_ADD_RECORD'               => 'Szolgáltatási Szerződés hozzáadása'	,
+	'LBL_RECORDS_LIST'             => 'Szolgáltatási Szerződések listája'	,
+	'LBL_RECORD_SUMMARY'           => 'Szolgáltatási Szerződés összefoglaló',
+	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szolgáltatási Szerződés adatai'	,
+	'Contract No'                  => 'Szerződés No.'						,
+	'Start Date'                   => 'Kezdés dátuma'						,
+	'End Date'                     => 'Befejezés dátuma'					,
+	'Tracking Unit'                => 'Nyomkövető Egység'					,
+	'Total Units'                  => 'Összes Egység'						,
+	'Used Units'                   => 'Felhasznált Egység'					,
+	'Progress'                     => 'Előrehaladás (%-ban)'				,
+	'Planned Duration'             => 'Tervezett időtartam (Napokban)'		,
+	'Actual Duration'              => 'Tényleges időtartam (Napokban)'		,
 );

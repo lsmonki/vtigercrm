@@ -12,7 +12,6 @@ $languageStrings = array(
 	'SINGLE_Assets' => 'Asset',
 	'LBL_ADD_RECORD' => 'Add Asset',
 	'LBL_RECORDS_LIST' => 'Assets List',
-	'LBL_RECORD_SUMMARY' => 'Assets Summary',
 
 	// Blocks
 	'LBL_ASSET_INFORMATION' => 'Asset Details',

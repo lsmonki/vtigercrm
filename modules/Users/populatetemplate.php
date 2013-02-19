@@ -17,7 +17,7 @@ global $log;
 
 //download the template file and store it in some specific location
 $sql = "select templatename,body from vtiger_emailtemplates where templateid=?";
-$tempresult = $adb->pquery($sql, array($_REQUEST["templateid"]));
+$tempresult = $adb->pquery($sql, array(vtlib_purify($_REQUEST["templateid"])));
 $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];
 

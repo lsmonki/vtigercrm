@@ -55,8 +55,8 @@ jQuery.Class("Vtiger_Header_Js",{
 	getContentsContainer : function() {
 		return this.contentContainer;
 	},
-	
-	
+
+
 	getQuickCreateForm : function(url, moduleName, params) {
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
@@ -69,7 +69,7 @@ jQuery.Class("Vtiger_Header_Js",{
 				aDeferred.resolve(Vtiger_Header_Js.quickCreateModuleCache[moduleName]);
 				return aDeferred.promise();
 			}
-		} 
+		}
 		requestParams = url;
 		if(typeof params.data != "undefined"){
 			var requestParams = {};
@@ -78,7 +78,7 @@ jQuery.Class("Vtiger_Header_Js",{
 		}
 		AppConnector.request(requestParams).then(function(data){
 			if((!params.noCache) || (typeof (params.noCache) == "undefined")){
-				Vtiger_Header_Js.quickCreateModuleCache[moduleName] = data; 
+				Vtiger_Header_Js.quickCreateModuleCache[moduleName] = data;
 			}
 			aDeferred.resolve(data);
 		});
@@ -142,16 +142,16 @@ jQuery.Class("Vtiger_Header_Js",{
 	registerAnnouncement : function() {
 		var thisInstance = this;
 		var announcementBtn = jQuery('#announcementBtn');
-		
+
 		var announcementTurnOffKey = 'announcement.turnoff';
-		
+
 		announcementBtn.click(function(e, manual){
 			var displayStatus = jQuery('#announcement').css('display');
 			if(displayStatus == 'none'){
 				jQuery('#announcement').show();
 				thisInstance.alignContentsContainer('105px');
 				announcementBtn.attr('src', app.vimage_path('btnAnnounce.png'));
-				
+
 				// Turn-on always
 				if (!manual) {
 					app.cacheSet(announcementTurnOffKey, false);
@@ -160,16 +160,16 @@ jQuery.Class("Vtiger_Header_Js",{
 				thisInstance.alignContentsContainer();
 				jQuery('#announcement').hide();
 				announcementBtn.attr('src', app.vimage_path('btnAnnounceOff.png'));
-				
+
 				// Turn-off always
 				// NOTE: Add preference on server - to reenable on announcement content change.
 				if (!manual) {
 					app.cacheSet(announcementTurnOffKey, true);
 				}
-				
+
 			}
 		});
-		
+
 		if (app.cacheGet(announcementTurnOffKey, false)) {
 			//jQuery('#announcement').show();
 			announcementBtn.trigger('click', true);
@@ -207,26 +207,29 @@ jQuery.Class("Vtiger_Header_Js",{
 		var thisInstance = this;
 		app.showModalWindow(data, function(data){
 			var quickCreateForm = data.find('form[name="QuickCreate"]');
+			var moduleName = quickCreateForm.find('[name="module"]').val();
+			var editViewInstance = Vtiger_Edit_Js.getInstance(moduleName);
+			editViewInstance.registerBasicEvents(quickCreateForm);
 			quickCreateForm.validationEngine(app.validationEngineOptions);
 			if(typeof params.callbackPostShown != "undefined"){
 				params.callbackPostShown(quickCreateForm);
 			}
-			thisInstance.registerQuickCreatePostLoadEvents(quickCreateForm,params.callbackFunction);
+			thisInstance.registerQuickCreatePostLoadEvents(quickCreateForm,params);
 			app.registerEventForDatePickerFields(quickCreateForm);
-			var editViewObj = Vtiger_Edit_Js.getInstance();
-			editViewObj.registerBasicEvents(quickCreateForm);
 		});
 	},
 
-	registerQuickCreatePostLoadEvents : function(form, submitSuccessCallbackFunction) {
+	registerQuickCreatePostLoadEvents : function(form, params) {
 		var thisInstance = this;
+		var submitSuccessCallbackFunction = params.callbackFunction;
+		var goToFullFormCallBack = params.goToFullFormcallback;
 		if(typeof submitSuccessCallbackFunction == 'undefined') {
 			submitSuccessCallbackFunction = function() {};
 		}
-		
+
 		form.on('submit',function(e){
 			var form = jQuery(e.currentTarget);
-			
+
 			//Form should submit only once for multiple clicks also
 			if(typeof form.data('submit') != "undefined") {
 				return false;
@@ -236,15 +239,15 @@ jQuery.Class("Vtiger_Header_Js",{
 				if(invalidFields.length > 0 ) {
 					//If validation fails, form should submit again
 					form.removeData('submit');
-					form.progressIndicator({'mode' : 'hide'});
+					form.closest('#globalmodal').find('.modal-header h3').progressIndicator({'mode' : 'hide'});
 					e.preventDefault();
 					return;
 				} else {
 					//Once the form is submiting add data attribute to that form element
 					form.data('submit', 'true');
-					form.progressIndicator();
+					form.closest('#globalmodal').find('.modal-header h3').progressIndicator({smallLoadingImage : true, imageContainerCss : {display : 'inline', 'margin-left' : '18%',position : 'absolute'}});
 				}
-				
+
 				var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
 				form.trigger(recordPreSaveEvent, {'value' : 'edit'});
 				if(!(recordPreSaveEvent.isDefaultPrevented())) {
@@ -264,7 +267,7 @@ jQuery.Class("Vtiger_Header_Js",{
 				} else {
 					//If validation fails in recordPreSaveEvent, form should submit again
 					form.removeData('submit');
-					form.progressIndicator({'mode' : 'hide'});
+					form.closest('#globalmodal').find('.modal-header h3').progressIndicator({'mode' : 'hide'});
 				}
 			e.preventDefault();
 		}
@@ -273,6 +276,9 @@ jQuery.Class("Vtiger_Header_Js",{
 		form.find('#goToFullForm').on('click',function(e){
 			var form = jQuery(e.currentTarget).closest('form');
 			var editViewUrl = jQuery(e.currentTarget).data('editViewUrl');
+			if(typeof goToFullFormCallBack != "undefined"){
+				goToFullFormCallBack(form);
+			}
 			thisInstance.quickCreateGoToFullForm(form,editViewUrl);
 		});
 
@@ -321,7 +327,9 @@ jQuery.Class("Vtiger_Header_Js",{
 		var thisInstance = this;
 		jQuery('#globalSearch').click(function() {
 			var advanceSearchInstance = new Vtiger_AdvanceSearch_Js();
-			advanceSearchInstance.initiateSearch();
+			advanceSearchInstance.initiateSearch().then(function(){
+                advanceSearchInstance.selectBasicSearchValue();
+            });
 		});
 
 		thisInstance.registerAnnouncement();
@@ -341,6 +349,12 @@ jQuery.Class("Vtiger_Header_Js",{
 				moreMenu.css('left',0).addClass('leftAligned');
 			}
 		});
+
+		//After selecting the global search module, focus the input element to type
+		jQuery('#basicSearchModulesList').change(function() {
+			jQuery('#globalSearchValue').focus();
+		});
+
 		jQuery('#globalSearchValue').keypress(function(e){
 			var currentTarget = jQuery(e.currentTarget)
 			if(e.which == 13){
@@ -364,12 +378,15 @@ jQuery.Class("Vtiger_Header_Js",{
 			if(typeof params.callbackFunction == 'undefined') {
 				params.callbackFunction = function(){};
 			}
-			
+
 			var quickCreateElem = jQuery(e.currentTarget);
 			var quickCreateUrl = quickCreateElem.data('url');
 			var quickCreateModuleName = quickCreateElem.data('name');
+
+			var progress = jQuery.progressIndicator();
 			thisInstance.getQuickCreateForm(quickCreateUrl,quickCreateModuleName,params).then(function(data){
 				thisInstance.handleQuickCreateData(data,params);
+				progress.progressIndicator({'mode':'hide'});
 			});
 
 		});

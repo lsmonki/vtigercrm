@@ -39,6 +39,7 @@ $languageStrings = array(
 	'LBL_DUPLICATES_EXIST'         => 'El nombre de esta cuenta ya existe', 
 );
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Seguro que lo quieres borrar?',
 	'LBL_DELETE_CONFIRMATION'      => 'Eliminando esta cuenta, se eliminarán también todas las oportunidades y cotizaciones relacionadas. ¿Estás seguro de que quieres eliminar esta cuenta?',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Eliminando esta cuenta, se eliminarán también todas las oportunidades y cotizaciones relacionadas. ¿Estás seguro de que quieres eliminar esta cuenta',
 );

@@ -14,8 +14,13 @@ class Vtiger_RemoveWidget_Action extends Vtiger_IndexAjax_View {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$linkId = $request->get('linkid');
 		$response = new Vtiger_Response();
+		
+		if ($request->has('widgetid')) {
+			$widget = Vtiger_Widget_Model::getInstanceWithWidgetId($request->get('widgetid'), $currentUser->getId());
+		} else {
+			$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
+		}
 
-		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 		if (!$widget->isDefault()) {
 			$widget->remove();
 			$response->setResult(array('linkid' => $linkId, 'name' => $widget->getName(), 'url' => $widget->getUrl(), 'title' => vtranslate($widget->getTitle(), $request->getModule())));

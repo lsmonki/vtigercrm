@@ -11,7 +11,6 @@ $languageStrings = array(
 	// Basic Strings
 	'SINGLE_ModComments' => 'Comment',
 	'LBL_RECORDS_LIST' => 'Comments List',
-	'LBL_RECORD_SUMMARY' => 'Comments Summary',
 
 	// Blocks
 	'LBL_MODCOMMENTS_INFORMATION' => 'Comments',

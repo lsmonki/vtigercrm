@@ -113,7 +113,8 @@ class Contacts extends CRMEntity {
 		);
 
 	var $search_fields_name = Array(
-	'Name' => 'lastname',
+	'First Name' => 'firstname',
+	'Last Name' => 'lastname',
 	'Title' => 'title',
 	'Account Name'=>'account_id',
 	'Assigned To'=>'assigned_user_id'

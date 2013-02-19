@@ -159,10 +159,7 @@ class Reports_List_View extends Vtiger_Index_View {
 
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
-
-	function postProcess(Vtiger_Request $request) {
-	}
-
+    
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

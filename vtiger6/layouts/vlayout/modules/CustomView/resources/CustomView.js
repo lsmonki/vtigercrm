@@ -198,7 +198,7 @@ var Vtiger_CustomView_Js = {
 	 */
 	registerSelect2ElementForColumnsSelection : function() {
 		var selectElement = Vtiger_CustomView_Js.getColumnSelectElement();
-		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 7});
+		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 7,dropdownCss : {'z-index' : 0}});
 	},
 
 	registerEvents: function(){

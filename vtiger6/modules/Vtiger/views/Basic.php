@@ -50,7 +50,8 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		$viewer->assign('HOME_MODULE_MODEL', $homeModuleModel);
 		$viewer->assign('HEADER_LINKS',$this->getHeaderLinks());
 		$viewer->assign('ANNOUNCEMENT', $this->getAnnouncement());
-
+		$viewer->assign('SEARCHABLE_MODULES', Vtiger_Module_Model::getSearchableModules());
+		
 		if($display) {
 			$this->preProcessDisplay($request);
 		}
@@ -83,7 +84,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 
 		$jsFileNames = array(
 			'libraries.bootstrap.js.eternicode-bootstrap-datepicker.js.bootstrap-datepicker',
-			'~libraries/jquery/jdewit-bootstrap-timepicker/js/bootstrap-timepicker.js',
+			'~libraries/jquery/timepicker/jquery.timepicker.min.js',
             'modules.Vtiger.resources.Header',
 			'modules.Vtiger.resources.Edit',
 			"modules.$moduleName.resources.Edit",
@@ -114,7 +115,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		$headerCssInstances = parent::getHeaderCss($request);
 
 		$cssFileNames = array(
-			'~/libraries/jquery/jdewit-bootstrap-timepicker/compiled/timepicker.css',
+			'~/libraries/jquery/timepicker/jquery.timepicker.css',
 		);
 		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
 		$headerCssInstances = array_merge($headerCssInstances, $cssInstances);

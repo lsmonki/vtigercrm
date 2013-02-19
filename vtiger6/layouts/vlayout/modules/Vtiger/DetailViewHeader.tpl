@@ -19,15 +19,6 @@
 					<div class="span7">
 						<div class="row-fluid">
 							{include file="DetailViewHeaderTitle.tpl"|vtemplate_path:$MODULE}
-							<span class="span2">
-								{if $NO_SUMMARY neq true}
-									<a class="changeDetailViewMode height20 cursorPointer"><sub>{vtranslate('LBL_COMPLETE_DETAILS',{$MODULE_NAME})}</sub></a>
-									{assign var="FULL_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=full'} }
-									{assign var="SUMMARY_MODE_URL" value={$RECORD->getDetailViewUrl()|cat:'&mode=showDetailViewByMode&requestMode=summary'} }
-									<input type="hidden" name="viewMode" value="summary" data-nextviewname="full" data-currentviewlabel="{vtranslate('LBL_SUMMARY_DETAILS',{$MODULE_NAME})}"
-										data-summary-url="{$SUMMARY_MODE_URL}" data-full-url="{$FULL_MODE_URL}"  />
-								{/if}
-							</span>
 						</div>
 					</div>
 

@@ -22,21 +22,38 @@ class Products_MoreCurrenciesList_View extends Vtiger_IndexAjax_View {
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
+		$currencyName = $request->get('currency');
 
 		if (!empty($recordId)) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+			$priceDetails = $recordModel->getPriceDetails();
 		} else {
 			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
-		}
+			$priceDetails = $recordModel->getPriceDetails();
 
-		$viewer = $this->getViewer($request);
-		$baseCurrencyDetails = $recordModel->getBaseCurrencyDetails();
+			foreach ($priceDetails as $key => $currencyDetails) {
+				if ($currencyDetails['curname'] === $currencyName) {
+					$baseCurrencyConversionRate = $currencyDetails['conversionrate'];
+					break;
+				}
+			}
+
+			foreach ($priceDetails as $key => $currencyDetails) {
+				if ($currencyDetails['curname'] === $currencyName) {
+					$currencyDetails['conversionrate'] = 1;
+					$currencyDetails['is_basecurrency'] = 1;
+				} else {
+					$currencyDetails['conversionrate'] = $currencyDetails['conversionrate'] / $baseCurrencyConversionRate;
+					$currencyDetails['is_basecurrency'] = 0;
+				}
+				$priceDetails[$key] = $currencyDetails;
+			}
+		}
 
 		$viewer = $this->getViewer($request);
 
 		$viewer->assign('MODULE', $moduleName);
-		$viewer->assign('PRICE_DETAILS', $recordModel->getPriceDetails());
-		$viewer->assign('BASE_CURRENCY', $baseCurrencyDetails['currencyid']);
+		$viewer->assign('PRICE_DETAILS', $priceDetails);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		$viewer->view('MoreCurrenciesList.tpl', 'Products');

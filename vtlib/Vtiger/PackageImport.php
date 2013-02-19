@@ -275,7 +275,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'cron' => "cron/modules/$module"
 				)
 			);
-			
+
 
 			if($unzip) $unzip->close();
 		}
@@ -632,7 +632,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 */
 	function import_Event($modulenode, $moduleInstance, $eventnode) {
 		$event_condition = '';
-		$event_dependent = '';
+		$event_dependent = '[]';
 		if(!empty($eventnode->condition)) $event_condition = "$eventnode->condition";
 		if(!empty($eventnode->dependent)) $event_dependent = "$eventnode->dependent";
 		Vtiger_Event::register($moduleInstance,

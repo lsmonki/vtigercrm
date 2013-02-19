@@ -13,7 +13,7 @@
 	<span class="span2">
 		{foreach key=ITER item=IMAGE_INFO from=$RECORD->getImageDetails()} 
 			{if !empty($IMAGE_INFO.path)} 
-				<img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" alt="{$IMAGE_INFO.orgname}" title="{$IMAGE_INFO.orgname}" width="150" height="80" align="left"><br> 
+				<img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" alt="{$IMAGE_INFO.orgname}" title="{$IMAGE_INFO.orgname}" width="65" height="80" align="left"><br> 
 			{else}
 				<img src="{vimage_path('summary_Contact.png')}" class="summaryImg"/>
 			{/if} 
@@ -21,8 +21,9 @@
 	</span>
 	<span class="span8 margin0px">
 		<span class="row-fluid">
-			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getName()}">{$RECORD->getName()}</span>
-		</span>
+			{assign var=SALUTATION_TYPE value=$RECORD->getDisplayValue('salutationtype')}
+			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}">{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}</span>
+		</span>	
 		<span class="row-fluid">
 			<span class="title_label">{$RECORD->getDisplayValue('title')}</span>
 			{if $RECORD->getDisplayValue('account_id') && $RECORD->getDisplayValue('title') }

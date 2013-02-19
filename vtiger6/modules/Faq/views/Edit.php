@@ -41,7 +41,7 @@ class Faq_Edit_View extends Vtiger_Edit_View {
 		foreach($requestFieldList as $fieldName=>$fieldValue) {
 			$fieldModel = $fieldList[$fieldName];
 			if($fieldModel->isEditable()) {
-				$recordModel->set($fieldName, $fieldValue);
+				$recordModel->set($fieldName, $fieldModel->getDBInsertValue($fieldValue));
 			}
 		}
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);

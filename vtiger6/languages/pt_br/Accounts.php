@@ -38,6 +38,7 @@ $languageStrings = array(
 	'LBL_DUPLICATES_EXIST'         => 'Organization Name already exists', // TODO: Review
 );
 $jsLanguageStrings = array(
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Are you sure you want to Delete?',
 	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', // TODO: Review
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', // TODO: Review
 );

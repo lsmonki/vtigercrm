@@ -138,7 +138,7 @@ class DateTimeField {
 		if(empty($user)) {
 			$user = $current_user;
 		}
-		$format = $current_user->date_format;
+		$format = $user->date_format;
 		if(empty($format)) {
 			$format = 'dd-mm-yyyy';
 		}
@@ -254,7 +254,7 @@ class DateTimeField {
 			$date_value = $date->format('Y-m-d');
 		}
 
-		$display_date = self::convertToUserFormat($date_value);
+		$display_date = self::convertToUserFormat($date_value, $user);
 		$log->debug("Exiting getDisplayDate method ...");
 		return $display_date;
 	}

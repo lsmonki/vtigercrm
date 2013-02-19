@@ -189,10 +189,12 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				var unitPrice = thisInstance.getDataBaseFormatUnitPrice();
 				var price = parseFloat(unitPrice)*parseFloat(conversionRate);
 				jQuery('input',parentRow).attr('disabled', true).removeAttr('disabled');
+				jQuery('button.currencyReset', parentRow).attr('disabled', true).removeAttr('disabled');
 				jQuery('input.convertedPrice',parentRow).val(price)
 			}else{
 				jQuery('input',parentRow).attr('disabled', true);
 				jQuery('input.enableCurrency',parentRow).removeAttr('disabled');
+				jQuery('button.currencyReset', parentRow).attr('disabled', 'disabled');
 			}
 		})
 		return this;
@@ -208,12 +210,14 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 			var moduleName = app.getModuleName();
 			var parentElem = thisInstance.getCurrentElem(e).closest('div');
 			var moreCurrenciesContainer = jQuery('#moreCurrenciesContainer');
+			var baseCurrency = jQuery('input[name="base_currency"]').val();
 			var recordId = jQuery('input[name="record"]').val();
 			var moreCurrenciesDiv = thisInstance.getMoreCurrenciesContainer();
 			if(moreCurrenciesDiv.length == 0){
 				var moreCurrenciesParams = {
 					'module' : moduleName,
 					'view' : "MoreCurrenciesList",
+					'currency' : baseCurrency,
 					'record' : recordId
 				}
 				var progressInstance = jQuery.progressIndicator();

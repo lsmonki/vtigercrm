@@ -73,7 +73,6 @@ class Import_Main_View extends Vtiger_View_Controller{
 		} else {
 			$continueImport = false;
 		}
-
 		$importStatusCount = $importDataController->getImportStatusCount();
 		$totalRecords = $importStatusCount['TOTAL'];
 		if($totalRecords > ($importStatusCount['IMPORTED'] + $importStatusCount['FAILED'])) {
@@ -108,9 +107,10 @@ class Import_Main_View extends Vtiger_View_Controller{
 		$moduleName = $importInfo['module'];
 		$ownerId = $importInfo['user_id'];
 
-		$viewer = new Vtiger_Viewer();
-
-		$viewer->assign('FOR_MODULE', $moduleName);
+        $viewer = new Vtiger_Viewer();
+        
+		$viewer->assign('SKIPPED_RECORDS',$skippedRecords);
+        $viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('MODULE', 'Import');
 		$viewer->assign('OWNER_ID', $ownerId);
 		$viewer->assign('IMPORT_RESULT', $importStatusCount);

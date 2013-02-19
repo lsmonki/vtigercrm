@@ -106,6 +106,10 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 
 		if(!empty($detailViewBasiclinks)) {
 			foreach($detailViewBasiclinks as $linkModel) {
+				// Remove view history, needed in vtiger5 to see history but not in vtiger6
+				if($linkModel->linklabel == 'View History') {
+					continue;
+				}
 				$linkModelList['DETAILVIEW'][] = $linkModel;
 			}
 		}
@@ -131,12 +135,13 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	 */
 	public function getDetailViewRelatedLinks() {
 		$recordModel = $this->getRecord();
+		$moduleName = $recordModel->getModuleName();
 		$relatedLinks = array();
 		//link which shows the summary information(generally detail of record)
 		$relatedLinks[] = array(
 				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => 'LBL_RECORD_SUMMARY',
-				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=summary',
+				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName),
+				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=full',
 				'linkicon' => ''
 		);
 
@@ -184,7 +189,8 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$moduleModel = $this->getModule();
 		$widgets = array();
 
-		if($moduleModel->isCommentEnabled()) {
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
+		if($moduleModel->isCommentEnabled() && $modCommentsModel->isPermitted('EditView')) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
 					'linklabel' => 'ModComments',
@@ -192,7 +198,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 							'&mode=showRecentComments&page=1&limit=5'
 			);
 		}
-
+		
 		if($moduleModel->isTrackingEnabled()) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
@@ -215,6 +221,8 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	 * @return <Array> List of Vtiger_Link_Model instances
 	 */
 	public function getSideBarLinks($linkParams) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+
 		$linkTypes = array('SIDEBARLINK', 'SIDEBARWIDGET');
 		$moduleLinks = $this->getModule()->getSideBarLinks($linkTypes);
 
@@ -226,6 +234,18 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 				$link->linkurl = $link->linkurl.'&record='.$this->getRecord()->getId().'&source_module='.$this->getModule()->getName();
 				$moduleLinks['SIDEBARLINK'][] = $link;
 			}
+		}
+
+		if($currentUser->getTagCloudStatus()) {
+			$tagWidget = array(
+				'linktype' => 'DETAILVIEWSIDEBARWIDGET',
+				'linklabel' => 'LBL_TAG_CLOUD',
+				'linkurl' => 'module='.$this->getModule()->getName().'&view=ShowTagCloud&mode=showTags',
+				'linkicon' => '',
+			);
+			$linkModel = Vtiger_Link_Model::getInstanceFromValues($tagWidget);
+			if($listLinks['DETAILVIEWSIDEBARWIDGET']) array_push($listLinks['DETAILVIEWSIDEBARWIDGET'], $linkModel);
+			else $listLinks['DETAILVIEWSIDEBARWIDGET'][] = $linkModel;
 		}
 
 		if($listLinks['DETAILVIEWSIDEBARWIDGET']) {

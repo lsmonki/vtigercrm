@@ -14,7 +14,7 @@ global $upload_badext;
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 // Arbitrary File Upload Vulnerability fix - Philip
 if(isset($_REQUEST['binFile_hidden'])) {
-	$file = $_REQUEST['binFile_hidden'];
+	$file = vtlib_purify($_REQUEST['binFile_hidden']);
 } else {
 	$file = $_FILES['binFile']['name'];
 }
