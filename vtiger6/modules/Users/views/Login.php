@@ -15,12 +15,6 @@ class Users_Login_View extends Vtiger_View_Controller {
 	}
 
 	function preProcess(Vtiger_Request $request, $display = true) {
-		$loginUrl = VtigerConfig::getOD('LOGIN_URL');
-		if(!empty($loginUrl)) {
-			header('Location:' .$loginUrl);
-			exit;
-		}
-		
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
 		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));

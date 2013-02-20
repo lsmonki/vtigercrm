@@ -261,6 +261,23 @@ function vtws_updateConvertLeadStatus($entityIds, $leadId, $user) {
 		$crmentityUpdateSql = "UPDATE vtiger_crmentity SET modifiedtime=?, modifiedby=? WHERE crmid=?";
 		$adb->pquery($crmentityUpdateSql, array($leadModifiedTime, $user->id, $leadIdComponents[1]));
 	}
+    $moduleArray = array('Accounts','Contacts','Potentials');
+
+    foreach($moduleArray as $module){
+        if(!empty($entityIds[$module])) {
+            $idComponents = vtws_getIdComponents($entityIds[$module]);
+            $id = $idComponents[1];
+            $webserviceModule = vtws_getModuleHandlerFromName($module, $user);
+            $meta = $webserviceModule->getMeta();
+            $fields = $meta->getModuleFields();
+            $field = $fields['isconvertedfromlead'];
+            $tablename = $field->getTableName();
+            $tableList = $meta->getEntityTableIndexList();
+            $tableIndex = $tableList[$tablename];
+            $adb->pquery("UPDATE $tablename SET isconvertedfromlead = ? WHERE $tableIndex = ?",array(1,$id));
+        }
+    }
+
 }
 
 ?>

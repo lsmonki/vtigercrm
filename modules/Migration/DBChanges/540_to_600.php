@@ -10,6 +10,7 @@
 
 //--
 $adb = PearDatabase::getInstance();
+$Vtiger_Utils_log = true;
 
 if (!defined('INSTALLATION_MODE')) {
 	$adb->pquery("CREATE TABLE IF NOT EXISTS com_vtiger_workflow_tasktypes (
@@ -694,6 +695,7 @@ $adb->pquery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
 // Collating all module package updates here
 updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
 updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
+updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
 
 updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
 updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
@@ -978,3 +980,258 @@ $adb->pquery('UPDATE vtiger_field SET block=? WHERE fieldname IN (?,?) and tabid
 $adb->pquery('UPDATE vtiger_field SET displaytype=1 WHERE fieldname=? and tabid=?',array('recurringtype',$tabId));
 
 // END 2012.12.02
+
+// //////////////////////////////////////////////
+$inventoryModules = array(
+    'Invoice' => array('LBL_INVOICE_INFORMATION', 'vtiger_invoice', 'invoiceid'),
+    'SalesOrder' => array('LBL_SO_INFORMATION', 'vtiger_salesorder', 'salesorderid'),
+    'PurchaseOrder' => array('LBL_PO_INFORMATION', 'vtiger_purchaseorder', 'purchaseorderid'),
+    'Quotes' => array('LBL_QUOTE_INFORMATION', 'vtiger_quotes', 'quoteid')
+);
+
+foreach ($inventoryModules as $module => $details) {
+    $tableName = $details[1];
+    $moduleInstance = Vtiger_Module::getInstance($module);
+    $block = Vtiger_Block::getInstance($details[0], $moduleInstance);
+
+    $preTaxTotalField = new Vtiger_Field();
+    $preTaxTotalField->name = 'pre_tax_total';
+    $preTaxTotalField->label = 'Pre Tax Total';
+    $preTaxTotalField->table = $tableName;
+    $preTaxTotalField->column = 'pre_tax_total';
+    $preTaxTotalField->columntype = 'decimal(25,8)';
+    $preTaxTotalField->typeofdata = 'N~O';
+    $preTaxTotalField->uitype = '72';
+    $preTaxTotalField->masseditable = '1';
+    $preTaxTotalField->displaytype = '3';
+    $block->addField($preTaxTotalField);
+
+    $tableId = $details[2];
+
+    $result = $db->pquery("SELECT $tableId, subtotal, s_h_amount, discount_percent, discount_amount FROM $tableName", array());
+    $numOfRows = $db->num_rows($result);
+
+    for ($i = 0; $i < $numOfRows; $i++) {
+        $id = $db->query_result($result, $i, $tableId);
+        $subTotal = (float) $db->query_result($result, $i, "subtotal");
+        $shAmount = (float) $db->query_result($result, $i, "s_h_amount");
+        $discountAmount = (float) $db->query_result($result, $i, "discount_amount");
+        $discountPercent = (float) $db->query_result($result, $i, "discount_percent");
+
+        if ($discountPercent != '0') {
+            $discountAmount = ($subTotal * $discountPercent) / 100;
+        }
+        $preTaxTotalValue = $subTotal + $shAmount - $discountAmount;
+
+        $db->pquery("UPDATE $tableName set pre_tax_total = ? WHERE $tableId = ?", array($preTaxTotalValue, $id));
+    }
+}
+
+$moduleInstance = Vtiger_Module::getInstance('Users');
+
+$calendarSettings = Vtiger_Block::getInstance('LBL_CALENDAR_SETTINGS', $moduleInstance);
+$calendarsharedtype = new Vtiger_Field();
+$calendarsharedtype->name = 'calendarsharedtype';
+$calendarsharedtype->label = 'Calendar Shared Type';
+$calendarsharedtype->table ='vtiger_users';
+$calendarsharedtype->column = 'calendarsharedtype';
+$calendarsharedtype->columntype = 'varchar(100)';
+$calendarsharedtype->typeofdata = 'V~O';
+$calendarsharedtype->uitype = 16;
+$calendarsharedtype->sequence = 2;
+$calendarsharedtype->displaytype = 3;
+$calendarsharedtype->defaultvalue = 'Public';
+$calendarSettings->addField($calendarsharedtype);
+$calendarsharedtype->setPicklistValues(array('public','private','seletedusers'));
+echo "<br> Calendar Shared type field added <br>";
+
+$allUsers = get_user_array(false);
+foreach ($allUsers as $id => $name) {
+    $query = 'select sharedid from vtiger_sharedcalendar where userid=?';
+    $result = $db->pquery($query, array($id));
+	$count = $db->num_rows($result);
+    if($count > 0){
+		$db->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ?', array('selectedusers', $id));
+    }else{
+		$db->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ? ', array('public', $id));
+        foreach ($allUsers as $sharedid => $name) {
+            if($sharedid != $id){
+                $sql = "INSERT INTO vtiger_sharedcalendar VALUES (?,?)";
+                $db->pquery($sql, array($id, $sharedid));
+            }
+        }
+    }
+}
+
+// Add Key Metrics widget.
+$homeModule = Vtiger_Module::getInstance('Home');
+$homeModule->addLink('DASHBOARDWIDGET', 'Key Metrics', 'index.php?module=Home&view=ShowWidget&name=KeyMetrics');
+
+$moduleArray = array('Accounts' => 'LBL_ACCOUNT_INFORMATION', 'Contacts' => 'LBL_CONTACT_INFORMATION', 'Potentials' => 'LBL_OPPORTUNITY_INFORMATION');
+foreach ($moduleArray as $module => $block) {
+    $moduleInstance = Vtiger_Module::getInstance($module);
+    $blockInstance = Vtiger_Block::getInstance($block, $moduleInstance);
+
+    $field = new Vtiger_Field();
+    $field->name = 'isconvertedfromlead';
+    $field->label = 'Is Converted From Lead';
+    $field->uitype = 56;
+    $field->column = 'isconvertedfromlead';
+    $field->displaytype = 2;
+    $field->defaultvalue = 'no';
+    $field->columntype = 'varchar(3)';
+    $field->typeofdata = 'C~O';
+    $blockInstance->addField($field);
+    echo "Converted From field added to $module  <br/>";
+}
+
+$homeModule = Vtiger_Module::getInstance('Home');
+$homeModule->addLink('DASHBOARDWIDGET', 'Mini List', 'index.php?module=Home&view=ShowWidget&name=MiniList');
+
+$moduleInstance = Vtiger_Module::getInstance('Users');
+$moreInfoBlock = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $moduleInstance);
+
+$viewField = new Vtiger_Field();
+$viewField->name = 'default_record_view';
+$viewField->label = 'Default Record View';
+$viewField->table ='vtiger_users';
+$viewField->column = 'default_record_view';
+$viewField->columntype = 'VARCHAR(10)';
+$viewField->typeofdata = 'V~O';
+$viewField->uitype = 16;
+$viewField->defaultvalue = 'Summary';
+
+$moreInfoBlock->addField($viewField);
+$viewField->setPicklistValues(array('Summary', 'Detail'));
+
+$db->pquery('UPDATE vtiger_users SET default_record_view = ?', array('Summary'));
+echo "Default Record View option is added User preferences";
+
+
+$InvoiceInstance = Vtiger_Module::getInstance('Invoice');
+Vtiger_Event::register($InvoiceInstance, 'vtiger.entity.aftersave', 'InvoiceHandler', 'modules/Invoice/InvoiceHandler.php');
+
+$POInstance = Vtiger_Module::getInstance('PurchaseOrder');
+Vtiger_Event::register($POInstance, 'vtiger.entity.aftersave', 'PurchaseOrderHandler', 'modules/PurchaseOrder/PurchaseOrderHandler.php');
+            
+$InvoiceBlockInstance = Vtiger_Block::getInstance('LBL_INVOICE_INFORMATION', $InvoiceInstance);
+$field1 = Vtiger_Field::getInstance('received', $InvoiceInstance);
+if (!$field1) {
+    $field1 = new Vtiger_Field();
+    $field1->name = 'received';
+    $field1->label = 'Received';
+    $field1->table = 'vtiger_invoice';
+    $field1->uitype = 72;
+    $field1->displaytype = 3;
+    $field1->typeofdata = 'N~O';
+    $field1->defaultvalue = 0;
+    $InvoiceBlockInstance->addField($field1);
+}
+$field2 = Vtiger_Field::getInstance('balance', $InvoiceInstance);
+if (!$field2) {
+    $field2 = new Vtiger_Field();
+    $field2->name = 'balance';
+    $field2->label = 'Balance';
+    $field1->table = 'vtiger_invoice';
+    $field2->uitype = 72;
+    $field2->typeofdata = 'N~O';
+    $field2->defaultvalue = 0;
+    $field2->displaytype = 3;
+    $InvoiceBlockInstance->addField($field2);
+}
+
+$POBlockInstance = Vtiger_Block::getInstance('LBL_PO_INFORMATION', $POInstance);
+$field3 = Vtiger_Field::getInstance('paid', $POInstance);
+if (!$field3) {
+    $field3 = new Vtiger_Field();
+    $field3->name = 'paid';
+    $field3->label = 'Paid';
+    $field3->table = 'vtiger_purchaseorder';
+    $field3->uitype = 72;
+    $field3->displaytype = 3;
+    $field3->typeofdata = 'N~O';
+    $field3->defaultvalue = 0;
+    $POBlockInstance->addField($field3);
+}
+$field4 = Vtiger_Field::getInstance('balance', $POInstance);
+if (!$field4) {
+    $field4 = new Vtiger_Field();
+    $field4->name = 'balance';
+    $field4->label = 'Balance';
+    $field4->table = 'vtiger_purchaseorder';
+    $field4->uitype = 72;
+    $field4->typeofdata = 'N~O';
+    $field4->defaultvalue = 0;
+    $field4->displaytype = 3;
+    $POBlockInstance->addField($field4);
+}
+            
+
+$sqltimelogTable = "CREATE TABLE vtiger_sqltimelog ( id integer, type VARCHAR(10),
+					data text, started decimal(18,2), ended decimal(18,2), loggedon datetime)";
+
+$db->pquery($sqltimelogTable, array());
+
+$moduleName = 'PurchaseOrder';
+$emm = new VTEntityMethodManager($db);
+$emm->addEntityMethod($moduleName,"UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");
+
+$vtWorkFlow = new VTWorkflowManager($db);
+$poWorkFlow = $vtWorkFlow->newWorkFlow($moduleName);
+$poWorkFlow->description = "Update Inventory Products On Every Save";
+$poWorkFlow->defaultworkflow = 1;
+$poWorkFlow->executionCondition = 3;
+$vtWorkFlow->save($poWorkFlow);
+
+$tm = new VTTaskManager($db);
+$task = $tm->createTask('VTEntityMethodTask', $poWorkFlow->id);
+$task->active = true;
+$task->summary = "Update Inventory Products";
+$task->methodName = "UpdateInventory";
+$tm->saveTask($task);
+
+echo "Workflow for Purchase Order Created";
+
+// Add Tag Cloud widget.
+$homeModule = Vtiger_Module::getInstance('Home');
+$homeModule->addLink('DASHBOARDWIDGET', 'Tag Cloud', 'index.php?module=Home&view=ShowWidget&name=TagCloud');
+echo "successfully added tag cloud widget";
+
+// Schema changed for capturing Dashboard widget positions
+$db->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN position VARCHAR(50)',array());
+            
+$moduleInstance = Vtiger_Module::getInstance('Contacts');
+if($moduleInstance) {
+	$moduleInstance->addLink('LISTVIEWSIDEBARWIDGET','Google Contacts',
+		'module=Google&view=List&sourcemodule=Contacts', '','', '');
+}
+
+$moduleInstance = Vtiger_Module::getInstance('Calendar');
+if($moduleInstance) {
+	$moduleInstance->addLink('LISTVIEWSIDEBARWIDGET','Google Calendar',
+		'module=Google&view=List&sourcemodule=Calendar', '','', '');
+}
+
+$db->pquery('ALTER TABLE vtiger_cvadvfilter MODIFY comparator VARCHAR(20)', array());
+$db->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('next120days', 'next120day'));
+$db->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('last120days', 'last120day'));
+
+$db->pquery("UPDATE vtiger_relatedlists SET actions = ? WHERE tabid = ? AND related_tabid IN (?, ?)",
+	array('ADD', getTabid('Project'), getTabid('ProjectTask'), getTabid('ProjectMilestone')));
+
+$db->pquery("UPDATE vtiger_field SET typeofdata = ? WHERE columnname = ? AND tablename = ?", array("V~O", "company", "vtiger_leaddetails"));
+
+if(Vtiger_Utils::CheckTable('vtiger_cron_task')) {
+	$db->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN laststart INT(11) UNSIGNED',Array());
+	$db->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN lastend INT(11) UNSIGNED',Array());
+}
+
+if(Vtiger_Utils::CheckTable('vtiger_cron_log')) {
+	$db->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN start INT(11) UNSIGNED',Array());
+   	$db->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN end INT(11) UNSIGNED',Array());
+}
+
+require_once 'vtlib/Vtiger/Cron.php';
+Vtiger_Cron::deregister('ScheduleReports');
+
+// END 2013.02.18

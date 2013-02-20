@@ -14,7 +14,7 @@
 		{if $HEADER_LINKS}
 		{assign var="FIRSTHEADERLINK" value=$HEADER_LINKS.0}
 		{assign var="FIRSTHEADERLINKCHILDRENS" value=$FIRSTHEADERLINK->get('childlinks')}
-		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.2}
+		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.1}
 		<div id="userfeedback" class="feedback">
 			<a href="javascript:;" onclick="{$FEEDBACKLINKMODEL->get('linkurl')}" class="handle">{vtranslate("LBL_FEEDBACK", "Vtiger")}</a>
 		</div>

@@ -7499,4 +7499,14 @@
 		<constraint>ADD CONSTRAINT fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_sqltimelog">
+		<field name="id" type="I" size="19" />
+		<field name="type" type="C" size="10" />
+		<field name="data" type="X" />
+		<field name="started" type="N" size="18,2" />
+		<field name="ended" type="N" size="18,2" />
+		<field name="loggedon" type="T" />
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
 </schema>
