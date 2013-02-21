@@ -27,14 +27,16 @@ class Vtiger_Cache  {
     private static  $_module_cache = array();
     
     public function getModule($value){
-	if(isset(self::$_module_cache[$value])){
+	$value = (string)$value;
+	if($value && isset(self::$_module_cache[$value])){
 	    return self::$_module_cache[$value];
 	}
 	return false;
     }
     
     public function setModule($module,$instance){
-		if(self::$cacheEnable){
+		$module = (string)$module;
+		if(self::$cacheEnable && $module){
 			self::$_module_cache[$module] = $instance;
 		}
     }
