@@ -9,7 +9,7 @@
  *********************************************************************************/
 
 //--
-$adb = PearDatabase::getInstance();
+$adb = $db = PearDatabase::getInstance();
 $Vtiger_Utils_log = true;
 
 if (!defined('INSTALLATION_MODE')) {
@@ -41,6 +41,39 @@ if (!defined('INSTALLATION_MODE')) {
 		VTTaskType::registerTaskType($taskType);
 	}
 }
+
+// Collating all module package updates here
+updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
+updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
+updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
+
+updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
+updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
+updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
+updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
+updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
+updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
+updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
+updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
+updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
+updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
+updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
+installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
+
+// updated language packs.
+updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
+updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
+updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
+updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
+updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
+updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
+updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
+updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
+updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
+updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
+updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
+
+//--
 
 $moduleInstance = Vtiger_Module::getInstance('Potentials');
 $block = Vtiger_Block::getInstance('LBL_OPPORTUNITY_INFORMATION', $moduleInstance);
@@ -565,8 +598,7 @@ $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (
 $taskManager->saveTask($task);
 
 global $current_user;
-$adb = PearDatabase::getInstance();
-$user = new Users();
+$user = CRMEntity::getInstance('Users');
 $current_user = $user->retrieveCurrentUserInfoFromFile(Users::getActiveAdminId());
 
 $allTabIdResult = $adb->pquery('SELECT tabid, name FROM vtiger_tab', array());
@@ -582,16 +614,17 @@ for($i=0; $i<$noOfTabs; ++$i) {
 
 $moduleInstance = Vtiger_Module::getInstance('ProjectTask');
 $blockInstance = Vtiger_Block::getInstance('LBL_PROJECT_TASK_INFORMATION', $moduleInstance);
-$fieldInstance = new Vtiger_Field();
-$fieldInstance->name = 'projecttaskstatus';
-$fieldInstance->label = 'Status';
-$fieldInstance->uitype = 15;
-$fieldInstance->quickcreate = 0;
-$blockInstance->addField($fieldInstance);
-
-$pickListValues = array('--None--', 'Open', 'In Progress', 'Completed', 'Deferred', 'Canceled ');
-
-$fieldInstance->setPicklistValues($pickListValues);
+$fieldInstance = Vtiger_Field::getInstance('projecttaskstatus', $moduleInstance);
+if (!$fieldInstance) {
+	$fieldInstance = new Vtiger_Field();
+	$fieldInstance->name = 'projecttaskstatus';
+	$fieldInstance->label = 'Status';
+	$fieldInstance->uitype = 15;
+	$fieldInstance->quickcreate = 0;
+	$blockInstance->addField($fieldInstance);
+	$pickListValues = array('--None--', 'Open', 'In Progress', 'Completed', 'Deferred', 'Canceled ');
+	$fieldInstance->setPicklistValues($pickListValues);
+}
 
 //Dashboard schema changes
 Vtiger_Utils::CreateTable('vtiger_module_dashboard_widgets', '(id INT(19) NOT NULL AUTO_INCREMENT, linkid INT(19), userid INT(19), filterid INT(19),
@@ -689,39 +722,6 @@ $adb->pquery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
 			(SELECT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype NOT IN
 				('Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
 			AND columnindex = 0", array());
-
-//--
-
-// Collating all module package updates here
-updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
-updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
-updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
-
-updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
-updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
-updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
-updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
-updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
-updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
-updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
-updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
-updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
-updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
-installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
-
-// updated language packs.
-updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
-updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
-updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
-updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
-updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
-updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
-updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
-updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
-updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
-updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
-updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
 
 //--
 
