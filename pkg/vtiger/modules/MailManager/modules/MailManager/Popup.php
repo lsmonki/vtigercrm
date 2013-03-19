@@ -1,4 +1,7 @@
 <?php
+	exit; 
+	/* NOTE: This file not in use - Needs to be removed. */ 
+	
 	foreach($_FILES as $key=>$val) {
 		foreach ($val as $i=>$v){
 			$_FILES[$i]=$val[$i];

@@ -467,7 +467,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');
-	$filename = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
+	$filename = vtlib_purifyForSql(preg_replace('/\s+/', '_', $filename));//replace space with _ in filename
 	$date_var = date('Y-m-d H:i:s');
 
 	$seed_user = new Users();
