@@ -36,6 +36,8 @@ class Vtiger_MailScannerInfo {
 	var $searchfor = false;
 	// post scan mark record as
 	var $markas = false;
+	// server timezone
+	var $timezone = false;
 
 	// is the scannered enabled?
 	var $isvalid   = false;
@@ -88,6 +90,7 @@ class Vtiger_MailScannerInfo {
 			$this->searchfor  = $adb->query_result($result, 0, 'searchfor');
 			$this->markas     = $adb->query_result($result, 0, 'markas');
 			$this->isvalid    = $adb->query_result($result, 0, 'isvalid');
+			$this->timezone   = $adb->query_result($result, 0, 'timezone');
 
 			$this->initializeFolderInfo();
 			$this->initializeRules();
@@ -139,14 +142,28 @@ class Vtiger_MailScannerInfo {
 			}
 		}
 	}
+	
+	function dateBasedOnMailServerTimezone($format='d-M-Y') {
+		$returnDate = NULL;
+		if (!empty($this->timezone)) {
+			$currentTZ = date_default_timezone_get();
+			list ($tzhours, $tzminutes) = explode(':', trim($this->timezone));
+			$returnDate = date($format, strtotime(sprintf("%s hours %s minutes", $tzhours, $tzminutes)));
+			date_default_timezone_set($currentTZ);
+		} else {
+			// Search email one-day before to overcome timezone differences.
+			$returnDate = date($format, strtotime("-1 day"));
+		}
+		return $returnDate;
+	}
 
 	/**
 	 * Update lastscan information on folder (or set for rescan next)
 	 */
-	function updateLastscan($folderName, $rescanFolder=false) {
+	function updateLastscan($folderName, $rescanFolder=false, $enabledForScan=1) {
 		global $adb;
 
-		$scannedOn = date('d-M-Y');
+		$scannedOn = $this->dateBasedOnMailServerTimezone('d-M-Y');
 
 		$needRescan = $rescanFolder? 1 : 0;
 
@@ -157,7 +174,6 @@ class Vtiger_MailScannerInfo {
 			$adb->pquery("UPDATE vtiger_mailscanner_folders SET lastscan=?, rescan=? WHERE folderid=?", 
 				Array($scannedOn, $needRescan, $folderid));
 		} else {
-			$enabledForScan = 1; // Enable folder for scan by default
 			$adb->pquery("INSERT INTO vtiger_mailscanner_folders(scannerid, foldername, lastscan, rescan, enabled)
 			   VALUES(?,?,?,?,?)", Array($this->scannerid, $folderName, $scannedOn, $needRescan, $enabledForScan));
 		}
@@ -286,7 +302,7 @@ class Vtiger_MailScannerInfo {
 	function getAsMap() {
 		$infomap = Array();
 		$keys = Array('scannerid', 'scannername', 'server', 'protocol', 'username', 'password', 'ssltype', 
-			'sslmethod', 'connecturl', 'searchfor', 'markas', 'isvalid', 'rules');
+			'sslmethod', 'connecturl', 'searchfor', 'markas', 'isvalid', 'timezone', 'rules');
 		foreach($keys as $key) {
 			$infomap[$key] = $this->$key; 
 		}
@@ -329,6 +345,7 @@ class Vtiger_MailScannerInfo {
 		$this->searchfor = $otherInstance->searchfor;
 		$this->markas    = $otherInstance->markas;
 		$this->isvalid   = $otherInstance->isvalid;
+		$this->timezone  = $otherInstance->timezone;
 
 		$useisvalid = ($this->isvalid)? 1 : 0;
 
@@ -337,15 +354,15 @@ class Vtiger_MailScannerInfo {
 		global $adb;
 		if($this->scannerid == false) {
             $adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
-				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+				sslmethod,connecturl,searchfor,markas,isvalid,timezone) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
 				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword,
-				$this->ssltype, $this->sslmethod, $this->connecturl, $this->searchfor, $this->markas, $useisvalid));
+				$this->ssltype, $this->sslmethod, $this->connecturl, $this->searchfor, $this->markas, $useisvalid, $this->timezone));
 			$this->scannerid = $adb->database->Insert_ID();
         } else { //this record is exist in the data
 			$adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
-				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?",
+				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=?, timezone=? WHERE scannerid=?",
 				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype,
-				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
+				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->timezone, $this->scannerid));
         }
 		
 		return $mailServerChanged;

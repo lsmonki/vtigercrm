@@ -2,9 +2,9 @@
  * Override style to push UI closer to vtiger6.
  * Use when attempting to embed vtiger5 page inside vtiger6
  */
- 
+
 /* Font equivalization */
-body, 
+body,
 table, select, input[type="text"], input[type="password"],
 .small, .big, .settingsTabHeader, .settingsTabList, .settingsTabSelected,
 #orgLay {
@@ -140,8 +140,8 @@ a {
 	background-image: linear-gradient(top,#F2F8FE,#F2F8FE);
 }
 
-.tableHeading .tableHeading .crmButton.save, .tableHeading .tableHeading .crmbutton.save, 
-.tableHeading .tableHeading .crmButton.create, .tableHeading .tableHeading .crmbutton.create, 
+.tableHeading .tableHeading .crmButton.save, .tableHeading .tableHeading .crmbutton.save,
+.tableHeading .tableHeading .crmButton.create, .tableHeading .tableHeading .crmbutton.create,
 .tableHeading .tableHeading .crmButton.edit, .tableHeading .tableHeading .crmbutton.edit
 {
 	/* reset the overrides above */
@@ -165,4 +165,17 @@ a {
 	background: white;
 	text-shadow: none;
 	color: black !important;
+}
+
+.crmButton.save, .crmbutton.save,
+.crmButton.create, .crmbutton.create,
+.crmButton.edit, .crmbutton.edit {
+background-color: #F6F6F6;
+background-image: -moz-linear-gradient(center top , #F6F6F6, #B6B6B6);
+background-image: -ms-linear-gradient(top, #F6F6F6, #B6B6B6);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F6F6F6), to(#B6B6B6));
+background-image: -webkit-linear-gradient(top, #F6F6F6, #B6B6B6);
+background-image: -o-linear-gradient(top, #F6F6F6, #B6B6B6);
+background-image: linear-gradient(top, #F6F6F6, #B6B6B6);
+background-repeat: repeat-x;
 }

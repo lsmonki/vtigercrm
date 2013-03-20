@@ -36,7 +36,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 									$recordId => array(
 										'id'=>$recordId, 'name'=>$recordModel->getName(),
 										'taxes'=>$taxes, 'listprice'=>$listPrice,
-										'description' => $recordModel->get('description'),
+										'description' => decode_html($recordModel->get('description')),
 										'quantityInStock' => $recordModel->get('qtyinstock')
 									)));
 		} else {

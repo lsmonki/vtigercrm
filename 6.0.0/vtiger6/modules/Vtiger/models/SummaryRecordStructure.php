@@ -23,12 +23,14 @@ class Vtiger_SummaryRecordStructure_Model extends Vtiger_DetailRecordStructure_M
 
 		foreach($structuredValues as $blockLabel => $fieldModelsList) {
 			if ($summaryFieldsList) {
-				foreach ($fieldModelsList as $fieldName => $fieldModel) {
-					if (in_array($fieldName, $summaryFieldsList)) {
-						$fieldModels[$fieldName] = $fieldModel;
+				foreach ($summaryFieldsList as $key => $summaryField) {
+					foreach ($fieldModelsList as $fieldName => $fieldModel) {
+						if($summaryField == $fieldName){
+							$summaryFieldModels[$fieldName] = $fieldModel;
+						}
 					}
 				}
-				$summaryFieldModelsList['SUMMARY_FIELDS'] = $fieldModels;
+				$summaryFieldModelsList['SUMMARY_FIELDS'] = $summaryFieldModels;
 			} else {
 				$summaryFieldModelsList[$blockLabel] = $fieldModelsList;
 				break;

@@ -37,6 +37,12 @@ $newscannerinfo->sslmethod  = vtlib_purify(trim($_REQUEST['mailboxinfo_sslmethod
 $newscannerinfo->searchfor  = vtlib_purify(trim($_REQUEST['mailboxinfo_searchfor']));
 $newscannerinfo->markas     = vtlib_purify(trim($_REQUEST['mailboxinfo_markas']));
 $newscannerinfo->isvalid    =(vtlib_purify($_REQUEST['mailboxinfo_enable']) == 'true')? true : false;
+$newscannerinfo->timezone   = vtlib_purify(trim($_REQUEST['mailboxinfo_timezone']));
+if (empty($newscannerinfo->timezone)) {
+	if (stripos($server, 'gmail.com') !== false) {
+		$newscannerinfo->timezone = '-8:00'; // Internal IMAP received-date timezone = PST
+	}
+}
 
 // Rescan all folders on next run?
 $rescanfolder = (vtlib_purify($_REQUEST['mailboxinfo_rescan_folders']) == 'true')? true : false;
@@ -54,6 +60,7 @@ if(!$scannerinfo->compare($newscannerinfo)) {
 } else {
 	$isconnected = true;
 	$scannerinfo->isvalid = $newscannerinfo->isvalid; // Copy new value
+	$scannerinfo->timezone = $newscannerinfo->timezone; // Copy new timezone
 	$newscannerinfo = $scannerinfo;
 }
 
@@ -80,7 +87,15 @@ if(!$isconnected) {
 	// Update lastscan on all the available folders.
 	if($mailServerChanged && $mailbox) {
 		$folders = $mailbox->getFolders();
-		foreach($folders as $folder) $scannerinfo->updateLastscan($folder);
+		foreach($folders as $folder) {
+			$rescan = false; $enableForScan = false;
+			// By default enable only INBOX for scanning - better performance
+			// Administrator can configure other folders from UI.
+			if (stripos($folder, "INBOX") !== false) {
+				$enableForScan = true;
+			}
+			$scannerinfo->updateLastscan($folder, false, $enableForScan);
+		}
 	}
 
 	require('modules/Settings/MailScanner/MailScannerInfo.php');

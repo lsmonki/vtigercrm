@@ -53,6 +53,7 @@
 					</span>
 				</span>
 			</div>
+			{if !empty($CC)}
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">
@@ -60,13 +61,13 @@
 					</span>
 					<span class="span9">
 						<span class="row-fluid">
-							{if !empty($CC)}
-								{$CC}
-							{/if}
+							{$CC}
 						</span>
 					</span>
 				</span>
 			</div>
+			{/if}
+			{if !empty($BCC)}
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">
@@ -74,13 +75,12 @@
 					</span>
 					<span class="span9">
 						<span class="row-fluid">
-							{if !empty($BCC)}
-								{$BCC}
-							{/if}
+							{$BCC}
 						</span>
 					</span>
 				</span>
 			</div>
+			{/if}
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">
@@ -101,7 +101,7 @@
 					<span class="span9">
 						<span class="row-fluid">
 							{foreach item=ATTACHMENT_DETAILS  from=$RECORD->getAttachmentDetails()}
-                                <a &nbsp; 
+                                <a &nbsp;
                                 {if array_key_exists('docid',$ATTACHMENT_DETAILS)}
                                     &nbsp; href="index.php?module=Documents&action=DownloadFile&record={$ATTACHMENT_DETAILS['docid']}
                                             &fileid={$ATTACHMENT_DETAILS['fileid']}"

@@ -56,39 +56,4 @@ class HelpDesk_Detail_View extends Vtiger_Detail_View {
 			return $viewer->view('RelatedActivities.tpl', $moduleName, true);
 		}
 	}
-	
-	/**
-	 * Function returns related records based on related moduleName
-	 * @param Vtiger_Request $request
-	 * @return <type>
-	 */
-	function showRelatedRecords(Vtiger_Request $request) {
-		$parentId = $request->get('record');
-		$pageNumber = $request->get('page');
-		$limit = $request->get('limit');
-		$relatedModuleName = $request->get('relatedModule');
-		$moduleName = $request->getModule();
-
-		if(empty($pageNumber)) {
-			$pageNumber = 1;
-		}
-
-		$pagingModel = new Vtiger_Paging_Model();
-		$pagingModel->set('page', $pageNumber);
-		if(!empty($limit)) {
-			$pagingModel->set('limit', $limit);
-		}
-
-		$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId, $moduleName);
-		$relationListView = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $relatedModuleName);
-		$models = $relationListView->getEntries($pagingModel);
-		
-		$viewer = $this->getViewer($request);
-		$viewer->assign('MODULE' , $moduleName);
-		$viewer->assign('RELATED_RECORDS' , $models);
-		$viewer->assign('RELATED_MODULE' , $relatedModuleName);
-		$viewer->assign('PAGING_MODEL', $pagingModel);
-
-		return $viewer->view('SummaryWidgets.tpl', 'Potentials', 'true');
-	}
 }

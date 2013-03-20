@@ -48,7 +48,7 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
                 $emails = $googleRecord->getEmails();
                 $entity['email'] = $emails[0];
                 $phones = $googleRecord->getPhones();
-                $entity['phone'] = $phones[0];
+                $entity['mobile'] = $phones[0];
                 $addresses = $googleRecord->getAddresses();
                 $entity['mailingstreet'] = $addresses[0];
 
@@ -223,6 +223,3 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
     }
 
 }
-
-?>
-

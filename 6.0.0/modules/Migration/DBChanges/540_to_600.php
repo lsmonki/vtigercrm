@@ -9,7 +9,7 @@
  *********************************************************************************/
 
 //--
-$adb = $db = PearDatabase::getInstance();
+$adb = PearDatabase::getInstance();
 $Vtiger_Utils_log = true;
 
 if (!defined('INSTALLATION_MODE')) {
@@ -41,39 +41,6 @@ if (!defined('INSTALLATION_MODE')) {
 		VTTaskType::registerTaskType($taskType);
 	}
 }
-
-// Collating all module package updates here
-updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
-updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
-updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
-
-updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
-updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
-updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
-updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
-updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
-updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
-updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
-updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
-updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
-updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
-installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
-
-// updated language packs.
-updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
-updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
-updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
-updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
-updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
-updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
-updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
-updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
-updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
-updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
-updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
-
-//--
 
 $moduleInstance = Vtiger_Module::getInstance('Potentials');
 $block = Vtiger_Block::getInstance('LBL_OPPORTUNITY_INFORMATION', $moduleInstance);
@@ -598,7 +565,8 @@ $task->content = '$(assigned_user_id : (Users) last_name) $(assigned_user_id : (
 $taskManager->saveTask($task);
 
 global $current_user;
-$user = CRMEntity::getInstance('Users');
+$adb = PearDatabase::getInstance();
+$user = new Users();
 $current_user = $user->retrieveCurrentUserInfoFromFile(Users::getActiveAdminId());
 
 $allTabIdResult = $adb->pquery('SELECT tabid, name FROM vtiger_tab', array());
@@ -614,17 +582,16 @@ for($i=0; $i<$noOfTabs; ++$i) {
 
 $moduleInstance = Vtiger_Module::getInstance('ProjectTask');
 $blockInstance = Vtiger_Block::getInstance('LBL_PROJECT_TASK_INFORMATION', $moduleInstance);
-$fieldInstance = Vtiger_Field::getInstance('projecttaskstatus', $moduleInstance);
-if (!$fieldInstance) {
-	$fieldInstance = new Vtiger_Field();
-	$fieldInstance->name = 'projecttaskstatus';
-	$fieldInstance->label = 'Status';
-	$fieldInstance->uitype = 15;
-	$fieldInstance->quickcreate = 0;
-	$blockInstance->addField($fieldInstance);
-	$pickListValues = array('--None--', 'Open', 'In Progress', 'Completed', 'Deferred', 'Canceled ');
-	$fieldInstance->setPicklistValues($pickListValues);
-}
+$fieldInstance = new Vtiger_Field();
+$fieldInstance->name = 'projecttaskstatus';
+$fieldInstance->label = 'Status';
+$fieldInstance->uitype = 15;
+$fieldInstance->quickcreate = 0;
+$blockInstance->addField($fieldInstance);
+
+$pickListValues = array('--None--', 'Open', 'In Progress', 'Completed', 'Deferred', 'Canceled ');
+
+$fieldInstance->setPicklistValues($pickListValues);
 
 //Dashboard schema changes
 Vtiger_Utils::CreateTable('vtiger_module_dashboard_widgets', '(id INT(19) NOT NULL AUTO_INCREMENT, linkid INT(19), userid INT(19), filterid INT(19),
@@ -722,6 +689,39 @@ $adb->pquery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
 			(SELECT cvid FROM vtiger_customview WHERE viewname='All' AND entitytype NOT IN
 				('Emails','Calendar','ModComments','ProjectMilestone','Project','SMSNotifier','PBXManager','Webmails'))
 			AND columnindex = 0", array());
+
+//--
+
+// Collating all module package updates here
+updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
+updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
+updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
+
+updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
+updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
+updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
+updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
+updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
+updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
+updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
+updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
+updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
+updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
+updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
+installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
+
+// updated language packs.
+updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
+updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
+updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
+updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
+updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
+updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
+updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
+updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
+updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
+updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
+updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
 
 //--
 
@@ -890,6 +890,7 @@ $blockId = getBlockId($tabId, 'LBL_RECURRENCE_INFORMATION');
 $adb->pquery('UPDATE vtiger_field SET block=? WHERE fieldname=? and tabid=?', array($blockId, 'recurringtype', $tabId));
 
 // Update/Increment the sequence for the succeeding blocks of Users module, with starting sequence 2
+$moduleInstance = Vtiger_Module::getInstance('Users');
 $tabId = getTabid('Users');
 $adb->pquery('UPDATE vtiger_blocks SET sequence = sequence+1 WHERE tabid=? AND sequence >= 2', array($tabId));
 
@@ -1008,22 +1009,22 @@ foreach ($inventoryModules as $module => $details) {
 
     $tableId = $details[2];
 
-    $result = $db->pquery("SELECT $tableId, subtotal, s_h_amount, discount_percent, discount_amount FROM $tableName", array());
-    $numOfRows = $db->num_rows($result);
+    $result = $adb->pquery("SELECT $tableId, subtotal, s_h_amount, discount_percent, discount_amount FROM $tableName", array());
+    $numOfRows = $adb->num_rows($result);
 
     for ($i = 0; $i < $numOfRows; $i++) {
-        $id = $db->query_result($result, $i, $tableId);
-        $subTotal = (float) $db->query_result($result, $i, "subtotal");
-        $shAmount = (float) $db->query_result($result, $i, "s_h_amount");
-        $discountAmount = (float) $db->query_result($result, $i, "discount_amount");
-        $discountPercent = (float) $db->query_result($result, $i, "discount_percent");
+        $id = $adb->query_result($result, $i, $tableId);
+        $subTotal = (float) $adb->query_result($result, $i, "subtotal");
+        $shAmount = (float) $adb->query_result($result, $i, "s_h_amount");
+        $discountAmount = (float) $adb->query_result($result, $i, "discount_amount");
+        $discountPercent = (float) $adb->query_result($result, $i, "discount_percent");
 
         if ($discountPercent != '0') {
             $discountAmount = ($subTotal * $discountPercent) / 100;
         }
         $preTaxTotalValue = $subTotal + $shAmount - $discountAmount;
 
-        $db->pquery("UPDATE $tableName set pre_tax_total = ? WHERE $tableId = ?", array($preTaxTotalValue, $id));
+        $adb->pquery("UPDATE $tableName set pre_tax_total = ? WHERE $tableId = ?", array($preTaxTotalValue, $id));
     }
 }
 
@@ -1048,16 +1049,16 @@ echo "<br> Calendar Shared type field added <br>";
 $allUsers = get_user_array(false);
 foreach ($allUsers as $id => $name) {
     $query = 'select sharedid from vtiger_sharedcalendar where userid=?';
-    $result = $db->pquery($query, array($id));
-	$count = $db->num_rows($result);
+    $result = $adb->pquery($query, array($id));
+	$count = $adb->num_rows($result);
     if($count > 0){
-		$db->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ?', array('selectedusers', $id));
+		$adb->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ?', array('selectedusers', $id));
     }else{
-		$db->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ? ', array('public', $id));
+		$adb->pquery('UPDATE vtiger_users SET calendarsharedtype = ? WHERE id = ? ', array('public', $id));
         foreach ($allUsers as $sharedid => $name) {
             if($sharedid != $id){
                 $sql = "INSERT INTO vtiger_sharedcalendar VALUES (?,?)";
-                $db->pquery($sql, array($id, $sharedid));
+                $adb->pquery($sql, array($id, $sharedid));
             }
         }
     }
@@ -1104,7 +1105,7 @@ $viewField->defaultvalue = 'Summary';
 $moreInfoBlock->addField($viewField);
 $viewField->setPicklistValues(array('Summary', 'Detail'));
 
-$db->pquery('UPDATE vtiger_users SET default_record_view = ?', array('Summary'));
+$adb->pquery('UPDATE vtiger_users SET default_record_view = ?', array('Summary'));
 echo "Default Record View option is added User preferences";
 
 
@@ -1170,20 +1171,20 @@ if (!$field4) {
 $sqltimelogTable = "CREATE TABLE vtiger_sqltimelog ( id integer, type VARCHAR(10),
 					data text, started decimal(18,2), ended decimal(18,2), loggedon datetime)";
 
-$db->pquery($sqltimelogTable, array());
+$adb->pquery($sqltimelogTable, array());
 
 $moduleName = 'PurchaseOrder';
-$emm = new VTEntityMethodManager($db);
+$emm = new VTEntityMethodManager($adb);
 $emm->addEntityMethod($moduleName,"UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");
 
-$vtWorkFlow = new VTWorkflowManager($db);
+$vtWorkFlow = new VTWorkflowManager($adb);
 $poWorkFlow = $vtWorkFlow->newWorkFlow($moduleName);
 $poWorkFlow->description = "Update Inventory Products On Every Save";
 $poWorkFlow->defaultworkflow = 1;
 $poWorkFlow->executionCondition = 3;
 $vtWorkFlow->save($poWorkFlow);
 
-$tm = new VTTaskManager($db);
+$tm = new VTTaskManager($adb);
 $task = $tm->createTask('VTEntityMethodTask', $poWorkFlow->id);
 $task->active = true;
 $task->summary = "Update Inventory Products";
@@ -1198,7 +1199,7 @@ $homeModule->addLink('DASHBOARDWIDGET', 'Tag Cloud', 'index.php?module=Home&view
 echo "successfully added tag cloud widget";
 
 // Schema changed for capturing Dashboard widget positions
-$db->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN position VARCHAR(50)',array());
+$adb->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN position VARCHAR(50)',array());
             
 $moduleInstance = Vtiger_Module::getInstance('Contacts');
 if($moduleInstance) {
@@ -1212,26 +1213,39 @@ if($moduleInstance) {
 		'module=Google&view=List&sourcemodule=Calendar', '','', '');
 }
 
-$db->pquery('ALTER TABLE vtiger_cvadvfilter MODIFY comparator VARCHAR(20)', array());
-$db->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('next120days', 'next120day'));
-$db->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('last120days', 'last120day'));
+$adb->pquery('ALTER TABLE vtiger_cvadvfilter MODIFY comparator VARCHAR(20)', array());
+$adb->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('next120days', 'next120day'));
+$adb->pquery('UPDATE vtiger_cvadvfilter SET comparator = ? WHERE comparator = ?', array('last120days', 'last120day'));
 
-$db->pquery("UPDATE vtiger_relatedlists SET actions = ? WHERE tabid = ? AND related_tabid IN (?, ?)",
+$adb->pquery("UPDATE vtiger_relatedlists SET actions = ? WHERE tabid = ? AND related_tabid IN (?, ?)",
 	array('ADD', getTabid('Project'), getTabid('ProjectTask'), getTabid('ProjectMilestone')));
 
-$db->pquery("UPDATE vtiger_field SET typeofdata = ? WHERE columnname = ? AND tablename = ?", array("V~O", "company", "vtiger_leaddetails"));
+$adb->pquery("UPDATE vtiger_field SET typeofdata = ? WHERE columnname = ? AND tablename = ?", array("V~O", "company", "vtiger_leaddetails"));
 
 if(Vtiger_Utils::CheckTable('vtiger_cron_task')) {
-	$db->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN laststart INT(11) UNSIGNED',Array());
-	$db->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN lastend INT(11) UNSIGNED',Array());
+	$adb->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN laststart INT(11) UNSIGNED',Array());
+	$adb->pquery('ALTER TABLE vtiger_cron_task MODIFY COLUMN lastend INT(11) UNSIGNED',Array());
 }
 
 if(Vtiger_Utils::CheckTable('vtiger_cron_log')) {
-	$db->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN start INT(11) UNSIGNED',Array());
-   	$db->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN end INT(11) UNSIGNED',Array());
+	$adb->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN start INT(11) UNSIGNED',Array());
+   	$adb->pquery('ALTER TABLE vtiger_cron_log MODIFY COLUMN end INT(11) UNSIGNED',Array());
 }
 
 require_once 'vtlib/Vtiger/Cron.php';
 Vtiger_Cron::deregister('ScheduleReports');
 
 // END 2013.02.18
+
+// Start 2013.03.19 (odu24)
+
+// Mail Converter schema changes
+$adb->pquery('ALTER TABLE vtiger_mailscanner ADD COLUMN timezone VARCHAR(10) default NULL', array());
+$adb->pquery('UPDATE vtiger_mailscanner SET timezone=? WHERE server LIKE ? AND timezone IS NULL', array('-8:00', '%.gmail.com'));
+
+$adb->pquery('UPDATE vtiger_report SET state=?', array('CUSTOM'));
+
+$adb->pquery("ALTER TABLE vtiger_relcriteria MODIFY value VARCHAR(512)", array());
+$adb->pquery("ALTER TABLE vtiger_cvadvfilter MODIFY value VARCHAR(512)", array());
+
+//  End 2013.03.19 (odu24)

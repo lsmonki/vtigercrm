@@ -18,15 +18,16 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 
 	public function create($elementType, $element) {
 		$element = $this->sanitizeInventoryForInsert($element);
-        $lineItems = $element['LineItems'];
-        if(!empty ($lineItems)){
+		$element = $this->sanitizeShippingTaxes($element);
+		$lineItems = $element['LineItems'];
+		if (!empty($lineItems)) {
 			$element = parent::create($elementType, $element);
-            $handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
-            $handler->setLineItems('LineItem', $lineItems, $element);
-        }else{
-            throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,"Mandatory Fields Missing..");
-        }
-        return $element;
+			$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
+			$handler->setLineItems('LineItem', $lineItems, $element);
+		} else {
+			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING, "Mandatory Fields Missing..");
+		}
+		return $element;
 	}
 
 	public function update($element) {
@@ -44,13 +45,15 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 	}
 
 	public function revise($element) {
-        $element = $this->sanitizeInventoryForInsert($element);
+		$element = $this->sanitizeInventoryForInsert($element);
 		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 		$components = vtws_getIdComponents($element['id']);
 		$parentId = $components[1];
-		$lineItemList = $handler->getAllLineItemForParent($parentId);
 		if (!empty($element['LineItems'])) {
+			$lineItemList = $element['LineItems'];
 			unset($element['LineItems']);
+		} else {
+			$lineItemList = $handler->getAllLineItemForParent($parentId);
 		}
 		$updatedElement = parent::revise($element);
 		$handler->cleanLineItemList($updatedElement['id']);
@@ -62,8 +65,8 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 		$element = parent::retrieve($id);
 		$skipLineItemFields = getLineItemFields();
 		foreach ($skipLineItemFields as $key => $field) {
-			if(array_key_exists($field, $element)){
-				unset ($element[$field]);
+			if (array_key_exists($field, $element)) {
+				unset($element[$field]);
 			}
 		}
 		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
@@ -81,44 +84,56 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 		$result = parent::delete($id);
 		return $result;
 	}
-	protected function sanitizeInventoryForInsert($element){
+	/**
+	 * function to display discounts,taxes and adjustments
+	 * @param type $element
+	 * @return type
+	 */
+	protected function sanitizeInventoryForInsert($element) {
 		$meta = $this->getMeta();
-		if(!empty($element['hdnTaxType'])){
+		if (!empty($element['hdnTaxType'])) {
 			$_REQUEST['taxtype'] = $element['hdnTaxType'];
 		}
-		if(!empty($element['hdnSubTotal'])){
+		if (!empty($element['hdnSubTotal'])) {
 			$_REQUEST['subtotal'] = $element['hdnSubTotal'];
 		}
-
-		if(!empty($element['hdnDiscountAmount'])){
+		$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
+		if (!empty($element['hdnDiscountAmount'])) {
 			$_REQUEST['discount_type_final'] = 'amount';
 			$_REQUEST['discount_amount_final'] = $element['hdnDiscountAmount'];
-		}elseif(!empty($element['hdnDiscountPercent'])){
+		} elseif (!empty($element['hdnDiscountPercent'])) {
 			$_REQUEST['discount_type_final'] = 'percentage';
 			$_REQUEST['discount_percentage_final'] = $element['hdnDiscountPercent'];
 		}
+		
 
-		if($element['hdnS_H_Amount'] != ''){
-			$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
-		}
-
-		if(!empty($element['txtAdjustment'])){
-			$_REQUEST['adjustmentType'] = ((int)$element['txtAdjustment'] < 0)? '-':'+';
+		if (!empty($element['txtAdjustment'])) {
+			$_REQUEST['adjustmentType'] = ((int) $element['txtAdjustment'] < 0) ? '-' : '+';
 			$_REQUEST['adjustment'] = abs($element['txtAdjustment']);
 		}
-		if(!empty($element['hdnGrandTotal'])){
+		if (!empty($element['hdnGrandTotal'])) {
 			$_REQUEST['total'] = $element['hdnGrandTotal'];
 		}
 
-		$taxDetails = getAllTaxes('all','sh');
-		foreach ($taxDetails as $taxInfo) {
-			if($taxInfo['deleted'] == '0' || $taxInfo['deleted'] === 0){
-				$_REQUEST[$taxInfo['taxname'].'_sh_percent'] = $taxInfo['percentage'];
-			}
-		}
+
 
 		return $element;
 	}
-
+	
+	public function sanitizeShippingTaxes($element){
+			$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
+			$taxDetails = getAllTaxes('all', 'sh');
+			foreach ($taxDetails as $taxInfo) {
+				if ($taxInfo['deleted'] == '0' || $taxInfo['deleted'] === 0) {
+						$_REQUEST[$taxInfo['taxname'] . '_sh_percent'] = $taxInfo['percentage'];
+				}
+			}
+			return $element;
+		
+	}
+	
 }
+
+
+
 ?>

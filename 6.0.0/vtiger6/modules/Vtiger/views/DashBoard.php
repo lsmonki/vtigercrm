@@ -50,11 +50,7 @@ class Vtiger_Dashboard_View extends Vtiger_Index_View {
 	}
 
 	public function postProcess(Vtiger_Request $request) {
-		parent::postProcess($request, false);
-		$viewer = $this->getViewer($request);
-		$moduleName = $request->getModule();
-		$viewer->assign('MODULE_NAME', $moduleName);
-		$viewer->view('dashboards/DashBoardPostProcess.tpl', $moduleName);
+		parent::postProcess($request);
 	}
 
 	/**

@@ -25,6 +25,8 @@ if (!empty ($searchurl)) {
 		$value = explode('=', $value);
 		if (count($value) == 2) {
 			$input[$value[0]] = $value[1];
+            //Since query generator will depend on request to get advance filter 
+            $_REQUEST[$value[0]] = $value[1];
 		}
 	}
 }

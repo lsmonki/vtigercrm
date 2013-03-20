@@ -67,7 +67,7 @@ function wsapp_getRecordEntityNameIds($entityNames,$modules,$user){
         $num_rows = $db->num_rows($result);
         for($i=0;$i<$num_rows;$i++){
             $id = $db->query_result($result, $i,'id');
-            $entityName = $entityNames[$i];
+            $entityName = $db->query_result($result, $i,'entityname');
             $entityNameIds[$entityName] = vtws_getWebserviceEntityId($moduleName, $id);
         }
     }

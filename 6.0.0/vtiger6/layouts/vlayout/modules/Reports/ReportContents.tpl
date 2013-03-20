@@ -13,7 +13,7 @@
 	<div id="reportDetails" class="marginLeft5px">
 		<input type="hidden" id="updatedCount" value="{$NEW_COUNT}" />
 		{if !empty($CALCULATION_FIELDS)}
-			<table class="table table-bordered" width="100%">
+			<table class="table table-bordered table-condensed" width="100%">
 				<thead>
 					<tr class="blockHeader">
 						<th>{vtranslate('LBL_FIELD_NAMES',$MODULE)}</th>

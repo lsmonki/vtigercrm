@@ -415,11 +415,17 @@ class Import_Data_Controller {
 				foreach ($allPicklistDetails as $picklistDetails) {
 					$allPicklistValues[] = $picklistDetails['value'];
 				}
-				$encodePicklistValue = htmlentities($fieldValue,ENT_QUOTES,$default_charset);
-				if (!in_array(strtolower($encodePicklistValue), array_map('strtolower',$allPicklistValues))) {
+
+				$picklistValueInLowerCase = strtolower(htmlentities($fieldValue, ENT_QUOTES, $default_charset));
+				$allPicklistValuesInLowerCase = array_map('strtolower', $allPicklistValues);
+				$picklistDetails = array_combine($allPicklistValuesInLowerCase, $allPicklistValues);
+
+				if (!in_array($picklistValueInLowerCase, $allPicklistValuesInLowerCase)) {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
+				} else {
+					$fieldData[$fieldName] = $picklistDetails[$picklistValueInLowerCase];
 				}
 				Vtiger_Cache::$cacheEnable = $olderCacheEnable;
 			} else {

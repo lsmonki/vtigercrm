@@ -282,6 +282,7 @@ if (typeof(ImportJs) == 'undefined') {
 				} else if(rowId in mapping) {
 					mappedFields.val($rowId);
 				}
+				mappedFields.trigger('liszt:updated');
 				ImportJs.loadDefaultValueWidget(fieldElement.attr('id'));
 			});
 		},

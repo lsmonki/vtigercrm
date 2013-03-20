@@ -388,6 +388,10 @@ jQuery.Class("Vtiger_Detail_Js",{
 			return aDeferred.promise();
 		}
 
+		var progressIndicatorElement = jQuery.progressIndicator({});
+		var element = jQuery(e.currentTarget);
+		element.attr('disabled', 'disabled');
+
 		var parentCommentId = closestCommentBlock.closest('.commentDetails').find('.commentInfoHeader').data('commentid');
 		var postData = {
 			"action" : 'SaveAjax',
@@ -398,9 +402,13 @@ jQuery.Class("Vtiger_Detail_Js",{
 		}
 		AppConnector.request(postData).then(
 			function(data){
+				progressIndicatorElement.progressIndicator({'mode':'hide'});
+				element.removeAttr('disabled');
 				aDeferred.resolve(data);
 			},
 			function(textStatus, errorThrown){
+				progressIndicatorElement.progressIndicator({'mode':'hide'});
+				element.removeAttr('disabled');
 				aDeferred.reject(textStatus, errorThrown);
 			}
 		);
@@ -1016,16 +1024,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var recordId = thisInstance.getRecordId();
 			var module = app.getModuleName();
 			var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
-			
-			
-			if(quickCreateNode.length <= 0) {
-				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
-			}
 			var fieldName = thisInstance.referenceFieldNames[module];
 			
 			var customParams = {};
 			customParams[fieldName] = recordId;
-			
+
+			if(quickCreateNode.length <= 0) {
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
+			}
+
 			var postQuickCreateSave = function(data) {
 				thisInstance.postSummaryWidgetAddRecord(data,currentElement);
 			}
@@ -1064,7 +1071,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 	},
 	
 	/**
-	 * Function to handle Post actions after adding record from 
+	 * Function to handle Post actions after adding record from
 	 * summary view widget
 	 */
 	postSummaryWidgetAddRecord : function(data,currentElement){
@@ -1076,6 +1083,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		var module = app.getModuleName();
 		var idList = new Array();
 		idList.push(data.result._recordId);
+		widgetDataContainer.progressIndicator({});
 		this.addRelationBetweenRecords(referenceModuleName,idList).then(
 			function(data){
 				var params = {};
@@ -1090,6 +1098,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				AppConnector.request(params).then(
 					function(data) {
 						var documentsWidget = jQuery('#relatedDocuments');
+						widgetDataContainer.progressIndicator({'mode' : 'hide'});
 						widgetDataContainer.html(data);
 						app.changeSelectElementView(documentsWidget);
 					}
@@ -1117,7 +1126,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			params['parentId'] = parentId;
 			params['relatedLoad'] = true;
 			popupInstance.show(params);
-		})		
+		})
 		detailContentsHolder.on('click','[name="emailsEditView"]',function(e){
 			e.stopPropagation();
 			var module = "Emails";
@@ -1274,7 +1283,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				record : thisInstance.getRecordId()
 			}
 			AppConnector.request(params).then(
-				function(data) {	
+				function(data) {
 				});
 		});
 	},
@@ -1298,7 +1307,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 					app.showModalWindow(params);
 					thisInstance.registerChangeEventForModulesList();
 				}
-			)			
+			)
 		});
 	},
 	
@@ -1310,7 +1319,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			} else{
 				jQuery('[name="tagSearchModuleResults"]').removeClass('hide');
 				var selectedOptionValue = modulesSelectElement.val();
-				jQuery('[name="tagSearchModuleResults"]').filter(':not(#'+selectedOptionValue+')').addClass('hide');      
+				jQuery('[name="tagSearchModuleResults"]').filter(':not(#'+selectedOptionValue+')').addClass('hide');
 			}
 		});
 	},
@@ -1459,18 +1468,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 			thisInstance.removeCommentBlockIfExists();
 			var addCommentBlock = thisInstance.getCommentBlock();
 			addCommentBlock.appendTo('.commentBlock');
-			jQuery(e.currentTarget).attr('disabled',true);
 		});
 
 		detailContentsHolder.on('click','.closeCommentBlock', function(e){
 			thisInstance.removeCommentBlockIfExists();
-			jQuery('.addCommentBtn').attr('disabled',false);
 		});
 
 		detailContentsHolder.on('click','.replyComment', function(e){
 			var detailContentsHolder = thisInstance.getContentHolder();
 			thisInstance.removeCommentBlockIfExists();
-			jQuery('.addCommentBtn').attr('disabled',false);
 			var currentTarget = jQuery(e.currentTarget);
 			var commentInfoBlock = currentTarget.closest('.singleComment');
 			var addCommentBlock = thisInstance.getCommentBlock();
@@ -1520,23 +1526,11 @@ jQuery.Class("Vtiger_Detail_Js",{
 		});
 
 		detailContentsHolder.on('click','.detailViewSaveComment', function(e){
-			jQuery(e.currentTarget).attr("disabled", true);
 			var dataObj = thisInstance.saveComment(e);
 			dataObj.then(function(data){
 				var commentsContainer = detailContentsHolder.find("[data-name='ModComments']");
 				thisInstance.loadWidget(commentsContainer);
 			});
-		});
-
-		detailContentsHolder.on('keyup','.commentcontent', function(e){
-			var commentContent = jQuery(e.currentTarget);
-			var commentContentValue = commentContent.val();
-			var parentElement = commentContent.closest('div.addCommentBlock');
-			if(commentContentValue != ""){
-				parentElement.find('.detailViewSaveComment').removeAttr('disabled');
-			}else{
-				parentElement.find('.detailViewSaveComment').attr('disabled',"disabled");
-			}
 		});
 
 		detailContentsHolder.on('click','.saveComment', function(e){

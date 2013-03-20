@@ -68,6 +68,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$queryGenerator = new QueryGenerator($moduleModel->get('name'), $user);
 		}else{
 			$queryGenerator = new QueryGenerator($moduleModel->get('name'), $currentUser);
+			$currentUsergroupIds = Users_Record_Model::getUserGroups($currentUser->id);
 		}
 
 		$queryGenerator->setFields(array('subject','visibility','date_start','time_start','due_date','time_end','assigned_user_id','id'));
@@ -85,7 +86,13 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			}
 			$query .= ")";
 		} else {
-			$query .= " AND vtiger_crmentity.smownerid='$currentUser->id'";
+			if(!empty($currentUsergroupIds)) {
+				$query .= " AND (vtiger_crmentity.smownerid='$currentUser->id' ".
+					" OR vtiger_crmentity.smownerid IN (".generateQuestionMarks($currentUsergroupIds).")) ";
+				$params = array_merge($params, $currentUsergroupIds);
+			} else {
+				$query .= " AND vtiger_crmentity.smownerid='$currentUser->id' ";
+			}
 		}
 
 		$queryResult = $db->pquery($query, $params);
@@ -97,10 +104,10 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item['id'] = $crmid;
 			$item['visibility'] = $visibility;
 			if($visibility == 'Private' && $userid && $userid != $currentUser->getId()) {
-				$item['title'] = $userName.' - '.vtranslate('Busy','Events').'*';
+				$item['title'] = decode_html($userName).' - '.decode_html(vtranslate('Busy','Events')).'*';
 				$item['url']   = '';
 			} else {
-				$item['title'] = $record['subject'];
+				$item['title'] = decode_html($record['subject']);
 				$item['url']   = sprintf('index.php?module=Calendar&view=Detail&record=%s', $crmid);
 			}
 
@@ -156,7 +163,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		while($record = $db->fetchByAssoc($queryResult)){
 			$item = array();
 			$crmid = $record['activityid'];
-			$item['title'] = $record['subject'];
+			$item['title'] = decode_html($record['subject']);
 
 			$dateTimeFieldInstance = new DateTimeField($record['date_start'] . ' ' . $record['time_start']);
 			$userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue();
@@ -181,7 +188,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item = array();
 			list ($modid, $crmid) = vtws_getIdComponents($record['id']);
 			$item['id'] = $crmid;
-			$item['title'] = $record['potentialname'];
+			$item['title'] = decode_html($record['potentialname']);
 			$item['start'] = $record['closingdate'];
 			$item['url']   = sprintf('index.php?module=Potentials&view=Detail&record=%s', $crmid);
 			$item['className'] = $cssClass;
@@ -202,7 +209,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item = array();
 			list ($modid, $crmid) = vtws_getIdComponents($record['id']);
 			$item['id'] = $crmid;
-			$item['title'] = trim($record['firstname'] . ' ' . $record['lastname']);
+			$item['title'] = decode_html(trim($record['firstname'] . ' ' . $record['lastname']));
 			$item['start'] = $record['support_end_date'];
 			$item['url']   = sprintf('index.php?module=Contacts&view=Detail&record=%s', $crmid);
 			$item['className'] = $cssClass;
@@ -246,7 +253,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			}
 			$recordDateTime->setDate($calendarYear, $recordDateTime->format('m'), $recordDateTime->format('d'));
 			$item['id'] = $crmid;
-			$item['title'] = trim($record['firstname'] . ' ' . $record['lastname']);
+			$item['title'] = decode_html(trim($record['firstname'] . ' ' . $record['lastname']));
 			$item['start'] = $recordDateTime->format('Y-m-d');
 			$item['url']   = sprintf('index.php?module=Contacts&view=Detail&record=%s', $crmid);
 			$item['className'] = $cssClass;
@@ -262,7 +269,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item = array();
 			list ($modid, $crmid) = vtws_getIdComponents($record['id']);
 			$item['id'] = $crmid;
-			$item['title'] = $record['subject'];
+			$item['title'] = decode_html($record['subject']);
 			$item['start'] = $record['duedate'];
 			$item['url']   = sprintf('index.php?module=Invoice&view=Detail&record=%s', $crmid);
 			$item['className'] = $cssClass;
@@ -291,7 +298,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item = array();
 			$crmid = $record['crmid'];
 			$item['id'] = $crmid;
-			$item['title'] = $record['projectname'];
+			$item['title'] = decode_html($record['projectname']);
 			$item['start'] = $record['startdate'];
 			$item['end'] = $record['targetenddate'];
 			$item['url']   = sprintf('index.php?module=Project&view=Detail&record=%s', $crmid);
@@ -321,7 +328,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item = array();
 			$crmid = $record['crmid'];
 			$item['id'] = $crmid;
-			$item['title'] = $record['projecttaskname'];
+			$item['title'] = decode_html($record['projecttaskname']);
 			$item['start'] = $record['startdate'];
 			$item['end'] = $record['enddate'];
 			$item['url']   = sprintf('index.php?module=ProjectTask&view=Detail&record=%s', $crmid);

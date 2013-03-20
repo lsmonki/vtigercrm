@@ -14,4 +14,12 @@ class Emails_Mailer_Model extends Vtiger_Mailer {
 	public static function getInstance() {
 		return new self();
 	}
+
+	/**
+	 * Function returns error from phpmailer
+	 * @return <String>
+	 */
+	function getError() {
+		return $this->ErrorInfo;
+	}
 }

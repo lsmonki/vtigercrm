@@ -11,8 +11,9 @@
 -->*}
 {strip}
 <div class="SendEmailFormStep2" id="composeEmailContainer">
-	<div class="modal-header">
+	<div style='padding:10px 0;'>
 		<h3>{vtranslate('LBL_COMPOSE_EMAIL', $MODULE)}</h3>
+		<hr style='margin:5px 0;width:100%'>
 	</div>
 	<form class="form-horizontal" id="massEmailForm" method="post" action="index.php" enctype="multipart/form-data" name="massEmailForm">
 		<input type="hidden" name="selected_ids" value='{ZEND_JSON::encode($SELECTED_IDS)}' />
@@ -143,8 +144,8 @@
 					<span  name="progressIndicator" style="height:30px;">&nbsp;</span>
 				</div>
 			</div>
-			<div class="span4 margin0px">
-				<span class="pull-right">
+			<div class="span4">
+				<span class="btn-toolbar pull-right">
 					<button type="button" class="btn" id="selectEmailTemplate" data-url="{$EMAIL_TEMPLATE_URL}" title="{vtranslate('LBL_SELECT_EMAIL_TEMPLATE',$MODULE)}"><strong>{vtranslate('LBL_SELECT_EMAIL_TEMPLATE',$MODULE)}</strong></button>
 				</span>
 			</div>

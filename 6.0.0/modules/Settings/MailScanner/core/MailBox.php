@@ -158,7 +158,7 @@ class Vtiger_MailBox {
 					$searchQuery = "$searchfor SINCE $lastscanOn";
 				}
 			} else {
-				$searchQuery = $lastscanOn? "SINCE $lastscanOn" : "BEFORE ". date('d-M-Y');
+				$searchQuery = $lastscanOn? "SINCE $lastscanOn" : "BEFORE ". $this->_scannerinfo->dateBasedOnMailServerTimezone('d-M-Y');
 			}
 		}
 		if($this->open($folder)) {

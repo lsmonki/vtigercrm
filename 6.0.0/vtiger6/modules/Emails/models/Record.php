@@ -98,6 +98,9 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				}
 			}
 			$status = $mailer->Send(true);
+			if(!$status) {
+				$status = $mailer->getError();
+			}
 		}
 		return $status;
 	}

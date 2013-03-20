@@ -229,7 +229,7 @@ jQuery.Class("Vtiger_Header_Js",{
 
 		form.on('submit',function(e){
 			var form = jQuery(e.currentTarget);
-
+			var module = form.find('[name="module"]').val();
 			//Form should submit only once for multiple clicks also
 			if(typeof form.data('submit') != "undefined") {
 				return false;
@@ -249,7 +249,7 @@ jQuery.Class("Vtiger_Header_Js",{
 				}
 
 				var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
-				form.trigger(recordPreSaveEvent, {'value' : 'edit'});
+				form.trigger(recordPreSaveEvent, {'value' : 'edit','module': module});
 				if(!(recordPreSaveEvent.isDefaultPrevented())) {
 					thisInstance.quickCreateSave(form).then(
 						function(data) {
@@ -365,8 +365,10 @@ jQuery.Class("Vtiger_Header_Js",{
 					return false;
 				}
 				var basicSearch = new Vtiger_BasicSearch_Js();
+				var progress = jQuery.progressIndicator();
 				basicSearch.search(val).then(function(data){
 					basicSearch.showSearchResults(data);
+					progress.progressIndicator({'mode':'hide'});
 				});
 			}
 		});

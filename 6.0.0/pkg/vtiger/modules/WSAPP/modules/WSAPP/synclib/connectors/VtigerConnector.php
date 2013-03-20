@@ -225,6 +225,11 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector{
 				if(!empty($currentFieldValue)){
 					continue;
 				}
+				//Dont fill mandatory fields if emapty is passed and if the record is in update mode
+				//Since sync app is using revise to update
+				if($record->getMode() == WSAPP_SyncRecordModel::WSAPP_UPDATE_MODE) {
+					continue;
+				}
 				$fieldDataType = $fieldInstance->getFieldDataType();
 				$defaultValue = $fieldInstance->getDefault();
 				$value='';

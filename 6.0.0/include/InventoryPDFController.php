@@ -129,7 +129,7 @@ class Vtiger_InventoryPDFController {
 			$totaltaxes += $tax;
 			$totaltaxes = number_format($totaltaxes, $no_of_decimal_places,'.','');
 			$discountPercentage = $productLineItem["discount_percent{$productLineItemIndex}"];
-			$productName = $productLineItem["productName{$productLineItemIndex}"];
+			$productName = decode_html($productLineItem["productName{$productLineItemIndex}"]);
 			//get the sub product
 			$subProducts = $productLineItem["subProductArray{$productLineItemIndex}"];
 			if($subProducts != '') {
@@ -138,13 +138,13 @@ class Vtiger_InventoryPDFController {
 				}
 			}
 			$contentModel->set('Name', $productName);
-			$contentModel->set('Code', $productLineItem["hdnProductcode{$productLineItemIndex}"]);
+			$contentModel->set('Code', decode_html($productLineItem["hdnProductcode{$productLineItemIndex}"]));
 			$contentModel->set('Quantity', $quantity);
 			$contentModel->set('Price',     $this->formatPrice($listPrice));
 			$contentModel->set('Discount',  $this->formatPrice($discount)."\n ($discountPercentage%)");
 			$contentModel->set('Tax',       $this->formatPrice($tax)."\n ($total_tax_percent%)");
 			$contentModel->set('Total',     $this->formatPrice($producttotal));
-			$contentModel->set('Comment',   $productLineItem["comment{$productLineItemIndex}"]);
+			$contentModel->set('Comment',   decode_html($productLineItem["comment{$productLineItemIndex}"]));
 
 			$contentModels[] = $contentModel;
 		}
@@ -188,12 +188,14 @@ class Vtiger_InventoryPDFController {
 		$discount_percent = $final_details["discount_percentage_final"];
 
 		$discount = 0.0;
-		if(!empty($discount_amount)) {
+        $discount_final_percent = '0.00';
+		if($final_details['discount_type_final'] == 'amount') {
 			$discount = $discount_amount;
-		} else if(!empty($discount_percent)) {
+		} else if($final_details['discount_type_final'] == 'percentage') {
+            $discount_final_percent = $discount_percent;
 			$discount = (($discount_percent*$final_details["hdnSubTotal"])/100);
 		}
-		$summaryModel->set(getTranslatedString("Discount", $this->moduleName), $this->formatPrice($discount));
+		$summaryModel->set(getTranslatedString("Discount", $this->moduleName)."($discount_final_percent%)", $this->formatPrice($discount));
 
 		$group_total_tax_percent = '0.00';
 		//To calculate the group tax amount
@@ -387,7 +389,7 @@ class Vtiger_InventoryPDFController {
 	function focusColumnValue($key, $defvalue='') {
 		$focus = $this->focus;
 		if(isset($focus->column_fields[$key])) {
-			return $focus->column_fields[$key];
+			return decode_html($focus->column_fields[$key]);
 		}
 		return $defvalue;
 	}
