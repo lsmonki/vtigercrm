@@ -1,0 +1,155 @@
+/**
+ * Override style to push UI closer to vtiger6.
+ * Use when attempting to embed vtiger5 page inside vtiger6
+ */
+ 
+/* Font equivalization */
+body, 
+table, select, input[type="text"], input[type="password"],
+.small, .big, .settingsTabHeader, .settingsTabList, .settingsTabSelected,
+#orgLay {
+	font-family: 'Lucida Grande', Tahoma, sans-serif !important;
+}
+
+#helpButton {
+	display: none !important;
+}
+
+.small {
+	font-size: 12px;
+	text-shadow: none;
+}
+
+.big {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+#note {
+	color: #0F3E76;
+}
+
+.showPanelBg {
+	background: none;
+}
+
+.settingsUI {
+	background: none;
+	border: 1px solid #BFD4E9 !important;
+	padding: 0;
+}
+
+.settingsTabHeader, .tableHeading, .layerPopupHeading {
+	background: #0F3E76 !important;
+	color: white !important;
+	text-shadow: 1px 1px 1px black;
+}
+
+/* Refer: http://reference.sitepoint.com/css/pseudoclass-empty */
+.settingsUI .tableHeading:empty {
+	background: red !important;
+}
+
+.settingsUI .tableHeading .tableHeading {
+	background: white !important;
+	color: black !important;
+	text-shadow: none;
+}
+
+.settingsUI .tableHeading td {
+	color: inherit !important;
+}
+
+.listTableTopButtons {
+	background: none;
+}
+
+.settingsTabList,
+.settingsTabSelected {
+	border-top-color: #BFD4E9 !important;
+	border-right-color: #BFD4E9 !important;
+	border-bottom-color: #BFD4E9 !important;
+	border-left-color: #BFD4E9 !important;
+}
+
+/* Generated using:  http://leafo.net/lessphp/
+ * vtiger6/libraries/bootstrap/less/mixins.less
+ * vtiger6/themes/vlayout/newskin/variables.less
+ * vtiger6/themes/vlayout/newskin/style.less
+ */
+.crmButton, .crmbutton {
+  color: black;
+  border-color: #FFFFFF;
+  /*padding: 5px 15px 5px;*/
+  font-weight: Bold;
+  background-color: #dcdcdc;
+  background-image: -moz-linear-gradient(top,#f6f6f6,#b6b6b6);
+  background-image: -ms-linear-gradient(top,#f6f6f6,#b6b6b6);
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(#f6f6f6),to(#b6b6b6));
+  background-image: -webkit-linear-gradient(top,#f6f6f6,#b6b6b6);
+  background-image: -o-linear-gradient(top,#f6f6f6,#b6b6b6);
+  background-image: linear-gradient(top,#f6f6f6,#b6b6b6);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#b6b6b6', GradientType=0);
+  border-color: #b6b6b6 #b6b6b6 #909090;
+  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+}
+.crmButton:hover, .crmbutton:hover {
+  box-shadow: 1px 1px 3px #236be1 !important;
+  border-style: solid;
+  border-color: #236be1;
+}
+
+.crmButton.save, .crmbutton.save,
+.crmButton.create, .crmbutton.create,
+.crmButton.edit, .crmbutton.edit {
+	color: white;
+	background-color: #0F3E76;
+	background-image: -moz-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -ms-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#0F3E76),to(#0F3E76));
+	background-image: -webkit-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -o-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: linear-gradient(top,#0F3E76,#0F3E76);
+}
+
+.tableHeading .crmButton.save, .tableHeading .crmbutton.save,
+.tableHeading .crmButton.create, .tableHeading .crmbutton.create,
+.tableHeading .crmButton.edit, .tableHeading .crmbutton.edit
+{
+	color: black;
+	background-color: #F2F8FE;
+	background-image: -moz-linear-gradient(top,#F2F8FE,#F2F8FE);
+	background-image: -ms-linear-gradient(top,#F2F8FE,#F2F8FE);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#F2F8FE),to(#F2F8FE));
+	background-image: -webkit-linear-gradient(top,#F2F8FE,#F2F8FE);
+	background-image: -o-linear-gradient(top,#F2F8FE,#F2F8FE);
+	background-image: linear-gradient(top,#F2F8FE,#F2F8FE);
+}
+
+.tableHeading .tableHeading .crmButton.save, .tableHeading .tableHeading .crmbutton.save, 
+.tableHeading .tableHeading .crmButton.create, .tableHeading .tableHeading .crmbutton.create, 
+.tableHeading .tableHeading .crmButton.edit, .tableHeading .tableHeading .crmbutton.edit
+{
+	/* reset the overrides above */
+	color: white;
+	background-color: #0F3E76;
+	background-image: -moz-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -ms-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#0F3E76),to(#0F3E76));
+	background-image: -webkit-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: -o-linear-gradient(top,#0F3E76,#0F3E76);
+	background-image: linear-gradient(top,#0F3E76,#0F3E76);
+}
+
+#pickListContents {
+	background: white;
+	text-shadow: none;
+	color: black;
+}
+
+#pickListContents .tableHeading td {
+	background: white;
+	text-shadow: none;
+	color: black !important;
+}
