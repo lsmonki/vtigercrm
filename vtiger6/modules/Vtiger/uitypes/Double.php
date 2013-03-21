@@ -17,14 +17,5 @@ class Vtiger_Double_UIType extends Vtiger_Base_UIType {
 	public function getTemplateName() {
 		return 'uitypes/Number.tpl';
 	}
-	
-	/**
-	 * Function to get the Display Value, for the current field type with given DB Insert Value
-	 * @param <Object> $value
-	 * @return <Object>
-	 */
-	public function getDisplayValue($value) {
-		return decimalFormat($value);
-	}
 
 }
