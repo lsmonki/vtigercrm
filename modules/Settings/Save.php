@@ -11,14 +11,24 @@
 require_once($root_directory."include/database/PearDatabase.php");
 global $mod_strings,$adb;
 $server=vtlib_purify($_REQUEST['server']);
+$mode = vtlib_purify($_REQUEST['mode']);
 $port=vtlib_purify($_REQUEST['port']);
 $server_username=vtlib_purify($_REQUEST['server_username']);
 $server_password=vtlib_purify($_REQUEST['server_password']);
 $server_type = vtlib_purify($_REQUEST['server_type']);
 $server_path = vtlib_purify($_REQUEST['server_path']);
 $from_email_field = vtlib_purify($_REQUEST['from_email_field']);
+$smtp_auth_value = vtlib_purify($_REQUEST['smtp_auth']);
+if($mode == "Default"){
+	$server=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server'];
+	$server_username=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server_username'];
+	$server_password=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server_password'];
+	$from_email_field = $VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['from_email_field'];
+	$smtp_auth_value = $VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['smtp_auth'];
+}
+
 $db_update = true;
-if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
+if($smtp_auth_value == 'on' || $smtp_auth_value == 1)
 	$smtp_auth = 'true';
 else
 	$smtp_auth = 'false';
@@ -126,7 +136,7 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 	global $current_user;
 
 	$to_email = getUserEmailId('id',$current_user->id);
-	$from_email = $to_email;
+	$from_email = empty($from_email_field) ? $to_email : $from_email_field;
 	$subject = 'Test mail about the mail server configuration.';
 	$description = 'Dear '.$current_user->user_name.', <br><br><b> This is a test mail sent to confirm if a mail is actually being sent through the smtp server that you have configured. </b><br>Feel free to delete this mail.<br><br>Thanks  and  Regards,<br> Team vTiger <br><br>';
 	if($to_email != '')
@@ -140,7 +150,7 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 	}
 	$error_str = getMailErrorString($mail_status_str);
 	$action = 'EmailConfig';
-	if($mail_status != 1) {
+	if(($mail_status != 1) && ($mode != "Default")) {
 		$action = 'EmailConfig&emailconfig_mode=edit&server_name='.
 			vtlib_purify($_REQUEST['server']).'&server_user='.
 			vtlib_purify($_REQUEST['server_username']).'&auth_check='.
@@ -158,7 +168,7 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
                 		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port,$from_email_field,$id);
 					}
 				$adb->pquery($sql, $params);
-        	}	
+        	}
 	}
 }
 //While configuring Proxy settings, the submitted values will be retained when exception is thrown - dina

@@ -35,5 +35,12 @@
 			</ul>
 		</div>
 	{/foreach}
-
+	{assign var=NUMBER_OF_RECORDS value=count($RELATED_RECORDS)}
+	{if $NUMBER_OF_RECORDS eq 5}
+		<div class="row-fluid">
+			<div class="pull-right">
+				<a class="moreRecentDocuments cursorPointer">{vtranslate('LBL_MORE',$MODULE_NAME)}</a>
+			</div>
+		</div>
+	{/if}
 {/strip}

@@ -220,9 +220,11 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				} else {
 					$value = '';
 				}
-			}elseif($uitype == 71 || $uitype == 72 || $uitype == 5){
-				$value = $fieldInfo->getDisplayValue($value);
-			}elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
+			} elseif($uitype == 71) {
+                $value = $fieldInfo->getDisplayValue($value);
+            } elseif($uitype == 72) {
+                $value = CurrencyField::convertToUserFormat($value, null, true, true);
+			} elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
 				$value = decimalFormat($value);
 			}
 			if($type == 'Documents' && $fieldLabel == 'description'){

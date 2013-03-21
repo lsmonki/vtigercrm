@@ -25,7 +25,7 @@
 				<div id="noOfRecords">{vtranslate('LBL_NO_OF_RECORDS',$MODULE)} <span id="countValue">{$COUNT}</span></div>
 			</div>
 			<div class='span4'>
-				<span class="pull-right">
+				<span class="pull-right" style='margin-right:50px;'>
 					{foreach item=DETAILVIEW_LINK from=$DETAILVIEW_LINKS}
 						<img class="cursorPointer alignBottom" onclick='window.location.href="{$DETAILVIEW_LINK->getUrl()}"' src="{vimage_path({$DETAILVIEW_LINK->get('linkicon')})}" alt="{vtranslate($DETAILVIEW_LINK->getLabel(), $MODULE)}" title="{vtranslate($DETAILVIEW_LINK->getLabel(), $MODULE)}" />&nbsp;
 					{/foreach}
@@ -57,5 +57,5 @@
 				</div>
 			</div>
 		</div>
-	</div>				
+	</div>
 {/strip}

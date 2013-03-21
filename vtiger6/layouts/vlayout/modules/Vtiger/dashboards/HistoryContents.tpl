@@ -37,11 +37,11 @@
 						<div class='font-x-small'>
 							<i>{$FIELD->getName()}</i>
 							{if $FIELD->get('prevalue') neq ''}
-								{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toSafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
+								{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
 							{else}
 								{vtranslate('LBL_CHANGED')}
 							{/if}
-								{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toSafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
+								{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
 						</div>
 						{else}
 							<a href="{$PARENT->getUpdatesUrl()}">{vtranslate('LBL_MORE')}</a>

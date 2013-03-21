@@ -35,21 +35,31 @@ class Invoice_MassSave_Action extends Inventory_MassSave_Action {
 		$moduleName = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 
-		$recordModels = parent::getRecordModelsFromRequest($request);
-		$fieldModelList = $moduleModel->getFields();
+		$recordIds = $this->getRecordsListFromRequest($request);
+		$recordModels = array();
 
-		foreach($recordModels as $id => $recordModel) {
+		$fieldModelList = $moduleModel->getFields();
+		foreach($recordIds as $recordId) {
+			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleModel);
+			$recordModel->set('id', $recordId);
+			$recordModel->set('mode', 'edit');
+
 			foreach ($fieldModelList as $fieldName => $fieldModel) {
+				$fieldValue = $request->get($fieldName, null);
 				$fieldDataType = $fieldModel->getFieldDataType();
 
-				// This is added as we are marking massedit in vtiger6 as not an ajax operation
-				// and this will force the date fields to be saved in user format. If the user format
-				// is other than y-m-d then it fails.
-				if($fieldDataType == 'date') {
-					$uiTypeModel = $fieldModel->getUITypeModel();
-					$recordModel->set($fieldName, $uiTypeModel->getDBInsertValue($recordModel->get($fieldName)));
+				if($fieldDataType == 'time') {
+					$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+				} else if($fieldDataType === 'date') {
+					$fieldValue = $fieldModel->getUITypeModel()->getDBInsertValue($fieldValue);
+				}
+
+				if(isset($fieldValue) && $fieldValue != null && !is_array($fieldValue)) {
+					$fieldValue = trim($fieldValue);
+					$recordModel->set($fieldName, $fieldValue);
 				}
 			}
+			$recordModels[$recordId] = $recordModel;
 		}
 		return $recordModels;
 	}

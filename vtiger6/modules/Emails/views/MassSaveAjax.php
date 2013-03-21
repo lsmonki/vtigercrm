@@ -200,7 +200,7 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 			$success = true;
 			if($flag == 'SENT') {
 				$status = $recordModel->send();
-				if ($status) {
+				if ($status === true) {
 					// This is needed to set vtiger_email_track table as it is used in email reporting
 					$recordModel->setAccessCountValue();
 				} else {

@@ -118,6 +118,18 @@ class Vtiger_Util_Helper {
 		}
 		return false;
 	}
+    
+    /**
+	 * Function Checks the existence of the record
+	 * @param <type> $recordId - module recordId
+     * returns 1 if record exists else 0 
+	 */
+    public static function checkRecordExistance($recordId){
+        global $adb;
+        $query = 'Select deleted from vtiger_crmentity where crmid=?';
+        $result = $adb->pquery($query, array($recordId));
+        return $adb->query_result($result, 'deleted');
+    }
 
 	/**
 	 * Function to parses date into string format
@@ -151,7 +163,16 @@ class Vtiger_Util_Helper {
 				$formatedDate .= ' '. vtranslate('LBL_AT') .' '. $displayTime;
 			}
 		} else {
-			$date = strtotime($date.' '.$time);
+			/**
+			 * To support strtotime() for 'mm-dd-yyyy' format the seperator should be '/'
+			 * For more referrences
+			 * http://php.net/manual/en/datetime.formats.date.php
+			 */
+			if ($currentUser->get('date_format') === 'mm-dd-yyyy') {
+				$dateInUserFormat = str_replace('-', '/', $dateInUserFormat);
+			}
+
+			$date = strtotime($dateInUserFormat);
 			$formatedDate = vtranslate('LBL_'.date('D', $date)) . ' ' . date('d', $date) . ' ' . vtranslate('LBL_'.date('M', $date));
 			if (date('Y', $date) != date('Y')) {
 				$formatedDate .= ', '.date('Y', $date);
@@ -202,7 +223,16 @@ class Vtiger_Util_Helper {
 			$displayTime = Vtiger_Time_UIType::getTimeValueInAMorPM($displayTime);
 		}
 
-		$date = strtotime($dateTime);
+		/**
+		 * To support strtotime() for 'mm-dd-yyyy' format the seperator should be '/'
+		 * For more referrences
+		 * http://php.net/manual/en/datetime.formats.date.php
+		 */
+		if ($currentUser->get('date_format') === 'mm-dd-yyyy') {
+			$dateInUserFormat = str_replace('-', '/', $dateInUserFormat);
+		}
+
+		$date = strtotime($dateInUserFormat);
 		//Adding date details
 		$formatedDate = vtranslate('LBL_'.date('D', $date)). ', ' .vtranslate('LBL_'.date('M', $date)). ' ' .date('d', $date). ', ' .date('Y', $date);
 		//Adding time details

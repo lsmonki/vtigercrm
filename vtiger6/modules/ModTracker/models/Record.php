@@ -110,6 +110,8 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 				if($row['fieldname'] == 'record_id' || $row['fieldname'] == 'record_module') continue;
 
 				$fieldModel = Vtiger_Field_Model::getInstance($row['fieldname'], $this->getParent()->getModule());
+				if(!$fieldModel) continue;
+				
 				$fieldInstance = new ModTracker_Field_Model();
 				$fieldInstance->setData($row)->setParent($this)->setFieldInstance($fieldModel);
 				$fieldInstances[] = $fieldInstance;

@@ -267,11 +267,21 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		$result = $db->pquery($query, $params);
 		$noOfRows = $db->num_rows($result);
 
-		$moduleModels = array();
-		$matchingRecords = array();
+		$moduleModels = $matchingRecords = $leadIdsList = array();
 		for($i=0; $i<$noOfRows; ++$i) {
 			$row = $db->query_result_rowdata($result, $i);
-			if(Users_Privileges_Model::isPermitted($row['setype'], 'DetailView', $row['crmid'])){
+			if ($row['setype'] === 'Leads') {
+				$leadIdsList[] = $row['crmid'];
+			}
+		}
+		$convertedInfo = Leads_Module_Model::getConvertedInfo($leadIdsList);
+
+		for($i=0; $i<$noOfRows; ++$i) {
+			$row = $db->query_result_rowdata($result, $i);
+			if ($row['setype'] === 'Leads' && $convertedInfo[$row['crmid']]) {
+				continue;
+			}
+			if(Users_Privileges_Model::isPermitted($row['setype'], 'DetailView', $row['crmid'])) {
 				$row['id'] = $row['crmid'];
 				$moduleName = $row['setype'];
 				if(!array_key_exists($moduleName, $moduleModels)) {

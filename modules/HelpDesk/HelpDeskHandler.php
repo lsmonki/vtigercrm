@@ -26,6 +26,7 @@ class HelpDeskHandler extends VTEventHandler {
 }
 
 function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
+	global $HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID;
 	$adb = PearDatabase::getInstance();
 	$moduleName = $entityData->getModuleName();
 	$wsId = $entityData->getId();
@@ -50,17 +51,18 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');
 
 	//get the contact email id who creates the ticket from portal and use this email as from email id in email
-	$result = $adb->pquery("SELECT email FROM vtiger_contactdetails WHERE contactid=?", array($parentId));
+	$result = $adb->pquery("SELECT email, concat (firstname,' ',lastname) as name FROM vtiger_contactdetails WHERE contactid=?", array($parentId));
 	$contact_email = $adb->query_result($result,0,'email');
+	$name = $adb->query_result($result, 0, 'name');
 	$from_email = $contact_email;
 
 	//send mail to assigned to user
 	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
-	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
+	$mail_status = send_mail('HelpDesk',$to_email,$name,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$contents);
 
 	//send mail to the customer(contact who creates the ticket from portal)
 	$adb->println("Send mail to the customer(contact) who creates the portal ticket");
-	$mail_status = send_mail('Contacts',$contact_email,'',$from_email,$subject,$contents);
+	$mail_status = send_mail('Contacts',$contact_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$contents);
 }
 
 function HelpDesk_notifyOnPortalTicketComment($entityData) {
@@ -135,10 +137,6 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 
 	$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
 						.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
-	$bodysubject = getTranslatedString('Ticket No', $moduleName) .":<br>" . $entityData->get('ticket_no')
-						. "<br>" . getTranslatedString('LBL_TICKET_ID', $moduleName).' : '.$entityId.'<br> '
-						.getTranslatedString('LBL_SUBJECT', $moduleName).$entityData->get('ticket_title');
-
 	$emailoptout = 0;
 
 	//To get the emailoptout vtiger_field value and then decide whether send mail about the tickets or not
@@ -174,24 +172,16 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 		//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
 		if($emailoptout == 0) {
 
-			if($isPortalUser == 1){
-				$url = "<a href='".$PORTAL_URL."/index.php?module=HelpDesk&action=index&ticketid=".$entityId."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
-				$email_body = $bodysubject.'<br><br>'.HelpDesk::getPortalTicketEmailContents($entityData);
-			}
-			else {
-				$email_body = HelpDesk::getTicketEmailContents($entityData);
-			}
+			$email_body = HelpDesk::getTicketEmailContents($entityData);
 			if($isNew) {
 				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 			} else {
 				$entityDelta = new VTEntityDelta();
 				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
 				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
-				$ownerHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'assigned_user_id');
-				$commentsHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'comments');
-				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
-
-					$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged) {
+					if($isPortalUser == 1)
+						$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 				}
 			}
 			$mail_status_str .= $parent_email."=".$mail_status."&&&";
@@ -225,7 +215,7 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 	$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
 						.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
 
-	$email_body = HelpDesk::getTicketEmailContents($entityData);
+	$email_body = HelpDesk::getTicketEmailContents($entityData, true);
 	if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
 		//send mail to the assigned to user and the parent to whom this ticket is assigned
 		require_once('modules/Emails/mail.php');
@@ -248,8 +238,8 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
 				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
 				$ownerHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'assigned_user_id');
-				$commentsHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'comments');
-				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $commentsHasChanged || $solutionHasChanged || $ownerHasChanged) {
+
+				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged || $ownerHasChanged) {
 
 					$mail_status = send_mail('HelpDesk',$to_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 				}

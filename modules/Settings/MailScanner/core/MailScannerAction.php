@@ -11,6 +11,7 @@
 
 require_once('modules/Emails/Emails.php');
 require_once('modules/HelpDesk/HelpDesk.php');
+require_once('modules/ModComments/ModComments.php');
 require_once('modules/Users/Users.php');
 require_once('modules/Documents/Documents.php');
 
@@ -159,13 +160,18 @@ class Vtiger_MailScannerAction {
 			$fromemail = $mailrecord->_from[0];
 
 			$linkfocus = $mailscanner->GetTicketRecord($usesubject, $fromemail);
-			$relatedid = $linkfocus->column_fields[parent_id];
- 
+
 			// If matching ticket is found, update comment, attach email
 			if($linkfocus) {
-				$timestamp = $adb->formatDate(date('YmdHis'), true);
-				$adb->pquery("INSERT INTO vtiger_ticketcomments(ticketid, comments, ownerid, ownertype, createdtime) VALUES(?,?,?,?,?)",
-					Array($linkfocus->id, $mailrecord->getBodyText(), $relatedid, 'customer', $timestamp));
+				global $current_user;
+				if($current_user) $current_user_id = $current_user->id;
+				else $current_user_id = 1;
+				$commentFocus = new ModComments();
+				$commentFocus->column_fields['commentcontent'] = $mailrecord->getBodyText();
+				$commentFocus->column_fields['related_to'] = $linkfocus->id;
+				$commentFocus->column_fields['assigned_user_id'] = $current_user_id;
+				$commentFocus->saveentity('ModComments');
+
 				// Set the ticket status to Open if its Closed
 				$adb->pquery("UPDATE vtiger_troubletickets set status=? WHERE ticketid=? AND status='Closed'", Array('Open', $linkfocus->id));
 

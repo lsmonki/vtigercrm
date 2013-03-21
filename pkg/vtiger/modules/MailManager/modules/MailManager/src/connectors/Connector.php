@@ -120,7 +120,13 @@ class MailManager_Connector {
 	 * Returns the last imap error 
 	 */
 	function isError() {
-		$this->mError = imap_last_error();
+		$errors = imap_errors();
+		if($errors !== false) {
+			$this->mError = implode(', ',$errors);
+		} else {
+			$this->mError = imap_last_error();
+		}
+		
 		return $this->hasError();
 	}
 

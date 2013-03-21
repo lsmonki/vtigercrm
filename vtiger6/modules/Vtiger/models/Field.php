@@ -717,7 +717,10 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 */
 	public static function  getInstance($value, $module = false) {
 		$fieldObject = parent::getInstance($value, $module);
-		return self::getInstanceFromFieldObject($fieldObject);
+		if($fieldObject) {
+			return self::getInstanceFromFieldObject($fieldObject);
+		}
+		return false;
 	}
 
 	/**

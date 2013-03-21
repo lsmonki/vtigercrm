@@ -788,7 +788,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		}
 	}
 
-	public static function getTicketEmailContents($entityData) {
+	public static function getTicketEmailContents($entityData, $toOwner=false) {
 		global $HELPDESK_SUPPORT_NAME;
 		$adb = PearDatabase::getInstance();
 		$moduleName = $entityData->getModuleName();
@@ -817,7 +817,8 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
 				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
 				. $entityData->get('ticket_title');
-		$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . getParentName($parentId) . ",<br><br>"
+		$name = (!$toOwner)?getParentName($parentId):'';
+		$desc .= "<br><br>" . getTranslatedString('Hi', $moduleName) . " " . $name . ",<br><br>"
 				. getTranslatedString('LBL_PORTAL_BODY_MAILINFO', $moduleName) . " " . $reply . " " . getTranslatedString('LBL_DETAIL', $moduleName) . "<br>";
 		$desc .= "<br>" . getTranslatedString('Ticket No', $moduleName) . " : " . $entityData->get('ticket_no');
 		$desc .= "<br>" . getTranslatedString('Status', $moduleName) . " : " . $entityData->get('ticketstatus');

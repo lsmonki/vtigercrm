@@ -97,8 +97,6 @@
 								<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
 							{elseif $RELATED_HEADERNAME eq 'access_count'}
 								{$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
-							{elseif $RELATED_HEADERNAME eq 'date_start'}
-								{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} {$RELATED_RECORD->getDisplayValue('time_start')}
 							{elseif $RELATED_HEADERNAME eq 'time_start'}
 							{else}
 								{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}

@@ -65,14 +65,14 @@
 			<div>
 				<p>
 					<small>
-						<em>{vtranslate('LBL_CREATED_ON',$MODULE_NAME)} {Vtiger_Util_Helper::formatDateTimeIntoDayString($RECORD->get('createdtime'))}</em>
+						<em>{vtranslate('LBL_CREATED_ON',$MODULE_NAME)} <b>{Vtiger_Util_Helper::formatDateTimeIntoDayString($RECORD->get('createdtime'))}</b></em>
 					</small>
 				</p>
 			</div>
 			<div>
 				<p>
 					<small>
-						<em>{vtranslate('LBL_MODIFIED_ON',$MODULE_NAME)} {Vtiger_Util_Helper::formatDateTimeIntoDayString($RECORD->get('modifiedtime'))}</em>
+						<em>{vtranslate('LBL_MODIFIED_ON',$MODULE_NAME)} <b>{Vtiger_Util_Helper::formatDateTimeIntoDayString($RECORD->get('modifiedtime'))}</b></em>
 					</small>
 				</p>
 			</div>

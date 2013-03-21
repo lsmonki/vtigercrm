@@ -115,7 +115,12 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 		try {
 			if (empty($module)) {
 				if ($this->hasLogin()) {
-					$module = 'Home'; $qualifiedModuleName = 'Home'; $view = 'DashBoard';
+					$defaultModule = vglobal('default_module');
+					if(!empty($defaultModule) && $defaultModule != 'Home') {
+						$module = $defaultModule; $qualifiedModuleName = $defaultModule; $view = 'List';
+					} else {
+						$module = 'Home'; $qualifiedModuleName = 'Home'; $view = 'DashBoard';
+					}
 				} else {
 					$module = 'Users'; $qualifiedModuleName = 'Settings:Users'; $view = 'Login';
 				}
@@ -152,7 +157,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 				$notPermittedModules = array('ModComments','RSS','Portal','Integration','PBXManager','DashBoard');
 
 				if(in_array($module, $notPermittedModules) && $view == 'List'){
-					header('Location:index.php');
+					header('Location:index.php?module=Home&view=DashBoard');
 				}
 
 				$this->triggerPreProcess($handler, $request);

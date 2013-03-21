@@ -54,8 +54,8 @@
 		$numOfPeople = count($usersList);
 
 		return array(
-			'Progress' => $this->get('progress'),
 			'LBL_TASKS_OPEN' => $tasksOpen,
+			'Progress' => $this->get('progress'),
 			'LBL_TASKS_DUE' => $taskDue,
 			'LBL_TASKS_COMPLETED' => $taskCompleted,
 		);

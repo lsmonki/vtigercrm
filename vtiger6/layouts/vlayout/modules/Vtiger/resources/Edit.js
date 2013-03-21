@@ -423,6 +423,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 			if(typeof editViewForm.data('submit') != "undefined") {
 				return false;
 			} else {
+				var module = jQuery(e.currentTarget).find('[name="module"]').val();
 				if(editViewForm.validationEngine('validate')) {
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');

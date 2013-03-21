@@ -168,7 +168,7 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 					array($this->get('linkid'), $this->get('userid'), $this->get('filterid'), $this->get('title'), Zend_Json::encode($this->get('data'))));
 			$this->set('id', $db->getLastInsertID());
 		} else {
-			$this->set('id', $db->query_result($result, 'id', 0));
+			$this->set('id', $db->query_result($result, 0, 'id'));
 		}
 	}
 

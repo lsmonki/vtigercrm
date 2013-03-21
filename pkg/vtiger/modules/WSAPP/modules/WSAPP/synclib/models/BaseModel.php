@@ -32,5 +32,17 @@ class WSAPP_BaseModel {
 		return $this->data[$key];
 	}
 
+	public function has($key) {
+		return array_key_exists($key, $this->data);
+	}
+
+	/**
+	 * Function to check if the key is empty.
+	 * @param type $key
+	 */
+	public function isEmpty($key) {
+		return (!isset($this->data[$key]) || empty($this->data[$key]));
+	}
+
 }
 ?>

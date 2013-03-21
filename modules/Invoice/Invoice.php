@@ -74,11 +74,17 @@ class Invoice extends CRMEntity {
 				//'Invoice No'=>Array('crmentity'=>'crmid'),
 				'Invoice No'=>Array('invoice'=>'invoice_no'),
 				'Subject'=>Array('purchaseorder'=>'subject'),
+                'Account Name'=>Array('contactdetails'=>'account_id'),
+                'Created Date' => Array('crmentity'=>'createdtime'),
+                'Assigned To'=>Array('crmentity'=>'smownerid'),
 				);
 
 	var $search_fields_name = Array(
-				        'Invoice No'=>'',
-				        'Subject'=>'subject',
+				        'Invoice No'          => 'invoice_no',
+				        'Subject'             => 'subject',
+                        'Account Name'        => 'account_id',
+                        'Created Time'        => 'createdtime',
+                        'Assigned To'         => 'assigned_user_id'
 				      );
 
 	// This is the list of vtiger_fields that are required.

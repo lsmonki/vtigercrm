@@ -134,6 +134,7 @@
 
 			$row = DataTransform::sanitizeDateFieldsForInsert($row,$meta);
 			$row = DataTransform::sanitizeCurrencyFieldsForInsert($row,$meta);
+			$row = DataTransform::sanitizeInventoryForInsert($row,$meta);
 
 			return $row;
 			
@@ -271,6 +272,35 @@
 					}
 				}
 			}
+			return $row;
+		}
+		
+		/**
+		 * function to display discount amount and discount percent 
+		 * @param type $row
+		 * @param type $meta
+		 * @return type
+		 */
+		function sanitizeInventoryForInsert($row, $meta) {
+			$inventoryModules = getInventoryModules();
+			if(!in_array($meta->getEntityName(), $inventoryModules)) {
+				return $row;
+			}
+			
+			$currencyId = $row['currency_id'];
+			$currencyInfo = getCurrencySymbolandCRate($currencyId);
+			$row['conversion_rate'] = $currencyInfo['rate'];
+            if(array_key_exists('discount_amount', $row)){
+                $row['discount_type_final']= 'amount';
+                $row['discount_amount_final'] = $row['discount_amount'];
+                $_REQUEST['discount_type_final']= 'amount';
+                $_REQUEST['discount_amount_final'] = $row['discount_amount'];
+            } else if(array_key_exists('discount_precent', $row)) {
+                $row['discount_type_final']= 'percentage';
+                $row['discount_percentage_final'] = $row['discount_precent'];
+                $_REQUEST['discount_type_final']= 'percentage';
+                $_REQUEST['discount_percentage_final'] = $row['discount_precent'];
+            }
 			return $row;
 		}
 	}

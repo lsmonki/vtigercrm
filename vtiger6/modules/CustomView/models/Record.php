@@ -146,6 +146,11 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		if($this->get('viewname') == 'All') {
 			return false;
 		}
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        if($currentUser->isAdminUser()) {
+            return true;
+        }
+        
 		if($this->isMine() || $this->isOthers()) {
 			return true;
 		}

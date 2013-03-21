@@ -129,7 +129,9 @@ class Users_Privileges_Model extends Users_Record_Model {
 		$valueMap['defaultOrgSharingPermission'] = $defaultOrgSharingPermission;
 		$valueMap['related_module_share'] = $related_module_share;
 
-		$valueMap = array_merge($valueMap, $user_info);
+		if(is_array($user_info)) {
+			$valueMap = array_merge($valueMap, $user_info);
+		}
 
 		return self::getInstance($valueMap);
 	}

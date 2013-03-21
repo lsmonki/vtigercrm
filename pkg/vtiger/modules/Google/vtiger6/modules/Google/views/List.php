@@ -98,8 +98,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         $controller = new Google_Calendar_Controller($user);
         $records = $controller->synchronize();
         $syncRecords = $this->getSyncRecordsCount($records);
-        $syncRecords['vtiger']['more'] = $controller->getTargetConnector()->moreRecordsExits();
-        $syncRecords['google']['more'] = $controller->getSourceConnector()->moreRecordsExits();
+        $syncRecords['vtiger']['more'] = $controller->targetConnector->moreRecordsExits();
+        $syncRecords['google']['more'] = $controller->sourceConnector->moreRecordsExits();
         return $syncRecords;
     }
 
@@ -163,9 +163,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
 	 */
     public function getHeaderScripts(Vtiger_Request $request) {
         $moduleName = $request->getModule();
-		return $this->checkAndConvertJsScripts(array("modules.$moduleName.resources.List"));
+		return $this->checkAndConvertJsScripts(array("~libraries/bootstrap/js/bootstrap-popover.js","modules.$moduleName.resources.List"));
         
     }
 
 }
-

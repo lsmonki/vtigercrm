@@ -106,7 +106,8 @@ class Contacts extends CRMEntity {
 	);
 
 	var $search_fields = Array(
-	'Name' => Array('contactdetails'=>'lastname'),
+	'First Name' => Array('contactdetails'=>'firstname'),
+	'Last Name' => Array('contactdetails'=>'lastname'),
 	'Title' => Array('contactdetails'=>'title'),
 	'Account Name'=>Array('contactdetails'=>'account_id'),
 	'Assigned To'=>Array('crmentity'=>'smownerid'),
@@ -1225,10 +1226,10 @@ function get_contactsforol($user_name)
 		if (!$queryplanner->requireTable('vtiger_contactdetails', $matrix)) {
 			return '';
 		}
-                
-		
+
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_contactdetails","contactid", $queryplanner);
-                
+
 		if ($queryplanner->requireTable("vtiger_crmentityContacts",$matrix)){
 			$query .= " left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid  and vtiger_crmentityContacts.deleted=0";
 		}

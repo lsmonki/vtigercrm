@@ -16,7 +16,7 @@
 				<li>
 					<div>
 						<div class="textOverflowEllipsis width27em">
-							<a href="{$RELATED_RECORD->getDetailViewUrl()}" title="{$RELATED_RECORD->getDisplayValue('ticket_title')}">
+							<a href="{$RELATED_RECORD->getDetailViewUrl()}" title="{$RELATED_RECORD->getDisplayValue('ticket_title')}" id="{$MODULE}_{$RELATED_MODULE}_Related_Record_{$RELATED_RECORD->get('id')}">
 								{$RELATED_RECORD->getDisplayValue('ticket_title')}
 							</a>
 						</div>
@@ -33,4 +33,12 @@
 			</ul>
 		</div>
 	{/foreach}
+	{assign var=NUMBER_OF_RECORDS value=count($RELATED_RECORDS)}
+	{if $NUMBER_OF_RECORDS eq 5}
+		<div class="row-fluid">
+			<div class="pull-right">
+				<a class="moreRecentTickets cursorPointer">{vtranslate('LBL_MORE',$MODULE_NAME)}</a>
+			</div>
+		</div>
+	{/if}
 {/strip}

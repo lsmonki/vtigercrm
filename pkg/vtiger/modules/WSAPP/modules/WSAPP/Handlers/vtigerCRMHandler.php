@@ -68,17 +68,25 @@ class vtigerCRMHandler extends SyncHandler {
             $crmIds[] = $recordIdComp[1];
 
         }
-        $assignedRecordIds = wsapp_checkIfRecordsAssignToUser($crmIds, $this->user->id);
+        $assignedRecordIds =array();
+		if($this->isClientUserSyncType()){
+			$assignedRecordIds = wsapp_checkIfRecordsAssignToUser($crmIds, $this->user->id);
+		}
         foreach($updatedRecords as $index=>$record){
             $webserviceRecordId = $record["id"];
             $recordIdComp = vtws_getIdComponents($webserviceRecordId);
-            if(in_array($recordIdComp[1], $assignedRecordIds))
-            {
-                $updatedRecords[$index] = vtws_revise($record, $this->user);
-            }
-            else{
-                $this->assignToChangedRecords[$index] = $record;
-            }
+			try{
+            	if(in_array($recordIdComp[1], $assignedRecordIds)){
+                	$updatedRecords[$index] = vtws_revise($record, $this->user);
+				
+            	} else if(!$this->isClientUserSyncType()){
+                	$updatedRecords[$index] = vtws_revise($record, $this->user);
+				} else{
+                	$this->assignToChangedRecords[$index] = $record;
+            	}
+			} catch(Exception $e){
+				continue;
+			}
         }
         $hasDeleteAccess = null;
         $deletedCrmIds = array();
@@ -100,7 +108,7 @@ class vtigerCRMHandler extends SyncHandler {
                     try{
                         vtws_delete($record, $this->user);
                     } catch(Exception $e){
-                        
+                        continue;
                     }
                 }
             }
@@ -187,8 +195,11 @@ class vtigerCRMHandler extends SyncHandler {
                 if(!empty ($referenceWsId)){
                     $referenceIdComp = vtws_getIdComponents($referenceWsId);
                     $webserviceObject = VtigerWebserviceObject::fromId($db, $referenceIdComp[0]);
-                    $referenceModuleIds[$webserviceObject->getEntityName()][]= $referenceIdComp[1];
-                    $referenceFieldIds[] =$referenceIdComp[1];
+                    if($webserviceObject->getEntityName() == 'Currency'){
+						continue;
+					}
+					$referenceModuleIds[$webserviceObject->getEntityName()][]= $referenceIdComp[1];
+					$referenceFieldIds[] =$referenceIdComp[1];
                 }
             }
 

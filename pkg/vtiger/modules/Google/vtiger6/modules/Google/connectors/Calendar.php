@@ -14,6 +14,8 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
     protected $apiInstance;
     protected $totalRecords;
     protected $maxResults = 100;
+    protected $createdRecords;
+	
 
     public function __construct($client) {
         $this->apiInstance = $client;
@@ -96,7 +98,7 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
                 }
 
                 $query->setUpdatedMax($maxModifiedTime);
-                $extendedFeed = $calendars->getContactListFeed($query);
+                $extendedFeed = $calendars->getCalendarEventFeed($query);
                 $calendarRecords = array_merge($feed->entry, $extendedFeed->entry);
             } else {
                 $calendarRecords = $feed->entry;
@@ -146,7 +148,7 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
                     $createdEntry = $gContact->insertEvent($entity);
                     $record->set('entity', $createdEntry);
                 }
-            } catch (Expection $e) {
+            } catch (Exception $e) {
                 continue;
             }
         }
@@ -178,19 +180,21 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
             $newEntry->content = $gcalendar->newContent($vtEvent->get('description'));
             $newEntry->content->type = 'text';
 
-            $tzOffset = "-00";
+            $oldtz = date_default_timezone_get(); 
+            date_default_timezone_set('GMT');
             $startDate = $vtEvent->get('date_start');
             $startTime = $vtEvent->get('time_start');
             $endDate = $vtEvent->get('due_date');
             $endTime = $vtEvent->get('time_end');
             if (empty($endTime)) {
-                $endTime = "12:59:59";
+                $endTime = "00:00";
             }
             $when = $gcalendar->newWhen();
-            $when->startTime = "{$startDate}T{$startTime}.000{$tzOffset}:00";
+            $when->startTime = date('c', strtotime("$startDate $startTime"));
             if (!empty($endDate)) {
-                $when->endTime = "{$endDate}T{$endTime}.000{$tzOffset}:00";
+                $when->endTime = date('c', strtotime("$endDate $endTime"));
             }
+            date_default_timezone_set($oldtz);
             $newEntry->when = array($when);
             $recordModel = Google_Calendar_Model::getInstanceFromValues(array('entity' => $newEntry));
             $recordModel->setType($this->getSynchronizeController()->getSourceType())->setMode($vtEvent->getMode())->setSyncIdentificationKey($vtEvent->get('_syncidentificationkey'));
@@ -206,10 +210,8 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
      * @return <boolean> true or false
      */
     public function moreRecordsExits() {
-        return ($this->totalRecords - $this->maxResults > 0) ? true : false;
+        return ($this->totalRecords - $this->createdRecords > 0) ? true : false;
     }
 
 }
 ?>
-
-

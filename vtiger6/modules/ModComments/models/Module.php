@@ -11,6 +11,17 @@
 class ModComments_Module_Model extends Vtiger_Module_Model{
 
 	/**
+	 * Function to get the Quick Links for the module
+	 * @param <Array> $linkParams
+	 * @return <Array> List of Vtiger_Link_Model instances
+	 */
+	public function getSideBarLinks($linkParams) {
+		$links = parent::getSideBarLinks($linkParams);
+		unset($links['SIDEBARLINK']);
+		return $links;
+	}
+
+	/**
 	 * Function to get the create url with parent id set
 	 * @param <type> $parentRecord	- parent record for which comment need to be added
 	 * @return <string> Url

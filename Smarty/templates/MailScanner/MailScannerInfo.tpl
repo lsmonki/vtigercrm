@@ -159,6 +159,10 @@ function performScanNow(app_key, scannername) {
                				<td width="80%" class="small cellText">{$SCANNERINFO.connecturl}</td>
                         </tr>
 						<tr>
+			                <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_SERVER_TIMEZONE}</strong></td>
+               				<td width="80%" class="small cellText">{include file="MailScanner/MailScannerServerTZInfo.tpl" SELECTEDTZ=$SCANNERINFO.timezone}</td>
+                        </tr>
+						<tr>
 			                <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_STATUS}</strong></td>
                				<td width="80%" class="small cellText">
 								{if $SCANNERINFO.isvalid eq true}<font color=green><b>{$MOD.LBL_ENABLED}</b></font>
