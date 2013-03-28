@@ -12,7 +12,6 @@ $languageStrings = array(
 	'SINGLE_Reports' => 'Report',
 
 	// Basic Strings
-	'LBL_FOLDER_NOT_EMPTY' => 'Folder is not empty',
 	'LBL_MOVE_REPORT' => 'Move Reports',
 	'LBL_CUSTOMIZE' => 'Customize',
 	'LBL_REPORT_EXPORT_EXCEL' => 'Export Excel',
@@ -53,7 +52,6 @@ $languageStrings = array(
 	'LBL_MAX' => 'Max',
 	'LBL_NEXT' => 'Next',
 	'LBL_REPORTS' => 'Reports List',
-	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
 
 	//Step2 Strings
 	'LBL_GROUP_BY' => 'Group By',

@@ -335,7 +335,6 @@ $fieldTypeId = $adb->getUniqueID("vtiger_ws_entity_fieldtype");
 $adb->pquery("INSERT INTO vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) VALUES (?,?,?,?);", array($fieldTypeId,'vtiger_producttaxrel', 'taxid',"reference"));
 $adb->pquery("INSERT INTO vtiger_ws_entity_referencetype(fieldtypeid,type) VALUES (?,?)",array($fieldTypeId,'Tax'));
 
-$adb->pquery('UPDATE vtiger_users SET email1="noreply@vtiger.com" WHERE id=?',array(1));
 
 if (!function_exists('PopulateReportFolder')) {
 	// In case modules/Reports/PopulateReports.php is not included define the required functions

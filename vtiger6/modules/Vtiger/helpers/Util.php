@@ -96,6 +96,15 @@ class Vtiger_Util_Helper {
 	}
 
 	/**
+	 * Function that will strip all the tags while displaying
+	 * @param <String> $input - html data
+	 * @return <String> vtiger6 displayable data
+	 */
+	public static function toVtiger6SafeHTML($input) {
+		$allowableTags = '<a><br>';
+		return strip_tags($input, $allowableTags);
+	}
+	/**
 	 * Function to validate the input with given pattern.
 	 * @param <String> $string
 	 * @param <Boolean> $skipEmpty Skip the check if string is empty.
