@@ -31,7 +31,7 @@ $focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html(vtlib_purify($_REQUEST['user_name']));
-$user_password = vtlib_purify($_REQUEST['user_password']);
+$user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
 
