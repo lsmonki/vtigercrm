@@ -51,7 +51,7 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	        die;
 	}
 }
-if(!is_admin($current_user) && $_REQUEST['user_role'] != $current_user->roleid){
+if($_REQUEST['user_role'] != '' && !is_admin($current_user) && $_REQUEST['user_role'] != $current_user->roleid){
 	
 	$log->fatal("SECURITY:Non-Admin user:". $current_user->id . " attempted to change user role");
 	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
