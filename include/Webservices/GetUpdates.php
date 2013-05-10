@@ -142,7 +142,7 @@ require_once 'include/Webservices/DescribeObject.php';
 			// adding the fieldnames that are present in the delete condition to the select clause
 			// since not all fields present in delete condition will be present in the fieldnames of the module
 			foreach($deleteColumnNames as $table_fieldName=>$columnName){
-				if(!in_array($columnName,$moduleFeildNames)){
+				if(!in_array($columnName,$moduleFieldNames)){
 					$selectClause .=", ".$table_fieldName;
 				}
 			}

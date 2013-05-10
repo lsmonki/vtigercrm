@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'Campaigns'                    => 'Campaigns'                   , 
 	'SINGLE_Campaigns'             => 'Campaign'                    , 
-	'LBL_ADD_RECORD'               => 'Add Campaign'                , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Campaigns List'              , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Campaigns Summary'           , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Campaign'                , 
+	'LBL_RECORDS_LIST'             => 'Campaigns List'              , 
 	'LBL_CAMPAIGN_INFORMATION'     => 'Campaign Information'        , 
 	'LBL_EXPECTATIONS_AND_ACTUALS' => 'Expectations & Actuals'      , 
 	'Campaign Name'                => 'Campaign Name'               , 

@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'Accounts'                     => 'Organisations'               , 
 	'SINGLE_Accounts'              => 'Organisation'                , 
-	'LBL_ADD_RECORD'               => 'Add Organization'            , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Organisation List'           , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Organization Summary'        , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Organization'            , 
+	'LBL_RECORDS_LIST'             => 'Organisation List'           , 
 	'LBL_ACCOUNT_INFORMATION'      => 'Organisation Information'    , 
 	'LBL_SHOW_ACCOUNT_HIERARCHY'   => 'Show Organisation Hierarchy' , 
 	'industry'                     => 'Industry'                    , 
@@ -35,10 +34,12 @@ $languageStrings = array(
 	'Reseller'                     => 'Reseller'                    , 
 	'LBL_START_DATE'               => 'Start Date'                  , 
 	'LBL_END_DATE'                 => 'End Date'                    , 
-	'LBL_DUPLICATES_EXIST'         => 'Organization Name already exists', // TODO: Review
+	'LBL_DUPLICATES_EXIST'         => 'Organization Name already exists', 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
 );
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Are you sure you want to Delete?',
-	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', // TODO: Review
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Are you sure you want to Delete?', 
+	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', 
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', 
 );

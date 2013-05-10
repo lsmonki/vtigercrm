@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Class Settings_SharingAccess_IndexAjax_Action extends Vtiger_Action_Controller {
+Class Settings_SharingAccess_IndexAjax_Action extends Settings_Vtiger_IndexAjax_View {
 
 	function __construct() {
 		parent::__construct();

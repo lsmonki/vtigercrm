@@ -94,9 +94,11 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
             $maxModifiedTime = date('Y-m-d H:i:s', strtotime(Google_Contacts_Model::vtigerFormat(end($feed->entry)->updated->text)) + 1);
             if ($this->totalRecords > $this->maxResults) {
                 if (!Google_Utils_Helper::getSyncTime('Calendar')) {
-                    $query->setUpdatedMin(end($feed->entry)->updated->text);
+                    $query->setUpdatedMin(date('Y-m-d H:i:s', strtotime(Google_Contacts_Model::vtigerFormat(end($feed->entry)->updated->text))));
+                    $query->setStartIndex($this->maxResults);
                 }
 
+                $query->setMaxResults(500);
                 $query->setUpdatedMax($maxModifiedTime);
                 $extendedFeed = $calendars->getCalendarEventFeed($query);
                 $calendarRecords = array_merge($feed->entry, $extendedFeed->entry);

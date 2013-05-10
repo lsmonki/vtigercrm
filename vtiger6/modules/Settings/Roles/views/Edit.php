@@ -16,6 +16,7 @@ Class Settings_Roles_Edit_View extends Settings_Roles_Index_View {
 		$qualifiedModuleName = $request->getModule(false);
 		$record = $request->get('record');
 		$parentRoleId = $request->get('parent_roleid');
+		$roleDirectlyRelated = false;
 
 		if(!empty($record)) {
 			$recordModel = Settings_Roles_Record_Model::getInstanceById($record);
@@ -24,8 +25,16 @@ Class Settings_Roles_Edit_View extends Settings_Roles_Index_View {
 			$recordModel = new Settings_Roles_Record_Model();
 			$recordModel->setParent(Settings_Roles_Record_Model::getInstanceById($parentRoleId));
 			$viewer->assign('MODE', '');
+            $roleDirectlyRelated = true;
+		}
+		$profileId = $recordModel->getDirectlyRelatedProfileId();
+		if($profileId){
+			$viewer->assign('PROFILE_ID',$profileId);
+			$roleDirectlyRelated = true;
 		}
 
+
+		$viewer->assign('PROFILE_DIRECTLY_RELATED_TO_ROLE',$roleDirectlyRelated);
 		$viewer->assign('ALL_PROFILES', Settings_Profiles_Record_Model::getAll());
 		$viewer->assign('RECORD_MODEL', $recordModel);
 		$viewer->assign('RECORD_ID', $record);
@@ -34,4 +43,6 @@ Class Settings_Roles_Edit_View extends Settings_Roles_Index_View {
 
 		$viewer->view('EditView.tpl', $qualifiedModuleName);
 	}
+    
+   
 }

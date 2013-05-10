@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'Faq'                          => 'FAQ'                         , 
 	'SINGLE_Faq'                   => 'FAQ'                         , 
-	'LBL_RECORDS_LIST'             => 'FAQs List'                   , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add FAQ'                     , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'FAQs Summary'                , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'FAQs List'                   , 
+	'LBL_ADD_RECORD'               => 'Add FAQ'                     , 
 	'LBL_FAQ_INFORMATION'          => 'Informatie Faq'              , 
 	'LBL_COMMENT_INFORMATION'      => 'Informatie comentariu'       , 
 	'Question'                     => 'Intrebare'                   , 

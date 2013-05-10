@@ -218,7 +218,13 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 			$viewer->assign('ALPHABET_VALUE',$searchValue);
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
-		
+		$parentModule = $request->get('sourceModule');
+		$parentRecord = $request->get('sourceRecord');
+		if (!empty($parentModule)) {
+			$viewer->assign('PARENT_MODULE', $parentModule);
+			$viewer->assign('PARENT_RECORD', $parentRecord);
+			$viewer->assign('RELATED_MODULE', $sourceModule);
+		}
 		if($relatedLoad){
 			$viewer->assign('RELATED_LOAD', true);
 		}
@@ -281,17 +287,24 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 				return $selectedIds;
 			}
 		}
+		
+		$sourceRecord = $request->get('sourceRecord');
+		$sourceModule = $request->get('sourceModule');
+		if ($sourceRecord && $sourceModule) {
+			$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
+			return $sourceRecordModel->getSelectedIdsList($request->getModule(), $excludedIds);
+		}
 
 		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
 		if($customViewModel) {
-            $searchKey = $request->get('search_key');
-            $searchValue = $request->get('search_value');
-            $operator = $request->get('operator');
-            if(!empty($operator)) {
-                $customViewModel->set('operator', $operator);
-                $customViewModel->set('search_key', $searchKey);
-                $customViewModel->set('search_value', $searchValue);
-            }
+			$searchKey = $request->get('search_key');
+			$searchValue = $request->get('search_value');
+			$operator = $request->get('operator');
+			if(!empty($operator)) {
+				$customViewModel->set('operator', $operator);
+				$customViewModel->set('search_key', $searchKey);
+				$customViewModel->set('search_value', $searchValue);
+			}
 			return $customViewModel->getRecordIds($excludedIds);
 		}
 	}

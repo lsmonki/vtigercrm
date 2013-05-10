@@ -132,5 +132,31 @@ class Settings_SharingAccess_Module_Model extends Vtiger_Module_Model {
 		}
 		return $moduleModels;
 	}
+	
+	/**
+	 * Static Function to get the instance of Vtiger Module Model for all the modules
+	 * @return <Array> - List of Vtiger Module Model or sub class instances
+	 */
+	public static function getDependentModules() {
+		$dependentModulesList = array();
+		$dependentModulesList['Accounts'] = array('Potentials', 'HelpDesk', 'Quotes', 'SalesOrder', 'Invoice');
+
+		return $dependentModulesList;
+	}
+	/**
+	 * Function recalculate the sharing rules
+	 */
+	public static function recalculateSharingRules() {
+		set_time_limit(vglobal('php_max_execution_time'));
+		$db = PearDatabase::getInstance();
+
+		require_once('modules/Users/CreateUserPrivilegeFile.php');
+		$result = $db->pquery('SELECT id FROM vtiger_users WHERE deleted = ?', array(0));
+		$numOfRows = $db->num_rows($result);
+
+		for($i=0; $i<$numOfRows; $i++) {
+			createUserSharingPrivilegesfile($db->query_result($result, $i, 'id'));
+		}
+	}
 
 }

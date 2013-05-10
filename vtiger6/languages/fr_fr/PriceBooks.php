@@ -10,11 +10,10 @@
 $languageStrings = array(
 	'PriceBooks'                   => 'Grille tarifaire'            , 
 	'SINGLE_PriceBooks'            => 'Grille tarifaire'            , 
-	'LBL_ADD_RECORD'               => 'Add Price Book'              , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Price Books List'            , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Price Books Summary'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Price Book'              , 
+	'LBL_RECORDS_LIST'             => 'Price Books List'            , 
 	'LBL_PRICEBOOK_INFORMATION'    => 'Grille tarifaire'            , 
-	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , // TODO: Review
+	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , 
 	'Price Book Name'              => 'Objet'                       , 
 	'PriceBook No'                 => 'Grille tarifaire N°'        , 
 );

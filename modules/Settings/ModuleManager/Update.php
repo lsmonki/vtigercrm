@@ -13,7 +13,6 @@ $module_update_step = vtlib_purify($_REQUEST['module_update']);
 require_once('Smarty_setup.php');
 require_once('vtlib/Vtiger/Package.php');
 require_once('vtlib/Vtiger/Language.php');
-require_once('modules/Settings/ModuleManager/Extension.php');
 
 global $mod_strings,$app_strings,$theme;
 $smarty = new vtigerCRM_Smarty;
@@ -32,17 +31,7 @@ if($module_update_step == 'Step2' || $module_update_step == 'Step2.url') {
 	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";	
 	checkFileAccess($modulemanager_uploaddir);
 
-	$package_file_available = false;
-	if ($module_update_step == 'Step2.url') {
-		$package_file_available = Module_Manager_Extension::download(vtlib_purify($_REQUEST['extensionid']), $uploadfilename);
-		if ($package_file_available === false) {
-			$smarty->assign("EXTENSIONPACKAGE_DOWNLOAD_FAILED", "true");
-		}
-
-	} else {
-		// Forcefully disable the upload feature for now
-		// $package_file_available = move_uploaded_file($_FILES['module_zipfile']['tmp_name'], $uploadfilename);
-	}
+	$package_file_available = move_uploaded_file($_FILES['module_zipfile']['tmp_name'], $uploadfilename);
 
 	if(!$package_file_available) {
 		$smarty->assign("MODULEUPDATE_FAILED", "true");

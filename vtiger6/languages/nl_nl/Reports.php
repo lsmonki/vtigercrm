@@ -6,68 +6,62 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Reports.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
-	'LBL_FOLDER_NOT_EMPTY'         => 'Map is niet leeg'         , // TODO: Review
-	'LBL_MOVE_REPORT'              => 'Verhuis rapport'             , // KEY 5.x: Move_Reports
-	'LBL_CUSTOMIZE'                => 'Bewerk'                      , // KEY 5.x: LBL_CUSTOMIZE_BUTTON
-	'LBL_REPORT_EXPORT_EXCEL'      => 'Exporteer Excel'                , // TODO: Review
-	'LBL_REPORT_PRINT'             => 'Print'                       , // KEY 5.x: LNK_PRINT
-	'LBL_STEP_1'                   => 'Stap 1'                      , // TODO: Review
-	'LBL_STEP_2'                   => 'Stap 2'                      , // TODO: Review
-	'LBL_STEP_3'                   => 'Stap 3'                      , // TODO: Review
+	'Reports'                      => 'Reports'                     , // TODO: Review
+	'SINGLE_Reports'               => 'Report'                      , // TODO: Review
+	'LBL_FOLDER_NOT_EMPTY'         => 'Map is niet leeg'            , 
+	'LBL_MOVE_REPORT'              => 'Verhuis rapport'             , 
+	'LBL_CUSTOMIZE'                => 'Bewerk'                      , 
+	'LBL_REPORT_EXPORT_EXCEL'      => 'Exporteer Excel'             , 
+	'LBL_REPORT_PRINT'             => 'Print'                       , 
+	'LBL_STEP_1'                   => 'Stap 1'                      , 
+	'LBL_STEP_2'                   => 'Stap 2'                      , 
+	'LBL_STEP_3'                   => 'Stap 3'                      , 
 	'LBL_REPORT_DETAILS'           => 'Rapport Details'             , 
 	'LBL_SELECT_COLUMNS'           => 'Selecteer kolom'             , 
 	'LBL_FILTERS'                  => 'Filters'                     , 
-	'LBL_FOLDERS'                  => 'Mappen'                     , // TODO: Review
-	'LBL_ADD_NEW_FOLDER'           => 'Nieuwe groep toevoegen'      , // KEY 5.x: LBL_ADD_NEW_GROUP
-	'LBL_FOLDER_NAME'              => 'Mapnaam'                 , // TODO: Review
-	'LBL_FOLDER_DESCRIPTION'       => 'Map Omschrijving'          , // TODO: Review
-	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Voer Omschrijving in'           , // TODO: Review
-	'LBL_DUPLICATES_EXIST'         => 'Duplicaat bestaat'            , // TODO: Review
-	'LBL_MOVE_REPORTS'             => 'Verhuis rapport'             , // KEY 5.x: Move_Reports
-	'LBL_FOLDERS_LIST'             => 'Mappenlijst'                , // TODO: Review
-	'LBL_DENIED_REPORTS'           => 'Geweigerde Rapportages'              , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Voeg Rapportage toe'                  , // TODO: Review
-	'LBL_ADD_FOLDER'               => 'Voeg Map toe'                  , // TODO: Review
-	'LBL_REPORT_DELETE_DENIED'     => 'Geen Toegang om de rapportage te verwijderen', // TODO: Review
-	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'Deze map kan niet worden verwijderd', // TODO: Review
-	'LBL_REPORTS_LIST'             => 'Rapportenlijst'                , // TODO: Review
+	'LBL_FOLDERS'                  => 'Mappen'                      , 
+	'LBL_ADD_NEW_FOLDER'           => 'Nieuwe groep toevoegen'      , 
+	'LBL_FOLDER_NAME'              => 'Mapnaam'                     , 
+	'LBL_FOLDER_DESCRIPTION'       => 'Map Omschrijving'            , 
+	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Voer Omschrijving in'        , 
+	'LBL_DUPLICATES_EXIST'         => 'Duplicaat bestaat'           , 
+	'LBL_FOLDERS_LIST'             => 'Mappenlijst'                 , 
+	'LBL_DENIED_REPORTS'           => 'Geweigerde Rapportages'      , 
+	'LBL_NO_OF_RECORDS'            => 'Number of records'           , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Rapportage toe'         , 
+	'LBL_ADD_FOLDER'               => 'Voeg Map toe'                , 
+	'LBL_REPORT_DELETE_DENIED'     => 'Geen Toegang om de rapportage te verwijderen', 
+	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'Deze map kan niet worden verwijderd', 
+	'LBL_REPORTS_LIST'             => 'Rapportenlijst'              , 
 	'LBL_REPORT_NAME'              => 'Rapportnaam'                 , 
-	'LBL_REPORT_FOLDER'            => 'Rapport map'                 , // KEY 5.x: LBL_REP_FOLDER
+	'LBL_REPORT_FOLDER'            => 'Rapport map'                 , 
 	'LBL_DESCRIPTION'              => 'Omschrijving'                , 
-	'PRIMARY_MODULE'               => 'Primaire Module'              , // TODO: Review
-	'LBL_SELECT_RELATED_MODULES'   => 'Selecteer Gerelateerde Modules'      , // TODO: Review
-	'LBL_MAX'                      => 'MAX'                         , // KEY 5.x: MAX
-	'LBL_NEXT'                     => 'Volgende'                    , // KEY 5.x: LNK_LIST_NEXT
-	'LBL_REPORTS'                  => 'Rapportagelijst'                , // TODO: Review
-	'LBL_GROUP_BY'                 => 'Groeperen op'                    , // TODO: Review
-	'LBL_SORT_ORDER'               => 'Sorteervolgorde'                  , // TODO: Review
-	'LBL_ASCENDING'                => 'Oplopend'                    , // KEY 5.x: Ascending
-	'LBL_DESCENDING'               => 'Aflopend'                    , // KEY 5.x: Descending
-	'LBL_CALCULATIONS'             => 'Berekeningen'                 , 
+	'PRIMARY_MODULE'               => 'Primaire Module'             , 
+	'LBL_SELECT_RELATED_MODULES'   => 'Selecteer Gerelateerde Modules', 
+	'LBL_MAX'                      => 'MAX'                         , 
+	'LBL_NEXT'                     => 'Volgende'                    , 
+	'LBL_REPORTS'                  => 'Rapportagelijst'             , 
+	'LBL_GROUP_BY'                 => 'Groeperen op'                , 
+	'LBL_SORT_ORDER'               => 'Sorteervolgorde'             , 
+	'LBL_ASCENDING'                => 'Oplopend'                    , 
+	'LBL_DESCENDING'               => 'Aflopend'                    , 
+	'LBL_CALCULATIONS'             => 'Berekeningen'                , 
 	'LBL_COLUMNS'                  => 'Kolommen'                    , 
-	'LBL_SUM_VALUE'                => 'Opgeteld'                    , // KEY 5.x: LBL_COLUMNS_SUM
-	'LBL_AVERAGE'                  => 'Gemiddeld'                   , // KEY 5.x: LBL_COLUMNS_AVERAGE
-	'LBL_LOWEST_VALUE'             => 'Laagste getal'               , // KEY 5.x: LBL_COLUMNS_LOW_VALUE
-	'LBL_HIGHEST_VALUE'            => 'Highest Value'               , // TODO: Review
-	'LBL_GENERATE_REPORT'          => 'Genereer Rapportage'             , // TODO: Review
-	'LBL_SUM'                      => 'Totaal'                      , // KEY 5.x: SUM
-	'LBL_AVG'                      => 'Gemiddeld'                   , // KEY 5.x: AVG
-	'LBL_MIN'                      => 'MIN'                         , // KEY 5.x: MIN
-	'LBL_FIELD_NAMES'              => 'Totalen'                     , // KEY 5.x: Totals
-	'LBL_REPORT_CSV'               => 'Exporteer CSV'                  , // TODO: Review
+	'LBL_SUM_VALUE'                => 'Opgeteld'                    , 
+	'LBL_AVERAGE'                  => 'Gemiddeld'                   , 
+	'LBL_LOWEST_VALUE'             => 'Laagste getal'               , 
+	'LBL_HIGHEST_VALUE'            => 'Highest Value'               , 
+	'LBL_GENERATE_REPORT'          => 'Genereer Rapportage'         , 
+	'LBL_SUM'                      => 'Totaal'                      , 
+	'LBL_AVG'                      => 'Gemiddeld'                   , 
+	'LBL_MIN'                      => 'MIN'                         , 
+	'LBL_FIELD_NAMES'              => 'Totalen'                     , 
+	'LBL_REPORT_CSV'               => 'Exporteer CSV'               , 
 	'LBL_VIEW_DETAILS'             => 'Toon Details'                , 
-	'Report Name'                  => 'Rapportnaam'                 , // KEY 5.x: LBL_REPORT_NAME
+	'LBL_GENERATE_NOW'             => 'Generate now'                , // TODO: Review
+	'Report Name'                  => 'Rapportnaam'                 , 
 	'Account and Contact Reports'  => 'Account en contact rapport'  , 
 	'Lead Reports'                 => 'Lead rapport'                , 
 	'Potential Reports'            => 'Verkoopkans rapport'         , 
@@ -110,13 +104,23 @@ $languageStrings = array(
 	'This Month Activities'        => 'Activiteiten van deze maand' , 
 	'Campaign Expectations and Actuals' => 'Campagne verwachting + actueel', 
 	'SalesOrder Detailed Report'   => 'Gedetailleerd verkooporder rapport', 
-	'Email Reports'                => 'E-mail Raportages'               , // TODO: Review
-	'Contacts Email Report'        => 'Contacten E-mail Rapportage'       , // TODO: Review
-	'Accounts Email Report'        => 'Organisaties E-mail Rapportage'  , // TODO: Review
-	'Leads Email Report'           => 'Leads E-mail Rapportage'          , // TODO: Review
-	'Vendors Email Report'         => 'Vendors E-mail Rapportage'        , // TODO: Review
-	'Emails sent to Contacts'      => 'E-mails verzonden naar Contacten'     , // TODO: Review
-	'Emails sent to Organizations' => 'E-mails verzonden naar Organisaties', // TODO: Review
-	'Emails sent to Leads'         => 'E-mails verzonden naar Leads'        , // TODO: Review
-	'Emails sent to Vendors'       => 'E-mails verzonden naar Leveranciers'      , // TODO: Review
+	'Email Reports'                => 'E-mail Raportages'           , 
+	'Contacts Email Report'        => 'Contacten E-mail Rapportage' , 
+	'Accounts Email Report'        => 'Organisaties E-mail Rapportage', 
+	'Leads Email Report'           => 'Leads E-mail Rapportage'     , 
+	'Vendors Email Report'         => 'Vendors E-mail Rapportage'   , 
+	'Emails sent to Contacts'      => 'E-mails verzonden naar Contacten', 
+	'Emails sent to Organizations' => 'E-mails verzonden naar Organisaties', 
+	'Emails sent to Leads'         => 'E-mails verzonden naar Leads', 
+	'Emails sent to Vendors'       => 'E-mails verzonden naar Leveranciers', 
+	'LBL_PRINT_REPORT'             => 'Print Report'                , // TODO: Review
+	'LBL_RECORDS'                  => 'Records'                     , // TODO: Review
+	'LBL_LIMIT_EXCEEDED'           => 'Only 1000 + records are displayed. Use CSV or Excel Export to see all the records', // TODO: Review
+	'LBL_TOP'                      => 'Top'                         , // TODO: Review
+	'LBL_ALL_REPORTS'              => 'All Reports'                 , // TODO: Review
+	'LBL_CALCULATION_CONVERSION_MESSAGE' => 'Calculation are based on the base currency of your CRM', // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_DUPLICATE_RECORD'          => 'Duplicate Report'            , // TODO: Review
+	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.', // TODO: Review
 );

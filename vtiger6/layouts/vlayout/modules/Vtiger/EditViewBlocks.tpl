@@ -16,7 +16,15 @@
 		{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 			<input type="hidden" name="picklistDependency" value='{$PICKIST_DEPENDENCY_DATASOURCE}' />
 		{/if}
-		<input type="hidden" name="module" value="{$MODULE}" />
+		{assign var=QUALIFIED_MODULE_NAME value={$MODULE}}
+		{assign var=IS_PARENT_EXISTS value=strpos($MODULE,":")}
+		{if $IS_PARENT_EXISTS}
+			{assign var=SPLITTED_MODULE value=":"|explode:$MODULE}
+			<input type="hidden" name="module" value="{$SPLITTED_MODULE[1]}" />
+			<input type="hidden" name="parent" value="{$SPLITTED_MODULE[0]}" />
+		{else}
+			<input type="hidden" name="module" value="{$MODULE}" />
+		{/if}
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="record" value="{$RECORD_ID}" />
 		<input type="hidden" name="defaultCallDuration" value="{$USER_MODEL->get('callduration')}" />

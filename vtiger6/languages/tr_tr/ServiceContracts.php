@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'ServiceContracts'             => 'Hizmet Anlaşmaları'        , 
 	'SINGLE_ServiceContracts'      => 'Hizmet Anlaşması'          , 
-	'LBL_ADD_RECORD'               => 'Add Service Contract'        , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Service Contracts Summary'   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Service Contract'        , 
+	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , 
 	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Hizmet Anlaşması Bilgisi'  , 
 	'Contract No'                  => 'Anlaşma No'                 , 
 	'Start Date'                   => 'Başlangıç Tarihi'         , 

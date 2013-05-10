@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class Vtiger_Detail_View extends Vtiger_Index_View {
-	private $record = false;
+	protected $record = false;
 
 	function __construct() {
 		parent::__construct();
@@ -179,7 +179,6 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 			"libraries.jquery.ckeditor.adapters.jquery",
 			"modules.Emails.resources.MassEdit",
 			"modules.Vtiger.resources.CkEditor",
-			'libraries.jquery.multiple-file-upload.jquery.MultiFile.js'
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
@@ -421,6 +420,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		
 		$viewer->assign('IS_EDITABLE', $relationModel->isEditable());
 		$viewer->assign('IS_DELETABLE', $relationModel->isDeletable());
+		$viewer->assign('VIEW', $request->get('view'));
 
 		if($relatedModuleName == "Emails"){
 			return $viewer->view('EmailRelatedList.tpl', $moduleName, 'true');

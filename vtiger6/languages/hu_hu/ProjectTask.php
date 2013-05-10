@@ -8,9 +8,10 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Projekt Feladat'				,
-	'LBL_ADD_RECORD'               => 'Projekt Feladat hozzáadása'	,
-	'LBL_RECORDS_LIST'             => 'Projekt Feladatok listája'	,
-	'LBL_RECORD_SUMMARY'           => 'Projekt Feladat összefoglaló',
-	'LBL_PROJECT_TASK_INFORMATION' => 'Projekt Feladat adatai'		,
+	'SINGLE_ProjectTask'           => 'Projekt Feladat'             , 
+	'LBL_ADD_RECORD'               => 'Projekt Feladat hozzáadása'  , 
+	'LBL_RECORDS_LIST'             => 'Projekt Feladatok listája'   , 
+	'LBL_PROJECT_TASK_INFORMATION' => 'Projekt Feladat adatai'      , 
+	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
+	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
 );

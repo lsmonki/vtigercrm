@@ -34,7 +34,7 @@
 		<link rel="stylesheet" href="libraries/jquery/pnotify/jquery.pnotify.default.css"/>
 		<link rel="stylesheet" href="libraries/jquery/pnotify/use for pines style icons/jquery.pnotify.default.icons.css"/>
 		<link rel="stylesheet" media="screen" type="text/css" href="libraries/jquery/datepicker/css/datepicker.css" />
-
+		<link rel="stylesheet" href="libraries/breadcrumb/css/global.css" />
 		{foreach key=index item=cssModel from=$STYLES}
 			<link rel="{$cssModel->getRel()}" href="{$cssModel->getHref()}?&v={$VTIGER_VERSION}" type="{$cssModel->getType()}" media="{$cssModel->getMedia()}" />
 		{/foreach}

@@ -136,6 +136,12 @@
 							</td>
                         </tr>
 						<tr>
+							<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_SERVER_TIMEZONE}</strong></td>
+							<td width="80%" class="small cellText">
+								{include file="MailScanner/MailScannerServerTZEdit.tpl" SELECTEDTZ=$SCANNERINFO.timezone}
+							</td>
+						</tr>
+						<tr>
 			                <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_STATUS}</strong></td>
 							<td width="80%" class="small cellText">
 								{assign var="mailbox_enable" value=""}

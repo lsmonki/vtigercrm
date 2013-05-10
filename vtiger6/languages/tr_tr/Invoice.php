@@ -10,20 +10,21 @@
 $languageStrings = array(
 	'SINGLE_Invoice'               => 'Fatura'                      , 
 	'LBL_EXPORT_TO_PDF'            => 'PDF Olarak Aktar'            , 
-	'LBL_ADD_RECORD'               => 'Add Invoice'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Fatura Listesi'              , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Invoice Summary'             , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Invoice'                 , 
+	'LBL_RECORDS_LIST'             => 'Fatura Listesi'              , 
 	'LBL_INVOICE_INFORMATION'      => 'Fatura Bilgisi'              , 
 	'Sales Order'                  => 'Satış Siparişi'           , 
 	'Customer No'                  => 'Müşteri Numarası'         , 
 	'Invoice Date'                 => 'Fatura Tarihi'               , 
 	'Purchase Order'               => 'Satınalma Siparişi'        , 
 	'Sales Commission'             => 'Satış Komisyonu'           , 
-	'Account Name'                 => 'Müşteri Adı'              , 
 	'Invoice No'                   => 'Fatura No'                   , 
+	'LBL_RECEIVED'                 => 'Received'                    , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Sent'                         => 'Gönderildi'                 , 
 	'Credit Invoice'               => 'İade Faturası'             , 
 	'Paid'                         => 'Ödendi'                     , 
-	'AutoCreated'                  => 'AutoCreated'                 , // TODO: Review
-	'Cancel'                       => 'İptal'                      , // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
+	'AutoCreated'                  => 'AutoCreated'                 , 
+	'Cancel'                       => 'İptal'                      , 
 );

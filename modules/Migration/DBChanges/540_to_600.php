@@ -12,6 +12,38 @@
 $adb = PearDatabase::getInstance();
 $Vtiger_Utils_log = true;
 
+// Collating all module package updates here
+updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
+updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
+updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
+
+updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
+updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
+updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
+updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
+updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
+updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
+updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
+updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
+updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
+updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
+updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
+updateVtlibModule('ConfigEditor', 'packages/vtiger/mandatory/ConfigEditor.zip');
+installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
+
+// updated language packs.
+updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
+updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
+updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
+updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
+updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
+updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
+updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
+updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
+updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
+updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
+updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
+
 if (!defined('INSTALLATION_MODE')) {
 	$adb->pquery("CREATE TABLE IF NOT EXISTS com_vtiger_workflow_tasktypes (
 						id int(11) NOT NULL,
@@ -691,37 +723,6 @@ $adb->pquery("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN
 
 //--
 
-// Collating all module package updates here
-updateVtlibModule('FieldFormulas', "packages/vtiger/optional/FieldFormulas.zip");
-updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
-updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
-
-updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
-updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
-updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
-updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
-updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
-updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
-updateVtlibModule('MailManager', "packages/vtiger/mandatory/MailManager.zip");
-updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
-updateVtlibModule('CronTasks', 'packages/vtiger/optional/CronTasks.zip');
-updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
-installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
-
-// updated language packs.
-updateVtlibModule('Dutch', 'packages/vtiger/optional/Dutch.zip');
-updateVtlibModule('Hungarian', 'packages/vtiger/optional/Hungarian.zip');
-updateVtlibModule('PT Brasil', 'packages/vtiger/optional/BrazilianLanguagePack_bz_bz.zip');
-updateVtlibModule('British English', 'packages/vtiger/optional/BritishLanguagePack_br_br.zip');
-updateVtlibModule('Deutsch', 'packages/vtiger/optional/Deutsch.zip');
-updateVtlibModule('French', 'packages/vtiger/optional/French.zip');
-updateVtlibModule('Italian', 'packages/vtiger/optional/ItalianLanguagePack_it_it.zip');
-updateVtlibModule('Mexican Spanish', 'packages/vtiger/optional/MexicanSpanishLanguagePack_es_mx.zip');
-updateVtlibModule('RomanianLanguagePack_rm_rm', 'packages/vtiger/optional/RomanianLanguagePack_rm_rm.zip');
-updateVtlibModule('Spanish', 'packages/vtiger/optional/Spanish.zip');
-updateVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
-
 //--
 
 // Added indexes for Modtracker Module to improve performance
@@ -1043,7 +1044,6 @@ $calendarsharedtype->displaytype = 3;
 $calendarsharedtype->defaultvalue = 'Public';
 $calendarSettings->addField($calendarsharedtype);
 $calendarsharedtype->setPicklistValues(array('public','private','seletedusers'));
-echo "<br> Calendar Shared type field added <br>";
 
 $allUsers = get_user_array(false);
 foreach ($allUsers as $id => $name) {
@@ -1082,7 +1082,6 @@ foreach ($moduleArray as $module => $block) {
     $field->columntype = 'varchar(3)';
     $field->typeofdata = 'C~O';
     $blockInstance->addField($field);
-    echo "Converted From field added to $module  <br/>";
 }
 
 $homeModule = Vtiger_Module::getInstance('Home');
@@ -1105,8 +1104,6 @@ $moreInfoBlock->addField($viewField);
 $viewField->setPicklistValues(array('Summary', 'Detail'));
 
 $adb->pquery('UPDATE vtiger_users SET default_record_view = ?', array('Summary'));
-echo "Default Record View option is added User preferences";
-
 
 $InvoiceInstance = Vtiger_Module::getInstance('Invoice');
 Vtiger_Event::register($InvoiceInstance, 'vtiger.entity.aftersave', 'InvoiceHandler', 'modules/Invoice/InvoiceHandler.php');
@@ -1190,12 +1187,9 @@ $task->summary = "Update Inventory Products";
 $task->methodName = "UpdateInventory";
 $tm->saveTask($task);
 
-echo "Workflow for Purchase Order Created";
-
 // Add Tag Cloud widget.
 $homeModule = Vtiger_Module::getInstance('Home');
 $homeModule->addLink('DASHBOARDWIDGET', 'Tag Cloud', 'index.php?module=Home&view=ShowWidget&name=TagCloud');
-echo "successfully added tag cloud widget";
 
 // Schema changed for capturing Dashboard widget positions
 $adb->pquery('ALTER TABLE vtiger_module_dashboard_widgets ADD COLUMN position VARCHAR(50)',array());
@@ -1233,11 +1227,9 @@ if(Vtiger_Utils::CheckTable('vtiger_cron_log')) {
 
 require_once 'vtlib/Vtiger/Cron.php';
 Vtiger_Cron::deregister('ScheduleReports');
-
 // END 2013.02.18
 
-// Start 2013.03.19 (odu24)
-
+// Start 2013.03.19
 // Mail Converter schema changes
 $adb->pquery('ALTER TABLE vtiger_mailscanner ADD COLUMN timezone VARCHAR(10) default NULL', array());
 $adb->pquery('UPDATE vtiger_mailscanner SET timezone=? WHERE server LIKE ? AND timezone IS NULL', array('-8:00', '%.gmail.com'));
@@ -1246,5 +1238,80 @@ $adb->pquery('UPDATE vtiger_report SET state=?', array('CUSTOM'));
 
 $adb->pquery("ALTER TABLE vtiger_relcriteria MODIFY value VARCHAR(512)", array());
 $adb->pquery("ALTER TABLE vtiger_cvadvfilter MODIFY value VARCHAR(512)", array());
+// End 2013.03.19
 
-//  End 2013.03.19 (odu24)
+// Start 2013.04.23
+$adb->pquery('ALTER TABLE vtiger_sqltimelog MODIFY started DECIMAL(20,6)', array());
+$adb->pquery('ALTER TABLE vtiger_sqltimelog MODIFY ended DECIMAL(20,6)', array());
+
+//added Assests tab in contact 
+$assetsModuleInstance = Vtiger_Module::getInstance('Assets');
+$contactModule = Vtiger_Module::getInstance('Contacts');
+$contactModule->setRelatedList($assetsModuleInstance, '', false, 'get_dependents_list');
+// End 2013.04.23
+
+// Start 2013.04.30
+$adb->pquery('ALTER TABLE vtiger_users MODIFY signature TEXT', array());
+//Adding column to store the state of short cut settings fields
+$adb->pquery('ALTER TABLE vtiger_settings_field ADD COLUMN pinned int(1) DEFAULT 0',array());
+
+$defaultPinnedFields = array('LBL_USERS','LBL_LIST_WORKFLOWS','VTLIB_LBL_MODULE_MANAGER','LBL_PICKLIST_EDITOR');
+$defaultPinnedSettingFieldQuery = 'UPDATE vtiger_settings_field SET pinned=1 WHERE name IN ('.generateQuestionMarks($defaultPinnedFields).')';
+$adb->pquery($defaultPinnedSettingFieldQuery,$defaultPinnedFields);
+
+$adb->pquery('ALTER TABLE vtiger_profile ADD COLUMN directly_related_to_role int(1) DEFAULT 0',array());
+
+$blockId = getSettingsBlockId('LBL_STUDIO');
+$result = $adb->pquery('SELECT max(sequence) as maxSequence FROM vtiger_settings_field WHERE blockid=?', array($blockId));
+$sequence = 0;
+if($adb->num_rows($result) > 0 ) {
+	$sequence = $adb->query_result($result,0,'maxSequence');
+}
+
+$fieldId = $adb->getUniqueID('vtiger_settings_field');
+$query = "INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, " .
+		"linkto, sequence) VALUES (?,?,?,?,?,?,?)";
+$layoutEditoLink = 'index.php?module=LayoutEditor&parent=Settings&view=Index';
+$params = array($fieldId, $blockId, 'LBL_EDIT_FIELDS', '', 'LBL_LAYOUT_EDITOR_DESCRIPTION', $layoutEditoLink, $sequence);
+$adb->pquery($query, $params);
+
+$adb->pquery('ALTER TABLE com_vtiger_workflows ADD COLUMN filtersavedinnew int(1)', array());
+$adb->pquery('UPDATE com_vtiger_workflows SET filtersavedinnew = 5', array());
+
+$adb->pquery('UPDATE vtiger_role SET rolename = ? WHERE rolename = ? AND depth = ?', array('Organization', 'Organisation', 0));
+
+
+//Create a new table to support custom fields in Documents module
+$adb->query("CREATE TABLE IF NOT EXISTS vtiger_notescf (notesid INT(19), FOREIGN KEY fk_1_vtiger_notescf(notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE);");
+
+$query = 'SELECT distinct fieldname FROM vtiger_field WHERE uitype IN (15,33)';
+$result = $adb->pquery($query, array());
+$num_rows = $adb->num_rows($result);
+for($i=0; $i<$num_rows; $i++) {
+	$fieldName = $adb->query_result($result,$i,'fieldname');
+	$query = 'ALTER TABLE vtiger_'.$fieldName.' ADD COLUMN sortorderid INT(1)';
+	$adb->pquery($query, array());
+}
+
+$adb->pquery('ALTER TABLE vtiger_salutationtype ADD COLUMN sortorderid INT(1)', array());
+
+$adb->pquery('ALTER TABLE vtiger_field ADD COLUMN summaryfield int(1) DEFAULT 0', array());
+
+$summaryFields = array(
+	'Accounts'	=> array('assigned_user_id', 'email1', 'phone', 'bill_city', 'bill_country', 'website'),
+	'Contacts'	=> array('assigned_user_id', 'email', 'phone', 'mailingcity', 'mailingcountry'),
+	'Leads'		=> array('assigned_user_id', 'email', 'phone', 'city', 'country', 'leadsource'),
+	'HelpDesk'	=> array('assigned_user_id', 'ticketstatus', 'parent_id', 'ticketseverities', 'description'),
+	'Potentials'=> array('assigned_user_id', 'amount', 'sales_stage', 'closingdate'),
+	'Project'	=> array('assigned_user_id', 'targetenddate'));
+
+foreach ($summaryFields as $moduleName => $fieldsList) {
+	$updateQuery = 'UPDATE vtiger_field SET summaryfield = 1
+						WHERE fieldname IN ('.generateQuestionMarks($fieldsList) .') AND tabid = '. getTabid($moduleName);
+	$adb->pquery($updateQuery, $fieldsList);
+}
+
+$adb->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname=', array('Active', 'vtiger_users', 'status'));
+$adb->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname=', array('12', 'vtiger_users', 'hour_format'));
+
+//End 2013-05-06

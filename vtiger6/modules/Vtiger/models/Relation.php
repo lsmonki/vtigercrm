@@ -56,6 +56,14 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 		}
 		return $this->relatedModule;
 	}
+    
+    public function getRelationModuleName() {
+        $relationModuleName = $this->get('relatedModuleName');
+        if(!empty($relationModuleName)) {
+            return $relationModuleName;
+        }
+        return $this->getRelationModuleModel()->getName();
+    }
 
 	public function getListUrl($parentRecordModel) {
 		return 'module='.$this->getParentModuleModel()->get('name').'&relatedModule='.$this->get('modulename').
@@ -180,17 +188,23 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 		return false;
 	}
 
-	public static function getAllRelations($parentModuleModel) {
+	public static function getAllRelations($parentModuleModel, $selected = true, $onlyActive = true) {
 		$db = PearDatabase::getInstance();
 
 		$skipReltionsList = array('get_history');
+        $query = 'SELECT vtiger_relatedlists.*,vtiger_tab.name as modulename FROM vtiger_relatedlists 
+                    INNER JOIN vtiger_tab on vtiger_relatedlists.related_tabid = vtiger_tab.tabid
+                    WHERE vtiger_relatedlists.tabid = ? AND related_tabid != 0';
 
-		$query = 'SELECT vtiger_relatedlists.*,vtiger_tab.name as modulename FROM vtiger_relatedlists 
-					INNER JOIN vtiger_tab on vtiger_relatedlists.related_tabid = vtiger_tab.tabid
-					WHERE vtiger_relatedlists.tabid = ? AND related_tabid != 0
-						AND vtiger_tab.presence <> 1 AND vtiger_relatedlists.name NOT IN ('.generateQuestionMarks($skipReltionsList).')
-						ORDER BY sequence'; // TODO: Need to handle entries that has related_tabid 0
-		$result = $db->pquery($query, array($parentModuleModel->getId(), $skipReltionsList));
+		if ($selected) {
+			$query .= ' AND vtiger_relatedlists.presence <> 1';
+		}
+        if($onlyActive){
+            $query .= ' AND vtiger_tab.presence <> 1 ';
+        }
+        $query .= ' AND vtiger_relatedlists.name NOT IN ('.generateQuestionMarks($skipReltionsList).') ORDER BY sequence'; // TODO: Need to handle entries that has related_tabid 0
+
+        $result = $db->pquery($query, array($parentModuleModel->getId(), $skipReltionsList));
 
 		$relationModels = array();
 		$relationModelClassName = Vtiger_Loader::getComponentClassName('Model', 'Relation', $parentModuleModel->get('name'));
@@ -202,7 +216,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 				continue;
 			}
 			$relationModel = new $relationModelClassName();
-			$relationModel->setData($row)->setParetModuleModel($parentModuleModel);
+			$relationModel->setData($row)->setParetModuleModel($parentModuleModel)->set('relatedModuleName',$row['modulename']);
 			$relationModels[] = $relationModel;
 		}
 		return $relationModels;
@@ -233,5 +247,32 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 		}
 		return $relationField;
 	}
-
+    
+    public static  function updateRelationSequenceAndPresence($relatedInfoList, $sourceModuleTabId) {
+        $db = PearDatabase::getInstance();
+        $query = 'UPDATE vtiger_relatedlists SET sequence=CASE ';
+        $relation_ids = array();
+        foreach($relatedInfoList as $relatedInfo){
+            $relation_id = $relatedInfo['relation_id'];
+            $relation_ids[] = $relation_id;
+            $sequence = $relatedInfo['sequence'];
+            $presence = $relatedInfo['presence'];
+            $query .= ' WHEN relation_id='.$relation_id.' THEN '.$sequence;
+        }
+        $query.= ' END , ';
+        $query.= ' presence = CASE ';
+        foreach($relatedInfoList as $relatedInfo){
+            $relation_id = $relatedInfo['relation_id'];
+            $relation_ids[] = $relation_id;
+            $sequence = $relatedInfo['sequence'];
+            $presence = $relatedInfo['presence'];
+            $query .= ' WHEN relation_id='.$relation_id.' THEN '.$presence;
+        }
+        $query .= ' END WHERE tabid=? AND relation_id IN ('.  generateQuestionMarks($relation_ids).')';
+        $result = $db->pquery($query, array($sourceModuleTabId,$relation_ids));
+    }
+	
+	public function isActive() {
+		return $this->get('presence') == 0 ? true : false;
+	}
 }

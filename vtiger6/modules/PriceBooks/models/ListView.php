@@ -63,7 +63,6 @@ class PriceBooks_ListView_Model extends Vtiger_ListView_Model {
 			$sortOrder = 'DESC';
 		}
 
-		$orderBy = $this->get('orderby');
 		if(!empty($orderBy)) {
 			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
 		}

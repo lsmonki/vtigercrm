@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Önemli Müşteriler'        , // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Önemli Fırsatlar'          , // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Önemli Teklifler'           , // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'Kilit Ölçümler'           , // KEY 5.x: Key Metrics
-	'HLT'                          => 'Top Support Tickets'         , // TODO: Review
-	'GRT'                          => 'Grup Dağıtımım'          , // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Önemli Satış Siparişleri', // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Önemli Faturalar'           , // KEY 5.x: Top Invoices
-	'HDB'                          => 'Ana Sayfa Grafikleri'        , // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Önemli Satınalma Siparişleri', // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'Yakın SSS'                  , // KEY 5.x: My Recent FAQs
-	'UA'                           => 'Gelecek İşler'             , // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'Bekleyen İşler'            , // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Önemli Müşteriler'        , 
+	'PLVT'                         => 'Önemli Fırsatlar'          , 
+	'QLTQ'                         => 'Önemli Teklifler'           , 
+	'CVLVT'                        => 'Kilit Ölçümler'           , 
+	'HLT'                          => 'Top Support Tickets'         , 
+	'GRT'                          => 'Grup Dağıtımım'          , 
+	'OLTSO'                        => 'Önemli Satış Siparişleri', 
+	'ILTI'                         => 'Önemli Faturalar'           , 
+	'HDB'                          => 'Ana Sayfa Grafikleri'        , 
+	'OLTPO'                        => 'Önemli Satınalma Siparişleri', 
+	'LTFAQ'                        => 'Yakın SSS'                  , 
+	'UA'                           => 'Gelecek İşler'             , 
+	'PA'                           => 'Bekleyen İşler'            , 
 );

@@ -6,25 +6,17 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Contacts.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'Contacts'                     => 'Contacten'                   , 
 	'SINGLE_Contacts'              => 'Contact'                     , 
-	'LBL_ADD_RECORD'               => 'Contact toevoegen'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Contactenlijst'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Contactoverzicht'            , // TODO: Review
-	'LBL_CONTACT_INFORMATION'      => 'Contactinformatie'          , 
+	'LBL_ADD_RECORD'               => 'Contact toevoegen'           , 
+	'LBL_RECORDS_LIST'             => 'Contactenlijst'              , 
+	'LBL_CONTACT_INFORMATION'      => 'Contactinformatie'           , 
 	'LBL_CUSTOMER_PORTAL_INFORMATION' => 'Klantportaal informatie'     , 
 	'LBL_IMAGE_INFORMATION'        => 'Afbeelding:'                 , 
+	'LBL_COPY_OTHER_ADDRESS'       => 'Copy Other Address'          , // TODO: Review
+	'LBL_COPY_MAILING_ADDRESS'     => 'Copy Mailing Address'        , // TODO: Review
 	'Office Phone'                 => 'Telefoon Kantoor'            , 
 	'Home Phone'                   => 'Telefoon Thuis'              , 
 	'Title'                        => 'Titel'                       , 
@@ -41,18 +33,24 @@ $languageStrings = array(
 	'Mailing State'                => 'Postadres Provincie'         , 
 	'Mailing Zip'                  => 'Postadres Postcode'          , 
 	'Mailing Country'              => 'Postadres Land'              , 
-	'Mailing PO Box'               => 'Postadres Postbus'            , // TODO: Review
+	'Mailing PO Box'               => 'Postadres Postbus'           , 
 	'Other Street'                 => 'Bezoekadres straat'          , 
 	'Other City'                   => 'Bezoekadres Plaats'          , 
 	'Other State'                  => 'Bezoekadres Provincie'       , 
 	'Other Zip'                    => 'Bezoekadres Postcode'        , 
 	'Other Country'                => 'Bezoekadres Land'            , 
-	'Other PO Box'                 => 'Bezoekadres Postbus'              , // TODO: Review
-	'Contact Image'                => 'Contactfoto'                , 
+	'Other PO Box'                 => 'Bezoekadres Postbus'         , 
+	'Contact Image'                => 'Contactfoto'                 , 
 	'Mr.'                          => 'heer'                        , 
 	'Ms.'                          => 'mevrouw'                     , 
 	'Mrs.'                         => 'mejuffrouw'                  , 
 	'Dr.'                          => 'dr.'                         , 
 	'Prof.'                        => 'prof.'                       , 
 	'User List'                    => 'Gebruikerslijst'             , 
+);
+$jsLanguageStrings = array(
+	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
+	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
+	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
+	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 );

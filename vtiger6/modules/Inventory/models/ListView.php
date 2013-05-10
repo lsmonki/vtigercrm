@@ -60,38 +60,16 @@ class Inventory_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		$advancedLinks = array();
-
 		foreach($advancedLinks as $advancedLink) {
 			$links['LISTVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($advancedLink);
 		}
 
 		if($currentUserModel->isAdminUser()) {
-
-			$settingsLinks = array(
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_FIELDS',
-					'linkurl' => $moduleModel->getSettingsUrl('LayoutEditor'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_WORKFLOWS',
-					'linkurl' => $moduleModel->getSettingsUrl('EditWorkflows'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',
-					'linkurl' => $moduleModel->getSettingsUrl('PicklistEditor'),
-					'linkicon' => ''
-				)
-			);
+			$settingsLinks = $this->getSettingLinks();
 			foreach($settingsLinks as $settingsLink) {
 				$links['LISTVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
 			}
 		}
-
 		return $links;
 	}
 }

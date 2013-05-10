@@ -8,18 +8,31 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_SELECT_EMAIL_IDS'         => 'Select Email Addresses'      , // TODO: Review
+	'SINGLE_Emails'                => 'Email'                       , 
+	'Emails'                       => 'Emails'                      , 
+	'LBL_SELECT_EMAIL_IDS'         => 'Select Email Addresses'      , 
 	'LBL_SUBJECT'                  => 'Betreff:'                    , 
 	'LBL_ATTACHMENT'               => 'Anhang'                      , 
-	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , // TODO: Review
+	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , 
 	'LBL_SEND'                     => 'Senden'                      , 
-	'LBL_SAVE_AS_DRAFT'            => 'Save as Draft'               , // TODO: Review
-	'LBL_SELECT_EMAIL_TEMPLATE'    => 'E-Mail Vorlage wählen'      , // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
+	'LBL_SAVE_AS_DRAFT'            => 'Save as Draft'               , 
+	'LBL_GO_TO_PREVIEW'            => 'Go to Preview'               , 
+	'LBL_SELECT_EMAIL_TEMPLATE'    => 'E-Mail Vorlage wählen'      , 
 	'LBL_COMPOSE_EMAIL'            => 'neue E-Mail'                 , 
+	'LBL_TO'                       => 'To'                          , 
 	'LBL_CC'                       => 'CC :'                        , 
 	'LBL_BCC'                      => 'BCC :'                       , 
-	'LBL_ADD_CC'                   => 'Add Cc'                      , // TODO: Review
-	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
-	'LBL_MAX_UPLOAD_SIZE'          => 'Die maximale Dateigröße zum hochladen beträgt', // KEY 5.x: LBL_MAX_SIZE
-	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	'LBL_ADD_CC'                   => 'Add Cc'                      , 
+	'LBL_ADD_BCC'                  => 'Add Bcc'                     , 
+	'LBL_MAX_UPLOAD_SIZE'          => 'Die maximale Dateigröße zum hochladen beträgt', 
+	'LBL_EXCEEDED'                 => 'Exceeded'                    , 
+	'LBL_FORWARD'                  => 'Forward'                     , 
+	'LBL_PRINT'                    => 'Print'                       , 
+	'LBL_DESCRIPTION'              => 'Description'                 , 
+	'LBL_FROM'                     => 'From'                        , 
+	'LBL_INFO'                     => 'Info'                        , 
+	'LBL_DRAFTED_ON'               => 'Drafted on'                  , 
+	'LBL_SENT_ON'                  => 'Sent on'                     , 
+	'LBL_OWNER'                    => 'Owner'                       , 
+	'Date & Time Sent'             => 'Date Sent'                   , 
 );

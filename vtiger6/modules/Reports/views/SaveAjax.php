@@ -48,8 +48,9 @@ class Reports_SaveAjax_View extends Vtiger_IndexAjax_View {
 		} else if ($mode === 'generate') {
 			$data = $reportModel->generateData($pagingModel);
 		}
-		$calculation = $reportModel->getReportCalulationData();
-		
+		$calculation = $reportModel->generateCalculationData();
+
+		$viewer->assign('PRIMARY_MODULE', $reportModel->getPrimaryModule());
 		$viewer->assign('CALCULATION_FIELDS', $calculation);
 		$viewer->assign('DATA', $data);
 		$viewer->assign('RECORD_ID', $record);

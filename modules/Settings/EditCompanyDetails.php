@@ -32,6 +32,9 @@ if(isset($_REQUEST['flag']) && $_REQUEST['flag'] != '')
 		case 4:
 			$smarty->assign("ERRORFLAG","<b>".$mod_strings['Problems_in_upload'].". ".$mod_strings['Please_try_again']." </b><br>");
 			break;
+		case 5:
+			$smarty->assign("ERRORFLAG","<font color='red'><B>".$mod_strings['Error_Message']."<ul><li><font color='red'>".$mod_strings['Invalid_image']."</font><li><font color='red'>".$mod_strings['Image_corrupted']."</font></ul></B></font>");
+			break;
 		default:
 			$smarty->assign("ERRORFLAG","");
 		

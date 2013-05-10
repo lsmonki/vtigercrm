@@ -10,13 +10,17 @@
 $languageStrings = array(
 	'SINGLE_PurchaseOrder'         => 'Pedido Compra'               , 
 	'LBL_EXPORT_TO_PDF'            => 'Exportar para PDF'           , 
-	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Listar Pedido de Compra'     , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Purchase Order Summary'      , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , 
+	'LBL_RECORDS_LIST'             => 'Listar Pedido de Compra'     , 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
 	'LBL_PO_INFORMATION'           => 'Informação Pedido Compra'  , 
 	'PurchaseOrder No'             => 'No. Pedido Compra'           , 
 	'Requisition No'               => 'No. Requisição'            , 
 	'Tracking Number'              => 'No. Rastreamento'            , 
 	'Sales Commission'             => 'Comissão Vendas'            , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Entrega Recebida'            , 
 );

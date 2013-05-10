@@ -164,5 +164,13 @@ Calendar_CalendarView_Js("SharedCalendar_SharedCalendarView_Js",{
 		this.allocateColorsForAllUsers();
 		this.fetchAllEvents();
 		this.registerCalendarFeedChange();
+	},
+	
+	registerEvents : function() {
+		this._super();
+		// Open the Calendar added by default (override previous widget close state)
+		// This is required to display the event items on the view.
+		jQuery('[data-widget-url="module=Calendar&view=ViewTypes&mode=getSharedUsersList"]').trigger('click');
+		return this;
 	}
 });

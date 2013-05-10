@@ -160,10 +160,6 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 */
 	static function getInstance($value) {
 		global $adb;
-		$cache = Vtiger_Cache::getInstance();
-		if($cache->getModule($value)){
-		    return $cache->getModule($value);
-		} else {
 		$instance = false;
 		$query = false;
 		if(Vtiger_Utils::isNumber($value)) {
@@ -176,9 +172,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 			$instance = new self();
 			$instance->initialize($adb->fetch_array($result));
 		}
-		    $cache->setModule($value, $instance);
 		return $instance;
-	       }
 	}
 
 	/**

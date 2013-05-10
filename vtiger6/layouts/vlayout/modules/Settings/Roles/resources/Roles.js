@@ -8,15 +8,18 @@
  *************************************************************************************/
 var Settings_Roles_Js = {
 	
+	newPriviliges : false,
+	
 	initDeleteView: function() {
+		jQuery('#roleDeleteForm').validationEngine(app.validationEngineOptions);
 		
-		jQuery('[data-action="popup"]').click(function(e) {
+		jQuery('[data-action="popup"]').on('click',function(e) {
 			e.preventDefault();
 			var target = $(e.currentTarget);
 			var field  = target.data('field');
 			
 			// TODO simiplify by pushing the retrieveSelectedRecords to library
-			var popupInstance = Vtiger_Popup_Js.getInstance()();
+			var popupInstance = Vtiger_Popup_Js.getInstance();
 			popupInstance.show(target.data('url'));
 			popupInstance.retrieveSelectedRecords(function(data) {
 				try {
@@ -30,10 +33,14 @@ var Settings_Roles_Js = {
 				jQuery('[name="'+field+'"]').val(data);
 			});
 		});
+		
+		jQuery('#clearRole').on('click',function(e){
+			jQuery('[name="transfer_record_display"]').val('');
+		});
 	},
 	
 	initPopupView: function() {
-		jQuery('.draggable').click(function(e){
+		jQuery('.roleEle').click(function(e){
 			var target = $(e.currentTarget);
 			// jquery_windowmsg plugin expects second parameter to be string.
 			jQuery.triggerParentEvent('postSelection', JSON.stringify({value: target.closest('li').data('roleid'), label: target.text()}));
@@ -64,7 +71,9 @@ var Settings_Roles_Js = {
 		
 		function modalActionHandler(event) {
 			var target = $(event.currentTarget);
-			app.showModalWindow(null, target.data('url'));
+			app.showModalWindow(null, target.data('url'),function(data){
+				Settings_Roles_Js.initDeleteView();
+			});
 		}
 		
 		jQuery('[data-action="modal"]').click(modalActionHandler);
@@ -122,5 +131,113 @@ var Settings_Roles_Js = {
 				applyMoveChanges(sourceRoleId, targetRoleId);
 			}
 		});
+	},
+	
+	registerShowNewProfilePrivilegesEvent : function() {
+		jQuery('[name="profile_directly_related_to_role"]').on('change',function(e){
+			var target = jQuery(e.currentTarget);
+			var hanlder = target.data('handler');
+			if(hanlder == 'new'){
+				Settings_Roles_Js.getProfilePriviliges();return false;
+			}
+			var container = jQuery('[data-content="'+ hanlder + '"]');
+			jQuery('[data-content]').not(container).fadeOut('slow',function(){
+				container.fadeIn('slow');
+			});
+		})
+	},
+	
+	onLoadProfilePrivilegesAjax : function() {
+		jQuery('[name="profile_directly_related_to_role"]:checked').trigger('change');
+	},
+	
+	getProfilePriviliges : function() {
+		var content = jQuery('[data-content="new"]');
+		var profileId = jQuery('[name="profile_directly_related_to_role_id"]').val();
+		var params = {
+			module : 'Profiles',
+			parent: 'Settings',
+			view : 'EditAjax',
+			record : profileId
+		}
+		if(Settings_Roles_Js.newPriviliges == true) {
+			jQuery('[data-content="existing"]').fadeOut('slow',function(){
+				content.fadeIn('slow');
+			});
+			return false;
+		}
+		var progressIndicatorElement = jQuery.progressIndicator({
+			'position' : 'html',
+			'blockInfo' : {
+				'enabled' : true
+			}
+		});
+		AppConnector.request(params).then(function(data) {
+			content.find('.fieldValue').html(data);
+			app.changeSelectElementView(jQuery('#directProfilePriviligesSelect'), 'select2');
+			Settings_Roles_Js.registerExistingProfilesChangeEvent();
+			progressIndicatorElement.progressIndicator({
+				'mode' : 'hide'
+			});
+			Settings_Roles_Js.newPriviliges = true;
+			jQuery('[data-content="existing"]').fadeOut('slow',function(){
+				content.fadeIn('slow',function(){
+				});
+			});
+		})
+	},
+	
+	registerExistingProfilesChangeEvent : function() {
+		jQuery('#directProfilePriviligesSelect').on('change',function(e) {
+			var profileId = jQuery(e.currentTarget).val();
+			var params = {
+				module : 'Profiles',
+				parent: 'Settings',
+				view : 'EditAjax',
+				record : profileId
+			}
+			var progressIndicatorElement = jQuery.progressIndicator({
+				'position' : 'html',
+				'blockInfo' : {
+					'enabled' : true
+				}
+			});
+			
+			AppConnector.request(params).then(function(data) {
+				jQuery('[data-content="new"]').find('.fieldValue').html(data);
+				progressIndicatorElement.progressIndicator({
+					'mode' : 'hide'
+				});
+				app.changeSelectElementView(jQuery('#directProfilePriviligesSelect'), 'select2');
+				Settings_Roles_Js.registerExistingProfilesChangeEvent();
+			});
+		});
+	},
+	
+	registerSubmitEvent : function() {
+		jQuery('#EditView').on('submit',function(e) {
+			if(jQuery('[data-handler="existing"]').is(':checked')){
+				var selectElement = jQuery('#profilesList');
+				var select2Element = app.getSelect2ElementFromSelect(selectElement);
+				var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
+				if(result != true){
+					select2Element.validationEngine('showPrompt', result , 'error','bottomLeft',true);
+					e.preventDefault();
+					return;
+				} else {
+					select2Element.validationEngine('hide');
+				}
+			} 
+		});
+	},
+	
+	registerEvents : function() {
+		Settings_Roles_Js.initEditView();
+		Settings_Roles_Js.registerShowNewProfilePrivilegesEvent();
+		Settings_Roles_Js.onLoadProfilePrivilegesAjax();
+		Settings_Roles_Js.registerSubmitEvent();
 	}
 }
+jQuery(document).ready(function(){
+	Settings_Roles_Js.registerEvents();
+})

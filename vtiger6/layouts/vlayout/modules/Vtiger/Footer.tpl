@@ -10,11 +10,13 @@
  ********************************************************************************/
 -->*}
 {strip}
+		<input id='activityReminder' class='hide' value="{$ACTIVITY_REMINDER}"/>
+
 		{* Feedback side-panel button *}
 		{if $HEADER_LINKS}
 		{assign var="FIRSTHEADERLINK" value=$HEADER_LINKS.0}
 		{assign var="FIRSTHEADERLINKCHILDRENS" value=$FIRSTHEADERLINK->get('childlinks')}
-		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.1}
+		{assign var="FEEDBACKLINKMODEL" value=$FIRSTHEADERLINKCHILDRENS.2}
 		<div id="userfeedback" class="feedback">
 			<a href="javascript:;" onclick="{$FEEDBACKLINKMODEL->get('linkurl')}" class="handle">{vtranslate("LBL_FEEDBACK", "Vtiger")}</a>
 		</div>

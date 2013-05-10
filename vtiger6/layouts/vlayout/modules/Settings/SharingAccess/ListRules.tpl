@@ -10,37 +10,43 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div class="row-fluid">
-		<div class="title row-fluid padding-bottom1per">
-			<span class="secondaryColor padding-left1per">
+	<div class="row-fluid ruleListContainer">
+		<hr>
+		<div class="title padding-bottom1per">
+			<span class="themeLinkColor padding-left1per">
 				<!-- Check if the module should the for module to get the translations-->
-				{vtranslate('LBL_SHARING_RULE', $QUALIFIED_MODULE)} :
+				<strong>{vtranslate('LBL_SHARING_RULE', $QUALIFIED_MODULE)}&nbsp;{vtranslate('LBL_FOR', $MODULE)}&nbsp;
+					{if $FOR_MODULE == 'Accounts'}{vtranslate($FOR_MODULE, $QUALIFIED_MODULE)}{else}{vtranslate($FOR_MODULE, $MODULE)}{/if} :</strong>
 			</span>
 			<span class="pull-right padding-right1per">
-				<button class="vtButton btn-mini addCustomRule" data-url="{$MODULE_MODEL->getCreateRuleUrl()}"> {vtranslate('LBL_ADD_CUSTOM_RULE', $QUALIFIED_MODULE)} </button>
+				<button class="btn addButton addCustomRule" type="button" data-url="{$MODULE_MODEL->getCreateRuleUrl()}">
+					<strong>{vtranslate('LBL_ADD_CUSTOM_RULE', $QUALIFIED_MODULE)}</strong></button>
 			</span>
 		</div>
-		<div class="contents">
-			<table class="table table-bordered table-condensed">
-				<tbody>
-					<tr>
-						<th class="secondaryColor">{vtranslate('LBL_RULE_NO', $QUALIFIED_MODULE)}</th>
+		<div class="contents padding1per">
+			{if $RULE_MODEL_LIST}
+			<table class="table table-bordered table-condensed customRuleTable">
+				<thead>
+					<tr class="customRuleHeaders">
+						<th>{vtranslate('LBL_RULE_NO', $QUALIFIED_MODULE)}</th>
 						<!-- Check if the module should the for module to get the translations -->
-						<th class="secondaryColor">{vtranslate('LBL_MODULE_OF', $QUALIFIED_MODULE)}</th>
-						<th class="secondaryColor">{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</th>
-						<th class="secondaryColor">{vtranslate('LBL_PRIVILEGES', $QUALIFIED_MODULE)}</th>
-						<th class="secondaryColor">{vtranslate('LBL_TOOLS', $QUALIFIED_MODULE)}</th>
+						<th>{if $FOR_MODULE == 'Accounts'}{vtranslate($FOR_MODULE, $QUALIFIED_MODULE)}{else}{vtranslate($FOR_MODULE, $MODULE)}{/if}
+							&nbsp;{vtranslate('LBL_OF', $MODULE)}</th>
+						<th>{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</th>
+						<th>{vtranslate('LBL_PRIVILEGES', $QUALIFIED_MODULE)}</th>
 					</tr>
+				</thead>
+				<tbody>
 					{foreach item=RULE_MODEL key=RULE_ID from=$RULE_MODEL_LIST name="customRuleIterator"}
-					<tr>
+					<tr class="customRuleEntries">
 						<td>
 							{$smarty.foreach.customRuleIterator.index + 1}
 						</td>
 						<td>
-							{$RULE_MODEL->getSourceMember()->getName()}
+							<a href="{$RULE_MODEL->getSourceDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getSourceMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getSourceMember()->getName()}</a>
 						</td>
 						<td>
-							{$RULE_MODEL->getTargetMember()->getName()}
+							<a href="{$RULE_MODEL->getTargetDetailViewUrl()}">{vtranslate('SINGLE_'|cat:$RULE_MODEL->getTargetMemberName(), $QUALIFIED_MODULE)}::{$RULE_MODEL->getTargetMember()->getName()}</a>
 						</td>
 						<td>
 							{if $RULE_MODEL->isReadOnly()}
@@ -48,18 +54,28 @@
 							{else}
 								{vtranslate('Read Write', $QUALIFIED_MODULE)}
 							{/if}
-						</td>
-						<td>
-							<span>
-								<a href="javascript:void(0);" class="edit" data-url="{$RULE_MODEL->getEditViewUrl()}"><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>
-								<span class="alignMiddle actionImagesAlignment"> <b>|</b></span>
-								<a href="javascript:void(0);" class="delete" data-url="{$RULE_MODEL->getDeleteActionUrl()}"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
-							</span>
+							
+							<div class="pull-right actions">
+								<span class="actionImages">
+									<a href="javascript:void(0);" class="edit" data-url="{$RULE_MODEL->getEditViewUrl()}"><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>
+									<span class="alignMiddle actionImagesAlignment"> <b>|</b></span>
+									<a href="javascript:void(0);" class="delete" data-url="{$RULE_MODEL->getDeleteActionUrl()}"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
+								</span>
+							</div>
+							
 						</td>
 					</tr>
 					{/foreach}
 				</tbody>
 			</table>
+			<div class="recordDetails hide">
+				<p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
+			</div>
+			{else}
+				<div class="recordDetails">
+					<p class="textAlignCenter">{vtranslate('LBL_CUSTOM_ACCESS_MESG', $QUALIFIED_MODULE)}.<!--<a href="">{vtranslate('LBL_CLICK_HERE', $QUALIFIED_MODULE)}</a>&nbsp;{vtranslate('LBL_CREATE_RULE_MESG', $QUALIFIED_MODULE)}--></p>
+				</div>
+			{/if}
 		</div>
 	</div>
 {/strip}

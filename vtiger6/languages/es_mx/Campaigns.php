@@ -6,14 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'Campaigns'                    => 'Campañas'                   , 
 	'SINGLE_Campaigns'             => 'Campaña'                    , 
-	'LBL_ADD_RECORD'               => 'Agregar Campaña'                , 
-	'LBL_RECORDS_LIST'             => 'Lista de campañas'              , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de campañas'           , 
+	'LBL_ADD_RECORD'               => 'Agregar Campaña'            , 
+	'LBL_RECORDS_LIST'             => 'Lista de campañas'          , 
 	'LBL_CAMPAIGN_INFORMATION'     => 'Información de Campaña'    , 
 	'LBL_EXPECTATIONS_AND_ACTUALS' => 'Expectativa y Real'          , 
 	'Campaign Name'                => 'Nombre de Campaña'          , 
@@ -51,7 +49,7 @@ $languageStrings = array(
 	'Average'                      => 'Normal'                      , 
 	'Poor'                         => 'Pobre'                       , 
 	'--None--'                     => '--Ninguno--'                 , 
-	'Contacted - Successful'       => 'Contactado - Éxito'   , 
-	'Contacted - Unsuccessful'     => 'Contactado - Fracaso' , 
+	'Contacted - Successful'       => 'Contactado - Éxito'         , 
+	'Contacted - Unsuccessful'     => 'Contactado - Fracaso'        , 
 	'Contacted - Never Contact Again' => 'Contactado - No volver a contactar', 
 );

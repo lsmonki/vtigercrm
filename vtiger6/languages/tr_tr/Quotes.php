@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Teklif'                      , 
 	'LBL_EXPORT_TO_PDF'            => 'PDF Olarak Aktar'            , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Teklfiler Listesi'           , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Teklfiler Listesi'           , 
 	'LBL_QUOTE_INFORMATION'        => 'Teklif Bilgisi'              , 
 	'Quote No'                     => 'Teklif No'                   , 
 	'Quote Stage'                  => 'Teklif Aşaması'            , 

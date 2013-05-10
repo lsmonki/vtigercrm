@@ -28,7 +28,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	 * @param <type> $value - id value
 	 * @return <Object> - current instance
 	 */
-	public function setId($value){
+	public function setId($value) {
 		return $this->set('id',$value);
 	}
 
@@ -173,12 +173,15 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	 * @param <String> $fieldName - field name for which values need to get
 	 * @return <String>
 	 */
-	public function getDisplayValue($fieldName,$recordId = false){
+	public function getDisplayValue($fieldName,$recordId = false) {
 		if(empty($recordId)) {
 			$recordId = $this->getId();
 		}
 		$fieldModel = $this->getModule()->getField($fieldName);
-		return $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
+		if($fieldModel) {
+			return $fieldModel->getDisplayValue($this->get($fieldName), $recordId, $this);
+		}
+		return false;
 	}
 
 	/**
@@ -189,6 +192,21 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	public function getField($fieldName) {
 		return $this->getModule()->getField($fieldName);
 	}
+
+	/**
+	 * Function returns all the field values in user format
+	 * @return <Array>
+	 */
+	public function getDisplayableValues() {
+		$displayableValues = array();
+		$data = $this->getData();
+		foreach($data as $fieldName=>$value) {
+			$fieldValue = $this->getDisplayValue($fieldName);
+			$displayableValues[$fieldName] = ($fieldValue) ? $fieldValue : $value;
+		}
+		return $displayableValues;
+	}
+
 	/**
 	 * Function to save the current Record Model
 	 */
@@ -250,7 +268,7 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 	public static function getSearchResult($searchKey, $module=false) {
 		$db = PearDatabase::getInstance();
 
-        $query = 'SELECT label, crmid, setype, createdtime
+		$query = 'SELECT label, crmid, setype, createdtime
 					FROM vtiger_crmentity WHERE label LIKE ? AND vtiger_crmentity.deleted = 0';
 		$params = array("%$searchKey%");
 
@@ -312,15 +330,15 @@ class Vtiger_Record_Model extends Vtiger_Base_Model {
 		return Users_Privileges_Model::isPermitted($this->getModuleName(), 'Delete', $this->getId());
 	}
 
-    /**
-     * Funtion to get Duplicate Record Url
-     * @return <String>
-     */
-    public function getDuplicateRecordUrl(){
-        $module = $this->getModule();
+	/**
+	 * Funtion to get Duplicate Record Url
+	 * @return <String>
+	 */
+	public function getDuplicateRecordUrl() {
+		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&view='.$module->getEditViewName().'&record='.$this->getId().'&isDuplicate=true';
 
-    }
+	}
 
 	/**
 	 * Function to get Display value for RelatedList

@@ -8,13 +8,13 @@
  *************************************************************************************/
 
 jQuery.Class("Vtiger_Helper_Js",{
-    
+
 	checkServerConfigResponseCache : '',
 	/*
-	 * Function to get the instance of Mass edit of Email 
+	 * Function to get the instance of Mass edit of Email
 	 */
 	getEmailMassEditInstance : function(){
-		
+
 		var className = 'Emails_MassEdit_Js';
 		var emailMassEditInstance = new window[className]();
 		return emailMassEditInstance
@@ -23,7 +23,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 	 * function to check server Configuration
 	 * returns boolean true or false
 	 */
-	
+
 	checkServerConfig : function(module){
 		var aDeferred = jQuery.Deferred();
 		var actionParams = {
@@ -49,7 +49,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 	 * @params dateFormat---user date format
 	 * @return date object
 	 */
-	
+
 	getDateInstance : function(dateTime,dateFormat){
 		var dateTimeComponents = dateTime.split(" ");
 		var dateComponent = dateTimeComponents[0];
@@ -65,7 +65,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 				var errorMsg = app.vtranslate("JS_INVALID_DATE");
 				throw errorMsg;
 		}
-        
+
 		//Before creating date object time is set to 00
 		//because as while calculating date object it depends system timezone
 		if(typeof timeComponent == "undefined"){
@@ -81,14 +81,14 @@ jQuery.Class("Vtiger_Helper_Js",{
 		if(typeof dateTimeComponents[2] != 'undefined') {
 			timeComponent += ' ' + dateTimeComponents[2];
             if(dateTimeComponents[2].toLowerCase() == 'pm' && timeSections[0] != '12') {
-                timeSections[0] = parseInt(timeSections[0]) + 12;
+                timeSections[0] = parseInt(timeSections[0], 10) + 12;
             }
 
             if(dateTimeComponents[2].toLowerCase() == 'am' && timeSections[0] == '12') {
                 timeSections[0] = '00';
             }
 		}
-        
+
         month = month-1;
 		var dateInstance = new Date(year,month,date,timeSections[0],timeSections[1],seconds);
         return dateInstance;
@@ -107,7 +107,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var emailsMassEditInstance = Vtiger_Helper_Js.getEmailMassEditInstance();
 		emailsMassEditInstance.showComposeEmailForm(params);
 	},
-	
+
 	/*
 	 * Function to get the compose email popup
 	 */
@@ -122,7 +122,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 			}
 		}
 		if(cacheResponse === ''){
-			var checkServerConfig = Vtiger_Helper_Js.checkServerConfig(module); 
+			var checkServerConfig = Vtiger_Helper_Js.checkServerConfig(module);
 			checkServerConfig.then(function(data){
 				Vtiger_Helper_Js.checkServerConfigResponseCache = data;
 				checkServerConfigPostOperations(Vtiger_Helper_Js.checkServerConfigResponseCache);
@@ -131,20 +131,20 @@ jQuery.Class("Vtiger_Helper_Js",{
 			checkServerConfigPostOperations(Vtiger_Helper_Js.checkServerConfigResponseCache);
 		}
 	},
-	
+
 	/*
 	 * Function to show the confirmation messagebox
 	 */
 	showConfirmationBox : function(data){
 		var aDeferred = jQuery.Deferred();
 		var bootBoxModal = bootbox.confirm(data['message'],app.vtranslate('LBL_NO'),app.vtranslate('LBL_YES'), function(result) {
-			if(result){   
+			if(result){
 				aDeferred.resolve();
 			} else{
 				aDeferred.reject();
 			}
 		});
-        
+
         bootBoxModal.on('hidden',function(e){
             //In Case of multiple modal. like mass edit and quick create, if bootbox is shown and hidden , it will remove
             // modal open
@@ -155,12 +155,12 @@ jQuery.Class("Vtiger_Helper_Js",{
         })
 		return aDeferred.promise();
 	},
-	
+
 	/*
 	 * Function to check Duplication of Account Name
 	 * returns boolean true or false
 	 */
-        
+
 	checkDuplicateName : function(details) {
 		var accountName = details.accountName;
 		var recordId = details.recordId;
@@ -191,12 +191,21 @@ jQuery.Class("Vtiger_Helper_Js",{
 		);
 		return aDeferred.promise();
 	},
-	
+
+	showMessage : function(params){
+		if(typeof params.type == "undefined"){
+			params.type = 'info';
+		}
+		params.animation = "show";
+		params.title = app.vtranslate('JS_MESSAGE'),
+		Vtiger_Helper_Js.showPnotify(params);
+	},
+
 	/*
 	 * Function to show pnotify message
 	 */
 	showPnotify : function(customParams) {
-		
+
 		var userParams = customParams;
 		if(typeof customParams == 'string') {
 			var userParams = {};
@@ -209,21 +218,20 @@ jQuery.Class("Vtiger_Helper_Js",{
 			type: 'error',
 			pnotify_history: false
 		}
-		
+
 		if(typeof userParams != 'undefined'){
 			var params = jQuery.extend(params,userParams);
 		}
-		jQuery.pnotify(params);
+		return jQuery.pnotify(params);
 	},
-	
-	/*
-	 * Function to add clickoutside event on the element - By using outside events plugin
-	 * @params element---On which element you want to apply the click outside event
-	 * @params callbackFunction---This function will contain the actions triggered after clickoutside event
-	 */
-	addClickOutSideEvent : function(element, callbackFunction) {
-		element.one('clickoutside',callbackFunction);
-	}
+    
+    /* 
+    * Function to add clickoutside event on the element - By using outside events plugin 
+    * @params element---On which element you want to apply the click outside event 
+    * @params callbackFunction---This function will contain the actions triggered after clickoutside event 
+    */ 
+    addClickOutSideEvent : function(element, callbackFunction) { 
+        element.one('clickoutside',callbackFunction); 
+    } 
 
-	
 },{});

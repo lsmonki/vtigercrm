@@ -6,22 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/ServiceContracts.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'ServiceContracts'             => 'Service Contracten'          , 
 	'SINGLE_ServiceContracts'      => 'Service Contract'            , 
-	'LBL_ADD_RECORD'               => 'Voeg Service Contract toe'        , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Service Contracten Lijst'      , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Service Contracten Samenvatting'   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Service Contract toe'   , 
+	'LBL_RECORDS_LIST'             => 'Service Contracten Lijst'    , 
 	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Service Contract Informatie' , 
 	'Contract No'                  => 'Contract Nr'                 , 
 	'Start Date'                   => 'Startdatum'                  , 

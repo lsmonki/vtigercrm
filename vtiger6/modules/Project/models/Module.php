@@ -33,15 +33,4 @@ class Project_Module_Model extends Vtiger_Module_Model {
 		$taskModel = Vtiger_Module_Model::getInstance('ProjectTask');
 		return $taskModel->getListViewUrl();
 	}
-	
-	/**
-	 * Function to get list of field for summary view
-	 * @return <array> fields list
-	 */
-	public function getSummaryViewFieldsList() {
-		return array(
-				'targetenddate',
-				'assigned_user_id'				
-		);
-	}
 }

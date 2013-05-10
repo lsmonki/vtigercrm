@@ -874,17 +874,17 @@ class ListViewController {
 						$value = ' --';
 					}
 				}elseif ($field->getFieldDataType() == 'picklist') {
-					//To not check for permissions for non admin users for task
-                    if($module == 'Calendar' && $value == 'Task') {
-                        $value = getTranslatedString($value,$module);
+					//not check for permissions for non admin users for status and activity type field
+                    if($module == 'Calendar' && ($fieldName == 'taskstatus' || $fieldName == 'eventstatus' || $fieldName == 'activitytype')) {
+                        $value = Vtiger_Language_Handler::getTranslatedString($value,$module);
 						$value = textlength_check($value);
                     }
 					else if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
 							!in_array($value, $this->picklistValueMap[$fieldName])) {
-						$value = "<font color='red'>".getTranslatedString('LBL_NOT_ACCESSIBLE',
+						$value = "<font color='red'>". Vtiger_Language_Handler::getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
 					} else {
-						$value = getTranslatedString($value,$module);
+						$value =  Vtiger_Language_Handler::getTranslatedString($value,$module);
 						$value = textlength_check($value);
 					}
 				}elseif($field->getFieldDataType() == 'date' || $field->getFieldDataType() == 'datetime') {
@@ -954,6 +954,11 @@ class ListViewController {
 						$value = '<a class="emailField" href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
 					}
 				} elseif($field->getFieldDataType() == 'boolean') {
+					if ($value === 'on') {
+						$value = 1;
+					} else if ($value == 'off') {
+						$value = 0;
+					}
 					if($value == 1) {
 						$value = getTranslatedString('yes',$module);
 					} elseif($value == 0) {
@@ -962,8 +967,7 @@ class ListViewController {
 						$value = '--';
 					}
 				} elseif($field->getUIType() == 98) {
-					$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab='.
-						'Settings&roleid='.$value.'">'.textlength_check(getRoleName($value)).'</a>';
+					$value = '<a href="index.php?module=Roles&parent=Settings&view=Edit&record='.$value.'">'.textlength_check(getRoleName($value)).'</a>';
 				} elseif($field->getFieldDataType() == 'multipicklist') {
 					$value = ($value != "") ? str_replace(' |##| ',', ',$value) : "";
 					if(!$is_admin && $value != '') {

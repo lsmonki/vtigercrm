@@ -23,6 +23,7 @@
 		<input type="hidden" name="selected_sort_fields" id="selected_sort_fields" value={$REPORT_MODEL->get('selected_sort_fields')} />
 		<input type="hidden" name="selected_calculation_fields" id="calculation_fields" value={$REPORT_MODEL->get('calculation_fields')} />
 		<input type="hidden" name="advanced_filter" id="advanced_filter" value="" />
+		<input type="hidden" name="isDuplicate" value="{$IS_DUPLICATE}" />
 		<input type="hidden" class="step" value="3" />
         <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		{assign var=RECORD_STRUCTURE value=array()}
@@ -30,7 +31,11 @@
 		{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$PRIMARY_MODULE_RECORD_STRUCTURE->getStructure()}
 			{assign var=PRIMARY_MODULE_BLOCK_LABEL value=vtranslate($BLOCK_LABEL, $PRIMARY_MODULE)}
 			{assign var=key value="$PRIMARY_MODULE_LABEL $PRIMARY_MODULE_BLOCK_LABEL"}
-			{$RECORD_STRUCTURE[$key] = $BLOCK_FIELDS}
+			{if $LINEITEM_FIELD_IN_CALCULATION eq false && $BLOCK_LABEL eq 'LBL_ITEM_DETAILS'}
+				{* dont show the line item fields block when Inventory fields are selected for calculations *}
+			{else}
+				{$RECORD_STRUCTURE[$key] = $BLOCK_FIELDS}
+			{/if}
 		{/foreach}
 		{foreach key=MODULE_LABEL item=SECONDARY_MODULE_RECORD_STRUCTURE from=$SECONDARY_MODULE_RECORD_STRUCTURES}
 			{assign var=SECONDARY_MODULE_LABEL value=vtranslate($MODULE_LABEL, $MODULE_LABEL)}

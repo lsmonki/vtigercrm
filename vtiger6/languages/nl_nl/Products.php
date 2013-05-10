@@ -6,31 +6,21 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Products.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'Products'                     => 'Producten'                   , 
 	'SINGLE_Products'              => 'Product'                     , 
-	'LBL_ADD_RECORD'               => 'Voeg Product toe'            , // KEY 5.x: LBL_ADD_PRODUCT
-	'LBL_RECORDS_LIST'             => 'Productenlijst'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Producten Samenvatting'            , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Product toe'            , 
+	'LBL_RECORDS_LIST'             => 'Productenlijst'              , 
 	'LBL_PRODUCT_INFORMATION'      => 'Productinformatie'           , 
 	'LBL_IMAGE_INFORMATION'        => 'Productafbeeldingen:'        , 
 	'LBL_STOCK_INFORMATION'        => 'Voorraad informatie:'        , 
 	'LBL_MORE_CURRENCIES'          => 'meer valuta'                 , 
-	'LBL_PRICES'                   => 'Productprijzen'              , // KEY 5.x: LBL_PRODUCT_PRICES
+	'LBL_PRICES'                   => 'Productprijzen'              , 
 	'LBL_PRICE'                    => 'Prijs'                       , 
 	'LBL_RESET_PRICE'              => 'Reset Prijs'                 , 
 	'LBL_RESET'                    => 'Reset'                       , 
-	'LBL_ADD_TO_PRICEBOOKS'        => 'Voeg toe aan Prijslijsten'           , // TODO: Review
+	'LBL_ADD_TO_PRICEBOOKS'        => 'Voeg toe aan Prijslijsten'   , 
 	'Product No'                   => 'Product Nr'                  , 
 	'Part Number'                  => 'Partnummer'                  , 
 	'Product Active'               => 'Product actief'              , 
@@ -81,4 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Vel'                         , 
 	'Spiral Binder'                => 'Spiraal Map'                 , 
 	'Sq Ft'                        => 'Vierkante meter'             , 
+	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
 );

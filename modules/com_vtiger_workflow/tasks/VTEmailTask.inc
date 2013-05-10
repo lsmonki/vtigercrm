@@ -21,8 +21,15 @@ class VTEmailTask extends VTTask{
 	public function doTask($entity){
 		global $adb, $current_user;
 		$util = new VTWorkflowUtils();
+		
+		$from_userid = 1; // Default user-email = Administrator.
+		// Send email as owner of the record (if not 
+		$entityOwnerId = $entity->get('assigned_user_id');
+		if ($entityOwnerId) {
+			list ($moduleid, $from_userid) = explode('x', $entityOwnerId);
+		}
 
-		$result = $adb->query("select user_name, email1, email2 from vtiger_users where id=1");
+		$result = $adb->pquery("select user_name, email1, email2 from vtiger_users where id=?", array($from_userid));
 		$from_email = $adb->query_result($result,0,'email1');
 		$from_name  = $adb->query_result($result,0,'user_name');
 

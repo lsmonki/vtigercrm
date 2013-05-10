@@ -4342,7 +4342,7 @@ function getSettingsBlocks(){
  */
 function getSettingsFields(){
 	global $adb;
-	$sql = "select * from vtiger_settings_field where blockid!=? and active=0 order by blockid,sequence";
+	$sql = "select * from vtiger_settings_field where blockid!=? and active=0 and name != 'LBL_EDIT_FIELDS' order by blockid,sequence";
 	$result = $adb->pquery($sql, array(getSettingsBlockId('LBL_MODULE_MANAGER')));
 	$count = $adb->num_rows($result);
 	$fields = array();
@@ -5229,5 +5229,27 @@ function getExportRecordIds($moduleName, $viewid, $input) {
 		$export_data = 'selecteddata';
 	}
 	return $idstring. '#@@#' .$export_data;
+}
+
+/**
+ * Function to get combinations of string from Array
+ * @param <Array> $array
+ * @param <String> $tempString
+ * @return <Array>
+ */
+function getCombinations($array, $tempString = '') {
+	for ($i=0; $i<count($array); $i++) {
+		$splicedArray = $array;
+		$element = array_splice($splicedArray, $i, 1);// removes and returns the i'th element
+		if (count($splicedArray) > 0) {
+			 if(!is_array($result)) {
+				 $result = array();
+			 }
+			 $result = array_merge($result, getCombinations($splicedArray, $tempString .' ' . $element[0]));
+		} else {
+			return array(trim($tempString. ' ' . $element[0]));
+		}
+	}
+	return $result;
 }
 ?>

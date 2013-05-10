@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Ordine di Vendita'           , 
 	'LBL_EXPORT_TO_PDF'            => 'Esporta in PDF'              , 
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Lista Ordini di Vendita'     , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Sales Order Summary'         , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Lista Ordini di Vendita'     , 
 	'LBL_SO_INFORMATION'           => 'Informazioni Ordine di Vendita', 
 	'SalesOrder No'                => 'No. Ordini di Vendita'       , 
 	'Quote Name'                   => 'Nome Preventivo'             , 
@@ -30,8 +30,8 @@ $languageStrings = array(
 	'Payment Duration'             => 'Durata pagamento'            , 
 	'Invoice Status'               => 'Stato fattura'               , 
 	'Sub Total'                    => 'Sub totale'                  , 
-	'AutoCreated'                  => 'AutoCreated'                 , // TODO: Review
-	'Sent'                         => 'Sent'                        , // TODO: Review
-	'Credit Invoice'               => 'Credit Invoice'              , // TODO: Review
-	'Paid'                         => 'Paid'                        , // TODO: Review
+	'AutoCreated'                  => 'AutoCreated'                 , 
+	'Sent'                         => 'Sent'                        , 
+	'Credit Invoice'               => 'Credit Invoice'              , 
+	'Paid'                         => 'Paid'                        , 
 );

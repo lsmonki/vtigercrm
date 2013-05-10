@@ -88,10 +88,10 @@ $languageStrings = array(
 
 $jsLanguageStrings = array(
 	'LBL_ADD_EVENT_TASK' => 'Add Event/Task',
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your calendar',
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar',
     'LBL_SYNC_BUTTON' => 'Synchronize Now',
     'LBL_SYNCRONIZING' => 'Synchronizing....',
     'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
     'LBL_FIELD_MAPPING' => 'Field Mapping',
-    'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related contacts for leads'
+    'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
 );

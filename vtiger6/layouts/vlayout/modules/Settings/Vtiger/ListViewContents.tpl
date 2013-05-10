@@ -10,74 +10,86 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="well listViewActionsDiv">
-	<span class="btn-toolbar">
-		{vtranslate($MODULE, $QUALIFIED_MODULE)}
-	</span>
-	<span class="pageNavigation pull-right">
-		<span class="pageNumbers">{$PAGING_MODEL->getRecordStartRange()} to {$PAGING_MODEL->getRecordEndRange()}</span>
-		<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
-		<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
-		<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
-		<span class="btn btn-mini" id="listViewPreviousPageButton"><span class="icon-chevron-left"></span></span>
-		<span class="btn btn-mini" id="listViewNextPageButton"><span class="icon-chevron-right"></span></span>
-	</span>
-</div>		
-<div class="listViewEntriesDiv">
-	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
-	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
+<input type="hidden" id="listViewEntriesCount" value="{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
+<input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
+<input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
+<input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
+<input type="hidden" id="pageNumberValue" value= "{$PAGE_NUMBER}"/>
+<input type="hidden" id="pageLimitValue" value= "{$PAGING_MODEL->getPageLimit()}" />
+<input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
+<input type="hidden" value="{$ORDER_BY}" id="orderBy">
+<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
+<input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
+
+<div class="listViewEntriesDiv" style='overflow-x:auto;'>
 	<span class="listViewLoadingImageBlock hide modal" id="loadingListViewModal">
 		<img class="listViewLoadingImage" src="{vimage_path('loading.gif')}" alt="no-image" title="{vtranslate('LBL_LOADING', $MODULE)}"/>
 		<p class="listViewLoadingMsg">{vtranslate('LBL_LOADING_LISTVIEW_CONTENTS', $MODULE)}........</p>
 	</span>
 	{assign var="NAME_FIELDS" value=$MODULE_MODEL->getNameFields()}
-	<table class="table table-bordered table-condensed table-striped listViewEntriesTable">
+	<table class="table table-bordered table-condensed listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
+				<th width="1%"></th>
+				{assign var=WIDTH value={99/(count($LISTVIEW_HEADERS))}}
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<td>
-					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('name')}">{vtranslate($LISTVIEW_HEADER->get('label'), $QUALIFIED_MODULE)}
-						{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('name')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE)}">{/if}</a>
-				</td>
+				<th width="{$WIDTH}%" nowrap {if $LISTVIEW_HEADER@last}colspan="2" {/if}>
+					<a  {if !($LISTVIEW_HEADER->has('sort'))} class="listViewHeaderValues cursorPointer" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('name')}" {/if}>{vtranslate($LISTVIEW_HEADER->get('label'), $QUALIFIED_MODULE)}
+						{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('name')}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
+				</th>
 				{/foreach}
 			</tr>
 		</thead>
+		<tbody>
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES}
-		<tr class="listViewEntries" data-id={$LISTVIEW_ENTRY->getId()}>
-			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			{assign var=LAST_COLUMN value=$LISTVIEW_HEADER@last}
-			{if $LAST_COLUMN}<td><div class="row-fluid">{else}<td>{/if}
-				{if $LAST_COLUMN}<div class="span9">{/if}	
-					{if isset($NAME_FIELDS[$LISTVIEW_HEADER->get('name')]) eq true}
-					<a href="{$LISTVIEW_ENTRY->getDetailViewUrl()}">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
-					{else}
-					{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
-					{/if}
-				{if $LAST_COLUMN}</div>{/if}	
-				{if $LAST_COLUMN && $LISTVIEW_ENTRY->getRecordLinks()}
-				<div class="pull-right actions">
-					<span class="actionImages">
-						{foreach item=RECORD_LINK from=$LISTVIEW_ENTRY->getRecordLinks()}
-							{assign var="RECORD_LINK_URL" value=$RECORD_LINK->getUrl()}
-							<a href='{$RECORD_LINK_URL}' {if stripos($RECORD_LINK_URL, 'javascript:')===0}onclick='{$RECORD_LINK_URL|substr:strlen("javascript:")};return false;'{/if}><i class="{$RECORD_LINK->getIcon()} alignMiddle"></i></a>
-							{if !$RECORD_LINK@last}
-							<span class="alignMiddle actionImagesAlignment"><b>|</b></span>
-							{/if}
-						{/foreach}
-					</span>
-				</div>
+			<tr class="listViewEntries" data-id="{$LISTVIEW_ENTRY->getId()}"
+					{if method_exists($LISTVIEW_ENTRY,'getDetailViewUrl')}data-recordurl="{$LISTVIEW_ENTRY->getDetailViewUrl()}"{/if}
+			 >
+			<td width="1%" nowrap>
+				{if $MODULE eq 'CronTasks'}
+					<img src="{vimage_path('drag.png')}" class="alignTop" title="{vtranslate('LBL_DRAG',$QUALIFIED_MODULE)}" />
 				{/if}
-			{if $LAST_COLUMN}</div>{/if}	
 			</td>
-			{/foreach}
-		</tr>
+				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
+					{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
+					{assign var=LAST_COLUMN value=$LISTVIEW_HEADER@last}
+					<td class="listViewEntryValue"  width="{$WIDTH}%" nowrap>
+						&nbsp;{$LISTVIEW_ENTRY->getDisplayValue($LISTVIEW_HEADERNAME)}
+						{if $LAST_COLUMN && $LISTVIEW_ENTRY->getRecordLinks()}
+							<div class="pull-right actions">
+								<span class="actionImages">
+									{foreach item=RECORD_LINK from=$LISTVIEW_ENTRY->getRecordLinks()}
+										{assign var="RECORD_LINK_URL" value=$RECORD_LINK->getUrl()}
+										<a {if stripos($RECORD_LINK_URL, 'javascript:')===0} onclick="{$RECORD_LINK_URL|substr:strlen("javascript:")};if(event.stopPropagation){ldelim}event.stopPropagation();{rdelim}else{ldelim}event.cancelBubble=true;{rdelim}" {else} href='{$RECORD_LINK_URL}' {/if}>
+											<i class="{$RECORD_LINK->getIcon()} alignMiddle" title="{vtranslate($RECORD_LINK->getLabel(), $QUALIFIED_MODULE)}"></i>
+										</a>
+										{if !$RECORD_LINK@last}
+											&nbsp;&nbsp;
+										{/if}
+									{/foreach}
+								</span>
+							</div>
+						{/if}
+					</td>
+				{/foreach}
+			</tr>
 		{/foreach}
+		</tbody>
 	</table>
 
 	<!--added this div for Temporarily -->
 	{if $LISTVIEW_ENTIRES_COUNT eq '0'}
-	<div class="span7 emptyRecordsDiv">NO {$MODULE} found.Click on add {$MODULE}</div>
+	<table class="emptyRecordsDiv">
+		<tbody>
+			<tr>
+				<td>
+					{vtranslate('LBL_NO')} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND')}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	{/if}
 </div>
 {/strip}

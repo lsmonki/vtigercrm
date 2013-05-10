@@ -9,10 +9,9 @@
  ************************************************************************************/
 $languageStrings = array(
 	'HelpDesk'                     => 'Casos'                       , 
-	'SINGLE_HelpDesk'              => 'Caso'                      , 
-	'LBL_ADD_RECORD'               => 'Agregar Ticket'                  , 
-	'LBL_RECORDS_LIST'             => 'Lista de casos'                 , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen del Caso'              , 
+	'SINGLE_HelpDesk'              => 'Caso'                        , 
+	'LBL_ADD_RECORD'               => 'Agregar Ticket'              , 
+	'LBL_RECORDS_LIST'             => 'Lista de casos'              , 
 	'LBL_TICKET_INFORMATION'       => 'Información del Caso'       , 
 	'LBL_TICKET_RESOLUTION'        => 'Solución Propuesta'         , 
 	'Ticket No'                    => 'Núm. Caso'                  , 
@@ -20,7 +19,7 @@ $languageStrings = array(
 	'Update History'               => 'Histórico de Actualizaciones', 
 	'Hours'                        => 'Horas'                       , 
 	'Days'                         => 'Días'                       , 
-	'Title'                        => 'Referencia'                 , 
+	'Title'                        => 'Referencia'                  , 
 	'Solution'                     => 'Solución'                   , 
 	'From Portal'                  => 'Proviene del Portal'         , 
 	'Big Problem'                  => 'Problema Grave'              , 
@@ -37,7 +36,7 @@ $languageStrings = array(
 	'Wait For Response'            => 'Esperando Respuesta'         , 
 	'Closed'                       => 'Cerrada'                     , 
 	'LBL_STATUS'                   => 'Estado'                      , 
-	'LBL_SEVERITY'                 => 'Importancia'                 , // KEY 5.x: Severity
-	'LBL_CONVERT_FAQ'              => 'Convertir a FAQ'              , 
+	'LBL_SEVERITY'                 => 'Importancia'                 , 
+	'LBL_CONVERT_FAQ'              => 'Convertir a FAQ'             , 
 	'LBL_RELATED_TO'               => 'Relacionado Con'             , 
 );

@@ -49,20 +49,28 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 	}
 
 	/**
-	 * Function to get the Edit View Url for the Role
+	 * Function to get the Edit View Url for the Group
 	 * @return <String>
 	 */
 	public function getEditViewUrl() {
-		return '?module=Groups&parent=Settings&view=Edit&record=' . $this->getId();
+		return '?module=Groups&parent=Settings&view=Edit&record='.$this->getId();
 	}
 
 	/**
-	 * Function to get the Delete Action Url for the current role
+	 * Function to get the Delete Action Url for the current group
 	 * @return <String>
 	 */
 	public function getDeleteActionUrl() {
-		return '?module=Groups&parent=Settings&view=DeleteAjax&record=' . $this->getId();
+		return 'index.php?module=Groups&parent=Settings&view=DeleteAjax&record='.$this->getId();
 	}
+    
+    /**
+	 * Function to get the Detail Url for the current group
+	 * @return <String>
+	 */
+    public function getDetailViewUrl() {
+        return '?module=Groups&parent=Settings&view=Detail&record='.$this->getId();
+    }
 
 	/**
 	 * Function to get all the members of the groups
@@ -198,7 +206,7 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 			array(
 				'linktype' => 'LISTVIEWRECORD',
 				'linklabel' => 'LBL_DELETE_RECORD',
-				'linkurl' => 'javascript:app.showModalWindow(null, "'.$this->getDeleteActionUrl().'");',
+				'linkurl' => "javascript:Settings_Vtiger_List_Js.triggerDelete(event,'".$this->getDeleteActionUrl()."')",
 				'linkicon' => 'icon-trash'
 			)
 		);

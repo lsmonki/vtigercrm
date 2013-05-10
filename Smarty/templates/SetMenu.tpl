@@ -11,6 +11,8 @@
  ********************************************************************************/
 
 -->*}
+
+{if $smarty.cookies.vtigerui neq 6}
 {php}
 	//add the settings page values
 	$this->assign("BLOCKS",getSettingsBlocks());
@@ -79,3 +81,5 @@
 							}
 {/literal}
 						</script>
+
+{/if}

@@ -7,7 +7,120 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Vtiger_Detail_Js("Users_Detail_Js",{},{
+Vtiger_Detail_Js("Users_Detail_Js",{
+	
+	triggerChangePassword : function (CHPWActionUrl, module){
+		AppConnector.request(CHPWActionUrl).then(
+			function(data) {
+				if(data) {
+					var callback = function(data) {
+						var params = app.validationEngineOptions;
+						params.onValidationComplete = function(form, valid){
+							if(valid){
+								Users_Detail_Js.savePassword(form)
+							}
+							return false;
+						}
+						jQuery('#changePassword').validationEngine(app.validationEngineOptions);
+					}
+					app.showModalWindow(data, function(data){
+						if(typeof callback == 'function'){
+							callback(data);
+						}
+					});
+				}
+			}
+		);
+	},
+	
+	savePassword : function(form){
+		var new_password  = form.find('[name="new_password"]');
+		var confirm_password = form.find('[name="confirm_password"]');
+		var old_password  = form.find('[name="old_password"]');
+		var userid = form.find('[name="userid"]').val();
+		
+		if(new_password.val() == confirm_password.val()){
+			var params = {
+				'module': app.getModuleName(),
+				'action' : "SaveAjax",
+				'mode' : 'savePassword',
+				'old_password' : old_password.val(),
+				'new_password' : new_password.val(),
+				'userid' : userid
+			}
+			AppConnector.request(params).then(
+				function(data) {
+					if(data.success){
+						app.hideModalWindow();
+						Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.message));
+					}else{
+						old_password.validationEngine('showPrompt', app.vtranslate(data.error.message) , 'error','topLeft',true);
+						return false;
+					}
+				}
+			);
+		} else {
+			new_password.validationEngine('showPrompt', app.vtranslate('JS_REENTER_PASSWORDS') , 'error','topLeft',true);
+			return false;
+		}
+	},
+	
+	/*
+	 * function to trigger delete record action
+	 * @params: delete record url.
+	 */
+    deleteRecord : function(deleteRecordActionUrl) {
+		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
+				AppConnector.request(deleteRecordActionUrl).then(
+				function(data){
+					if(data){
+						var callback = function(data) {
+						var params = app.validationEngineOptions;
+						params.onValidationComplete = function(form, valid){
+							if(valid){
+								Users_Detail_Js.deleteUser(form)
+							}
+							return false;
+						}
+						jQuery('#deleteUser').validationEngine(app.validationEngineOptions);
+					}
+					app.showModalWindow(data, function(data){
+						if(typeof callback == 'function'){
+							callback(data);
+						}
+					});
+					}
+				});
+			},
+			function(error, err){
+			}
+		);
+	},
+	
+	deleteUser: function (form){
+		var userid = form.find('[name="userid"]').val();
+		var transferUserId = form.find('[name="tranfer_owner_id"]').val();
+		
+		var params = {
+				'module': app.getModuleName(),
+				'action' : "DeleteAjax",
+				'mode' : 'deleteUser',
+				'transfer_user_id' : transferUserId,
+				'userid' : userid
+			}
+			console.log(params);
+		AppConnector.request(params).then(
+			function(data) {
+				if(data.success){
+					app.hideModalWindow();
+					var url = data.result.listViewUrl;
+					window.location.href=url;
+				}
+			}
+		);
+	}
+},{
 	
 	usersEditInstance : false,
 	
@@ -37,7 +150,7 @@ Vtiger_Detail_Js("Users_Detail_Js",{},{
 	},
 	
 	registerEvents : function() {
-        this._super();
+		this._super();
 		var form = this.getForm();
 		this.usersEditInstance = Vtiger_Edit_Js.getInstance();
 		this.updateStartHourElement(form);

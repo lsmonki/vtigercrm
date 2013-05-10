@@ -40,13 +40,13 @@
 						{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_TO', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{if $TOTAL_ENTRIES} {vtranslate('LBL_OF', $RELATED_MODULE->get('name'))} {$TOTAL_ENTRIES}{/if}{/if}
 						</span>
 					</span>
-					
+
 						<div class="span5 btn-group pull-right">
-							<button class="btn" id="listViewPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
-							<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+							<button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
+							<button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
 								<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
 							</button>
-							<ul class="listViewBasicAction dropdown-menu" id="listViewPageJumpDropDown">
+							<ul class="listViewBasicAction dropdown-menu" id="relatedListPageJumpDropDown">
 								<li>
 									<span class="row-fluid">
 										<span class="span3"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
@@ -60,7 +60,7 @@
 									</span>
 								</li>
 							</ul>
-							<button class="btn" id="listViewNextPageButton" {if !$PAGING->isNextPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
+							<button class="btn" id="relatedListNextPageButton" {if !$PAGING->isNextPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
 						</div>
 					</span>
 				</span>
@@ -72,8 +72,8 @@
 			<thead>
 				<tr class="listViewHeaders">
 					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-						<th>
-							<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('name')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
+						<th nowrap {if $HEADER_FIELD@last} colspan="2" {/if}>
+							<a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('name')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
 								&nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}<img class="{$SORT_IMAGE} icon-white">{/if}
 							</a>
 						</th>
@@ -85,7 +85,7 @@
 				<tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
 					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
 						{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
-						<td>
+						<td nowrap>
 						{if $HEADER_FIELD->get('name') == 'listprice'}
 								{$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
 								{assign var="LISTPRICE" value=$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
@@ -95,6 +95,7 @@
 							{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
 						{/if}
 						{if $HEADER_FIELD@last}
+						</td><td nowrap>
 						<div class="pull-right actions">
 							<span class="actionImages">
 								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
@@ -105,6 +106,7 @@
 								<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
 							</span>
 						</div>
+						</td>
 						{/if}
 						</td>
 					{/foreach}

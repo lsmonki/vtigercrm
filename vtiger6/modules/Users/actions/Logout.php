@@ -9,10 +9,13 @@
  ************************************************************************************/
 
 class Users_Logout_Action extends Vtiger_Action_Controller {
+	
+	function checkPermission(Vtiger_Request $request) {
+		return true;
+	}
 
 	function process(Vtiger_Request $request) {
 		Vtiger_Session::destroy();
-		
 		header ('Location: index.php');
 	}
 }

@@ -17,7 +17,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td>
+		<td data-import-upload-size="{$IMPORT_UPLOAD_SIZE}">
 			<input type="hidden" name="type" value="csv" />
 			<input type="hidden" name="is_scheduled" value="1" />
 			<input type="file" name="import_file" id="import_file" onchange="ImportJs.checkFileType()"/>

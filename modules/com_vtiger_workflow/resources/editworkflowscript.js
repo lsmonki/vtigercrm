@@ -590,6 +590,7 @@ function editworkflowscript($, conditions){
 					if(conditions){
 						$.each(conditions, function(i, condition){
 							var fieldname = condition["fieldname"];
+							if(fieldname == "") return;
 							var groupid = condition["groupid"];
 							if(groupid == '') groupid = 0;
 							addCondition(groupid, condno);

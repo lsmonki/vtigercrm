@@ -25,7 +25,7 @@ require_once 'include/utils/CommonUtils.php';
   *   $attachment	-- whether we want to attach the currently selected file or all vtiger_files.[values = current,all] - optional
   *   $emailid		-- id of the email object which will be used to get the vtiger_attachments
   */
-function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='')
+function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='', $useGivenFromEmailAddress=false)
 {
 
 	global $adb, $log;
@@ -56,7 +56,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	} else {
 		$replyToEmail = $from_email_field;
 	}
-	if(isset($from_email_field) && $from_email_field!=''){
+	if(isset($from_email_field) && $from_email_field!='' && !$useGivenFromEmailAddress){
 		//setting from _email to the defined email address in the outgoing server configuration
 		$from_email = $from_email_field;
 	}
@@ -189,7 +189,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$num_rows = $adb->num_rows($rs);
 	if($num_rows > 0)
 		$from_name = getFullNameFromQResult($rs, 0, 'Users');
-	
+
 	$mail->FromName = decode_html($from_name);
 
 //	$mail->Sender= getReturnPath($mail->Host);
@@ -559,7 +559,7 @@ function getDefaultAssigneeEmailIds($groupId) {
 		$userGroups = new GetGroupUsers();
 		$userGroups->getAllUsersInGroup($groupId);
 		$result = $adb->pquery('SELECT email1,email2,secondaryemail FROM vtiger_users WHERE vtiger_users.id IN
-											('.  generateQuestionMarks($userGroups->group_users).')',
+									('.  generateQuestionMarks($userGroups->group_users).') AND status = "Active"',
 								array($userGroups->group_users));
 		$rows = $adb->num_rows($result);
 		for($i = 0;$i < $rows; $i++) {

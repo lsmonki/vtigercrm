@@ -26,6 +26,8 @@ class Users_UI5_Action extends Vtiger_Action_Controller {
 			if ($module == 'Vtiger') $module = '';
 		}
 		
+        
+        
 		if (isset($params['view'])) {
 			if ($params['view'] == 'Detail') {
 				if ($module == 'Reports') {
@@ -59,6 +61,15 @@ class Users_UI5_Action extends Vtiger_Action_Controller {
 		if (isset($params['mode'])) {
 			$mode = $params['mode'];
 		}
+        
+        if(isset($params['parent'])) {
+            //redirect to settings index page
+            $module = 'Settings';
+            $action = 'index';
+            //empty if any record or mode
+            $record = '';
+            $mode = '';
+        }
 		
 		$url = '../index.php?';
 		if ($module) $url .= "&module=" . $module;

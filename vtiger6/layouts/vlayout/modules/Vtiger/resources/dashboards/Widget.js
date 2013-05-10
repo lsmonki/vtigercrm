@@ -178,7 +178,9 @@ jQuery.Class('Vtiger_Widget_Js',{
 			params.data = jQuery.extend(params.data, this.getFilterData())
 		}
 		var refreshContainer = parent.find('.refresh');
-		refreshContainer.progressIndicator();
+		refreshContainer.progressIndicator({
+			'smallLoadingImage' : true
+		});
 		AppConnector.request(params).then(
 			function(data){
 				refreshContainer.progressIndicator({'mode': 'hide'});
@@ -194,6 +196,7 @@ jQuery.Class('Vtiger_Widget_Js',{
 		var thisInstance = this;
 		var container = this.getContainer();
 		var dateRangeElement = container.find('input.dateRange');
+		var dateChanged = false;
 		if(dateRangeElement.length <= 0) {
 			return;
 		}
@@ -202,11 +205,18 @@ jQuery.Class('Vtiger_Widget_Js',{
 			mode: 'range',
 			className : 'rangeCalendar',
 			onChange: function(formated) {
+				dateChanged = true;
 				var element = jQuery(this).data('datepicker').el;
 				jQuery(element).val(formated);
 			},
 			onHide : function() {
-				container.find('a[name="drefresh"]').trigger('click');
+				if(dateChanged){
+					container.find('a[name="drefresh"]').trigger('click');
+					dateChanged = false;
+				}
+			},
+			onBeforeShow : function(elem) {
+				jQuery(elem).css('z-index','3');
 			}
 		}
 		dateRangeElement.addClass('dateField').attr('data-date-format',thisInstance.getUserDateFormat());

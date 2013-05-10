@@ -9,12 +9,11 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ModComments'           => 'Comentário'                 , 
-	'LBL_RECORDS_LIST'             => 'Comments List'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Comments Summary'            , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Comments List'               , 
 	'LBL_MODCOMMENTS_INFORMATION'  => 'Informação Comentários'   , 
 	'LBL_OTHER_INFORMATION'        => 'Outras Informações'        , 
-	'LBL_ADDING_COMMENT'           => 'Adding Comment'              , // TODO: Review
-	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Enter comments here'         , // TODO: Review
+	'LBL_ADDING_COMMENT'           => 'Adding Comment'              , 
+	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Enter comments here'         , 
 	'Comment'                      => 'Comentário'                 , 
 	'Creator'                      => 'Criador'                     , 
 	'Related To Comments'          => 'Comentário Pai'             , 

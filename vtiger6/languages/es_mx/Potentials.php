@@ -6,14 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'Potentials'                   => 'Oportunidades'               , 
 	'SINGLE_Potentials'            => 'Oportunidad'                 , 
-	'LBL_ADD_RECORD'               => 'Agregar Oportunidad'             , 
-	'LBL_RECORDS_LIST'             => 'Lista de oportunidades'          , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Oportunidades'       , 
+	'LBL_ADD_RECORD'               => 'Agregar Oportunidad'         , 
+	'LBL_RECORDS_LIST'             => 'Lista de oportunidades'      , 
 	'LBL_OPPORTUNITY_INFORMATION'  => 'Información de Oportunidad:', 
 	'Potential No'                 => 'Núm. Oportunidad'           , 
 	'Amount'                       => 'Importe'                     , 
@@ -21,12 +19,12 @@ $languageStrings = array(
 	'Sales Stage'                  => 'Fase de Venta'               , 
 	'Probability'                  => 'Probabilidad'                , 
 	'Campaign Source'              => 'Campaña Origen'             , 
-	'Forecast Amount'              => 'Importe del presupuesto'             , 
-	'Funnel'                       => 'Embudo de ventas'                , 
+	'Forecast Amount'              => 'Importe del presupuesto'     , 
+	'Funnel'                       => 'Embudo de ventas'            , 
 	'Potentials by Stage'          => 'Oportunidades por fase'      , 
-	'Total Revenue'                => 'Ingresos por Vendedor'      , 
-	'Top Potentials'               => 'Oportunidades más importantes'           , 
-	'Forecast'                     => 'Presupuesto de ventas'              , 
+	'Total Revenue'                => 'Ingresos por Vendedor'       , 
+	'Top Potentials'               => 'Oportunidades más importantes', 
+	'Forecast'                     => 'Presupuesto de ventas'       , 
 	'Prospecting'                  => 'Investigando'                , 
 	'Qualification'                => 'Calificando'                 , 
 	'Needs Analysis'               => 'Necesita Análisis'          , 
@@ -40,5 +38,7 @@ $languageStrings = array(
 	'--None--'                     => '-----'                       , 
 	'Existing Business'            => 'Negocio Existente'           , 
 	'New Business'                 => 'Nuevo Negocio'               , 
-	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Fecha esperada de cierre'        , 
+	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Fecha esperada de cierre'    , 
+	'LBL_RELATED_CONTACTS'         => 'Related Contacts'            , // TODO: Review
+	'LBL_RELATED_PRODUCTS'         => 'Related Products'            , // TODO: Review
 );

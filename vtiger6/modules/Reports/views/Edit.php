@@ -111,6 +111,10 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('MODULE', $moduleName);
 
+		if ($request->get('isDuplicate')) {
+			$viewer->assign('IS_DUPLICATE', true);
+		}
+
 		$viewer->view('Step1.tpl', $moduleName);
 	}
 
@@ -150,6 +154,10 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 
 		$viewer->assign('CALCULATION_FIELDS', $reportModel->getCalculationFields());
 		$viewer->assign('MODULE', $moduleName);
+
+		if ($request->get('isDuplicate')) {
+			$viewer->assign('IS_DUPLICATE', true);
+		}
 
 		$viewer->view('step2.tpl', $moduleName);
 	}
@@ -195,6 +203,16 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
 		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
 		$viewer->assign('MODULE', $moduleName);
+
+		$calculationFields = $reportModel->get('calculation_fields');
+		if($calculationFields) {
+			$calculationFields = Zend_Json::decode($calculationFields);
+			$viewer->assign('LINEITEM_FIELD_IN_CALCULATION', $reportModel->showLineItemFieldsInFilter($calculationFields));
+		}
+		if ($request->get('isDuplicate')) {
+			$viewer->assign('IS_DUPLICATE', true);
+		}
+
 		$viewer->view('step3.tpl', $moduleName);
 	}
 

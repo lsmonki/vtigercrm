@@ -10,20 +10,21 @@
 $languageStrings = array(
 	'SINGLE_Invoice'               => 'Fatura'                      , 
 	'LBL_EXPORT_TO_PDF'            => 'Exportar para PDF'           , 
-	'LBL_ADD_RECORD'               => 'Add Invoice'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Listar Fatura'               , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Invoice Summary'             , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Invoice'                 , 
+	'LBL_RECORDS_LIST'             => 'Listar Fatura'               , 
 	'LBL_INVOICE_INFORMATION'      => 'Informação Fatura'         , 
 	'Sales Order'                  => 'Pedido Vendas'               , 
 	'Customer No'                  => 'Cod. Cliente'                , 
 	'Invoice Date'                 => 'Data Fatura'                 , 
 	'Purchase Order'               => 'Pedido Compra:'              , 
 	'Sales Commission'             => 'Comissão Vendas'            , 
-	'Account Name'                 => 'Nome Organização'          , 
 	'Invoice No'                   => 'No. Fatura'                  , 
+	'LBL_RECEIVED'                 => 'Received'                    , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Sent'                         => 'Enviada'                     , 
 	'Credit Invoice'               => 'Creditar Fatura'             , 
 	'Paid'                         => 'Paga'                        , 
 	'AutoCreated'                  => 'Auto Criado'                 , 
-	'Cancel'                       => 'Cancelar'                    , // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
+	'Cancel'                       => 'Cancelar'                    , 
 );

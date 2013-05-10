@@ -10,10 +10,10 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Quote'                       , 
 	'LBL_EXPORT_TO_PDF'            => 'Export To PDF'               , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Quotes List'                 , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
-	'LBL_QUOTE_INFORMATION'        => 'Quote Details'               , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Quotes List'                 , 
+	'LBL_QUOTE_INFORMATION'        => 'Quote Details'               , 
 	'Quote No'                     => 'Quote No.'                   , 
 	'Quote Stage'                  => 'Quote Stage'                 , 
 	'Valid Till'                   => 'Valid until'                 , 

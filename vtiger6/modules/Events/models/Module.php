@@ -38,5 +38,37 @@ class Events_Module_Model extends Calendar_Module_Model {
             sendInvitation($invities,$activityMode,$recordModel->get('subject'),$mail_contents);
         }
     }
+
+	/**
+	 * Function to retrieve name fields of a module
+	 * @return <array> - array which contains fields which together construct name fields
+	 */
+	public function getNameFields(){
+        $nameFieldObject = Vtiger_Cache::get('EntityField',$this->getName());
+        $moduleName = $this->getName();
+		if($nameFieldObject && $nameFieldObject->fieldname) {
+			$this->nameFields = explode(',', $nameFieldObject->fieldname);
+		} else {
+			$adb = PearDatabase::getInstance();
+
+			$query = "SELECT fieldname, tablename, entityidfield FROM vtiger_entityname WHERE tabid = ?";
+			$result = $adb->pquery($query, array(getTabid('Calendar')));
+			$this->nameFields = array();
+			if($result){
+				$rowCount = $adb->num_rows($result);
+				if($rowCount > 0){
+					$fieldNames = $adb->query_result($result,0,'fieldname');
+					$this->nameFields = explode(',', $fieldNames);
+				}
+			}
+			
+			$entiyObj = new stdClass();
+			$entiyObj->basetable = $adb->query_result($result, 0, 'tablename');
+			$entiyObj->basetableid =  $adb->query_result($result, 0, 'entityidfield');
+			$entiyObj->fieldname =  $fieldNames;
+			Vtiger_Cache::set('EntityField',$this->getName(), $entiyObj);
+		}
+        return $this->nameFields;
+	}
 	
 }

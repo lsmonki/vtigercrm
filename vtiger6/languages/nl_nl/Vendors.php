@@ -6,23 +6,13 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Vendors.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'Vendors'                      => 'Leveranciers'                , 
 	'SINGLE_Vendors'               => 'Leverancier'                 , 
-	'LBL_ADD_RECORD'               => 'Voeg Leverancier toe'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Leverancierslijst'                , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Leveranciers Samenvatting'             , // TODO: Review
-	'LBL_VENDOR_INFORMATION'       => 'Leveranciers Informatie:'     , 
+	'LBL_ADD_RECORD'               => 'Voeg Leverancier toe'        , 
+	'LBL_RECORDS_LIST'             => 'Leverancierslijst'           , 
+	'LBL_VENDOR_INFORMATION'       => 'Leveranciers Informatie:'    , 
 	'LBL_VENDOR_ADDRESS_INFORMATION' => 'Adresinformatie:'            , 
 	'Vendor Name'                  => 'Naam leverancier'            , 
 	'Vendor No'                    => 'Leverancier Nr'              , 
@@ -39,7 +29,7 @@ $languageStrings = array(
 	'308-Sales-Books'              => '308-Verkoop-Boeken'          , 
 );
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Weet u zeker dat u wilt verwijderen?',
-	'LBL_DELETE_CONFIRMATION'      => 'Bij het verwijderen van deze Leverancier worden ook de gerelateerde inkooporders verwijderd. Weet u zeker dat u deze leverancier wilt verwijderen?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Bij het verwijderen van deze Leverancier worden ook de gerelateerde inkooporders verwijderd. Weet u zeker dat u deze records wilt verwijderen?', // TODO: Review
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Weet u zeker dat u wilt verwijderen?', 
+	'LBL_DELETE_CONFIRMATION'      => 'Bij het verwijderen van deze Leverancier worden ook de gerelateerde inkooporders verwijderd. Weet u zeker dat u deze leverancier wilt verwijderen?', 
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Bij het verwijderen van deze Leverancier worden ook de gerelateerde inkooporders verwijderd. Weet u zeker dat u deze records wilt verwijderen?', 
 );

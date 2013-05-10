@@ -117,11 +117,13 @@ class Vtiger_Loader {
 			$moduleDir = str_replace(':', '.', $moduleName);
 			$moduleClassPath = str_replace(':', '_', $moduleName);
 			$actualModule = $moduleHierarchyParts[count($moduleHierarchyParts)-1];
-			$firstFallBackModuleDir = $firstFallBackModuleClassPath = $actualModule;
+			$secondFallBackModuleDir= $secondFallBackModuleClassPath =  $actualModule;
+			if($actualModule != 'Users') {
 			$baseModule = $moduleHierarchyParts[0];
 			if($baseModule == 'Settings')  $baseModule = 'Settings:Vtiger';
-			$secondFallBackDir = str_replace(':', '.', $baseModule);
-			$secondFallBackClassPath = str_replace(':', '_', $baseModule);
+				$firstFallBackDir = str_replace(':', '.', $baseModule);
+				$firstFallBackClassPath = str_replace(':', '_', $baseModule);
+			}
 		}
 		// Build module specific file path and class name
 		$moduleSpecificComponentFilePath = Vtiger_Loader::resolveNameToPath('modules.'.$moduleDir.'.'.$componentTypeDirectory.'.'.$componentName);
@@ -130,10 +132,11 @@ class Vtiger_Loader {
 			return $moduleSpecificComponentClassName;
 		}
 
+
 		// Build first intermediate fall back file path and class name
-		if(!empty($firstFallBackModuleDir) && !empty($firstFallBackModuleClassPath)) {
-			$fallBackComponentFilePath = Vtiger_Loader::resolveNameToPath('modules.'.$firstFallBackModuleDir.'.'.$componentTypeDirectory.'.'.$componentName);
-			$fallBackComponentClassName = $firstFallBackModuleClassPath.'_'.$componentName.'_'.$componentType;
+		if(!empty($firstFallBackDir) && !empty($firstFallBackClassPath)) {
+			$fallBackComponentFilePath = Vtiger_Loader::resolveNameToPath('modules.'.$firstFallBackDir.'.'.$componentTypeDirectory.'.'.$componentName);
+			$fallBackComponentClassName = $firstFallBackClassPath.'_'.$componentName.'_'.$componentType;
 
 			if(file_exists($fallBackComponentFilePath)) {
 				return $fallBackComponentClassName;
@@ -141,9 +144,9 @@ class Vtiger_Loader {
 		}
 
 		// Build intermediate fall back file path and class name
-		if(!empty($secondFallBackDir) && !empty($secondFallBackClassPath)) {
-			$fallBackComponentFilePath = Vtiger_Loader::resolveNameToPath('modules.'.$secondFallBackDir.'.'.$componentTypeDirectory.'.'.$componentName);
-			$fallBackComponentClassName = $secondFallBackClassPath.'_'.$componentName.'_'.$componentType;
+		if(!empty($secondFallBackModuleDir) && !empty($secondFallBackModuleClassPath)) {
+			$fallBackComponentFilePath = Vtiger_Loader::resolveNameToPath('modules.'.$secondFallBackModuleDir.'.'.$componentTypeDirectory.'.'.$componentName);
+			$fallBackComponentClassName = $secondFallBackModuleClassPath.'_'.$componentName.'_'.$componentType;
 
 			if(file_exists($fallBackComponentFilePath)) {
 				return $fallBackComponentClassName;

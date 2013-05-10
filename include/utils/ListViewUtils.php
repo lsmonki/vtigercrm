@@ -1758,10 +1758,6 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 		if ($fieldname == $focus->list_link_field) {
 			if ($mode == "search") {
 				if ($popuptype == "specific" || $popuptype == "toDospecific") {
-					// Added for get the first name of contact in Popup window
-					if ($colname == "lastname" && $module == 'Contacts') {
-						$temp_val = getFullNameFromQResult($list_result, $list_result_count, "Contacts");
-					}
 
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val, ENT_QUOTES, $default_charset);
@@ -1801,7 +1797,7 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					}
 				} elseif ($popuptype == "detailview") {
-					if ($colname == "lastname" && ($module == 'Contacts' || $module == 'Leads')) {
+					if ($colname == "lastname" && $module == 'Leads') {
 						$temp_val = getFullNameFromQResult($list_result, $list_result_count, $module);
 					}
 
@@ -2015,21 +2011,24 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						require_once('modules/Accounts/Accounts.php');
 						$acct_focus = new Accounts();
 						$acct_focus->retrieve_entity_info($relatedid, "Accounts");
-						$account_name = getAccountName($relatedid);
+						try {
+							$account_name = $acct_focus->column_fields['account_name'];
 
-						$slashes_account_name = popup_from_html($account_name);
-						$slashes_account_name = htmlspecialchars($slashes_account_name, ENT_QUOTES, $default_charset);
+							$slashes_account_name = popup_from_html($account_name);
+							$slashes_account_name = htmlspecialchars($slashes_account_name, ENT_QUOTES, $default_charset);
 
-						$xyz = array('bill_street', 'bill_city', 'bill_code', 'bill_pobox', 'bill_country', 'bill_state', 'ship_street', 'ship_city', 'ship_code', 'ship_pobox', 'ship_country', 'ship_state');
-						for ($i = 0; $i < 12; $i++) {
-							if (getFieldVisibilityPermission('Accounts', $current_user->id, $xyz[$i]) == '0') {
-								$acct_focus->column_fields[$xyz[$i]] = $acct_focus->column_fields[$xyz[$i]];
+							$xyz = array('bill_street', 'bill_city', 'bill_code', 'bill_pobox', 'bill_country', 'bill_state', 'ship_street', 'ship_city', 'ship_code', 'ship_pobox', 'ship_country', 'ship_state');
+							for ($i = 0; $i < 12; $i++) {
+								if (getFieldVisibilityPermission('Accounts', $current_user->id, $xyz[$i]) == '0') {
+									$acct_focus->column_fields[$xyz[$i]] = $acct_focus->column_fields[$xyz[$i]];
+								}
+								else
+									$acct_focus->column_fields[$xyz[$i]] = '';
 							}
-							else
-								$acct_focus->column_fields[$xyz[$i]] = '';
-						}
-						$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['bill_street']));
-						$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
+							$bill_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['bill_street']));
+							$ship_street = str_replace(array("\r", "\n"), array('\r', '\n'), popup_decode_html($acct_focus->column_fields['ship_street']));
+						} catch(Exception $e) {}
+
 						$count = counterValue();
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_address("' . $entity_id . '", "' . nl2br(decode_html($slashes_temp_val)) . '", "' . $relatedid . '", "' . nl2br(decode_html($slashes_account_name)) . '", "' . $bill_street . '", "' . $ship_street . '", "' . popup_decode_html($acct_focus->column_fields['bill_city']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_city']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_state']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_state']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_code']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_code']) . '", "' . popup_decode_html($acct_focus->column_fields['bill_country']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_country']) . '","' . popup_decode_html($acct_focus->column_fields['bill_pobox']) . '", "' . popup_decode_html($acct_focus->column_fields['ship_pobox']) . '");\'id = ' . $count . '>' . textlength_check($temp_val) . '</a>';
 					} else if ($relatedentity == 'Contacts') {
@@ -2103,7 +2102,11 @@ function getValue($field_result, $list_result, $fieldname, $focus, $module, $ent
 						$count = counterValue();
 						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails(' . $entity_id . ',' . $fieldid . ',"' . decode_html($slashes_name) . '","' . $emailaddress . '","' . $emailaddress2 . '","' . $email_check . '"); \'id = ' . $count . '>' . textlength_check($name) . '</a>';
 					}elseif ($module == 'Contacts' || $module == 'Leads') {
-						$name = getFullNameFromQResult($list_result, $list_result_count, $module);
+						if($module == 'Leads') {
+							$name = getFullNameFromQResult($list_result, $list_result_count, $module);
+						} else {
+							$name = $adb->query_result($list_result, $list_result_count, "lastname");
+						}
 						if (CheckFieldPermission('email', $module) == "true") {
 							$emailaddress = $adb->query_result($list_result, $list_result_count, "email");
 							$email_check = 1;
@@ -3806,15 +3809,16 @@ function getListViewDeleteLink($module, $entity_id, $relatedlist, $returnset) {
 	$del_link .= "&parenttab=" . $tabname . "&return_viewname=" . $viewname . $url;
 
 	// vtlib customization: override default delete link for custom modules
-	$requestModule = vtlib_purify($_REQUEST['module']);
-	$requestRecord = vtlib_purify($_REQUEST['record']);
 	$requestAction = vtlib_purify($_REQUEST['action']);
-	$parenttab = vtlib_purify($_REQUEST['parenttab']);
+	$requestModule = $current_module;
+	
 	$isCustomModule = vtlib_isCustomModule($requestModule);
 	if ($requestAction == $requestModule . "Ajax") {
 		$requestAction = vtlib_purify($_REQUEST['file']);
 	}
 	if ($isCustomModule && !in_array($requestAction, Array('index', 'ListView'))) {
+		$requestRecord = vtlib_purify($_REQUEST['record']); 
+		$parenttab = vtlib_purify($_REQUEST['parenttab']);
 		$del_link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";
 		$del_link .= "&destination_module=$module&idlist=$entity_id&mode=delete&parenttab=$parenttab";
 	}

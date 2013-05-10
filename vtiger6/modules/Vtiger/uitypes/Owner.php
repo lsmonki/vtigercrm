@@ -29,7 +29,13 @@ class Vtiger_Owner_UIType extends Vtiger_Base_UIType {
 			$userModel->set('id', $value);
 			$detailViewUrl = $userModel->getDetailViewUrl();
 		} else {
-			$detailViewUrl = "index.php?module=Vtiger&parent=Settings&view=Index&item=GroupDetailView&groupId=$value";
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            if(!$currentUser->isAdminUser()){
+                return getOwnerName($value);
+            }
+            $recordModel = new Settings_Groups_Record_Model();
+            $recordModel->set('groupid',$value);
+			$detailViewUrl = $recordModel->getDetailViewUrl();
 		}
 		return "<a href=" .$detailViewUrl. ">" .getOwnerName($value). "</a>";
 	}

@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Principais Organizações'   , // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Principais Oportunidades'    , // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Principais Cotações'       , // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'Métricas Chave'             , // KEY 5.x: Key Metrics
-	'HLT'                          => 'Top Support Tickets'         , // TODO: Review
-	'GRT'                          => 'Meus Grupos'                 , // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Principais Pedidos Vendas'   , // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Principais Faturas'          , // KEY 5.x: Top Invoices
-	'HDB'                          => 'Página Painel'              , // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Principais Pedidos Compras'  , // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'Minhas FAQs Recentes'        , // KEY 5.x: My Recent FAQs
-	'UA'                           => 'Eventos Programados'         , // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'Eventos Pendentes'           , // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Principais Organizações'   , 
+	'PLVT'                         => 'Principais Oportunidades'    , 
+	'QLTQ'                         => 'Principais Cotações'       , 
+	'CVLVT'                        => 'Métricas Chave'             , 
+	'HLT'                          => 'Top Support Tickets'         , 
+	'GRT'                          => 'Meus Grupos'                 , 
+	'OLTSO'                        => 'Principais Pedidos Vendas'   , 
+	'ILTI'                         => 'Principais Faturas'          , 
+	'HDB'                          => 'Página Painel'              , 
+	'OLTPO'                        => 'Principais Pedidos Compras'  , 
+	'LTFAQ'                        => 'Minhas FAQs Recentes'        , 
+	'UA'                           => 'Eventos Programados'         , 
+	'PA'                           => 'Eventos Pendentes'           , 
 );

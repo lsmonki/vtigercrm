@@ -16,6 +16,7 @@
 			<input type="hidden" name="view" value="Edit" />
 			<input type="hidden" name="mode" value="step2" />
 			<input type="hidden" class="step" value="1" />
+			<input type="hidden" name="isDuplicate" value="{$IS_DUPLICATE}" />
 			<input type="hidden" name="record" value="{$RECORD_ID}" />
 			<input type=hidden id="relatedModules" data-value='{ZEND_JSON::encode($RELATED_MODULES)}' />
 			<div class="well contentsBackground">

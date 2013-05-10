@@ -148,7 +148,9 @@ class Vtiger_Link_Model extends Vtiger_Link {
 		}
 		//Check if the link is not javascript
 		if(!$this->isPageLoadLink()){
-			return $url;
+           //To convert single quotes and double quotes
+           $url = Vtiger_Util_Helper::toSafeHTML($url);
+           return $url;
 		}
 
 		$module = false;
@@ -209,8 +211,11 @@ class Vtiger_Link_Model extends Vtiger_Link {
 				}
 			}
 		}
-
-		return implode('&', $parametersParts);
+        
+        $url = implode('&', $parametersParts);
+       //To convert single quotes and double quotes
+        $url = Vtiger_Util_Helper::toSafeHTML($url);
+		return  $url;
 	}
 
 	/**
@@ -254,13 +259,19 @@ class Vtiger_Link_Model extends Vtiger_Link {
 	 * @return <Array> - List of Vtiger_Link_Model instances
 	 */
 	public static function getAllByType($tabid, $type = false, $parameters = false) {
-		$links = parent::getAllByType($tabid, $type, $parameters);
+		$links = Vtiger_Cache::get('links-'.$tabid, $type);
+		if(!$links) {
+			$links = parent::getAllByType($tabid, $type, $parameters);
+			Vtiger_Cache::set('links-'.$tabid, $type, $links);
+		}
+
 		$linkModels = array();
 		foreach($links as $linkType => $linkObjects) {
 			foreach($linkObjects as $linkObject) {
 				$linkModels[$linkType][] = self::getInstanceFromLinkObject($linkObject);
 			}
 		}
+
 		return $linkModels;
 	}
 

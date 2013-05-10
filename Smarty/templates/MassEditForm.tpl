@@ -29,7 +29,7 @@
 						<input type="hidden" name="module" value="{$MODULE}">
 						<input type="hidden" name="viewname" value="{$VIEWID}">
 						<input type="hidden" name="excludedRecords" value="{$EXCLUDED_REC}">
-						<input type="hidden" name="searchurl" value="{$SEARCH_URL}">
+						<input type="hidden" name="searchurl" value='{$SEARCH_URL}'>
 						<input type="hidden" name="action" value="MassEditSave">
 					</td>
 				</tr>

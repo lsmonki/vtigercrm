@@ -19,13 +19,7 @@ $server_type = vtlib_purify($_REQUEST['server_type']);
 $server_path = vtlib_purify($_REQUEST['server_path']);
 $from_email_field = vtlib_purify($_REQUEST['from_email_field']);
 $smtp_auth_value = vtlib_purify($_REQUEST['smtp_auth']);
-if($mode == "Default"){
-	$server=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server'];
-	$server_username=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server_username'];
-	$server_password=$VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['server_password'];
-	$from_email_field = $VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['from_email_field'];
-	$smtp_auth_value = $VtigerOndemandConfig['DEFAULT_OUTGOING_SERVER_DETAILS']['smtp_auth'];
-}
+
 
 $db_update = true;
 if($smtp_auth_value == 'on' || $smtp_auth_value == 1)

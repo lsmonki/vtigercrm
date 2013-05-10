@@ -211,7 +211,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 			$record = Vtiger_Record_Model::getCleanInstance($relationModule->get('name'));
             $record->setData($newRow)->setModuleFromInstance($relationModule);
             $record->setId($row['crmid']);
-			$relatedRecordList[] = $record;
+			$relatedRecordList[$row['crmid']] = $record;
 		}
 		$pagingModel->calculatePageRange($relatedRecordList);
 

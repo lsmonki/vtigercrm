@@ -16,9 +16,9 @@
 			<div class='span4' style="position:relative;left:10px">
 				{if $REPORT_MODEL->isEditable() eq true}
 					<button onclick='window.location.href="{$REPORT_MODEL->getEditViewUrl()}"' type="button" class="cursorPointer btn"><strong>{vtranslate('LBL_CUSTOMIZE',$MODULE)}</strong>&nbsp;<i class="icon-pencil"></i></button>
-				{else}
 					&nbsp;
 				{/if}
+				<button onclick='window.location.href="{$REPORT_MODEL->getDuplicateRecordUrl()}"' type="button" class="cursorPointer btn"><strong>{vtranslate('LBL_DUPLICATE',$MODULE)}</strong></button>
 			</div>
 			<div class='span4 textAlignCenter'>
 				<h3>{$REPORT_MODEL->getName()}</h3>
@@ -39,7 +39,11 @@
 			{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$PRIMARY_MODULE_RECORD_STRUCTURE->getStructure()}
 				{assign var=PRIMARY_MODULE_BLOCK_LABEL value=vtranslate($BLOCK_LABEL, $PRIMARY_MODULE)}
 				{assign var=key value="$PRIMARY_MODULE_LABEL $PRIMARY_MODULE_BLOCK_LABEL"}
-				{$RECORD_STRUCTURE[$key] = $BLOCK_FIELDS}
+				{if $LINEITEM_FIELD_IN_CALCULATION eq false && $BLOCK_LABEL eq 'LBL_ITEM_DETAILS'}
+					{* dont show the line item fields block when Inventory fields are selected for calculations *}
+				{else}
+					{$RECORD_STRUCTURE[$key] = $BLOCK_FIELDS}
+				{/if}
 			{/foreach}
 			{foreach key=MODULE_LABEL item=SECONDARY_MODULE_RECORD_STRUCTURE from=$SECONDARY_MODULE_RECORD_STRUCTURES}
 				{assign var=SECONDARY_MODULE_LABEL value=vtranslate($MODULE_LABEL, $MODULE_LABEL)}
@@ -51,7 +55,7 @@
 			{/foreach}
 			{include file='AdvanceFilter.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE ADVANCE_CRITERIA=$SELECTED_ADVANCED_FILTER_FIELDS COLUMNNAME_API=getReportFilterColumnName}
 			<div class="row">
-				<div class="span4 offset4">
+				<div class="span4 offset5">
 					<input type="button" class="btn generateReport" data-mode="generate" value="{vtranslate('LBL_GENERATE_NOW',$MODULE)}"/>&nbsp;
 					<input type="button" class="btn btn-success generateReport" data-mode="save" value="{vtranslate('LBL_SAVE',$MODULE)}" />
 				</div>

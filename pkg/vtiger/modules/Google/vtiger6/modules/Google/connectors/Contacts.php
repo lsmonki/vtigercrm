@@ -102,9 +102,10 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
             $maxModifiedTime = date('Y-m-d H:i:s', strtotime(Google_Contacts_Model::vtigerFormat(end($feed->entry)->updated->text)) + 1);
             if ($this->totalRecords > $this->maxResults) {
                 if (!Google_Utils_Helper::getSyncTime('Contacts')) {
-                    $query->setUpdatedMin(end($feed->entry)->updated->text);
+                    $query->setUpdatedMin(date('Y-m-d H:i:s', strtotime(Google_Contacts_Model::vtigerFormat(end($feed->entry)->updated->text))));
+                    $query->setStartIndex($this->maxResults);
                 }
-
+                $query->setMaxResults(5000);
                 $query->setUpdatedMax($maxModifiedTime);
                 $extendedFeed = $contacts->getContactListFeed($query);
                 $contactRecords = array_merge($feed->entry, $extendedFeed->entry);

@@ -94,10 +94,6 @@ function insert_charset_header()
 insert_charset_header();
 // Create or reestablish the current session
 session_start();
-$_SESSION['KCFINDER'] = array();
-$_SESSION['KCFINDER']['disabled'] = false;
-$_SESSION['KCFINDER']['uploadURL'] = "test/upload";
-$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
 
 if (!is_file('config.inc.php')) {
 	header("Location: install.php");
@@ -696,7 +692,7 @@ if(!$skipSecurityCheck && $use_current_login)
         else
         {
                 $display = isPermitted($module,$now_action);
-        }	
+        }
 	$seclog->debug('########### Pemitted ---> '.$display.'  ##############');
 
 }

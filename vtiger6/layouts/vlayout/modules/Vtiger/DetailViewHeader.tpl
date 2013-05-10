@@ -14,7 +14,7 @@
 	<input id="recordId" type="hidden" value="{$RECORD->getId()}" />
 	<div class="detailViewContainer">
 		<div class="row-fluid detailViewTitle">
-			<div class="span10">
+			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if}">
 				<div class="row-fluid">
 					<div class="span7">
 						<div class="row-fluid">
@@ -56,15 +56,17 @@
 					</div>
 				</div>
 			</div>
-			<div class="span2 detailViewPagingButton">
-				<span class="btn-group pull-right">
-					<button class="btn" id="detailViewPreviousRecordButton" {if empty($PREVIOUS_RECORD_URL)} disabled="disabled" {else} onclick="window.location.href='{$PREVIOUS_RECORD_URL}'" {/if}><i class="icon-chevron-left"></i></button>
-					<button class="btn" id="detailViewNextRecordButton" {if empty($NEXT_RECORD_URL)} disabled="disabled" {else} onclick="window.location.href='{$NEXT_RECORD_URL}'" {/if}><i class="icon-chevron-right"></i></button>
-				</span>
-			</div>
+			{if !{$NO_PAGINATION}}
+				<div class="span2 detailViewPagingButton">
+					<span class="btn-group pull-right">
+						<button class="btn" id="detailViewPreviousRecordButton" {if empty($PREVIOUS_RECORD_URL)} disabled="disabled" {else} onclick="window.location.href='{$PREVIOUS_RECORD_URL}'" {/if}><i class="icon-chevron-left"></i></button>
+						<button class="btn" id="detailViewNextRecordButton" {if empty($NEXT_RECORD_URL)} disabled="disabled" {else} onclick="window.location.href='{$NEXT_RECORD_URL}'" {/if}><i class="icon-chevron-right"></i></button>
+					</span>
+				</div>
+			{/if}
 		</div>
 		<div class="detailViewInfo row-fluid">
-			<div class="span10 details">
+			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if} details">
 				<form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
 					<div class="contents">
 {/strip}

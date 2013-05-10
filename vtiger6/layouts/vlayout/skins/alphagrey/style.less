@@ -30,13 +30,23 @@ th{
 		}
 	}
 }
-
+.backgroundImageNone {
+	background-image : none !important;
+}
+.horizontalAlignCenter {
+	margin : auto !important;
+	width : 100% !important;
+}
 .well{
     .gradientBar(@gradient3StrtColor,@gradient3EndColor);
 }
 
 hr{
       border-bottom: 1px solid @borderColor;
+	  margin : 1% 0% 1% 0% !important;
+}
+.themeTextColor{
+	color : @headerTextColor;
 }
 .floatNone {
 	float : none !important;
@@ -103,10 +113,13 @@ hr{
 	margin-bottom: 1.2em;
 }
 .textAlignCenter{
-	text-align : center;
+	text-align : center !important;
 }
 .textAlignRight{
 	text-align : right !important;
+}
+.textAlignLeft{
+	text-align : left !important;
 }
 .redColor {
 	color: red;
@@ -131,6 +144,9 @@ hr{
 .marginLeftZero.span10{
 	width: 84.5% !important;
 }
+.displayInlineBlock{
+	display: inline-block !important;
+}
 .detailViewBlockHeader {
 	.gradientBar(@gradient5StrtColor,@gradient5EndColor);
 }
@@ -140,8 +156,7 @@ hr{
 	border-radius: 4px 4px 0 0 !important;
 }
 .quickWidgetContainer {
-	.gradientBar(@gradient6StrtColor,@gradient6EndColor);
-	border-top: 2px solid @activeRecordsWidgetBorder;
+	border-top:2px solid @black;
 	li{
 		margin-left: -6%;
 		a{
@@ -155,12 +170,15 @@ hr{
 		}
 	}
 	.quickWidgetHeader {
-		.gradientBar(@gradient6StrtColor,@gradient6EndColor);
+		.gradientBar(@gradient16StrtColor,@gradient16EndColor);
 		.cursorPointer;
-		padding: 10px;
+		padding: 8px;
+		h5 {
+			color : @white;
+		}
 	}
 	.widgetContainer {
-		 border-bottom: 1px solid @activeRecordsWidgetBorder;
+		 border-bottom: 1px solid @black;
 	}
 }
 .whitePageDivider{
@@ -184,6 +202,9 @@ hr{
 }
 .dull{
 	opacity: 0.5;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+	filter: alpha(opacity=50);
 }
 
 .equalSplit{
@@ -193,9 +214,7 @@ hr{
 }
 
 .sidebarTitleBlock {
-	display: block;
-	border-bottom: 2px solid @lightColorBorder;
-	margin: 5px 0;
+	margin: 6px 0;
 }
 
 .sidebarTitleBlock .titlePadding {
@@ -317,6 +336,9 @@ tr.collapseRow{
 
 .zeroOpacity {
 	opacity : 0;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	filter: alpha(opacity=0);
 }
 
 .pushDown{
@@ -336,7 +358,7 @@ tr.collapseRow{
 //Auto Complete Reference Field
 
 .ui-autocomplete-loading {
-	background: url('images/load.gif') no-repeat right center
+	background: url('../images/load.gif') no-repeat right center
 }
 
 //Auto Complete Reference Field
@@ -350,8 +372,13 @@ tr.collapseRow{
 	overflow : hidden;
 	/** modal will be having z-index as 10001 **/
 	.datepicker, .timePicker{
-		z-index : 10002 !important;
+		z-index : 1000008 !important;
 	}
+}
+
+// Select2 Plugin customization
+.select2-container-multi .select2-choices .select2-search-choice {
+	cursor:move;
 }
 
 /** General complete **/
@@ -538,7 +565,7 @@ tr.collapseRow{
     border-bottom-style: solid;
     border-bottom-width: 6px;
     content: "";
-    display: inline-block;
+    .displayInlineBlock;
     left: 80%;
     position: absolute;
     top: -6px;
@@ -548,7 +575,7 @@ tr.collapseRow{
     border-bottom-style: solid;
     border-bottom-width: 7px;
     content: "";
-    display: inline-block;
+    .displayInlineBlock;
     left: 80%;
     position: absolute;
     top: -7px;
@@ -772,6 +799,7 @@ div.blockPage {
 
 .listViewEntriesDiv{
 	margin-top:5px;
+	overflow-x: auto;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {
@@ -810,7 +838,7 @@ div.blockPage {
     right: 0;
 }
 
-form#EditView {
+form#EditView,.profileDetailView {
 	padding: 0 2%;
 	table{
 		margin-left : 3px;
@@ -1032,6 +1060,9 @@ footer {
 			}
 		}
 	}
+}
+.relatedContents {
+	overflow-x:auto;
 }
 //Related tabs in detail view Ends Here
 
@@ -1268,7 +1299,7 @@ footer {
 }
 
 .paddingLeft20{
-	padding-left: 20px;
+	padding-left: 20px !important;
 }
 
 .paddingTop20{
@@ -1277,22 +1308,22 @@ footer {
 
 // Settings > Groups //
 
-#memberList_chzn{
-  .search-choice[data-member-type="Users"] {
+#s2id_memberList, .groupMembersColors{
+  .Users{
 		background-color : @users !important;
-		background-image : none !important;
+		.backgroundImageNone;
    }
-   .search-choice[data-member-type="Groups"] {
+   .Groups {
 		background-color : @groups !important;
-		background-image : none !important;
+		.backgroundImageNone;
    }
-	.search-choice[data-member-type="Roles"] {
+	.Roles{
 		background-color : @roles !important;
-		background-image : none !important;
+		.backgroundImageNone;
    }
-   .search-choice[data-member-type="RoleAndSubordinates"] {
+   .RoleAndSubordinates{
 		background-color : @rolesAndSubordinates !important;
-		background-image : none !important;
+		.backgroundImageNone;
    }
 }
 // Settings > Groups completed//
@@ -1317,14 +1348,7 @@ footer {
 	.addCommentBlock {
 		min-height: 115px;
 		.commentcontent{
-			min-width: 100%;
-			box-shadow: inset 0 0 4px @boxShadowColor;
-			overflow-y: hidden;
-			padding : 8px !important;
-			resize: none;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */
+			.textarea-autosize;
 		}
     }
     .singleComment .addCommentBlock .commentcontent{
@@ -1351,7 +1375,7 @@ footer {
 Please check for the below classes if it is being used
 *******************************************************/
 .singleComment:hover .commentActions .replyComment{
-	display: inline-block;
+	.displayInlineBlock;
 }
 /******************************************************/
 .commentActionsDiv{
@@ -1699,6 +1723,7 @@ Please check for the below classes if it is being used
 	.cursorPointer;
 	 color:	@deleteButton;
 	 margin-left: 8px;
+	font-size : @baseFontSize !important;
 	 &:hover{
 	    color: @deleteButton !important;
 	 }
@@ -1782,7 +1807,7 @@ Please check for the below classes if it is being used
     padding: 7px 22px;
 	border : 0;
 	li {
-		display: inline-block;
+		.displayInlineBlock;
 		.textShadow(@headerTextColor,0px,0px,1px,@headerTextShadowColor);
 	}
 	.divider {
@@ -1801,7 +1826,7 @@ Please check for the below classes if it is being used
 	.textOverflowEllipsisMixin(9em,ellipsis);
 }
 .widgetTextOverflowEllipsis{
-	.textOverflowEllipsisMixin(12em,ellipsis);
+	.textOverflowEllipsisMixin(86%,ellipsis);
 }
 #detailView,#EditView{
 	#lineItemTab.table{
@@ -1833,6 +1858,11 @@ Please check for the below classes if it is being used
 	select[name*="time_zone"]{
 		width: 350px !important;
 	}
+}
+
+//jqplot style
+.jqplot-point-label {
+	font-size: inherit;
 }
 
 //Dashboard style
@@ -1983,6 +2013,8 @@ div#chart2{
 	}
 }
 .mainContainer{
+    margin-top:75px;
+    margin-bottom:20px;
 	.hero-unit{
 		height:500px;
 	}
@@ -2000,9 +2032,6 @@ div#chart2{
 .fc-button-effect {display: none;
 }
 .multiCurrencyEditUI{
-	position : absolute;
-	width: 48%;
-	z-index: 10000;
 	.border(@borderColor, @lightColorBorder);
 	background-color : @gradient7StrtColor;
 	border-radius : 6px;
@@ -2072,7 +2101,13 @@ div#chart2{
 //Time picker styles
 .timePicker{
 	width: 8.5em !important;
-	z-index: 0 !important;
+	//layout editor drop down should show
+	z-index: 1029 !important;
+}
+
+.datepicker {
+	//layout editor drop down should show
+	z-index: 1029 !important;
 }
 
 //Account Hierarchy
@@ -2192,7 +2227,7 @@ div#chart2{
 	box-shadow: 0 0 4px @black inset;
 	border-radius : 5px;
 }
-.massEditActiveField{
+.massEditActiveField,.selectedListItem{
 	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 }
 .ui-pnotify{
@@ -2302,7 +2337,7 @@ div#chart2{
 input[type="text"], input, textarea{
 	color: #444444 !important;
 }
-#listViewPageJumpDropDown{
+#listViewPageJumpDropDown, #relatedListPageJumpDropDown{
 	.padding5per;
 	.listViewPagingInput {
 		height : 12px;
@@ -2346,10 +2381,6 @@ input[type="text"], input, textarea{
 .relatedPopup {
 	border-radius : 0px !important;
 }
-
-.horizontalLeftSpacingForSummaryWidgetHeader{
-	margin-left: 2.0em !important;
-}
 .horizontalLeftSpacingForSummaryWidgetContents{
 	margin-left: 1.8em !important;
 }
@@ -2359,4 +2390,247 @@ input[type="text"], input, textarea{
 }
 .modal-backdrop {
 	z-index : 1000002;
+}
+.vtReminder-icon {
+	background: url('images/Events.png') no-repeat right center
+}
+
+
+// Settings page Css
+.settingsIndexPage{
+	.moduleBlock{
+		 min-height: 54px;
+		&:hover{
+			.unpin{
+				opacity : 0.4;
+				.displayInlineBlock;
+				&:hover {
+					opacity : 0.8;
+				}
+			}
+		}
+	}
+	#settingsShortCutsContainer{
+		min-height : 350px;
+	}
+}
+
+#settingsQuickWidgetContainer {
+	.quickWidgetHeader{
+		.gradientBar(@gradient16StrtColor,@gradient16EndColor);
+	}
+	h5{
+		color : @navLinkColor;
+	}
+	.widgetContainer > div {
+		&:hover{
+			.selectedListItem;
+		}
+	}
+	.widgetContainer{
+		.selectedMenuItem {
+			background-color : @navLinkColor;
+			border-bottom : 1px solid @lightColorBorder !important;
+			border-top : 1px solid @lightColorBorder !important;
+			.fontBold;
+			a{
+				color : @textColor;
+			}
+		}
+		border-bottom : 3px solid @secondaryBorderColor;
+		.menuItem{
+			a{
+				color : @textColor;
+				&:hover{
+					text-decoration : none;
+				}
+			}
+			&:hover{
+				.pinUnpinShortCut{
+					.displayInlineBlock;
+					opacity : 0.8;
+					&:hover {
+						opacity : 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+//Sharing Access Stylings
+#EditSharingAccess{
+	.table-bordered{
+		border-collapse: collapse !important;
+	}
+	.equalSplit{
+		tr td{
+			width: 22% !important;
+		}
+		.customRuleTable{
+			thead tr th:first-child, tbody tr td:first-child{
+				width: 8% !important;
+			}
+			thead tr th:last-child, tbody tr td:last-child{
+				width: 12% !important;
+			}
+		}
+	}
+}
+.sharingAccessDetails{
+	.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+	tr.collapseRow{
+		border-top: 2px solid @gray !important;
+		&>td{
+			.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+		}
+		+tr{
+			border-bottom: 2px solid @gray !important;
+			:hover th, :hover td{
+				background-color: @tableBackgroundColor;
+			}
+			hr{
+				margin: 0 0 8px;
+			}
+			&>td{
+				.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+			}
+		}
+	}
+	thead tr th, tbody tr td{
+		border-left: none;
+	}
+}
+.customRuleEntries:hover td .actions .actionImages{
+	opacity :1;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	filter: alpha(opacity=100);
+}
+.customRuleTable{
+	.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+	thead tr th, tbody tr td{
+		border-left: 1px solid @grayLight !important;
+	}
+	th{
+		color: @themeLinkColor;
+	}
+}
+.themeLinkColor{
+	color: @themeLinkColor;
+}
+
+
+//Module Manager - genaral class to apply opacity to actions
+.opacity .actions{
+	.zeroOpacity;
+}
+.opacity:hover .actions{
+	opacity :1;
+	/*for IE*/
+	-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	filter: alpha(opacity=100);
+}
+
+
+.settingsHeader{
+	.font-x-x-large;
+	color : @headerColor1;
+}
+.collectiveGroupMembers{
+	border : 2px solid @grayLighter;
+	.groupLabel{
+		background-color : @grayLighter;
+	}
+}
+//General class for theme table color
+.themeTableColor {
+	.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+}
+//General class for textarea autosize
+.textarea-autosize{
+	min-width: 100%;
+	box-shadow: inset 0 0 4px @boxShadowColor !important;
+	padding : 8px !important;
+	resize: none;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.editViewMiniSlider {
+	a{
+		border-style : none !important;
+		margin-top : 1px;
+	}
+}
+//Picklist dependency
+.selectedCell {
+	background-color: lightBlue;
+    white-space: nowrap;
+}
+.unselectedCell {
+    background-color: @grayLighter;
+    color: @seperatorColor;
+    white-space : nowrap;
+}
+.pickListDependencyTable {
+	tbody tr:hover td {
+		background-color: none !important;
+	}
+}
+.overWriteAddOnStyles{
+	.floatNone;
+	.displayInlineBlock;
+	padding-top: 3px !important;
+	padding-bottom: 5px !important;
+}
+//layout Editor
+.border1px {
+	border: 1px solid @lightColorBorder;
+}
+.layoutBlockHeader {
+	.gradientBar(@gradient5StrtColor,@gradient5EndColor);
+	.blockLabel {
+		color : @bodyColor2;
+		text-shadow : 0px 0px 2px @black;
+	}
+}
+.blockFieldsList {
+	.editFields {
+		margin-left : 0.5% !important;
+
+		//default value ui- multi select values ui breaking
+		.dropdown-menu a {
+			padding : 0px !important;
+		}
+	}
+	.editFields:hover{
+		background-color : @lightColorBorder !important;
+	}
+}
+.extensionWidgetContainer{
+	background-color: @white;
+	border: 1px solid @summaryWidgetBorderColor;
+	border-radius : 4px;
+	min-height: 200px;
+	.padding5per;
+	.extensionDescription {
+		padding-top: 5%;
+		padding-bottom: 5%;
+		line-height: 20px;
+	}
+	.extensionInfo{
+		padding-top: 5%;
+	}
+}
+#advanceFilterContainer {
+	.conditionGroup{
+		border: 1px solid @lightColorBorder;
+		padding: 5px;
+		.border-radius(5px);
+		.contents{
+			padding : 1%;
+		}
+	}
 }

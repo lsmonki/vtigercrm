@@ -11,6 +11,7 @@
 /**
  * Class to handle Caching Mechanism and re-use information.
  */
+require_once 'vtiger6/includes/runtime/Cache.php';
 class VTCacheUtils {
 	
 	/** Tab information caching */
@@ -74,9 +75,13 @@ class VTCacheUtils {
 			'typeofdata'=> $typeofdata,
 			'presence'  => $presence,
 		);
+        Vtiger_Cache::set('fieldInfo', $tabid, self::$_fieldinfo_cache[$tabid]);
 	}
 	static function lookupFieldInfo($tabid, $fieldname) {
-		if(isset(self::$_fieldinfo_cache[$tabid]) && isset(self::$_fieldinfo_cache[$tabid][$fieldname])) {
+        $fieldInfo = Vtiger_Cache::get('fieldInfo', $tabid);
+        if($fieldInfo && isset($fieldInfo[$fieldname])){
+            return $fieldInfo[$fieldname];
+        }else if(isset(self::$_fieldinfo_cache[$tabid]) && isset(self::$_fieldinfo_cache[$tabid][$fieldname])) {
 			return self::$_fieldinfo_cache[$tabid][$fieldname];
 		}
 		return false;
@@ -84,11 +89,16 @@ class VTCacheUtils {
 	static function lookupFieldInfo_Module($module, $presencein = array('0', '2')) {
 		$tabid = getTabid($module);
 		$modulefields = false;
+		$fieldInfo = Vtiger_Cache::get('fieldInfo', $tabid);
+        if($fieldInfo){
+            $fldcache =$fieldInfo;
+        }else if(isset(self::$_fieldinfo_cache[$tabid])) {
+            $fldcache = self::$_fieldinfo_cache[$tabid];
+        }
 		
-		if(isset(self::$_fieldinfo_cache[$tabid])) {
-			$modulefields = array();
+        if($fldcache){
+            $modulefields = array();
 			
-			$fldcache = self::$_fieldinfo_cache[$tabid];
 			foreach($fldcache as $fieldname=>$fieldinfo) {
 				if(in_array($fieldinfo['presence'], $presencein)) {
 					$modulefields[] = $fieldinfo;
@@ -113,9 +123,13 @@ class VTCacheUtils {
 	static $_module_entityname_cache = array();
 	static function updateEntityNameInfo($module, $data) {
 		self::$_module_entityname_cache[$module] = $data;
+        Vtiger_Cache::set('EntityInfo', $module, self::$_module_entityname_cache[$module]);
 	}
 	static function lookupEntityNameInfo($module) {
-		if (isset(self::$_module_entityname_cache[$module])) {
+        $entityNames = Vtiger_Cache::get('EntityInfo', $module);
+        if($entityNames){
+            return $entityNames;
+        }else if (isset(self::$_module_entityname_cache[$module])) {
 			return self::$_module_entityname_cache[$module];
 		}
 		return false;

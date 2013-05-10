@@ -30,8 +30,8 @@ class ModComments_ListView_Model extends Vtiger_ListView_Model {
 			$settingsLink = array(
 					'linktype' => 'LISTVIEWSETTING',
 					'linklabel' => 'LBL_EDIT_WORKFLOWS',
-					'linkurl' => $moduleModel->getSettingsUrl('EditWorkflows'),
-					'linkicon' => ''
+					'linkurl' => 'index.php?parent=Settings&module=Workflow&sourceModule='.$this->getName(),
+					'linkicon' => Vtiger_Theme::getImagePath('EditWorkflows.png')
 			);
 			$links['LISTVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
 		}

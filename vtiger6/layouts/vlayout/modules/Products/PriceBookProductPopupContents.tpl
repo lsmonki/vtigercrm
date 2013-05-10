@@ -64,8 +64,8 @@
 		</div>
 	{/if}
 </div>
-<div class="form-actions">
-	<a class="cancelLink cursorPointer pull-right horizontalLeftSpacing"> Cancel </a>
+<div class="modal-footer form-actions">
+	<a class="cancelLink cursorPointer pull-right horizontalLeftSpacing">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 	<button class="btn addButton select pull-right btn-primary"><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate('LBL_ADD_TO_PRICEBOOKS',$MODULE)}</strong></button>
 </div>
 {/strip}

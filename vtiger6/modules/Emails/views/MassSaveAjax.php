@@ -238,11 +238,18 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		}
 
 		if($selectedIds == 'all'){
+			$sourceRecord = $request->get('sourceRecord');
+			$sourceModule = $request->get('sourceModule');
+			if ($sourceRecord && $sourceModule) {
+				$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
+				return $sourceRecordModel->getSelectedIdsList($request->get('parentModule'), $excludedIds);
+			}
+
 			$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
 			if($customViewModel) {
-                $searchKey = $request->get('search_key');
-                $searchValue = $request->get('search_value');
-                $operator = $request->get('operator');
+				$searchKey = $request->get('search_key');
+				$searchValue = $request->get('search_value');
+				$operator = $request->get('operator');
                 if(!empty($operator)) {
                     $customViewModel->set('operator', $operator);
                     $customViewModel->set('search_key', $searchKey);

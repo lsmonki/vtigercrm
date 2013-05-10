@@ -31,5 +31,27 @@ class ModComments_Module_Model extends Vtiger_Module_Model{
 		$createRecordUrlWithParent = $createRecordUrl.'&parent_id='.$parentRecord->getId();
 		return $createRecordUrlWithParent;
 	}
+    
+    /**
+	 * Function to get Settings links
+	 * @return <Array>
+	 */
+	public function getSettingLinks(){
+		vimport('~~modules/com_vtiger_workflow/VTWorkflowUtils.php');
+
+		$editWorkflowsImagePath = Vtiger_Theme::getImagePath('EditWorkflows.png');
+		$settingsLinks = array();
+
+
+		if(VTWorkflowUtils::checkModuleWorkflow($this->getName())) {
+			$settingsLinks[] = array(
+					'linktype' => 'LISTVIEWSETTING',
+					'linklabel' => 'LBL_EDIT_WORKFLOWS',
+                    'linkurl' => 'index.php?parent=Settings&module=Workflows&view=List&sourceModule='.$this->getName(),
+					'linkicon' => $editWorkflowsImagePath
+			);
+		}
+		return $settingsLinks;
+	}
 }
 ?>

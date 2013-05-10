@@ -72,11 +72,19 @@ if (typeof(ImportJs) == 'undefined') {
 			var importFile = jQuery('#import_file');
 			var filePath = importFile.val();
 			if(jQuery.trim(filePath) == '') {
-				alert(app.vtranslate('JS_IMPORT_FILE_CAN_NOT_BE_EMPTY'));
+				var errorMessage = app.vtranslate('JS_IMPORT_FILE_CAN_NOT_BE_EMPTY');
+				var params = {
+					text: errorMessage,
+					type: 'error'
+				};
+				Vtiger_Helper_Js.showMessage(params);
 				importFile.focus();
 				return false;
 			}
 			if(!ImportJs.uploadFilter("import_file", "csv|vcf")) {
+				return false;
+			}
+			if(!ImportJs.uploadFileSize("import_file")) {
 				return false;
 			}
 			return true;
@@ -91,10 +99,31 @@ if (typeof(ImportJs) == 'undefined') {
 				var validExtensions = allowedExtensions.toLowerCase().split('|');
 
 				if(validExtensions.indexOf(fileType) < 0) {
-					alert(app.vtranslate('JS_SELECT_FILE_EXTENSION')+'\n' +validExtensions);
+					var errorMessage = app.vtranslate('JS_SELECT_FILE_EXTENSION')+'\n' +validExtensions;
+					var params = {
+						text: errorMessage,
+						type: 'error'
+					};
+					Vtiger_Helper_Js.showMessage(params);
 					obj.focus();
 					return false;
 				}
+			}
+			return true;
+		},
+		
+		uploadFileSize : function(elementId) {
+			var element = jQuery('#'+elementId);
+			var importMaxUploadSize = element.closest('td').data('importUploadSize');
+			var uploadedFileSize = element.get(0).files[0].size;
+			if(uploadedFileSize > importMaxUploadSize){
+				var errorMessage = app.vtranslate('JS_UPLOADED_FILE_SIZE_EXCEEDS')+" "+"3 MB." + app.vtranslate('JS_PLEASE_SPLIT_FILE_AND_IMPORT_AGAIN');
+				var params = {
+					text: errorMessage,
+					type: 'error'
+				};
+				Vtiger_Helper_Js.showMessage(params);
+				return false;
 			}
 			return true;
 		},

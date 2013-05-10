@@ -43,7 +43,8 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 
 			$viewer->assign('QUICK_LINKS', $linkModels);
 		}
-
+		
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('CURRENT_VIEW', $request->get('view'));
 		if($display) {
 			$this->preProcessDisplay($request);

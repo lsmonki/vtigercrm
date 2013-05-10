@@ -5,20 +5,13 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
- * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
- * ********************************************************************************
- *  Language     : Español es_es
- *  Version      : 6.0.0
- *  Created Date : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Actividad',
-	'LBL_ADD_RECORD'               => 'Añadir Actividad',
-	'LBL_RECORDS_LIST'             => 'Lista de Actividades',
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Actividades',
-	'LBL_PROJECT_TASK_INFORMATION' => 'Detalles de Actividad',
+	'SINGLE_ProjectTask'           => 'Actividad'                   , 
+	'LBL_ADD_RECORD'               => 'Añadir Actividad'           , 
+	'LBL_RECORDS_LIST'             => 'Lista de Actividades'        , 
+	'LBL_PROJECT_TASK_INFORMATION' => 'Detalles de Actividad'       , 
+	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
+	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
 );

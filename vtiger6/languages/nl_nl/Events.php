@@ -6,42 +6,64 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Events.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'Events'                       => 'Afspraken'                   , 
 	'SINGLE_Events'                => 'Afspraken'                   , 
-	'LBL_ADD_RECORD'               => 'Afspraak toevoegen'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Lijstoverzicht'                   , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Events Samenvating'              , // TODO: Review
-	'LBL_EVENTS'                   => 'Afspraken'                   , // KEY 5.x: Events
-	'LBL_TODOS'                    => 'Taak'                        , // KEY 5.x: SINGLE_Calendar
-	'LBL_EVENT_INFORMATION'        => 'Event Details'               , // TODO: Review
-	'LBL_RECURRENCE_INFORMATION'   => 'Herhaal Details'          , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Afspraak toevoegen'          , 
+	'LBL_RECORDS_LIST'             => 'Lijstoverzicht'              , 
+	'LBL_EVENTS'                   => 'Afspraken'                   , 
+	'LBL_TODOS'                    => 'Taak'                        , 
+	'LBL_HOLD_FOLLOWUP_ON'         => 'Hold Followup on'            , // TODO: Review
+	'LBL_EVENT_INFORMATION'        => 'Event Details'               , 
+	'LBL_RECURRENCE_INFORMATION'   => 'Herhaal Details'             , 
+	'LBL_RELATED_TO'               => 'Related To'                  , // TODO: Review
 	'Start Date & Time'            => 'Startdatum & tijd'           , 
-	'Recurrence'                   => 'Herhaling'                  , // TODO: Review
-	'Send Notification'            => 'Stuur Notificatie'           , // TODO: Review
-	'Location'                     => 'Locatie'                    , // TODO: Review
-	'Send Reminder'                => 'Stuur Herinnnering'               , // TODO: Review
+	'Recurrence'                   => 'Herhaling'                   , 
+	'Send Notification'            => 'Stuur Notificatie'           , 
+	'Location'                     => 'Locatie'                     , 
+	'Send Reminder'                => 'Stuur Herinnnering'          , 
 	'End Date & Time'              => 'Einddatum & tijd'            , 
 	'Activity Type'                => 'Type Activiteit'             , 
-	'Visibility'                   => 'Zichtbaarheid'                  , // TODO: Review
-	'Private'                      => 'Prive'                       , // KEY 5.x: PRIVATE_FILTER
-	'Public'                       => 'Publiek'                     , // KEY 5.x: LBL_PUBLIC
+	'Visibility'                   => 'Zichtbaarheid'               , 
+	'Private'                      => 'Prive'                       , 
+	'Public'                       => 'Publiek'                     , 
 	'Call'                         => 'Bel'                         , 
 	'Meeting'                      => 'Vergadering'                 , 
 	'Planned'                      => 'gepland'                     , 
 	'Held'                         => 'Gehouden'                    , 
 	'Not Held'                     => 'Niet gehouden'               , 
-	'LBL_DAYS'                     => 'Dagen'                        , // TODO: Review
-	'LBL_HOURS'                    => 'Uren'                       , // TODO: Review
-	'LBL_CALENDAR_VIEW'            => 'Kalenderoverzicht'               , // TODO: Review
+	'LBL_DAYS'                     => 'Dagen'                       , 
+	'LBL_HOURS'                    => 'Uren'                        , 
+	'LBL_DAYS_TYPE'                => 'Day(s)'                      , // TODO: Review
+	'LBL_WEEKS_TYPE'               => 'Week(s)'                     , // TODO: Review
+	'LBL_MONTHS_TYPE'              => 'Month(s)'                    , // TODO: Review
+	'LBL_YEAR_TYPE'                => 'Year'                        , // TODO: Review
+	'LBL_FIRST'                    => 'First'                       , // TODO: Review
+	'LBL_LAST'                     => 'Last'                        , // TODO: Review
+	'LBL_SM_SUN'                   => 'Sun'                         , // TODO: Review
+	'LBL_SM_MON'                   => 'Mon'                         , // TODO: Review
+	'LBL_SM_TUE'                   => 'Tue'                         , // TODO: Review
+	'LBL_SM_WED'                   => 'Wed'                         , // TODO: Review
+	'LBL_SM_THU'                   => 'Thr'                         , // TODO: Review
+	'LBL_SM_FRI'                   => 'Fri'                         , // TODO: Review
+	'LBL_SM_SAT'                   => 'Sat'                         , // TODO: Review
+	'LBL_DAY0'                     => 'Sunday'                      , // TODO: Review
+	'LBL_DAY1'                     => 'Monday'                      , // TODO: Review
+	'LBL_DAY2'                     => 'Tuesday'                     , // TODO: Review
+	'LBL_DAY3'                     => 'Wednesday'                   , // TODO: Review
+	'LBL_DAY4'                     => 'Thursday'                    , // TODO: Review
+	'LBL_DAY5'                     => 'Friday'                      , // TODO: Review
+	'LBL_DAY6'                     => 'Saturday'                    , // TODO: Review
+	'Daily'                        => 'Day(s)'                      , // TODO: Review
+	'Weekly'                       => 'Week(s)'                     , // TODO: Review
+	'Monthly'                      => 'Month(s)'                    , // TODO: Review
+	'Yearly'                       => 'Year'                        , // TODO: Review
+	'LBL_REPEATEVENT'              => 'Repeat once in every'        , // TODO: Review
+	'LBL_UNTIL'                    => 'Until'                       , // TODO: Review
+	'LBL_DAY_OF_THE_MONTH'         => 'day of the month'            , // TODO: Review
+	'LBL_ON'                       => 'on'                          , // TODO: Review
+	'LBL_CALENDAR_VIEW'            => 'Kalenderoverzicht'           , 
+	'LBL_INVITE_USER_BLOCK'        => 'Invite'                      , // TODO: Review
+	'LBL_INVITE_USERS'             => 'Invite Users'                , // TODO: Review
 );

@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Asterisk'                     => 'Asterisk'				,
-	'PBXManager'                   => 'PBX menedzser'			,
-	'SINGLE_PBXManager'            => 'PBX menedzser'			, // KEY 5.x: PBXManager
-	'LBL_CALL_INFORMATION'         => 'Hívás adatai'			,
-	'Call From'                    => 'Bejövő hívás'			,
-	'Call To'                      => 'Kimenő hívás'			,
-	'Time Of Call'                 => 'Hívás ideje'				,
-	'PBXManager ID'                => 'PBX menedzser AZ'		,
+	'Asterisk'                     => 'Asterisk'                    , 
+	'PBXManager'                   => 'PBX menedzser'               , 
+	'SINGLE_PBXManager'            => 'PBX menedzser'               , 
+	'LBL_CALL_INFORMATION'         => 'Hívás adatai'              , 
+	'Call From'                    => 'Bejövő hívás'            , 
+	'Call To'                      => 'Kimenő hívás'             , 
+	'Time Of Call'                 => 'Hívás ideje'               , 
+	'PBXManager ID'                => 'PBX menedzser AZ'            , 
 );

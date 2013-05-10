@@ -27,7 +27,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	function process(Vtiger_Request $request) {
 		$this->ExportData($request);
 	}
-	
+
 	private $moduleInstance;
 	private $focus;
 
@@ -39,19 +39,32 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		$db = PearDatabase::getInstance();
 		$moduleName = $request->get('source_module');
 
+		$this->moduleInstance = Vtiger_Module_Model::getInstance($moduleName);
+		$this->moduleFieldInstances = $this->moduleInstance->getFields();
+
 		$query = $this->getExportQuery($request);
 		$result = $db->pquery($query, array());
 
-		$headerList = $db->getFieldsArray($result);
-		$headers = array_diff($headerList,array("user_name"));
-		$translatedHeaders = array();
-		for($i=0; $i<count($headers); $i++) {
-			$translatedHeaders[$i] = vtranslate($headers[$i], $moduleName);
+		$headers = array();
+		//Query generator set this when generating the query
+		if(!empty($this->accessibleFields)) {
+			$accessiblePresenceValue = array(0,2);
+			foreach($this->accessibleFields as $fieldName) {
+				$fieldModel = $this->moduleFieldInstances[$fieldName];
+				// Check added as querygenerator is not checking this for admin users
+				$presence = $fieldModel->get('presence');
+				if(in_array($presence, $accessiblePresenceValue)) {
+					$headers[] = $fieldModel->get('label');
+				}
+			}
+		} else {
+			foreach($this->moduleFieldInstances as $field) $headers[] = $field->get('label');
 		}
-		$this->moduleInstance = Vtiger_Module_Model::getInstance($moduleName);
+		$translatedHeaders = array();
+		foreach($headers as $header) $translatedHeaders[] = vtranslate($header, $moduleName);
+
 		$this->focus = CRMEntity::getInstance($moduleName);
-		
-		// TODO: sanitize the data before sending it
+
 		$entries = array();
 		for($j=0; $j<$db->num_rows($result); $j++) {
 			$entries[] = $this->sanitizeValues($db->fetchByAssoc($result, $j));
@@ -66,22 +79,19 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	 * @return <String> export query
 	 */
 	function getExportQuery(Vtiger_Request $request) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$mode = $request->getMode();
 		$cvId = $request->get('viewname');
 		$moduleName = $request->get('source_module');
 
-		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$query = $moduleModel->getExportQuery('');
+		$queryGenerator = new QueryGenerator($moduleName, $currentUser);
+		$queryGenerator->initForCustomViewById($cvId);
+		$fieldInstances = $this->moduleFieldInstances;
 
-		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
-		$stdFilterSql = $customViewModel->getCVStdFilterSQL();
-		$advFilterSql = $customViewModel->getCVAdvFilterSQL();
-		if(isset($stdFilterSql) && $stdFilterSql != ''){
-			$query .= ' AND '.$stdFilterSql;
-		}
-		if(isset($advFilterSql) && $advFilterSql != '') {
-			$query .= ' AND '.$advFilterSql;
-		}
+		foreach($fieldInstances as $field) $fields[] = $field->getName();
+		$queryGenerator->setFields($fields);
+		$query = $queryGenerator->getQuery();
+		$this->accessibleFields = $queryGenerator->getFields();
 
 		switch($mode) {
 			case 'ExportAllData' :	return $query;
@@ -101,8 +111,8 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 										break;
 
 			case 'ExportSelectedRecords' :	$idList = $this->getRecordsListFromRequest($request);
-											$baseTable = $moduleModel->get('basetable');
-											$baseTableColumnId = $moduleModel->get('basetableid');
+											$baseTable = $this->moduleInstance->get('basetable');
+											$baseTableColumnId = $this->moduleInstance->get('basetableid');
 											if(!empty($idList)) {
 												if(!empty($baseTable) && !empty($baseTableColumnId)) {
 													$idList = implode(',' , $idList);
@@ -161,10 +171,10 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			echo $line;
 		}
 	}
-	
+
 	private $picklistValues;
 	private $fieldArray;
-	
+
 	/**
 	 * this function takes in an array of values for an user and sanitizes it for export
 	 * @param array $arr - the array of values
@@ -174,25 +184,26 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$roleid = $currentUser->get('roleid');
 		if(empty ($this->fieldArray)){
-			$this->fieldArray = $this->moduleInstance->getFieldsByLabel();
-			foreach($this->fieldArray as $fieldLabel => $fieldObj){
-					$this->fieldArray[strtolower($fieldLabel)] = $fieldObj;
+			$this->fieldArray = $this->moduleFieldInstances;
+			foreach($this->fieldArray as $fieldName => $fieldObj){
+				$columnName = $fieldObj->get('column');
+				$this->fieldArray[$columnName] = $fieldObj;
 			}
 		}
-		$type= $this->moduleInstance->getName();
-		
-		foreach($arr as $fieldLabel=>&$value){
-			if(isset($this->fieldArray[$fieldLabel])){
-				$fieldInfo = $this->fieldArray[$fieldLabel];
+		$moduleName = $this->moduleInstance->getName();
+		foreach($arr as $fieldName=>&$value){
+			if(isset($this->fieldArray[$fieldName])){
+				$fieldInfo = $this->fieldArray[$fieldName];
 			}else {
-				unset($arr[$fieldLabel]);
+				unset($arr[$fieldName]);
+				continue;
 			}
 			$value = decode_html($value);
 			$uitype = $fieldInfo->get('uitype');
 			$fieldname = $fieldInfo->get('name');
+			$type = $fieldInfo->getFieldDataType();
+
 			if($uitype == 15 || $uitype == 16 || $uitype == 33){
-				
-				//picklists
 				if(empty($this->picklistValues[$fieldname])){
 					$this->picklistValues[$fieldname] = getAssignedPicklistValues($fieldname, $roleid, $db);
 				}
@@ -201,8 +212,9 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				} else {
 					$value = "";
 				}
-			}elseif($uitype == 10){
-				//have to handle uitype 10
+			} elseif($uitype == 52 || $type == 'owner') {
+				$value = getOwnerName($value);
+			}elseif($type == 'reference'){
 				$value = trim($value);
 				if(!empty($value)) {
 					$parent_module = getSalesEntityType($value);
@@ -227,12 +239,11 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			} elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
 				$value = decimalFormat($value);
 			}
-			if($type == 'Documents' && $fieldLabel == 'description'){
+			if($moduleName == 'Documents' && $fieldname == 'description'){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);
 				array_push($new_arr,$value);
 			}
-			
 		}
 		return $arr;
 	}

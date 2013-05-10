@@ -5,18 +5,23 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
- * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
- * ********************************************************************************
- *  Language     : Español es_es
- *  Version      : 6.0.0
- *  Created Date : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'Roles'                        => 'Roles',
-	'SINGLE_Roles'                 => 'Rol',
-	'LBL_ADD_RECORD'               => 'Añadir Rol',
+	'Roles'                        => 'Roles'                       , 
+	'SINGLE_Roles'                 => 'Rol'                         , 
+	'LBL_ADD_RECORD'               => 'Añadir Rol'                 , 
+	'LBL_DELETE_ROLE'              => 'Delete Role'                 , // TODO: Review
+	'LBL_TRANSFER_OWNERSHIP'       => 'Transfer Ownership'          , // TODO: Review
+	'LBL_TO_OTHER_ROLE'            => 'To other Role'               , // TODO: Review
+	'LBL_CLICK_TO_EDIT_OR_DRAG_TO_MOVE' => 'Click to edit/Drag to move'  , // TODO: Review
+	'LBL_ASSIGN_ROLE'              => 'Assign Role'                 , // TODO: Review
+	'LBL_CHOOSE_PROFILES'          => 'Choose profiles'             , // TODO: Review
+	'LBL_COPY_PRIVILEGES_FROM'     => 'Copy privileges from'        , // TODO: Review
+	'LBL_PROFILE'                  => 'Profile'                     , // TODO: Review
+	'LBL_REPORTS_TO'               => 'Reports To'                  , // TODO: Review
+	'LBL_NAME'                     => 'Name'                        , // TODO: Review
+	'LBL_ASSIGN_NEW_PRIVILEGES'    => 'Assign privileges directly to Role', // TODO: Review
+	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Assign priviliges from existing profiles', // TODO: Review
+	'LBL_PRIVILEGES'               => 'Privileges'                  , // TODO: Review
 );

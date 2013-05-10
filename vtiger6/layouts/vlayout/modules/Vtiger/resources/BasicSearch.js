@@ -65,6 +65,10 @@ jQuery.Class('Vtiger_BasicSearch_Js',{},{
 		if(typeof params.module == 'undefined') {
 			params.module = app.getModuleName();
 		}
+        //if you are in settings then module should be vtiger
+        if(app.getParentModuleName().length > 0) {
+            params.module = 'Vtiger';
+        }
 
 		AppConnector.request(params).then(
 			function(data){

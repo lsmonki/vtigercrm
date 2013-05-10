@@ -27,7 +27,7 @@ var Vtiger_CustomView_Js = {
 				var contents = jQuery(".contentsDiv").html(data);
 				jQuery('div.modal-backdrop').remove();
 				Vtiger_CustomView_Js.registerEvents();
-				Vtiger_CustomView_Js.advanceFilterInstance = new Vtiger_AdvanceFilter_Js(jQuery('.filterContainer',contents));
+				Vtiger_CustomView_Js.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',contents));
 			},
 			function(error,err){
 
@@ -198,7 +198,7 @@ var Vtiger_CustomView_Js = {
 	 */
 	registerSelect2ElementForColumnsSelection : function() {
 		var selectElement = Vtiger_CustomView_Js.getColumnSelectElement();
-		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 7,dropdownCss : {'z-index' : 0}});
+		app.changeSelectElementView(selectElement, 'select2', {maximumSelectionSize: 12,dropdownCss : {'z-index' : 0}});
 	},
 
 	registerEvents: function(){

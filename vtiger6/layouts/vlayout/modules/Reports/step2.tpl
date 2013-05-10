@@ -23,6 +23,7 @@
 		<input type="hidden" name="selected_fields" id="seleted_fields" value='{ZEND_JSON::encode($SELECTED_FIELDS)}' />
 		<input type="hidden" name="selected_sort_fields" id="selected_sort_fields" value="" />
 		<input type="hidden" name="calculation_fields" id="calculation_fields" value="" />
+		<input type="hidden" name="isDuplicate" value="{$IS_DUPLICATE}" />
 		<input type="hidden" class="step" value="2" />
 		<div class="well padding1per contentsBackground">
 			<div class="row-fluid block">

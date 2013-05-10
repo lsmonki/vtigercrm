@@ -83,7 +83,8 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 								'File Location Type' => 'filelocationtype');
 
 		foreach ($reqPopUpFields as $fieldLabel => $fieldName) {
-			if ($currentUserModel->hasFieldWriteAccess($this->getName(), $fieldName)) {
+            $fieldModel = Vtiger_Field_Model::getInstance($fieldName,$this);
+			if ($fieldModel->getPermissions('readwrite')) {
 				$popupFileds[$fieldLabel] = $fieldName;
 			}
 		}
@@ -118,5 +119,38 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 		
 		return $relatedListFields;
 	}
+    
+    public function getSettingLinks() {
+        vimport('~~modules/com_vtiger_workflow/VTWorkflowUtils.php');
+        
+        
+		$layoutEditorImagePath = Vtiger_Theme::getImagePath('LayoutEditor.gif');
+		$settingsLinks = array();
+
+		$settingsLinks[] = array(
+					'linktype' => 'LISTVIEWSETTING',
+					'linklabel' => 'LBL_EDIT_FIELDS',
+						'linkurl' => 'index.php?parent=Settings&module=LayoutEditor&sourceModule='.$this->getName(),
+					'linkicon' => $layoutEditorImagePath
+		);
+		
+		$settingsLinks[] = array(
+					'linktype' => 'LISTVIEWSETTING',
+					'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',
+				'linkurl' => 'index.php?parent=Settings&module=Picklist&source_module='.$this->getName(),
+				'linkicon' => ''
+		);
+        
+        if($this->hasSequenceNumberField()) {
+		$settingsLinks[] = array(
+				'linktype' => 'LISTVIEWSETTING',
+				'linklabel' => 'LBL_MODULE_SEQUENCE_NUMBERING',
+				'linkurl' => 'index.php?parent=Settings&module=Vtiger&view=CustomRecordNumbering&sourceModule='.$this->getName(),
+					'linkicon' => ''
+			);
+		}
+
+		return $settingsLinks;
+    }
 }
 ?>

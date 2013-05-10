@@ -6,17 +6,16 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_Documents'             => 'Documento'                   , 
-	'LBL_ADD_RECORD'               => 'Agregar Documento'                , 
-	'LBL_RECORDS_LIST'             => 'Lista de Documentos'              , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Documento'           , 
+	'Documents'                    => 'Documents'                   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Agregar Documento'           , 
+	'LBL_RECORDS_LIST'             => 'Lista de Documentos'         , 
 	'LBL_NOTE_INFORMATION'         => 'Información Básica'        , 
-	'LBL_FILE_INFORMATION'         => 'Información del Archivo'        , 
+	'LBL_FILE_INFORMATION'         => 'Información del Archivo'    , 
 	'LBL_DESCRIPTION'              => 'Descripción'                , 
-	'Title'                        => 'Asunto'                     , 
+	'Title'                        => 'Asunto'                      , 
 	'File Name'                    => 'Nombre Archivo'              , 
 	'Note'                         => 'Notas'                       , 
 	'File Type'                    => 'Tipo Archivo'                , 
@@ -27,31 +26,31 @@ $languageStrings = array(
 	'Download Count'               => 'Número Descargas'           , 
 	'Folder Name'                  => 'Nombre de carpeta'           , 
 	'Document No'                  => 'Número Documento'           , 
-	'Last Modified By'             => 'Última modificación por'            , 
+	'Last Modified By'             => 'Última modificación por'   , 
 	'LBL_FOLDER_HAS_DOCUMENTS'     => 'Mueve los documentos de la carpeta antes de borrarla', 
 	'LBL_DOWNLOAD_FILE'            => 'Descargar archivo'           , 
-	'LBL_CHECK_FILE_INTEGRITY'     => 'Comprobar integridad archivo', // KEY 5.x: LBL_CHECK_INTEGRITY
+	'LBL_CHECK_FILE_INTEGRITY'     => 'Comprobar integridad archivo', 
 	'LBL_INTERNAL'                 => 'Interno'                     , 
 	'LBL_EXTERNAL'                 => 'Externo'                     , 
-	'LBL_MAX_UPLOAD_SIZE'          => 'Tamaño máximo de archivo para subir al CRM'         , 
+	'LBL_MAX_UPLOAD_SIZE'          => 'Tamaño máximo de archivo para subir al CRM', 
 	'LBL_MOVE'                     => 'Mover'                       , 
-	'LBL_ADD_FOLDER'               => 'Agregar Carpeta'             , // KEY 5.x: LBL_ADD_NEW_FOLDER
-	'LBL_FOLDERS_LIST'             => 'Lista de Carpetas'                , 
-	'LBL_FOLDERS'                  => 'Carpetas'                     , 
+	'LBL_ADD_FOLDER'               => 'Agregar Carpeta'             , 
+	'LBL_FOLDERS_LIST'             => 'Lista de Carpetas'           , 
+	'LBL_FOLDERS'                  => 'Carpetas'                    , 
 	'LBL_DOCUMENTS_MOVED_SUCCESSFULLY' => 'Documentos movidos correctamente', 
-	'LBL_DENIED_DOCUMENTS'         => 'Documentos negados'            , 
-	'MB'                           => 'MB'                          , // KEY 5.x: LBL_FILESIZEIN_MB
+	'LBL_DENIED_DOCUMENTS'         => 'Documentos negados'          , 
+	'MB'                           => 'MB'                          , 
 	'LBL_ADD_NEW_FOLDER'           => 'Agregar Carpeta'             , 
 	'LBL_FOLDER_NAME'              => 'Nombre Carpeta'              , 
-	'LBL_FOLDER_DESCRIPTION'       => 'Descripción de la carpeta'          , 
+	'LBL_FOLDER_DESCRIPTION'       => 'Descripción de la carpeta'  , 
 	'LBL_FILE_AVAILABLE'           => 'El archivo está disponible para descargarlo', 
 	'LBL_FILE_NOT_AVAILABLE'       => 'Este documento no está disponible para descargarlo', 
 );
 $jsLanguageStrings = array(
 	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Este archivo excede el tamaño máximo de carga permitido', 
-	'JS_NEW_FOLDER'                => 'Nueva Carpeta'                  , 
-	'JS_MOVE_DOCUMENTS'            => 'Mover documentos'              , 
+	'JS_NEW_FOLDER'                => 'Nueva Carpeta'               , 
+	'JS_MOVE_DOCUMENTS'            => 'Mover documentos'            , 
 	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Estás seguro de que quieres mover estos archivos a', 
-	'JS_FOLDER'                    => 'Carpeta'                      , 
-	'JS_OPERATION_DENIED'          => 'Operación rechazada'            , 
+	'JS_FOLDER'                    => 'Carpeta'                     , 
+	'JS_OPERATION_DENIED'          => 'Operación rechazada'        , 
 );

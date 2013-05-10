@@ -316,6 +316,7 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 			
 			var callbackFunction = function() {
 				filterContainer.slideUp(500);
+				jQuery('.dateRange').DatePickerHide();
 			}
 			//adding clickoutside event on the dashboardWidgetHeader
 			Vtiger_Helper_Js.addClickOutSideEvent(dashboardWidgetHeader, callbackFunction);

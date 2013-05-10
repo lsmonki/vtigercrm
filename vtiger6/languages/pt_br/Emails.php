@@ -8,18 +8,31 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_SELECT_EMAIL_IDS'         => 'Select Email Addresses'      , // TODO: Review
+	'SINGLE_Emails'                => 'Email'                       , // TODO: Review
+	'Emails'                       => 'Emails'                      , // TODO: Review
+	'LBL_SELECT_EMAIL_IDS'         => 'Select Email Addresses'      , 
 	'LBL_SUBJECT'                  => 'Assunto:'                    , 
 	'LBL_ATTACHMENT'               => 'Anexos'                      , 
-	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , // TODO: Review
+	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , 
 	'LBL_SEND'                     => 'Enviar'                      , 
-	'LBL_SAVE_AS_DRAFT'            => 'Save as Draft'               , // TODO: Review
-	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Selecione Modelo Email'      , // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
+	'LBL_SAVE_AS_DRAFT'            => 'Save as Draft'               , 
+	'LBL_GO_TO_PREVIEW'            => 'Go to Preview'               , // TODO: Review
+	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Selecione Modelo Email'      , 
 	'LBL_COMPOSE_EMAIL'            => 'Novo E-Mail'                 , 
+	'LBL_TO'                       => 'To'                          , // TODO: Review
 	'LBL_CC'                       => 'Cc :'                        , 
 	'LBL_BCC'                      => 'Bcc :'                       , 
-	'LBL_ADD_CC'                   => 'Add Cc'                      , // TODO: Review
-	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
-	'LBL_MAX_UPLOAD_SIZE'          => 'O tamanho máximo de upload é', // KEY 5.x: LBL_MAX_SIZE
-	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	'LBL_ADD_CC'                   => 'Add Cc'                      , 
+	'LBL_ADD_BCC'                  => 'Add Bcc'                     , 
+	'LBL_MAX_UPLOAD_SIZE'          => 'O tamanho máximo de upload é', 
+	'LBL_EXCEEDED'                 => 'Exceeded'                    , 
+	'LBL_FORWARD'                  => 'Forward'                     , // TODO: Review
+	'LBL_PRINT'                    => 'Print'                       , // TODO: Review
+	'LBL_DESCRIPTION'              => 'Description'                 , // TODO: Review
+	'LBL_FROM'                     => 'From'                        , // TODO: Review
+	'LBL_INFO'                     => 'Info'                        , // TODO: Review
+	'LBL_DRAFTED_ON'               => 'Drafted on'                  , // TODO: Review
+	'LBL_SENT_ON'                  => 'Sent on'                     , // TODO: Review
+	'LBL_OWNER'                    => 'Owner'                       , // TODO: Review
+	'Date & Time Sent'             => 'Date Sent'                   , // TODO: Review
 );

@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'Vendors'                      => 'Fornitori'                   , 
 	'SINGLE_Vendors'               => 'Fornitore'                   , 
-	'LBL_ADD_RECORD'               => 'Add Vendor'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Vendors List'                , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Vendors Summary'             , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Vendor'                  , 
+	'LBL_RECORDS_LIST'             => 'Vendors List'                , 
 	'LBL_VENDOR_INFORMATION'       => 'Informazioni Fornitore:'     , 
 	'LBL_VENDOR_ADDRESS_INFORMATION' => 'Informazioni Indirizzo:'     , 
 	'Vendor Name'                  => 'Nome Fornitore'              , 
@@ -30,7 +29,7 @@ $languageStrings = array(
 	'308-Sales-Books'              => '308-Vendite-Libri'           , 
 );
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Are you sure you want to delete?',
-	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Vendor will remove its related PurchaseOrders. Are you sure you want to delete this Vendor?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected Records?', // TODO: Review
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', 
+	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Vendor will remove its related PurchaseOrders. Are you sure you want to delete this Vendor?', 
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected Records?', 
 );

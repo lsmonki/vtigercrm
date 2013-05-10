@@ -59,7 +59,7 @@ class Vtiger_Language_Handler {
 		}
 		// Lookup for the translation in base module, in case of sub modules, before ending up with common strings
 		if(strpos($module, '.') > 0) {
-			$baseModule = substr($module, 0, strpos($module, ':'));
+			$baseModule = substr($module, 0, strpos($module, '.'));
 			if($baseModule == 'Settings') {
 				$baseModule = 'Settings.Vtiger';
 			}
@@ -116,6 +116,7 @@ class Vtiger_Language_Handler {
 	 * @return <array> - array if module has language strings else returns empty array
 	 */
 	public static function getModuleStringsFromFile($language, $module='Vtiger'){
+        $module = str_replace(':', '.', $module);
 		if(empty(self::$languageContainer[$language][$module])){
 
 			$qualifiedName = 'languages.'.$language.'.'.$module;
@@ -153,32 +154,44 @@ class Vtiger_Language_Handler {
 	 * @return <Array>
 	 */
 	public static function export($module, $type='languageStrings') {
-		$currentLanguage = self::getLanguage();
-		$exportLangString = array();
+        $userSelectedLanguage = self::getLanguage();
+        $defaultLanguage = vglobal('default_language');
+        $languages = array($userSelectedLanguage);
+        //To merge base language and user selected language translations
+        if($userSelectedLanguage != $defaultLanguage) {
+            array_push($languages, $defaultLanguage);
+        }
+        
+        
+        $resultantLanguageString = array();
+        foreach($languages as $currentLanguage) {
+            $exportLangString = array();
 
-		$moduleStrings = self::getModuleStringsFromFile($currentLanguage, $module);
-		if(!empty($moduleStrings[$type])) {
-			$exportLangString = $moduleStrings[$type];
-		}
+            $moduleStrings = self::getModuleStringsFromFile($currentLanguage, $module);
+            if(!empty($moduleStrings[$type])) {
+                $exportLangString = $moduleStrings[$type];
+            }
 
-		// Lookup for the translation in base module, in case of sub modules, before ending up with common strings
-		if(strpos($module, '.') > 0) {
-			$baseModule = substr($module, 0, strpos($module, '.'));
-			if($baseModule == 'Settings') {
-				$baseModule = 'Settings.Vtiger';
-			}
-			$moduleStrings = self::getModuleStringsFromFile($currentLanguage, $baseModule);
-			if(!empty($moduleStrings[$type])) {
-				$exportLangString += $commonStrings[$type];
-			}
-		}
+            // Lookup for the translation in base module, in case of sub modules, before ending up with common strings
+            if(strpos($module, '.') > 0) {
+                $baseModule = substr($module, 0, strpos($module, '.'));
+                if($baseModule == 'Settings') {
+                    $baseModule = 'Settings.Vtiger';
+                }
+                $moduleStrings = self::getModuleStringsFromFile($currentLanguage, $baseModule);
+                if(!empty($moduleStrings[$type])) {
+                    $exportLangString += $commonStrings[$type];
+                }
+            }
 
-		$commonStrings = self::getModuleStringsFromFile($currentLanguage);
-		if(!empty($commonStrings[$type])) {
-			$exportLangString += $commonStrings[$type];
-		}
+            $commonStrings = self::getModuleStringsFromFile($currentLanguage);
+            if(!empty($commonStrings[$type])) {
+                $exportLangString += $commonStrings[$type];
+            }
+            $resultantLanguageString += $exportLangString;
+        }
 
-		return $exportLangString;;
+		return $resultantLanguageString;;
 	}
 
     /**

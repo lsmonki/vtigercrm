@@ -19,6 +19,7 @@ Class Settings_SharingAccess_Index_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('ALL_ACTIONS', Settings_SharingAccess_Action_Model::getAll());
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+		$viewer->assign('DEPENDENT_MODULES', Settings_SharingAccess_Module_Model::getDependentModules());
 
 		$viewer->view('Index.tpl', $qualifiedModuleName);
 	}

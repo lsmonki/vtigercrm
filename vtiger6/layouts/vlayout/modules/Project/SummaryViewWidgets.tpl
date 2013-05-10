@@ -41,7 +41,7 @@
 				<div class="widgetContainer_comments" data-url="{$COMMENTS_WIDGET_MODEL->getUrl()}" data-name="{$COMMENTS_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<span class="span9"><h4>{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						
+
 						<span class="span3">
 							{if $COMMENTS_WIDGET_MODEL->get('action')}
 								<button class="btn pull-right addButton createRecord" type="button" data-url="{$COMMENTS_WIDGET_MODEL->get('actionURL')}">
@@ -97,7 +97,7 @@
 		{/if}
 		{* Summary View HelpDesk Widget Ends here *}
 	</div>
-	<div class='span5'>
+	<div class='span5' style="overflow: hidden">
 
 		{* Summary View MileStone Widget*}
 		{if $MILESTONE_WIDGET_MODEL}
@@ -190,7 +190,7 @@
 				<div class="widgetContainer_updates" data-url="{$UPDATES_WIDGET_MODEL->getUrl()}" data-name="{$UPDATES_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<span class="span9"><h4>{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						
+
 						<span class="span3">
 							{if $UPDATES_WIDGET_MODEL->get('action')}
 								<button class="btn pull-right addButton createRecord" type="button" data-url="{$UPDATES_WIDGET_MODEL->get('actionURL')}">

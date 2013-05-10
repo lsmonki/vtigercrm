@@ -11,8 +11,9 @@
 -->*}
 {strip}
 	{foreach key=BLOCK_LABEL_KEY item=FIELD_MODEL_LIST from=$RECORD_STRUCTURE}
-	{if $FIELD_MODEL_LIST|@count lte 0}{continue}{/if}
-	{assign var=IS_HIDDEN value=$BLOCK_LIST[$BLOCK_LABEL_KEY]->isHidden()}
+	{assign var=BLOCK value=$BLOCK_LIST[$BLOCK_LABEL_KEY]}
+	{if $BLOCK eq null or $FIELD_MODEL_LIST|@count lte 0}{continue}{/if}
+	{assign var=IS_HIDDEN value=$BLOCK->isHidden()}
 	<input type=hidden name="timeFormatOptions" data-value='{$DAY_STARTS}' />
 	<table class="table table-bordered equalSplit detailview-table">
 		<thead>
@@ -59,13 +60,13 @@
 				{/if}
 				<td class="fieldLabel"><label class="muted pull-right marginRight10px">{vtranslate({$FIELD_MODEL->get('label')},{$MODULE_NAME})}</label></td>
 				<td class="fieldValue">
-					{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
-						<div class="row-fluid">
+					<div id="imageContainer" width="300" height="200">
+						{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
 							{if !empty($IMAGE_INFO.path) && !empty({$IMAGE_INFO.orgname})}
-								<span class="span11"><img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}"></span>
+								<img src="../{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" width="300" height="200">
 							{/if}
-						</div>
-					{/foreach}
+						{/foreach}
+					</div>
 				</td>
 				{assign var=COUNTER value=$COUNTER+1}
 			{else}

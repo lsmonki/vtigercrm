@@ -10,8 +10,10 @@
  ********************************************************************************/
 -->*}
 {strip}
+<!DOCTYPE>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	</head>
 	<body onLoad="javascript:window.print()" style="padding:3% 5%;">
 		{assign var="TO_EMAILS" value=$RECORD->get('saved_toid')|replace:']':''}
@@ -36,7 +38,7 @@
 			</div>
 			<div style="width:90%;text-align: left;font-family:'Lucida Grande';font-size:15px">
 				<span style="margin-left:7%;">
-					{$USER_MODEL->get('email1')}
+					{$FROM}
 				</span>
 			</div>
 			<div class="clear-both"></div>

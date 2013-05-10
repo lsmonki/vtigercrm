@@ -39,8 +39,8 @@ if($mode == 'add'){
 		if(!empty($val)){
 			$id = $adb->getUniqueID("vtiger_$tableName");
 			$picklist_valueid = getUniquePicklistID();
-			$sql = "insert into vtiger_$tableName values (?,?,?,?)";
-			$adb->pquery($sql, array($id, $val, 1, $picklist_valueid));
+			$sql = "insert into vtiger_$tableName values (?,?,?,?,?)";
+			$adb->pquery($sql, array($id, $val, 1, $picklist_valueid,NULL));
 			
 			//add the picklist values to the selected roles
 			for($j=0;$j<count($roles);$j++){

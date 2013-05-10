@@ -6,17 +6,9 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Users.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
+	'LBL_ADD_RECORD'               => 'Add User'                    , // TODO: Review
 	'LBL_MY_PREFERENCES'           => 'Mijn voorkeuren'             , 
 	'LBL_MORE_INFORMATION'         => 'Meer informatie'             , 
 	'LBL_USERLOGIN_ROLE'           => 'Gebruiker login & rol'       , 
@@ -25,7 +17,8 @@ $languageStrings = array(
 	'LBL_ADDRESS_INFORMATION'      => 'Adresinformatie'             , 
 	'LBL_USER_ADV_OPTIONS'         => 'Geavanceerde gebruikersopties', 
 	'Asterisk Configuration'       => 'Asterisk Configuration'      , 
-	'LBL_HOME_PAGE_COMPONENTS'     => 'Homepagina componenten'     , // KEY 5.x: LBL_HOME_PAGE_COMP
+	'LBL_HOME_PAGE_COMPONENTS'     => 'Homepagina componenten'      , 
+	'LBL_TAG_CLOUD_DISPLAY'        => 'Tag Cloud Display'           , // TODO: Review
 	'Role'                         => 'Rol'                         , 
 	'Admin'                        => 'Admin'                       , 
 	'User Name'                    => 'Gebruikersnaam'              , 
@@ -48,7 +41,7 @@ $languageStrings = array(
 	'LBL_HIDDEN'                   => 'Verborgen'                   , 
 	'LBL_SHOW'                     => 'Laten zien'                  , 
 	'LBL_HIDE'                     => 'Verberg'                     , 
-	'LBL_HOME_PAGE_COMPO'          => 'Homepagina componenten'     , // KEY 5.x: LBL_HOME_PAGE_COMP
+	'LBL_HOME_PAGE_COMPO'          => 'Homepagina componenten'      , 
 	'LBL_LOGIN_HISTORY'            => 'Login geschiedenis'          , 
 	'LBL_USERDETAIL_INFO'          => 'Bekijk details van de gebruiker', 
 	'LBL_DELETE_GROUP'             => 'Verwijder groep'             , 
@@ -61,19 +54,22 @@ $languageStrings = array(
 	'LBL_PROFILE_TO_BE_DELETED'    => 'Verwijder profiel'           , 
 	'INTERNAL_MAIL_COMPOSER'       => 'Interne e-mail Composer'     , 
 	'Asterisk Extension'           => 'Asterisk Extension'          , 
-	'Receive Incoming Calls'       => 'Ontvang Inkomende Telefoontjes'      , // KEY 5.x:  Receive Incoming Calls
+	' Receive Incoming Calls'      => 'Receive Incoming Calls'      , // TODO: Review
 	'Reminder Interval'            => 'herinnerings Interval'       , 
 	'Webservice Access Key'        => 'Toegangssleutel'             , 
 	'Language'                     => 'Taal'                        , 
 	'Theme'                        => 'Thema'                       , 
 	'Time Zone'                    => 'Tijdzone'                    , 
-	'Decimal Separator'            => 'Decimaal Scheidingsteken'           , // TODO: Review
-	'Digit Grouping Pattern'       => 'Digit Groepeer Patroon'      , // TODO: Review
-	'Digit Grouping Separator'     => 'Digit Groupeer Scheidingsteken'    , // TODO: Review
-	'Symbol Placement'             => 'Symbool Plaatsing'            , // TODO: Review
-	'Number Of Currency Decimals'  => 'Aantal Valuta Decimalen' , // TODO: Review
-	'Truncate Trailing Zeros'      => 'Verwijder Extra Nullen'     , // TODO: Review
-	'Kwajalein'                    => '(UTC-12:00) International Date Line West',  //  LRO decided to keep these in original Enlgish
+	'Decimal Separator'            => 'Decimaal Scheidingsteken'    , 
+	'Digit Grouping Pattern'       => 'Digit Groepeer Patroon'      , 
+	'Digit Grouping Separator'     => 'Digit Groupeer Scheidingsteken', 
+	'Symbol Placement'             => 'Symbool Plaatsing'           , 
+	'Number Of Currency Decimals'  => 'Aantal Valuta Decimalen'     , 
+	'Truncate Trailing Zeros'      => 'Verwijder Extra Nullen'      , 
+	'Default Call Duration'        => 'Default Call Duration (Mins)', // TODO: Review
+	'Other Event Duration'         => 'Other Event Duration (Mins)' , // TODO: Review
+	'Calendar Hour Format'         => 'Calendar Hour Format'        , // TODO: Review
+	'Kwajalein'                    => '(UTC-12:00) International Date Line West', 
 	'Pacific/Midway'               => '(UTC-11:00) Coordinated Universal Time-11', 
 	'Pacific/Samoa'                => '(UTC-11:00) Samoa'           , 
 	'Pacific/Honolulu'             => '(UTC-10:00) Hawaii'          , 
@@ -170,4 +166,11 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland'        , 
 	'Asia/Magadan'                 => '(UTC+12:00) Magadan'         , 
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa'       , 
+	'Summary'                      => 'Summary'                     , // TODO: Review
+	'Detail'                       => 'Detail'                      , // TODO: Review
+	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'LBL_OLD_PASSWORD'			   => 'Old Password',
+	'LBL_CHANGE_PASSWORD'	       => 'Change Password',
+	'LBL_NEW_PASSWORD'			   => 'New Password',
+	'LBL_CONFIRM_PASSWORD'		   => 'Confirm Password',
 );

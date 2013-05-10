@@ -17,7 +17,7 @@ class Vtiger_Action_Model extends Vtiger_Base_Model {
 	static $nonConfigurableActions = array('Save', 'index', 'SavePriceBook', 'SaveVendor',
 											'DetailViewAjax', 'PriceBookEditView', 'QuickCreate', 'VendorEditView',
 											'DeletePriceBook', 'DeleteVendor', 'Popup', 'PriceBookDetailView',
-											'TagCloud', 'VendorDetailView', 'ConvertLead');
+											'TagCloud', 'VendorDetailView');
 
 	public function getId() {
 		return $this->get('actionid');
@@ -100,20 +100,24 @@ class Vtiger_Action_Model extends Vtiger_Base_Model {
 	}
 
 	public static function getAll($configurable=false) {
-		$db = PearDatabase::getInstance();
+		$actionModels = Vtiger_Cache::get('vtiger', 'actions');
+        if(!$actionModels){
+            $db = PearDatabase::getInstance();
 
-		$sql = 'SELECT * FROM vtiger_actionmapping';
-		$params = array();
-		if($configurable) {
-			$sql .= ' WHERE actionname NOT IN ('. generateQuestionMarks(self::$nonConfigurableActions) .')';
-			array_push($params, self::$nonConfigurableActions);
-		}
-		$result = $db->pquery($sql, $params);
-		$noOfRows = $db->num_rows($result);
-		$actionModels = array();
-		for($i=0; $i<$noOfRows; ++$i) {
-			$actionModels[] = self::getInstanceFromQResult($result, $i);
-		}
+            $sql = 'SELECT * FROM vtiger_actionmapping';
+            $params = array();
+            if($configurable) {
+                $sql .= ' WHERE actionname NOT IN ('. generateQuestionMarks(self::$nonConfigurableActions) .')';
+                array_push($params, self::$nonConfigurableActions);
+            }
+            $result = $db->pquery($sql, $params);
+            $noOfRows = $db->num_rows($result);
+            $actionModels = array();
+            for($i=0; $i<$noOfRows; ++$i) {
+                $actionModels[] = self::getInstanceFromQResult($result, $i);
+            }
+            Vtiger_Cache::set('vtiger','actions', $actionModels);
+        }
 		return $actionModels;
 	}
 

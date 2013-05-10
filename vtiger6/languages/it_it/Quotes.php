@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Preventivo'                  , 
 	'LBL_EXPORT_TO_PDF'            => 'Esporta in PDF'              , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Lista Preventivi'            , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Lista Preventivi'            , 
 	'LBL_QUOTE_INFORMATION'        => 'Informazioni Preventivo'     , 
 	'Quote No'                     => 'No. Preventivo'              , 
 	'Quote Stage'                  => 'Stadio Preventivo'           , 

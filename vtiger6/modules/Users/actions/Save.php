@@ -34,11 +34,14 @@ class Users_Save_Action extends Vtiger_Save_Action {
 		}
 
 		foreach ($modelData as $fieldName => $value) {
-			$requestFieldExits = $request->has($fieldName);
-			if(!$requestFieldExits){
+			$requestFieldExists = $request->has($fieldName);
+			if(!$requestFieldExists){
 				continue;
 			}
 			$fieldValue = $request->get($fieldName, null);
+			if ($fieldName === 'is_admin' && !$fieldValue) {
+				$fieldValue = 'off';
+			}
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
 					$fieldValue = trim($fieldValue);

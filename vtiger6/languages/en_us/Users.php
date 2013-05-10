@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'LBL_ADD_RECORD' => 'Add User',
 
 	//MyPreference Blocks
 	'LBL_MY_PREFERENCES'  =>  'My Preferences',
@@ -175,4 +176,21 @@ $languageStrings = array(
 
 	'Summary' => 'Summary',
 	'Detail' => 'Detail',
+	'LBL_USER_LIST_DETAILS' => 'Details',
+	
+	'LBL_OLD_PASSWORD' => 'Old Password',
+	'LBL_CHANGE_PASSWORD' => 'Change Password',
+	'LBL_NEW_PASSWORD' => 'New Password',
+	'LBL_CONFIRM_PASSWORD' => 'Confirm Password',
+);
+
+$jsLanguageStrings = array(
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

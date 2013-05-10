@@ -9,7 +9,7 @@
  ********************************************************************************/
 $patch_version = '';
 $modified_database = '';
-$vtiger_current_version = '5.10.10';
+$vtiger_current_version = '5.10.11';
 $_SESSION['vtiger_version'] = $vtiger_current_version;
 
 ?>

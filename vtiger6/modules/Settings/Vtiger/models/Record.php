@@ -26,4 +26,8 @@ abstract class Settings_Vtiger_Record_Model extends Vtiger_Base_Model {
 
 		return $links;
 	}
+	
+	public function getDisplayValue($key) {
+		return $this->get($key);
+	}
 }

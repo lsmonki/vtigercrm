@@ -137,12 +137,12 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 	 * @return <Array> - List of Vtiger_Field_Model instances
 	 */
 	public function getListViewHeaders() {
-		$listViewContoller = $this->get('listview_controller');
+        $listViewContoller = $this->get('listview_controller');
+        $module = $this->getModule();
 		$headerFieldModels = array();
 		$headerFields = $listViewContoller->getListViewHeaderFields();
 		foreach($headerFields as $fieldName => $webserviceField) {
-			$fieldObj = Vtiger_Field::getInstance($webserviceField->getFieldId());
-			$headerFieldModels[$fieldName] = Vtiger_Field_Model::getInstanceFromFieldObject($fieldObj);
+			$headerFieldModels[$fieldName] = Vtiger_Field_Model::getInstance($fieldName,$module);
 		}
 		return $headerFieldModels;
 	}
@@ -242,9 +242,9 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
-		$listQuery = $queryGenerator->getQuery();
+		$listQuery = $this->getQuery();
 		
-
+		
 		$sourceModule = $this->get('src_module');
 		if(!empty($sourceModule)) {
 			$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
@@ -268,7 +268,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		if($this->getModule()->get('name') == 'Calendar'){
 			$listQuery .= ' AND activitytype <> "Emails"';
 		}
-
+		
 		$listResult = $db->pquery($listQuery, array());
 		return $db->query_result($listResult, 0, 'count');
 	}

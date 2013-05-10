@@ -6,17 +6,19 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Settings/Groups.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Draag eigendom over'          , // TODO: Review
-	'LBL_TO_OTHER_GROUP'           => 'Aan andere groep '             , // TODO: Review
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Draag eigendom over'         , 
+	'SINGLE_Groups'                => 'Group'                       , // TODO: Review
+	'LBL_TO_OTHER_GROUP'           => 'Aan andere groep '           , 
+	'LBL_ADD_RECORD'               => 'Add Group'                   , // TODO: Review
+	'LBL_GROUP_NAME'               => 'Group Name'                  , // TODO: Review
+	'LBL_GROUP_MEMBERS'            => 'Group Members'               , // TODO: Review
+	'LBL_ADD_USERS_ROLES'          => 'Add Users, Roles...'         , // TODO: Review
+	'LBL_ROLEANDSUBORDINATE'       => 'Role and Subordinates'       , // TODO: Review
+	'RoleAndSubordinates'          => 'Role and Subordinates'       , // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully'  , // TODO: Review
 );

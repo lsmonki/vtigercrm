@@ -272,7 +272,10 @@ class CRMEntity {
 		$date_var = date("Y-m-d H:i:s");
 
 		$ownerid = $this->column_fields['assigned_user_id'];
-
+		if(empty($ownerid)) {
+			$ownerid = $current_user->id;
+		}
+		/* vtiger6 Performance check added
 		$sql = "select ownedby from vtiger_tab where name=?";
 		$res = $adb->pquery($sql, array($module));
 		$this->ownedby = $adb->query_result($res, 0, 'ownedby');
@@ -285,6 +288,7 @@ class CRMEntity {
 		// It is empty for modules like Invoice/Quotes/SO/PO which do not have Assigned to field
 		if ($ownerid === '')
 			$ownerid = 0;
+		/ Performance check ends */
 
 		if ($module == 'Events') {
 			$module = 'Calendar';
@@ -315,7 +319,8 @@ class CRMEntity {
 				}
 			}
 			$adb->pquery($sql, $params);
-			$sql1 = "delete from vtiger_ownernotify where crmid=?";
+			/* vtiger6 Performance - not sure if this is used now
+			/*$sql1 = "delete from vtiger_ownernotify where crmid=?";
 			$params1 = array($this->id);
 			$adb->pquery($sql1, $params1);
 			if ($ownerid != $current_user->id) {
@@ -323,6 +328,7 @@ class CRMEntity {
 				$params1 = array($this->id, $ownerid, null);
 				$adb->pquery($sql1, $params1);
 			}
+			/Performance ends  */
 		} else {
 			//if this is the create mode and the group allocation is chosen, then do the following
 			$current_id = $adb->getUniqueID("vtiger_crmentity");
@@ -2172,7 +2178,7 @@ class CRMEntity {
 		$secQuery = "select $table_name.* from $table_name inner join vtiger_crmentity on " .
 				"vtiger_crmentity.crmid=$table_name.$column_name and vtiger_crmentity.deleted=0";
 
-		$secQueryTempTableQuery = $queryPlanner->registerTempTable($secQuery, $column_name);
+		$secQueryTempTableQuery = $queryPlanner->registerTempTable($secQuery, array($column_name, $fields[1]));
 
 		$query = '';
 		if ($pritablename == 'vtiger_crmentityrel') {

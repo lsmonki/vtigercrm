@@ -8,15 +8,19 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_PurchaseOrder'         => 'Beszerzés'					,
-	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'			,
-	'LBL_ADD_RECORD'               => 'Beszerzés hozzáadása'		,
-	'LBL_RECORDS_LIST'             => 'Beszerzések listája'			, // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Beszerzés összefoglaló'		,
-	'LBL_PO_INFORMATION'           => 'Beszerzés adatai'			,
-	'PurchaseOrder No'             => 'Beszerzés No.'				,
-	'Requisition No'               => 'Igénylőlap sorszáma'			,
-	'Tracking Number'              => 'Nyomkövető szám'				,
-	'Sales Commission'             => 'Értékesítési jutalék'		,
-	'Received Shipment'            => 'Beérkezett beszerzés'		,
+	'SINGLE_PurchaseOrder'         => 'Beszerzés'                  , 
+	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'         , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Beszerzés hozzáadása'     , 
+	'LBL_RECORDS_LIST'             => 'Beszerzések listája'       , 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
+	'LBL_PO_INFORMATION'           => 'Beszerzés adatai'           , 
+	'PurchaseOrder No'             => 'Beszerzés No.'              , 
+	'Requisition No'               => 'Igénylőlap sorszáma'      , 
+	'Tracking Number'              => 'Nyomkövető szám'          , 
+	'Sales Commission'             => 'Értékesítési jutalék'   , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
+	'Received Shipment'            => 'Beérkezett beszerzés'      , 
 );

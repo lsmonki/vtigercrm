@@ -17,6 +17,7 @@ $languageStrings = array(
 
 	// Common Actions
 	'LBL_SELECT_ALL' => 'Select all',
+	'LBL_SELECT_TO_LOAD_LIST' => 'Select to Load List',
 	'LBL_CREATING_NEW' => 'Creating New',
 	'LBL_EDITING' => 'Editing',
 	'LBL_SAVE' => 'Save',
@@ -35,7 +36,7 @@ $languageStrings = array(
 	'LBL_EDIT_FIELDS' => 'Edit Fields',
 	'LBL_EDIT_WORKFLOWS' => 'Edit Workflows',
 	'LBL_EDIT_PICKLIST_VALUES' => 'Edit Picklist Values',
-	'LBL_EDIT_MAILSCANNER' => 'Convert Emails',
+	'LBL_EDIT_MAILSCANNER' => 'Mail Converter',
 	'LBL_RECORD_DELETE' => 'The record you are trying to view has been deleted.',
 	'LBL_RECORD_NOT_FOUND' => 'Record you are trying to access is not found',
 
@@ -317,7 +318,6 @@ $languageStrings = array(
 	'LBL_CUSTOM_INFORMATION' => 'Custom Information',
 	'LBL_NO_RECENT_UPDATES' => 'No recent updates',
 	'LBL_NO_DATA' => 'No Data',
-	'LBL_NO_RECENT_UPDATES' => 'No recent updates',
 	'LBL_PERMISSION_DENIED' => 'Permission denied',
 	'LBL_HANDLER_NOT_FOUND' => 'Handler not found',
 	'LBL_FILTER' => 'Filter',
@@ -340,7 +340,7 @@ $languageStrings = array(
 	'LBL_CREATE_VIEW' => 'Creating new View',
 	'LBL_BASIC_DETAILS' => 'Basic Details',
 	'LBL_CHOOSE_COLUMNS' => 'Choose Columns and Order',
-	'LBL_MAX_NUMBER_FILTER_COLUMNS' => 'Max 7',
+	'LBL_MAX_NUMBER_FILTER_COLUMNS' => 'Max 12',
 	'LBL_FILTER_ON_DATE' => 'Filter on date',
 	'LBL_CHOOSE_FILTER_CONDITIONS' => 'Choose filter Conditions',
 	'LBL_ADD_CONDITION' => 'Add Condition',
@@ -478,6 +478,9 @@ $languageStrings = array(
 	'Market Failed'=>'Market Failed',
 	'Project Cancelled'=>'Project Cancelled',
 	'Shutdown'=>'Shutdown',
+	'Apparel'=>'Apparel',
+	'Banking'=>'Banking',
+	'Biotechnology'=>'Biotechnology',
 	'Chemicals'=>'Chemicals',
 	'Communications'=>'Communications',
 	'Construction'=>'Construction',
@@ -660,6 +663,37 @@ $languageStrings = array(
 	'LBL_GLOBAL_SEARCH_MAX_MESSAGE' => 'Only the first 100 results of all modules are shown below. For module specific results, please select respective module and search',
 	'LBL_GLOBAL_SEARCH_MAX_MESSAGE_FOR_MODULE' => 'Only the first 100 results are shown below. Please do Advanced Search if you are not satisfied with the result',
 
+	// used in reports detail view
+	'LBL ACTION' => 'Action',
+	'LBL_NOTE' => 'Note',
+	'LBL_SELECT_OPTION' => 'Select an Option',
+	
+	//Module Manager
+	'LBL_TOOLTIP' => 'Tooltip Management',
+	'LBL_MODULE_SEQUENCE_NUMBERING' => 'Module Sequence Numbering',
+	'LBL_CUSTOM_FIELD_MAPPING' => 'Custom Field Mapping',
+	'LBL_WEBFORMS' => 'WebForms',
+	
+	//Compose Email Strings
+	'SINGLE_Emails' => 'Email',
+	'Emails' => 'Emails',
+	'LBL_SELECT_EMAIL_IDS' => 'Select Email Addresses',
+	'LBL_SUBJECT' => 'Subject',
+	'LBL_ATTACHMENT' => 'Attachment',
+	'LBL_BROWSE_CRM' => 'Browse CRM',
+	'LBL_SEND' => 'Send',
+	'LBL_SAVE_AS_DRAFT' => 'Save as Draft',
+	'LBL_GO_TO_PREVIEW' => 'Go to Preview',
+	'LBL_SELECT_EMAIL_TEMPLATE' => 'Select Email Template',
+	'LBL_COMPOSE_EMAIL' => 'Compose Email',
+	'LBL_TO' => 'To',
+ 	'LBL_CC' => 'Cc',
+   	'LBL_BCC' => 'Bcc',
+   	'LBL_ADD_CC' => 'Add Cc',
+   	'LBL_ADD_BCC' => 'Add Bcc',
+	'LBL_MAX_UPLOAD_SIZE' => 'Maximum upload size is',
+	'LBL_EXCEEDED' => 'Exceeded',
+	
 );
 
 $jsLanguageStrings = array(
@@ -710,6 +744,7 @@ $jsLanguageStrings = array(
 	'JS_THIS_FILE_HAS_ALREADY_BEEN_SELECTED' => 'This File has already been selected',
 	'JS_MAX_FILE_UPLOAD_EXCEEDS' => 'max file Upload exceeds',
 	'JS_THIS_DOCUMENT_HAS_ALREADY_BEEN_SELECTED' => 'This Document has already been attached',
+	'JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO' => 'Should be greater than or equal to',
 
 
 	//Roles
@@ -721,6 +756,9 @@ $jsLanguageStrings = array(
 	'JS_MAP_NAME_CAN_NOT_BE_EMPTY' => 'Map Name cannot be empty',
 	'JS_MAP_NAME_ALREADY_EXISTS' => 'Map Name already exists',
 	'JS_SELECT_FILE_EXTENSION' => 'Please select a file with the following extension:',
+	'JS_UPLOADED_FILE_SIZE_SHOULD_BE_LESS_THAN' => 'Upload file size should be less than',
+	'JS_UPLOADED_FILE_SIZE_EXCEEDS' => 'Uploaded file size exceeds',
+	'JS_PLEASE_SPLIT_FILE_AND_IMPORT_AGAIN' => 'Please split the file into smaller files and import again.',
 	'JS_FIELD_MAPPED_MORE_THAN_ONCE' => 'Field mapped more than once',
 	'JS_MAP_MANDATORY_FIELDS' => 'Please map mandatory fields',
 	'JS_PLEASE_ENTER_SOME_VALUE' => 'Please enter some value to search',
@@ -763,11 +801,48 @@ $jsLanguageStrings = array(
 	'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Contact does not contain address to copy',
 	'JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER' => 'Please enter Primary email address to enable portal user',
 	'JS_PRIMARY_EMAIL_FIELD_DOES_NOT_EXISTS' => 'Primary email field does not exist to enable portal user',
-	
+
 	//Tag Cloud validation messages
 	'JS_PLEASE_ENTER_A_TAG' => 'Please enter a tag',
 	'JS_TAG_NAME_ALREADY_EXIST' => 'Tag name already exist',
 	'JS_MAX_TAG_LENGTH_EXCEEDS' => 'Tag length exceeds max size',
+
+	'JS_NO_VIEW_PERMISSION_AFTER_SAVE'=> 'You will not have permissions to view this record after save. Would you like to continue?',
+	'JS_NO_RECORDS_RELATED_TO_THIS_FILTER' => 'No Records Related to this Filter',
+
+	// Calendar Reminder popup
+	'JS_START_DATE_TIME' => 'Start Date & Time',
+	'JS_END_DATE_TIME' => 'End Date & Time',
+	'JS_POSTPONE' => 'Postpone',
+	'JS_MESSAGE' => 'Message',
 	
-	'JS_NO_VIEW_PERMISSION_AFTER_SAVE'=> 'You will not have permissions to view this record after save. Would you like to continue?'
+	'JS_NO_VIEW_PERMISSION_AFTER_SAVE'=> 'You will not have permissions to view this record after save. Would you like to continue?',
+	
+	//Settings page translations
+	'JS_SUCCESSFULLY_PINNED' => 'Shortcut added successfully',
+	'JS_SUCCESSFULLY_UNPINNED' => 'Shortcut removed successfully',
+	'JS_SHORTCUT_ALREADY_ADDED' => 'This shortcut is already added',
+	'JS_MESSAGE' => 'Message',
+	
+	//Module Manager
+	'JS_MODULE_ENABLED' => 'Module Enabled',
+	'JS_MODULE_DISABLED' => 'Module Disabled',
+	
+	//Crom tasks
+	'JS_VALUE_SHOULD_NOT_BE_LESS_THAN' => 'Frequency of any cron job configured should not be less than',
+	'JS_MINUTES' => 'mins',
+	
+	//PickList 
+	'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Item Renamed Successfully',
+	'JS_ITEM_ADDED_SUCCESSFULLY' => 'Item added Successfully',
+	'JS_NO_ITEM_SELECTED' => 'No item Selected',
+	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected',
+	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully',
+	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value',
+	
+	//User Password
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
+	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Password Changed Successfully.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
+
 );

@@ -9,6 +9,13 @@
  *************************************************************************************/
 
 class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
+	
+	public function checkPermission(Vtiger_Request $request) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		if(!$currentUser->isAdminUser()) {
+			throw new AppException('LBL_PERMISSION_DENIED');
+		}
+	}
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
@@ -24,11 +31,13 @@ class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
 		if($recordModel) {
 			$recordModel->set('profilename', $request->get('profilename'));
 			$recordModel->set('description', $request->get('description'));
+			$recordModel->set('viewall', $request->get('viewall'));
+			$recordModel->set('editall', $request->get('editall'));
 			$recordModel->set('profile_permissions', $request->get('permissions'));
 			$recordModel->save();
 		}
 
-		$redirectUrl = $moduleModel->getDefaultUrl();
+		$redirectUrl = $recordModel->getDetailViewUrl();
 		header("Location: $redirectUrl");
 	}
 }

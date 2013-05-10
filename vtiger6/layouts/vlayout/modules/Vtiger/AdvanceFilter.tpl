@@ -23,6 +23,7 @@
 
 
 <div class="filterContainer">
+	<input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 	<input type=hidden name="advanceFilterOpsByFieldType" data-value='{ZEND_JSON::encode($ADVANCED_FILTER_OPTIONS_BY_TYPE)}' />
 	{foreach key=ADVANCE_FILTER_OPTION_KEY item=ADVANCE_FILTER_OPTION from=$ADVANCED_FILTER_OPTIONS}
 		{$ADVANCED_FILTER_OPTIONS[$ADVANCE_FILTER_OPTION_KEY] = vtranslate($ADVANCE_FILTER_OPTION, $MODULE)}
@@ -37,14 +38,14 @@
 		<div class="contents">
 			<div class="conditionList">
 			 {foreach item=CONDITION_INFO from=$ALL_CONDITION_CRITERIA['columns']}
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=$CONDITION_INFO MODULE=$MODULE}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=$CONDITION_INFO MODULE=$MODULE}
 			{/foreach}
 			{if count($ALL_CONDITION_CRITERIA) eq 0}
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array()}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array()}
 			{/if}
 			</div>
 			<div class="hide basic">
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=array() MODULE=$MODULE NOCHOSEN=true}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=array() MODULE=$MODULE NOCHOSEN=true}
 			</div>
 			<div class="addCondition">
 				<button type="button" class="btn"><strong>{vtranslate('LBL_ADD_CONDITION',$MODULE)}</strong></button>
@@ -67,14 +68,14 @@
 		<div class="contents">
 			<div class="conditionList">
 			{foreach item=CONDITION_INFO from=$ANY_CONDITION_CRITERIA['columns']}
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=$CONDITION_INFO MODULE=$MODULE CONDITION="or"}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE CONDITION_INFO=$CONDITION_INFO MODULE=$MODULE CONDITION="or"}
 			{/foreach}
 			{if count($ANY_CONDITION_CRITERIA) eq 0}
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array() CONDITION="or"}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array() CONDITION="or"}
 			{/if}
 			</div>
 			<div class="hide basic">
-				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array() CONDITION="or" NOCHOSEN=true}
+				{include file='AdvanceFilterCondition.tpl'|@vtemplate_path:$QUALIFIED_MODULE RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE=$MODULE CONDITION_INFO=array() CONDITION="or" NOCHOSEN=true}
 			</div>
 			<div class="addCondition">
 				<button type="button" class="btn"><strong>{vtranslate('LBL_ADD_CONDITION',$MODULE)}</strong></button>

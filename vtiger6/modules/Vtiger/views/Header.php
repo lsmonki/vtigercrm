@@ -13,7 +13,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	//Note : To get the right hook for immediate parent in PHP,
 	// specially in case of deep hierarchy
 	/*function preProcessParentTplName(Vtiger_Request $request) {
@@ -59,9 +59,17 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 				'childlinks' => array(
 					array (
 						'linktype' => 'HEADERLINK',
-						'linklabel' => 'LBL_HELP',
-						'linkurl' => 'http://wiki.vtiger.com/vtiger6/index.php',
+						'linklabel' => 'LBL_DOCUMENTATION',
+						'linkurl' => 'https://wiki.vtiger.com/vtiger6/index.php/Main_Page',
 						'linkicon' => '',
+						'target' => '_blank'
+					),
+					array (
+						'linktype' => 'HEADERLINK',
+						'linklabel' => 'LBL_VIDEO_TUTORIAL',
+						'linkurl' => 'https://www.vtiger.com/crm/videos',
+						'linkicon' => '',
+						'target' => '_blank'
 					),
 					// Note: This structure is expected to generate side-bar feedback button.
 					array (
@@ -87,7 +95,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linkurl' => '?module=Vtiger&parent=Settings&view=Index',
 						'linkicon' => '',
 					),
-				)
+					)
 			);
 			array_push($headerLinks, $crmSettingsLink);
 		}
@@ -100,14 +108,8 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 					array (
 						'linktype' => 'HEADERLINK',
 						'linklabel' => 'LBL_MY_PREFERENCES',
-						'linkurl' => $userModel->getDetailViewUrl(),
+						'linkurl' => $userModel->getPreferenceDetailViewUrl(),
 						'linkicon' => '',
-					),
-					array(
-						'linktype' => 'HEADERLINK',
-						'linklabel' => 'Switch to old look',
-						'linkurl' => '?module=Users&action=UI5',
-						'linkicon' =>'',
 					),
 					array(), // separator
 					array (
@@ -129,9 +131,11 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 			}
 			$headerLinkInstances[$index++] = $headerLinkInstance;
 		}
-		$headerLinks = Vtiger_Link::getAllByType(Vtiger_Link::IGNORE_MODULE, 'HEADERLINK');
-		foreach($headerLinks as $headerLink) {
-			$headerLinkInstances[$index++] = Vtiger_Link_Model::getInstanceFromLinkObject($headerLink);
+		$headerLinks = Vtiger_Link_Model::getAllByType(Vtiger_Link::IGNORE_MODULE, array('HEADERLINK'));
+		foreach($headerLinks as $headerType => $headerLinks) {
+			foreach($headerLinks as $headerLink) {
+				$headerLinkInstances[$index++] = Vtiger_Link_Model::getInstanceFromLinkObject($headerLink);
+			}
 		}
 		return $headerLinkInstances;
 	}
@@ -143,11 +147,12 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 	 */
 	function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
-		$homeTabId = getTabid('Home');
-		$headerScripts = Vtiger_Link::getAllByType(Vtiger_Link::IGNORE_MODULE, 'HEADERSCRIPT');
-		foreach($headerScripts as $headerScript) {
-			if ($this->checkFileUriInRelocatedMouldesFolder($headerScript->linkurl)) {
-				$headerScriptInstances[] = Vtiger_JsScript_Model::getInstanceFromLinkObject($headerScript);
+		$headerScripts = Vtiger_Link_Model::getAllByType(Vtiger_Link::IGNORE_MODULE, array('HEADERSCRIPT'));
+		foreach($headerScripts as $headerType => $headerScripts) {
+			foreach($headerScripts as $headerScript) {
+				if ($this->checkFileUriInRelocatedMouldesFolder($headerScript->linkurl)) {
+					$headerScriptInstances[] = Vtiger_JsScript_Model::getInstanceFromLinkObject($headerScript);
+				}
 			}
 		}
 		return $headerScriptInstances;
@@ -160,7 +165,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 	 */
 	function getHeaderCss(Vtiger_Request $request) {
 		$headerCssInstances = parent::getHeaderCss($request);
-		$headerCss = Vtiger_Link::getAllByType(Vtiger_Link::IGNORE_MODULE, 'HEADERCSS');
+		$headerCss = Vtiger_Link_Model::getAllByType(Vtiger_Link::IGNORE_MODULE, array('HEADERCSS'));
 		$selectedThemeCssPath = Vtiger_Theme::getStylePath();
 		//TODO : check the filename whether it is less or css and add relative less
 		$isLessType = (strpos($selectedThemeCssPath, ".less") !== false)? true:false;
@@ -171,9 +176,11 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 											Vtiger_CssScript_Model::LESS_REL :
 											Vtiger_CssScript_Model::DEFAULT_REL);
 
-		foreach($headerCss as $css) {
-			if ($this->checkFileUriInRelocatedMouldesFolder($css->linkurl)) {
-				$headerCssInstances[] = Vtiger_CssScript_Model::getInstanceFromLinkObject($css);
+		foreach($headerCss as $headerType => $cssLinks) {
+			foreach($cssLinks as $cssLink) {
+				if ($this->checkFileUriInRelocatedMouldesFolder($cssLink->linkurl)) {
+					$headerCssInstances[] = Vtiger_CssScript_Model::getInstanceFromLinkObject($cssLink);
+				}
 			}
 		}
 		return $headerCssInstances;
@@ -184,8 +191,12 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 	 * @return Vtiger_Base_Model - Announcement
 	 */
 	function getAnnouncement() {
-		$announcement = get_announcements();
+		//$announcement = Vtiger_Cache::get('announcement', 'value');
 		$model = new Vtiger_Base_Model();
+		//if(!$announcement) {
+			$announcement = get_announcements();
+				//Vtiger_Cache::set('announcement', 'value', $announcement);
+		//}
 		return $model->set('announcement', $announcement);
 	}
 

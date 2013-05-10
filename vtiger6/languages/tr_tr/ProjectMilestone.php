@@ -8,12 +8,11 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Project Milestone Summary'   , // TODO: Review
-	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , // TODO: Review
-	'Project Milestone Name'       => 'Project Milestone Name'      , // TODO: Review
-	'Milestone Date'               => 'Milestone Date'              , // TODO: Review
-	'Project Milestone No'         => 'Project Milestone Number'    , // TODO: Review
+	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , 
+	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , 
+	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , 
+	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , 
+	'Project Milestone Name'       => 'Project Milestone Name'      , 
+	'Milestone Date'               => 'Milestone Date'              , 
+	'Project Milestone No'         => 'Project Milestone Number'    , 
 );

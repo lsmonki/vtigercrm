@@ -200,7 +200,7 @@ class Import_Main_View extends Vtiger_View_Controller{
 		$viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('MODULE', 'Import');
 		$viewer->assign('SAVED_MAPS', Import_Map_Model::getAllByModule($moduleName));
-		echo $viewer->view('Import_Saved_Maps.tpl', 'Import');
+		$viewer->view('Import_Saved_Maps.tpl', 'Import');
 	}
 }
 

@@ -96,17 +96,36 @@ class ConfigEditor_Controller {
 
 		if ($configReader) {
 			$reqvalues = $request->values();
-			foreach($reqvalues as $k => $v) {
-				if (preg_match("/key_([^ ]+)/", $k, $m)) {
-					$configReader->setVariableValue($m[1], $v);
+			if($this->validateReqValues($reqvalues)){
+				foreach($reqvalues as $k => $v) {
+					if (preg_match("/key_([^ ]+)/", $k, $m)) {
+						$configReader->setVariableValue($m[1], vtlib_purify($v));
+					}
 				}
+				$configReader->save();
 			}
-			$configReader->save();
 		}
 		header('Location: index.php?module=ConfigEditor&action=index');
 	}
+	
+	function validateReqValues($values){
+		$flag = true;
+		if(filter_var($values['key_HELPDESK_SUPPORT_EMAIL_ID'], FILTER_VALIDATE_EMAIL) != true) {
+			$flag = false;
+		}elseif(preg_match ('/[\'";?><]/', $values['key_HELPDESK_SUPPORT_NAME'])){
+			$flag = false;
+		}elseif(!preg_match ('/[a-zA-z0-9]/', $values['key_default_module'])){
+			$flag = false;
+		}elseif(filter_var($values['key_upload_maxsize'],FILTER_VALIDATE_INT) != true || 
+				filter_var($values['key_list_max_entries_per_page'],FILTER_VALIDATE_INT) != true ||
+				filter_var($values['key_history_max_viewed'],FILTER_VALIDATE_INT) != true || 
+				filter_var($values['key_listview_max_textlength'],FILTER_VALIDATE_INT) != true ) {
+			$flag = false;
+		}
+		return $flag;
+	}
+	
 }
-
 $controller = new ConfigEditor_Controller();
 $controller->process(new ConfigEditor_Request($_REQUEST));
 

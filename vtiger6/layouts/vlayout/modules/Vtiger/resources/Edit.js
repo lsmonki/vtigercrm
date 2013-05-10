@@ -21,19 +21,35 @@ jQuery.Class("Vtiger_Edit_Js",{
     refrenceMultiSelectionEvent : 'Vtiger.MultiReference.Selection',
     
     preReferencePopUpOpenEvent : 'Vtiger.Referece.Popup.Pre',
+	
+	editInstance : false,
 
-	getInstance : function(moduleName) {
-		if(typeof moduleName == "undefined"){
-			moduleName = app.getModuleName();
+	getInstance: function(){
+		if(Vtiger_Edit_Js.editInstance == false){
+			var module = app.getModuleName();
+			var parentModule = app.getParentModuleName();
+			if(parentModule == 'Settings'){
+				var moduleClassName = parentModule+"_"+module+"_Edit_Js";
+				if(typeof window[moduleClassName] == 'undefined'){
+					moduleClassName = module+"_Edit_Js";
+				}
+				var fallbackClassName = parentModule+"_Vtiger_Edit_Js";
+				if(typeof window[fallbackClassName] == 'undefined') {
+					fallbackClassName = "Vtiger_Edit_Js";
+				}
+			} else {
+				moduleClassName = module+"_Edit_Js";
+				fallbackClassName = "Vtiger_Edit_Js";
+			}
+			if(typeof window[moduleClassName] != 'undefined'){
+				var instance = new window[moduleClassName]();
+			}else{
+				var instance = new window[fallbackClassName]();
+			}
+			Vtiger_Edit_Js.editInstance = instance;
+			return instance;
 		}
-	    var moduleClassName = moduleName+"_Edit_Js";
-		var fallbackClassName = Vtiger_Edit_Js;
-		if(typeof window[moduleClassName] != 'undefined'){
-			var instance = new window[moduleClassName]();
-		}else{
-			var instance = new fallbackClassName();
-		}
-	    return instance;
+		return Vtiger_Edit_Js.editInstance;
 	}
 
 },{
@@ -59,10 +75,10 @@ jQuery.Class("Vtiger_Edit_Js",{
         var sourceFieldElement = jQuery('input[class="sourceField"]',container);
 		var sourceField = sourceFieldElement.attr('name');
 		var sourceRecordElement = jQuery('input[name="record"]');
-        if(sourceRecordElement.length > 0) {
-            var sourceRecordId = sourceRecordElement.val();
-        }
 		var sourceRecordId = '';
+		if(sourceRecordElement.length > 0) {
+            sourceRecordId = sourceRecordElement.val();
+        }
 
         var isMultiple = false;
         if(sourceFieldElement.data('multiple') == true){
@@ -360,7 +376,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 			}
 		});
 	},
-	
+
 	/**
 	 * Function which will register basic events which will be used in quick create as well
 	 *
@@ -416,7 +432,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 
 	registerSubmitEvent: function() {
 		var editViewForm = this.getForm();
-		
+
 		editViewForm.submit(function(e){
 			
 			//Form should submit only once for multiple clicks also
@@ -556,7 +572,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerBasicEvents(this.getForm());
 		this.registerEventForImageDelete();
 		this.registerSubmitEvent();
-		
+
 		app.registerEventForDatePickerFields('#EditView');
 		editViewForm.validationEngine(app.validationEngineOptions);
 

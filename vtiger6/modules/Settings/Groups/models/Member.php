@@ -76,7 +76,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 		$members = array();
 
 		if($type == self::MEMBER_TYPE_USERS) {
-			$sql = 'SELECT vtiger_users.*  FROM vtiger_users
+			$sql = 'SELECT vtiger_users.id, vtiger_users.last_name, vtiger_users.first_name FROM vtiger_users
 							INNER JOIN vtiger_users2group ON vtiger_users2group.userid = vtiger_users.id
 							WHERE vtiger_users2group.groupid = ?';
 			$params = array($groupModel->getId());
@@ -94,7 +94,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 		}
 
 		if($type == self::MEMBER_TYPE_GROUPS) {
-			$sql = 'SELECT vtiger_groups.*  FROM vtiger_groups
+			$sql = 'SELECT vtiger_groups.groupid, vtiger_groups.groupname FROM vtiger_groups
 							INNER JOIN vtiger_group2grouprel ON vtiger_group2grouprel.containsgroupid = vtiger_groups.groupid
 							WHERE vtiger_group2grouprel.groupid = ?';
 			$params = array($groupModel->getId());
@@ -111,7 +111,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 		}
 
 		if($type == self::MEMBER_TYPE_ROLES) {
-			$sql = 'SELECT vtiger_role.*  FROM vtiger_role
+			$sql = 'SELECT vtiger_role.roleid, vtiger_role.rolename FROM vtiger_role
 							INNER JOIN vtiger_group2role ON vtiger_group2role.roleid = vtiger_role.roleid
 							WHERE vtiger_group2role.groupid = ?';
 			$params = array($groupModel->getId());
@@ -128,7 +128,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 		}
 
 		if($type == self::MEMBER_TYPE_ROLE_AND_SUBORDINATES) {
-			$sql = 'SELECT vtiger_role.*  FROM vtiger_role
+			$sql = 'SELECT vtiger_role.roleid, vtiger_role.rolename FROM vtiger_role
 							INNER JOIN vtiger_group2rs ON vtiger_group2rs.roleandsubid = vtiger_role.roleid
 							WHERE vtiger_group2rs.groupid = ?';
 			$params = array($groupModel->getId());
@@ -145,6 +145,29 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 		}
 
 		return $members;
+	}
+
+	/**
+	 * Function to get Detail View Url of this member
+	 * return <String> url
+	 */
+	public function getDetailViewUrl() {
+		list($type, $recordId) = self::getIdComponentsFromQualifiedId($this->getId());
+		switch ($type) {
+			case 'Users'	: $recordModel = Users_Record_Model::getCleanInstance($type);
+							  $recordModel->setId($recordId);
+							  return $recordModel->getDetailViewUrl();
+
+
+			case 'RoleAndSubordinates' :
+			case 'Roles'	: $recordModel = new Settings_Roles_Record_Model();
+							  $recordModel->set('roleid', $recordId);
+							  return $recordModel->getEditViewUrl();
+
+			case 'Groups'	: $recordModel = new Settings_Groups_Record_Model();
+							  $recordModel->setId($recordId);
+							  return $recordModel->getDetailViewUrl();
+		}
 	}
 
 	/**

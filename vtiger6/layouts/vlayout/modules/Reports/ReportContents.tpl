@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div id="reportDetails" class="marginLeft5px">
+	<div id="reportDetails" class="marginLeft5px" style="overflow-x: auto;">
 		<input type="hidden" id="updatedCount" value="{$NEW_COUNT}" />
 		{if !empty($CALCULATION_FIELDS)}
 			<table class="table table-bordered table-condensed" width="100%">
@@ -37,6 +37,10 @@
 					</tr>
 				{/foreach}
 			</table>
+			{if $PRIMARY_MODULE eq 'Invoice' || $PRIMARY_MODULE eq 'Quotes' || $PRIMARY_MODULE eq 'SalesOrder' || $PRIMARY_MODULE eq 'PurchaseOrder'}
+				{assign var=BASE_CURRENCY_INFO value=Vtiger_Util_Helper::getBaseCurrency()}
+				<div style="position:relative;top:-18px;" class="pull-right alert-info">{vtranslate('LBL_NOTE', 'Vtiger')} : {vtranslate('LBL_CALCULATION_CONVERSION_MESSAGE', 'Reports')} - {$BASE_CURRENCY_INFO['currency_name']} ({$BASE_CURRENCY_INFO['currency_code']})</div>
+			{/if}
 		{/if}
 
 		{if $DATA neq ''}
@@ -45,14 +49,14 @@
 				<thead>
 					<tr class="blockHeader">
 						{foreach from=$HEADERS item=HEADER key=NAME}
-							<th>{vtranslate($NAME,$MODULE)}</th>
+							<th nowrap>{vtranslate($NAME,$MODULE)}</th>
 						{/foreach}
 					</tr>
 				</thead>
 				{foreach from=$DATA item=VALUES}
 					<tr>
 						{foreach from=$VALUES item=VALUE key=NAME}
-							<td>{$VALUE}</td>
+							<td nowrap>{$VALUE}</td>
 						{/foreach}
 					</tr>
 				{/foreach}

@@ -64,7 +64,7 @@ class CurrencyField {
 
     /**
      * Value to be converted
-     * @param Number $value 
+     * @param Number $value
      */
     var $value = null;
 
@@ -114,7 +114,7 @@ class CurrencyField {
 		return $this->currencySymbol;
 	}
 
-    
+
     /**
      * Returns the Formatted Currency value for the User
      * @global Users $current_user
@@ -123,12 +123,19 @@ class CurrencyField {
      * @return String - Formatted Currency
      */
     public static function convertToUserFormat($value, $user=null, $skipConversion=false, $skipFormatting=false) {
+		// To support negative values
+		$negative = false;
+		if(stripos($value, '-') === 0) {
+			$negative = true;
+			$value = substr($value, 1);
+		}
         $self = new self($value);
-		return $self->getDisplayValue($user,$skipConversion,$skipFormatting);
+		$value = $self->getDisplayValue($user,$skipConversion,$skipFormatting);
+		return ($negative) ? '-'.$value : $value;
     }
 
     /**
-     * Function that converts the Number into Users Currency 
+     * Function that converts the Number into Users Currency
      * @param Users $user
 	 * @param Boolean $skipConversion
      * @return Formatted Currency
@@ -144,7 +151,7 @@ class CurrencyField {
 		if($skipConversion == false) {
 			$value = convertFromDollar($value,$this->conversionRate);
 		}
-		
+
 		if($skipFormatting == false) {
 			$value = $this->_formatCurrencyValue($value);
 		}
@@ -303,7 +310,7 @@ class CurrencyField {
         $this->initialize($user);
 
 		$value = $this->value;
-		
+
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
 		if(empty($currencySeparator)) $currencySeparator = ' ';

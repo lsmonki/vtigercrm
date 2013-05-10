@@ -136,7 +136,7 @@
 					options.onFieldFailure();
 				}
 			}
-			if(options.onValidationComplete) {
+			if(options && options.onValidationComplete) {
 				// !! ensures that an undefined return is interpreted as return false but allows a onValidationComplete() to possibly return true and have form continue processing
 				return !!options.onValidationComplete(form, valid);
 			}
@@ -158,8 +158,14 @@
 			// No option, take default one
 			form.find('['+options.validateAttribute+'*=validate]').not(":disabled").each(function(){
 				var field = $(this);
-				if (options.prettySelect && field.is(":hidden"))
-				  field = form.find("#" + options.usePrefix + field.attr('id') + options.useSuffix);
+				if (options.prettySelect && field.is(":hidden")){
+                    var jqSelector = methods._jqSelector(field.attr('id'));
+                    field = form.find("#" + options.usePrefix + jqSelector);
+                    if(field.length <= 0){
+                        field = form.find("#" + jqSelector + options.useSuffix);
+                    }
+				  //field = form.find("#" + options.usePrefix + field.attr('id') + options.useSuffix);
+                }
 				var prompt = methods._getPrompt(field);
 				var promptText = $(prompt).find(".formErrorContent").html();
 
@@ -277,7 +283,7 @@
 				return false;
 			}
 
-			if(options.onValidationComplete) {
+			if(options && options.onValidationComplete) {
 				// !! ensures that an undefined return is interpreted as return false but allows a onValidationComplete() to possibly return true and have form continue processing
 				return !!options.onValidationComplete(form, r);
 			}
@@ -335,8 +341,14 @@
 				if ($.inArray(field.attr('name'), names) < 0) {
 					errorFound |= methods._validateField(field, options);
 					if (errorFound && first_err==null)
-						if (field.is(":hidden") && options.prettySelect)
-										 first_err = field = form.find("#" + options.usePrefix + methods._jqSelector(field.attr('id')) + options.useSuffix);
+						if (field.is(":hidden") && options.prettySelect){
+                                        var jqSelector = methods._jqSelector(field.attr('id'));
+                                        first_err = field = form.find("#" + options.usePrefix + jqSelector);
+                                        if(field.length <= 0){
+                                            first_err = field = form.find("#" + jqSelector + options.useSuffix);
+                                        }
+										 //first_err = field = form.find("#" + options.usePrefix + methods._jqSelector(field.attr('id')) + options.useSuffix);
+                        }
 									else
 										 first_err=field;
 					if (options.doNotShowAllErrosOnSubmit)
@@ -709,7 +721,12 @@
 			}
 
 			if(field.is(":hidden") && options.prettySelect) {
-				field = form.find("#" + options.usePrefix + methods._jqSelector(field.attr('id')) + options.useSuffix);
+                var jqSelector = methods._jqSelector(field.attr('id'));
+                field = form.find("#" + options.usePrefix + jqSelector);
+                if(field.length <= 0){
+                    field = form.find("#" + jqSelector + options.useSuffix);
+                }
+				//field = form.find("#" + options.usePrefix + methods._jqSelector(field.attr('id')) + options.useSuffix);
 			}
 
 			if (options.isError && options.showPrompts){

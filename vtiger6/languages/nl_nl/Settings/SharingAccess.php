@@ -6,24 +6,31 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Settings/SharingAccess.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
+	'Accounts'                     => 'Organizations & Contacts'    , // TODO: Review
 	'LBL_ADD_CUSTOM_RULE'          => 'Toevoegen standaard privilege regel', 
-	'Read Only'                    => 'L'                           , // TODO: Review - LRO: Administrators might prefer the R/R+W
-	'Read Write'                   => 'L+S'                         , // TODO: Review
-	'LBL_CREATE_CUSTOM_RULE'       => 'Maak niet maatwerk rol'      , // TODO: Review
-	'LBL_CAN_ACCESSED_BY'          => 'Toegang verkrijgen door'     , // KEY 5.x: LBL_CAN_BE_ACCESSED_BY
+	'Read Only'                    => 'L'                           , 
+	'Read Write'                   => 'L+S'                         , 
+	'LBL_ADD_CUSTOM_RULE_TO'       => 'Add Custom Rule to'          , // TODO: Review
+	'LBL_CAN_ACCESSED_BY'          => 'Toegang verkrijgen door'     , 
 	'LBL_PRIVILEGES'               => 'Privileges'                  , 
-	'LBL_SHARING_RULE'             => 'Regels delen'               , // TODO: Review
+	'LBL_SHARING_RULE'             => 'Regels delen'                , 
 	'LBL_RULE_NO'                  => 'Regel nr.'                   , 
-	'LBL_PRIVILAGES'               => 'Privileges'                  , // KEY 5.x: LBL_PRIVILEGES
+	'LBL_MODULE'                   => 'Module'                      , // TODO: Review
+	'LBL_ADVANCED_SHARING_RULES'   => 'Advanced Sharing Rules'      , // TODO: Review
+	'LBL_WITH_PERMISSIONS'         => 'With Permissions'            , // TODO: Review
+	'LBL_APPLY_NEW_SHARING_RULES'  => 'Apply New Sharing Rules'     , // TODO: Review
+	'LBL_READ'                     => 'Read'                        , // TODO: Review
+	'LBL_READ_WRITE'               => 'Read and Write'              , // TODO: Review
+	'LBL_CUSTOM_ACCESS_MESG'       => 'No Custom Access Rules defined', // TODO: Review
+	'SINGLE_Groups'                => 'Group'                       , // TODO: Review
+	'SINGLE_Roles'                 => 'Role'                        , // TODO: Review
+	'SINGLE_RoleAndSubordinates'   => 'RoleAndSubordinate'          , // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Custom Sharing Rule Saved Successfully', // TODO: Review
+	'JS_SELECT_ANY_OTHER_ACCESSING_USER' => 'Select any other accessing user', // TODO: Review
+	'JS_NEW_SHARING_RULES_APPLIED_SUCCESSFULLY' => 'New Sharing Rules Applied Successfully', // TODO: Review
+	'JS_DEPENDENT_PRIVILEGES_SHOULD_CHANGE' => 'Opportunities, Tickets, Quotes, SalesOrder & Invoice Access must be set to Private when the Organization Access is set to Private', // TODO: Review
 );

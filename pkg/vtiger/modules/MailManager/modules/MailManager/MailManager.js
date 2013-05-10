@@ -809,7 +809,7 @@ if (typeof(MailManager) == 'undefined') {
         // Place an element at the center of the page
         placeAtCenter : function(element) {
             element.css("position","absolute");
-            element.css("top", ((jQuery(window).height() - element.outerHeight()) / 2) + jQuery(window).scrollTop() + "px");
+            element.css("top", ((jQuery(window).height() - element.outerHeight()) / 4) + jQuery(window).scrollTop() + "px");
             element.css("left", ((jQuery(window).width() - element.outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
 
         },
@@ -1268,7 +1268,7 @@ if (typeof(MailManager) == 'undefined') {
                         dropdownItem: "token-input-dropdown-item-facebook",
                         dropdownItem2: "token-input-dropdown-item2-facebook",
                         selectedDropdownItem: "token-input-selected-dropdown-item-facebook",
-                        inputToken: "token-input-input-token-facebook"
+                        inputToken: "token-input-list-facebook"
                     }
                 });
                 elem.attr('_tokeninput_init_', true);

@@ -10,8 +10,8 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="listViewPageDiv">
-	<div class="listViewTopMenuDiv">{include file='ListViewTopMenu.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
-	<div class="listViewContentDiv" id="listViewContents">{include file='ListViewContents.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+<div>
+	<div class="listViewTopMenuDiv">{include file='ListViewHeader.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+	<div class="listViewContentDiv" id="listViewContents"><br>{include file='ListViewContents.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
 </div>
 {/strip}

@@ -40,9 +40,14 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 	public function getImagePath() {
 		$commentor = $this->getCommentedByModel();
 		if($commentor) {
-			$imagePath = $commentor->getImageDetails();
-			if(!empty($imagePath[0]['name'])) {
-				return '../'.$imagePath[0]['path'].'_'.$imagePath[0]['name'];
+			$customer = $this->get('customer');
+			if (!empty($customer)) {
+				return 'CustomerPortal.png';
+			} else {
+				$imagePath = $commentor->getImageDetails();
+				if (!empty($imagePath[0]['name'])) {
+					return '../' . $imagePath[0]['path'] . '_' . $imagePath[0]['name'];
+				}
 			}
 		}
 		return false;

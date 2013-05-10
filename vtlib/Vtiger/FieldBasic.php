@@ -68,6 +68,8 @@ class Vtiger_FieldBasic {
 		$this->presence      = $valuemap['presence'];
 		$this->defaultvalue  = $valuemap['defaultvalue'];
         $this->quickcreate = $valuemap['quickcreate'];
+		$this->sequence = $valuemap['sequence'];
+		$this->summaryfield = $valuemap['summaryfield'];
 		$this->block= $blockInstance? $blockInstance : Vtiger_Block::getInstance($valuemap['block'], $moduleInstance);
 	}
 

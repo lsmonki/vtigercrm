@@ -60,26 +60,6 @@ class Leads_ListView_Model extends Vtiger_ListView_Model {
 			}
 			$index++;
 		}
-		
 		return $links;
-	}
-	
-	
-	public function getSettingLinks() {
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		$settingLinks = parent::getSettingLinks();
-		if($currentUserModel->isAdminUser()) {
-			$settingLinks[] = array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_CUSTOM_FIELD_MAPPING',
-					'linkurl' => $this->getModule()->getSettingsUrl('CustomFieldList'),
-					'linkicon' => '');
-			$settingLinks[] =	array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_WEBFORMS',
-					'linkurl' => $this->getModule()->getSettingsUrl('WebForms'),
-					'linkicon' => '');
-		}
-		return $settingLinks;
 	}
 }

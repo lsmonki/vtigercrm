@@ -13,35 +13,43 @@
 <div class="SendEmailFormStep2" name="emailPreview">
 	<input type="hidden" name="parentRecord" value="{$PARENT_RECORD}"/>
 	<input type="hidden" name="recordId" value="{$RECORD_ID}"/>
-	<div class="row-fluid padding-bottom1per pushDown2per">
-		<span class="span4">&nbsp;</span>
-		<span class="span8">
-			<span class="pull-right btn-toolbar"> 
-				<span class="btn-group"> 
-					<button type="button" name="previewForward" class="btn" data-mode="emailForward"> 
-							<strong>{vtranslate('LBL_FORWARD',$MODULE)}</strong> 
-					</button> 
-				</span> 
-				{if !($RECORD->isSentMail())} 
-					<span class="btn-group"> 
-						<button type="button" name="previewEdit" class="btn" data-mode="emailEdit"> 
-								<strong>{vtranslate('LBL_EDIT',$MODULE)}</strong> 
-						</button> 
-					</span> 
-				{/if} 
-				<span class="btn-group"> 
-					<button type="button" name="previewPrint" class="btn" onClick='window.location.href="{$RECORD->getPrintViewUrl()}"'> 
-						<strong>{vtranslate('LBL_PRINT',$MODULE)}</strong> 
-					</button> 
-				</span> 
-			</span>
-		</span>
-	</div>
+	<br>
 	<div class="well well-large zeroPaddingAndMargin">
-		<div class="modal-header blockHeader emailPreviewHeader">
-			<h3>{vtranslate('SINGLE_Emails', $MODULE)} {vtranslate('LBL_INFO', $MODULE)}</h3>
+		<div class="modal-header blockHeader emailPreviewHeader" style="height:30px">
+			<h3 class='span4'>{vtranslate('SINGLE_Emails', $MODULE)} {vtranslate('LBL_INFO', $MODULE)}</h3>
+			<div class='pull-right'>
+				<span class="btn-toolbar">
+					<span class="btn-group">
+						<button type="button" name="previewForward" class="btn" data-mode="emailForward">
+							<strong>{vtranslate('LBL_FORWARD',$MODULE)}</strong>
+						</button>
+					</span>
+					{if !($RECORD->isSentMail())}
+						<span class="btn-group">
+							<button type="button" name="previewEdit" class="btn" data-mode="emailEdit">
+								<strong>{vtranslate('LBL_EDIT',$MODULE)}</strong>
+							</button>
+						</span>
+					{/if}
+					<span class="btn-group">
+						<button type="button" name="previewPrint" class="btn" onClick='window.location.href="{$RECORD->getPrintViewUrl()}"'>
+							<strong>{vtranslate('LBL_PRINT',$MODULE)}</strong>
+						</button>
+					</span>
+				</span>
+			</div>
 		</div>
 		<form class="form-horizontal emailPreview">
+			<div class="row-fluid padding-bottom1per">
+				<span class="span12 row-fluid">
+					<span class="span2">
+						<span class="pull-right muted">{vtranslate('LBL_FROM',$MODULE)}</span>
+					</span>
+					<span class="span9">
+						<span class="row-fluid">{$FROM}</span>
+					</span>
+				</span>
+			</div>
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">
@@ -137,7 +145,7 @@
 						{if $RECORD->get('email_flag') eq "SAVED"}
 							<small><em>{vtranslate('LBL_DRAFTED_ON',$MODULE)}</em></small>
 							<span><small><em>&nbsp;{$RECORD->getDisplayValue('createdtime')}</em></small></span>
-						{elseif $RECORD->get('email_flag') eq "SENT"}
+						{else}
 							<small><em>{vtranslate('LBL_SENT_ON',$MODULE)}</em></small>
                             {assign var="SEND_TIME" value=$RECORD->get('date_start')|@cat:' '|@cat:$RECORD->get('time_start')}
                             <span><small><em>&nbsp;{Vtiger_Datetime_UIType::getDisplayDateTimeValue($SEND_TIME)}</em></small></span>
@@ -154,4 +162,5 @@
 		</form>
 	</div>
 </div>
+	{include file='JSResources.tpl'|vtemplate_path}
 {/strip}

@@ -5,17 +5,20 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
- * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
- * ********************************************************************************
- *  Language     : Español es_es
- *  Version      : 6.0.0
- *  Created Date : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transferir Asignado',
-	'LBL_TO_OTHER_GROUP'           => 'A Otro Grupo ',
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Transferir Asignado'         , 
+	'SINGLE_Groups'                => 'Group'                       , // TODO: Review
+	'LBL_TO_OTHER_GROUP'           => 'A Otro Grupo '               , 
+	'LBL_ADD_RECORD'               => 'Add Group'                   , // TODO: Review
+	'LBL_GROUP_NAME'               => 'Group Name'                  , // TODO: Review
+	'LBL_GROUP_MEMBERS'            => 'Group Members'               , // TODO: Review
+	'LBL_ADD_USERS_ROLES'          => 'Add Users, Roles...'         , // TODO: Review
+	'LBL_ROLEANDSUBORDINATE'       => 'Role and Subordinates'       , // TODO: Review
+	'RoleAndSubordinates'          => 'Role and Subordinates'       , // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully'  , // TODO: Review
 );

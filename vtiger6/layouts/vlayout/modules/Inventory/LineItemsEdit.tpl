@@ -40,7 +40,7 @@
 						{/if}
 					{/foreach}
 				{/if}
-				
+
                 <select class="chzn-select" id="currency_id" name="currency_id">
                     {foreach item=currency_details key=count from=$CURRENCIES}
                         <option value="{$currency_details.curid}" class="textShadowNone" data-conversion-rate="{$currency_details.conversionrate}" {if $SELECTED_CURRENCY.currency_id eq $currency_details.curid} selected {/if}>
@@ -48,7 +48,7 @@
                         </option>
                     {/foreach}
                 </select>
-				
+
 				{assign var="RECORD_CURRENCY_RATE" value=$RECORD_STRUCTURE_MODEL->getRecord()->get('conversion_rate')}
 				{if $RECORD_CURRENCY_RATE eq ''}
 					{assign var="RECORD_CURRENCY_RATE" value=$SELECTED_CURRENCY.conversionrate}
@@ -115,7 +115,7 @@
                     <button type="button" class="btn addButton" id="addProduct">
                         <i class="icon-plus icon-white"></i><strong> {vtranslate('LBL_ADD_PRODUCT',$MODULE)}</strong>
                     </button>
-                </div>>
+                </div>
             {elseif $SERVICE_ACTIVE eq 'true'}
                 <div class="btn-group">
                     <button type="button" class="btn addButton" id="addService">
@@ -221,7 +221,7 @@
                                 <td align="left" class="lineOnTop">
                                     <input type="text" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" class="smallInputBox groupTaxPercentage" />&nbsp;%
                                 </td>
-                                <td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
+                                <td align="center" class="lineOnTop"><div class="textOverflowEllipsis">{$tax_detail.taxlabel}</div></td>
                                 <td align="right" class="lineOnTop">
                                     <input type="text" size="6" name="{$tax_detail.taxname}_group_amount" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="{$tax_detail.amount}" readonly class="cursorPointer smallInputBox groupTaxTotal" />
                                 </td>
@@ -259,7 +259,7 @@
                         <tbody>
                             {foreach item=tax_detail name=sh_loop key=loop_count from=$SHIPPING_TAXES}
                                 <tr>
-				    <td>{$tax_detail.taxlabel}</td>
+									<td><div class="textOverflowEllipsis">{$tax_detail.taxlabel}</div></td>
                                     <td>
                                         <input type="text" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" class="smallInputBox shippingTaxPercentage" />&nbsp;%
                                     </td>
@@ -296,7 +296,7 @@
                 </div>
             </td>
             <td>
-                <span class="pull-right"><input id="adjustment" name="adjustment" type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $FINAL.adjustment lt 0} {abs($FINAL.adjustment)} {elseif $FINAL.adjustment}{$FINAL.adjustment}{else}0.00{/if}"></span>
+                <span class="pull-right"><input id="adjustment" name="adjustment" type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $FINAL.adjustment lt 0}{abs($FINAL.adjustment)}{elseif $FINAL.adjustment}{$FINAL.adjustment}{else}0.00{/if}"></span>
             </td>
         </tr>
         <tr valign="top">
@@ -320,16 +320,16 @@
                 </td>
                 <td>
                     {if $MODULE eq 'Invoice'}
-                        {if (vtlib_isModuleActive("Payments"))} 
+                        {if (vtlib_isModuleActive("Payments"))}
                             <span class="pull-right"><input id="received" name="received" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received')}{$RECORD->getDisplayValue('received')}{else}0.00{/if}" readonly></span>
                             {else}
                             <span class="pull-right"><input id="received" name="received" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('received')}{$RECORD->getDisplayValue('received')}{else}0.00{/if}"></span>
                          {/if}
                     {else}
-                        {if (vtlib_isModuleActive("Payments"))} 
-                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}" readonly></span>                        
-                         {else}   
-                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}"></span>                        
+                        {if (vtlib_isModuleActive("Payments"))}
+                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}" readonly></span>
+                         {else}
+                        <span class="pull-right"><input id="paid" name="paid" type="text" data-validation-engine="validate[funcCall[Vtiger_Integer_Validator_Js.invokeValidation]]" class="lineItemInputBox" value="{if $RECORD->getDisplayValue('paid')}{$RECORD->getDisplayValue('paid')}{else}0.00{/if}"></span>
                         {/if}
                     {/if}
                 </td>

@@ -34,8 +34,8 @@
 				<div class="widgetContainer_comments" data-url="{$COMMENTS_WIDGET_MODEL->getUrl()}" data-name="{$COMMENTS_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$COMMENTS_WIDGET_MODEL->get('linkName')}" />
-						<span class="span8 margin0px"><h4>{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						<span class="span3 horizontalLeftSpacingForSummaryWidgetHeader">
+						<span class="span9 margin0px"><h4>{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span3">
 							<span class="pull-right">
 								{if $COMMENTS_WIDGET_MODEL->get('action')}
 									<button class="btn pull-right addButton createRecord" type="button" data-url="{$COMMENTS_WIDGET_MODEL->get('actionURL')}">
@@ -53,7 +53,7 @@
 		{* Summary View Comments Widget Ends Here*}
 	</div>
 
-	<div class='span5'>
+	<div class='span5' style="overflow: hidden">
 		{* Summary View Related Activities Widget*}
 			<div id="relatedActivities">
 				{$RELATED_ACTIVITIES}
@@ -66,8 +66,8 @@
 				<div class="widgetContainer_documents" data-url="{$DOCUMENT_WIDGET_MODEL->getUrl()}" data-name="{$DOCUMENT_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$DOCUMENT_WIDGET_MODEL->get('linkName')}" />
-						<span class="span8 margin0px"><h4>{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						<span class="span3 horizontalLeftSpacingForSummaryWidgetHeader">
+						<span class="span9 margin0px"><h4>{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span3">
 							<span class="pull-right">
 								{if $DOCUMENT_WIDGET_MODEL->get('action')}
 									<button class="btn pull-right addButton createRecord" type="button" data-url="{$DOCUMENT_WIDGET_MODEL->get('actionURL')}">
@@ -90,8 +90,8 @@
 				<div class="widgetContainer_updates" data-url="{$UPDATES_WIDGET_MODEL->getUrl()}" data-name="{$UPDATES_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$UPDATES_WIDGET_MODEL->get('linkName')}" />
-						<span class="span8 margin0px"><h4>{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						<span class="span3 horizontalLeftSpacingForSummaryWidgetHeader">
+						<span class="span9 margin0px"><h4>{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span3">
 							<span class="pull-right">
 								{if $UPDATES_WIDGET_MODEL->get('action')}
 									<button class="btn pull-right addButton createRecord" type="button" data-url="{$UPDATES_WIDGET_MODEL->get('actionURL')}">

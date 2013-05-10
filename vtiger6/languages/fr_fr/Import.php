@@ -57,5 +57,17 @@ $languageStrings = array(
 										Purger les données non importées pour relancer un nouvel import', 
 	'ERR_IMPORT_INTERRUPTED'       => 'L\'import courant a été interrompu. Essayez plus tard.', 
 	'ERR_FAILED_TO_LOCK_MODULE'    => 'Impossible de vérouiller ce module pour l\'import. Essayez plus tard', 
-	'LBL_SELECT_SAVED_MAPPING'     => 'Select Saved Mapping'        , // TODO: Review
+	'LBL_SELECT_SAVED_MAPPING'     => 'Select Saved Mapping'        , 
+	'LBL_IMPORT_ERROR_LARGE_FILE'  => 'Import Error Large file '    , // TODO: Review
+	'LBL_FILE_UPLOAD_FAILED'       => 'File Upload Failed'          , // TODO: Review
+	'LBL_IMPORT_CHANGE_UPLOAD_SIZE' => 'Import Change Upload Size'   , // TODO: Review
+	'LBL_IMPORT_DIRECTORY_NOT_WRITABLE' => 'Import Directory is not writable', // TODO: Review
+	'LBL_IMPORT_FILE_COPY_FAILED'  => 'Import File copy failed'     , // TODO: Review
+	'LBL_INVALID_FILE'             => 'Invalid File'                , // TODO: Review
+	'LBL_NO_ROWS_FOUND'            => 'No rows found'               , // TODO: Review
+	'LBL_SCHEDULED_IMPORT_DETAILS' => 'Your import has been scheduled and will start within 15 minutes. You will receive an email after import is completed.  <br> <br>
+										Please make sure that the Outgoing server and your email address is configured to receive email notification', // TODO: Review
+	'LBL_DETAILS'                  => 'Details'                     , // TODO: Review
+	'skipped'                      => 'Skipped Records'             , // TODO: Review
+	'failed'                       => 'Failed Records'              , // TODO: Review
 );

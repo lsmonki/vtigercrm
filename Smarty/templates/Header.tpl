@@ -152,9 +152,6 @@
 				<td valign="top" class="genHeaderSmall" style="padding-left:10px;padding-top:3px;">
 					<span class="userName">{$USER}</span>
 				</td>
-				{* ondemand customization: Header links on the top panel *}
-				<td class="small"  onmouseover="fnDropDownUser(this,'ondemand_sub','~{$CURRENT_USER_MAIL}`');" onmouseout="fnHideDrop('ondemand_sub');" valign="bottom" nowrap style="padding-bottom: 1em;"><img src="{$IMAGEPATH}user.PNG" border=0 style="padding: 0px;padding-left:5px"></td>
-				{* END *}
 				{* vtlib customization: Header links on the top panel *}
 				{if $HEADERLINKS}
 				<td style="padding-left:10px;padding-right:5px" class=small nowrap>
@@ -716,20 +713,6 @@ function openwin()
 				<tr><td style="padding-left:0px;padding-right:10px font-weight:bold"  nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab=" class="drop_down_usersettings">{'LBL_CRM_SETTINGS'|@getTranslatedString:$MODULE_NAME}</a></td></tr>
                                 {/if}
         {/foreach}
-{foreach item=ONDEMANDLINK from=$ONDEMANDLINKS}
-		{assign var="headerlink_href" value=$ONDEMANDLINK->linkurl}
-		{assign var="headerlink_label" value=$ONDEMANDLINK->linklabel}
-		{if $headerlink_label eq ''}
-			{assign var="headerlink_label" value=$headerlink_href}
-		{else}
-			{* Pickup the translated label provided by the module *}
-			{assign var="headerlink_label" value=$headerlink_label|@getTranslatedString:$ONDEMANDLINK->module()}
-		{/if}
-                                            {if $headerlink_label neq 'Profile' &&  $headerlink_label neq 'Plugin Setup'}
-
-						<tr><td><a href="{$headerlink_href}" class="drop_down_usersettings">{$headerlink_label|@getTranslatedString:$MODULE_NAME}</a></td></tr>
-                                            {/if}
-	{/foreach}
         </table>
 </div>
 <!-- vtiger Feedback -->
@@ -798,12 +781,12 @@ function vtiger_news(obj) {
 			var length = splittedArr.length;
 			var afterSlice = splittedArr.slice(0,length-1);
             var switchLocation = currentHref.split('?');
-            var newUrl = switchLocation[1].split('&');
+            var newUrl = decodeURIComponent(switchLocation[1]).split('&');
             for(var i=0; i<newUrl.length; i++){
                 var value = newUrl[i].split('=');
                 if(value[0] == 'module'){
                     var module = value[1];
-                    if(module == 'Settings' || module == 'Rss' || module == 'Integration' 
+                    if(module == 'Rss' || module == 'Integration' 
 						|| module == 'Portal' || module == 'PBXManager' || module == 'Dashboard')
                         module = 'Home';
                 }else if(value[0] == 'action'){
@@ -818,11 +801,19 @@ function vtiger_news(obj) {
                 }else if(value[0] == 'record' && value[1] != ''){
                     var record = value[1];
                 }
+                //if panrenttab exists then redirect to settings
+                else if(value[0].toLowerCase() == 'parenttab' && value[1] == 'Settings'){
+                    module = 'Settings';
+                }
             }
             if(module == 'Home')
                 action = 'DashBoard';
+            
 			afterSlice.push('vtiger6');
-            if(record != undefined)
+            if(module == 'Settings') {
+                afterSlice.push('index.php?module=Vtiger&view=Index&parent=Settings');
+            }
+            else if(record != undefined)
                 afterSlice.push('index.php?module='+module+'&view='+action+'&record='+record);
             else
                 afterSlice.push('index.php?module='+module+'&view='+action);

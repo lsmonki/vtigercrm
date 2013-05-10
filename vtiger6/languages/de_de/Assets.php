@@ -9,9 +9,8 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_Assets'                => 'Bestandsverwaltung'          , 
-	'LBL_ADD_RECORD'               => 'Add Assets'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Assets List'                 , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Assets Summary'              , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Assets'                  , 
+	'LBL_RECORDS_LIST'             => 'Assets List'                 , 
 	'LBL_ASSET_INFORMATION'        => 'Bestandsverwaltung Information', 
 	'Asset No'                     => 'Bestandsverwaltung Nr'       , 
 	'Serial Number'                => 'Seriennummer'                , 

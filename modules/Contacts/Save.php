@@ -34,7 +34,7 @@ $search=vtlib_purify($_REQUEST['search_url']);
 
 setObjectValuesFromRequest($focus);
 
-if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
+if($_REQUEST['salutationtype'] == '--None--') $_REQUEST['salutationtype'] = $focus->column_fields['salutationtype'] = '';
 if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
 if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
 

@@ -6,23 +6,21 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'Products'                     => 'Productos'                   , 
 	'SINGLE_Products'              => 'Producto'                    , 
-	'LBL_ADD_RECORD'               => 'Agregar Producto'            , // KEY 5.x: LBL_ADD_PRODUCT
-	'LBL_RECORDS_LIST'             => 'Lista de productos'               , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Productos'            , 
+	'LBL_ADD_RECORD'               => 'Agregar Producto'            , 
+	'LBL_RECORDS_LIST'             => 'Lista de productos'          , 
 	'LBL_PRODUCT_INFORMATION'      => 'Información del Producto'   , 
 	'LBL_IMAGE_INFORMATION'        => 'Información de la Imagen del Producto:', 
 	'LBL_STOCK_INFORMATION'        => 'Información del Stock:'     , 
 	'LBL_MORE_CURRENCIES'          => 'más monedas'                , 
-	'LBL_PRICES'                   => 'Precios Productos'           , // KEY 5.x: LBL_PRODUCT_PRICES
+	'LBL_PRICES'                   => 'Precios Productos'           , 
 	'LBL_PRICE'                    => 'Precio'                      , 
 	'LBL_RESET_PRICE'              => 'Restaurar Precio'            , 
 	'LBL_RESET'                    => 'Restaurar'                   , 
-	'LBL_ADD_TO_PRICEBOOKS'        => 'Agregar a lista de precios'           , 
+	'LBL_ADD_TO_PRICEBOOKS'        => 'Agregar a lista de precios'  , 
 	'Product No'                   => 'Núm. Producto'              , 
 	'Part Number'                  => 'Código de Producto'         , 
 	'Product Active'               => 'Producto Activo'             , 
@@ -73,4 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Hoja'                        , 
 	'Spiral Binder'                => 'Encuadernado Espiral'        , 
 	'Sq Ft'                        => 'm&sup2;'                     , 
+	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
 );

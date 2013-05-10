@@ -31,6 +31,14 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
+	
+	/**
+	 * Function to get the Detail View url for the Preferences page
+	 * @return <String> - Record Detail View Url
+	 */
+	public function getPreferenceDetailViewUrl() {
+		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view=PreferenceDetail&record='.$this->getId();
+	}
 
 	/**
 	 * Function to get the Edit View url for the record
@@ -42,12 +50,21 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	}
 
 	/**
+	 * Function to get the Edit View url for the Preferences page
+	 * @return <String> - Record Detail View Url
+	 */
+	public function getPreferenceEditViewUrl() {
+		$module = $this->getModule();
+		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view=PreferenceEdit&record='.$this->getId();
+	}
+
+	/**
 	 * Function to get the Delete Action url for the record
 	 * @return <String> - Record Delete Action Url
 	 */
 	public function getDeleteUrl() {
 		$module = $this->getModule();
-		return 'index.php?module='.$this->getModuleName().'&parent=Settings&action='.$module->getDeleteActionName().'&record='.$this->getId();
+		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view='.$module->getDeleteActionName().'Ajax&record='.$this->getId();
 	}
 
 	/**
@@ -99,11 +116,26 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 * Static Function to get the instance of the User Record model for the current user
 	 * @return Users_Record_Model instance
 	 */
+	protected static $currentUserModels = array();
 	public static function getCurrentUserModel() {
 		//TODO : Remove the global dependency
 		$currentUser = vglobal('current_user');
 		if(!empty($currentUser)) {
-			return self::getInstanceFromUserObject($currentUser);
+			
+			// Optimization to avoid object creation every-time
+			// Caching is per-id as current_user can get swapped at runtime (ex. workflow)
+			$currentUserModel = NULL;
+			if (isset(self::$currentUserModels[$currentUser->id])) {
+				$currentUserModel = self::$currentUserModels[$currentUser->id];
+				if ($currentUser->column_fields['modifiedtime'] != $currentUserModel->get('modifiedtime')) {
+					$currentUserModel = NULL;
+		}
+			}
+			if (!$currentUserModel) {
+				$currentUserModel = self::getInstanceFromUserObject($currentUser);
+				self::$currentUserModels[$currentUser->id] = $currentUserModel;
+			}
+			return $currentUserModel;
 		}
 		return new self();
 	}
@@ -212,7 +244,6 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 * @return <Array of Users_Record_Model>
 	 */
 	public function getAccessibleUsersForModule($module) {
-
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$curentUserPrivileges = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
@@ -257,8 +288,8 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 */
 	public function getImageDetails() {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-
 		$db = PearDatabase::getInstance();
+
 		$imageDetails = array();
 		$recordId = $this->getId();
 
@@ -293,7 +324,12 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 */
 	public function getAccessibleUsers($private="") {
 		//TODO:Remove dependence on $_REQUEST for the module name in the below API
-		return get_user_array(false, "ACTIVE", "", $private);
+        $accessibleUser = Vtiger_Cache::get('vtiger-'.$private, 'accessibleusers');
+        if(!$accessibleUser){
+            $accessibleUser = get_user_array(false, "ACTIVE", "", $private);
+            Vtiger_Cache::set('vtiger-'.$private, 'accessibleusers',$accessibleUser);
+        }
+		return $accessibleUser;
 	}
 
 	/**
@@ -302,6 +338,11 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 */
 	public function getAccessibleGroups($private="") {
 		//TODO:Remove dependence on $_REQUEST for the module name in the below API
+        $accessibleGroups = Vtiger_Cache::get('vtiger-'.$private, 'accessiblegroups');
+        if(!$accessibleGroups){
+            $accessibleGroups = get_group_array(false, "ACTIVE", "", $private);
+            Vtiger_Cache::set('vtiger-'.$private, 'accessiblegroups',$accessibleGroups);
+        }
 		return get_group_array(false, "ACTIVE", "", $private);
 	}
 
@@ -414,5 +455,72 @@ class Users_Record_Model extends Vtiger_Record_Model {
 			$groupIds[] = $groupId;
 		}
 		return $groupIds;
+	}
+
+	/**
+	 * Function returns the users activity reminder in seconds
+	 * @return string
+	 */
+	/**
+	 * Function returns the users activity reminder in seconds
+	 * @return string
+	 */
+	function getCurrentUserActivityReminderInSeconds() {
+		$activityReminder = $this->reminder_interval;
+		$activityReminderInSeconds = '';
+		if($activityReminder != 'None') {
+			preg_match('/([0-9]+)[\s]([a-zA-Z]+)/', $activityReminder, $matches);
+			if($matches) {
+				$number = $matches[1];
+				$string = $matches[2];
+				if($string) {
+					switch($string) {
+						case 'Minute':
+						case 'Minutes': $activityReminderInSeconds = $number * 60;			break;
+						case 'Hour'   : $activityReminderInSeconds = $number * 60 * 60;		break;
+						case 'Day'    : $activityReminderInSeconds = $number * 60 * 60 * 24;break;
+						default : $activityReminderInSeconds = '';
+					}
+				}
+			}
+		}
+		return $activityReminderInSeconds;
+	}	
+    
+    /**
+     * Function to get the users count
+     * @param <Boolean> $onlyActive - If true it returns count of only acive users else only inactive users
+     * @return <Integer> number of users
+     */
+    public static function getCount($onlyActive = false) {
+        $db = PearDatabase::getInstance();
+        $query = 'SELECT 1 FROM vtiger_users ';
+        $params = array();
+        
+        if($onlyActive) {
+            $query.= ' WHERE status=? ';
+            array_push($params,'active');
+        }
+        $result = $db->pquery($query,$params);
+        
+        $numOfUsers = $db->num_rows($result);
+        return $numOfUsers;
+    }
+	
+	/**
+	 * Funtion to get Duplicate Record Url
+	 * @return <String>
+	 */
+	public function getDuplicateRecordUrl() {
+		$module = $this->getModule();
+		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view='.$module->getEditViewName().'&record='.$this->getId().'&isDuplicate=true';
+
+	}
+	
+	/**
+	 * Function to delete the current Record Model
+	 */
+	public function delete() {
+		$this->getModule()->deleteRecord($this);
 	}
 }

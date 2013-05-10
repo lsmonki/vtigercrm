@@ -10,7 +10,7 @@
 vimport('~~include/utils/RecurringType.php');
 
 class Calendar_Record_Model extends Vtiger_Record_Model {
-	
+
 /**
 	 * Function returns the Entity Name of Record Model
 	 * @return <String>
@@ -54,7 +54,7 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module=Calendar&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
-	
+
 	/**
 	 * Function returns recurring information for EditView
 	 * @return <Array> - which contains recurring Information
@@ -87,14 +87,14 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 		}
 		return $recurringData;
 	}
-	
+
 	function save() {
 		//Time should changed to 24hrs format
 		$_REQUEST['time_start'] = Vtiger_Time_UIType::getTimeValueWithSeconds($_REQUEST['time_start']);
 		$_REQUEST['time_end'] = Vtiger_Time_UIType::getTimeValueWithSeconds($_REQUEST['time_end']);
 		parent::save();
 	}
-	
+
 	/**
 	 * Function to get recurring information for the current record in detail view
 	 * @return <Array> - which contains Recurring Information
@@ -107,10 +107,10 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 			$recurringInfoDisplayData['recurringcheck'] = vtranslate('LBL_NO', $currentModule);
 			$recurringInfoDisplayData['repeat_str'] = '';
 		}
-		
+
 		return $recurringInfoDisplayData;
 	}
-	
+
 	/**
 	 * Function to get the recurring object
 	 * @return Object - recurring object
@@ -125,5 +125,14 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 			return RecurringType::fromDBRequest($db->query_result_rowdata($result, 0));
 		}
 		return false;
+	}
+
+	/**
+	 * Function updates the Calendar Reminder popup's status
+	 */
+	public function updateReminderStatus($status=1) {
+		$db = PearDatabase::getInstance();
+		$db->pquery("UPDATE vtiger_activity_reminder_popup set status = ? where recordid = ?", array($status, $this->getId()));
+
 	}
 }

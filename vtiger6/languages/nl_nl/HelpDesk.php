@@ -6,22 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/HelpDesk.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'HelpDesk'                     => 'Helpdesk'                    , 
 	'SINGLE_HelpDesk'              => 'Ticket'                      , 
-	'LBL_ADD_RECORD'               => 'Voeg Ticket toe'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Ticketlijst'                 , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Ticket Samenvatting'              , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Ticket toe'             , 
+	'LBL_RECORDS_LIST'             => 'Ticketlijst'                 , 
 	'LBL_TICKET_INFORMATION'       => 'Ticket informatie'           , 
 	'LBL_TICKET_RESOLUTION'        => 'Oplossing'                   , 
 	'Ticket No'                    => 'Ticket Nr'                   , 
@@ -46,7 +36,7 @@ $languageStrings = array(
 	'Wait For Response'            => 'Wacht op reactie'            , 
 	'Closed'                       => 'Gesloten'                    , 
 	'LBL_STATUS'                   => 'Status'                      , 
-	'LBL_SEVERITY'                 => 'Ernstigheid'                 , // KEY 5.x: Severity
-	'LBL_CONVERT_FAQ'              => 'Converteer naar FAQ'              , // TODO: Review
+	'LBL_SEVERITY'                 => 'Ernstigheid'                 , 
+	'LBL_CONVERT_FAQ'              => 'Converteer naar FAQ'         , 
 	'LBL_RELATED_TO'               => 'Gerelateerd aan'             , 
 );

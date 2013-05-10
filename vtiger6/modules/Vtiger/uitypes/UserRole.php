@@ -30,5 +30,20 @@ class Vtiger_UserRole_UIType extends Vtiger_Base_UIType {
 		}
 	}
 
-
+	/**
+	 * Function to get display value
+	 * @param <String> $value
+	 * @param <Number> $recordId
+	 * @return <String> display value
+	 */
+	public function getDisplayValue($value, $recordId) {
+		$displayValue = $this->getEditViewDisplayValue($value);
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		if ($currentUserModel->isAdminUser()) {
+			$roleRecordModel = new Settings_Roles_Record_Model();
+			$roleRecordModel->set('roleid', $value);
+			return '<a href="'. $roleRecordModel->getEditViewUrl() .'">'. textlength_check($displayValue) .'</a>';
+		}
+		return $displayValue;
+	}
 }

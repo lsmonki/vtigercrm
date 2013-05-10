@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Cotação'                   , 
 	'LBL_EXPORT_TO_PDF'            => 'Exportar para PDF'           , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Lista Cotações'            , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Lista Cotações'            , 
 	'LBL_QUOTE_INFORMATION'        => 'Informação Cotação'      , 
 	'Quote No'                     => 'No. Cotação'               , 
 	'Quote Stage'                  => 'Estágio Cotação'          , 

@@ -51,7 +51,7 @@
 									{/if}
 									{/foreach}
 								{if $USER_MODEL->isAdminUser()}
-									<a id="menubar_item_moduleManager" href="index.php?module=Vtiger&parent=Settings&view=Index&item=ModuleManager" class="pull-right">{vtranslate('LBL_ADD_MANAGE_MODULES',$MODULE)}</a>
+									<a id="menubar_item_moduleManager" href="index.php?module=ModuleManager&parent=Settings&view=List" class="pull-right">{vtranslate('LBL_ADD_MANAGE_MODULES',$MODULE)}</a>
 								{/if}
 							</div>
 						</li>

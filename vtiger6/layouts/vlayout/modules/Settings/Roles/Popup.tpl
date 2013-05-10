@@ -10,25 +10,24 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div id="popupPageContainer">
-	<div class="popupContainer row-fluid">
-		<div class="span12">
-			<div class="row-fluid">
-				<div class="span6">
-					<span class="logo"><img src="{$COMPANY_LOGO->get('imagepath')}" title="{$COMPANY_LOGO->get('title')}" alt="{$COMPANY_LOGO->get('alt')}"/>
-				</div>
-				<div class="span6 pull-right">
-					<span class="pull-right"><b>{$MODULE_NAME}</b></span>
-				</div>
+<div id="popupPageContainer" class="popupContainer" style="min-height: 600px">
+	<div class="popupContainer padding1per">
+		<div class="row-fluid">
+			<div class="span6">
+				<span><h3>{vtranslate('LBL_ASSIGN_ROLE',"Settings:Roles")}</h3></span>
+			</div>
+			<div class="span6 pull-right">
+				<span class="logo pull-right"><img src="{$COMPANY_LOGO->get('imagepath')}" title="{$COMPANY_LOGO->get('title')}" alt="{$COMPANY_LOGO->get('alt')}"/>
 			</div>
 		</div>
+		<hr>
 	</div>
 	<div class="popupContainer row-fluid">
 		<div class="clearfix treeView">
 			<ul>
 				<li data-role="{$ROOT_ROLE->getParentRoleString()}" data-roleid="{$ROOT_ROLE->getId()}">
-					<div class="toolbar-handle">
-						<a href="javascript:;" class="btn btn-mini btn-info draggable droppable">{$ROOT_ROLE->getName()}</a>
+					<div>
+						<a href="javascript:;" class="btn btn-inverse">{$ROOT_ROLE->getName()}</a>
 					</div>
 					{assign var="ROLE" value=$ROOT_ROLE}
 					{include file=vtemplate_path("RoleTree.tpl", "Settings:Roles")}
@@ -39,6 +38,8 @@
 </div>
 
 <script type="text/javascript">
-	jQuery('body').ready(Settings_Roles_Js.initPopupView);
+	jQuery('body').ready(function(){
+		Settings_Roles_Js.initPopupView()
+	});
 </script>
 {/strip}

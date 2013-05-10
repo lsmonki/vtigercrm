@@ -52,23 +52,6 @@ class Accounts_Module_Model extends Vtiger_Module_Model {
 	}
 
 	/**
-	 * Function to get list of field for summary view
-	 * @return <array> fields list
-	 */
-	public function getSummaryViewFieldsList() {
-		return array(
-				'website',
-				'email1',
-				'phone',
-				'bill_city',
-				'bill_country',
-				'createdtime',
-				'modifiedtime',
-				'assigned_user_id',
-		);
-	}
-
-	/**
 	 * Function to get relation query for particular module with function name
 	 * @param <record> $recordId
 	 * @param <String> $functionName

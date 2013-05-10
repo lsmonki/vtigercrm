@@ -16,8 +16,10 @@ jQuery.Class("Vtiger_Base_Validator_Js",{
 	invokeValidation: function(field, rules, i, options){
 		//If validation engine already maked the field as error 
 		// we dont want to proceed
-		if(options.isError == true){
-			return;
+		if(typeof options !=  "undefined") {
+			if(options.isError == true){
+				return;
+			}
 		}
 		var listOfValidators = Vtiger_Base_Validator_Js.getValidator(field);
 		for(var i=0; i<listOfValidators.length; i++){
@@ -49,7 +51,6 @@ jQuery.Class("Vtiger_Base_Validator_Js",{
 			fieldInfo = JSON.parse(fieldInfo);
 		}
 		var dataValidator = "validator";
-		var module = app.getModuleName();
 		var fieldInstance = Vtiger_Field_Js.getInstance(fieldInfo);
 		var validatorsOfType = Vtiger_Base_Validator_Js.getValidatorsFromFieldType(fieldInstance);
 		for(var key in validatorsOfType){

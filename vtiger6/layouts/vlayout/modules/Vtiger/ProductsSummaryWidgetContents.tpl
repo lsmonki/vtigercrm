@@ -21,7 +21,7 @@
 		<span class="span7">
 			<strong>{$PRODUCT_NAME_HEADER}</strong>
 		</span>
-		<span class="span4 horizontalLeftSpacingForSummaryWidgetHeader">
+		<span class="span4">
 			<span class="pull-right">
 				<strong>{$PRODUCT_UNITPRICE_HEADER}</strong>
 			</span>

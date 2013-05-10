@@ -8,10 +8,6 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-/*
- * Settings Module Model Class
- */
-
 require_once 'modules/com_vtiger_workflow/include.inc';
 require_once 'modules/com_vtiger_workflow/expression_engine/VTExpressionsManager.inc';
 
@@ -19,7 +15,8 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 
 	var $baseTable = 'com_vtiger_workflows';
 	var $baseIndex = 'workflow_id';
-	var $listFields = array('summary' => 'Summary', 'module_label' => 'Module', 'execution_condition_label' => 'Execution Condition');
+	var $listFields = array('summary' => 'Summary', 'module_name' => 'Module', 'execution_condition' => 'Execution Condition');
+	var $name = 'Workflows';
 
 	static $metaVariables = array(
 		'Current User' => '(general : (__VtigerMeta__) currentusername',
@@ -41,10 +38,6 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 		7 => 'MANUAL'
 	);
 
-	public function getName() {
-		return 'Workflows';
-	}
-
 	/**
 	 * Function to get the url for default view of the module
 	 * @return <string> - url
@@ -58,14 +51,18 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 	 * @return <string> - url
 	 */
 	public static function getCreateViewUrl() {
-		return 'index.php?module=Workflows&parent=Settings&view=Create';
+		return "javascript:Settings_Workflows_List_Js.triggerCreate('index.php?module=Workflows&parent=Settings&view=Edit')";
+	}
+	
+	public static function getCreateRecordUrl() {
+		return 'index.php?module=Workflows&parent=Settings&view=Edit';
 	}
 
 	public static function getSupportedModules() {
 		$moduleModels = Vtiger_Module_Model::getAll(array(0,2));
 		$supportedModuleModels = array();
 		foreach($moduleModels as $tabId => $moduleModel) {
-			if($moduleModel->isWorkflowSupported()) {
+			if($moduleModel->isWorkflowSupported() && $moduleModel->getName() != 'Webmails') {
 				$supportedModuleModels[$tabId] = $moduleModel;
 			}
 		}
@@ -85,5 +82,21 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 
 	public static function getMetaVariables() {
 		return self::$metaVariables;
+	}
+	
+	public function getListFields() {
+		if(!$this->listFieldModels) {
+			$fields = $this->listFields;
+			$fieldObjects = array();
+			foreach($fields as $fieldName => $fieldLabel) {
+				if($fieldName == 'module_name' || $fieldName == 'execution_condition') {
+					$fieldObjects[$fieldName] = new Vtiger_Base_Model(array('name' => $fieldName, 'label' => $fieldLabel, 'sort'=>false));
+				} else {
+					$fieldObjects[$fieldName] = new Vtiger_Base_Model(array('name' => $fieldName, 'label' => $fieldLabel));
+				}
+			}
+			$this->listFieldModels = $fieldObjects;
+		}
+		return $this->listFieldModels;
 	}
 }

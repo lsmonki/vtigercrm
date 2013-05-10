@@ -80,7 +80,8 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 				}
 			}
             foreach($complusoryFields as $complusoryField) {
-                if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+                $fieldModel = Vtiger_Field_Model::getInstance($complusoryField, $moduleModel);
+				if($fieldModel->getPermissions('readwrite')) {
                     $industryFieldModel = $moduleModel->getField($complusoryField);
                     $industryLeadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
                     $industryFieldModel->set('fieldvalue', $this->get($industryLeadMappedField));
@@ -126,7 +127,8 @@ class Leads_Record_Model extends Vtiger_Record_Model {
             }
 
 			foreach($complusoryFields as $complusoryField) {
-				if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+                $fieldModel = Vtiger_Field_Model::getInstance($complusoryField, $moduleModel);
+				if($fieldModel->getPermissions('readwrite')) {
 					$leadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
 					$fieldModel = $moduleModel->getField($complusoryField);
 					$fieldModel->set('fieldvalue', $this->get($leadMappedField));
@@ -167,7 +169,8 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 				}
 			}
             foreach($complusoryFields as $complusoryField) {
-                if($privilegeModel->hasFieldWriteAccess($moduleName, $complusoryField)) {
+                $fieldModel = Vtiger_Field_Model::getInstance($complusoryField, $moduleModel);
+                if($fieldModel->getPermissions('readwrite')) {
                     $fieldModel = $moduleModel->getField($complusoryField);
                     $amountLeadMappedField = $this->getConvertLeadMappedField($complusoryField, $moduleName);
                     $fieldModel->set('fieldvalue', $this->get($amountLeadMappedField));

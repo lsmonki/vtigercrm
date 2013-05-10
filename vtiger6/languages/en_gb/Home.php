@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Top Organisations'           , // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Top Opportunities'           , // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Top Quotes'                  , // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'Key Metrics'                 , // KEY 5.x: Key Metrics
-	'HLT'                          => 'Top Support Tickets'         , // TODO: Review
-	'GRT'                          => 'My Group Allocation'         , // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Top Sales Orders'            , // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Top Invoices'                , // KEY 5.x: Top Invoices
-	'HDB'                          => 'Home Page Dashboard'         , // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Top Purchase Orders'         , // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'My Recent FAQs'              , // KEY 5.x: My Recent FAQs
-	'UA'                           => 'Upcoming Activities'         , // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'Pending Activities'          , // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Top Organisations'           , 
+	'PLVT'                         => 'Top Opportunities'           , 
+	'QLTQ'                         => 'Top Quotes'                  , 
+	'CVLVT'                        => 'Key Metrics'                 , 
+	'HLT'                          => 'Top Support Tickets'         , 
+	'GRT'                          => 'My Group Allocation'         , 
+	'OLTSO'                        => 'Top Sales Orders'            , 
+	'ILTI'                         => 'Top Invoices'                , 
+	'HDB'                          => 'Home Page Dashboard'         , 
+	'OLTPO'                        => 'Top Purchase Orders'         , 
+	'LTFAQ'                        => 'My Recent FAQs'              , 
+	'UA'                           => 'Upcoming Activities'         , 
+	'PA'                           => 'Pending Activities'          , 
 );

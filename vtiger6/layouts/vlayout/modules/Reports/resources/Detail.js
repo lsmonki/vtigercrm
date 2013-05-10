@@ -63,6 +63,6 @@ Vtiger_Detail_Js("Reports_Detail_Js",{},{
 		this._super();
 		this.registerSaveOrGenerateReportEvent();
 		var container = this.getContentHolder();
-		this.advanceFilterInstance = new Vtiger_AdvanceFilter_Js(jQuery('.filterContainer',container));
+		this.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',container));
 	}
 });

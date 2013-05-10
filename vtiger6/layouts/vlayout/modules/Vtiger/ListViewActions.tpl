@@ -11,6 +11,7 @@
 -->*}
 {strip}
 	<span class="pull-right listViewActions">
+        {if (method_exists($MODULE_MODEL,'isPagingSupported') && ($MODULE_MODEL->isPagingSupported()  eq true)) || !method_exists($MODULE_MODEL,'isPagingSupported')}
 		<span class="pageNumbers alignTop">
 			{if $LISTVIEW_ENTIRES_COUNT}{$PAGING_MODEL->getRecordStartRange()} {vtranslate('LBL_TO', $MODULE)} {$PAGING_MODEL->getRecordEndRange()}{if $LISTVIEW_COUNT} {vtranslate('LBL_OF', $MODULE)} {$LISTVIEW_COUNT}{/if}{/if}
 		</span>
@@ -44,6 +45,7 @@
 				<button class="btn" id="listViewNextPageButton" {if !$PAGING_MODEL->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
 			</span>
 		</span>
+        {/if}
 	{if $LISTVIEW_LINKS['LISTVIEWSETTING']|@count gt 0}
 		<span class="btn-group">
 			<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><img class="alignMiddle" src="{vimage_path('tools.png')}" alt="{vtranslate('LBL_SETTINGS', $MODULE)}" title="{vtranslate('LBL_SETTINGS', $MODULE)}">&nbsp;&nbsp;<i class="caret"></i></button>

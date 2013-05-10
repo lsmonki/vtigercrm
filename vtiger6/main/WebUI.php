@@ -36,7 +36,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 			$userid = Vtiger_Session::get('AUTHUSERID', $_SESSION['authenticated_user_id']);
 			if ($userid) {
 				$user = CRMEntity::getInstance('Users');
-				$user->retrieve_entity_info($userid, 'Users');
+				$user->retrieveCurrentUserInfoFromFile($userid);
 				$this->setLogin($user);
 			}
 		}
@@ -152,6 +152,11 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 
 				if(!in_array($module, $skipList) && stripos($qualifiedModuleName, 'Settings') === false) {
 					$this->triggerCheckPermission($handler, $request);
+				}
+
+				// Every settings page handler should implement this method
+				if(stripos($qualifiedModuleName, 'Settings') === 0) {
+					$handler->checkPermission($request);
 				}
 
 				$notPermittedModules = array('ModComments','RSS','Portal','Integration','PBXManager','DashBoard');

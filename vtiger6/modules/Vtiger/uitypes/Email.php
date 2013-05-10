@@ -21,13 +21,14 @@ class Vtiger_Email_UIType extends Vtiger_Base_UIType {
 	public function getDisplayValue($value, $recordId) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$internalMailer = $currentUser->get('internal_mailer');
-		
-		if ($internalMailer == 1) {
-			$fieldName = $this->get('field')->get('name');
-			$value = "<a class='emailField' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId," .
-					"'$fieldName');\">" . textlength_check($value) . "</a>";
-		} else {
-			$value = '<a class="emailField"  href="mailto:' . $rawValue . '">' . textlength_check($value) . '</a>';
+		if($value){
+			if ($internalMailer == 1) {
+				$fieldName = $this->get('field')->get('name');
+				$value = "<a class='emailField cursorPointer' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId," .
+						"'$fieldName');\">" . textlength_check($value) . "</a>";
+			} else {
+				$value = '<a class="emailField cursorPointer"  href="mailto:' . $value . '">' . textlength_check($value) . '</a>';
+			}
 		}
 		return $value;
 	}

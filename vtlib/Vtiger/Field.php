@@ -49,7 +49,8 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 				"($picklist_idcol INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				$this->name VARCHAR(200) NOT NULL,
 				presence INT (1) NOT NULL DEFAULT 1,
-				picklist_valueid INT NOT NULL DEFAULT 0)",
+				picklist_valueid INT NOT NULL DEFAULT 0,
+                sortorderid INT DEFAULT 0)",
 				true);
 			$new_picklistid = $this->__getPicklistUniqueId();
 			$adb->pquery("INSERT INTO vtiger_picklist (picklistid,name) VALUES(?,?)",Array($new_picklistid, $this->name));
@@ -81,9 +82,11 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 			$new_picklistvalueid = getUniquePicklistID();
 			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
 			$new_id = $adb->getUniqueID($picklist_table);
-			$adb->pquery("INSERT INTO $picklist_table($picklist_idcol, $this->name, presence, picklist_valueid) VALUES(?,?,?,?)",
-				Array($new_id, $value, $presence, $new_picklistvalueid));
-			++$sortid;
+            ++$sortid;
+            
+			$adb->pquery("INSERT INTO $picklist_table($picklist_idcol, $this->name, presence, picklist_valueid,sortorderid) VALUES(?,?,?,?,?)",
+				Array($new_id, $value, $presence, $new_picklistvalueid,$sortid));
+			
 
 			// Associate picklist values to all the role
 			$adb->pquery("INSERT INTO vtiger_role2picklist(roleid, picklistvalueid, picklistid, sortid) SELECT roleid,
@@ -184,28 +187,21 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	static function getInstance($value, $moduleInstance=false) {
 		global $adb;
 		$instance = false;
-		$cache = Vtiger_Cache::getInstance();
-		if($moduleInstance && $cache->getFieldInstance($value,$moduleInstance->id)){
-			return $cache->getFieldInstance($value,$moduleInstance->id);
-		} else {
-			$query = false;
-			$queryParams = false;
-			if(Vtiger_Utils::isNumber($value)) {
-				$query = "SELECT * FROM vtiger_field WHERE fieldid=?";
-				$queryParams = Array($value);
-			} else {
-				$query = "SELECT * FROM vtiger_field WHERE fieldname=? AND tabid=?";
-				$queryParams = Array($value, $moduleInstance->id);
-			}
-			$result = $adb->pquery($query, $queryParams);
-			if($adb->num_rows($result)) {
-				$instance = new self();
-				$instance->initialize($adb->fetch_array($result), $moduleInstance);
-			}
-			if($moduleInstance)
-				$cache->setFieldInstance($value,$moduleInstance->id,$instance);
-			return $instance;
-		}
+        $query = false;
+        $queryParams = false;
+        if(Vtiger_Utils::isNumber($value)) {
+            $query = "SELECT * FROM vtiger_field WHERE fieldid=?";
+            $queryParams = Array($value);
+        } else {
+            $query = "SELECT * FROM vtiger_field WHERE fieldname=? AND tabid=?";
+            $queryParams = Array($value, $moduleInstance->id);
+        }
+        $result = $adb->pquery($query, $queryParams);
+        if($adb->num_rows($result)) {
+            $instance = new self();
+            $instance->initialize($adb->fetch_array($result), $moduleInstance);
+        }
+        return $instance;
 	}
 
 	/**
@@ -248,7 +244,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		global $adb;
 		$instances = false;
 
-		$query = "SELECT * FROM vtiger_field WHERE tabid=?";
+		$query = "SELECT * FROM vtiger_field WHERE tabid=? ORDER BY sequence";
 		$queryParams = Array($moduleInstance->id);
 
 		$result = $adb->pquery($query, $queryParams);

@@ -56,11 +56,6 @@
 					'ticks' : users,
 					'labels' : stages
 				}
-				console.log({
-					'data' : count,
-					'ticks' : users,
-					'labels' : stages
-				});
 			}
 		});
 	</script>

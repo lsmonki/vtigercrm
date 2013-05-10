@@ -10,10 +10,10 @@
 $languageStrings = array(
 	'Asterisk'                     => 'Asterisk'                    , 
 	'PBXManager'                   => 'PBX Manager'                 , 
-	'SINGLE_PBXManager'            => 'PBX Manager'                 , // KEY 5.x: PBXManager
-	'LBL_CALL_INFORMATION'         => 'Call Details'                , // TODO: Review
+	'SINGLE_PBXManager'            => 'PBX Manager'                 , 
+	'LBL_CALL_INFORMATION'         => 'Call Details'                , 
 	'Call From'                    => 'Anruf von'                   , 
 	'Call To'                      => 'Anruf zu'                    , 
 	'Time Of Call'                 => 'Anrufzeit'                   , 
-	'PBXManager ID'                => 'PBX Manager ID'              , // TODO: Review
+	'PBXManager ID'                => 'PBX Manager ID'              , 
 );

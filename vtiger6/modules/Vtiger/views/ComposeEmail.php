@@ -9,7 +9,7 @@
  * *********************************************************************************** */
 
 class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
-	
+
 	function __construct() {
 		parent::__construct();
 		$this->exposeMethod('emailPreview');
@@ -33,7 +33,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
         }
         return parent::preProcess($request,$display);
     }
-	
+
 	public function composeMailData($request){
 		$moduleName = 'Emails';
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
@@ -43,8 +43,6 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$excludedIds = $request->get('excluded_ids',array());
 		$selectedFields = $request->get('selectedFields');
 		$relatedLoad = $request->get('relatedLoad');
-		
-		
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODULE', $moduleName);
@@ -54,7 +52,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize'));
 		$viewer->assign('RELATED_MODULES', $moduleModel->getEmailRelatedModules());
-        
+
         $searchKey = $request->get('search_key');
         $searchValue = $request->get('search_value');
 		$operator = $request->get('operator');
@@ -67,7 +65,17 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$to =array();
 		$toMailInfo = array();
 		$selectIds = $this->getRecordsListFromRequest($request);
-        
+
+		$ccMailInfo = $request->get('ccemailinfo');
+		if(empty($ccMailInfo)){
+			$ccMailInfo = array();
+		}
+
+		$bccMailInfo = $request->get('bccemailinfo');
+		if(empty($bccMailInfo)){
+			$bccMailInfo = array();
+		}
+
 		foreach($selectIds as $id) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($id);
 			if($selectedFields){
@@ -85,33 +93,37 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 
 		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplate');
 		$emailTemplateListURL = $emailTemplateModuleModel->getListViewUrl();
-		
+
 		$viewer->assign('DOCUMENTS_URL', $documentsURL);
 		$viewer->assign('EMAIL_TEMPLATE_URL', $emailTemplateListURL);
 		$viewer->assign('TO', $to);
 		$viewer->assign('TOMAIL_INFO', $toMailInfo);
+		$viewer->assign('CC', $request->get('cc'));
+		$viewer->assign('CCMAIL_INFO', $ccMailInfo);
+		$viewer->assign('BCC', $request->get('bcc'));
+		$viewer->assign('BCCMAIL_INFO', $bccMailInfo);
 		if($relatedLoad){
 			$viewer->assign('RELATED_LOAD', true);
 		}
 	}
-	
-	
+
+
 	public function emailActionsData($request){
 		$recordId = $request->get('record_id');
 		$moduleName = $request->getModule();
 		$viewer = $this->getViewer($request);
 		$attachment = array();
-		
+
 		if(!$this->record){
 		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 		$recordModel = $this->record->getRecord();
-		
+
 		$this->composeMailData($request);
 		$subject = $recordModel->get('subject');
 		$description = $recordModel->get('description');
 		$attachmentDetails = $recordModel->getAttachmentDetails();
-        
+
         $viewer->assign('SUBJECT', $subject);
         $viewer->assign('DESCRIPTION', $description);
 		$viewer->assign('ATTACHMENTS', $attachmentDetails);
@@ -129,7 +141,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer = $this->getViewer($request);
 		echo $viewer->view('ComposeEmailForm.tpl', $moduleName, true);
 	}
-	
+
 	function postProcess(Vtiger_Request $request) {
 		return;
 	}
@@ -143,6 +155,13 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 			if(!empty($selectedIds) && count($selectedIds) > 0) {
 				return $selectedIds;
 			}
+		}
+
+		$sourceRecord = $request->get('sourceRecord');
+		$sourceModule = $request->get('sourceModule');
+		if ($sourceRecord && $sourceModule) {
+			$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
+			return $sourceRecordModel->getSelectedIdsList($request->get('parentModule'), $excludedIds);
 		}
 
 		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
@@ -186,7 +205,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
-	
+
 	function emailPreview($request){
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
@@ -195,12 +214,13 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 		$recordModel = $this->record->getRecord();
-		
+
 		$viewer = $this->getViewer($request);
 		$TO = Zend_Json::decode(html_entity_decode($recordModel->get('saved_toid')));
 		$CC = Zend_Json::decode(html_entity_decode($recordModel->get('ccmail')));
 		$BCC = Zend_Json::decode(html_entity_decode($recordModel->get('bccmail')));
-        
+
+		$viewer->assign('FROM', $recordModel->get('from_email'));
 		$viewer->assign('TO',$TO);
 		$viewer->assign('CC', implode(',',$CC));
 		$viewer->assign('BCC', implode(',',$BCC));
@@ -215,28 +235,28 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
         }else{
             echo $viewer->view('EmailPreview.tpl',$moduleName,true);
         }
-		
+
 	}
-	
+
 	function emailEdit($request){
 		$viewer = $this->getViewer($request);
 		$this->emailActionsData($request);
-		
+
 		$recordId = $request->get('record_id');
 		$moduleName = $request->getModule();
 		$viewer = $this->getViewer($request);
-		
+
 		if(!$this->record){
 		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 		$recordModel = $this->record->getRecord();
-        
+
 		$TO = Zend_Json::decode(html_entity_decode($recordModel->get('saved_toid')));
 		$CC = Zend_Json::decode(html_entity_decode($recordModel->get('ccmail')));
 		$BCC = Zend_Json::decode(html_entity_decode($recordModel->get('bccmail')));
 
         $parentIds = explode('|',$recordModel->get('parent_id'));
-        
+
 
         $toMailInfo = array();
         foreach($parentIds as $index=>$parentFieldId) {
@@ -258,7 +278,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('EMAIL_MODE', 'edit');
 		echo $viewer->view('ComposeEmailForm.tpl', $moduleName, true);
 	}
-	
+
 	function emailForward($request){
 		$viewer = $this->getViewer($request);
 		$this->emailActionsData($request);

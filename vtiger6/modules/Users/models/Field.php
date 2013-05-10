@@ -19,7 +19,7 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 */
 	public function isReadOnly() {
         $currentUserModel = Users_Record_Model::getCurrentUserModel();
-        if(($currentUserModel->isAdminUser() == false && $this->get('uitype') == 98) || $this->get('uitype') == 106 || $this->get('uitype') == 156 || $this->get('uitype') == 115) {
+        if(($currentUserModel->isAdminUser() == false && $this->get('uitype') == 98)) {
             return true;
         }
 	}
@@ -42,11 +42,13 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 * @return <String> Data type of the field
 	 */
 	public function getFieldDataType() {
-		if($this->get('uitype') == 32){
+		if($this->get('uitype') == 99){
+			return 'password';
+		}else if(in_array($this->get('uitype'), array(32, 115))) {
             return 'picklist';
-        } else if($this->get('uitype') == 101){
+        } else if($this->get('uitype') == 101) {
             return 'userReference';
-        } else if($this->get('uitype') == 98){
+        } else if($this->get('uitype') == 98) {
             return 'userRole';
         } elseif($this->get('uitype') == 105) {
 			return 'image';
@@ -61,7 +63,7 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 * @return <Boolean>
 	 */
 	public function isAjaxEditable() {
-		if(!$this->isEditable() || $this->get('uitype') == 105 || $this->get('uitype') == 98 || $this->get('uitype') == 101) {
+		if(!$this->isEditable() || $this->get('uitype') == 105 || $this->get('uitype') == 106 || $this->get('uitype') == 98 || $this->get('uitype') == 101) {
 			return false;
 		}
 		return true;
@@ -75,6 +77,19 @@ class Users_Field_Model extends Vtiger_Field_Model {
 		if($this->get('uitype') == 32) {
 			return Vtiger_Language_Handler::getAllLanguages();
 		}
+        else if ($this->get('uitype') == '115') {
+            $db = PearDatabase::getInstance();
+            
+            $query = 'SELECT '.$this->getFieldName().' FROM vtiger_'.$this->getFieldName();
+            $result = $db->pquery($query, array());
+            $num_rows = $db->num_rows($result);
+            $fieldPickListValues = array();
+            for($i=0; $i<$num_rows; $i++) {
+                $picklistValue = $db->query_result($result,$i,$this->getFieldName());
+                $fieldPickListValues[$picklistValue] = vtranslate($picklistValue,$this->getModuleName());
+            }
+            return $fieldPickListValues;
+        }
 		return parent::getPicklistValues();
 	}
 
@@ -91,19 +106,12 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 * @param <String> $value - value which need to be converted to display value
 	 * @return <String> - converted display value
 	 */
-    public function getDisplayValue($value, $record = false) {
-        if($this->get('uitype') == 101){
-            $userNames = getOwnerName($value);
-            return $userNames;
-        }
-        if($this->get('uitype') == 98){
-            $roleName = getRoleName($value);
-            return $roleName;
-        }
+    public function getDisplayValue($value, $recordId = false) {
+        
 		 if($this->get('uitype') == 32){
 			return Vtiger_Language_Handler::getLanguageLabel($value);
 		 }
-        return parent::getDisplayValue($value);
+        return parent::getDisplayValue($value, $recordId);
     }
 
 	/**
@@ -111,18 +119,26 @@ class Users_Field_Model extends Vtiger_Field_Model {
 	 * @return
 	 */
      public function getAllRoles(){
-        $db = PearDatabase::getInstance();
-
-		$sql = 'SELECT roleid, rolename FROM vtiger_role ORDER BY parentrole';
-		$params = array();
-		$result = $db->pquery($sql, $params);
-		$noOfRoles = $db->num_rows($result);
+        $roleModels = Settings_Roles_Record_Model::getAll();
 		$roles = array();
-		for ($i=0; $i<$noOfRoles; ++$i) {
-			$roleId = $db->query_result($result, $i, 'roleid');
-            $roleName = $db->query_result($result, $i, 'rolename');
+		foreach ($roleModels as $roleId=>$roleModel) {
+			$roleName = $roleModel->getName();
 			$roles[$roleName] = $roleId;
 		}
 		return $roles;
     }
+
+	/**
+	 * Function to check whether this field editable or not
+	 * return <boolen> true/false
+	 */
+	public function isEditable() {
+		$isEditable = $this->get('editable');
+		if (!$isEditable && $this->getDisplayType() == '4') {
+			$this->set('editable', true);
+		}elseif (!$isEditable){
+			$this->set('editable', parent::isEditable());
+		}
+		return $this->get('editable');
+	}
 }

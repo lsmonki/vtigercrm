@@ -24,6 +24,11 @@
             <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
             <input type="hidden" name="operator" value="{$OPERATOR}" />
             <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
+			{if !empty($PARENT_MODULE)}
+				<input type="hidden" name="sourceModule" value="{$PARENT_MODULE}" />
+				<input type="hidden" name="sourceRecord" value="{$PARENT_RECORD}" />
+				<input type="hidden" name="parentModule" value="{$RELATED_MODULE}" />
+			{/if}
 			<div class='padding10'>
 				<small>{vtranslate('LBL_MUTIPLE_EMAIL_SELECT_ONE', $SOURCE_MODULE)}</small>
 			</div>

@@ -21,7 +21,7 @@
 		<span class="span7">
 			<strong>{$PROJECTMILESTONE_NAME_HEADER}</strong>
 		</span>
-		<span class="span4 horizontalLeftSpacingForSummaryWidgetHeader">
+		<span class="span4">
 			<span class="pull-right">
 				<strong>{$PROJECTMILESTONE_DATE_HEADER}</strong>
 			</span>

@@ -84,7 +84,10 @@
 		<div>
 			<input id="{$listPrice}" name="{$listPrice}" value="{if !empty($data.$listPrice)}{$data.$listPrice}{else}0{/if}" type="text" data-validation-engine="validate[required,funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="listPrice smallInputBox" />
 			&nbsp;
-			<img src="{vimage_path('PriceBooks.png')}" class="cursorPointer alignMiddle priceBookPopup" data-popup="Popup" data-module-name="PriceBooks" title="{vtranslate('PriceBooks',$MODULE)}"/>
+			{assign var=PRICEBOOK_MODULE_MODEL value=Vtiger_Module_Model::getInstance('PriceBooks')}
+			{if $PRICEBOOK_MODULE_MODEL->isPermitted('DetailView')}
+				<img src="{vimage_path('PriceBooks.png')}" class="cursorPointer alignMiddle priceBookPopup" data-popup="Popup" data-module-name="PriceBooks" title="{vtranslate('PriceBooks',$MODULE)}"/>
+			{/if}
 		</div>
 		<div>
 			<span>
@@ -172,7 +175,7 @@
 				<td>
 					<input type="text" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" class="smallInputBox taxPercentage" />&nbsp;%
 				</td>
-				<td>{$tax_data.taxlabel}</td>
+				<td><div class="textOverflowEllipsis">{$tax_data.taxlabel}</div></td>
 				<td>
 					<input type="text" name="{$popup_tax_rowname}" class="cursorPointer smallInputBox taxTotal" value="{$tax_data.amount}" readonly />
 				</td>

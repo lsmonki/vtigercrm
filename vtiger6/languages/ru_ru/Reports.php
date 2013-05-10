@@ -1,0 +1,126 @@
+<?php
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
+$languageStrings = array(
+	'Reports'                      => 'Reports'                     , // TODO: Review
+	'SINGLE_Reports'               => 'Report'                      , // TODO: Review
+	'LBL_FOLDER_NOT_EMPTY'         => 'Folder is not empty'         , // TODO: Review
+	'LBL_MOVE_REPORT'              => 'Move Reports'                , // TODO: Review
+	'LBL_CUSTOMIZE'                => 'Customize'                   , // TODO: Review
+	'LBL_REPORT_EXPORT_EXCEL'      => 'Export Excel'                , // TODO: Review
+	'LBL_REPORT_PRINT'             => 'Print'                       , // TODO: Review
+	'LBL_STEP_1'                   => 'Step 1'                      , // TODO: Review
+	'LBL_STEP_2'                   => 'Step 2'                      , // TODO: Review
+	'LBL_STEP_3'                   => 'Step 3'                      , // TODO: Review
+	'LBL_REPORT_DETAILS'           => 'Report Details'              , // TODO: Review
+	'LBL_SELECT_COLUMNS'           => 'Select Columns'              , // TODO: Review
+	'LBL_FILTERS'                  => 'Filters'                     , // TODO: Review
+	'LBL_FOLDERS'                  => 'Folders'                     , // TODO: Review
+	'LBL_ADD_NEW_FOLDER'           => 'Add New Folder'              , // TODO: Review
+	'LBL_FOLDER_NAME'              => 'Folder Name'                 , // TODO: Review
+	'LBL_FOLDER_DESCRIPTION'       => 'Folder Description'          , // TODO: Review
+	'LBL_WRITE_YOUR_DESCRIPTION_HERE' => 'Enter Description'           , // TODO: Review
+	'LBL_DUPLICATES_EXIST'         => 'Report Name already Exists'  , // TODO: Review
+	'LBL_FOLDERS_LIST'             => 'Folders List'                , // TODO: Review
+	'LBL_DENIED_REPORTS'           => 'Denied Reports'              , // TODO: Review
+	'LBL_NO_OF_RECORDS'            => 'Number of records'           , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Report'                  , // TODO: Review
+	'LBL_ADD_FOLDER'               => 'Add Folder'                  , // TODO: Review
+	'LBL_REPORT_DELETE_DENIED'     => 'Permission denied to delete the Report', // TODO: Review
+	'LBL_FOLDER_CAN_NOT_BE_DELETED' => 'This folder can not be deleted', // TODO: Review
+	'LBL_REPORTS_LIST'             => 'Reports list'                , // TODO: Review
+	'LBL_REPORT_NAME'              => 'Report Name'                 , // TODO: Review
+	'LBL_REPORT_FOLDER'            => 'Report Folder'               , // TODO: Review
+	'LBL_DESCRIPTION'              => 'Description'                 , // TODO: Review
+	'PRIMARY_MODULE'               => 'Primary Module'              , // TODO: Review
+	'LBL_SELECT_RELATED_MODULES'   => 'Select Related Modules'      , // TODO: Review
+	'LBL_MAX'                      => 'MAX'                         , // TODO: Review
+	'LBL_NEXT'                     => 'Next'                        , // TODO: Review
+	'LBL_REPORTS'                  => 'Reports List'                , // TODO: Review
+	'LBL_GROUP_BY'                 => 'Group By'                    , // TODO: Review
+	'LBL_SORT_ORDER'               => 'Sort Order'                  , // TODO: Review
+	'LBL_ASCENDING'                => 'Ascending'                   , // TODO: Review
+	'LBL_DESCENDING'               => 'Descending'                  , // TODO: Review
+	'LBL_CALCULATIONS'             => 'Calculations'                , // TODO: Review
+	'LBL_COLUMNS'                  => 'Columns'                     , // TODO: Review
+	'LBL_SUM_VALUE'                => 'Sum'                         , // TODO: Review
+	'LBL_AVERAGE'                  => 'Average'                     , // TODO: Review
+	'LBL_LOWEST_VALUE'             => 'Lowest Value'                , // TODO: Review
+	'LBL_HIGHEST_VALUE'            => 'Highest Value'               , // TODO: Review
+	'LBL_GENERATE_REPORT'          => 'Generate Report'             , // TODO: Review
+	'LBL_SUM'                      => 'SUM'                         , // TODO: Review
+	'LBL_AVG'                      => 'AVG'                         , // TODO: Review
+	'LBL_MIN'                      => 'MIN'                         , // TODO: Review
+	'LBL_FIELD_NAMES'              => 'Field Names'                 , // TODO: Review
+	'LBL_REPORT_CSV'               => 'Export CSV'                  , // TODO: Review
+	'LBL_VIEW_DETAILS'             => 'View Details'                , // TODO: Review
+	'LBL_GENERATE_NOW'             => 'Generate now'                , // TODO: Review
+	'Report Name'                  => 'Report Name'                 , // TODO: Review
+	'Account and Contact Reports'  => 'Organization and Contact Reports', // TODO: Review
+	'Lead Reports'                 => 'Lead Reports'                , // TODO: Review
+	'Potential Reports'            => 'Opportunity Reports'         , // TODO: Review
+	'Activity Reports'             => 'Activity Reports'            , // TODO: Review
+	'HelpDesk Reports'             => 'Tickets Reports'             , // TODO: Review
+	'Product Reports'              => 'Product Reports'             , // TODO: Review
+	'Quote Reports'                => 'Quote Reports'               , // TODO: Review
+	'PurchaseOrder Reports'        => 'Purchase Order Reports'      , // TODO: Review
+	'SalesOrder Reports'           => 'Sales Order Reports'         , // TODO: Review
+	'Invoice Reports'              => 'Invoice Reports'             , // TODO: Review
+	'Campaign Reports'             => 'Campaign Reports'            , // TODO: Review
+	'Contacts by Accounts'         => 'Contacts by Organizations'   , // TODO: Review
+	'Contacts without Accounts'    => 'Contacts without Organizations', // TODO: Review
+	'Contacts by Potentials'       => 'Contacts by Opportunities'   , // TODO: Review
+	'Contacts related to Accounts' => 'Contacts related to Organizations', // TODO: Review
+	'Contacts not related to Accounts' => 'Contacts not related to Organizations', // TODO: Review
+	'Contacts related to Potentials' => 'Contacts related to Opportunities', // TODO: Review
+	'Lead by Source'               => 'Lead by Source'              , // TODO: Review
+	'Lead Status Report'           => 'Lead Status Report'          , // TODO: Review
+	'Potential Pipeline'           => 'Opportunity Pipeline'        , // TODO: Review
+	'Closed Potentials'            => 'Closed Opportunities'        , // TODO: Review
+	'Potential that have Won'      => 'Won Opportunities'           , // TODO: Review
+	'Tickets by Products'          => 'Tickets by Products'         , // TODO: Review
+	'Tickets by Priority'          => 'Tickets by Priority'         , // TODO: Review
+	'Open Tickets'                 => 'Open Tickets'                , // TODO: Review
+	'Tickets related to Products'  => 'Tickets related to Products' , // TODO: Review
+	'Tickets that are Open'        => 'Open Tickets'                , // TODO: Review
+	'Product Details'              => 'Product Details'             , // TODO: Review
+	'Products by Contacts'         => 'Products by Contacts'        , // TODO: Review
+	'Product Detailed Report'      => 'Product Detailed Report'     , // TODO: Review
+	'Products related to Contacts' => 'Products related to Contacts', // TODO: Review
+	'Open Quotes'                  => 'Open Quotes'                 , // TODO: Review
+	'Quotes Detailed Report'       => 'Quotes Detailed Report'      , // TODO: Review
+	'Quotes that are Open'         => 'Open Quotes'                 , // TODO: Review
+	'PurchaseOrder by Contacts'    => 'Purchase Order by Contacts'  , // TODO: Review
+	'PurchaseOrder Detailed Report' => 'Purchase Order Detailed Report', // TODO: Review
+	'PurchaseOrder related to Contacts' => 'Purchase Order Related to Contacts', // TODO: Review
+	'Invoice Detailed Report'      => 'Invoice Detailed Report'     , // TODO: Review
+	'Last Month Activities'        => 'Last Month Activities'       , // TODO: Review
+	'This Month Activities'        => 'This Month Activities'       , // TODO: Review
+	'Campaign Expectations and Actuals' => 'Campaign Expectations and Actuals', // TODO: Review
+	'SalesOrder Detailed Report'   => 'Sales Order Detailed Report' , // TODO: Review
+	'Email Reports'                => 'Email Reports'               , // TODO: Review
+	'Contacts Email Report'        => 'Contacts Email Report'       , // TODO: Review
+	'Accounts Email Report'        => 'Organizations Email Report'  , // TODO: Review
+	'Leads Email Report'           => 'Leads Email Report'          , // TODO: Review
+	'Vendors Email Report'         => 'Vendors Email Report'        , // TODO: Review
+	'Emails sent to Contacts'      => 'Emails sent to Contacts'     , // TODO: Review
+	'Emails sent to Organizations' => 'Emails sent to Organizations', // TODO: Review
+	'Emails sent to Leads'         => 'Emails sent to Leads'        , // TODO: Review
+	'Emails sent to Vendors'       => 'Emails sent to Vendors'      , // TODO: Review
+	'LBL_PRINT_REPORT'             => 'Print Report'                , // TODO: Review
+	'LBL_RECORDS'                  => 'Records'                     , // TODO: Review
+	'LBL_LIMIT_EXCEEDED'           => 'Only 1000 + records are displayed. Use CSV or Excel Export to see all the records', // TODO: Review
+	'LBL_TOP'                      => 'Top'                         , // TODO: Review
+	'LBL_ALL_REPORTS'              => 'All Reports'                 , // TODO: Review
+	'LBL_CALCULATION_CONVERSION_MESSAGE' => 'Calculation are based on the base currency of your CRM', // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_DUPLICATE_RECORD'          => 'Duplicate Report'            , // TODO: Review
+	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.', // TODO: Review
+);

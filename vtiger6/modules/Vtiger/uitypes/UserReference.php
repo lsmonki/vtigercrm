@@ -30,5 +30,21 @@ class Vtiger_UserReference_UIType extends Vtiger_Base_UIType {
 		}
 	}
 
+	/**
+	 * Function to get display value
+	 * @param <String> $value
+	 * @param <Number> $recordId
+	 * @return <String> display value
+	 */
+	public function getDisplayValue($value, $recordId) {
+		$displayValue = $this->getEditViewDisplayValue($value);
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		if ($currentUserModel->isAdminUser()) {
+			$recordModel = Users_Record_Model::getCleanInstance('Users');
+			$recordModel->set('id', $value);
+			return '<a href="'. $recordModel->getDetailViewUrl() .'">'. textlength_check($displayValue) .'</a>';
+		}
+		return $displayValue;
+	}
 
 }

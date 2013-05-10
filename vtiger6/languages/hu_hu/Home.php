@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Legfontosabb Cégek'			, // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Legfontosabb Lehetőségek'	, // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Legfontosabb Ajánlatok'		, // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'Kulcs Mérőszámok'			, // KEY 5.x: Key Metrics
-	'HLT'                          => 'Legfontosabb Kérések'		,
-	'GRT'                          => 'Csoport beosztásom'			, // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Legfontosabb Megrendelések'	, // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Legfontosabb Díjbekérők'		, // KEY 5.x: Top Invoices
-	'HDB'                          => 'Műszerfal Kezdőlap'			, // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Legfontosabb Beszerzések'	, // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'TudásTár bejegyzéseim'		, // KEY 5.x: My Recent FAQs
-	'UA'                           => 'Rám váró Tevékenységek'		, // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'Befejezetlen Tevékenységek'	, // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Legfontosabb Cégek'         , 
+	'PLVT'                         => 'Legfontosabb Lehetőségek'  , 
+	'QLTQ'                         => 'Legfontosabb Ajánlatok'     , 
+	'CVLVT'                        => 'Kulcs Mérőszámok'         , 
+	'HLT'                          => 'Legfontosabb Kérések'      , 
+	'GRT'                          => 'Csoport beosztásom'         , 
+	'OLTSO'                        => 'Legfontosabb Megrendelések' , 
+	'ILTI'                         => 'Legfontosabb Díjbekérők'  , 
+	'HDB'                          => 'Műszerfal Kezdőlap'        , 
+	'OLTPO'                        => 'Legfontosabb Beszerzések'   , 
+	'LTFAQ'                        => 'TudásTár bejegyzéseim'    , 
+	'UA'                           => 'Rám váró Tevékenységek' , 
+	'PA'                           => 'Befejezetlen Tevékenységek', 
 );

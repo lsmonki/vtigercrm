@@ -23,9 +23,14 @@ class Documents extends CRMEntity {
 	var $table_index= 'notesid';
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_notes');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid');
-
+	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_notescf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_notescf'=>'notesid');
+	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_notescf', 'notesid');
+	
 	var $column_fields = Array();
 
     var $sortby_fields = Array('title','modifiedtime','filename','createdtime','lastname','filedownloadcount','smownerid');

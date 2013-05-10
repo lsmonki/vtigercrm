@@ -81,6 +81,8 @@ jQuery.Class("Vtiger_Field_Js",{
 	getValue : function() {
 		if('value' in this.getData()){
 			return this.get('value');
+		} else if('defaultValue' in this.getData()){
+			return this.get('defaultValue');
 		}
 		return '';
 	},
@@ -101,12 +103,16 @@ jQuery.Class("Vtiger_Field_Js",{
         this.data = fieldInfo;
 		return this;
     },
+	
+	getModuleName : function() {
+		return app.getModuleName();
+	},
 
 	/**
 	 * Function to get the ui type specific model
 	 */
 	getUiTypeModel : function() {
-		var currentModule = app.getModuleName();
+		var currentModule = this.getModuleName();
 
 		var type = this.getType();
 		var typeClassName = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
@@ -150,12 +156,18 @@ jQuery.Class("Vtiger_Field_Js",{
 	 */
 	addValidationToElement : function(element) {
 		var element = jQuery(element);
+		var addValidationToElement = element;
+		var elementInStructure = element.find('[name="'+ this.getName() +'"]');
+		if(elementInStructure.length > 0){
+			var addValidationToElement = elementInStructure;
+		}
 		var validationHandler = 'validate[';
 		if(this.isMandatory()) {
 			validationHandler +="required,";
 		}
 		validationHandler +="funcCall[Vtiger_Base_Validator_Js.invokeValidation]]";
-		return element.attr('data-validation-engine', validationHandler).data('fieldinfo',JSON.stringify(this.getData()));
+		addValidationToElement.attr('data-validation-engine', validationHandler).data('fieldinfo',JSON.stringify(this.getData()));
+		return element;
 	}
 })
 
@@ -206,7 +218,7 @@ Vtiger_Field_Js('Vtiger_Multipicklist_Field_Js',{},{
 	 * @return - select element and chosen element
 	 */
 	getUi : function() {
-		var html = '<select class="row-fluid chzn-select" multiple name="'+ this.getName() +'[]">';
+		var html = '<select class="select2" multiple name="'+ this.getName() +'[]">';
 		var pickListValues = this.getPickListValues();
 		var selectedOption = this.getValue();
 		var selectedOptionsArray = selectedOption.split(',')
@@ -243,7 +255,7 @@ Vtiger_Field_Js('Vtiger_Boolean_Field_Js',{},{
 	 * @return - checkbox element
 	 */
 	getUi : function() {
-		var	html = '<input type="checkbox" name="'+ this.getName() +'" ';
+		var	html = '<input type="hidden" name="'+this.getName() +'" value="0"/><input type="checkbox" name="'+ this.getName() +'" ';
 		if(this.isChecked()) {
 			html += 'checked';
 		}
@@ -267,7 +279,12 @@ Vtiger_Field_Js('Vtiger_Date_Field_Js',{},{
 	 * @return - input text field
 	 */
 	getUi : function() {
-		var html = '<input class="dateField" type="text" readonly name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'
+		var html = '<div class="input-append">'+
+						'<div class="date">'+
+							'<input class="dateField" type="text" name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'+
+							'<span class="add-on"><i class="icon-calendar"></i></span>'+
+						'</div>'+
+					'</div>';
 		var element = jQuery(html);
 		return this.addValidationToElement(element);
 	}
@@ -285,22 +302,10 @@ Vtiger_Field_Js('Vtiger_Currency_Field_Js',{},{
 	getUi : function() {
 		var html = '<span class="input-prepend row-fluid">'+
 									'<span class="add-on">'+ this.getCurrencySymbol()+'</span>'+
-									'<input type="text" class="span9 marginLeftZero" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
+									'<input type="text" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
 					'</span>';
-		return html;
-	},
-
-	/**
-	 * Function to add the validation for the element
-	 */
-	addValidationToElement : function(element) {
-		var element = jQuery(element);
-		var validationHandler = 'validate[';
-		if(this.isMandatory()) {
-			validationHandler +="required,";
-		}
-		validationHandler +="funcCall[Vtiger_Base_Validator_Js.invokeValidation]]";
-		return element.find('[name="'+ this.getName() +'"]').attr('data-validation-engine', validationHandler).data('fieldinfo',JSON.stringify(this.getData()));
+		var element = jQuery(html);
+		return this.addValidationToElement(element);
 	}
 });
 
@@ -342,4 +347,40 @@ Vtiger_Field_Js('Vtiger_Owner_Field_Js',{},{
 
 Vtiger_Date_Field_Js('Vtiger_Datetime_Field_Js',{},{
 
+});
+
+Vtiger_Field_Js('Vtiger_Time_Field_Js',{},{
+	
+	/**
+	 * Function to get the user date format
+	 */
+	getTimeFormat : function(){
+		return this.get('time-format');
+	},
+
+	/**
+	 * Function to get the ui
+	 * @return - input text field
+	 */
+	getUi : function() {
+		var html = '<div class="input-append time">'+
+							'<input class="timepicker-default" type="text" data-format="'+ this.getTimeFormat() +'" name="'+ this.getName() +'"  value="'+  this.getValue() + '" />'+
+							'<span class="add-on"><i class="icon-time"></i></span>'+
+					'</div>';
+		var element = jQuery(html);
+		return this.addValidationToElement(element);
+	}
+});
+
+Vtiger_Field_Js('Vtiger_Text_Field_Js',{},{
+
+	/**
+	 * Function to get the ui
+	 * @return - input text field
+	 */
+	getUi : function() {
+		var html = '<textarea class="input-xxlarge" name="'+ this.getName() +'"  value="'+  this.getValue() + '" style="width:100%">'+  this.getValue() + '</textarea>';
+		var element = jQuery(html);
+		return this.addValidationToElement(element);
+	}
 });

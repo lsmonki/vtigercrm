@@ -6,13 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012 ************************************************************************************/
+ ************************************************************************************/
 $languageStrings = array(
 	'Vendors'                      => 'Proveedores'                 , 
 	'SINGLE_Vendors'               => 'Proveedor'                   , 
-	'LBL_ADD_RECORD'               => 'Agregar Proveedor'                  , 
-	'LBL_RECORDS_LIST'             => 'Lista de proveedores'                , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de proveedores'             , 
+	'LBL_ADD_RECORD'               => 'Agregar Proveedor'           , 
+	'LBL_RECORDS_LIST'             => 'Lista de proveedores'        , 
 	'LBL_VENDOR_INFORMATION'       => 'Información sobre Proveedores:', 
 	'LBL_VENDOR_ADDRESS_INFORMATION' => 'Información sobre la Dirección:', 
 	'Vendor Name'                  => 'Proveedor'                   , 
@@ -30,7 +29,7 @@ $languageStrings = array(
 	'308-Sales-Books'              => '308-Ventas-Libros'           , 
 );
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION'      => 'Seguro que lo quieres borrar?',
-	'LBL_DELETE_CONFIRMATION'      => 'Borrando a este proveedor, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar a este proveedor?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Borrando a estos proveedores, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar estos registros?', // TODO: Review
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Seguro que lo quieres borrar?', 
+	'LBL_DELETE_CONFIRMATION'      => 'Borrando a este proveedor, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar a este proveedor?', 
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Borrando a estos proveedores, se eliminarán también sus ordenes de compra relacionadas; Estas seguro que deseas eliminar estos registros?', 
 );

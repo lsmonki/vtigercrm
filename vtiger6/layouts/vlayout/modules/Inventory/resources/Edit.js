@@ -525,7 +525,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 					'<td>'+
 					'<input type="text" name="'+taxName+'_percentage'+rowNumber+'" id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.percentage+'" class="smallInputBox taxPercentage">&nbsp;%'+
 					'</td>'+
-					'<td>'+taxInfo.label+'</td> '+
+					'<td><div class="textOverflowEllipsis">'+taxInfo.label+'</div></td> '+
 					'<td>'+
 					'<input type="text" name="popup_tax_row'+rowNumber+'" class="cursorPointer smallInputBox taxTotal" value="0.0" readonly>'+
 					'</td>'+
@@ -1275,12 +1275,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var thisInstance = this;
 		jQuery('#currency_id').change(function(e){
 			var element = jQuery(e.currentTarget);
+			var conversionRateElem = jQuery('#conversion_rate');
+			var prevSelectedCurrencyConversionRate = conversionRateElem.val();
 			var optionsSelected = element.find('option:selected');
 			var conversionRate = optionsSelected.data('conversionRate');
-			jQuery('#conversion_rate').val(conversionRate);
-			var prevSelectedCurrencyId = jQuery('#prev_selected_currency_id').val();
-			var prevSelectedOption = element.find('option[value="'+prevSelectedCurrencyId+'"]');
-			conversionRate = parseFloat(conversionRate)/ parseFloat(prevSelectedOption.data('conversionRate'));
+			conversionRateElem.val(conversionRate);
+			conversionRate = parseFloat(conversionRate)/ parseFloat(prevSelectedCurrencyConversionRate);
 			var lineItemTable = thisInstance.getLineItemContentsContainer();
 			lineItemTable.find('tr.'+thisInstance.rowClass).each(function(index,domElement){
 				var lineItemRow = jQuery(domElement);
@@ -1572,7 +1572,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				var tdElement = element.closest('td');
 				var selectedModule = tdElement.find('.lineItemPopup').data('moduleName');
 				var popupElement = tdElement.find('.lineItemPopup');
-				var dataUrl = "index.php?module=Inventory&action=GetTaxes&record="+selectedItemData.id;
+				var dataUrl = "index.php?module=Inventory&action=GetTaxes&record="+selectedItemData.id+"&currency_id="+jQuery('#currency_id option:selected').val();
 				AppConnector.request(dataUrl).then(
 					function(data){
 						for(var id in data){

@@ -8,90 +8,77 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Class Users_Edit_View extends Vtiger_Edit_View {
+Class Users_Edit_View extends Users_PreferenceEdit_View {
 
-    public function checkPermission(Vtiger_Request $request) {
-        $currentUserModel = Users_Record_Model::getCurrentUserModel();
-        $record = $request->get('record');
-
-        if(($currentUserModel->isAdminUser() == true && $record != 1) ||
-                $currentUserModel->get('id') == $record){
-            return true;
-        }else{
-			throw new AppException('LBL_PERMISSION_DENIED');
-        }
+	public function preProcess(Vtiger_Request $request) {
+		parent::preProcess($request, false);
+		$this->preProcessSettings($request);
 	}
 
-    function preProcessTplName(Vtiger_Request $request) {
-		return 'UserEditViewPreProcess.tpl';
-	}
-
-
-    public function preProcess (Vtiger_Request $request, $display=true) {
-        if($this->checkPermission($request)){
-            $viewer = $this->getViewer($request);
-
-            $menuModelsList = Vtiger_Menu_Model::getAll(true);
-            $selectedModule = $request->getModule();
-            $menuStructure = Vtiger_MenuStructure_Model::getInstanceFromMenuList($menuModelsList, $selectedModule);
-
-			// Order by pre-defined automation process for QuickCreate.
-			uksort($menuModelsList, array('Vtiger_MenuStructure_Model', 'sortMenuItemsByProcess'));
-
-            $companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
-            $companyLogo = $companyDetails->getLogo();
-
-            $viewer->assign('CURRENTDATE', date('Y-n-j'));
-            $viewer->assign('MODULE', $selectedModule);
-            $viewer->assign('PARENT_MODULE', $request->get('parent'));
-            $viewer->assign('MENUS', $menuModelsList);
-            $viewer->assign('MENU_STRUCTURE', $menuStructure);
-            $viewer->assign('COMPANY_LOGO',$companyLogo);
-            $viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
-
-            $homeModuleModel = Vtiger_Module_Model::getInstance('Home');
-            $viewer->assign('HOME_MODULE_MODEL', $homeModuleModel);
-            $viewer->assign('HEADER_LINKS',$this->getHeaderLinks());
-            $viewer->assign('ANNOUNCEMENT', $this->getAnnouncement());
-
-            $viewer->assign('CURRENT_VIEW', $request->get('view'));
-
-            $viewer->assign('PAGETITLE', $this->getPageTitle($request));
-            $viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
-            $viewer->assign('STYLES',$this->getHeaderCss($request));
-            $viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
-			$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
-
-            if($display) {
-                $this->preProcessDisplay($request);
-            }
-        }
-	}
-
-    protected function preProcessDisplay(Vtiger_Request $request) {
+	public function preProcessSettings(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
-		$viewer->view($this->preProcessTplName($request), $request->getModule());
-	}
-
-	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
-		$recordId = $request->get('record');
+		$qualifiedModuleName = $request->getModule(false);
+		$selectedMenuId = $request->get('block');
+		$fieldId = $request->get('fieldid');
 
-		if (!empty($recordId)) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+		$settingsModel = Settings_Vtiger_Module_Model::getInstance();
+		$menuModels = $settingsModel->getMenus();
+
+		if(!empty($selectedMenuId)) {
+			$selectedMenu = Settings_Vtiger_Menu_Model::getInstanceById($selectedMenuId);
+		} elseif(!empty($moduleName) && $moduleName != 'Vtiger') {
+			$fieldItem = Settings_Vtiger_Index_View::getSelectedFieldFromModule($menuModels,$moduleName);
+			if($fieldItem){
+				$selectedMenu = Settings_Vtiger_Menu_Model::getInstanceById($fieldItem->get('blockid'));
+				$fieldId = $fieldItem->get('fieldid');
+			} else {
+				reset($menuModels);
+				$firstKey = key($menuModels);
+				$selectedMenu = $menuModels[$firstKey];
+			}
 		} else {
-			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+			reset($menuModels);
+			$firstKey = key($menuModels);
+			$selectedMenu = $menuModels[$firstKey];
 		}
 
-		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
+		$viewer->assign('SELECTED_FIELDID',$fieldId);
+		$viewer->assign('SELECTED_MENU', $selectedMenu);
+		$viewer->assign('SETTINGS_MENUS', $menuModels);
+		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+        $viewer->assign('LOAD_OLD', Settings_Vtiger_Index_View::$loadOlderSettingUi);
+		$viewer->assign('IS_PREFERENCE', false);
 
-		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructureInstance->getStructure());
+		$viewer->view('SettingsMenuStart.tpl', $qualifiedModuleName);
+	}
 
+	public function postProcessSettings(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
-		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
-		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
-		$viewer->assign('TAG_CLOUD', $recordModel->getTagCloudStatus());
+		$qualifiedModuleName = $request->getModule(false);
+		$viewer->view('SettingsMenuEnd.tpl', $qualifiedModuleName);
+	}
 
+	public function postProcess(Vtiger_Request $request) {
+		$this->postProcessSettings($request);
+		parent::postProcess($request);
+	}
+	
+	public function getHeaderScripts(Vtiger_Request $request) {
+		$headerScriptInstances = parent::getHeaderScripts($request);
+		$moduleName = $request->getModule();
+
+		$jsFileNames = array(
+			'modules.Settings.Vtiger.resources.Index'
+		);
+
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+		return $headerScriptInstances;
+	}
+	
+	public function process(Vtiger_Request $request) {
 		parent::process($request);
 	}
 }

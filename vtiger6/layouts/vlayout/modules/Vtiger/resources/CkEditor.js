@@ -38,6 +38,14 @@ jQuery.Class("Vtiger_CkEditor_Js",{},{
 		var elementName = this.getElementId();
 		return CKEDITOR.instances[elementName];
 	},
+    
+    /***
+     * Function to get the plain text
+     */
+    getPlainText : function() {
+        var ckEditorInstnace = this.getCkEditorInstanceFromName();
+        return ckEditorInstnace.document.getBody().getText();
+    },
 	/*
 	 * Function to load CkEditor
 	 * @params : element: element on which CkEditor has to be loaded, config: custom configurations for ckeditor

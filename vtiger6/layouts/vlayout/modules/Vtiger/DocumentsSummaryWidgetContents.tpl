@@ -10,6 +10,16 @@
 ********************************************************************************/
 -->*}
 {strip}
+	<div class="row-fluid">
+		<span class="span7">
+			<strong>{vtranslate('Title','Documents')}</strong>
+		</span>
+		<span class="span4 horizontalLeftSpacingForSummaryWidgetHeader">
+			<span class="pull-right">
+				<strong>{vtranslate('File Name', 'Documents')}</strong>
+			</span>
+		</span>
+	</div>
 	{foreach item=RELATED_RECORD from=$RELATED_RECORDS}
 		{assign var=DOWNLOAD_FILE_URL value=$RELATED_RECORD->getDownloadFileURL()}
 		{assign var=DOWNLOAD_STATUS value=$RELATED_RECORD->get('filestatus')}
@@ -23,7 +33,7 @@
 								{$RELATED_RECORD->getDisplayValue('notes_title')}
 							</a>
 						</span>
-						<span class="span4 horizontalLeftSpacingForSummaryWidgetContents" id="DownloadableLink">
+						<span class="span5 textOverflowEllipsis" id="DownloadableLink">
 							{if $DOWNLOAD_STATUS eq 1}
 								{$RELATED_RECORD->getDisplayValue('filename', $RELATED_RECORD->getId(), $RELATED_RECORD)}
 							{else}

@@ -6,26 +6,21 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/PurchaseOrder.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'SINGLE_PurchaseOrder'         => 'Inkooporder'                 , 
 	'LBL_EXPORT_TO_PDF'            => 'Exporteer naar PDF'          , 
-	'LBL_ADD_RECORD'               => 'Voeg Inkooporder toe'          , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Inkooporder lijst'           , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Inkooporder Samenvatting'      , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Inkooporder toe'        , 
+	'LBL_RECORDS_LIST'             => 'Inkooporder lijst'           , 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
 	'LBL_PO_INFORMATION'           => 'Inkooporder Informatie'      , 
 	'PurchaseOrder No'             => 'Inkoopordernummer'           , 
 	'Requisition No'               => 'Vorderingsnummer'            , 
 	'Tracking Number'              => 'Volgnummer'                  , 
 	'Sales Commission'             => 'Verkoopcommissie'            , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Goederen ontvangen'          , 
 );

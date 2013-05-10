@@ -8,29 +8,161 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-class Settings_Workflows_Edit_View extends Settings_Workflows_Create_View {
+class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 
 	public function process(Vtiger_Request $request) {
+		$mode = $request->getMode();
+		if ($mode) {
+			$this->$mode($request);
+		} else {
+			$this->step1($request);
+		}
+	}
+
+	public function preProcess(Vtiger_Request $request) {
+		parent::preProcess($request);
+		$viewer = $this->getViewer($request);
+
+		$viewer->assign('RECORD_MODE', $request->getMode());
+		$viewer->view('EditHeader.tpl', $request->getModule(false));
+	}
+
+	public function step1(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
 
 		$recordId = $request->get('record');
-		$workflowModel = Settings_Workflows_Record_Model::getInstance($recordId);
+		if ($recordId) {
+			$workflowModel = Settings_Workflows_Record_Model::getInstance($recordId);
+			$viewer->assign('RECORDID', $recordId);
+			$viewer->assign('MODULE_MODEL', $workflowModel->getModule());
+			$viewer->assign('MODE', 'edit');
+		} else {
+			$workflowModel = Settings_Workflows_Record_Model::getCleanInstance($moduleName);
+            $selectedModule = $request->get('source_module');
+            if(!empty($selectedModule)) {
+                $viewer->assign('SELECTED_MODULE', $selectedModule);
+            }
+		}
 
 		$viewer->assign('WORKFLOW_MODEL', $workflowModel);
+		$viewer->assign('ALL_MODULES', Settings_Workflows_Module_Model::getSupportedModules());
 		$viewer->assign('TRIGGER_TYPES', Settings_Workflows_Module_Model::getTriggerTypes());
-		$viewer->assign('MODULE_MODEL', $workflowModel->getModule());
-		$viewer->assign('CURRENTDATE', date('Y-n-j'));
-		$viewer->assign('DATE_FILTERS', Vtiger_Field_Model::getDateFilterTypes());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
-		$viewer->assign('FIELD_EXPRESSIONS', Settings_Workflows_Module_Model::getExpressions());
-		$viewer->assign('META_VARIABLES', Settings_Workflows_Module_Model::getMetaVariables());
 
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 
-		$viewer->view('EditView.tpl', $qualifiedModuleName);
+		$viewer->view('Step1.tpl', $qualifiedModuleName);
+	}
+
+	public function step2(Vtiger_Request $request) {
+
+		$viewer = $this->getViewer($request);
+		$moduleName = $request->getModule();
+		$qualifiedModuleName = $request->getModule(false);
+
+		$recordId = $request->get('record');
+
+		if ($recordId) {
+			$workFlowModel = Settings_Workflows_Record_Model::getInstance($recordId);
+			$selectedModule = $workFlowModel->getModule();
+			$selectedModuleName = $selectedModule->getName();
+		} else {
+			$selectedModuleName = $request->get('module_name');
+			$selectedModule = Vtiger_Module_Model::getInstance($selectedModuleName);
+			$workFlowModel = Settings_Workflows_Record_Model::getCleanInstance($selectedModuleName);
+		}
+
+		$requestData = $request->getAll();
+		foreach($requestData as $name=>$value) {
+			$workFlowModel->set($name,$value);
+		}
+		//Added to support advance filters
+		$recordStructureInstance = Settings_Workflows_RecordStructure_Model::getInstanceForWorkFlowModule($workFlowModel);
+		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
+		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
+
+		$viewer->assign('WORKFLOW_MODEL',$workFlowModel);
+
+		$viewer->assign('MODULE_MODEL', $selectedModule);
+		$viewer->assign('SELECTED_MODULE_NAME', $selectedModuleName);
+
+		$viewer->assign('DATE_FILTERS', Settings_Workflows_Field_Model::getDateFilterTypes());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS', Settings_Workflows_Field_Model::getAdvancedFilterOptions());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Settings_Workflows_Field_Model::getAdvancedFilterOpsByFieldType());
+		$viewer->assign('COLUMNNAME_API', 'getWorkFlowFilterColumnName');
+
+		$viewer->assign('FIELD_EXPRESSIONS', Settings_Workflows_Module_Model::getExpressions());
+		$viewer->assign('META_VARIABLES', Settings_Workflows_Module_Model::getMetaVariables());
+
+		// Added to show filters only when saved from vtiger6
+		if($workFlowModel->isFilterSavedInNew()) {
+			$viewer->assign('ADVANCE_CRITERIA', $workFlowModel->transformToAdvancedFilterCondition());
+		} else {
+			$viewer->assign('ADVANCE_CRITERIA', "");
+		}
+		
+		$viewer->assign('IS_FILTER_SAVED_NEW',$workFlowModel->isFilterSavedInNew());
+		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+
+		$viewer->view('Step2.tpl', $qualifiedModuleName);
+	}
+
+	function Step3(Vtiger_Request $request) {
+		$viewer = $this->getViewer($request);
+		$moduleName = $request->getModule();
+		$qualifiedModuleName = $request->getModule(false);
+
+		$recordId = $request->get('record');
+
+		if ($recordId) {
+			$workFlowModel = Settings_Workflows_Record_Model::getInstance($recordId);
+			$selectedModule = $workFlowModel->getModule();
+			$selectedModuleName = $selectedModule->getName();
+		} else {
+			$selectedModuleName = $request->get('module_name');
+			$selectedModule = Vtiger_Module_Model::getInstance($selectedModuleName);
+			$workFlowModel = Settings_Workflows_Record_Model::getCleanInstance($selectedModuleName);
+		}
+
+		$requestData = $request->getAll();
+		foreach($requestData as $name=>$value) {
+			$workFlowModel->set($name,$value);
+		}
+
+		$workFlowModel->save();
+
+		$moduleModel = $workFlowModel->getModule();
+		$viewer->assign('TASK_TYPES', Settings_Workflows_TaskType_Model::getAllForModule($moduleModel));
+		$viewer->assign('SOURCE_MODULE',$selectedModuleName);
+		$viewer->assign('RECORD',$recordId);
+		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('WORKFLOW_MODEL',$workFlowModel);
+		$viewer->assign('TASK_LIST', $workFlowModel->getTasks());
+		$viewer->assign('QUALIFIED_MODULE',$qualifiedModuleName);
+		
+		$viewer->view('Step3.tpl', $qualifiedModuleName);
+	}
+
+	public function getHeaderScripts(Vtiger_Request $request) {
+		$headerScriptInstances = parent::getHeaderScripts($request);
+		$moduleName = $request->getModule();
+
+		$jsFileNames = array(
+			'modules.Settings.Vtiger.resources.Edit',
+			"modules.Settings.$moduleName.resources.Edit",
+			"modules.Settings.$moduleName.resources.Edit1",
+			"modules.Settings.$moduleName.resources.Edit2",
+			"modules.Settings.$moduleName.resources.Edit3",
+			"modules.Settings.$moduleName.resources.AdvanceFilter",
+			'~libraries/jquery/ckeditor/ckeditor.js',
+			"modules.Vtiger.resources.CkEditor",
+		);
+
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+		return $headerScriptInstances;
 	}
 }

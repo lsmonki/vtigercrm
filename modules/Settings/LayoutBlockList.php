@@ -941,6 +941,7 @@ function addCustomField() {
 							".$columnName." varchar(200) NOT NULL,
 							presence int(1) NOT NULL default '1',
 							picklist_valueid int(19) NOT NULL default '0',
+							sortorderid INT DEFAULT 0,
 							PRIMARY KEY  (".$columnName."id)
 						)";
 						$adb->pquery($qur, array());
@@ -974,8 +975,8 @@ function addCustomField() {
 							}
 							if($picklistcount == 0) {
 								$picklist_valueid = getUniquePicklistID();
-								$query = "insert into vtiger_".$columnName." values(?,?,?,?)";
-								$adb->pquery($query, array($adb->getUniqueID("vtiger_".$columnName),$pickArray[$i],1,$picklist_valueid));
+								$query = "insert into vtiger_".$columnName." values(?,?,?,?,?)";
+								$adb->pquery($query, array($adb->getUniqueID("vtiger_".$columnName),$pickArray[$i],1,$picklist_valueid, $i+1));
 								/*$sql="update vtiger_picklistvalues_seq set id = ?";
 								$adb->pquery($sql, array(++$picklist_valueid));*/
 							}

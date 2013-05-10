@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Devis'                       , 
 	'LBL_EXPORT_TO_PDF'            => 'Export PDF'                  , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Liste devis'                 , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Liste devis'                 , 
 	'LBL_QUOTE_INFORMATION'        => 'Détail devis'               , 
 	'Quote No'                     => 'Devis N°'                   , 
 	'Quote Stage'                  => 'Phase'                       , 

@@ -160,6 +160,8 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 
 	function postProcess(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$viewer->assign('ACTIVITY_REMINDER', $currentUser->getCurrentUserActivityReminderInSeconds());
 		$viewer->view('Footer.tpl');
 	}
 

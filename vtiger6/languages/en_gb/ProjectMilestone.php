@@ -9,9 +9,8 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , 
-	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Project Milestone Summary'   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , 
+	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , 
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Information', 
 	'Project Milestone Name'       => 'Milestone Name'              , 
 	'Milestone Date'               => 'Milestone Date'              , 

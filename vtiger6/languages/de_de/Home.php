@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Top Organisationen'          , // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Top Potentiale'              , // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Top Angebote'                , // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'benutzerdefinierte Listen'   , // KEY 5.x: Key Metrics
-	'HLT'                          => 'Top Support Tickets'         , // TODO: Review
-	'GRT'                          => 'meine Gruppenzugehörigkeit' , // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Top Verkaufsbestellungen'    , // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Top Rechnungen'              , // KEY 5.x: Top Invoices
-	'HDB'                          => 'Home Cockpit'                , // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Top Einkaufsbestellungen'    , // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'meine Wissensbasis'          , // KEY 5.x: My Recent FAQs
-	'UA'                           => 'aktuelle Aktivitäten'       , // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'unerledigte Aktivitäten'    , // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Top Organisationen'          , 
+	'PLVT'                         => 'Top Potentiale'              , 
+	'QLTQ'                         => 'Top Angebote'                , 
+	'CVLVT'                        => 'benutzerdefinierte Listen'   , 
+	'HLT'                          => 'Top Support Tickets'         , 
+	'GRT'                          => 'meine Gruppenzugehörigkeit' , 
+	'OLTSO'                        => 'Top Verkaufsbestellungen'    , 
+	'ILTI'                         => 'Top Rechnungen'              , 
+	'HDB'                          => 'Home Cockpit'                , 
+	'OLTPO'                        => 'Top Einkaufsbestellungen'    , 
+	'LTFAQ'                        => 'meine Wissensbasis'          , 
+	'UA'                           => 'aktuelle Aktivitäten'       , 
+	'PA'                           => 'unerledigte Aktivitäten'    , 
 );

@@ -500,6 +500,8 @@ class Emails extends CRMEntity {
 		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 		$this->db->pquery($sql, $params);
+
+		$this->db->pquery('UPDATE vtiger_crmentity SET modifiedtime = ? WHERE crmid = ?', array(date('y-m-d H:i:d'), $id));
 	}
 
 	public function getNonAdminAccessControlQuery($module, $user, $scope='') {
@@ -555,14 +557,14 @@ class Emails extends CRMEntity {
 	function generateReportsSecQuery($module, $secmodule, $queryPlanner){
 		$focus = CRMEntity::getInstance($module);
 		$matrix = $queryPlanner->newDependencyMatrix();
-		
+
 		$matrix->setDependency("vtiger_crmentityEmails",array("vtiger_groupsEmails","vtiger_usersEmails","vtiger_lastModifiedByEmails"));
 		$matrix->setDependency("vtiger_activity",array("vtiger_crmentityEmails","vtiger_email_track"));
 
 		if (!$queryPlanner->requireTable('vtiger_activity', $matrix)) {
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module, $secmodule, "vtiger_activity","activityid", $queryPlanner);
 		if ($queryPlanner->requireTable("vtiger_crmentityEmails")){
 		    $query .= " LEFT JOIN vtiger_crmentity AS vtiger_crmentityEmails ON vtiger_crmentityEmails.crmid=vtiger_activity.activityid and vtiger_crmentityEmails.deleted = 0";
@@ -662,7 +664,7 @@ function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
 				   WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid IN ('.generateQuestionMarks($idlist).') AND vtiger_account.emailoptout=0';
 	}
 	$result = $adb->pquery($query,$idlist);
-	
+
 	if($adb->num_rows($result)>0){
 		while($entityvalue = $adb->fetchByAssoc($result)){
 			$vtwsid = $entityvalue['id'];

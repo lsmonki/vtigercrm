@@ -10,8 +10,8 @@
 $languageStrings = array(
 	'Asterisk'                     => 'Asterisk'                    , 
 	'PBXManager'                   => 'Administrador PBX'           , 
-	'SINGLE_PBXManager'            => 'Administrador PBX'           , // KEY 5.x: PBXManager
-	'LBL_CALL_INFORMATION'         => 'Detalles de llamada'                , // TODO: Review
+	'SINGLE_PBXManager'            => 'Administrador PBX'           , 
+	'LBL_CALL_INFORMATION'         => 'Detalles de llamada'         , 
 	'Call From'                    => 'Llamada de'                  , 
 	'Call To'                      => 'Llamar a'                    , 
 	'Time Of Call'                 => 'Tiempo de Llamada'           , 

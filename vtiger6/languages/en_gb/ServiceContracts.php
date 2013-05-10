@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'ServiceContracts'             => 'Service Contracts'           , 
 	'SINGLE_ServiceContracts'      => 'Service Contract'            , 
-	'LBL_ADD_RECORD'               => 'Add Service Contract'        , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Service Contracts Summary'   , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Service Contract'        , 
+	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , 
 	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Service Contract Information', 
 	'Contract No'                  => 'Contract No.'                , 
 	'Start Date'                   => 'Start Date'                  , 

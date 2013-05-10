@@ -7,8 +7,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Vtiger_Edit_Js("Users_Edit_Js",{},{
-
+Vtiger_Edit_Js("Users_Edit_Js",{
+	
 	//Hold the conditions for a hour format
 	hourFormatConditionMapping : false,
 	
@@ -59,11 +59,52 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 		this.changeStartHourValuesEvent(form);
 		jQuery('select[name="hour_format"]',form).trigger('change');
 	},
-
+	
+	/**
+	 * Function to register recordpresave event
+	 */
+	registerRecordPreSaveEvent : function(form){
+		var thisInstance = this;
+		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
+			var userName = jQuery('input[name="user_name"]').val();
+			var newPassword = jQuery('input[name="user_password"]').val();
+			var confirmPassword = jQuery('input[name="confirm_password"]').val();
+			if(userName != ''){
+				var result = thisInstance.checkDuplicateUser(userName);
+				if(result){
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_USER_EXISTS'));
+					e.preventDefault();
+				}
+			}
+			if(newPassword != confirmPassword){
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_REENTER_PASSWORDS'));
+				e.preventDefault();
+			}
+		})
+	},
+	
+	checkDuplicateUser: function(userName){
+		var params = {
+				'module': app.getModuleName(),
+				'action' : "SaveAjax",
+				'mode' : 'userExists',
+				'user_name' : userName
+			}
+			AppConnector.request(params).then(
+				function(data) {
+					if(data.result){
+						return true;
+					}
+					return false;
+				}
+			);
+	},
+	
 	registerEvents : function() {
         this._super();
 		var form = this.getForm();
 		this.registerWidthChangeEvent();
 		this.triggerHourFormatChangeEvent(form);
+		this.registerRecordPreSaveEvent(form);
 	}
 });

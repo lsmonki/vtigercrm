@@ -32,7 +32,11 @@ function __vt_mul($arr){
 }
 
 function __vt_div($arr){
-	return $arr[0]/$arr[1];
+	try {
+		return $arr[0]/$arr[1];
+	}catch(Exception $e) {
+		return 0;
+	}
 }
 
 function __vt_equals($arr){

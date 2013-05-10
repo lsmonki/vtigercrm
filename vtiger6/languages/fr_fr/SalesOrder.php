@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Bon de commande'             , 
 	'LBL_EXPORT_TO_PDF'            => 'Export PDF'                  , 
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Liste'                       , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Sales Order Summary'         , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Liste'                       , 
 	'LBL_SO_INFORMATION'           => 'Détail bon de commande'     , 
 	'SalesOrder No'                => 'Bon de commande N°'         , 
 	'Quote Name'                   => 'Devis'                       , 

@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 Class Vtiger_Edit_View extends Vtiger_Index_View {
-
+    protected $record = false;
 	function __construct() {
 		parent::__construct();
 	}
@@ -29,19 +29,21 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
 		$viewer = $this->getViewer ($request);
 		$moduleName = $request->getModule();
 		$record = $request->get('record');
-
         if(!empty($record) && $request->get('isDuplicate') == true) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($record, $moduleName);
-			$viewer->assign('MODE', '');
-		}else if(!empty($record)) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($record, $moduleName);
+            $recordModel = $this->record?$this->record:Vtiger_Record_Model::getInstanceById($record, $moduleName);
+            $viewer->assign('MODE', '');
+        }else if(!empty($record)) {
+            $recordModel = $this->record?$this->record:Vtiger_Record_Model::getInstanceById($record, $moduleName);
             $viewer->assign('RECORD_ID', $record);
-			$viewer->assign('MODE', 'edit');
-		} else {
-			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
-			$viewer->assign('MODE', '');
-		}
-
+            $viewer->assign('MODE', 'edit');
+        } else {
+            $recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+            $viewer->assign('MODE', '');
+        }
+        if(!$this->record){
+            $this->record = $recordModel;
+        }
+        
 		$moduleModel = $recordModel->getModule();
 		$fieldList = $moduleModel->getFields();
 		$requestFieldList = array_intersect_key($request->getAll(), $fieldList);
@@ -70,7 +72,7 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
 			$viewer->assign('SOURCE_MODULE', $request->get('sourceModule'));
 			$viewer->assign('SOURCE_RECORD', $request->get('sourceRecord'));
 		}
-		
+
 		$viewer->assign('MAX_UPLOAD_LIMIT_MB', vglobal('upload_maxsize')/1000000);
 		$viewer->assign('MAX_UPLOAD_LIMIT', vglobal('upload_maxsize'));
 		$viewer->view('EditView.tpl', $moduleName);

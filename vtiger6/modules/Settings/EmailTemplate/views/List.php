@@ -9,6 +9,11 @@
  ************************************************************************************/
 
 class Settings_EmailTemplate_List_View extends Vtiger_Footer_View {
+    
+    function checkPermission(Vtiger_Request $request) {
+		//Return true as WebUI.php is already checking for module permission
+		return true;
+	}
 	
 	public function process(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);

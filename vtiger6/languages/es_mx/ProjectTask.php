@@ -6,12 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ProjectTask'           => 'Actividad'                   , 
-	'LBL_ADD_RECORD'               => 'Agregar Actividad'            , 
-	'LBL_RECORDS_LIST'             => 'Lista de actividades'           , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de actividades'        , 
+	'LBL_ADD_RECORD'               => 'Agregar Actividad'           , 
+	'LBL_RECORDS_LIST'             => 'Lista de actividades'        , 
 	'LBL_PROJECT_TASK_INFORMATION' => 'Información Actividad'      , 
+	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
+	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
 );

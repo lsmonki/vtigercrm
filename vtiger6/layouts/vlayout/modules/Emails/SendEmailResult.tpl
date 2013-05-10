@@ -14,6 +14,8 @@
 	window.close();
 	{if $RELATED_LOAD eq true}
         window.opener.Vtiger_Detail_Js.reloadRelatedList();
+	{else}
+		window.opener.Vtiger_List_Js.clearList();
     {/if}
 </script>
 {else}

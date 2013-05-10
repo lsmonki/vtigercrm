@@ -57,5 +57,17 @@ $languageStrings = array(
                                        Setze Daten zurück und starte einen neuen Import.', 
 	'ERR_IMPORT_INTERRUPTED'       => 'Aktuelle Import wurde unterbrochen. Bitte versuchen Sie es später erneut.', 
 	'ERR_FAILED_TO_LOCK_MODULE'    => 'Das Modul konnte für den Import nicht gesperrt werden. Versuchen Sie es später noch einmal.', 
-	'LBL_SELECT_SAVED_MAPPING'     => 'Select Saved Mapping'        , // TODO: Review
+	'LBL_SELECT_SAVED_MAPPING'     => 'Select Saved Mapping'        , 
+	'LBL_IMPORT_ERROR_LARGE_FILE'  => 'Import Error Large file '    , 
+	'LBL_FILE_UPLOAD_FAILED'       => 'File Upload Failed'          , 
+	'LBL_IMPORT_CHANGE_UPLOAD_SIZE' => 'Import Change Upload Size'   , 
+	'LBL_IMPORT_DIRECTORY_NOT_WRITABLE' => 'Import Directory is not writable', 
+	'LBL_IMPORT_FILE_COPY_FAILED'  => 'Import File copy failed'     , 
+	'LBL_INVALID_FILE'             => 'Invalid File'                , 
+	'LBL_NO_ROWS_FOUND'            => 'No rows found'               , 
+	'LBL_SCHEDULED_IMPORT_DETAILS' => 'Your import has been scheduled and will start within 15 minutes. You will receive an email after import is completed.  <br> <br>
+										Please make sure that the Outgoing server and your email address is configured to receive email notification', 
+	'LBL_DETAILS'                  => 'Details'                     , 
+	'skipped'                      => 'Skipped Records'             , 
+	'failed'                       => 'Failed Records'              , 
 );

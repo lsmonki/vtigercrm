@@ -8,28 +8,19 @@
  *************************************************************************************}
 {strip}
 <div class="container-fluid">
-	<div class="titleBar row-fluid">
+	<div class="widget_header row-fluid">
 		<div class="span8">
-			<h3 class="title">{vtranslate($MODULE, $QUALIFIED_MODULE)}</h3>
-			<p>&nbsp;</p>
-		</div>
-		<div class="span4">
-			<div class="pull-right">
-				<div class="btn-toolbar">
-					<span class="btn-group">
-						<a class="btn btn-mini vtButton" href="javascript:window.history.back();">Back ...</a>
-					</span>
-				</div>
-			</div>
-		</div>
+			<h3>{vtranslate($MODULE, $QUALIFIED_MODULE)}</h3>
+	</div>	
 	</div>
+	<hr>
 	<div class="clearfix treeView">
 		<ul>
 			<li data-role="{$ROOT_ROLE->getParentRoleString()}" data-roleid="{$ROOT_ROLE->getId()}">
 				<div class="toolbar-handle">
-					<a href="javascript:;" class="btn btn-mini btn-info draggable droppable">{$ROOT_ROLE->getName()}</a>
-					<div class="toolbar">
-						&nbsp;<a href="javascript:;" data-url="{$ROOT_ROLE->getCreateChildUrl()}" data-action="modal"><span class="icon-plus-sign"></span></a>
+					<a href="javascript:;" class="btn btn-inverse draggable droppable">{$ROOT_ROLE->getName()}</a>
+					<div class="toolbar" title="{vtranslate('LBL_ADD_RECORD', $QUALIFIED_MODULE)}">
+						&nbsp;<a href="{$ROOT_ROLE->getCreateChildUrl()}" data-url="{$ROOT_ROLE->getCreateChildUrl()}" data-action="modal"><span class="icon-plus-sign"></span></a>
 					</div>
 				</div>
 				{assign var="ROLE" value=$ROOT_ROLE}
@@ -38,8 +29,4 @@
 		</ul>
 	</div>
 </div>
-			
-<script type="text/javascript">
-	jQuery('body').ready(Settings_Roles_Js.initEditView);
-</script>
 {/strip}

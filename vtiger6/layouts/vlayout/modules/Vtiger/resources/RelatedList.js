@@ -45,14 +45,13 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		jQuery.extend(completeParams,params);
 		AppConnector.request(completeParams).then(
 			function(responseData){
-				jQuery('.contents').html(responseData);
 				progressIndicatorElement.progressIndicator({
 					'mode' : 'hide'
 				})
-				aDeferred.resolve(responseData);
 				thisInstance.relatedTabsContainer.find('li').removeClass('active');
 				thisInstance.selectedRelatedTabElement.addClass('active');
 				thisInstance.relatedContentContainer.html(responseData);
+				responseData = thisInstance.relatedContentContainer.html();
 				aDeferred.resolve(responseData);
 				jQuery('input[name="currentPageNum"]', thisInstance.relatedContentContainer).val(completeParams.page);
 			},
@@ -65,6 +64,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	},
 	
 	showSelectRelationPopup : function(){
+		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var popupInstance = Vtiger_Popup_Js.getInstance();
 		popupInstance.show(this.getPopupParams(), function(responseString){
@@ -74,11 +74,14 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 					function(data){
 						var relatedCurrentPage = thisInstance.getCurrentPageNum();
 						var params = {'page':relatedCurrentPage};
-						thisInstance.loadRelatedList(params);
+						thisInstance.loadRelatedList(params).then(function(data){
+							aDeferred.resolve(data);
+						});
 					}
 				);
 			}
 		);
+		return aDeferred.promise();
 	},
 
 	addRelations : function(idList){
@@ -183,6 +186,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	 * Function to handle Sort
 	 */
 	sortHandler : function(headerElement){
+		var aDeferred = jQuery.Deferred();
 		var fieldName = headerElement.data('fieldname');
 		var sortOrderVal = headerElement.data('nextsortorderval');
 		var sortingParams = {
@@ -190,13 +194,23 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 			"sortorder" : sortOrderVal,
 			"tab_label" : this.selectedRelatedTabElement.data('label-key')
 		}
-		return this.loadRelatedList(sortingParams);
+		this.loadRelatedList(sortingParams).then(
+				function(data){
+					aDeferred.resolve(data);
+				},
+
+				function(textStatus, errorThrown){
+					aDeferred.reject(textStatus, errorThrown);
+				}
+			);
+		return aDeferred.promise();
 	},
 	
 	/**
 	 * Function to handle next page navigation
 	 */
 	nextPageHandler : function(){
+		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
 		var pageLimit = jQuery('#pageLimit').val();
@@ -225,6 +239,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	 * Function to handle next page navigation
 	 */
 	previousPageHandler : function(){
+		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
 		var pageNumber = this.getCurrentPageNum();
@@ -251,6 +266,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	 * Function to handle page jump in related list
 	 */
 	pageJumpHandler : function(e){
+		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		if(e.which == 13){
 			var element = jQuery(e.currentTarget);
@@ -267,18 +283,22 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				this.loadRelatedList(jumptoPageParams).then(
 					function(data){
 						thisInstance.setCurrentPageNumber(jumpToPage);
+						aDeferred.resolve(data);
 					},
 
 					function(textStatus, errorThrown){
+						aDeferred.reject(textStatus, errorThrown);
 					}
 				);
 			}
 		}
+		return aDeferred.promise();
 	},
 	/**
 	 * Function to add related record for the module
 	 */
 	addRelatedRecord : function(element){
+		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var	referenceModuleName = this.relatedModulename;
 		var parentId = this.getParentId();
@@ -305,7 +325,10 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 
 		}
 		var postQuickCreateSave  = function(data) {
-			thisInstance.loadRelatedList();
+			thisInstance.loadRelatedList().then(
+				function(data){
+					aDeferred.resolve(data);
+				})
 		}
 		
 		if(typeof relatedField != "undefined"){
@@ -319,6 +342,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 			Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
 		}
 		quickCreateNode.trigger('click',quickCreateParams);
+		return aDeferred.promise();
 	},
 	
 	getRelatedPageCount : function(){
@@ -346,7 +370,6 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 			);
 		}
 	},
-
 	
 	init : function(parentId, parentModule, selectedRelatedTabElement, relatedModuleName){
 		this.selectedRelatedTabElement = selectedRelatedTabElement,

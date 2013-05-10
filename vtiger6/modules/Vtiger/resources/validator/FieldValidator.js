@@ -6,7 +6,22 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-Vtiger_Base_Validator_Js("Vtiger_Email_Validator_Js",{},{
+Vtiger_Base_Validator_Js("Vtiger_Email_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var emailInstance = new Vtiger_Email_Validator_Js();
+		emailInstance.setElement(field);
+		var response = emailInstance.validate();
+		if(response != true){
+			return emailInstance.getError();
+		}
+	}
+},{
 
 	/**
 	 * Function to validate the email field data
@@ -122,7 +137,23 @@ Vtiger_Base_Validator_Js("Vtiger_Phone_Validator_Js",{},{
 	}
 })
 
-Vtiger_PositiveNumber_Validator_Js("Vtiger_Percentage_Validator_Js",{},{
+Vtiger_PositiveNumber_Validator_Js("Vtiger_Percentage_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var percentageInstance = new Vtiger_Percentage_Validator_Js();
+		percentageInstance.setElement(field);
+		var response = percentageInstance.validate();
+		if(response != true){
+			return percentageInstance.getError();
+		}
+	}
+	
+},{
 
 	/**
 	 * Function to validate the percentage field data
@@ -271,7 +302,22 @@ Vtiger_PositiveNumber_Validator_Js("Vtiger_GreaterThanZero_Validator_Js",{
 	}
 })
 
-Vtiger_PositiveNumber_Validator_Js("Vtiger_WholeNumber_Validator_Js",{},{
+Vtiger_PositiveNumber_Validator_Js("Vtiger_WholeNumber_Validator_Js",{
+    
+    /**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var instance = new Vtiger_WholeNumber_Validator_Js();
+		instance.setElement(field);
+		var response = instance.validate();
+		if(response != true){
+			return instance.getError();
+		}
+	}
+},{
 
 	/**
 	 * Function to validate the Positive Numbers and whole Number
@@ -734,5 +780,40 @@ Vtiger_WholeNumber_Validator_Js("Vtiger_WholeNumberGreaterThanZero_Validator_Js"
 			}
 		}
 		return true;
+	}
+})
+Vtiger_Base_Validator_Js("Vtiger_AlphaNumeric_Validator_Js",{
+
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var alphaNumericInstance = new Vtiger_AlphaNumeric_Validator_Js();
+		alphaNumericInstance.setElement(field);
+		var response = alphaNumericInstance.validate();
+		if(response != true){
+			return alphaNumericInstance.getError();
+		}
+	}
+
+},{
+
+	/**
+	 * Function to validate the Positive Numbers
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(){
+		var field = this.getElement();;
+		var fieldValue = field.val();
+		var alphaNumericRegex = /^[a-z0-9 _-]*$/i;
+		if (!fieldValue.match(alphaNumericRegex)) {
+			var errorInfo = app.vtranslate("JS_CONTAINS_ILLEGAL_CHARACTERS");
+			this.setError(errorInfo);
+			return false;
+		}
+        return true;
 	}
 })

@@ -26,18 +26,18 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName);
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'));
 		$viewer->assign('CUSTOM_VIEWS', CustomView_Record_Model::getAllByGroup($moduleName));
-		$viewName = $request->get('viewname');
-		if(empty($viewName)){
+		$this->viewName = $request->get('viewname');
+		if(empty($this->viewName)){
 			//If not view name exits then get it from custom view
 			//This can return default view id or view id present in session
 			$customView = new CustomView();
-			$viewName = $customView->getViewId($moduleName);
+			$this->viewName = $customView->getViewId($moduleName);
 		}
 
 		$quickLinkModels = $listViewModel->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $quickLinkModels);
 		$this->initializeListViewContents($request, $viewer);
-		$viewer->assign('VIEWID', $viewName);
+		$viewer->assign('VIEWID', $this->viewName);
 
 		if($display) {
 			$this->preProcessDisplay($request);
@@ -64,8 +64,10 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$viewer = $this->getViewer ($request);
 		$moduleName = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-
+		$this->viewName = $request->get('viewname');
+		
 		$this->initializeListViewContents($request, $viewer);
+		$viewer->assign('VIEW', $request->get('view'));
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->view('ListViewContents.tpl', $moduleName);
@@ -107,7 +109,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	 */
 	public function initializeListViewContents(Vtiger_Request $request, Vtiger_Viewer $viewer) {
 		$moduleName = $request->getModule();
-		$cvId = $request->get('viewname');
+		$cvId = $this->viewName;
 		$pageNumber = $request->get('page');
 		$orderBy = $request->get('orderby');
 		$sortOrder = $request->get('sortorder');

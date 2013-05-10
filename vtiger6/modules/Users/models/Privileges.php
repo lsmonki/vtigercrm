@@ -161,53 +161,8 @@ class Users_Privileges_Model extends Users_Record_Model {
 		}
 		return false;
 	}
-	
-	/**
-	 * Function checks if the field has readonly/readwrite permission
-	 * @param <String> $moduleName - Module name
-	 * @param <String> $fieldName - Field name
-	 * @return <Boolean>
-	 */
-	public function hasFieldWriteAccess($moduleName, $fieldName) {
-		$cache = Vtiger_Cache::getInstance();
-		
-		if($cache->getFieldWritePermision($moduleName,$fieldName) === '0'){
-			return true;
-		} else if ($cache->getFieldWritePermision($moduleName,$fieldName) === '1'){
-			return false;
-		} else {
-			$permission = getFieldVisibilityPermission($moduleName, $this->id, $fieldName, 'readwrite');
-			$cache->setFieldWritePermision($moduleName,$fieldName,$permission);
-			if($permission === '0') {
-				return true;
-			}
-			return false;
-		}
-	}
-	
-	/**
-	 * Function checks if the field has readonly permission
-	 * @param <String> $moduleName - Module name
-	 * @param <String> $fieldName - Field name
-	 * @return <Boolean>
-	 */
-	public function hasFieldReadAccess($moduleName, $fieldName) {
-			$cache = Vtiger_Cache::getInstance();
-		
-		if($cache->getFieldReadPermision($moduleName,$fieldName) === '0'){
-			return true;
-		} else if ($cache->getFieldReadPermision($moduleName,$fieldName) === '1'){
-			return false;
-		} else {
-			$permission = getFieldVisibilityPermission($moduleName, $this->id, $fieldName, 'readonly');
-			$cache->setFieldReadPermision($moduleName,$fieldName,$permission);
-			if($permission === '0') {
-				return true;
-			}
-			return false;
-		}
-	}
 
+	
 	/**
 	 * Function returns non admin access control check query
 	 * @param <String> $module

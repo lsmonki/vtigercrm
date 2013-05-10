@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'HelpDesk'                     => 'Tickets'                     , 
 	'SINGLE_HelpDesk'              => 'Ticket'                      , 
-	'LBL_ADD_RECORD'               => 'Add Ticket'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Ticket List'                 , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Ticket Summary'              , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Ticket'                  , 
+	'LBL_RECORDS_LIST'             => 'Ticket List'                 , 
 	'LBL_TICKET_INFORMATION'       => 'Dados do Ticket'             , 
 	'LBL_TICKET_RESOLUTION'        => 'Dados da Solução'          , 
 	'Ticket No'                    => 'No. Ticket'                  , 
@@ -37,7 +36,7 @@ $languageStrings = array(
 	'Wait For Response'            => 'Aguarda Resposta'            , 
 	'Closed'                       => 'Fechado'                     , 
 	'LBL_STATUS'                   => 'Status'                      , 
-	'LBL_SEVERITY'                 => 'Gravidade'                   , // KEY 5.x: Severity
-	'LBL_CONVERT_FAQ'              => 'Convert to FAQ'              , // TODO: Review
+	'LBL_SEVERITY'                 => 'Gravidade'                   , 
+	'LBL_CONVERT_FAQ'              => 'Convert to FAQ'              , 
 	'LBL_RELATED_TO'               => 'Relacionado à'              , 
 );

@@ -41,11 +41,25 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$smarty->assign("ID",vtlib_purify($_REQUEST['record']));
 	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
-    $focus->retrieve_entity_info($_REQUEST['record'],'Users');
+    $focus->retrieve_entity_info(vtlib_purify($_REQUEST['record']),'Users');
 	$smarty->assign("USERNAME", getFullNameFromArray('Users', $focus->column_fields));
 }else
 {
 	$mode='create';
+}
+
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$focus->id = "";
+	$focus->user_name = "";
+	$mode='create';
+
+	//When duplicating the user the password fields should be empty
+	$focus->column_fields['user_password']='';
+	$focus->column_fields['confirm_password']='';
+}
+
+if(empty($focus->column_fields['time_zone'])) {
+	$focus->column_fields['time_zone'] = DateTimeField::getDBTimeZone();
 }
 
 global $theme;

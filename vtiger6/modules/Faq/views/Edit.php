@@ -50,7 +50,10 @@ class Faq_Edit_View extends Vtiger_Edit_View {
 		if(!empty($viewMode)) {
 			$viewer->assign('VIEW_MODE', $viewMode);
 		}
+		
+		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 
+		$viewer->assign('PICKIST_DEPENDENCY_DATASOURCE',Zend_Json::encode($picklistDependencyDatasource));
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 		$viewer->assign('MODULE', $moduleName);

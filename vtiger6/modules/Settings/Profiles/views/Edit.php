@@ -11,7 +11,15 @@
 Class Settings_Profiles_Edit_View extends Settings_Vtiger_Index_View {
 
 	public function process(Vtiger_Request $request) {
-		$viewer = $this->getViewer ($request);
+        $this->initialize($request);
+        $qualifiedModuleName = $request->getModule(false);
+        
+        $viewer = $this->getViewer($request);
+		$viewer->view('EditView.tpl', $qualifiedModuleName);
+	}
+    
+    public function initialize(Vtiger_Request $request) {
+        $viewer = $this->getViewer ($request);
 		$moduleName = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
 		$record = $request->get('record');
@@ -25,20 +33,21 @@ Class Settings_Profiles_Edit_View extends Settings_Vtiger_Index_View {
 			$recordModel->getModulePermissions();
 			$recordModel->set('profileid', '');
 			$viewer->assign('MODE', '');
+			$viewer->assign('IS_DUPLICATE_RECORD',$fromRecord);
 		} else {
 			$recordModel = new Settings_Profiles_Record_Model();
 			$viewer->assign('MODE', '');
 		}
-
+		$viewer->assign('ALL_PROFILES',$recordModel->getAll());
+		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 		$viewer->assign('ALL_BASIC_ACTIONS', Vtiger_Action_Model::getAllBasic(true));
-		$viewer->assign('ALL_UTILITY_ACTIONS', Vtiger_Action_Model::getAllUtility(true));
+		$viewer->assign('ALL_UTILITY_ACTIONS', Vtiger_Action_Model::getAllUtility(true)); 
 		$viewer->assign('RECORD_MODEL', $recordModel);
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
-
-		$viewer->view('EditView.tpl', $qualifiedModuleName);
-	}
+    }
+    
 
 	/**
 	 * Function to get the list of Script models to be included

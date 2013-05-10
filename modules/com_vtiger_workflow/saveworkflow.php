@@ -39,6 +39,7 @@ require_once("VTWorkflowUtils.php");
 			$wf->test = $conditions;
 			$wf->taskId = $taskId;
 			$wf->executionConditionAsLabel($executionCondition);
+			$wf->filtersavedinnew = 5;
 			$wm->save($wf);
 		}else if($saveType=='edit'){
 			$wf = $wm->retrieve($request["workflow_id"]);
@@ -46,6 +47,7 @@ require_once("VTWorkflowUtils.php");
 			$wf->test = $conditions;
 			$wf->taskId = $taskId;
 			$wf->executionConditionAsLabel($executionCondition);
+			$wf->filtersavedinnew = 5;
 			$wm->save($wf);
 		}else{
 			throw new Exception();

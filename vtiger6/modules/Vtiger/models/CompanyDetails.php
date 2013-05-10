@@ -29,23 +29,26 @@ class Vtiger_CompanyDetails_Model extends Vtiger_Base_Model {
 		return $logoModel;
 	}
 
-	/**
-	 * Function to get the instance of the CompanyDetails model for a given organization id
-	 * @param <Number> $id
-	 * @return Vtiger_CompanyDetails_Model instance
-	 */
-	public static function getInstanceById($id=1) {
-		$db = PearDatabase::getInstance();
-
-		$sql = 'SELECT * FROM vtiger_organizationdetails WHERE organization_id=?';
-		$params = array($id);
-		$result = $db->pquery($sql, $params);
-		$companyDetails = new self();
-		if($result && $db->num_rows($result) > 0) {
-			$resultRow = $db->query_result_rowdata($result,0);
-			$companyDetails->setData($resultRow);
-		}
-		return $companyDetails;
-	}
+    /**
+     * Function to get the instance of the CompanyDetails model for a given organization id
+     * @param <Number> $id
+     * @return Vtiger_CompanyDetails_Model instance
+     */
+    public static function getInstanceById($id = 1) {
+        $companyDetails = Vtiger_Cache::get('vtiger', 'organization');
+        if (!$companyDetails) {
+            $db = PearDatabase::getInstance();
+            $sql = 'SELECT * FROM vtiger_organizationdetails WHERE organization_id=?';
+            $params = array($id);
+            $result = $db->pquery($sql, $params);
+            $companyDetails = new self();
+            if ($result && $db->num_rows($result) > 0) {
+                $resultRow = $db->query_result_rowdata($result, 0);
+                $companyDetails->setData($resultRow);
+            }
+            Vtiger_Cache::set('vtiger','organization',$companyDetails);
+        }
+        return $companyDetails;
+    }
 
 }

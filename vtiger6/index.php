@@ -16,4 +16,4 @@ include_once 'vtlib/Vtiger/Module.php';
 include_once dirname(__FILE__) . '/main/WebUI.php';
 
 $webUI = new Vtiger_WebUI();
-$webUI->process(new Vtiger_Request($_REQUEST));
+$webUI->process(new Vtiger_Request($_REQUEST, $_REQUEST));

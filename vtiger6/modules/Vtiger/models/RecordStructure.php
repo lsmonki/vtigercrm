@@ -103,7 +103,7 @@ class Vtiger_RecordStructure_Model extends Vtiger_Base_Model {
 	 */
 	public static function getInstanceFromRecordModel($recordModel, $mode=self::RECORD_STRUCTURE_MODE_DEFAULT) {
 		$moduleModel = $recordModel->getModule();
-		$className = Vtiger_Loader::getComponentClassName('Model', $mode.'RecordStructure', $moduleModel->get('name'));
+		$className = Vtiger_Loader::getComponentClassName('Model', $mode.'RecordStructure', $moduleModel->getName(true));
 		$instance = new $className();
 		$instance->setModule($moduleModel)->setRecord($recordModel);
 		return $instance;

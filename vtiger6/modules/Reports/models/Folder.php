@@ -141,17 +141,45 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 	 * @return <Reports_Folder_Model>
 	 */
 	public static function getInstanceById($folderId) {
-		$db = PearDatabase::getInstance();
-		$folderModel = Reports_Folder_Model::getInstance();
+		$folderModel = Vtiger_Cache::get('reportsFolder',$folderId);
+        if(!$folderModel){
+            $db = PearDatabase::getInstance();
+            $folderModel = Reports_Folder_Model::getInstance();
 
-		$result = $db->pquery("SELECT * FROM vtiger_reportfolder WHERE folderid = ?", array($folderId));
+            $result = $db->pquery("SELECT * FROM vtiger_reportfolder WHERE folderid = ?", array($folderId));
 
-		if ($db->num_rows($result) > 0) {
-			$values = $db->query_result_rowdata($result, 0);
-			$folderModel->setData($values);
-		}
-		return $folderModel;
+            if ($db->num_rows($result) > 0) {
+                $values = $db->query_result_rowdata($result, 0);
+                $folderModel->setData($values);
+            }
+            Vtiger_Cache::set('reportsFolder',$folderId,$folderModel);
+        }
+        return $folderModel;
 	}
+    
+    /**
+     * Function returns the instance of Folder model
+     * @return <Reports_Folder_Model>
+     */
+    public static function getAll() {
+        $db = PearDatabase::getInstance();
+        $folders = Vtiger_Cache::get('reports', 'folders');
+        if (!$folders) {
+            $folders = array();
+            $result = $db->pquery("SELECT * FROM vtiger_reportfolder ORDER BY foldername ASC", array());
+            $noOfFolders = $db->num_rows($result);
+            if ($noOfFolders > 0) {
+                for ($i = 0; $i < $noOfFolders; $i++) {
+                    $folderModel = Reports_Folder_Model::getInstance();
+                    $values = $db->query_result_rowdata($result, $i);
+                    $folders[$values['folderid']] = $folderModel->setData($values);
+                    Vtiger_Cache::set('reportsFolder',$values['folderid'],$folderModel);
+                }
+            }
+            Vtiger_Cache::set('reports','folders',$folders);
+        }
+        return $folders;
+    }
 
 	/**
 	 * Function returns duplicate record status of the module
@@ -197,11 +225,7 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 	 * @return true if it is read only else false
 	 */
 	function isDefault() {
-		$db = PearDatabase::getInstance();
-
-		$result = $db->pquery("SELECT 1 FROM vtiger_reportfolder WHERE state = 'SAVED' AND folderid = ?", array($this->getId()));
-
-		if ($db->num_rows($result) > 0) {
+        if ($this->get('state') == 'SAVED') {
 			return true;
 		}
 		return false;

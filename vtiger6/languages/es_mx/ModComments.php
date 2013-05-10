@@ -6,17 +6,15 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ModComments'           => 'Comentario'                  , 
-	'LBL_RECORDS_LIST'             => 'Lista de comentarios'               , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de comentarios'            , 
+	'LBL_RECORDS_LIST'             => 'Lista de comentarios'        , 
 	'LBL_MODCOMMENTS_INFORMATION'  => 'Información de Comentario'  , 
 	'LBL_OTHER_INFORMATION'        => 'Información Adicional'      , 
-	'LBL_ADDING_COMMENT'           => 'Agregar Comentario'              , 
-	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Introduzca comentarios aquí'         , 
+	'LBL_ADDING_COMMENT'           => 'Agregar Comentario'          , 
+	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Introduzca comentarios aquí', 
 	'Comment'                      => 'Comentario'                  , 
 	'Creator'                      => 'Creador'                     , 
-	'Related To Comments'          => 'Relacionado con'             , // KEY 5.x: Related To
+	'Related To Comments'          => 'Relacionado con'             , 
 );

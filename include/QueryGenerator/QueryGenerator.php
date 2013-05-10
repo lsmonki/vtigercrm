@@ -344,6 +344,7 @@ class QueryGenerator {
 		if(!empty($this->query) || !empty($this->fromClause)) {
 			return $this->fromClause;
 		}
+		$baseModule = $this->getModule();
 		$moduleFields = $this->meta->getModuleFields();
 		$tableList = array();
 		$tableJoinMapping = array();
@@ -361,7 +362,7 @@ class QueryGenerator {
 				$moduleList = $this->referenceFieldInfoList[$fieldName];
 				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
 				foreach($moduleList as $module) {
-					if($module == 'Users') {
+					if($module == 'Users' && $baseModule != 'Users') {
 						$tableJoinCondition[$fieldName]['vtiger_users'] = $field->getTableName().
 								".".$field->getColumnName()." = vtiger_users.id";
 						$tableJoinCondition[$fieldName]['vtiger_groups'] = $field->getTableName().
@@ -537,7 +538,7 @@ class QueryGenerator {
 		foreach ($this->conditionals as $index=>$conditionInfo) {
 			$fieldName = $conditionInfo['name'];
 			$field = $moduleFieldList[$fieldName];
-			if(empty($field)) {
+			if(empty($field) || $conditionInfo['operator'] == 'None') {
 				continue;
 			}
 			$fieldSql = '(';
@@ -633,6 +634,12 @@ class QueryGenerator {
 
 		if(is_string($value) && $this->ignoreComma == false) {
 			$valueArray = explode(',' , $value);
+			if ($field->getFieldDataType() == 'multipicklist' && in_array($operator, array('e', 'n'))) {
+				$valueArray = getCombinations($valueArray);
+				foreach ($valueArray as $key => $value) {
+					$valueArray[$key] = str_replace(' ', ' |##| ', $value);
+				}
+			}
 		} elseif(is_array($value)) {
 			$valueArray = $value;
 		} else{

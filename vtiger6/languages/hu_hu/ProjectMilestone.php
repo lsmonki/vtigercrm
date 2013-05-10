@@ -8,12 +8,11 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectMilestone'      => 'Projekt Mérföldkő'				,
-	'LBL_ADD_RECORD'               => 'Projekt Mérföldkő hozzáadása'	,
-	'LBL_RECORDS_LIST'             => 'Projekt Mérföldkövek listája'	,
-	'LBL_RECORD_SUMMARY'           => 'Projekt Mérföldkő összefoglaló'	,
-	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Projekt Mérföldkő adatai'	,
-	'Project Milestone Name'       => 'Mérföldkő megnevezése'			,
-	'Milestone Date'               => 'Mérföldkő dátuma'				,
-	'Project Milestone No'         => 'Mérföldkő No.'					,
+	'SINGLE_ProjectMilestone'      => 'Projekt Mérföldkő'        , 
+	'LBL_ADD_RECORD'               => 'Projekt Mérföldkő hozzáadása', 
+	'LBL_RECORDS_LIST'             => 'Projekt Mérföldkövek listája', 
+	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Projekt Mérföldkő adatai' , 
+	'Project Milestone Name'       => 'Mérföldkő megnevezése'   , 
+	'Milestone Date'               => 'Mérföldkő dátuma'        , 
+	'Project Milestone No'         => 'Mérföldkő No.'            , 
 );

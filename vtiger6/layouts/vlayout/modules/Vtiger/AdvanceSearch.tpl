@@ -30,8 +30,7 @@
 			<div class="filterElements">
 				<form name="advanceFilterForm">
                     <input type="hidden" name="labelFields" data-value='{ZEND_JSON::encode($SOURCE_MODULE_MODEL->getNameFields())}' />
-                    <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
-					{include file='AdvanceFilter.tpl'|@vtemplate_path}
+                    {include file='AdvanceFilter.tpl'|@vtemplate_path}
 				</form>
 				<div class="row-fluid actions">
 					<!-- TODO: should be done in better way to show right elements -->

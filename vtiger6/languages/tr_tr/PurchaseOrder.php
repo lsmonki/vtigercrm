@@ -10,13 +10,17 @@
 $languageStrings = array(
 	'SINGLE_PurchaseOrder'         => 'Satın Alma Siparişi'       , 
 	'LBL_EXPORT_TO_PDF'            => 'PDF Olarak Aktar'            , 
-	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Satınalma Siparişi Listesi', // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Purchase Order Summary'      , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , 
+	'LBL_RECORDS_LIST'             => 'Satınalma Siparişi Listesi', 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
 	'LBL_PO_INFORMATION'           => 'Satınalma Sipariş Bilgisi' , 
 	'PurchaseOrder No'             => 'Satınalma Siparişi No'     , 
 	'Requisition No'               => 'İstak No'                   , 
 	'Tracking Number'              => 'İzleme Numarası'           , 
 	'Sales Commission'             => 'Satış Komisyonu'           , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Gönderi Tamamlandı'        , 
 );

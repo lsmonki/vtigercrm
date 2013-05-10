@@ -15,7 +15,15 @@
 	</span>
 	<span class="span8 margin0px">
 		<span class="row-fluid">
-			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}">{$RECORD->getDisplayValue('salutationtype')} {$RECORD->getName()}</span>
+			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getDisplayValue('salutationtype')}{$RECORD->getName()}">
+				<span class="salutation">{$RECORD->getDisplayValue('salutationtype')}</span>
+				{foreach item=NAME_FIELD from=$MODULE_MODEL->getNameFields()}
+					{assign var=FIELD_MODEL value=$MODULE_MODEL->getField($NAME_FIELD)}
+						{if $FIELD_MODEL->getPermissions()}
+							<span class="{$NAME_FIELD}">{$RECORD->get($NAME_FIELD)}</span>&nbsp;
+						{/if}
+				{/foreach}
+			</span>
 		</span>
 		<span class="row-fluid">
 			<span class="designation_label">{$RECORD->getDisplayValue('designation')}</span>

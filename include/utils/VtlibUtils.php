@@ -103,14 +103,15 @@ function vtlib_isModuleActive($module) {
 
 	if(!isset($__cache_module_activeinfo[$module])) {
 		include 'tabdata.php';
-		$presence = isset($tab_info_array[$module])? 0: 1;
+		$tabId = $tab_info_array[$module];
+		$presence = $tab_seq_array[$tabId];
 		$__cache_module_activeinfo[$module] = $presence;
 	} else {
 		$presence = $__cache_module_activeinfo[$module];
 	}
 
 	$active = false;
-	if($presence != 1) $active = true;
+	if($presence == 0) $active = true;
 
 	return $active;
 }
@@ -182,7 +183,7 @@ function vtlib_getToggleModuleInfo() {
 
 	$modinfo = Array();
 
-	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users', 'Home') AND presence IN (0,1) ORDER BY name");
+	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users','Home') AND presence IN (0,1) ORDER BY name");
 	$num_rows  = $adb->num_rows($sqlresult);
 	for($idx = 0; $idx < $num_rows; ++$idx) {
 		$module = $adb->query_result($sqlresult, $idx, 'name');
@@ -538,6 +539,13 @@ $__htmlpurifier_instance = false;
 function vtlib_purify($input, $ignore=false) {
 	global $__htmlpurifier_instance, $root_directory, $default_charset;
 
+	static $purified_cache = array();
+	if(!is_array($input)) {
+		$md5OfInput = md5($input); 
+		if (array_key_exists($md5OfInput, $purified_cache)) { 
+			return $purified_cache[$md5OfInput]; 
+		} 
+	}
 	$use_charset = $default_charset;
 	$use_root_directory = $root_directory;
 
@@ -567,6 +575,7 @@ function vtlib_purify($input, $ignore=false) {
 				$value = $__htmlpurifier_instance->purify($input);
 			}
 		}
+		$purified_cache[$md5OfInput] = $value;
 	}
 	$value = str_replace('&amp;','&',$value);
 	return $value;

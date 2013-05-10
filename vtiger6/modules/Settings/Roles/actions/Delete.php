@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Settings_Roles_Delete_Action extends Vtiger_Action_Controller {
+class Settings_Roles_Delete_Action extends Settings_Vtiger_Basic_Action {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();

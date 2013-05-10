@@ -6,29 +6,19 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Campaigns.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'Campaigns'                    => 'Campagnes'                   , 
 	'SINGLE_Campaigns'             => 'Campagne'                    , 
-	'LBL_ADD_RECORD'               => 'Campagne toevoegen'                , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Campagnelijst'              , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Campagne Overzicht'           , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Campagne toevoegen'          , 
+	'LBL_RECORDS_LIST'             => 'Campagnelijst'               , 
 	'LBL_CAMPAIGN_INFORMATION'     => 'Campagne informatie'         , 
 	'LBL_EXPECTATIONS_AND_ACTUALS' => 'Verwachting en actueel'      , 
-	'Campaign Name'                => 'Campagnenaam'               , 
+	'Campaign Name'                => 'Campagnenaam'                , 
 	'Campaign No'                  => 'Campagnenummer'              , 
-	'Campaign Type'                => 'Campagnetype'               , 
+	'Campaign Type'                => 'Campagnetype'                , 
 	'Product'                      => 'Product'                     , 
-	'Campaign Status'              => 'Campagnestatus'             , 
+	'Campaign Status'              => 'Campagnestatus'              , 
 	'Num Sent'                     => 'Aantal verzonden'            , 
 	'Sponsor'                      => 'Sponsor'                     , 
 	'Target Audience'              => 'Doelgroep'                   , 

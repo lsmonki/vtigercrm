@@ -13,53 +13,40 @@
  */
 class Vtiger_Menu_Model extends Vtiger_Module_Model {
 
-	/**
-	 * Static Function to get all the accessible menu models with/without ordering them by sequence
-	 * @param <Boolean> $sequenced - true/false
-	 * @return <Array> - List of Vtiger_Menu_Model instances
-	 */
-	public static function getAll($sequenced=false) {
-		$currentUser = Users_Record_Model::getCurrentUserModel();
-		$userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		$db = PearDatabase::getInstance();
-		$restrictedModulesList = array('Emails', 'ProjectMilestone', 'ProjectTask', 'ModComments','RSS','Portal','Integration','PBXManager','DashBoard','Home');
+    /**
+     * Static Function to get all the accessible menu models with/without ordering them by sequence
+     * @param <Boolean> $sequenced - true/false
+     * @return <Array> - List of Vtiger_Menu_Model instances
+     */
+    public static function getAll($sequenced = false) {
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+        $userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+        $restrictedModulesList = array('Emails', 'ProjectMilestone', 'ProjectTask', 'ModComments', 'RSS', 'Portal', 'Integration', 'PBXManager', 'Dashboard', 'Home');
 
-		// Ondemand Specific : Restrict Language Editor for now in menu for non-admin users
-		if(!$currentUser->isAdminUser()) {
-			array_push($restrictedModulesList, 'LanguageEditor');
-		}
-
-		$sql = "SELECT *
-				FROM vtiger_tab
-				WHERE parent IS NOT NULL AND parent != '' AND presence IN (0,2)
-				AND name NOT IN (".generateQuestionMarks($restrictedModulesList).")";
-
-		// We sequence it based on pre-defined automation process
-		if($sequenced) {
-			$sql .= ' ORDER BY tabsequence';
-		}
-
-		$result = $db->pquery($sql, $restrictedModulesList);
-		$noOfMenus = $db->num_rows($result);
-
+		$allModules = parent::getAll(array('0','2'));    
 		$menuModels = array();
-		for($i=0; $i<$noOfMenus; ++$i) {
+        $moduleSeqs = Array();
+        $moduleNonSeqs = Array();
+        foreach($allModules as $module){
+            if($module->get('tabsequence') != -1){
+                $moduleSeqs[$module->get('tabsequence')] = $module;
+            }else {
+                $moduleNonSeqs[] = $module;
+            }
+        }
+        ksort($moduleSeqs);
+        $modules = array_merge($moduleSeqs, $moduleNonSeqs);
+        
+		foreach($modules as $module) {
+            if (($userPrivModel->isAdminUser() ||
+                    $userPrivModel->hasGlobalReadPermission() ||
+                    $userPrivModel->hasModulePermission($module->getId()))& !in_array($module->getName(), $restrictedModulesList) && $module->get('parent') != '') {
+                    $menuModels[$module->getName()] = $module;
+                
+            }
+        }
 
-			$row = $db->query_result_rowdata($result,$i);
-			if($userPrivModel->isAdminUser() ||
-					$userPrivModel->hasGlobalReadPermission() ||
-					$userPrivModel->hasModulePermission($row['tabid'])) {
-				$instance = Vtiger_Module_Model::getCleanInstance($row['name']);
-				$instance->set('name',$row['name']);
-				$instance->set('tabsequence',$row['tabsequence']);
-				$instance->set('parent',$row['parent']);
-				$instance->set('id',$row['tabid']);
-				$instance->set('label',$row['tablabel']);
-				$instance->set('isentitytype',$row['isentitytype']);
-				$menuModels[$row['name']] = $instance;
-			}
-		}
+        return $menuModels;
+    }
 
-		return $menuModels;
-	}
 }

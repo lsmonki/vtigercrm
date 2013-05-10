@@ -111,7 +111,7 @@ class MailManager_MailController extends MailManager_Controller {
 							for($i=0; $i<count($relatedtos); $i++) {
 								if($i == count($relatedtos)-1) {
 									$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
-									$parentIds .= $relateto[1]."@1";
+									$parentIds = $relateto[1]."@1";
 								}elseif($relatedtos[$i]['module'] == $val){
 									$relateto = vtws_getIdComponents($relatedtos[$i]['record']);
 									$parentIds = $relateto[1]."@1";
@@ -130,17 +130,19 @@ class MailManager_MailController extends MailManager_Controller {
 							break;
 						}
 					}
-				
+
 					$cc_string = rtrim($request->get('cc'), ',');
 					$bcc_string= rtrim($request->get('bcc'), ',');
 					$subject   = $request->get('subject');
 					$body      = $request->get('body');
 
-					if($relateto[1]!= NULL) {
+					//Restrict this for users module
+					if($relateto[1]!= NULL && $relateto[0] != '19') {
 						$entityId = $relateto[1];
 						$parent_module = getSalesEntityType($entityId);
 						$description = getMergedDescription($body,$entityId,$parent_module);
 					} else {
+						if($relateto[0] == '19') $parentIds = $relateto[1].'@-1';
 						$description = $body;
 					}
 
@@ -161,14 +163,14 @@ class MailManager_MailController extends MailManager_Controller {
 					$ccs = empty($cc_string)? array() : explode(',', $cc_string);
 					$bccs= empty($bcc_string)?array() : explode(',', $bcc_string);
 					$emailId = $request->get('emailid');
-		
+
 					$attachments = $connector->getAttachmentDetails($emailId);
 
 					$mailer->AddAddress($to);
 					foreach($ccs as $cc) $mailer->AddCC($cc);
 					foreach($bccs as $bcc)$mailer->AddBCC($bcc);
 					global $root_directory;
-		
+
 					if(is_array($attachments)) {
 						foreach($attachments as $attachment){
 							$fileNameWithPath = $root_directory.$attachment['path'].$attachment['fileid']."_".$attachment['attachment'];
@@ -178,30 +180,46 @@ class MailManager_MailController extends MailManager_Controller {
 						}
 					}
 					$status = $mailer->Send(true);
+
+					if ($status === true) {
+						$email = CRMEntity::getInstance('Emails');
+						$email->column_fields['assigned_user_id'] = $current_user->id;
+						$email->column_fields['date_start'] = date('Y-m-d');
+						$email->column_fields['time_start'] = date('H:i');
+						$email->column_fields['parent_id'] = $parentIds;
+						$email->column_fields['subject'] = $mailer->Subject;
+						$email->column_fields['description'] = $mailer->Body;
+						$email->column_fields['activitytype'] = 'Emails';
+						$email->column_fields['from_email'] = $mailer->From;
+						$email->column_fields['saved_toid'] = $to;
+						$email->column_fields['ccmail'] = $cc_string;
+						$email->column_fields['bccmail'] = $bcc_string;
+						$email->column_fields['email_flag'] = 'SENT';
+						if(empty($emailId)) {
+							$email->save('Emails');
+						} else {
+							$email->id = $emailId;
+							$email->mode = 'edit';
+							$email->save('Emails');
+						}
+
+						// This is added since the Emails save_module is not handling this
+						global $adb;
+						$realid = explode("@", $parentIds);
+						$mycrmid = $realid[0];
+						$params = array($mycrmid, $email->id);
+						if ($realid[1] == -1) {
+							$adb->pquery('DELETE FROM vtiger_salesmanactivityrel WHERE smid=? AND activityid=?',$params);
+							$adb->pquery('INSERT INTO vtiger_salesmanactivityrel VALUES (?,?)', $params);
+						} else {
+							$adb->pquery('DELETE FROM vtiger_seactivityrel WHERE crmid=? AND activityid=?', $params);
+							$adb->pquery('INSERT INTO vtiger_seactivityrel VALUES (?,?)', $params);
+						}
+					}
 				}
 			}
 
 			if ($status === true) {
-				$email = CRMEntity::getInstance('Emails');
-				$email->column_fields['assigned_user_id'] = $current_user->id;
-				$email->column_fields['date_start'] = date('Y-m-d');
-				$email->column_fields['time_start'] = date('H:i');
-				$email->column_fields['parent_id'] = $parentIds;
-				$email->column_fields['subject'] = $mailer->Subject;
-				$email->column_fields['description'] = $mailer->Body;
-				$email->column_fields['activitytype'] = 'Emails';
-				$email->column_fields['from_email'] = $mailer->From;
-				$email->column_fields['saved_toid'] = $to_string;
-				$email->column_fields['ccmail'] = $cc_string;
-				$email->column_fields['bccmail'] = $bcc_string;
-				$email->column_fields['email_flag'] = 'SENT';
-				if(empty($emailId)) {
-					$email->save('Emails');
-				} else {
-					$email->id = $emailId;
-					$email->mode = 'edit';
-					$email->save('Emails');
-				}
 				$response->isJson(true);
 				$response->setResult( array('sent'=> true) );
 			} else {

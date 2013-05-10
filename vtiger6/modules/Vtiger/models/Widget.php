@@ -18,7 +18,7 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		if(in_array($title, $largerSizedWidgets)) {
 			$this->set('width', '6');
 		}
-		
+
 		$width = $this->get('width');
 		if(empty($width)) {
 			$this->set('width', '4');
@@ -38,7 +38,7 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $this->get('height');
 	}
-	
+
 	public function getPositionCol($default=0) {
 		$position = $this->get('position');
 		if ($position) {
@@ -47,7 +47,7 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $default;
 	}
-	
+
 	public function getPositionRow($default=0) {
 		$position = $this->get('position');
 		if ($position) {
@@ -116,10 +116,10 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $self;
 	}
-	
+
 	public static function updateWidgetPosition($position, $linkId, $widgetId, $userId) {
 		if (!$linkId && !$widgetId) return;
-		
+
 		$db = PearDatabase::getInstance();
 		$sql = 'UPDATE vtiger_module_dashboard_widgets SET position=? WHERE userid=?';
 		$params = array($position, $userId);
@@ -146,22 +146,22 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 		}
 		return $self;
 	}
-	
+
 	/**
 	 * Function to add a widget from the Users Dashboard
 	 */
 	public function add() {
 		$db = PearDatabase::getInstance();
-		
+
 		$sql = 'SELECT id FROM vtiger_module_dashboard_widgets WHERE linkid = ? AND userid = ?';
 		$params = array($this->get('linkid'), $this->get('userid'));
-		
+
 		$filterid = $this->get('filterid');
 		if (!empty($filterid)) {
 			$sql .= ' AND filterid = ?';
 			$params[] = $this->get('filterid');
 		}
-		
+
 		$result = $db->pquery($sql, $params);
 		if(!$db->num_rows($result)) {
 			$db->pquery('INSERT INTO vtiger_module_dashboard_widgets(linkid, userid, filterid, title, data) VALUES(?,?,?,?,?)',

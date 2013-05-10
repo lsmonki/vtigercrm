@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Comanda Vanzare'             , 
 	'LBL_EXPORT_TO_PDF'            => 'Exporta in PDF'              , 
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Listeaza comenzi vanzare'    , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Sales Order Summary'         , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Listeaza comenzi vanzare'    , 
 	'LBL_SO_INFORMATION'           => 'Info comanda vanzare'        , 
 	'SalesOrder No'                => 'ID Comanda Vanzare'          , 
 	'Quote Name'                   => 'Nume Oferta'                 , 
@@ -30,8 +30,8 @@ $languageStrings = array(
 	'Payment Duration'             => 'Durata Plata'                , 
 	'Invoice Status'               => 'Stare Factura'               , 
 	'Sub Total'                    => 'Subtotal'                    , 
-	'AutoCreated'                  => 'AutoCreated'                 , // TODO: Review
-	'Sent'                         => 'Sent'                        , // TODO: Review
-	'Credit Invoice'               => 'Credit Invoice'              , // TODO: Review
-	'Paid'                         => 'Paid'                        , // TODO: Review
+	'AutoCreated'                  => 'AutoCreated'                 , 
+	'Sent'                         => 'Sent'                        , 
+	'Credit Invoice'               => 'Credit Invoice'              , 
+	'Paid'                         => 'Paid'                        , 
 );

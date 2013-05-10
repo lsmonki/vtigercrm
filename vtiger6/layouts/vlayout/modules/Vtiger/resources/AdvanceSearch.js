@@ -59,6 +59,11 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 			aDeferred.resolve(Vtiger_AdvanceSearch_Js.cache[searchModule]);
 			return aDeferred.promise();
 		}
+        
+        //if you are in settings then module should be vtiger
+        if(app.getParentModuleName().length > 0) {
+            moduleName = 'Vtiger';
+        }
 
         var searchableModulesParams = {
 			"module":moduleName,

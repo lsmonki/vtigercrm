@@ -89,6 +89,7 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		$viewer->assign('AVAILABLE_FIELDS', $moduleMeta->getMergableFields());
 		$viewer->assign('ENTITY_FIELDS', $moduleMeta->getEntityFields());
 		$viewer->assign('ERROR_MESSAGE', $request->get('error_message'));
+		$viewer->assign('IMPORT_UPLOAD_SIZE', '3145728');
 
 		return $viewer->view('ImportBasicStep.tpl', 'Import');
 	}

@@ -6,29 +6,33 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Emails.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
-	'LBL_SELECT_EMAIL_IDS'         => 'Selecteer E-mailaddressen'      , // TODO: Review
+	'SINGLE_Emails'                => 'Email'                       , // TODO: Review
+	'Emails'                       => 'Emails'                      , // TODO: Review
+	'LBL_SELECT_EMAIL_IDS'         => 'Selecteer E-mailaddressen'   , 
 	'LBL_SUBJECT'                  => 'Onderwerp:'                  , 
 	'LBL_ATTACHMENT'               => 'Bijlage'                     , 
-	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , // TODO: Review
+	'LBL_BROWSE_CRM'               => 'Browse CRM'                  , 
 	'LBL_SEND'                     => 'Verzenden'                   , 
-	'LBL_SAVE_AS_DRAFT'            => 'Oplsan als concept'               , // TODO: Review
-	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Selecteer e-mailsjabloon'   , // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
+	'LBL_SAVE_AS_DRAFT'            => 'Oplsan als concept'          , 
+	'LBL_GO_TO_PREVIEW'            => 'Go to Preview'               , // TODO: Review
+	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Selecteer e-mailsjabloon'    , 
 	'LBL_COMPOSE_EMAIL'            => 'Nieuwe e-mail'               , 
+	'LBL_TO'                       => 'To'                          , // TODO: Review
 	'LBL_CC'                       => 'Cc :'                        , 
 	'LBL_BCC'                      => 'Bcc :'                       , 
-	'LBL_ADD_CC'                   => 'Voeg Cc toe'                      , // TODO: Review
-	'LBL_ADD_BCC'                  => 'Voeg Bcc toe'                     , // TODO: Review
-	'LBL_MAX_UPLOAD_SIZE'          => 'Maximale omvang upload is'   , // KEY 5.x: LBL_MAX_SIZE
-	'LBL_EXCEEDED'                 => 'Overschreden'                    , // TODO: Review
+	'LBL_ADD_CC'                   => 'Voeg Cc toe'                 , 
+	'LBL_ADD_BCC'                  => 'Voeg Bcc toe'                , 
+	'LBL_MAX_UPLOAD_SIZE'          => 'Maximale omvang upload is'   , 
+	'LBL_EXCEEDED'                 => 'Overschreden'                , 
+	'LBL_FORWARD'                  => 'Forward'                     , // TODO: Review
+	'LBL_PRINT'                    => 'Print'                       , // TODO: Review
+	'LBL_DESCRIPTION'              => 'Description'                 , // TODO: Review
+	'LBL_FROM'                     => 'From'                        , // TODO: Review
+	'LBL_INFO'                     => 'Info'                        , // TODO: Review
+	'LBL_DRAFTED_ON'               => 'Drafted on'                  , // TODO: Review
+	'LBL_SENT_ON'                  => 'Sent on'                     , // TODO: Review
+	'LBL_OWNER'                    => 'Owner'                       , // TODO: Review
+	'Date & Time Sent'             => 'Date Sent'                   , // TODO: Review
 );

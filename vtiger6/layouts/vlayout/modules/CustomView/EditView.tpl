@@ -21,6 +21,7 @@
 		<input type="hidden" id="advfilterlist" name="advfilterlist" value=""/>
         <input type="hidden" id="status" name="status" value="{$CV_PRIVATE_VALUE}"/>
 		<h3>{vtranslate('LBL_CREATE_VIEW',$MODULE)}</h3>
+		<hr style='margin:5px 5px 5px 0px;'>
 		<input type="hidden" id="sourceModule" value="{$SOURCE_MODULE}">
         <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		<div class="filterBlocksAlignment">
@@ -32,6 +33,7 @@
                 <span class="span"><input id="setmetrics" name="setmetrics" type="checkbox" value="1" {if $CUSTOMVIEW_MODEL->get('setmetrics') eq '1'} checked="checked"{/if}><span class="alignMiddle"> {vtranslate('LBL_LIST_IN_METRICS',$MODULE)}</span></span>
                 <span class="span"><input id="status" name="status" type="checkbox" {if $CUSTOMVIEW_MODEL->isSetPublic()} value="{$CUSTOMVIEW_MODEL->get('status')}" checked="checked" {else} value="{$CV_PENDING_VALUE}" {/if}><span class="alignMiddle"> {vtranslate('LBL_SET_AS_PUBLIC',$MODULE)}</span></span>
 			</div>
+			<br>
 			<h4 class="filterHeaders">{vtranslate('LBL_CHOOSE_COLUMNS',$MODULE)} ({vtranslate('LBL_MAX_NUMBER_FILTER_COLUMNS')}):</h4>
 			<div class="columnsSelectDiv">
 				{assign var=MANDATORY_FIELDS value=array()}
@@ -56,6 +58,7 @@
 				<input type="hidden" name="columnslist" value='{ZEND_JSON::encode($SELECTED_FIELDS)}' />
 				<input id="mandatoryFieldsList" type="hidden" value='{ZEND_JSON::encode($MANDATORY_FIELDS)}' />
 			</div>
+			<br>
 			<h4 class="filterHeaders">{vtranslate('LBL_CHOOSE_FILTER_CONDITIONS', $MODULE)}:</h4>
 			<div class="well filterConditionsDiv">
 				<div class="row-fluid">

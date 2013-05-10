@@ -53,7 +53,7 @@
 			{foreach item=recordObject from=$searchRecords name=globalSearch}
 				{assign var="ID" value="{$module}_globalSearch_row_{$smarty.foreach.globalSearch.index+1}"}
 				<li id="{$ID}">
-					<a id="{$ID}_link" href="{$recordObject->getDetailViewUrl()}">{$recordObject->getName()}
+					<a target="_blank" id="{$ID}_link" href="{$recordObject->getDetailViewUrl()}">{$recordObject->getName()}
 						<span id="{$ID}_time" class="pull-right" title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($recordObject->get('createdtime'))}">{Vtiger_Util_Helper::formatDateDiffInStrings($recordObject->get('createdtime'))}</span>
 					</a>
 				</li>

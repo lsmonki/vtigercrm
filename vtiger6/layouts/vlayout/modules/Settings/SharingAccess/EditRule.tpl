@@ -15,19 +15,19 @@
 	{if empty($RULE_ID)}
 		{assign var=RULE_MODEL_EXISTS value=false}
 	{/if}
-	<div class="modal-header">
-		<button class="close vtButton" data-dismiss="modal">×</button>
-		<h3>{vtranslate('LBL_CREATE_CUSTOM_RULE', $QUALIFIED_MODULE)}</h3>
-	</div>
-	<div class="contents">
-		<form id="editCustomRule">
+	<div>
+		<div class="modal-header">
+			<button class="close vtButton" data-dismiss="modal">×</button>
+			<h3>{vtranslate('LBL_ADD_CUSTOM_RULE_TO', $QUALIFIED_MODULE)}&nbsp;{vtranslate($MODULE_MODEL->get('name'), $MODULE)}</h3>
+		</div>
+		<form id="editCustomRule" class="form-horizontal contentsBackground">
 			<input type="hidden" name="for_module" value="{$MODULE_MODEL->get('name')}" />
 			<input type="hidden" name="record" value="{$RULE_ID}" />
 			<div class="modal-body">
-				<table class="table table-bordered table-condensed table-striped">
-					<tr>
-						<td>{vtranslate('LBL_MODULE_OF', $QUALIFIED_MODULE)}</td>
-						<td>
+				<div class="row-fluid">
+					<div class="control-group">
+						<label class="control-label">{vtranslate($MODULE_MODEL->get('name'), $MODULE)}&nbsp;{vtranslate('LBL_OF', $MODULE)}</label>
+						<div class="controls">
 							<select class="chzn-select" name="source_id">
 								{foreach from=$ALL_RULE_MEMBERS key=GROUP_LABEL item=ALL_GROUP_MEMBERS}
 								<optgroup label="{vtranslate($GROUP_LABEL, $QUALIFIED_MODULE)}">
@@ -40,11 +40,11 @@
 								</optgroup>
 							{/foreach}
 							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</td>
-						<td>
+						</div>	
+					</div>
+					<div class="control-group">
+						<label class="control-label">{vtranslate('LBL_CAN_ACCESSED_BY', $QUALIFIED_MODULE)}</label>
+						<div class="controls">
 							<select class="chzn-select" name="target_id">
 								{foreach from=$ALL_RULE_MEMBERS key=GROUP_LABEL item=ALL_GROUP_MEMBERS}
 								<optgroup label="{vtranslate($GROUP_LABEL, $QUALIFIED_MODULE)}">
@@ -57,33 +57,18 @@
 								</optgroup>
 							{/foreach}
 							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>{vtranslate('LBL_PRIVILEGES', $QUALIFIED_MODULE)}</td>
-						<td>
-							<select class="chzn-select" name="permission">
-								{foreach item=PERMISSION_LABEL key=PERMISSION_ID from=$ALL_PERMISSIONS}
-								<option value="{$PERMISSION_ID}"
-										{if $RULE_MODEL_EXISTS}{if $RULE_MODEL->getPermission() == $PERMISSION_ID}selected{/if}{/if}>
-									{vtranslate($PERMISSION_LABEL, $QUALIFIED_MODULE)}
-								</option>
-								{/foreach}
-							</select>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<div class="row-fluid">
-					<div class="pull-right">
-						<div class="span5">
-							<button class="vtButton" data-dismiss="modal">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</button>
-							<button type="submit" class="vtButton saveButton">{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</button>
-						</div>
+						</div>	
+					</div>
+					<div class="control-group">
+						<label class="control-label">{vtranslate('LBL_WITH_PERMISSIONS', $QUALIFIED_MODULE)}</label>
+						<div class="controls">
+							<label class="radio"><input type="radio" value="0" name="permission" {if $RULE_MODEL_EXISTS} {if $RULE_MODEL->isReadOnly()} checked {/if} {else} checked {/if}/>&nbsp;{vtranslate('LBL_READ', $QUALIFIED_MODULE)}&nbsp;</label>
+							<label class="radio"><input type="radio" value="1" name="permission" {if $RULE_MODEL->isReadWrite()} checked {/if} />&nbsp;{vtranslate('LBL_READ_WRITE', $QUALIFIED_MODULE)}&nbsp;</label>
+						</div>	
 					</div>
 				</div>
 			</div>
+			{include file='ModalFooter.tpl'|@vtemplate_path:'Vtiger'}
 		</form>
 	</div>
 {/strip}

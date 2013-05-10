@@ -8,22 +8,23 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Invoice'               => 'Díjbekérő'					,
-	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'			,
-	'LBL_ADD_RECORD'               => 'Díjbekérő hozzáadása'		,
-	'LBL_RECORDS_LIST'             => 'Díjbekérők listája'			, // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Díjbekérő összefoglaló'		,
-	'LBL_INVOICE_INFORMATION'      => 'Díjbekérő adatai'			,
-	'Sales Order'                  => 'Megrendelések'				,
-	'Customer No'                  => 'Ügyfél száma'				,
-	'Invoice Date'                 => 'Díjbekérő kiállítási dátuma'	,
-	'Purchase Order'               => 'Beszerzések'					,
-	'Sales Commission'             => 'Értékesítési jutalék'		,
-	'Account Name'                 => 'Cég neve'					,
-	'Invoice No'                   => 'Díjbekérő No.'				,
-	'Sent'                         => 'Elküldött'					,
-	'Credit Invoice'               => 'Utalásos Díjbekérő'			,
-	'Paid'                         => 'Fizetett'					,
-	'AutoCreated'                  => 'Automatikusan létrehozva'	,
-	'Cancel'                       => 'Visszavon'					, // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
+	'SINGLE_Invoice'               => 'Díjbekérő'                , 
+	'LBL_EXPORT_TO_PDF'            => 'Exportálás PDF-be'         , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Díjbekérő hozzáadása'   , 
+	'LBL_RECORDS_LIST'             => 'Díjbekérők listája'      , 
+	'LBL_INVOICE_INFORMATION'      => 'Díjbekérő adatai'         , 
+	'Sales Order'                  => 'Megrendelések'              , 
+	'Customer No'                  => 'Ügyfél száma'             , 
+	'Invoice Date'                 => 'Díjbekérő kiállítási dátuma', 
+	'Purchase Order'               => 'Beszerzések'                , 
+	'Sales Commission'             => 'Értékesítési jutalék'   , 
+	'Invoice No'                   => 'Díjbekérő No.'            , 
+	'LBL_RECEIVED'                 => 'Received'                    , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
+	'Sent'                         => 'Elküldött'                 , 
+	'Credit Invoice'               => 'Utalásos Díjbekérő'      , 
+	'Paid'                         => 'Fizetett'                    , 
+	'AutoCreated'                  => 'Automatikusan létrehozva'   , 
+	'Cancel'                       => 'Visszavon'                   , 
 );

@@ -489,7 +489,7 @@ class Users extends CRMEntity {
      */
     function change_password($user_password, $new_password, $dieOnError = true) {
 
-        $usr_name = $this->column_fields["user_name"];
+		$usr_name = $this->column_fields["user_name"];
         global $mod_strings;
         global $current_user;
         $this->log->debug("Starting password change for $usr_name");
@@ -499,7 +499,7 @@ class Users extends CRMEntity {
             return false;
         }
 
-        if (!is_admin($current_user)) {
+		if (!is_admin($current_user)) {
             $this->db->startTransaction();
             if(!$this->verifyPassword($user_password)) {
                 $this->log->warn("Incorrect old password for $usr_name");
@@ -1257,7 +1257,7 @@ class Users extends CRMEntity {
         $tc = $adb->getUniqueID("vtiger_homestuff");
         $visibility=0;
         $sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $uid, $visibility, 'Tag Cloud')";
-        $adb->query($sql);
+        $adb->pquery($sql, array());
 
         $sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
         $adb->pquery($sql, array());

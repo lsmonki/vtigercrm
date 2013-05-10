@@ -8,9 +8,10 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Project Task'                , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add Project Task'            , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Project Task List'           , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Project Task Summary'        , // TODO: Review
-	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details'        , // TODO: Review
+	'SINGLE_ProjectTask'           => 'Project Task'                , 
+	'LBL_ADD_RECORD'               => 'Add Project Task'            , 
+	'LBL_RECORDS_LIST'             => 'Project Task List'           , 
+	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details'        , 
+	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
+	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
 );

@@ -86,8 +86,13 @@ class WSAPP_VtigerSyncEventHandler extends SyncHandler{
 	  */
 	 public function storeClientIdAndSynkeyMapping($records){
 		 foreach($records as $record){
-			 $this->putOperationClientIdAndSyncKeyMapping[$record['id']] = $record['values']['_syncidentificationkey'];
+             if(!empty($record['values'])){
+                $this->putOperationClientIdAndSyncKeyMapping[$record['id']] = $record['values']['_syncidentificationkey'];
+             } else{
+                $this->putOperationClientIdAndSyncKeyMapping[$record['id']] = $record['_syncidentificationkey']; 
+             }
 		 }
 	 }
 }
 ?>
+

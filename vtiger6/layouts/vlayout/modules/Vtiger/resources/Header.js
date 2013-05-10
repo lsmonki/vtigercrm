@@ -102,7 +102,7 @@ jQuery.Class("Vtiger_Header_Js",{
 			topValue = '75px';
 		}
 		var contentsContainer = this.getContentsContainer();
-		contentsContainer.css({'margin-top':topValue, 'margin-bottom':'20px'});
+		contentsContainer.css({'margin-top':topValue});
 		return this;
 	},
 
@@ -402,5 +402,5 @@ jQuery.Class("Vtiger_Header_Js",{
 	}
 });
 jQuery(document).ready(function() {
-        Vtiger_Header_Js.getInstance().alignContentsContainer().registerEvents();
+        Vtiger_Header_Js.getInstance().registerEvents();
 });

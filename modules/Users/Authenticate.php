@@ -31,7 +31,7 @@ $focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
-$user_password = vtlib_purify($_REQUEST['user_password']);
+$user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
 
@@ -71,8 +71,15 @@ if($focus->is_authenticated()) {
 	session_unregister('login_user_name');
 
 	$_SESSION['authenticated_user_id'] = $focus->id;
+	$_SESSION['AUTHUSERID'] = $focus->id;
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
+	//Enabled session variable for KCFINDER 
+ 	$_SESSION['KCFINDER'] = array(); 
+ 	$_SESSION['KCFINDER']['disabled'] = false; 
+ 	$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
+ 	$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
+	
 	// store the user's theme in the session
 	if(!empty($focus->column_fields["theme"])) {
 		$authenticated_user_theme = $focus->column_fields["theme"];

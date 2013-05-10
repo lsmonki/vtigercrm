@@ -12,6 +12,7 @@ $languageStrings = array(
 	'SINGLE_Reports' => 'Report',
 
 	// Basic Strings
+	'LBL_FOLDER_NOT_EMPTY' => 'Folder is not empty',
 	'LBL_MOVE_REPORT' => 'Move Reports',
 	'LBL_CUSTOMIZE' => 'Customize',
 	'LBL_REPORT_EXPORT_EXCEL' => 'Export Excel',
@@ -52,6 +53,7 @@ $languageStrings = array(
 	'LBL_MAX' => 'Max',
 	'LBL_NEXT' => 'Next',
 	'LBL_REPORTS' => 'Reports List',
+	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
 
 	//Step2 Strings
 	'LBL_GROUP_BY' => 'Group By',
@@ -141,7 +143,9 @@ $languageStrings = array(
 	'LBL_LIMIT_EXCEEDED' => 'Only 1000 + records are displayed. Use CSV or Excel Export to see all the records',
 	'LBL_TOP' => 'Top',
 	'LBL_ALL_REPORTS' => 'All Reports',
+	'LBL_CALCULATION_CONVERSION_MESSAGE' => 'Calculation are based on the base currency of your CRM',
 );
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD' => 'Duplicate Report',
+	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
 );

@@ -8,7 +8,7 @@
  *************************************************************************************/
 
 jQuery.Class("Vtiger_Detail_Js",{
-    
+
     detailInstance : false,
 
 	getInstance: function(){
@@ -119,7 +119,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		);
 	},
-	
+
 	reloadRelatedList : function(){
 		var pageNumber = jQuery('[name="currentPageNum"]').val();
 		var detailInstance = Vtiger_Detail_Js.getInstance();
@@ -143,7 +143,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 	updatedFields : ['company','designation','title'],
 	//Event that will triggered before saving the ajax edit of fields
 	fieldPreSave : 'Vtiger.Field.PreSave',
-	
+
 	referenceFieldNames : {
 		'Accounts' : 'parent_id',
 		'Contacts' : 'contact_id',
@@ -169,7 +169,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			thisInstance.loadWidget(widgetContainer);
 		});
 	},
-	
+
 	loadWidget : function(widgetContainer) {
 		var thisInstance = this;
 		var contentHeader = jQuery('.widget_header',widgetContainer);
@@ -195,7 +195,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		);
 	},
-	
+
 	/**
 	 * Function to load only Comments Widget.
 	 */
@@ -216,8 +216,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 			params.data = data;
 		}
 		AppConnector.requestPjax(params).then(
-			function(reponseData){
-				detailContentsHolder.html(reponseData);
+			function(responseData){
+				detailContentsHolder.html(responseData);
+				responseData = detailContentsHolder.html();
 				thisInstance.triggerDisplayTypeEvent();
 				thisInstance.registerBlockStatusCheckOnLoad();
 				//Make select box more usability
@@ -227,7 +228,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				app.registerEventForTextAreaFields(jQuery(".commentcontent"));
 				jQuery('.commentcontent').autosize();
 				thisInstance.getForm().validationEngine();
-				aDeferred.resolve(reponseData);
+				aDeferred.resolve(responseData);
 			},
 			function(){
 
@@ -505,17 +506,23 @@ jQuery.Class("Vtiger_Detail_Js",{
 		var detailContentsHolder = thisInstance.getContentHolder();
 		var form = thisInstance.getForm();
 		var nameFields = form.data('nameFields');
-		var recordLabel = '';
-		for(var index in nameFields) {
-			if(index != 0) {
-				recordLabel += ' '
-			}
-
-			var nameFieldName = nameFields[index];
-			recordLabel += form.find('[name="'+nameFieldName+'"]').val();
-		}
 		var recordLabelElement = detailContentsHolder.closest('.contentsDiv').find('.recordLabel');
-		recordLabelElement.text(recordLabel);
+		var title = '';
+		for(var index in nameFields) {
+			var nameFieldName = nameFields[index];
+			var nameField = form.find('[name="'+nameFieldName+'"]');
+			if(nameField.length > 0){
+				var recordLabel = nameField.val();
+				title += recordLabel+" ";
+				recordLabelElement.find('[class="'+nameFieldName+'"]').text(recordLabel);
+			}
+		}
+		var salutatioField = recordLabelElement.find('.salutation');
+		if(salutatioField.length > 0){
+			var salutatioValue = salutatioField.text();
+			title = salutatioValue+title;
+		}
+		recordLabelElement.attr('title',title);
 	},
 
 	registerAjaxEditEvent : function(){
@@ -561,6 +568,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 	registerRelatedRowClickEvent: function(){
 		var detailContentsHolder = this.getContentHolder();
 		detailContentsHolder.on('click','.listViewEntries',function(e){
+			if(jQuery(e.target).is('input[type="checkbox"]')) return;
 			var elem = jQuery(e.currentTarget);
 			var recordUrl = elem.data('recordurl');
 			if(typeof recordUrl != "undefined"){
@@ -579,25 +587,29 @@ jQuery.Class("Vtiger_Detail_Js",{
 	registerEventForRelatedListPagination : function(){
 		var thisInstance = this;
 		var detailContentsHolder = this.getContentHolder();
-		detailContentsHolder.on('click','#listViewNextPageButton',function(e){
+		detailContentsHolder.on('click','#relatedListNextPageButton',function(e){
+			var element = jQuery(e.currentTarget);
+			if(element.attr('disabled') == "disabled"){
+				return;
+			}
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
 			relatedController.nextPageHandler();
 		});
-		detailContentsHolder.on('click','#listViewPreviousPageButton',function(){
+		detailContentsHolder.on('click','#relatedListPreviousPageButton',function(){
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
 			relatedController.previousPageHandler();
 		});
-		detailContentsHolder.on('click','#listViewPageJump',function(e){
+		detailContentsHolder.on('click','#relatedListPageJump',function(e){
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
 			relatedController.getRelatedPageCount();
 		});
-		detailContentsHolder.on('click','#listViewPageJumpDropDown > li',function(e){
+		detailContentsHolder.on('click','#relatedListPageJumpDropDown > li',function(e){
 			e.stopImmediatePropagation();
 		}).on('keypress','#pageToJump',function(e){
 			var selectedTabElement = thisInstance.getSelectedTab();
@@ -610,15 +622,50 @@ jQuery.Class("Vtiger_Detail_Js",{
 	/**
 	 * Function to register Event for Sorting
 	 */
-	registerEventForRelatedListSort : function(){
+	registerEventForRelatedList : function(){
 		var thisInstance = this;
 		var detailContentsHolder = this.getContentHolder();
-		detailContentsHolder.on('click','.listViewHeaderValues',function(e){
+		detailContentsHolder.on('click','.relatedListHeaderValues',function(e){
 			var element = jQuery(e.currentTarget);
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
 			relatedController.sortHandler(element);
+		});
+		
+		detailContentsHolder.on('click', 'button.selectRelation', function(e){
+			var selectButton = jQuery(e.currentTarget);
+			var selectedTabElement = thisInstance.getSelectedTab();
+			var relatedModuleName = thisInstance.getRelatedModuleName();
+			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
+			relatedController.showSelectRelationPopup().then(function(data){
+				var emailEnabledModule = jQuery(data).find('[name="emailEnabledModules"]').val();
+				if(emailEnabledModule){
+					thisInstance.registerEventToEditRelatedStatus();
+				}
+			});
+		});
+
+		detailContentsHolder.on('click', 'a.relationDelete', function(e){
+			e.stopImmediatePropagation();
+			var element = jQuery(e.currentTarget);
+			var instance = Vtiger_Detail_Js.getInstance();
+			var key = instance.getDeleteMessageKey();
+			var message = app.vtranslate(key);
+			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+				function(e) {
+					var row = element.closest('tr');
+					var relatedRecordid = row.data('id');
+					var selectedTabElement = thisInstance.getSelectedTab();
+					var relatedModuleName = thisInstance.getRelatedModuleName();
+					var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
+					relatedController.deleteRelation([relatedRecordid]).then(function(response){
+						relatedController.loadRelatedList();
+					});
+				},
+				function(error, err){
+				}
+			);
 		});
 	},
 
@@ -676,7 +723,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		});
 	},
-	
+
 	/**
 	 * Function to register event for adding related record for module
 	 */
@@ -692,13 +739,13 @@ jQuery.Class("Vtiger_Detail_Js",{
                 window.location.href = element.data('url');
                 return;
             }
-            
+
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
 			relatedController.addRelatedRecord(element);
 		})
 	},
-	
-	
+
+
 	/**
 	 * Function to handle the ajax edit for detailview and summary view fields
 	 * which will expects the currentTdElement
@@ -757,9 +804,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 					return;
 				}
 
-				
 
-				
+
+
 
                 //Before saving ajax edit values we need to check if the value is changed then only we have to save
                 if(previousValue == ajaxEditNewValue) {
@@ -777,9 +824,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 						return
 					}
 					preventDefault = false;
-					
+
 					jQuery(document).off('click', '*', saveHandler);
-					
+
 					if(!saveTriggred && !preventDefault) {
 						saveTriggred = true;
 					}else{
@@ -814,7 +861,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 			jQuery(document).on('click','*', saveHandler);
 	},
-	
+
 
 	triggerDisplayTypeEvent : function() {
 		var widthType = app.cacheGet('widthType', 'narrowWidthType');
@@ -823,7 +870,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			elements.addClass(widthType);
 		}
 	},
-	
+
 	/**
 	 * Function updates the hidden elements which is used for creating relations
 	 */
@@ -832,14 +879,14 @@ jQuery.Class("Vtiger_Detail_Js",{
 		jQuery('<input type="hidden" name="sourceRecord" value="'+recordId+'" >').appendTo(container);
 		jQuery('<input type="hidden" name="relationOperation" value="true" >').appendTo(container);
 	},
-	
+
 	/**
 	 * Function to register event for activity widget for adding
 	 * event and task from the widget
 	 */
 	registerEventForActivityWidget : function(){
 		var thisInstance = this;
-		
+
 		/*
 		 * Register click event for add button in Related Activities widget
 		 */
@@ -849,15 +896,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var recordId = thisInstance.getRecordId();
 			var module = app.getModuleName();
 			var element = jQuery(e.currentTarget);
-			
+
 			if(quickCreateNode.length <= 0) {
 				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
 			}
 			var fieldName = thisInstance.referenceFieldNames[module];
-			
+
 			var customParams = {};
 			customParams[fieldName] = recordId;
-	
+
 			var fullFormUrl = element.data('url');
 			var preQuickCreateSave = function(data){
 				thisInstance.addElementsToQuickCreateForCreatingRelation(data,module,recordId);
@@ -869,14 +916,14 @@ jQuery.Class("Vtiger_Detail_Js",{
 				taskGoToFullFormButton.data('editViewUrl',taskFullFormUrl);
 				eventsGoToFullFormButton.data('editViewUrl',eventsFullFormUrl);
 			}
-			
+
 			var callbackFunction = function() {
 				var params = {};
 				params['record'] = recordId;
 				params['view'] = 'Detail';
 				params['module'] = module;
 				params['mode'] = 'getActivities';
-				
+
 				AppConnector.request(params).then(
 					function(data) {
 						var activitiesWidget = jQuery('#relatedActivities');
@@ -885,12 +932,12 @@ jQuery.Class("Vtiger_Detail_Js",{
 						thisInstance.registerEventForActivityWidget();
 					}
 				);
-                    
+
                 var summaryViewContainer = thisInstance.getContentHolder();
 				var updatesWidget = summaryViewContainer.find("[data-name='LBL_UPDATES']");
 				thisInstance.loadWidget(updatesWidget);
 			}
-			
+
 			var QuickCreateParams = {};
 			QuickCreateParams['callbackPostShown'] = preQuickCreateSave;
 			QuickCreateParams['callbackFunction'] = callbackFunction;
@@ -899,8 +946,8 @@ jQuery.Class("Vtiger_Detail_Js",{
 			quickCreateNode.trigger('click', QuickCreateParams);
 		});
 	},
-	
-	
+
+
 	/**
 	 * Function to register all the events related to summary view widgets
 	 */
@@ -917,7 +964,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var currentTdElement = currentTarget.closest('td.fieldValue');
 			thisInstance.ajaxEditHandling(currentTdElement);
 		});
-		
+
 		/**
 		 * Function to handle actions after ajax save in summary view
 		 */
@@ -925,7 +972,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var updatesWidget = summaryViewContainer.find("[data-name='LBL_UPDATES']");
 			thisInstance.loadWidget(updatesWidget);
 		});
-		
+
 		/*
 		 * Register the event to edit the status for for related activities
 		 */
@@ -934,18 +981,18 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var currentDiv = currentTarget.closest('.activityStatus');
 			var editElement = currentDiv.find('.edit');
 			var detailViewElement = currentDiv.find('.value');
-			
+
 			currentTarget.hide();
 			detailViewElement.addClass('hide');
 			editElement.removeClass('hide').show();
-			
+
 			var callbackFunction = function() {
 				var fieldnameElement = jQuery('.fieldname', editElement);
 				var fieldName = fieldnameElement.val();
 				var fieldElement = jQuery('[name="'+ fieldName +'"]', editElement);
 				var previousValue = fieldnameElement.data('prevValue');
 				var ajaxEditNewValue = fieldElement.find('option:selected').text();
-				
+
 				if(previousValue == ajaxEditNewValue) {
                     editElement.addClass('hide');
                     detailViewElement.removeClass('hide');
@@ -955,7 +1002,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 					var activityId = activityDiv.find('.activityId').val();
 					var moduleName = activityDiv.find('.activityModule').val();
 					var activityType = activityDiv.find('.activityType').val();
-					
+
 					currentDiv.progressIndicator();
                     editElement.addClass('hide');
 					var params = {
@@ -966,7 +1013,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 						module : moduleName,
 						activitytype : activityType
 					};
-					
+
 					AppConnector.request(params).then(
 						function(data) {
 							currentDiv.progressIndicator({'mode':'hide'});
@@ -978,16 +1025,16 @@ jQuery.Class("Vtiger_Detail_Js",{
 					);
 				}
 			}
-			
+
 			//adding clickoutside event on the currentDiv - to save the ajax edit of status values
 			Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);
 		});
-		
+
 		/*
 		 * Register click event for add button in Related widgets
 		 * to add record from widget
 		 */
-		
+
 		jQuery('.changeDetailViewMode').on('click',function(e){
 			var currentElement = jQuery(e.currentTarget);
 			var detailViewTitleContainer = currentElement.closest('.toggleViewByMode');
@@ -1011,7 +1058,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				}
 			);
 		});
-		
+
 		/*
 		 * Register click event for add button in Related widgets
 		 * to add record from widget
@@ -1025,7 +1072,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var module = app.getModuleName();
 			var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
 			var fieldName = thisInstance.referenceFieldNames[module];
-			
+
 			var customParams = {};
 			customParams[fieldName] = recordId;
 
@@ -1036,11 +1083,11 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var postQuickCreateSave = function(data) {
 				thisInstance.postSummaryWidgetAddRecord(data,currentElement);
 			}
-			
+
 			var goToFullFormcallback = function(data){
 				thisInstance.addElementsToQuickCreateForCreatingRelation(data,module,recordId);
 			}
-			
+
 			var QuickCreateParams = {};
 			QuickCreateParams['callbackFunction'] = postQuickCreateSave;
 			QuickCreateParams['goToFullFormcallback'] = goToFullFormcallback;
@@ -1069,7 +1116,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		)
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function to handle Post actions after adding record from
 	 * summary view widget
@@ -1106,7 +1153,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		)
 	},
-	
+
 	/**
 	 * Function to register event for emails related record click
 	 */
@@ -1152,7 +1199,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			})
 		})
 	},
-	
+
 	/**
 	 * Function to register event for adding email from related list
 	 */
@@ -1196,9 +1243,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 		} else {
 			return tagName;
 		}
-		
+
 	},
-	
+
 	addTagsToList : function(data,tagText) {
 		var tagsArray = tagText.split(' ');
 
@@ -1206,9 +1253,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var id = data.result[1][tagsArray[i]];
 			jQuery('#tagsList').prepend('<div class="tag row-fluid span11 marginLeftZero" data-tagname="'+tagsArray[i]+'" data-tagid="'+id+'"><span class="tagName textOverflowEllipsis span11 cursorPointer"><a>'+tagsArray[i]+'</a></span><span class="pull-right cursorPointer deleteTag">x</span></div>');
 		}
-		
+
 	},
-	
+
 	checkTagMaxLengthExceeds : function(tagText) {
 		var tagsArray = tagText.split(' ');
 		var maxTagLength = jQuery('#maxTagLength').val();
@@ -1220,7 +1267,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		}
 		return false;
 	},
-	
+
 	registerClickEventForAddingTagRecord : function() {
 		var thisInstance = this;
 		jQuery('#tagRecord').on('click',function(){
@@ -1266,7 +1313,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		});
 	},
-	
+
 	registerDeleteEventForTag : function(data) {
 		var thisInstance = this;
 		jQuery(data).on('click','.deleteTag',function(e){
@@ -1310,7 +1357,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			)
 		});
 	},
-	
+
 	registerChangeEventForModulesList : function() {
 		jQuery('#tagSearchModulesList').on('change',function(e) {
 			var modulesSelectElement = jQuery(e.currentTarget);
@@ -1323,7 +1370,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		});
 	},
-	
+
 	registerPostTagCloudWidgetLoad : function() {
 		var thisInstance = this;
 		app.getContentsContainer().on('Vtiger.Widget.Load.LBL_TAG_CLOUD',function(e,data){
@@ -1334,38 +1381,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 			thisInstance.registerTagClickEvent(data);
 		});
 	},
-	
-	registerEvents : function(){
+
+	registerEventForRelatedTabClick : function(){
 		var thisInstance = this;
-		thisInstance.triggerDisplayTypeEvent();
-		thisInstance.registerSendSmsSubmitEvent();
-		thisInstance.registerAjaxEditEvent();
-		this.registerRelatedRowClickEvent();
-		this.registerBlockAnimationEvent();
-		this.registerBlockStatusCheckOnLoad();
-		this.registerEmailFieldClickEvent();
-		this.registerEventForRelatedListSort();
-		this.registerEventForRelatedListPagination();
-		this.registerEventForAddingRelatedRecord();
-		this.registerEventForEmailsRelatedRecord();
-		this.registerEventForAddingEmailFromRelatedList();
-		this.registerPostTagCloudWidgetLoad();
-
-		var detailViewContainer = jQuery('div.detailViewContainer');
-		if(detailViewContainer.length <= 0) {
-			// Not detail view page
-			return;
-		}
-
 		var detailContentsHolder = thisInstance.getContentHolder();
 		var detailContainer = detailContentsHolder.closest('div.detailViewInfo');
 		app.registerEventForDatePickerFields(detailContentsHolder);
 		//Attach time picker event to time fields
 		app.registerEventForTimeFields(detailContentsHolder);
-		
-		//register all the events for summary view container
-		this.registerSummaryViewContainerEvents(detailContentsHolder);
-		
+
 		jQuery('.related', detailContainer).on('click', 'li', function(e, urlAttributes){
 			var tabElement = jQuery(e.currentTarget);
 			var element = jQuery('<div></div>');
@@ -1401,7 +1425,38 @@ jQuery.Class("Vtiger_Detail_Js",{
 				}
 			);
 		});
+	},
+	
+	registerEvents : function(){
+		var thisInstance = this;
+		thisInstance.triggerDisplayTypeEvent();
+		thisInstance.registerSendSmsSubmitEvent();
+		thisInstance.registerAjaxEditEvent();
+		this.registerRelatedRowClickEvent();
+		this.registerBlockAnimationEvent();
+		this.registerBlockStatusCheckOnLoad();
+		this.registerEmailFieldClickEvent();
+		this.registerEventForRelatedList();
+		this.registerEventForRelatedListPagination();
+		this.registerEventForAddingRelatedRecord();
+		this.registerEventForEmailsRelatedRecord();
+		this.registerEventForAddingEmailFromRelatedList();
+		this.registerPostTagCloudWidgetLoad();
+		this.registerEventForRelatedTabClick();
 
+		var detailViewContainer = jQuery('div.detailViewContainer');
+		if(detailViewContainer.length <= 0) {
+			// Not detail view page
+			return;
+		}
+
+		var detailContentsHolder = thisInstance.getContentHolder();
+		app.registerEventForDatePickerFields(detailContentsHolder);
+		//Attach time picker event to time fields
+		app.registerEventForTimeFields(detailContentsHolder);
+		
+		//register all the events for summary view container
+		this.registerSummaryViewContainerEvents(detailContentsHolder);
 
 		detailContentsHolder.on('click', '#detailViewNextRecordButton', function(e){
 			var selectedTabElement = thisInstance.getSelectedTab();
@@ -1420,36 +1475,6 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var params = {};
 			var nextPageUrl = url+'&page='+requestedPage;
 			thisInstance.loadContents(nextPageUrl);
-		});
-
-		detailContentsHolder.on('click', 'button.selectRelation', function(e){
-			var selectButton = jQuery(e.currentTarget);
-			var selectedTabElement = thisInstance.getSelectedTab();
-			var relatedModuleName = thisInstance.getRelatedModuleName();
-			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
-			relatedController.showSelectRelationPopup();
-		});
-
-		detailContentsHolder.on('click', 'a.relationDelete', function(e){
-			e.stopImmediatePropagation();
-			var element = jQuery(e.currentTarget);
-			var instance = Vtiger_Detail_Js.getInstance();
-			var key = instance.getDeleteMessageKey();
-			var message = app.vtranslate(key);
-			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
-				function(e) {
-					var row = element.closest('tr');
-					var relatedRecordid = row.data('id');
-					var selectedTabElement = thisInstance.getSelectedTab();
-					var relatedModuleName = thisInstance.getRelatedModuleName();
-					var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
-					relatedController.deleteRelation([relatedRecordid]).then(function(response){
-						relatedController.loadRelatedList();
-					});
-				},
-				function(error, err){
-				}
-			);
 		});
 
 		detailContentsHolder.on('click','table.detailview-table td.fieldValue', function(e) {
@@ -1567,21 +1592,21 @@ jQuery.Class("Vtiger_Detail_Js",{
 			var recentUpdatesTab = thisInstance.getTabByLabel(thisInstance.detailViewRecentUpdatesTabLabel);
 			recentUpdatesTab.trigger('click');
 		});
-		
+
 		detailContentsHolder.on('click','.moreRecentDocuments', function(){
 			var recentDocumentsTab = thisInstance.getTabByLabel(thisInstance.detailViewRecentDocumentsTabLabel);
 			recentDocumentsTab.trigger('click');
 		});
-		
+
 		detailContentsHolder.on('click','.moreRecentActivities', function(){
 			var recentActivitiesTab = thisInstance.getTabByLabel(thisInstance.detailViewRecentActivitiesTabLabel);
 			recentActivitiesTab.trigger('click');
 		});
-		
+
 		thisInstance.getForm().validationEngine(app.validationEngineOptions);
 
 		thisInstance.loadWidgets();
-		
+
 		app.registerEventForTextAreaFields(jQuery('.commentcontent'));
 	}
 });

@@ -685,7 +685,7 @@ $mod_strings = Array(
 'LBL_SELECT_CRM_MODULE'=>'Select CRM Module',
 'LBL_TAX_SETTINGS'=>'Tax Calculations',
 'LBL_INVENTORY_TAX_CONFIG'=>'Inventory Tax Configuration',
-'LBL_CUSTOM_MAPP_INFO'=>'Only in Leads module you can map the fields with Organizations, Contacts, and Opportunities.',
+'LBL_CUSTOM_MAPP_INFO'=>'Field mapping is only available for Leads module',
 'LBL_MAPPING_OTHER_MODULES'=>'Mapping with other Modules',
 'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
 'LBL_ROLE_HIERARCHY_TREE'=>'Roles & Hierarchy Tree',
@@ -878,10 +878,12 @@ $mod_strings = Array(
 'LBL_NODOC'=>'No doc File in this directory.Please try again!',
 
 //Added for error messages on Company Info.
-'LOGO_ERROR'=>'Logo has to be an Image of type png/gif',
+'LOGO_ERROR'=>'Logo has to be an Image of type jpeg/png',
 'Error_Message'=>'Error Message',
 'Invalid_file'=>'Invalid file OR',
 'File_has_no_data'=>'File has no data',
+'Invalid_image'=>'Invalid image OR',
+'Image_corrupted'=>'Virus detected OR Uploaded Image Corrupted',
 'Sorry'=>'Sorry',
 'uploaded_file_exceeds_maximum_limit'=>'the uploaded file exceeds the maximum vtiger_filesize limit',
 'try_file_smaller'=>'Please try a file smaller than 800000 bytes',
@@ -1240,8 +1242,8 @@ $mod_strings = Array(
 'Settings' => 'Settings',
 'LBL_ERR_TAX_LABEL_ALREADY_EXISTS' => 'This tax is already available.',
 'LBL_ERR_SOME_TAX_LABELS_ALREADY_EXISTS' => 'Some tax labels are already available, hence not saved.',
-'LBL_EDIT_COMPANY_INFO' => "To edit company details, please click on
-			   <span style='font-style:italic;color:blue;'>Settings Icon > Add/Delete Users > Company </span>",
+'LBL_EDIT_COMPANY_INFO' => "To edit company details, please <span style='font-style:italic;color:blue;'>
+                                <a href='vtiger6/index.php?parent=Settings&module=Vtiger&view=CompanyDetails'> click here</a></span>",
 
 'Configuration Editor'=>'Configuration Editor',
 

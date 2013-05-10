@@ -117,13 +117,13 @@ var AppConnector = {
 			}
 
 			jQuery(document).on('pjax:success', function(event, data,status,jqXHR){
-				success(data,status,jqXHR);
 				pjaxContainer.html('');
+				success(data,status,jqXHR);
 			})
 			
 			jQuery(document).on('pjax:error', function(event, jqXHR, textStatus, errorThrown){
-				error(jqXHR, textStatus, errorThrown);
 				pjaxContainer.html('');
+				error(jqXHR, textStatus, errorThrown);
 			})
 			jQuery.pjax(params);
 

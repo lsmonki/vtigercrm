@@ -13,7 +13,7 @@
     {assign var="MODULE_NAME" value=$MODULE_MODEL->get('name')}
     <input id="recordId" type="hidden" value="{$RECORD->getId()}" />
     <div class="detailViewContainer">
-        <div class="detailViewTitle" id="prefPageHeader">
+        <div class="detailViewTitle" id="userPageHeader">
             <div class="row-fluid">
                 <div class="span8">
                     <span class="row-fluid marginLeftZero">
@@ -25,11 +25,8 @@
 							{/foreach}
 						</span>
 						<span class="span9">
-							<span id="myPrefHeading" class="row-fluid">
-								<h3>{vtranslate('LBL_MY_PREFERENCES', $MODULE_NAME)} </h3>
-							</span>
-							<span class="row-fluid">
-								{vtranslate('LBL_USERDETAIL_INFO', $MODULE_NAME)}&nbsp;&nbsp;"<b>{$RECORD->getName()}</b>"
+							<span id="userHeading" class="row-fluid">
+								<h3>{$RECORD->getName()}</h3>
 							</span>
 						</span>
 					</span>
@@ -37,35 +34,43 @@
                 <div class="span4">
                     <div class="row-fluid pull-right detailViewButtoncontainer">
 						<div class="btn-toolbar pull-right">
-								<div class='btn-group' title="{vtranslate('LBL_DISPLAY_TYPE', 'Vtiger')}">
-									<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
-										<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
-									</a>
-									<ul class='dropdown-menu pull-right' id='widthType'>
-										<li class="cursorPointer" data-class='wideWidthType' title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
-											<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
-										</li>
-										<li class="cursorPointer" data-class='mediumWidthType' title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
-											<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
-										</li>
-										<li class="cursorPointer" data-class='narrowWidthType' title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
-											<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
-										</li>
-									</ul>
+                           							
+							{foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
+								<div class="btn-group">
+								<button class="btn"
+										{if $DETAIL_VIEW_BASIC_LINK->isPageLoadLink()}
+											onclick="window.location.href='{$DETAIL_VIEW_BASIC_LINK->getUrl()}'"
+										{else}
+											onclick={$DETAIL_VIEW_BASIC_LINK->getUrl()}
+										{/if}>
+									<strong>{vtranslate($DETAIL_VIEW_BASIC_LINK->getLabel(), $MODULE_NAME)}</strong>
+								</button>
 								</div>
-
-                            {foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
-                                <div class="btn-group">
-                                    <button class="btn"
-                                            {if $DETAIL_VIEW_BASIC_LINK->isPageLoadLink()}
-                                                onclick="window.location.href='{$DETAIL_VIEW_BASIC_LINK->getUrl()}'"
-                                            {else}
-                                                onclick={$DETAIL_VIEW_BASIC_LINK->getUrl()}
-                                            {/if}>
-                                        <strong>{vtranslate($DETAIL_VIEW_BASIC_LINK->getLabel(), $MODULE_NAME)}</strong>
-                                    </button>
-                                </div>
-                            {/foreach}
+							{/foreach}
+							
+							{if $DETAILVIEW_LINKS['DETAILVIEW']|@count gt 0}
+								<span class="btn-group">
+									<button class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);">
+										<strong>{vtranslate('LBL_MORE', $MODULE_NAME)}</strong>&nbsp;&nbsp;<i class="caret"></i>
+									</button>
+									<ul class="dropdown-menu pull-right">
+										{foreach item=DETAIL_VIEW_LINK from=$DETAILVIEW_LINKS['DETAILVIEW']}
+											{if {vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)} eq 'Delete'}
+												{if $CURRENT_USER_MODEL->isAdminUser() && $CURRENT_USER_MODEL->getId() neq $RECORD->getId()}
+													<li id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
+													<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
+												</li>
+												{/if}
+											{else}	
+												<li id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
+													<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
+												</li>
+											{/if}
+										{/foreach}
+									</ul>
+								</span>
+							{/if}
+							
                         </div>
                     </div>
                 </div>

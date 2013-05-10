@@ -30,6 +30,36 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 		}
 		return Users_Privileges_Model::isPermitted($this->getName(), $actionName);
 	}
+    
+    
+    /**
+	 * Function to get Settings links
+	 * @return <Array>
+	 */
+	public function getSettingLinks(){
+		vimport('~~modules/com_vtiger_workflow/VTWorkflowUtils.php');
+
+		$editWorkflowsImagePath = Vtiger_Theme::getImagePath('EditWorkflows.png');
+		$settingsLinks = array();
+
+
+		if(VTWorkflowUtils::checkModuleWorkflow($this->getName())) {
+			$settingsLinks[] = array(
+					'linktype' => 'LISTVIEWSETTING',
+					'linklabel' => 'LBL_EDIT_WORKFLOWS',
+                    'linkurl' => 'index.php?parent=Settings&module=Workflows&view=List&sourceModule='.$this->getName(),
+					'linkicon' => $editWorkflowsImagePath
+			);
+		}
+		
+        $settingsLinks[] =  array(
+					'linktype' => 'LISTVIEWSETTING',
+					'linklabel' => vtranslate('LBL_SEREVER_CONFIG', $moduleName),
+					'linkurl' => 'index.php?module=SMSNotifier&parent=Settings&view=List',
+					'linkicon' => ''
+				);
+		return $settingsLinks;
+	}
 
 }
 ?>

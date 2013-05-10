@@ -602,9 +602,9 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		return $data;
 	}
 
-	function getReportCalulationData() {
+	function getReportCalulationData($filterQuery = false) {
 		$reportRun = ReportRun::getInstance($this->getId());
-		$data = $reportRun->GenerateReport('TOTALXLS', false, true);
+		$data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
 		return $data;
 	}
 	/**
@@ -675,10 +675,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 * @return <boolean>
 	 */
 	function isDefault() {
-		$db = PearDatabase::getInstance();
-
-		$result = $db->pquery("SELECT 1 FROM vtiger_report WHERE state = 'SAVED' AND reportid = ?", array($this->getId()));
-		if ($db->num_rows($result) > 0) {
+		if ($this->get('state') == 'SAVED') {
 			return true;
 		}
 		return false;
@@ -828,7 +825,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
                 $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
             }
 		}
-		if($standardFilter){
+		if($standardFilter && $standardFilter[0]['value'] != '0000-00-00,0000-00-00'){
 			$allGroupColumns = array_merge($allGroupColumns,$standardFilter);
 		}
 		$transformedAdvancedCondition = array();
@@ -857,7 +854,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 				$tranformedStandardFilter['value'] =  implode(',',$date);
 			} else{
 				$tranformedStandardFilter['columnname'] = "$fields[0]:$fields[1]:$fields[3]:$fields[2]:D";
-				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate']; 
+				$tranformedStandardFilter['value'] = $standardFilter['startdate'].','.$standardFilter['enddate'];
 			}
 			return array($tranformedStandardFilter);
 		} else{
@@ -866,11 +863,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	}
 
 	/**
-	 * Function to generate data for advanced filter conditions
-	 * @param Vtiger_Paging_Model $pagingModel
-	 * @return <Array>
+	 * Function returns the Advanced filter SQL
+	 * @return <String>
 	 */
-	public function generateData($pagingModel = false) {
+	function getAdvancedFilterSQL() {
 		$advancedFilter = $this->get('advancedFilter');
 		
 		$advancedFilterCriteria = array();
@@ -895,11 +891,30 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			}
 		}
 
-		$reportRun = ReportRun::getInstance($this->getId());
-		$filterQuery = $reportRun->RunTimeAdvFilter($advancedFilterCriteria,$advancedFilterCriteriaGroup);
+		$this->reportRun = ReportRun::getInstance($this->getId());
+		$filterQuery = $this->reportRun->RunTimeAdvFilter($advancedFilterCriteria,$advancedFilterCriteriaGroup);
+		return $filterQuery;
+	}
+
+	/**
+	 * Function to generate data for advanced filter conditions
+	 * @param Vtiger_Paging_Model $pagingModel
+	 * @return <Array>
+	 */
+	public function generateData($pagingModel = false) {
+		$filterQuery = $this->getAdvancedFilterSQL();
 		return $this->getReportData($pagingModel, $filterQuery);
 	}
-	
+
+	/**
+	 * Function to generate data for advanced filter conditions
+	 * @param Vtiger_Paging_Model $pagingModel
+	 * @return <Array>
+	 */
+	public function generateCalculationData() {
+		$filterQuery = $this->getAdvancedFilterSQL();
+		return $this->getReportCalulationData($filterQuery);
+	}
 	/**
 	 * Function to check duplicate exists or not
 	 * @return <boolean>
@@ -921,5 +936,27 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			return true;
 		}
 		return false;
+	}
+
+		/**
+	 * Function is used for Inventory reports, filters should show line items fields only if they are selected in
+	 * calculation otherwise it should not be shown
+	 * @return boolean
+	 */
+	function showLineItemFieldsInFilter($calculationFields=false) {
+		if($calculationFields == false) $calculationFields = $this->getSelectedCalculationFields();
+
+		$primaryModule = $this->getPrimaryModule();
+		$inventoryModules = array('Invoice', 'Quotes', 'SalesOrder', 'PurchaseOrder');
+		if(!in_array($primaryModule, $inventoryModules)) return false;
+		if(!empty($calculationFields)) {
+			foreach($calculationFields as $field) {
+				if(stripos($field, 'cb:vtiger_inventoryproductrel') !== false) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
 	}
 }

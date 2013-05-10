@@ -45,36 +45,6 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		return array();
 	}
 
-	/*
-	 * Function to get Setting links
-	 * @return array of setting links
-	 */
-	public function getSettingLinks() {
-		$moduleModel = $this->getModule();
-		$settingsLinks = array(
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_FIELDS',
-					'linkurl' => $moduleModel->getSettingsUrl('CustomFields'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_WORKFLOWS',
-					'linkurl' => $moduleModel->getSettingsUrl('EditWorkflows'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',
-					'linkurl' => $moduleModel->getSettingsUrl('PicklistEditor'),
-					'linkicon' => ''
-				)
-			);
-		return $settingsLinks;
-	}
-
-
 	/**
 	 * Function to get query to get List of records in the current page
 	 * @return <String> query
@@ -165,14 +135,23 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
         //To combine date and time fields for sorting 
         if($orderBy == 'date_start') {
             $orderBy = "str_to_date(concat(date_start,time_start),'%Y-%m-%d %H:%i:%s')";
         }else if($orderBy == 'due_date') {
             $orderBy = "str_to_date(concat(due_date,time_end),'%Y-%m-%d %H:%i:%s')";
         }
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
+			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);

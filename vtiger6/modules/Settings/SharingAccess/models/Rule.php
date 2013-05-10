@@ -203,7 +203,61 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 	public function getDeleteActionUrl() {
 		return '?module=SharingAccess&parent=Settings&action=IndexAjax&mode=deleteRule&for_module='.$this->getModule()->getId().'&record='.$this->getId();
 	}
-
+	
+	/**
+	 * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
+	 * @return DetailViewUrl
+	 */
+	public function getSourceDetailViewUrl() {
+		$sourceMember = $this->getSourceMember()->getId();
+		$sourceMemberDetails = explode(':', $sourceMember);
+		
+		if($sourceMemberDetails[0] == 'Groups') {
+			return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$sourceMemberDetails[1];
+		} else if($sourceMemberDetails[0] == 'Roles') {
+			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
+		} else if($sourceMemberDetails[0] == 'RoleAndSubordinates') {
+			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$sourceMemberDetails[1];
+		}
+	}
+	
+	/**
+	 * Function to get the detailViewUrl for the rule member in Sharing Access Custom Rules
+	 * @return DetailViewUrl
+	 */
+	public function getTargetDetailViewUrl() {
+		$targetMember = $this->getTargetMember()->getId();
+		$targetMemberDetails = explode(':', $targetMember);
+		
+		if($targetMemberDetails[0] == 'Groups'){
+			return 'index.php?parent=Settings&module=Groups&view=Detail&record='.$targetMemberDetails[1];
+		} else if($targetMemberDetails[0] == 'Roles') {
+			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
+		} else if($targetMemberDetails[0] == 'RoleAndSubordinates') {
+			return 'index.php?parent=Settings&module=Roles&view=Edit&record='.$targetMemberDetails[1];
+		}
+	}
+	
+	/**
+	 * Function to get the Member Name from the Rule Model
+	 * @return Name of the rule Member
+	 */
+	public function getSourceMemberName() {
+		$sourceMember = $this->getSourceMember()->getId();
+		$sourceMemberDetails = explode(':', $sourceMember);
+		return $sourceMemberDetails[0];
+	}
+	
+	/**
+	 * Function to get the Member Name from the Rule Model
+	 * @return Name of the rule Member
+	 */
+	public function getTargetMemberName() {
+		$targetMember = $this->getTargetMember()->getId();
+		$targetMemberDetails = explode(':', $targetMember);
+		return $targetMemberDetails[0];
+	}
+	
 	/**
 	 * Function to get the list view actions for the record
 	 * @return <Array> - Associate array of Vtiger_Link_Model instances
@@ -277,6 +331,7 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		$sql = 'UPDATE vtiger_datashare_module_rel SET relationtype=? WHERE shareid=?';
 		$params = array($this->get('relationtype'), $ruleId);
 		$db->pquery($sql, $params);
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
 	}
 
 	public function delete() {
@@ -292,6 +347,7 @@ class Settings_SharingAccess_Rule_Model extends Vtiger_Base_Model {
 		$db->pquery("DELETE FROM $tableName WHERE shareid=?", array($ruleId));
 
 		$db->pquery('DELETE FROM vtiger_datashare_module_rel WHERE shareid=?', array($ruleId));
+        Settings_SharingAccess_Module_Model::recalculateSharingRules();
 	}
 
 	/**

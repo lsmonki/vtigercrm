@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Angebot'                     , 
 	'LBL_EXPORT_TO_PDF'            => 'Export als PDF'              , 
-	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Angebote'                    , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Quotes Summary'              , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , 
+	'LBL_ADD_RECORD'               => 'Add Quote'                   , 
+	'LBL_RECORDS_LIST'             => 'Angebote'                    , 
 	'LBL_QUOTE_INFORMATION'        => 'Angebot'                     , 
 	'Quote No'                     => 'Angebotsnr.'                 , 
 	'Quote Stage'                  => 'Angebotsstufe'               , 

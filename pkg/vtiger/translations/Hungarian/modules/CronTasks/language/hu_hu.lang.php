@@ -29,7 +29,6 @@ $mod_strings = array(
 	'LBL_HOURS' => 'órával ezelőtt',
 	'LBL_MINS' => 'Perc',
 	'LBL_RUNNING' => 'Működés alatt',
-	'LBL_MINIMUM_FREQUENCY' => 'Bármely időzített feladat ismétlési gyakorisága 15 percet meg kell, hogy haladja az Ondemand rendszerben',
 	'LBL_SECONDS' => 'másodperccel ezelőtt',
 	'LBL_MINUTES' => 'perccel ezelőtt',
 	'LBL_MONTHS' => 'hónappal ezelőtt',

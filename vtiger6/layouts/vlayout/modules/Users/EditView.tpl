@@ -23,32 +23,35 @@
 		{/if}
 		<div class="contentHeader row-fluid">
 		{assign var=SINGLE_MODULE_NAME value='Single_'|cat:$MODULE}
-			<span class="span8">
+			<span class="span6">
 		{if $RECORD_ID neq ''}
-			<span class="span8 font-x-x-large textOverflowEllipsis" title='{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"'>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</span>
+			<span class="span6 font-x-x-large" title='{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"'>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</span>
 		{else}
-			<span class="span8 font-x-x-large textOverflowEllipsis" title="{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
+			<span class="span6 font-x-x-large" title="{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
 		{/if}
 			</span>
-			<span class="span4">
+			<span class="span6">
 				<span class="pull-right" style="padding-right: 15px">
-					<div class='btn-group' title="{vtranslate('LBL_DISPLAY_TYPE', 'Vtiger')}" style="float:left">
-						<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
-							<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
-						</a>
-						<ul class='dropdown-menu pull-right' id='widthType'>
-							<li class="cursorPointer" data-class='wideWidthType' title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
-								<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
-							</li>
-							<li class="cursorPointer" data-class='mediumWidthType' title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
-								<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
-							</li>
-							<li class="cursorPointer" data-class='narrowWidthType' title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
-								<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
-							</li>
-						</ul>
-					</div>
-					&nbsp;&nbsp;<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
+					{if $IS_PREFERENCE && $RECORD_ID == $USER_MODEL->getId()}
+						<div class='btn-group' title="{vtranslate('LBL_DISPLAY_TYPE', 'Vtiger')}" style="float:left">
+							<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
+								<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
+							</a>
+							<ul class='dropdown-menu pull-right' id='widthType'>
+								<li class="cursorPointer" data-class='wideWidthType' title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
+									<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
+								</li>
+								<li class="cursorPointer" data-class='mediumWidthType' title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
+									<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
+								</li>
+								<li class="cursorPointer" data-class='narrowWidthType' title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
+									<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
+								</li>
+							</ul>
+						</div>
+						&nbsp;&nbsp;
+					{/if}
+					<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
 					<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 				</span>
 			</span>

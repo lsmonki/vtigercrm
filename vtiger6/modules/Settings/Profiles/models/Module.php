@@ -29,10 +29,8 @@ class Settings_Profiles_Module_Model extends Settings_Vtiger_Module_Model {
 	
 	const FIELD_READWRITE = 0;
 	const FIELD_READONLY = 1;
-
-	public function getName() {
-		return 'Profiles';
-	}
+	
+	var $name = 'Profiles';
 
 	/**
 	 * Function to get the url for default view of the module
@@ -46,7 +44,7 @@ class Settings_Profiles_Module_Model extends Settings_Vtiger_Module_Model {
 	 * Function to get the url for create view of the module
 	 * @return <string> - url
 	 */
-	public function getCreateViewUrl() {
+	public function getCreateRecordUrl() {
 		return 'index.php?module=Profiles&parent=Settings&view=Edit';
 	}
 }

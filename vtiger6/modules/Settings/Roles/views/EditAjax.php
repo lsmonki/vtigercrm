@@ -29,6 +29,7 @@ Class Settings_Roles_EditAjax_View extends Settings_Roles_IndexAjax_View {
 		$viewer->assign('ALL_PROFILES', Settings_Profiles_Record_Model::getAll());
 		$viewer->assign('RECORD_MODEL', $recordModel);
 		$viewer->assign('RECORD_ID', $record);
+		$viewer->assign('QUALIFIED_MODULE',$qualifiedModuleName);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 

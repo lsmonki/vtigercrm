@@ -18,7 +18,11 @@
 				<li>
 					<a data-id={$recordsModel->getId()} href="{$recordsModel->getDetailViewUrl()}">{substr(decode_html($recordsModel->getName()), 0, 20)}</a>
 				</li>
+				{foreachelse}
+					<li style="text-align:center">{vtranslate('LBL_NO_RECORDS', $MODULE)}
+					</li>
 				{/foreach}
+
 			</ul>
 		</div>
 	</div>

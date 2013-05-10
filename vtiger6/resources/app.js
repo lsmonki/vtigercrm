@@ -81,13 +81,53 @@ var app = {
 		return chosenSelectConainer;
 	},
 
+	/**
+	 * Function to destroy the chosen element and get back the basic select Element
+	 */
+	destroyChosenElement : function(parent) {
+		var selectElement = jQuery();
+		if(typeof parent == 'undefined') {
+			parent = jQuery('body');
+		}
+		
+		selectElement = jQuery('.chzn-select', parent);
+		//parent itself is the element
+		if(parent.is('select.chzn-select')) {
+			selectElement = parent;
+		}
+		
+		selectElement.css('display','block').removeClass("chzn-done").data("chosen", null).next().remove();
 
+		return selectElement;
+		
+	},
 	/**
 	 * Function which will show the select2 element for select boxes . This will use select2 library
 	 */
 	showSelect2ElementView : function(selectElement, params) {
 		if(typeof params == 'undefined') {
 			params = {};
+		}
+		
+		var data = selectElement.data();
+		if(data != null) {
+			params = jQuery.extend(data,params);
+		}
+		
+		// Sort DOM nodes alphabetically in select box.
+		if (typeof params['customSortOptGroup'] != 'undefined' && params['customSortOptGroup']) {
+			jQuery('optgroup', selectElement).each(function(){
+				var optgroup = jQuery(this);
+				var options  = optgroup.children().toArray().sort(function(a, b){
+					var aText = jQuery(a).text();
+					var bText = jQuery(b).text();
+					return aText < bText ? 1 : -1;
+				});
+				jQuery.each(options, function(i, v){
+					optgroup.prepend(v);
+				});
+			});
+			delete params['customSortOptGroup'];
 		}
 
 		//formatSelectionTooBig param is not defined even it has the maximumSelectionSize,
@@ -238,7 +278,13 @@ var app = {
 			jQuery.blockUI({
 					'message' : container,
 					'overlayCSS' : effectiveOverlayCss,
-					'css' : effectiveCss
+					'css' : effectiveCss,
+					
+					// disable if you want key and mouse events to be enable for content that is blocked (fix for select2 search box)
+					bindEvents: false,
+					
+					//Fix for overlay opacity issue in FF/Linux
+					applyPlatformOpacityRules : false
 				});
 			var unblockUi = function() {
 				app.hideModalWindow(unBlockCb);
@@ -266,6 +312,8 @@ var app = {
 
 			// TODO Make it better with jQuery.on
 			app.changeSelectElementView(container);
+            //register all select2 Elements
+            app.showSelect2ElementView(container.find('select.select2'));
 			//register date fields event to show mini calendar on click of element
 			app.registerEventForDatePickerFields(container);
 			cb(container);
@@ -323,7 +371,8 @@ var app = {
 		promptPosition: 'topLeft',
 		//to support validation for chosen select box
 		prettySelect : true,
-		useSuffix: "_chzn"
+		useSuffix: "_chzn",
+        usePrefix : "s2id_"
 	},
 
 	/**
@@ -543,6 +592,24 @@ var app = {
 	},
 
 	/**
+	 * Function to destroy time fields
+	 */
+	destroyTimeFields : function(container) {
+		
+		if(typeof cotainer == 'undefined') {
+			container = jQuery('body');
+		}
+		
+		if(container.hasClass('timepicker-default')) {
+			var element = container;
+		}else{
+			var element = container.find('.timepicker-default');
+		}
+		element.data('timepicker-list',null);
+		return container;
+	},
+	
+	/**
 	 * Function to get the chosen element from the raw select element
 	 * @params: select element
 	 * @return : chosenElement - corresponding chosen element
@@ -618,6 +685,23 @@ var app = {
 		}
 
 		return element.slimScroll(options);
+	},
+	
+	showHorizontalScrollBar : function(element, options) {
+		if(typeof options == 'undefined') {
+			options = {};
+		}
+		var params = {
+			horizontalScroll: true,
+			theme: "dark-thick",
+			advanced: {
+				autoExpandHorizontalScroll:true
+			}
+		}
+		if(typeof options != 'undefined'){
+			var params = jQuery.extend(params,options);
+		}
+		return element.mCustomScrollbar(params);
 	},
 
 	/**
@@ -701,6 +785,10 @@ var app = {
 		element.css("position","absolute");
 		element.css("top", ((jQuery(window).height() - element.outerHeight()) / 2) + jQuery(window).scrollTop() + "px");
 		element.css("left", ((jQuery(window).width() - element.outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
+	},
+	
+	getvalidationEngineOptions : function(select2Status){
+		return app.validationEngineOptions;
 	}
 }
 
@@ -710,12 +798,11 @@ jQuery(document).ready(function(){
 	//register all select2 Elements
 	app.showSelect2ElementView(jQuery('body').find('select.select2'));
 
-	app.setInheritWidth(jQuery('.inheritWidth'));
+	
 	app.setContentsHeight();
 
 	jQuery(window).resize(function(){
-		//on resize caliculate the width
-		app.setInheritWidth(jQuery('.inheritWidth'));
+		
 		app.setContentsHeight();
 	})
 

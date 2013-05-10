@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Satış Siparişi'           , 
 	'LBL_EXPORT_TO_PDF'            => 'PDF Olarak Aktar'            , 
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Satış Sipariş Listesi'    , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Sales Order Summary'         , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Satış Sipariş Listesi'    , 
 	'LBL_SO_INFORMATION'           => 'Satış Siparişi Bilgileri' , 
 	'SalesOrder No'                => 'Satış Siparişi No'        , 
 	'Quote Name'                   => 'Teklif Adı'                 , 
@@ -30,8 +30,8 @@ $languageStrings = array(
 	'Payment Duration'             => 'Ödeme Süresi'              , 
 	'Invoice Status'               => 'Fatura Durumu'               , 
 	'Sub Total'                    => 'Ara Toplam'                  , 
-	'AutoCreated'                  => 'AutoCreated'                 , // TODO: Review
-	'Sent'                         => 'Sent'                        , // TODO: Review
-	'Credit Invoice'               => 'Credit Invoice'              , // TODO: Review
-	'Paid'                         => 'Paid'                        , // TODO: Review
+	'AutoCreated'                  => 'AutoCreated'                 , 
+	'Sent'                         => 'Sent'                        , 
+	'Credit Invoice'               => 'Credit Invoice'              , 
+	'Paid'                         => 'Paid'                        , 
 );

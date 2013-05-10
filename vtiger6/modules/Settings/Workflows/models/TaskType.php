@@ -22,11 +22,19 @@ class Settings_Workflows_TaskType_Model extends Vtiger_Base_Model {
 	public function getName() {
 		return $this->get('tasktypename');
 	}
+	
+	public function getLabel() {
+		return $this->get('label');
+	}
 
 	public function getTemplatePath() {
-		$templatePath = $this->get('templatepath');
 		// TODO - Do required template path transformation once the new template files are created, till the database is updated with new path
+		$templatePath = vtemplate_path('Tasks/'.$this->getName().'.tpl', 'Settings:Workflows');
 		return $templatePath;
+	}
+
+	public function getEditViewUrl() {
+		return '?module=Workflows&parent=Settings&view=EditTask&type='.$this->getName();
 	}
 
 	public static function getInstanceFromClassName($taskClass) {
@@ -53,6 +61,14 @@ class Settings_Workflows_TaskType_Model extends Vtiger_Base_Model {
 
 	public static function getInstanceFromTaskTypeObject($taskTypeObject) {
 		return new self($taskTypeObject->data);
+	}
+
+	public function getTaskBaseModule() {
+		$taskTypeName = $this->get('tasktypename');
+		switch($taskTypeName) {
+			case 'VTCreateTodoTask' : return Vtiger_Module_Model::getInstance('Calendar');
+			case 'VTCreateEventTask' : return Vtiger_Module_Model::getInstance('Events');
+		}
 	}
 
 }

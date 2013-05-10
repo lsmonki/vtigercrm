@@ -15,6 +15,6 @@
 <div class="bodyContents">
 	<div class="mainContainer row-fluid">
 		<div class="span2 row-fluid">
-			<div class="inheritWidth span2">{include file='SideBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+			<div class="row-fluid">{include file='SideBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
 		</div>
 		<div class="contentsDiv span10 marginLeftZero">

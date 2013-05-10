@@ -36,6 +36,7 @@ Class Settings_SharingAccess_IndexAjax_View extends Settings_Vtiger_IndexAjax_Vi
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('FOR_MODULE', $forModule);
 		$viewer->assign('RULE_MODEL_LIST', $ruleModelList);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 

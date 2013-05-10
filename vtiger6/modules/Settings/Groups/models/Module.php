@@ -16,10 +16,7 @@ class Settings_Groups_Module_Model extends Settings_Vtiger_Module_Model {
 	var $baseTable = 'vtiger_groups';
 	var $baseIndex = 'groupid';
 	var $listFields = array('groupname' => 'Name', 'description' => 'Description');
-
-	public function getName() {
-		return 'Groups';
-	}
+	var $name = 'Groups';
 
 	/**
 	 * Function to get the url for default view of the module
@@ -33,7 +30,7 @@ class Settings_Groups_Module_Model extends Settings_Vtiger_Module_Model {
 	 * Function to get the url for create view of the module
 	 * @return <string> - url
 	 */
-	public function getCreateViewUrl() {
+	public function getCreateRecordUrl() {
 		return 'index.php?module=Groups&parent=Settings&view=Edit';
 	}
 }

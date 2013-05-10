@@ -14,12 +14,14 @@ class Leads_Edit_View extends Vtiger_Edit_View {
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
-
-		if (!empty($recordId)) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
-		} else {
-			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
-		}
+        $recordModel = $this->record;
+        if(!$recordModel){
+            if (!empty($recordId)) {
+                $recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
+            } else {
+                $recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+            }
+        }
 
 		$viewer = $this->getViewer($request);
 

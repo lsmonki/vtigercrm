@@ -10,9 +10,9 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Sales Order'                 , 
 	'LBL_EXPORT_TO_PDF'            => 'Export als PDF'              , 
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Verkäufe'                   , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Sales Order Summary'         , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , 
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Verkäufe'                   , 
 	'LBL_SO_INFORMATION'           => 'Verkauf'                     , 
 	'SalesOrder No'                => 'Verkaufsbestellung Nr.'      , 
 	'Quote Name'                   => 'Angebot'                     , 

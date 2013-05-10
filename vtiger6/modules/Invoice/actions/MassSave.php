@@ -13,6 +13,7 @@ class Invoice_MassSave_Action extends Inventory_MassSave_Action {
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordModels = $this->getRecordModelsFromRequest($request);
+
 		foreach($recordModels as $recordId => $recordModel) {
 			if(Users_Privileges_Model::isPermitted($moduleName, 'Save', $recordId)) {
 				//Inventory line items getting wiped out

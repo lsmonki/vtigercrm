@@ -10,11 +10,12 @@
 require_once 'include/fields/DateTimeField.php';
 require_once 'modules/WSAPP/SyncServer.php';
 require_once 'modules/WSAPP/Handlers/SyncHandler.php';
+require_once 'modules/WSAPP/OutlookSyncServer.php';
 
 Class OutlookHandler extends SyncHandler {
 
     public function __construct($appkey){
-        $this->syncServer = new SyncServer();
+        $this->syncServer = new OutlookSyncServer();
         $this->key = $appkey;
     }
 

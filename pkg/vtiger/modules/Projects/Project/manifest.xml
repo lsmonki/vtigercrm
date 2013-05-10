@@ -4,7 +4,7 @@
 <name>Project</name>
 <label>Project</label>
 <parent>Support</parent>
-<version>3.1</version>
+<version>3.2</version>
 <dependencies>
 <vtiger_version>5.2.0</vtiger_version>
 </dependencies>
@@ -543,7 +543,7 @@
 </relatedlist>
 <relatedlist>
 <function>get_related_list</function>
-<label>Trouble Tickets</label>
+<label>HelpDesk</label>
 <sequence>5</sequence>
 <presence>0</presence>
 <actions>

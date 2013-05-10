@@ -27,4 +27,16 @@ class Products_Detail_View extends Vtiger_Detail_View {
 	public function showModuleBasicView(Vtiger_Request $request) {
 		return $this->showModuleDetailView($request);
 	}
+
+	public function getHeaderScripts(Vtiger_Request $request) {
+		$headerScriptInstances = parent::getHeaderScripts($request);
+
+		$jsFileNames = array(
+			'~libraries/jquery/jquery.cycle.min.js'
+		);
+
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+		return $headerScriptInstances;
+	}
 }

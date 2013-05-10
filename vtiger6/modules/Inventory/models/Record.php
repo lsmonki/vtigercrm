@@ -139,8 +139,8 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 		foreach ($fieldMappingList as $fieldMapping) {
 			$parentField = $fieldMapping['parentField'];
 			$inventoryField = $fieldMapping['inventoryField'];
-
-			if ($userModel->hasFieldReadAccess($moduleName, $parentField)) {
+            $fieldModel = Vtiger_Field_Model::getInstance($parentField,  Vtiger_Module_Model::getInstance($moduleName));
+			if ($fieldModel->getPermissions()) {
 				$data[$inventoryField] = $parentRecordModel->get($parentField);
 			} else {
 				$data[$inventoryField] = $fieldMapping['defaultValue'];
@@ -195,8 +195,9 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
         $controller = new Vtiger_InvoicePDFController($moduleName);
         $controller->loadRecord($recordId);
 
-        $invoice_no = getModuleSequenceNumber($moduleName,$recordId);
-        $filePath="storage/Invoice_".$invoice_no.".pdf";
+        $sequenceNo = getModuleSequenceNumber($moduleName,$recordId);
+		$translatedName = vtranslate($moduleName, $moduleName);
+        $filePath = "storage/$translatedName"."_".$sequenceNo.".pdf";
         //added file name to make it work in IE, also forces the download giving the user the option to save
         $controller->Output($filePath,'F');
         return $filePath;

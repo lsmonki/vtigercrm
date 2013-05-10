@@ -7,69 +7,80 @@
  * All Rights Reserved.
  *************************************************************************************}
 {strip}
-<div class="container-fluid">
-	<div class="titleBar row-fluid">
-		<div class="span8">
-			<h3 class="title">{vtranslate($MODULE, $QUALIFIED_MODULE)}</h3>
-			<p>&nbsp;</p>
-		</div>
-		<div class="span4">
-			<div class="pull-right">
-				<div class="btn-toolbar">
-					<span class="btn-group">
-						<a class="btn btn-mini vtButton" href="javascript:window.history.back();">Back ...</a>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	
+<div class="editViewContainer">
 	<form name="EditGroup" action="index.php" method="post" id="EditView" class="form-horizontal">
 		<input type="hidden" name="module" value="Groups">
 		<input type="hidden" name="action" value="Save">
 		<input type="hidden" name="parent" value="Settings">
 		<input type="hidden" name="record" value="{$RECORD_MODEL->getId()}">
 		<input type="hidden" name="mode" value="{$MODE}">
-
-		<table class="table table-striped table-bordered table-condensed">
-			<tbody>
-				<tr class="listViewActionsDiv">
-					<th colspan="2">{vtranslate('LBL_NEW_GROUP', $QUALIFIED_MODULE)}</th>
-				</tr>
-				<tr>
-					<td class="fieldLabel">Name <span class="redColor">*</span></td>
-					<td class="fieldValue">
-						<input class="input-large" required="true" name="groupname" value="{$RECORD_MODEL->getName()}">
-					</td>
-				</tr>
-				<tr>
-					<td class="fieldLabel">{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}</td>
-					<td class="fieldValue">
-						<textarea name="description" id="description">{$RECORD_MODEL->getDescription()}</textarea>
-					</td>
-				</tr>
-				<tr>
-					<td class="fieldLabel">{vtranslate('LBL_MEMBERS', $QUALIFIED_MODULE)}</td>
-					<td class="fieldValue">
+		
+		<div class="contentHeader row-fluid">
+			<span class="settingsHeader"> 
+				{if !empty($MODE)}
+					{vtranslate('LBL_EDITING', $QUALIFIED_MODULE)} {vtranslate('SINGLE_'|cat:$MODULE, $QUALIFIED_MODULE)} - {$RECORD_MODEL->getName()}
+				{else}
+					{vtranslate('LBL_CREATING_NEW', $QUALIFIED_MODULE)} {vtranslate('SINGLE_'|cat:$MODULE, $QUALIFIED_MODULE)}
+				{/if}
+			</span><hr>
+		</div>
+		<div class="control-group">
+			<span class="control-label">
+				{vtranslate('LBL_GROUP_NAME', $QUALIFIED_MODULE)} <span class="redColor">*</span>
+			</span>
+			<div class="controls">
+				<input class="input-large" name="groupname" value="{$RECORD_MODEL->getName()}" data-validation-engine="validate[required]">
+			</div>
+		</div>
+		<div class="control-group">
+			<span class="control-label">
+				{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}
+			</span>
+			<div class="controls">
+				<input class="input-large" name="description" id="description" value="{$RECORD_MODEL->getDescription()}" />
+			</div>
+		</div>
+		<div class="control-group">
+			<span class="control-label">
+				{vtranslate('LBL_GROUP_MEMBERS', $QUALIFIED_MODULE)}
+			</span>
+			<div class="controls">
+				<div class="row-fluid">
+					<span class="span6">
 						{assign var="GROUP_MEMBERS" value=$RECORD_MODEL->getMembers()}
-
-						<select id="memberList" class="chzn-select row-fluid members" multiple="true" name="members[]" required="true" data-placeholder="Choose Members...">
+						<select id="memberList" class="row-fluid members" multiple="true" name="members[]" data-placeholder="{vtranslate('LBL_ADD_USERS_ROLES', $QUALIFIED_MODULE)}" data-validation-engine="validate[required]">
 							{foreach from=$MEMBER_GROUPS key=GROUP_LABEL item=ALL_GROUP_MEMBERS}
 								<optgroup label="{$GROUP_LABEL}">
 								{foreach from=$ALL_GROUP_MEMBERS item=MEMBER}
-									<option value="{$MEMBER->getId()}"  data-member-type="{$GROUP_LABEL}" {if isset($GROUP_MEMBERS[$GROUP_LABEL][$MEMBER->getId()])}selected="true"{/if}>{$MEMBER->getName()}</option>
+									{if $MEMBER->getName() neq $RECORD_MODEL->getName()}
+										<option value="{$MEMBER->getId()}"  data-member-type="{$GROUP_LABEL}" {if isset($GROUP_MEMBERS[$GROUP_LABEL][$MEMBER->getId()])}selected="true"{/if}>{$MEMBER->getName()}</option>
+									{/if}
 								{/foreach}
 								</optgroup>
 							{/foreach}
 						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="form-actions">
-			<button class="vtButton saveButton" type="submit">{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</button>
-			<a class="cancelLink" type="reset" onclick="window.history.back();">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)} </a>
+					</span>
+					<span class="span6">
+						<span class="pull-right groupMembersColors">
+							<ul class="liStyleNone">
+								<li class="Users padding5per textAlignCenter"><strong>{vtranslate('LBL_USERS', $QUALIFIED_MODULE)}</strong></li>
+								<li class="Groups padding5per textAlignCenter"><strong>{vtranslate('LBL_GROUPS', $QUALIFIED_MODULE)}</strong></li>
+								<li class="Roles padding5per textAlignCenter"><strong>{vtranslate('LBL_ROLES', $QUALIFIED_MODULE)}</strong></li>
+								<li class="RoleAndSubordinates padding5per textAlignCenter"><strong>{vtranslate('LBL_ROLEANDSUBORDINATE', $QUALIFIED_MODULE)}</strong></li>
+							</ul>
+						</span>
+					</span>
+				</div>
+			</div>
 		</div>
+			<div class="row-fluid">
+				<div class="span5">
+					<span class="pull-right">
+						<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
+						<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
+					</span>
+				</div>
+			</div>
 	</form>
 </div>
 {/strip}

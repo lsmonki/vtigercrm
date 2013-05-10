@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ALVT'                         => 'Top Conturi'                 , // KEY 5.x: Top Accounts
-	'PLVT'                         => 'Top Potentiale'              , // KEY 5.x: Top Potentials
-	'QLTQ'                         => 'Top Oferte'                  , // KEY 5.x: Top Quotes
-	'CVLVT'                        => 'Indicatori Cheie'            , // KEY 5.x: Key Metrics
-	'HLT'                          => 'Top Support Tickets'         , // TODO: Review
-	'GRT'                          => 'Alocarile Grupului meu'      , // KEY 5.x: My Group Allocation
-	'OLTSO'                        => 'Top Comenzi Vanzare'         , // KEY 5.x: Top Sales Orders
-	'ILTI'                         => 'Top Facturi'                 , // KEY 5.x: Top Invoices
-	'HDB'                          => 'Index Tablou de Bord'        , // KEY 5.x: Home Page Dashboard
-	'OLTPO'                        => 'Top Comenzi Cumparare'       , // KEY 5.x: Top Purchase Orders
-	'LTFAQ'                        => 'FAQ Recente'                 , // KEY 5.x: My Recent FAQs
-	'UA'                           => 'Activitati viitoare'         , // KEY 5.x: LBL_UPCOMING_EVENTS
-	'PA'                           => 'Activitati in asteptare'     , // KEY 5.x: LBL_PENDING_EVENTS
+	'ALVT'                         => 'Top Conturi'                 , 
+	'PLVT'                         => 'Top Potentiale'              , 
+	'QLTQ'                         => 'Top Oferte'                  , 
+	'CVLVT'                        => 'Indicatori Cheie'            , 
+	'HLT'                          => 'Top Support Tickets'         , 
+	'GRT'                          => 'Alocarile Grupului meu'      , 
+	'OLTSO'                        => 'Top Comenzi Vanzare'         , 
+	'ILTI'                         => 'Top Facturi'                 , 
+	'HDB'                          => 'Index Tablou de Bord'        , 
+	'OLTPO'                        => 'Top Comenzi Cumparare'       , 
+	'LTFAQ'                        => 'FAQ Recente'                 , 
+	'UA'                           => 'Activitati viitoare'         , 
+	'PA'                           => 'Activitati in asteptare'     , 
 );

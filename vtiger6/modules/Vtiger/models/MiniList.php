@@ -112,6 +112,7 @@ class Vtiger_MiniList_Model extends Vtiger_Widget_Model {
 			$db = PearDatabase::getInstance();
 
 			$query = $this->queryGenerator->getQuery();
+			$query .= ' ORDER BY vtiger_crmentity.modifiedtime DESC ';
 			$query .= ' LIMIT 0,' . $this->getRecordLimit();
 			$query = str_replace(" FROM ", ",vtiger_crmentity.crmid as id FROM ", $query);
 			

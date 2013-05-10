@@ -13,7 +13,7 @@
 <form class="modal-backdrop" style="margin:0;" action="?module=Users&action=Login" method="POST">
 	<div class="modal">
 		<div class="modal-header">
-			<h3>vtiger CRM <small>please enter your credentials</small></h3>
+			<h3>vtigerCRM 6 <small>please enter your credentials</small></h3>
 		</div>
 		<div class="modal-body">
 			{if isset($smarty.request.error)}

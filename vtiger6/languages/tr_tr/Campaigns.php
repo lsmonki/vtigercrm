@@ -10,9 +10,8 @@
 $languageStrings = array(
 	'Campaigns'                    => 'Kampanyalar'                 , 
 	'SINGLE_Campaigns'             => 'Kampanya'                    , 
-	'LBL_ADD_RECORD'               => 'Add Campaign'                , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Campaigns List'              , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Campaigns Summary'           , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Campaign'                , 
+	'LBL_RECORDS_LIST'             => 'Campaigns List'              , 
 	'LBL_CAMPAIGN_INFORMATION'     => 'Kampanya Bilgisi'            , 
 	'LBL_EXPECTATIONS_AND_ACTUALS' => 'Beklenen ve Gerçekleşen'   , 
 	'Campaign Name'                => 'Kampanya Adı'               , 
@@ -49,8 +48,8 @@ $languageStrings = array(
 	'Good'                         => 'İyi'                        , 
 	'Average'                      => 'Ortalama'                    , 
 	'Poor'                         => 'Kötü'                      , 
-	'--None--'                     => '--Yok--'                     , // KEY 5.x: LBL_NONE
-	'Contacted - Successful'       => 'Contacted - Successful'      , // TODO: Review
-	'Contacted - Unsuccessful'     => 'Contacted - Unsuccessful'    , // TODO: Review
-	'Contacted - Never Contact Again' => 'Contacted - Never Contact Again', // TODO: Review
+	'--None--'                     => '--Yok--'                     , 
+	'Contacted - Successful'       => 'Contacted - Successful'      , 
+	'Contacted - Unsuccessful'     => 'Contacted - Unsuccessful'    , 
+	'Contacted - Never Contact Again' => 'Contacted - Never Contact Again', 
 );

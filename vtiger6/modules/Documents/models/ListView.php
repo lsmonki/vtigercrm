@@ -55,20 +55,7 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		if($currentUserModel->isAdminUser()) {
-			$settingsLinks = array(
-					array(
-							'linktype' => 'LISTVIEWSETTING',
-							'linklabel' => 'LBL_EDIT_FIELDS',
-							'linkurl' => $moduleModel->getSettingsUrl('LayoutEditor'),
-							'linkicon' => ''
-					),
-					array(
-							'linktype' => 'LISTVIEWSETTING',
-							'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',
-							'linkurl' => $moduleModel->getSettingsUrl('PicklistEditor'),
-							'linkicon' => ''
-					)
-			);
+			$settingsLinks = $this->getSettingLinks();
 			foreach($settingsLinks as $settingsLink) {
 				$links['LISTVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
 			}

@@ -9,9 +9,8 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_Project'               => 'Project'                     , 
-	'LBL_ADD_RECORD'               => 'Add Project'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Projects List'               , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Projects Summary'            , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Project'                 , 
+	'LBL_RECORDS_LIST'             => 'Projects List'               , 
 	'LBL_PROJECT_INFORMATION'      => 'Project Information'         , 
 	'Project Name'                 => 'Project Name'                , 
 	'Start Date'                   => 'Start Date'                  , 
@@ -21,9 +20,17 @@ $languageStrings = array(
 	'Target Budget'                => 'Target budget'               , 
 	'Project Url'                  => 'URL'                         , 
 	'Progress'                     => 'Progress'                    , 
-	'LBL_TASKS_OPEN'               => 'Tasks Open'                  , // TODO: Review
-	'LBL_TASKS_DUE'                => 'Tasks Due'                   , // TODO: Review
-	'LBL_TASKS_COMPLETED'          => 'Tasks Completed'             , // TODO: Review
-	'LBL_PEOPLE'                   => 'People'                      , // TODO: Review
-	'LBL_CHARTS'                   => 'Charts'                      , // KEY 5.x: Charts
+	'LBL_TASKS_OPEN'               => 'Tasks Open'                  , 
+	'LBL_TASKS_DUE'                => 'Tasks Due'                   , 
+	'LBL_TASKS_COMPLETED'          => 'Tasks Completed'             , 
+	'LBL_PEOPLE'                   => 'People'                      , 
+	'LBL_CHARTS'                   => 'Charts'                      , 
+	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
+	'LBL_MILESTONES'               => 'Milestones'                  , // TODO: Review
+	'LBL_TASKS'                    => 'Tasks'                       , // TODO: Review
+	'LBL_STATUS_IS'                => 'Status is'                   , // TODO: Review
+	'LBL_STATUS'                   => 'Status'                      , // TODO: Review
+	'LBL_TICKET_PRIORITY'          => 'Priority'                    , // TODO: Review
+	'LBL_MORE'                     => 'more'                        , // TODO: Review
+	'LBL_DOWNLOAD_FILE'            => 'Download File'               , // TODO: Review
 );

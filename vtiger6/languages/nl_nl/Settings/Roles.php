@@ -6,18 +6,22 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/Settings/Roles.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
-	'Roles'                        => 'Rollen'                      , // KEY 5.x: LBL_ROLES
-	'SINGLE_Roles'                 => 'Rol'                         , // KEY 5.x: LBL_LIST_CONTACT_ROLE
-	'LBL_ADD_RECORD'               => 'Rol toevoegen'               , // KEY 5.x: LBL_ADD_ROLE
+	'Roles'                        => 'Rollen'                      , 
+	'SINGLE_Roles'                 => 'Rol'                         , 
+	'LBL_ADD_RECORD'               => 'Rol toevoegen'               , 
+	'LBL_DELETE_ROLE'              => 'Delete Role'                 , // TODO: Review
+	'LBL_TRANSFER_OWNERSHIP'       => 'Transfer Ownership'          , // TODO: Review
+	'LBL_TO_OTHER_ROLE'            => 'To other Role'               , // TODO: Review
+	'LBL_CLICK_TO_EDIT_OR_DRAG_TO_MOVE' => 'Click to edit/Drag to move'  , // TODO: Review
+	'LBL_ASSIGN_ROLE'              => 'Assign Role'                 , // TODO: Review
+	'LBL_CHOOSE_PROFILES'          => 'Choose profiles'             , // TODO: Review
+	'LBL_COPY_PRIVILEGES_FROM'     => 'Copy privileges from'        , // TODO: Review
+	'LBL_PROFILE'                  => 'Profile'                     , // TODO: Review
+	'LBL_REPORTS_TO'               => 'Reports To'                  , // TODO: Review
+	'LBL_NAME'                     => 'Name'                        , // TODO: Review
+	'LBL_ASSIGN_NEW_PRIVILEGES'    => 'Assign privileges directly to Role', // TODO: Review
+	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Assign priviliges from existing profiles', // TODO: Review
+	'LBL_PRIVILEGES'               => 'Privileges'                  , // TODO: Review
 );

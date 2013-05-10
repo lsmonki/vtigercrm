@@ -12,11 +12,38 @@ $languageStrings = array(
 	'Profiles' => 'Profiles',
 	'SINGLE_Profiles' => 'Profile',
 	'LBL_ADD_RECORD' => 'Add Profile',
+	'LBL_CREATE_PROFILE' => 'Create Profile',
+	'LBL_PROFILE_NAME' => 'Profile name',
+	'LBL_DESCRIPTION' => 'Description',
+	'LBL_EDIT_PRIVILIGES_FOR_THIS_PROFILE' => 'Edit priviliges for this profile',
+	'LBL_MODULES' => 'Modules',
+	'LBL_PROFILE_VIEW' => 'Profile view',
+	'LBL_FIELDS' => 'Fields',
+	'LBL_TOOLS' => 'Tools',
+	'LBL_FIELD_AND_TOOL_PRVILIGES' => 'Field and Tool Privileges',
+	'LBL_EDIT_RECORD' => 'Edit',
+	'LBL_DUPLICATE_RECORD' => 'Duplicate',
+	'LBL_DELETE_RECORD' => 'Delete',
 	
 	'LBL_VIEW_PRVILIGE' => 'View',
 	'LBL_EDIT_PRVILIGE' => 'Create/Edit',
 	'LBL_DELETE_PRVILIGE' => 'Delete',
-	'LBL_FIELD_PRVILIGES' => 'Field Privileges',
-	'LBL_TOOL_PRVILIGES' => 'Tool Privileges',
+	'LBL_INIVISIBLE' => 'Invisible',
+	'LBL_READ_ONLY' => 'Read only',
+	'LBL_WRITE' => 'Write',
 	
+	'LBL_DELETE_PROFILE' => 'Delete Profile',
+	'LBL_TRANSFER_ROLES_TO_PROFILE' => 'Transfer roles to profile',
+	'LBL_PROFILES' => 'Profiles',
+	'LBL_CHOOSE_PROFILES' => 'Choose Profiles',
+    
+    'LBL_VIEW_ALL' => 'View All',
+    'LBL_EDIT_ALL' => 'Edit All',
+    'LBL_VIEW_ALL_DESC' => 'Can view all the modules information',
+    'LBL_EDIT_ALL_DESC' => 'Can edit all the modules information'
+	
+);
+
+$jsLanguageStrings = array(
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Profile deleted successfully',
 );

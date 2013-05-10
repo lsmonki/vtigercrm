@@ -24,7 +24,7 @@
     <div class="bodyContents">
         <div class="mainContainer row-fluid">
             <div class="span2 row-fluid">
-                <div>{include file='NavigationBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+				<div>{include file='Sidebar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
             </div>
     		<div class="contentsDiv span10 marginLeftZero">
 {/if}

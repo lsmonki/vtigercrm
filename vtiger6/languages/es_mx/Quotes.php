@@ -6,14 +6,13 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_Quotes'                => 'Cotización'                 , 
 	'LBL_EXPORT_TO_PDF'            => 'Exportar a PDF'              , 
-	'LBL_ADD_RECORD'               => 'Agregar Cotización'                   , 
-	'LBL_RECORDS_LIST'             => 'Lista de Cotizaciones'       , // KEY 5.x: LBL_LIST_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Resumen de cotizaciones'              , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Agregar Cotización'         , 
+	'LBL_RECORDS_LIST'             => 'Lista de Cotizaciones'       , 
 	'LBL_QUOTE_INFORMATION'        => 'Información de la Cotización', 
 	'Quote No'                     => 'No Cotización'              , 
 	'Quote Stage'                  => 'Estado de la Cotización'    , 

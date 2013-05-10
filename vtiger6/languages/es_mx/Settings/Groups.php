@@ -6,9 +6,19 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transferir propietario'          ,
-	'LBL_TO_OTHER_GROUP'           => 'A otro grupo '             ,
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Transferir propietario'      , 
+	'SINGLE_Groups'                => 'Group'                       , // TODO: Review
+	'LBL_TO_OTHER_GROUP'           => 'A otro grupo '               , 
+	'LBL_ADD_RECORD'               => 'Add Group'                   , // TODO: Review
+	'LBL_GROUP_NAME'               => 'Group Name'                  , // TODO: Review
+	'LBL_GROUP_MEMBERS'            => 'Group Members'               , // TODO: Review
+	'LBL_ADD_USERS_ROLES'          => 'Add Users, Roles...'         , // TODO: Review
+	'LBL_ROLEANDSUBORDINATE'       => 'Role and Subordinates'       , // TODO: Review
+	'RoleAndSubordinates'          => 'Role and Subordinates'       , // TODO: Review
+);
+$jsLanguageStrings = array(
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully'  , // TODO: Review
 );

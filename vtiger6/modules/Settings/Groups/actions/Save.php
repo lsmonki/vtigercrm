@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Settings_Groups_Save_Action extends Vtiger_Action_Controller {
+class Settings_Groups_Save_Action extends Settings_Vtiger_Index_Action {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
@@ -28,7 +28,7 @@ class Settings_Groups_Save_Action extends Vtiger_Action_Controller {
 			$recordModel->save();
 		}
 
-		$redirectUrl = $moduleModel->getDefaultUrl();
+		$redirectUrl = $recordModel->getDetailViewUrl();
 		header("Location: $redirectUrl");
 	}
 }

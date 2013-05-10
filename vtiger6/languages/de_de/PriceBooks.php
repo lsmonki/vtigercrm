@@ -10,11 +10,10 @@
 $languageStrings = array(
 	'PriceBooks'                   => 'Preislisten'                 , 
 	'SINGLE_PriceBooks'            => 'Preisliste'                  , 
-	'LBL_ADD_RECORD'               => 'Add Price Book'              , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Price Books List'            , // TODO: Review
-	'LBL_RECORD_SUMMARY'           => 'Price Books Summary'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Price Book'              , 
+	'LBL_RECORDS_LIST'             => 'Price Books List'            , 
 	'LBL_PRICEBOOK_INFORMATION'    => 'Preislisteninformation:'     , 
-	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , // TODO: Review
+	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , 
 	'Price Book Name'              => 'Preislistenname'             , 
 	'PriceBook No'                 => 'Preislisten Nummer'          , 
 );

@@ -238,6 +238,64 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
             });
 	},
 
+	/**
+	 * Function is used to limit the calculation for line item fields and inventory module fields.
+	 * only one of these fields can be used at a time
+	 */
+	registerLineItemCalculationLimit : function() {
+		var thisInstance = this;
+		var primaryModule = jQuery('input[name="primary_module"]').val();
+		var inventoryModules = ['Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder'];
+		if(jQuery.inArray(primaryModule, inventoryModules) !== -1) {
+			jQuery('.CalculationFields').on('change', 'input[type="checkbox"]', function(e) {
+				var element = jQuery(e.currentTarget);
+				var value = element.val();
+				var reg = new RegExp(/cb:vtiger_inventoryproductrel*/);
+				var attr = element.is(':checked');
+				var moduleCalculationFields = jQuery('.CalculationFields input[type="checkbox"]').not('[value^="cb:vtiger_inventoryproductrel"]');
+				var lineItemCalculationFields = jQuery('.CalculationFields').find('[value^="cb:vtiger_inventoryproductrel"]');
+				if(reg.test(value)) {	// line item field selected
+					if(attr) {	// disable all the other checkboxes
+						moduleCalculationFields.attr('checked',false).attr('disabled',true);
+					} else {
+						var otherLineItemFieldsCheckedLength = lineItemCalculationFields.filter(':checked').length;
+						if(otherLineItemFieldsCheckedLength == 0) moduleCalculationFields.attr('disabled',false);
+						else moduleCalculationFields.attr('checked',false).attr('disabled',true);
+					}
+				} else {		// some other field is selected
+					if(attr) {
+						lineItemCalculationFields.attr('checked',false).attr('disabled',true)
+					} else {
+						var moduleCalculationFieldLength = moduleCalculationFields.filter(':checked').length
+						if(moduleCalculationFieldLength == 0) lineItemCalculationFields.attr('disabled', false);
+						else lineItemCalculationFields.attr('disabled', true).attr('checked',false);
+					}
+				}
+				thisInstance.displayLineItemFieldLimitationMessage();
+			});
+		}
+	},
+	displayLineItemFieldLimitationMessage : function() {
+		var message = app.vtranslate('JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION');
+		if(jQuery('#calculationLimitationMessage').length == 0) {
+			jQuery('.CalculationFields').parent().append('<div id="calculationLimitationMessage" style="position:relative;top:-18px" class="pull-right alert-info">'+message+'</div>');
+		} else {
+			jQuery('#calculationLimitationMessage').html(message);
+		}
+	},
+
+	registerLineItemCalculationLimitOnLoad : function() {
+		var moduleCalculationFields = jQuery('.CalculationFields input[type="checkbox"]').not('[value^="cb:vtiger_inventoryproductrel"]');
+		var lineItemFields = jQuery('.CalculationFields').find('[value^="cb:vtiger_inventoryproductrel"]');
+		if(moduleCalculationFields.filter(':checked').length != 0) {
+			lineItemFields.attr('checked', false).attr('disabled', true);
+			this.displayLineItemFieldLimitationMessage();
+		} else if(lineItemFields.filter(':checked').length != 0) {
+			moduleCalculationFields.attr('checked', false).attr('disabled', true);
+			this.displayLineItemFieldLimitationMessage();
+		}
+	},
+
 	registerEvents : function(){
 		var container = this.getContainer();
 		//If the container is reloading, containers cache should be reset
@@ -246,6 +304,8 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 		this.registerSelect2ElementForReportColumns();
 		this.arrangeSelectChoicesInOrder();
 		this.makeColumnListSortable();
+		this.registerLineItemCalculationLimit();
+		this.registerLineItemCalculationLimitOnLoad();
 		app.changeSelectElementView(container);
 		container.validationEngine({
 			// to prevent the page reload after the validation has completed

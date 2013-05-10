@@ -25,6 +25,7 @@ require_once('include/utils/RecurringType.php');
 require_once('include/utils/EmailTemplate.php');
 require_once 'include/QueryGenerator/QueryGenerator.php';
 require_once 'include/ListView/ListViewController.php';
+require_once 'vtiger6/includes/runtime/Cache.php';
 
 /**
  * Check if user id belongs to a system admin.
@@ -376,19 +377,17 @@ function getTabid($module) {
 		if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) {
 			include('tabdata.php');
 			$tabid = $tab_info_array[$module];
+		}
 
-			// Update information to cache for re-use
-			VTCacheUtils::updateTabidInfo($tabid, $module);
-		} else {
-			$log->info("module  is " . $module);
+		//If the module is disabled and tabdata file does not have the entry, then we have fetch it from db
+		if(empty($tabid)) {
 			global $adb;
 			$sql = "select tabid from vtiger_tab where name=?";
 			$result = $adb->pquery($sql, array($module));
 			$tabid = $adb->query_result($result, 0, "tabid");
-
-			// Update information to cache for re-use
-			VTCacheUtils::updateTabidInfo($tabid, $module);
 		}
+		// Update information to cache for re-use
+		VTCacheUtils::updateTabidInfo($tabid, $module);
 	}
 
 	$log->debug("Exiting getTabid method ...");
@@ -1633,7 +1632,7 @@ function create_tab_data_file() {
 	global $adb;
 	//$sql = "select * from vtiger_tab";
 	// vtlib customization: Disabling the tab item based on presence
-	$sql = "select * from vtiger_tab where presence in (0,2)";
+	$sql = "select * from vtiger_tab";
 	// END
 
 	$result = $adb->pquery($sql, array());
@@ -2236,16 +2235,20 @@ function getSingleFieldValue($tablename, $fieldname, $idname, $id) {
  * 	return string $announcement  - List of announments for the CRM users
  */
 function get_announcements() {
-	global $adb;
-	$sql = " select * from vtiger_announcement inner join vtiger_users on vtiger_announcement.creatorid=vtiger_users.id";
-	$sql.=" AND vtiger_users.is_admin='on' AND vtiger_users.status='Active' AND vtiger_users.deleted = 0";
-	$result = $adb->pquery($sql, array());
-	for ($i = 0; $i < $adb->num_rows($result); $i++) {
-		$announce = getUserFullName($adb->query_result($result, $i, 'creatorid')) . ' :  ' . $adb->query_result($result, $i, 'announcement') . '   ';
-		if ($adb->query_result($result, $i, 'announcement') != '')
-			$announcement.=$announce;
-	}
-
+	$announcement = Vtiger_Cache::get('vtiger', 'announcement');
+    if($announcement === false){
+        global $adb;
+        $sql = " select * from vtiger_announcement inner join vtiger_users on vtiger_announcement.creatorid=vtiger_users.id";
+        $sql.=" AND vtiger_users.is_admin='on' AND vtiger_users.status='Active' AND vtiger_users.deleted = 0";
+        $result = $adb->pquery($sql, array());
+        $announcement = '';
+        for ($i = 0; $i < $adb->num_rows($result); $i++) {
+            $announce = getUserFullName($adb->query_result($result, $i, 'creatorid')) . ' :  ' . $adb->query_result($result, $i, 'announcement') . '   ';
+            if ($adb->query_result($result, $i, 'announcement') != '')
+                $announcement.=$announce;
+        }
+        Vtiger_Cache::set('vtiger', 'announcement',$announcement);
+    }
    return $announcement;
 }
 
@@ -2896,7 +2899,7 @@ function checkFileAccessForDeletion($filepath) {
 	if (stripos($realfilepath, $rootdirpath) !== 0 || !in_array($filePathParts[0], $safeDirectories)) {
 		die("Sorry! Attempt to access restricted file.");
 	}
-	
+
 }
 
 /** Function to check the file access is made within web root directory. */
@@ -3276,6 +3279,7 @@ function getMenuStructure($selectModule = '') {
 
 	for ($i = 0; $i < $adb->num_rows($result); $i++) {
 		$moduleName = $adb->query_result($result, $i, 'name');
+
 		$moduleLabel = $adb->query_result($result, $i, 'tablabel');
 		$tabid = $adb->query_result($result, $i, 'tabid');
 		$parent = $adb->query_result($result, $i, 'parent');

@@ -6,16 +6,14 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'ServiceContracts'             => 'Contratos de Servicio'       , 
 	'SINGLE_ServiceContracts'      => 'Contrato de Servicio'        , 
-	'LBL_ADD_RECORD'               => 'Agregar Contrato de Servicio'        , 
-	'LBL_RECORDS_LIST'             => 'Lista de Contratos de Servicio'      , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Contratos de Servicio'   , 
+	'LBL_ADD_RECORD'               => 'Agregar Contrato de Servicio', 
+	'LBL_RECORDS_LIST'             => 'Lista de Contratos de Servicio', 
 	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Información Contrato de Servicio', 
-	'Contract No'                  => 'Número de Contrato'            , 
+	'Contract No'                  => 'Número de Contrato'         , 
 	'Start Date'                   => 'Fecha inicio'                , 
 	'End Date'                     => 'Fecha fin'                   , 
 	'Tracking Unit'                => 'Unidad de seguimiento'       , 

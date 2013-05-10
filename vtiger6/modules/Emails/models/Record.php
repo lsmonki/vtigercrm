@@ -65,8 +65,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 			foreach($emails as $email) {
 				$mailer->Body = $this->getTrackImageDetails($id, $this->isEmailTrackEnabled());
 				$mailer->Body .= $description;
-
-				$mailer->Signature = nl2br($currentUserModel->get('signature'));
+				$mailer->Signature = str_replace(array('\r\n', '\n'),'<br>',$currentUserModel->get('signature'));
 				if($mailer->Signature != '') {
 					$mailer->Body.= $mailer->Signature;
 				}
@@ -137,7 +136,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		if($numOfRows) {
 			for($i=0; $i<$numOfRows; $i++) {
 				$attachmentsList[$i]['fileid'] = $db->query_result($attachmentRes, $i, 'attachmentsid');
-				$attachmentsList[$i]['attachment'] = $db->query_result($attachmentRes, $i, 'name');
+				$attachmentsList[$i]['attachment'] = decode_html($db->query_result($attachmentRes, $i, 'name'));
                 $path = $db->query_result($attachmentRes, $i, 'path');
 				$attachmentsList[$i]['path'] = $path;
                 $attachmentsList[$i]['size'] = filesize($path.$attachmentsList[$i]['fileid'].'_'.$attachmentsList[$i]['attachment']);

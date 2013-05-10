@@ -6,23 +6,14 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *******************************************************************************
- * Vicus eBusiness Solutions (www.vicus.nl) Version Control
- * @package 	NL-Dutch
- * Description	Dutch language pack for vtiger CRM version 6.0.x
- * @author	$Author: luuk $
- * @version 	$Revision: 1.1 $ $Date: 2012/11/02 09:39:28 $
- * @source	$Source: /var/lib/cvs/vtiger600/languages/nl_nl/SalesOrder.php,v $
- * @copyright	Copyright (c)2005-2012 Vicus eBusiness Solutions bv <info@vicus.nl>
  ************************************************************************************/
-
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Verkooporder'                , 
 	'LBL_EXPORT_TO_PDF'            => 'Exporteer naar PDF'          , 
-	'LBL_ADD_RECORD'               => 'Voeg Verkooporder toe'             , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Verkooporder lijst'          , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Verkooporder Samenvatting'         , // TODO: Review
-	'LBL_SO_INFORMATION'           => 'Verkooporder Informatie'    , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Voeg Verkooporder toe'       , 
+	'LBL_RECORDS_LIST'             => 'Verkooporder lijst'          , 
+	'LBL_SO_INFORMATION'           => 'Verkooporder Informatie'     , 
 	'SalesOrder No'                => 'Verkooporder Nr'             , 
 	'Quote Name'                   => 'Offertenaam'                 , 
 	'Customer No'                  => 'Klantnummer'                 , 

@@ -17,9 +17,13 @@ class Settings_Vtiger_Module_Model extends Vtiger_Base_Model {
 	var $baseIndex = 'fieldid';
 	var $listFields = array('name' => 'Name', 'description' => 'Description');
 	var $nameFields = array('name');
+	var $name = 'Vtiger';
 
-	public function getName() {
-		return 'Vtiger';
+	public function getName($includeParentIfExists = false) {
+		if($includeParentIfExists) {
+			return  $this->getParentName() .':'. $this->name;
+		}
+		return $this->name;
 	}
 
 	public function getParentName() {
@@ -63,6 +67,10 @@ class Settings_Vtiger_Module_Model extends Vtiger_Base_Model {
 		}
 		return $this->nameFieldModels;
 	}
+	
+	public function hasCreatePermissions() {
+		return true;
+	}
 
 	/**
 	 * Function to get all the Settings menus
@@ -83,6 +91,10 @@ class Settings_Vtiger_Module_Model extends Vtiger_Base_Model {
 		}
 		return Settings_Vtiger_MenuItem_Model::getAll($menuModel);
 	}
+    
+    public function isPagingSupported(){
+        return true;
+    }
 
 	/**
 	 * Function to get the instance of Settings module model
@@ -91,5 +103,13 @@ class Settings_Vtiger_Module_Model extends Vtiger_Base_Model {
 	public static function getInstance($name='Settings:Vtiger') {
 		$modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Module', $name);
 		return new $modelClassName();
+	}
+
+	/**
+	 * Function to get Index view Url
+	 * @return <String> URL
+	 */
+	public function getIndexViewUrl() {
+		return 'index.php?module='.$this->getName().'&parent='.$this->getParentName().'&view=Index';
 	}
 }

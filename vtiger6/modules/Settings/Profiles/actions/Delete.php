@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Settings_Profiles_Delete_Action extends Vtiger_Action_Controller {
+class Settings_Profiles_Delete_Action extends Settings_Vtiger_Basic_Action {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
@@ -23,7 +23,10 @@ class Settings_Profiles_Delete_Action extends Vtiger_Action_Controller {
 			$recordModel->delete($transferToProfile);
 		}
 
-		$redirectUrl = $moduleModel->getDefaultUrl();
-		header("Location: $redirectUrl");
+		$response = new Vtiger_Response();
+		$result = array('success'=>true);
+		
+		$response->setResult($result);
+		$response->emit();
 	}
 }

@@ -23,7 +23,7 @@ class HelpDesk_ListView_Model extends Vtiger_ListView_Model {
 			$settingsLinks[] = array(
 				'linktype' => 'LISTVIEWSETTING',
 				'linklabel' => 'LBL_EDIT_MAILSCANNER',
-				'linkurl' => $moduleModel->getSettingsUrl('MailScanner'),
+				'linkurl' => 'index.php?module=MailScanner&parent=Settings&view=List',
 				'linkicon' => ''
 			);
 			return $settingsLinks;

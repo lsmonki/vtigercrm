@@ -5,26 +5,22 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
- * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
- * ********************************************************************************
- *  Language     : Español es_es
- *  Version      : 6.0.0
- *  Created Date : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2012-10-26
- *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_PurchaseOrder'         => 'Orden Compra',
-	'LBL_EXPORT_TO_PDF'            => 'Exportar a PDF',
-	'LBL_ADD_RECORD'               => 'Añadir Orden Compra',
-	'LBL_RECORDS_LIST'             => 'Lista de Orden Compra',
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Orden Compra',
-	'LBL_PO_INFORMATION'           => 'Detalles de Orden Compra',
-	'PurchaseOrder No'             => 'Número Orden Compra',
-	'Requisition No'               => 'Referencia del pedido',
-	'Tracking Number'              => 'Nº de seguimiento',
-	'Sales Commission'             => 'Comisión sobre Ventas',
-	'Received Shipment'            => 'Recibido',
+	'SINGLE_PurchaseOrder'         => 'Orden Compra'                , 
+	'LBL_EXPORT_TO_PDF'            => 'Exportar a PDF'              , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Añadir Orden Compra'        , 
+	'LBL_RECORDS_LIST'             => 'Lista de Orden Compra'       , 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
+	'LBL_PO_INFORMATION'           => 'Detalles de Orden Compra'    , 
+	'PurchaseOrder No'             => 'Número Orden Compra'        , 
+	'Requisition No'               => 'Referencia del pedido'       , 
+	'Tracking Number'              => 'Nº de seguimiento'          , 
+	'Sales Commission'             => 'Comisión sobre Ventas'      , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
+	'Received Shipment'            => 'Recibido'                    , 
 );

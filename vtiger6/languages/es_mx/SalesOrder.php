@@ -6,14 +6,13 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Pedido'                      , 
 	'LBL_EXPORT_TO_PDF'            => 'Exportar a PDF'              , 
-	'LBL_ADD_RECORD'               => 'Agregar Pedido de Venta'             , 
-	'LBL_RECORDS_LIST'             => 'Lista de los Pedidos de venta'        , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Pedidos de venta'         , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Agregar Pedido de Venta'     , 
+	'LBL_RECORDS_LIST'             => 'Lista de los Pedidos de venta', 
 	'LBL_SO_INFORMATION'           => 'Información del Pedido'     , 
 	'SalesOrder No'                => 'No Pedido'                   , 
 	'Quote Name'                   => 'Referencia de la Cotización', 

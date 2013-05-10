@@ -9,7 +9,7 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-class Import_Module_Model extends Vtiger_Base_Model {
+class Import_Module_Model extends Vtiger_Module_Model {
 	
 }
 ?>

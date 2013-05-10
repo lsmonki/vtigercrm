@@ -24,20 +24,7 @@ class SMSNotifier_ListView_Model extends Vtiger_ListView_Model {
 		$links = Vtiger_Link_Model::getAllByType($moduleModel->getId(), $linkTypes, $linkParams);
 
 		if($currentUserModel->isAdminUser()) {
-			$settingsLinks = array(
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => vtranslate('LBL_EDIT_WORKFLOWS', $moduleName),
-					'linkurl' => $moduleModel->getSettingsUrl('EditWorkflows'),
-					'linkicon' => ''
-				),
-				array(
-					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => vtranslate('LBL_SEREVER_CONFIG', $moduleName),
-					'linkurl' => $moduleModel->getSettingsUrl('SMSServerConfig'),
-					'linkicon' => ''
-				)
-			);
+			$settingsLinks = $this->getSettingLinks();
 			foreach($settingsLinks as $settingsLink) {
 				$links['LISTVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
 			}

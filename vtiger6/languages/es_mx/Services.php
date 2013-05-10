@@ -6,21 +6,19 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Author       : Francisco Hernandez Odin Consultores www.odin.mx 30/10/2012
  ************************************************************************************/
 $languageStrings = array(
 	'Services'                     => 'Servicios'                   , 
 	'SINGLE_Services'              => 'Servicio'                    , 
-	'LBL_ADD_RECORD'               => 'Agregar Servicio'            , // KEY 5.x: LBL_ADD_SERVICE
-	'LBL_RECORDS_LIST'             => 'Lista de Servicios'               , 
-	'LBL_RECORD_SUMMARY'           => 'Resumen de Servicios'            , 
+	'LBL_ADD_RECORD'               => 'Agregar Servicio'            , 
+	'LBL_RECORDS_LIST'             => 'Lista de Servicios'          , 
 	'LBL_SERVICE_INFORMATION'      => 'Información Servicio'       , 
 	'LBL_MORE_CURRENCIES'          => 'más monedas'                , 
-	'LBL_PRICES'                   => 'Precios de Servicios'              , 
+	'LBL_PRICES'                   => 'Precios de Servicios'        , 
 	'LBL_PRICE'                    => 'Precio'                      , 
 	'LBL_RESET_PRICE'              => 'Restaurar Precio'            , 
 	'LBL_RESET'                    => 'Restaurar'                   , 
-	'LBL_ADD_TO_PRICEBOOKS'        => 'Agregar a Lista de precios'           , 
+	'LBL_ADD_TO_PRICEBOOKS'        => 'Agregar a Lista de precios'  , 
 	'Service Name'                 => 'Nombre Servicio'             , 
 	'Service Active'               => 'Servicio Activo'             , 
 	'Service Category'             => 'Categoría Servicio'         , 

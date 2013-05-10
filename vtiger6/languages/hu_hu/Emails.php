@@ -8,18 +8,31 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_SELECT_EMAIL_IDS'         => 'Válasszál Email címeket'		,
-	'LBL_SUBJECT'                  => 'Tárgy:'						,
-	'LBL_ATTACHMENT'               => 'Melléklet'					,
-	'LBL_BROWSE_CRM'               => 'Keresés a CRM-ben'			,
-	'LBL_SEND'                     => 'Küldés'						,
-	'LBL_SAVE_AS_DRAFT'            => 'Piszkozatként ment'			,
-	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Válaszd ki az Email sablont'	, // KEY 5.x: LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE
-	'LBL_COMPOSE_EMAIL'            => 'Email szerkesztése'			,
-	'LBL_CC'                       => 'Másolat :'					,
-	'LBL_BCC'                      => 'Rejtett másolat :'			,
-	'LBL_ADD_CC'                   => 'Másolat hozzáadása'			,
-	'LBL_ADD_BCC'                  => 'Rejtett másolat hozzáadása'	,
-	'LBL_MAX_UPLOAD_SIZE'          => 'Maximális feltölthető méret:', // KEY 5.x: LBL_MAX_SIZE
-	'LBL_EXCEEDED'                 => 'Túllépve'					,
+	'SINGLE_Emails'                => 'Email'                       , // TODO: Review
+	'Emails'                       => 'Emails'                      , // TODO: Review
+	'LBL_SELECT_EMAIL_IDS'         => 'Válasszál Email címeket'  , 
+	'LBL_SUBJECT'                  => 'Tárgy:'                     , 
+	'LBL_ATTACHMENT'               => 'Melléklet'                  , 
+	'LBL_BROWSE_CRM'               => 'Keresés a CRM-ben'          , 
+	'LBL_SEND'                     => 'Küldés'                    , 
+	'LBL_SAVE_AS_DRAFT'            => 'Piszkozatként ment'         , 
+	'LBL_GO_TO_PREVIEW'            => 'Go to Preview'               , // TODO: Review
+	'LBL_SELECT_EMAIL_TEMPLATE'    => 'Válaszd ki az Email sablont', 
+	'LBL_COMPOSE_EMAIL'            => 'Email szerkesztése'         , 
+	'LBL_TO'                       => 'To'                          , // TODO: Review
+	'LBL_CC'                       => 'Másolat :'                  , 
+	'LBL_BCC'                      => 'Rejtett másolat :'          , 
+	'LBL_ADD_CC'                   => 'Másolat hozzáadása'       , 
+	'LBL_ADD_BCC'                  => 'Rejtett másolat hozzáadása', 
+	'LBL_MAX_UPLOAD_SIZE'          => 'Maximális feltölthető méret:', 
+	'LBL_EXCEEDED'                 => 'Túllépve'                  , 
+	'LBL_FORWARD'                  => 'Forward'                     , // TODO: Review
+	'LBL_PRINT'                    => 'Print'                       , // TODO: Review
+	'LBL_DESCRIPTION'              => 'Description'                 , // TODO: Review
+	'LBL_FROM'                     => 'From'                        , // TODO: Review
+	'LBL_INFO'                     => 'Info'                        , // TODO: Review
+	'LBL_DRAFTED_ON'               => 'Drafted on'                  , // TODO: Review
+	'LBL_SENT_ON'                  => 'Sent on'                     , // TODO: Review
+	'LBL_OWNER'                    => 'Owner'                       , // TODO: Review
+	'Date & Time Sent'             => 'Date Sent'                   , // TODO: Review
 );

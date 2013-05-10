@@ -21,7 +21,7 @@
 		<span class="span7">
 			<strong>{$TASK_NAME_HEADER}</strong>
 		</span>
-		<span class="span4 horizontalLeftSpacingForSummaryWidgetHeader">
+		<span class="span4">
 			<span class="pull-right">
 				<strong>{$TASK_PROGRESS_HEADER}</strong>
 			</span>

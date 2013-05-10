@@ -18,24 +18,17 @@ class Vtiger_SummaryRecordStructure_Model extends Vtiger_DetailRecordStructure_M
 	 * @return <array> - values in structure array('block'=>array(fieldinfo));
 	 */
 	public function getStructure() {
-		$structuredValues = parent::getStructure();
 		$summaryFieldsList = $this->getModule()->getSummaryViewFieldsList();
-
-		foreach($structuredValues as $blockLabel => $fieldModelsList) {
+        $recordModel = $this->getRecord();
+        $summaryFieldModelsList['SUMMARY_FIELDS'] = array();
 			if ($summaryFieldsList) {
-				foreach ($summaryFieldsList as $key => $summaryField) {
-					foreach ($fieldModelsList as $fieldName => $fieldModel) {
-						if($summaryField == $fieldName){
-							$summaryFieldModels[$fieldName] = $fieldModel;
+			foreach ($summaryFieldsList as $fieldName => $fieldModel) {
+                if($fieldModel->isViewableInDetailView()) {
+                    $fieldModel->set('fieldvalue', $recordModel->get($fieldName));
+                    $summaryFieldModelsList['SUMMARY_FIELDS'][$fieldName] = $fieldModel;
 						}
 					}
 				}
-				$summaryFieldModelsList['SUMMARY_FIELDS'] = $summaryFieldModels;
-			} else {
-				$summaryFieldModelsList[$blockLabel] = $fieldModelsList;
-				break;
-			}
-		}
 		return $summaryFieldModelsList;
 	}
 }
