@@ -234,7 +234,9 @@ $languageStrings = array(
     'LBL_LAST_SCAN_TIMED_OUT' => 'Last scan timed out',
     'LBL_LAST_SCAN_AT' => 'Last scanned at ',
     'LBL_TIME_TAKEN' => ' time taken ',
-    'LBL_SHORT_SECONDS' => 'sec'
+    'LBL_SHORT_SECONDS' => 'sec',
+	
+	'LBL_BACKUP_SERVER_SETTINGS'=>'Backup Server',
 );
 
 $jsLanguageStrings = array(

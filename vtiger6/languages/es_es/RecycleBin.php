@@ -6,17 +6,28 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
+ * ********************************************************************************
+ *  Language     : Español es_es
+ *  Version      : 6.0.0
+ *  Created Date : 2013-05-10
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *  Last change  : 2013-05-10
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
-$languageStrings = array(
-	'RecycleBin'                   => 'Recycle Bin'                 , // TODO: Review
-	'LBL_SELECT_MODULE'            => 'Select Module'               , // TODO: Review
-	'LBL_EMPTY_RECYCLEBIN'         => 'Empty Recycle Bin'           , // TODO: Review
-	'LBL_RESTORE'                  => 'Restore'                     , // TODO: Review
-	'LBL_NO_PERMITTED_MODULES'     => 'No permitted modules available', // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Recycle Bin List'            , // TODO: Review
-	'LBL_NO_RECORDS_FOUND'         => 'No records found to Restore in module', // TODO: Review
+
+$languageStrings = Array(
+	'RecycleBin' => 'Papelera de Reciclaje',
+	'LBL_SELECT_MODULE' => 'Selecciona Módulo',
+	'LBL_EMPTY_RECYCLEBIN' => 'Vaciar Papelera de Reciclaje',
+	'LBL_RESTORE' => 'Restaurar',
+	'LBL_NO_PERMITTED_MODULES' => 'No hay modulos permitidos',
+	'LBL_RECORDS_LIST' => 'Lista Papelera',
+	'LBL_NO_RECORDS_FOUND' => 'No hay registros en la papelera de este módulo',
 );
+
 $jsLanguageStrings = array(
-	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Are you sure you want to permanently remove all the deleted records from your database?', // TODO: Review
-	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => 'Are you sure you want to restore the records?', // TODO: Review
+	'JS_MSG_EMPTY_RB_CONFIRMATION' => '¿Estás seguro que quieres eliminar permanentemente todos los registros borrados de la base de datos?',
+	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => '¿Estás seguro que quieres restaurar los registros?',
 );
+
+?>

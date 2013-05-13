@@ -859,10 +859,6 @@ $mod_strings = array (
         'LBL_NOTE' => 'Замечание:',
         'LBL_HIDE' => 'Спрятать детали',
         'LBL_SHOW' => 'Показать детали',
-        // END
-        'LBL_USER_ADDITION_INFO'=>"Чтобы добавить нового пользователя, пожалуйста, нажмите
-                                   <span style='font-style:italic;color:blue;'>OD-Settings Menu -> On Demand Admin -> Add / Invite User </span>",
-
         'LBL_READ_ONLY_ACCESS_MSG' => 'Доступ только для чтения',
         'LBL_READ_WRITE_ACCESS_MSG' => 'Доступ для чтения и записи',
 

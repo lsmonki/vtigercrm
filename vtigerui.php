@@ -44,4 +44,7 @@ if (isset($_REQUEST['next'])) {
 	}
 }
 
+// To overcome browser caching this redirect (could cause trouble to enable switching UI between 5 & 6)
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); header("Cache-Control: no-cache"); header("Pragma: no-cache");
+
 header ("Location: {$ui}index.php{$uri}");

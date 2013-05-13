@@ -884,10 +884,7 @@ $mod_strings = array (
       'LBL_NOTE' => 'Nota:',
       'LBL_HIDE' => 'Esconder Detalles',
       'LBL_SHOW' => 'Mostrar Detalles',
-      // END
-      'LBL_USER_ADDITION_INFO'=>"Para añadir un nuevo usuario, haz click en  
-      			   <span style='font-style:italic;color:blue;'>OD-Menú Configuración -> On Demand Admin -> Añadir / Invitar Usuario </span>",
-      
+     
       'LBL_READ_ONLY_ACCESS_MSG' => 'Acceso Solo-Lectura',
       'LBL_READ_WRITE_ACCESS_MSG' => 'Acceso Lectura-Escritura',
       'LBL_DESCRIPTION_Public: Read Only'=>'Usuarios pueden Solo Leer otros usuarios ',

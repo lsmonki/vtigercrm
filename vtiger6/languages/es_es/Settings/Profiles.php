@@ -5,35 +5,52 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
+ * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
+ * ********************************************************************************
+ *  Language     : Español es_es
+ *  Version      : 6.0.0
+ *  Created Date : 2012-10-26
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *  Last change  : 2013-05-11
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'Profiles'                     => 'Perfiles'                    , 
-	'SINGLE_Profiles'              => 'Perfil'                      , 
-	'LBL_ADD_RECORD'               => 'Añadir Perfil'              , 
-	'LBL_CREATE_PROFILE'           => 'Create Profile'              , // TODO: Review
-	'LBL_PROFILE_NAME'             => 'Profile name'                , // TODO: Review
-	'LBL_DESCRIPTION'              => 'Description'                 , // TODO: Review
-	'LBL_EDIT_PRIVILIGES_FOR_THIS_PROFILE' => 'Edit priviliges for this profile', // TODO: Review
-	'LBL_MODULES'                  => 'Modules'                     , // TODO: Review
-	'LBL_PROFILE_VIEW'             => 'Profile view'                , // TODO: Review
-	'LBL_FIELDS'                   => 'Fields'                      , // TODO: Review
-	'LBL_TOOLS'                    => 'Tools'                       , // TODO: Review
-	'LBL_FIELD_AND_TOOL_PRVILIGES' => 'Field and Tool Privileges'   , // TODO: Review
-	'LBL_EDIT_RECORD'              => 'Edit'                        , // TODO: Review
-	'LBL_DUPLICATE_RECORD'         => 'Duplicate'                   , // TODO: Review
-	'LBL_DELETE_RECORD'            => 'Delete'                      , // TODO: Review
-	'LBL_VIEW_PRVILIGE'            => 'Ver'                         , 
-	'LBL_EDIT_PRVILIGE'            => 'Crear/Editar'                , 
-	'LBL_DELETE_PRVILIGE'          => 'Borrar'                      , 
-	'LBL_INIVISIBLE'               => 'Invisible'                   , // TODO: Review
-	'LBL_READ_ONLY'                => 'Read only'                   , // TODO: Review
-	'LBL_WRITE'                    => 'Write'                       , // TODO: Review
-	'LBL_DELETE_PROFILE'           => 'Delete Profile'              , // TODO: Review
-	'LBL_TRANSFER_ROLES_TO_PROFILE' => 'Transfer roles to profile'   , // TODO: Review
-	'LBL_PROFILES'                 => 'Profiles'                    , // TODO: Review
-	'LBL_CHOOSE_PROFILES'          => 'Choose Profiles'             , // TODO: Review
+	'Profiles'                     => 'Perfiles',
+	'SINGLE_Profiles'              => 'Perfil',
+	'LBL_ADD_RECORD'               => 'Añadir Perfil',
+	'LBL_CREATE_PROFILE' => 'Crear Perfil',
+	'LBL_PROFILE_NAME' => 'Nombre Perfil',
+	'LBL_DESCRIPTION' => 'Descripción',
+	'LBL_EDIT_PRIVILIGES_FOR_THIS_PROFILE' => 'Editar privilegios parar este perfil',
+	'LBL_MODULES' => 'Módulos',
+	'LBL_PROFILE_VIEW' => 'Vista Perfil',
+	'LBL_FIELDS' => 'Campos',
+	'LBL_TOOLS' => 'Herramientas',
+	'LBL_FIELD_AND_TOOL_PRVILIGES' => 'Privilegios Campo y Herramientas',
+	'LBL_EDIT_RECORD' => 'Editar',
+	'LBL_DUPLICATE_RECORD' => 'Duplicar',
+	'LBL_DELETE_RECORD' => 'Eliminar',
+
+	'LBL_VIEW_PRVILIGE'            => 'Ver',
+	'LBL_EDIT_PRVILIGE'            => 'Crear/Editar',
+	'LBL_DELETE_PRVILIGE'          => 'Borrar',
+	'LBL_INIVISIBLE' => 'Invisible',
+	'LBL_READ_ONLY' => 'Solo lectura',
+	'LBL_WRITE' => 'Escritura',
+
+	'LBL_DELETE_PROFILE' => 'Eliminar Perfil',
+	'LBL_TRANSFER_ROLES_TO_PROFILE' => 'Transferir roles a perfil',
+	'LBL_PROFILES' => 'Perfiles',
+	'LBL_CHOOSE_PROFILES' => 'Selecciona Perfiles',
+
+    'LBL_VIEW_ALL' => 'Ver Todos',
+    'LBL_EDIT_ALL' => 'Editar Todos',
+    'LBL_VIEW_ALL_DESC' => 'Puede ver toda la información del módulo',
+    'LBL_EDIT_ALL_DESC' => 'Puede edtar toda la información del módulo'
+
 );
+
 $jsLanguageStrings = array(
-	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Profile deleted successfully', // TODO: Review
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Se ha eliminado el perfil correctamente',
 );

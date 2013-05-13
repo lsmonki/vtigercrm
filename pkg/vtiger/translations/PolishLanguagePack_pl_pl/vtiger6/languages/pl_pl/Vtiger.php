@@ -78,7 +78,6 @@ $languageStrings = array(
 	'LBL_HELP' => 'Pomoc (EN)',
 	'LBL_FEEDBACK' => 'Informacja do producenta',
 	'LBL_CRM_SETTINGS' => 'Konfiguracja systemu',
-	'LBL_ON_DEMAND_ADMIN' => 'Dodaj/Usuń użytkowników',
 	'LBL_ANNOUNCEMENT' => 'Ogłoszenie',
 	'LBL_CALENDAR' => 'Kalendarz',
 	'LBL_POST' => 'Dodaj komentarz',

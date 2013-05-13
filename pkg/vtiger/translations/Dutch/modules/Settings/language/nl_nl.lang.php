@@ -1001,8 +1001,6 @@ $mod_strings = Array(
 'LBL_HIDE' => 'Hide Details',
 'LBL_SHOW' => 'Show Details',
 // END
-'LBL_USER_ADDITION_INFO'=>"To add a new user, please click on  
-			   <span style='font-style:italic;color:blue;'>OD-Settings Menu -> On Demand Admin -> Add / Invite User </span>",
 
 'LBL_READ_ONLY_ACCESS_MSG' => 'Alleen-Lezen toegang',
 'LBL_READ_WRITE_ACCESS_MSG' => 'Lezen-Schrijven toegang',

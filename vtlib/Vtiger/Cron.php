@@ -159,7 +159,7 @@ class Vtiger_Cron {
             // Take care to start the cron im
             $lastTime = ($this->getLastStart() > 0) ? $this->getLastStart() : $this->getLastEnd();
             $elapsedTime = time() - $lastTime;
-            $runnable = ($elapsedTime >= ($this->getFrequency()-1));
+            $runnable = ($elapsedTime >= ($this->getFrequency()-60));
         }
         return $runnable;
     }

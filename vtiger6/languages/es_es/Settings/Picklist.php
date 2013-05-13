@@ -1,53 +1,61 @@
 <?php
-/*+**********************************************************************************
+/*+***********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************
+ *  Language     : Español es_es
+ *  Version      : 6.0.0
+ *  Created Date : 2013-05-10
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *  Last change  : 2013-05-10
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *************************************************************************************/
 $languageStrings = array(
-	'LBL_SELECT_PICKLIST_IN'       => 'Select Picklist in'          , // TODO: Review
-	'LBL_ADD_VALUE'                => 'Add Value'                   , // TODO: Review
-	'LBL_RENAME_VALUE'             => 'Rename Value'                , // TODO: Review
-	'LBL_DELETE_VALUE'             => 'Delete Value'                , // TODO: Review
-	'LBL_ITEMS'                    => 'Values'                      , // TODO: Review
-	'LBL_DRAG_ITEMS_TO_RESPOSITION' => 'Drag items to reposition them', // TODO: Review
-	'LBL_SELECT_AN_ITEM_TO_RENAME_OR_DELETE' => 'Select an item to rename or delete', // TODO: Review
-	'LBL_TO_DELETE_MULTIPLE_HOLD_CONTROL_KEY' => 'To Delete multiple items hold Ctrl key down while selecting items', // TODO: Review
-	'LBL_ADD_ITEM_TO'              => 'Add Item to'                 , // TODO: Review
-	'LBL_ITEM_VALUE'               => 'Item value'                  , // TODO: Review
-	'LBL_ITEM_TO_RENAME'           => 'Item to rename'              , // TODO: Review
-	'LBL_ENTER_NEW_NAME'           => 'Enter new Name'              , // TODO: Review
-	'LBL_RENAME_PICKLIST_ITEM'     => 'Rename PickList Item'        , // TODO: Review
-	'LBL_DELETE_PICKLIST_ITEMS'    => 'Delete PickList Items'       , // TODO: Review
-	'LBL_ITEMS_TO_DELETE'          => 'Items to Delete'             , // TODO: Review
-	'LBL_REPLACE_IT_WITH'          => 'Replace it with'             , // TODO: Review
-	'LBL_ASSIGN_TO_ROLE'           => 'Assign to Role'              , // TODO: Review
-	'LBL_ALL_ROLES'                => 'All Roles'                   , // TODO: Review
-	'LBL_CHOOSE_ROLES'             => 'Choose Roles'                , // TODO: Review
-	'LBL_ALL_VALUES'               => 'All values'                  , // TODO: Review
-	'LBL_VALUES_ASSIGNED_TO_A_ROLE' => 'Values assigned to a role'   , // TODO: Review
-	'LBL_ASSIGN_VALUE'             => 'Assign Value'                , // TODO: Review
-	'LBL_SAVE_ORDER'               => 'Save Order'                  , // TODO: Review
-	'LBL_ROLE_NAME'                => 'Role name'                   , // TODO: Review
-	'LBL_SELECTED_VALUES_MESSGAE'  => 'will appear for the user with this role', // TODO: Review
-	'LBL_ENABLE/DISABLE_MESSGAE'   => 'Click on value to Enable/Disable it.After done click on save', // TODO: Review
-	'LBL_ASSIGN_VALUES_TO_ROLES'   => 'Assign Values to Roles'      , // TODO: Review
-	'LBL_SELECTED_VALUES'          => 'Selected Values'             , // TODO: Review
-	'NO_PICKLIST_FIELDS'           => 'do not have any picklist fields', // TODO: Review
+	'LBL_SELECT_PICKLIST_IN' => 'Selecciona Lista en',
+	'LBL_ADD_VALUE' => 'Añadir Valor',
+	'LBL_RENAME_VALUE' => 'Renombrar Valor',
+	'LBL_DELETE_VALUE' => 'Eliminar Valor',
+	'LBL_ITEMS' => 'Valores',
+	'LBL_DRAG_ITEMS_TO_RESPOSITION' => 'Arrastra los elementos para reordenar',
+	'LBL_SELECT_AN_ITEM_TO_RENAME_OR_DELETE' => 'Selecciona un elemento para renombrar o eliminar',
+	'LBL_TO_DELETE_MULTIPLE_HOLD_CONTROL_KEY' => 'Para eliminar varios elementos seleccionalos manteniendo pulsado la tecla',
+	'LBL_ADD_ITEM_TO' => 'Añadir elemento a',
+	'LBL_ITEM_VALUE' => 'Valor elemento',
+	'LBL_ITEM_TO_RENAME' => 'Elemento a renombrar',
+	'LBL_ENTER_NEW_NAME' => 'Introduce el nuevo Nombre',
+	'LBL_RENAME_PICKLIST_ITEM' => 'Renombrar Elemento de la Lista',
+	'LBL_DELETE_PICKLIST_ITEMS' => 'Eliminar Elementos de la Lista',
+	'LBL_ITEMS_TO_DELETE' => 'Elementos a Eliminar',
+	'LBL_REPLACE_IT_WITH' => 'Reemplazar con',
+	'LBL_ASSIGN_TO_ROLE' => 'Asignar a Rol',
+	'LBL_ALL_ROLES' => 'Todos los Roles',
+	'LBL_CHOOSE_ROLES' => 'Selecciona roles',
+	'LBL_ALL_VALUES' => 'Todos los valores',
+	'LBL_VALUES_ASSIGNED_TO_A_ROLE' => 'Valores asignados a un rol',
+	'LBL_ASSIGN_VALUE' => 'Asignar Valor',
+	'LBL_SAVE_ORDER' => 'Guardar Orden',
+	'LBL_ROLE_NAME' => 'Nombre Rol',
+	'LBL_SELECTED_VALUES_MESSGAE' => 'aparecerán para los usuarios con este rol',
+	'LBL_ENABLE/DISABLE_MESSGAE' => 'Selecciona el valor para Habilitar/Deshabilitarlo. Pulsa Guardar al finalizar',
+	'LBL_ASSIGN_VALUES_TO_ROLES' => 'Asignar Valores a Roles',
+	'LBL_SELECTED_VALUES' => 'Valores Seleccionados',
+    'NO_PICKLIST_FIELDS'=> 'no tiene campos de tipo lista desplegable',
 );
 $jsLanguageStrings = array(
-	'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Item Renamed Successfully'   , // TODO: Review
-	'JS_ITEM_ADDED_SUCCESSFULLY'   => 'Item added Successfully'     , // TODO: Review
-	'JS_NO_ITEM_SELECTED'          => 'No item Selected'            , // TODO: Review
-	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
-	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
-	'JS_YOU_CANNOT_DELETE_ALL_THE_VALUES' => 'You cannot delete all the values', // TODO: Review
-	'JS_ALL_ROLES_SELECTED'        => 'All Roles Selected'          , // TODO: Review
-	'JS_LIST_UPDATED_SUCCESSFULLY' => 'List updated Successfully'   , // TODO: Review
-	'JS_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Sequence updated successfully', // TODO: Review
-	'JS_VALUE_ASSIGNED_SUCCESSFULLY' => 'Value assigned successfully' , // TODO: Review
-	'JS_PLEASE_SELECT_MODULE'      => 'Please seelct module'        , // TODO: Review
-);
+	//PickList 
+	'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Se ha renombrado el elemento',
+	'JS_ITEM_ADDED_SUCCESSFULLY' => 'Se ha añadido el elemento',
+	'JS_NO_ITEM_SELECTED' => 'No hay elementos seleccionados',
+	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'Se ha seleccionado más de un elemento',
+	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Se ha eliminado el elemento',
+	'JS_YOU_CANNOT_DELETE_ALL_THE_VALUES' => 'No se pueden eliminar todos los valores',
+	'JS_ALL_ROLES_SELECTED' => 'Se han seleccionado todos los roles',
+	'JS_LIST_UPDATED_SUCCESSFULLY' => 'Se ha actualizado la Lista',
+	'JS_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Se ha actualizado la secuencia',
+	'JS_VALUE_ASSIGNED_SUCCESSFULLY' => 'Se han asignado los valores',
+    'JS_PLEASE_SELECT_MODULE' => 'Selecciona un módulo'
+);	

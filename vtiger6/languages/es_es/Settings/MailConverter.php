@@ -1,94 +1,125 @@
 <?php
-/*+**********************************************************************************
+/*+***********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************
+ *  Language     : Español es_es
+ *  Version      : 6.0.0
+ *  Created Date : 2013-05-10
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *  Last change  : 2013-05-11
+ *  Author       : JPL TSolucio, S. L. Joe Bordes
+ *************************************************************************************/
 $languageStrings = array(
-	'MailConverter'                => 'Mail Converter'              , // TODO: Review
-	'MailConverter_Description'    => 'Convert emails to respective records', // TODO: Review
-	'MAILBOX'                      => 'MailBox'                     , // TODO: Review
-	'RULE'                         => 'Rule'                        , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add MailBox'                 , // TODO: Review
-	'ALL'                          => 'All'                         , // TODO: Review
-	'UNSEEN'                       => 'Unread'                      , // TODO: Review
-	'LBL_MARK_READ'                => 'Mark Read'                   , // TODO: Review
-	'SEEN'                         => 'Read'                        , // TODO: Review
-	'LBL_EDIT_MAILBOX'             => 'Edit MailBox'                , // TODO: Review
-	'LBL_CREATE_MAILBOX'           => 'Create MailBox'              , // TODO: Review
-	'LBL_BACK_TO_MAILBOXES'        => 'Back to MailBoxes'           , // TODO: Review
-	'LBL_MARK_MESSAGE_AS'          => 'Mark message as'             , // TODO: Review
-	'LBL_MAX_LIMIT_ONLY_TWO'       => 'You can configure only two mailboxes', // TODO: Review
-	'LBL_IS_IN_RUNNING_STATE'      => 'is in running state'         , // TODO: Review
-	'LBL_SAVED_SUCCESSFULLY'       => 'Saved successfully'          , // TODO: Review
-	'LBL_CONNECTION_TO_MAILBOX_FAILED' => 'Connecting to mailbox failed!', // TODO: Review
-	'LBL_DELETED_SUCCESSFULLY'     => 'Deleted successfully'        , // TODO: Review
-	'LBL_RULE_DELETION_FAILED'     => 'Rule deletion failed'        , // TODO: Review
-	'LBL_RULES_SEQUENCE_INFO_IS_EMPTY' => 'Rules sequnce information is empty', // TODO: Review
-	'LBL_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Sequence updated successfully', // TODO: Review
-	'LBL_SCANNED_SUCCESSFULLY'     => 'Scanned successfully'        , // TODO: Review
-	'scannername'                  => 'Scanner Name'                , // TODO: Review
-	'server'                       => 'Server Name'                 , // TODO: Review
-	'protocol'                     => 'Protocol'                    , // TODO: Review
-	'username'                     => 'User Name'                   , // TODO: Review
-	'password'                     => 'Password'                    , // TODO: Review
-	'ssltype'                      => 'SSL Type'                    , // TODO: Review
-	'sslmethod'                    => 'SSL Method'                  , // TODO: Review
-	'connecturl'                   => 'Connect Url'                 , // TODO: Review
-	'searchfor'                    => 'Look For'                    , // TODO: Review
-	'markas'                       => 'After Scan'                  , // TODO: Review
-	'LBL_ENABLE'                   => 'Enable'                      , // TODO: Review
-	'LBL_DISABLE'                  => 'Disable'                     , // TODO: Review
-	'LBL_STATUS_MESSAGE'           => 'Check To make active'        , // TODO: Review
-	'LBL_VALIDATE_SSL_CERTIFICATE' => 'Validate SSL Certificate'    , // TODO: Review
-	'LBL_DO_NOT_VALIDATE_SSL_CERTIFICATE' => 'Do Not Validate SSL Certificate', // TODO: Review
-	'LBL_ALL_MESSAGES_FROM_LAST_SCAN' => 'All messages from last scan' , // TODO: Review
-	'LBL_UNREAD_MESSAGES_FROM_LAST_SCAN' => 'Unread messages from last scan', // TODO: Review
-	'LBL_MARK_MESSAGES_AS_READ'    => 'Mark messages as read'       , // TODO: Review
-	'LBL_I_DONT_KNOW'              => 'I don\'t know'               , // TODO: Review
-	'LBL_SCAN_NOW'                 => 'Scan Now'                    , // TODO: Review
-	'LBL_RULES_LIST'               => 'Rules List'                  , // TODO: Review
-	'LBL_SELECT_FOLDERS'           => 'Select Folders'              , // TODO: Review
-	'LBL_SCANED_SUCCESSFULLY'      => 'Scanned successfully'        , // TODO: Review
-	'LBL_FOLDERS_INFO_IS_EMPTY'    => 'Folders information is empty', // TODO: Review
-	'LBL_UPDATE_FOLDERS'           => 'Update Folders'              , // TODO: Review
-	'fromaddress'                  => 'From'                        , // TODO: Review
-	'toaddress'                    => 'To'                          , // TODO: Review
-	'subject'                      => 'Subject'                     , // TODO: Review
-	'body'                         => 'Body'                        , // TODO: Review
-	'matchusing'                   => 'Match'                       , // TODO: Review
-	'action'                       => 'Action'                      , // TODO: Review
-	'LBL_PRIORITY'                 => 'Priority'                    , // TODO: Review
-	'PRIORITISE_MESSAGE'           => 'Drag and drop block to prioritise the rule', // TODO: Review
-	'LBL_ALL_CONDITIONS'           => 'All Conditions'              , // TODO: Review
-	'LBL_ANY_CONDITIOn'            => 'Any Condition'               , // TODO: Review
-	'Contains'                     => 'Contains'                    , // TODO: Review
-	'Not Contains'                 => 'Not Contains'                , // TODO: Review
-	'Equals'                       => 'Equals'                      , // TODO: Review
-	'Not Equals'                   => 'Not Equals'                  , // TODO: Review
-	'Begins With'                  => 'Begin'                       , // TODO: Review
-	'Ends With'                    => 'End'                         , // TODO: Review
-	'Regex'                        => 'Regex'                       , // TODO: Review
-	'CREATE_HelpDesk_FROM'         => 'Create Ticket'               , // TODO: Review
-	'UPDATE_HelpDesk_SUBJECT'      => 'Update Ticket'               , // TODO: Review
-	'LINK_Contacts_FROM'           => 'Add to Contact [FROM]'       , // TODO: Review
-	'LINK_Contacts_TO'             => 'Add to Contact [TO]'         , // TODO: Review
-	'LINK_Accounts_FROM'           => 'Add to Organization [FROM]'  , // TODO: Review
-	'LINK_Accounts_TO'             => 'Add to Organization [TO]'    , // TODO: Review
-	'LBL_UNSELECT_ALL'             => 'Unselect All'                , // TODO: Review
-	'LBL_CONVERT_EMAILS_TO_RESPECTIVE_RECORDS' => 'Convert emails to respective records', // TODO: Review
-	'LBL_DRAG_AND_DROP_BLOCK_TO_PRIORITISE_THE_RULE' => 'Drag and drop block to prioritise the rule', // TODO: Review
-	'LBL_ADD_RULE'                 => 'Add Rule'                    , // TODO: Review
-	'LBL_DELETE_RULE'              => 'Delete rule'                 , // TODO: Review
-	'LBL_BODY'                     => 'Body'                        , // TODO: Review
-	'LBL_MATCH'                    => 'Match'                       , // TODO: Review
-	'LBL_ACTION'                   => 'Action'                      , // TODO: Review
-	'LBL_FROM'                     => 'From'                        , // TODO: Review
+	'MailConverter' => 'Clasificar Correos',
+	'MailConverter_Description' => 'Convierte emails en registros de la aplicación',
+	'MAILBOX' => 'Buzón',
+	'RULE' => 'Regla',
+	'LBL_ADD_RECORD' => 'Añadir Buzón',
+	'ALL' => 'Todos',
+	'UNSEEN' => 'No leídos',
+	'LBL_MARK_READ' => 'Marcar mensaje como leído',
+	'SEEN' => 'Leído',
+	'LBL_EDIT_MAILBOX' => 'Editar Buzón',
+    'LBL_CREATE_MAILBOX' => 'Crear Buzón',
+	'LBL_BACK_TO_MAILBOXES' => 'Volver a Buzones',
+	'LBL_MARK_MESSAGE_AS' => 'Marcar mensaje como',
+	
+	//Server Messages
+	'LBL_MAX_LIMIT_ONLY_TWO' => 'Solo puedes configurar dos buzones',
+	'LBL_CONNECTION_TO_MAILBOX_FAILED' => 'No se ha podido conectar con el buzón!',
+	'LBL_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Se ha actualizado la secuencia correctamente',
+	'LBL_SCANNED_SUCCESSFULLY' => 'Se ha clasificado correctamente',
+
+	//Field Names
+	'scannername' => 'Nombre Clasificador',
+	'server' => 'Nombre Servidor',
+	'protocol' => 'Protocolo',
+	'username' => 'Nombre Usuario',
+	'password' => 'Contraseña',
+	'ssltype' =>  'Tipo SSL',
+	'sslmethod' => 'Método SSL',
+	'connecturl' => 'Url Conexión',
+	'searchfor' => 'Buscar',
+	'markas' => 'Después de Clasificación',
+
+	//Field values & Messages
+	'LBL_ENABLE' => 'Habilita',
+	'LBL_DISABLE' =>'Deshabilita',
+	'LBL_STATUS_MESSAGE' => 'Marcar para activar',
+	'LBL_VALIDATE_SSL_CERTIFICATE' => 'Validar Certificado SSL',
+	'LBL_DO_NOT_VALIDATE_SSL_CERTIFICATE' => 'No Validar Certificado SSL',
+	'LBL_ALL_MESSAGES_FROM_LAST_SCAN' => 'Todos los mensajes de la última clasificación',
+	'LBL_UNREAD_MESSAGES_FROM_LAST_SCAN' => 'Mensajes de la última clasificación',
+	'LBL_MARK_MESSAGES_AS_READ' => 'Marcar mensaje como leído',
+	'LBL_I_DONT_KNOW' => 'No lo se',
+
+	//Mailbox Actions
+	'LBL_SCAN_NOW' => 'Clasifica Ahora',
+	'LBL_RULES_LIST' => 'Lista de Reglas',
+	'LBL_SELECT_FOLDERS' => 'Selecciona Carpetas',
+
+	//Action Messages
+	'LBL_DELETED_SUCCESSFULLY' => 'Se ha eliminado correctamente',
+	'LBL_RULE_DELETION_FAILED' => 'No se ha podido eliminar la regla',
+	'LBL_SAVED_SUCCESSFULLY' => 'Se ha guardado correctamente',
+	'LBL_SCANED_SUCCESSFULLY' => 'Se ha leído correctamente',
+	'LBL_IS_IN_RUNNING_STATE' => 'está en ejecución',
+	'LBL_FOLDERS_INFO_IS_EMPTY' => 'La información de las carpetas está vacía',
+	'LBL_RULES_SEQUENCE_INFO_IS_EMPTY' => 'La información de la secuencia de las reglas está vacía',
+
+	//Rule Fields
+	'fromaddress' => 'De',
+	'toaddress' => 'A',
+	'subject' => 'Asunto',
+	'body' => 'Cuerpo',
+	'matchusing' => 'Emparejar',
+	'action' => 'Acción',
+
+	//Rules List View labels
+	'PRIORITISE_MESSAGE' => 'Arrastra el bloque para priorizar la regla',
+
+	//Rule Field values & Messages
+	'LBL_ALL_CONDITIONS' => 'Todas las Condiciones',
+	'LBL_ANY_CONDITIOn' => 'Cualquier Condición',
+
+	//Rule Conditions
+	'Contains' => 'Contiene',
+	'Not Contains' => 'No Contiene',
+	'Equals' => 'Igual',
+	'Not Equals' => 'No Igual',
+	'Begins With' => 'Empieza con',
+	'Ends With' => 'Termina con',
+	'Regex' => 'Regex',
+
+	//Rule Actions
+	'CREATE_HelpDesk_FROM' => 'Crear Incidencia',
+	'UPDATE_HelpDesk_SUBJECT' => 'Actualizar Incidencia',
+	'LINK_Contacts_FROM' => 'Añadir a Contacto [De]',
+	'LINK_Contacts_TO' => 'Añadir a Contacto [A]',
+	'LINK_Accounts_FROM' => 'Añadir a Cuenta [De]',
+	'LINK_Accounts_TO' => 'Añadir a Cuenta [A]',
+    
+    //Select Folder
+    'LBL_UPDATE_FOLDERS' => 'Actualizar Carpetas',
+    'LBL_UNSELECT_ALL' => 'Desmarcar todos',
+	
+	//Setup Rules
+	'LBL_CONVERT_EMAILS_TO_RESPECTIVE_RECORDS' => 'Convierte emails en registros de la aplicación',
+	'LBL_DRAG_AND_DROP_BLOCK_TO_PRIORITISE_THE_RULE' => 'Arrastra el bloque para priorizar la regla',
+	'LBL_ADD_RULE' => 'Añadir Regla',
+	'LBL_PRIORITY' => 'Prioridad',
+	'LBL_DELETE_RULE' => 'Eliminar regla',
+	'LBL_BODY' => 'Cuerpo',
+	'LBL_MATCH' => 'Emparejar',
+	'LBL_ACTION' => 'Acción',
+	'LBL_FROM' => 'De',
 );
 $jsLanguageStrings = array(
-	'JS_MAILBOX_DELETED_SUCCESSFULLY' => 'MailBox deleted Successfully', // TODO: Review
-	'JS_MAILBOX_LOADED_SUCCESSFULLY' => 'MailBox loaded Successfully' , // TODO: Review
-);
+	'JS_MAILBOX_DELETED_SUCCESSFULLY' => 'Se ha eliminado el buzón',
+	'JS_MAILBOX_LOADED_SUCCESSFULLY' => 'Se ha leído el buzón'
+);	

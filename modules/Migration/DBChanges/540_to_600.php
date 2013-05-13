@@ -8,6 +8,10 @@
  * All Rights Reserved.
  *********************************************************************************/
 
+require_once 'include/utils/utils.php';
+require_once 'modules/com_vtiger_workflow/include.inc';
+require_once 'modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc';
+require_once 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
 //--
 $adb = PearDatabase::getInstance();
 $Vtiger_Utils_log = true;

@@ -801,20 +801,14 @@ class PearDatabase{
 		}
 		$this->database = ADONewConnection($this->dbType);
 
-		$result = $this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
-		if ($result) {
-			$this->database->LogSQL($this->enableSQLlog);
+		$this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
+		$this->database->LogSQL($this->enableSQLlog);
 
-			// 'SET NAMES UTF8' needs to be executed even if database has default CHARSET UTF8
-			// as mysql server might be running with different charset!
-			// We will notice problem reading UTF8 characters otherwise.
-			if($this->isdb_default_utf8_charset) {
-				$this->executeSetNamesUTF8SQL(true);
-			}
-		} else {
-			if (function_exists('sendMailToSATeam')) {
-				sendMailToSATeam("Mysql_Connection");
-			}
+		// 'SET NAMES UTF8' needs to be executed even if database has default CHARSET UTF8
+		// as mysql server might be running with different charset!
+		// We will notice problem reading UTF8 characters otherwise.
+		if($this->isdb_default_utf8_charset) {
+			$this->executeSetNamesUTF8SQL(true);
 		}
 	}
 

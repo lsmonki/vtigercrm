@@ -82,7 +82,6 @@ $languageStrings = array(
 	'LBL_VIDEO_TUTORIAL' => 'Video Tutorial',
 	'LBL_FEEDBACK' => 'Feedback',
 	'LBL_CRM_SETTINGS' => 'CRM Settings',
-	'LBL_ON_DEMAND_ADMIN' => 'Add / Delete Users',
 	'LBL_ANNOUNCEMENT' => 'Announcement',
 	'LBL_CALENDAR' => 'Calendar',
 	'LBL_POST' => 'Post',
@@ -619,9 +618,6 @@ $languageStrings = array(
 	//Dashboard list of widgets translation
 	'Open Ticktes' => 'Open Tickets',
 	'LBL_SELECT_STATUS' => 'Select Status',
-
-	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand',
 
 	//Translations used in inventory modules for sopy address
 	'SINGLE_Accounts' => 'Organization',
