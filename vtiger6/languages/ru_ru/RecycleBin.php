@@ -8,13 +8,13 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'RecycleBin'                   => 'Recycle Bin'                 , // TODO: Review
-	'LBL_SELECT_MODULE'            => 'Select Module'               , // TODO: Review
-	'LBL_EMPTY_RECYCLEBIN'         => 'Empty Recycle Bin'           , // TODO: Review
-	'LBL_RESTORE'                  => 'Restore'                     , // TODO: Review
-	'LBL_NO_PERMITTED_MODULES'     => 'No permitted modules available', // TODO: Review
+	'RecycleBin'                   => 'Корзина'              , 
+	'LBL_SELECT_MODULE'            => 'Выберите Модуль', 
+	'LBL_EMPTY_RECYCLEBIN'         => 'Очистить Корзину', 
+	'LBL_RESTORE'                  => 'Востановить'      , // KEY 5.x: LBL_MASS_RESTORE
+	'LBL_NO_PERMITTED_MODULES'     => 'Нет доступных модулей', 
 	'LBL_RECORDS_LIST'             => 'Recycle Bin List'            , // TODO: Review
-	'LBL_NO_RECORDS_FOUND'         => 'No records found to Restore in module', // TODO: Review
+	'LBL_NO_RECORDS_FOUND'         => 'Не найдено записей для Востановления в модуле', // KEY 5.x: LBL_EMPTY_MODULE
 );
 $jsLanguageStrings = array(
 	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Are you sure you want to permanently remove all the deleted records from your database?', // TODO: Review

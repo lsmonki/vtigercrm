@@ -9,7 +9,9 @@
  ********************************************************************************/
 
 require_once($root_directory."include/database/PearDatabase.php");
+
 global $mod_strings,$adb;
+
 $server=vtlib_purify($_REQUEST['server']);
 $mode = vtlib_purify($_REQUEST['mode']);
 $port=vtlib_purify($_REQUEST['port']);
@@ -19,7 +21,6 @@ $server_type = vtlib_purify($_REQUEST['server_type']);
 $server_path = vtlib_purify($_REQUEST['server_path']);
 $from_email_field = vtlib_purify($_REQUEST['from_email_field']);
 $smtp_auth_value = vtlib_purify($_REQUEST['smtp_auth']);
-
 
 $db_update = true;
 if($smtp_auth_value == 'on' || $smtp_auth_value == 1)
@@ -135,7 +136,7 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 	$description = 'Dear '.$current_user->user_name.', <br><br><b> This is a test mail sent to confirm if a mail is actually being sent through the smtp server that you have configured. </b><br>Feel free to delete this mail.<br><br>Thanks  and  Regards,<br> Team vTiger <br><br>';
 	if($to_email != '')
 	{
-		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
+		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description,'','','','','',true);
 		$mail_status_str = $to_email."=".$mail_status."&&&";
 	}
 	else

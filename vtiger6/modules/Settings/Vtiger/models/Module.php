@@ -55,19 +55,23 @@ class Settings_Vtiger_Module_Model extends Vtiger_Base_Model {
 		return $this->listFieldModels;
 	}
 
+	/**
+	 * Function to get name fields of this module
+	 * @return <Array> list field names
+	 */
 	public function getNameFields() {
-		if(!$this->nameFieldModels) {
-			$fields = $this->nameFields;
-			$fieldObjects = $this->getListFields();
-			$nameFieldObjects = array();
-			foreach($fields as $fieldName) {
-				$nameFieldObjects[$fieldName] = $fieldObjects[$fieldName];
-			}
-			$this->nameFieldModels = $nameFieldObjects;
-		}
-		return $this->nameFieldModels;
+		return $this->nameFields;
 	}
-	
+
+	/**
+	 * Function to get field using field name
+	 * @param <String> $fieldName
+	 * @return <Field_Model>
+	 */
+	public function getField($fieldName) {
+		return new Vtiger_Base_Model(array('name' => $fieldName, 'label' => $fieldName));
+	}
+
 	public function hasCreatePermissions() {
 		return true;
 	}

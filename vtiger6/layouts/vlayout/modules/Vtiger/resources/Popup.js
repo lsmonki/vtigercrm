@@ -529,7 +529,15 @@ jQuery.Class("Vtiger_Popup_Js",{
 		    thisInstance.getListViewEntries(e);
 		});
 	},
-
+	
+	triggerDisplayTypeEvent : function() {
+		var widthType = app.cacheGet('widthType', 'narrowWidthType');
+		if(widthType) {
+			var elements = jQuery('.listViewEntriesTable').find('td,th');
+			elements.attr('class', widthType);
+		}
+	},
+	
 	registerEvents: function(){
 		var thisInstance = this;
 		var pageNumber = jQuery('#pageNumber').val();
@@ -544,6 +552,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		this.registerEventForSort();
 		this.registerEventForPagination();
 		this.registerEventForListViewEntries();
+		this.triggerDisplayTypeEvent();
 	}
 });
 jQuery(document).ready(function() {

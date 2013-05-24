@@ -21,7 +21,7 @@ class Settings_Vtiger_OutgoingServerSaveAjax_Action extends Settings_Vtiger_Basi
         }
         $response = new Vtiger_Response();
         try{
-            $id = $outgoingServerSettingsModel->save();
+            $id = $outgoingServerSettingsModel->save($request);
             $data = $outgoingServerSettingsModel->getData();
             $response->setResult($data);
         }catch(Exception $e) {

@@ -39,7 +39,7 @@
 				<tbody>
 					{foreach item=RULE_MODEL key=RULE_ID from=$RULE_MODEL_LIST name="customRuleIterator"}
 					<tr class="customRuleEntries">
-						<td>
+						<td class="sequenceNumber">
 							{$smarty.foreach.customRuleIterator.index + 1}
 						</td>
 						<td>

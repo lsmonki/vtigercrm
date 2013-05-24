@@ -26,5 +26,6 @@ $languageStrings = array(
 	'LBL_NAME' => 'Name',
 	'LBL_ASSIGN_NEW_PRIVILEGES' => 'Assign privileges directly to Role',
 	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Assign priviliges from existing profiles',
-	'LBL_PRIVILEGES' => 'Privileges'
+	'LBL_PRIVILEGES' => 'Privileges',
+	'LBL_DUPLICATES_EXIST' => 'Duplicate Role Exists',
 );

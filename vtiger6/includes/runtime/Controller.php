@@ -120,7 +120,7 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 	}
 
 	function getPageTitle(Vtiger_Request $request) {
-		return vtranslate($request->get('module'), $request->get('module'));
+		return vtranslate($request->getModule(), $request->get('module'));
 	}
 
 	function preProcess(Vtiger_Request $request, $display=true) {

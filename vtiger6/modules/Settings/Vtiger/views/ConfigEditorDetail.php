@@ -19,6 +19,11 @@ class Settings_Vtiger_ConfigEditorDetail_View extends Settings_Vtiger_Index_View
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedName);
 		$viewer->view('ConfigEditorDetail.tpl', $qualifiedName);
 	}
+	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_CONFIG_EDITOR',$qualifiedModuleName);
+	}
     
 	/**
 	 * Function to get the list of Script models to be included

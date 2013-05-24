@@ -86,7 +86,8 @@ var Settings_Picklist_Js = {
 	
 	registerAssingValueToRuleEvent : function() {
 		jQuery('#assignValue').on('click',function() {
-			var selectedListItem = jQuery('.selectedListItem');
+			var pickListValuesTable = jQuery('#pickListValuesTable');
+			var selectedListItem = jQuery('.selectedListItem',pickListValuesTable);
 			if(selectedListItem.length > 0) {
 				var selectedValues = [];
 				jQuery.each(selectedListItem,function(i,element) {
@@ -227,7 +228,8 @@ var Settings_Picklist_Js = {
 	
 	registerRenameItemEvent : function() {
 		jQuery('#renameItem').on('click',function(e){
-			var selectedListItem = jQuery('.selectedListItem');
+			var pickListValuesTable = jQuery('#pickListValuesTable');
+			var selectedListItem = jQuery('.selectedListItem',pickListValuesTable);
 			var selectedListItemLength = selectedListItem.length;
 			if(selectedListItemLength > 1)  {
 				var params = {

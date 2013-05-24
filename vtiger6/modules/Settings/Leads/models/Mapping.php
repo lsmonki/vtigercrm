@@ -155,7 +155,7 @@ class Settings_Leads_Mapping_Model extends Settings_Vtiger_Module_Model {
 			$mappingId = $mappingDetails['mappingId'];
 			if ($mappingDetails['lead']) {
 				if ($mappingId) {
-					if (array_key_exists('deletable', $mappingDetails)) {
+					if ((array_key_exists('deletable', $mappingDetails)) || (!$mappingDetails['account'] && !$mappingDetails['contact'] && !$mappingDetails['potential'])) {
 						$deleteMappingsList[] = $mappingId;
 					} else {
 						if ($mappingDetails['account'] || $mappingDetails['contact'] || $mappingDetails['potential']) {

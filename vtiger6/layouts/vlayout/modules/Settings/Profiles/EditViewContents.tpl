@@ -69,7 +69,10 @@
 			</tr>
 		</thead>
 		<tbody>
-			{foreach from=$RECORD_MODEL->getModulePermissions() key=TABID item=PROFILE_MODULE}
+			{assign var=PROFILE_MODULES value=$RECORD_MODEL->getModulePermissions()}
+			{foreach from=$PROFILE_MODULES key=TABID item=PROFILE_MODULE}
+				{assign var=MODULE_NAME value=$PROFILE_MODULE->getName()}
+				{if $MODULE_NAME neq 'Events'}
 				{assign var=IS_RESTRICTED_MODULE value=$RECORD_MODEL->isRestrictedModule($PROFILE_MODULE->getName())}
 				<tr>
 					<td>
@@ -99,10 +102,9 @@
 				<tr class="hide">
 					<td colspan="6" class="row-fluid" style="padding-left: 5%;padding-right: 5%">
 						<div class="row-fluid hide" data-togglecontent="{$TABID}-fields">
-							{if !$IS_RESTRICTED_MODULE}
 							{if $PROFILE_MODULE->getFields()}
 								<div class="span12">
-									<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}</strong></label>
+									<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}{if $MODULE_NAME eq 'Calendar'} {vtranslate('LBL_OF', $MODULE_NAME)} {vtranslate('LBL_TASKS', $MODULE_NAME)}{/if}</strong></label>
 									<div class="pull-right">
 										<span class="mini-slider-control ui-slider" data-value="0">
 											<a style="margin-top: 5px" class="ui-slider-handle"></a>
@@ -139,6 +141,29 @@
 
 								{/foreach}
 							</table>
+							{if $MODULE_NAME eq 'Calendar'}
+								{assign var=EVENT_MODULE value=$PROFILE_MODULES[16]}
+								<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS', $QUALIFIED_MODULE)} {vtranslate('LBL_OF', $EVENT_MODULE->getName())} {vtranslate('LBL_EVENTS', $EVENT_MODULE->getName())}</strong></label>
+								<table class="table table-bordered table-striped">
+									{foreach from=$EVENT_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
+										{assign var="FIELD_ID" value=$FIELD_MODEL->getId()}
+										{if $smarty.foreach.fields.index % 3 == 0}
+										<tr>
+										{/if}
+										<td style="border-left: 1px solid #DDD !important;">
+											{assign var="FIELD_LOCKED" value=$RECORD_MODEL->isModuleFieldLocked($EVENT_MODULE, $FIELD_MODEL)}
+											<input type="hidden" name="permissions[16][fields][{$FIELD_ID}]" data-range-input="{$FIELD_ID}" value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}" readonly="true">
+											<div class="mini-slider-control editViewMiniSlider pull-left" data-locked="{$FIELD_LOCKED}" data-range="{$FIELD_ID}" data-value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}"></div>
+											<div class="pull-left">
+												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {$FIELD_MODEL->get('label')}
+											</div>
+										</td>
+										{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}
+										</tr>
+										{/if}
+									{/foreach}
+								</table>
+							{/if}
 						</div>
 						</ul>
 					{/if}
@@ -176,9 +201,9 @@
 											{/foreach}
 										</table>
 									</div>
-									{/if}
 								</td>
 							</tr>
+							{/if}
 						{/foreach}
 					</tbody>
 				</table>

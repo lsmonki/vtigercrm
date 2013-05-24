@@ -21,10 +21,10 @@
 			<div class="span2">&nbsp;</div>
 			<div class="span2">
 				<button class="btn addButton" {if stripos($SCANNER_MODEL->getCreateRuleRecordUrl(), 'javascript:')===0} onclick='{$SCANNER_MODEL->getCreateRuleRecordUrl()|substr:strlen("javascript:")}' 
-						{else} onclick='window.location.href="{$SCANNER_MODEL->getCreateRuleRecordUrl()}"' {/if}><i class="icon-plus icon-white"></i>&nbsp;&nbsp;{vtranslate('LBL_ADD_RULE',$QUALIFIED_MODULE)}</button>	
+						{else} onclick='window.location.href="{$SCANNER_MODEL->getCreateRuleRecordUrl()}"' {/if}><i class="icon-plus icon-white"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_RULE',$QUALIFIED_MODULE)}</strong></button>	
 			</div>
 			<div class="span8">
-				<button class="btn pull-right" onclick="window.history.back()">{vtranslate('LBL_BACK_TO_MAILBOXES',$QUALIFIED_MODULE)}</button>
+				<button class="btn pull-right" onclick="window.history.back()"><strong>{vtranslate('LBL_BACK_TO_MAILBOXES',$QUALIFIED_MODULE)}</strong></button>
 			</div> 
 			<div class="clearfix"></div>
 		</div><br>

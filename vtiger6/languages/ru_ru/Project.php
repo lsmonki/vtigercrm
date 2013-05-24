@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Project'               => 'Project'                     , // TODO: Review
+	'SINGLE_Project'               => 'Общая'                  , 
 	'LBL_ADD_RECORD'               => 'Add Project'                 , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Projects List'               , // TODO: Review
-	'LBL_PROJECT_INFORMATION'      => 'Project Details'             , // TODO: Review
-	'Project Name'                 => 'Project Name'                , // TODO: Review
-	'Start Date'                   => 'Start Date'                  , // TODO: Review
+	'LBL_PROJECT_INFORMATION'      => 'Информация о проекте', 
+	'Project Name'                 => 'Наименование проекта', 
+	'Start Date'                   => 'Дата Начала'       , 
 	'Target End Date'              => 'Target End Date'             , // TODO: Review
 	'Actual End Date'              => 'Actual End Date'             , // TODO: Review
 	'Project No'                   => 'Project Number'              , // TODO: Review
@@ -27,10 +27,10 @@ $languageStrings = array(
 	'LBL_CHARTS'                   => 'Charts'                      , // TODO: Review
 	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
 	'LBL_MILESTONES'               => 'Milestones'                  , // TODO: Review
-	'LBL_TASKS'                    => 'Tasks'                       , // TODO: Review
+	'LBL_TASKS'                    => 'Задачи'                , // KEY 5.x: Tasks
 	'LBL_STATUS_IS'                => 'Status is'                   , // TODO: Review
-	'LBL_STATUS'                   => 'Status'                      , // TODO: Review
-	'LBL_TICKET_PRIORITY'          => 'Priority'                    , // TODO: Review
-	'LBL_MORE'                     => 'more'                        , // TODO: Review
+	'LBL_STATUS'                   => 'Статус'                , 
+	'LBL_TICKET_PRIORITY'          => 'Приоритет'          , // KEY 5.x: LBL_PRIORITY
+	'LBL_MORE'                     => 'больше'                , 
 	'LBL_DOWNLOAD_FILE'            => 'Download File'               , // TODO: Review
 );

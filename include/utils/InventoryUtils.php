@@ -1191,13 +1191,13 @@ function createRecords($obj) {
 	$focus = CRMEntity::getInstance($moduleName);
 
 	$tableName = Import_Utils::getDbTableName($obj->user);
-	$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' GROUP BY subject';
+	$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = ? GROUP BY subject';
 
 	if($obj->batchImport) {
 		$importBatchLimit = getImportBatchLimit();
 		$sql .= ' LIMIT '. $importBatchLimit;
 	}
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array(Import_Data_Controller::$IMPORT_RECORD_NONE));
 	$numberOfRecords = $adb->num_rows($result);
 
 	if ($numberOfRecords <= 0) {
@@ -1214,8 +1214,8 @@ function createRecords($obj) {
 		$fieldData = array();
 		$lineItems = array();
 		$subject = $row['subject'];
-		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' AND subject = "'. $subject .'"';
-		$subjectResult = $adb->query($sql);
+		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = ? AND subject = ?';
+		$subjectResult = $adb->pquery($sql, array(Import_Data_Controller::$IMPORT_RECORD_NONE, $subject));
 		$count = $adb->num_rows($subjectResult);
 		$subjectRowIDs = array();
 		for ($j = 0; $j < $count; ++$j) {
@@ -1360,7 +1360,7 @@ function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
 function getImportStatusCount($obj) {
 	global $adb;
 	$tableName = Import_Utils::getDbTableName($obj->user);
-	$result = $adb->query('SELECT status FROM '.$tableName. ' GROUP BY subject');
+	$result = $adb->pquery('SELECT status FROM '.$tableName. ' GROUP BY subject', array());
 
 	$statusCount = array('TOTAL' => 0, 'IMPORTED' => 0, 'FAILED' => 0, 'PENDING' => 0,
 			'CREATED' => 0, 'SKIPPED' => 0, 'UPDATED' => 0, 'MERGED' => 0);
@@ -1407,8 +1407,8 @@ function undoLastImport($obj, $user) {
 		$viewer->display('OperationNotPermitted.tpl', 'Vtiger');
 		exit;
 	}
-	$result = $adb->query("SELECT recordid FROM $dbTableName WHERE status = ". Import_Data_Controller::$IMPORT_RECORD_CREATED
-			." AND recordid IS NOT NULL GROUP BY subject");
+	$result = $adb->pquery("SELECT recordid FROM $dbTableName WHERE status = ? AND recordid IS NOT NULL GROUP BY subject", 
+			array(Import_Data_Controller::$IMPORT_RECORD_CREATED));
 	$noOfRecords = $adb->num_rows($result);
 	$noOfRecordsDeleted = 0;
 	for($i=0; $i<$noOfRecords; ++$i) {

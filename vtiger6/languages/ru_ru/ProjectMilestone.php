@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , // TODO: Review
+	'SINGLE_ProjectMilestone'      => 'Контрольная Точка', 
 	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , // TODO: Review
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , // TODO: Review

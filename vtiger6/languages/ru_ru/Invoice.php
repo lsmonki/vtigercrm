@@ -8,23 +8,23 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Invoice'               => 'Invoice'                     , // TODO: Review
-	'LBL_EXPORT_TO_PDF'            => 'Export to PDF'               , // TODO: Review
+	'SINGLE_Invoice'               => 'Счет'                    , 
+	'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF'       , 
 	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
 	'LBL_ADD_RECORD'               => 'Add Invoice'                 , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Invoice List'                , // TODO: Review
-	'LBL_INVOICE_INFORMATION'      => 'Invoice Details'             , // TODO: Review
-	'Sales Order'                  => 'Sales Order'                 , // TODO: Review
-	'Customer No'                  => 'Customer No'                 , // TODO: Review
-	'Invoice Date'                 => 'Invoice Date'                , // TODO: Review
-	'Purchase Order'               => 'Purchase Order'              , // TODO: Review
-	'Sales Commission'             => 'Sales Commission'            , // TODO: Review
-	'Invoice No'                   => 'Invoice No'                  , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Список Счетов'   , // KEY 5.x: LBL_LIST_FORM_TITLE
+	'LBL_INVOICE_INFORMATION'      => 'Информация Счета', 
+	'Sales Order'                  => 'Заказ на Продажу', 
+	'Customer No'                  => 'Номер Клиента'   , 
+	'Invoice Date'                 => 'Дата'                    , 
+	'Purchase Order'               => 'Заказ на Закупку', 
+	'Sales Commission'             => 'Комиссия'            , 
+	'Invoice No'                   => 'Счет №'                , 
 	'LBL_RECEIVED'                 => 'Received'                    , // TODO: Review
 	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
-	'Sent'                         => 'Sent'                        , // TODO: Review
-	'Credit Invoice'               => 'Credit Invoice'              , // TODO: Review
-	'Paid'                         => 'Paid'                        , // TODO: Review
-	'AutoCreated'                  => 'AutoCreated'                 , // TODO: Review
-	'Cancel'                       => 'Cancel'                      , // TODO: Review
+	'Sent'                         => 'Отправлен'          , 
+	'Credit Invoice'               => 'Просрочен'          , 
+	'Paid'                         => 'Оплачен'              , 
+	'AutoCreated'                  => 'АвтоСоздан'        , 
+	'Cancel'                       => 'Отменить'            , // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
 );

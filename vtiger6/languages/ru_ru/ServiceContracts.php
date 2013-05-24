@@ -8,18 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'ServiceContracts'             => 'Service Contracts'           , // TODO: Review
-	'SINGLE_ServiceContracts'      => 'Service Contract'            , // TODO: Review
+	'ServiceContracts'             => 'Сервисные Контракты', 
+	'SINGLE_ServiceContracts'      => 'Сервисные Контракты', 
 	'LBL_ADD_RECORD'               => 'Add Service Contract'        , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Service Contracts List'      , // TODO: Review
-	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Service Contract Details'    , // TODO: Review
-	'Contract No'                  => 'Contract Number'             , // TODO: Review
-	'Start Date'                   => 'Start Date'                  , // TODO: Review
-	'End Date'                     => 'End Date'                    , // TODO: Review
-	'Tracking Unit'                => 'Tracking Unit'               , // TODO: Review
-	'Total Units'                  => 'Total Units'                 , // TODO: Review
-	'Used Units'                   => 'Used Units'                  , // TODO: Review
-	'Progress'                     => 'Progress'                    , // TODO: Review
-	'Planned Duration'             => 'Planned Duration (in Days)'  , // TODO: Review
-	'Actual Duration'              => 'Actual Duration (in Days)'   , // TODO: Review
+	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Информация Сервисного Контракта', 
+	'Contract No'                  => 'Контракт №'        , 
+	'Start Date'                   => 'Начало'                , 
+	'End Date'                     => 'Дата Завершения', 
+	'Tracking Unit'                => 'Отслеживаемая Единица', 
+	'Total Units'                  => 'Всего Единиц'     , 
+	'Used Units'                   => 'Использовано Единиц', 
+	'Progress'                     => 'Прогрес (в %)'       , 
+	'Planned Duration'             => 'Плановая Продолжительность (в Днях)', 
+	'Actual Duration'              => 'Фактическая Продолжительность (в Днях)', 
 );

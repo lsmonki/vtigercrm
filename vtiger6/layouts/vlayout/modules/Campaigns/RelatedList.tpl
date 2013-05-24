@@ -105,7 +105,13 @@
 		<div id="deSelectAllMsgDiv" class="alert-block msgDiv">
 			<strong><a id="deSelectAllMsg">{vtranslate('LBL_DESELECT_ALL_RECORDS',$MODULE)}</a></strong>
 		</div>
-		<div class="relatedContents">
+		<div class="contents-topscroll">
+			<div class="topscroll-div">
+				&nbsp;
+			 </div>
+		</div>
+		<div class="relatedContents contents-bottomscroll">
+			<div class="bottomscroll-div">
 			<table class="table table-bordered listViewEntriesTable">
 				<thead>
 					<tr class="listViewHeaders">
@@ -176,6 +182,7 @@
 					</tr>
 				{/foreach}
 			</table>
+			</div>
 		</div>
 	</div>
 {else}

@@ -198,7 +198,7 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 
 	public function isModuleFieldLocked($module, $field) {
 		$fieldModel = $this->getProfileTabFieldModel($module, $field);
-        if(!$fieldModel->isEditable() || $fieldModel->isMandatory() 
+        if(!$fieldModel->isEditable() || $fieldModel->isMandatory()
 				|| in_array($fieldModel->get('uitype'),self::$fieldLockedUiTypes)) {
 			return true;
 		}
@@ -328,7 +328,9 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 
 	public function getModulePermissions() {
 		if(!$this->module_permissions) {
-			$allModules = Vtiger_Module_Model::getAll(array(0), array_merge(array('Home'), Settings_ModuleManager_Module_Model::getNonVisibleModulesList()));
+			$allModules = Vtiger_Module_Model::getAll(array(0), Settings_Profiles_Module_Model::getNonVisibleModulesList());
+			$eventModule = Vtiger_Module_Model::getInstance('Events');
+			$allModules[$eventModule->getId()] = $eventModule;
 			$profileTabPermissions = $this->getProfileTabPermissions();
 			$profileActionPermissions = $this->getProfileActionPermissions();
 			$profileUtilityPermissions = $this->getProfileUtilityPermissions();
@@ -412,8 +414,14 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 		$profileName = $this->get('profilename');
 		$description = $this->get('description');
 		$profilePermissions = $this->get('profile_permissions');
+		$calendarModule = Vtiger_Module_Model::getInstance('Calendar');
+		$eventModule = Vtiger_Module_Model::getInstance('Events');
+		$eventFieldsPermissions = $profilePermissions[$eventModule->getId()]['fields'];
+		$profilePermissions[$eventModule->getId()] = $profilePermissions[$calendarModule->getId()];
+		$profilePermissions[$eventModule->getId()]['fields'] = $eventFieldsPermissions;
 
         $isProfileDirectlyRelatedToRole = 0;
+		$isNewProfile = false;
         if($this->has('directly_related_to_role')){
             $isProfileDirectlyRelatedToRole = $this->get('directly_related_to_role');
         }
@@ -423,6 +431,7 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 			$this->setId($profileId);
 			$sql = 'INSERT INTO vtiger_profile(profileid, profilename, description, directly_related_to_role) VALUES (?,?,?,?)';
 			$params = array($profileId, $profileName, $description, $isProfileDirectlyRelatedToRole);
+			$isNewProfile = true;
 		} else {
 			$sql = 'UPDATE vtiger_profile SET profilename=?, description=?, directly_related_to_role=? WHERE profileid=?';
 			$params = array($profileName, $description, $isProfileDirectlyRelatedToRole, $profileId);
@@ -439,7 +448,8 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 		$params = array($profileId, Settings_Profiles_Module_Model::GLOBAL_ACTION_EDIT, $this->tranformInputPermissionValue($this->get('editall')));
 		$db->pquery($sql, $params);
 
-		$allModuleModules = Vtiger_Module_Model::getAll(array(0), array_merge(array('Home'), Settings_ModuleManager_Module_Model::getNonVisibleModulesList()));
+		$allModuleModules = Vtiger_Module_Model::getAll(array(0), Settings_Profiles_Module_Model::getNonVisibleModulesList());
+		$allModuleModules[$eventModule->getId()] = $eventModule;
 		if(count($allModuleModules) > 0) {
 			$actionModels = Vtiger_Action_Model::getAll(true);
 			foreach($allModuleModules as $tabId => $moduleModel) {
@@ -471,6 +481,10 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 				}
 			}
 		}
+		if($isNewProfile){
+			$this->saveUserAccessbleFieldsIntoProfile2Field();
+		}
+		
         $this->recalculate();
         return $profileId;
 	}
@@ -727,21 +741,26 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 		return null;
 	}
-    
-    public static function getInstanceByName($profileName , $checkOnlyDirectlyRelated=false) {
+
+    public static function getInstanceByName($profileName , $checkOnlyDirectlyRelated=false, $excludedRecordId = array()) {
         $db = PearDatabase::getInstance();
         $query = 'SELECT * FROM vtiger_profile WHERE profilename=?';
         $params = array($profileName);
         if($checkOnlyDirectlyRelated) {
             $query .=' AND directly_related_to_role=1';
         }
+		if(!empty($excludedRecordId)) {
+           $query .= ' AND profileid NOT IN ('.generateQuestionMarks($excludedRecordId).')';
+           $params = array_merge($params,$excludedRecordId);
+       }
+	   
         $result = $db->pquery($query, $params);
         if($db->num_rows($result)> 0 ){
             return self::getInstanceFromQResult($result);
         }
         return null;
     }
-	
+
 	/**
 	 * Function to get the Detail Url for the current group
 	 * @return <String>
@@ -749,7 +768,7 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
     public function getDetailViewUrl() {
         return '?module=Profiles&parent=Settings&view=Detail&record=' . $this->getId();
     }
-	
+
 	/**
 	 * Function to check whether the profiles is directly related to role
 	 * @return Boolean
@@ -812,5 +831,52 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 			$userIdsList[] = $db->query_result($result, $i, 'id');
 		}
 		return $userIdsList;
+	}
+	
+	/**
+	 * Function to save user fields in vtiger_profile2field table
+	 * We need user field values to generating the Email Templates variable valuues.
+	 * @param type $profileId
+	 */
+	public function saveUserAccessbleFieldsIntoProfile2Field(){
+		$profileId = $this->getId();
+		if(!empty($profileId)){
+			$db = PearDatabase::getInstance();
+			$userRecordModel = Users_Record_Model::getCurrentUserModel();
+			$module = $userRecordModel->getModuleName();
+			$tabId = getTabid($module);
+			$userModuleModel = Users_Module_Model::getInstance($module);
+			$moduleFields = $userModuleModel->getFields();
+
+			$userAccessbleFields = array();
+			$skipFields = array(98,115,116,31,32);
+			foreach ($moduleFields as $fieldName => $fieldModel) {
+				if($fieldModel->getFieldDataType() == 'string' || $fieldModel->getFieldDataType() == 'email' || $fieldModel->getFieldDataType() == 'phone') {
+					if(!in_array($fieldModel->get('uitype'), $skipFields) && $fieldName != 'asterisk_extension'){
+						$userAccessbleFields[$fieldModel->get('id')] .= $fieldName;
+					}
+				}
+			}
+
+			//Added user fields into vtiger_profile2field and vtiger_def_org_field
+			//We are using this field information in Email Templates.
+			foreach ($userAccessbleFields as $fieldId => $fieldName) {
+				$insertQuery = 'INSERT INTO vtiger_profile2field VALUES(?,?,?,?,?)';
+				$db->pquery($insertQuery, array($profileId, $tabId, $fieldId,  Settings_Profiles_Module_Model::FIELD_ACTIVE, Settings_Profiles_Module_Model::FIELD_READWRITE));
+			}
+			
+			$sql = 'SELECT fieldid FROM vtiger_def_org_field WHERE tabid = ?';
+			$result1 = $db->pquery($sql, array($tabId));
+			$def_org_fields = array();
+			for($j=0; $j<$db->num_rows($result1); $j++) {
+				array_push($def_org_fields, $db->query_result($result1, $j, 'fieldid'));
+			}
+			foreach ($userAccessbleFields as $fieldId => $fieldName) {
+				if(!in_array($fieldId, $def_org_fields)){
+					$insertQuery = 'INSERT INTO vtiger_def_org_field VALUES(?,?,?,?)';
+					$db->pquery($insertQuery, array($tabId,$fieldId,0,0));
+				}
+			}
+		}
 	}
 }

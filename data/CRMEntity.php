@@ -1190,16 +1190,17 @@ class CRMEntity {
 	function trash($module, $id) {
 		global $log, $current_user, $adb;
 
-		require_once("include/events/include.inc");
-		$em = new VTEventsManager($adb);
+		if(!self::isBulkSaveMode()) {
+            require_once("include/events/include.inc");
+            $em = new VTEventsManager($adb);
 
-		// Initialize Event trigger cache
-		$em->initTriggerCache();
+            // Initialize Event trigger cache
+            $em->initTriggerCache();
 
-		$entityData = VTEntityData::fromEntityId($adb, $id);
+            $entityData = VTEntityData::fromEntityId($adb, $id);
 
-		$em->triggerEvent("vtiger.entity.beforedelete", $entityData);
-
+            $em->triggerEvent("vtiger.entity.beforedelete", $entityData);
+        }
 		$this->mark_deleted($id);
 		$this->unlinkDependencies($module, $id);
 
@@ -1210,7 +1211,9 @@ class CRMEntity {
 		$sql_recentviewed = 'DELETE FROM vtiger_tracker WHERE user_id = ? AND item_id = ?';
 		$this->db->pquery($sql_recentviewed, array($current_user->id, $id));
 
-		$em->triggerEvent("vtiger.entity.afterdelete", $entityData);
+		if($em){
+            $em->triggerEvent("vtiger.entity.afterdelete", $entityData);
+        }
 	}
 
 	/** Function to unlink all the dependent entities of the given Entity by Id */
@@ -1466,7 +1469,7 @@ class CRMEntity {
 	// END
 
 	function updateMissingSeqNumber($module) {
-		global $log, $adb;
+        global $log, $adb;
 		$log->debug("Entered updateMissingSeqNumber function");
 
 		vtlib_setup_modulevars($module, $this);

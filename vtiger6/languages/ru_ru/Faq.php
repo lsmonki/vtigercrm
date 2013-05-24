@@ -8,19 +8,19 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Faq'                          => 'FAQ'                         , // TODO: Review
-	'SINGLE_Faq'                   => 'FAQ'                         , // TODO: Review
+	'Faq'                          => 'ЧаВо'                    , 
+	'SINGLE_Faq'                   => 'ЧаВо'                    , 
 	'LBL_RECORDS_LIST'             => 'FAQs List'                   , // TODO: Review
 	'LBL_ADD_RECORD'               => 'Add FAQ'                     , // TODO: Review
-	'LBL_FAQ_INFORMATION'          => 'FAQ Information'             , // TODO: Review
-	'LBL_COMMENT_INFORMATION'      => 'Comments'                    , // TODO: Review
-	'Question'                     => 'Question'                    , // TODO: Review
-	'Answer'                       => 'Answer'                      , // TODO: Review
-	'Comments'                     => 'Comments'                    , // TODO: Review
-	'Faq No'                       => 'Faq Number'                  , // TODO: Review
-	'General'                      => 'General'                     , // TODO: Review
-	'Draft'                        => 'Draft'                       , // TODO: Review
-	'Published'                    => 'Published'                   , // TODO: Review
-	'Obsolete'                     => 'Obsolete'                    , // TODO: Review
-	'LBL_SOLUTION'                 => 'Solution'                    , // TODO: Review
+	'LBL_FAQ_INFORMATION'          => 'Информация ЧаВо', 
+	'LBL_COMMENT_INFORMATION'      => 'Комментарий'      , 
+	'Question'                     => 'Вопрос'                , 
+	'Answer'                       => 'Ответ'                  , 
+	'Comments'                     => 'Комментарии'      , 
+	'Faq No'                       => 'ЧаВо №'                , 
+	'General'                      => 'Общее'                  , 
+	'Draft'                        => 'Черновик'            , 
+	'Published'                    => 'Опубликовано'    , 
+	'Obsolete'                     => 'Устарело'            , 
+	'LBL_SOLUTION'                 => 'РЕШЕНИЕ'              , 
 );

@@ -235,6 +235,79 @@ var Settings_Profiles_Js = {
 		}
 	}, 
 	
+	registerSubmitEvent : function() {
+		var thisInstance = this;
+		var form = jQuery('[name="EditProfile"]');
+		form.on('submit',function(e) {
+			if(form.data('submit') == 'true' && form.data('performCheck') == 'true') {
+				return true;
+			} else {
+				if(form.data('jqv').InvalidFields.length <= 0) {
+					var formData = form.serializeFormData();
+					thisInstance.checkDuplicateName({
+						'profileName' : formData.profilename,
+						'profileId' : formData.record
+					}).then(
+						function(data){
+							form.data('submit', 'true');
+							form.data('performCheck', 'true');
+							form.submit();
+						},
+						function(data, err){
+							var params = {};
+							params['text'] = data['message'];
+							params['type'] = 'error';
+							Settings_Vtiger_Index_Js.showMessage(params);
+							return false;
+						}
+					);
+				} else {
+					//If validation fails, form should submit again
+					form.removeData('submit');
+					// to avoid hiding of error message under the fixed nav bar
+					app.formAlignmentAfterValidation(form);
+				}
+				e.preventDefault();
+			}
+		})
+	},
+	
+	/*
+	 * Function to check Duplication of Profile Name
+	 * returns boolean true or false
+	 */
+
+	checkDuplicateName : function(details) {
+		var profileName = details.profileName;
+		var recordId = details.profileId;
+		var aDeferred = jQuery.Deferred();
+		
+		var params = {
+		'module' : app.getModuleName(),
+		'parent' : app.getParentModuleName(),
+		'action' : 'EditAjax',
+		'mode' : 'checkDuplicate',
+		'profilename' : profileName,
+		'record' : recordId
+		}
+		
+		AppConnector.request(params).then(
+			function(data) {
+				var response = data['result'];
+				var result = response['success'];
+				if(result == true) {
+					aDeferred.reject(response);
+				} else {
+					aDeferred.resolve(response);
+				}
+			},
+			function(error,err){
+				aDeferred.reject();
+			}
+		);
+		return aDeferred.promise();
+	},
+	
 	registerEvents : function() {
 		Settings_Profiles_Js.initEditView();
 		Settings_Profiles_Js.registerSelectAllModulesEvent();
@@ -242,6 +315,7 @@ var Settings_Profiles_Js = {
 		Settings_Profiles_Js.registerSelectAllCreateActionsEvent();
 		Settings_Profiles_Js.registerSelectAllDeleteActionsEvent();
 		Settings_Profiles_Js.performSelectAllActionsOnLoad();
+		Settings_Profiles_Js.registerSubmitEvent();
 	}
 	
 }

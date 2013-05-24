@@ -164,7 +164,8 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 			$viewer->view('OperationNotPermitted.tpl', 'Vtiger');
 			exit;
 		}
-
+        $previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
+        $VTIGER_BULK_SAVE_MODE = true;  
 		$result = $db->query("SELECT recordid FROM $dbTableName WHERE status = ". Import_Data_Action::$IMPORT_RECORD_CREATED
 									." AND recordid IS NOT NULL");
 		$noOfRecords = $db->num_rows($result);
@@ -172,12 +173,13 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		for($i=0; $i<$noOfRecords; $i++) {
 			$recordId = $db->query_result($result, $i, 'recordid');
 			if(isRecordExists($recordId) && isPermitted($moduleName, 'Delete', $recordId) == 'yes') {
-				$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
-				$recordModel->delete();
+				$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+                $recordModel->setId($recordId);
+                $recordModel->delete();
 				$noOfRecordsDeleted++;
 			}
 		}
-
+        $VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 		$viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('MODULE', 'Import');
 		$viewer->assign('TOTAL_RECORDS', $noOfRecords);

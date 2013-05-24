@@ -64,6 +64,16 @@ class Settings_Webforms_Module_Model extends Settings_Vtiger_Module_Model {
 	}
 
 	/**
+	 * Function to get field using field name
+	 * @param <String> $fieldName
+	 * @return <Settings_Webforms_Field_Model>
+	 */
+	public function getField($fieldName) {
+		$fields = $this->getFields();
+		return $fields[$fieldName];
+	}
+
+	/**
 	 * Function to delete record
 	 * @param <Settings_Webforms_Record_Model> $recordModel
 	 * @return <boolean> true

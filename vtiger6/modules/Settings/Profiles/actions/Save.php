@@ -18,11 +18,8 @@ class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
 	}
 
 	public function process(Vtiger_Request $request) {
-		$moduleName = $request->getModule();
-		$qualifiedModuleName = $request->getModule(false);
 		$recordId = $request->get('record');
 
-		$moduleModel = Settings_Vtiger_Module_Model::getInstance($qualifiedModuleName);
 		if(!empty($recordId)) {
 			$recordModel = Settings_Profiles_Record_Model::getInstanceById($recordId);
 		} else {
@@ -36,7 +33,7 @@ class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
 			$recordModel->set('profile_permissions', $request->get('permissions'));
 			$recordModel->save();
 		}
-
+		
 		$redirectUrl = $recordModel->getDetailViewUrl();
 		header("Location: $redirectUrl");
 	}

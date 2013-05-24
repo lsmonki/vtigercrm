@@ -126,6 +126,7 @@ $languageStrings = array(
 	'LBL_SEARCH_BUTTON' => 'Search Button',
 	'LBL_ADVANCE_SEARCH' => 'Advanced Search',
 	'LBL_LOADING_PLEASE_WAIT' => 'Loading, Please wait.',
+	'LBL_PLEASE_SELECT_MODULE' => 'Please select module',
 
 	//DropDown Category
 	'LBL_USERS' => 'Users',
@@ -689,7 +690,7 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Add Bcc',
 	'LBL_MAX_UPLOAD_SIZE' => 'Maximum upload size is',
 	'LBL_EXCEEDED' => 'Exceeded',
-	
+	'LBL_OPERATION_NOT_PERMITTED' => 'Operation not permitted',
 );
 
 $jsLanguageStrings = array(
@@ -722,6 +723,7 @@ $jsLanguageStrings = array(
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected Records?',
 	'JS_LBL_SAVE' => 'Save',
 	'JS_LBL_CANCEL' => 'Cancel',
+	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Organization Name already Exists.Do you want to create a duplicate record?',
 
 	'SHOULD_BE_LESS_THAN_TODAY' => 'Must occur before today',
 	'JS_PLEASE_SELECT_ATLEAST_ONE_OPTION' => 'Please select at least one option',
@@ -840,5 +842,8 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Password Changed Successfully.',
 	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
+	
+	'JS_SHOULD_NOT_EMPTY' => 'Should not empty!',
+	'JS_WRONG_TYPE' => 'Folder/File should be in .zip format',
 
 );

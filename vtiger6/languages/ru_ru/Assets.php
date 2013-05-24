@@ -8,21 +8,21 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Assets'                => 'Asset'                       , // TODO: Review
+	'SINGLE_Assets'                => 'Активы'                , 
 	'LBL_ADD_RECORD'               => 'Add Asset'                   , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Assets List'                 , // TODO: Review
-	'LBL_ASSET_INFORMATION'        => 'Asset Details'               , // TODO: Review
-	'Asset No'                     => 'Asset No'                    , // TODO: Review
-	'Serial Number'                => 'Serial Number'               , // TODO: Review
-	'Date Sold'                    => 'Date Sold'                   , // TODO: Review
-	'Date in Service'              => 'Date in Service'             , // TODO: Review
-	'Tag Number'                   => 'Tag Number'                  , // TODO: Review
-	'Invoice Name'                 => 'Invoice Name'                , // TODO: Review
-	'Shipping Method'              => 'Shipping Method'             , // TODO: Review
-	'Shipping Tracking Number'     => 'Shipping Tracking Number'    , // TODO: Review
-	'Asset Name'                   => 'Asset Name'                  , // TODO: Review
-	'Customer Name'                => 'Customer Name'               , // TODO: Review
-	'Notes'                        => 'Notes'                       , // TODO: Review
-	'In Service'                   => 'In Service'                  , // TODO: Review
-	'Out-of-service'               => 'Out-of-service'              , // TODO: Review
+	'LBL_ASSET_INFORMATION'        => 'Информация Актива', 
+	'Asset No'                     => 'Актив №'              , 
+	'Serial Number'                => 'Серийный Номер' , 
+	'Date Sold'                    => 'Дата Продажи'     , 
+	'Date in Service'              => 'Дата Сервиса'     , 
+	'Tag Number'                   => 'Номер Тега'         , 
+	'Invoice Name'                 => 'Счет'                    , 
+	'Shipping Method'              => 'Метод Доставки' , 
+	'Shipping Tracking Number'     => 'Номер Доставки' , 
+	'Asset Name'                   => 'Название Актива', 
+	'Customer Name'                => 'Название Клиента', 
+	'Notes'                        => 'Примечания'        , 
+	'In Service'                   => 'Обслуживается'  , 
+	'Out-of-service'               => 'Не обслуживается', 
 );

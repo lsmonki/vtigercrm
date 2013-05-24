@@ -15,13 +15,5 @@ class Settings_Workflows_List_View extends Settings_Vtiger_List_View {
 		$viewer->assign('SUPPORTED_MODULE_MODELS', Settings_Workflows_Module_Model::getSupportedModules());
         $viewer->assign('CRON_RECORD_MODEL', Settings_CronTasks_Record_Model::getInstanceByName('Workflow'));
 		parent::preProcess($request, $display);
-		
-	
-
-
-		
-	
-
-
 	}
 }

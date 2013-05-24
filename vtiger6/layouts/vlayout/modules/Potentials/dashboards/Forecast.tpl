@@ -21,6 +21,8 @@
 			<span class="span4">
 				<input type="text" name="expectedclosedate" class="dateRange widgetFilter" />
 			</span>
+		</div>
+		<div class="row-fluid">	
 			<span class="span5">
 				<span class="pull-right">
 					{vtranslate('Created Time', $MODULE_NAME)} &nbsp; {vtranslate('LBL_BETWEEN', $MODULE_NAME)}

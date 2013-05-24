@@ -121,13 +121,16 @@ jQuery.Class("Settings_LeadMapping_Js",{
 			selectedDataType = app.vtranslate("JS_"+selectedDataType);
 			container.find('.selectedFieldDataType').html(selectedDataType);
 			
-			accountFieldsSelectElement.html(accountFieldsBasedOnType);
 			var noneValue = app.vtranslate('JS_NONE');
-			accountFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
+			accountFieldsSelectElement.html(accountFieldsBasedOnType);
 			contactFieldsSelectElement.html(contactFieldsBasedOnType);
-			contactFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
 			potentialFieldsSelectElement.html(potentialFieldsBasedOnType);
-			potentialFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
+			
+			if(selectedDataType != "None"){
+				accountFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
+				contactFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
+				potentialFieldsSelectElement.prepend('<option data-type="'+noneValue+'" label="'+noneValue+'" value="0" selected>'+noneValue+'</option>');
+			}
 			
 			accountFieldsSelectElement.trigger("liszt:updated").trigger('change',false);
 			contactFieldsSelectElement.trigger("liszt:updated").trigger('change',false);
@@ -213,11 +216,11 @@ jQuery.Class("Settings_LeadMapping_Js",{
 			
 			var duplicateOption = false;
 			var existingIdElement;
-			if(typeof selectedOptionId == "0"){
-				selectedOptionId = false;
+			if(selectedOptionId == "0"){
+				selectedOptionId = "false";
 			}
 			
-			if(!executeChange){
+			if((!executeChange) || (selectedOptionId == "false")){
 				selectElement.attr('selectedId',selectedOptionId);
 				return;
 			}
@@ -234,7 +237,7 @@ jQuery.Class("Settings_LeadMapping_Js",{
 				}
 				Settings_Vtiger_Index_Js.showMessage(errorParams);
 			}
-			
+
 			if(selectElement.hasClass('accountsFields')){
 				existingIdElement = jQuery('select.accountsFields.select2[selectedid="'+selectedOptionId+'"]')
 			} else if(selectElement.hasClass('contactFields')){
@@ -242,7 +245,7 @@ jQuery.Class("Settings_LeadMapping_Js",{
 			} else if(selectElement.hasClass('potentialFields')){
 				existingIdElement = jQuery('select.potentialFields.select2[selectedid="'+selectedOptionId+'"]')
 			}
-			
+
 			if(existingIdElement.length > 0){
 				duplicateOption = true;
 			}
@@ -252,7 +255,7 @@ jQuery.Class("Settings_LeadMapping_Js",{
 				var previousSelectedValue;
 				if(selectedFieldId == "false"){
 					previousSelectedValue = selectElement.find('option[label="None"]').text();
-					selectElement.attr('selectedId',false);
+					selectElement.attr('selectedId',"false");
 				} else if(selectedFieldId != "false"){
 					previousSelectedValue = selectElement.find('option[value="'+selectedFieldId+'"]').text();
 					selectElement.attr('selectedId',selectedFieldId);

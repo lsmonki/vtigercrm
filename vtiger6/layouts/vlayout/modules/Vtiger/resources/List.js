@@ -430,6 +430,7 @@ jQuery.Class("Vtiger_List_Js",{
 				})
                 jQuery('#listViewContents').html(data);
 				thisInstance.triggerDisplayTypeEvent();
+				Vtiger_Helper_Js.showHorizontalTopScrollBar();
 				
 				var selectedIds = thisInstance.readSelectedIds();
 				if(selectedIds != ''){
@@ -920,7 +921,7 @@ jQuery.Class("Vtiger_List_Js",{
 		}
 		if(listViewEntriesCount != 0){
 			var pageNumberText = pageStartRange+" "+app.vtranslate('to')+" "+pageEndRange;
-			if(totalCount != '') {
+			if(totalCount != '' && typeof totalCount != 'undefined') {
 				pageNumberText += " "+app.vtranslate('of')+" "+totalCount;
 			}
 			jQuery('.pageNumbers').html(pageNumberText);
@@ -1276,7 +1277,17 @@ jQuery.Class("Vtiger_List_Js",{
 		})
 
 	},
-
+	
+	/*
+	 * Function to register the click event of url field
+	 */
+	registerUrlFieldClickEvent : function(){
+		var listViewContentDiv = this.getListViewContentContainer();
+		listViewContentDiv.on('click','.urlField',function(e){
+			e.stopPropagation();
+		})
+	},
+	
 	/**
 	 * Function to inactive field for validation in a form
 	 * this will remove data-validation-engine attr of all the elements
@@ -1443,7 +1454,7 @@ jQuery.Class("Vtiger_List_Js",{
 
 	registerEventForAlphabetSearch : function() {
 		var thisInstance = this;
-		var listViewPageDiv = this.getListViewContainer();
+		var listViewPageDiv = this.getListViewContentContainer();
 		listViewPageDiv.on('click','.alphabetSearch',function(e) {
 			var alphabet = jQuery(e.currentTarget).find('a').text();
 			var cvId = thisInstance.getCurrentCvId();
@@ -1496,6 +1507,8 @@ jQuery.Class("Vtiger_List_Js",{
 		this.registerMassActionSubmitEvent();
 		this.triggerDisplayTypeEvent();
 		this.registerEventForAlphabetSearch();
+		Vtiger_Helper_Js.showHorizontalTopScrollBar();
+		this.registerUrlFieldClickEvent();
 
 		//Just reset all the checkboxes on page load: added for chrome issue.
 		var listViewContainer = this.getListViewContentContainer();

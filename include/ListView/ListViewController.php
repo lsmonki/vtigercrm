@@ -940,9 +940,9 @@ class ListViewController {
                     $matchPattern = "^[\w]+:\/\/^";
                     preg_match($matchPattern, $rawValue, $matches);
                     if(!empty ($matches[0])){
-                        $value = '<a href="'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
+                        $value = '<a class="urlField cursorPointer" href="'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }else{
-                        $value = '<a href="http://'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
+                        $value = '<a class="urlField cursorPointer" href="http://'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }
 				} elseif ($field->getFieldDataType() == 'email') {
 					global $current_user;

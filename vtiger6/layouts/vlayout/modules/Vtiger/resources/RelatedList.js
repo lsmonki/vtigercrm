@@ -52,6 +52,8 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				thisInstance.selectedRelatedTabElement.addClass('active');
 				thisInstance.relatedContentContainer.html(responseData);
 				responseData = thisInstance.relatedContentContainer.html();
+				thisInstance.triggerDisplayTypeEvent();
+				Vtiger_Helper_Js.showHorizontalTopScrollBar();
 				aDeferred.resolve(responseData);
 				jQuery('input[name="currentPageNum"]', thisInstance.relatedContentContainer).val(completeParams.page);
 			},
@@ -61,6 +63,14 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 			}
 		);
 		return aDeferred.promise();
+	},
+	
+	triggerDisplayTypeEvent : function() {
+		var widthType = app.cacheGet('widthType', 'narrowWidthType');
+		if(widthType) {
+			var elements = jQuery('.listViewEntriesTable').find('td,th');
+			elements.attr('class', widthType);
+		}
 	},
 	
 	showSelectRelationPopup : function(){
@@ -379,5 +389,6 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		this.relatedTabsContainer = selectedRelatedTabElement.closest('div.related');
 		this.detailViewContainer = this.relatedTabsContainer.closest('div.detailViewContainer');
 		this.relatedContentContainer = jQuery('div.contents',this.detailViewContainer);
+		Vtiger_Helper_Js.showHorizontalTopScrollBar();
 	}
 })

@@ -22,6 +22,11 @@ class Settings_Vtiger_TermsAndConditionsEdit_View extends Settings_Vtiger_Index_
         $viewer->view('TermsAndConditions.tpl',$qualifiedName);
     }
 	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_TERMS_AND_CONDITIONS',$qualifiedModuleName);
+	}	
+			
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

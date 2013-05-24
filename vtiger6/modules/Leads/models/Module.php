@@ -45,7 +45,7 @@ class Leads_Module_Model extends Vtiger_Module_Model {
 			$settingLinks[] =	array(
 					'linktype' => 'LISTVIEWSETTING',
 					'linklabel' => 'LBL_WEBFORMS',
-					'linkurl' => 'index.php?parent=Settings&module=Webforms&sourceModule='.$this->getName(),
+					'linkurl' => 'index.php?module=Webforms&parent=Settings&view=Edit',
 					'linkicon' => '');
 		}
 		return $settingLinks;

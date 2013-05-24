@@ -29,7 +29,7 @@
 		{$ADVANCED_FILTER_OPTIONS[$ADVANCE_FILTER_OPTION_KEY] = vtranslate($ADVANCE_FILTER_OPTION, $MODULE)}
 	{/foreach}
 	<input type=hidden name="advanceFilterOptions" data-value='{ZEND_JSON::encode($ADVANCED_FILTER_OPTIONS)}' />
-	<div class="allConditionContainer conditionGroup">
+	<div class="allConditionContainer conditionGroup contentsBackground well">
 		<div class="header">
 			<span><strong>{vtranslate('LBL_ALL_CONDITIONS',$MODULE)}</strong></span>
 			&nbsp;
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="anyConditionContainer conditionGroup">
+	<div class="anyConditionContainer conditionGroup contentsBackground well">
 		<div class="header">
 			<span><strong>{vtranslate('LBL_ANY_CONDITIONS',$MODULE)}</strong></span>
 			&nbsp;

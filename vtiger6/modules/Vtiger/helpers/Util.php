@@ -249,10 +249,10 @@ class Vtiger_Util_Helper {
 
 		return $formatedDate;
 	}
-    
+
     /**
-     * Function which will give the picklist values for a field 
-     * @param type $fieldName -- string 
+     * Function which will give the picklist values for a field
+     * @param type $fieldName -- string
      * @return type -- array of values
      */
     public static function getPickListValues($fieldName) {
@@ -261,7 +261,7 @@ class Vtiger_Util_Helper {
             return $cache->getPicklistValues($fieldName);
         }
         $db = PearDatabase::getInstance();
-        
+
         $query = 'SELECT '.$fieldName.' FROM vtiger_'.$fieldName.' order by sortorderid';
         $values = array();
         $result = $db->pquery($query, array());
@@ -272,11 +272,11 @@ class Vtiger_Util_Helper {
         $cache->setPicklistValues($fieldName, $values);
         return $values;
     }
-    
-	/** 
+
+	/**
 	 * Function gets the CRM's base Currency information
 	 * @return Array
-	 */	
+	 */
 	public static function getBaseCurrency() {
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery('SELECT * FROM vtiger_currency_info WHERE defaultid < 0', array());
@@ -291,25 +291,25 @@ class Vtiger_Util_Helper {
 	 */
     public static function getRoleBasedPicklistValues($fieldName, $roleId) {
         $db = PearDatabase::getInstance();
-        
-        $query = "SELECT $fieldName 
-                  FROM vtiger_$fieldName 
-                      INNER JOIN vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldName.picklist_valueid 
+
+        $query = "SELECT $fieldName
+                  FROM vtiger_$fieldName
+                      INNER JOIN vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldName.picklist_valueid
                   WHERE roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortorderid";
         $result = $db->pquery($query, array($roleId));
         $picklistValues = Array();
         while ($row = $db->fetch_array($result)) {
-            $picklistValues[] = $row[$fieldName];
+            $picklistValues[] = decode_html($row[$fieldName]);
         }
         return $picklistValues;
     }
 
-	/** 
+	/**
 	 * Function to sanitize the uploaded file name
 	 * @param <String> $fileName
 	 * @param <Array> $badFileExtensions
 	 * @return <String> sanitized file name
-	 */	
+	 */
 	public static function sanitizeUploadFileName($fileName, $badFileExtensions) {
 		$fileName = preg_replace('/\s+/', '_', $fileName);//replace space with _ in filename
 		$fileName = rtrim($fileName, '\\/<>?*:"<>|');

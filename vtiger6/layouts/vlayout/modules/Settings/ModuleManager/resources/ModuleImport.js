@@ -56,7 +56,7 @@ jQuery.Class('Settings_Module_Import_Js', {
 	},
     
     /**
-	 * Function to register event related to Import extrension Modules in step1
+	 * Function to register event related to Import extension Modules in step1
 	 */
 	registerEventsForImportModuleStep1 : function(container){
 		var thisInstance = this;
@@ -86,7 +86,7 @@ jQuery.Class('Settings_Module_Import_Js', {
 	},
     
     /**
-	 * Function to register event related to Import extrension Modules in step2
+	 * Function to register event related to Import extension Modules in step2
 	 */
 	registerEventsForImportModuleStep2 : function(container){
 		var container = jQuery(container);
@@ -143,9 +143,50 @@ jQuery.Class('Settings_Module_Import_Js', {
 			});
 		})
 	},
-    
+	
+	registerUploadModuleZipEvent : function() {
+		var thisInstance = this;
+		jQuery('#importUserModule').on('submit',function(e) {
+			var result = thisInstance.checkValidation();
+			
+			if(result == false){
+				return result;
+				e.preventDefault();
+			}
+		});
+	},
+	
+	checkValidation : function() {
+		var moduleZipObj = jQuery('#moduleZip');
+		var moduleZipName = moduleZipObj.val();
+		if(moduleZipName != '') {
+			var zip_arr = new Array();
+			zip_arr = moduleZipName.split(".");
+			
+			var zip_arr_last_index = zip_arr.length - 1;
+			if(zip_arr_last_index < 0) {
+				moduleZipObj.validationEngine('showPrompt', app.vtranslate('JS_WRONG_TYPE') , 'error','topLeft',true);
+				moduleZipObj.val('');
+				return false;
+			}
+			var allowed_extensions = 'zip';
+			var module_ext = zip_arr[zip_arr_last_index].toLowerCase();
+			if(module_ext != allowed_extensions) {
+				moduleZipObj.validationEngine('showPrompt', app.vtranslate('JS_WRONG_TYPE') , 'error','topLeft',true);
+				moduleZipObj.val('');
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			moduleZipObj.validationEngine('showPrompt', app.vtranslate('JS_SHOULD_NOT_EMPTY') , 'error','topLeft',true);
+			return false;
+		}
+	},
+	
     registerEvents : function() {
         this.registerEventForStep1();
+		this.registerUploadModuleZipEvent();
     }
 });
 

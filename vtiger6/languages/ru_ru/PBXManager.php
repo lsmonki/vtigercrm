@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Asterisk'                     => 'Asterisk'                    , // TODO: Review
-	'PBXManager'                   => 'PBX Manager'                 , // TODO: Review
-	'SINGLE_PBXManager'            => 'PBX Manager'                 , // TODO: Review
+	'Asterisk'                     => 'Asterisk'                    , 
+	'PBXManager'                   => 'Менеджер PBX'        , 
+	'SINGLE_PBXManager'            => 'Менеджер PBX'        , // KEY 5.x: PBXManager
 	'LBL_CALL_INFORMATION'         => 'Call Details'                , // TODO: Review
-	'Call From'                    => 'Call From'                   , // TODO: Review
-	'Call To'                      => 'Call To'                     , // TODO: Review
-	'Time Of Call'                 => 'Time Of Call'                , // TODO: Review
-	'PBXManager ID'                => 'PBX Manager ID'              , // TODO: Review
+	'Call From'                    => 'Звонок От'           , 
+	'Call To'                      => 'Звонок'                , 
+	'Time Of Call'                 => 'Время Звонка'     , 
+	'PBXManager ID'                => 'Id PBX Manager'              , 
 );

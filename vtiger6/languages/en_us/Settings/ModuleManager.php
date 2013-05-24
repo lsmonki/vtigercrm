@@ -8,8 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_IMPORT_MODULE' => 'Import Module',
-	'LBL_VTIGER_EXTENSION_STORE' => 'Vtiger Extension Store',
+	'LBL_IMPORT_MODULE_FROM_FILE' => 'Import Module From File',
+	'LBL_VTIGER_EXTENSION_STORE' => 'Vtiger App Store',
 	'LBL_PUBLISHER' => 'Publisher',
 	'LBL_LICENSE' => 'License',
 	'LBL_PUBLISHED_ON' => 'Published on',
@@ -27,4 +27,17 @@ $languageStrings = array(
 	'LBL_FAILED' => 'Failed',
 	'LBL_SUCCESSFULL' => 'Successfull',
 	'LBL_INSTALLATION_LOG' => 'Installation Log',
+	//Install From file labels
+	'LBL_VERIFY_IMPORT_DETAILS' => 'Verify Import Details',
+	'LBL_MODULE_NAME' => 'Module Name',
+	'LBL_REQ_VTIGER_VERSION' => 'Vtiger Version',
+	'LBL_LICENSE_ACCEPT_AGREEMENT' => 'I accept the license agreement.',
+	'LBL_EXISTS'=>'Exists',
+	'LBL_PROCEED_WITH_IMPORT' => 'Do you want to proceed with the import?',
+	'LBL_VERSION_NOT_SUPPORTED' => 'Module version is not compatible with vtiger version',
+	'LBL_FINISH' => 'Finish',
+	'LBL_IMPORT_ZIP' => 'Install From File ...',
+	'LBL_IMPORT_MODULE' => 'Install From Vtiger ...',
+	'LBL_NOT_FOUND' => "Sorry.. We were n't found any Extesions/Modules for Current Version",
+	'LBL_INVALID_IMPORT_TRY_AGAIN' => ' provided for module import! Try Again.',
 );

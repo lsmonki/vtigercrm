@@ -31,6 +31,7 @@ Class Settings_Profiles_Edit_View extends Settings_Vtiger_Index_View {
 		} elseif(!empty($fromRecord)) {
 			$recordModel = Settings_Profiles_Record_Model::getInstanceById($fromRecord);
 			$recordModel->getModulePermissions();
+            $recordModel->getGlobalPermissions();
 			$recordModel->set('profileid', '');
 			$viewer->assign('MODE', '');
 			$viewer->assign('IS_DUPLICATE_RECORD',$fromRecord);

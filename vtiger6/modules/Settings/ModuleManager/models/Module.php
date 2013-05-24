@@ -21,10 +21,17 @@ class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
      * Function to get the url of new module import 
      */
     public static function getNewModuleImportUrl() {
-		return NULL;
+		return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport';
     }
-    
-    /**
+	
+	 /**
+     * Function to get the url of new module import 
+     */
+    public static function getUserModuleImportUrl() {
+		return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport&mode=importUserModuleStep1';
+	}
+	
+	/**
      * Function to disable a module 
      * @param type $moduleName - name of the module
      */

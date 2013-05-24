@@ -177,11 +177,11 @@ class DateTimeField {
 	 * @param Users $user
 	 */
 	public static function convertToUserTimeZone($value, $user = null ) {
-		global $current_user;
+		global $current_user, $default_timezone;
 		if(empty($user)) {
 			$user = $current_user;
 		}
-		$timeZone = $user->time_zone;
+		$timeZone = $user->time_zone ? $user->time_zone : $default_timezone;
 		return DateTimeField::convertTimeZone($value, self::getDBTimeZone(), $timeZone);
 	}
 
@@ -192,11 +192,11 @@ class DateTimeField {
 	 * @param Users $user
 	 */
 	public static function convertToDBTimeZone( $value, $user = null ) {
-		global $current_user;
+		global $current_user, $default_timezone;
 		if(empty($user)) {
 			$user = $current_user;
 		}
-		$timeZone = $user->time_zone;
+		$timeZone = $user->time_zone ? $user->time_zone : $default_timezone;
 		$value = self::sanitizeDate($value, $user);
 		return DateTimeField::convertTimeZone($value, $timeZone, self::getDBTimeZone() );
 	}

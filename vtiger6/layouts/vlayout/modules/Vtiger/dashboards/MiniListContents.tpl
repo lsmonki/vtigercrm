@@ -6,7 +6,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************}
-<div style='padding:5px'>
+<div style='padding:4%;padding-top: 0;margin-bottom: 2%'>
 	
 	{* Comupte the nubmer of columns required *}
 	{assign var="SPANSIZE" value=12}
@@ -27,7 +27,7 @@
 		{foreach item=FIELD from=$MINILIST_WIDGET_MODEL->getHeaders() name="minilistWidgetModelRowHeaders"}
 			<div class="span{$SPANSIZE}">
 				{if $smarty.foreach.minilistWidgetModelRowHeaders.last}
-					<a href="{$RECORD->getDetailViewUrl()}" class="pull-right"><i class="icon-th-list alignMiddle"></i></a>
+					<a href="{$RECORD->getDetailViewUrl()}" class="pull-right"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS',$MODULE_NAME)}" class="icon-th-list alignMiddle"></i></a>
 				{/if}
 				{$RECORD->get($FIELD->get('name'))}&nbsp;
 			</div>

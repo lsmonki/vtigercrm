@@ -13,7 +13,7 @@
 <div class="container-fluid">
 	<label class="themeTextColor font-x-x-large">{vtranslate('LBL_CREATE_PROFILE', $QUALIFIED_MODULE)}</label>
 	<hr>
-	<form name="EditProfile" action="index.php" method="post" class="form-horizontal">
+	<form id="EditView" name="EditProfile" action="index.php" method="post" class="form-horizontal">
 		<input type="hidden" name="module" value="Profiles" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="parent" value="Settings" />
@@ -23,7 +23,7 @@
 		<div class="row-fluid">
 			<div class="row-fluid">
 				<label class="fieldLabel span2"><span class="redColor">*</span><strong>{vtranslate('LBL_PROFILE_NAME', $QUALIFIED_MODULE)}: </strong></label>
-				<input type="text" class="fieldValue span6" name="profilename" id="profilename" value="{$RECORD_MODEL->getName()}" required="true"  />
+				<input type="text" class="fieldValue span6" name="profilename" id="profilename" value="{$RECORD_MODEL->getName()}" data-validation-engine="validate[required]"  />
 			</div><br>
 			<div class="row-fluid">
 				<label class="fieldLabel span2"><strong>{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}:</strong></label>
@@ -32,7 +32,7 @@
             <div class="summaryWidgetContainer">
                 <label class="checkbox">
                     <input type="hidden" name="viewall" value="0" />
-                    <input type="checkbox" name="viewall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} value="1" /> 
+                    <input type="checkbox" name="viewall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} value="1" />
                     {vtranslate('LBL_VIEW_ALL',$QUALIFIED_MODULE)}
                     <span style="margin-left:25px">
                         <i class="icon-info-sign"></i>
@@ -74,8 +74,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						{foreach from=$RECORD_MODEL->getModulePermissions() key=TABID item=PROFILE_MODULE}
-							{assign var=IS_RESTRICTED_MODULE value=$RECORD_MODEL->isRestrictedModule($PROFILE_MODULE->getName())}
+						{assign var=PROFILE_MODULES value=$RECORD_MODEL->getModulePermissions()}
+						{foreach from=$PROFILE_MODULES key=TABID item=PROFILE_MODULE}
+							{assign var=MODULE_NAME value=$PROFILE_MODULE->getName()}
+							{if $MODULE_NAME neq 'Events'}
+							{assign var=IS_RESTRICTED_MODULE value=$RECORD_MODEL->isRestrictedModule($MODULE_NAME)}
 							<tr>
 								<td>
 									<input class="modulesCheckBox alignTop" type="checkbox" name="permissions[{$TABID}][is_permitted]" data-value="{$TABID}" data-module-state="" {if $RECORD_MODEL->hasModulePermission($PROFILE_MODULE)}checked="true"{else} data-module-unchecked="true" {/if}> {$PROFILE_MODULE->get('label')|vtranslate:$PROFILE_MODULE->getName()}
@@ -91,7 +94,6 @@
 									</td>
 								{/foreach}
 								<td style="border-left: 1px solid #DDD !important;">
-									{if !$IS_RESTRICTED_MODULE}
 									{if $PROFILE_MODULE->getFields()}
 										<div class="row-fluid">
 											<span class="span4">&nbsp;</span>
@@ -107,7 +109,7 @@
 									<div class="row-fluid hide" data-togglecontent="{$TABID}-fields">
 									{if $PROFILE_MODULE->getFields()}
 										<div class="span12">
-											<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}</strong></label>
+											<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}{if $MODULE_NAME eq 'Calendar'} {vtranslate('LBL_OF', $MODULE_NAME)} {vtranslate('LBL_TASKS', $MODULE_NAME)}{/if}</strong></label>
 											<div class="pull-right">
 												<span class="mini-slider-control ui-slider" data-value="0">
 													<a style="margin-top: 5px" class="ui-slider-handle"></a>
@@ -143,8 +145,33 @@
 												</tr>
 											{/if}
 											{/if}
-									{/foreach}
-									</table>
+										{/foreach}
+										</table>
+										{if $MODULE_NAME eq 'Calendar'}
+											{assign var=EVENT_MODULE value=$PROFILE_MODULES[16]}
+											<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)} {vtranslate('LBL_OF', $EVENT_MODULE->getName())} {vtranslate('LBL_EVENTS', $EVENT_MODULE->getName())}</strong></label>
+											<table class="table table-bordered table-striped">
+											{foreach from=$EVENT_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
+											{if $FIELD_MODEL->isActiveField()}
+											{assign var="FIELD_ID" value=$FIELD_MODEL->getId()}
+											{if $smarty.foreach.fields.index % 3 == 0}
+												<tr>
+											{/if}
+											<td style="border-left: 1px solid #DDD !important;">
+												{assign var="FIELD_LOCKED" value=$RECORD_MODEL->isModuleFieldLocked($EVENT_MODULE, $FIELD_MODEL)}
+												<input type="hidden" name="permissions[16][fields][{$FIELD_ID}]" data-range-input="{$FIELD_ID}" value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}" readonly="true">
+												<div class="mini-slider-control editViewMiniSlider pull-left" data-locked="{$FIELD_LOCKED}" data-range="{$FIELD_ID}" data-value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}"></div>
+												<div class="pull-left">
+												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {$FIELD_MODEL->get('label')}
+												</div>
+											</td>
+											{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}
+												</tr>
+											{/if}
+											{/if}
+											{/foreach}
+										</table>
+										{/if}
 									</div>
 									</ul>
 								{/if}
@@ -162,7 +189,7 @@
 									{if $ACTION_MODEL->isModuleEnabled($PROFILE_MODULE)}
 										{assign var="testArray" array_push($ALL_UTILITY_ACTIONS_ARRAY,$ACTION_MODEL)}
 									{/if}
-								{/foreach}	
+								{/foreach}
 								{foreach from=$ALL_UTILITY_ACTIONS_ARRAY item=ACTION_MODEL name="actions"}
 									{if $smarty.foreach.actions.index % 3 == 0}
 										<tr>
@@ -173,7 +200,7 @@
 										{assign var="colspan" value=4-$index}
 										colspan="{$colspan}"
 										{else}
-											style="border-right: 1px solid #DDD !important;" 	
+											style="border-right: 1px solid #DDD !important;"
 										{/if}>
 									<input type="checkbox" class="alignTop"  name="permissions[{$TABID}][actions][{$ACTIONID}]" {if $RECORD_MODEL->hasModuleActionPermission($PROFILE_MODULE, $ACTIONID)}checked="true" {elseif empty($RECORD_ID) && empty($IS_DUPLICATE_RECORD)} checked="true" {/if}> {$ACTION_MODEL->getName()}</td>
 									{if $smarty.foreach.actions.last OR ($smarty.foreach.actions.index+1) % 3 == 0}
@@ -182,13 +209,13 @@
 								{/foreach}
 								</table>
 								</div>
-							{/if}
 							</td>
 						</tr>
+						{/if}
 					{/foreach}
 				</tbody>
 			</table>
-			</div>	
+			</div>
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-success" type="submit">{vtranslate('LBL_SAVE',$MODULE)}</button>

@@ -27,9 +27,13 @@
 <div id="deSelectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="deSelectAllMsg">{vtranslate('LBL_DESELECT_ALL_RECORDS',$MODULE)}</a></strong>
 </div>
-
-<div class="listViewEntriesDiv">
-
+<div class="contents-topscroll">
+	<div class="topscroll-div">
+		&nbsp;
+	 </div>
+</div>
+<div class="listViewEntriesDiv contents-bottomscroll">
+	<div class="bottomscroll-div">
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
 	<span class="listViewLoadingImageBlock hide modal" id="loadingListViewModal">
@@ -99,5 +103,6 @@
 		</tbody>
 	</table>
 {/if}
+</div>
 </div>
 {/strip}

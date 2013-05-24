@@ -36,11 +36,11 @@
 					</div>
 				</div>
 				<div class="row-fluid">
-					<div class="span6 control-group">
+					<div class="span4 control-group">
 						<label class="muted control-label">{vtranslate('LBL_SOURCE_FIELD', $QUALIFIED_MODULE)}</label>
 						<div class="controls">
 							<span class="row-fluid">
-								<select id="sourceField" name="sourceField" class="select2 span5" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
+								<select id="sourceField" name="sourceField" class="select2 row-fluid" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
 									<option value=''></option>
 									{foreach key=FIELD_NAME item=FIELD_LABEL from=$PICKLIST_FIELDS}
 										<option value="{$FIELD_NAME}" {if $RECORD_MODEL->get('sourcefield') eq $FIELD_NAME} selected {/if}>{vtranslate($FIELD_LABEL, $SELECTED_MODULE)}</option>
@@ -49,11 +49,11 @@
 							</span>
 						</div>
 					</div>
-					<div class="span6 control-group">
+					<div class="span4 control-group marginLeftZero">
 						<label class="muted control-label">{vtranslate('LBL_TARGET_FIELD', $QUALIFIED_MODULE)}</label>
 						<div class="controls">
 							<span class="row-fluid">
-								<select id="targetField" name="targetField" class="select2 span5" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
+								<select id="targetField" name="targetField" class="select2 row-fluid" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
 									<option value=''></option>
 									{foreach key=FIELD_NAME item=FIELD_LABEL from=$PICKLIST_FIELDS}
 										<option value="{$FIELD_NAME}" {if $RECORD_MODEL->get('targetfield') eq $FIELD_NAME} selected {/if}>{vtranslate($FIELD_LABEL, $SELECTED_MODULE)}</option>
@@ -67,11 +67,6 @@
 					<div class="alert alert-error">
 					  <strong>{vtranslate('LBL_ERR_CYCLIC_DEPENDENCY', $QUALIFIED_MODULE)}</strong>  
 					</div>
-				</div>
-				<div class="row-fluid hide cancelAddView">
-					<span class="btn-toolbar pull-right">
-						<a type="reset" class="cancelLink" title="{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
-					</span>
 				</div>
 				<div id="dependencyGraph">
 				{if $DEPENDENCY_GRAPH}

@@ -561,6 +561,15 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 	},
 
+	/*
+	 * Function to register the click event of url field
+	 */
+	registerUrlFieldClickEvent : function(){
+		var detailContentsHolder = this.getContentHolder();
+		detailContentsHolder.on('click','.urlField',function(e){
+			e.stopPropagation();
+		})
+	},
 
 	/**
 	 * Function to register event for related list row click
@@ -1409,6 +1418,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				function(data){
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.markTabAsSelected(tabElement);
+					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					element.progressIndicator({'mode': 'hide'});
 					if(typeof callBack == 'function'){
 						callBack(data);
@@ -1443,6 +1453,8 @@ jQuery.Class("Vtiger_Detail_Js",{
 		this.registerEventForAddingEmailFromRelatedList();
 		this.registerPostTagCloudWidgetLoad();
 		this.registerEventForRelatedTabClick();
+		Vtiger_Helper_Js.showHorizontalTopScrollBar();
+		this.registerUrlFieldClickEvent();
 
 		var detailViewContainer = jQuery('div.detailViewContainer');
 		if(detailViewContainer.length <= 0) {

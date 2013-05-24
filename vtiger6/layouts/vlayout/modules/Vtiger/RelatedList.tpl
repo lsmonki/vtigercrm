@@ -70,57 +70,64 @@
 			</div>
 		</div>
 	</div>
-	<div class="relatedContents">
-		<table class="table table-bordered listViewEntriesTable">
-			<thead>
-				<tr class="listViewHeaders">
-					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-						<th {if $HEADER_FIELD@last} colspan="2" {/if} nowrap>
-							{if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
-								<a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
-							{elseif $HEADER_FIELD->get('column') eq 'time_start'}
-							{else}
-								<a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
-									&nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}
-								</a>
-							{/if}
-						</th>
-					{/foreach}
-				</tr>
-			</thead>
-			{foreach item=RELATED_RECORD from=$RELATED_RECORDS}
-				<tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
-					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-						{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
-						<td nowrap>
-							{if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
-								<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
-							{elseif $RELATED_HEADERNAME eq 'access_count'}
-								{$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
-							{elseif $RELATED_HEADERNAME eq 'time_start'}
-							{else}
-								{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
-							{/if}
-						{if $HEADER_FIELD@last}
-							</td><td nowrap>
-						<div class="pull-right actions">
-							<span class="actionImages">
-								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
-								{if $IS_EDITABLE}
-									<a href='{$RELATED_RECORD->getEditViewUrl()}'><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>
+	<div class="contents-topscroll">
+		<div class="topscroll-div">
+		&nbsp;
+		</div>
+	</div>
+	<div class="relatedContents contents-bottomscroll">
+		<div class="bottomscroll-div">
+			<table class="table table-bordered listViewEntriesTable">
+				<thead>
+					<tr class="listViewHeaders">
+						{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
+							<th {if $HEADER_FIELD@last} colspan="2" {/if} nowrap>
+								{if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
+									<a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
+								{elseif $HEADER_FIELD->get('column') eq 'time_start'}
+								{else}
+									<a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
+										&nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}
+									</a>
 								{/if}
-								{if $IS_DELETABLE}
-									<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
+							</th>
+						{/foreach}
+					</tr>
+				</thead>
+				{foreach item=RELATED_RECORD from=$RELATED_RECORDS}
+					<tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
+						{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
+							{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
+							<td nowrap>
+								{if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
+									<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
+								{elseif $RELATED_HEADERNAME eq 'access_count'}
+									{$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
+								{elseif $RELATED_HEADERNAME eq 'time_start'}
+								{else}
+									{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
 								{/if}
-							</span>
-						</div>
+							{if $HEADER_FIELD@last}
+								</td><td nowrap>
+							<div class="pull-right actions">
+								<span class="actionImages">
+									<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
+									{if $IS_EDITABLE}
+										<a href='{$RELATED_RECORD->getEditViewUrl()}'><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>
+									{/if}
+									{if $IS_DELETABLE}
+										<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
+									{/if}
+								</span>
+							</div>
+								</td>
+							{/if}
 							</td>
-						{/if}
-						</td>
-					{/foreach}
-				</tr>
-			{/foreach}
-		</table>
+						{/foreach}
+					</tr>
+				{/foreach}
+			</table>
+		</div>
 	</div>
 </div>
 {/strip}

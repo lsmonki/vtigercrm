@@ -25,12 +25,16 @@
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 
 {assign var=ALPHABETS value=','|explode:'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'}
-<div class="pagination alphabetSorting">
-	<ul class="row-fluid">
-		{foreach item=ALPHABET from=$ALPHABETS}
-			<li class="alphabetSearch"><a id="{$ALPHABET}" {if $ALPHABET_VALUE eq $ALPHABET}class="highlightBackgroundColor" {/if}href="#">{$ALPHABET}</a></li>
-		{/foreach}
-	</ul>
+<div class="alphabetSorting">
+	<table width="100%" class="table-bordered" style="border: 1px solid #ddd;table-layout: fixed">
+		<tbody>
+			<tr>
+			{foreach item=ALPHABET from=$ALPHABETS}
+				<td class="alphabetSearch textAlignCenter cursorPointer {if $ALPHABET_VALUE eq $ALPHABET} highlightBackgroundColor {/if}" style="padding : 0px !important"><a id="{$ALPHABET}" href="#">{$ALPHABET}</a></td>
+			{/foreach}
+			</tr>
+		</tbody>	
+	</table>
 </div>
 <div id="selectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($MODULE ,$MODULE)}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>
@@ -38,9 +42,13 @@
 <div id="deSelectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="deSelectAllMsg">{vtranslate('LBL_DESELECT_ALL_RECORDS',$MODULE)}</a></strong>
 </div>
-
-<div class="listViewEntriesDiv">
-
+<div class="contents-topscroll">
+	<div class="topscroll-div">
+		&nbsp;
+	 </div>
+</div>
+<div class="listViewEntriesDiv contents-bottomscroll">
+	<div class="bottomscroll-div">
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
 	<span class="listViewLoadingImageBlock hide modal" id="loadingListViewModal">
@@ -114,5 +122,6 @@
 		</tbody>
 	</table>
 {/if}
+</div>
 </div>
 {/strip}

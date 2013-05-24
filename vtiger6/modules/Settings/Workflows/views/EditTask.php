@@ -70,9 +70,7 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		
 		$emailFields = $recordStructureInstance->getAllEmailFields();
 		foreach($emailFields as $metaKey => $emailField) {
-			$emailFieldoptions .= '<option value=",$'.$metaKey.'">'.
-						'('.vtranslate($emailField->getModule()->get("name"), $emailField->getModule()->get("name")).')'.'  '.
-						vtranslate($emailField->get("label"), $emailField->getModule()->get("name")).'</option>';
+			$emailFieldoptions .= '<option value=",$'.$metaKey.'">'.$emailField->get('workflow_columnlabel').'</option>';
 		}
 		
 		$structure = $recordStructureInstance->getStructure();

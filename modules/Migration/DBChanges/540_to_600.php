@@ -12,6 +12,8 @@ require_once 'include/utils/utils.php';
 require_once 'modules/com_vtiger_workflow/include.inc';
 require_once 'modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc';
 require_once 'modules/com_vtiger_workflow/VTEntityMethodManager.inc';
+require_once 'include/Webservices/Utils.php';
+require_once 'modules/Users/Users.php';
 //--
 $adb = PearDatabase::getInstance();
 $Vtiger_Utils_log = true;
@@ -1279,9 +1281,6 @@ $layoutEditoLink = 'index.php?module=LayoutEditor&parent=Settings&view=Index';
 $params = array($fieldId, $blockId, 'LBL_EDIT_FIELDS', '', 'LBL_LAYOUT_EDITOR_DESCRIPTION', $layoutEditoLink, $sequence);
 $adb->pquery($query, $params);
 
-$adb->pquery('ALTER TABLE com_vtiger_workflows ADD COLUMN filtersavedinnew int(1)', array());
-$adb->pquery('UPDATE com_vtiger_workflows SET filtersavedinnew = 5', array());
-
 $adb->pquery('UPDATE vtiger_role SET rolename = ? WHERE rolename = ? AND depth = ?', array('Organization', 'Organisation', 0));
 
 
@@ -1319,3 +1318,63 @@ $adb->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND field
 $adb->pquery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname=', array('12', 'vtiger_users', 'hour_format'));
 
 //End 2013-05-06
+
+//Start 2013-05-20
+
+// Adding users field into all the available profiles, this is used in email templates
+// when non-admin sends an email with users field in the template
+$module = 'Users';
+$user = new $module();
+$activeAdmin = Users::getActiveAdminId();
+$user->retrieve_entity_info($activeAdmin, $module);
+$handler = vtws_getModuleHandlerFromName($module, $user);
+$meta = $handler->getMeta();
+$moduleFields = $meta->getModuleFields();
+
+$userAccessbleFields = array();
+$skipFields = array(98,115,116,31,32);
+foreach ($moduleFields as $fieldName => $webserviceField) {
+	if($webserviceField->getFieldDataType() == 'string' || $webserviceField->getFieldDataType() == 'email' || $webserviceField->getFieldDataType() == 'phone') {
+		if(!in_array($webserviceField->getUitype(), $skipFields) && $fieldName != 'asterisk_extension'){
+			$userAccessbleFields[$webserviceField->getFieldId()] .= $fieldName;
+		}
+	}
+}
+
+$tabId = getTabid($module);
+$query = 'SELECT profileid FROM vtiger_profile';
+$result = $adb->pquery($query, array());
+
+for($i=0; $i<$adb->num_rows($result); $i++) {
+	$profileId = $adb->query_result($result, $i, 'profileid');
+	$sql = 'SELECT fieldid FROM vtiger_profile2field WHERE profileid = ? AND tabid = ?';
+	$fieldsResult = $adb->pquery($sql, array($profileId, $tabId));
+	$profile2Fields = array();
+	$rows = $adb->num_rows($fieldsResult);
+	for($j=0; $j<$rows; $j++) {
+		array_push($profile2Fields, $adb->query_result($fieldsResult, $j, 'fieldid'));
+	}
+	foreach ($userAccessbleFields as $fieldId => $fieldName) {
+		if(!in_array($fieldId, $profile2Fields)){
+			$insertQuery = 'INSERT INTO vtiger_profile2field(profileid,tabid,fieldid,visible,readonly) VALUES(?,?,?,?,?)';
+			$adb->pquery($insertQuery, array($profileId,$tabId,$fieldId,0,0));
+		}
+	}
+}
+
+//Added user field in vtiger_def_org_field table
+$sql = 'SELECT fieldid FROM vtiger_def_org_field WHERE tabid = ?';
+$result1 = $adb->pquery($sql, array($tabId));
+$def_org_fields = array();
+$defRows = $adb->num_rows($result1);
+for($j=0; $j<$defRows; $j++) {
+	array_push($def_org_fields, $adb->query_result($result1, $j, 'fieldid'));
+}
+foreach ($userAccessbleFields as $fieldId => $fieldName) {
+	if(!in_array($fieldId, $def_org_fields)){
+		$insertQuery = 'INSERT INTO vtiger_def_org_field(tabid,fieldid,visible,readonly) VALUES(?,?,?,?)';
+		$adb->pquery($insertQuery, array($tabId,$fieldId,0,0));
+	}
+}
+
+// END 2013-05-20

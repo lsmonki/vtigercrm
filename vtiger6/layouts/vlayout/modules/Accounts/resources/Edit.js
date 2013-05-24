@@ -77,27 +77,38 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
                     function(data, err){
                         thisInstance.duplicateCheckCache[accountName] = data['success'];
                         thisInstance.duplicateCheckCache['message'] = data['message'];
-                        params = {
-                            title: app.vtranslate('JS_DUPLICATE_RECORD'),
-                            text: data['message']
-                        };
-                        Vtiger_Helper_Js.showPnotify(params);
+						var message = app.vtranslate('JS_DUPLICTAE_CREATION_CONFIRMATION');
+						Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+							function(e) {
+								thisInstance.duplicateCheckCache[accountName] = false;
+								form.submit();
+							},
+							function(error, err) {
+								
+							}
+						);
                     }
-                    );
+				);
             }
            
 			else {
 				if(thisInstance.duplicateCheckCache[accountName] == true){
-					params = {
-						title: app.vtranslate('JS_DUPLICATE_RECORD'),
-						text: thisInstance.duplicateCheckCache['message']
-					};
-					Vtiger_Helper_Js.showPnotify(params);
+					var message = app.vtranslate('JS_DUPLICTAE_CREATION_CONFIRMATION');
+					Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+						function(e) {
+							thisInstance.duplicateCheckCache[accountName] = false;
+							form.submit();
+						},
+						function(error, err) {
+							
+						}
+					);
 				} else {
+					delete thisInstance.duplicateCheckCache[accountName];
 					return true;
 				}
 			}
-			e.preventDefault();
+            e.preventDefault();
 		})
 	},
 	

@@ -9,6 +9,10 @@ body {
 	font-size : @baseFontSize !important;
 	line-height: 1.4;
 }
+// fix for firefox dotted outline around 
+.btn:focus { 
+    outline: none; 
+}
 #page{
 	width:100%;
 	background-image : @pagePatternurl;
@@ -129,9 +133,6 @@ hr{
 }
 .width100per{
 	width: 100%;
-}
-.width80per{
-	width: 80%;
 }
 .width27em{
 	width: 27em !important;
@@ -410,7 +411,6 @@ tr.collapseRow{
 	&:after,&:before{
 		left : 292px !important;
 	}
-	.gradientBar(@gradient7StrtColor,@gradient4EndColor);
 	width: 50em;
 	padding: 24%;
 	left: -270px;
@@ -663,9 +663,8 @@ tr.collapseRow{
 .alphabetSorting {
 	margin : 4px 0 !important;
 	height : 19px;
-	a {
+	td {
 		line-height : 18px;
-		padding : 0  1.35%;
 		&:hover {
 			.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 			//IE 8 Fix
@@ -673,7 +672,7 @@ tr.collapseRow{
 			border-width: 1px 1px 1px 0;
 		}
 	}
-	a.highlightBackgroundColor {
+	td.highlightBackgroundColor {
 		.gradientBar(@gradient2StrtColor,@gradient2EndColor);
 		//IE 8 Fix
 		border : 1px solid @grayLight;
@@ -798,9 +797,9 @@ div.blockPage {
 	.gradientBar(@gradient1StrtColor,@gradient1EndColor);
 }
 
-.listViewEntriesDiv{
+.listViewEntriesDiv, .contents-topscroll{
 	margin-top:5px;
-	overflow-x: auto;
+	overflow-x: auto !important;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {
@@ -1063,7 +1062,7 @@ footer {
 	}
 }
 .relatedContents {
-	overflow-x:auto;
+	overflow-x:auto !important;
 }
 //Related tabs in detail view Ends Here
 
@@ -1084,7 +1083,7 @@ footer {
 
 .filterConditionsDiv{
 	box-shadow: 0 0 6px @boxShadowColor;
-	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+	.gradientBar(@white,@white);
 }
 
 .advanceFilterCondition{
@@ -1493,7 +1492,7 @@ Please check for the below classes if it is being used
 /** Advance Search **/
 
 #advanceSearchContainer {
-	.dropdownStylings;
+	background-color : @white;
 	.filterContainer{
 		.conditionGroup{
 			border: 1px solid @lightColorBorder;
@@ -2632,4 +2631,18 @@ input[type="text"], input, textarea{
 			padding : 1%;
 		}
 	}
+}
+//Horizontal top scroll
+.contents-topscroll, .relatedContents, #reportDetails{
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.bottomscroll-div {
+	display : inline;
+}
+
+//Control the overlapping of cells (due to many rows+cell) during reporting
+//Observed specially in Chrome having 1000+ rows with 9 cells.
+#reportDetails table tr td {
+	padding: 5px;
 }

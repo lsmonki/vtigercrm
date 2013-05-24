@@ -15,10 +15,12 @@ class Import_FileReader_Reader {
 	var $errorMessage='';
 	var $user;
 	var $request;
+    var $moduleModel;
 
 	public function  __construct($request, $user) {
 		$this->request = $request;
 		$this->user = $user;
+        $this->moduleModel = Vtiger_Module_Model::getInstance($this->request->get('module'));
 	}
 
 	public function getStatus() {
@@ -90,12 +92,14 @@ class Import_FileReader_Reader {
 
 		$tableName = Import_Utils_Helper::getDbTableName($this->user);
 		$fieldMapping = $this->request->get('field_mapping');
-
-		$columnsListQuery = 'id INT PRIMARY KEY AUTO_INCREMENT, status INT DEFAULT 0, recordid INT';
-		foreach($fieldMapping as $fieldName => $index) {
-			$columnsListQuery .= ','.$fieldName.' TEXT';
+        $moduleFields = $this->moduleModel->getFields();
+        $columnsListQuery = 'id INT PRIMARY KEY AUTO_INCREMENT, status INT DEFAULT 0, recordid INT';
+		$fieldTypes = $this->getModuleFieldDBColumnType();
+        foreach($fieldMapping as $fieldName => $index) {
+            $fieldObject = $moduleFields[$fieldName];
+            $columnsListQuery .= $this->getDBColumnType($fieldObject, $fieldTypes);
 		}
-		$createTableQuery = 'CREATE TABLE '. $tableName . ' ('.$columnsListQuery.')';
+		$createTableQuery = 'CREATE TABLE '. $tableName . ' ('.$columnsListQuery.') ENGINE=MyISAM ';
 		$db->query($createTableQuery);
 		return true;
 	}
@@ -107,5 +111,47 @@ class Import_FileReader_Reader {
 		$db->pquery('INSERT INTO '.$tableName.' ('. implode(',', $columnNames).') VALUES ('. generateQuestionMarks($fieldValues) .')', $fieldValues);
 		$this->numberOfRecordsRead++;
 	}
+    
+	/** Function returns the database column type of the field
+	 * @param $fieldObject <Vtiger_Field_Model>
+	 * @param $fieldTypes <Array> - fieldnames with column type
+	 * @return <String> - column name with type for sql creation of table
+	 */	
+    public function getDBColumnType($fieldObject,$fieldTypes){
+        $columnsListQuery = '';
+        $fieldName = $fieldObject->getName();
+        $dataType = $fieldObject->getFieldDataType();
+        if($dataType == 'reference' || $dataType == 'owner'){
+            $columnsListQuery .= ','.$fieldName.' varchar(250)';
+        } else {
+            $columnsListQuery .= ','.$fieldName.' '.$fieldTypes[$fieldObject->get('column')];
+        }
+        
+        return $columnsListQuery;
+    }
+    
+	/** Function returns array of columnnames and their column datatype
+	 * @return <Array>
+	 */
+    public function getModuleFieldDBColumnType() {
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery('SELECT tablename FROM vtiger_field WHERE tabid=? GROUP BY tablename', array($this->moduleModel->getId()));
+        $tables = array();
+        if ($result && $db->num_rows($result) > 0) {
+            while ($row = $db->fetch_array($result)) {
+                $tables[] = $row['tablename'];
+            }
+        }
+        $fieldTypes = array();
+        foreach ($tables as $table) {
+            $result = $db->pquery("DESC $table", array());
+            if ($result && $db->num_rows($result) > 0) {
+                while ($row = $db->fetch_array($result)) {
+                    $fieldTypes[$row['field']] = $row['type'];
+                }
+            }
+        }
+        return $fieldTypes;
+    }
 }
 ?>

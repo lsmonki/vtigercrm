@@ -10,16 +10,16 @@
  ************************************************************************************/
 
 class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
-    
-    
-    
+
+
+
     public function isEditable() {
         $nonEditablePickListValues = array( 'campaignrelstatus', 'duration_minutes','email_flag','hdnTaxType',
                         'payment_duration','recurringtype','recurring_frequency','visibility','paymentsstatus','paymentsmode');
         if(in_array($this->getName(), $nonEditablePickListValues)) return false;
         return true;
     }
-    
+
     /**
      * Function which will give the picklistvalues for given roleids
      * @param type $roleIdList -- array of role ids
@@ -34,7 +34,7 @@ class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
         if($groupMode == 'INTERSECTION') {
             $intersectionMode = true;
         }
-        
+
         $db = PearDatabase::getInstance();
         $fieldName = $this->getName();
         $tableName = 'vtiger_'.$fieldName;
@@ -59,11 +59,11 @@ class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
                     continue;
                 }
             }
-            $pickListValues[] = $rowData[$fieldName];
+            $pickListValues[] = decode_html($rowData[$fieldName]);
         }
         return $pickListValues;
     }
-    
+
     /**
 	 * Function to get instance
 	 * @param <String> $value - fieldname or fieldid
@@ -77,7 +77,7 @@ class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
 		}
 		return false;
 	}
-    
+
     /**
 	 * Static Function to get the instance fo Vtiger Field Model from a given Vtiger_Field object
 	 * @param Vtiger_Field $fieldObj - vtlib field object
@@ -91,7 +91,7 @@ class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
 		}
 		return $fieldModel;
 	}
-    
-    
-    
+
+
+
 }

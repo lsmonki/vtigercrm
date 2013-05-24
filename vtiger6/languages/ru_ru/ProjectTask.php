@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Project Task'                , // TODO: Review
+	'SINGLE_ProjectTask'           => 'Проектная Задача', 
 	'LBL_ADD_RECORD'               => 'Add Project Task'            , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Project Task List'           , // TODO: Review
 	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details'        , // TODO: Review

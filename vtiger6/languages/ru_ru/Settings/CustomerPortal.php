@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'CustomerPortal'               => 'Customer Portal'             , // TODO: Review
+	'CustomerPortal'               => 'Клиентский Портал', 
 	'LBL_PORTAL_DESCRIPTION'       => 'Setup Privileges of Portal User', // TODO: Review
-	'LBL_PRIVILEGES'               => 'Privileges'                  , // TODO: Review
+	'LBL_PRIVILEGES'               => 'Права'                  , 
 	'LBL_DEFAULT_ASSIGNEE'         => 'Default Assignee'            , // TODO: Review
 	'LBL_PORTAL_URL'               => 'Portal Url'                  , // TODO: Review
-	'LBL_MODULE_NAME'              => 'Module Name'                 , // TODO: Review
+	'LBL_MODULE_NAME'              => 'Параметры'          , 
 	'LBL_ENABLE_MODULE'            => 'Enable Module'               , // TODO: Review
 	'LBL_VIEW_ALL_RECORDS'         => 'See Records across Organization', // TODO: Review
 	'LBL_PREVILEGES_MESSAGE'       => 'This Role\'s privileges will be applied to the Portal User.', // TODO: Review

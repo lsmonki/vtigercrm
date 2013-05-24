@@ -24,11 +24,11 @@
 			{if $smarty.request.view != 'Popup'}
 			<div class="toolbar">
 				&nbsp;<a href="{$CHILD_ROLE->getCreateChildUrl()}" data-url="{$CHILD_ROLE->getCreateChildUrl()}" title="{vtranslate('LBL_ADD_RECORD', $QUALIFIED_MODULE)}"><span class="icon-plus-sign"></span></a>
-				&nbsp;<a href="javascript:;" data-url="{$CHILD_ROLE->getDeleteActionUrl()}" data-action="modal" title="{vtranslate('LBL_DELETE', $QUALIFIED_MODULE)}"><span class="icon-trash"></span></a>
+				&nbsp;<a data-id="{$CHILD_ROLE->getId()}" href="javascript:;" data-url="{$CHILD_ROLE->getDeleteActionUrl()}" data-action="modal" title="{vtranslate('LBL_DELETE', $QUALIFIED_MODULE)}"><span class="icon-trash"></span></a>
 			</div>
 			{/if}
 		</div>
-		
+
 		{assign var="ROLE" value=$CHILD_ROLE}
 		{include file=vtemplate_path("RoleTree.tpl", "Settings:Roles")}
 	</li>

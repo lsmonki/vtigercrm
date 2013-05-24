@@ -257,4 +257,5 @@ $jsLanguageStrings = array(
 	'LBL_MAXIMUM_SIZE_EXCEEDS' => 'You can upload maximum size of 1MB only',
 	'LBL_NO_LOGO_SELECTED' => 'No logo selected',
 	'JS_CONFIGURATION_DETAILS_SAVED' => 'Configuration Details Saved',
+	'JS_TERMS_AND_CONDITIONS_SAVED' => 'Terms and conditions saved',
 );

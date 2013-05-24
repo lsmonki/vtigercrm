@@ -45,11 +45,12 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
                     'include' => Array('templates', "modules/$module", 'cron', 'vtiger6', 'layouts'), // We don't need manifest.xml
                     //'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
                     ),
-                    // Templates folder to be renamed while copying
-                    Array('templates' => "Smarty/templates/modules/$module"),
-
-                    // Cron folder to be renamed while copying
-                    Array('cron' => "cron/modules/$module")
+                    Array(
+					// Templates folder
+					'templates' => "Smarty/templates/modules/$module",
+					// Cron folder
+					'cron' => "cron/modules/$module"
+                    )   
             );
 
             // If data is not yet available

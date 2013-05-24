@@ -12,11 +12,20 @@
 {strip}
 	<div class="container-fluid" id="moduleManagerContents">
 		<div class="widget_header row-fluid">
-			<div class="span8"><h3>{vtranslate('LBL_MODULE_MANAGER', $QUALIFIED_MODULE)}</h3></div>
-			<div class="span4">
-				<button class="btn pull-right" type="button" onclick='window.location.href="{$IMPORT_MODULE_URL}"'>
-					<strong>{vtranslate('LBL_IMPORT_MODULE', $QUALIFIED_MODULE)}</strong>
-				</button>
+			<div class="span6"><h3>{vtranslate('LBL_MODULE_MANAGER', $QUALIFIED_MODULE)}</h3></div>
+			<div class="span6">
+				<span class="btn-toolbar pull-right margin0px">
+					<span class="btn-group">
+						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_USER_MODULE_URL}"'>
+							<strong>{vtranslate('LBL_IMPORT_ZIP', $QUALIFIED_MODULE)}</strong>
+						</button>
+					</span>
+					<span class="btn-group">
+						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_MODULE_URL}"'>
+							<strong>{vtranslate('LBL_IMPORT_MODULE', $QUALIFIED_MODULE)}</strong>
+						</button>
+					</span>
+				</span>
 			</div>
 		</div>
 		<hr>

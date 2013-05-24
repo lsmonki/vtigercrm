@@ -79,7 +79,14 @@ class Import_Utils_Helper {
 	public static function getDbTableName($user) {
 		$configReader = new Import_Config_Model();
 		$userImportTablePrefix = $configReader->get('userImportTablePrefix');
-		return $userImportTablePrefix . $user->getId();
+
+        $tableName = $userImportTablePrefix;
+        if(method_exists($user, 'getId')){
+            $tableName .= $user->getId();
+        } else {
+            $tableName .= $user->id;
+        }
+        return $tableName;
 	}
 
 	public static function showErrorPage($errorMessage, $errorDetails=false, $customActions=false) {

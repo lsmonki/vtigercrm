@@ -10,7 +10,7 @@
 $languageStrings = array(
 	'LBL_ADD_RECORD'               => 'Add Picklist Dependency'     , // TODO: Review
 	'LBL_PICKLIST_DEPENDENCY'      => 'Picklist Dependency'         , // TODO: Review
-	'LBL_SELECT_MODULE'            => 'Module'                      , // TODO: Review
+	'LBL_SELECT_MODULE'            => 'Выбрать Модуль' , 
 	'LBL_SOURCE_FIELD'             => 'Source Field'                , // TODO: Review
 	'LBL_TARGET_FIELD'             => 'Target Field'                , // TODO: Review
 	'LBL_SELECT_FIELD'             => 'Select field'                , // TODO: Review

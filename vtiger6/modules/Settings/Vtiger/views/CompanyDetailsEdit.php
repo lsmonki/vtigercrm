@@ -19,7 +19,12 @@ class Settings_Vtiger_CompanyDetailsEdit_View extends Settings_Vtiger_Index_View
 		$viewer->assign('QUALIFIED_MODULE_NAME', $qualifiedModuleName);
 		$viewer->assign('ERROR_MESSAGE', $request->get('error'));
 
-        $viewer->view('CompanyDetailsEdit.tpl', $qualifiedModuleName);//For Open Source
+	    $viewer->view('CompanyDetailsEdit.tpl', $qualifiedModuleName);
+	}
+		
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_CONFIG_EDITOR',$qualifiedModuleName);
 	}
 	
 }

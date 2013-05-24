@@ -24,12 +24,16 @@
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 
 {assign var=ALPHABETS value=','|explode:'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'}
-<div class="pagination alphabetSorting">
-	<ul class="row-fluid">
-		{foreach item=ALPHABET from=$ALPHABETS}
-			<li class="alphabetSearch"><a id="{$ALPHABET}" {if $ALPHABET_VALUE eq $ALPHABET}class="highlightBackgroundColor" {/if}href="#">{$ALPHABET}</a></li>
-		{/foreach}
-	</ul>
+<div class="alphabetSorting">
+	<table width="100%" class="table-bordered" style="border: 1px solid #ddd;table-layout: fixed">
+		<tbody>
+			<tr>
+			{foreach item=ALPHABET from=$ALPHABETS}
+				<td class="alphabetSearch textAlignCenter cursorPointer {if $ALPHABET_VALUE eq $ALPHABET} highlightBackgroundColor {/if}" style="padding : 0px !important"><a id="{$ALPHABET}" href="#">{$ALPHABET}</a></td>
+			{/foreach}
+			</tr>
+		</tbody>	
+	</table>
 </div>
 <div class="listViewEntriesDiv" style='overflow-x:auto;'>
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
@@ -59,7 +63,7 @@
 		<tr class="listViewEntries" data-id='{$LISTVIEW_ENTRY->getId()}' data-recordUrl='{$LISTVIEW_ENTRY->getDetailViewUrl()}' id="{$MODULE}_listView_row_{$smarty.foreach.listview.index+1}">
 			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			<input type="hidden" name="deleteActionUrl" value="{$LISTVIEW_ENTRY->getDeleteUrl()}">
+
 				{if $LISTVIEW_HEADER->getName() eq 'first_name'}
 					<td class="listViewEntryValue">
 					<div class='row-fluid'>

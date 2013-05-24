@@ -46,8 +46,24 @@ $languageStrings = array(
 	'LBL_NON_ROLE_BASED_PICKLIST' => 'Non Role Based Picklist',
 	'LBL_DUPLICATE_FIELD_EXISTS' => 'Duplicate Field Exists',
 	'LBL_WRONG_FIELD_TYPE' => 'Wrong Field Type',
-	'LBL_ROLE_BASED_PICKLIST' => 'Role Based Picklist'
-
+	'LBL_ROLE_BASED_PICKLIST' => 'Role Based Picklist',
+	
+	//Field Types
+	'Text'=>'Text',
+	'Decimal'=>'Decimal',
+	'Integer'=>'Integer',
+	'Percent'=>'Percent',
+	'Currency'=>'Currency',
+	'Date'=>'Date',
+	'Email'=>'Email',
+	'Phone'=>'Phone',
+	'PickList'=>'Pick List',
+	'MultiSelectCombo'=>'Multi-Select Combo Box',
+	'URL' => 'URL',
+	'Checkbox' => 'Checkbox',
+	'TextArea' => 'Text Area',
+	'Skype'=>'Skype',
+	'Time'=>'Time',
 );
 
 $jsLanguageStrings = array(

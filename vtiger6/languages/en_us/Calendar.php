@@ -39,7 +39,7 @@ $languageStrings = array(
 	'LBL_CONTACTS_SUPPORT_END_DATE' => 'Support End Date',
 	'LBL_CONTACTS_BIRTH_DAY' => 'Date of Birth',
 	'LBL_ADDED_CALENDARS' => 'Added Calendars',
-	
+
 
 	//Activity Type picklist values
 	'Call' => 'Call',
@@ -60,11 +60,12 @@ $languageStrings = array(
 
 	'LBL_EVENT' => 'Event',
 	'LBL_TASK' => 'Task',
+	'LBL_TASKS' => 'Tasks',
 
 	'LBL_RECORDS_LIST' => 'List View',
 	'LBL_CALENDAR_VIEW' => 'My Calendar',
 	'LBL_SHARED_CALENDAR' => 'Shared Calendar',
-	
+
 	//Repeat Lables - used by getTranslatedString
 	'LBL_DAY0' => 'Sunday',
 	'LBL_DAY1' => 'Monday',
@@ -73,12 +74,12 @@ $languageStrings = array(
 	'LBL_DAY4' => 'Thursday',
 	'LBL_DAY5' => 'Friday',
 	'LBL_DAY6' => 'Saturday',
-	
+
 	'first' => 'First',
 	'last' => 'Last',
 	'LBL_DAY_OF_THE_MONTH' => 'day of the month',
 	'LBL_ON' => 'on',
-	
+
 	'Daily'=>'Day(s)',
 	'Weekly'=>'Week(s)',
 	'Monthly'=>'Month(s)',

@@ -21,6 +21,12 @@ class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
 		$viewer->view('CompanyDetails.tpl', $qualifiedModuleName);
 	}
 	
+	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_COMPANY_DETAILS',$qualifiedModuleName);
+	}
+	
 		/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

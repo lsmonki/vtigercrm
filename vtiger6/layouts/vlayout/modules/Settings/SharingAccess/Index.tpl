@@ -47,16 +47,16 @@
 					<tr data-module-name="Calendar">
 						<td>{'SINGLE_Calendar'|vtranslate:'Calendar'}</td>
 						<td class="row-fluid">
-							<div><input type="radio" disabled="disabled" /></div>
+							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
 						</td>
 						<td class="row-fluid">
-							<div><input type="radio" disabled="disabled" /></div>
+							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
 						</td>
 						<td class="row-fluid">
-							<div><input type="radio" disabled="disabled" /></div>
+							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
 						</td>
 						<td class="row-fluid">
-							<div><input type="radio" checked="true" disabled="disabled" /></div>
+							<div><input type="radio" style="margin-left: 25%" checked="true" disabled="disabled" /></div>
 						</td>
 						<td>
 							<div class="row-fluid">
@@ -80,7 +80,7 @@
 						{foreach from=$ALL_ACTIONS key=ACTION_ID item=ACTION_MODEL}
 						<td class="row-fluid">
 							{if $ACTION_MODEL->isModuleEnabled($MODULE_MODEL)}
-								<div><input type="radio" name="permissions[{$TABID}]" data-action-state="{$ACTION_MODEL->getName()}" value="{$ACTION_ID}"{if $MODULE_MODEL->getPermissionValue() eq $ACTION_ID}checked="true"{/if}></div>
+								<div><input style="margin-left: 25%" type="radio" name="permissions[{$TABID}]" data-action-state="{$ACTION_MODEL->getName()}" value="{$ACTION_ID}"{if $MODULE_MODEL->getPermissionValue() eq $ACTION_ID}checked="true"{/if}></div>
 							{/if}
 						</td>
 						{/foreach}

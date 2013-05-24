@@ -6769,6 +6769,8 @@
 		</field>
 		<field name="defaultworkflow" type="I" size="1">
 		</field>
+		<field name="filtersavedinnew" type="I">
+		</field>
 		<field name="type" type="C" size="255">
 		</field>
 		<index name="com_vtiger_workflows_idx">

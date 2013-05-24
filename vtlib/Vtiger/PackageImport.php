@@ -50,9 +50,11 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 */
 	function __parseManifestFile($unzip) {
 		$manifestfile = $this->__getManifestFilePath();
-		$unzip->unzip('manifest.xml', $manifestfile);
-		$this->_modulexml = simplexml_load_file($manifestfile);
-		unlink($manifestfile);
+		$status = $unzip->unzip('manifest.xml', $manifestfile);
+		if($status != false){
+			$this->_modulexml = simplexml_load_file($manifestfile);
+			unlink($manifestfile);
+		}
 	}
 
 	/**

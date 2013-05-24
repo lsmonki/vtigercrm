@@ -20,6 +20,11 @@ class Settings_Vtiger_OutgoingServerDetail_View extends Settings_Vtiger_Index_Vi
         $viewer->view('OutgoingServerDetail.tpl',$qualifiedName);
     }
 	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_OUTGOING_SERVER',$qualifiedModuleName);
+	}
+	
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

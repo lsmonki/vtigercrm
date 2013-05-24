@@ -350,11 +350,6 @@ Vtiger_BasicSearch_Js("Vtiger_AdvanceSearch_Js",{
 			var selectedModuleName = selectElement.val();
 
 			thisInstance.setSearchModule(selectedModuleName);
-			//If no module is selected dont proceed
-			//TODO : see if you need to clear earlier loaded fields and conditions
-			if(selectedModuleName == '') {
-				return;
-			}
 
 			thisInstance.initiateSearch().then(function(){
                 thisInstance.selectBasicSearchValue();

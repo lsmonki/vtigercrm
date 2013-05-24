@@ -232,6 +232,25 @@ jQuery.Class("Vtiger_Helper_Js",{
     */ 
     addClickOutSideEvent : function(element, callbackFunction) { 
         element.one('clickoutside',callbackFunction); 
-    } 
+    },
+	
+	/*
+	 * Function to show horizontal top scroll bar 
+	 */
+	showHorizontalTopScrollBar : function() {
+		var container = jQuery('.contentsDiv');
+		var topScroll = jQuery('.contents-topscroll',container);
+		var bottomScroll = jQuery('.contents-bottomscroll', container);
+		
+		jQuery('.topscroll-div', container).css('width', jQuery('.bottomscroll-div', container).outerWidth());
+		
+		topScroll.scroll(function(){
+			bottomScroll.scrollLeft(topScroll.scrollLeft());
+		});
+		
+		bottomScroll.scroll(function(){
+			topScroll.scrollLeft(bottomScroll.scrollLeft());
+		});
+	}
 
 },{});

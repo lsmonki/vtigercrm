@@ -29,6 +29,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 	var $mergeFields;
 	var $defaultValues;
 	var $importedRecordInfo = array();
+    protected $allPicklistValues = array();
 	var $batchImport = true;
 
 	static $IMPORT_RECORD_NONE = 0;
@@ -107,7 +108,13 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 
 	public function importData() {
 		$focus = CRMEntity::getInstance($this->module);
-		if(method_exists($focus, 'createRecords')) {
+		$moduleModel = Vtiger_Module_Model::getInstance($this->module);
+        // pre fetch the fields and premmisions of module
+        Vtiger_Field_Model::getAllForModule($moduleModel);
+        if($this->user->is_admin == 'off'){
+            Vtiger_Field_Model::preFetchModuleFieldPermission($moduleModel->getId());
+        }
+        if(method_exists($focus, 'createRecords')) {
 			$focus->createRecords($this);
 		} else {
 			$this->createRecords();
@@ -229,7 +236,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					$duplicatesResult = $adb->query($query);
 					$noOfDuplicates = $adb->num_rows($duplicatesResult);
 
-					if ($noOfDuplicates > 0) {
+                    if ($noOfDuplicates > 0) {
 						if ($mergeType == Import_Utils_Helper::$AUTO_MERGE_IGNORE) {
 							$entityInfo['status'] = self::$IMPORT_RECORD_SKIPPED;
 						} elseif ($mergeType == Import_Utils_Helper::$AUTO_MERGE_OVERWRITE ||
@@ -294,18 +301,32 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					if($fieldData == null) {
 						$entityInfo = null;
 					} else {
-						$entityInfo = vtws_create($moduleName, $fieldData, $this->user);
-						$entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
-						$entityIdComponents = vtws_getIdComponents($entityInfo['id']);
-						$recordId = $entityIdComponents[1];
-						updateRecordLabel($this->module, $recordId);
+                        try{
+                            $entityInfo = vtws_create($moduleName, $fieldData, $this->user);
+                        } catch (Exception $e){
+                            
+                        }
 					}
 				}
 			}
-
-			if($entityInfo == null) {
-				$entityInfo = array('id' => null, 'status' => self::$IMPORT_RECORD_FAILED);
-			}
+			if ($entityInfo == null) {
+                $entityInfo = array('id' => null, 'status' => self::$IMPORT_RECORD_FAILED);
+            } else if($createRecord){
+                $entityInfo['status'] = self::$IMPORT_RECORD_CREATED;
+                $entityIdComponents = vtws_getIdComponents($entityInfo['id']);
+                $recordId = $entityIdComponents[1];
+                $entityfields = getEntityFieldNames($this->module);
+                $label = '';
+                if(is_array($entityfields['fieldname'])){
+                    foreach($entityfields['fieldname'] as $field){
+                        $label .= $fieldData[$field]." ";
+                    }
+                }else {
+                    $label = $fieldData[$field];
+                }
+                $label = trim($label);
+                $adb->pquery('UPDATE vtiger_crmentity SET label=? WHERE crmid=?', array($label, $recordId));
+            }
 
 			$this->importedRecordInfo[$rowId] = $entityInfo;
 			$this->updateImportStatus($rowId, $entityInfo);
@@ -404,8 +425,11 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 				}
 				$olderCacheEnable = Vtiger_Cache::$cacheEnable;
 				Vtiger_Cache::$cacheEnable = false;
-				$allPicklistDetails = $fieldInstance->getPicklistDetails();
-
+                if(!isset($this->allPicklistValues[$fieldName])){
+                    $this->allPicklistValues[$fieldName] = $fieldInstance->getPicklistDetails();
+                } 
+                $allPicklistDetails = $this->allPicklistValues[$fieldName];
+               
 				$allPicklistValues = array();
 				foreach ($allPicklistDetails as $picklistDetails) {
 					$allPicklistValues[] = $picklistDetails['value'];
@@ -419,6 +443,7 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 					$moduleObject = Vtiger_Module::getInstance($moduleMeta->getEntityName());
 					$fieldObject = Vtiger_Field::getInstance($fieldName, $moduleObject);
 					$fieldObject->setPicklistValues(array($fieldValue));
+                    unset($this->allPicklistValues[$fieldName]);
 				} else {
 					$fieldData[$fieldName] = $picklistDetails[$picklistValueInLowerCase];
 				}
@@ -561,8 +586,10 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 			$importStatusCount = $importDataController->getImportStatusCount();
 
 			$emailSubject = 'vtiger CRM - Scheduled Import Report for '.$importDataController->module;
+            vimport('~~/modules/Import/ui/Viewer.php');
 			$viewer = new Import_UI_Viewer();
 			$viewer->assign('FOR_MODULE', $importDataController->module);
+            $viewer->assign('INVENTORY_MODULES', getInventoryModules());
 			$viewer->assign('IMPORT_RESULT', $importStatusCount);
 			$importResult = $viewer->fetch('Import_Result_Details.tpl');
 			$importResult = str_replace('align="center"', '', $importResult);

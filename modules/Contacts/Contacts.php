@@ -349,6 +349,10 @@ class Contacts extends CRMEntity {
 					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
 			}
 		}
+		
+		// Should Opportunities be listed on Secondary Contacts ignoring the boundaries of Organization.
+		// Useful when the Reseller are working to gain Potential for other Organization.
+		$ignoreOrganizationCheck = true;
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
@@ -363,9 +367,12 @@ class Contacts extends CRMEntity {
 		left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid
 		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
-		where vtiger_contactdetails.contactid ='.$id.'
-		and (vtiger_contactdetails.accountid = vtiger_potential.related_to or vtiger_contactdetails.contactid=vtiger_potential.related_to)
-		and vtiger_crmentity.deleted=0';
+		where  vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid ='.$id;
+			
+		if (!$ignoreOrganizationCheck) {
+			// Restrict the scope of listing to only related contacts of the organization linked to potential via related_to of Potential
+			$query .= ' and (vtiger_contactdetails.accountid = vtiger_potential.related_to or vtiger_contactdetails.contactid=vtiger_potential.related_to)';
+		}
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
 

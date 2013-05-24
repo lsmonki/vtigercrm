@@ -215,20 +215,87 @@ var Settings_Roles_Js = {
 	},
 	
 	registerSubmitEvent : function() {
-		jQuery('#EditView').on('submit',function(e) {
-			if(jQuery('[data-handler="existing"]').is(':checked')){
-				var selectElement = jQuery('#profilesList');
-				var select2Element = app.getSelect2ElementFromSelect(selectElement);
-				var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
-				if(result != true){
-					select2Element.validationEngine('showPrompt', result , 'error','bottomLeft',true);
-					e.preventDefault();
-					return;
+		var thisInstance = this;
+		var form = jQuery('#EditView');
+		form.on('submit',function(e) {
+			if(form.data('submit') == 'true' && form.data('performCheck') == 'true') {
+				return true;
+			} else {
+				if(jQuery('[data-handler="existing"]').is(':checked')){
+					var selectElement = jQuery('#profilesList');
+					var select2Element = app.getSelect2ElementFromSelect(selectElement);
+					var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
+					if(result != true){
+						select2Element.validationEngine('showPrompt', result , 'error','bottomLeft',true);
+						e.preventDefault();
+						return;
+					} else {
+						select2Element.validationEngine('hide');
+					}
+				} 
+				
+				if(form.data('jqv').InvalidFields.length <= 0) {
+					var formData = form.serializeFormData();
+					thisInstance.checkDuplicateName({
+						'rolename' : formData.rolename,
+						'record' : formData.record
+					}).then(
+						function(data){
+							form.data('submit', 'true');
+							form.data('performCheck', 'true');
+							form.submit();
+						},
+						function(data, err){
+							var params = {};
+							params['text'] = data['message'];
+							params['type'] = 'error';
+							Settings_Vtiger_Index_Js.showMessage(params);
+							return false;
+						}
+					);
 				} else {
-					select2Element.validationEngine('hide');
+					//If validation fails, form should submit again
+					form.removeData('submit');
+					// to avoid hiding of error message under the fixed nav bar
+					app.formAlignmentAfterValidation(form);
 				}
-			} 
+				e.preventDefault();
+			}
 		});
+	},
+	
+	/*
+	 * Function to check Duplication of Role Names
+	 * returns boolean true or false
+	 */
+
+	checkDuplicateName : function(details) {
+		var aDeferred = jQuery.Deferred();
+		
+		var params = {
+		'module' : app.getModuleName(),
+		'parent' : app.getParentModuleName(),
+		'action' : 'EditAjax',
+		'mode'   : 'checkDuplicate',
+		'rolename' : details.rolename,
+		'record' : details.record
+		}
+		
+		AppConnector.request(params).then(
+			function(data) {
+				var response = data['result'];
+				var result = response['success'];
+				if(result == true) {
+					aDeferred.reject(response);
+				} else {
+					aDeferred.resolve(response);
+				}
+			},
+			function(error,err){
+				aDeferred.reject();
+			}
+		);
+		return aDeferred.promise();
 	},
 	
 	registerEvents : function() {

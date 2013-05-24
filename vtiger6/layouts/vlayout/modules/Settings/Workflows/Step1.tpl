@@ -39,8 +39,10 @@
 					<div class="control-label">
 						{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}<span class="redColor">*</span>
 					</div>
-					<div class="controls row-fluid">
-						<input type="text" name="summary" class="span6" data-validation-engine='validate[required]' value="{$WORKFLOW_MODEL->get('summary')}" id="summary" />
+					<div class="controls">
+						<span class="row-fluid">
+							<input type="text" name="summary" class="span6" data-validation-engine='validate[required]' value="{$WORKFLOW_MODEL->get('summary')}" id="summary" />
+						</span>
 					</div>
 				</div>
 				<div>

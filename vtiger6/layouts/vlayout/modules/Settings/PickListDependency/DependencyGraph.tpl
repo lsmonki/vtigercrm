@@ -21,8 +21,8 @@
 			</ul>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<span class="btn-toolbar pull-right">
+	<div class="row-fluid padding-bottom1per">
+		<span class="btn-toolbar">
 			<button class="btn sourceValues" type="button"><strong>{vtranslate('LBL_SELECT_SOURCE_VALUES', $QUALIFIED_MODULE)}</strong></button>
 		</span>
 	</div>
@@ -76,7 +76,7 @@
                         {/if}
 						<td	data-source-value='{$SOURCE_PICKLIST_VALUE}' data-target-value='{$TARGET_VALUE}'
 							class="{if $IS_SELECTED}selectedCell {else}unselectedCell {/if} 
-								{$SOURCE_FIELD}{$SOURCE_PICKLIST_VALUE} picklistValueMapping cursorPointer"
+								targetValue{$SOURCE_PICKLIST_VALUE} picklistValueMapping cursorPointer"
 								{if !empty($MAPPED_VALUES) && !in_array($SOURCE_PICKLIST_VALUE, $MAPPED_SOURCE_PICKLIST_VALUES)}style="display: none;" {/if}>
                             {if $IS_SELECTED}
                                 <i class="icon-ok pull-left"></i>
@@ -118,8 +118,8 @@
 		</div>
 			{include file='ModalFooter.tpl'|@vtemplate_path:'Vtiger'}
 	</div>
-	<div class="row-fluid">
-		<span class="btn-toolbar pull-right">
+	<div class="row-fluid padding1per">
+		<span class="btn-toolbar">
 			<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
 			<a type="reset" class="cancelLink cancelDependency" title="{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
 		</span>

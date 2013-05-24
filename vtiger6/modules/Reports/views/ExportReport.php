@@ -25,7 +25,7 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 		$reportModel = Reports_Record_Model::getCleanInstance($record);
 
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		if(!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId()) || !$reportModel->isEditable()) {
+		if(!$currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
 			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}

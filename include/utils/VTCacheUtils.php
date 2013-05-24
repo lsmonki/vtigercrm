@@ -84,6 +84,22 @@ class VTCacheUtils {
         }else if(isset(self::$_fieldinfo_cache[$tabid]) && isset(self::$_fieldinfo_cache[$tabid][$fieldname])) {
 			return self::$_fieldinfo_cache[$tabid][$fieldname];
 		}
+        
+        $field = Vtiger_Cache::get('field-'.$tabid,$fieldname);
+        if($field){
+            $cacheField = array(
+                'tabid' => $tabid,
+                'fieldid' => $field->getId(),
+                'fieldname' => $field->getName(),
+                'fieldlabel' => $field->get('label'),
+                'columnname' => $field->get('column'),
+                'tablename' => $field->get('table'),
+                'uitype' => $field->get('uitype'),
+                'typeofdata' => $field->get('typeofdata'),
+                'presence' => $field->get('presence'),
+            );
+            return $cacheField;
+        }
 		return false;
 	}	
 	static function lookupFieldInfo_Module($module, $presencein = array('0', '2')) {
@@ -105,17 +121,62 @@ class VTCacheUtils {
 				}
 			}
 		}
+        
+        $fieldInfo = Vtiger_Cache::get('ModuleFields',$tabid);
+        if($fieldInfo){
+            foreach($fieldInfo as $block => $blockFields){
+                foreach ($blockFields as $field){
+                if(in_array($field->get('presence'), $presencein)) {
+                     $cacheField = array(
+                            'tabid' => $tabid,
+                            'fieldid' => $field->getId(),
+                            'fieldname' => $field->getName(),
+                            'fieldlabel' => $field->get('label'),
+                            'columnname' => $field->get('column'),
+                            'tablename' => $field->get('table'),
+                            'uitype' => $field->get('uitype'),
+                            'typeofdata' => $field->get('typeofdata'),
+                            'presence' => $field->get('presence'),
+                        );
+                     $modulefields[] = $cacheField;
+                 }   
+                }
+            }
+        }
 		return $modulefields;
 	}
 	
 	static function lookupFieldInfoByColumn($tabid, $columnname) {
-		if(isset(self::$_fieldinfo_cache[$tabid])) {
+		
+        if(isset(self::$_fieldinfo_cache[$tabid])) {
 			foreach(self::$_fieldinfo_cache[$tabid] as $fieldname=>$fieldinfo) {
 				if($fieldinfo['columnname'] == $columnname) {
 					return $fieldinfo;
 				}
 			}
 		}
+        
+        $fieldInfo = Vtiger_Cache::get('ModuleFields',$tabid);
+        if($fieldInfo){
+            foreach($fieldInfo as $block => $blockFields){
+                foreach ($blockFields as $field){
+                 if($field->get('column') == $columnname) {
+                     $cacheField = array(
+                            'tabid' => $tabid,
+                            'fieldid' => $field->getId(),
+                            'fieldname' => $field->getName(),
+                            'fieldlabel' => $field->get('label'),
+                            'columnname' => $field->get('column'),
+                            'tablename' => $field->get('table'),
+                            'uitype' => $field->get('uitype'),
+                            'typeofdata' => $field->get('typeofdata'),
+                            'presence' => $field->get('presence'),
+                        );
+                        return $cacheField;
+                 }   
+                }
+            }
+        }
 		return false;
 	}
 	

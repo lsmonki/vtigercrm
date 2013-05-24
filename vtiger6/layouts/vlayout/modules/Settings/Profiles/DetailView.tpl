@@ -90,7 +90,6 @@
 									</td>
 								{/foreach}
 								<td style="border-left: 1px solid #DDD !important;">
-									{if !$IS_RESTRICTED_MODULE}
 									{if $PROFILE_MODULE->getFields()}
 										<div class="row-fluid">
 											<span class="span4">&nbsp;</span>
@@ -189,7 +188,6 @@
 								{/foreach}
 								</table>
 								</div>
-							{/if}
 							</td>
 						</tr>
 					{/foreach}

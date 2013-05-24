@@ -277,7 +277,12 @@ class Accounts extends CRMEntity {
 					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
 			}
 		}
-
+		
+		// TODO: We need to add pull contacts if its linked as secondary in Potentials too.
+		// These relations are captued in vtiger_contpotentialrel
+		// Better to provide switch to turn-on / off this feature like in
+		// Contacts::get_opportunities
+		
 		$entityIds = $this->getRelatedContactsIds();
 		array_push($entityIds, $id);
 		$entityIds = implode(',', $entityIds);

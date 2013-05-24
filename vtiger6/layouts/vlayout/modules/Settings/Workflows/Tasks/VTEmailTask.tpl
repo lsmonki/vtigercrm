@@ -13,36 +13,36 @@
 	<div id="VtEmailTaskContainer">
 		<div class="row-fluid">
 			<div class="row-fluid padding-bottom1per">
-				<span class="span8 row-fluid">
+				<span class="span7 row-fluid">
 					<span class="span2">{vtranslate('LBL_TO',$QUALIFIED_MODULE)}<span class="redColor">*</span></span>
 					<input data-validation-engine='validate[required]' name="recepient" class="span9 fields" type="text" value="{$TASK_OBJECT->recepient}" />
 				</span>
-				<span class="span4">
-					<select style="min-width: 260px" class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+				<span class="span5">
+					<select style="min-width: 300px" class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
 						<option></option>
 						{$EMAIL_FIELD_OPTION}
 					</select>
 				</span>
 			</div>
 			<div class="row-fluid padding-bottom1per {if empty($TASK_OBJECT->emailcc)}hide {/if}" id="ccContainer">
-				<span class="span8 row-fluid">
+				<span class="span7 row-fluid">
 					<span class="span2">{vtranslate('LBL_CC',$QUALIFIED_MODULE)}</span>
 					<input class="span9 fields" type="text" name="emailcc" value="{$TASK_OBJECT->emailcc}" />
 				</span>
-				<span class="span4">
-					<select {if empty($TASK_OBJECT->emailcc)} style="min-width: 250px" {else} style="min-width: 260px"{/if} class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+				<span class="span5">
+					<select class="task-fields" data-placeholder='{vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}' style="min-width: 300px">
 						<option></option>
 						{$EMAIL_FIELD_OPTION}
 					</select>
 				</span>
 			</div>
 			<div class="row-fluid padding-bottom1per {if empty($TASK_OBJECT->emailbcc)}hide {/if}" id="bccContainer">
-				<span class="span8 row-fluid">
+				<span class="span7 row-fluid">
 					<span class="span2">{vtranslate('LBL_BCC',$QUALIFIED_MODULE)}</span>
 					<input class="span9 fields" type="text" name="emailbcc" value="{$TASK_OBJECT->emailbcc}" />
 				</span>
-				<span class="span4">
-					<select {if empty($TASK_OBJECT->emailbcc)} style="min-width: 250px" {else} style="min-width: 260px"{/if} class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+				<span class="span5">
+					<select class="task-fields" data-placeholder='{vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}' style="min-width: 300px">
 						<option></option>
 						{$EMAIL_FIELD_OPTION}
 					</select>
@@ -58,19 +58,19 @@
 				</span>
 			</div>
 			<div class="row-fluid padding-bottom1per">
-				<span class="span8 row-fluid">
+				<span class="span7 row-fluid">
 					<span class="span2">{vtranslate('LBL_SUBJECT',$QUALIFIED_MODULE)}<span class="redColor">*</span></span>
 					<input data-validation-engine='validate[required]' name="subject" class="span9 fields" type="text" name="subject" value="{$TASK_OBJECT->subject}" id="subject"/>
 				</span>
-				<span class="span4">
-					<select style="min-width: 260px" class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+				<span class="span5">
+					<select style="min-width: 300px" class="task-fields chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
 						<option></option>
 						{$ALL_FIELD_OPTIONS}
 					</select>
 				</span>
 			</div>
 			<div class="row-fluid padding-bottom1per">
-				<span class="span8 row-fluid">
+				<span class="span7 row-fluid">
 					<span style="margin-top: 7px" class="span2">{vtranslate('LBL_ADD_FIELD',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 					<span class="span8">
 						<select style="min-width: 250px" id="task-fieldnames" class="chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
@@ -79,10 +79,10 @@
 						</select>
 					</span>	
 				</span>
-				<span class="span4 row-fluid">
+				<span class="span5 row-fluid">
 					<span style="margin-top: 7px" class="span3">{vtranslate('LBL_ADD_TIME',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 					<span class="span8">
-						<select style="width: 189px" id="task_timefields" class="chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+						<select style="width: 215px" id="task_timefields" class="chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
 							<option></option>
 							{foreach from=$META_VARIABLES item=META_VARIABLE_KEY key=META_VARIABLE_VALUE}
 								<option value="${$META_VARIABLE_KEY}">{vtranslate($META_VARIABLE_VALUE,$QUALIFIED_MODULE)}</option>

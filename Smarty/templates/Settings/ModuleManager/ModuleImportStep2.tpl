@@ -29,7 +29,7 @@
 						{if $MODULEIMPORT_FAILED neq ''}
 							<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr>
-								<td class='big' colspan=2><b>{$MOD.VTlIB_LBL_IMPORT_FAILURE}</b></td>
+								<td class='big' colspan=2><b>{$MOD.VTLIB_LBL_IMPORT_FAILURE}</b></td>
 							</tr>
 							</table>
 							<table cellpadding=5 cellspacing=0 border=0 width=80%>

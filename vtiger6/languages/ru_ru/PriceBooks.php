@@ -8,12 +8,12 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'PriceBooks'                   => 'Price Books'                 , // TODO: Review
-	'SINGLE_PriceBooks'            => 'Price Book'                  , // TODO: Review
+	'PriceBooks'                   => 'Каталоги'            , 
+	'SINGLE_PriceBooks'            => 'Каталог'              , 
 	'LBL_ADD_RECORD'               => 'Add Price Book'              , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Price Books List'            , // TODO: Review
-	'LBL_PRICEBOOK_INFORMATION'    => 'Price Book Details'          , // TODO: Review
+	'LBL_PRICEBOOK_INFORMATION'    => 'Информация о Каталоге:', 
 	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , // TODO: Review
-	'Price Book Name'              => 'Price Book Name'             , // TODO: Review
-	'PriceBook No'                 => 'Price Book Number'           , // TODO: Review
+	'Price Book Name'              => 'Название'            , 
+	'PriceBook No'                 => 'Каталог №'          , 
 );

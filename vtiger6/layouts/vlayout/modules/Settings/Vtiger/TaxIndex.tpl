@@ -17,14 +17,14 @@
 	<div class="contents row-fluid paddingTop20">
 		<div class="span6">
 			{assign var=CREATE_TAX_URL value=$TAX_RECORD_MODEL->getCreateTaxUrl()}
+			<div class="marginBottom10px">
+				<button type="button" class="btn addTax addButton" data-url="{$CREATE_TAX_URL}" data-type="0"><i class="icon-plus icon-white"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_NEW_TAX', $QUALIFIED_MODULE)}</strong></button>
+			</div>
 			<table class="table table-bordered inventoryTaxTable themeTableColor">
 				<thead>
 					<tr class="blockHeader">
 						<th colspan="3">
 							{vtranslate('LBL_PRODUCT_SERVICE_TAXES', $QUALIFIED_MODULE)}
-							<div class="pull-right">
-								<button type="button" class="btn addTax" data-url="{$CREATE_TAX_URL}" data-type="0"><strong>{vtranslate('LBL_ADD_NEW_TAX', $QUALIFIED_MODULE)}</strong></button>
-							</div>
 						</th>
 					</tr>
 				</thead>
@@ -49,14 +49,14 @@
 			</table>
 		</div>
 		<div class="span6">
+			<div class="marginBottom10px">
+				<button type="button" class="btn addTax addButton" data-url="{$CREATE_TAX_URL}" data-type="1"><i class="icon-plus icon-white"></i>&nbsp;&nbsp;<strong>{vtranslate('LBL_ADD_NEW_TAX', $QUALIFIED_MODULE)}</strong></button>
+			</div>
 			<table class="table table-bordered shippingTaxTable themeTableColor">
 				<thead>
 					<tr class="blockHeader">
 						<th colspan="3">
 							{vtranslate('LBL_SHIPPING_HANDLING_TAXES', $QUALIFIED_MODULE)}
-							<div class="pull-right">
-								<button type="button" class="btn addTax" data-url="{$CREATE_TAX_URL}" data-type="1"><strong>{vtranslate('LBL_ADD_NEW_TAX', $QUALIFIED_MODULE)}</strong></button>
-							</div>
 						</th>
 					</tr>
 				</thead>

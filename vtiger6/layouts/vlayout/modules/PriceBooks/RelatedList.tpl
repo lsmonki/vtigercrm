@@ -67,52 +67,59 @@
 			</div>
 		</div>
 	</div>
-	<div class="relatedContents">
-		<table class="table table-bordered listViewEntriesTable">
-			<thead>
-				<tr class="listViewHeaders">
-					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-						<th nowrap {if $HEADER_FIELD@last} colspan="2" {/if}>
-							<a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('name')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
-								&nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}<img class="{$SORT_IMAGE} icon-white">{/if}
-							</a>
-						</th>
-					{/foreach}
-				</tr>
-			</thead>
-			{foreach item=RELATED_RECORD from=$RELATED_RECORDS}
-				{assign var=BASE_CURRENCY_DETAILS value=$RELATED_RECORD->getBaseCurrencyDetails()}
-				<tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
-					{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-						{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
-						<td nowrap>
-						{if $HEADER_FIELD->get('name') == 'listprice'}
-								{$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
-								{assign var="LISTPRICE" value=$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
-							{else if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
-								<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
-						{else}
-							{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
-						{/if}
-						{if $HEADER_FIELD@last}
-						</td><td nowrap>
-						<div class="pull-right actions">
-							<span class="actionImages">
-								<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
-								<a data-url="index.php?module=PriceBooks&view=ListPriceUpdate&record={$PARENT_RECORD->getId()}&relid={$RELATED_RECORD->getId()}&currentPrice={$LISTPRICE}"
-									class="editListPrice cursorPointer" data-related-recordid='{$RELATED_RECORD->getId()}' data-list-price={$LISTPRICE}>
-									<i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $MODULE)}"></i>
+	<div class="contents-topscroll">
+		<div class="topscroll-div">
+		&nbsp;
+		</div>
+	</div>
+	<div class="relatedContents contents-bottomscroll">
+		<div class="bottomscroll-div">
+			<table class="table table-bordered listViewEntriesTable">
+				<thead>
+					<tr class="listViewHeaders">
+						{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
+							<th nowrap {if $HEADER_FIELD@last} colspan="2" {/if}>
+								<a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('name')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
+									&nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}<img class="{$SORT_IMAGE} icon-white">{/if}
 								</a>
-								<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
-							</span>
-						</div>
-						</td>
-						{/if}
-						</td>
-					{/foreach}
-				</tr>
-			{/foreach}
-		</table>
+							</th>
+						{/foreach}
+					</tr>
+				</thead>
+				{foreach item=RELATED_RECORD from=$RELATED_RECORDS}
+					{assign var=BASE_CURRENCY_DETAILS value=$RELATED_RECORD->getBaseCurrencyDetails()}
+					<tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
+						{foreach item=HEADER_FIELD from=$RELATED_HEADERS}
+							{assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
+							<td nowrap>
+							{if $HEADER_FIELD->get('name') == 'listprice'}
+									{$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
+									{assign var="LISTPRICE" value=$RELATED_RECORD->get($HEADER_FIELD->get('name'))}
+								{else if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
+									<a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
+							{else}
+								{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+							{/if}
+							{if $HEADER_FIELD@last}
+							</td><td nowrap>
+							<div class="pull-right actions">
+								<span class="actionImages">
+									<a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;
+									<a data-url="index.php?module=PriceBooks&view=ListPriceUpdate&record={$PARENT_RECORD->getId()}&relid={$RELATED_RECORD->getId()}&currentPrice={$LISTPRICE}"
+										class="editListPrice cursorPointer" data-related-recordid='{$RELATED_RECORD->getId()}' data-list-price={$LISTPRICE}>
+										<i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $MODULE)}"></i>
+									</a>
+									<a class="relationDelete"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
+								</span>
+							</div>
+							</td>
+							{/if}
+							</td>
+						{/foreach}
+					</tr>
+				{/foreach}
+			</table>
+		</div>
 	</div>
 </div>
 {/strip}

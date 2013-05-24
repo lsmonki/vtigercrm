@@ -47,4 +47,13 @@ class Settings_Profiles_Module_Model extends Settings_Vtiger_Module_Model {
 	public function getCreateRecordUrl() {
 		return 'index.php?module=Profiles&parent=Settings&view=Edit';
 	}
+
+	/**
+	 * Function to get non visible modules list
+	 * @return <Array> list of modules
+	 */
+	public static function getNonVisibleModulesList() {
+        return array('ModTracker', 'Portal', 'Webmails', 'Users', 'Mobile', 'Integration', 'WSAPP', 'ConfigEditor',
+					'FieldFormulas', 'VtigerBackup', 'CronTasks', 'Import', 'Tooltip', 'CustomerPortal', 'Home');
+    }
 }

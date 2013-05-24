@@ -26,6 +26,8 @@
 			<span class="span4">
 				<input type="text" name="createdtime" class="dateRange widgetFilter" />
 			</span>	
+			</div>
+			<div class="row-fluid">	
 			<span class="span5">
 				<span class="pull-right">
 					{vtranslate('Assigned To', $MODULE_NAME)}

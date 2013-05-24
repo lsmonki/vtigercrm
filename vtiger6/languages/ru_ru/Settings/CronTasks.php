@@ -12,12 +12,12 @@ $languageStrings = array(
 	'Id'                           => 'Id'                          , // TODO: Review
 	'Cron Job'                     => 'Cron Job'                    , // TODO: Review
 	'Frequency'                    => 'Frequency'                   , // TODO: Review
-	'Status'                       => 'Status'                      , // TODO: Review
+	'Status'                       => 'Статус'                , 
 	'Last Start'                   => 'Last scan started'           , // TODO: Review
 	'Last End'                     => 'Last scan ended'             , // TODO: Review
 	'Sequence'                     => 'Sequence'                    , // TODO: Review
-	'LBL_COMPLETED'                => 'Completed'                   , // TODO: Review
-	'LBL_RUNNING'                  => 'Running'                     , // TODO: Review
-	'LBL_ACTIVE'                   => 'Active'                      , // TODO: Review
-	'LBL_INACTIVE'                 => 'In Active'                   , // TODO: Review
+	'LBL_COMPLETED'                => 'Завершено'          , // KEY 5.x: Completed
+	'LBL_RUNNING'                  => 'работа'                , 
+	'LBL_ACTIVE'                   => 'Активен'              , 
+	'LBL_INACTIVE'                 => 'Неактивен'          , 
 );

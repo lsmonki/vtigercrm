@@ -166,7 +166,7 @@ jQuery.Class("Vtiger_Field_Js",{
 			validationHandler +="required,";
 		}
 		validationHandler +="funcCall[Vtiger_Base_Validator_Js.invokeValidation]]";
-		addValidationToElement.attr('data-validation-engine', validationHandler).data('fieldinfo',JSON.stringify(this.getData()));
+		addValidationToElement.attr('data-validation-engine', validationHandler).attr('data-fieldinfo',JSON.stringify(this.getData()));
 		return element;
 	}
 })
@@ -380,6 +380,22 @@ Vtiger_Field_Js('Vtiger_Text_Field_Js',{},{
 	 */
 	getUi : function() {
 		var html = '<textarea class="input-xxlarge" name="'+ this.getName() +'"  value="'+  this.getValue() + '" style="width:100%">'+  this.getValue() + '</textarea>';
+		var element = jQuery(html);
+		return this.addValidationToElement(element);
+	}
+});
+
+Vtiger_Field_Js('Vtiger_Percentage_Field_Js',{},{
+
+	/**
+	 * Function to get the ui
+	 * @return - input percentage field
+	 */
+	getUi : function() {
+		var html = '<span class="input-append row-fluid">'+
+									'<input type="text" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
+									'<span class="add-on">%</span>'+
+					'</span>';
 		var element = jQuery(html);
 		return this.addValidationToElement(element);
 	}

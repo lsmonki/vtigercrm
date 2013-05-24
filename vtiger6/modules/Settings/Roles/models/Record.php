@@ -441,5 +441,24 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 		return null;
 	}
+	
+	/* Function to get the instance of the role by Name
+    * @param type $name -- name of the role
+    * @return null/role instance
+    */
+   public static function getInstanceByName($name, $excludedRecordId = array()) {
+       $db = PearDatabase::getInstance();
+       $sql = 'SELECT * FROM vtiger_role WHERE rolename=?';
+       $params = array($name);
+       if(!empty($excludedRecordId)){
+           $sql.= ' AND roleid NOT IN ('.generateQuestionMarks($excludedRecordId).')';
+           $params = array_merge($params,$excludedRecordId);
+       }
+       $result = $db->pquery($sql, $params);
+       if($db->num_rows($result) > 0) {
+		   return self::getInstanceFromQResult($result, 0);
+	   }
+	   return null;
+   }
 
 }

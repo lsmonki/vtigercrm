@@ -15,9 +15,9 @@ $languageStrings = array(
 	'LBL_TYPE_THE_MESSAGE'         => 'Type the message'            , // TODO: Review
 	'LBL_WRITE_YOUR_MESSAGE_HERE'  => 'write your message here'     , // TODO: Review
 	'LBL_ADD_MORE_FIELDS'          => 'Add more fields'             , // TODO: Review
-	'LBL_SEREVER_CONFIG'           => 'Server Configuration'        , // TODO: Review
-	'LBL_CHECK_STATUS'             => 'Check Status'                , // TODO: Review
-	'message'                      => 'Message'                     , // TODO: Review
-	'LBL_SMSNOTIFIER_INFORMATION'  => 'SMS Information'             , // TODO: Review
-	'SINGLE_SMSNotifier'           => 'SMS Notifier'                , // TODO: Review
+	'LBL_SEREVER_CONFIG'           => 'Конфигурация Сервера', // KEY 5.x: SERVER_CONFIGURATION
+	'LBL_CHECK_STATUS'             => 'Проверить статус', 
+	'message'                      => 'Сообщение'          , 
+	'LBL_SMSNOTIFIER_INFORMATION'  => 'Информация SMS'    , 
+	'SINGLE_SMSNotifier'           => 'SMS Инфо'                , 
 );

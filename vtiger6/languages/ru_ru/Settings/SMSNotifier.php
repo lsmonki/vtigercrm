@@ -9,14 +9,14 @@
  ************************************************************************************/
 $languageStrings = array(
 	'LBL_ADD_RECORD'               => 'New Configuration'           , // TODO: Review
-	'SMSNotifier'                  => 'SMS Provider Configuration'  , // TODO: Review
+	'SMSNotifier'                  => 'SMS-Уведомления'  , 
 	'LBL_ADD_CONFIGURATION'        => 'New Configuration'           , // TODO: Review
 	'LBL_EDIT_CONFIGURATION'       => 'Edit Configuration'          , // TODO: Review
 	'LBL_SELECT_ONE'               => 'Select One'                  , // TODO: Review
 	'providertype'                 => 'Provider'                    , // TODO: Review
-	'isactive'                     => 'Active'                      , // TODO: Review
-	'username'                     => 'User Name'                   , // TODO: Review
-	'password'                     => 'Password'                    , // TODO: Review
+	'isactive'                     => 'Активен'              , // KEY 5.x: LBL_ACTIVE
+	'username'                     => 'Пользователь'    , // KEY 5.x: LBL_USERNAME
+	'password'                     => 'Пароль'                , // KEY 5.x: LBL_PASWRD
 );
 $jsLanguageStrings = array(
 	'LBL_DELETE_CONFIRMATION'      => 'Are you sure, you want to delete this SMSNotifier Configuration', // TODO: Review

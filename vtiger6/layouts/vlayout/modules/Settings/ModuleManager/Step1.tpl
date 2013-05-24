@@ -16,6 +16,7 @@
 	</div><hr>
 	<div class="contents">
 		<div class="row-fluid">
+			{if $EXTENSIONS_AVAILABLE eq true}
 				{foreach item=EXTENSION from=$EXTENSIONS name=extensions}
 					<div class="span6 {if $smarty.foreach.extensions.index % 2 != 0} margin0px{/if}">
 						<div class="extension_container extensionWidgetContainer">
@@ -73,8 +74,12 @@
 							</div>
 						</div>
 					</div>
-				{if $smarty.foreach.extensions.index % 2 != 0}</div><div class="row-fluid">{/if}
+					{if $smarty.foreach.extensions.index % 2 != 0}</div><div class="row-fluid">{/if}
 				{/foreach}
+			{else}
+				<br><br><center><b>{vtranslate('LBL_NOT_FOUND', $QUALIFIED_MODULE)}</b>
+				<a class="cancelLink" href="index.php?module=ModuleManager&parent=Settings&view=List">{vtranslate('LBL_GO_BACK', $QUALIFIED_MODULE)}</a></center>
+			{/if}
 		</div>
 	</div>
 </div>

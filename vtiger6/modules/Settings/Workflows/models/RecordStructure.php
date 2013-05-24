@@ -49,7 +49,7 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 						$fieldModel->set('workflow_columnname', $fieldName)->set('workflow_columnlabel', $fieldModel->get('label'));
 						// This is used to identify the field belongs to source module of workflow
 						$fieldModel->set('workflow_sourcemodule_field', true);
-						$values[$blockLabel][$fieldName] = $fieldModel;
+						$values[$blockLabel][$fieldName] = clone $fieldModel;
 					}
 				}
 			}
@@ -69,8 +69,8 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 					if (!empty ($fieldModelList)) {
 						foreach($fieldModelList as $fieldName=>$fieldModel) {
 							if($fieldModel->isViewable()) {
-								$name = "($parentFieldName : ($refModule) $fieldName)";
-								$label = $field->get('label').' : ('.$refModule.') '.$fieldModel->get('label');
+								$name = "$parentFieldName : ($refModule) $fieldName";
+								$label = vtranslate($field->get('label', $moduleModel->getName()), $refModule).' : ('.$refModule.') '.vtranslate($fieldModel->get('label'), $refModule);
 								$fieldModel->set('workflow_columnname', $name)->set('workflow_columnlabel', $label);
 								if(!empty($recordId)) {
 									$fieldValueType = $recordModel->getFieldFilterValueType($name);
@@ -78,7 +78,7 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 									$fieldInfo['workflow_valuetype'] = $fieldValueType;
 									$fieldModel->setFieldInfo($fieldInfo);
 								}
-								$values[$field->get('label')][$name] = $fieldModel;
+								$values[$field->get('label')][$name] = clone $fieldModel;
 							}
 						}
 					}
@@ -96,7 +96,7 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 	public function getAllEmailFields() {
 		return $this->getFieldsByType('email');
 	}
-	
+
 	/**
 	 * Function returns all the date time fields for the workflow record structure
 	 * @return type
@@ -105,12 +105,12 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 		$fieldTypes = array('date','datetime');
 		return $this->getFieldsByType($fieldTypes);
 	}
-	
+
 	/**
 	 * Function returns fields based on type
 	 * @return type
 	 */
-	public function  getFieldsByType($fieldTypes) {
+	public function getFieldsByType($fieldTypes) {
 		$fieldTypesArray = array();
 		if(gettype($fieldTypes) == 'string'){
 			array_push($fieldTypesArray,$fieldTypes);

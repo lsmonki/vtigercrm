@@ -9,14 +9,14 @@
  ************************************************************************************/
 
 class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
-    
+
     public function getPickListTableName($fieldName) {
         return 'vtiger_'.$fieldName;
     }
-    
+
     public function getFieldsByType($type) {
         $hardCodedPickFields = array('hdnTaxType','email_flag');
-        
+
         $fieldModels = parent::getFieldsByType($type);
         $fields = array();
         foreach($fieldModels as $fieldName=>$fieldModel) {
@@ -27,7 +27,7 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
         }
         return $fields;
     }
-    
+
     public function addPickListValues($fieldModel, $newValue, $rolesSelected = array()) {
         $db = PearDatabase::getInstance();
         $pickListFieldName = $fieldModel->getName();
@@ -38,15 +38,15 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 		$maxSeqQuery = 'SELECT max(sortorderid) as maxsequence FROM '.$tableName;
 		$result = $db->pquery($maxSeqQuery, array());
 		$sequence = $db->query_result($result,0,'maxsequence');
-		
+
         if($fieldModel->isRoleBased()) {
             $sql = 'insert into '.$tableName.' values (?,?,?,?,?)';
             $db->pquery($sql, array($id, $newValue, 1, $picklist_valueid,++$sequence));
         }else{
             $sql = 'INSERT INTO '.$tableName.' VALUES (?,?,?,?)';
-            $db->pquery($sql, array($id, $newValue, 1, ++$sequence));
+            $db->pquery($sql, array($id, $newValue, ++$sequence, 1));
         }
-        
+
         if($fieldModel->isRoleBased() && !empty($rolesSelected)) {
             $sql = "select picklistid from vtiger_picklist where name=?";
             $result = $db->pquery($sql, array($pickListFieldName));
@@ -55,52 +55,52 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
             for($j=0;$j<count($rolesSelected);$j++){
                 $roleid = $rolesSelected[$j];
 
-                $sql ="SELECT max(sortid)+1 as sortid 
-                       FROM vtiger_role2picklist left join vtiger_$pickListFieldName 
-                           on vtiger_$pickListFieldName.picklist_valueid=vtiger_role2picklist.picklistvalueid 
+                $sql ="SELECT max(sortid)+1 as sortid
+                       FROM vtiger_role2picklist left join vtiger_$pickListFieldName
+                           on vtiger_$pickListFieldName.picklist_valueid=vtiger_role2picklist.picklistvalueid
                        WHERE roleid=? and picklistid=?";
                 $sortid = $db->query_result($db->pquery($sql, array($roleid, $picklistid)),0,'sortid');
 
                 $sql = "insert into vtiger_role2picklist values(?,?,?,?)";
                 $db->pquery($sql, array($roleid, $picklist_valueid, $picklistid, $sortid));
             }
-        
+
         }
         return $picklist_valueid;
     }
-    
+
     public function renamePickListValues($pickListFieldName, $oldValue, $newValue, $moduleName) {
         $db = PearDatabase::getInstance();
-        
+
         $query = 'SELECT tablename,columnname FROM vtiger_field WHERE fieldname=? and presence IN (0,2)';
         $result = $db->pquery($query, array($pickListFieldName));
         $row = $db->query_result_rowdata($result,'0');
         $tableName = $row['tablename'];
         $columnName = $row['columnname'];
-        
-        
+
+
         $query = 'UPDATE '.$this->getPickListTableName($pickListFieldName).' SET '.$pickListFieldName.'=? WHERE '.$pickListFieldName.'=?';
         $db->pquery($query, array($newValue, $oldValue));
-        
+
         $query = 'UPDATE '.$tableName.' SET '.$columnName.'=? WHERE '.$columnName.'=?';
         $db->pquery($query, array($newValue, $oldValue));
-        
+
         $query = "UPDATE vtiger_field SET defaultvalue=? WHERE defaultvalue=? AND tablename=? AND columnname=?";
         $db->pquery($query, array($newValue, $oldValue, $tableName, $columnName));
-        
+
         vimport('~~/include/utils/CommonUtils.php');
-        
+
         $query = "UPDATE vtiger_picklist_dependency SET sourcevalue=? WHERE sourcevalue=? AND sourcefield=? AND tabid=?";
         $db->pquery($query, array($newValue, $oldValue, $tableName, getTabid($moduleName)));
         return true;
     }
-    
+
     public function remove($pickListFieldName , $valueToDelete, $replaceValue , $moduleName) {
         $db = PearDatabase::getInstance();
 		if(!is_array($valueToDelete)) {
 			$valueToDelete = array($valueToDelete);
 		}
-        
+
         $fieldModel = Settings_Picklist_Field_Model::getInstance($pickListFieldName,$this);
         //if role based then we need to delete all the values in role based picklist
         if($fieldModel->isRoleBased()) {
@@ -115,11 +115,11 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
             $query = 'DELETE FROM vtiger_role2picklist WHERE picklistvalueid IN ('.generateQuestionMarks($picklistValueIdToDelete).')';
             $db->pquery($query,$picklistValueIdToDelete);
         }
-		
+
         $query = 'DELETE FROM '. $this->getPickListTableName($pickListFieldName).
 					' WHERE '.$pickListFieldName.' IN ('.  generateQuestionMarks($valueToDelete).')';
         $db->pquery($query, $valueToDelete);
-        
+
         vimport('~~/include/utils/CommonUtils.php');
         $tabId = getTabId($moduleName);
         $query = 'DELETE FROM vtiger_picklist_dependency WHERE sourcevalue IN ('. generateQuestionMarks($valueToDelete) .')'.
@@ -127,16 +127,16 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 		$params = $valueToDelete;
 		array_push($params, $pickListFieldName, $tabId);
         $db->pquery($query, $params);
-        
+
         $query='SELECT tablename,columnname FROM vtiger_field WHERE fieldname=? AND presence in (0,2) AND tabid=?';
         $result = $db->pquery($query, array($pickListFieldName, $tabId));
         $num_row = $db->num_rows($result);
-        
+
         for($i=0; $i<$num_row; $i++) {
             $row = $db->query_result_rowdata($result, $i);
             $tableName = $row['tablename'];
             $columnName = $row['columnname'];
-            
+
             $query = 'UPDATE '.$tableName.' SET '.$columnName.'=? WHERE '.$columnName.' IN ('.  generateQuestionMarks($valueToDelete).')';
 			$params = array($replaceValue);
 			$params = array_merge($params, $valueToDelete);
@@ -149,41 +149,41 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
         }
         return true;
     }
-    
+
     public function enableOrDisableValuesForRole($picklistFieldName, $valuesToEnables, $valuesToDisable, $roleIdList) {
         $db = PearDatabase::getInstance();
         //To disable die On error since we will be doing insert without chekcing
         $dieOnErrorOldValue = $db->dieOnError;
         $db->dieOnError = false;
-        
+
 		$sql = "select picklistid from vtiger_picklist where name=?";
 		$result = $db->pquery($sql, array($picklistFieldName));
 		$picklistid = $db->query_result($result,0,"picklistid");;
-        
+
         $pickListValueList = array_merge($valuesToEnables,$valuesToDisable);
         $pickListValueDetails = array();
         $query = 'SELECT picklist_valueid,'. $picklistFieldName.
                  ' FROM '.$this->getPickListTableName($picklistFieldName).
                  ' WHERE '.$picklistFieldName .' IN ('.  generateQuestionMarks($pickListValueList).')';
         $result = $db->pquery($query, $pickListValueList);
-        $num_rows = $db->num_rows($result);
-        
+		$num_rows = $db->num_rows($result);
+
         for($i=0; $i<$num_rows; $i++) {
             $row = $db->query_result_rowdata($result,$i);
-            
-            $pickListValueDetails[$row[$picklistFieldName]] =array('picklistvalueid'=>$row['picklist_valueid'],
+
+            $pickListValueDetails[decode_html($row[$picklistFieldName])] =array('picklistvalueid'=>$row['picklist_valueid'],
 																	'picklistid'=>$picklistid);
         }
-        $insertValueList = array();
+		$insertValueList = array();
         $deleteValueList = array();
         foreach($roleIdList as $roleId) {
             foreach($valuesToEnables  as $picklistValue) {
-                $valueDetail = $pickListValueDetails[$picklistValue];
+		        $valueDetail = $pickListValueDetails[$picklistValue];
                 $pickListValueId = $valueDetail['picklistvalueid'];
                 $picklistId = $valueDetail['picklistid'];
                 $insertValueList[] = '("'.$roleId.'","'.$pickListValueId.'","'.$picklistId.'")';
             }
-            
+
             foreach($valuesToDisable as $picklistValue) {
                 $valueDetail = $pickListValueDetails[$picklistValue];
                 $pickListValueId = $valueDetail['picklistvalueid'];
@@ -191,21 +191,21 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
                 $deleteValueList[] = ' ( roleid = "'.$roleId.'" AND '.'picklistvalueid = "'.$pickListValueId.'") ';
             }
         }
-        $query = 'INSERT IGNORE INTO vtiger_role2picklist (roleid,picklistvalueid,picklistid) VALUES '.implode(',',$insertValueList);
+		$query = 'INSERT IGNORE INTO vtiger_role2picklist (roleid,picklistvalueid,picklistid) VALUES '.implode(',',$insertValueList);
         $result = $db->pquery($query,array());
 
 		$deleteQuery = 'DELETE FROM vtiger_role2picklist WHERE '.implode(' OR ',$deleteValueList);
 
 		$result = $db->pquery($deleteQuery,array());
-        
+
         //retaining to older value
         $db->dieOnError = $dieOnErrorOldValue;
-         
+
     }
-    
+
     public function updateSequence($pickListFieldName , $picklistValues) {
         $db = PearDatabase::getInstance();
-        
+
         $query = 'UPDATE '.$this->getPickListTableName($pickListFieldName).' SET sortorderid = CASE ';
         foreach($picklistValues as $values => $sequence) {
             $query .= ' WHEN '.$pickListFieldName.'="'.$values.'" THEN "'.$sequence.'"';
@@ -213,20 +213,20 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 		$query .= ' END';
         $result = $db->pquery($query, array());
     }
- 
+
 
     public static function getPicklistSupportedModules() {
          $db = PearDatabase::getInstance();
-        
+
         // vtlib customization: Ignore disabled modules.
-        $query = 'SELECT distinct vtiger_tab.tablabel, vtiger_tab.name as tabname 
-                  FROM vtiger_tab 
-                        inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid 
-                  WHERE uitype IN (15,33,16) and vtiger_field.tabid NOT IN (29,10)  and vtiger_tab.presence != 1 and vtiger_field.presence in (0,2) 
+        $query = 'SELECT distinct vtiger_tab.tablabel, vtiger_tab.name as tabname
+                  FROM vtiger_tab
+                        inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid
+                  WHERE uitype IN (15,33,16) and vtiger_field.tabid NOT IN (29,10)  and vtiger_tab.presence != 1 and vtiger_field.presence in (0,2)
                   ORDER BY vtiger_tab.tabid ASC';
         // END
         $result = $db->pquery($query, array());
-        
+
         $modulesModelsList = array();
         while($row = $db->fetch_array($result)){
             $moduleLabel = $row['tablabel'];
@@ -238,8 +238,8 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
         }
         return $modulesModelsList;
     }
-    
-    
+
+
     /**
 	 * Static Function to get the instance of Vtiger Module Model for the given id or name
 	 * @param mixed id or name of the module

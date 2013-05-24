@@ -8,16 +8,16 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Quotes'                => 'Quote'                       , // TODO: Review
-	'LBL_EXPORT_TO_PDF'            => 'Export to PDF'               , // TODO: Review
+	'SINGLE_Quotes'                => 'Предложение'      , 
+	'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF'       , 
 	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
 	'LBL_ADD_RECORD'               => 'Add Quote'                   , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Quotes List'                 , // TODO: Review
-	'LBL_QUOTE_INFORMATION'        => 'Quote Details'               , // TODO: Review
-	'Quote No'                     => 'Quote Number'                , // TODO: Review
-	'Quote Stage'                  => 'Quote Stage'                 , // TODO: Review
-	'Valid Till'                   => 'Valid Until'                 , // TODO: Review
-	'Inventory Manager'            => 'Inventory Manager'           , // TODO: Review
-	'Accepted'                     => 'Accepted'                    , // TODO: Review
-	'Rejected'                     => 'Rejected'                    , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Список Предложений', // KEY 5.x: LBL_LIST_FORM_TITLE
+	'LBL_QUOTE_INFORMATION'        => 'Информация'        , 
+	'Quote No'                     => 'Предложение Id'   , 
+	'Quote Stage'                  => 'Стадия'                , 
+	'Valid Till'                   => 'Действительно до', 
+	'Inventory Manager'            => 'Ответственный за склад', 
+	'Accepted'                     => 'Принято'              , 
+	'Rejected'                     => 'Отклонено'          , 
 );

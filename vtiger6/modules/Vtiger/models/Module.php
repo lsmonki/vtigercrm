@@ -1167,6 +1167,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
     public function isExportable() {
         return $this->isCustomizable() ? true : false;
+
     }
 
 	/**

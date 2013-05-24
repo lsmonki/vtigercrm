@@ -370,6 +370,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 	 */
 	registerTargetFieldsClickEvent : function(dependencyGraph) {
 		var thisInstance = this;
+		thisInstance.updatedSourceValues = [];
 		dependencyGraph.find('td.picklistValueMapping').on('click', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
 			var sourceValue = currentTarget.data('sourceValue');
@@ -389,6 +390,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 	 */
 	updateValueMapping : function(dependencyGraph) {
 		var thisInstance = this;
+		thisInstance.valueMapping = [];
 		var sourceValuesArray = thisInstance.updatedSourceValues;
 		var dependencyTable = dependencyGraph.find('.pickListDependencyTable');
 		for(var key in sourceValuesArray) {

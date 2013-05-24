@@ -63,8 +63,8 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
             if(conditions.length <=0) {
                 return true;
             }
-            values[index+1] = {};
-			values[index+1]['columns'] = {};
+            
+            var iterationValues = {};
 			conditions.each(function(i, conditionDomElement){
 				var rowElement = jQuery(conditionDomElement);
 				var fieldSelectElement = jQuery('[name="columnname"]', rowElement);
@@ -140,10 +140,16 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
 				if(rowElement.is(":last-child")) {
 					rowValues['column_condition'] = '';
 				}
-				values[index+1]['columns'][columnIndex] = rowValues;
+				iterationValues[columnIndex] = rowValues;
 				columnIndex++;
 			});
-			if(groupElement.find('div.groupCondition').length > 0) {
+            
+            if(!jQuery.isEmptyObject(iterationValues)) {
+                values[index+1] = {};
+                //values[index+1]['columns'] = {};
+                values[index+1]['columns'] = iterationValues;
+            }
+			if(groupElement.find('div.groupCondition').length > 0 && !jQuery.isEmptyObject(values[index+1])) {
 				values[index+1]['condition'] = conditionGroups.find('div.groupCondition [name="condition"]').val();
 			}
 		});

@@ -28,6 +28,11 @@ class Settings_Vtiger_CustomRecordNumbering_View extends Settings_Vtiger_Index_V
 		$viewer->assign('QUALIFIED_MODULE',$qualifiedModuleName);
 		$viewer->view('CustomRecordNumbering.tpl', $qualifiedModuleName);
 	}
+	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_CUSTOMIZE_RECORD_NUMBERING',$qualifiedModuleName);
+	}
 
 	/**
 	 * Function to get the list of Script models to be included

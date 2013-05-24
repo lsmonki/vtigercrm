@@ -203,11 +203,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	}
     
     public function isRoleBased() {
-        if($this->getFieldDataType() != 'picklist') {
-            return false;
-        }
-        
-        if($this->get('uitype') != '16') {
+        if($this->get('uitype') == '15' || $this->get('uitype') == '33') {
             return true;
         }
         return false;
@@ -769,8 +765,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
             foreach($fieldObjects as $fieldObject){
                 $fieldModelObject= self::getInstanceFromFieldObject($fieldObject);
                 $fieldModelList[$fieldModelObject->get('block')->id][] = $fieldModelObject;
-                Vtiger_Cache::set('field-'.$moduleModel->getName(),$fieldModelObject->getId(),$fieldModelObject);
-                Vtiger_Cache::set('field-'.$moduleModel->getName(),$fieldModelObject->getName(),$fieldModelObject);
+                Vtiger_Cache::set('field-'.$moduleModel->getId(),$fieldModelObject->getId(),$fieldModelObject);
+                Vtiger_Cache::set('field-'.$moduleModel->getId(),$fieldModelObject->getName(),$fieldModelObject);
             }
 
             Vtiger_Cache::set('ModuleFields',$moduleModel->id,$fieldModelList);
@@ -787,12 +783,12 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	public static function  getInstance($value, $module = false) {
         $fieldObject = null;
         if($module){
-            $fieldObject = Vtiger_Cache::get('field-'.$module->getName(), $value);
+            $fieldObject = Vtiger_Cache::get('field-'.$module->getId(), $value);
         }
         if(!$fieldObject){
             $fieldObject = parent::getInstance($value, $module);
             if($module){
-                Vtiger_Cache::set('field-'.$module->getName(),$value,$fieldObject);
+                Vtiger_Cache::set('field-'.$module->getId(),$value,$fieldObject);
             }
         }
         
@@ -982,13 +978,10 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
     /**
      * Function to get visibilty permissions of a Field
-     * @param type $accessmode
-     * @return boolean
+     * @param <String> $accessmode
+     * @return <Boolean>
      */
     public function getPermissions($accessmode = 'readonly') {
-
-      
-        $adb = PearDatabase::getInstance();
         $user = Users_Record_Model::getCurrentUserModel();
         $privileges = $user->getPrivileges();
         if ($privileges->hasGlobalReadPermission()) {
@@ -996,7 +989,27 @@ class Vtiger_Field_Model extends Vtiger_Field {
         } else {
             $modulePermission = Vtiger_Cache::get('modulePermission-'.$accessmode, $this->getModuleId());
             if (!$modulePermission) {
-                $profilelist = $privileges->get('profiles');
+                $modulePermission = self::preFetchModuleFieldPermission($this->getModuleId(), $accessmode);
+            }
+            if (array_key_exists($this->getId(), $modulePermission)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    /**
+     * Function to Preinitialize the module Field Permissions
+     * @param <Integer> $tabid
+     * @param <String> $accessmode
+     * @return <Array>
+     */
+    public static function preFetchModuleFieldPermission($tabid,$accessmode = 'readonly'){
+        $adb = PearDatabase::getInstance();
+        $user = Users_Record_Model::getCurrentUserModel();
+        $privileges = $user->getPrivileges();
+        $profilelist = $privileges->get('profiles');
 
                 if (count($profilelist) > 0) {
                     if ($accessmode == 'readonly') {
@@ -1004,14 +1017,14 @@ class Vtiger_Field_Model extends Vtiger_Field {
                     } else {
                         $query = "SELECT vtiger_profile2field.visible,vtiger_field.fieldid FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (" . generateQuestionMarks($profilelist) . ") AND vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
                     }
-                    $params = array($this->getModuleId(), $profilelist);
+                    $params = array($tabid, $profilelist);
                 } else {
                     if ($accessmode == 'readonly') {
                         $query = "SELECT vtiger_profile2field.visible,vtiger_field.fieldid FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
                     } else {
                         $query = "SELECT vtiger_profile2field.visible,vtiger_field.fieldid FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_profile2field.readonly=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
                     }
-                    $params = array($this->getModuleId());
+                    $params = array($tabid);
                 }
 
                 $result = $adb->pquery($query, $params);
@@ -1021,14 +1034,9 @@ class Vtiger_Field_Model extends Vtiger_Field {
                     $row = $adb->query_result_rowdata($result, $i);
                     $modulePermission[$row['fieldid']] = $row['visible'];
                 }
-                Vtiger_Cache::set('modulePermission-'.$accessmode,$this->getModuleId(),$modulePermission);
-            }
-            if (array_key_exists($this->getId(), $modulePermission)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+                Vtiger_Cache::set('modulePermission-'.$accessmode,$tabid,$modulePermission);
+                
+                return $modulePermission;
     }
     
     public function __update() {

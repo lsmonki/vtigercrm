@@ -22,9 +22,9 @@ class Vtiger_Url_UIType extends Vtiger_Base_UIType {
 		$matchPattern = "^[\w]+:\/\/^";
 		preg_match($matchPattern, $value, $matches);
 		if(!empty ($matches[0])) {
-			$value = '<a href="'.$value.'" target="_blank">'.textlength_check($value).'</a>';
+			$value = '<a class="urlField cursorPointer" href="'.$value.'" target="_blank">'.textlength_check($value).'</a>';
 		} else {
-			$value = '<a href="http://'.$value.'" target="_blank">'.textlength_check($value).'</a>';
+			$value = '<a class="urlField cursorPointer" href="http://'.$value.'" target="_blank">'.textlength_check($value).'</a>';
 		}
 		return $value;
 	}

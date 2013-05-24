@@ -264,6 +264,15 @@ jQuery.Class('Settings_Sharing_Access_Js', {}, {
 					if(data.success == true){
 						currentRow.fadeOut('slow');
 						var customRuleTable = currentRow.closest('table .customRuleTable');
+						//after delete the custom rule, update the sequence number of existing rules
+						var nextRows = currentRow.nextAll('tr.customRuleEntries');
+						if(nextRows.length > 0){
+							jQuery.each(nextRows,function(i,element) {
+								var currentSequenceElement = jQuery(element).find('.sequenceNumber');
+								var updatedNumber = parseInt(currentSequenceElement.text())-1;
+								currentSequenceElement.text(updatedNumber);
+							});	
+						}
 						currentRow.remove();
 						var customRuleEntries = customRuleTable.find('.customRuleEntries');
 						//if there are no custom rule entries, we have to hide headers also and show the empty message div

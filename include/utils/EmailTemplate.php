@@ -33,7 +33,6 @@ class EmailTemplate {
 		$this->processed = false;
 		$this->user = $user;
 		$this->setDescription($description);
-		$this->processed = false;
 	}
 
 	public function setDescription($description) {
@@ -115,6 +114,12 @@ class EmailTemplate {
 								$moduleTableIndexList[$tableName];
 					}
 				}
+				//If module is Leads and if you are not selected any leads fields then query failure is happening.
+				//By default we are checking where condition on base table.
+				if($module == 'Leads' && !in_array('vtiger_leaddetails', $tableList)){
+					$sql .=' INNER JOIN vtiger_leaddetails ON vtiger_leaddetails.leadid = vtiger_crmentity.crmid';
+				}
+				
 				$sql .= ' WHERE';
 				$deleteQuery = $meta->getEntityDeletedQuery();
 				if (!empty($deleteQuery)) {

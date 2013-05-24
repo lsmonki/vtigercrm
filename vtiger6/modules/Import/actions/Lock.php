@@ -39,7 +39,7 @@ class Import_Lock_Action extends Vtiger_Action_Controller {
 		$adb = PearDatabase::getInstance();
 		if(Vtiger_Utils::CheckTable('vtiger_import_locks')) {
 			$query = 'DELETE FROM vtiger_import_locks WHERE userid=?';
-			$params = array($user->get('id'));
+			$params = array(method_exists($user, 'get')?$user->get('id'):$user->id);
 			if($module != false) {
 				$query .= ' AND tabid=?';
 				array_push($params, getTabid($module));

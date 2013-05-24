@@ -10,7 +10,13 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div id="reportDetails" class="marginLeft5px" style="overflow-x: auto;">
+	<div class="contents-topscroll">
+		<div class="topscroll-div">
+			&nbsp;
+		 </div>
+	</div>
+	<div id="reportDetails" class="marginLeft5px contents-bottomscroll">
+		<div class="bottomscroll-div">
 		<input type="hidden" id="updatedCount" value="{$NEW_COUNT}" />
 		{if !empty($CALCULATION_FIELDS)}
 			<table class="table table-bordered table-condensed" width="100%">
@@ -45,7 +51,7 @@
 
 		{if $DATA neq ''}
 			{assign var=HEADERS value=$DATA[0]}
-			<table class="table table-bordered">
+			<table class="table table-bordered table-striped">
 				<thead>
 					<tr class="blockHeader">
 						{foreach from=$HEADERS item=HEADER key=NAME}
@@ -67,5 +73,6 @@
 		{else}
 			{vtranslate('LBL_NO_DATA_AVAILABLE',$MODULE)}
 		{/if}
+		</div>
 	</div>
 {/strip}

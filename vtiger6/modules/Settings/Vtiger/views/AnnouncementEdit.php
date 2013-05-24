@@ -23,6 +23,11 @@ class Settings_Vtiger_AnnouncementEdit_View extends Settings_Vtiger_Index_View {
         $viewer->view('Announcement.tpl',$qualifiedModuleName);
     }
 	
+	function getPageTitle(Vtiger_Request $request) {
+		$qualifiedModuleName = $request->getModule(false);
+		return vtranslate('LBL_ANNOUNCEMENT',$qualifiedModuleName);
+	}
+	
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

@@ -122,6 +122,7 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 					thisInstance[preSaveActionFunctionName].apply(thisInstance,[taskType]);
 				}
 				var params  = form.serializeFormData();
+				params.content = CKEDITOR.instances['content'].getData();
 				AppConnector.request(params).then(function(data){
 					if(data.result){
 						thisInstance.getTaskList();
@@ -683,12 +684,20 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 	registerCcAndBccEvents : function(){
 		var thisInstance = this;
 		jQuery('#ccLink').on('click',function(e){
-			jQuery('#ccContainer').show();
+			var ccContainer = jQuery('#ccContainer');
+			ccContainer.show();
+			var taskFieldElement = ccContainer.find('select.task-fields');
+			taskFieldElement.addClass('chzn-select');
+			app.changeSelectElementView(taskFieldElement);
 			jQuery(e.currentTarget).hide();
 			thisInstance.checkHiddenStatusofCcandBcc();
 		});
 		jQuery('#bccLink').on('click',function(e){
-			jQuery('#bccContainer').show();
+			var bccContainer = jQuery('#bccContainer');
+			bccContainer.show();
+			var taskFieldElement = bccContainer.find('select.task-fields');
+			taskFieldElement.addClass('chzn-select');
+			app.changeSelectElementView(taskFieldElement);
 			jQuery(e.currentTarget).hide();
 			thisInstance.checkHiddenStatusofCcandBcc();
 		});

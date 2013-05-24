@@ -127,8 +127,9 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 			$query .= ' WHEN fieldid = ? THEN '. $maxSequence;
 		}
 		$query .= ' ELSE sequence END';
-
-		$db->pquery($query, $fieldIdsList);
+		$query .= ' WHERE fieldid IN ('.generateQuestionMarks($fieldIdsList).')';
+		
+		$db->pquery($query, array_merge($fieldIdsList,$fieldIdsList));
     }
     
     /**

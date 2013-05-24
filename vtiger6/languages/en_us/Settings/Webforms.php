@@ -38,6 +38,7 @@ $languageStrings = array(
 );
 $jsLanguageStrings = array(
 	'JS_WEBFORM_DELETED_SUCCESSFULLY' => 'Webform deleted successfully',
-	'JS_LOADING_TARGET_MODULE_FIELDS' => 'Loadding Target Module Fields',
-	'JS_SELECT_VALUE' => 'Select Vlaue',
+	'JS_LOADING_TARGET_MODULE_FIELDS' => 'Loading Target Module Fields',
+	'JS_SELECT_VALUE' => 'Select Value',
+	'JS_LABEL' => 'label',
 );

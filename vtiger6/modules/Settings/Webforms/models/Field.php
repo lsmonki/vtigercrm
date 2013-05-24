@@ -77,4 +77,8 @@ class Settings_Webforms_Field_Model extends Vtiger_Field_Model {
     public function isEmptyPicklistOptionAllowed() {
         return false;;
     }
+
+	public function getPermissions() {
+		return true;
+	}
 }

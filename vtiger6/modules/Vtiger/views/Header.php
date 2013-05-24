@@ -76,7 +76,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linktype' => 'HEADERLINK',
 						'linklabel' => 'LBL_FEEDBACK',
 						'linkurl' => "javascript:window.open('http://vtiger.com/products/crm/od-feedback/index.php?version=".$vtigerCurrentVersion.
-							"(OS)&email=".$userEmail."&uid=".$appUniqueKey.
+							"&email=".$userEmail."&uid=".$appUniqueKey.
 							"&ui=6','feedbackwin','height=400,width=550,top=200,left=300')",
 						'linkicon' => '',
 					)

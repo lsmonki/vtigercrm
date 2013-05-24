@@ -53,17 +53,7 @@ if (typeof(ImportJs) == 'undefined') {
 		
 		registerImportClickEvent : function(){
 			jQuery('#importButton').on('click',function(e){
-				var progressIndicatorElement = jQuery.progressIndicator({
-					'blockInfo' : {
-						'enabled' : true
-					}
-				});
 				var result = ImportJs.sanitizeAndSubmit()
-				if(result == false){
-					progressIndicatorElement.progressIndicator({
-						'mode' : 'hide'
-					});
-				}
 				return result;
 			});
 		},
@@ -133,7 +123,12 @@ if (typeof(ImportJs) == 'undefined') {
 			if($mergeChecked) {
 				var selectedOptions = jQuery('#selected_merge_fields option');
 				if(selectedOptions.length == 0) {
-					alert(app.vtranslate('JS_PLEASE_SELECT_ONE_FIELD_FOR_MERGE'));
+					var errorMessage = app.vtranslate('JS_PLEASE_SELECT_ONE_FIELD_FOR_MERGE');
+					var params = {
+						text: errorMessage,
+						'type': 'error'
+					};
+					Vtiger_Helper_Js.showMessage(params);
 					return false;
 				}
 			}
@@ -212,6 +207,8 @@ if (typeof(ImportJs) == 'undefined') {
 		sanitizeFieldMapping: function() {
 			var fieldsList = jQuery('.fieldIdentifier');
 			var mappedFields = {};
+			var errorMessage;
+			var params = {};
 			var mappedDefaultValues = {};
 			for(var i=0; i<fieldsList.length; ++i) {
 				var fieldElement = jQuery(fieldsList.get(i));
@@ -227,7 +224,12 @@ if (typeof(ImportJs) == 'undefined') {
 				}
 				if(selectedFieldName != '') {
 					if(selectedFieldName in mappedFields) {
-						alert(app.vtranslate('JS_FIELD_MAPPED_MORE_THAN_ONCE')+" "  + selectedFieldElement.html() );
+						errorMessage = app.vtranslate('JS_FIELD_MAPPED_MORE_THAN_ONCE')+" "  + selectedFieldElement.data('label');
+						params = {
+							text: errorMessage,
+							'type': 'error'
+						};
+						Vtiger_Helper_Js.showMessage(params);
 						return false;
 					}
 					mappedFields[selectedFieldName] = rowId-1;
@@ -247,7 +249,12 @@ if (typeof(ImportJs) == 'undefined') {
 				}
 			}
 			if(missingMandatoryFields.length > 0) {
-				alert(app.vtranslate('JS_MAP_MANDATORY_FIELDS')+ missingMandatoryFields.join(','));
+				errorMessage = app.vtranslate('JS_MAP_MANDATORY_FIELDS')+ missingMandatoryFields.join(',');
+				params = {
+					text: errorMessage,
+					'type': 'error'
+				};
+				Vtiger_Helper_Js.showMessage(params);
 				return false;
 			}
 			jQuery('#field_mapping').val(JSON.stringify(mappedFields));
@@ -256,18 +263,30 @@ if (typeof(ImportJs) == 'undefined') {
 		},
 
 		validateCustomMap: function() {
+			var errorMessage;
+			var params = {};
 			var saveMap = jQuery('#save_map').is(':checked');
 			if(saveMap) {
 				var mapName = jQuery('#save_map_as').val();
 				if(jQuery.trim(mapName) == '') {
-					alert(app.vtranslate('JS_MAP_NAME_CAN_NOT_BE_EMPTY'));
+					errorMessage = app.vtranslate('JS_MAP_NAME_CAN_NOT_BE_EMPTY');
+					params = {
+						text: errorMessage,
+						'type': 'error'
+					};
+					Vtiger_Helper_Js.showMessage(params);
 					return false;
 				}
 				var mapOptions = jQuery('#saved_maps option');
 				for(var i=0; i<mapOptions.length; ++i) {
 					var mapOption = jQuery(mapOptions.get(i));
 					if(mapOption.html() == mapName) {
-						alert(app.vtranslate('JS_MAP_NAME_ALREADY_EXISTS'));
+						errorMessage = app.vtranslate('JS_MAP_NAME_ALREADY_EXISTS');
+						params = {
+							text: errorMessage,
+							'type': 'error'
+						};
+						Vtiger_Helper_Js.showMessage(params);
 						return false;
 					}
 				}

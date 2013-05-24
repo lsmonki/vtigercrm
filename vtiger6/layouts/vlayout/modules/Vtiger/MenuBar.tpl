@@ -39,7 +39,7 @@
 									{/if}
 									{if $moduleList}
 									<span class="span3">
-										<strong><label>{vtranslate("LBL_$parent",$moduleName)}</label></strong><hr>
+										<strong>{vtranslate("LBL_$parent",$moduleName)}</strong><hr>
 										{foreach key=moduleName item=moduleModel from=$moduleList}
 											{assign var='translatedModuleLabel' value=vtranslate($moduleModel->get('label'),$moduleName)}
 											<label class="moduleNames"><a id="menubar_item_{$moduleName}" href="{$moduleModel->getDefaultUrl()}">{$translatedModuleLabel}</a></label>

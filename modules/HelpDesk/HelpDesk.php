@@ -810,10 +810,15 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 			$reply = getTranslatedString("created", $moduleName);
 			$temp = " ";
 		}
-
+		
 		$wsParentId = $entityData->get('parent_id');
 		$parentIdParts = explode('x', $wsParentId);
-		$parentId = $parentIdParts[1];
+		
+		// If this function is being triggered as part of Eventing API
+		// Then the reference field ID will not matching the webservice format.
+		// Regardless of the entry we need just the ID
+		$parentId = array_pop($parentIdParts);
+		
 		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
 				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
 				. $entityData->get('ticket_title');

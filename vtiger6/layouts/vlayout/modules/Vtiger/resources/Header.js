@@ -208,7 +208,7 @@ jQuery.Class("Vtiger_Header_Js",{
 		app.showModalWindow(data, function(data){
 			var quickCreateForm = data.find('form[name="QuickCreate"]');
 			var moduleName = quickCreateForm.find('[name="module"]').val();
-			var editViewInstance = Vtiger_Edit_Js.getInstance(moduleName);
+			var editViewInstance = Vtiger_Edit_Js.getInstanceByModuleName(moduleName);
 			editViewInstance.registerBasicEvents(quickCreateForm);
 			quickCreateForm.validationEngine(app.validationEngineOptions);
 			if(typeof params.callbackPostShown != "undefined"){

@@ -22,7 +22,7 @@
 		<input type="hidden" name="record" id="record" value="{$RECORD_MODEL->getId()}" />
 
 		<div class="modal-body">
-			<h6>{vtranslate('LBL_TRANSFER_OWNERSHIP',$QUALIFIED_MODULE)}</h6>
+			<h5>{vtranslate('LBL_TRANSFER_OWNERSHIP',$QUALIFIED_MODULE)}</h5>
 			<div class="control-group">
 				<div class="control-label"><span class="redColor">*</span>{vtranslate('LBL_TO_OTHER_ROLE',$QUALIFIED_MODULE)}</div>
 				<div class="controls">
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</div>
-							
+
 			<div class="modal-footer">
 				<div class=" pull-right cancelLinkContainer">
 					<a class="cancelLink" data-dismiss="modal" type="reset">Cancel</a>

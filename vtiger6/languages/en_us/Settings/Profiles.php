@@ -40,7 +40,8 @@ $languageStrings = array(
     'LBL_VIEW_ALL' => 'View All',
     'LBL_EDIT_ALL' => 'Edit All',
     'LBL_VIEW_ALL_DESC' => 'Can view all the modules information',
-    'LBL_EDIT_ALL_DESC' => 'Can edit all the modules information'
+    'LBL_EDIT_ALL_DESC' => 'Can edit all the modules information',
+	'LBL_DUPLICATES_EXIST' => 'Duplicate Profile Exists',
 	
 );
 

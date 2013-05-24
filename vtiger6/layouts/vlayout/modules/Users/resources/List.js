@@ -103,5 +103,6 @@ Settings_Vtiger_List_Js("Users_List_Js",{
         this.registerEmailFieldClickEvent();
 		this.registerEmailFieldClickEvent();
 		this.registerDeleteRecordClickEvent();
+		this.registerUrlFieldClickEvent();
 	}
 });

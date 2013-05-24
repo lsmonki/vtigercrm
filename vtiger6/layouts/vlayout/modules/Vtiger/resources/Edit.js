@@ -23,29 +23,41 @@ jQuery.Class("Vtiger_Edit_Js",{
     preReferencePopUpOpenEvent : 'Vtiger.Referece.Popup.Pre',
 	
 	editInstance : false,
+	
+	/**
+	 * Function to get Instance by name
+	 * @params moduleName:-- Name of the module to create instance
+	 */
+	getInstanceByModuleName : function(moduleName){
+		if(typeof moduleName == "undefined"){
+			moduleName = app.getModuleName();
+		}
+		var parentModule = app.getParentModuleName();
+		if(parentModule == 'Settings'){
+			var moduleClassName = parentModule+"_"+moduleName+"_Edit_Js";
+			if(typeof window[moduleClassName] == 'undefined'){
+				moduleClassName = moduleName+"_Edit_Js";
+			}
+			var fallbackClassName = parentModule+"_Vtiger_Edit_Js";
+			if(typeof window[fallbackClassName] == 'undefined') {
+				fallbackClassName = "Vtiger_Edit_Js";
+			}
+		} else {
+			moduleClassName = moduleName+"_Edit_Js";
+			fallbackClassName = "Vtiger_Edit_Js";
+		}
+		if(typeof window[moduleClassName] != 'undefined'){
+			var instance = new window[moduleClassName]();
+		}else{
+			var instance = new window[fallbackClassName]();
+		}
+		return instance;
+	},
+	
 
 	getInstance: function(){
 		if(Vtiger_Edit_Js.editInstance == false){
-			var module = app.getModuleName();
-			var parentModule = app.getParentModuleName();
-			if(parentModule == 'Settings'){
-				var moduleClassName = parentModule+"_"+module+"_Edit_Js";
-				if(typeof window[moduleClassName] == 'undefined'){
-					moduleClassName = module+"_Edit_Js";
-				}
-				var fallbackClassName = parentModule+"_Vtiger_Edit_Js";
-				if(typeof window[fallbackClassName] == 'undefined') {
-					fallbackClassName = "Vtiger_Edit_Js";
-				}
-			} else {
-				moduleClassName = module+"_Edit_Js";
-				fallbackClassName = "Vtiger_Edit_Js";
-			}
-			if(typeof window[moduleClassName] != 'undefined'){
-				var instance = new window[moduleClassName]();
-			}else{
-				var instance = new window[fallbackClassName]();
-			}
+			var instance = Vtiger_Edit_Js.getInstanceByModuleName();
 			Vtiger_Edit_Js.editInstance = instance;
 			return instance;
 		}
