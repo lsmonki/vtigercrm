@@ -433,19 +433,6 @@ class Leads extends CRMEntity {
 		return $return_value;
 	}
 
-	/** Function to get the Combo List Values of Leads Field
-	 * @param string $list_option
-	 * Returns Combo List Options
-	*/
-	function get_lead_field_options($list_option)
-	{
-		global $log;
-		$log->debug("Entering get_lead_field_options(".$list_option.") method ...");
-		$comboFieldArray = getComboArray($this->combofieldNames);
-		$log->debug("Exiting get_lead_field_options method ...");
-		return $comboFieldArray[$list_option];
-	}
-
 	/** Function to get the Columnnames of the Leads Record
 	* Used By vtigerCRM Word Plugin
 	* Returns the Merge Fields for Word Plugin
@@ -519,6 +506,7 @@ class Leads extends CRMEntity {
 				}
 			}
 		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 

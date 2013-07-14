@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -15,18 +15,16 @@
 
 include('vtigerversion.php');
 
-version_compare(phpversion(), '5.3.0') < 0? error_reporting(E_ALL & ~E_NOTICE) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
 ini_set('memory_limit','64M');
 
-// show or hide calendar, world clock, calculator, chat and CKEditor 
-// Do NOT remove the quotes if you set these to false! 
+// show or hide calendar, world clock, calculator, chat and CKEditor
+// Do NOT remove the quotes if you set these to false!
 $CALENDAR_DISPLAY = 'true';
 $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
-$CHAT_DISPLAY = 'true'; 
+$CHAT_DISPLAY = 'true';
 $USE_RTE = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
@@ -103,9 +101,9 @@ $upload_dir = '_VT_UPLOADDIR_';
 $upload_maxsize = 3000000;
 
 // flag to allow export functionality
-// 'all' to allow anyone to use exports 
-// 'admin' to only allow admins to export 
-// 'none' to block exports completely 
+// 'all' to allow anyone to use exports
+// 'admin' to only allow admins to export
+// 'none' to block exports completely
 // allow_exports default value = all
 $allow_exports = 'all';
 
@@ -198,8 +196,4 @@ $default_timezone = 'UTC';
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
-
-/** minimum cron frequency -- In minutes */
-$MINIMUM_CRON_FREQUENCY = 15;
-
 ?>

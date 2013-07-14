@@ -84,7 +84,7 @@ function vtws_getUserAccessibleGroups($moduleId, $user){
 			($defaultOrgSharingPermission[$moduleId] == 3 or $defaultOrgSharingPermission[$moduleId] == 0)){
 		$result=get_current_user_access_groups($tabName);
 	}else{
-		$result = get_group_options();
+		$result = $adb->pquery('select groupname,groupid from vtiger_groups', array());
 	}
 
 	$groups = array();
@@ -214,7 +214,7 @@ function vtws_getModuleInstance($webserviceObject){
 
 function vtws_isRecordOwnerUser($ownerId){
 	global $adb;
-	
+
 	static $cache = array();
 	if (!array_key_exists($ownerId, $cache)) {
 		$result = $adb->pquery("select first_name from vtiger_users where id = ?",array($ownerId));
@@ -224,7 +224,7 @@ function vtws_isRecordOwnerUser($ownerId){
 	} else {
 		$ownedByUser = $cache[$ownerId];
 	}
-	
+
 	return $ownedByUser;
 }
 
@@ -240,7 +240,7 @@ function vtws_isRecordOwnerGroup($ownerId){
 	} else {
 		$ownedByGroup = $cache[$ownerId];
 	}
-	
+
 	return $ownedByGroup;
 }
 
@@ -824,16 +824,8 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 		$db->pquery($sql, array($ownerId));
 	}
 
-	//updating created by in vtiger_lar
-	$sql = "update vtiger_lar set createdby=? where createdby=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
-
 	//updating the vtiger_import_maps
 	$sql ="update vtiger_import_maps set assigned_user_id=? where assigned_user_id=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
-
-	//update assigned_user_id in vtiger_files
-	$sql ="update vtiger_files set assigned_user_id=? where assigned_user_id=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
 	if(Vtiger_Utils::CheckTable('vtiger_customerportal_prefs')) {
@@ -880,44 +872,8 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 	}
 }
 
-
-function vtws_getWebserviceTranslatedStringForLanguage($label, $currentLanguage) {
-	static $translations = array();
-	$currentLanguage = vtws_getWebserviceCurrentLanguage();
-	if(empty($translations[$currentLanguage])) {
-		include 'include/Webservices/language/'.$currentLanguage.'.lang.php';
-		$translations[$currentLanguage] = $webservice_strings;
-	}
-	if(isset($translations[$currentLanguage][$label])) {
-		return $translations[$currentLanguage][$label];
-	}
-	return null;
-}
-
 function vtws_getWebserviceTranslatedString($label) {
-	$currentLanguage = vtws_getWebserviceCurrentLanguage();
-	$translation = vtws_getWebserviceTranslatedStringForLanguage($label, $currentLanguage);
-	if(!empty($translation)) {
-		return $translation;
-	}
-
-	//current language doesn't have translation, return translation in default language
-	//if default language is english then LBL_ will not shown to the user.
-	$defaultLanguage = vtws_getWebserviceDefaultLanguage();
-	$translation = vtws_getWebserviceTranslatedStringForLanguage($label, $defaultLanguage);
-	if(!empty($translation)) {
-		return $translation;
-	}
-
-	//if default language is not en_us then do the translation in en_us to eliminate the LBL_ bit
-	//of label.
-	if('en_us' != $defaultLanguage) {
-		$translation = vtws_getWebserviceTranslatedStringForLanguage($label, 'en_us');
-		if(!empty($translation)) {
-			return $translation;
-		}
-	}
-	return $label;
+	return getTranslatedString($label, 'Webservices');
 }
 
 function vtws_getWebserviceCurrentLanguage() {
@@ -931,6 +887,69 @@ function vtws_getWebserviceCurrentLanguage() {
 function vtws_getWebserviceDefaultLanguage() {
 	global $default_language;
 	return $default_language;
+}
+
+// Moved from SearchUtils.php
+function getAdvancedSearchCriteriaList($advft_criteria, $advft_criteria_groups, $module='') {
+	global $currentModule, $current_user;
+	if(empty($module)) {
+		$module = $currentModule;
+	}
+
+	$advfilterlist = array();
+
+	$moduleHandler = vtws_getModuleHandlerFromName($module,$current_user);
+	$moduleMeta = $moduleHandler->getMeta();
+	$moduleFields = $moduleMeta->getModuleFields();
+
+	foreach($advft_criteria as $column_index => $column_condition) {
+		if(empty($column_condition)) continue;
+
+		$adv_filter_column = $column_condition["columnname"];
+		$adv_filter_comparator = $column_condition["comparator"];
+		$adv_filter_value = $column_condition["value"];
+		$adv_filter_column_condition = $column_condition["columncondition"];
+		$adv_filter_groupid = $column_condition["groupid"];
+
+		$column_info = explode(":",$adv_filter_column);
+
+		$fieldName = $column_info[2];
+		$fieldObj = $moduleFields[$fieldName];
+		$fieldType = $fieldObj->getFieldDataType();
+
+		if($fieldType == 'currency') {
+			// Some of the currency fields like Unit Price, Total, Sub-total etc of Inventory modules, do not need currency conversion
+			if($fieldObj->getUIType() == '72') {
+				$adv_filter_value = CurrencyField::convertToDBFormat($adv_filter_value, null, true);
+			} else {
+				$currencyField = new CurrencyField($adv_filter_value);
+				$adv_filter_value = $currencyField->getDBInsertedValue();
+			}
+		}
+
+		$criteria = array();
+		$criteria['columnname'] = $adv_filter_column;
+		$criteria['comparator'] = $adv_filter_comparator;
+		$criteria['value'] = $adv_filter_value;
+		$criteria['column_condition'] = $adv_filter_column_condition;
+
+		$advfilterlist[$adv_filter_groupid]['columns'][] = $criteria;
+	}
+
+	foreach($advft_criteria_groups as $group_index => $group_condition_info) {
+		if(empty($group_condition_info)) continue;
+		if(empty($advfilterlist[$group_index])) continue;
+		$advfilterlist[$group_index]['condition'] = $group_condition_info["groupcondition"];
+		$noOfGroupColumns = count($advfilterlist[$group_index]['columns']);
+		if(!empty($advfilterlist[$group_index]['columns'][$noOfGroupColumns-1]['column_condition'])) {
+			$advfilterlist[$group_index]['columns'][$noOfGroupColumns-1]['column_condition'] = '';
+		}
+	}
+	$noOfGroups = count($advfilterlist);
+	if(!empty($advfilterlist[$noOfGroups]['condition'])) {
+		$advfilterlist[$noOfGroups]['condition'] = '';
+	}
+	return $advfilterlist;
 }
 
 ?>

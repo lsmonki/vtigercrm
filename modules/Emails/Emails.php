@@ -494,8 +494,8 @@ class Emails extends CRMEntity {
 	function unlinkRelationship($id, $return_module, $return_id) {
 		global $log;
 
-		$sql = 'DELETE FROM vtiger_seactivityrel WHERE activityid=?';
-		$this->db->pquery($sql, array($id));
+		$sql = 'DELETE FROM vtiger_seactivityrel WHERE activityid=? AND crmid = ?';
+		$this->db->pquery($sql, array($id, $return_id));
 
 		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
@@ -596,83 +596,6 @@ class Emails extends CRMEntity {
 		}
 	}
 
-}
-
-/** Function to get the emailids for the given ids form the request parameters
- *  It returns an array which contains the mailids and the parentidlists
- */
-function get_to_emailids($module) {global $log;$log->fatal($_REQUEST);
-	global $adb, $current_user, $log;
-	require_once 'include/Webservices/Query.php';
-	//$idlists1 = "";
-	$mailds = '';
-	$fieldids = explode(":", vtlib_purify($_REQUEST['field_lists']));
-	if($_REQUEST['idlist'] == 'all' || $_REQUEST['idlist'] == 'relatedListSelectAll'){
-		$idlist = getSelectedRecords($_REQUEST,vtlib_purify($_REQUEST['pmodule']),vtlib_purify($_REQUEST['idlist']),vtlib_purify($_REQUEST['excludedRecords']));
-	} else {
-		$idlist = explode(":", str_replace("undefined","",vtlib_purify($_REQUEST['idlist'])));
-	}
-
-	$entityids = array();
-	foreach ($idlist as $key => $id) {
-		$entityids[] = vtws_getWebserviceEntityId($module, $id);
-	}
-	$vtwsObject = VtigerWebserviceObject::fromName($adb, $module);
-	$vtwsCRMObjectMeta = new VtigerCRMObjectMeta($vtwsObject, $current_user);
-	$emailFields = $vtwsCRMObjectMeta->getEmailFields();
-
-	foreach ($emailFields as $key => $fieldname) {
-		$fieldid = $vtwsCRMObjectMeta->getFieldIdFromFieldName($fieldname);
-		if (!in_array($fieldid, $fieldids)) {
-			unset($emailFields[$key]);
-		}
-	}
-	if(empty($emailFields))
-		return false;
-	if ($module == 'Leads') {
-		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_leaddetails.leadid as id
-				  FROM vtiger_leaddetails
-				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
-				  LEFT JOIN vtiger_leadscf ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
-				  WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.leadid IN ('.generateQuestionMarks($idlist).')';
-	} else if ($module == 'Contacts'){
-		$query = 'SELECT firstname,lastname,'.implode(",", $emailFields).',vtiger_contactdetails.contactid as id
-				  FROM vtiger_contactdetails
-				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
-				  LEFT JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
-				  WHERE vtiger_crmentity.deleted=0 AND vtiger_contactdetails.contactid IN ('.generateQuestionMarks($idlist).') AND vtiger_contactdetails.emailoptout=0';
-	} else if ($module == 'Vendors'){
-		$query = 'SELECT vendorname,'.implode(",", $emailFields).',vtiger_vendor.vendorid as id
-				  FROM vtiger_vendor
-				  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_vendor.vendorid
-				  LEFT JOIN vtiger_vendorcf ON vtiger_vendor.vendorid = vtiger_vendorcf.vendorid
-				  WHERE vtiger_crmentity.deleted=0 AND vtiger_vendor.vendorid IN ('.generateQuestionMarks($idlist).')';
-	} else {
-		$query = 'SELECT vtiger_account.accountname, '.implode(",", $emailFields).',vtiger_account.accountid as id FROM vtiger_account
-				   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
-				   LEFT JOIN vtiger_accountscf ON vtiger_accountscf.accountid= vtiger_account.accountid
-				   WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid IN ('.generateQuestionMarks($idlist).') AND vtiger_account.emailoptout=0';
-	}
-	$result = $adb->pquery($query,$idlist);
-
-	if($adb->num_rows($result)>0){
-		while($entityvalue = $adb->fetchByAssoc($result)){
-			$vtwsid = $entityvalue['id'];
-			foreach ($emailFields as $i => $emailFieldName) {
-				if ($entityvalue[$emailFieldName] != NULL || $entityvalue[$emailFieldName] != '') {
-					$idlists .= $vtwsid . '@' . $vtwsCRMObjectMeta->getFieldIdFromFieldName($emailFieldName) . '|';
-					if ($module == 'Leads' || $module == 'Contacts') {
-						$mailids .= $entityvalue['lastname'] . " " . $entityvalue['firstname'] . "<" . $entityvalue[$emailFieldName] . ">,";
-					} else {
-						$mailids .= $entityvalue['accountname'] . "<" . $entityvalue[$emailFieldName] . ">,";
-					}
-				}
-			}
-		}
-	}
-
-	$return_data = array('idlists' => $idlists, 'mailds' => $mailids);
-	return $return_data;
 }
 
 //added for attach the generated pdf with email

@@ -124,50 +124,6 @@ class Faq extends CRMEntity {
 	}	
 	
 
-	/**     Function to get the list of comments for the given FAQ id
-         *      @param  int  $faqid - FAQ id
-	 *      @return list $list - return the list of comments and comment informations as a html output where as these comments and comments informations will be formed in div tag.
-        **/	
-	function getFAQComments($faqid)
-	{
-		global $log, $default_charset;
-		$log->debug("Entering getFAQComments(".$faqid.") method ...");
-		global $mod_strings;
-		$sql = "select * from vtiger_faqcomments where faqid=?";
-		$result = $this->db->pquery($sql, array($faqid));
-		$noofrows = $this->db->num_rows($result);
-
-		//In ajax save we should not add this div
-		if($_REQUEST['action'] != 'FaqAjax')
-		{
-			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
-			$enddiv = '</div>';
-		}
-
-		for($i=0;$i<$noofrows;$i++)
-		{
-			$comment = $this->db->query_result($result,$i,'comments');
-			$createdtime = $this->db->query_result($result,$i,'createdtime');
-			if($comment != '')
-			{
-				//this div is to display the comment
-				if($_REQUEST['action'] == 'FaqAjax') {
-					$comment = htmlentities($comment, ENT_QUOTES, $default_charset);
-				}
-				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">'.make_clickable(nl2br($comment)).'</div>';
-				
-				//this div is to display the created time
-				$list .= '<div valign="top" style="width:99%;border-bottom:1px dotted #CCCCCC;padding-bottom:5px;" class="dataLabel"><font color=darkred>'.$mod_strings['Created Time'];
-				$list .= ' : '.$createdtime.'</font></div>';
-			}
-		}
-
-		$list .= $enddiv;
-		
-		$log->debug("Exiting getFAQComments method ...");
-		return $list;
-	}
-
 	/*
 	 * Function to get the primary query part of a report 
 	 * @param - $module Primary module name

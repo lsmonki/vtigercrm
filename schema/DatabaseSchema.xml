@@ -1058,52 +1058,6 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_competitor">
-		<field name="competitorid" type="I" size="19">
-			<key />
-		</field>
-		<field name="competitorname" type="C" size="100">
-			<notnull />
-		</field>
-		<field name="website" type="C" size="100" />
-		<field name="strength" type="C" size="250" />
-		<field name="weakness" type="C" size="250" />
-
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_competitor" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_competitor FOREIGN KEY (competitorid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="vtiger_potcompetitorrel">
-		<field name="potentialid" type="I" size="19">
-			<key />
-		</field>
-		<field name="competitorid" type="I" size="19">
-			<key />
-		</field>
-
-		<index name="potcompetitorrel_potentialid_idx">
-			<col>potentialid</col>
-		</index>
-		<index name="potcompetitorrel_competitorid_idx">
-			<col>competitorid</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_potcompetitorrel" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_potcompetitorrel FOREIGN KEY (competitorid) REFERENCES vtiger_competitor(competitorid) ON DELETE CASCADE</constraint>
-		<constraint>ADD CONSTRAINT fk_2_vtiger_potcompetitorrel FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
 	<table name="vtiger_vendor">
 		<field name="vendorid" type="I" size="19">
 			<key />
@@ -1260,45 +1214,12 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="manufacturer_manufacturer_idx">
 			<unique />
 			<col>manufacturer</col>
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_productcollaterals">
-		<field name="productid" type="I" size="11">
-			<key />
-		</field>
-		<field name="date_entered" type="T">
-			<notnull />
-			<deftimestamp />
-		</field>
-		<field name="data" type="B">
-			<notnull />
-		</field>
-		<field name="description" type="X" />
-		<field name="filename" type="C" size="50" />
-		<field name="filesize" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="filetype" type="C" size="20">
-			<notnull />
-		</field>
-
-		<index name="productcollaterals_productid_filename_idx">
-			<col>productid</col>
-			<col>filename</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_productcollaterals" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_productcollaterals FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
 	</table>
 
 	<table name="vtiger_role">
@@ -1426,31 +1347,6 @@
 		</data>
 	</table>
 
-	<table name="vtiger_leadpotrel">
-		<field name="leadid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="potentialid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-
-		<index name="leadpotrel_leadid_idx">
-			<col>leadid</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_leadpotrel" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_leadpotrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
-		<constraint>ADD CONSTRAINT fk_2_vtiger_leadpotrel FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
 	<table name="vtiger_campaign">
 		<field name="campaign_no" type="C" size="100">
 			<notnull />
@@ -1566,54 +1462,6 @@
 		</data>
 	</table>
 
-	<table name="vtiger_leadcontrel">
-		<field name="leadid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-		<field name="contactid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-
-		<index name="leadcontrel_contactid_idx">
-			<col>contactid</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_leadcontrel" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_leadcontrel FOREIGN KEY (leadcontrel_contactid_idx) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
-		<constraint>ADD CONSTRAINT fk_2_vtiger_leadcontrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="vtiger_leadacctrel">
-		<field name="leadid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-		<field name="accountid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-
-		<index name="leadacctrel_accountid_idx">
-			<col>accountid</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_leadacctrel" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_leadacctrel FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
-		<constraint>ADD CONSTRAINT fk_2_vtiger_leadacctrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
 	<table name="vtiger_contpotentialrel">
 		<field name="contactid" type="I" size="19">
 			<key />
@@ -1640,48 +1488,6 @@
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
-	</table>
-
-	<table name="vtiger_dealintimation">
-		<field name="dealintimationid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-		<field name="dealname" type="C" size="100">
-			<notnull />
-		</field>
-		<field name="intimationamount" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-
-		<field name="dealprobability" type="N" size="3.2">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="dealintimationactive" type="I" size="1" />
-		<field name="fromname" type="C" size="120">
-			<notnull />
-		</field>
-		<field name="fromemailid" type="C" size="100">
-			<notnull />
-		</field>
-		<field name="notifyemails" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="notifybccemails" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="notifyccmails" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="notifypotentialowner" type="I" size="1" />
-
-		<index name="dealintimation_dealname_idx">
-			<col>dealname</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_cntactivityrel">
@@ -1712,66 +1518,6 @@
 		</data>
 	</table>
 
-	<table name="vtiger_lar">
-		<field name="larid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-		<field name="name" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="createdby" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="createdon" type="D">
-			<notnull />
-		</field>
-
-		<index name="lar_name_idx">
-			<col>name</col>
-			<unique />
-		</index>
-		<index name="lar_createdby_idx">
-			<col>createdby</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_lar" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_lar FOREIGN KEY (createdby) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="vtiger_crmentitynotesrel">
-		<field name="crmid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-		<field name="notesid" type="I" size="19">
-			<key />
-			<default value="0" />
-		</field>
-
-		<index name="crmentitynotesrel_notesid_idx">
-			<col>notesid</col>
-		</index>
-		<index name="crmentitynotesrel_crmid_idx">
-			<col>crmid</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_crmentitynotesrel" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_crmentitynotesrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
-		<constraint>ADD CONSTRAINT fk_2_vtiger_crmentitynotesrel FOREIGN KEY (notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
 	<table name="vtiger_troubletickets">
 		<field name="ticketid" type="I" size="19">
 			<key />
@@ -1795,8 +1541,6 @@
 		<field name="version_id" type="I" size="11" />
 		<field name="hours" type="C" size="200" />
 		<field name="days" type="C" size="200" />
-		<field name="from_portal" type="C" size="3" />
-
 		<index name="troubletickets_ticketid_idx">
 			<col>ticketid</col>
 		</index>
@@ -2006,17 +1750,6 @@
 		</data>
 	</table>
 
-	<table name="vtiger_headers">
-		<field name="fileid" type="I" size="3">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="headernames" type="C" size="30">
-			<notnull />
-		</field>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_import_maps">
 		<field name="id" type="I" size="19">
 			<key />
@@ -2196,30 +1929,6 @@
 		</data>
 	</table>
 
-	<table name="vtiger_files">
-		<field name="id" type="C" size="36">
-			<key />
-		</field>
-		<field name="name" type="C" size="36" />
-		<field name="content" type="B" />
-		<field name="deleted" type="I" size="1">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="date_entered" type="T">
-			<notnull />
-			<deftimestamp />
-		</field>
-		<field name="assigned_user_id" type="C" size="36" />
-
-		<index name="files_assigned_user_id_name_deleted_idx">
-			<col>assigned_user_id</col>
-			<col>name</col>
-			<col>deleted</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_loginhistory">
 		<field name="login_id" type="I" size="11">
 			<key />
@@ -2268,35 +1977,12 @@
 		</data>
 	</table>
 
-	<table name="vtiger_ticketstracktime">
-		<field name="ticket_id" type="I" size="11">
-			<key />
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="supporter_id" type="I" size="11">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="minutes" type="I" size="11">
-			<default value="0" />
-		</field>
-		<field name="date_logged" type="I" size="11">
-			<notnull />
-			<default value="0" />
-		</field>
-
-		<index name="ticketstracktime_ticket_id_idx">
-			<col>ticket_id</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_ticketcf">
 		<field name="ticketid" type="I" size="19">
 			<key />
 			<default value="0" />
 		</field>
+		<field name="from_portal" type="C" size="3" />
 
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
@@ -2377,54 +2063,6 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_accountdepstatus">
-		<field name="deploymentstatusid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="deploymentstatus" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="accountdepstatus_deploymentstatus_idx">
-			<col>deploymentstatus</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_accountownership">
-		<field name="acctownershipid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="ownership" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="accountownership_ownership_idx">
-			<col>ownership</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_accountrating">
 		<field name="accountratingid" type="I" size="19">
 			<key />
@@ -2449,30 +2087,6 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_accountregion">
-		<field name="accountregionid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="region" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="accountregion_region_idx">
-			<col>region</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_accounttype">
 		<field name="accounttypeid" type="I" size="19">
 			<key />
@@ -2489,32 +2103,9 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="accounttype_accounttype_idx">
 			<col>accounttype</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_contacttype">
-		<field name="contacttypeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="contacttype" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="contacttype_contacttype_idx">
-			<col>contacttype</col>
 			<unique />
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
@@ -2536,6 +2127,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="leadsource_source_idx">
 			<col>source</col>
 			<unique />
@@ -2559,6 +2151,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="opportunity_type_opportunity_type_idx">
 			<col>opportunity_type</col>
 			<unique />
@@ -2606,6 +2199,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="leadstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2629,6 +2223,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="eventstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2654,30 +2249,6 @@
 		</field>
 
 		<index name="duration_minutes_status_idx">
-			<col>status</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_licencekeystatus">
-		<field name="licencekeystatusid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="licencekeystatus" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="licencekeystatus_status_idx">
 			<col>status</col>
 			<unique />
 		</index>
@@ -2735,30 +2306,6 @@
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_businesstype">
-		<field name="businesstypeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="businesstype" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="businesstype_businesstype_idx">
-			<col>businesstype</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_industry">
 		<field name="industryid" type="I" size="19">
 			<key />
@@ -2775,32 +2322,9 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="industry_industry_idx">
 			<col>industry</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_revenuetype">
-		<field name="revenuetypeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="revenuetype" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="revenuetype_revenuetype_idx">
-			<col>revenuetype</col>
 			<unique />
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
@@ -2822,6 +2346,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2839,6 +2364,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2856,6 +2382,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2875,33 +2402,9 @@
 			<notnull />
 			<default value="0" />
 		</field>
-
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="activitytype_activitytype_idx">
 			<col>activitytype</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_usertype">
-		<field name="usertypeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="usertype" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="usertype_usertype_idx">
-			<col>usertype</col>
 			<unique />
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
@@ -2922,6 +2425,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2939,6 +2443,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2956,6 +2461,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2973,6 +2479,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -2990,6 +2497,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -3007,6 +2515,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -3024,6 +2533,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -3041,47 +2551,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_activsubtype">
-		<field name="activesubtypeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="activsubtype" type="C" size="100" />
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_downloadpurpose">
-		<field name="downloadpurposeid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="purpose" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="downloadpurpose_purpose_idx">
-			<col>purpose</col>
-			<unique />
-		</index>
+		<field name="sortorderid" type="I" size="11"></field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -3116,30 +2586,6 @@
 			<notnull />
 			<default value="1" />
 		</field>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_evaluationstatus">
-		<field name="evalstatusid" type="I" size="19">
-			<key />
-			<autoincrement />
-		</field>
-		<field name="status" type="C" size="200">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<index name="evaluationstatus_status_idx">
-			<col>status</col>
-			<unique />
-		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
@@ -3343,6 +2789,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="productcategory_productcategory_idx">
 			<col>productcategory</col>
 			<unique />
@@ -4478,6 +3925,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="usageunit_usageunit_idx">
 			<col>usageunit</col>
 			<unique />
@@ -4501,6 +3949,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="glacct_glacct_idx">
 			<col>glacct</col>
 			<unique />
@@ -4524,6 +3973,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="quotestage_quotestage_idx">
 			<col>quotestage</col>
 			<unique />
@@ -4547,6 +3997,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="invoicestatus_invoiestatus_idx">
 			<col>invoicestatus</col>
 			<unique />
@@ -4570,6 +4021,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="postatus_postatus_idx">
 			<col>postatus</col>
 			<unique />
@@ -4593,6 +4045,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="sostatus_sostatus_idx">
 			<col>sostatus</col>
 			<unique />
@@ -4617,6 +4070,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="carrier_carrier_idx">
 			<col>carrier</col>
 			<unique />
@@ -4787,18 +4241,6 @@
 		<opt>Engine=InnoDB</opt>
 		<data>
 		</data>
-	</table>
-
-	<table name="vtiger_ownernotify">
-		<field name="crmid" type="I" size="19" />
-		<field name="smownerid" type="I" size="19" />
-		<field name="flag" type="I" size="3" />
-
-		<index name="ownernotify_crmid_flag_idx">
-			<col>crmid</col>
-			<col>flag</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_datashare_module_rel">
@@ -5423,6 +4865,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="campaigntype_campaigntype_idx">
 			<col>campaigntype</col>
 			<unique />
@@ -5446,6 +4889,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="campaignstatus_campaignstatus_idx">
 			<col>campaignstatus</col>
 		</index>
@@ -5468,6 +4912,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="sortorderid" type="I" size="11"></field>
 		<index name="CampaignExpRes_UK01">
 			<col>expectedresponse</col>
 			<unique />
@@ -5569,125 +5014,6 @@
 			<col>creatorid</col>
 		</index>
 		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_chat_users">
-		<field name="id" type="I" size="20">
-			<autoincrement />
-			<notnull />
-			<key />
-		</field>
-		<field name="nick" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="session" type="C" size="50">
-			<notnull />
-		</field>
-		<field name="ip" type="C" size="20">
-			<default value="000.000.000.000" />
-			<notnull />
-		</field>
-		<field name="ping" type="T">
-			<default value="NULL" />
-		</field>
-
-		<index name="chat_users_nick_idx">
-			<col>nick</col>
-		</index>
-		<index name="chat_users_session_idx">
-			<col>session</col>
-		</index>
-		<index name="chat_users_ping_idx">
-			<col>ping</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_chat_msg">
-		<field name="id" type="I" size="20">
-			<autoincrement />
-			<notnull />
-			<key />
-		</field>
-		<field name="chat_from" type="I" size="20">
-			<default value="0" />
-			<notnull />
-		</field>
-		<field name="chat_to" type="I" size="20">
-			<default value="0" />
-			<notnull />
-		</field>
-		<field name="born" type="T">
-			<default value="NULL" />
-		</field>
-		<field name="msg" type="C" size="255">
-			<notnull />
-		</field>
-
-		<index name="chat_msg_chat_from_idx">
-			<col>chat_from</col>
-		</index>
-		<index name="chat_msg_chat_to_idx">
-			<col>chat_to</col>
-		</index>
-		<index name="chat_msg_born_idx">
-			<col>born</col>
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_chat_msg" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_chat_msg FOREIGN KEY (chat_from) REFERENCES vtiger_chat_users(id) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="vtiger_chat_pchat">
-		<field name="id" type="I" size="20">
-			<autoincrement />
-			<notnull />
-			<key />
-		</field>
-		<field name="msg" type="I" size="20">
-			<default value="0"/>
-		</field>
-
-		<index name="chat_pchat_msg_idx">
-			<col>msg</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_chat_pchat" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_chat_pchat FOREIGN KEY (msg) REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="vtiger_chat_pvchat">
-		<field name="id" type="I" size="20">
-			<autoincrement />
-			<notnull />
-			<key />
-		</field>
-		<field name="msg" type="I" size="20">
-			<default value="0"/>
-		</field>
-		<index name="chat_pvchat_msg_idx">
-			<col>msg</col>
-			<unique />
-		</index>
-		<opt platform="mysql">Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_chat_pvchat" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_chat_pvchat FOREIGN KEY (msg) REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
-		<opt>Engine=InnoDB</opt>
-		<data>
-		</data>
 	</table>
 
 	<table name="vtiger_freetags">
@@ -6769,9 +6095,9 @@
 		</field>
 		<field name="defaultworkflow" type="I" size="1">
 		</field>
-		<field name="filtersavedinnew" type="I">
-		</field>
 		<field name="type" type="C" size="255">
+		</field>
+		<field name="filtersavedinnew" type="I" size="1">
 		</field>
 		<index name="com_vtiger_workflows_idx">
 			<unique />
@@ -6860,27 +6186,26 @@
 	</table>
 
 	<table name="com_vtiger_workflow_tasktypes">
-		<field name="id" type="I" >
-			<key />
-			<autoincrement />
+		<field name="id" type="I" size="11">
+			<notnull />
 		</field>
 		<field name="tasktypename" type="C" size="255" >
+			<notnull />
 		</field>
 		<field name="label" type="C" size="255" >
 		</field>
-		<field name="classname" type="C" size="255" >
+		<field name="classname" type="C" size="255">
 		</field>
-		<field name="classpath" type="C" size="255" >
+		<field name="classpath" type="C" size="255">
 		</field>
-		<field name="templatepath" type="C" size="255" >
+		<field name="templatepath" type="C" size="255">
 		</field>
-		<field name="modules" type="C" size="500" >
+		<field name="modules" type="C" size="500">
 		</field>
-		<field name="sourcemodule" type="C" size="255" >
+		<field name="sourcemodule" type="C" size="255">
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
-	
     <!-- com_vtiger_workflow ends-->
 
 	<!--  asterisk integration starts -->
@@ -7500,15 +6825,5 @@
 	<table name="vtiger_reportgroupbycolumn" alter="true">
 		<constraint>ADD CONSTRAINT fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_sqltimelog">
-		<field name="id" type="I" size="19" />
-		<field name="type" type="C" size="10" />
-		<field name="data" type="X" />
-		<field name="started" type="N" size="18,2" />
-		<field name="ended" type="N" size="18,2" />
-		<field name="loggedon" type="T" />
-		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
 </schema>

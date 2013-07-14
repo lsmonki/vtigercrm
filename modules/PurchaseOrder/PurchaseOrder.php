@@ -119,6 +119,7 @@ class PurchaseOrder extends CRMEntity {
 				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
 				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
 
+			$requestProductIdsList = $requestQuantitiesList = array();
 			$totalNoOfProducts = $_REQUEST['totalProductCount'];
 			for($i=1; $i<=$totalNoOfProducts; $i++) {
 				$productId = $_REQUEST['hdnProductId'.$i];

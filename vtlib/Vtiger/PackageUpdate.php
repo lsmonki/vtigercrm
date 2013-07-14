@@ -42,16 +42,26 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
             // Unzip selectively
             $unzip->unzipAllEx( ".",
                     Array(
-                    'include' => Array('templates', "modules/$module", 'cron', 'vtiger6', 'layouts'), // We don't need manifest.xml
-                    //'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
+                    'include' => Array('templates', "modules/$module", 'cron', 'languages',
+						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
+					// DEFAULT: excludes all not in include
                     ),
-                    Array(
-					// Templates folder
-					'templates' => "Smarty/templates/modules/$module",
-					// Cron folder
-					'cron' => "cron/modules/$module"
-                    )   
-            );
+
+                    Array(// Templates folder to be renamed while copying
+						'templates' => "layouts/vlayout/modules/$module",
+
+						// Cron folder
+						'cron' => "cron/modules/$module",
+
+						// Settings folder
+						'settings/actions' => "modules/Settings/$module/actions",
+						'settings/views' => "modules/Settings/$module/views",
+						'settings/models' => "modules/Settings/$module/models",
+
+						// Settings templates folder
+						'settings/templates' => "layouts/vlayout/modules/Settings/$module"
+				)
+			);
 
             // If data is not yet available
             if(empty($this->_modulexml)) {

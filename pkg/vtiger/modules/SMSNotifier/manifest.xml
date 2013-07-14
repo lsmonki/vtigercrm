@@ -4,9 +4,9 @@
 <name>SMSNotifier</name>
 <label>SMSNotifier</label>
 <parent>Tools</parent>
-<version>1.8</version>
+<version>1.9</version>
 <dependencies>
-<vtiger_version>5.1.0</vtiger_version>
+<vtiger_version>6.0.0rc</vtiger_version>
 <vtiger_max_version>6.*</vtiger_max_version>
 </dependencies>
 <tables>
@@ -231,13 +231,6 @@
 <linklabel>LBL_CHECK_STATUS</linklabel>
 <linkurl><![CDATA[javascript:SMSNotifier.checkstatus($RECORD$)]]></linkurl>
 <linkicon><![CDATA[themes/images/reload.gif]]></linkicon>
-<sequence>0</sequence>
-</customlink>
-<customlink>
-<linktype>HEADERSCRIPT</linktype>
-<linklabel>SMSNotifierCommonJS</linklabel>
-<linkurl><![CDATA[modules/SMSNotifier/SMSNotifierCommon.js]]></linkurl>
-<linkicon><![CDATA[]]></linkicon>
 <sequence>0</sequence>
 </customlink>
 </customlinks>

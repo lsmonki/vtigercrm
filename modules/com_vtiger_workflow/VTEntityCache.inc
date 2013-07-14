@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 require_once 'data/VTEntityDelta.php';
-require_once 'vtiger6/includes/runtime/Cache.php';
+require_once VTIGER6_REL_DIR . 'includes/runtime/Cache.php';
 
 class VTWorkflowEntity{
 	function __construct($user, $id){

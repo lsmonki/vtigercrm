@@ -1164,6 +1164,9 @@ class CustomView extends CRMEntity {
 					}
 					elseif ($comparator == 'bw' && count($valuearray) == 2) {
 						$advfiltersql = "(" . $columns[0] . "." . $columns[1] . " between '" . getValidDBInsertDateTimeValue(trim($valuearray[0]), $datatype) . "' and '" . getValidDBInsertDateTimeValue(trim($valuearray[1]), $datatype) . "')";
+					}
+					elseif ($comparator == 'y') {
+						$advfiltersql = sprintf("(%s.%s IS NULL OR %s.%s = '')", $columns[0], $columns[1], $columns[0], $columns[1]);
 					} else {
 						//Added for getting vtiger_activity Status -Jaguar
 						if ($this->customviewmodule == "Calendar" && ($columns[1] == "status" || $columns[1] == "eventstatus")) {
@@ -1273,7 +1276,7 @@ class CustomView extends CRMEntity {
 			$value = $this->getSalesRelatedName($comparator, $value, $datatype, $tablename, $fieldname);
 		} else {
 			//For checkbox type values, we have to convert yes/no as 1/0 to get the values
-			$field_uitype = getUItype($this->customviewmodule, $fieldname);
+			$field_uitype = $this->getUItype($this->customviewmodule, $fieldname);
 			if ($field_uitype == 56) {
 				if (strtolower($value) == 'yes')
 					$value = 1;
@@ -1959,6 +1962,21 @@ class CustomView extends CRMEntity {
 		}
 		$log->debug("Exiting isPermittedChangeStatus($status) method..............");
 		return $status_details;
+	}
+	
+	function getUItype($module, $columnname) {
+		global $adb;
+		
+		$tabIdList = array();
+		//To find tabid for this module
+		$tabIdList[] = getTabid($module);
+		if ($module == 'Calendar') {
+			$tabIdList[] = getTabid('Events');
+		}
+		$sql = "select uitype from vtiger_field where tabid IN (" . generateQuestionMarks($tabIdList) . ") and columnname=?";
+		$result = $adb->pquery($sql, array($tabIdList, $columnname));
+		$uitype = $adb->query_result($result, 0, "uitype");
+		return $uitype;
 	}
 
 }

@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-require_once 'vtiger6/includes/runtime/Cache.php';
+require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php';
 include_once('vtlib/Vtiger/ModuleBasic.php');
 /**
  * Provides API to work with vtiger CRM Modules
@@ -139,7 +139,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	function getLinksForExport() {
 		return Vtiger_Link::getAllForExport($this->id);
 	}
-	
+
 	/**
 	 * Initialize webservice setup for this module instance.
 	 */
@@ -159,18 +159,11 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 * @param mixed id or name of the module
 	 */
 	static function getInstance($value) {
-		global $adb;
 		$instance = false;
-		$query = false;
-		if(Vtiger_Utils::isNumber($value)) {
-			$query = "SELECT * FROM vtiger_tab WHERE tabid=?";
-		} else {
-			$query = "SELECT * FROM vtiger_tab WHERE name=?";
-		}
-		$result = $adb->pquery($query, Array($value));
-		if($adb->num_rows($result)) {
+		$data = Vtiger_Functions::getModuleData($value);
+		if ($data) {
 			$instance = new self();
-			$instance->initialize($adb->fetch_array($result));
+			$instance->initialize($data);
 		}
 		return $instance;
 	}

@@ -20,6 +20,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	 */
 	function __construct() {
 		parent::__construct();
+		$this->_export_tmpdir;
 	}
 
 	function getPrefix() {
@@ -34,6 +35,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		$this->__initSchema();
 
 		$name = $this->getModuleNameFromZip($zipfile);
+		return $name;
 	}
 
 	/**
@@ -42,10 +44,10 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	 * @param Boolean True for overwriting existing module
 	 */
 	function import($zipfile, $overwrite=false) {
-		$this->initImport($zipfile, $overwrite);
+		$name = $this->initImport($zipfile, $overwrite);
 
 		// Call module import function
-		$this->import_Language($zipfile);
+		$this->import_Language($zipfile, $name);
 	}
 
 	/**
@@ -62,10 +64,14 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	 * Import Module
 	 * @access private
 	 */
-	function import_Language($zipfile) {
-		$name = $this->_modulexml->name;
-		$prefix = $this->_modulexml->prefix;
+	function import_Language($zipfile, $name) {
+		$prefix = (string)$this->_modulexml->prefix;
 		$label = $this->_modulexml->label;
+
+		if(!$name) {
+			self::log("Importing $label [$prefix] ... FAILED");
+			return;
+		}
 
 		self::log("Importing $label [$prefix] ... STARTED");
 		$unzip = new Vtiger_Unzip($zipfile);
@@ -78,62 +84,42 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 
 				$targetdir  = substr($filename, 0, strripos($filename,'/'));
 				$targetfile = basename($filename);
-
-				$prefixparts = split('_', $prefix);
+				$defaultLangPath = 'languages'; $defaultLanguage = 'en_us';
+				$prefixFileName = null;
 
 				$dounzip = false;
-				if(is_dir($targetdir)) {
-					// Case handling for jscalendar
-					if(stripos($targetdir, 'jscalendar/lang') === 0
-						&& stripos($targetfile, "calendar-".$prefixparts[0].".js")===0) {
-
-							if(file_exists("$targetdir/calendar-en.js")) {
-								$dounzip = true;
-							}
+				//check and copy modules folder with languages/$prefix/
+				if(preg_replace("/modules/", "$defaultLangPath/$defaultLanguage", $targetdir)) {
+					$baseDir = preg_replace("/modules/", "$defaultLangPath/$defaultLanguage", $targetdir);
+					if(is_dir($baseDir)) {
+						$dounzip = true;
+						$prefixDir = preg_replace("/modules/", "$defaultLangPath/$prefix", $targetdir);
+						$prefixFileName = "$prefixDir/$targetfile";
+						@mkdir($prefixDir);
+						@chmod($prefixDir, 0777);
 					}
-					// Case handling for phpmailer
-				   	else if(stripos($targetdir, 'modules/Emails/language') === 0
-						&& stripos($targetfile, "phpmailer.lang-$prefix.php")===0) {
+				} else if(is_dir($targetdir)) {
+					if(stripos($targetfile, "phpmailer.lang-$prefix.php")===0) {
 
-							if(file_exists("$targetdir/phpmailer.lang-en_us.php")) {
-								$dounzip = true;
-							}
-					}
-					// Handle javascript language file
-					else if(preg_match("/$prefix.lang.js/", $targetfile)) {
-						$corelangfile = "$targetdir/en_us.lang.js";
-						if(file_exists($corelangfile)) {
+						if(file_exists("$targetdir/phpmailer.lang-en.php")) {
 							$dounzip = true;
 						}
-					}
-					// Handle php language file
-					else if(preg_match("/$prefix.lang.php/", $targetfile)) {
-						$corelangfile = "$targetdir/en_us.lang.php";
-						if(file_exists($corelangfile)) {
+					} else if(preg_replace("/$prefix/", $defaultLanguage, $targetdir)) {
+						if(file_exists($targetdir)) {
 							$dounzip = true;
 						}
-					}
-					// Handle vtiger6 language file
-					else if(stripos($targetdir, 'vtiger6') === 0) {
-						$dounzip = true;
-					}
-				} else {
-					// Create a folder if it does not exists in vtiger6
-					if(stripos($targetdir, 'vtiger6') === 0) {
-						@mkdir($targetdir);
-						@chmod($targetdir, 0777);
-						$dounzip = true;
 					}
 				}
 
 				if($dounzip) {
-					if($unzip->unzip($filename, $filename) !== false) {
-						self::log("Copying file $filename ... DONE");
+					if($prefixFileName == null) $prefixFileName = $filename;
+					if($unzip->unzip($filename, $prefixFileName) !== false) {
+						self::log("Copying file $prefixFileName ... DONE");
 					} else {
-						self::log("Copying file $filename ... FAILED");
+						self::log("Copying file $prefixFileName ... FAILED");
 					}
 				} else {
-					self::log("Copying file $filename ... SKIPPED");
+					self::log("Copying file $prefixFileName ... SKIPPED");
 				}
 			}
 		}
@@ -146,4 +132,3 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		return;
 	}
 }
-?>

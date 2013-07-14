@@ -290,47 +290,6 @@ class HelpDesk extends CRMEntity {
 		return $return_value;
 	}
 
-
-
-	/**	Function to get the ticket comments as a array
-	 *	@param  int   $ticketid - ticketid
-	 *	@return array $output - array(
-						[$i][comments]    => comments
-						[$i][owner]       => name of the user or customer who made the comment
-						[$i][createdtime] => the comment created time
-					     )
-				where $i = 0,1,..n which are all made for the ticket
-	**/
-	/*
-	 * Note : This function is deprecated in vtiger6
-	 */
-	function get_ticket_comments_list($ticketid)
-	{
-		global $log;
-		$log->debug("Entering get_ticket_comments_list(".$ticketid.") method ...");
-		 $sql = "select * from vtiger_ticketcomments where ticketid=? order by createdtime DESC";
-		 $result = $this->db->pquery($sql, array($ticketid));
-		 $noofrows = $this->db->num_rows($result);
-		 for($i=0;$i<$noofrows;$i++)
-		 {
-			 $ownerid = $this->db->query_result($result,$i,"ownerid");
-			 $ownertype = $this->db->query_result($result,$i,"ownertype");
-			 if($ownertype == 'user')
-				 $name = getUserFullName($ownerid);
-			 elseif($ownertype == 'customer')
-			 {
-				 $sql1 = 'select * from vtiger_portalinfo where id=?';
-				 $name = $this->db->query_result($this->db->pquery($sql1, array($ownerid)),0,'user_name');
-			 }
-
-			 $output[$i]['comments'] = decode_html(nl2br($this->db->query_result($result,$i,"comments")));
-			 $output[$i]['owner'] = $name;
-			 $output[$i]['createdtime'] = $this->db->query_result($result,$i,"createdtime");
-		 }
-		$log->debug("Exiting get_ticket_comments_list method ...");
-		 return $output;
-	 }
-
 	/**	Function to process the list query and return the result with number of rows
 	 *	@param  string $query - query
 	 *	@return array  $response - array(	list           => array(
@@ -415,77 +374,6 @@ class HelpDesk extends CRMEntity {
 		return $mergeflds;
 	}
 
-	/**     Function to get the list of comments for the given ticket id
-	 *      @param  int  $ticketid - Ticket id
-	 *      @return list $list - return the list of comments and comment informations as a html output where as these comments and comments informations will be formed in div tag.
-	**/
-	function getCommentInformation($ticketid)
-	{
-		global $log;
-		$log->debug("Entering getCommentInformation(".$ticketid.") method ...");
-		global $adb;
-		global $mod_strings, $default_charset;
-		$sql = "select * from vtiger_ticketcomments where ticketid=?";
-		$result = $adb->pquery($sql, array($ticketid));
-		$noofrows = $adb->num_rows($result);
-
-		//In ajax save we should not add this div
-		if($_REQUEST['action'] != 'HelpDeskAjax')
-		{
-			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
-			$enddiv = '</div>';
-		}
-		for($i=0;$i<$noofrows;$i++)
-		{
-			if($adb->query_result($result,$i,'comments') != '')
-			{
-				//this div is to display the comment
-				$comment = $adb->query_result($result,$i,'comments');
-				// Asha: Fix for ticket #4478 . Need to escape html tags during ajax save.
-				if($_REQUEST['action'] == 'HelpDeskAjax') {
-					$comment = htmlentities($comment, ENT_QUOTES, $default_charset);
-				}
-				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">';
-				$list .= make_clickable(nl2br($comment));
-
-				$list .= '</div>';
-
-				//this div is to display the author and time
-				$list .= '<div valign="top" style="width:99%;border-bottom:1px dotted #CCCCCC;padding-bottom:5px;" class="dataLabel"><font color=darkred>';
-				$list .= $mod_strings['LBL_AUTHOR'].' : ';
-
-				if($adb->query_result($result,$i,'ownertype') == 'user')
-					$list .= getUserFullName($adb->query_result($result,$i,'ownerid'));
-				elseif($adb->query_result($result,$i,'ownertype') == 'customer') {
-					$contactid = $adb->query_result($result,$i,'ownerid');
-					$displayValueArray = getEntityName('Contacts', $contactid);
-					if (!empty($displayValueArray)) {
-						foreach ($displayValueArray as $key => $field_value) {
-							$contact_name = $field_value;
-						}
-					} else {
-						$contact_name='';
-					}
-					$list .= $contact_name;
-				}
-				$createdTime = $adb->query_result($result,$i,'createdtime');
-				$createdDateAndTime = explode(' ',$createdTime);
-				$createdDate = $createdDateAndTime[0];
-				$curr_time = $createdDateAndTime[1];
-				$userTime = DateTimeField::convertToUserTimeZone(date('H:i:s', strtotime($curr_time)));
-				$userTime = $userTime->format('H:i:s');
-				$list .= ' on '.$createdDate.' '.$userTime.' &nbsp;';
-
-				$list .= '</font></div>';
-			}
-		}
-
-		$list .= $enddiv;
-
-		$log->debug("Exiting getCommentInformation method ...");
-		return $list;
-	}
-
 	/**     Function to get the Customer Name who has made comment to the ticket from the customer portal
 	 *      @param  int    $id   - Ticket id
 	 *      @return string $customername - The contact name
@@ -501,7 +389,7 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Exiting getCustomerName method ...");
         	return $customername;
 	}
-	//Pavani: Function to create, export query for helpdesk module
+	// Function to create, export query for helpdesk module
         /** Function to export the ticket records in CSV Format
         * @param reference variable - where condition is passed when the query is executed
         * Returns Export Tickets Query.
@@ -699,6 +587,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 				}
 			}
 		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 
@@ -810,15 +699,16 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 			$reply = getTranslatedString("created", $moduleName);
 			$temp = " ";
 		}
-		
+
+
 		$wsParentId = $entityData->get('parent_id');
 		$parentIdParts = explode('x', $wsParentId);
-		
+
 		// If this function is being triggered as part of Eventing API
 		// Then the reference field ID will not matching the webservice format.
 		// Regardless of the entry we need just the ID
 		$parentId = array_pop($parentIdParts);
-		
+
 		$desc = getTranslatedString('Ticket ID', $moduleName) . ' : ' . $entityId . '<br>'
 				. getTranslatedString('Ticket Title', $moduleName) . ' : ' . $temp . ' '
 				. $entityData->get('ticket_title');
@@ -855,7 +745,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 
 		$moduleName = $entityData->getModuleName();
 		$wsId = $entityData->getId();
-		
+
 		if(strpos($wsId,'x')){
 			$parts = explode('x', $wsId);
 			$entityId = $parts[1];
@@ -864,7 +754,12 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		}
 		$wsParentId = $entityData->get('parent_id');
 		$parentIdParts = explode('x', $wsParentId);
-		$parentId = $parentIdParts[1];
+
+		// If this function is being triggered as part of Eventing API
+		// Then the reference field ID will not matching the webservice format.
+		// Regardless of the entry we need just the ID
+		$parentId = array_pop($parentIdParts);
+
 		$portalUrl = "<a href='" . $PORTAL_URL . "/index.php?module=HelpDesk&action=index&ticketid=" . $entityId . "&fun=detail'>"
 				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
 		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName($parentId) . ",<br><br>";

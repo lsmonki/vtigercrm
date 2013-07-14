@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once dirname(__FILE__) . '/ModCommentsCore.php';
-include_once dirname(__FILE__) . '/models/Comments.php';
 
 require_once 'include/utils/VtlibUtils.php';
 
@@ -109,13 +108,6 @@ class ModComments extends ModCommentsCore {
 			$modCommentsRelatedToField = Vtiger_Field::getInstance('related_to', $modCommentsModule);
 			$modCommentsRelatedToField->unsetRelatedModules($commentWidgetModules);
 		}
-	}
-
-	/**
-	 * Wrap this instance as a model
-	 */
-	function getAsCommentModel() {
-		return new ModComments_CommentsModel($this->column_fields);
 	}
 
 	function getListButtons($app_strings) {

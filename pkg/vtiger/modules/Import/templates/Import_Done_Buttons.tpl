@@ -10,5 +10,5 @@
  ********************************************************************************/
 -->*}
 
-<input type="button" name="ok" value="{'LBL_OK_BUTTON_LABEL'|@getTranslatedString:$MODULE}"
-				   onclick="location.href='index.php?module={$FOR_MODULE}&action=index'" class="crmButton small edit" />
+<button class="btn btn-success" name="ok"
+		onclick="location.href='index.php?module={$FOR_MODULE}&view=Import'"><strong>{'LBL_OK_BUTTON_LABEL'|@vtranslate:$MODULE}</strong></button>

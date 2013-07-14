@@ -164,22 +164,6 @@ class Contacts extends CRMEntity {
 	}
 
 	// This function doesn't seem to be used anywhere. Need to check and remove it.
-	/** Function to get the Contact Details assigned to a given User ID which has a valid Email Address.
-	* @param varchar $user_name - User Name (eg. Admin)
-	* @param varchar $email_address - Email Addr of each contact record.
-	* Returns the query.
-	*/
-  	function get_contacts1($user_name,$email_address)
-	{
-		global $log;
-		$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
-		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,vtiger_account.accountid as account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '". formatForSqlLike($email_address) ."' limit 50";
-
-		$log->debug("Exiting get_contacts1 method ...");
-		return $this->process_list_query1($query);
-	}
-
-	// This function doesn't seem to be used anywhere. Need to check and remove it.
 	/** Function to get the Contact Details assigned to a particular User based on the starting count and the number of subsequent records.
 	*  @param varchar $user_name - Assigned User
 	*  @param integer $from_index - Initial record number to be displayed
@@ -365,6 +349,7 @@ class Contacts extends CRMEntity {
 		left join vtiger_potential on (vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid or vtiger_potential.related_to=vtiger_contactdetails.contactid)
 		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid
 		left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid
+		LEFT JOIN vtiger_potentialscf ON vtiger_potential.potentialid = vtiger_potentialscf.potentialid
 		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		where  vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid ='.$id;
@@ -534,6 +519,7 @@ class Contacts extends CRMEntity {
 				vtiger_crmentity.smownerid, vtiger_troubletickets.ticket_no
 				from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
 				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_ticketcf ON vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid=".$id;
@@ -1214,7 +1200,9 @@ function get_contactsforol($user_name)
 					}
 				}
 			}
+			$adb->pquery("UPDATE vtiger_potential SET related_to = ? WHERE related_to = ?", array($entityId, $transferId));
 		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 

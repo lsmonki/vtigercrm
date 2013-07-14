@@ -207,32 +207,18 @@ class VTTaskType {
 
 	public static function registerTaskType($taskType) {
 		$adb = PearDatabase::getInstance();
-		if (!Vtiger_Utils::CheckTable('com_vtiger_workflow_tasktypes')) {
-			Vtiger_Utils::CreateTable(
-					'com_vtiger_workflow_tasktypes',
-					"(id int(11) NOTNULL,
-						tasktypename varchar(255) NOTNULL,
-						label varchar(255),
-						classname varchar(255),
-						classpath varchar(255),
-						templatepath varchar(255),
-						modules text(500),
-						sourcemodule varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=utf8",
-					true);
-		}
-
 		$modules = Zend_Json::encode($taskType['modules']);
 
 		$taskTypeId = $adb->getUniqueID("com_vtiger_workflow_tasktypes");
 		$taskType['id'] = $taskTypeId;
 
-		$adb->pquery("INSERT INTO com_vtiger_workflow_tasktypes
-									(id, tasktypename, label, classname, classpath, templatepath, modules, sourcemodule)
-									values (?,?,?,?,?,?,?,?)",
-				array($taskTypeId, $taskType['name'], $taskType['label'], $taskType['classname'],  $taskType['classpath'], $taskType['templatepath'], $modules, $taskType['sourcemodule']));
-
-
-
+		$taskResult = $adb->pquery('SELECT 1 FROM com_vtiger_workflow_tasktypes WHERE tasktypename = ?', array($taskType['name']));
+		if($adb->num_rows($taskResult) === 0) {
+			$adb->pquery("INSERT INTO com_vtiger_workflow_tasktypes (id, tasktypename, label, classname, classpath,
+				templatepath, modules, sourcemodule) values (?,?,?,?,?,?,?,?)",
+					array($taskTypeId, $taskType['name'], $taskType['label'], $taskType['classname'],  $taskType['classpath'],
+					$taskType['templatepath'], $modules, $taskType['sourcemodule']));
+		}
 	}
 
 	public static function getAll($moduleName='') {

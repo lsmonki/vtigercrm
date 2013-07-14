@@ -31,6 +31,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 	private $Group = 'Group';
 	private $newId = null;
 	private $taxList = null;
+    private static $parentCache = array();
 
 	public function __construct($webserviceObject,$user,$adb,$log) {
 		$this->user = $user;
@@ -460,6 +461,8 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$params[] = array_values($shippingTaxInfo);
 
 		$transactionSuccessful = vtws_runQueryAsTransaction($sql,$params,$result);
+        
+        self::$parentCache[$parent['id']] = $parent;
 		if(!$transactionSuccessful){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");
@@ -528,9 +531,12 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		}
 	}
 
-	private function getParentById($parentId){
-		static $parentCache = array();
-		return vtws_retrieve($parentId, $this->user);
+	public function getParentById($parentId){
+        if(empty(self::$parentCache[$parentId])){
+            return vtws_retrieve($parentId, $this->user);
+        } else {
+            return self::$parentCache[$parentId];
+        }
 	}
 
 	function setCache($parentId,  $updatedList) {

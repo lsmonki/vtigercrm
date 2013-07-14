@@ -48,18 +48,6 @@ function vtlib_getModuleNameById($tabid) {
 }
 
 /**
- * Get module names for which sharing access can be controlled.
- * NOTE: Ignore the standard modules which is already handled.
- */
-function vtlib_getModuleNameForSharing() {
-	global $adb;
-	$std_modules = array('Calendar','Leads','Accounts','Contacts','Potentials',
-			'HelpDesk','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Events');
-	$modulesList = getSharingModuleList($std_modules);
-	return $modulesList;
-}
-
-/**
  * Cache the module active information for performance
  */
 $__cache_module_activeinfo = Array();
@@ -176,88 +164,6 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 }
 
 /**
- * Get list of module with current status which can be controlled.
- */
-function vtlib_getToggleModuleInfo() {
-	global $adb;
-
-	$modinfo = Array();
-
-	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users','Home') AND presence IN (0,1) ORDER BY name");
-	$num_rows  = $adb->num_rows($sqlresult);
-	for($idx = 0; $idx < $num_rows; ++$idx) {
-		$module = $adb->query_result($sqlresult, $idx, 'name');
-		$presence=$adb->query_result($sqlresult, $idx, 'presence');
-		$customized=$adb->query_result($sqlresult, $idx, 'customized');
-		$isentitytype=$adb->query_result($sqlresult, $idx, 'isentitytype');
-		$hassettings=file_exists("modules/$module/Settings.php");
-
-		$modinfo[$module] = Array( 'customized'=>$customized, 'presence'=>$presence, 'hassettings'=>$hassettings, 'isentitytype' => $isentitytype );
-	}
-	return $modinfo;
-}
-
-/**
- * Get list of language and its current status.
- */
-function vtlib_getToggleLanguageInfo() {
-	global $adb;
-
-	// The table might not exists!
-	$old_dieOnError = $adb->dieOnError;
-	$adb->dieOnError = false;
-
-	$langinfo = Array();
-	$sqlresult = $adb->query("SELECT * FROM vtiger_language");
-	if($sqlresult) {
-		for($idx = 0; $idx < $adb->num_rows($sqlresult); ++$idx) {
-			$row = $adb->fetch_array($sqlresult);
-			$langinfo[$row['prefix']] = Array( 'label'=>$row['label'], 'active'=>$row['active'] );
-		}
-	}
-	$adb->dieOnError = $old_dieOnError;
-	return $langinfo;
-}
-
-/**
- * Toggle the language (enable/disable)
- */
-function vtlib_toggleLanguageAccess($langprefix, $enable_disable) {
-	global $adb;
-
-	// The table might not exists!
-	$old_dieOnError = $adb->dieOnError;
-	$adb->dieOnError = false;
-
-	if($enable_disable === true) $enable_disable = 1;
-	else if($enable_disable === false) $enable_disable = 0;
-
-	$adb->pquery('UPDATE vtiger_language set active = ? WHERE prefix = ?', Array($enable_disable, $langprefix));
-
-	$adb->dieOnError = $old_dieOnError;
-}
-
-/**
- * Get help information set for the module fields.
- */
-function vtlib_getFieldHelpInfo($module) {
-	global $adb;
-	$fieldhelpinfo = Array();
-	if(in_array('helpinfo', $adb->getColumnNames('vtiger_field'))) {
-		$result = $adb->pquery('SELECT fieldname,helpinfo FROM vtiger_field WHERE tabid=?', Array(getTabid($module)));
-		if($result && $adb->num_rows($result)) {
-			while($fieldrow = $adb->fetch_array($result)) {
-				$helpinfo = decode_html($fieldrow['helpinfo']);
-				if(!empty($helpinfo)) {
-					$fieldhelpinfo[$fieldrow['fieldname']] = getTranslatedString($helpinfo, $module);
-				}
-			}
-		}
-	}
-	return $fieldhelpinfo;
-}
-
-/**
  * Setup mandatory (requried) module variable values in the module class.
  */
 function vtlib_setup_modulevars($module, $focus) {
@@ -282,6 +188,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array(
 					'vtiger_accountbillads' => Array ('accountaddressid', 'vtiger_account', 'accountid'),
 					'vtiger_accountshipads' => Array ('accountaddressid', 'vtiger_account', 'accountid'),
+					'vtiger_accountscf' => Array ('accountid', 'vtiger_account', 'accountid'),
 				),
 				'popup_fields' => Array('accountname'), // TODO: Add this initialization to all the standard module
 			),
@@ -290,7 +197,14 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_contactdetails',
 				'table_index' => 'contactid',
-				'related_tables'=> Array( 'vtiger_account' => Array ('accountid' ) ),
+				'related_tables'=> Array( 
+					'vtiger_account' => Array ('accountid' ),
+					//REVIEW: Added these tables for displaying the data into relatedlist (based on configurable fields)
+					'vtiger_contactaddress' => Array('contactaddressid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_contactsubdetails' => Array('contactsubscriptionid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_customerdetails' => Array('customerid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_contactscf' => Array('contactid', 'vtiger_contactdetails', 'contactid')
+					),
 				'popup_fields' => Array ('lastname'),
 			),
 			'Leads' =>
@@ -301,6 +215,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array (
 					'vtiger_leadsubdetails' => Array ( 'leadsubscriptionid', 'vtiger_leaddetails', 'leadid' ),
 					'vtiger_leadaddress'    => Array ( 'leadaddressid', 'vtiger_leaddetails', 'leadid' ),
+					'vtiger_leadscf'    => Array ( 'leadid', 'vtiger_leaddetails', 'leadid' ),
 				),
 				'popup_fields'=> Array ('lastname'),
 			),
@@ -319,6 +234,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				// NOTE: UIType 10 is being used instead of direct relationship from 5.1.0
 				//'related_tables' => Array ('vtiger_account' => Array('accountid')),
 				'popup_fields'=> Array('potentialname'),
+				'related_tables' => Array (
+					'vtiger_potentialscf'    => Array ( 'potentialid', 'vtiger_potential', 'potentialid' ),
+				),
 			),
 			'Quotes' =>
 			Array(
@@ -355,6 +273,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_troubletickets',
 				'table_index'=> 'ticketid',
+				'related_tables'=> Array ('vtiger_ticketcf' => Array('ticketid')),
 				'popup_fields'=> Array('ticket_title')
 			),
 			'Faq'=>
@@ -388,6 +307,15 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_vendor',
 				'table_index'=> 'vendorid',
 				'popup_fields'=>Array('vendorname'),
+			),
+			'Project' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_project',
+				'table_index'=> 'projectid',
+				'related_tables'=> Array( 
+					'vtiger_projectcf' => Array('projectid', 'vtiger_project', 'projectid')
+					),
 			)
 		);
 	return $mod_var_mapping[$module][$varname];
@@ -543,7 +471,9 @@ function vtlib_purify($input, $ignore=false) {
 	if(!is_array($input)) {
 		$md5OfInput = md5($input); 
 		if (array_key_exists($md5OfInput, $purified_cache)) { 
-			return $purified_cache[$md5OfInput]; 
+			$value =  $purified_cache[$md5OfInput]; 
+            //to escape cleaning up again
+            $ignore = true;
 		} 
 	}
 	$use_charset = $default_charset;
@@ -556,7 +486,7 @@ function vtlib_purify($input, $ignore=false) {
 			if(empty($use_charset)) $use_charset = 'UTF-8';
 			if(empty($use_root_directory)) $use_root_directory = dirname(__FILE__) . '/../..';
 
-			include_once ('include/htmlpurifier/library/HTMLPurifier.auto.php');
+			include_once ('libraries/htmlpurifier/library/HTMLPurifier.auto.php');
 
 			$config = HTMLPurifier_Config::createDefault();
 	    	$config->set('Core', 'Encoding', $use_charset);
@@ -593,40 +523,6 @@ function vtlib_purifyForSql($string, $skipEmpty=true) {
 		return $string;
 	}
 	return false;
-}
-
-/**
- * Process the UI Widget requested
- * @param Vtiger_Link $widgetLinkInfo
- * @param Current Smarty Context $context
- * @return
- */
-function vtlib_process_widget($widgetLinkInfo, $context = false) {
-	if (preg_match("/^block:\/\/(.*)/", $widgetLinkInfo->linkurl, $matches)) {
-		list($widgetControllerClass, $widgetControllerClassFile) = explode(':', $matches[1]);
-		if (!class_exists($widgetControllerClass)) {
-			checkFileAccessForInclusion($widgetControllerClassFile);
-			include_once $widgetControllerClassFile;
-		}
-		if (class_exists($widgetControllerClass)) {
-			$widgetControllerInstance = new $widgetControllerClass;
-			$widgetInstance = $widgetControllerInstance->getWidget($widgetLinkInfo->linklabel);
-			if ($widgetInstance) {
-				return $widgetInstance->process($context);
-			}
-		}
-	}
-	return "";
-}
-
-function vtlib_module_icon($modulename){
-	if($modulename == 'Events'){
-		return "modules/Calendar/Events.png";
-	}
-	if(file_exists("modules/$modulename/$modulename.png")){
-		return "modules/$modulename/$modulename.png";
-	}
-	return "modules/Vtiger/Vtiger.png";
 }
 
 ?>

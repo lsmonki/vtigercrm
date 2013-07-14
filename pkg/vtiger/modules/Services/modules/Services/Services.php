@@ -747,117 +747,6 @@ class Services extends CRMEntity {
 		return $return_value;
 	}
 
-
-	/**	Function to display the Services which are related to the PriceBook
-	 *	@param string $query - query to get the list of products which are related to the current PriceBook
-	 *	@param object $focus - PriceBook object which contains all the information of the current PriceBook
-	 *	@param string $returnset - return_module, return_action and return_id which are sequenced with & to pass to the URL which is optional
-	 *	return array $return_data which will be formed like array('header'=>$header,'entries'=>$entries_list) where as $header contains all the header columns and $entries_list will contain all the Service entries
-	 */
-	function getPriceBookRelatedServices($query,$focus,$returnset='')
-	{
-		global $log;
-		$log->debug("Entering getPriceBookRelatedServices(".$query.",".get_class($focus).",".$returnset.") method ...");
-
-		global $adb;
-		global $app_strings;
-		global $current_language,$current_user;
-		$current_module_strings = return_module_language($current_language, 'Services');
-        $no_of_decimal_places = getCurrencyDecimalPlaces();
-		global $list_max_entries_per_page;
-		global $urlPrefix;
-
-		global $theme;
-		$pricebook_id = $_REQUEST['record'];
-		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
-
-		$computeCount = $_REQUEST['withCount'];
-		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
-				((boolean) $computeCount) == true){
-			$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
-		}else{
-			$noofrows = null;
-		}
-		$module = 'PriceBooks';
-		$relatedmodule = 'Services';
-		if(!$_SESSION['rlvs'][$module][$relatedmodule])
-		{
-			$modObj = new ListViewSession();
-			$modObj->sortby = $focus->default_order_by;
-			$modObj->sorder = $focus->default_sort_order;
-			$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
-		}
-		if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule) {
-			$relmodule = vtlib_purify($_REQUEST['relmodule']);
-			if($_SESSION['rlvs'][$module][$relmodule]) {
-				setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
-			}
-		}
-		global $relationId;
-		$start = RelatedListViewSession::getRequestCurrentPage($relationId, $query);
-		$navigation_array =  VT_getSimpleNavigationValues($start, $list_max_entries_per_page,
-				$noofrows);
-
-		$limit_start_rec = ($start-1) * $list_max_entries_per_page;
-
-		if( $adb->dbType == "pgsql")
-			$list_result = $adb->pquery($query.
-					" OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
-		else
-			$list_result = $adb->pquery($query.
-					" LIMIT $limit_start_rec, $list_max_entries_per_page", array());
-
-		$header=array();
-		$header[]=$current_module_strings['LBL_LIST_SERVICE_NAME'];
-		if(getFieldVisibilityPermission('Services', $current_user->id, 'unit_price') == '0')
-			$header[]=$current_module_strings['LBL_SERVICE_UNIT_PRICE'];
-		$header[]=$current_module_strings['LBL_PB_LIST_PRICE'];
-		if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
-			$header[]=$app_strings['LBL_ACTION'];
-
-		$currency_id = $focus->column_fields['currency_id'];
-		$numRows = $adb->num_rows($list_result);
-		for($i=0; $i<$numRows; $i++) {
-			$entity_id = $adb->query_result($list_result,$i,"crmid");
-			$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
-			if($currency_id != null) {
-				$prod_prices = getPricesForProducts($currency_id, array($entity_id),'Services');
-				$unit_price = $prod_prices[$entity_id];
-			}
-			$listprice = $adb->query_result($list_result,$i,"listprice");
-			$field_name=$entity_id."_listprice";
-
-			$entries = Array();
-			$entries[] = textlength_check($adb->query_result($list_result,$i,"servicename"));
-			if(getFieldVisibilityPermission('Services', $current_user->id, 'unit_price') == '0')
-				$entries[] = CurrencyField::convertToUserFormat($unit_price, null, true);
-
-			$entries[] = CurrencyField::convertToUserFormat($listprice, null, true);
-			$action = "";
-			if(isPermitted("PriceBooks","EditView","") == 'yes' && isPermitted('Services', 'EditView', $entity_id) == 'yes') {
-				$action .= '<img style="cursor:pointer;" src="themes/images/editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.number_format($listprice, $no_of_decimal_places,'.','').'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
-			} else {
-				$action .= '<img src="'. vtiger_imageurl('blank.gif', $theme).'" border="0" />';
-			}
-			if(isPermitted("PriceBooks","Delete","") == 'yes' && isPermitted('Services', 'Delete', $entity_id) == 'yes')
-			{
-				if($action != "")
-					$action .= '&nbsp;|&nbsp;';
-				$action .= '<img src="themes/images/delete.gif" onclick="if(confirm(\''.$app_strings['ARE_YOU_SURE'].'\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';
-			}
-			if($action != "")
-				$entries[] = $action;
-			$entries_list[] = $entries;
-		}
-		$navigationOutput[] =  getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
-		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, '',$module,$relatedmodule,$focus->id);
-		$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
-
-		$log->debug("Exiting getPriceBookRelatedServices method ...");
-		return $return_data;
-	}
-
 	/**
 	 * Move the related records of the specified list of id's to the given record.
 	 * @param String This module name
@@ -905,7 +794,7 @@ class Services extends CRMEntity {
 	 */
 	function generateReportsQuery($module,$queryPlanner){
 	   	global $current_user;
-		
+
 			$matrix = $queryPlanner->newDependencyMatrix();
 			$matrix->setDependency('vtiger_seproductsrel',array('vtiger_crmentityRelServices','vtiger_accountRelServices','vtiger_leaddetailsRelServices','vtiger_servicecf','vtiger_potentialRelServices'));
 			$query = "from vtiger_service
@@ -973,10 +862,10 @@ class Services extends CRMEntity {
 			(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
 			WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
 			ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
-			) AS actual_unit_price FROM vtiger_service 
+			) AS actual_unit_price FROM vtiger_service
             LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
             LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
-			AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . ") 
+			AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . ")
             AS innerService ON innerService.serviceid = vtiger_service.serviceid";
 		}
 		if ($queryPlanner->requireTable("vtiger_crmentityServices",$matrix)){
@@ -1072,13 +961,13 @@ class Services extends CRMEntity {
 		// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
 		// TODO Handle actions after this module is updated.
-		
+
 			//adds sharing accsess
 			$ServicesModule  = Vtiger_Module::getInstance('Services');
 			Vtiger_Access::setDefaultSharing($ServicesModule);
 		}
  	}
-	
+
 	/** Function to unlink an entity with given Id from another entity */
 	function unlinkRelationship($id, $return_module, $return_id) {
 		global $log, $currentModule;

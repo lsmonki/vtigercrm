@@ -14,7 +14,7 @@
  * Redirect based on the UI state selected. 
  */
 
-$defaultUI = 'vtiger6/'; // Use ('') for vtiger5
+$defaultUI = ''; // Use ('') for vtiger5
 
 // Hook to reset the configuration
 if (file_exists('vtigerui_override.php')) {

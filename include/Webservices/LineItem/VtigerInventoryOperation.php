@@ -21,13 +21,17 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 		$element = $this->sanitizeShippingTaxes($element);
 		$lineItems = $element['LineItems'];
 		if (!empty($lineItems)) {
-			$element = parent::create($elementType, $element);
-			$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
+            $element = parent::create($elementType, $element);
+            $handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 			$handler->setLineItems('LineItem', $lineItems, $element);
+            $parent = $handler->getParentById($element['id']);
+            $components = vtws_getIdComponents($element['id']);
+            $parentId = $components[1]; 
+            $parent['LineItems'] = $handler->getAllLineItemForParent($parentId);
 		} else {
 			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING, "Mandatory Fields Missing..");
 		}
-		return $element;
+		return array_merge($element,$parent);
 	}
 
 	public function update($element) {
@@ -58,7 +62,9 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 		$updatedElement = parent::revise($element);
 		$handler->cleanLineItemList($updatedElement['id']);
 		$handler->setLineItems('LineItem', $lineItemList, $updatedElement);
-		return $updatedElement;
+        $parent = $handler->getParentById($element['id']);
+        $parent['LineItems'] = $handler->getAllLineItemForParent($parentId);
+		return array_merge($element,$parent);
 	}
 
 	public function retrieve($id) {

@@ -13,9 +13,9 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-require_once('include/logging.php');
-include('adodb/adodb.inc.php');
-require_once("adodb/adodb-xmlschema.inc.php");
+require_once 'include/logging.php';
+include_once 'libraries/adodb/adodb.inc.php';
+require_once 'libraries/adodb/adodb-xmlschema.inc.php';
 
 $log =& LoggerManager::getLogger('VT');
 $logsqltm =& LoggerManager::getLogger('SQLTIME');
@@ -213,7 +213,7 @@ class PearDatabase{
 				$qmarkIndex = strpos($_SERVER['REQUEST_URI'], '?');
 				if ($qmarkIndex !== false) $uri = substr($uri, 0, $qmarkIndex);
 				$data = $uri . '?'. http_build_query($_SERVER['REQUEST_METHOD'] == 'GET'? $_GET:$_POST);
-			} else {
+			} else if ($argv) {
 				$data = implode(' ', $argv);
 			}
 
@@ -801,14 +801,16 @@ class PearDatabase{
 		}
 		$this->database = ADONewConnection($this->dbType);
 
-		$this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
-		$this->database->LogSQL($this->enableSQLlog);
+		$result = $this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
+		if ($result) {
+			$this->database->LogSQL($this->enableSQLlog);
 
-		// 'SET NAMES UTF8' needs to be executed even if database has default CHARSET UTF8
-		// as mysql server might be running with different charset!
-		// We will notice problem reading UTF8 characters otherwise.
-		if($this->isdb_default_utf8_charset) {
-			$this->executeSetNamesUTF8SQL(true);
+			// 'SET NAMES UTF8' needs to be executed even if database has default CHARSET UTF8
+			// as mysql server might be running with different charset!
+			// We will notice problem reading UTF8 characters otherwise.
+			if($this->isdb_default_utf8_charset) {
+				$this->executeSetNamesUTF8SQL(true);
+			}
 		}
 	}
 
@@ -1024,6 +1026,43 @@ class PearDatabase{
 			$dbName = "`{$dbName}`";
 		}
 		return $dbName;
+	}
+
+	function check_db_utf8_support() {
+		global $db_type;
+		if($db_type == 'pgsql')
+			return true;
+		$dbvarRS = $this->database->Execute("show variables like '%_database' ");
+		$db_character_set = null;
+		$db_collation_type = null;
+		while(!$dbvarRS->EOF) {
+			$arr = $dbvarRS->FetchRow();
+			$arr = array_change_key_case($arr);
+			switch($arr['variable_name']) {
+				case 'character_set_database' : $db_character_set = $arr['value']; break;
+				case 'collation_database'     : $db_collation_type = $arr['value']; break;
+			}
+			// If we have all the required information break the loop.
+			if($db_character_set != null && $db_collation_type != null) break;
+		}
+		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
+	}
+
+	function get_db_charset() {
+		global $db_type;
+		if($db_type == 'pgsql')
+			return 'UTF8';
+		$dbvarRS = $this->database->query("show variables like '%_database' ");
+		$db_character_set = null;
+		while(!$dbvarRS->EOF) {
+			$arr = $dbvarRS->FetchRow();
+			$arr = array_change_key_case($arr);
+			if($arr['variable_name'] == 'character_set_database') {
+				$db_character_set = $arr['value'];
+				break;
+			}
+		}
+		return $db_character_set;
 	}
 } /* End of class */
 

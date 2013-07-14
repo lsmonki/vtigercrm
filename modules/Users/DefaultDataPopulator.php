@@ -415,7 +415,6 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'days','vtiger_troubletickets',1,'1','days','Days',1,2,'',100,10,25,1,'I~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,9,25,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,12,25,2,'DT~O',3,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'from_portal','vtiger_troubletickets',1,'56','from_portal','From Portal',1,0,'',100,13,25,3,'C~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'modifiedby','vtiger_crmentity',1,'52','modifiedby','Last Modified By',1,0,'',100,16,25,3,'V~O',3,null,'BAS',0)");
 
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'title','vtiger_troubletickets',1,'22','ticket_title','Title',1,0,'',100,1,25,1,'V~M',0,1,'BAS',1)");
@@ -1860,8 +1859,8 @@ Should any need arise,please do give us a call.';
 		//Insert into vtiger_organizationdetails vtiger_table
 		$organizationId = $this->db->getUniqueID('vtiger_organizationdetails');
 		$this->db->query("insert into vtiger_organizationdetails(organization_id,organizationname,address,city,state,country,code,phone,fax,website,logoname)
-								values ($organizationId,'vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai',
-										'Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.gif')");
+								values ($organizationId,'vtiger','95, 12th Main Road, 3rd Block, Rajajinagar','Bangalore',
+										'Karnataka','India','560010','+91 9243602352','+91 9243602352','www.vtiger.com','vtiger-crm-logo.png')");
 
 
 		$this->db->query("insert into vtiger_actionmapping values(0,'Save',0)");
@@ -2395,36 +2394,32 @@ Should any need arise,please do give us a call.';
 			"ico-groups.gif",
 			"shareaccess.gif",
 			"orgshar.gif",
-			"audit.gif",
 			"set-IcoLoginHistory.gif",
 			"vtlib_modmng.gif",
 			"picklist.gif",
 			"picklistdependency.gif",
-			"ViewTemplate.gif",
-			"mailmarge.gif",
+			"menueditor.png",
 			"notification.gif",
 			"inventory.gif",
 			"company.gif",
 			"ogmailserver.gif",
-			"backupserver.gif",
 			"currency.gif",
 			"taxConfiguration.gif",
 			"system.gif",
-			"proxy.gif",
 			"announ.gif",
 			"set-IcoTwoTabConfig.gif",
 			"terms.gif",
 			"settingsInvNumber.gif",
 			"mailScanner.gif",
-			"settingsWorkflow.png",
-			"menueditor.png");
+			"settingsWorkflow.png");
 
 		//labels for blocks
-		$blocks = array('LBL_MODULE_MANAGER',
+		$blocks = array(
 			'LBL_USER_MANAGEMENT',
 			'LBL_STUDIO',
 			'LBL_COMMUNICATION_TEMPLATES',
-			'LBL_OTHER_SETTINGS');
+			'LBL_OTHER_SETTINGS'
+			);
 
 		//field names
 		$names = array('LBL_USERS',
@@ -2433,29 +2428,25 @@ Should any need arise,please do give us a call.';
 			'USERGROUPLIST',
 			'LBL_SHARING_ACCESS',
 			'LBL_FIELDS_ACCESS',
-			'LBL_AUDIT_TRAIL',
 			'LBL_LOGIN_HISTORY_DETAILS',
 			'VTLIB_LBL_MODULE_MANAGER',
 			'LBL_PICKLIST_EDITOR',
 			'LBL_PICKLIST_DEPENDENCY_SETUP',
-			'EMAILTEMPLATES',
-			'LBL_MAIL_MERGE',
+			'LBL_MENU_EDITOR',
 			'NOTIFICATIONSCHEDULERS',
 			'INVENTORYNOTIFICATION',
 			'LBL_COMPANY_DETAILS',
 			'LBL_MAIL_SERVER_SETTINGS',
-			'LBL_BACKUP_SERVER_SETTINGS',
 			'LBL_CURRENCY_SETTINGS',
 			'LBL_TAX_SETTINGS',
 			'LBL_SYSTEM_INFO',
-			'LBL_PROXY_SETTINGS',
 			'LBL_ANNOUNCEMENT',
 			'LBL_DEFAULT_MODULE_VIEW',
 			'INVENTORYTERMSANDCONDITIONS',
 			'LBL_CUSTOMIZE_MODENT_NUMBER',
 			'LBL_MAIL_SCANNER',
-			'LBL_LIST_WORKFLOWS',
-			'LBL_MENU_EDITOR');
+			'LBL_LIST_WORKFLOWS'
+			);
 
 
 		$name_blocks = array('LBL_USERS' => 'LBL_USER_MANAGEMENT',
@@ -2464,29 +2455,25 @@ Should any need arise,please do give us a call.';
 			'USERGROUPLIST' => 'LBL_USER_MANAGEMENT',
 			'LBL_SHARING_ACCESS' => 'LBL_USER_MANAGEMENT',
 			'LBL_FIELDS_ACCESS' => 'LBL_USER_MANAGEMENT',
-			'LBL_AUDIT_TRAIL' => 'LBL_USER_MANAGEMENT',
 			'LBL_LOGIN_HISTORY_DETAILS' => 'LBL_USER_MANAGEMENT',
 			'VTLIB_LBL_MODULE_MANAGER' => 'LBL_STUDIO',
 			'LBL_PICKLIST_EDITOR' => 'LBL_STUDIO',
 			'LBL_PICKLIST_DEPENDENCY_SETUP' => 'LBL_STUDIO',
-			'EMAILTEMPLATES' => 'LBL_COMMUNICATION_TEMPLATES',
-			'LBL_MAIL_MERGE' => 'LBL_COMMUNICATION_TEMPLATES',
+			'LBL_MENU_EDITOR' => 'LBL_STUDIO',
 			'NOTIFICATIONSCHEDULERS' => 'LBL_COMMUNICATION_TEMPLATES',
 			'INVENTORYNOTIFICATION' => 'LBL_COMMUNICATION_TEMPLATES',
 			'LBL_COMPANY_DETAILS' => 'LBL_COMMUNICATION_TEMPLATES',
 			'LBL_MAIL_SERVER_SETTINGS' => 'LBL_OTHER_SETTINGS',
-			'LBL_BACKUP_SERVER_SETTINGS' => 'LBL_OTHER_SETTINGS',
 			'LBL_CURRENCY_SETTINGS' => 'LBL_OTHER_SETTINGS',
 			'LBL_TAX_SETTINGS' => 'LBL_OTHER_SETTINGS',
 			'LBL_SYSTEM_INFO' => 'LBL_OTHER_SETTINGS',
-			'LBL_PROXY_SETTINGS' => 'LBL_OTHER_SETTINGS',
 			'LBL_ANNOUNCEMENT' => 'LBL_OTHER_SETTINGS',
 			'LBL_DEFAULT_MODULE_VIEW' => 'LBL_OTHER_SETTINGS',
 			'INVENTORYTERMSANDCONDITIONS' => 'LBL_OTHER_SETTINGS',
 			'LBL_CUSTOMIZE_MODENT_NUMBER' => 'LBL_OTHER_SETTINGS',
 			'LBL_MAIL_SCANNER' => 'LBL_OTHER_SETTINGS',
 			'LBL_LIST_WORKFLOWS' => 'LBL_OTHER_SETTINGS',
-			'LBL_MENU_EDITOR' => 'LBL_STUDIO');
+			);
 
 
 		//description for fields
@@ -2496,59 +2483,51 @@ Should any need arise,please do give us a call.';
 			'LBL_GROUP_DESCRIPTION',
 			'LBL_SHARING_ACCESS_DESCRIPTION',
 			'LBL_SHARING_FIELDS_DESCRIPTION',
-			'LBL_AUDIT_DESCRIPTION',
 			'LBL_LOGIN_HISTORY_DESCRIPTION',
 			'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION',
 			'LBL_PICKLIST_DESCRIPTION',
 			'LBL_PICKLIST_DEPENDENCY_DESCRIPTION',
-			'LBL_EMAIL_TEMPLATE_DESCRIPTION',
-			'LBL_MAIL_MERGE_DESCRIPTION',
+			'LBL_MENU_DESC',
 			'LBL_NOTIF_SCHED_DESCRIPTION',
 			'LBL_INV_NOTIF_DESCRIPTION',
 			'LBL_COMPANY_DESCRIPTION',
 			'LBL_MAIL_SERVER_DESCRIPTION',
-			'LBL_BACKUP_SERVER_DESCRIPTION',
 			'LBL_CURRENCY_DESCRIPTION',
 			'LBL_TAX_DESCRIPTION',
 			'LBL_SYSTEM_DESCRIPTION',
-			'LBL_PROXY_DESCRIPTION',
 			'LBL_ANNOUNCEMENT_DESCRIPTION',
 			'LBL_DEFAULT_MODULE_VIEW_DESC',
 			'LBL_INV_TANDC_DESCRIPTION',
 			'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION',
 			'LBL_MAIL_SCANNER_DESCRIPTION',
-			'LBL_LIST_WORKFLOWS_DESCRIPTION',
-			'LBL_MENU_DESC');
+			'LBL_LIST_WORKFLOWS_DESCRIPTION');
 
-		$links = array('index.php?module=Administration&action=index&parenttab=Settings',
-			'index.php?module=Settings&action=listroles&parenttab=Settings',
-			'index.php?module=Settings&action=ListProfiles&parenttab=Settings',
-			'index.php?module=Settings&action=listgroups&parenttab=Settings',
-			'index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings',
-			'index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings',
-			'index.php?module=Settings&action=AuditTrailList&parenttab=Settings',
-			'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
-			'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
-			'index.php?module=PickList&action=PickList&parenttab=Settings',
-			'index.php?module=PickList&action=PickListDependencySetup&parenttab=Settings',
-			'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',
-			'index.php?module=Settings&action=listwordtemplates&parenttab=Settings',
-			'index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings',
-			'index.php?module=Settings&action=listinventorynotifications&parenttab=Settings',
-			'index.php?module=Settings&action=OrganizationConfig&parenttab=Settings',
-			'index.php?module=Settings&action=EmailConfig&parenttab=Settings',
-			'index.php?module=Settings&action=BackupServerConfig&parenttab=Settings',
-			'index.php?module=Settings&action=CurrencyListView&parenttab=Settings',
-			'index.php?module=Settings&action=TaxConfig&parenttab=Settings',
-			'index.php?module=System&action=listsysconfig&parenttab=Settings',
-			'index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings',
-			'index.php?module=Settings&action=Announcements&parenttab=Settings',
+		$links = array(
+			'index.php?module=Users&parent=Settings&view=List',
+			'index.php?module=Roles&parent=Settings&view=Index',
+			'index.php?module=Profiles&parent=Settings&view=List',
+			'index.php?module=Groups&parent=Settings&view=List',
+			'index.php?module=SharingAccess&parent=Settings&view=Index',
+			'index.php?module=FieldAccess&parent=Settings&view=Index',
+			'index.php?module=LoginHistory&parent=Settings&view=List',
+			'index.php?module=ModuleManager&parent=Settings&view=List',
+			'index.php?parent=Settings&module=Picklist&view=Index',
+			'index.php?parent=Settings&module=PickListDependency&view=List',
+			'index.php?module=MenuEditor&parent=Settings&view=Index',
+			'index.php?module=Settings&view=listnotificationschedulers&parenttab=Settings',
+			'index.php?module=Settings&view=listinventorynotifications&parenttab=Settings',
+			'index.php?parent=Settings&module=Vtiger&view=CompanyDetails',
+			'index.php?parent=Settings&module=Vtiger&view=OutgoingServerDetail',
+			'index.php?parent=Settings&module=Currency&view=List',
+			'index.php?module=Vtiger&parent=Settings&view=TaxIndex',
+			'index.php?module=Settings&submodule=Server&view=ProxyConfig',
+			'index.php?parent=Settings&module=Vtiger&view=AnnouncementEdit',
 			'index.php?module=Settings&action=DefModuleView&parenttab=Settings',
-			'index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings',
-			'index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings',
-			'index.php?module=Settings&action=MailScanner&parenttab=Settings',
-			'index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings',
-			'index.php?module=Settings&action=MenuEditor&parenttab=Settings');
+			'index.php?parent=Settings&module=Vtiger&view=TermsAndConditionsEdit',
+			'index.php?module=Vtiger&parent=Settings&view=CustomRecordNumbering',
+			'index.php?parent=Settings&module=MailConverter&view=List',
+			'index.php?module=Workflows&parent=Settings&view=List'
+			);
 
 		//insert settings blocks
 		$count = count($blocks);
@@ -2559,20 +2538,11 @@ Should any need arise,please do give us a call.';
 		$count = count($icons);
 		//insert settings fields
 		for ($i = 0, $seq = 1; $i < $count; $i++, $seq++) {
-			if ($i == 8 || $i == 12 || $i == 18) {
+			if ($i == 7 || $i == 11 || $i == 14) {
 				$seq = 1;
 			}
 			$adb->query("insert into vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) values (" . $adb->getUniqueID('vtiger_settings_field') . ", " . getSettingsBlockId($name_blocks[$names[$i]]) . ", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
-
-		// for Workflow in settings page of every module
-		$module_manager_id = getSettingsBlockId('LBL_MODULE_MANAGER');
-		$result = $adb->pquery("SELECT max(sequence) AS maxseq FROM vtiger_settings_field WHERE blockid = ?", array($module_manager_id));
-		$maxseq = $adb->query_result($result, 0, 'maxseq');
-		if ($maxseq < 0 || $maxseq == NULL) {
-			$maxseq = 1;
-		}
-		$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)", array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
 
 		//hide the system details tab for now
 		$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");

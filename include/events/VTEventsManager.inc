@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-	
+
 	/**
 	 * Create and trigger events in vtiger
 	 */
@@ -15,7 +15,7 @@
 		function __construct($adb){
 			$this->adb = $adb;
 		}
-		
+
 		/**
 		 * Register an event handler
 		 *
@@ -33,30 +33,30 @@
 				$adb->pquery("insert into vtiger_eventhandlers
 					(eventhandler_id, event_name, handler_path, handler_class, cond, is_active, dependent_on)
 					values (?,?,?,?,?, true, ?)", array($handlerId, $forEvent, $path, $className, $condition, $depedentOn));
-				
+
 				$this->clearTriggerCache($forEvent);
 			}
 		}
-		
+
 		/**
 		 * Initialize Event Trigger Cache for the required event types.
 		 *
 		 * @param Object $for Optional String or Array of event_names for initializing.
-		 * @param Boolean $force Optional Force the initialization of cache?  
+		 * @param Boolean $force Optional Force the initialization of cache?
 		 */
 		function initTriggerCache($for = false, $force = false) {
 			VTEventTrigger::initCache($for, $force);
 		}
-		
+
 		/**
-		 * Clear the Event Trigger Cache 
+		 * Clear the Event Trigger Cache
 		 *
 		 * @param Object $forEvent
 		 */
 		function clearTriggerCache($forEvent = false) {
 			VTEventTrigger::clearCache($forEvent);
 		}
-		
+
 		/**
 		 * Set an event handler as inactive
 		 * @param The handler class to set as inactive
@@ -65,10 +65,10 @@
 		function setHandlerInActive($handlerClass){
 			$adb = $this->adb;
 			$adb->pquery("update vtiger_eventhandlers set is_active=false where handler_class=?", array($handlerClass));
-			
+
 			$this->clearTriggerCache();
 		}
-		
+
 		/**
 		 * Set an event handler as active
 		 *
@@ -77,11 +77,11 @@
 		function setHandlerActive($handlerClass){
 			$adb = $this->adb;
 			$adb->pquery("update vtiger_eventhandlers set is_active=true where handler_class=?", array($handlerClass));
-			
+
 			$this->clearTriggerCache();
 		}
-		
-		
+
+
 		/**
 		 * Unregister a registered handler
 		 *
@@ -93,13 +93,13 @@
 				array($className));
 			$adb->pquery("delete from vtiger_eventhandler_module where handler_class=?",
 				array($className));
-				
+
 			$this->clearTriggerCache();
 		}
-		
+
 		/**
 		 * Get an event triger instance
-		 * 
+		 *
 		 * @param $triggerName The name of the event.
 		 * @return The trigger object for the event.
 		 */
@@ -107,7 +107,7 @@
 			$adb=$this->adb;
 			return new VTEventTrigger($adb, $triggerName);
 		}
-		
+
 		/**
 		 * Trigger an event
 		 *
@@ -120,7 +120,7 @@
 
 		/**
 		 * Set the module the handler belongs to
-		 * 
+		 *
 		 * @param moduleName - The name of the module
 		 * @param handlerClass - The name of the handler class
 		 */
@@ -138,7 +138,7 @@
 
 		/**
 		 * List handler classes for a module
-		 * 
+		 *
 		 * @param moduleName - The name of the module
 		 */
 		function listHandlersForModule($moduleName){
@@ -151,7 +151,7 @@
 		  }
 		  return $arr;
 		}
-		
+
 		/**
 		 * List active events.
 		 *
@@ -163,14 +163,14 @@
 					array());
 			return $this->listEventHandlers($result);
 		}
-		
+
 		function listAllEventHandlers(){
 			$adb = $this->adb;
 			$result = $adb->pquery("select * from vtiger_eventhandlers", array());
 			return $this->listEventHandlers($result);
 
 		}
-		
+
 		private function listEventHandlers($result){
 			$adb = $this->adb;
 			$it = new SQLResultIterator($adb, $result);

@@ -387,7 +387,19 @@ class ProjectTask extends CRMEntity {
 			}
         }
     }
-
+	
+	/**
+	 * Function to check the module active and user action permissions before showing as link in other modules
+	 * like in more actions of detail view(Projects).
+	 */
+	static function isLinkPermitted($linkData) {
+		$moduleName = "ProjectTask";
+		if(vtlib_isModuleActive($moduleName) && isPermitted($moduleName, 'EditView') == 'yes') {
+			return true;
+		}
+		return false;
+	}
+	
     /**
      * Handle saving related module information.
      * NOTE: This function has been added to CRMEntity (base class).

@@ -50,11 +50,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 */
 	function __parseManifestFile($unzip) {
 		$manifestfile = $this->__getManifestFilePath();
-		$status = $unzip->unzip('manifest.xml', $manifestfile);
-		if($status != false){
-			$this->_modulexml = simplexml_load_file($manifestfile);
-			unlink($manifestfile);
-		}
+		$unzip->unzip('manifest.xml', $manifestfile);
+		$this->_modulexml = simplexml_load_file($manifestfile);
+		unlink($manifestfile);
 	}
 
 	/**
@@ -176,9 +174,15 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					continue;
 				}
 			}
-			// Check for language file.
-			preg_match("/modules\/([^\/]+)\/language\/en_us.lang.php/", $filename, $matches);
-			if(count($matches)) { $language_modulename = $matches[1]; continue; }
+			// Language file present in en_us folder
+			$pattern = '/languages\/en_us\/([^\/]+).php/';
+			preg_match($pattern, $filename, $matches);
+			if(count($matches)) { $language_modulename = $matches[1]; }
+
+			// or Language file may be present in en_us/Settings folder
+			$settingsPattern = '/languages\/en_us\/Settings\/([^\/]+).php/';
+			preg_match($settingsPattern, $filename, $matches);
+			if(count($matches)) { $language_modulename = $matches[1]; }
 		}
 
 		// Verify module language file.
@@ -189,7 +193,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(!empty($this->_modulexml) &&
 			!empty($this->_modulexml->dependencies) &&
 			!empty($this->_modulexml->dependencies->vtiger_version)) {
-				$vtigerversion_found = true;
+				$vtigerVersion = (string)$this->_modulexml->dependencies->vtiger_version;
+				if(version_compare($vtigerVersion, '6.0.0rc', '>=') === true) {
+					$vtigerversion_found = true;
+				}
 		}
 
 		$validzip = false;
@@ -265,16 +272,23 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			$unzip->unzipAllEx( ".",
 				Array(
 					// Include only file/folders that need to be extracted
-					'include' => Array('templates', "modules/$module", 'cron', 'vtiger6', 'layouts'),
-					//'exclude' => Array('manifest.xml')
+					'include' => Array('templates', "modules/$module", 'cron', 'languages',
+						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
 				),
 				// What files needs to be renamed?
 				Array(
 					// Templates folder
-					'templates' => "Smarty/templates/modules/$module",
+					'templates' => "layouts/vlayout/modules/$module",
 					// Cron folder
-					'cron' => "cron/modules/$module"
+					'cron' => "cron/modules/$module",
+					// Settings folder
+					'settings/actions' => "modules/Settings/$module/actions",
+					'settings/views' => "modules/Settings/$module/views",
+					'settings/models' => "modules/Settings/$module/models",
+
+					// Settings templates folder
+					'settings/templates' => "layouts/vlayout/modules/Settings/$module"
 				)
 			);
 

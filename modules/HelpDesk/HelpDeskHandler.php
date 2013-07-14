@@ -57,11 +57,9 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 	$from_email = $contact_email;
 
 	//send mail to assigned to user
-	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
 	$mail_status = send_mail('HelpDesk',$to_email,$name,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$contents);
 
 	//send mail to the customer(contact who creates the ticket from portal)
-	$adb->println("Send mail to the customer(contact) who creates the portal ticket");
 	$mail_status = send_mail('Contacts',$contact_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$contents);
 }
 

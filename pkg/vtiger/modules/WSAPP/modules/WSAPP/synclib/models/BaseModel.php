@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 class WSAPP_BaseModel {
+
 	protected $data;
 
 	function  __construct($values = array()) {
@@ -45,4 +46,5 @@ class WSAPP_BaseModel {
 	}
 
 }
+
 ?>

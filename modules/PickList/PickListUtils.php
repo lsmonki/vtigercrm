@@ -7,22 +7,22 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-require_once 'vtiger6/includes/runtime/Cache.php';
+require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php'; 
 /**
  * this file will be used to store the functions to be used in the picklist module
  */
 
-/** 
- * Function to get picklist fields for the given module 
+/**
+ * Function to get picklist fields for the given module
  * @ param $fld_module
  * It gets the picklist details array for the given module in the given format
- * $fieldlist = Array(Array('fieldlabel'=>$fieldlabel,'generatedtype'=>$generatedtype,'columnname'=>$columnname,'fieldname'=>$fieldname,'value'=>picklistvalues))	
+ * $fieldlist = Array(Array('fieldlabel'=>$fieldlabel,'generatedtype'=>$generatedtype,'columnname'=>$columnname,'fieldname'=>$fieldname,'value'=>picklistvalues))
  */
 function getUserFldArray($fld_module,$roleid){
 	global $adb, $log;
 	$user_fld = Array();
 	$tabid = getTabid($fld_module);
-	
+
 	$query="select vtiger_field.fieldlabel,vtiger_field.columnname,vtiger_field.fieldname, vtiger_field.uitype" .
 			" FROM vtiger_field inner join vtiger_picklist on vtiger_field.fieldname = vtiger_picklist.name" .
 			" where (displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','55','33','16') " .
@@ -37,23 +37,23 @@ function getUserFldArray($fld_module,$roleid){
     	for($i=0; $i<$noofrows; $i++){
 			$user_fld = array();
 			$fld_name = $adb->query_result($result,$i,"fieldname");
-			
-			$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");	
-			$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	
-			$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
-			$user_fld['fieldname'] = $adb->query_result($result,$i,"fieldname");	
-			$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
-			$user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb); 
+
+			$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");
+			$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");
+			$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");
+			$user_fld['fieldname'] = $adb->query_result($result,$i,"fieldname");
+			$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");
+			$user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb);
 			$fieldlist[] = $user_fld;
 		}
 	}
 	return $fieldlist;
 }
 
-/** 
- * Function to get modules which has picklist values  
- * It gets the picklist modules and return in an array in the following format 
- * $modules = Array($tabid=>$tablabel,$tabid1=>$tablabel1,$tabid2=>$tablabel2,-------------,$tabidn=>$tablabeln)	
+/**
+ * Function to get modules which has picklist values
+ * It gets the picklist modules and return in an array in the following format
+ * $modules = Array($tabid=>$tablabel,$tabid1=>$tablabel1,$tabid2=>$tablabel2,-------------,$tabidn=>$tablabeln)
  */
 function getPickListModules(){
 	global $adb;
@@ -92,20 +92,20 @@ function get_available_module_picklist($picklist_details){
 	foreach($avail_pick_values as $key => $val){
 		$module_pick[$avail_pick_values[$key]['fieldname']] = getTranslatedString($avail_pick_values[$key]['fieldlabel']);
 	}
-	return $module_pick;	
+	return $module_pick;
 }
 
 /**
  * this function returns all the picklist values that are available for a given
  * @param string $fieldName - the name of the field
- * @return array $arr - the array containing the picklist values 
+ * @return array $arr - the array containing the picklist values
  */
 function getAllPickListValues($fieldName,$lang = Array() ){
 	global $adb;
 	$sql = 'SELECT * FROM vtiger_'.$adb->sql_escape_string($fieldName);
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
-	
+
 	$arr = array();
 	for($i=0;$i<$count;$i++){
 		$pick_val = decode_html($adb->query_result($result, $i, $fieldName));
@@ -186,28 +186,28 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 		return $cache->getAssignedPicklistValues($tableName,$roleid);
 	} else {
 	$arr = array();
-	
+
 	$sub = getSubordinateRoleAndUsers($roleid);
 	$subRoles = array($roleid);
 	$subRoles = array_merge($subRoles, array_keys($sub));
-	
+
 	$sql = "select picklistid from vtiger_picklist where name = ?";
 	$result = $adb->pquery($sql, array($tableName));
 	if($adb->num_rows($result)){
 		$picklistid = $adb->query_result($result, 0, "picklistid");
-		
-	
+
+
 		$roleids = array();
 		foreach($subRoles as $role){
 			$roleids[] = $role;
 		}
-		
+
 		$sql = "SELECT distinct ".$adb->sql_escape_string($tableName)." FROM ". $adb->sql_escape_string("vtiger_$tableName")
 				. " inner join vtiger_role2picklist on ".$adb->sql_escape_string("vtiger_$tableName").".picklist_valueid=vtiger_role2picklist.picklistvalueid"
 				. " and roleid in (".generateQuestionMarks($roleids).") order by sortid";
 		$result = $adb->pquery($sql, $roleids);
 		$count = $adb->num_rows($result);
-		
+
 		if($count) {
 			while($resultrow = $adb->fetch_array($result)) {
 				$pick_val = decode_html($resultrow[$tableName]);

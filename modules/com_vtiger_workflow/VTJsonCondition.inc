@@ -17,74 +17,76 @@ class VTJsonCondition {
 
 	function evaluate($condition, $entityCache, $id) {
 		$expr = Zend_Json::decode($condition);
-		$entityData = $entityCache->forId($id);
-		$data = $entityData->getData();
+		$finalResult = TRUE;
+		if (is_array($expr)) {
+			$entityData = $entityCache->forId($id);
+			$data = $entityData->getData();
 
-		$groupResults = array();
-		$expressionResults = array();
-		$i = 0;
-		foreach ($expr as $cond) {
-			$conditionGroup = $cond['groupid'];
-			if (empty($conditionGroup))
-				$conditionGroup = 0;
-			preg_match('/(\w+) : \((\w+)\) (\w+)/', $cond['fieldname'], $matches);
-			if (count($matches) == 0) {
-				$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entityData, $cond);
-			} else {
-				list($full, $referenceField, $referenceModule, $fieldname) = $matches;
-				$referenceFieldId = $data[$referenceField];
-				if ($referenceFieldId != 0) {
-					$entity = $entityCache->forId($data[$referenceField]);
-					if ($entity->getModuleName() == $referenceModule) {
-						$cond['fieldname'] = $fieldname;
-						$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entity, $cond, $entityData);
+			$groupResults = array();
+			$expressionResults = array();
+			$i = 0;
+			foreach ($expr as $cond) {
+				$conditionGroup = $cond['groupid'];
+				if (empty($conditionGroup))
+					$conditionGroup = 0;
+				preg_match('/(\w+) : \((\w+)\) (\w+)/', $cond['fieldname'], $matches);
+				if (count($matches) == 0) {
+					$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entityData, $cond);
+				} else {
+					list($full, $referenceField, $referenceModule, $fieldname) = $matches;
+					$referenceFieldId = $data[$referenceField];
+					if ($referenceFieldId != 0) {
+						$entity = $entityCache->forId($data[$referenceField]);
+						if ($entity->getModuleName() == $referenceModule) {
+							$cond['fieldname'] = $fieldname;
+							$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entity, $cond, $entityData);
+						} else {
+							$expressionResults[$conditionGroup][$i]['result'] = FALSE;
+						}
 					} else {
 						$expressionResults[$conditionGroup][$i]['result'] = FALSE;
 					}
-				} else {
-					$expressionResults[$conditionGroup][$i]['result'] = FALSE;
 				}
+				$expressionResults[$conditionGroup][$i + 1]['logicaloperator'] = (!empty($cond['joincondition'])) ? $cond['joincondition'] : 'and';
+				$groupResults[$conditionGroup]['logicaloperator'] = (!empty($cond['groupjoin'])) ? $cond['groupjoin'] : 'and';
+				$i++;
 			}
-			$expressionResults[$conditionGroup][$i + 1]['logicaloperator'] = (!empty($cond['joincondition'])) ? $cond['joincondition'] : 'and';
-			$groupResults[$conditionGroup]['logicaloperator'] = (!empty($cond['groupjoin'])) ? $cond['groupjoin'] : 'and';
-			$i++;
-		}
 
-		foreach ($expressionResults as $groupId => $groupExprResultSet) {
-			$groupResult = TRUE;
-			foreach ($groupExprResultSet as $exprResult) {
-				$result = $exprResult['result'];
-				$logicalOperator = $exprResult['logicaloperator'];
+			foreach ($expressionResults as $groupId => $groupExprResultSet) {
+				$groupResult = TRUE;
+				foreach ($groupExprResultSet as $exprResult) {
+					$result = $exprResult['result'];
+					$logicalOperator = $exprResult['logicaloperator'];
+					if (isset($result)) { // Condition to skip last condition
+						if (!empty($logicalOperator)) {
+							switch ($logicalOperator) {
+								case 'and' : $groupResult = ($groupResult && $result);
+									break;
+								case 'or' : $groupResult = ($groupResult || $result);
+									break;
+							}
+						} else { // Case for the first condition
+							$groupResult = $result;
+						}
+					}
+				}
+				$groupResults[$groupId]['result'] = $groupResult;
+			}
+
+			foreach ($groupResults as $groupId => $groupResult) {
+				$result = $groupResult['result'];
+				$logicalOperator = $groupResult['logicaloperator'];
 				if (isset($result)) { // Condition to skip last condition
 					if (!empty($logicalOperator)) {
 						switch ($logicalOperator) {
-							case 'and' : $groupResult = ($groupResult && $result);
+							case 'and' : $finalResult = ($finalResult && $result);
 								break;
-							case 'or' : $groupResult = ($groupResult || $result);
+							case 'or' : $finalResult = ($finalResult || $result);
 								break;
 						}
 					} else { // Case for the first condition
-						$groupResult = $result;
+						$finalResult = $result;
 					}
-				}
-			}
-			$groupResults[$groupId]['result'] = $groupResult;
-		}
-
-		$finalResult = TRUE;
-		foreach ($groupResults as $groupId => $groupResult) {
-			$result = $groupResult['result'];
-			$logicalOperator = $groupResult['logicaloperator'];
-			if (isset($result)) { // Condition to skip last condition
-				if (!empty($logicalOperator)) {
-					switch ($logicalOperator) {
-						case 'and' : $finalResult = ($finalResult && $result);
-							break;
-						case 'or' : $finalResult = ($finalResult || $result);
-							break;
-					}
-				} else { // Case for the first condition
-					$finalResult = $result;
 				}
 			}
 		}

@@ -330,11 +330,11 @@ class ExportUtils{
 				} else {
 					$value = '';
 				}
-			}elseif($uitype == 71){
+			} elseif($uitype == 71) {
                 $value = CurrencyField::convertToUserFormat($value);
-            }elseif($uitype == 72){
-                $value = CurrencyField::convertToUserFormat($value, null, true);
-            }elseif($uitype == 7 && $fieldInfo['typeofdata'] == 'N~O' || $uitype == 9){
+            } elseif($uitype == 72) {
+                $value = CurrencyField::convertToUserFormat($value, null, true, true);
+            } elseif($uitype == 7 && $fieldInfo['typeofdata'] == 'N~O' || $uitype == 9){
                 $value = decimalFormat($value);
             }
 		}

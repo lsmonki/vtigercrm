@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ******************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
-require_once 'vtiger6/includes/runtime/Cache.php';
+require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php';
 
 /**
  * Provides API to work with vtiger CRM Module Blocks

@@ -211,9 +211,20 @@ class QueryGenerator {
 		} elseif($this->conditionInstanceCount > 0 && is_array($this->advFilterList) && count($this->advFilterList) > 0) {
 			$this->addConditionGlue(self::$AND);
 		}
-        $dateSpecificConditions = $customView->getStdFilterConditions();
 		if(is_array($this->advFilterList) && count($this->advFilterList) > 0) {
-			foreach ($this->advFilterList as $groupindex=>$groupcolumns) {
+			$this->parseAdvFilterList($this->advFilterList);	
+		}
+		if($this->conditionInstanceCount > 0) {
+			$this->endGroup();
+		}
+	}
+	
+	public function parseAdvFilterList($advFilterList, $glue=''){
+		if(!empty($glue)) $this->addConditionGlue($glue);
+		
+		$customView = new CustomView($this->module);
+		$dateSpecificConditions = $customView->getStdFilterConditions();
+		foreach ($advFilterList as $groupindex=>$groupcolumns) {
 				$filtercolumns = $groupcolumns['columns'];
 				if(count($filtercolumns) > 0) {
 					$this->startGroup('');
@@ -228,9 +239,16 @@ class QueryGenerator {
                             $filter['stdfilter'] = $filter['comparator'];
                             $valueComponents = explode(',',$filter['value']);
                             if($filter['comparator'] == 'custom') {
+							if($nameComponents[4] == 'DT') {
+								$startDateTimeComponents = explode(' ',$valueComponents[0]);
+								$endDateTimeComponents = explode(' ',$valueComponents[1]);
+								$filter['startdate'] = DateTimeField::convertToDBFormat($startDateTimeComponents[0]);
+								$filter['enddate'] = DateTimeField::convertToDBFormat($endDateTimeComponents[0]);
+							} else {
                                 $filter['startdate'] = DateTimeField::convertToDBFormat($valueComponents[0]);
                                 $filter['enddate'] = DateTimeField::convertToDBFormat($valueComponents[1]);
                             }
+						}
                             $dateFilterResolvedList = $customView->resolveDateFilterValue($filter);
                             $value[] = $this->fixDateTimeValue($name, $dateFilterResolvedList['startdate']);
                             $value[] = $this->fixDateTimeValue($name, $dateFilterResolvedList['enddate'], false);
@@ -250,10 +268,6 @@ class QueryGenerator {
 				}
 			}
 		}
-		if($this->conditionInstanceCount > 0) {
-			$this->endGroup();
-		}
-	}
 
 	public function getCustomViewQueryById($viewId) {
 		$this->initForCustomViewById($viewId);
@@ -349,6 +363,7 @@ class QueryGenerator {
 		$tableList = array();
 		$tableJoinMapping = array();
 		$tableJoinCondition = array();
+		$i =1;
 		foreach ($this->fields as $fieldName) {
 			if ($fieldName == 'id') {
 				continue;
@@ -363,12 +378,13 @@ class QueryGenerator {
 				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
 				foreach($moduleList as $module) {
 					if($module == 'Users' && $baseModule != 'Users') {
-						$tableJoinCondition[$fieldName]['vtiger_users'] = $field->getTableName().
-								".".$field->getColumnName()." = vtiger_users.id";
-						$tableJoinCondition[$fieldName]['vtiger_groups'] = $field->getTableName().
-								".".$field->getColumnName()." = vtiger_groups.groupid";
-						$tableJoinMapping['vtiger_users'] = 'LEFT JOIN';
-						$tableJoinMapping['vtiger_groups'] = 'LEFT JOIN';
+						$tableJoinCondition[$fieldName]['vtiger_users'.$i] = $field->getTableName().
+								".".$field->getColumnName()." = vtiger_users".$i.".id";
+						$tableJoinCondition[$fieldName]['vtiger_groups'.$i] = $field->getTableName().
+								".".$field->getColumnName()." = vtiger_groups".$i.".groupid";
+						$tableJoinMapping['vtiger_users'.$i] = 'LEFT JOIN vtiger_users AS';
+						$tableJoinMapping['vtiger_groups'.$i] = 'LEFT JOIN vtiger_groups AS';
+						$i++;
 					}
 				}
 			} elseif($field->getFieldDataType() == 'owner') {
@@ -665,6 +681,10 @@ class QueryGenerator {
 		foreach ($valueArray as $value) {
 			if(!$this->isStringType($field->getFieldDataType())) {
 				$value = trim($value);
+			}
+			if ($operator == 'empty' || $operator == 'y') {
+				$sql[] = sprintf("IS NULL OR %s = ''", $this->getSQLColumn($field->getFieldName()));
+				continue;
 			}
 			if((strtolower(trim($value)) == 'null') ||
 					(trim($value) == '' && !$this->isStringType($field->getFieldDataType())) &&

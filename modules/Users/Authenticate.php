@@ -35,12 +35,12 @@ $user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
 
-$successURL = 'vtigerui.php?next=home';
+$successURL = 'vtigerui.php';
 
 if($focus->is_authenticated()) {
 	session_regenerate_id();
 	//Inserting entries for audit trail during login
-
+	$audit_trail = 'false';
 	if($audit_trail == 'true') {
 		if($record == '')
 			$auditrecord = '';
@@ -74,12 +74,6 @@ if($focus->is_authenticated()) {
 	$_SESSION['AUTHUSERID'] = $focus->id;
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
-	//Enabled session variable for KCFINDER 
- 	$_SESSION['KCFINDER'] = array(); 
- 	$_SESSION['KCFINDER']['disabled'] = false; 
- 	$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
- 	$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
-	
 	// store the user's theme in the session
 	if(!empty($focus->column_fields["theme"])) {
 		$authenticated_user_theme = $focus->column_fields["theme"];

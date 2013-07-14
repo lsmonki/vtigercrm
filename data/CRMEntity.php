@@ -109,51 +109,6 @@ class CRMEntity {
 		// END
 	}
 
-	function insertIntoAttachment1($id, $module, $filedata, $filename, $filesize, $filetype, $user_id) {
-		$date_var = date("Y-m-d H:i:s");
-		global $current_user;
-		global $adb;
-		//global $root_directory;
-		global $log;
-
-		$ownerid = $user_id;
-
-		if ($filesize != 0) {
-			$data = base64_encode(fread(fopen($filedata, "r"), $filesize));
-		}
-
-		$current_id = $adb->getUniqueID("vtiger_crmentity");
-
-		if ($module == 'Emails') {
-			$log->info("module is " . $module);
-			$idname = 'emailid';
-			$tablename = 'emails';
-			$descname = 'description';
-		} else {
-			$idname = 'notesid';
-			$tablename = 'notes';
-			$descname = 'notecontent';
-		}
-
-		$sql = "update $tablename set filename=? where $idname=?";
-		$params = array($filename, $id);
-		$adb->pquery($sql, $params);
-
-		$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
-		$params1 = array($current_id, $current_user->id, $ownerid, $module . " Attachment", '', $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
-		$adb->pquery($sql1, $params1);
-
-		$sql2 = "insert into vtiger_attachments(attachmentsid, name, description, type) values(?, ?, ?, ?)";
-		$params2 = array($current_id, $filename, '', $filetype);
-		$result = $adb->pquery($sql2, $params2);
-
-		//TODO -- instead of put contents in db now we should store the file in harddisk
-
-		$sql3 = 'insert into vtiger_seattachmentsrel values(?, ?)';
-		$params3 = array($id, $current_id);
-		$adb->pquery($sql3, $params3);
-	}
-
 	/**
 	 *      This function is used to upload the attachment in the server and save that attachment information in db.
 	 *      @param int $id  - entity id to which the file to be uploaded
@@ -275,20 +230,6 @@ class CRMEntity {
 		if(empty($ownerid)) {
 			$ownerid = $current_user->id;
 		}
-		/* vtiger6 Performance check added
-		$sql = "select ownedby from vtiger_tab where name=?";
-		$res = $adb->pquery($sql, array($module));
-		$this->ownedby = $adb->query_result($res, 0, 'ownedby');
-
-		if ($this->ownedby == 1) {
-			$log->info("module is =" . $module);
-			$ownerid = $current_user->id;
-		}
-		// Asha - Change ownerid from '' to null since its an integer field.
-		// It is empty for modules like Invoice/Quotes/SO/PO which do not have Assigned to field
-		if ($ownerid === '')
-			$ownerid = 0;
-		/ Performance check ends */
 
 		if ($module == 'Events') {
 			$module = 'Calendar';
@@ -319,16 +260,6 @@ class CRMEntity {
 				}
 			}
 			$adb->pquery($sql, $params);
-			/* vtiger6 Performance - not sure if this is used now
-			/*$sql1 = "delete from vtiger_ownernotify where crmid=?";
-			$params1 = array($this->id);
-			$adb->pquery($sql1, $params1);
-			if ($ownerid != $current_user->id) {
-				$sql1 = "insert into vtiger_ownernotify values(?,?,?)";
-				$params1 = array($this->id, $ownerid, null);
-				$adb->pquery($sql1, $params1);
-			}
-			/Performance ends  */
 		} else {
 			//if this is the create mode and the group allocation is chosen, then do the following
 			$current_id = $adb->getUniqueID("vtiger_crmentity");
@@ -679,27 +610,6 @@ class CRMEntity {
 		}
 	}
 
-	/** Function to attachment filename of the given entity
-	 * @param $notesid -- crmid:: Type Integer
-	 * The function will get the attachmentsid for the given entityid from vtiger_seattachmentsrel table and get the attachmentsname from vtiger_attachments table
-	 * returns the 'filename'
-	 */
-	function getOldFileName($notesid) {
-		global $log;
-		$log->info("in getOldFileName  " . $notesid);
-		global $adb;
-		$query1 = "select * from vtiger_seattachmentsrel where crmid=?";
-		$result = $adb->pquery($query1, array($notesid));
-		$noofrows = $adb->num_rows($result);
-		if ($noofrows != 0)
-			$attachmentid = $adb->query_result($result, 0, 'attachmentsid');
-		if ($attachmentid != '') {
-			$query2 = "select * from vtiger_attachments where attachmentsid=?";
-			$filename = $adb->query_result($adb->pquery($query2, array($attachmentid)), 0, 'name');
-		}
-		return $filename;
-	}
-
 	/**
 	 * Function returns the column alias for a field
 	 * @param <Array> $fieldinfo - field information
@@ -776,7 +686,7 @@ class CRMEntity {
 						&& stripos($fieldinfo['columnname'], 'shtax') !== false) {
 					continue;
 				}
-				
+
 				// Alias prefixed with tablename+fieldname to avoid duplicate column name across tables
 				// fieldname are always assumed to be unique for a module
 				$column_clause .=  $fieldinfo['tablename'].'.'.$fieldinfo['columnname'].' AS '.$this->createColumnAliasForField($fieldinfo).',';
@@ -786,12 +696,12 @@ class CRMEntity {
 			if (isset($required_tables['vtiger_crmentity'])) {
 				$from_clause  = ' vtiger_crmentity';
 				unset($required_tables['vtiger_crmentity']);
-				foreach ($required_tables as $tablename => $tableindex) {
-					if (in_array($tablename, $multirow_tables)) {
-						// Avoid multirow table joins.
-						continue;
-					}
-					$from_clause .= sprintf(' %s %s ON %s.%s=%s.%s', $join_type,
+			foreach ($required_tables as $tablename => $tableindex) {
+				if (in_array($tablename, $multirow_tables)) {
+					// Avoid multirow table joins.
+					continue;
+				}
+				$from_clause .= sprintf(' %s %s ON %s.%s=%s.%s', $join_type,
 						$tablename, $tablename, $tableindex, 'vtiger_crmentity', 'crmid');
 				}
 			}
@@ -1204,7 +1114,7 @@ class CRMEntity {
 		$this->mark_deleted($id);
 		$this->unlinkDependencies($module, $id);
 
-		require_once('include/freetag/freetag.class.php');
+		require_once('libraries/freetag/freetag.class.php');
 		$freetag = new freetag();
 		$freetag->delete_all_object_tags_for_user($current_user->id, $id);
 
@@ -1892,6 +1802,7 @@ class CRMEntity {
 				$parmodule = $adb->query_result($parentRecords, $i, 'module');
 				$adb->pquery("UPDATE vtiger_crmentityrel SET relcrmid=? WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?", array($entityId, $parcrmid, $parmodule, $transferId, $module));
 			}
+			$adb->pquery("UPDATE vtiger_modcomments SET related_to = ? WHERE related_to = ?", array($entityId, $transferId));
 		}
 		$log->debug("Exiting transferRelatedRecords...");
 	}
@@ -2118,12 +2029,22 @@ class CRMEntity {
 			require('user_privileges/user_privileges_' . $current_user->id . '.php');
 			require('user_privileges/sharing_privileges_' . $current_user->id . '.php');
 		}
-		$sec_query .= " and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '" . $current_user_parent_role_seq . "::%') or vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_sharing_per where userid=" . $current_user->id . " and tabid=" . $tabid . ") or (";
-
-		if (sizeof($current_user_groups) > 0) {
-			$sec_query .= " vtiger_groups.groupid in (" . implode(",", $current_user_groups) . ") or ";
+		$sec_query = '';
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1
+			&& $defaultOrgSharingPermission[$tabid] == 3) {
+			$sec_query .= " and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid
+					in (select vtiger_user2role.userid from vtiger_user2role
+							inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid
+							inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid
+							where vtiger_role.parentrole like '" . $current_user_parent_role_seq . "::%') or vtiger_crmentity.smownerid
+					in(select shareduserid from vtiger_tmp_read_user_sharing_per
+						where userid=" . $current_user->id . " and tabid=" . $tabid . ") or (";
+			if (sizeof($current_user_groups) > 0) {
+				$sec_query .= " vtiger_groups.groupid in (" . implode(",", $current_user_groups) . ") or ";
+			}
+			$sec_query .= " vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid
+						from vtiger_tmp_read_group_sharing_per where userid=" . $current_user->id . " and tabid=" . $tabid . "))) ";
 		}
-		$sec_query .= " vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=" . $current_user->id . " and tabid=" . $tabid . "))) ";
 		return $sec_query;
 	}
 
@@ -2638,5 +2559,71 @@ class CRMEntity {
 			ModTracker::unLinkRelation($module, $crmid, $with_module, $with_crmid);
 		}
 	}
+
+	/**
+	 * Function which will give the basic query to find duplicates
+	 * @param <String> $module
+	 * @param <String> $tableColumns
+	 * @param <String> $mergeFields
+	 * @param <String> $select_cols
+	 * @return string
+	 */
+	// Note : remove getDuplicatesQuery API once vtiger5 code is removed
+    function getQueryForDuplicates($module, $tableColumns, $selectedColumns = '') {
+		if(is_array($tableColumns)) {
+			$tableColumnsString = implode(',', $tableColumns);
+		}
+        $selectClause = "SELECT " . $this->table_name . "." . $this->table_index . " AS recordid," . $tableColumnsString;
+
+        // Select Custom Field Table Columns if present
+        if (isset($this->customFieldTable))
+            $query .= ", " . $this->customFieldTable[0] . ".* ";
+
+        $fromClause = " FROM $this->table_name";
+
+        $fromClause .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index";
+
+		if($this->tab_name) {
+			foreach($this->tab_name as $tableName) {
+				if($tableName != 'vtiger_crmentity' && $tableName != $this->table_name) {
+					if($this->tab_name_index[$tableName]) {
+						$fromClause .= " INNER JOIN " . $tableName . " ON " . $tableName . '.' . $this->tab_name_index[$tableName] .
+							" = $this->table_name.$this->table_index";
+					}
+				}
+			}
+		}
+        $fromClause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+
+        $whereClause = " WHERE vtiger_crmentity.deleted = 0";
+        $whereClause .= $this->getListViewSecurityParameter($module);
+
+        if (isset($selectedColumns) && trim($selectedColumns) != '') {
+            $sub_query = "SELECT $selectedColumns FROM $this->table_name AS t " .
+                    " INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t." . $this->table_index;
+            // Consider custom table join as well.
+            if (isset($this->customFieldTable)) {
+                $sub_query .= " LEFT JOIN " . $this->customFieldTable[0] . " tcf ON tcf." . $this->customFieldTable[1] . " = t.$this->table_index";
+            }
+            $sub_query .= " WHERE crm.deleted=0 GROUP BY $selectedColumns HAVING COUNT(*)>1";
+        } else {
+            $sub_query = "SELECT $tableColumnsString $fromClause $whereClause GROUP BY $tableColumnsString HAVING COUNT(*)>1";
+        }
+
+		$i = 1;
+		foreach($tableColumns as $tableColumn){
+			$tableInfo = explode('.', $tableColumn);
+			$duplicateCheckClause .= " ifnull($tableColumn,'null') = ifnull(temp.$tableInfo[1],'null')";
+			if (count($tableColumns) != $i++) $duplicateCheckClause .= " AND ";
+		}
+
+        $query = $selectClause . $fromClause .
+                " LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name . "." . $this->table_index .
+                " INNER JOIN (" . $sub_query . ") AS temp ON " . $duplicateCheckClause .
+                $whereClause .
+                " ORDER BY $tableColumnsString," . $this->table_name . "." . $this->table_index . " ASC";
+        return $query;
+    }
 }
 ?>

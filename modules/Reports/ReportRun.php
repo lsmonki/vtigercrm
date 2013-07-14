@@ -19,7 +19,7 @@ require_once('data/CRMEntity.php');
 require_once("modules/Reports/Reports.php");
 require_once 'modules/Reports/ReportUtils.php';
 require_once("vtlib/Vtiger/Module.php");
-require_once('vtiger6/modules/Vtiger/helpers/Util.php');
+require_once(VTIGER6_REL_DIR . 'modules/Vtiger/helpers/Util.php');
 
 /*
  * Helper class to determine the associative dependency between tables.
@@ -881,8 +881,15 @@ class ReportRun extends CRMEntity
                             $columninfo['stdfilter'] = $columninfo['comparator'];
                             $valueComponents = explode(',',$columninfo['value']);
                             if($comparator == 'custom') {
+								if($selectedfields[4] == 'DT') {
+									$startDateTimeComponents = explode(' ',$valueComponents[0]);
+									$endDateTimeComponents = explode(' ',$valueComponents[1]);
+									$columninfo['startdate'] = DateTimeField::convertToDBFormat($startDateTimeComponents[0]);
+									$columninfo['enddate'] = DateTimeField::convertToDBFormat($endDateTimeComponents[0]);
+								} else {	
                                 $columninfo['startdate'] = DateTimeField::convertToDBFormat($valueComponents[0]);
                                 $columninfo['enddate'] = DateTimeField::convertToDBFormat($valueComponents[1]);
+                            }
                             }
                             $dateFilterResolvedList = $customView->resolveDateFilterValue($columninfo);
                             $startDate = DateTimeField::convertToDBFormat($dateFilterResolvedList['startdate']);
@@ -962,7 +969,7 @@ class ReportRun extends CRMEntity
 									$this->getAdvComparator($comparator,trim($value),$datatype);
 						} elseif($selectedfields[0] == "vtiger_activity" && $selectedfields[1] == 'status') {
 							$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
-						} elseif($comparator == 'e' && (trim($value) == "NULL" || trim($value) == '')) {
+						} elseif($comparator == 'y' || ($comparator == 'e' && (trim($value) == "NULL" || trim($value) == ''))) {
 							if($selectedfields[0] == 'vtiger_inventoryproductrel') {
 								$selectedfields[0]='vtiger_inventoryproductrel'.$this->primarymodule;
 							}
@@ -3707,7 +3714,7 @@ class ReportRun extends CRMEntity
 	}
 
 	function getReportPDF($filterlist=false) {
-		require_once 'include/tcpdf/tcpdf.php';
+		require_once 'libraries/tcpdf/tcpdf.php';
 
 		$arr_val = $this->GenerateReport("PDF",$filterlist);
 
@@ -3819,7 +3826,7 @@ class ReportRun extends CRMEntity
 		global $currentModule, $current_language;
 		$mod_strings = return_module_language($current_language, $currentModule);
 
-		require_once("include/PHPExcel/PHPExcel.php");
+		require_once("libraries/PHPExcel/PHPExcel.php");
 
 		$workbook = new PHPExcel();
 		$worksheet = $workbook->setActiveSheetIndex(0);
@@ -3835,9 +3842,11 @@ class ReportRun extends CRMEntity
 		if(isset($arr_val)) {
 			$count = 0;
 			$rowcount = 1;
-			array_pop($arr_val[0]);			// removed action link in details
-			foreach($arr_val[0] as $key=>$value) {
-				$worksheet->setCellValueByColumnAndRow($count, $rowcount, $key);
+            //copy the first value details
+            $arrayFirstRowValues = $arr_val[0];
+			array_pop($arrayFirstRowValues);			// removed action link in details
+			foreach($arrayFirstRowValues as $key=>$value) {
+				$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, $key, true);
 				$worksheet->getStyleByColumnAndRow($count, $rowcount)->applyFromArray($header_styles);
 
 				// NOTE Performance overhead: http://stackoverflow.com/questions/9965476/phpexcel-column-size-issues
@@ -3853,7 +3862,9 @@ class ReportRun extends CRMEntity
 				foreach($array_value as $hdr=>$value) {
 					if($hdr == 'ACTION') continue;
 					$value = decode_html($value);
-					$worksheet->setCellValueByColumnAndRow($count, $rowcount, $value);
+					// TODO Determine data-type based on field-type.
+					// String type helps having numbers prefixed with 0 intact.
+					$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, $value, PHPExcel_Cell_DataType::TYPE_STRING);
 					$count = $count + 1;
 				}
 				$rowcount++;
@@ -3866,7 +3877,7 @@ class ReportRun extends CRMEntity
 				foreach($totalxls[0] as $key=>$value) {
 					$chdr=substr($key,-3,3);
 					$translated_str = in_array($chdr ,array_keys($mod_strings))?$mod_strings[$chdr]:$key;
-					$worksheet->setCellValueByColumnAndRow($count, $rowcount, $translated_str);
+					$worksheet->setCellValueExplicitByColumnAndRow($count, $rowcount, $translated_str);
 
 					$worksheet->getStyleByColumnAndRow($count, $rowcount)->applyFromArray($header_styles);
 
@@ -3879,7 +3890,7 @@ class ReportRun extends CRMEntity
 				$count = 0;
 				foreach($array_value as $hdr=>$value) {
 					$value = decode_html($value);
-					$worksheet->setCellValueByColumnAndRow($count, $key+$rowcount, $value);
+					$worksheet->setCellValueExplicitByColumnAndRow($count, $key+$rowcount, $value);
 					$count = $count + 1;
 				}
 			}

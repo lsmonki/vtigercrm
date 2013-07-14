@@ -181,7 +181,7 @@ class ListViewSession {
 		if(!empty($_REQUEST['start'])){
 			$start = $_REQUEST['start'];
 			if($start == 'last'){
-				$count_result = $adb->query( mkCountQuery( $query));
+				$count_result = $adb->query( Vtiger_Functions::mkCountQuery( $query));
 				$noofrows = $adb->query_result($count_result,0,"count");
 				if($noofrows > 0){
 					$start = ceil($noofrows/$list_max_entries_per_page);
@@ -210,7 +210,7 @@ class ListViewSession {
 		}
 		$_SESSION[$currentModule.'_listquery'] = $query;
 	}
-	
+
 	function hasViewChanged($currentModule) {
 		if(empty($_SESSION['lvs'][$currentModule]['viewname'])) return true;
 		if(empty($_REQUEST['viewname'])) return false;

@@ -187,7 +187,7 @@ require_once 'include/Webservices/DescribeObject.php';
 
 		$q = "SELECT crmid FROM $baseCRMTable WHERE modifiedtime>?  and setype IN(".generateQuestionMarks($accessableModules).")";
 		$params = array($maxModifiedTime);
-		
+
 		foreach($accessableModules as $entityModule){
 			if($entityModule == "Events")
 				$entityModule = "Calendar";

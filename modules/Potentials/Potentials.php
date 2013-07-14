@@ -237,6 +237,10 @@ class Potentials extends CRMEntity {
 					vtiger_crmentity.modifiedtime , vtiger_account.accountname from vtiger_potential
 					inner join vtiger_contpotentialrel on vtiger_contpotentialrel.potentialid = vtiger_potential.potentialid
 					inner join vtiger_contactdetails on vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid
+					INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+					INNER JOIN vtiger_contactsubdetails ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
+					INNER JOIN vtiger_customerdetails ON vtiger_contactdetails.contactid = vtiger_customerdetails.customerid
+					INNER JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
 					inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 					left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
 					left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
@@ -628,6 +632,7 @@ class Potentials extends CRMEntity {
 				}
 			}
 		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 

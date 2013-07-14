@@ -9,7 +9,7 @@
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
 include_once('vtlib/Vtiger/FieldBasic.php');
-require_once 'vtiger6/includes/runtime/Cache.php';
+require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php';
 
 /**
  * Provides APIs to control vtiger CRM Field
@@ -78,7 +78,6 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		// Add value to picklist now
 		$sortid = 0; // TODO To be set per role
 		foreach($values as $value) {
-			$value = htmlentities($value,ENT_QUOTES,$default_charset);
 			$new_picklistvalueid = getUniquePicklistID();
 			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
 			$new_id = $adb->getUniqueID($picklist_table);
@@ -187,21 +186,12 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	static function getInstance($value, $moduleInstance=false) {
 		global $adb;
 		$instance = false;
-        $query = false;
-        $queryParams = false;
-        if(Vtiger_Utils::isNumber($value)) {
-            $query = "SELECT * FROM vtiger_field WHERE fieldid=?";
-            $queryParams = Array($value);
-        } else {
-            $query = "SELECT * FROM vtiger_field WHERE fieldname=? AND tabid=?";
-            $queryParams = Array($value, $moduleInstance->id);
-        }
-        $result = $adb->pquery($query, $queryParams);
-        if($adb->num_rows($result)) {
-            $instance = new self();
-            $instance->initialize($adb->fetch_array($result), $moduleInstance);
-        }
-        return $instance;
+		$data = Vtiger_Functions::getModuleFieldInfo($moduleInstance->id, $value);
+		if ($data) {
+			$instance = new self();
+			$instance->initialize($data, $moduleInstance);
+		}
+		return $instance;
 	}
 
 	/**

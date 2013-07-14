@@ -270,7 +270,7 @@ class Vtiger_InventoryPDFController {
 			$modelColumnLeft = array(
 					'logo' => "test/logo/".$resultrow['logoname'],
 					'summary' => decode_html($resultrow['organizationname']),
-					'content' => $this->joinValues($addressValues, ' '). $this->joinValues($additionalCompanyInfo, ' ')
+					'content' => decode_html($this->joinValues($addressValues, ' '). $this->joinValues($additionalCompanyInfo, ' '))
 			);
 		}
 		return $modelColumnLeft;

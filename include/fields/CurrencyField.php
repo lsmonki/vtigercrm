@@ -149,13 +149,13 @@ class CurrencyField {
 
 		$value = $this->value;
 		if($skipConversion == false) {
-			$value = convertFromDollar($value,$this->conversionRate);
+			$value = self::convertFromDollar($value,$this->conversionRate);
 		}
-
+		
 		if($skipFormatting == false) {
 			$value = $this->_formatCurrencyValue($value);
 		}
-		return currencyDecimalFormat($value);
+		return self::currentUserDecimalFormat($value);
     }
 
 	/**
@@ -319,7 +319,7 @@ class CurrencyField {
         $value = str_replace("$decimalSeparator", ".", $value);
 
 		if($skipConversion == false) {
-			$value = convertToDollar($value,$this->conversionRate);
+			$value = self::convertToDollar($value,$this->conversionRate);
 		}
 		//$value = round($value, $this->maxNumberOfDecimals);
 
@@ -351,6 +351,42 @@ class CurrencyField {
 			return $adb->query_result($result, 0, 'id');
 		}
 		return null;
+	}
+	
+	public static function convertToDollar($amount, $conversionRate) {
+		if ($conversionRate == 0) return 0;
+		return $amount / $conversionRate;
+	}
+	
+	public static function convertFromDollar($amount, $conversionRate) {
+		$currencyField = new CurrencyField($amount);
+		return round($amount * $conversionRate, $currencyField->maxNumberOfDecimals);
+	}
+	
+	/** This function returns the amount converted from master currency.
+	 * param $amount - amount to be converted.
+	 * param $crate - conversion rate.
+	 */
+	public static function convertFromMasterCurrency($amount, $conversionRate) {
+		return $amount * $conversionRate;
+	}
+	
+	public static function currentUserDecimalFormat($value){
+		global $current_user;
+		if($current_user->truncate_trailing_zeros == true) {
+			$value = rtrim($value, '0');
+			$fld_value = explode($current_user->currency_decimal_separator, $value);
+			if(strlen($fld_value[1]) <= 1){
+				if(strlen($fld_value[1]) == 1)
+					return $value = $fld_value[0].$current_user->currency_decimal_separator.$fld_value[1].'0';
+				else
+					return $value = $fld_value[0].$current_user->currency_decimal_separator.'00';
+			}else{
+				return preg_replace("/(?<=\\.[0-9])[0]+\$/","",$value);
+			}
+		} else {
+			return $value;
+		}
 	}
 }
 ?>

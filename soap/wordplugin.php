@@ -11,7 +11,7 @@
 
 require_once("config.php");
 require_once('include/logging.php');
-require_once('include/nusoap/nusoap.php');
+require_once('libraries/nusoap/nusoap.php');
 require_once('include/database/PearDatabase.php');
 
 $log = &LoggerManager::getLogger('wordplugin');

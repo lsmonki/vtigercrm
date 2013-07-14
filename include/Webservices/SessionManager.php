@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-	require_once("include/HTTP_Session/Session.php");
+	require_once("libraries/HTTP_Session/Session.php");
 	// Later may we can move this to config file.
 	
 	global $maxWebServiceSessionLifeSpan, $maxWebServiceSessionIdleTime;

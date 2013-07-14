@@ -10,50 +10,6 @@
  ********************************************************************************/
 
 /**
- * This function returns the Product detail block values in array format.
- * Input Parameter are $module - module name, $focus - module object, $num_of_products - no.of vtiger_products associated with it  * $associated_prod = associated product details
- * column vtiger_fields/
- */
-
-function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
-{
-	global $log;
-	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$num_of_products.",".$associated_prod.") method ...");
-
-	$productDetails = Array();
-	$productBlock = Array();
-	if($num_of_products=='')
-	{
-		$num_of_products = getNoOfAssocProducts($module,$focus);
-	}
-	$productDetails['no_products'] = $num_of_products;
-	if($associated_prod=='')
-        {
-		$productDetails['product_details'] = getAssociatedProducts($module,$focus);
-	}
-	else
-	{
-		$productDetails['product_details'] = $associated_prod;
-	}
-	if($focus != '')
-	{
-		$productBlock[] = Array('mode'=>$focus->mode);
-		$productBlock[] = $productDetails['product_details'];
-		$productBlock[] = Array('taxvalue' => $focus->column_fields['txtTax']);
-		$productBlock[] = Array('taxAdjustment' => $focus->column_fields['txtAdjustment']);
-		$productBlock[] = Array('hdnSubTotal' => $focus->column_fields['hdnSubTotal']);
-		$productBlock[] = Array('hdnGrandTotal' => $focus->column_fields['hdnGrandTotal']);
-	}
-	else
-	{
-		$productBlock[] = Array(Array());
-
-	}
-	$log->debug("Exiting getProductDetailsBlockInfo method ...");
-	return $productBlock;
-}
-
-/**
  * This function updates the stock information once the product is ordered.
  * Param $productid - product id
  * Param $qty - product quantity in no's
@@ -104,7 +60,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 	$log->debug("Inside sendPrdStckMail function, module=".$module);
 	$log->debug("Prd reorder level ".$reorderlevel);
 	if($upd_qty < $reorderlevel)
-	{	
+	{
 		//send mail to the handler
 		$handler = getRecordOwnerId($product_id);
 		foreach($handler as $type=>$id){
@@ -951,7 +907,7 @@ function getPriceDetailsForProduct($productid, $unit_price, $available='availabl
 			if ($cur_value == null || $cur_value == '') {
 				$price_details[$i]['check_value'] = false;
 				if	($unit_price != null) {
-					$cur_value = convertFromMasterCurrency($unit_price, $actual_conversion_rate);
+					$cur_value = CurrencyField::convertFromMasterCurrency($unit_price, $actual_conversion_rate);
 				} else {
 					$cur_value = '0';
 				}
@@ -1190,14 +1146,14 @@ function createRecords($obj) {
 	$moduleFields = $moduleMeta->getModuleFields();
 	$focus = CRMEntity::getInstance($moduleName);
 
-	$tableName = Import_Utils::getDbTableName($obj->user);
-	$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = ? GROUP BY subject';
+	$tableName = Import_Utils_Helper::getDbTableName($obj->user);
+	$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Action::$IMPORT_RECORD_NONE .' GROUP BY subject';
 
 	if($obj->batchImport) {
 		$importBatchLimit = getImportBatchLimit();
 		$sql .= ' LIMIT '. $importBatchLimit;
 	}
-	$result = $adb->pquery($sql, array(Import_Data_Controller::$IMPORT_RECORD_NONE));
+	$result = $adb->query($sql);
 	$numberOfRecords = $adb->num_rows($result);
 
 	if ($numberOfRecords <= 0) {
@@ -1214,8 +1170,8 @@ function createRecords($obj) {
 		$fieldData = array();
 		$lineItems = array();
 		$subject = $row['subject'];
-		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = ? AND subject = ?';
-		$subjectResult = $adb->pquery($sql, array(Import_Data_Controller::$IMPORT_RECORD_NONE, $subject));
+		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' AND subject = "'. str_replace("\"", "\\\"", $subject) .'"';
+		$subjectResult = $adb->query($sql);
 		$count = $adb->num_rows($subjectResult);
 		$subjectRowIDs = array();
 		for ($j = 0; $j < $count; ++$j) {
@@ -1359,8 +1315,8 @@ function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
 
 function getImportStatusCount($obj) {
 	global $adb;
-	$tableName = Import_Utils::getDbTableName($obj->user);
-	$result = $adb->pquery('SELECT status FROM '.$tableName. ' GROUP BY subject', array());
+	$tableName = Import_Utils_Helper::getDbTableName($obj->user);
+	$result = $adb->query('SELECT status FROM '.$tableName. ' GROUP BY subject');
 
 	$statusCount = array('TOTAL' => 0, 'IMPORTED' => 0, 'FAILED' => 0, 'PENDING' => 0,
 			'CREATED' => 0, 'SKIPPED' => 0, 'UPDATED' => 0, 'MERGED' => 0);
@@ -1401,14 +1357,16 @@ function undoLastImport($obj, $user) {
 	$owner = new Users();
 	$owner->id = $ownerId;
 	$owner->retrieve_entity_info($ownerId, 'Users');
-	$dbTableName = Import_Utils::getDbTableName($owner);
+	
+	$dbTableName = Import_Utils_Helper::getDbTableName($owner);
+	
 	if(!is_admin($user) && $user->id != $owner->id) {
 		$viewer = new Import_UI_Viewer();
 		$viewer->display('OperationNotPermitted.tpl', 'Vtiger');
 		exit;
 	}
-	$result = $adb->pquery("SELECT recordid FROM $dbTableName WHERE status = ? AND recordid IS NOT NULL GROUP BY subject", 
-			array(Import_Data_Controller::$IMPORT_RECORD_CREATED));
+	$result = $adb->query("SELECT recordid FROM $dbTableName WHERE status = ". Import_Data_Controller::$IMPORT_RECORD_CREATED
+			." AND recordid IS NOT NULL GROUP BY subject");
 	$noOfRecords = $adb->num_rows($result);
 	$noOfRecordsDeleted = 0;
 	for($i=0; $i<$noOfRecords; ++$i) {
@@ -1457,7 +1415,7 @@ function getCurrencyId($fieldValue) {
  */
 function getLineItemFields(){
 	global $adb;
-	
+
 	$sql = 'SELECT DISTINCT columnname FROM vtiger_field WHERE tablename=?';
 	$result = $adb->pquery($sql, array('vtiger_inventoryproductrel'));
 	$lineItemdFields = array();

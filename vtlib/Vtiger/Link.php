@@ -79,7 +79,8 @@ class Vtiger_Link {
 	 * Initialize the schema (tables)
 	 */
 	static function __initSchema() {
-		if(empty(self::$__cacheSchemaChanges['vtiger_links'])) {
+		/* vtiger_links is already core product table */
+		/*if(empty(self::$__cacheSchemaChanges['vtiger_links'])) {
 			if(!Vtiger_Utils::CheckTable('vtiger_links')) {
 				Vtiger_Utils::CreateTable(
 					'vtiger_links',
@@ -90,7 +91,7 @@ class Vtiger_Link {
 					'CREATE INDEX link_tabidtype_idx on vtiger_links(tabid,linktype)');
 			}
 			self::$__cacheSchemaChanges['vtiger_links'] = true;
-		}
+		}*/
 	}
 
 	/**
