@@ -19,7 +19,7 @@ require_once('data/CRMEntity.php');
 require_once("modules/Reports/Reports.php");
 require_once 'modules/Reports/ReportUtils.php';
 require_once("vtlib/Vtiger/Module.php");
-require_once(VTIGER6_REL_DIR . 'modules/Vtiger/helpers/Util.php');
+require_once('modules/Vtiger/helpers/Util.php');
 
 /*
  * Helper class to determine the associative dependency between tables.
@@ -2846,8 +2846,7 @@ class ReportRun extends CRMEntity
 							$translatedLabel = getTranslatedString($field->getFieldLabelKey(),
 									$module);
 						} else {
-							$translatedLabel = getTranslatedString(str_replace('_', " ",
-									$fieldLabel), $module);
+							$translatedLabel = getTranslatedString($fieldLabel, $module);
 						}
 						/*STRING TRANSLATION starts */
 						$moduleLabel ='';
@@ -2869,11 +2868,8 @@ class ReportRun extends CRMEntity
 						$fieldvalue = getReportFieldValue($this, $picklistarray, $fld,
 								$custom_field_values, $i);
 
-						//used for vtiger6
-						if($_COOKIE['vtigerui'] == '6') {
-							if($fld->name == $this->primarymodule.'_LBL_ACTION' && $fieldvalue != '-') {
-								$fieldvalue = "<a href='index.php?module={$this->primarymodule}&view=Detail&record={$fieldvalue}' target='_blank'>".getTranslatedString('LBL_VIEW_DETAILS')."</a>";
-							}
+						if($fld->name == $this->primarymodule.'_LBL_ACTION' && $fieldvalue != '-') {
+							$fieldvalue = "<a href='index.php?module={$this->primarymodule}&view=Detail&record={$fieldvalue}' target='_blank'>".getTranslatedString('LBL_VIEW_DETAILS', $this->primarymodule)."</a>";
 						}
 
 						$arraylists[$headerLabel] = $fieldvalue;

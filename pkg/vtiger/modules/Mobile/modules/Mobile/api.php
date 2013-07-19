@@ -23,8 +23,7 @@ if (file_exists('config_override.php')) {
 // NOTE: Make sure GetRelatedList function_exists check is made in include/utils/RelatedListView.php
 include_once dirname(__FILE__) . '/api/Relation.php';
 
-require_once 'vtiger6-dir.php';
-include_once VTIGER6_REL_DIR. 'includes/main/WebUI.php';
+include_once 'includes/main/WebUI.php';
 
 include_once dirname(__FILE__) . '/api/Request.php';
 include_once dirname(__FILE__) . '/api/Response.php';

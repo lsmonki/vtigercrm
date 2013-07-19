@@ -40,7 +40,7 @@ if ($userSetupStatus) {
 	$smarty->assign('POINTER_IMAGE', 'test/logo/pointer.png');
 	$smarty->display('UserSetup.tpl');
 } else {
-	header("Location: vtigerui.php?next=home&_" . microtime(true)); // _ added to overcome cache.
+	header("Location: index.php?action=index&module=Home");
 }
 
 ?>

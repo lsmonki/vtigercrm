@@ -8,13 +8,11 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-include_once 'vtiger6-dir.php';
-
 require_once 'include/utils/utils.php';
 require_once 'include/utils/VtlibUtils.php';
 require_once 'modules/Emails/class.phpmailer.php';
 require_once 'modules/Emails/mail.php';
-require_once VTIGER6_REL_DIR.'modules/Vtiger/helpers/ShortURL.php';
+require_once 'modules/Vtiger/helpers/ShortURL.php';
 global $adb;
 $adb = PearDatabase::getInstance();
 

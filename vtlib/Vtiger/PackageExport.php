@@ -166,7 +166,7 @@ class Vtiger_PackageExport {
 	 * @param <String> $module
 	 */
 	function __copyLanguageFiles($zip, $module) {
-		$languageFolder = VTIGER6_REL_DIR. "languages";
+		$languageFolder = "languages";
 		if($dir = @opendir($languageFolder)) {		// open languages folder
 			while (($langName = readdir($dir)) !== false) {
 				if ($langName != ".." && $langName != "." && is_dir($languageFolder."/".$langName)) {

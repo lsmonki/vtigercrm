@@ -8,13 +8,12 @@
  * All Rights Reserved.
  *************************************************************************************/
 chdir(dirname(__FILE__)."/../../../");
-include 'vtiger6-dir.php';
 include_once "include/utils/VtlibUtils.php";
 include_once "include/utils/CommonUtils.php";
-include_once VTIGER6_REL_DIR. "includes/Loader.php";
-include_once VTIGER6_REL_DIR. 'includes/runtime/BaseModel.php';
-include_once VTIGER6_REL_DIR. 'includes/runtime/Viewer.php';
-include_once VTIGER6_REL_DIR. "includes/http/Request.php";
+include_once "includes/Loader.php";
+include_once 'includes/runtime/BaseModel.php';
+include_once 'includes/runtime/Viewer.php';
+include_once "includes/http/Request.php";
 include_once "include/Webservices/Custom/ChangePassword.php";
 include_once "include/Webservices/Utils.php";
 

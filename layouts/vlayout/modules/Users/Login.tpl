@@ -66,32 +66,32 @@
 										<ul class="bxslider">
 											<li>
 												<div id="slide01" class="slide">
-													<img class="pull-left" src="layouts/vlayout/skins/images/android_text.png"/>
-													<img class="pull-right" src="layouts/vlayout/skins/images/android.png"/>
+													<img class="pull-left" src="{vimage_path('android_text.png')}">
+													<img class="pull-right" src="{vimage_path('android.png')}"/>
 												</div>
 											</li>
 											<li>
 												<div id="slide02" class="slide">
-													<img class="pull-left" src="layouts/vlayout/skins/images/iphone_text.png"/>
-													<img class="pull-right" src="layouts/vlayout/skins/images/iphone.png"/>
+													<img class="pull-left" src="{vimage_path('iphone_text.png')}"/>
+													<img class="pull-right" src="{vimage_path('iphone.png')}"/>
 												</div>
 											</li>
 											<li>
 												<div id="slide03" class="slide">
-													<img class="pull-left" src="layouts/vlayout/skins/images/ipad_text.png"/>
-													<img class="pull-right" src="layouts/vlayout/skins/images/ipad.png"/>
+													<img class="pull-left" src="{vimage_path('ipad_text.png')}"/>
+													<img class="pull-right" src="{vimage_path('ipad.png')}"/>
 												</div>
 											</li>
 											<li>
 												<div id="slide04" class="slide">
-													<img class="pull-left" src="layouts/vlayout/skins/images/exchange_conn_text.png"/>
-													<img class="pull-right" src="layouts/vlayout/skins/images/exchange_conn.png"/>
+													<img class="pull-left" src="{vimage_path('exchange_conn_text.png')}"/>
+													<img class="pull-right" src="{vimage_path('exchange_conn.png')}"/>
 												</div>
 											</li>
 											<li>
 												<div id="slide05" class="slide">
-													<img class="pull-left" src="layouts/vlayout/skins/images/outlook_text.png"/>
-													<img class="pull-right" src="layouts/vlayout/skins/images/outlook.png"/>
+													<img class="pull-left" src="{vimage_path('outlook_text.png')}"/>
+													<img class="pull-right" src="{vimage_path('outlook.png')}"/>
 												</div>
 											</li>
 										</ul>
@@ -145,7 +145,7 @@
 												</div>
 											</form>
 											<div class="login-subscript">
-												<small> Powered by vtiger CRM 6.0.0rc</small>
+												<small> Powered by vtiger CRM {$CURRENT_VERSION}</small>
 											</div>
 										</div>
 										

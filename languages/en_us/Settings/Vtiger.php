@@ -245,6 +245,8 @@ $languageStrings = array(
 	//User Login History
 	'LoginHistory' => 'User Login History',
 	'LBL_SELECT_USER' => 'Select User',
+	'LBL_LOGIN_HISTORY_DETAILS' => 'Login History',
+	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
 );
 
 $jsLanguageStrings = array(

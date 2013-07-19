@@ -304,7 +304,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		$applicationKey = vglobal('application_unique_key');
 		$emailId = $this->getId();
 
-		$trackURL = $siteURL.'/'.VTIGER6_REL_DIR ."modules/Emails/actions/TrackAccess.php?record=$emailId&parentId=$crmId&applicationKey=$applicationKey";
+		$trackURL = $siteURL."/modules/Emails/actions/TrackAccess.php?record=$emailId&parentId=$crmId&applicationKey=$applicationKey";
 		$imageDetails = "<img src='$trackURL' alt='' width='1' height='1'>";
 		return $imageDetails;
 	}

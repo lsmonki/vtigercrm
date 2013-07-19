@@ -95,7 +95,7 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		define(VTIGER_UPGRADE, true);
 
 		for($i=0; $i<$patchCount; $i++){
-			$filename = VTIGER6_REL_DIR. "modules/Migration/schema/".$migrateVersions[$i]."_to_".$migrateVersions[$i+1].".php";
+			$filename =  "modules/Migration/schema/".$migrateVersions[$i]."_to_".$migrateVersions[$i+1].".php";
 			if(is_file($filename)) {
 				if(!defined('INSTALLATION_MODE')) {
 					echo "<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Starts. </font></b></span></th></tr></table>";

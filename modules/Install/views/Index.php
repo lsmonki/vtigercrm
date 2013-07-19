@@ -45,6 +45,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function process(Vtiger_Request $request) {
+		set_time_limit(0);
 		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		$mode = $request->getMode();
 		if(!empty($mode) && $this->isMethodExposed($mode)) {
@@ -118,7 +119,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$webRoot = ($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"]:$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
 		$webRoot .= $_SERVER["REQUEST_URI"];
 
-		$webRoot = str_replace(VTIGER6_REL_DIR. "index.php", "", $webRoot);
+		$webRoot = str_replace( "index.php", "", $webRoot);
 		$webRoot = "http://".$webRoot;
 
 		$_SESSION['config_file_info']['site_URL'] = $webRoot;

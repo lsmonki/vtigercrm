@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php'; 
+require_once  'includes/runtime/Cache.php'; 
 /**
  * this file will be used to store the functions to be used in the picklist module
  */

@@ -36,8 +36,8 @@ require_once 'vtlib/Vtiger/Language.php';
 require_once 'vtlib/Vtiger/Functions.php';
 require_once 'vtlib/Vtiger/Deprecated.php';
 
-require_once VTIGER6_REL_DIR . 'includes/runtime/Cache.php';
-require_once VTIGER6_REL_DIR . 'modules/Vtiger/helpers/Util.php';
+require_once 'includes/runtime/Cache.php';
+require_once 'modules/Vtiger/helpers/Util.php';
 
 // Constants to be defined here
 
@@ -1410,7 +1410,7 @@ function relateEntities($focus, $sourceModule, $sourceRecordId, $destinationModu
  * @param - $packagepath - Complete path to the zip file of the Module
  */
 function installVtlibModule($packagename, $packagepath, $customized=false) {
-	global $log;
+	global $log, $Vtiger_Utils_Log;
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
 	$Vtiger_Utils_Log = true;
@@ -1809,5 +1809,12 @@ function getCombinations($array, $tempString = '') {
 		}
 	}
 	return $result;
+}
+
+/**
+ *  call back function to change the array values in to lower case 
+ */
+function lower_array(&$string){
+		$string = strtolower(trim($string));
 }
 ?>

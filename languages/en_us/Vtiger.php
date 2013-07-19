@@ -744,6 +744,9 @@ $languageStrings = array(
 	'SINGLE_Groups'=>'Group',
 	'SINGLE_DocumentFolders'=>'Document Folder',
 	'SINGLE_Currency'=>'Currency',
+	
+	//Report Detail View
+	'LBL_VIEW_DETAILS' => 'View Details',
 );
 
 $jsLanguageStrings = array(

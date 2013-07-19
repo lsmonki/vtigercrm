@@ -15,8 +15,7 @@ header('Cache-Control: private', false);
 
 ini_set('include_path', '../../../');
 
-require_once 'vtiger6-dir.php';
-require_once VTIGER6_REL_DIR. 'includes/Loader.php';
+require_once 'includes/Loader.php';
 require_once 'include/utils/utils.php';
 
 vimport('includes.http.Request');

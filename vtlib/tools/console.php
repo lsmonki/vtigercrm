@@ -9,7 +9,6 @@
  ************************************************************************************/
 
 chdir(dirname(__FILE__) . '/../..');
-include_once 'vtiger6-dir.php';
 include_once 'vtlib/Vtiger/Module.php';
 include_once 'includes/main/WebUI.php';
 
@@ -295,7 +294,7 @@ class Vtiger_Tools_Console_LayoutController extends Vtiger_Tools_Console_Control
 		$layoutInformation = array();
 		do {
 			$layoutInformation['name'] = strtolower($this->prompt("Enter layout name: ", self::PROMPT_NAME));
-			if (!file_exists(VTIGER6_REL_DIR . 'layouts/' . $layoutInformation['name'])) {
+			if (!file_exists( 'layouts/' . $layoutInformation['name'])) {
 				break;
 			}
 			echo "ERROR: " . $layoutInformation['name'] . " already exists, try another.\n";
@@ -308,10 +307,10 @@ class Vtiger_Tools_Console_LayoutController extends Vtiger_Tools_Console_Control
 
 	protected function create($layoutInformation) {
 		$files = array();
-		$this->findFiles(VTIGER6_REL_DIR . 'includes', '.php$', $files);
-		$this->findFiles(VTIGER6_REL_DIR . 'modules', '.php$', $files);
+		$this->findFiles( 'includes', '.php$', $files);
+		$this->findFiles( 'modules', '.php$', $files);
 
-		$layoutdir = VTIGER6_REL_DIR . 'layouts/' . $layoutInformation['name'] . '/';
+		$layoutdir =  'layouts/' . $layoutInformation['name'] . '/';
 
 		foreach ($files as $file) {
 			$tplfolder = $layoutdir . "modules/Vtiger";
@@ -376,7 +375,7 @@ class Vtiger_Tools_Console_LanguageController extends Vtiger_Tools_Console_Contr
 		$languageInformation = array();
 		do {
 			$languageInformation['prefix'] = strtolower($this->prompt("Enter language prefix: ", self::PROMPT_NAME));
-			if (!file_exists(VTIGER6_REL_DIR . 'languages/' . $languageInformation['prefix'])) {
+			if (!file_exists( 'languages/' . $languageInformation['prefix'])) {
 				break;
 			}
 			echo "ERROR: " . $languageInformation['prefix'] . " already exists, try another.\n";
@@ -389,7 +388,7 @@ class Vtiger_Tools_Console_LanguageController extends Vtiger_Tools_Console_Contr
 
 	protected function create($languageInformation) {
 		$files = array();
-		$this->findFiles(VTIGER6_REL_DIR . 'languages/'.self::BASE_LANG_PREFIX, '.php$', $files);
+		$this->findFiles( 'languages/'.self::BASE_LANG_PREFIX, '.php$', $files);
 
 		foreach ($files as $file) {
 			$filename = basename($file, true);

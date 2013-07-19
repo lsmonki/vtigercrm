@@ -105,7 +105,7 @@ class Vtiger_Theme extends Vtiger_Viewer {
      */
     public static function getAllSkins(){
         $skinsList = array();
-		$themeDir = VTIGER6_REL_DIR. self::getBaseThemePath();
+		$themeDir = self::getBaseThemePath();
         if ($dir = @opendir($themeDir)) {
             while (($skinName = readdir($dir)) !== false) {
                if ($skinName != ".." && $skinName != "." && $skinName != "CVS" && $skinName != "images" && $skinName != "vgray" ) {

@@ -455,8 +455,6 @@ for ($i=0; $i<$num_rows; $i++) {
 	Migration_Index_View::ExecuteQuery($updateQuery, $updateParams);
 }
 
-Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_ws_referencetype VALUES (?,?)', array(31,'Campaigns'));
-
 $moduleInstance = Vtiger_Module::getInstance('Users');
 $currencyBlock = Vtiger_Block::getInstance('LBL_CURRENCY_CONFIGURATION', $moduleInstance);
 $truncateTrailingZeros = new Vtiger_Field();

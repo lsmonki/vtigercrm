@@ -23,6 +23,7 @@ class Users_Login_View extends Vtiger_View_Controller {
 		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
 		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
+		$viewer->assign('CURRENT_VERSION', vglobal('vtiger_current_version'));
 		if($display) {
 			$this->preProcessDisplay($request);
 		}

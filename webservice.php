@@ -16,14 +16,12 @@
         include_once 'config_override.php';
     }
 
-	require_once 'vtiger6-dir.php';
-
 	//Overrides GetRelatedList : used to get related query
 	//TODO : Eliminate below hacking solution
 	include_once 'include/Webservices/Relation.php';
 
 	include_once 'vtlib/Vtiger/Module.php';
-	include_once VTIGER6_REL_DIR. 'includes/main/WebUI.php';
+	include_once 'includes/main/WebUI.php';
 
 	require_once("libraries/HTTP_Session/Session.php");
 	require_once 'include/Webservices/Utils.php';

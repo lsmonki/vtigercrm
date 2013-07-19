@@ -35,8 +35,6 @@ $user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
 
-$successURL = 'vtigerui.php';
-
 if($focus->is_authenticated()) {
 	session_regenerate_id();
 	//Inserting entries for audit trail during login
@@ -114,9 +112,9 @@ if($focus->is_authenticated()) {
 	}
 	$arr = $_SESSION['lastpage'];
 	if(isset($_SESSION['lastpage'])) {
-		header("Location: $successURL".$arr);
+		header("Location: index.php?".$arr);
 	} else {
-		header("Location: $successURL");
+		header("Location: index.php");
 	}
 } else {
 	$sql = 'select user_name, id, crypt_type from vtiger_users where user_name=?';

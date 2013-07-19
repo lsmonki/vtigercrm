@@ -33,7 +33,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 
 		// prefix the base lookup folder (relocated file).
 		if (strpos($filename, 'modules') === 0) {
-			$filename = VTIGER6_REL_DIR . $filename;
+			$filename = $filename;
 		}
 
 		return file_exists($filename);

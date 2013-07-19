@@ -27,7 +27,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 			}
 			if ($zip->extractTo($root_directory)) {
 				$zip->close();
-				header('Location: ../'.VTIGER6_REL_DIR. 'index.php?module=Migration&view=Index&mode=step1');
+				header('Location: ../index.php?module=Migration&view=Index&mode=step1');
 			} else {
 				$errorMessage = '<p>ERROR IN FILE EXTRACTING!</p>';
 				header('Location: index.php?error='.$errorMessage);

@@ -9,7 +9,7 @@
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
 include_once('vtlib/Vtiger/FieldBasic.php');
-require_once VTIGER6_REL_DIR. 'includes/runtime/Cache.php';
+require_once 'includes/runtime/Cache.php';
 
 /**
  * Provides APIs to control vtiger CRM Field

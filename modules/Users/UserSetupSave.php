@@ -56,6 +56,6 @@ $log->debug("app_unique_key is $application_unique_key");
 
 $current_language = $authenticated_user_language;
 
-header("Location: vtigerui.php?next=home");
+header("Location: index.php?action=index&module=Home");
 
 ?>
