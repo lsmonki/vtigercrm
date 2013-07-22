@@ -45,7 +45,6 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function process(Vtiger_Request $request) {
-		set_time_limit(0);
 		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		$mode = $request->getMode();
 		if(!empty($mode) && $this->isMethodExposed($mode)) {
@@ -95,6 +94,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function Step5(Vtiger_Request $request) {
+		set_time_limit(0);
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$requestData = $request->getAll();
