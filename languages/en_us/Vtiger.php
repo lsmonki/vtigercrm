@@ -631,7 +631,7 @@ $languageStrings = array(
 	'LBL_BLANK' => '-Blank-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM',
 
 	//Translations used in inventory modules for sopy address
 	'SINGLE_Accounts' => 'Organization',
