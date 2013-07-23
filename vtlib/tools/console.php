@@ -413,7 +413,7 @@ class Vtiger_Tools_Console_LanguageController extends Vtiger_Tools_Console_Contr
 		}
 
 		$db = PearDatabase::getInstance();
-		$check = $db->pquery('SELECT 1 FROM vtiger_language WHERE prefix=?', $languageInformation['prefix']);
+		$check = $db->pquery('SELECT 1 FROM vtiger_language WHERE prefix=?', array($languageInformation['prefix']));
 		if ($check && $db->num_rows($check)) {
 			;
 		} else {
