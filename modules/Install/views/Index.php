@@ -10,6 +10,8 @@
 
 class Install_Index_view extends Vtiger_View_Controller {
 
+	protected $debug = false;
+
 	function loginRequired() {
 		return false;
 	}
@@ -24,6 +26,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function preProcess(Vtiger_Request $request) {
+		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		// Added to redirect to default module if already installed
 		$configFileName = 'config.inc.php';
 		if(is_file($configFileName) && filesize($configFileName) > 0) {
@@ -41,11 +44,11 @@ class Install_Index_view extends Vtiger_View_Controller {
 		vglobal('default_language', $defaultLanguage);
 
 		define('INSTALLATION_MODE', true);
+		define('INSTALLATION_MODE_DEBUG', $this->debug);
 		$viewer->view('InstallPreProcess.tpl', $moduleName);
 	}
 
 	public function process(Vtiger_Request $request) {
-		date_default_timezone_set('Europe/London'); // to overcome the pre configuration settings
 		$mode = $request->getMode();
 		if(!empty($mode) && $this->isMethodExposed($mode)) {
 			return $this->$mode($request);
@@ -94,7 +97,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function Step5(Vtiger_Request $request) {
-		set_time_limit(0);
+		set_time_limit(0); // Override default limit to let install complete.
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$requestData = $request->getAll();
@@ -120,7 +123,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$webRoot .= $_SERVER["REQUEST_URI"];
 
 		$webRoot = str_replace( "index.php", "", $webRoot);
-		$webRoot = "http://".$webRoot;
+		$webRoot = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? "https://":"http://").$webRoot;
 
 		$_SESSION['config_file_info']['site_URL'] = $webRoot;
 		$viewer->assign('SITE_URL', $webRoot);
@@ -154,6 +157,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$adb->resetSettings($configParams['db_type'], $configParams['db_hostname'], $configParams['db_name'],
 							$configParams['db_username'], $configParams['db_password']);
 
+
 		// Initialize and set up tables
 		Install_InitSchema_Model::initialize();
 
@@ -164,7 +168,15 @@ class Install_Index_view extends Vtiger_View_Controller {
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PASSWORD', $_SESSION['config_file_info']['password']);
+		$viewer->assign('APPUNIQUEKEY', $this->retrieveConfiguredAppUniqueKey());
+		$viewer->assign('CURRENT_VERSION', $_SESSION['vtiger_version']);
 		$viewer->view('Step6.tpl', $moduleName);
+	}
+
+	// Helper function as configuration file is still not loaded.
+	protected function retrieveConfiguredAppUniqueKey() {
+		include 'config.inc.php';
+		return $application_unique_key;
 	}
 
 	public function getHeaderCss(Vtiger_Request $request) {

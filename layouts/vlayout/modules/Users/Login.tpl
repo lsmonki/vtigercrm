@@ -143,6 +143,8 @@
 														&nbsp;&nbsp;&nbsp;<a>Forgot Password ?</a>
 													</div>
 												</div>
+												{* Retain this tracker to help us get usage details *}
+												<img src='//stats.vtiger.com/stats.php?uid={$APPUNIQUEKEY}&v={$CURRENT_VERSION}&type=U' alt='' title='' border=0 width='1px' height='1px'>
 											</form>
 											<div class="login-subscript">
 												<small> Powered by vtiger CRM {$CURRENT_VERSION}</small>
@@ -189,7 +191,7 @@
 					<div class="row-fluid">
 						<div class="span6 pull-left" >
 							<div class="footer-content">
-								<small>&#169 2004-2013 &nbsp;
+								<small>&#169 2004-{date('Y')}&nbsp;
 									<a href="https://www.vtiger.com"> vtiger.com</a> | 
 									<a href="javascript:mypopup();">Read License</a> | 
 									<a href="https://www.vtiger.com/products/crm/privacy_policy.html">Privacy Policy</a> </small>

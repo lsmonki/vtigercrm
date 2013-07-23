@@ -1413,7 +1413,7 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	global $log, $Vtiger_Utils_Log;
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
+	$Vtiger_Utils_Log = defined('INSTALLATION_MODE_DEBUG')? INSTALLATION_MODE_DEBUG : true;
 	$package = new Vtiger_Package();
 
 	if($package->isLanguageType($packagepath)) {
@@ -1458,7 +1458,7 @@ function updateVtlibModule($module, $packagepath) {
 	global $log;
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
+	$Vtiger_Utils_Log = defined('INSTALLATION_MODE_DEBUG')? INSTALLATION_MODE_DEBUG : true;
 	$package = new Vtiger_Package();
 
 	if($package->isLanguageType($packagepath)) {
