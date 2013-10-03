@@ -14,9 +14,9 @@ Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$record = $request->get('record');
 
-		if(($currentUserModel->isAdminUser() == true) || $currentUserModel->get('id') == $record) {
+		if($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $record) {
 			return true;
-		}else {
+		} else {
 			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}
@@ -28,6 +28,7 @@ Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 
 	public function preProcess (Vtiger_Request $request, $display=true) {
 		if($this->checkPermission($request)) {
+			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$viewer = $this->getViewer($request);
 			$menuModelsList = Vtiger_Menu_Model::getAll(true);
 			$selectedModule = $request->getModule();
@@ -49,6 +50,7 @@ Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 			$viewer->assign('MENU_TOPITEMS_LIMIT', $menuStructure->getLimit());
 			$viewer->assign('COMPANY_LOGO',$companyLogo);
 			$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+            $viewer->assign('SEARCHABLE_MODULES', Vtiger_Module_Model::getSearchableModules());
 
 			$homeModuleModel = Vtiger_Module_Model::getInstance('Home');
 			$viewer->assign('HOME_MODULE_MODEL', $homeModuleModel);
@@ -62,7 +64,8 @@ Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 			$viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
 			$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
 			$viewer->assign('IS_PREFERENCE', true);
-
+			$viewer->assign('LANGUAGE', $currentUser->get('language'));
+			
 			if($display) {
 				$this->preProcessDisplay($request);
 			}
@@ -95,7 +98,7 @@ Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 
 		parent::process($request);
 	}
-    
+
     public function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();

@@ -141,6 +141,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Заказы на Продажу', 
 	'Invoice'                      => 'Счета'                  , 
 	'MailManager'                  => 'почта менеджер' , 
+	'Activities'				   => 'Действия'					,
 	'LBL_ADD_RECORD'               => 'Add Record'                  , // TODO: Review
 	'LBL_RECENTLY_MODIFIED'        => 'Recently Modified'           , // TODO: Review
 	'LBL_RECORDS_LIST'             => 'Records List'                , // TODO: Review
@@ -358,7 +359,7 @@ $languageStrings = array(
 	'Banking'                      => 'Banking'                     , // TODO: Review
 	'Billing Address'              => 'Юридический Адрес', 
 	'Billing City'                 => 'Billing City'                , // TODO: Review
-	'Billing Code'                 => 'Billing Code'                , // TODO: Review
+	'Billing Code'                 => 'Billing Postal Code'         , // TODO: Review
 	'Billing Country'              => 'Billing Country'             , // TODO: Review
 	'Billing Po Box'               => 'Billing PO Box'              , // TODO: Review
 	'Billing State'                => 'Billing State'               , // TODO: Review
@@ -496,7 +497,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Sales End Date'              , // TODO: Review
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Выбрать Новый Статус', 
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , // TODO: Review
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source'        , // TODO: Review
 	'SINGLE_Accounts'              => 'Контрагент'        , 
 	'SINGLE_Contacts'              => 'Контакт'              , 
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -550,6 +551,41 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
 	'LBL_OPERATION_NOT_PERMITTED'  => 'Operation not permitted'     , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Действительно до',
+	'Discount'=>'скидка',
+	'Product Code'=>'товарный код',
+	'Customer Name'=>'Имя клиента',
+	'Price'=>'цена',
+	'Tax:' => 'Налог:',
+	'Contact Name' => 'Контакт',
+	'Phone: ' => 'Тел.: ',
+	'Fax: ' => 'Факс: ',
+	'Website: ' => 'Веб-сайт: ',
+	'Issued Date' => 'Дата создания',
+	'Quantity' => 'Кол-во',
+	'Net Total' => 'Итого',
+	'Shipping & Handling Charges' => 'Стоимость доставки',
+	'Shipping & Handling Tax:' => 'Налоги на доставку ',
+	'Grand Total:' => 'общий итог:',
+	'Tax' => 'Налог',
+	
+	'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	//Realted tab strings
+	'Service Contracts' => 'Сервисные Контракты',
+	'Projects' => 'Проекты',
+	'Sales Order' => 'Заказы на Продажу',
+	'Purchase Order' => 'Заказы на Закупку',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Please configure your outgoing server settings from the settings page', // TODO: Review
@@ -653,4 +689,6 @@ $jsLanguageStrings = array(
 	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

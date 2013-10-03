@@ -72,6 +72,12 @@ if($focus->is_authenticated()) {
 	$_SESSION['AUTHUSERID'] = $focus->id;
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
+	//Enabled session variable for KCFINDER 
+ 	$_SESSION['KCFINDER'] = array(); 
+ 	$_SESSION['KCFINDER']['disabled'] = false; 
+ 	$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
+ 	$_SESSION['KCFINDER']['uploadDir'] = "test/upload";
+	
 	// store the user's theme in the session
 	if(!empty($focus->column_fields["theme"])) {
 		$authenticated_user_theme = $focus->column_fields["theme"];

@@ -106,7 +106,7 @@ $languageStrings = array(
 	'LBL_IN'                       => 'In'                          , 
 	'LBL_TYPE_SEARCH'              => 'Type to search'              , 
 	'LBL_SEARCH_BUTTON'            => 'Search Button'               , 
-	'LBL_ADVANCE_SEARCH'           => 'erweiterte Suche'            , 
+	'LBL_ADVANCE_SEARCH'           => 'erweiterte'            , 
 	'LBL_LOADING_PLEASE_WAIT'      => 'Loading, Please wait.'       , 
 	'LBL_USERS'                    => 'Benutzer'                    , 
 	'LBL_GROUPS'                   => 'Groups'                      , 
@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Verkaufsbestellung'          , 
 	'Invoice'                      => 'Rechnung'                    , 
 	'MailManager'                  => 'Mail Manager'                , 
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Add Record'                  , 
 	'LBL_RECENTLY_MODIFIED'        => 'Recently Modified'           , 
 	'LBL_RECORDS_LIST'             => 'Records List'                , 
@@ -357,7 +358,7 @@ $languageStrings = array(
 	'Banking'                      => 'Banking'                     , 
 	'Billing Address'              => 'Rechnungsadresse'            , 
 	'Billing City'                 => 'Billing City'                , 
-	'Billing Code'                 => 'Billing Code'                , 
+	'Billing Code'                 => 'Billing Postal Code'         , 
 	'Billing Country'              => 'Billing Country'             , 
 	'Billing Po Box'               => 'Billing P.O. Box'            , 
 	'Billing State'                => 'Billing State'               , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Sales End Date'              , 
 	'Open Ticktes'                 => 'Open Tickets'                , 
 	'LBL_SELECT_STATUS'            => 'Select Status'               , 
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , 
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source'        , 
 	'SINGLE_Accounts'              => 'Organization'                , 
 	'SINGLE_Contacts'              => 'Contact'                     , 
 	'LBL_Sun'                      => 'Sun'                         , 
@@ -548,6 +549,40 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , 
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , 
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , 
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Gültig seit',
+	'Phone: ' => 'telefonieren: ',
+	'Issued Date' => 'Ausgestellt Datum',
+	'Shipping & Handling Charges' => 'Shipping & Handling Gebühren',
+	'Shipping & Handling Tax:' => 'Shipping & Handling Tax:',
+	'Discount' => 'Ermäßigung',
+	'Net Total' => 'Net Total',
+	'Product Code' => 'Product Code',
+	'Customer Name' => 'Name des Kunden',
+	'Price' => 'Preis',
+	'Tax:' => 'MwSt.:',
+	'Contact Name' => 'Ansprechpartner Name',
+	'Grand Total:' => 'Grand Total:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'Webseite: ',
+	'Tax' => 'MwSt.',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Serviceverträge',
+	'Projects' => 'Projekte',
+	'Sales Order' => 'Verkaufsbestellung',
+	'Purchase Order' => 'Einkaufsbestellung',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Please configure your outgoing server settings from the settings page', 
@@ -655,4 +690,6 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Password Changed Successfully.',
 	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

@@ -12,6 +12,8 @@
  * Function to get the field information from module name and field label
  */
 function getFieldByReportLabel($module, $label) {
+	$cacheLabel = VTCacheUtils::getReportFieldByLabel($module, $label);
+	if($cacheLabel) return $cacheLabel;
 
 	// this is required so the internal cache is populated or reused.
 	getColumnFields($module);
@@ -23,6 +25,7 @@ function getFieldByReportLabel($module, $label) {
 	foreach ($cachedModuleFields as $fieldInfo) {
 		$fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
 		if($label == $fieldLabel) {
+			VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
 			return $fieldInfo;
 		}
 	}

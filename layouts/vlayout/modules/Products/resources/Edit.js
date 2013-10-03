@@ -107,7 +107,11 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 			var	unitPrice = thisInstance.getDataBaseFormatUnitPrice();
 			var conversionRate = jQuery('.conversionRate',parentElem).val();
 			var price = parseFloat(unitPrice) * parseFloat(conversionRate);
-			jQuery('.convertedPrice',parentElem).val(price.toFixed(2));
+			var unitPriceFieldData = thisInstance.getUnitPrice().data();
+			var userPreferredDecimalPlaces = unitPriceFieldData.numberOfDecimalPlaces;
+			price = price.toFixed(userPreferredDecimalPlaces);
+			var calculatedPrice = price.toString().replace('.',unitPriceFieldData.decimalSeperator);
+			jQuery('.convertedPrice',parentElem).val(calculatedPrice);
 		});
 		return this;
 	},
@@ -123,7 +127,7 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 			}else{
 				var fieldData = field.data();
 				var strippedValue = unitPrice.replace(fieldData.groupSeperator, '');
-				var strippedValue = strippedValue.replace(fieldData.decimalSeperator, '.');
+				strippedValue = strippedValue.replace(fieldData.decimalSeperator, '.');
 				unitPrice = strippedValue;
 			}
 			return unitPrice;
@@ -166,11 +170,19 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				var price = parseFloat(unitPrice)*parseFloat(conversionRate);
 				jQuery('input',parentRow).attr('disabled', true).removeAttr('disabled');
 				jQuery('button.currencyReset', parentRow).attr('disabled', true).removeAttr('disabled');
-				jQuery('input.convertedPrice',parentRow).val(price)
+				var unitPriceFieldData = thisInstance.getUnitPrice().data();
+				var userPreferredDecimalPlaces = unitPriceFieldData.numberOfDecimalPlaces;
+				price = price.toFixed(userPreferredDecimalPlaces);
+				var calculatedPrice = price.toString().replace('.',unitPriceFieldData.decimalSeperator);
+				jQuery('input.convertedPrice',parentRow).val(calculatedPrice)
 			}else{
 				jQuery('input',parentRow).attr('disabled', true);
 				jQuery('input.enableCurrency',parentRow).removeAttr('disabled');
 				jQuery('button.currencyReset', parentRow).attr('disabled', 'disabled');
+				var baseCurrency = jQuery('.baseCurrency', parentRow);
+				if(baseCurrency.is(':checked')){
+					baseCurrency.removeAttr('checked');
+				}
 			}
 		})
 		return this;
@@ -290,28 +302,71 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 	},
 
 	registerRecordPreSaveEvent : function(form) {
+		var thisInstance = this;
 		if(typeof form == 'undefined') {
 			form = this.getForm();
 		}
 
 		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
-			var unitPrice = form.find('[name="unit_price"]').val();
-			var baseCurrencyName = form.find('[name="base_currency"]').val();
-			form.find('[name="'+ baseCurrencyName +'"]').val(unitPrice);
-			form.find('#requstedUnitPrice').attr('name',baseCurrencyName).val(unitPrice);
+			var multiCurrencyContent = jQuery('#moreCurrenciesContainer').find('.currencyContent');
+			var unitPrice = thisInstance.getUnitPrice();
+			if((multiCurrencyContent.length < 1) && (unitPrice.length > 0)){
+				e.preventDefault();
+				thisInstance.getMoreCurrenciesUI().then(function(data){
+					thisInstance.preSaveConfigOfForm(form);
+					form.submit();
+				})
+			}else if(multiCurrencyContent.length > 0){
+				thisInstance.preSaveConfigOfForm(form);
+			}
 		})
+	},
+	
+	/**
+	 * Function to handle settings before save of record
+	 */
+	preSaveConfigOfForm : function(form) {
+		var unitPrice = this.getUnitPrice();
+		if(unitPrice.length > 0){
+			var unitPriceValue = unitPrice.val();
+			var baseCurrencyName = form.find('[name="base_currency"]').val();
+			form.find('[name="'+ baseCurrencyName +'"]').val(unitPriceValue);
+			form.find('#requstedUnitPrice').attr('name',baseCurrencyName).val(unitPriceValue);
+		}
 	},
 	
 	saveCurrencies : function(){
 		var thisInstance = this;
+		var errorMessage,params;
+		var form = jQuery('#currencyContainer');
 		var editViewForm = thisInstance.getForm();
 		var modalContainer = jQuery('#globalmodal');
-		var selectedBaseCurrency = modalContainer.find('.baseCurrency').filter(':checked');
-		selectedBaseCurrency.attr('checked',"checked");
-		modalContainer.find('.baseCurrency').filter(":not(:checked)").removeAttr('checked');
 		var enabledBaseCurrency = modalContainer.find('.enableCurrency').filter(':checked');
+		if(enabledBaseCurrency.length < 1){
+			errorMessage = app.vtranslate('JS_PLEASE_SELECT_BASE_CURRENCY_FOR_PRODUCT');
+			params = {
+				text: errorMessage,
+				'type':'error'
+			};
+			Vtiger_Helper_Js.showMessage(params);
+			form.removeData('submit');
+			return;
+		}
 		enabledBaseCurrency.attr('checked',"checked");
 		modalContainer.find('.enableCurrency').filter(":not(:checked)").removeAttr('checked');
+		var selectedBaseCurrency = modalContainer.find('.baseCurrency').filter(':checked');
+		if(selectedBaseCurrency.length < 1){
+			errorMessage = app.vtranslate('JS_PLEASE_ENABLE_BASE_CURRENCY_FOR_PRODUCT');
+			params = {
+				text: errorMessage,
+				'type':'error'
+			};
+			Vtiger_Helper_Js.showMessage(params);
+			form.removeData('submit');
+			return;
+		}
+		selectedBaseCurrency.attr('checked',"checked");
+		modalContainer.find('.baseCurrency').filter(":not(:checked)").removeAttr('checked');
 		var parentElem = selectedBaseCurrency.closest('tr');
 		var convertedPrice = jQuery('.convertedPrice',parentElem).val();
 		thisInstance.baseCurrencyName = parentElem.data('currencyId');

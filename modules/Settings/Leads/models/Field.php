@@ -17,18 +17,18 @@ class Settings_Leads_Field_Model extends Vtiger_Field_Model {
 	public function getFieldDataType() {
 		$fieldDataType = '';
 		$uitype = $this->get('uitype');
-		switch ($uitype) {
-			case 7		: $fieldDataType = 'decimal';	break;
-			case 9		: $fieldDataType = 'percent';	break;
-			case 19		:
-			case 21		: $fieldDataType = 'textArea';	break;
-			case 33		: $fieldDataType = 'multiSelectCombo';	break;
-			case 56		: $fieldDataType = 'checkBox';	break;
+		if ($uitype == '9') {
+			$fieldDataType = 'percent';
 		}
 
 		if (!$fieldDataType) {
 			$webserviceField = $this->getWebserviceFieldObject();
 			$fieldDataType = $webserviceField->getFieldDataType();
+			switch($fieldDataType) {
+				case 'text' : $fieldDataType = 'textArea'; break;
+				case 'boolean' : $fieldDataType = 'checkBox'; break;
+			    case 'multipicklist' : $fieldDataType = 'multiSelectCombo'; break;
+			}
 		}
 		return $fieldDataType;
 	}

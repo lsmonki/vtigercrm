@@ -20,6 +20,7 @@
 			<a class="cursorPointer accordion-heading accordion-toggle" data-toggle="collapse" data-target="#serverSteps">{vtranslate('LBL_MORE', $QUALIFIED_MODULE)}..</a>
 			<div id="serverSteps" class="accordion-body collapse themeTextColor"><ul>
 				<br><li>{vtranslate('LBL_OPTIONS1', $QUALIFIED_MODULE)}</li><br>
+				<li>{vtranslate('LBL_OPTIONS2', $QUALIFIED_MODULE)}</li>
 			</ul></div>
 		</div>
 		<table class="table table-bordered table-condensed themeTableColor">

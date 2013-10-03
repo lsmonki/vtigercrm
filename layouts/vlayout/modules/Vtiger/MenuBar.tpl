@@ -17,7 +17,7 @@
 		<div class="navbar-inner" id="nav-inner">
 			<div class="menuBar row-fluid">
 				{* overflow+height is required to avoid flickering UI due to responsive handling, overflow will be dropped later *}
-				<div class="span9" style="overflow: hidden; height: 30px;">
+				<div class="span9" style="overflow: hidden;">
 					<ul class="nav modulesList">
 						<li class="tabs">
 							<a class="alignMiddle {if $MODULE eq 'Home'} selected {/if}" href="{$HOME_MODULE_MODEL->getDefaultUrl()}"><img src="{vimage_path('home.png')}" alt="{vtranslate('LBL_HOME',$moduleName)}" title="{vtranslate('LBL_HOME',$moduleName)}" /></a>
@@ -66,7 +66,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="span3 row-fluid" id="headerLinks">
+				<div class="span3" id="headerLinks">
 					<span class="pull-right headerLinksContainer">
 						{foreach key=index item=obj from=$HEADER_LINKS}
 							{assign var="src" value=$obj->getIconPath()}
@@ -81,7 +81,7 @@
 											{if empty($title)}
 												{assign var=title value=$USER_MODEL->get('last_name')}
 											{/if}
-										<span class="dropdown-toggle row-fluid" data-toggle="dropdown" href="#">
+										<span class="dropdown-toggle" data-toggle="dropdown" href="#">
 											<a id="menubar_item_right_{$title}"  class="userName textOverflowEllipsis span" title="{$title}">{$title} <i class="caret"></i> </a> </span>
 									{/if}
 									{if !empty($childLinks)}
@@ -99,7 +99,7 @@
 														{assign var="href" value="javascript:;"}
 													{/if}
 													<li>
-														<a target="{$obj->target}" id="menubar_item_right_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($label)}" {if $label=='Switch to old look'}switchLook{/if} href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
+														<a target="{$obj->target}" id="menubar_item_right_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($label)}" href="{$href}" {$onclick}>{vtranslate($label,$MODULE)}</a>
 													</li>
 												{/if}
 											{/foreach}

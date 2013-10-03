@@ -82,6 +82,11 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$dataModelInstance = Vtiger_FindDuplicate_Model::getInstance($module);
 		$dataModelInstance->set('fields', $duplicateSearchFields);
 
+		$ignoreEmpty = $request->get('ignoreEmpty');
+		$ignoreEmptyValue = false;
+		if($ignoreEmpty == 'on' || $ignoreEmpty == 'true' || $ignoreEmpty == '1') $ignoreEmptyValue = true;
+		$dataModelInstance->set('ignoreEmpty', $ignoreEmptyValue);
+
 		if(!$this->listViewEntries) {
 			$this->listViewEntries = $dataModelInstance->getListViewEntries($pagingModel);
 		}
@@ -94,12 +99,6 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 			$viewer->assign('TOTAL_COUNT', $this->rows);
 		}
 
-		if($this->rows > $pageLimit){
-			$pagingModel->set('nextPageExists', true);
-		}else{
-			$pagingModel->set('nextPageExists', false);
-		}
-
 		$rowCount = 0;
 		foreach($this->listViewEntries as $group) {
 			foreach($group as $row) {
@@ -110,6 +109,7 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		for($i=0; $i<$rowCount; $i++) $dummyListEntries[] = $i;
 		$pagingModel->calculatePageRange($dummyListEntries);
 
+		$viewer->assign('IGNORE_EMPTY', $ignoreEmpty);
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT', $rowCount);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
@@ -142,47 +142,4 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$response->setResult($result);
 		$response->emit();
 	}
-
-	/**
-	 * Function to get listView count
-	 * @param Vtiger_Request $request
-	 */
-	/*function getListViewCount(Vtiger_Request $request){
-		$moduleName = $request->getModule();
-		$cvId = $request->get('viewname');
-		if(empty($cvId)) {
-			$cvId = '0';
-		}
-
-		$searchKey = $request->get('search_key');
-		$searchValue = $request->get('search_value');
-
-		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
-		$listViewModel->set('search_key', $searchKey);
-		$listViewModel->set('search_value', $searchValue);
-		$listViewModel->set('operator', $request->get('operator'));
-
-		$count = $listViewModel->getListViewCount();
-
-		return $count;
-	}
-
-
-
-	/**
-	 * Function to get the page count for list
-	 * @return total number of pages
-	 */
-	/*function getPageCount(Vtiger_Request $request){
-		$listViewCount = $this->getListViewCount($request);
-		$pagingModel = new Vtiger_Paging_Model();
-		$pageLimit = $pagingModel->getPageLimit();
-		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
-
-		$result = array();
-		$result['page'] = $pageCount;
-		$response = new Vtiger_Response();
-		$response->setResult($result);
-		$response->emit();
-	}*/
 }

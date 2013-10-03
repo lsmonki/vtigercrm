@@ -34,7 +34,7 @@
 				<div class="widgetContainer_comments" data-url="{$COMMENTS_WIDGET_MODEL->getUrl()}" data-name="{$COMMENTS_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$COMMENTS_WIDGET_MODEL->get('linkName')}" />
-						<span class="span9 margin0px"><h4>{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 						<span class="span3">
 							<span class="pull-right">
 								{if $COMMENTS_WIDGET_MODEL->get('action')}
@@ -66,7 +66,7 @@
 				<div class="widgetContainer_documents" data-url="{$DOCUMENT_WIDGET_MODEL->getUrl()}" data-name="{$DOCUMENT_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$DOCUMENT_WIDGET_MODEL->get('linkName')}" />
-						<span class="span9 margin0px"><h4>{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 						<span class="span3">
 							<span class="pull-right">
 								{if $DOCUMENT_WIDGET_MODEL->get('action')}
@@ -90,7 +90,7 @@
 				<div class="widgetContainer_updates" data-url="{$UPDATES_WIDGET_MODEL->getUrl()}" data-name="{$UPDATES_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$UPDATES_WIDGET_MODEL->get('linkName')}" />
-						<span class="span9 margin0px"><h4>{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 						<span class="span3">
 							<span class="pull-right">
 								{if $UPDATES_WIDGET_MODEL->get('action')}

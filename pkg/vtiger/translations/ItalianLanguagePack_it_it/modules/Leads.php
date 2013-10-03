@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Leads Field Mapping'         , 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
 	'LBL_WEBFORMS'                 => 'Setup Webfroms'              , 
-	'LBL_LEAD_SOURCE'              => 'Fonte Lead:'                 , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

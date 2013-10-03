@@ -42,6 +42,7 @@ class HelpDesk extends CRMEntity {
 					// END
 					'Subject'=>Array('troubletickets'=>'title'),
 					'Related to'=>Array('troubletickets'=>'parent_id'),
+					'Contact Name'=>Array('troubletickets'=>'contact_id'),
 					'Status'=>Array('troubletickets'=>'status'),
 					'Priority'=>Array('troubletickets'=>'priority'),
 					'Assigned To'=>Array('crmentity','smownerid')
@@ -51,6 +52,7 @@ class HelpDesk extends CRMEntity {
 					'Ticket No'=>'ticket_no',
 					'Subject'=>'ticket_title',
 					'Related to'=>'parent_id',
+					'Contact Name' => 'contact_id',
 					'Status'=>'ticketstatus',
 					'Priority'=>'ticketpriorities',
 					'Assigned To'=>'assigned_user_id'
@@ -383,7 +385,7 @@ class HelpDesk extends CRMEntity {
 		global $log;
 		$log->debug("Entering getCustomerName(".$id.") method ...");
         	global $adb;
-	        $sql = "select * from vtiger_portalinfo inner join vtiger_troubletickets on vtiger_troubletickets.parent_id = vtiger_portalinfo.id where vtiger_troubletickets.ticketid=?";
+	        $sql = "select * from vtiger_portalinfo inner join vtiger_troubletickets on vtiger_troubletickets.contact_id = vtiger_portalinfo.id where vtiger_troubletickets.ticketid=?";
         	$result = $adb->pquery($sql, array($id));
 	        $customername = $adb->query_result($result,0,'user_name');
 		$log->debug("Exiting getCustomerName method ...");
@@ -415,22 +417,16 @@ class HelpDesk extends CRMEntity {
                        FROM ".$this->entity_table. "
 				INNER JOIN vtiger_troubletickets
 					ON vtiger_troubletickets.ticketid =vtiger_crmentity.crmid
-				LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
-					ON vtiger_crmentityRelatedTo.crmid = vtiger_troubletickets.parent_id
 				LEFT JOIN vtiger_account
 					ON vtiger_account.accountid = vtiger_troubletickets.parent_id
 				LEFT JOIN vtiger_contactdetails
-					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
+					ON vtiger_contactdetails.contactid = vtiger_troubletickets.contact_id
 				LEFT JOIN vtiger_ticketcf
 					ON vtiger_ticketcf.ticketid=vtiger_troubletickets.ticketid
 				LEFT JOIN vtiger_groups
 					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id=vtiger_crmentity.smownerid and vtiger_users.status='Active'
-				LEFT JOIN vtiger_seattachmentsrel
-					ON vtiger_seattachmentsrel.crmid =vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_attachments
-					ON vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid
 				LEFT JOIN vtiger_products
 					ON vtiger_products.productid=vtiger_troubletickets.product_id";
 				//end
@@ -624,7 +620,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		    $query .=" left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid";
 		}
 		if ($queryplanner->requireTable("vtiger_contactdetailsRelHelpDesk")){
-		    $query .=" left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid";
+		    $query .=" left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_troubletickets.contact_id";
 		}
 		if ($queryplanner->requireTable("vtiger_productsRel")){
 		    $query .=" left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id";
@@ -662,12 +658,17 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		global $log;
 		if(empty($return_module) || empty($return_id)) return;
 
-		if($return_module == 'Contacts' || $return_module == 'Accounts') {
+		if($return_module == 'Accounts') {
 			$sql = 'UPDATE vtiger_troubletickets SET parent_id=? WHERE ticketid=?';
 			$this->db->pquery($sql, array(null, $id));
 			$se_sql= 'DELETE FROM vtiger_seticketsrel WHERE ticketid=?';
 			$this->db->pquery($se_sql, array($id));
-		} elseif($return_module == 'Products') {
+		} elseif($return_module == 'Contacts') {
+			$sql = 'UPDATE vtiger_troubletickets SET contact_id=? WHERE ticketid=?';
+			$this->db->pquery($sql, array(null, $id));
+			$se_sql= 'DELETE FROM vtiger_seticketsrel WHERE ticketid=?';
+			$this->db->pquery($se_sql, array($id));
+		}elseif($return_module == 'Products') {
 			$sql = 'UPDATE vtiger_troubletickets SET product_id=? WHERE ticketid=?';
 			$this->db->pquery($sql, array(null, $id));
 		} else {
@@ -701,7 +702,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		}
 
 
-		$wsParentId = $entityData->get('parent_id');
+		$wsParentId = $entityData->get('contact_id');
 		$parentIdParts = explode('x', $wsParentId);
 
 		// If this function is being triggered as part of Eventing API
@@ -752,7 +753,7 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		} else{
 			$entityId = $wsId;
 		}
-		$wsParentId = $entityData->get('parent_id');
+		$wsParentId = $entityData->get('contact_id');
 		$parentIdParts = explode('x', $wsParentId);
 
 		// If this function is being triggered as part of Eventing API
@@ -762,7 +763,9 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 
 		$portalUrl = "<a href='" . $PORTAL_URL . "/index.php?module=HelpDesk&action=index&ticketid=" . $entityId . "&fun=detail'>"
 				. getTranslatedString('LBL_TICKET_DETAILS', $moduleName) . "</a>";
-		$contents = getTranslatedString('Dear', $moduleName) . " " . getParentName($parentId) . ",<br><br>";
+		$contents = getTranslatedString('Dear', $moduleName).' ';
+		$contents .= ($parentId) ? getParentName($parentId) : '';
+		$contents .= ",<br>";
 		$contents .= getTranslatedString('reply', $moduleName) . ' <b>' . $entityData->get('ticket_title')
 				. '</b> ' . getTranslatedString('customer_portal', $moduleName);
 		$contents .= getTranslatedString("link", $moduleName) . '<br>';

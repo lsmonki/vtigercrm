@@ -15,12 +15,12 @@
 			<span class="btn-group listViewMassActions">
 				{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS}
 					<span class="btn-group">
-						<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0} onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
+						<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn btn-danger" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0} onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
 					</span>
 				{/foreach}
 			</span>
 		</span>
-		<span class='span4'><div><h3 style='margin-top:2px'>{vtranslate('LBL_DUPLICATE')}  {vtranslate($MODULE, $MODULE)}</h3></div></span>
+		<span class='span4'><div class="textAlignCenter"><h3 style='margin-top:2px'>{vtranslate('LBL_DUPLICATE')}  {vtranslate($MODULE, $MODULE)}</h3></div></span>
 		<span class="span4 btn-toolbar">
 			{include file='ListViewActions.tpl'|@vtemplate_path}
 		</span>

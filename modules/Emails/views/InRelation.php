@@ -60,6 +60,9 @@ class Emails_InRelation_View extends Vtiger_RelatedList_View {
 			$pageLimit = $pagingModel->getPageLimit();
 			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
 
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
 			$viewer->assign('PAGE_COUNT', $pageCount);
 			$viewer->assign('TOTAL_ENTRIES', $totalCount);
 			$viewer->assign('PERFORMANCE', true);

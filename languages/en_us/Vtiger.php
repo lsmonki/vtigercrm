@@ -127,7 +127,7 @@ $languageStrings = array(
 	'LBL_IN' => 'in',
 	'LBL_TYPE_SEARCH' => 'Type to search',
 	'LBL_SEARCH_BUTTON' => 'Search Button',
-	'LBL_ADVANCE_SEARCH' => 'Advanced Search',
+	'LBL_ADVANCE_SEARCH' => 'Advanced',
 	'LBL_LOADING_PLEASE_WAIT' => 'Loading, Please wait.',
 	'LBL_PLEASE_SELECT_MODULE' => 'Please select module',
 
@@ -171,6 +171,7 @@ $languageStrings = array(
 	'SalesOrder'=>'Sales Order',
 	'Invoice'=>'Invoice',
 	'MailManager' => 'Mail Manager',
+	'Activities' => 'Activities',
 
 
 	//Basic String Translation
@@ -292,6 +293,7 @@ $languageStrings = array(
 	'LBL_UPDATED' => 'updated',
 	'LBL_FROM' => 'from',
 	'LBL_TO' => 'to',
+	'LBL_to' => 'to',
 	'LBL_ON' => 'on',
 	'LBL_OF' => 'of',
 	'LBL_BY' => 'by',
@@ -455,7 +457,7 @@ $languageStrings = array(
 	'Banking'=>'Banking',
 	'Billing Address' => 'Billing Address',
 	'Billing City' => 'Billing City',
-	'Billing Code' => 'Billing Code',
+	'Billing Code' => 'Billing Postal Code',
 	'Billing Country' => 'Billing Country',
 	'Billing Po Box' => 'Billing PO Box',
 	'Billing State' => 'Billing State',
@@ -550,6 +552,9 @@ $languageStrings = array(
 
 	'Due Date' => 'Due Date',
 	'Due Date & Time' => 'Due Date & Time',
+	'Email' => 'Primary Email',
+	'Secondary Email' => 'Secondary Email',
+	'Other Email' => 'Other Email',
 	'Email Opt Out' => 'Email Opt Out',
 
 	'Expected Close Date' => 'Expected Close Date',
@@ -603,6 +608,8 @@ $languageStrings = array(
 	'Mobile' => 'Mobile Phone',
 
 	'Notify Owner' => 'Notify Owner',
+	'Other Phone' => 'Secondary Phone',
+	'Phone' => 'Primary Phone',
 
 	'State' =>  'State',
 	'Po Box' => 'PO Box',
@@ -631,7 +638,7 @@ $languageStrings = array(
 	'LBL_BLANK' => '-Blank-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source',
 
 	//Translations used in inventory modules for sopy address
 	'SINGLE_Accounts' => 'Organization',
@@ -696,7 +703,6 @@ $languageStrings = array(
 	'LBL_GO_TO_PREVIEW' => 'Go to Preview',
 	'LBL_SELECT_EMAIL_TEMPLATE' => 'Select Email Template',
 	'LBL_COMPOSE_EMAIL' => 'Compose Email',
-	'LBL_TO' => 'To',
  	'LBL_CC' => 'Cc',
    	'LBL_BCC' => 'Bcc',
    	'LBL_ADD_CC' => 'Add Cc',
@@ -716,34 +722,48 @@ $languageStrings = array(
 	'LBL_NO_DUPLICATED_FOUND' => 'No duplicates found',
 	'LBL_MERGE_SELECT' => 'Merge Select',
 
-	'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
-	'LBL_ASSIGNED_TO' => 'Assigned To',
-	'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
-	'Task_Not_completed' => 'Task Not completed',
-	'Dear_Team' => 'Dear Team,<br>',
-	'Dear_Team_Time_to_Party' => '<br>Congratulations!Time to Party! <br>We closed a deal worth more than 10000!!!!<br> Time to hit the dance floor!<br>',
-	'Task_Not_completed' => 'Task Not completed',
-	'Too_many_pending_tickets' => 'Too many pending tickets',
-	'Dear_Admin_too_many_tickets_pending' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
-	'Potential_Id' => 'Opportunity Id:',
-	'Potential_Name' => 'Opportunity Name:',
-	'Big_Deal_Closed_Successfully' => 'Big Deal Closed Successfully',
-	'Pending_Ticket_notification' => 'Pending Ticket notification',
-	'Kind_Attention' => 'Dear Admin,<br> This is to bring to your kind attention that ticket number ',
-	'Thank_You_HelpDesk' => ' is yet to be closed<br> Thank You,<br> HelpDesk Team<br>',
-	'Support_starting' => 'Support starting',
-	'Hello_Support' => 'Hello! Support Starts for',
-	'Congratulations' => 'Congratulations! Your support starts from today',
-	'Support_Ending_Subject' => 'Reg: Support Ending',
-	'Support_Ending_Content' => 'Dear Admin,<br><br> This is to bring to your notice that Support Date for the product <b>',
-	'kindly_renew' => '</b> ends shortly. Kindly renew your support please.<br><br>Regards,<br>HelpDesk Team<br>',
+	//sbproducts translation
+	'LBL_BACK_TO_PRODUCTS' => 'Back to products',
 
-	// webservices language app_strings
-	'Groups'=>'Groups',
-	'DocumentFolders'=>'Document Folders',
-	'SINGLE_Groups'=>'Group',
-	'SINGLE_DocumentFolders'=>'Document Folder',
-	'SINGLE_Currency'=>'Currency',
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Valid Date',
+	'Phone: ' => 'Phone: ',
+	'Issued Date' => 'Issued Date',
+	'Shipping & Handling Charges' => 'Shipping & Handling Charges',
+	'Shipping & Handling Tax:' => 'Shipping & Handling Tax:',
+	'Discount'=>'Discount',
+	'Net Total' => 'Net Total',
+	'Product Code'=>'Product Code',
+	'Customer Name'=>'Customer Name',
+	'Price'=>'Price',
+	'Tax:' => 'Tax:',
+	'Contact Name' => 'Contact Name',
+	'Grand Total:' => 'Grand Total:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'Website: ',
+	'Tax' => 'Tax',
+	'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Service Contracts',
+	'Projects' => 'Projects',
+	'Sales Order' => 'Sales Order',
+	'Purchase Order' => 'Purchase Order',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	'LBL_IGNORE_EMPTY_VALUES' =>'Ignore empty values',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
+	
+	'LBL_MANAGE_USERS' => 'Manage Users',
+	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership',
+	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
+	'LBL_ASSIGNED_TO' => 'Assigned To',
 	
 	//Report Detail View
 	'LBL_VIEW_DETAILS' => 'View Details',
@@ -898,9 +918,25 @@ $jsLanguageStrings = array(
 	'JS_ALLOWED_TO_SELECT_MAX_OF_THREE_RECORDS' => 'You are allowed to select a maximum of three records',
 	//Notification message for dashboard widget delete
 	'JS_ARE_YOU_SURE_TO_DELETE_WIDGET' => 'Are you sure to delete widget',
+	'JS_DUPLICATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value',
+	'JS_SELECT_RECORDS_TO_MERGE_FROM_SAME_GROUP' => 'You have to select the records in the same groups for merging',
+	'JS_SELECT_ATLEAST_TWO_RECORD_FOR_MERGING' => 'Select atleast two records for merging',
+	'JS_ALLOWED_TO_SELECT_MAX_OF_THREE_RECORDS' => 'You are allowed to select a maximum of three records',
+	'JS_TOTAL_RECORDS' => 'Total records',
+	'JS_PAGE_NOT_EXIST' => 'Page not exist',
+	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'You are in page number',
 
-	//User Password
-	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
-	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Password Changed Successfully.',
-	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
+	//More currencies message
+	'JS_PLEASE_ENABLE_BASE_CURRENCY_FOR_PRODUCT' => 'Please enable base currency for product',
+	'JS_PLEASE_SELECT_BASE_CURRENCY_FOR_PRODUCT' => 'Please select base currency for product',
+
+	//Delete Records message
+	'JS_RECORDS_ARE_GETTING_DELETED' => 'Records are getting deleted',
+	'JS_RECORD_GETTING_DELETED' => 'Record getting deleted',
+	'JS_NO_RESULTS_FOUND' => 'No Results Found',
+	 
+	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Records ownership has been tranferred successfully',
+    
+	'JS_USER_EXISTS' => 'User Already Exists',
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',
 );

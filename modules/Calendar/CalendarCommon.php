@@ -162,7 +162,7 @@ function sendInvitation($inviteesid,$mode,$subject,$desc)
  */
 function calendarview_getSelectedUserId() {
 	global $current_user, $default_charset;
-	$only_for_user = htmlspecialchars(strip_tags($_REQUEST['onlyforuser']),ENT_QUOTES,$default_charset);
+	$only_for_user = htmlspecialchars(strip_tags(vtlib_purifyForSql($_REQUEST['onlyforuser'])),ENT_QUOTES,$default_charset);
 	if($only_for_user == '') $only_for_user = $current_user->id;
 	return $only_for_user;
 }

@@ -59,12 +59,11 @@ class Documents_Folder_Action extends Vtiger_Action_Controller {
 
 	public function delete($request) {
 		$moduleName = $request->getModule();
-		$folderName = $request->get('foldername');
+		$folderId = $request->get('folderid');
 		$result = array();
 
-		if (!empty ($folderName)) {
-			$folderModel = Documents_Folder_Model::getInstanceByName($folderName);
-
+		if (!empty ($folderId)) {
+			$folderModel = Documents_Folder_Model::getInstanceById($folderId);
 			if (!($folderModel->hasDocuments())) {
 				$folderModel->delete();
 				$result = array('success'=>true, 'message'=>vtranslate('LBL_FOLDER_DELETED', $moduleName));

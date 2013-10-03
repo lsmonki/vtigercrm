@@ -53,7 +53,11 @@ Vtiger_List_Js("Settings_Vtiger_List_Js",{
 						text: app.vtranslate('JS_RECORD_DELETED_SUCCESSFULLY')
 					};
 					Settings_Vtiger_Index_Js.showMessage(params);
-					thisInstance.getListViewRecords();
+					jQuery('#recordsCount').val('');
+					jQuery('#totalPageCount').text('');
+					thisInstance.getListViewRecords().then(function(){
+						thisInstance.updatePagination();
+					});
 				},
 				function(error,err){
 					app.hideModalWindow();
@@ -75,6 +79,10 @@ Vtiger_List_Js("Settings_Vtiger_List_Js",{
 			'mode' : "getPageCount",
 			"viewname": cvId
 		}
+		var sourceModule = jQuery('#moduleFilter').val();
+		if(typeof sourceModule != 'undefined'){
+			pageCountParams['sourceModule'] = sourceModule;
+		}
 		return pageCountParams;
 	},
 	
@@ -83,5 +91,7 @@ Vtiger_List_Js("Settings_Vtiger_List_Js",{
 		this.registerRowClickEvent();
 		this.registerHeadersClickEvent();
 		this.registerPageNavigationEvents();
+		this.registerEventForTotalRecordsCount();
+		jQuery('.pageNumbers').tooltip();
 	}
 });

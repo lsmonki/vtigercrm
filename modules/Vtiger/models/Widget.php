@@ -211,6 +211,6 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 	 * @return <type>
 	 */
 	public function getDefaultWidgets() {
-		return array('History', 'CalendarActivities');
+		return array();
 	}
 }

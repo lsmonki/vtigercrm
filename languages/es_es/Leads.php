@@ -56,7 +56,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vinculación de Campos',
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Editar Vinculación de Campos',
 	'LBL_WEBFORMS'                 => 'Crear Formulario Web',
-	'LBL_LEAD_SOURCE'              => 'Origen Pre-Contacto',
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecciona Contactos para seguir',

@@ -22,6 +22,7 @@ class Settings_Roles_Save_Action extends Vtiger_Action_Controller {
 		$qualifiedModuleName = $request->getModule(false);
 		$recordId = $request->get('record');
 		$roleName = $request->get('rolename');
+		$allowassignedrecordsto = $request->get('allowassignedrecordsto');
 
 		$moduleModel = Settings_Vtiger_Module_Model::getInstance($qualifiedModuleName);
 		if(!empty($recordId)) {
@@ -59,6 +60,7 @@ class Settings_Roles_Save_Action extends Vtiger_Action_Controller {
 		$parentRoleId = $request->get('parent_roleid');
 		if($recordModel && !empty($parentRoleId)) {
 			$parentRole = Settings_Roles_Record_Model::getInstanceById($parentRoleId);
+			if(!empty($allowassignedrecordsto)) $recordModel->set('allowassignedrecordsto', $allowassignedrecordsto); // set the value of assigned records to
 			if($parentRole && !empty($roleName) && !empty($roleProfiles)) {
 				$recordModel->set('rolename', $roleName);
 				$recordModel->set('profileIds', $roleProfiles);

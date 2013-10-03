@@ -139,9 +139,10 @@ class EmailTemplate {
 				}
 				$moduleFields = $meta->getModuleFields();
 				foreach ($moduleFields as $fieldName => $webserviceField) {
-					if (!$this->isActive($fieldName, $module)) {
-						continue;
-					}
+                    $presence = $webserviceField->getPresence();
+                    if(!in_array($presence,array(0,2))){
+                        continue;
+                    }
 					if (isset($values[$fieldName]) &&
 							$values[$fieldName] !== null) {
 						if (strcasecmp($webserviceField->getFieldDataType(), 'reference') === 0) {
@@ -156,7 +157,7 @@ class EmailTemplate {
 										$this->user);
 							}
 							$referencedObjectMeta = $referencedObjectHandler->getMeta();
-							if (!$this->isProcessingReferenceField($params)) {
+							if (!$this->isProcessingReferenceField($params) && !empty($values[$fieldName])) {
 								$this->process(array('parentMeta' => $meta, 'referencedMeta' => $referencedObjectMeta, 'field' => $fieldName, 'id' => $values[$fieldName]));
 							}
 							$values[$fieldName] =
@@ -180,6 +181,9 @@ class EmailTemplate {
 									$referencedObjectMeta->getEntityId(),
 									$values[$fieldName]));
 						} elseif (strcasecmp($webserviceField->getFieldDataType(), 'picklist') === 0) {
+							$values[$fieldName] = getTranslatedString(
+									$values[$fieldName], $module);
+						} elseif (strcasecmp($fieldName, 'salutationtype') === 0 && $webserviceField->getUIType() == '55'){
 							$values[$fieldName] = getTranslatedString(
 									$values[$fieldName], $module);
 						} elseif (strcasecmp($webserviceField->getFieldDataType(), 'datetime') === 0) {

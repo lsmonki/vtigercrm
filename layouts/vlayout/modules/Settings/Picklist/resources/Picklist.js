@@ -260,6 +260,7 @@ var Settings_Picklist_Js = {
 	},
 	
 	registerDeleteItemEvent : function() {
+		var thisInstance = this;
 		jQuery('#deleteItem').on('click',function(e){
 			var pickListValuesTable = jQuery('#pickListValuesTable');
 			var selectedListItem = jQuery('.selectedListItem',pickListValuesTable);
@@ -282,13 +283,7 @@ var Settings_Picklist_Js = {
 				pickListFieldId : jQuery('#modulePickList').val(),
 				fieldValue	: JSON.stringify(selectedListItemsArray)
 			}
-			AppConnector.request(params).then(function(data){
-				app.showModalWindow(data);
-				var maximumSelectionSize = jQuery('#pickListValuesCount').val()-1;
-				app.changeSelectElementView(jQuery('[name="delete_value[]"]'), 'select2', {maximumSelectionSize: maximumSelectionSize,dropdownCss : {'z-index' : 100001},val : e.val});
-				Settings_Picklist_Js.registerDeleteOptionEvent();
-				Settings_Picklist_Js.registerDeleteItemsSaveEvent();
-			});
+			thisInstance.showDeleteItemForm(params);
 		});
 	},
 	
@@ -323,8 +318,23 @@ var Settings_Picklist_Js = {
 			var decodedValue = app.getDecodedValue(e);
 			pickListValuesArr.push(decodedValue.toLowerCase());
 		});
-		var newValue = jQuery('[name="newValue"]',container).val().toLowerCase(); 
-		if(jQuery.inArray(newValue,pickListValuesArr) != -1){
+		
+		var mode = jQuery('[name="mode"]', container).val();
+		var newValue = jQuery('[name="newValue"]',container).val();
+		var lowerCasedNewValue = jQuery('[name="newValue"]',container).val().toLowerCase(); 
+		
+		//Checking the new picklist value is already exists 
+		if(jQuery.inArray(lowerCasedNewValue,pickListValuesArr) != -1){
+			//while renaming the picklist values
+			if(mode == 'rename') {
+				var oldValue = jQuery('[name="oldValue"]',container).val();
+				var lowerCasedOldValue = oldValue.toLowerCase();
+				//allow to rename when the new value should not be same as old value and the new value only with case diffrence
+				if(oldValue != newValue && lowerCasedOldValue == lowerCasedNewValue) {
+					return false;
+				}
+			}
+			//while adding or renaming with different existing value
 			return true;
 		} else {
 			return false;
@@ -453,46 +463,64 @@ var Settings_Picklist_Js = {
 		});
 	},
 	
-	registerDeleteItemsSaveEvent : function() {
-		jQuery('#deleteItemForm').on('submit',function(e) {
-			var form = jQuery(e.currentTarget);
-			var selectElement = jQuery('[name="delete_value[]"]');
-			var select2Element = app.getSelect2ElementFromSelect(selectElement);
-			var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
-			if(result != true){
-				select2Element.validationEngine('showPrompt', result , 'error','topLeft',true);
-				e.preventDefault();
-				return;
-			} else {
-				select2Element.validationEngine('hide');
-				form.find('[name="saveButton"]').attr('disabled',"disabled");
-			}
-			var deleteValues = jQuery('[name="delete_value[]"]').val();
-			var params = form.serializeFormData();
-			AppConnector.request(params).then(function(data) {
-				if(typeof data.result != 'undefined'){
-					app.hideModalWindow();
-					//delete the item in the hidden picklist values array
-					var pickListValuesEle = jQuery('[name="pickListValues"]');
-					var pickListValuesArray = JSON.parse(pickListValuesEle.val());
-					jQuery.each(deleteValues,function(i,e){
-						var encodedOldValue = e.replace(/"/g, '\\"');
-						jQuery('[data-key="'+encodedOldValue+'"]').remove();
-						var index = pickListValuesArray.indexOf(e);
-						pickListValuesArray.splice(index, 1);
-					});
-					pickListValuesEle.val(JSON.stringify(pickListValuesArray));
-					var params = {
-						title : app.vtranslate('JS_MESSAGE'),
-						text: app.vtranslate('JS_ITEMS_DELETED_SUCCESSFULLY'),
-						animation: 'show',
-						type: 'success'
-					};
-					Vtiger_Helper_Js.showPnotify(params);
+	showDeleteItemForm : function(params) {
+		AppConnector.request(params).then(function(data){
+			app.showModalWindow(data, function(data) {
+				if(typeof callBackFunction == 'function') {
+					callBackFunction(data);
 				}
 			});
-			e.preventDefault();
 		});
+			
+		var callBackFunction = function(data) {
+			var form = data.find('#deleteItemForm');
+			var maximumSelectionSize = jQuery('#pickListValuesCount').val()-1;
+			app.changeSelectElementView(jQuery('[name="delete_value[]"]'), 'select2', {maximumSelectionSize: maximumSelectionSize,dropdownCss : {'z-index' : 100001}});
+			Settings_Picklist_Js.registerDeleteOptionEvent();
+
+			var params = app.getvalidationEngineOptions(true);
+			params.onValidationComplete = function(form, valid){
+				if(valid) {
+					var selectElement = jQuery('[name="delete_value[]"]');
+					var select2Element = app.getSelect2ElementFromSelect(selectElement);
+					var result = Vtiger_MultiSelect_Validator_Js.invokeValidation(selectElement);
+					if(result != true){
+						select2Element.validationEngine('showPrompt', result , 'error','topLeft',true);
+						e.preventDefault();
+						return;
+					} else {
+						select2Element.validationEngine('hide');
+						form.find('[name="saveButton"]').attr('disabled',"disabled");
+					}
+					var deleteValues = jQuery('[name="delete_value[]"]').val();
+					var params = form.serializeFormData();
+					AppConnector.request(params).then(function(data) {
+						if(typeof data.result != 'undefined'){
+							app.hideModalWindow();
+							//delete the item in the hidden picklist values array
+							var pickListValuesEle = jQuery('[name="pickListValues"]');
+							var pickListValuesArray = JSON.parse(pickListValuesEle.val());
+							jQuery.each(deleteValues,function(i,e){
+								var encodedOldValue = e.replace(/"/g, '\\"');
+								jQuery('[data-key="'+encodedOldValue+'"]').remove();
+								var index = pickListValuesArray.indexOf(e);
+								pickListValuesArray.splice(index, 1);
+							});
+							pickListValuesEle.val(JSON.stringify(pickListValuesArray));
+							var params = {
+								title : app.vtranslate('JS_MESSAGE'),
+								text: app.vtranslate('JS_ITEMS_DELETED_SUCCESSFULLY'),
+								animation: 'show',
+								type: 'success'
+							};
+							Vtiger_Helper_Js.showPnotify(params);
+						}
+					});
+				}
+				return false;
+			}
+			form.validationEngine(params);
+		}
 	},
 	
 	registerSelectPickListValueEvent : function() {
@@ -623,10 +651,10 @@ Vtiger_Base_Validator_Js("Vtiger_FieldLabel_Validator_Js",{
 	},
 	
 	validateValue : function(fieldValue){
-		var specialChars = /[<\>]/ ;
+		var specialChars = /[<\>\"]/ ;
 
 		if (specialChars.test(fieldValue)) {
-			var errorInfo = app.vtranslate('JS_SPECIAL_CHARACTERS')+" < > "+app.vtranslate('JS_NOT_ALLOWED');
+			var errorInfo = app.vtranslate('JS_SPECIAL_CHARACTERS')+" < > \" "+app.vtranslate('JS_NOT_ALLOWED');
 			this.setError(errorInfo);
 			return false;
 		} 

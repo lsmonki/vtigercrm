@@ -141,16 +141,9 @@ function getFieldsListFromQuery($query)
 		//By Pavani...Handling mismatch field and table name for trouble tickets
       	elseif($tablename == 'vtiger_troubletickets' && $columnName == 'product_id')//Ticket - Product
         {
-                 $fields .= "vtiger_products.productname as '".$fieldlabel."',";
+			$fields .= "vtiger_products.productname as '".$fieldlabel."',";
         }
-        elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
-        {
-                 $fields .= "case vtiger_crmentityRelatedTo.setype
-                                when 'Accounts' then concat('Accounts :::: ',vtiger_account.accountname)
-			when 'Contacts' then concat('Contacts :::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
-                             End as 'Related To',";
-        }
-		elseif($tablename == 'vtiger_notes' && ($columnName == 'filename' || $columnName == 'filetype' || $columnName == 'filesize' || $columnName == 'filelocationtype' || $columnName == 'filestatus' || $columnName == 'filedownloadcount' ||$columnName == 'folderid')){
+        elseif($tablename == 'vtiger_notes' && ($columnName == 'filename' || $columnName == 'filetype' || $columnName == 'filesize' || $columnName == 'filelocationtype' || $columnName == 'filestatus' || $columnName == 'filedownloadcount' ||$columnName == 'folderid')){
 			continue;
 		}
 		elseif(($tablename == 'vtiger_invoice' || $tablename == 'vtiger_quotes' || $tablename == 'vtiger_salesorder')&& $columnName == 'accountid') {

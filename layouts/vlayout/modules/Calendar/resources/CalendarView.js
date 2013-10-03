@@ -405,10 +405,12 @@ jQuery.Class("Calendar_CalendarView_Js",{
 		}else{
 			var cssClass = jQuery('[data-calendar-feed="Events"]').data('calendarFeedCss');
 			var color = jQuery('[data-calendar-userid='+assignedUserId+']').data('calendar-feed-color');
+			var textColor = jQuery('[data-calendar-userid='+assignedUserId+']').data('calendar-feed-textcolor');
 			eventObject.allDay = false;
 		}
 		eventObject.className = cssClass;
 		eventObject.color = color;
+		eventObject.textColor = textColor;
 		this.getCalendarView().fullCalendar('renderEvent',eventObject);
 	},
 

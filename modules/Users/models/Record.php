@@ -74,7 +74,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 */
 	public function getDeleteUrl() {
 		$module = $this->getModule();
-		return 'index.php?module='.$this->getModuleName().'&parent=Settings&action='.$module->getDeleteActionName().'&record='.$this->getId();
+		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view='.$module->getDeleteActionName().'User&record='.$this->getId();
 	}
 
 	/**
@@ -258,13 +258,13 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$curentUserPrivileges = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
 		if($currentUser->isAdminUser() || $curentUserPrivileges->hasGlobalWritePermission()) {
-			$users = $this->getAccessibleUsers();
+			$users = $this->getAccessibleUsers("",$module);
 		} else {
 			$sharingAccessModel = Settings_SharingAccess_Module_Model::getInstance($module);
 			if($sharingAccessModel->isPrivate()) {
-				$users = $this->getAccessibleUsers('private');
+				$users = $this->getAccessibleUsers('private',$module);
 			} else {
-				$users = $this->getAccessibleUsers();
+				$users = $this->getAccessibleUsers("",$module);
 			}
 		}
 		return $users;
@@ -280,13 +280,13 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$curentUserPrivileges = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
 		if($currentUser->isAdminUser() || $curentUserPrivileges->hasGlobalWritePermission()) {
-			$groups = $this->getAccessibleGroups();
+			$groups = $this->getAccessibleUsers("",$module);
 		} else {
 			$sharingAccessModel = Settings_SharingAccess_Module_Model::getInstance($module);
 			if($sharingAccessModel->isPrivate()) {
-				$groups = $this->getAccessibleGroups('private');
+				$groups = $this->getAccessibleGroups('private',$module);
 			} else {
-				$groups = $this->getAccessibleGroups();
+				$groups = $this->getAccessibleUsers("",$module);
 			}
 		}
 		return $groups;
@@ -332,25 +332,89 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 * Function to get all the accessible users
 	 * @return <Array>
 	 */
-	public function getAccessibleUsers($private="") {
-		//TODO:Remove dependence on $_REQUEST for the module name in the below API
-        $accessibleUser = Vtiger_Cache::get('vtiger-'.$private, 'accessibleusers');
-        if(!$accessibleUser){
-            $accessibleUser = get_user_array(false, "ACTIVE", "", $private);
-            Vtiger_Cache::set('vtiger-'.$private, 'accessibleusers',$accessibleUser);
-        }
+	public function getAccessibleUsers($private="",$module = false) {
+		$currentUserRoleModel = Settings_Roles_Record_Model::getInstanceById($this->getRole());
+		$accessibleUser = Vtiger_Cache::get('vtiger-'.$this->getRole().'-'.$currentUserRoleModel->get('allowassignedrecordsto'), 'accessibleusers');
+        if(empty($accessibleUser)) {
+			if($currentUserRoleModel->get('allowassignedrecordsto') === '1' || $private == 'Public') {
+				$accessibleUser = get_user_array(false, "ACTIVE", "", $private,$module);
+			} else if($currentUserRoleModel->get('allowassignedrecordsto') === '2'){
+				$accessibleUser = $this->getSameLevelUsersWithSubordinates();
+			} else if($currentUserRoleModel->get('allowassignedrecordsto') === '3') {
+				$accessibleUser = $this->getRoleBasedSubordinateUsers();
+			}
+			Vtiger_Cache::set('vtiger-'.$this->getRole().'-'.$currentUserRoleModel->get('allowassignedrecordsto'), 'accessibleusers',$accessibleUser);
+		}
 		return $accessibleUser;
 	}
 
 	/**
+	 * Function to get same level and subordinates Users
+	 * @return <array> Users
+	 */
+	public function getSameLevelUsersWithSubordinates(){
+		$currentUserRoleModel = Settings_Roles_Record_Model::getInstanceById($this->getRole());
+		$sameLevelRoles = $currentUserRoleModel->getSameLevelRoles();
+		$sameLevelUsers = $this->getAllUsersOnRoles($sameLevelRoles);
+		$subordinateUsers = $this->getRoleBasedSubordinateUsers();
+		foreach ($subordinateUsers as $userId => $userName) {
+			$sameLevelUsers[$userId] = $userName;
+		}
+		return $sameLevelUsers;
+	}
+	
+	/**
+	 * Function to get subordinates Users
+	 * @return <array> Users
+	 */
+	public function getRoleBasedSubordinateUsers(){
+		$currentUserRoleModel = Settings_Roles_Record_Model::getInstanceById($this->getRole());
+		$childernRoles = $currentUserRoleModel->getAllChildren();
+		return $this->getAllUsersOnRoles($childernRoles);
+	}
+
+	/**
+	 * Function to get the users based on Roles
+	 * @param type $roles
+	 * @return <array>
+	 */
+	public function getAllUsersOnRoles($roles) {
+		$db = PearDatabase::getInstance();
+		$roleIds[] = $this->getRole();
+		foreach ($roles as $key => $role) {
+			$roleIds[] = $role->getId();
+		}
+		$sql = 'SELECT userid FROM vtiger_user2role WHERE roleid IN ('.  generateQuestionMarks($roleIds).')';
+		$result = $db->pquery($sql, $roleIds);
+		$noOfUsers = $db->num_rows($result);
+		$userIds = array();
+		$subUsers = array();
+		if($noOfUsers > 0) {
+			for($i=0; $i<$noOfUsers; ++$i) {
+				$userIds[] = $db->query_result($result, $i, 'userid');
+			}
+			$query = 'SELECT id, first_name, last_name FROM vtiger_users WHERE status = ? AND id IN ('.  generateQuestionMarks($userIds).')';
+			$result = $db->pquery($query, array('ACTIVE', $userIds));
+			$noOfUsers = $db->num_rows($result);
+			for($j=0; $j<$noOfUsers; ++$j) {
+				$userId = $db->query_result($result, $j,'id');
+				$firstName = $db->query_result($result, $j, 'first_name');
+				$lastName = $db->query_result($result, $j, 'last_name');
+				$subUsers[$userId] = $firstName .' '.$lastName;
+			}
+		}
+		return $subUsers;
+	}
+	
+	/**
 	 * Function to get all the accessible groups
 	 * @return <Array>
 	 */
-	public function getAccessibleGroups($private="") {
+	public function getAccessibleGroups($private="",$module = false) {
 		//TODO:Remove dependence on $_REQUEST for the module name in the below API
         $accessibleGroups = Vtiger_Cache::get('vtiger-'.$private, 'accessiblegroups');
         if(!$accessibleGroups){
-            $accessibleGroups = get_group_array(false, "ACTIVE", "", $private);
+            $accessibleGroups = get_group_array(false, "ACTIVE", "", $private,$module);
             Vtiger_Cache::set('vtiger-'.$private, 'accessiblegroups',$accessibleGroups);
         }
 		return get_group_array(false, "ACTIVE", "", $private);
@@ -528,9 +592,57 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	}
 	
 	/**
+	 * Function to get instance of user model by name
+	 * @param <String> $userName
+	 * @return <Users_Record_Model>
+	 */
+	public static function getInstanceByName($userName) {
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery('SELECT id FROM vtiger_users WHERE user_name = ?', array($userName));
+
+		if ($db->num_rows($result)) {
+			return Users_Record_Model::getInstanceById($db->query_result($result, 0, 'id'), 'Users');
+		}
+		return false;
+	}
+	
+	/**
 	 * Function to delete the current Record Model
 	 */
 	public function delete() {
 		$this->getModule()->deleteRecord($this);
 	}
+	
+	public function getActiveAdminUsers() {
+		$db = PearDatabase::getInstance();
+
+		$sql = 'SELECT id FROM vtiger_users WHERE status=? AND is_admin=?';
+		$result = $db->pquery($sql, array('ACTIVE', 'on'));
+
+		$noOfUsers = $db->num_rows($result);
+		$users = array();
+		if($noOfUsers > 0) {
+			$focus = new Users();
+			for($i=0; $i<$noOfUsers; ++$i) {
+				$userId = $db->query_result($result, $i, 'id');
+				$focus->id = $userId;
+				$focus->retrieve_entity_info($userId, 'Users');
+
+				$userModel = self::getInstanceFromUserObject($focus);
+				$users[$userModel->getId()] = $userModel;
+			}
+		}
+		return $users;
+	}
+	
+	public function isFirstTimeLogin($userId) {
+		$db = PearDatabase::getInstance();
+
+		$query = 'SELECT 1 FROM vtiger_crmsetup WHERE userid = ? and setup_status = ?';
+		$result = $db->pquery($query, array($userId, 1));
+		if($db->num_rows($result) == 0){
+			return true;
+		}
+		return false;
+    }
 }

@@ -65,7 +65,13 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 						- (float)$relatedProducts[1]['final_details']['discountTotal_final'];
 
 		$relatedProducts[1]['final_details']['preTaxTotal'] = number_format($preTaxTotal, getCurrencyDecimalPlaces(),'.','');
-
+		
+		//Updating Total After Discount
+		$totalAfterDiscount = (float)$relatedProducts[1]['final_details']['hdnSubTotal']
+								- (float)$relatedProducts[1]['final_details']['discountTotal_final'];
+		
+		$relatedProducts[1]['final_details']['totalAfterDiscount'] = number_format($totalAfterDiscount, getCurrencyDecimalPlaces(),'.','');
+		
 		//Updating Tax details
 		$taxtype = $relatedProducts[1]['final_details']['taxtype'];
 

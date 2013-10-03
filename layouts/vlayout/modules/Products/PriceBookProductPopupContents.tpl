@@ -64,7 +64,7 @@
 		</div>
 	{/if}
 </div>
-<div class="modal-footer form-actions">
+<div class="clearfix form-actions" style="background-color:#EEF6FE !important">
 	<a class="cancelLink cursorPointer pull-right horizontalLeftSpacing">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 	<button class="btn addButton select pull-right btn-primary"><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate('LBL_ADD_TO_PRICEBOOKS',$MODULE)}</strong></button>
 </div>

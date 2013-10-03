@@ -201,7 +201,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 	 */
     public function isSummaryFieldOptionDisabled() {
 		$moduleModel = $this->getModule();
-		if($this->get('uitype') == 70 || !$moduleModel->isSummaryViewSupported()) {
+		if($this->get('uitype') == 70) {
 			return true;
 		}
         return false;

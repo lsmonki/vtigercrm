@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Megrendelések'              , 
 	'Invoice'                      => 'Díjbekérők'               , 
 	'MailManager'                  => 'Mail Manager'                , // TODO: Review
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Rekord hozzáadása'         , 
 	'LBL_RECENTLY_MODIFIED'        => 'Legutóbb módosítva'       , 
 	'LBL_RECORDS_LIST'             => 'Rekordok listája'           , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Értékesítés Záró dátuma', 
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Select Status'               , // TODO: Review
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , // TODO: Review
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source'        , // TODO: Review
 	'SINGLE_Accounts'              => 'Organization'                , // TODO: Review
 	'SINGLE_Contacts'              => 'Contact'                     , // TODO: Review
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -548,6 +549,42 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'érvényes dátum',
+	'Phone: ' => 'telefon: ',
+	'Issued Date' => 'Sikeres Date',
+	'Shipping & Handling Charges' => 'Szállítás és kezelési költséget',
+	'Shipping & Handling Tax:' => 'Szállítás és kezelése Adó:',
+	'Discount' => 'kedvezmény',
+	'Net Total' => 'Net Total',
+	'Product Code' => 'Termék kód',
+	'Customer Name' => 'ügyfél neve',
+	'Price' => 'ár',
+	'Tax:' => 'adó:',
+	'Contact Name' => 'Kapcsolattartó neve',
+	'Grand Total:' => 'Grand Total:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'weboldal: ',
+	'Tax' => 'adó',
+	'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Szolgáltatási Szerződések',
+	'Projects' => 'Projektek',
+	'Sales Order' => 'Megrendelések',
+	'Purchase Order' => 'Beszerzések',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Szolgáltatási Szerződések',
+	'Projects' => 'Projektek',
+	'Sales Order' => 'Megrendelések',
+	'Purchase Order' => 'Beszerzések',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Kérjük, hogy állítsd be a kimenő email szerver (SMTP) beállításait a Beállítások oldalon', 
@@ -650,4 +687,6 @@ $jsLanguageStrings = array(
 	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

@@ -284,7 +284,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	function getSelectedStandardFilter() {
 		$db = PearDatabase::getInstance();
 
-		$result = $db->pquery('SELECT * FROM vtiger_reportdatefilter WHERE datefilterid = ?', array($this->getId()));
+		$result = $db->pquery('SELECT * FROM vtiger_reportdatefilter WHERE datefilterid = ? AND startdate != ? AND enddate != ?',
+																		array($this->getId(), '0000-00-00', '0000-00-00'));
 		$standardFieldInfo = array();
 		if($db->num_rows($result)) {
 			$standardFieldInfo['columnname'] = $db->query_result($result, 0, 'datecolumnname');
@@ -372,8 +373,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$db->pquery('UPDATE vtiger_reportmodules SET primarymodule = ?,secondarymodules = ? WHERE reportmodulesid = ?',
 					array($this->getPrimaryModule(), $this->getSecondaryModules(), $reportId));
 
-			$db->pquery('UPDATE vtiger_report SET reportname = ?, description = ?, reporttype = ? WHERE
-					reportid = ?', array($this->get('reportname'), $this->get('description'), 'summary', $reportId));
+			$db->pquery('UPDATE vtiger_report SET reportname = ?, description = ?, reporttype = ?, folderid = ? WHERE
+				reportid = ?', array($this->get('reportname'), $this->get('description'), 'summary', $this->get('folderid'), $reportId));
 
 
 			$db->pquery('DELETE FROM vtiger_reportsortcol WHERE reportid = ?', array($reportId));
@@ -823,7 +824,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
                 $anyGroupColumns = array_merge($anyGroupColumns, $group['columns']);
             }
 		}
-		if($standardFilter && $standardFilter[0]['value'] != '0000-00-00,0000-00-00'){
+		if($standardFilter) {
 			$allGroupColumns = array_merge($allGroupColumns,$standardFilter);
 		}
 		$transformedAdvancedCondition = array();

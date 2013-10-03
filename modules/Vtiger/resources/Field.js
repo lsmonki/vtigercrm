@@ -400,3 +400,34 @@ Vtiger_Field_Js('Vtiger_Percentage_Field_Js',{},{
 		return this.addValidationToElement(element);
 	}
 });
+Vtiger_Field_Js('Vtiger_Recurrence_Field_Js',{},{
+
+	/**
+	 * Function to get the pick list values
+	 * @return <object> key value pair of options
+	 */
+	getPickListValues : function() {
+		return this.get('picklistvalues');
+	},
+
+	/**
+	 * Function to get the ui
+	 * @return - select element and chosen element
+	 */
+	getUi : function() {
+		var html = '<select class="row-fluid chzn-select" name="'+ this.getName() +'">';
+		var pickListValues = this.getPickListValues();
+		var selectedOption = app.htmlDecode(this.getValue());
+		for(var option in pickListValues) {
+			html += '<option value="'+option+'" ';
+			if(option == selectedOption) {
+				html += ' selected ';
+			}
+			html += '>'+pickListValues[option]+'</option>';
+		}
+		html +='</select>';
+		var selectContainer = jQuery(html);
+		this.addValidationToElement(selectContainer);
+		return selectContainer;
+	}
+});

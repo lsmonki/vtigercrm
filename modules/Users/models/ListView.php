@@ -34,6 +34,11 @@ class Users_ListView_Model extends Vtiger_ListView_Model {
 		return $links;
 	}
 
+	/**
+	 * Function to get the list of Mass actions for the module
+	 * @param <Array> $linkParams
+	 * @return <Array> - Associative array of Link type to List of  Vtiger_Link_Model instances for Mass Actions
+	 */
 	public function getListViewMassActions($linkParams) {
 		return array();
 	}

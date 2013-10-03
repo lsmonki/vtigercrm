@@ -100,8 +100,15 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
     public function unHide(Vtiger_Request $request) {
         $response = new Vtiger_Response();
         try{
-            Settings_LayoutEditor_Field_Model::makeFieldActive($request->get('fieldIdList'), $request->get('blockId'));
-            $response->setResult(array('success'=>true));
+			$fieldIds = $request->get('fieldIdList');
+            Settings_LayoutEditor_Field_Model::makeFieldActive($fieldIds, $request->get('blockId'));
+			$responseData = array();
+			foreach($fieldIds as $fieldId) {
+				$fieldModel = Vtiger_Field_Model::getInstance($fieldId);
+				$fieldInfo = $fieldModel->getFieldInfo();
+				$responseData[] = array_merge(array('id'=>$fieldModel->getId(), 'blockid'=>$fieldModel->get('block')->id),$fieldInfo);
+			}
+            $response->setResult($responseData);
         }catch(Exception $e) {
             $response->setError($e->getCode(), $e->getMessage());
         }

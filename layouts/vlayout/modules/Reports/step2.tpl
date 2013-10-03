@@ -34,7 +34,7 @@
 							{foreach key=BLOCK_LABEL item=BLOCK from=$PRIMARY_MODULE}
 								<optgroup label='{vtranslate($PRIMARY_MODULE_NAME,$MODULE)}-{vtranslate($BLOCK_LABEL,$PRIMARY_MODULE_NAME)}'>
 								{foreach key=FIELD_KEY item=FIELD_LABEL from=$BLOCK}
-									<option value="{$FIELD_KEY}" {if !empty($SELECTED_FIELDS) && in_array($FIELD_KEY,$SELECTED_FIELDS)}selected=""{/if}>{vtranslate($FIELD_LABEL, $PRIMARY_MODULE_NAME)}</option>
+									<option value="{$FIELD_KEY}" {if !empty($SELECTED_FIELDS) && in_array($FIELD_KEY,array_map('decode_html',$SELECTED_FIELDS))}selected=""{/if}>{vtranslate($FIELD_LABEL, $PRIMARY_MODULE_NAME)}</option>
 								{/foreach}
 								</optgroup>
 							{/foreach}
@@ -43,7 +43,7 @@
 							{foreach key=BLOCK_LABEL item=BLOCK from=$SECONDARY_MODULE}
 								<optgroup label='{vtranslate($SECONDARY_MODULE_NAME,$MODULE)}-{vtranslate($BLOCK_LABEL,$SECONDARY_MODULE_NAME)}'>
 								{foreach key=FIELD_KEY item=FIELD_LABEL from=$BLOCK}
-									<option value="{$FIELD_KEY}"{if !empty($SELECTED_FIELDS) && in_array($FIELD_KEY,$SELECTED_FIELDS)}selected=""{/if}>{vtranslate($FIELD_LABEL, $SECONDARY_MODULE_NAME)}</option>
+									<option value="{$FIELD_KEY}"{if !empty($SELECTED_FIELDS) && in_array($FIELD_KEY,array_map('decode_html',$SELECTED_FIELDS))}selected=""{/if}>{vtranslate($FIELD_LABEL, $SECONDARY_MODULE_NAME)}</option>
 								{/foreach}
 								</optgroup>
 							{/foreach}

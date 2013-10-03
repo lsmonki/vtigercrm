@@ -25,13 +25,17 @@
 						{assign var=columnNameApi value=getCustomViewColumnName}
 					{/if}
 					<option value="{$FIELD_MODEL->$columnNameApi()}" data-fieldtype="{$FIELD_MODEL->getFieldType()}" data-field-name="{$FIELD_NAME}"
-					{if $FIELD_MODEL->$columnNameApi() eq $CONDITION_INFO['columnname']}
+					{if decode_html($FIELD_MODEL->$columnNameApi()) eq $CONDITION_INFO['columnname']}
 						{assign var=FIELD_TYPE value=$FIELD_MODEL->getFieldDataType()}
 						{assign var=SELECTED_FIELD_MODEL value=$FIELD_MODEL}
-						{$FIELD_INFO['value'] = $CONDITION_INFO['value']|escape}
-						selected &nbsp;
+						{$FIELD_INFO['value'] = decode_html($CONDITION_INFO['value'])}
+						selected="selected"
 					{/if}
-					&nbsp; data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}' >
+					{if ($MODULE_MODEL->get('name') eq 'Events') and ($FIELD_NAME eq 'recurringtype')}
+						{assign var=PICKLIST_VALUES value = Calendar_Field_Model::getReccurencePicklistValues()}
+						{$FIELD_INFO['picklistvalues'] = $PICKLIST_VALUES}
+					{/if}
+					data-fieldinfo='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($FIELD_INFO))}' >
 					{if $SELECTED_MODULE_NAME neq $MODULE_MODEL->get('name')} 
 						({vtranslate($MODULE_MODEL->get('name'), $MODULE_MODEL->get('name'))})  {vtranslate($FIELD_MODEL->get('label'), $MODULE_MODEL->get('name'))}
 					{else}

@@ -16,6 +16,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$this->exposeMethod('showComposeEmailForm');
 		$this->exposeMethod('showSendSMSForm');
 		$this->exposeMethod('showDuplicatesSearchForm');
+		$this->exposeMethod('transferOwnership');
 	}
 
 	function process(Vtiger_Request $request) {
@@ -244,7 +245,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 
 		$sourceModule = $request->getModule();
 		$moduleName = 'SMSNotifier';
-		$selectedIds = $request->get('selected_ids');
+		$selectedIds = $this->getRecordsListFromRequest($request);
 		$excludedIds = $request->get('excluded_ids');
 		$cvId = $request->get('viewname');
 
@@ -253,6 +254,12 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
         $phoneFields = $moduleModel->getFieldsByType('phone');
 
 		$viewer = $this->getViewer($request);
+		
+		if(count($selectedIds) == 1){
+			$recordId = $selectedIds[0];
+			$selectedRecordModel = Vtiger_Record_Model::getInstanceById($recordId, $sourceModule);
+			$viewer->assign('SINGLE_RECORD', $selectedRecordModel);
+		}
 		$viewer->assign('VIEWNAME', $cvId);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
@@ -306,7 +313,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 				$customViewModel->set('search_key', $searchKey);
 				$customViewModel->set('search_value', $searchValue);
 			}
-			return $customViewModel->getRecordIds($excludedIds);
+			return $customViewModel->getRecordIds($excludedIds,$request->getModule());
 		}
 	}
 
@@ -344,5 +351,26 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('MODULE', $module);
 		$viewer->assign('FIELDS', $fields);
 		$viewer->view('showDuplicateSearch.tpl', $module);
+	}
+	
+	function transferOwnership(Vtiger_Request $request){
+		$module = $request->getModule();
+		$moduleModel = Vtiger_Module_Model::getInstance($module);
+		$relatedModules = $moduleModel->getRelations();
+		//User doesn't have the permission to edit related module,
+		//then don't show that module in related module list.
+		foreach ($relatedModules as $key => $relModule) {
+			if (!Users_Privileges_Model::isPermitted($relModule->get('relatedModuleName'), 'EditView')) {
+				unset($relatedModules[$key]);
+			}
+		}
+		
+		$viewer = $this->getViewer($request);
+		$skipModules = array('Emails');
+		$viewer->assign('MODULE',$module);
+		$viewer->assign('RELATED_MODULES', $relatedModules);
+		$viewer->assign('SKIP_MODULES', $skipModules);
+		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+		$viewer->view('TransferRecordOwnership.tpl', $module);
 	}
 }

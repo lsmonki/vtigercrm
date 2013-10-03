@@ -163,7 +163,7 @@ class Google_List_View extends Vtiger_PopupAjax_View {
 	 */
     public function getHeaderScripts(Vtiger_Request $request) {
         $moduleName = $request->getModule();
-		return $this->checkAndConvertJsScripts(array("~libraries/bootstrap/js/bootstrap-popover.js","modules.$moduleName.resources.List",));
+		return $this->checkAndConvertJsScripts(array("~libraries/bootstrap/js/bootstrap-popover.js","modules.$moduleName.resources.List"));
         
     }
 

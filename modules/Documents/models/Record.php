@@ -20,12 +20,9 @@ class Documents_Record_Model extends Vtiger_Record_Model {
 	}
 
 	function getDownloadFileURL() {
-		$moduleName = $this->getModuleName();
-		
 		if ($this->get('filelocationtype') == 'I') {
 			$fileDetails = $this->getFileDetails();
-			
-			return "index.php?module=".$moduleName."&action=DownloadFile&record=".$this->getId()."&fileid=".$fileDetails['attachmentsid'];
+			return 'index.php?module='. $this->getModuleName() .'&action=DownloadFile&record='. $this->getId() .'&fileid='. $fileDetails['attachmentsid'];
 		} else {
 			return $this->get('filename');
 		}

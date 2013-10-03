@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Ведет поле отображения', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , // TODO: Review
 	'LBL_WEBFORMS'                 => 'Setup Webforms'              , // TODO: Review
-	'LBL_LEAD_SOURCE'              => 'Источник:'           , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , // TODO: Review

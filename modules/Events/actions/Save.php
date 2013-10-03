@@ -16,9 +16,10 @@ class Events_Save_Action extends Calendar_Save_Action {
 	 * @return <RecordModel> - record Model of saved record
 	 */
 	public function saveRecord($request) {
-		 $adb = PearDatabase::getInstance();
+		$adb = PearDatabase::getInstance();
 		$recordModel = $this->getRecordModelFromRequest($request);
 		$recordModel->save();
+		$originalRecordId = $recordModel->getId();
 		if($request->get('relationOperation')) {
 			$parentModuleName = $request->get('sourceModule');
 			$parentModuleModel = Vtiger_Module_Model::getInstance($parentModuleName);
@@ -46,12 +47,24 @@ class Events_Save_Action extends Calendar_Save_Action {
 			$recordModel->set('eventstatus', 'Planned');
 			$recordModel->set('subject','[Followup] '.$subject);
 			$recordModel->set('date_start',$startDate);
-			$recordModel->set('due_date',$startDate);
 			$recordModel->set('time_start',$startTime);
+
+			$currentUser = Users_Record_Model::getCurrentUserModel();
+			$activityType = $recordModel->get('activitytype');
+			if($activityType == 'Call') {
+				$minutes = $currentUser->get('callduration');
+			} else {
+				$minutes = $currentUser->get('othereventduration');
+			}
+			$dueDateTime = date('Y-m-d H:i:s', strtotime("$startDateTime+$minutes minutes"));
+			list($startDate, $startTime) = explode(' ', $dueDateTime);
+
+			$recordModel->set('due_date',$startDate);
 			$recordModel->set('time_end',$startTime);
 			$recordModel->set('recurringtype', '');
 			$recordModel->set('mode', 'create');
 			$recordModel->save();
+			$heldevent = true;
 		}
 		
 		//TODO: remove the dependency on $_REQUEST
@@ -66,13 +79,17 @@ class Events_Save_Action extends Calendar_Save_Action {
 		}
 		$contactIdList = $request->get('contactidlist');
         $recordId = $recordModel->getId();
+		$idLists = array();
         if(isset($contactIdList))
         {
             //split the string and store in an array
             $storearray = explode (";",$contactIdList);
-            $del_sql = "delete from vtiger_cntactivityrel where activityid=?";
-            $adb->pquery($del_sql, array($recordId));
-            //print_r($adb->convert2Sql($del_sql, array($recordId)));
+			array_push($idLists, $recordId);
+			if($heldevent) {
+				array_push($idLists, $originalRecordId);
+			}
+            $del_sql = 'delete from vtiger_cntactivityrel where activityid IN(' . generateQuestionMarks($idLists) . ')';
+            $adb->pquery($del_sql, $idLists);
             $record = $recordId;
             foreach($storearray as $id)
             {
@@ -81,9 +98,9 @@ class Events_Save_Action extends Calendar_Save_Action {
 
                     $sql = "insert into vtiger_cntactivityrel values (?,?)";
                     $adb->pquery($sql, array($id, $record));
-                    if(!empty($heldevent_id)) {
-                        $sql = "insert into vtiger_cntactivityrel values (?,?)";
-                        $adb->pquery($sql, array($id, $heldevent_id));
+                    if($heldevent) {
+						$sql = "insert into vtiger_cntactivityrel values (?,?)";
+						$adb->pquery($sql, array($id, $originalRecordId));
                     }
                 }
             }

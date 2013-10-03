@@ -308,6 +308,38 @@ var Settings_Profiles_Js = {
 		return aDeferred.promise();
 	},
 	
+	registerGlobalPermissionActionsEvent : function() {
+		var editAllAction = jQuery('[name="editall"]').filter(':checkbox');
+		var viewAllAction = jQuery('[name="viewall"]').filter(':checkbox');
+		
+		if(editAllAction.is(':checked')) {
+			viewAllAction.attr('readonly', 'readonly');
+		}
+		
+		viewAllAction.on('change', function(e) {
+			var currentTarget = jQuery(e.currentTarget);
+			if(currentTarget.attr('readonly') == 'readonly') {
+				var status = jQuery(e.currentTarget).is(':checked');
+				if(!status){
+					jQuery(e.currentTarget).attr('checked','checked')
+				}else{
+					jQuery(e.currentTarget).removeAttr('checked');
+				}
+				e.preventDefault();
+			}
+		})
+		
+		editAllAction.on('change', function(e) {
+			var currentTarget = jQuery(e.currentTarget);
+			if(currentTarget.is(':checked')) {
+				viewAllAction.attr('checked', 'checked');
+				viewAllAction.attr('readonly', 'readonly');
+			} else {
+				viewAllAction.removeAttr('readonly');
+			}
+		})
+	},
+	
 	registerEvents : function() {
 		Settings_Profiles_Js.initEditView();
 		Settings_Profiles_Js.registerSelectAllModulesEvent();
@@ -316,6 +348,7 @@ var Settings_Profiles_Js = {
 		Settings_Profiles_Js.registerSelectAllDeleteActionsEvent();
 		Settings_Profiles_Js.performSelectAllActionsOnLoad();
 		Settings_Profiles_Js.registerSubmitEvent();
+		Settings_Profiles_Js.registerGlobalPermissionActionsEvent();
 	}
 	
 }

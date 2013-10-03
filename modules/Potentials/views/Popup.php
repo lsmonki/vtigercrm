@@ -115,6 +115,21 @@ class Potentials_Popup_View extends Vtiger_Popup_View {
 			$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
 			$viewer->assign('LISTVIEW_HEADERS', $headers);
 			$viewer->assign('LISTVIEW_ENTRIES', $models);
+			
+			if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
+				if(!$this->listViewCount){
+					$this->listViewCount = $relationListView->getRelatedEntriesCount();
+				}
+				$totalCount = $this->listViewCount;
+				$pageLimit = $pagingModel->getPageLimit();
+				$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+				if($pageCount == 0){
+					$pageCount = 1;
+				}
+				$viewer->assign('PAGE_COUNT', $pageCount);
+				$viewer->assign('LISTVIEW_COUNT', $totalCount);
+			}
 
 			$viewer->assign('MULTI_SELECT', $multiSelectMode);
 			$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());

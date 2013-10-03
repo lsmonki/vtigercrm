@@ -54,11 +54,11 @@
 					{vtranslate('LBL_MODULES', $QUALIFIED_MODULE)}
 				</th>
 				<th width="14%" style="border-left: 1px solid #DDD !important;">
-					<input type="checkbox" class="alignTop" checked="true" id="mainAction4CheckBox" />&nbsp;
+					<input type="checkbox" {if !$RECORD_ID} class="alignTop" checked="true" {/if} id="mainAction4CheckBox" />&nbsp;
 					{'LBL_VIEW_PRVILIGE'|vtranslate:$QUALIFIED_MODULE}
 				</th>
 				<th width="14%" style="border-left: 1px solid #DDD !important;">
-					<input checked="true" class="alignTop" type="checkbox" id="mainAction1CheckBox" />&nbsp;
+					<input {if !$RECORD_ID} class="alignTop"  checked="true" {/if} type="checkbox" id="mainAction1CheckBox" />&nbsp;
 					{'LBL_EDIT_PRVILIGE'|vtranslate:$QUALIFIED_MODULE}
 				</th>
 				<th width="14%" style="border-left: 1px solid #DDD !important;">
@@ -132,7 +132,7 @@
 												<input type="hidden" name="permissions[{$TABID}][fields][{$FIELD_ID}]" data-range-input="{$FIELD_ID}" value="{$RECORD_MODEL->getModuleFieldPermissionValue($PROFILE_MODULE, $FIELD_MODEL)}" readonly="true">
 												<div class="mini-slider-control editViewMiniSlider pull-left" data-locked="{$FIELD_LOCKED}" data-range="{$FIELD_ID}" data-value="{$RECORD_MODEL->getModuleFieldPermissionValue($PROFILE_MODULE, $FIELD_MODEL)}"></div>
 												<div class="pull-left">
-												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {$FIELD_MODEL->get('label')}
+												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
 											</div>
 										</td>
 										{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}
@@ -154,7 +154,7 @@
 											<input type="hidden" name="permissions[16][fields][{$FIELD_ID}]" data-range-input="{$FIELD_ID}" value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}" readonly="true">
 											<div class="mini-slider-control editViewMiniSlider pull-left" data-locked="{$FIELD_LOCKED}" data-range="{$FIELD_ID}" data-value="{$RECORD_MODEL->getModuleFieldPermissionValue($EVENT_MODULE, $FIELD_MODEL)}"></div>
 											<div class="pull-left">
-												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {$FIELD_MODEL->get('label')}
+												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
 											</div>
 										</td>
 										{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}

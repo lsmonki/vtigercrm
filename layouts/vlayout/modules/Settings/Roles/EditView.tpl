@@ -26,19 +26,35 @@
 
 			<div class="row-fluid">
 				<div class="row-fluid">
-					<label class="fieldLabel span2"><strong>{vtranslate('LBL_NAME', $QUALIFIED_MODULE)}<span class="redColor">*</span>: </strong></label>
+					<label class="fieldLabel span3"><strong>{vtranslate('LBL_NAME', $QUALIFIED_MODULE)}<span class="redColor">*</span>: </strong></label>
 					<input type="text" class="fieldValue span6" name="rolename" id="profilename" value="{$RECORD_MODEL->getName()}" data-validation-engine='validate[required]'  />
 				</div><br>
 				<div class="row-fluid">
-					<label class="fieldLabel span2"><strong>{vtranslate('LBL_REPORTS_TO', $QUALIFIED_MODULE)}: </strong></label>
-					<div class="span6 fieldValue">
+					<label class="fieldLabel span3"><strong>{vtranslate('LBL_REPORTS_TO', $QUALIFIED_MODULE)}: </strong></label>
+					<div class="span8 fieldValue">
 						<input type="hidden" name="parent_roleid" {if $HAS_PARENT}value="{$RECORD_MODEL->getParent()->getId()}"{/if}>
 						<input type="text" class="input-large" name="parent_roleid_display" {if $HAS_PARENT}value="{$RECORD_MODEL->getParent()->getName()}"{/if} readonly>
 					</div>
 				</div><br>
+                <div class="row-fluid">
+					<label class="fieldLabel span3"><strong>{vtranslate('LBL_CAN_ASSIGN_RECORDS_TO', $QUALIFIED_MODULE)}: </strong></label>
+					<div class="row-fluid span8 fieldValue">
+						<div class="span">
+							<input type="radio" value="1"{if !$RECORD_MODEL->get('allowassignedrecordsto')} checked=""{/if} {if $RECORD_MODEL->get('allowassignedrecordsto') eq '1'} checked="" {/if} name="allowassignedrecordsto" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_ALL_USERS',$QUALIFIED_MODULE)}</span>
+						</div>
+                        <div class="span1">&nbsp;</div>
+						<div class="span">
+							<input type="radio" value="2" {if $RECORD_MODEL->get('allowassignedrecordsto') eq '2'} checked="" {/if} name="allowassignedrecordsto" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_USERS_WITH_SAME_OR_LOWER_LEVEL',$QUALIFIED_MODULE)}</span>
+						</div>
+                        <div class="span1">&nbsp;</div>
+						<div class="span">
+							<input type="radio" value="3" {if $RECORD_MODEL->get('allowassignedrecordsto') eq '3'} checked="" {/if} name="allowassignedrecordsto" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_USERS_WITH_LOWER_LEVEL',$QUALIFIED_MODULE)}</span>
+						</div>
+				</div>
+                </div><br>
 				<div class="row-fluid">
-					<label class="fieldLabel span2"><strong>{vtranslate('LBL_PRIVILEGES',$QUALIFIED_MODULE)}:</strong></label>
-					<div class="row-fluid span10 fieldValue">
+					<label class="fieldLabel span3"><strong>{vtranslate('LBL_PRIVILEGES',$QUALIFIED_MODULE)}:</strong></label>
+					<div class="row-fluid span8 fieldValue">
 						<div class="span">
 							<input type="radio" value="1" {if $PROFILE_DIRECTLY_RELATED_TO_ROLE} checked="" {/if} name="profile_directly_related_to_role" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_ASSIGN_NEW_PRIVILEGES',$QUALIFIED_MODULE)}</span>
 						</div>
@@ -47,7 +63,8 @@
 							<input type="radio" value="0" {if $PROFILE_DIRECTLY_RELATED_TO_ROLE eq false} checked="" {/if} name="profile_directly_related_to_role" data-handler="existing" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_ASSIGN_EXISTING_PRIVILEGES',$QUALIFIED_MODULE)}</span>
 						</div>
 					</div>
-				</div><br>
+				</div>
+				
 				<div class="row-fluid hide" data-content="new">
 					<div class="fieldValue span12 contentsBackground padding1per">
 					</div>
@@ -64,6 +81,7 @@
 						</select>
 					</div>
 				</div><br>
+                
 			</div>
 
 			<div class="pull-right">

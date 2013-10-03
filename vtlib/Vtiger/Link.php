@@ -187,13 +187,14 @@ class Vtiger_Link {
 					$params = $type;
 					$permittedTabIdList = getPermittedModuleIdList();
 					if(count($permittedTabIdList) > 0 && $current_user->is_admin !== 'on') {
+                        array_push($permittedTabIdList, 0);     // Added to support one link for all modules
 						$sql .= ' and tabid IN ('.
 							Vtiger_Utils::implodestr('?', count($permittedTabIdList), ',').')';
 						$params[] = $permittedTabIdList;
 					}
 					$result = $adb->pquery($sql, Array($adb->flatten_array($params)));
 				} else {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype IN ('.
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE (tabid=? OR tabid=0) AND linktype IN ('.
 						Vtiger_Utils::implodestr('?', count($type), ',') .')',
 							Array($tabid, $adb->flatten_array($type)));
 				}			
@@ -202,7 +203,7 @@ class Vtiger_Link {
 				if($tabid === self::IGNORE_MODULE) {
 					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE linktype=?', Array($type));
 				} else {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype=?', Array($tabid, $type));				
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE (tabid=? OR tabid=0) AND linktype=?', Array($tabid, $type));				
 				}
 			}
 		} else {
@@ -239,7 +240,7 @@ class Vtiger_Link {
 			if($multitype) {
 				$instances[$instance->linktype][] = $instance;
 			} else {
-				$instances[] = $instance;
+				$instances[$instance->linktype] = $instance;
 			}
 		}
 		return $instances;

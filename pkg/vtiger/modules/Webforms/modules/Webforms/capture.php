@@ -23,7 +23,10 @@ class Webform_Capture {
 	function captureNow($request) {
 		$returnURL = false;
 		try {
-
+			
+			foreach ($request as $key=>$value) {
+				$request[utf8_decode($key)] = $value;
+			}
 			if(!vtlib_isModuleActive('Webforms')) throw new Exception('webforms is not active');
 			
 			$webform = Webforms_Model::retrieveWithPublicId(vtlib_purify($request['publicid']));
@@ -43,11 +46,13 @@ class Webform_Capture {
 				if($webformField->getDefaultValue()!=null){
 					$parameters[$webformField->getFieldName()] = decode_html($webformField->getDefaultValue());
 				}else{
-					if(is_array(vtlib_purify($request[$webformField->getNeutralizedField()]))){
-						$fieldData=implode(" |##| ",vtlib_purify($request[$webformField->getNeutralizedField()]));
+					$webformNeutralizedField = html_entity_decode($webformField->getNeutralizedField());
+					if(is_array(vtlib_purify($request[$webformNeutralizedField]))){
+						$fieldData=implode(" |##| ",vtlib_purify($request[$webformNeutralizedField]));
 					}
 					else{
-						$fieldData=vtlib_purify($request[$webformField->getNeutralizedField()]);
+						$fieldData=vtlib_purify($request[$webformNeutralizedField]);
+						$fieldData = decode_html($fieldData);
 					}
 				
 					$parameters[$webformField->getFieldName()] = stripslashes($fieldData);

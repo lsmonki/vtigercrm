@@ -70,20 +70,28 @@ class Mobile_WS_SyncModuleRecords extends Mobile_WS_SaveRecord {
 		$activeQuery = sprintf("%s LIMIT %u,%u;", $queryActive, $startLimit, ($FETCH_LIMIT+1));
 		$activeResult = vtws_query( $activeQuery, $current_user );
 
-		// Special case handling merge Events records
-		if ($module == 'Calendar') {
-			$activeResult2 = vtws_query(str_replace('Calendar', 'Events', $activeQuery), $current_user);
-			if (!empty($activeResult2)) $activeResult = array_merge($activeResult, $activeResult2);
-			$FETCH_LIMIT *= 2;
-		}
+		 // Determine paging
+        $hasNextPage = (count($activeResult) > $FETCH_LIMIT);
 
-		// Determine paging
-		$hasNextPage = (count($activeResult) > $FETCH_LIMIT);
-		$nextPage = 0;
-		if ($hasNextPage) {
-			array_pop($activeResult); // Avoid sending next page record now
-			$nextPage = $currentPage + 1;
-		}
+        // Special case handling merge Events records
+        if ($module == 'Calendar') {
+            $activeResult2 = vtws_query(str_replace('Calendar', 'Events', $activeQuery), $current_user);
+            if (!empty($activeResult2)) {
+                $activeResult = array_merge($activeResult, $activeResult2);
+                if (!$hasNextPage) {
+                    // If there was not Calendar next-page of records - check with Events
+                    $hasNextPage = (count($activeResult) > $FETCH_LIMIT);
+                }
+            }
+            // Indicator that we fetched both Calendar+Events
+            $FETCH_LIMIT *= 2;
+        }
+
+        $nextPage = 0;
+        if ($hasNextPage) {
+            array_pop($activeResult); // Avoid sending next page record now
+            $nextPage = $currentPage + 1;
+        }
 
 		// Resolved record details
 		$resolvedModifiedRecords = array();

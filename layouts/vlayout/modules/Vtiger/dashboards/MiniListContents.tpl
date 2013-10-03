@@ -16,7 +16,7 @@
 	
 	<div class="row-fluid" style="padding:5px">
 		{foreach item=FIELD from=$MINILIST_WIDGET_MODEL->getHeaders()}
-		<div class="span{$SPANSIZE}"><strong>{vtranslate($FIELD->get('label'),$MODULE_NAME)}</strong></div>
+		<div class="span{$SPANSIZE}"><strong>{vtranslate($FIELD->get('label'),$BASE_MODULE)}</strong></div>
 		{/foreach}
 	</div>
 	

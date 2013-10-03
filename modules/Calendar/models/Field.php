@@ -106,4 +106,36 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 		}
 		return parent::getEditViewDisplayValue($value);
 	}
+	
+	/**
+     * Function which will give the picklist values for a recurrence field
+     * @param type $fieldName -- string
+     * @return type -- array of values
+     */
+    public static function getReccurencePicklistValues() {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$fieldModel = Vtiger_Field_Model::getInstance('recurringtype', Vtiger_Module_Model::getInstance('Events'));
+		if($fieldModel->isRoleBased() && !$currentUser->isAdminUser()) {
+			$userModel = Users_Record_Model::getCurrentUserModel();
+			$picklistValues = Vtiger_Util_Helper::getRoleBasedPicklistValues('recurringtype', $userModel->get('roleid'));
+		}else{
+			$picklistValues = Vtiger_Util_Helper::getPickListValues('recurringtype');
+		}
+		foreach($picklistValues as $value) {
+			$fieldPickListValues[$value] = vtranslate($value,'Events');
+		}
+		return $fieldPickListValues;
+	}
+	
+	/**
+	 * Function to get the advanced filter option names by Field type
+	 * @return <Array>
+	 */
+	public static function getAdvancedFilterOpsByFieldType() {
+		
+		$filterOpsByFieldType = parent::getAdvancedFilterOpsByFieldType();
+		$filterOpsByFieldType['O'] = array('e','n');
+		
+		return $filterOpsByFieldType;
+	}
 }

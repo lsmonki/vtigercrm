@@ -20,7 +20,6 @@ class Inventory_SubProductsPopup_View extends Vtiger_Popup_View {
 	
 	function process (Vtiger_Request $request) {
 		$viewer = $this->getViewer ($request);
-		$moduleName = $this->getModule($request);
 		$companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
 		$companyLogo = $companyDetails->getLogo();
 
@@ -28,7 +27,9 @@ class Inventory_SubProductsPopup_View extends Vtiger_Popup_View {
 
 		$viewer->assign('MODULE_NAME',$moduleName);
 		$viewer->assign('COMPANY_LOGO',$companyLogo);
-
+		
+		$moduleName = 'Inventory';
+		$viewer->assign('MODULE_NAME',$moduleName);
 		$viewer->view('PopupEntries.tpl', $moduleName);
 	}
 	/*
@@ -93,6 +94,8 @@ class Inventory_SubProductsPopup_View extends Vtiger_Popup_View {
 		if($subProductsPopup && $parentProductId){
 			$listViewModel->set('subProductsPopup', true);
 			$listViewModel->set('productId', $parentProductId);
+			$viewer->assign('SUBPRODUCTS_POPUP', $subProductsPopup);
+			$viewer->assign('PARENT_PRODUCT_ID', $parentProductId);
 		}
 
 		if(!$this->listViewHeaders){
@@ -140,13 +143,89 @@ class Inventory_SubProductsPopup_View extends Vtiger_Popup_View {
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
+		
+		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
+			if(!$this->listViewCount){
+				$this->listViewCount = $listViewModel->getListViewCount();
+			}
+			$totalCount = $this->listViewCount;
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('LISTVIEW_COUNT', $totalCount);
+		}
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		
 		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('GETURL', 'getTaxesURL');
-		$viewer->assign('VIEW', 'ProductsPopup');
+		$viewer->assign('VIEW', 'SubProductsPopup');
 		$viewer->assign('MAIN_PRODUCT_POPUP', true);
+	}
+	/**
+	 * Function to get listView count
+	 * @param Vtiger_Request $request
+	 */
+	function getListViewCount(Vtiger_Request $request){
+		$moduleName = $this->getModule($request);
+		$sourceModule = $request->get('src_module');
+		$sourceField = $request->get('src_field');
+		$sourceRecord = $request->get('src_record');
+		$orderBy = $request->get('orderby');
+		$sortOrder = $request->get('sortorder');
+
+		$searchKey = $request->get('search_key');
+		$searchValue = $request->get('search_value');
+		$subProductsPopup = $request->get('subProductsPopup');
+		$parentProductId = $request->get('productid');
+
+		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+		if(!empty($sourceModule)) {
+			$listViewModel->set('src_module', $sourceModule);
+			$listViewModel->set('src_field', $sourceField);
+			$listViewModel->set('src_record', $sourceRecord);
+		}
+		
+		if(!empty($orderBy)) {
+			$listViewModel->set('orderby', $orderBy);
+			$listViewModel->set('sortorder', $sortOrder);
+		}
+		if((!empty($searchKey)) && (!empty($searchValue)))  {
+			$listViewModel->set('search_key', $searchKey);
+			$listViewModel->set('search_value', $searchValue);
+		}
+		if($subProductsPopup && $parentProductId){
+			$listViewModel->set('subProductsPopup', true);
+			$listViewModel->set('productId', $parentProductId);
+		}
+		$count = $listViewModel->getListViewCount();
+
+		return $count;
+	}
+	
+	/**
+	 * Function to get the page count for list
+	 * @return total number of pages
+	 */
+	function getPageCount(Vtiger_Request $request){
+		$listViewCount = $this->getListViewCount($request);
+		$pagingModel = new Vtiger_Paging_Model();
+		$pageLimit = $pagingModel->getPageLimit();
+		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
+
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
+		$result = array();
+		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $listViewCount;
+		$response = new Vtiger_Response();
+		$response->setResult($result);
+		$response->emit();
 	}
 }

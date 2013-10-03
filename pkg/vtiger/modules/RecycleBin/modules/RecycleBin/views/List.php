@@ -125,7 +125,15 @@ class RecycleBin_List_View extends Vtiger_Index_View {
 			if(!$this->listViewCount){
 				$this->listViewCount = $listViewModel->getListViewCount();
 			}
-			$viewer->assign('LISTVIEW_COUNT', $this->listViewCount);
+			$totalCount = $this->listViewCount;
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('LISTVIEW_COUNT', $totalCount);
 		}
 		$viewer->assign('IS_MODULE_DELETABLE', $listViewModel->getModule()->isPermitted('Delete'));
 		
@@ -168,8 +176,12 @@ class RecycleBin_List_View extends Vtiger_Index_View {
 		$pageLimit = $pagingModel->getPageLimit();
 		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
 
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
 		$result = array();
 		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $listViewCount;
 		$response = new Vtiger_Response();
 		$response->setResult($result);
 		$response->emit();

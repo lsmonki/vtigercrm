@@ -141,6 +141,8 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 	public function postProcess(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		if(!$this->record){
 			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
@@ -148,10 +150,18 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$detailViewLinks = $this->record->getDetailViewLinks($detailViewLinkParams);
 
 		$selectedTabLabel = $request->get('tab_label');
-		if(empty($selectedTabLabel) && !empty($detailViewLinks['DETAILVIEWTAB']) &&
-				!empty($detailViewLinks['DETAILVIEWTAB'][0])) {
-			$selectedTabLabel = $detailViewLinks['DETAILVIEWTAB'][0]->getLabel();
-		}
+
+		if(empty($selectedTabLabel)) {
+            if($currentUserModel->get('default_record_view') === 'Detail') {
+                $selectedTabLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName);
+            } else{
+                if($moduleModel->isSummaryViewSupported()) {
+                    $selectedTabLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_SUMMARY', $moduleName);
+                } else {
+                    $selectedTabLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName);
+                }
+            } 
+        }
 
 		$viewer = $this->getViewer($request);
 

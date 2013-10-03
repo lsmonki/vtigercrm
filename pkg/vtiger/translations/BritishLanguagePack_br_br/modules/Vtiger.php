@@ -106,7 +106,7 @@ $languageStrings = array(
 	'LBL_IN'                       => 'In'                          , 
 	'LBL_TYPE_SEARCH'              => 'Type to search'              , 
 	'LBL_SEARCH_BUTTON'            => 'Search Button'               , 
-	'LBL_ADVANCE_SEARCH'           => 'Advanced Search'             , 
+	'LBL_ADVANCE_SEARCH'           => 'Advanced'             , 
 	'LBL_LOADING_PLEASE_WAIT'      => 'Loading, Please wait.'       , 
 	'LBL_USERS'                    => 'Users'                       , 
 	'LBL_GROUPS'                   => 'Groups'                      , 
@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Sales Order'                 , 
 	'Invoice'                      => 'Invoice'                     , 
 	'MailManager'                  => 'Mail Manager'                , // TODO: Review
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Add Record'                  , 
 	'LBL_RECENTLY_MODIFIED'        => 'Recently Modified'           , 
 	'LBL_RECORDS_LIST'             => 'Records List'                , 
@@ -357,7 +358,7 @@ $languageStrings = array(
 	'Banking'                      => 'Banking'                     , 
 	'Billing Address'              => 'Invoice Address'             , 
 	'Billing City'                 => 'Billing City'                , 
-	'Billing Code'                 => 'Billing Code'                , 
+	'Billing Code'                 => 'Billing Postal Code'         , 
 	'Billing Country'              => 'Billing Country'             , 
 	'Billing Po Box'               => 'Billing P.O. Box'            , 
 	'Billing State'                => 'Billing State'               , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Sales End Date'              , 
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Select Status'               , // TODO: Review
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , 
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand'        , 
 	'SINGLE_Accounts'              => 'Organization'                , // TODO: Review
 	'SINGLE_Contacts'              => 'Contact'                     , // TODO: Review
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -548,6 +549,45 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Valid Date',
+	'Phone: ' => 'Phone: ',
+	'Issued Date' => 'Issued Date',
+	'Shipping & Handling Charges' => 'Shipping & Handling Charges',
+	'Shipping & Handling Tax:' => 'Shipping & Handling Tax:',
+	'Discount'=>'Discount',
+	'Net Total' => 'Net Total',
+	'Product Code'=>'Product Code',
+	'Customer Name'=>'Customer Name',
+	'Price'=>'Price',
+	'Tax:' => 'Tax:',
+	'Contact Name' => 'Contact Name',
+	'Grand Total:' => 'Grand Total:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'Website: ',
+	'Tax' => 'Tax',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Service Contracts',
+	'Projects' => 'Projects',
+	'Sales Order' => 'Sales Order',
+	'Purchase Order' => 'Purchase Order',
+	'Payments' => 'Payments',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
+	
+	'LBL_MANAGE_USERS' => 'Manage Users',
+	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership',
+	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Please configure your outgoing server settings from the settings page', 
@@ -655,4 +695,7 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Password Changed Successfully.',
 	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
+	'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

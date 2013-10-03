@@ -16,7 +16,7 @@ $languageStrings = array(
 
 	// Blocks
 	'LBL_OPPORTUNITY_INFORMATION' => 'Opportunity Details',
-	
+
 	//Field Labels
 	'Potential No' => 'Opportunity Number',
 	'Amount' => 'Amount',
@@ -25,6 +25,8 @@ $languageStrings = array(
 	'Probability' => 'Probability',
 	'Campaign Source' => 'Campaign Source',
 	'Forecast Amount' => 'Forecast Amount',
+	'Related To' => 'Organization Name',
+	'Contact Name' => 'Contact Name',
 	
 	//Dashboard widgets
 	'Funnel' => 'Sales Funnel',
@@ -32,7 +34,7 @@ $languageStrings = array(
 	'Total Revenue' => 'Revenue by Salesperson',
 	'Top Potentials' => 'Top Opportunities',
 	'Forecast' => 'Sales Forecast',
-	
+
 	//Added for Existing Picklist Strings
 
 	'Prospecting'=>'Prospecting',
@@ -50,7 +52,7 @@ $languageStrings = array(
 	'Existing Business'=>'Existing Business',
 	'New Business'=>'New Business',
 	'LBL_EXPECTED_CLOSE_DATE_ON' => 'Expected to close on',
-	
+
 	//widgets headers
 	'LBL_RELATED_CONTACTS' => 'Related Contacts',
 	'LBL_RELATED_PRODUCTS' => 'Related Products',

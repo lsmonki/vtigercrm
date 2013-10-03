@@ -217,7 +217,7 @@ class Vtiger_InventoryPDFController {
 		$summaryModel->set(getTranslatedString("Shipping & Handling Charges", $this->moduleName), $this->formatPrice($final_details['shipping_handling_charge']));
 		$summaryModel->set(getTranslatedString("Shipping & Handling Tax:", $this->moduleName)."($sh_tax_percent%)", $this->formatPrice($final_details['shtax_totalamount']));
 		$summaryModel->set(getTranslatedString("Adjustment", $this->moduleName), $this->formatPrice($final_details['adjustment']));
-		$summaryModel->set(getTranslatedString("Grand Total : (in $currencySymbol)", $this->moduleName), $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
+		$summaryModel->set(getTranslatedString("Grand Total:", $this->moduleName)."(in $currencySymbol)", $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
 
 		if ($this->moduleName == 'Invoice') {
 			$receivedVal = $this->focusColumnValue("received");

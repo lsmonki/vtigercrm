@@ -31,13 +31,13 @@ Inventory_Edit_Js("SalesOrder_Edit_Js",{},{
 		if(sourceFieldElement.attr('name') == 'contact_id' || sourceFieldElement.attr('name') == 'potential_id') {
 			var form = this.getForm();
 			var parentIdElement  = form.find('[name="account_id"]');
-			if(parentIdElement.val().length > 0) {
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 				var closestContainer = parentIdElement.closest('td');
 				params['related_parent_id'] = parentIdElement.val();
 				params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
 			} else if(sourceFieldElement.attr('name') == 'potential_id') {
 				parentIdElement  = form.find('[name="contact_id"]');
-				if(parentIdElement.val().length > 0) {
+				if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 					closestContainer = parentIdElement.closest('td');
 					params['related_parent_id'] = parentIdElement.val();
 					params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
@@ -63,13 +63,13 @@ Inventory_Edit_Js("SalesOrder_Edit_Js",{},{
 		if (params.search_module == 'Contacts' || params.search_module == 'Potentials') {
 			var form = this.getForm();
 			var parentIdElement  = form.find('[name="account_id"]');
-			if(parentIdElement.val().length > 0) {
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 				var closestContainer = parentIdElement.closest('td');
 				params.parent_id = parentIdElement.val();
 				params.parent_module = closestContainer.find('[name="popupReferenceModule"]').val();
 			} else if(params.search_module == 'Potentials') {
 				parentIdElement  = form.find('[name="contact_id"]');
-				if(parentIdElement.val().length > 0) {
+				if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 					closestContainer = parentIdElement.closest('td');
 					params.parent_id = parentIdElement.val();
 					params.parent_module = closestContainer.find('[name="popupReferenceModule"]').val();

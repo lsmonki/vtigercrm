@@ -36,11 +36,9 @@
 					<div class="accordion-group convertLeadModules">
 						<div class="header accordion-heading">
 							<div data-parent="#leadAccordion" data-toggle="collapse" class="accordion-toggle table-bordered moduleSelection" href="#{$MODULE_NAME}_FieldInfo">
-								<input id="{$MODULE_NAME}Module" class="convertLeadModuleSelection alignBottom" data-module="{vtranslate($MODULE_NAME,$MODULE_NAME)}" value="{$MODULE_NAME}" type="checkbox" {if $MODULE_NAME != 'Potentials'} checked="" {/if}/>
-									{if $MODULE_NAME eq 'Accounts'}&nbsp;{vtranslate('LBL_CREATE', $MODULE)}&nbsp;{vtranslate('SINGLE_Accounts', $MODULE_NAME)}
-										{elseif $MODULE_NAME eq 'Contacts'}&nbsp;{vtranslate('LBL_CREATE', $MODULE)}&nbsp;{vtranslate('SINGLE_Contacts', $MODULE_NAME)}
-										{elseif $MODULE_NAME eq 'Potentials'}&nbsp;{vtranslate('LBL_CREATE', $MODULE)}&nbsp;{vtranslate('SINGLE_Potentials', $MODULE_NAME)}
-									{/if}
+								<input id="{$MODULE_NAME}Module" class="convertLeadModuleSelection alignBottom" data-module="{vtranslate($MODULE_NAME,$MODULE_NAME)}" value="{$MODULE_NAME}" type="checkbox" {if $MODULE_NAME != 'Potentials'} {if $MODULE_NAME == 'Accounts' && $ACCOUNT_FIELD_MODEL && $ACCOUNT_FIELD_MODEL->isMandatory()} disabled="disabled" {/if} {if $MODULE_NAME == 'Contacts' && $CONTACT_FIELD_MODEL && $CONTACT_FIELD_MODEL->isMandatory()} disabled="disabled" {/if} checked="" {/if}/>
+									{assign var=SINGLE_MODULE_NAME value="SINGLE_$MODULE_NAME"}
+									<span style="position:relative;top:2px;">&nbsp;&nbsp;&nbsp;{vtranslate('LBL_CREATE', $MODULE)}&nbsp;{vtranslate($SINGLE_MODULE_NAME, $MODULE_NAME)}</span>
 									<span class="pull-right"><i class="iconArrow {if $CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Accounts"} icon-chevron-up {elseif !$CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Contacts"} icon-chevron-up {else} icon-chevron-down {/if}alignBottom"></i></span>
 							</div>
 						</div>

@@ -13,8 +13,8 @@
 <div id="advanceSearchContainer">
 	<div class="row-fluid padding1per">
 		<div class="span"> &nbsp; </div>
-		<div class="span11">
-			<div class="row-fluid padding-bottom1per">
+		<div class="span11 paddingTop10">
+			<div class="row-fluid">
 				<span class="span3">&nbsp;</span>
 				<span class="span">
 					<label class="highLight pushDown"><strong>{vtranslate('LBL_SEARCH_IN',$MODULE)}</strong></label>

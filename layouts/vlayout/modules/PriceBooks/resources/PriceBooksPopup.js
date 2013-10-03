@@ -133,7 +133,7 @@ Vtiger_Popup_Js("PriceBook_Products_Popup_Js",{
 	popupSlimScroll : function(){
 		var popupPageContentsContainer = this.getPopupPageContainer();
 		var element = popupPageContentsContainer.find('.popupEntriesDiv');
-		app.showScrollBar(element, {"height" : '350px'});
+		app.showScrollBar(element, {"height" : '400px'});
 	},
 
      /**

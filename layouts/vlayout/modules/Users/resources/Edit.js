@@ -8,7 +8,9 @@
  *************************************************************************************/
 
 Vtiger_Edit_Js("Users_Edit_Js",{},{
-
+	
+	duplicateCheckCache : {},
+	
 	//Hold the conditions for a hour format
 	hourFormatConditionMapping : false,
 	
@@ -69,21 +71,41 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 			var userName = jQuery('input[name="user_name"]').val();
 			var newPassword = jQuery('input[name="user_password"]').val();
 			var confirmPassword = jQuery('input[name="confirm_password"]').val();
-			if(userName != ''){
-				var result = thisInstance.checkDuplicateUser(userName);
-				if(result){
-					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_USER_EXISTS'));
+			var record = jQuery('input[name="record"]').val();
+			if(record == ''){
+				if(newPassword != confirmPassword){
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_REENTER_PASSWORDS'));
 					e.preventDefault();
 				}
-			}
-			if(newPassword != confirmPassword){
-				Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_REENTER_PASSWORDS'));
+
+				if(!(userName in thisInstance.duplicateCheckCache)) {
+					thisInstance.checkDuplicateUser(userName).then(
+						function(data){
+							if(data.result) {
+								thisInstance.duplicateCheckCache[userName] = data.result;
+								Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_USER_EXISTS'));
+							}
+						}, 
+						function (data, error){
+							thisInstance.duplicateCheckCache[userName] = data.result;
+							form.submit();
+						}
+					);
+				} else {
+					if(thisInstance.duplicateCheckCache[userName] == true){
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_USER_EXISTS'));
+					} else {
+						delete thisInstance.duplicateCheckCache[userName];
+						return true;
+					}
+				}
 				e.preventDefault();
 			}
 		})
 	},
 	
 	checkDuplicateUser: function(userName){
+		var aDeferred = jQuery.Deferred();
 		var params = {
 				'module': app.getModuleName(),
 				'action' : "SaveAjax",
@@ -93,11 +115,13 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 			AppConnector.request(params).then(
 				function(data) {
 					if(data.result){
-						return true;
+						aDeferred.resolve(data);
+					}else{
+						aDeferred.reject(data);
 					}
-					return false;
 				}
 			);
+		return aDeferred.promise();
 	},
 	
 	registerEvents : function() {

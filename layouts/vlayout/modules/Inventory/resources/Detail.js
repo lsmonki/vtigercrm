@@ -26,8 +26,8 @@ Vtiger_Detail_Js("Inventory_Detail_Js",{
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
             var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ relatedModuleName +'"]');
-            console.log('sdwewe');
-            if(quickCreateNode.length <= 0 || selectedTabElement.data('labelKey') == 'Activities') {
+
+			if(quickCreateNode.length <= 0 || selectedTabElement.data('labelKey') == 'Activities') {
                 window.location.href = element.data('url');
                 return;
             }

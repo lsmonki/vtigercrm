@@ -22,7 +22,7 @@
 					<div class="summaryWidgetContainer">
 						<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
 							<div class="widget_header row-fluid">
-								<span class="span8 margin0px"><h4>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
+								<span class="span8 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
 							</div>
 							<div class="widget_contents">
 							</div>
@@ -40,7 +40,7 @@
 					<div class="summaryWidgetContainer">
 						<div class="widgetContainer_{$smarty.foreach.count.index}" data-url="{$DETAIL_VIEW_WIDGET->getUrl()}" data-name="{$DETAIL_VIEW_WIDGET->getLabel()}">
 							<div class="widget_header row-fluid">
-								<span class="span8 margin0px"><h4>{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
+								<span class="span8 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($DETAIL_VIEW_WIDGET->getLabel(),$MODULE_NAME)}</h4></span>
 							</div>
 							<div class="widget_contents">
 							</div>

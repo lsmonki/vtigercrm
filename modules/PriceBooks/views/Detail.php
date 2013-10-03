@@ -78,7 +78,16 @@ class PriceBooks_Detail_View extends Vtiger_Detail_View {
 		$viewer->assign('RELATION_FIELD', $relationField);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
-			$viewer->assign('TOTAL_ENTRIES', $relationListView->getRelatedEntriesCount());
+			$totalCount = $relationListView->getRelatedEntriesCount();
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('TOTAL_ENTRIES', $totalCount);
+			$viewer->assign('PERFORMANCE', true);
 		}
 
 		$viewer->assign('MODULE', $moduleName);

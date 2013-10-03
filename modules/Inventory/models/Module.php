@@ -20,6 +20,14 @@ class Inventory_Module_Model extends Vtiger_Module_Model {
 		//SalesOrder module is not enabled for quick create
 		return false;
 	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
 
 	static function getAllCurrencies() {
 		return getAllCurrencies();

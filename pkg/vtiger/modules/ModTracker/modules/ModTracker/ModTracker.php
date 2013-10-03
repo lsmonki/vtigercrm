@@ -57,16 +57,12 @@ class ModTracker {
      * function gives an array of module names for which modtracking is enabled
     */
     function getModTrackerEnabledModules() {
-        global $adb;
-        $moduleResult = $adb->pquery('SELECT * FROM vtiger_modtracker_tabs', array());
-        for($i=0; $i<$adb->num_rows($moduleResult); $i++) {
-            $tabId = $adb->query_result($moduleResult, $i, 'tabid');
-            $visible = $adb->query_result($moduleResult, $i, 'visible');
-            self::updateCache($tabId, $visible);
-            if($visible == 1) {
-                $modules[] = getTabModuleName($tabId);
-            }
-        }
+		$entityModules = Vtiger_Module_Model::getEntityModules();
+		foreach($entityModules as $module) {
+			if($module && $module->isPermitted('DetailView')) {
+				$modules[] = $module->getName();
+			}
+		}
         return $modules;
     }
 

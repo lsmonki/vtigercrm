@@ -96,7 +96,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 		global $default_language;
 		vglobal('default_language', $default_language);
 		$currentLanguage = Vtiger_Language_Handler::getLanguage();
-
+		vglobal('current_language',$currentLanguage);
 		$module = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
 
@@ -125,6 +125,11 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 					$defaultModule = vglobal('default_module');
 					if(!empty($defaultModule) && $defaultModule != 'Home') {
 						$module = $defaultModule; $qualifiedModuleName = $defaultModule; $view = 'List';
+                        if($module == 'Calendar') { 
+                            // To load MyCalendar instead of list view for calendar
+                            //TODO: see if it has to enhanced and get the default view from module model
+                            $view = 'Calendar';
+                        }
 					} else {
 						$module = 'Home'; $qualifiedModuleName = 'Home'; $view = 'DashBoard';
 					}

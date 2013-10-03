@@ -141,6 +141,34 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
+        $orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
+        if(!empty($orderBy)){
+            $columnFieldMapping = $moduleModel->getColumnFieldMapping();
+            $orderByFieldName = $columnFieldMapping[$orderBy];
+            $orderByFieldModel = $moduleModel->getField($orderByFieldName);
+            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+                //IF it is reference add it in the where fields so that from clause will be having join of the table
+                $queryGenerator = $this->get('query_generator');
+                $queryGenerator->addWhereField($orderByFieldName);
+                //$queryGenerator->whereFields[] = $orderByFieldName;
+            }
+        }
+
+        //To combine date and time fields for sorting
+        if($orderBy == 'date_start') {
+            $orderBy = "str_to_date(concat(date_start,time_start),'%Y-%m-%d %H:%i:%s')";
+        }else if($orderBy == 'due_date') {
+            $orderBy = "str_to_date(concat(due_date,time_end),'%Y-%m-%d %H:%i:%s')";
+        }
+
 		$listQuery = $this->getQuery();
 
 		$sourceModule = $this->get('src_module');
@@ -156,24 +184,31 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
 
-		$orderBy = $this->getForSql('orderby');
-		$sortOrder = $this->getForSql('sortorder');
 
-        //To combine date and time fields for sorting 
-        if($orderBy == 'date_start') {
-            $orderBy = "str_to_date(concat(date_start,time_start),'%Y-%m-%d %H:%i:%s')";
-        }else if($orderBy == 'due_date') {
-            $orderBy = "str_to_date(concat(due_date,time_end),'%Y-%m-%d %H:%i:%s')";
-        }
-
-		//List view will be displayed on recently created/modified records
-		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
-			$orderBy = 'modifiedtime';
-			$sortOrder = 'DESC';
-		}
 
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            if($orderByFieldModel->isReferenceField()){
+                $referenceModules = $orderByFieldModel->getReferenceList();
+                $referenceNameFieldOrderBy = array();
+                foreach($referenceModules as $referenceModuleName) {
+                    $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
+                    $referenceNameFields = $referenceModuleModel->getNameFields();
+
+                    $columnList = array();
+                    foreach($referenceNameFields as $nameField) {
+                        $fieldModel = $referenceModuleModel->getField($nameField);
+                        $columnList[] = $fieldModel->get('table').$orderByFieldModel->getName().'.'.$fieldModel->get('column');
+                    }
+                    if(count($columnList) > 1) {
+                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users').' '.$sortOrder;
+                    } else {
+                        $referenceNameFieldOrderBy[] = implode('', $columnList).' '.$sortOrder ;
+                    }
+                }
+                $listQuery .= ' ORDER BY '. implode(',',$referenceNameFieldOrderBy);
+            }else{
+                $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            }
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);

@@ -16,13 +16,13 @@
 		<div class="row-fluid detailViewTitle">
 			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if}">
 				<div class="row-fluid">
-					<div class="span7">
+					<div class="span5">
 						<div class="row-fluid">
 							{include file="DetailViewHeaderTitle.tpl"|vtemplate_path:$MODULE}
 						</div>
 					</div>
 
-					<div class="span5">
+					<div class="span7">
 						<div class="pull-right detailViewButtoncontainer">
 							<div class="btn-toolbar">
 							{foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
@@ -50,6 +50,16 @@
 									{/foreach}
 								</ul>
 							</span>
+							{/if}
+							{if $DETAILVIEW_LINKS['DETAILVIEWSETTING']|@count gt 0}
+								<span class="btn-group">
+									<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-wrench" alt="{vtranslate('LBL_SETTINGS', $MODULE_NAME)}" title="{vtranslate('LBL_SETTINGS', $MODULE_NAME)}"></i>&nbsp;&nbsp;<i class="caret"></i></button>
+									<ul class="listViewSetting dropdown-menu">
+										{foreach item=DETAILVIEW_SETTING from=$DETAILVIEW_LINKS['DETAILVIEWSETTING']}
+											<li><a href={$DETAILVIEW_SETTING->getUrl()}>{vtranslate($DETAILVIEW_SETTING->getLabel(), $MODULE_NAME)}</a></li>
+										{/foreach}
+									</ul>
+								</span>
 							{/if}
 							</div>
 						</div>

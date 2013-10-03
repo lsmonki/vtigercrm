@@ -258,7 +258,8 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 			AppConnector.request(urlParams).then(
 				function(data){
 					widgetContainer.html(data);
-					app.showScrollBar(widgetContainer.find('.dashboardWidgetContent'),{'height' : widgetContainer.height()});
+					var adjustedHeight = widgetContainer.height()-50;
+					app.showScrollBar(widgetContainer.find('.dashboardWidgetContent'),{'height' : adjustedHeight});
 					var widgetInstance = thisInstance.getWidgetInstance(widgetContainer);
 					widgetContainer.trigger(Vtiger_Widget_Js.widgetPostLoadEvent);
 				},
@@ -342,7 +343,13 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 									if (jQuery.inArray(widgetName, nonReversableWidgets) == -1) {
 										var data = '<li><a onclick="Vtiger_DashBoard_Js.addWidget(this, \''+response.result.url+'\')" href="javascript:void(0);"';
 										data += ' data-linkid='+response.result.linkid+' data-name='+response.result.name+'>'+response.result.title+'</a></li>';
-										jQuery(data).insertBefore(jQuery('.widgetsList .divider'));
+										
+										var divider = jQuery('.widgetsList .divider');
+										if(divider.length) {
+											jQuery(data).insertBefore(divider);
+										} else {
+											jQuery(data).insertAfter(jQuery('.widgetsList li:last'));
+										}
 									}
 								}
 							}

@@ -107,5 +107,15 @@ class Settings_LayoutEditor_Block_Model extends Vtiger_Block_Model {
 		}
 		return $blockModelList;
 	}
-    
+
+	public function getLayoutBlockActiveFields() {
+		$fields = $this->getFields();
+		$activeFields = array();
+		foreach($fields as $fieldName => $fieldModel) {
+			if($fieldModel->isActiveField()) {
+				$activeFields[$fieldName] = $fieldModel;
+			}
+		}
+		return $activeFields;
+	}
 }

@@ -113,8 +113,9 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 	 * @return <Integer>
 	 */
 	public function getListViewCount() {
-		$folderModel = Reports_Folder_Model::getInstanceById($this->get('folderid'));
-		return $folderModel->getReportsCount();
+		$reportFolderModel = Reports_Folder_Model::getInstance();
+		$reportFolderModel->set('folderid', $this->get('folderid'));
+		return $reportFolderModel->getReportsCount();
 	}
 	
 	public function getCreateRecordUrl(){

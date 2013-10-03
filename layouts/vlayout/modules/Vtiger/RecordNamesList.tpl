@@ -16,7 +16,7 @@
 			<ul class="nav nav-list">
 				{foreach item=recordsModel from=$RECORDS}
 				<li>
-					<a data-id={$recordsModel->getId()} href="{$recordsModel->getDetailViewUrl()}">{substr(decode_html($recordsModel->getName()), 0, 20)}</a>
+					<a data-id={$recordsModel->getId()} href="{$recordsModel->getDetailViewUrl()}" title="{decode_html($recordsModel->getName())}">{decode_html($recordsModel->getName())}</a>
 				</li>
 				{foreachelse}
 					<li style="text-align:center">{vtranslate('LBL_NO_RECORDS', $MODULE)}

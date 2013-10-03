@@ -480,6 +480,7 @@ $languageStrings = array(
 	'LBL_LISTVIEW_PAGE_JUMP' => 'Salto de Página',
 	'LBL_SHOW_FULL_DETAILS' => 'Mostrar Datos Completos',
 	'LBL_ACTIVITIES' => 'Actividades',
+	'Activities'	 => 'Actividades',
 	'LBL_NO_PENDING_ACTIVITIES' => 'No hay actividades pendientes',
 	'LBL_SUMMARY' => 'Resumen',
 	'LBL_DETAILS' => 'Detalles',
@@ -562,7 +563,46 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Añadir Bcc',
 	'LBL_MAX_UPLOAD_SIZE' => 'Tamaño máximo de subida es',
 	'LBL_EXCEEDED' => 'Excedido',
-
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Fecha válida',
+	'Phone: ' => 'teléfono: ',
+	'Issued Date' => 'Fecha de publicación',
+	'Shipping & Handling Charges' => 'Enviando y cargas',
+	'Shipping & Handling Tax:' => 'Envío y dirección fiscal:',
+	'Discount' => 'descuento',
+	'Net Total' => 'total neto',
+	'Product Code' => 'producto código',
+	'Customer Name' => 'Nombre del cliente',
+	'Price'=>'precio',
+	'Tax:' => 'impuesto:',
+	'Contact Name' => 'Nombre de contacto',
+	'Grand Total:' => 'total general:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'sitio web: ',
+	'Tax' => 'impuesto',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Contratos de Servicio',
+	'Projects' => 'Proyectos',
+	'Sales Order' => 'Ordenes de Venta',
+	'Purchase Order' => 'Ordenes de Compra',
+	'Payments' => 'Payments',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
+	
+	'LBL_MANAGE_USERS' => 'Manage Users',
+	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership',
+	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
+	
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Por favor, configura el servidor de correo saliente en la sección de configuración',
@@ -683,4 +723,7 @@ $jsLanguageStrings = array(
 	'JS_PASSWORD_INCORRECT_OLD'=>'Contraseña actual incorrecta. Introduce de nuevo la información de las contraseñas.',
 	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Se ha cambiado la contraseña correctamente.',
 	'JS_REENTER_PASSWORDS'=>'Introduce las contraseñas de nuevo. La "nueva contraseña" y la "contraseña de confirmación" no coinciden.',
+	'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

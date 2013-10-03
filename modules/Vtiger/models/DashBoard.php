@@ -41,16 +41,14 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 	 * @return <Array of Vtiger_Widget_Model>
 	 */
 	public function getSelectableDashboard() {
-		$defaultWidgets = array('History', 'Upcoming Activities');
 		$db = PearDatabase::getInstance();
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$moduleModel = $this->getModule();
 
 		$sql = 'SELECT * FROM vtiger_links WHERE linktype = ?
 					AND tabid = ? AND linkid NOT IN (SELECT linkid FROM vtiger_module_dashboard_widgets
-					WHERE userid = ?) AND linklabel NOT IN ('.generateQuestionMarks($defaultWidgets).')';
+					WHERE userid = ?)';
 		$params = array('DASHBOARDWIDGET', $moduleModel->getId(), $currentUser->getId());
-		$params = array_merge($params, $defaultWidgets);
 
 		$sql .= ' UNION SELECT * FROM vtiger_links WHERE linklabel in (?,?)';
 		$params[] = 'Mini List';
@@ -78,7 +76,6 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 	 * @return <Array of Vtiger_Widget_Model>
 	 */
 	public function getDashboards() {
-		$defaultWidgets = array('History', 'Upcoming Activities');
 		$db = PearDatabase::getInstance();
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$moduleModel = $this->getModule();
@@ -97,18 +94,6 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 			$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
 		}
 
-		if (empty($widgets)) {
-			// No widgets found? Pull the default widgets.
-			$sql = "SELECT vtiger_links.*, {$currentUser->getId()} as userid, 0 as widgetid, NULL as position, vtiger_links.linkid as id FROM vtiger_links WHERE tabid = ? AND linklabel IN (".generateQuestionMarks($defaultWidgets).")";
-			$params = array($moduleModel->getId());
-			$params = array_merge($params, $defaultWidgets);
-			$result = $db->pquery($sql, $params);
-			for($i=0, $len=$db->num_rows($result); $i<$len; $i++) {
-				$row = $db->query_result_rowdata($result, $i);
-				$row['linkid'] = $row['id'];
-				$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
-			}
-		}
 		foreach ($widgets as $index => $widget) {
 			$label = $widget->get('linklabel');
 			if($label == 'Tag Cloud') {
@@ -129,23 +114,7 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		$moduleModel = $this->getModule();
 		$widgets = array();
 
-		$widgets[] = array(
-			'title' => 'History',
-			'mode' => 'open',
-			'url' => "module=". $moduleModel->getName()."&view=ShowWidget&mode=History",
-		);
-
-		$widgets[] = array(
-			'title' => 'Upcoming Tasks',
-			'mode' => 'open',
-			'url' => 'module='. $moduleModel->getName().'&view=ShowWidget&mode=UpcomingActivities',
-		);
-
-		$widgetList= array();
-		foreach($widgets as $widget) {
-			$widgetList[] = Vtiger_Widget_Model::getInstanceFromValues($widget);
-		}
-		return $widgetList;
+		return $widgets;
 	}
 
 

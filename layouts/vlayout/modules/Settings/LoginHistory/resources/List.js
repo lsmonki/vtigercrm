@@ -12,14 +12,19 @@ Settings_Vtiger_List_Js("Settings_LoginHistory_List_Js",{},{
 	registerFilterChangeEvent : function() {
 		var thisInstance = this;
 		jQuery('#usersFilter').on('change',function(e){
+			jQuery('#pageNumber').val("1");
+			jQuery('#pageToJump').val('1');
 			jQuery('#orderBy').val('');
 			jQuery("#sortOrder").val('');
 			var params = {
 				module : app.getModuleName(),
 				parent : app.getParentModuleName(),
 				'search_key' : 'user_name',
-				'search_value' : jQuery(e.currentTarget).val()
+				'search_value' : jQuery(e.currentTarget).val(),
+				'page' : 1
 			}
+			//Make total number of pages as empty
+			jQuery('#totalPageCount').text("");
 			thisInstance.getListViewRecords(params).then(
 				function(data){
 					thisInstance.updatePagination();
@@ -37,14 +42,35 @@ Settings_Vtiger_List_Js("Settings_LoginHistory_List_Js",{},{
 			'parent' : parent,
 			'page' : pageNumber,
 			'view' : "List",
-			'userName' : jQuery('#usersFilter').val()
+			'userName' : jQuery('#usersFilter').val(),
+			'search_key' : 'user_name',
+			'search_value' : jQuery('#usersFilter').val()
 		}
 
 		return params;
 	},
 	
+	/**
+	 * Function to get Page Jump Params
+	 */
+	getPageJumpParams : function(){
+		var module = app.getModuleName();
+		var parent = app.getParentModuleName();
+		var pageJumpParams = {
+			'module' : module,
+			'parent' : parent,
+			'action' : "ListAjax",
+			'mode' : "getPageCount",
+			'search_value' : jQuery('#usersFilter').val(),
+			'search_key' : 'user_name'
+		}
+		return pageJumpParams;
+	},
+	
 	registerEvents : function() {
-		this._super();
 		this.registerFilterChangeEvent();
+		this.registerPageNavigationEvents();
+		this.registerEventForTotalRecordsCount();
+		jQuery('.pageNumbers').tooltip();
 	}
 });

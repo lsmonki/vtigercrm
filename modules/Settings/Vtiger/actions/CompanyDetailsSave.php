@@ -28,7 +28,7 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
                 }
 				// Check for php code injection
 				$imageContents = file_get_contents($_FILES["logo"]["tmp_name"]);
-				if (preg_match('/(<\?(php)?)/i', $imageContents) == 1) {
+				if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
 					$saveLogo = false;
 				}
                 if ($saveLogo) {

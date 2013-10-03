@@ -19,6 +19,10 @@
 	<textarea id="showFormContent" class="input-xxlarge" style="height:400px;min-width: 600px"></textarea>
 <code>
 <pre>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
 <form name="{$RECORD_MODEL->getName()}" action="{$ACTION_PATH}"
   method="post" accept-charset="utf-8">
 	<input type="hidden" name="publicid" value="{$RECORD_MODEL->get('publicid')}" />
@@ -43,7 +47,7 @@
 	{assign var=TYPE value="text"}
 {else if ($DATA_TYPE eq "text")}
 	{assign var=TYPE value="text"}
-	<textarea name="{$FIELD_MODEL->getFieldName()}" {if $FIELD_MODEL->get('required') eq 1} required="true"{/if}>{$FIELD_MODEL->get('fieldvalue')}</textarea>
+	<textarea name="{utf8_encode($FIELD_MODEL->getFieldName())}" {if $FIELD_MODEL->get('required') eq 1} required="true"{/if}>{$FIELD_MODEL->get('fieldvalue')}</textarea>
 {else if ($DATA_TYPE eq "email")}
 	{assign var=TYPE value="email"}
 {else if ($DATA_TYPE eq "url")}
@@ -72,16 +76,17 @@
 	{/foreach}
 </select>
 {else if $TYPE eq "checkbox"}
-	<input type="hidden" name="{$FIELD_MODEL->getFieldName()}" value="off" />
-	<input type="{$TYPE}" name="{$FIELD_MODEL->getFieldName()}" value="on" {if $FIELD_MODEL->get('fieldvalue') eq "on"} checked {/if} />
+	<input type="hidden" name="{utf8_encode($FIELD_MODEL->getFieldName())}" value="off" />
+	<input type="{$TYPE}" name="{utf8_encode($FIELD_MODEL->getFieldName())}" value="on" {if $FIELD_MODEL->get('fieldvalue') eq "on"} checked {/if} />
 {else if ($DATA_TYPE neq "text") and ($TYPE neq "checkbox")}
-	<input type="{$TYPE}" name="{$FIELD_MODEL->getFieldName()}" value="{$FIELD_MODEL->get('fieldvalue')}" {if ($FIELD_MODEL->get('required') eq 1) || ($FIELD_MODEL->isMandatory(true))} required="true"{/if} />{if ($DATA_TYPE eq "date")}(yyyy-mm-dd){/if}
+	<input type="{$TYPE}" name="{utf8_encode($FIELD_MODEL->getFieldName())}" value="{$FIELD_MODEL->get('fieldvalue')}" {if ($FIELD_MODEL->get('required') eq 1) || ($FIELD_MODEL->isMandatory(true))} required="true"{/if} />{if ($DATA_TYPE eq "date")}(yyyy-mm-dd){/if}
 {/if}
 </td></tr>
 {/foreach}
 	</table>
 <input type="submit" value="Submit" ></input>
 </form>
+</html>
 </pre>
 </code>
 </div>

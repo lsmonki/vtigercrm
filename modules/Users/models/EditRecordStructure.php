@@ -30,14 +30,11 @@ class Users_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Model {
 			if ($fieldModelList) {
 				$values[$blockLabel] = array();
 				foreach($fieldModelList as $fieldName => $fieldModel) {
-                    if($fieldModel->get('uitype') == 115) {
-                        $fieldModel->set('editable', false);
-                    }
-					if(empty($recordId) && $fieldModel->get('uitype') == 99) {
+					if(empty($recordId) && ($fieldModel->get('uitype') == 99 || $fieldModel->get('uitype') == 106)) {
 							$fieldModel->set('editable', true);
 					}
-					//Is Admin and Status and user_name fields are Editable when the record user != current user
-					if (in_array($fieldModel->get('uitype'), array(156, 115, 106)) && $currentUserModel->getId() !== $recordId) {
+					//Is Admin field is editable when the record user != current user
+					if (in_array($fieldModel->get('uitype'), array(156)) && $currentUserModel->getId() !== $recordId) {
 						$fieldModel->set('editable', true);
 						if ($fieldModel->get('uitype') == 156) {
 							$fieldValue = false;

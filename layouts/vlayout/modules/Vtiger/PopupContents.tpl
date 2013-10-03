@@ -10,27 +10,14 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="popupPaging">
-	<div class="row-fluid">
-		<span class="actions span6">&nbsp;
-			{if $MULTI_SELECT}
-				{if !empty($LISTVIEW_ENTRIES)}<button class="select btn"><strong>{vtranslate('LBL_SELECT', $MODULE)}</strong></button>{/if}
-			{/if}
-		</span>
-		<span class="span6">
-			<span class="pull-right">
-				<span class="pageNumbers">{if !empty($LISTVIEW_ENTRIES)}{$PAGING_MODEL->getRecordStartRange()} to {$PAGING_MODEL->getRecordEndRange()}{/if}</span>
-				<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
-				<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
-				<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
-				<span class="pull-right btn-group">
-					<button class="btn" id="listViewPreviousPageButton" {if !$PAGING_MODEL->isPrevPageExists()} disabled {/if}><span class="icon-chevron-left"></span></button>
-					<button class="btn" id="listViewNextPageButton" {if !$PAGING_MODEL->isNextPageExists()} disabled {/if}><span class="icon-chevron-right"></span></button>
-				</span>
-			</span>
-		</span>
-	</div>
-</div>
+<input type='hidden' id='pageNumber' value="{$PAGE_NUMBER}">
+<input type='hidden' id='pageLimit' value="{$PAGING_MODEL->getPageLimit()}">
+<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTIRES_COUNT}">
+<input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
+<input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
+<input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
+<input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
+<input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 <div class="popupEntriesDiv">
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">

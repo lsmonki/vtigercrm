@@ -106,18 +106,7 @@ jQuery.Class('Settings_Sharing_Access_Js', {}, {
 		return aDeferred.promise();
 	},
 	
-	/*
-	 * function to validate Custom Rule
-	 * returns Boolean Value
-	 */
-	validateCustomRule : function(form) {
-		var data = form.serializeFormData();
-		
-		if(data.source_id == data.target_id) {
-			return true;
-		}
-		return false;
-	},
+
 	
 	/*
 	 * function to Save the Custom Rule
@@ -130,38 +119,26 @@ jQuery.Class('Settings_Sharing_Access_Js', {}, {
 			data = {};
 		}
 		
-		var selectElement = form.find('select[name="target_id"]');
-		var chosenElement = app.getChosenElementFromSelect(selectElement);
-		var message = app.vtranslate('JS_SELECT_ANY_OTHER_ACCESSING_USER');
-		
-		var result = thisInstance.validateCustomRule(form);
-		if(result) {
-			chosenElement.validationEngine('showPrompt', message , 'error','bottomLeft',true);
-			e.preventDefault();
-			return;
-		} else {
-			var progressIndicatorElement = jQuery.progressIndicator({
-				'position' : 'html',
-				'blockInfo' : {
-					'enabled' : true
-				}
-			});
-			chosenElement.validationEngine('hide');
-			data.module = app.getModuleName();
-			data.parent = app.getParentModuleName();
-			data.action = 'IndexAjax';
-			data.mode = 'saveRule';
+		var progressIndicatorElement = jQuery.progressIndicator({
+			'position' : 'html',
+			'blockInfo' : {
+				'enabled' : true
+			}
+		});
+		data.module = app.getModuleName();
+		data.parent = app.getParentModuleName();
+		data.action = 'IndexAjax';
+		data.mode = 'saveRule';
 
-			AppConnector.request(data).then(
-				function(data) {
-					progressIndicatorElement.progressIndicator({'mode':'hide'});
-					app.hideModalWindow();
-					thisInstance.displaySaveCustomRuleResponse(data);
-					var moduleName = jQuery('[name="for_module"]', form).val();
-					thisInstance.loadCustomRulesList(moduleName);
-				}
-			);
-		}
+		AppConnector.request(data).then(
+			function(data) {
+				progressIndicatorElement.progressIndicator({'mode':'hide'});
+				app.hideModalWindow();
+				thisInstance.displaySaveCustomRuleResponse(data);
+				var moduleName = jQuery('[name="for_module"]', form).val();
+				thisInstance.loadCustomRulesList(moduleName);
+			}
+		);
 	},
 	
 	/*
@@ -225,21 +202,6 @@ jQuery.Class('Settings_Sharing_Access_Js', {}, {
 		
 		app.showModalWindow(null, url, function(modalContainer){
 			var form = jQuery('#editCustomRule');
-			
-			form.on('change','select[name="source_id"], select[name="target_id"]',function(e){
-				var selectElement = form.find('select[name="target_id"]');
-				var chosenElement = app.getChosenElementFromSelect(selectElement);
-				var message = app.vtranslate('JS_SELECT_ANY_OTHER_ACCESSING_USER');
-				
-				var result = thisInstance.validateCustomRule(form);
-				if(result) {
-					chosenElement.validationEngine('showPrompt', message , 'error','bottomLeft',true);
-					e.preventDefault();
-					return;
-				} else {
-					chosenElement.validationEngine('hide');
-				}
-			});
 			
 			form.on('submit', function(e) {
 				//To stop the submit of form

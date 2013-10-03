@@ -12,6 +12,7 @@ $languageStrings = array(
 	'LBL_NEW' => 'New',
 	'LBL_WORKFLOW' => 'Workflow',
 	'LBL_CREATING_WORKFLOW' => 'Creating WorkFlow',
+	'LBL_EDITING_WORKFLOW' => 'Editing Workflow',
 	'LBL_NEXT' => 'Next',
 
 	//Edit view
@@ -26,7 +27,7 @@ $languageStrings = array(
 	'SCHEDULE_WORKFLOW' => 'Schedule Workflow',
 	'ADD_CONDITIONS' => 'Add Conditions',
 	'ADD_TASKS' => 'Add Tasks',
-	
+
 	//Step2 edit view
 	'LBL_EXPRESSION' => 'Expression',
 	'LBL_FIELD_NAME' => 'Field',
@@ -39,7 +40,7 @@ $languageStrings = array(
 	'LBL_USE_EXISTING_CONDITIONS' => 'Use existing conditions',
 	'LBL_RECREATE_CONDITIONS' => 'Recreate Conditions',
 	'LBL_SAVE_AND_CONTINUE' => 'Save & Continue',
-	
+
 	//Step3 edit view
 	'LBL_ACTIVE' => 'Active',
 	'LBL_TASK_TYPE' => 'Task Type',

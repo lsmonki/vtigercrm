@@ -28,6 +28,12 @@ $languageStrings = array(
 	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Assign priviliges from existing profiles',
 	'LBL_PRIVILEGES' => 'Privileges',
 	'LBL_DUPLICATES_EXIST' => 'Duplicate Role Exists',
+	
+	//Assign Records to
+	'LBL_CAN_ASSIGN_RECORDS_TO' => 'Can Assign Records To',
+	'LBL_ALL_USERS' => 'All Users',
+	'LBL_USERS_WITH_LOWER_LEVEL' => 'Users having Subordinate Role',
+	'LBL_USERS_WITH_SAME_OR_LOWER_LEVEL' => 'Users having Same Role or Subordinate Role',
 );
 
 $jsLanguageStrings = array(

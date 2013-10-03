@@ -63,7 +63,12 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 			$parentModule = $this->getEntityType($id);
 			$mailer->reinitialize();
 			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
-
+			
+			$old_mod_strings = vglobal('mod_strings');
+			$currentLanguage = Vtiger_Language_Handler::getLanguage();
+			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage,$parentModule);
+			vglobal('mod_strings', $moduleLanguageStrings['languageStrings']);
+			
 			if ($parentModule != 'Users') {
 				// Apply merge for non-Users module merge tags.
 				$description = getMergedDescription($mergedDescription, $id, $parentModule);
@@ -71,7 +76,8 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				// Re-merge the description for user tags based on actual user.
 				$description = getMergedDescription($this->get('description'), $id, 'Users');
 			}
-
+			vglobal('mod_strings', $old_mod_strings);
+			
 			if (strpos($description, '$logo$')) {
 				$description = str_replace('$logo$',"<img src='cid:logo' />", $description);
 				$logo = true;

@@ -12,6 +12,9 @@ require_once 'include/Webservices/Retrieve.php';
 require_once 'include/Webservices/Create.php';
 require_once 'include/Webservices/Delete.php';
 require_once 'include/Webservices/DescribeObject.php';
+require_once 'includes/Loader.php';
+vimport ('includes.runtime.Globals');
+vimport ('includes.runtime.BaseModel');
 
 function vtws_convertlead($entityvalues, $user) {
 
@@ -75,8 +78,9 @@ function vtws_convertlead($entityvalues, $user) {
 			if ($entityvalue['name'] == 'Potentials') {
 				if (!empty($entityIds['Accounts'])) {
 					$entityObjectValues['related_to'] = $entityIds['Accounts'];
-				} else {
-					$entityObjectValues['related_to'] = $entityIds['Contacts'];
+				}
+				if (!empty($entityIds['Contacts'])) {
+					$entityObjectValues['contact_id'] = $entityIds['Contacts'];
 				}
 			}
 
@@ -102,7 +106,8 @@ function vtws_convertlead($entityvalues, $user) {
 					$entityIds[$entityName] = $entityRecord['id'];
 				}
 			} catch (Exception $e) {
-				return null;
+				throw new WebServiceException(WebServiceErrorCode::$UNKNOWNOPERATION,
+						$e->getMessage().' : '.$entityvalue['name']);
 			}
 		}
 	}

@@ -39,7 +39,7 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 
         var form = this.getForm();
         var parentIdElement  = form.find('[name="parent_id"]');
-        if(parentIdElement.val().length > 0) {
+        if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
             var closestContainer = parentIdElement.closest('td');
             params['related_parent_id'] = parentIdElement.val();
             params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();

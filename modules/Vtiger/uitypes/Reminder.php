@@ -32,15 +32,9 @@ class Vtiger_Reminder_UIType extends Vtiger_Date_UIType {
 	 * @return <Object>
 	 */
 	public function getDisplayValue($value) {
-        if($value != 0 ){
-            $rem_days = floor($value/(24*60));
-            $rem_hrs = floor(($value-$rem_days*24*60)/60);
-            $rem_min = ($value-($rem_days*24*60))%60;
-            $reminder_time = array($rem_days , $rem_hrs, $rem_min);
-            return $reminder_time;
-        }else{
-            return '';
-        }
+        $reminder_time = $this->getEditViewDisplayValue($value);
+		$reminder_value = $reminder_time[0].' '.vtranslate('LBL_DAYS').' '.$reminder_time[1].' '.vtranslate('LBL_HOURS').' '.$reminder_time[2].' '.vtranslate('LBL_MINUTES');
+		return $reminder_value;
 	}
     
     /**
@@ -49,7 +43,15 @@ class Vtiger_Reminder_UIType extends Vtiger_Date_UIType {
 	 * @return converted value
 	 */
 	public function getEditViewDisplayValue($value) {
-		return $this->getDisplayValue($value);
+		if($value != 0 ){
+            $rem_days = floor($value/(24*60));
+            $rem_hrs = floor(($value-$rem_days*24*60)/60);
+            $rem_min = ($value-($rem_days*24*60))%60;
+            $reminder_time = array($rem_days , $rem_hrs, $rem_min);
+            return $reminder_time;
+        }else{
+            return '';
+        }
 	}
     
 }

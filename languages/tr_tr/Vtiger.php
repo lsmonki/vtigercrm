@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Satış Emri'                , 
 	'Invoice'                      => 'Fatura'                      , 
 	'MailManager'                  => 'Mail Manager'                , // TODO: Review
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Add Record'                  , 
 	'LBL_RECENTLY_MODIFIED'        => 'Recently Modified'           , 
 	'LBL_RECORDS_LIST'             => 'Records List'                , 
@@ -357,7 +358,7 @@ $languageStrings = array(
 	'Banking'                      => 'Banking'                     , 
 	'Billing Address'              => 'Fatura Adresi'               , 
 	'Billing City'                 => 'Billing City'                , 
-	'Billing Code'                 => 'Billing Code'                , 
+	'Billing Code'                 => 'Billing Postal Code'         , 
 	'Billing Country'              => 'Billing Country'             , 
 	'Billing Po Box'               => 'Billing P.O. Box'            , 
 	'Billing State'                => 'Billing State'               , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Sales End Date'              , 
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Select Status'               , // TODO: Review
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , 
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source'        , 
 	'SINGLE_Accounts'              => 'Organization'                , // TODO: Review
 	'SINGLE_Contacts'              => 'Contact'                     , // TODO: Review
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -548,6 +549,40 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'geçerli tarihi',
+	'Phone: ' => 'Telefon: ',
+	'Issued Date' => 'tarihi İhraç',
+	'Shipping & Handling Charges' => 'Ücretler Nakliye ve Taşıma',
+	'Shipping & Handling Tax:' => 'Vergi Nakliye ve Taşıma:',
+	'Discount'=>'indirim',
+	'Net Total' => 'net Toplam',
+	'Product Code'=>'Ürün Kodu',
+	'Customer Name'=>'Müşteri Adı',
+	'Price'=>'fiyat',
+	'Tax:' => 'vergi:',
+	'Contact Name' => 'Kişi Adı',
+	'Grand Total:' => 'genel Toplam:',
+	'Fax: ' => 'Faks: ',
+	'Website: ' => 'web sitesi: ',
+	'Tax' => 'vergi',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Hizmet Sözleşmeleri',
+	'Projects' => 'Projects',
+	'Sales Order' => 'Satış Emri',
+	'Purchase Order' => 'Satınalma Emri',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Please configure your outgoing server settings from the settings page', 
@@ -650,4 +685,6 @@ $jsLanguageStrings = array(
 	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

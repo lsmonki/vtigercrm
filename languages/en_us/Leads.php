@@ -67,7 +67,6 @@ $languageStrings = array(
 	//Leads Custom Field Mapping
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'Edit Field Mapping',
 	'LBL_WEBFORMS' => 'Setup Webforms',
-	'LBL_LEAD_SOURCE' => 'Lead Source'
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS' => 'Select Contacts to proceed',

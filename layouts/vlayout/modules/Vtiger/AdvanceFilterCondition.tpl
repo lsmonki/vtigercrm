@@ -25,17 +25,34 @@
 						{assign var=columnNameApi value=getCustomViewColumnName}
 					{/if}
 					<option value="{$FIELD_MODEL->$columnNameApi()}" data-fieldtype="{$FIELD_MODEL->getFieldType()}" data-field-name="{$FIELD_NAME}"
-					{if $FIELD_MODEL->$columnNameApi() eq $CONDITION_INFO['columnname']}
+					{if decode_html($FIELD_MODEL->$columnNameApi()) eq $CONDITION_INFO['columnname']}
 						{assign var=FIELD_TYPE value=$FIELD_MODEL->getFieldType()}
 						{assign var=SELECTED_FIELD_MODEL value=$FIELD_MODEL}
 						{if $FIELD_MODEL->getFieldDataType() == 'reference'}
 							{$FIELD_TYPE='V'}
-						{/if}	
-						{$FIELD_INFO['value'] = $CONDITION_INFO['value']|escape}
-						selected &nbsp;
+						{/if}
+						{$FIELD_INFO['value'] = decode_html($CONDITION_INFO['value'])}
+						selected="selected"
 					{/if}
-					&nbsp; data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}' >
-					{if $SOURCE_MODULE neq $MODULE_MODEL->get('name')} 
+					{if ($MODULE_MODEL->get('name') eq 'Calendar') && ($FIELD_NAME eq 'recurringtype')}
+						{assign var=PICKLIST_VALUES value = Calendar_Field_Model::getReccurencePicklistValues()}
+						{$FIELD_INFO['picklistvalues'] = $PICKLIST_VALUES}
+					{/if}
+					{if $FIELD_MODEL->getFieldDataType() eq 'reference'}
+						{assign var=referenceList value=$FIELD_MODEL->getWebserviceFieldObject()->getReferenceList()}
+						{if is_array($referenceList) && in_array('Users', $referenceList)}
+								{assign var=USERSLIST value=array()}
+								{assign var=CURRENT_USER_MODEL value = Users_Record_Model::getCurrentUserModel()}
+								{assign var=ACCESSIBLE_USERS value = $CURRENT_USER_MODEL->getAccessibleUsers()}
+								{foreach item=USER_NAME from=$ACCESSIBLE_USERS}
+										{$USERSLIST[$USER_NAME] = $USER_NAME}
+								{/foreach}
+								{$FIELD_INFO['picklistvalues'] = $USERSLIST}
+								{$FIELD_INFO['type'] = 'picklist'}
+						{/if}
+					{/if}
+					data-fieldinfo='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($FIELD_INFO))}' >
+					{if $SOURCE_MODULE neq $MODULE_MODEL->get('name')}
 						({vtranslate($MODULE_MODEL->get('name'), $MODULE_MODEL->get('name'))})  {vtranslate($FIELD_MODEL->get('label'), $MODULE_MODEL->get('name'))}
 					{else}
 						{vtranslate($FIELD_MODEL->get('label'), $SOURCE_MODULE)}

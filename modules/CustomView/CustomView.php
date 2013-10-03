@@ -360,9 +360,6 @@ class CustomView extends CRMEntity {
 				//displayed Correctly in Custom view Advance Filter.
 				$fieldtypeofdata = ChangeTypeOfData_Filter($fieldtablename, $fieldcolname, $fieldtypeofdata);
 			}
-			if ($fieldlabel == "Related To") {
-				$fieldlabel = "Related to";
-			}
 			if ($fieldlabel == "Start Date & Time") {
 				$fieldlabel = "Start Date";
 			}
@@ -490,9 +487,9 @@ class CustomView extends CRMEntity {
 
 		return $stdcriteria_list;
 	}
-    
+
     /**
-     *  Function which will give condition list for date fields 
+     *  Function which will give condition list for date fields
      * @return array of std filter conditions
      */
     function getStdFilterConditions() {
@@ -1276,7 +1273,7 @@ class CustomView extends CRMEntity {
 			$value = $this->getSalesRelatedName($comparator, $value, $datatype, $tablename, $fieldname);
 		} else {
 			//For checkbox type values, we have to convert yes/no as 1/0 to get the values
-			$field_uitype = $this->getUItype($this->customviewmodule, $fieldname);
+			$field_uitype = getUItype($this->customviewmodule, $fieldname);
 			if ($field_uitype == 56) {
 				if (strtolower($value) == 'yes')
 					$value = 1;
@@ -1962,21 +1959,6 @@ class CustomView extends CRMEntity {
 		}
 		$log->debug("Exiting isPermittedChangeStatus($status) method..............");
 		return $status_details;
-	}
-	
-	function getUItype($module, $columnname) {
-		global $adb;
-		
-		$tabIdList = array();
-		//To find tabid for this module
-		$tabIdList[] = getTabid($module);
-		if ($module == 'Calendar') {
-			$tabIdList[] = getTabid('Events');
-		}
-		$sql = "select uitype from vtiger_field where tabid IN (" . generateQuestionMarks($tabIdList) . ") and columnname=?";
-		$result = $adb->pquery($sql, array($tabIdList, $columnname));
-		$uitype = $adb->query_result($result, 0, "uitype");
-		return $uitype;
 	}
 
 }

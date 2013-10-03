@@ -55,8 +55,6 @@ class VTCreateTodoTask extends VTTask{
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
 		$date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*($this->directions=='Before'?-1:1));
-		$startDate = new DateTimeField($date.' '.$time[1]);
-		$date = $startDate->getDisplayDate();
 
 		// Added to check if the user/group is active
 		if(!empty($this->assigned_user_id)) {
@@ -80,7 +78,7 @@ class VTCreateTodoTask extends VTTask{
 			'taskpriority'=>$this->priority,
 			'taskstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
-			'time_start'=> $startDate->getDisplayTime(),
+			'time_start'=> $time[1],
 			'sendnotification'=>($this->sendNotification!='' && $this->sendNotification!='N')?
 					true: false,
 			'date_start'=>$date,

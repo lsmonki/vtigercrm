@@ -24,7 +24,7 @@
 	<tbody>
 		<tr>
 			<td class="span5">
-				<div class="dashboardTitle"><b>&nbsp;&nbsp;{vtranslate($WIDGET->getTitle(), $MODULE_NAME)}</b></div>
+				<div class="dashboardTitle" title="{vtranslate($WIDGET->getTitle(), $MODULE_NAME)}"><b>&nbsp;&nbsp;{vtranslate($WIDGET->getTitle(), $MODULE_NAME)}</b></div>
 			</td>
 			<td class="span2">
 				<div>

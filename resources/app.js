@@ -13,6 +13,9 @@ var app = {
 	 * variable stores client side language strings
 	 */
 	languageString : [],
+	
+	
+	weekDaysArray : {Sunday : 0,Monday : 1, Tuesday : 2, Wednesday : 3,Thursday : 4, Friday : 5, Saturday : 6},
 
 	/**
 	 * Function to get the module name. This function will get the value from element which has id module
@@ -484,11 +487,22 @@ var app = {
 			});
 		}
 		var dateFormat = element.data('dateFormat');
-		var vtigerDateFormat = app.convertToDatePickerFormat(dateFormat);;
+		var vtigerDateFormat = app.convertToDatePickerFormat(dateFormat);
+		var language = jQuery('body').data('language');
+		var lang = language.split('_');
+		
+		//Default first day of the week
+		var defaultFirstDay = jQuery('#start_day').val();
+		if(defaultFirstDay == '' || typeof(defaultFirstDay) == 'undefined'){
+			var convertedFirstDay = 1
+		} else {
+			convertedFirstDay = this.weekDaysArray[defaultFirstDay];
+		}
 		var params = {
 			format : vtigerDateFormat,
 			calendars: 1,
-			starts: 1,
+			locale: $.fn.datepicker.dates[lang[0]],
+			starts: convertedFirstDay,
 			eventName : 'focus',
 			onChange: function(formated){
                 var element = jQuery(this).data('datepicker').el;
@@ -850,12 +864,23 @@ var app = {
 			return new window[moduleClassName]();
 		}
 	},
-	
+
 	/**
 	 * Function to decode the encoded htmlentities values
 	 */
 	getDecodedValue : function(value) {
 		return jQuery('<div></div>').html(value).text();
+	},
+	
+	/**
+	 * Function to check whether the color is dark or light
+	 */
+	getColorContrast: function(hexcolor){
+		var r = parseInt(hexcolor.substr(0,2),16);
+		var g = parseInt(hexcolor.substr(2,2),16);
+		var b = parseInt(hexcolor.substr(4,2),16);
+		var yiq = ((r*299)+(g*587)+(b*114))/1000;
+		return (yiq >= 128) ? 'light' : 'dark';
 	}
 }
 

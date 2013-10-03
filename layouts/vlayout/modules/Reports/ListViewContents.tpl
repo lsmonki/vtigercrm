@@ -10,14 +10,15 @@
  ********************************************************************************/
 -->*}
 {strip}
-<input type="hidden" id="listViewEntriesCount" value="{$LISTVIEW_ENTIRES_COUNT}" />
 <input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
 <input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
-<input type="hidden" id="pageNumberValue" value= "{$PAGE_NUMBER}"/>
-<input type="hidden" id="pageLimitValue" value= "{$PAGING_MODEL->getPageLimit()}" />
 <input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
+<input type='hidden' id='pageNumber' value="{$PAGE_NUMBER}" >
+<input type='hidden' id='pageLimit' value="{$PAGING_MODEL->getPageLimit()}">
+<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTIRES_COUNT}">
 
 <div id="selectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($MODULE ,$MODULE)}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>

@@ -46,7 +46,11 @@ Settings_Vtiger_List_Js("Settings_Webforms_List_Js",{
 						text: app.vtranslate('JS_WEBFORM_DELETED_SUCCESSFULLY')
 					};
 					Settings_Vtiger_Index_Js.showMessage(params);
-					thisInstance.getListViewRecords();
+					jQuery('#recordsCount').val('');
+					jQuery('#totalPageCount').text('');
+					thisInstance.getListViewRecords().then(function(){
+						thisInstance.updatePagination();
+					});
 					}else{
 						Vtiger_Helper_Js.showPnotify(data.error.message);
 					}

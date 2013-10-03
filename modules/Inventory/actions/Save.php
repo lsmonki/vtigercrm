@@ -9,4 +9,21 @@
  *************************************************************************************/
 require_once 'modules/Emails/mail.php';
 class Inventory_Save_Action extends Vtiger_Save_Action {
+    
+    protected function getRecordModelFromRequest(Vtiger_Request $request) {
+		$recordModel = parent::getRecordModelFromRequest($request);
+		// Added to set the pre tax total value to user format, so that save(CRMEntity) treats
+		// this as normal 72 uitype field. All the currency field that appear in Inventory module
+		// in final details are not shown in users format. Once these fields are shown in the users
+		// format then we need to remove this. To reproduce the issue have decimal separator as ','
+		// and group separator as '.', the values saved in the db are incorrect
+		$preTaxTotal = $request->get('pre_tax_total');
+		if(!empty($preTaxTotal)) {
+			$currentUser = Users_Record_Model::getCurrentUserModel();
+			$preTaxTotal = CurrencyField::convertToUserFormat($preTaxTotal, $currentUser);
+			$recordModel->set('pre_tax_total', $preTaxTotal);
+		}
+		return $recordModel;
+	}
+    
 }

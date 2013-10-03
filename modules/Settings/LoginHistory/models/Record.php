@@ -28,16 +28,31 @@ class Settings_LoginHistory_Record_Model extends Settings_Vtiger_Record_Model {
 	
 	public function getAccessibleUsers(){
 		$adb = PearDatabase::getInstance();
-		$userRecordModel = Users_Record_Model::getCurrentUserModel();
-		$usersList = $userRecordModel->getAccessibleUsers();
-		$query = 'SELECT user_name FROM vtiger_users WHERE id = ?';
 		$usersListArray = array();
-		foreach ($usersList as $id => $name) {
-			$result = $adb->pquery($query, array($id));
-			if($adb->num_rows($result) > 0) {
-				$usersListArray[$adb->query_result($result, 0, 'user_name')] = $name;
-			}
+		
+		$query = 'SELECT user_name, first_name, last_name FROM vtiger_users';
+		$result = $adb->pquery($query, array());
+		while($row = $adb->fetchByAssoc($result)) {
+			$usersListArray[$row['user_name']] = getFullNameFromArray('Users', $row);
 		}
 		return $usersListArray;
+	}
+	
+	/**
+	 * Function to retieve display value for a field
+	 * @param <String> $fieldName - field name for which values need to get
+	 * @return <String>
+	 */
+	public function getDisplayValue($fieldName, $recordId = false) {
+		if($fieldName == 'login_time' || $fieldName == 'logout_time'){
+			if($this->get($fieldName) != '0000-00-00 00:00:00'){
+				return Vtiger_Datetime_UIType::getDateTimeValue($this->get($fieldName));
+			}else{
+				return '---';
+			}
+		} else {
+			return $this->get($fieldName);
+		}
+		
 	}
 }

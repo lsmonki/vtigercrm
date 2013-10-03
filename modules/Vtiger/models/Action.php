@@ -18,6 +18,7 @@ class Vtiger_Action_Model extends Vtiger_Base_Model {
 											'DetailViewAjax', 'PriceBookEditView', 'QuickCreate', 'VendorEditView',
 											'DeletePriceBook', 'DeleteVendor', 'Popup', 'PriceBookDetailView',
 											'TagCloud', 'VendorDetailView');
+	static $utilityActions = array('5' => 'Import', '6' => 'Export', '8' => 'Merge', '9' => 'ConvertLead', '10' => 'DuplicatesHandling');
 
 	public function getId() {
 		return $this->get('actionid');

@@ -58,4 +58,5 @@ $jsLanguageStrings = array(
 	'JS_percent'                   => 'Percent'                     , // TODO: Review
 	'JS_skype'                     => 'Skype'                       , // TODO: Review
 	'JS_None'                      => 'None'                        , // TODO: Review
+	'JS_integer'					=> 'Integer',
 );

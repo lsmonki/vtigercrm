@@ -10,7 +10,8 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="gridster" style="padding-left:10px;">
+
+<div class="gridster span" style="width: 98%;">
 	<ul>
 	{assign var=COLUMNS value=2}
 	{assign var=ROW value=1}

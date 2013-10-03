@@ -185,16 +185,30 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 		if($orderBy) {
-			if($orderBy === 'assigned_user_id' || $orderBy == 'smownerid') {
-				$orderBy = 'user_name';
-			}
-			// Qualify the the column name with table to remove ambugity
-			$qualifiedOrderBy = $orderBy;
-			$orderByField = $relationModule->getFieldByColumn($orderBy);
-			if ($orderByField) {
-				$qualifiedOrderBy = $orderByField->get('table') . '.' . $qualifiedOrderBy;
-			}
-			$query = "$query ORDER BY $qualifiedOrderBy $sortOrder";
+
+            $orderByFieldModuleModel = $relationModule->getFieldByColumn($orderBy);
+            if($orderByFieldModuleModel && $orderByFieldModuleModel->isReferenceField()) {
+                //If reference field then we need to perform a join with crmentity with the related to field
+                $queryComponents = $split = spliti(' where ', $query);
+                $selectAndFromClause = $queryComponents[0];
+                $whereCondition = $queryComponents[1];
+                $qualifiedOrderBy = 'vtiger_crmentity'.$orderByFieldModuleModel->get('column');
+                $selectAndFromClause .= ' LEFT JOIN vtiger_crmentity AS '.$qualifiedOrderBy.' ON '.
+                                        $orderByFieldModuleModel->get('table').'.'.$orderByFieldModuleModel->get('column').' = '.
+                                        $qualifiedOrderBy.'.crmid ';
+                $query = $selectAndFromClause.' WHERE '.$whereCondition;
+                $query .= ' ORDER BY '.$qualifiedOrderBy.'.label '.$sortOrder;
+            } elseif($orderByFieldModuleModel && $orderByFieldModuleModel->isOwnerField()) {
+				 $query .= ' ORDER BY CONCAT(vtiger_users.first_name, " ", vtiger_users.last_name) '.$sortOrder;
+			} else{
+                // Qualify the the column name with table to remove ambugity
+                $qualifiedOrderBy = $orderBy;
+                $orderByField = $relationModule->getFieldByColumn($orderBy);
+                if ($orderByField) {
+                    $qualifiedOrderBy = $orderByField->get('table') . '.' . $qualifiedOrderBy;
+                }
+                $query = "$query ORDER BY $qualifiedOrderBy $sortOrder";
+            }
 		}
 
 		$limitQuery = $query .' LIMIT '.$startIndex.','.$pageLimit;
@@ -231,9 +245,8 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 	public function getHeaders() {
 		$relationModel = $this->getRelationModel();
 		$relatedModuleModel = $relationModel->getRelationModuleModel();
-		
+
 		$summaryFieldsList = $relatedModuleModel->getSummaryViewFieldsList();
-		$headerFieldNames = $relatedModuleModel->getRelatedListFields();
 
 		$headerFields = array();
 		if(count($summaryFieldsList) > 0) {
@@ -241,6 +254,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				$headerFields[$fieldName] = $fieldModel;
 			}
 		} else {
+			$headerFieldNames = $relatedModuleModel->getRelatedListFields();
 			foreach($headerFieldNames as $fieldName) {
 				$headerFields[$fieldName] = $relatedModuleModel->getField($fieldName);
 			}

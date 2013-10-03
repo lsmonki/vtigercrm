@@ -83,9 +83,9 @@ class VTCreateEventTask extends VTTask{
 			'eventstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
 			'time_start'=>self::conv12to24hour($this->startTime),
-			'date_start'=> DateTimeField::convertToUserFormat($startDate),
+			'date_start'=> $startDate,
 			'time_end'=>self::conv12to24hour($this->endTime),
-			'due_date'=>DateTimeField::convertToUserFormat($endDate),
+			'due_date'=>$endDate,
 			'visibility'=>'Private',
 			'taskstatus'=>'',
 			'duration_hours'=>'0'

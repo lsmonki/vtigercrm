@@ -52,8 +52,10 @@
 		{* ADD <script> INCLUDES in JSResources.tpl - for better performance *}
 	</head>
 
-	<body data-skinpath="{$SKIN_PATH}">
+	<body data-skinpath="{$SKIN_PATH}" data-language="{$LANGUAGE}">
 		<div id="js_strings" class="hide noprint">{Zend_Json::encode($LANGUAGE_STRINGS)}</div>
+		{assign var=CURRENT_USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
+		<input type="hidden" id="start_day" value="{$CURRENT_USER_MODEL->get('dayoftheweek')}" />
 		<div id="page">
 			<!-- container which holds data temporarly for pjax calls -->
 			<div id="pjaxContainer" class="hide noprint"></div>

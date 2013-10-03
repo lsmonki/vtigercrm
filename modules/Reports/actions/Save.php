@@ -40,7 +40,7 @@ class Reports_Save_Action extends Vtiger_Save_Action {
 
 		$reportModel->set('reportname', $request->get('reportname'));
 		$reportModel->set('folderid', $request->get('folderid'));
-		$reportModel->set('description', $request->get('description'));
+		$reportModel->set('description', $request->get('reports_description'));
 
 		$reportModel->setPrimaryModule($request->get('primary_module'));
 		

@@ -35,12 +35,12 @@
 				</div><br>
 				<div class="control-label">{vtranslate('LBL_REPLACE_IT_WITH',$QUALIFIED_MODULE)}</div>
 				<div class="controls">
-					<select id="replaceValue" name="replace_value" class="chzn-select">
-							{foreach from=$SELECTED_PICKLISTFIELD_ALL_VALUES key=PICKLIST_VALUE_KEY item=PICKLIST_VALUE}
-								{if !(in_array($PICKLIST_VALUE, $FIELD_VALUES))}
-									<option value="{$PICKLIST_VALUE}">{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
-								{/if}
-							{/foreach}
+					<select id="replaceValue" name="replace_value" class="chzn-select" data-validation-engine="validate[required]">
+						{foreach from=$SELECTED_PICKLISTFIELD_ALL_VALUES key=PICKLIST_VALUE_KEY item=PICKLIST_VALUE}
+							{if !(in_array($PICKLIST_VALUE, $FIELD_VALUES))}
+								<option value="{$PICKLIST_VALUE}">{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
+							{/if}
+						{/foreach}
 					</select>
 				</div>
 			</div>	

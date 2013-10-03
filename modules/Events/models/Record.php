@@ -98,6 +98,13 @@ class Events_Record_Model extends Calendar_Record_Model {
                     $cont_name .= $contact_name .', ';
                 }
             }
+
+			$parentId = $this->get('parent_id');
+			$parentName = '';
+			if($parentId != '') {
+				$parentName = Vtiger_Util_Helper::getRecordName($parentId);
+			}
+			
             $cont_name  = trim($cont_name,', ');
             $mail_data = Array();
             $mail_data['user_id'] = $this->get('assigned_user_id');
@@ -106,7 +113,7 @@ class Events_Record_Model extends Calendar_Record_Model {
             $mail_data['status'] = (($moduleName=='Calendar')?($this->get('taskstatus')):($this->get('eventstatus')));
             $mail_data['activity_mode'] = (($moduleName=='Calendar')?('Task'):('Events'));
             $mail_data['taskpriority'] = $this->get('taskpriority');
-            $mail_data['relatedto'] = $this->get('parent_name');
+            $mail_data['relatedto'] = $parentName;
             $mail_data['contact_name'] = $cont_name;
             $mail_data['description'] = $this->get('description');
             $mail_data['assign_type'] = $this->get('assigntype');

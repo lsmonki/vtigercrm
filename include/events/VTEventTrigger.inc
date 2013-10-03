@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-
+	require_once 'include/events/VTBatchEventTrigger.inc';
 	require_once("include/events/SqlResultIterator.inc");
 	class VTEventTrigger{
 
@@ -159,6 +159,13 @@
 					}
 				}
 			}
+		}
+
+		public static function getInstance($adb, $triggerName) {
+			if(stripos($triggerName, 'batch')) {
+				return new VTBatchEventTrigger($adb, $triggerName);
+			}
+			return new self($adb, $triggerName);
 		}
 	}
 ?>

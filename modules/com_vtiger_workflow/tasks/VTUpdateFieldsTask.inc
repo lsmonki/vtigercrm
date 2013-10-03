@@ -78,14 +78,17 @@ class VTUpdateFieldsTask extends VTTask {
 				}
 
 				if ($fieldInstance->getFieldDataType() === 'owner') {
-					$userId = getUserId_Ol($fieldValue);
-					$groupId = getGrpId($fieldValue);
+                    if(!is_numeric($fieldValue)){
+                        //If name is given 
+                        $userId = getUserId_Ol($fieldValue);
+                        $groupId = getGrpId($fieldValue);
 
-					if ($userId == 0 && $groupId == 0) {
-						$fieldValue = $focus->column_fields[$fieldName];
-					} else {
-						$fieldValue = ($userId == 0) ? $groupId : $userId;
-					}
+                        if ($userId == 0 && $groupId == 0) {
+                            $fieldValue = $focus->column_fields[$fieldName];
+                        } else {
+                            $fieldValue = ($userId == 0) ? $groupId : $userId;
+                        }
+                    }
 				}
 
 				$focus->column_fields[$fieldName] = $fieldValue;

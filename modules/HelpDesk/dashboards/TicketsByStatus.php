@@ -34,9 +34,17 @@ class HelpDesk_TicketsByStatus_Dashboard extends Vtiger_IndexAjax_View {
 
 		$linkId = $request->get('linkid');
 		$data = $request->get('data');
+		
+		$createdTime = $request->get('createdtime');
+		
+		//Date conversion from user to database format
+		if(!empty($createdTime)) {
+			$dates['start'] = Vtiger_Date_UIType::getDBInsertedValue($createdTime['start']);
+			$dates['end'] = Vtiger_Date_UIType::getDBInsertedValue($createdTime['end']);
+		}
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$data = $moduleModel->getTicketsByStatus($request->get('smownerid'));
+		$data = $moduleModel->getTicketsByStatus($request->get('owner'), $dates);
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 

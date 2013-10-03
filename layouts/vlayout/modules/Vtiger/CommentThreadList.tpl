@@ -72,17 +72,19 @@
 
 			</div>
 			{assign var="REASON_TO_EDIT" value=$COMMENT->get('reasontoedit')}
-			<div class="row-fluid{if empty($REASON_TO_EDIT)} hide{/if}"  name="editStatus">
+			<div class="row-fluid"  name="editStatus">
 				<hr style="border-color: gray;border-style: dashed;">
 				<div class="row-fluid pushUpandDown2per">
-					<span class="span6">
+					<span class="{if empty($REASON_TO_EDIT)}hide{/if} span6">
 						[ {vtranslate('LBL_EDIT_REASON',$MODULE_NAME)} ] : <span  name="editReason" class="textOverflowEllipsis">{nl2br($REASON_TO_EDIT)}</span>
 					</span>
-					<span class="span6">
-						<span class="pull-right">
-							<p class="muted"><em>{vtranslate('LBL_MODIFIED',$MODULE_NAME)}</em>&nbsp;<small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getModifiedTime())}">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getModifiedTime())}</small></p>
+					{if $COMMENT->getCommentedTime() neq $COMMENT->getModifiedTime()}
+						<span class="{if empty($REASON_TO_EDIT)}row-fluid{else} span6{/if}">
+							<span class="pull-right">
+								<p class="muted"><em>{vtranslate('LBL_MODIFIED',$MODULE_NAME)}</em>&nbsp;<small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getModifiedTime())}">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getModifiedTime())}</small></p>
+							</span>
 						</span>
-					</span>
+					{/if}
 				</div>
 			</div>
 		</div>

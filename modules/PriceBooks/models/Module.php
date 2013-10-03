@@ -78,5 +78,13 @@ class PriceBooks_Module_Model extends Vtiger_Module_Model {
 			return $overRideQuery;
 		}
 	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
 
 }

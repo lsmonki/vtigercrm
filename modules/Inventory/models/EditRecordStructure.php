@@ -35,11 +35,10 @@ class Inventory_EditRecordStructure_Model extends Vtiger_EditRecordStructure_Mod
 				foreach($fieldModelList as $fieldName=>$fieldModel) {
 					if($fieldModel->isEditable()) {
 						if($recordExists) {
-							$fieldValue = $recordModel->get($fieldName);
-							if($fieldName == 'terms_conditions' && $fieldValue == '') {
+							$fieldValue = $recordModel->get($fieldName,null);
+                            if($fieldName == 'terms_conditions' && $fieldValue == '') {
 								$fieldValue = $recordModel->getInventoryTermsandConditions();
-							}
-                            else if($fieldValue == ''){
+							} else if($fieldValue == '') {
                                 $defaultValue = $fieldModel->getDefaultFieldValue();
                                 if(!empty($defaultValue) && !$recordId)
                                     $fieldValue = $defaultValue;

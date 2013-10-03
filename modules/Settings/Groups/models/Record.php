@@ -90,6 +90,7 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 		$db = PearDatabase::getInstance();
 		$groupId = $this->getId();
 		$mode = 'edit';
+		$oldUsersList = $this->getUsersList(true);
 
 		if (empty($groupId)) {
 			$mode = '';
@@ -136,6 +137,88 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 				}
 			}
 		}
+		$this->recalculate($oldUsersList);
+	}
+
+	/**
+	 * Function to recalculate user priviliges files
+	 * @param <Array> $oldUsersList
+	 */
+	public function recalculate($oldUsersList) {
+		set_time_limit(vglobal('php_max_execution_time'));
+		require_once('modules/Users/CreateUserPrivilegeFile.php');
+
+		$userIdsList = array();
+		foreach ($oldUsersList as $userId => $userRecordModel) {
+			$userIdsList[$userId] = $userId;
+		}
+
+		$this->members = null;
+		foreach ($this->getUsersList(true) as $userId => $userRecordModel) {
+			$userIdsList[$userId] = $userId;
+		}
+
+		foreach ($userIdsList as $userId) {
+			createUserPrivilegesfile($userId);
+		}
+	}
+
+	/**
+	 * Function to get all users related to this group
+	 * @param <Boolean> $nonAdmin true/false
+	 * @return <Array> Users models list <Users_Record_Model>
+	 */
+	public function getUsersList($nonAdmin = false) {
+		$userIdsList = $usersList = array();
+		$members = $this->getMembers();
+
+		foreach ($members['Users'] as $memberModel) {
+			$userId = $memberModel->get('userId');
+			$userIdsList[$userId] = $userId;
+		}
+
+		foreach ($members['Groups'] as $memberModel) {
+			$groupModel = Settings_Groups_Record_Model::getInstance($memberModel->get('groupId'));
+			$groupMembers = $groupModel->getMembers();
+
+			foreach ($groupMembers['Users'] as $groupMemberModel) {
+				$userId = $groupMemberModel->get('userId');
+				$userIdsList[$userId] = $userId;
+			}
+		}
+
+		foreach ($members['Roles'] as $memberModel) {
+			$roleModel = new Settings_Roles_Record_Model();
+			$roleModel->set('roleid', $memberModel->get('roleId'));
+
+			$roleUsers = $roleModel->getUsers();
+			foreach ($roleUsers as $userId => $userRecordModel) {
+				$userIdsList[$userId] = $userId;
+			}
+		}
+
+		foreach ($members['RoleAndSubordinates'] as $memberModel) {
+			$roleModel = new Settings_Roles_Record_Model();
+			$roleModel->set('roleid', $memberModel->get('roleId'));
+
+			$roleUsers = $roleModel->getUsers();
+			foreach ($roleUsers as $userId => $userRecordModel) {
+				$userIdsList[$userId] = $userId;
+			}
+		}
+
+		if (array_key_exists(1, $userIdsList)) {
+			unset($userIdsList[1]);
+		}
+
+		foreach ($userIdsList as $userId) {
+			$userRecordModel = Users_Record_Model::getInstanceById($userId, 'Users');
+			if ($nonAdmin && $userRecordModel->isAdminUser()) {
+				continue;
+			}
+			$usersList[$userId] = $userRecordModel;
+		}
+		return $usersList;
 	}
 
 	protected function transferOwnership($transferToGroup) {

@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Pedidos'                     , 
 	'Invoice'                      => 'Facturas'                    , 
 	'MailManager'                  => 'Mail Manager'                , // TODO: Review
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Agregar Registro'            , 
 	'LBL_RECENTLY_MODIFIED'        => 'Modificado recientemente'    , 
 	'LBL_RECORDS_LIST'             => 'Lista de registros'          , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Fecha de fin de venta'       , 
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Select Status'               , // TODO: Review
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , 
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand'        , 
 	'SINGLE_Accounts'              => 'Organization'                , // TODO: Review
 	'SINGLE_Contacts'              => 'Contact'                     , // TODO: Review
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -548,6 +549,41 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Fecha válida',
+	'Phone: ' => 'teléfono: ',
+	'Issued Date' => 'Fecha de publicación',
+	'Shipping & Handling Charges' => 'Enviando y cargas',
+	'Shipping & Handling Tax:' => 'Envío y dirección fiscal:',
+	'Discount' => 'descuento',
+	'Net Total' => 'total neto',
+	'Product Code' => 'producto código',
+	'Customer Name' => 'Nombre del cliente',
+	'Price'=>'precio',
+	'Tax:' => 'impuesto:',
+	'Contact Name' => 'Nombre de contacto',
+	'Grand Total:' => 'total general:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'sitio web: ',
+	'Tax' => 'impuesto',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Contratos de Servicio',
+	'Projects' => 'Proyecto',
+	'Sales Order' => 'Pedidos',
+	'Purchase Order' => 'Órdenes de Compra',
+	'Payments' => 'Payments',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Por favor configura el servidor de salida desde la página de configuración ', 
@@ -650,4 +686,6 @@ $jsLanguageStrings = array(
 	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

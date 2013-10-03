@@ -14,7 +14,7 @@
 {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
 {assign var="FIELD_NAME" value=$FIELD_MODEL->get('name')}
 
-<input type="hidden" name="{$FIELD_MODEL->getFieldName()}" value='' />
+<input type="hidden" name="{$FIELD_MODEL->getFieldName()}" value=0 />
 <input id="{$MODULE}_editView_fieldName_{$FIELD_NAME}" type="checkbox" name="{$FIELD_MODEL->getFieldName()}" data-validation-engine="validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]"
 {if $FIELD_MODEL->get('fieldvalue') eq true} checked
 {/if} data-fieldinfo='{$FIELD_INFO}' {if !empty($SPECIAL_VALIDATOR)}data-validator={Zend_Json::encode($SPECIAL_VALIDATOR)}{/if} />

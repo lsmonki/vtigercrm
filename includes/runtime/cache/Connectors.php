@@ -15,7 +15,7 @@ class Vtiger_Cache_Connector_Memory {
 	function get($key) {
 		return isset($this->$key)? $this->$key : false;
 	}
-
+    
     function flush(){
         return true;
     }

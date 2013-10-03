@@ -16,7 +16,7 @@
 		<h3 id="importRecordHeader">{vtranslate('LBL_IMPORT_RECORDS', $MODULE)}</h3>
 	</div>
 	<form method="POST" action="index.php" enctype="multipart/form-data" id="ical_import" name="ical_import">
-		<input type="hidden" value="{$MODULE}" name="module">
+		<input type="hidden" value="{$MODULE}" name="module">		
 		<div name='importRecordsContent'>
 			<input type="hidden" value="Import" name="view">
 			<input type="hidden" value="importResult" name="mode">

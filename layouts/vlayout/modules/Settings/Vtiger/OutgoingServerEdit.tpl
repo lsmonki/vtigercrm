@@ -16,6 +16,7 @@
 				<div class="span8"><h3>{vtranslate('LBL_OUTGOING_SERVER', $QUALIFIED_MODULE)}</h3>&nbsp;{vtranslate('LBL_OUTGOING_SERVER_DESC', $QUALIFIED_MODULE)}</div>
 				<div class="span4 btn-toolbar"><div class="pull-right">
 					<button class="btn btn-success saveButton" type="submit" title="{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
+					<button class="btn resetButton" type="button" title="{vtranslate('LBL_RESET_TO_DEFAULT', $QUALIFIED_MODULE)}"><strong>{vtranslate('LBL_RESET_TO_DEFAULT', $QUALIFIED_MODULE)}</strong></button>
 					<a type="reset" class="cancelLink" title="{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
 				</div></div>
 			</div>
@@ -30,11 +31,12 @@
 				<a class="cursorPointer accordion-heading accordion-toggle" data-toggle="collapse" data-target="#serverSteps">{vtranslate('LBL_MORE', $QUALIFIED_MODULE)}..</a>
 				<div id="serverSteps" class="accordion-body collapse themeTextColor"><ul>
 					<br><li>{vtranslate('LBL_OPTIONS1', $QUALIFIED_MODULE)}</li><br>
+					<li>{vtranslate('LBL_OPTIONS2', $QUALIFIED_MODULE)}</li>
 				</ul></div>
 			</div>
 			<div class="row-fluid hide errorMessage">
 				<div class="alert alert-error">
-				  {vtranslate('LBL_TESTMAILSTATUS', $QUALIFIED_MODULE)}<strong>{vtranslate('LBL_MAILSENDERROR', $QUALIFIED_MODULE)}</strong>
+				  {vtranslate('LBL_TESTMAILSTATUS', $QUALIFIED_MODULE)}<strong>{vtranslate('LBL_MAILSENDERROR', $QUALIFIED_MODULE)}</strong>  
 				</div>
 			</div>
 			<table class="table table-bordered table-condensed themeTableColor">

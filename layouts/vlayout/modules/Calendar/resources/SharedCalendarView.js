@@ -29,7 +29,7 @@ Calendar_CalendarView_Js("SharedCalendar_SharedCalendarView_Js",{
 			if (disabledOnes.indexOf(feedcheckbox.data('calendar-sourcekey')) == -1) {
 				feedcheckbox.attr('checked',true);
 				var id = feedcheckbox.data('calendar-userid');
-				result[id] = feedcheckbox.data('calendar-feed-color');
+				result[id] = feedcheckbox.data('calendar-feed-color')+','+feedcheckbox.data('calendar-feed-textcolor');
 			}
 		});
 		
@@ -73,6 +73,7 @@ Calendar_CalendarView_Js("SharedCalendar_SharedCalendarView_Js",{
 				callback([]);
 				return;
 			}
+			feedcheckbox.attr('disabled', true);
 			var params = {
 				module: 'Calendar',
 				action: 'Feed',
@@ -80,10 +81,12 @@ Calendar_CalendarView_Js("SharedCalendar_SharedCalendarView_Js",{
 				end: thisInstance.toDateString(end),
 				type: feedcheckbox.data('calendar-feed'),
 				userid : feedcheckbox.data('calendar-userid'),
-				color : feedcheckbox.data('calendar-feed-color')
+				color : feedcheckbox.data('calendar-feed-color'),
+				textColor : feedcheckbox.data('calendar-feed-textcolor')
 			}
 			AppConnector.request(params).then(function(events){
 				callback(events);
+				feedcheckbox.attr('disabled', false).attr('checked', true);
 			},
             function(error){
                 //To send empty events if error occurs
@@ -109,8 +112,14 @@ Calendar_CalendarView_Js("SharedCalendar_SharedCalendarView_Js",{
 				randomColor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 				app.cacheSet(sourcekey, randomColor)
 			}
-			feedcheckbox.data('calendar-feed-color',randomColor);
-			feedcheckbox.closest('label').find('.label').css('background-color',randomColor)
+			var colorContrast = app.getColorContrast(randomColor.slice(1));
+			if(colorContrast == 'light') {
+				var textColor = 'black'
+			} else {
+				textColor = 'white'
+			}
+			feedcheckbox.data('calendar-feed-color',randomColor).data('calendar-feed-textcolor',textColor);
+			feedcheckbox.closest('label').find('.label').css({'background-color':randomColor,'color':textColor});
 		});
 
 	},

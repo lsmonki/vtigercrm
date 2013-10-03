@@ -63,4 +63,5 @@ $jsLanguageStrings = array(
 	'JS_percent' => 'Percent',
 	'JS_skype' => 'Skype',
 	'JS_None' => 'None',
+	'JS_integer' => 'Integer',
 );

@@ -7,24 +7,24 @@
  * All Rights Reserved.
  *************************************************************************************/
 jQuery.Class('Settings_LayoutEditor_Js', {
-	
+
 }, {
 	updatedBlockSequence : {},
-	
+
 	reactiveFieldsList : [],
-	
+
 	updatedRelatedList : {'updated' : [], 'deleted' : []},
-	
+
 	removeModulesArray : false,
-	
+
 	inActiveFieldsList : false,
-	
+
 	updatedBlockFieldsList : [],
-	
+
 	updatedBlocksList : [],
-	
+
 	blockNamesList : [],
-	
+
 	/**
 	 * Function to set the removed modules array used in related list
 	 */
@@ -34,7 +34,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var container = relatedList.find('.relatedTabModulesList');
 		thisInstance.removeModulesArray = JSON.parse(container.find('.RemovedModulesListArray').val());
 	},
-	
+
 	/**
 	 * Function to set the inactive fields list used to show the inactive fields
 	 */
@@ -43,7 +43,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
 		thisInstance.inActiveFieldsList = JSON.parse(contents.find('.inActiveFieldsArray').val());
 	},
-	
+
 	/**
 	 * Function to regiser the event to make the blocks sortable
 	 */
@@ -57,13 +57,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			'revert' : true,
 			'tolerance':'pointer',
 			'cursor' : 'move',
-			'dealy' : '3000',
 			'update' : function(e, ui) {
 				thisInstance.updateBlockSequence();
 			}
 		});
 	},
-	
+
 	/**
 	 * Function which will update block sequence
 	 */
@@ -75,7 +74,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var sequence = JSON.stringify(thisInstance.updateBlocksListByOrder());
 		var params = {};
 		params['module'] = app.getModuleName();
@@ -83,7 +82,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['action'] = 'Block';
 		params['mode'] = 'updateSequenceNumber';
 		params['sequence'] = sequence;
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -96,7 +95,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
+
 	/**
 	 * Function which will arrange the sequence number of blocks
 	 */
@@ -108,7 +107,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			var blockId = blockTable.data('blockId');
 			var actualBlockSequence = blockTable.data('sequence');
 			var expectedBlockSequence = (index+1);
-			
+
 			if(expectedBlockSequence != actualBlockSequence) {
 				blockTable.data('sequence', expectedBlockSequence);
 			}
@@ -116,7 +115,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		});
 		return thisInstance.updatedBlockSequence;
 	},
-	
+
 	/**
 	 * Function to regiser the event to make the related modules sortable
 	 */
@@ -130,13 +129,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			'revert' : true,
 			'tolerance':'pointer',
 			'cursor' : 'move',
-			'dealy' : '3000',
 			'update' : function(e, ui) {
 				thisInstance.showSaveButton();
 			}
 		});
 	},
-	
+
 	/**
 	 * Function which will enable the save button in realted tabs list
 	 */
@@ -147,7 +145,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			saveButton.removeAttr('disabled');
 		}
 	},
-	
+
 	/**
 	 * Function which will disable the save button in related tabs list
 	 */
@@ -156,7 +154,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var saveButton = relatedList.find('.saveRelatedList');
 		saveButton.attr('disabled', 'disabled');
 	},
-	
+
 	/**
 	 * Function to register all the relatedList Events
 	 */
@@ -166,7 +164,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var container = relatedList.find('.relatedTabModulesList');
 		var allModulesListArray = JSON.parse(container.find('.ModulesListArray').val());
 		var ulEle = container.find('ul.relatedModulesList');
-		
+
 		var selectEle = container.find('[name="addToList"]');
 		app.showSelect2ElementView(selectEle, {maximumSelectionSize : 1, closeOnSelect : true, dropdownCss : {'z-index' : 0}});
 		selectEle.on('change', function() {
@@ -174,21 +172,21 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			var moduleLabel = allModulesListArray[selectedVal];
 			//remove the element if its already exists
 			ulEle.find('.module_'+selectedVal[0]).remove();
-			
+
 			//append li element for the selected module
 			var liEle = container.find('.moduleCopy').clone(true, true);
 			liEle.data('relationId', selectedVal[0]).find('.moduleLabel').text(moduleLabel);
 			ulEle.append(liEle.removeClass('hide moduleCopy').addClass('relatedModule module_'+selectedVal[0]));
 			thisInstance.makeRelatedModuleSortable();
-			
+
 			//remove that selected module from the select element
 			selectEle.select2('data',[]);
 			selectEle.find('option[value="'+selectedVal[0]+'"]').remove();
-			
+
 			thisInstance.removeModulesArray.splice(thisInstance.removeModulesArray.indexOf(selectedVal[0]),1);
 			thisInstance.showSaveButton();
 		})
-		
+
 		//register the event to click on close the related module
 		container.find('.close').one('click', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
@@ -199,7 +197,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			liEle.fadeOut('slow').addClass('deleted');
 			selectEle.append('<option value="'+relationId+'">'+moduleLabel+'</option>');
 		})
-		
+
 		//register click event for save related  list button
 		relatedList.on('click', '.saveRelatedList', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
@@ -213,7 +211,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		})
 	},
-	
+
 	/**
 	 * Function to save the updated information in related list
 	 */
@@ -226,14 +224,14 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var params = {};
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
 		params['action'] = 'Relation';
 		params['related_info'] = thisInstance.getUpdatedModulesInfo();
 		params['sourceModule'] = jQuery('#selectedModuleName').val();
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -249,7 +247,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		);
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function to get the updates happened with the related modules list
 	 */
@@ -259,7 +257,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var removedModulesList = relatedList.find('li.relatedModule').filter('.deleted');
 		var updatedModulesList = relatedList.find('li.relatedModule').not('.deleted');
 		thisInstance.updatedRelatedList['updated'] = [];
-		
+
 		//update deleted related modules list
 		removedModulesList.each(function(index,domElement) {
 			var relationId = jQuery(domElement).data('relationId');
@@ -272,7 +270,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		});
 		return thisInstance.updatedRelatedList;
 	},
-	
+
 	/**
 	 * Function to regiser the event to make the fields sortable
 	 */
@@ -280,21 +278,25 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var thisInstance = this;
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
 		var table = contents.find('.editFieldsTable');
-		table.find('.blockFieldsSortable').sortable({
+		table.find('ul[name=sortable1], ul[name=sortable2]').sortable({
 			'containment' : '#moduleBlocks',
 			'revert' : true,
 			'tolerance':'pointer',
 			'cursor' : 'move',
-			'dealy' : '3000',
-			'connectWith' : '.blockFieldsSortable',
+			'connectWith' : '.connectedSortable',
 			'update' : function(e, ui) {
 				var currentField = ui['item'];
 				thisInstance.showSaveFieldSequenceButton();
 				thisInstance.createUpdatedBlocksList(currentField);
+				// rearrange the older block fields
+				if(ui.sender) {
+					var olderBlock = ui.sender.closest('.editFieldsTable');
+					thisInstance.reArrangeBlockFields(olderBlock);
+				}
 			}
 		});
 	},
-	
+
 	/**
 	 * Function to show the save button of fieldSequence
 	 */
@@ -303,7 +305,6 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var layout = jQuery('#detailViewLayout');
 		var saveButton = layout.find('.saveFieldSequence');
 		if(app.isHidden(saveButton)) {
-			//thisInstance.registerUnloadEvent();
 			thisInstance.updatedBlocksList = [];
 			thisInstance.updatedBlockFieldsList = [];
 			saveButton.removeClass('hide');
@@ -312,26 +313,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			Settings_Vtiger_Index_Js.showMessage(params);
 		}
 	},
-	
-	registerUnloadEvent : function() {
-		var layout = jQuery('#detailViewLayout');
-		jQuery(window).bind('beforeunload',function(){
-			var message = app.vtranslate('JS_SVAE_FIELD_SEQUENCE');
-			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
-				function(e) {
-					layout.find('.saveFieldSequence').trigger('click');
-					
-					//thisInstance.deleteCustomBlock(blockId);
-				},
-				function(e){
-					e.stopPropagation();
-				}
-			);
-			return false;	
-		});
-	},
-	
-	
+
 	/**
 	 * Function which will hide the saveFieldSequence button
 	 */
@@ -340,39 +322,67 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var saveButton = layout.find('.saveFieldSequence');
 		saveButton.addClass('hide');
 	},
-	
+
 	/**
 	 * Function to create the blocks list which are updated while sorting
 	 */
 	createUpdatedBlocksList : function(currentField) {
 		var thisInstance = this;
-		var updatedBlockId = currentField.closest('.editFieldsTable').data('blockId');
+		var block = currentField.closest('.editFieldsTable');
+		var updatedBlockId = block.data('blockId');
 		if(jQuery.inArray(updatedBlockId, thisInstance.updatedBlocksList) == -1) {
 			thisInstance.updatedBlocksList.push(updatedBlockId);
 		}
+		thisInstance.reArrangeBlockFields(block);
 	},
-	
+
+	/**
+	 * Function that rearranges fields in the block when the fields are moved
+	 * @param <jQuery object> block
+	 */
+	reArrangeBlockFields : function(block) {
+		// 1.get the containers, 2.compare the length, 3.if uneven then move the last element
+		var leftSideContainer = block.find('ul[name=sortable1]');
+		var rightSideContainer = block.find('ul[name=sortable2]');
+		if(leftSideContainer.children().length < rightSideContainer.children().length) {
+			var lastElementInRightContainer = rightSideContainer.children(':last');
+			leftSideContainer.append(lastElementInRightContainer);
+		} else if(leftSideContainer.children().length > rightSideContainer.children().length+1) {	//greater than 1
+			var lastElementInLeftContainer = leftSideContainer.children(':last');
+			rightSideContainer.append(lastElementInLeftContainer);
+		}
+	},
 	/**
 	 * Function to create the list of updated blocks with all the fields and their sequences
 	 */
 	createUpdatedBlockFieldsList : function() {
 		var thisInstance = this;
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
-		
+
 		for(var index in  thisInstance.updatedBlocksList) {
 			var updatedBlockId = thisInstance.updatedBlocksList[index];
 			var updatedBlock = contents.find('.block_'+updatedBlockId);
-			var editFields = updatedBlock.find('.editFields');
-			editFields.each(function(index,domElement){
+			var firstBlockSortFields = updatedBlock.find('ul[name=sortable1]');
+			var editFields = firstBlockSortFields.find('.editFields');
+			var expectedFieldSequence = 1;
+			editFields.each(function(i,domElement){
 				var fieldEle = jQuery(domElement);
 				var fieldId = fieldEle.data('fieldId');
-				var expectedFieldSequence = (index+1);
 				thisInstance.updatedBlockFieldsList.push({'fieldid' : fieldId,'sequence' : expectedFieldSequence, 'block' : updatedBlockId});
+				expectedFieldSequence = expectedFieldSequence+2;
+			});
+			var secondBlockSortFields = updatedBlock.find('ul[name=sortable2]');
+			var secondEditFields = secondBlockSortFields.find('.editFields');
+			var sequenceValue = 2;
+			secondEditFields.each(function(i,domElement){
+				var fieldEle = jQuery(domElement);
+				var fieldId = fieldEle.data('fieldId');
+				thisInstance.updatedBlockFieldsList.push({'fieldid' : fieldId,'sequence' : sequenceValue, 'block' : updatedBlockId});
+				sequenceValue = sequenceValue+2;
 			});
 		}
-		
 	},
-	
+
 	/**
 	 * Function to register click event for save button of fields sequence
 	 */
@@ -385,7 +395,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			thisInstance.updateFieldSequence();
 		});
 	},
-	
+
 	/**
 	 * Function will save the field sequences
 	 */
@@ -403,7 +413,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['action'] = 'Field';
 		params['mode'] = 'move';
 		params['updatedFields'] = thisInstance.updatedBlockFieldsList;
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -417,7 +427,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
+
 	/**
 	 * Function to register click evnet add custom field button
 	 */
@@ -428,21 +438,50 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			var blockId = jQuery(e.currentTarget).closest('.editFieldsTable').data('blockId');
 			var addFieldContainer = contents.find('.createFieldModal').clone(true, true);
 			addFieldContainer.removeClass('hide');
-			
+
 			var callBackFunction = function(data) {
 				//register all select2 Elements
 				app.showSelect2ElementView(data.find('select'));
-				
+
 				var form = data.find('.createCustomFieldForm');
 				form.attr('id', 'createFieldForm');
 				var select2params = {tags: [],tokenSeparators: [","]}
 				app.showSelect2ElementView(form.find('[name="pickListValues"]'), select2params);
-				
+
 				thisInstance.registerFieldTypeChangeEvent(form);
-				
+
 				var params = app.getvalidationEngineOptions(true);
 				params.onValidationComplete = function(form, valid){
 					if(valid) {
+						var fieldTypeValue = jQuery('[name="fieldType"]',form).val();
+						if(fieldTypeValue == 'Picklist' || fieldTypeValue == 'MultiSelectCombo') {
+							var pickListValueElement = jQuery('#picklistUi',form);
+							var pickLisValues = pickListValueElement.val();
+							var pickListValuesArray = pickLisValues.split(',');
+							var pickListValuesArraySize = pickListValuesArray.length;
+							var specialChars = /["]/ ;
+							for(var i=0;i<pickListValuesArray.length;i++) {
+								if (specialChars.test(pickListValuesArray[i])) {
+									var select2Element = app.getSelect2ElementFromSelect(pickListValueElement);
+									var message = app.vtranslate('JS_SPECIAL_CHARACTERS')+' " '+app.vtranslate('JS_NOT_ALLOWED');
+									select2Element.validationEngine('showPrompt', message , 'error','bottomLeft',true);
+									return false;
+								}
+							}
+							var lowerCasedpickListValuesArray = jQuery.map(pickListValuesArray, function(item, index) {
+																	return item.toLowerCase();
+																});
+							var uniqueLowerCasedpickListValuesArray = jQuery.unique(lowerCasedpickListValuesArray);
+							var uniqueLowerCasedpickListValuesArraySize = uniqueLowerCasedpickListValuesArray.length;
+							var arrayDiffSize = pickListValuesArraySize-uniqueLowerCasedpickListValuesArraySize;
+							if(arrayDiffSize > 0) {
+								var select2Element = app.getSelect2ElementFromSelect(pickListValueElement);
+								var message = app.vtranslate('JS_DUPLICATES_VALUES_FOUND');
+								select2Element.validationEngine('showPrompt', message , 'error','bottomLeft',true);
+								return false;
+							}
+
+						}
 						var saveButton = form.find(':submit');
 						saveButton.attr('disabled', 'disabled');
 						thisInstance.addCustomField(blockId, form).then(
@@ -453,7 +492,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 									app.hideModalWindow();
 									params['text'] = app.vtranslate('JS_CUSTOM_FIELD_ADDED');
 									Settings_Vtiger_Index_Js.showMessage(params);
-									thisInstance.showNewCustomField(result);
+									thisInstance.showCustomField(result);
 								} else {
 									var message = data['error']['message'];
 									form.find('[name="fieldLabel"]').validationEngine('showPrompt', message , 'error','topLeft',true);
@@ -467,7 +506,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				}
 				form.validationEngine(params);
 			}
-			
+
 			app.showModalWindow(addFieldContainer,function(data) {
 				if(typeof callBackFunction == 'function') {
 					callBackFunction(data);
@@ -475,9 +514,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}, {'width':'1000px'});
 		});
 	},
-	
+
 	/**
-	 * Function to create the array of block names list 
+	 * Function to create the array of block names list
 	 */
 	setBlocksListArray : function(form) {
 		var thisInstance = this;
@@ -489,7 +528,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			thisInstance.blockNamesList.push(label);
 		})
 	},
-	
+
 	/**
 	 * Function to save the custom field details
 	 */
@@ -497,9 +536,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var thisInstance = this;
 		var modalHeader = form.closest('#globalmodal').find('.modal-header h3');
 		var aDeferred = jQuery.Deferred();
-		
+
 		modalHeader.progressIndicator({smallLoadingImage : true, imageContainerCss : {display : 'inline', 'margin-left' : '18%',position : 'absolute'}});
-			
+
 		var params = form.serializeFormData();
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
@@ -507,7 +546,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['mode'] = 'add';
 		params['blockid'] = blockId;
 		params['sourceModule'] = jQuery('#selectedModuleName').val();
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				modalHeader.progressIndicator({'mode' : 'hide'});
@@ -520,84 +559,94 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		);
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function to register change event for fieldType while adding custom field
 	 */
 	registerFieldTypeChangeEvent : function(form) {
 		var thisInstance = this;
 		var lengthInput = form.find('[name="fieldLength"]');
-		
+
 		//special validators while adding new field
 		var lengthValidator = [{'name' : 'DecimalMaxLength'}];
 		var maxLengthValidator = [{'name' : 'MaxLength'}];
 		var decimalValidator = [{'name' : 'FloatingDigits'}];
-		
+
 		//By default add the max length validator
 		lengthInput.data('validator', maxLengthValidator);
-		
+
 		//register the change event for field types
 		form.find('[name="fieldType"]').on('change', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
 			var lengthInput = form.find('[name="fieldLength"]');
 			var selectedOption = currentTarget.find('option:selected');
-			
-			//hide all the elements like length, decimal,picklist 
+
+			//hide all the elements like length, decimal,picklist
 			form.find('.supportedType').addClass('hide');
-			
+
 			if(selectedOption.data('lengthsupported')) {
 				form.find('.lengthsupported').removeClass('hide');
 				lengthInput.data('validator', maxLengthValidator);
 			}
-			
+
 			if(selectedOption.data('decimalsupported')) {
 				var decimalFieldUi = form.find('.decimalsupported');
 				decimalFieldUi.removeClass('hide');
-				
+
 				var decimalInput = decimalFieldUi.find('[name="decimal"]');
 				var maxFloatingDigits = selectedOption.data('maxfloatingdigits');
-				
+
 				if(typeof maxFloatingDigits != "undefined") {
 					decimalInput.data('validator', decimalValidator);
 					lengthInput.data('validator', lengthValidator);
 				}
-				
+
 				if(selectedOption.data('decimalreadonly')) {
 					decimalInput.val(maxFloatingDigits).attr('readonly', true);
 				} else {
 					decimalInput.removeAttr('readonly').val('');
 				}
 			}
-			
+
 			if(selectedOption.data('predefinedvalueexists')) {
 				var pickListUi = form.find('.preDefinedValueExists');
-				pickListUi.removeClass('hide');	
+				pickListUi.removeClass('hide');
 			}
             if(selectedOption.data('picklistoption')) {
                 var pickListOption = form.find('.picklistOption');
-				pickListOption.removeClass('hide');	
+				pickListOption.removeClass('hide');
             }
 		})
 	},
-	
+
 	/**
 	 * Function to add new custom field ui to the list
 	 */
-	showNewCustomField : function(result) {
+	showCustomField : function(result) {
 		var thisInstance = this;
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
 		var relatedBlock = contents.find('.block_'+result['blockid']);
 		var fieldCopy = contents.find('.newCustomFieldCopy').clone(true, true);
-		fieldCopy.addClass('opacity editFields').attr('data-field-id', result['id']);
-		fieldCopy.find('.deleteCustomField, .saveFieldDetails').attr('data-field-id', result['id']);
-		fieldCopy.find('.fieldLabel').text(result['label']);
-		relatedBlock.find('.blockFieldsList').append(fieldCopy.removeClass('hide newCustomFieldCopy'));
-		
+		var fieldContainer = fieldCopy.find('div.marginLeftZero.border1px');
+		fieldContainer.addClass('opacity editFields').attr('data-field-id', result['id']).attr('data-block-id', result['blockid']);
+		fieldContainer.find('.deleteCustomField, .saveFieldDetails').attr('data-field-id', result['id']);
+		fieldContainer.find('.fieldLabel').text(result['label']);
+		var block = relatedBlock.find('.blockFieldsList');
+		var sortable1 = block.find('ul[name=sortable1]');
+		var length1 = sortable1.children().length;
+		var sortable2 = block.find('ul[name=sortable2]');
+		var length2 = sortable2.children().length;
+		// Deciding where to add the new field
+		if(length1 > length2) {
+			sortable2.append(fieldCopy.removeClass('hide newCustomFieldCopy'));
+		} else {
+			sortable1.append(fieldCopy.removeClass('hide newCustomFieldCopy'));
+		}
 		var form = fieldCopy.find('form.fieldDetailsForm');
 		thisInstance.setFieldDetails(result, form);
 		thisInstance.makeFieldsListSortable();
 	},
-	
+
 	/**
 	 * Function to set the field info for edit field actions
 	 */
@@ -605,7 +654,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var thisInstance = this;
 		//add field label to the field details
 		form.find('.modal-header').html(jQuery('<strong>'+result['label']+'</strong>'));
-		
+
 		var defaultValueUi = form.find('.defaultValueUi');
 		if(result['mandatory']) {
 			form.find('[name="mandatory"]').filter(':checkbox').attr('checked', true);
@@ -639,24 +688,24 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var fieldUi = fieldModel.getUiTypeSpecificHtml();
 		defaultValueUi.html(fieldUi);
 		defaultValueUi.find('.chzn-select').removeClass('chzn-select');
-		
+
 		//Handled Time field UI
 		var timeField = defaultValueUi.find('.timepicker-default');
 		timeField.removeClass('timePicker timepicker-default');
 		timeField.attr('data-toregister','time');
-		
+
 		//Handled date field UI
 		var dateField = defaultValueUi.find('.dateField')
 		dateField.removeClass('dateField');
 		dateField.attr('data-toregister','date');
-		
+
 		defaultValueUi.find('[data-validation-engine]').attr('data-validation-engine','validate[required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
 		defaultValueUi.find('[name*='+result['name']+']').attr('name', 'fieldDefaultValue');
 		defaultValueUi.find('[name="fieldDefaultValue"]').attr('disabled','disabled');
 		defaultValueUi.find('input').addClass('input-medium');
 		defaultValueUi.find('.select2').addClass('row-fluid');
 	},
-	
+
 	/**
 	 * Function to register click event for add custom block button
 	 */
@@ -665,12 +714,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
 		contents.find('.addCustomBlock').click(function(e) {
 			var addBlockContainer = contents.find('.addBlockModal').clone(true, true);
-			
+
 			var callBackFunction = function(data) {
 				data.find('.addBlockModal').removeClass('hide');
 				//register all select2 Elements
 				app.showSelect2ElementView(data.find('select'));
-				
+
 				var form = data.find('.addCustomBlockForm');
 				thisInstance.setBlocksListArray(form);
 				var fieldLabel = form.find('[name="label"]');
@@ -687,6 +736,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 										thisInstance.displayNewCustomBlock(result);
 										thisInstance.updateNewSequenceForBlocks(result['sequenceList']);
 										thisInstance.appendNewBlockToBlocksList(result, form);
+										thisInstance.makeFieldsListSortable();
 
 										params['text'] = app.vtranslate('JS_CUSTOM_BLOCK_ADDED');
 									} else {
@@ -719,7 +769,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}, {'width':'1000px'});
 		});
 	},
-	
+
 	/**
 	 * Function to save the new custom block details
 	 */
@@ -738,7 +788,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['sourceModule'] = jQuery('#selectedModuleName').val();
 		params['action'] = 'Block';
 		params['mode'] = 'save';
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -751,7 +801,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		);
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function used to display the new custom block ui after save
 	 */
@@ -760,7 +810,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var contents = jQuery('#layoutEditorContainer').find('.contents');
 		var beforeBlockId = result['beforeBlockId'];
 		var beforeBlock = contents.find('.block_'+beforeBlockId);
-		
+
 		var newBlockCloneCopy = contents.find('.newCustomBlockCopy').clone(true, true);
 		newBlockCloneCopy.data('blockId', result['id']).find('.blockLabel').append(jQuery('<strong>'+result['label']+'</strong>'));
 		newBlockCloneCopy.find('.blockVisibility').data('blockId', result['id']);
@@ -768,10 +818,10 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			newBlockCloneCopy.find('.addCustomField').removeClass('hide');
 		}
 		beforeBlock.after(newBlockCloneCopy.removeClass('hide newCustomBlockCopy').addClass('editFieldsTable block_'+result['id']));
-		
+
 		newBlockCloneCopy.find('.blockFieldsList').sortable({'connectWith' : '.blockFieldsList'});
 	},
-	
+
 	/**
 	 * Function to update the sequence for all blocks after adding new Block
 	 */
@@ -781,7 +831,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			contents.find('.block_'+blockId).data('sequence', sequence);
 		});
 	},
-	
+
 	/**
 	 * Function to update the block list with the new block label in the clone container
 	 */
@@ -795,7 +845,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
             		})
 		blocksListSelect.append(option.attr('data-label', result['label']));
 	},
-	
+
 	/**
 	 * Function to update the block list to remove the deleted custom block label in the clone container
 	 */
@@ -805,7 +855,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var blocksListSelect = hiddenAddBlockModel.find('[name="beforeBlockId"]');
 		blocksListSelect.find('option[value="'+blockId+'"]').remove();
 	},
-	
+
 	/**
 	 * Function to register the change event for block visibility
 	 */
@@ -825,7 +875,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			thisInstance.updateBlockStatus(currentTarget);
 		})
 	},
-	
+
 	/**
 	 * Function to save the changed visibility for the block
 	 */
@@ -846,7 +896,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['mode'] = 'save';
 		params['blockid'] = currentTarget.data('blockId');
 		params['display_status'] = blockStatus;
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -863,7 +913,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
+
 	/**
 	 * Function to register the click event for inactive fields list
 	 */
@@ -903,9 +953,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				}, {'width':'1000px'});
 			}
 		});
-		
+
 	},
-	
+
 	/**
 	 * Function to show the list of inactive fields in the modal
 	 */
@@ -917,7 +967,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			form.find('.inActiveList').append(inActiveField);
 		});
 	},
-	
+
 	/**
 	 * Function to create the list of reactivate fields list
 	 */
@@ -932,7 +982,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		});
 	},
-	
+
 	/**
 	 * Function to unHide the selected fields in the inactive fields modal
 	 */
@@ -951,10 +1001,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['mode'] = 'unHide';
 		params['blockId'] = currentBlock.data('blockId');
 		params['fieldIdList'] = JSON.stringify(thisInstance.reactiveFieldsList);
-		
+
 		AppConnector.request(params).then(
 			function(data) {
-				thisInstance.showReactiveFieldsUi(currentBlock);
+				for(index in data.result) {
+					thisInstance.showCustomField(data.result[index]);
+				}
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 				var params = {};
 				params['text'] = app.vtranslate('JS_SELECTED_FIELDS_REACTIVATED');
@@ -965,36 +1017,6 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
-	/**
-	* Function to show the ui for reactivated fields
-	*/
-	showReactiveFieldsUi : function(currentBlock) {
-		var thisInstance = this;
-		var params = {};
-		params['module'] = app.getModuleName();
-		params['parent'] = app.getParentModuleName();
-		params['view'] = 'IndexAjax';
-		params['mode'] = 'getFieldUI';
-		params['fieldIdList'] = JSON.stringify(thisInstance.reactiveFieldsList);
-		params['sourceModule'] = jQuery('#selectedModuleName').val();
-
-		AppConnector.request(params).then(
-			function(data) {
-				var currentBlockFieldslist = currentBlock.find('.blockFieldsList');
-				currentBlockFieldslist.append(data);
-				//register the events for the reactivated fields
-				jQuery.each(thisInstance.reactiveFieldsList, function(index, fieldId) {
-					var fieldUi = currentBlockFieldslist.find('[data-field-id="'+fieldId+'"]').filter('.editFields');
-					thisInstance.registerFieldEvents(fieldUi);
-				})
-			},
-			function(error) {
-
-			}
-		);
-	},
-	
 	/**
 	 * Function to register the click event for delete custom block
 	 */
@@ -1006,7 +1028,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			var currentTarget = jQuery(e.currentTarget);
 			var table = currentTarget.closest('div.editFieldsTable');
 			var blockId = table.data('blockId');
-			
+
 			var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE');
 			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
@@ -1018,7 +1040,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			);
 		});
 	},
-	
+
 	/**
 	 * Function to delete the custom block
 	 */
@@ -1030,14 +1052,14 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var params = {};
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
 		params['action'] = 'Block';
 		params['mode'] = 'delete';
 		params['blockid'] = blockId;
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -1057,7 +1079,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
+
 	/**
 	 * Function to remove the deleted custom block from the ui
 	 */
@@ -1066,7 +1088,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var deletedTable = contents.find('.block_'+blockId);
 		deletedTable.fadeOut('slow').remove();
 	},
-	
+
 	/**
 	 * Function to register the click event for delete custom field
 	 */
@@ -1083,12 +1105,16 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				function(e) {
 					thisInstance.deleteCustomField(fieldId).then(
 						function(data) {
-							currentTarget.closest('div.editFields').fadeOut('slow').remove();
+							var field = currentTarget.closest('div.editFields');
+							var blockId = field.data('blockId');
+							field.parent().fadeOut('slow').remove();
+							var block = jQuery('#block_'+blockId);
+							thisInstance.reArrangeBlockFields(block);
 							var params = {};
 							params['text'] = app.vtranslate('JS_CUSTOM_FIELD_DELETED');
 							Settings_Vtiger_Index_Js.showMessage(params);
 						},function(error, err) {
-							
+
 						}
 					);
 				},
@@ -1098,7 +1124,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			);
 		});
 	},
-	
+
 	/**
 	 * Function to delete the custom field
 	 */
@@ -1111,14 +1137,14 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var params = {};
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
 		params['action'] = 'Field';
 		params['mode'] = 'delete';
 		params['fieldid'] = fieldId;
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -1132,7 +1158,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		return aDeferred.promise();
 	},
 
-	
+
 	/**
 	 * Function to register the click event for save button after edit field details
 	 */
@@ -1140,7 +1166,8 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var thisInstance = this;
 		var submitButtton = form.find('.saveFieldDetails');
 		var fieldId = submitButtton.data('fieldId');
-		var blockId = submitButtton.closest('.editFieldsTable').data('blockId');
+		var block = submitButtton.closest('.editFieldsTable');
+		var blockId = block.data('blockId');
 		//close the drop down
 		submitButtton.closest('.btn-group').removeClass('open');
 		//adding class opacity to fieldRow - to give opacity to the actions of the fields
@@ -1152,7 +1179,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				var result = data['result'];
 				var fieldLabel = fieldRow.find('.fieldLabel');
 				if(result['presence'] == '1') {
-					fieldRow.fadeOut('slow').remove();
+					fieldRow.parent().fadeOut('slow').remove();
 
 					if(jQuery.isEmptyObject(thisInstance.inActiveFieldsList[blockId])) {
 						if(thisInstance.inActiveFieldsList.length == '0') {
@@ -1163,6 +1190,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 					} else {
 						thisInstance.inActiveFieldsList[blockId][fieldId] = result['label'];
 					}
+					thisInstance.reArrangeBlockFields(block);
 				}
 				if(result['mandatory']) {
 					if(fieldLabel.find('.redColor').length == '0') {
@@ -1190,7 +1218,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 						}
 					}
 				}
-				//handled registration of time field 
+				//handled registration of time field
 				var timeFieldElement = form.find('[data-toregister="time"]');
 				if(timeFieldElement.length > 0){
 					app.destroyTimeFields(timeFieldElement);
@@ -1204,7 +1232,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 			);
 	},
-	
+
 	/**
 	 * Function to save all the field details which are changed
 	 */
@@ -1219,7 +1247,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var params = form.serializeFormData();
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
@@ -1227,7 +1255,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['mode'] = 'save';
 		params['fieldid'] = fieldId;
 		params['sourceModule'] = jQuery('#selectedModuleName').val();
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -1243,7 +1271,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		);
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function to register the cahnge event for mandatory & default checkboxes in edit field details
 	 */
@@ -1266,7 +1294,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				}
 			}
 		})
-		
+
 		contents.on('change', '[name="defaultvalue"]', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
 			var defaultValueUi = currentTarget.closest('span').find('.defaultValueUi');
@@ -1283,9 +1311,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				defaultValueUi.addClass('zeroOpacity');
 			}
 		})
-		
+
 	},
-	
+
 	/**
 	 * Function to register the click event for related modules list tab
 	 */
@@ -1296,13 +1324,13 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var relatedTab = contents.find('.relatedListTab');
 		relatedTab.click(function() {
 			if(relatedContainer.find('.relatedTabModulesList').length > 0) {
-			
+
 			} else {
 				thisInstance.showRelatedTabModulesList(relatedContainer);
 			}
 		});
 	},
-	
+
 	/**
 	 * Function to show the related tab modules list in the tab
 	 */
@@ -1314,7 +1342,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		params['sourceModule'] = jQuery('#selectedModuleName').val();
 		params['view'] = 'Index';
 		params['mode'] = 'showRelatedListLayout';
-		
+
 		AppConnector.request(params).then(
 			function(data) {
 				relatedContainer.html(data);
@@ -1328,7 +1356,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		);
 	},
-	
+
 	/**
 	 * Function to get the respective module layout editor through pjax
 	 */
@@ -1341,13 +1369,13 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				'enabled' : true
 			}
 		});
-		
+
 		var params = {};
 		params['module'] = app.getModuleName();
 		params['parent'] = app.getParentModuleName();
 		params['view'] = 'Index';
 		params['sourceModule'] = selectedModule;
-		
+
 		AppConnector.requestPjax(params).then(
 			function(data) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -1360,7 +1388,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		);
 		return aDeferred.promise();
 	},
-	
+
 	/**
 	 * Function to register the change event for layout editor modules list
 	 */
@@ -1368,9 +1396,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var thisInstance = this;
 		var container = jQuery('#layoutEditorContainer');
 		var contentsDiv = container.closest('.contentsDiv');
-		
+
 		app.showSelect2ElementView(container.find('[name="layoutEditorModules"]'), {dropdownCss : {'z-index' : 0}});
-		
+
 		container.on('change', '[name="layoutEditorModules"]', function(e) {
 			var currentTarget = jQuery(e.currentTarget);
 			var selectedModule = currentTarget.val();
@@ -1381,9 +1409,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				}
 			);
 		});
-		
+
 	},
-	
+
 	/**
 	 * Function to register click event for drop-downs in fields list
 	 */
@@ -1392,7 +1420,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			e.stopPropagation();
 		});
 	},
-	
+
 	registerEditFieldDetailsClick : function(contents) {
 		var thisInstance = this;
 		if(typeof contents == 'undefined') {
@@ -1409,7 +1437,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			dropDownContainer.append(dropDown);
 			var dropDownMenu  = dropDownContainer.find('.dropdown-menu');
 			var params = app.getvalidationEngineOptions(true);
-			params.binded = false,    
+			params.binded = false,
 			params.onValidationComplete = function(form,valid){
 				if(valid) {
 					thisInstance.registerSaveFieldDetailsEvent(form);
@@ -1418,22 +1446,22 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 			dropDownMenu.find('form').validationEngine(params);
 			var defaultValueUiContainer = basicDropDown.find('.defaultValueUi');
-			
-			
+
+
 			//handled registration of chosen for select element
 			var selectElements = defaultValueUiContainer.find('select');
 			if(selectElements.length > 0) {
 				dropDownMenu.find('select').addClass('chzn-select');
 				app.changeSelectElementView(dropDownMenu);
 			}
-			
-			//handled registration of time field 
+
+			//handled registration of time field
 			var timeFieldElement = defaultValueUiContainer.find('[data-toregister="time"]');
 			if(timeFieldElement.length > 0){
 				dropDownMenu.find('[data-toregister="time"]').addClass('timepicker-default timePicker');
 				app.registerEventForTimeFields(dropDownMenu);
 			}
-			
+
 			//handled registration for date fields
 			 var dateField = defaultValueUiContainer.find('[data-toregister="date"]');
 			 if(dateField.length > 0) {
@@ -1441,7 +1469,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				 app.registerEventForDatePickerFields(dropDownMenu);
 			 }
 			thisInstance.avoidDropDownClick(dropDownContainer);
-			
+
 			dropDownMenu.on('change', ':checkbox', function(e) {
 				var currentTarget = jQuery(e.currentTarget);
 				if(currentTarget.attr('readonly') == 'readonly') {
@@ -1454,7 +1482,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 					e.preventDefault();
 				}
 			});
-			
+
 			//added for drop down position change
 			var offset = currentTarget.offset(),
                 height = currentTarget.outerHeight(),
@@ -1467,7 +1495,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			   } else {
 				   dropDown.removeClass('bottom-up');
 			   }
-				
+
 			var callbackFunction = function() {
 				fieldRow.addClass('opacity');
 				dropDown.remove();
@@ -1476,14 +1504,14 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			thisInstance.addClickOutSideEvent(dropDown, callbackFunction);
 			jQuery('body').on('click.dropdown.data-api.layouteditor',function(e){
                 var target = jQuery(e.target);
-                //user clicked on time picker   
+                //user clicked on time picker
                 if(target.closest('.ui-timepicker-list').length > 0) {
                     e.stopPropagation();
                 }
             })
 		});
 	},
-	
+
 	/**
 	 * Function to register all the events for blocks
 	 */
@@ -1495,7 +1523,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		thisInstance.registerInactiveFieldsEvent();
 		thisInstance.registerDeleteCustomBlockEvent();
 	},
-	
+
 	/**
 	 * Function to register all the events for fields
 	 */
@@ -1507,12 +1535,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		app.registerEventForDatePickerFields(contents);
 		app.registerEventForTimeFields(contents);
 		app.changeSelectElementView(contents);
-		
+
 		thisInstance.makeFieldsListSortable();
 		thisInstance.registerDeleteCustomFieldEvent(contents);
 		thisInstance.registerFieldDetailsChange(contents);
 		thisInstance.registerEditFieldDetailsClick(contents);
-		
+
 		contents.find(':checkbox').change(function(e) {
 			var currentTarget = jQuery(e.currentTarget);
 			if(currentTarget.attr('readonly') == 'readonly') {
@@ -1526,7 +1554,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			}
 		});
 	},
-    
+
     /*
 	 * Function to add clickoutside event on the element - By using outside events plugin
 	 * @params element---On which element you want to apply the click outside event
@@ -1535,23 +1563,23 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 	addClickOutSideEvent : function(element, callbackFunction) {
 		element.one('clickoutside',callbackFunction);
 	},
-	
+
 	/**
 	 * register events for layout editor
 	 */
 	registerEvents : function() {
 		var thisInstance = this;
-		
+
 		thisInstance.registerBlockEvents();
 		thisInstance.registerFieldEvents();
 		thisInstance.setInactiveFieldsList();
 		thisInstance.registerAddCustomBlockEvent();
 		thisInstance.registerFieldSequenceSaveClick();
-		
+
 		thisInstance.relatedModulesTabClickEvent();
 		thisInstance.registerModulesChangeEvent();
 	}
-	
+
 });
 
 jQuery(document).ready(function() {
@@ -1590,6 +1618,13 @@ Vtiger_WholeNumberGreaterThanZero_Validator_Js("Vtiger_FloatingDigits_Validator_
 			if (fieldValue < 2 || fieldValue > 5) {
 				var errorInfo = app.vtranslate('JS_PLEASE_ENTER_NUMBER_IN_RANGE_2TO5');
 				this.setError(errorInfo);
+				return false;
+			}
+			
+			var specialChars = /^[+]/ ;
+			if (specialChars.test(fieldValue)) {
+				var error = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
+				this.setError(error);
 				return false;
 			}
 			return true;
@@ -1632,6 +1667,13 @@ Vtiger_WholeNumberGreaterThanZero_Validator_Js("Vtiger_DecimalMaxLength_Validato
 				this.setError(errorInfo);
 				return false;
 			}
+			
+			var specialChars = /^[+]/ ;
+			if (specialChars.test(fieldValue)) {
+				var error = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
+				this.setError(error);
+				return false;
+			}
 			return true;
 		}
 	}
@@ -1668,6 +1710,13 @@ Vtiger_WholeNumberGreaterThanZero_Validator_Js("Vtiger_MaxLength_Validator_Js",{
 			if (fieldValue > 255) {
 				var errorInfo = app.vtranslate('JS_LENGTH_SHOULD_BE_LESS_THAN_EQUAL_TO')+' 255';
 				this.setError(errorInfo);
+				return false;
+			}
+			
+			var specialChars = /^[+]/ ;
+			if (specialChars.test(fieldValue)) {
+				var error = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
+				this.setError(error);
 				return false;
 			}
 			return true;

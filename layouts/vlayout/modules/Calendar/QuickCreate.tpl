@@ -32,10 +32,10 @@
 	<div class="modal-body tabbable" style="padding:0px">
 		<ul class="nav nav-pills" style="margin-bottom:0px;padding-left:5px">
 			<li class="active">
-				<a href="javascript:void(0);" data-target=".EventsQuikcCreateContents_{$RAND_NUMBER}" data-toggle="tab">{vtranslate('LBL_EVENT',$MODULE)}</a>
+				<a href="javascript:void(0);" data-target=".EventsQuikcCreateContents_{$RAND_NUMBER}" data-toggle="tab" data-tab-name="Event">{vtranslate('LBL_EVENT',$MODULE)}</a>
 			</li>
 			<li class="">
-				<a href="javascript:void(0);" data-target=".CalendarQuikcCreateContents_{$RAND_NUMBER} " data-toggle="tab">{vtranslate('LBL_TASK',$MODULE)}</a>
+				<a href="javascript:void(0);" data-target=".CalendarQuikcCreateContents_{$RAND_NUMBER} " data-toggle="tab" data-tab-name="Task">{vtranslate('LBL_TASK',$MODULE)}</a>
 			</li>
 		</ul>
 		<div class="tab-content overflowVisible">

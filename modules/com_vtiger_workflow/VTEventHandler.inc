@@ -27,7 +27,7 @@ require_once 'include/Webservices/VtigerWebserviceObject.php';
 require_once('VTWorkflowUtils.php');
 
 /*
- * VTEventHandler 
+ * VTEventHandler
  */
 
 class VTWorkflowEventHandler extends VTEventHandler {

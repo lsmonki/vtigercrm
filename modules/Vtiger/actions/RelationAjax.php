@@ -102,7 +102,11 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 		$pageLimit = $pagingModel->getPageLimit();
 		$pageCount = ceil((int) $totalCount / (int) $pageLimit);
 
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
 		$result = array();
+		$result['numberOfRecords'] = $totalCount;
 		$result['page'] = $pageCount;
 		$response = new Vtiger_Response();
 		$response->setResult($result);

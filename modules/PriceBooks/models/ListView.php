@@ -39,6 +39,26 @@ class PriceBooks_ListView_Model extends Vtiger_ListView_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
+        $orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
+        if(!empty($orderBy)){
+            $columnFieldMapping = $moduleModel->getColumnFieldMapping();
+            $orderByFieldName = $columnFieldMapping[$orderBy];
+            $orderByFieldModel = $moduleModel->getField($orderByFieldName);
+            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+                //IF it is reference add it in the where fields so that from clause will be having join of the table
+                $queryGenerator = $this->get('query_generator');
+                $queryGenerator->addWhereField($orderByFieldName);
+                //$queryGenerator->whereFields[] = $orderByFieldName;
+            }
+        }
+
 		$listQuery = $this->getQuery();
 
 		$sourceModule = $this->get('src_module');
@@ -54,17 +74,29 @@ class PriceBooks_ListView_Model extends Vtiger_ListView_Model {
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
 
-		$orderBy = $this->getForSql('orderby');
-		$sortOrder = $this->getForSql('sortorder');
-		
-		//List view will be displayed on recently created/modified records
-		if(empty($orderBy) && empty($sortOrder)){
-			$orderBy = 'modifiedtime';
-			$sortOrder = 'DESC';
-		}
-
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            if($orderByFieldModel->isReferenceField()){
+                $referenceModules = $orderByFieldModel->getReferenceList();
+                $referenceNameFieldOrderBy = array();
+                foreach($referenceModules as $referenceModuleName) {
+                    $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
+                    $referenceNameFields = $referenceModuleModel->getNameFields();
+
+                    $columnList = array();
+                    foreach($referenceNameFields as $nameField) {
+                        $fieldModel = $referenceModuleModel->getField($nameField);
+                        $columnList[] = $fieldModel->get('table').$orderByFieldModel->getName().'.'.$fieldModel->get('column');
+                    }
+                    if(count($columnList) > 1) {
+                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users').' '.$sortOrder;
+                    } else {
+                        $referenceNameFieldOrderBy[] = implode('', $columnList).' '.$sortOrder ;
+                    }
+                }
+                $listQuery .= ' ORDER BY '. implode(',',$referenceNameFieldOrderBy);
+            }else{
+                $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            }
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
@@ -101,6 +133,53 @@ class PriceBooks_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		return $listViewRecordModels;
+	}
+
+	/**
+	 * Function to get the list view entries
+	 * @param Vtiger_Paging_Model $pagingModel
+	 * @return <Array> - Associative array of record id mapped to Vtiger_Record_Model instance.
+	 */
+	public function getListViewCount() {
+		$db = PearDatabase::getInstance();
+
+		$queryGenerator = $this->get('query_generator');
+
+		$moduleName = $this->getModule()->get('name');
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+
+        $searchKey = $this->get('search_key');
+		$searchValue = $this->get('search_value');
+		$operator = $this->get('operator');
+		if(!empty($searchKey)) {
+			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
+		}
+
+		$listQuery = $this->getQuery();
+		$sourceModule = $this->get('src_module');
+		if(!empty($sourceModule)) {
+			if(method_exists($moduleModel, 'getQueryByModuleField')) {
+				$overrideQuery = $moduleModel->getQueryByModuleField($sourceModule, $this->get('src_field'), $this->get('src_record'), $listQuery, $this->get('currency_id'));
+				if(!empty($overrideQuery)) {
+					$listQuery = $overrideQuery;
+				}
+			}
+		}
+		$position = stripos($listQuery, ' from ');
+		if ($position) {
+			$split = spliti(' from ', $listQuery);
+			$splitCount = count($split);
+			$listQuery = 'SELECT count(*) AS count ';
+			for ($i=1; $i<$splitCount; $i++) {
+				$listQuery = $listQuery. ' FROM ' .$split[$i];
+			}
+		}
+
+		if($this->getModule()->get('name') == 'Calendar'){
+			$listQuery .= ' AND activitytype <> "Emails"';
+		}
+		$listResult = $db->pquery($listQuery, array());
+		return $db->query_result($listResult, 0, 'count');
 	}
 
 }

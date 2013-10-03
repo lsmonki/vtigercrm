@@ -21,6 +21,8 @@ Settings_Vtiger_List_Js("Settings_Workflows_List_Js",{
 	registerFilterChangeEvent : function() {
 		var thisInstance = this;
 		jQuery('#moduleFilter').on('change',function(e){
+			jQuery('#pageNumber').val("1");
+			jQuery('#pageToJump').val('1');
 			jQuery('#orderBy').val('');
 			jQuery("#sortOrder").val('');
 			var params = {
@@ -28,6 +30,10 @@ Settings_Vtiger_List_Js("Settings_Workflows_List_Js",{
 				parent : app.getParentModuleName(),
 				sourceModule : jQuery(e.currentTarget).val()
 			}
+			//Make the select all count as empty
+			jQuery('#recordsCount').val('');
+			//Make total number of pages as empty
+			jQuery('#totalPageCount').text("");
 			thisInstance.getListViewRecords(params).then(
 				function(data){
 					thisInstance.updatePagination();

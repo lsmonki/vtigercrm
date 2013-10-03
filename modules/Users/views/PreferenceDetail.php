@@ -14,7 +14,7 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$record = $request->get('record');
 
-		if(($currentUserModel->isAdminUser() == true) || $currentUserModel->get('id') == $record) {
+		if($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $record) {
 			return true;
 		} else {
 			throw new AppException('LBL_PERMISSION_DENIED');
@@ -40,6 +40,7 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 
 	public function preProcess(Vtiger_Request $request, $display=true) {
 		if($this->checkPermission($request)) {
+			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$recordId = $request->get('record');
 			$moduleName = $request->getModule();
 			$detailViewModel = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
@@ -93,6 +94,7 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 			$viewer->assign('ANNOUNCEMENT', $this->getAnnouncement());
 			$viewer->assign('CURRENT_VIEW', $request->get('view'));
 			$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
+			$viewer->assign('LANGUAGE', $currentUser->get('language'));
 
 			if($display) {
 				$this->preProcessDisplay($request);
@@ -119,9 +121,9 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
-		parent::process($request);
+		return parent::process($request);
 	}
-    
+
     public function getHeaderScripts(Vtiger_Request $request) {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$moduleName = $request->getModule();

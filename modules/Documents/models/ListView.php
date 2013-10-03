@@ -75,25 +75,25 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 		$linkTypes = array('LISTVIEWMASSACTION');
 		$links = Vtiger_Link_Model::getAllByType($moduleModel->getId(), $linkTypes, $linkParams);
 
-		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'Delete')) {
-			$massActionLinks = array(
-					array(
-							'linktype' => 'LISTVIEWMASSACTION',
-							'linklabel' => 'LBL_DELETE',
-							'linkurl' => 'javascript:Vtiger_List_Js.massDeleteRecords("index.php?module='.$moduleModel->getName().'&action=MassDelete");',
-							'linkicon' => ''
-					),
-					array(
-							'linktype' => 'LISTVIEWMASSACTION',
-							'linklabel' => 'LBL_MOVE',
-							'linkurl' => 'javascript:Documents_List_Js.massMove("index.php?module='.$moduleModel->getName().'&view=MoveDocuments");',
-							'linkicon' => ''
-					)
+		if ($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'Delete')) {
+			$massActionLink = array(
+				'linktype' => 'LISTVIEWMASSACTION',
+				'linklabel' => 'LBL_DELETE',
+				'linkurl' => 'javascript:Vtiger_List_Js.massDeleteRecords("index.php?module=' . $moduleModel->getName() . '&action=MassDelete");',
+				'linkicon' => ''
 			);
-			foreach($massActionLinks as $massActionLink) {
-				$links['LISTVIEWMASSACTION'][] = Vtiger_Link_Model::getInstanceFromValues($massActionLink);
-			}
+
+			$links['LISTVIEWMASSACTION'][] = Vtiger_Link_Model::getInstanceFromValues($massActionLink);
 		}
+
+		$massActionLink = array(
+			'linktype' => 'LISTVIEWMASSACTION',
+			'linklabel' => 'LBL_MOVE',
+			'linkurl' => 'javascript:Documents_List_Js.massMove("index.php?module=' . $moduleModel->getName() . '&view=MoveDocuments");',
+			'linkicon' => ''
+		);
+
+		$links['LISTVIEWMASSACTION'][] = Vtiger_Link_Model::getInstanceFromValues($massActionLink);
 
 		return $links;
 	}
@@ -127,6 +127,27 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
+        $orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
+        if(!empty($orderBy)){
+            $columnFieldMapping = $moduleModel->getColumnFieldMapping();
+            $orderByFieldName = $columnFieldMapping[$orderBy];
+            $orderByFieldModel = $moduleModel->getField($orderByFieldName);
+            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+                //IF it is reference add it in the where fields so that from clause will be having join of the table
+                $queryGenerator = $this->get('query_generator');
+                $queryGenerator->addWhereField($orderByFieldName);
+                //$queryGenerator->whereFields[] = $orderByFieldName;
+            }
+        }
+
 		$listQuery = $this->getQuery();
 
 		$sourceModule = $this->get('src_module');
@@ -142,17 +163,29 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
 
-		$orderBy = $this->getForSql('orderby');
-		$sortOrder = $this->getForSql('sortorder');
-
-		//List view will be displayed on recently created/modified records
-		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
-			$orderBy = 'modifiedtime';
-			$sortOrder = 'DESC';
-		}
-
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            if($orderByFieldModel->isReferenceField()){
+                $referenceModules = $orderByFieldModel->getReferenceList();
+                $referenceNameFieldOrderBy = array();
+                foreach($referenceModules as $referenceModuleName) {
+                    $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
+                    $referenceNameFields = $referenceModuleModel->getNameFields();
+
+                    $columnList = array();
+                    foreach($referenceNameFields as $nameField) {
+                        $fieldModel = $referenceModuleModel->getField($nameField);
+                        $columnList[] = $fieldModel->get('table').$orderByFieldModel->getName().'.'.$fieldModel->get('column');
+                    }
+                    if(count($columnList) > 1) {
+                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users').' '.$sortOrder;
+                    } else {
+                        $referenceNameFieldOrderBy[] = implode('', $columnList).' '.$sortOrder ;
+                    }
+                }
+                $listQuery .= ' ORDER BY '. implode(',',$referenceNameFieldOrderBy);
+            }else{
+                $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            }
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);

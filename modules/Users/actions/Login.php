@@ -30,17 +30,24 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 			$_SESSION['authenticated_user_id'] = $userid;
 			$_SESSION['app_unique_key'] = vglobal('application_unique_key');
 			$_SESSION['authenticated_user_language'] = vglobal('default_language');
+            
+            //Enabled session variable for KCFINDER 
+            $_SESSION['KCFINDER'] = array(); 
+            $_SESSION['KCFINDER']['disabled'] = false; 
+            $_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
+            $_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
 			// End
 
 			//Track the login History
-			$moduleName = $request->getModule();
-			$moduleModel = Users_Module_Model::getInstance($moduleName);
+			$moduleModel = Users_Module_Model::getInstance('Users');
 			$moduleModel->saveLoginHistory($user->column_fields['user_name']);
 			//End
 
-			header ('Location: index.php');
+			header ('Location: index.php?module=Users&parent=Settings&view=SystemSetup');
+			exit();
 		} else {
 			header ('Location: index.php?module=Users&parent=Settings&view=Login&error=1');
+			exit;
 		}
 
 	}

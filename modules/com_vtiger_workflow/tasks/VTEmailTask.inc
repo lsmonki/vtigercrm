@@ -21,84 +21,139 @@ class VTEmailTask extends VTTask{
 	public function doTask($entity){
 		global $adb, $current_user;
 		$util = new VTWorkflowUtils();
-		
-		$from_userid = 1; // Default user-email = Administrator.
-		// Send email as owner of the record (if not 
-		$entityOwnerId = $entity->get('assigned_user_id');
-		if ($entityOwnerId) {
-			list ($moduleid, $from_userid) = explode('x', $entityOwnerId);
-		}
-
-		$result = $adb->pquery("select user_name, email1, email2 from vtiger_users where id=?", array($from_userid));
-		$from_email = $adb->query_result($result,0,'email1');
-		$from_name  = $adb->query_result($result,0,'user_name');
-
 		$admin = $util->adminUser();
 		$module = $entity->getModuleName();
 
-		$entityCache = new VTEntityCache($admin);
+		$taskContents = Zend_Json::decode($this->getContents($entity));
+		$from_email	= $taskContents['fromEmail'];
+		$from_name	= $taskContents['fromName'];
+		$to_email	= $taskContents['toEmail'];
+		$cc			= $taskContents['ccEmail'];
+		$bcc		= $taskContents['bccEmail'];
+		$subject	= $taskContents['subject'];
+		$content	= $taskContents['content'];
 
-		$et = new VTEmailRecipientsTemplate($this->recepient);
-		$to_email = $et->render($entityCache, $entity->getId());
-		$ecct = new VTEmailRecipientsTemplate($this->emailcc);
-		$cc = $ecct->render($entityCache, $entity->getId());
-		$ebcct = new VTEmailRecipientsTemplate($this->emailbcc);
-		$bcc = $ebcct->render($entityCache, $entity->getId());
-		if(strlen(trim($to_email, " \t\n,")) == 0 && strlen(trim($cc, " \t\n,")) == 0 &&
-				strlen(trim($bcc, " \t\n,")) == 0) {
-			return ;
+		if(!empty($to_email)) {
+			//Storing the details of emails
+			$entityIdDetails = vtws_getIdComponents($entity->getId());
+			$entityId = $entityIdDetails[1];
+			$moduleName = 'Emails';
+			$userId = $current_user->id;
+			$emailFocus = CRMEntity::getInstance($moduleName);
+			$dateTime = new DateTimeField(null);
+			$emailFieldValues = array(
+					'assigned_user_id' => $userId,
+					'subject' => $subject,
+					'description' => $content,
+					'from_email' => $from_email,
+					'saved_toid' => $to_email,
+					'ccmail' => $cc,
+					'bccmail' => $bcc,
+					'parent_id' => $entityId."@$userId|",
+					'email_flag' => 'SENT',
+					'activitytype' => $moduleName,
+					'date_start' => date($dateTime->getDisplayDate($current_user)),
+					'time_start' => date($dateTime->getDisplayTime($current_user)),
+					'mode' => '',
+					'id' => ''
+			);
+			$emailFocus->column_fields = $emailFieldValues;
+			$emailFocus->save($moduleName);
+	
+
+				//Including email tracking details
+				global $site_URL, $application_unique_key;
+				$emailId = $emailFocus->id;
+				$trackURL = "$site_URL/modules/Emails/TrackAccess.php?record=$entityId&mailid=$emailId&app_key=$application_unique_key";
+				$content = "<img src='$trackURL' alt='' width='1' height='1'>$content";
+
+				if (stripos($content, '<img src="cid:logo" />')) {
+					$logo = 1;
+				}
+
+				$status = send_mail($module, $to_email, $from_name, $from_email, $subject, $content, $cc, $bcc, '', '', $logo);
+
+				if(!empty($emailId)) {
+					$emailFocus->setEmailAccessCountValue($emailId);
+				}
+				if(!$status) {
+					//If mail is not sent then removing the details about email
+					$emailFocus->trash($moduleName, $emailId);
+				}
+				}
+				$util->revertUser();
+        
+	}
+
+
+	/**
+	 * Function to get contents of this task
+	 * @param <Object> $entity
+	 * @return <Array> contents
+	 */
+	public function getContents($entity, $entityCache=false) {
+		if (!$this->contents) {
+			global $adb, $current_user;
+			$taskContents = array();
+
+			$fromUserId = 1;
+			$entityOwnerId = $entity->get('assigned_user_id');
+			if ($entityOwnerId) {
+				list ($moduleId, $fromUserId) = explode('x', $entityOwnerId);
+			}
+
+			$utils = new VTWorkflowUtils();
+			$adminUser = $utils->adminUser();
+			if(!$entityCache) $entityCache = new VTEntityCache($adminUser);
+
+			$ownerEntity = $entityCache->forId($entityOwnerId);
+			if($ownerEntity->getModuleName() === 'Groups') {
+				list($moduleId, $recordId) = vtws_getIdComponents($entity->getId());
+				$fromUserId = Vtiger_Util_Helper::getCreator($recordId);
+			}
+
+            $userObj = CRMEntity::getInstance('Users');
+            $userObj->retrieveCurrentUserInfoFromFile($fromUserId);
+
+            if($userObj) {
+                $taskContents['fromEmail'] = $userObj->email1;
+                $taskContents['fromName'] =	$userObj->user_name;
+            } else {
+                $result = $adb->pquery('SELECT user_name, email1 FROM vtiger_users WHERE id = ?', array($fromUserId));
+                $taskContents['fromEmail'] = $adb->query_result($result, 0, 'email1');
+                $taskContents['fromName'] =	$adb->query_result($result, 0, 'user_name');
+            }
+
+			
+			$et = new VTEmailRecipientsTemplate($this->recepient);
+			$toEmail = $et->render($entityCache, $entity->getId());
+
+			$ecct = new VTEmailRecipientsTemplate($this->emailcc);
+			$ccEmail = $ecct->render($entityCache, $entity->getId());
+
+			$ebcct = new VTEmailRecipientsTemplate($this->emailbcc);
+			$bccEmail = $ebcct->render($entityCache, $entity->getId());
+
+			if(strlen(trim($toEmail, " \t\n,")) == 0 && strlen(trim($ccEmail, " \t\n,")) == 0 && strlen(trim($bccEmail, " \t\n,")) == 0) {
+				return false;
+			}
+
+			$taskContents['toEmail'] = $toEmail;
+			$taskContents['ccEmail'] = $ccEmail;
+			$taskContents['bccEmail'] = $bccEmail;
+
+			$st = new VTSimpleTemplate($this->subject);
+			$taskContents['subject'] = $st->render($entityCache, $entity->getId());
+
+			$ct = new VTSimpleTemplate($this->content);
+			$taskContents['content'] = $ct->render($entityCache, $entity->getId());
+			$this->contents = $taskContents;
+            $utils->revertUser();
 		}
-
-		$st = new VTSimpleTemplate($this->subject);
-		$subject = $st->render($entityCache, $entity->getId());
-		$ct = new VTSimpleTemplate($this->content);
-		$content = $ct->render($entityCache, $entity->getId());
-
-		//Storing the details of emails
-		$entityIdDetails = vtws_getIdComponents($entity->getId());
-		$entityId = $entityIdDetails[1];
-		$moduleName = 'Emails';
-		$userId = $current_user->id;
-		$emailFocus = CRMEntity::getInstance($moduleName);
-		$emailFieldValues = array(
-				'assigned_user_id' => $userId,
-				'subject' => $subject,
-				'description' => $content,
-				'from_email' => $from_email,
-				'saved_toid' => $to_email,
-				'ccmail' => $cc,
-				'bccmail' => $bcc,
-				'parent_id' => $entityId."@$userId|",
-				'email_flag' => 'SENT',
-				'activitytype' => $moduleName,
-				'date_start' => date(getNewDisplayDate()),
-				'mode' => '',
-				'id' => ''
-		);
-		$emailFocus->column_fields = $emailFieldValues;
-		$emailFocus->save($moduleName);
-
-		//Including email tracking details
-		global $site_URL, $application_unique_key;
-		$emailId = $emailFocus->id;
-		$trackURL = "$site_URL/modules/Emails/TrackAccess.php?record=$entityId&mailid=$emailId&app_key=$application_unique_key";
-		$content = "<img src='$trackURL' alt='' width='1' height='1'>$content";
-
-		if (stripos($content, '<img src="cid:logo" />')) {
-			$logo = 1;
+		if(is_array($this->contents)) {
+			$this->contents = Zend_Json::encode($this->contents);
 		}
-
-		$status = send_mail($module, $to_email, $from_name, $from_email, $subject, $content, $cc, $bcc, '', '', $logo);
-
-		if(!empty($emailId)) {
-			$emailFocus->setEmailAccessCountValue($emailId);
-		}
-		if(!$status) {
-			//If mail is not sent then removing the details about email
-			$emailFocus->trash($moduleName, $emailId);
-		}
-		
-		$util->revertUser();
+		return $this->contents;
 	}
 }
 ?>

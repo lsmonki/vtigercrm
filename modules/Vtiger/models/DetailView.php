@@ -87,7 +87,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		if(Users_Privileges_Model::isPermitted($moduleName, 'Delete', $recordId)) {
 			$deletelinkModel = array(
 					'linktype' => 'DETAILVIEW',
-					'linklabel' => sprintf("%s %s", getTranslatedString('LBL_DELETE', $moduleName), getTranslatedString('SINGLE_'. $moduleName, $moduleName)),
+					'linklabel' => sprintf("%s %s", getTranslatedString('LBL_DELETE', $moduleName), vtranslate('SINGLE_'. $moduleName, $moduleName)),
 					'linkurl' => 'javascript:Vtiger_Detail_Js.deleteRecord("'.$recordModel->getDeleteUrl().'")',
 					'linkicon' => ''
 			);
@@ -125,6 +125,14 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		foreach($widgets as $widgetLinkModel) {
 			$linkModelList['DETAILVIEWWIDGET'][] = $widgetLinkModel;
 		}
+		
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		if($currentUserModel->isAdminUser()) {
+			$settingsLinks = $moduleModel->getSettingLinks();
+			foreach($settingsLinks as $settingsLink) {
+				$linkModelList['DETAILVIEWSETTING'][] = Vtiger_Link_Model::getInstanceFromValues($settingsLink);
+			}
+		}
 
 		return $linkModelList;
 	}
@@ -136,7 +144,18 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 	public function getDetailViewRelatedLinks() {
 		$recordModel = $this->getRecord();
 		$moduleName = $recordModel->getModuleName();
+		$parentModuleModel = $this->getModule();
 		$relatedLinks = array();
+		
+		if($parentModuleModel->isSummaryViewSupported()) {
+			$relatedLinks = array(array(
+				'linktype' => 'DETAILVIEWTAB',
+				'linklabel' => vtranslate('SINGLE_' . $moduleName, $moduleName) . ' ' . vtranslate('LBL_SUMMARY', $moduleName),
+				'linkKey' => 'LBL_RECORD_SUMMARY',
+				'linkurl' => $recordModel->getDetailViewUrl() . '&mode=showDetailViewByMode&requestMode=summary',
+				'linkicon' => ''
+			));
+		}
 		//link which shows the summary information(generally detail of record)
 		$relatedLinks[] = array(
 				'linktype' => 'DETAILVIEWTAB',
@@ -145,7 +164,6 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 				'linkicon' => ''
 		);
 
-		$parentModuleModel = $this->getModule();
 		if($parentModuleModel->isCommentEnabled()) {
 			$relatedLinks[] = array(
 					'linktype' => 'DETAILVIEWTAB',

@@ -59,9 +59,6 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 				case 'CustomFields' :
 					$params = 'module=Settings&action=CustomFieldList&parenttab=Settings&formodule='.$request->get('source_module');
 					break;
-                case 'PaymentServerConfig' :
-                    $params = 'module=Payments&action=PaymentsConfigServer&parenttab=Settings&formodule=' . $request->get('source_module');
-                    break;
 			}
 		}
 		return '../index.php?' . $params;

@@ -39,6 +39,7 @@ class Vtiger_MiniListWizard_View extends Vtiger_Index_View {
 				$listviewController = new ListViewController($db, $currentUser, $generator);
 				$listviewController->getListViewHeaderFields();
 				$viewer->assign('LIST_VIEW_CONTROLLER', $listviewController);
+				$viewer->assign('SELECTED_MODULE', $selectedModule);
 				break;
 		}
 		

@@ -246,8 +246,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 					var serverDataFormat = data.result
 					if(serverDataFormat.length <= 0) {
 						serverDataFormat = new Array({
-							//TODO : client translation
-							'label' : 'No Results Found',
+							'label' : app.vtranslate('JS_NO_RESULTS_FOUND'),
 							'type'  : 'no results'
 						});
 					}
@@ -560,17 +559,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 				}
 
 				var optionSelector = '';
+				optionSelector += '[value=""],';
 				for(var i=0; i<targetPickListMap.length; i++){
 					optionSelector += '[value="'+targetPickListMap[i]+'"],';
 				}
 				var targetOptions = listOfAvailableOptions.filter(optionSelector);
 				//Before updating the list, selected option should be updated
 				var targetPickListSelectedValue = '';
-				jQuery.each(targetOptions, function(key, option) {
-					if(jQuery(option).is(':selected')) {
-						targetPickListSelectedValue = jQuery(option).val();
-					}
-				});
+				var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
 				targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
 			})
 		});

@@ -47,6 +47,7 @@ $languageStrings = array(
 	'Dr.'                          => 'Sehr geehrter Herr Dr.'      , 
 	'Prof.'                        => 'Sehr geehrter Herr Prof.'    , 
 	'User List'                    => 'Nutzerliste'                 , 
+	'Contact Id' => 'Person Id',
 );
 $jsLanguageStrings = array(
 	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , 

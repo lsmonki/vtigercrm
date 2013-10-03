@@ -10,6 +10,9 @@
  ********************************************************************************/
 -->*}
 {strip}
+	<div id="toggleButton" class="toggleButton" title="Left Panel Show/Hide"> 
+		<i id="tButtonImage" class="{if $LEFTPANELHIDE neq '1'}icon-chevron-left{else}icon-chevron-right{/if}"></i>
+	</div>
 	<div class="reportsDetailHeader row-fluid">
         <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
 		<div class="reportHeader row-fluid span12">
@@ -62,4 +65,5 @@
 			</div>
 		</div>
 	</div>
+	<div id="reportContentsDiv">
 {/strip}

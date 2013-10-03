@@ -12,19 +12,13 @@
 {strip}
 	<span class="pull-right listViewActions">
         {if (method_exists($MODULE_MODEL,'isPagingSupported') && ($MODULE_MODEL->isPagingSupported()  eq true)) || !method_exists($MODULE_MODEL,'isPagingSupported')}
-		<span class="pageNumbers alignTop">
-			{if $LISTVIEW_ENTIRES_COUNT}{$PAGING_MODEL->getRecordStartRange()} {vtranslate('LBL_TO', $MODULE)} {$PAGING_MODEL->getRecordEndRange()}{if $LISTVIEW_COUNT} {vtranslate('LBL_OF', $MODULE)} {$LISTVIEW_COUNT}{/if}{/if}
+		<span class="pageNumbers alignTop" data-placement="bottom" >
+			{if $LISTVIEW_ENTIRES_COUNT}{$PAGING_MODEL->getRecordStartRange()} {vtranslate('LBL_to', $MODULE)} {$PAGING_MODEL->getRecordEndRange()}{/if}
 		</span>
 		<span class="btn-group alignTop">
-
-			<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
-			<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
-			<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
-
 			<span class="btn-group">
 				<button class="btn" id="listViewPreviousPageButton" {if !$PAGING_MODEL->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
-				{if $MODULE neq 'Reports'}
-					<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+					<button class="btn dropdown-toggle" type="button" id="listViewPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if} style="padding: 5px 9px 0px 9px;border-radius: 0px;">
 						<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
 					</button>
 					<ul class="listViewBasicAction dropdown-menu" id="listViewPageJumpDropDown">
@@ -37,18 +31,17 @@
 								<span class="span2 textAlignCenter pushUpandDown2per">
 									{vtranslate('LBL_OF',$moduleName)}&nbsp;
 								</span>
-								<span class="span2 pushUpandDown2per" id="totalPageCount"></span>
+								<span class="span2 pushUpandDown2per" id="totalPageCount">{$PAGE_COUNT}</span>
 							</span>
 						</li>
 					</ul>
-				{/if}
-				<button class="btn" id="listViewNextPageButton" {if !$PAGING_MODEL->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
+				<button class="btn" id="listViewNextPageButton" {if (!$PAGING_MODEL->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
 			</span>
 		</span>
         {/if}
 	{if $LISTVIEW_LINKS['LISTVIEWSETTING']|@count gt 0}
 		<span class="btn-group">
-			<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><img class="alignMiddle" src="{vimage_path('tools.png')}" alt="{vtranslate('LBL_SETTINGS', $MODULE)}" title="{vtranslate('LBL_SETTINGS', $MODULE)}">&nbsp;&nbsp;<i class="caret"></i></button>
+			<button class="btn dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-wrench" alt="{vtranslate('LBL_SETTINGS', $MODULE)}" title="{vtranslate('LBL_SETTINGS', $MODULE)}"></i>&nbsp;&nbsp;<i class="caret"></i></button>
 			<ul class="listViewSetting dropdown-menu">
 				{foreach item=LISTVIEW_SETTING from=$LISTVIEW_LINKS['LISTVIEWSETTING']}
 					<li><a href={$LISTVIEW_SETTING->getUrl()}>{vtranslate($LISTVIEW_SETTING->getLabel(), $MODULE)}</a></li>

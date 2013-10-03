@@ -47,6 +47,7 @@ $languageStrings = array(
 	'Dr.'                          => 'Dr.'                         , 
 	'Prof.'                        => 'Prof.'                       , 
 	'User List'                    => 'Felhasználó lista'         , 
+	'Contact Id' => 'Kapcsolat Id',
 );
 $jsLanguageStrings = array(
 	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review

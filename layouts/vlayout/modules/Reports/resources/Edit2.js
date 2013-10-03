@@ -278,7 +278,7 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 	displayLineItemFieldLimitationMessage : function() {
 		var message = app.vtranslate('JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION');
 		if(jQuery('#calculationLimitationMessage').length == 0) {
-			jQuery('.CalculationFields').parent().append('<div id="calculationLimitationMessage" style="position:relative;top:-18px" class="pull-right alert-info">'+message+'</div>');
+			jQuery('.CalculationFields').parent().append('<div id="calculationLimitationMessage" class="pull-right alert alert-info">'+message+'</div>');
 		} else {
 			jQuery('#calculationLimitationMessage').html(message);
 		}

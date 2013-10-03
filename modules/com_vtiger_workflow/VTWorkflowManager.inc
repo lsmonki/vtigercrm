@@ -76,7 +76,7 @@
 			$adb=$this->adb;
 			$cache= Vtiger_Cache::getInstance();
 			if($cache->getWorkflowForModule($moduleName)){
-				return $this->getWorkflowsForResult($cache->getWorkflowForModule($moduleName)); 
+				return $this->getWorkflowsForResult($cache->getWorkflowForModule($moduleName));
 			} else {
 			//my changes
 			$result=$adb->getColumnNames("com_vtiger_workflows");
@@ -98,13 +98,14 @@
 
 			$it = new SqlResultIterator($adb, $result);
 			$workflows=array();
+			$i=0;
 			foreach($it as $row){
 				$workflow = $this->getWorkflowInstance($row->type);
 				$workflow->setup($row->data);
 
 				if(!is_a($workflow, 'Workflow')) continue;
 
-				$workflows[$workflow->id]=$workflow;
+				$workflows[$i++]=$workflow;
 			}
 			return $workflows;
 		}
@@ -130,9 +131,7 @@
 		 */
 		function retrieve($id){
 			$adb=$this->adb;
-			$result = $adb->pquery("select workflow_id, module_name, summary, test, execution_condition, type, defaultworkflow, filtersavedinnew
-									from com_vtiger_workflows where workflow_id=?",
-						array($id));
+			$result = $adb->pquery("select * from com_vtiger_workflows where workflow_id=?", array($id));
 
 			if($adb->num_rows($result)){
 				$data = $adb->raw_query_result_rowdata($result, 0);
@@ -283,8 +282,8 @@
 					}
 					if($task->executeImmediately==true){
 						$task->doTask($entityData);
-					}else{
-						$taskQueue->queueTask($task->id,$entityData->getId(), $delay);
+					} else {
+						$taskQueue->queueTask($task->id,$entityData->getId(), $delay, $task->getContents($entityData));
 					}
 				}
 			}

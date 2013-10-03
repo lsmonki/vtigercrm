@@ -112,7 +112,7 @@ function return_name(&$row, $first_column, $last_column)
 */
 
 //used in module file
-function get_user_array($add_blank=true, $status="Active", $assigned_user="",$private="")
+function get_user_array($add_blank=true, $status="Active", $assigned_user="",$private="",$module=false)
 {
 	global $log;
 	$log->debug("Entering get_user_array(".$add_blank.",". $status.",".$assigned_user.",".$private.") method ...");
@@ -123,7 +123,10 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	}
 	static $user_array = null;
-	$module=$_REQUEST['module'];
+	if(!$module){
+        $module=$_REQUEST['module'];
+    }
+    
 
 	if($user_array == null)
 	{
@@ -180,7 +183,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	return $user_array;
 }
 
-function get_group_array($add_blank=true, $status="Active", $assigned_user="",$private="")
+function get_group_array($add_blank=true, $status="Active", $assigned_user="",$private="",$module = false)
 {
 	global $log;
 	$log->debug("Entering get_user_array(".$add_blank.",". $status.",".$assigned_user.",".$private.") method ...");
@@ -191,7 +194,9 @@ function get_group_array($add_blank=true, $status="Active", $assigned_user="",$p
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	}
 	static $group_array = null;
-	$module=$_REQUEST['module'];
+	if(!$module){
+        $module=$_REQUEST['module'];
+    }
 
 	if($group_array == null)
 	{
@@ -1803,9 +1808,9 @@ function getCombinations($array, $tempString = '') {
 			 if(!is_array($result)) {
 				 $result = array();
 			 }
-			 $result = array_merge($result, getCombinations($splicedArray, $tempString .' ' . $element[0]));
+			 $result = array_merge($result, getCombinations($splicedArray, $tempString. ' |##| ' .$element[0]));
 		} else {
-			return array(trim($tempString. ' ' . $element[0]));
+			return array($tempString. ' |##| ' . $element[0]);
 		}
 	}
 	return $result;

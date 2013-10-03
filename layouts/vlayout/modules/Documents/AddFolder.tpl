@@ -22,7 +22,9 @@
 			<div class="modal-body">
 				<div class="row-fluid verticalBottomSpacing">
 					<span class="span4">{vtranslate('LBL_FOLDER_NAME', $MODULE)}<span class="redColor">*</span></span>
-					<span class="span7 row-fluid"><input data-validation-engine='validate[required]' id="documentsFolderName" name="foldername" class="span12" type="text" value=""/></span>
+					<span class="span7 row-fluid">
+						<input data-validator='{Zend_Json::encode([['name'=>'FolderName']])}' data-validation-engine="validate[required, funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" id="documentsFolderName" name="foldername" class="span12" type="text" value=""/>
+					</span>
 				</div>
 				<div class="row-fluid">
 					<span class="span4">{vtranslate('LBL_FOLDER_DESCRIPTION', $MODULE)}</span>

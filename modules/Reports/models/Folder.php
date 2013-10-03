@@ -93,7 +93,28 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 							);
 		}
 		
-		$reportsList = $reportClassInstance->sgetRptsforFldr($fldrId, $paramsList);		
+		$reportsList = $reportClassInstance->sgetRptsforFldr($fldrId, $paramsList);
+		if(!$fldrId){
+			foreach ($reportsList as $reportId => $reports) {
+				$reportsCount += count($reports);
+			}
+		}else{
+			$reportsCount = count($reportsList);
+		}
+		
+		$pageLimit = $pagingModel->getPageLimit();
+		if($reportsCount > $pageLimit){
+			if(!$fldrId){
+				$lastKey = end(array_keys($reportsList));
+				array_pop($reportsList[$lastKey]);
+			}else{
+				array_pop($reportsList);
+			}
+			$pagingModel->set('nextPageExists', true);
+		}else{
+			$pagingModel->set('nextPageExists', false);
+		}
+		
 		$reportModuleModel = Vtiger_Module_Model::getInstance('Reports');
 		
 		if($fldrId == false) {
@@ -272,12 +293,20 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 	 */
 	public function getReportsCount() {
 		$db = PearDatabase::getInstance();
-
+		$params = array();
+		
 		$sql = "SELECT count(*) AS count FROM vtiger_report
-				INNER JOIN vtiger_reportfolder ON vtiger_reportfolder.folderid = vtiger_report.folderid
-				WHERE vtiger_reportfolder.folderid = ?";
-		$params = array($this->getId());
+				INNER JOIN vtiger_reportfolder ON vtiger_reportfolder.folderid = vtiger_report.folderid";
+		$fldrId = $this->getId();
+		if($fldrId == 'All') {
+			$fldrId = false;
+		}
 
+		// If information is required only for specific report folder?
+		if($fldrId !== false) {
+			$sql .= " WHERE vtiger_reportfolder.folderid=?";
+			array_push($params,$fldrId);
+		}
 		$currentUserModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		if (!$currentUserModel->isAdminUser()) {
 			$currentUserId = $currentUserModel->getId();

@@ -20,6 +20,7 @@ require_once 'include/Webservices/Retrieve.php';
 require_once 'include/Webservices/Update.php';
 require_once 'include/Webservices/Utils.php';
 require_once 'modules/Emails/mail.php';
+require_once 'include/utils/InventoryUtils.php';
 
 /**
  * Description of VtigerLineItemOperation
@@ -178,7 +179,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			$id = $id[1];
 			$sql = 'UPDATE vtiger_inventoryproductrel set ';
 			$sql .= implode('=?,',array_keys($this->taxList));
-			$sql .= '=? WHERE lineitem_id = ?';
+			$sql .= '=? WHERE id = ?';
 			$params = array();
 			foreach ($this->taxList as $taxInfo) {
 				$params[] = $taxInfo['percentage'];
@@ -193,54 +194,60 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		}
 	}
 
-	private function initTax($element,$parent){
-		static $__taxCache = array();
-		if(!is_array($__taxCache[$element['id']])){
-			if(!empty($element['parent_id'])){
-				$this->taxType = $parent['hdnTaxType'];
-			}
-
-			$productId = vtws_getIdComponents($element['productid']);
-			$productId = $productId[1];
-			if(strcasecmp($parent['hdnTaxType'], $this->Individual) ===0){
-				$found = false;
-				$meta = $this->getMeta();
-				$moduleFields = $meta->getModuleFields();
-				$productTaxList =  $this->getProductTaxList($productId);
-				if(count($productTaxList) > 0){
-					foreach ($moduleFields as $fieldName=>$field) {
-						if(preg_match('/tax\d+/', $fieldName) != 0){
-							if(!empty($element[$fieldName])){
-								$found = true;
-								if(is_array($productTaxList[$fieldName])){
-									$this->taxList[$fieldName] = array(
-										'label'=>$field->getFieldLabelKey(),
-										'percentage'=>$element[$fieldName]
-									);
-								}
+	private function initTax($element, $parent) {
+		if (!empty($element['parent_id'])) {
+			$this->taxType = $parent['hdnTaxType'];
+		}
+		$productId = vtws_getIdComponents($element['productid']);
+		$productId = $productId[1];
+		if (strcasecmp($parent['hdnTaxType'], $this->Individual) === 0) {
+			$found = false;
+			$meta = $this->getMeta();
+			$moduleFields = $meta->getModuleFields();
+			$productTaxList = $this->getProductTaxList($productId);
+			if (count($productTaxList) > 0) {
+				foreach ($moduleFields as $fieldName => $field) {
+					if (preg_match('/tax\d+/', $fieldName) != 0) {
+						if (!empty($element[$fieldName])) {
+							$found = true;
+							if (is_array($productTaxList[$fieldName])) {
+								$this->taxList[$fieldName] = array(
+									'label' => $field->getFieldLabelKey(),
+									'percentage' => $element[$fieldName]
+								);
 							}
 						}
 					}
-				}elseif($found == false){
-					array_merge($this->taxList,$productTaxList);
 				}
-			} else {
-				$meta = $this->getMeta();
-				$moduleFields = $meta->getModuleFields();
-				foreach ($moduleFields as $fieldName=>$field) {
-					if(preg_match('/tax\d+/', $fieldName) != 0) {
-						if(!empty($element[$fieldName])) {
-							$this->taxList[$fieldName] = array(
-								'label'=>$field->getFieldLabelKey(),
-								'percentage'=> $element[$fieldName]
-							);
-						}
-					}
-				}
+			} elseif ($found == false) {
+				array_merge($this->taxList, $productTaxList);
 			}
-			$__taxCache[$element['id']] = $this->taxList;
+		} else {
+			$meta = $this->getMeta();
+			$moduleFields = $meta->getModuleFields();
+            $availableTaxes = getAllTaxes('available');
+            $found = false;
+			foreach ($moduleFields as $fieldName => $field) {
+				if (preg_match('/tax\d+/', $fieldName) != 0) {
+						$found = true;
+					if (!empty($element[$fieldName])) {
+						$this->taxList[$fieldName] = array(
+							'label' => $field->getFieldLabelKey(),
+							'percentage' => $element[$fieldName]
+						);
+					}
+                }
+            }
+            if(!$found) {
+                foreach($availableTaxes as $taxInfo){
+                    $this->taxList[$taxInfo['taxname']] = array(
+                        'label' => $field->getFieldLabelKey(),
+                        'percentage' => $taxInfo['percentage']
+                    );
+                }
+            }
 		}
-		$this->taxList = $__taxCache[$element['id']];
+		$this->taxList;
 	}
 
 	public function cleanLineItemList($parentId){
@@ -285,7 +292,6 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$updatedLineItemList['parent_id'] = $element['parent_id'];
 		$this->setCache($parentId, $updatedLineItemList);
 		$this->updateInventoryStock($element,$parent);
-		$this->updateParent($element, $parent);
 		return $createdLineItem;
 	}
 
@@ -390,7 +396,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		self::$lineItemCache[$parentId] = null;
 	}
 
-	private function updateParent($createdElement,$parent){
+	public function updateParent($createdElement,$parent){
 		$discount = 0;
 		$parentId = vtws_getIdComponents($parent['id']);
 		$parentId = $parentId[1];
@@ -423,15 +429,14 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		} elseif(!empty($parent['hdnDiscountPercent'])){
 			$discount = ($parent['hdnDiscountPercent']/100 * $parent['hdnSubTotal']);
 		}
-		$total = $parent['hdnSubTotal'] - $discount;
+		$parent['pre_tax_total'] = $total = $parent['hdnSubTotal'] - $discount;
 		if(strcasecmp($parent['hdnTaxType'], $this->Individual) !==0){
 			$this->initTax($createdElement, $parent);
 			foreach ($this->taxList as $taxInfo) {
 				$taxAmount += ($taxInfo['percentage'])/100*$total;
 			}
 		}
-		
-		$shippingTax = getAllTaxes('all', 'sh');
+		$shippingTax = getAllTaxes('all', 'sh','edit',$parentId);
 		$shippingTaxInfo = array();
 		foreach ($shippingTax as $taxInfo) {
 			$taxAmount += ($taxInfo['percentage'])/100*$parent['hdnS_H_Amount'];
@@ -444,25 +449,13 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$parentTypeHandler = vtws_getModuleHandlerFromId($parent['id'], $this->user);
 		$parentTypeMeta = $parentTypeHandler->getMeta();
 		$parentType = $parentTypeMeta->getEntityName();
-		
+
 		$parentInstance = CRMEntity::getInstance($parentType);
 		$sql = 'update '.$parentInstance->table_name.' set subtotal=?, total=? where '.
 		$parentInstance->tab_name_index[$parentInstance->table_name].'=?';
 		$params = array($parent['hdnSubTotal'],$parent['hdnGrandTotal'],$parentId);
 		$transactionSuccessful = vtws_runQueryAsTransaction($sql,$params,$result);
-		if(!$transactionSuccessful){
-			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
-				"Database error while performing required operation");
-		}
-		$sql = 'insert into vtiger_inventoryshippingrel(id,'.
-			implode(',', array_keys($shippingTaxInfo)).') values (?,'.
-			generateQuestionMarks(implode(',',array_values($shippingTaxInfo))).')';
-		$params = array($parentId);
-		$params[] = array_values($shippingTaxInfo);
-
-		$transactionSuccessful = vtws_runQueryAsTransaction($sql,$params,$result);
-        
-        self::$parentCache[$parent['id']] = $parent;
+        self::$parentCache[$parent['id']] = $parent; 
 		if(!$transactionSuccessful){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");

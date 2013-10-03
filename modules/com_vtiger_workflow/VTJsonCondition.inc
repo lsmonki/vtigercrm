@@ -206,6 +206,34 @@ class VTJsonCondition {
 					return false;
 				}
 				return true;
+			case "before":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$dbValue = getValidDBInsertDateValue($value);
+				if($fieldValue < $dbValue) {
+					return true;
+				}
+				return false;
+			case "after":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$dbValue = getValidDBInsertDateValue($value);
+				if($fieldValue > $dbValue) {
+					return true;
+				}
+				return false;
+			case "between":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$values = explode(',', $value);
+				$values = array_map('getValidDBInsertDateValue',$values);
+				if($fieldValue > $values[0] && $fieldValue < $values[1]) {
+					return true;
+				}
+				return false;
 			default:
 				//Unexpected condition
 				throw new Exception("Found an unexpected condition: " . $condition);

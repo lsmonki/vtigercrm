@@ -13,7 +13,7 @@
 {assign var=MODULE_NAME value="Calendar"}
 <div  class="summaryWidgetContainer">
 	<div class="widget_header row-fluid">
-		<span class="span8"><h4>{vtranslate('LBL_ACTIVITIES',$MODULE_NAME)}</h4></span>
+		<span class="span8"><h4 class="textOverflowEllipsis">{vtranslate('LBL_ACTIVITIES',$MODULE_NAME)}</h4></span>
 		<span class="span4"><button class="btn pull-right addButton createActivity" data-url="sourceModule={$RECORD->getModuleName()}&sourceRecord={$RECORD->getId()}&relationOperation=true" type="button"><strong>{vtranslate('LBL_ADD',$MODULE_NAME)}</strong></button></span>
 	</div>
 	<div class="widget_contents">
@@ -22,7 +22,7 @@
 				{assign var=START_DATE value=$RECORD->get('date_start')}
 				{assign var=START_TIME value=$RECORD->get('time_start')}
 				<div class="activityEntries">
-					<hr>
+					
 					<input type="hidden" class="activityId" value="{$RECORD->get('activityid')}"/>
 					<div class="row-fluid">
 						<span class="span6"><strong title="{Vtiger_Util_Helper::formatDateTimeIntoDayString("$START_DATE $START_TIME")}">{Vtiger_Util_Helper::formatDateIntoStrings($START_DATE, $START_TIME)}</strong></span>
@@ -65,6 +65,7 @@
 					</div>
 					<div class="summaryViewEntries">{vtranslate($RECORD->get('activitytype'),$MODULE_NAME)} - <a href="{$RECORD->getDetailViewUrl()}" >{$RECORD->get('subject')}</a> <a href="{$RECORD->getEditViewUrl()}" class="fieldValue"><i class="icon-pencil summaryViewEdit" title="{vtranslate('LBL_EDIT',$MODULE_NAME)}"></i></a></div>
 				</div>
+                                <hr>
 			{/foreach}
 		{else}
 			<div class="summaryWidgetContainer">

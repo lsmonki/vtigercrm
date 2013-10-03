@@ -38,6 +38,14 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	public function getCalendarViewUrl() {
 		return 'index.php?module='.$this->get('name').'&view='.$this->getCalendarViewName();
 	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
 
 	/**
 	 * Function returns the URL for creating Events
@@ -77,6 +85,21 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	}
 
 	/**
+	 * Function to get list of field for related list
+	 * @return <Array> empty array
+	 */
+	public function getConfigureRelatedListFields() {
+        return array();
+	}
+
+	/**
+	 * Function to get list of field for summary view
+	 * @return <Array> empty array
+	 */
+	public function getSummaryViewFieldsList() {
+		return array();
+	}
+	/**
 	 * Function to get the Quick Links for the module
 	 * @param <Array> $linkParams
 	 * @return <Array> List of Vtiger_Link_Model instances
@@ -111,7 +134,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 
 		$quickWidgets = array();
 
-		if (vtlib_purify($_REQUEST['view']) == 'Calendar') {
+		if ($linkParams['ACTION'] == 'Calendar') {
 			$quickWidgets[] = array(
 				'linktype' => 'SIDEBARWIDGET',
 				'linklabel' => 'LBL_ACTIVITY_TYPES',
@@ -120,7 +143,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 			);
 		}
 
-		if (vtlib_purify($_REQUEST['view']) == 'SharedCalendar') {
+		if ($linkParams['ACTION'] == 'SharedCalendar') {
 			$quickWidgets[] = array(
 				'linktype' => 'SIDEBARWIDGET',
 				'linklabel' => 'LBL_ADDED_CALENDARS',
@@ -171,10 +194,10 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	public function setEventFieldsForExport() {
 		$moduleFields = array_flip($this->getColumnFieldMapping());
 		$userModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-        
+
 		$keysToReplace = array('taskpriority');
 		$keysValuesToReplace = array('taskpriority' => 'priority');
-        
+
 		foreach($moduleFields as $fieldName => $fieldValue) {
             $fieldModel = Vtiger_Field_Model::getInstance($fieldName, $this);
             if($fieldName != 'id' && $fieldModel->getPermissions()) {
@@ -380,7 +403,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 		}
 		return $recordModels;
 	}
-	
+
 	/**
 	 * Function gives fields based on the type
 	 * @param <String> $type - field type
@@ -388,7 +411,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getFieldsByType($type) {
 		$restrictedField = array('picklist'=>array('eventstatus', 'recurringtype', 'visibility', 'duration_minutes'));
-		
+
         if(!is_array($type)) {
             $type = array($type);
         }
@@ -422,7 +445,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 					'linkurl' => 'index.php?parent=Settings&module=LayoutEditor&sourceModule='.$this->getName(),
 					'linkicon' => Vtiger_Theme::getImagePath('LayoutEditor.gif')
 			);
-            
+
             $settingLinks[] = array(
 					'linktype' => 'LISTVIEWSETTING',
 					'linklabel' => 'LBL_EDIT_PICKLIST_VALUES',

@@ -15,21 +15,43 @@ class Settings_LoginHistory_ListView_Model extends Settings_Vtiger_ListView_Mode
 	 */
     public function getBasicListQuery() {
         $module = $this->getModule();
-		$userNameSql = Vtiger_Deprecated::getSqlForNameInDisplayFormat(array('first_name'=>
-							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "SELECT login_id, $userNameSql AS user_name, user_ip, logout_time, login_time, vtiger_loginhistory.status FROM ". $module->getBaseTable().' 
-				INNER JOIN vtiger_users ON vtiger_users.user_name = vtiger_loginhistory.user_name';
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		
-		$searchField = $this->get('search_key');
+		$query = "SELECT login_id, $userNameSql AS user_name, user_ip, logout_time, login_time, vtiger_loginhistory.status FROM $module->baseTable 
+				INNER JOIN vtiger_users ON vtiger_users.user_name = $module->baseTable.user_name";
+		
+		$search_key = $this->get('search_key');
 		$value = $this->get('search_value');
 		
-		if(!empty($searchField) && !empty($value)) {
-			$query .= " WHERE vtiger_loginhistory.user_name = '$value'";
+		if(!empty($search_key) && !empty($value)) {
+			$query .= " WHERE $module->baseTable.$search_key = '$value'";
 		}
         return $query;
     }
 
 	public function getListViewLinks() {
 		return array();
+	}
+	
+	/** 
+	 * Function which will get the list view count  
+	 * @return - number of records 
+	 */
+
+	public function getListViewCount() {
+		$db = PearDatabase::getInstance();
+
+		$module = $this->getModule();
+		$listQuery = "SELECT count(*) AS count FROM $module->baseTable INNER JOIN vtiger_users ON vtiger_users.user_name = $module->baseTable.user_name";
+
+		$search_key = $this->get('search_key');
+		$value = $this->get('search_value');
+		
+		if(!empty($search_key) && !empty($value)) {
+			$listQuery .= " WHERE $module->baseTable.$search_key = '$value'";
+		}
+
+		$listResult = $db->pquery($listQuery, array());
+		return $db->query_result($listResult, 0, 'count');
 	}
 }

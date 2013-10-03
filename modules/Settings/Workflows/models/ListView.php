@@ -52,7 +52,7 @@ class Settings_Workflows_ListView_Model extends Settings_Vtiger_ListView_Model {
 			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
 		}
         $nextListQuery = $listQuery.' LIMIT '.($startIndex+$pageLimit).',1';
-		$listQuery .= " LIMIT $startIndex, $pageLimit";
+		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);
 
 		$listResult = $db->pquery($listQuery, $params);
 		$noOfRecords = $db->num_rows($listResult);
@@ -67,6 +67,14 @@ class Settings_Workflows_ListView_Model extends Settings_Vtiger_ListView_Model {
 			$listViewRecordModels[$record->getId()] = $record;
 		}
 		$pagingModel->calculatePageRange($listViewRecordModels);
+		
+		if($db->num_rows($listResult) > $pageLimit){
+			array_pop($listViewRecordModels);
+			$pagingModel->set('nextPageExists', true);
+		}else{
+			$pagingModel->set('nextPageExists', false);
+		}
+		
         $nextPageResult = $db->pquery($nextListQuery, $params);
         $nextPageNumRows = $db->num_rows($nextPageResult);
         if($nextPageNumRows <= 0) {

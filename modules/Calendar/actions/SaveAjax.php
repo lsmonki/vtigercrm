@@ -66,9 +66,20 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
                 $recordModel->set('eventstatus', 'Planned');
                 $recordModel->set('subject','[Followup] '.$subject);
                 $recordModel->set('date_start',$startDate);
-                $recordModel->set('due_date',$startDate);
-                $recordModel->set('time_start',$startTime);
-                $recordModel->set('time_end',$startTime);
+				$recordModel->set('time_start',$startTime);
+
+				$currentUser = Users_Record_Model::getCurrentUserModel();
+				$activityType = $recordModel->get('activitytype');
+				if($activityType == 'Call') {
+					$minutes = $currentUser->get('callduration');
+				} else {
+					$minutes = $currentUser->get('othereventduration');
+				}
+				$dueDateTime = date('Y-m-d H:i:s', strtotime("$startDateTime+$minutes minutes"));
+				list($endDate, $endTime) = explode(' ', $dueDateTime);
+
+				$recordModel->set('due_date',$endDate);
+                $recordModel->set('time_end',$endTime);
                 $recordModel->set('mode', 'create');
                 $recordModel->save();
             }

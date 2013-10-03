@@ -261,6 +261,11 @@ var Settings_Roles_Js = {
 							form.data('submit', 'true');
 							form.data('performCheck', 'true');
 							form.submit();
+							jQuery.progressIndicator({
+								'blockInfo' : {
+								'enabled' : true
+								}
+							});
 						},
 						function(data, err){
 							var params = {};

@@ -14,14 +14,14 @@
 {assign var="time" value=Vtiger_Time_UIType::getDisplayTimeValue(null)}
 {assign var="currentTimeInVtigerFormat" value=Vtiger_Time_UIType::getTimeValueInAMorPM($time)}
 {if $COUNTER eq 2}
-</tr><tr class="hide followUpContainer massEditActiveField">
+</tr><tr class="{if !($SHOW_FOLLOW_UP)}hide {/if}followUpContainer massEditActiveField">
 	{assign var=COUNTER value=1}
 {else}
 	{assign var=COUNTER value=$COUNTER+1}
 {/if}
 <td class="fieldLabel">
 	<label class="muted pull-right marginRight10px">
-		<input name="followup" type="checkbox" class="alignTop"/>
+		<input name="followup" type="checkbox" class="alignTop" {if $FOLLOW_UP_STATUS} checked{/if}/>
 		{vtranslate('LBL_HOLD_FOLLOWUP_ON',$MODULE)}
 	</label>	
 </td>
@@ -29,14 +29,16 @@
 	<div>
 		<div class="input-append row-fluid">
 			<div class="span10 row-fluid date">
-				<input name="followup_date_start" type="text" class="span9 dateField" data-date-format="{$dateFormat}" type="text"  value="{$currentDate}"/>
+				<input name="followup_date_start" type="text" class="span9 dateField" data-date-format="{$dateFormat}" type="text"  
+					   value="{if !empty($FOLLOW_UP_DATE)}{$FOLLOW_UP_DATE}{else}{$currentDate}{/if}" />
 				<span class="add-on"><i class="icon-calendar"></i></span>
 			</div>	
 		</div>		
 	</div>
 	<div>
 		<div class="input-append time">
-			<input type="text" name="followup_time_start" class="timepicker-default input-small" value="{$currentTimeInVtigerFormat}" />
+			<input type="text" name="followup_time_start" class="timepicker-default input-small" 
+				   value="{if !empty($FOLLOW_UP_TIME)}{$FOLLOW_UP_TIME}{else}{$currentTimeInVtigerFormat}{/if}" />
 			<span class="add-on cursorPointer">
 				<i class="icon-time"></i>
 			</span>

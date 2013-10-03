@@ -24,6 +24,7 @@
 		<input type="hidden" id="selectedIds" name="selectedIds" data-selected-ids={ZEND_JSON::encode($SELECTED_IDS)} />
 		<input type="hidden" id="excludedIds" name="excludedIds" data-excluded-ids={ZEND_JSON::encode($EXCLUDED_IDS)} />
 		<input type="hidden" id="recordsCount" name="recordsCount" />
+		<input type='hidden' value="{$TOTAL_ENTRIES}" id='totalCount'>
 		<div class="relatedHeader">
 			<div class="btn-toolbar row-fluid">
 				<div class="span6">
@@ -68,14 +69,14 @@
 				<div class="span3">
 					<span class="row-fluid">
 						<span class="span5 pushDown">
-							<span class="pull-right">
-							{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_TO', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{if $TOTAL_ENTRIES} {vtranslate('LBL_OF', $RELATED_MODULE->get('name'))} {$TOTAL_ENTRIES}{/if}{/if}
+							<span class="pull-right pageNumbers alignTop" data-placement="bottom" data-original-title="" style="margin-top: -5px">
+								{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{/if}
 							</span>
 						</span>
 						<span class="span7 pull-right">
 							<span class="btn-group pull-right">
 								<button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
-								<button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
+								<button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}  style="padding: 5px 9px 0px 9px">
 									<span><img src="{vimage_path('ListViewJump.png')}" alt="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}" /></span>
 								</button>
 								<ul class="listViewBasicAction dropdown-menu" id="relatedListPageJumpDropDown">
@@ -88,11 +89,11 @@
 											<span class="span2 textAlignCenter">
 												{vtranslate('LBL_OF',$moduleName)}
 											</span>
-											<span class="span2" id="totalPageCount"></span>
+											<span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
 										</span>
 									</li>
 								</ul>
-								<button class="btn" id="relatedListNextPageButton" {if !$PAGING->isNextPageExists()} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
+								<button class="btn" id="relatedListNextPageButton" {if (!$PAGING->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
 							</span>
 						</span>
 					</span>

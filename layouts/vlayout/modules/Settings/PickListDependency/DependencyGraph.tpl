@@ -59,7 +59,7 @@
 			<table class="table-bordered table-condensed themeTableColor pickListDependencyTable">
 				<thead><tr class="blockHeader">
 					{foreach item=SOURCE_PICKLIST_VALUE from=$SOURCE_PICKLIST_VALUES}
-						<th class="{Vtiger_Util_Helper::toSafeHTML($SOURCE_FIELD)}{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)}" style="border: none;
+						<th data-source-value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)}" style="border: none;
 							{if !empty($MAPPED_VALUES) && !in_array($SOURCE_PICKLIST_VALUE, array_map('decode_html', $MAPPED_SOURCE_PICKLIST_VALUES))}display: none;{/if}">
 							{vtranslate($SOURCE_PICKLIST_VALUE, $SELECTED_MODULE)}</th>
 					{/foreach}</tr>
@@ -77,8 +77,7 @@
                             {assign var=IS_SELECTED value=true}
                         {/if}
 						<td	data-source-value='{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)}' data-target-value='{Vtiger_Util_Helper::toSafeHTML($TARGET_VALUE)}'
-							class="{if $IS_SELECTED}selectedCell {else}unselectedCell {/if} 
-								targetValue{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)} picklistValueMapping cursorPointer"
+							class="{if $IS_SELECTED}selectedCell {else}unselectedCell {/if} targetValue picklistValueMapping cursorPointer"
 								{if !empty($MAPPED_VALUES) && !in_array($SOURCE_PICKLIST_VALUE, array_map('decode_html', $MAPPED_SOURCE_PICKLIST_VALUES))}style="display: none;" {/if}>
                             {if $IS_SELECTED}
                                 <i class="icon-ok pull-left"></i>
@@ -108,7 +107,7 @@
 						<div class="control-group">
 							<div class="controls row-fluid">
 								<label class="checkbox"><input type="checkbox" class="sourceValue {Vtiger_Util_Helper::toSafeHTML($SOURCE_VALUE)}"
-									   value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_VALUE)}" 
+									data-source-value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_VALUE)}" value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_VALUE)}" 
 									{if empty($MAPPED_VALUES) || in_array($SOURCE_VALUE, array_map('decode_html', $MAPPED_SOURCE_PICKLIST_VALUES))} checked {/if}/>
 									&nbsp;{vtranslate($SOURCE_VALUE, $SELECTED_MODULE)}</label>
 							</div>

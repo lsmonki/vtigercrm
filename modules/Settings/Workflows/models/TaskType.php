@@ -38,6 +38,9 @@ class Settings_Workflows_TaskType_Model extends Vtiger_Base_Model {
 	}
 
 	public static function getInstanceFromClassName($taskClass) {
+		if ($taskClass == 'VTSendNotificationTask') {
+			$taskClass = 'VTEmailTask';
+		}
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery("SELECT * FROM com_vtiger_workflow_tasktypes where classname=?",array($taskClass));
 		$row = $db->query_result_rowdata($result, 0);

@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Mapping des champs du module prospects', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
 	'LBL_WEBFORMS'                 => 'Setup Webfroms'              , 
-	'LBL_LEAD_SOURCE'              => 'Origine :'                   , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

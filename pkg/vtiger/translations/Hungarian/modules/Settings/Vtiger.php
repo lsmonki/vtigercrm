@@ -181,6 +181,16 @@ $languageStrings = array(
 	'LBL_LAST_SCAN_AT'             => 'Last scanned at '            , // TODO: Review
 	'LBL_TIME_TAKEN'               => ' time taken '                , // TODO: Review
 	'LBL_SHORT_SECONDS'            => 'sec'                         , // TODO: Review
+	
+	//User Login History
+	'LoginHistory' => 'User Login History',
+	'LBL_LOGIN_HISTORY_DETAILS' => 'Login History',
+	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
+	'LBL_USER_NAME'=> 'User Name',
+	'LBL_USER_IP_ADDRESS'=> 'User IP Address', 
+	'LBL_LOGIN_TIME' => 'Sign-in Time',
+	'LBL_LOGGED_OUT_TIME' => 'Sign-out Time', 
+	'LBL_STATUS' => 'Status'
 );
 $jsLanguageStrings = array(
 	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review

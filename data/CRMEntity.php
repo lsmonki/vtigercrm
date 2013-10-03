@@ -610,6 +610,27 @@ class CRMEntity {
 		}
 	}
 
+	/** Function to attachment filename of the given entity
+	 * @param $notesid -- crmid:: Type Integer
+	 * The function will get the attachmentsid for the given entityid from vtiger_seattachmentsrel table and get the attachmentsname from vtiger_attachments table
+	 * returns the 'filename'
+	 */
+	function getOldFileName($notesid) {
+		global $log;
+		$log->info("in getOldFileName  " . $notesid);
+		global $adb;
+		$query1 = "select * from vtiger_seattachmentsrel where crmid=?";
+		$result = $adb->pquery($query1, array($notesid));
+		$noofrows = $adb->num_rows($result);
+		if ($noofrows != 0)
+			$attachmentid = $adb->query_result($result, 0, 'attachmentsid');
+		if ($attachmentid != '') {
+			$query2 = "select * from vtiger_attachments where attachmentsid=?";
+			$filename = $adb->query_result($adb->pquery($query2, array($attachmentid)), 0, 'name');
+		}
+		return $filename;
+	}
+
 	/**
 	 * Function returns the column alias for a field
 	 * @param <Array> $fieldinfo - field information
@@ -1474,6 +1495,7 @@ class CRMEntity {
 				vtiger_notes.notecontent description,vtiger_notes.*
 				from vtiger_notes
 				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+				left join vtiger_notescf ON vtiger_notescf.notesid= vtiger_notes.notesid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_notes.notesid and vtiger_crmentity.deleted=0
 				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_senotesrel.crmid
 				LEFT JOIN vtiger_groups
@@ -2049,28 +2071,6 @@ class CRMEntity {
 	}
 
 	/*
-	 * Function to get the security query part of a report
-	 * @param - $module primary module name
-	 * returns the query string formed on fetching the related data for report for security of the module
-	 */
-
-	function getSecListViewSecurityParameter($module) {
-		$tabid = getTabid($module);
-		global $current_user;
-		if ($current_user) {
-			require('user_privileges/user_privileges_' . $current_user->id . '.php');
-			require('user_privileges/sharing_privileges_' . $current_user->id . '.php');
-		}
-		$sec_query .= " and (vtiger_crmentity$module.smownerid in($current_user->id) or vtiger_crmentity$module.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '" . $current_user_parent_role_seq . "::%') or vtiger_crmentity$module.smownerid in(select shareduserid from vtiger_tmp_read_user_sharing_per where userid=" . $current_user->id . " and tabid=" . $tabid . ") or (";
-
-		if (sizeof($current_user_groups) > 0) {
-			$sec_query .= " vtiger_groups$module.groupid in (" . implode(",", $current_user_groups) . ") or ";
-		}
-		$sec_query .= " vtiger_groups$module.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=" . $current_user->id . " and tabid=" . $tabid . "))) ";
-		return $sec_query;
-	}
-
-	/*
 	 * Function to get the relation query part of a report
 	 * @param - $module primary module name
 	 * @param - $secmodule secondary module name
@@ -2559,71 +2559,5 @@ class CRMEntity {
 			ModTracker::unLinkRelation($module, $crmid, $with_module, $with_crmid);
 		}
 	}
-
-	/**
-	 * Function which will give the basic query to find duplicates
-	 * @param <String> $module
-	 * @param <String> $tableColumns
-	 * @param <String> $mergeFields
-	 * @param <String> $select_cols
-	 * @return string
-	 */
-	// Note : remove getDuplicatesQuery API once vtiger5 code is removed
-    function getQueryForDuplicates($module, $tableColumns, $selectedColumns = '') {
-		if(is_array($tableColumns)) {
-			$tableColumnsString = implode(',', $tableColumns);
-		}
-        $selectClause = "SELECT " . $this->table_name . "." . $this->table_index . " AS recordid," . $tableColumnsString;
-
-        // Select Custom Field Table Columns if present
-        if (isset($this->customFieldTable))
-            $query .= ", " . $this->customFieldTable[0] . ".* ";
-
-        $fromClause = " FROM $this->table_name";
-
-        $fromClause .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index";
-
-		if($this->tab_name) {
-			foreach($this->tab_name as $tableName) {
-				if($tableName != 'vtiger_crmentity' && $tableName != $this->table_name) {
-					if($this->tab_name_index[$tableName]) {
-						$fromClause .= " INNER JOIN " . $tableName . " ON " . $tableName . '.' . $this->tab_name_index[$tableName] .
-							" = $this->table_name.$this->table_index";
-					}
-				}
-			}
-		}
-        $fromClause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
-        $whereClause = " WHERE vtiger_crmentity.deleted = 0";
-        $whereClause .= $this->getListViewSecurityParameter($module);
-
-        if (isset($selectedColumns) && trim($selectedColumns) != '') {
-            $sub_query = "SELECT $selectedColumns FROM $this->table_name AS t " .
-                    " INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t." . $this->table_index;
-            // Consider custom table join as well.
-            if (isset($this->customFieldTable)) {
-                $sub_query .= " LEFT JOIN " . $this->customFieldTable[0] . " tcf ON tcf." . $this->customFieldTable[1] . " = t.$this->table_index";
-            }
-            $sub_query .= " WHERE crm.deleted=0 GROUP BY $selectedColumns HAVING COUNT(*)>1";
-        } else {
-            $sub_query = "SELECT $tableColumnsString $fromClause $whereClause GROUP BY $tableColumnsString HAVING COUNT(*)>1";
-        }
-
-		$i = 1;
-		foreach($tableColumns as $tableColumn){
-			$tableInfo = explode('.', $tableColumn);
-			$duplicateCheckClause .= " ifnull($tableColumn,'null') = ifnull(temp.$tableInfo[1],'null')";
-			if (count($tableColumns) != $i++) $duplicateCheckClause .= " AND ";
-		}
-
-        $query = $selectClause . $fromClause .
-                " LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name . "." . $this->table_index .
-                " INNER JOIN (" . $sub_query . ") AS temp ON " . $duplicateCheckClause .
-                $whereClause .
-                " ORDER BY $tableColumnsString," . $this->table_name . "." . $this->table_index . " ASC";
-        return $query;
-    }
 }
 ?>

@@ -34,14 +34,28 @@ require_once 'include/Webservices/DescribeObject.php';
 			$user = $syncType;
 		} else if($syncType == 'application'){
 			$applicationSync = true;
-		}
+		} else if($syncType == 'userandgroup'){
+            $userAndGroupSync = true;
+        }
 
 		if($applicationSync && !is_admin($user)){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Only admin users can perform application sync");
 		}
 		
 		$ownerIds = array($user->id);
-
+        // To get groupids in which this user exist
+        if ($userAndGroupSync) {
+        $groupresult = $adb->pquery("select groupid from vtiger_users2group where userid=?", array($user->id));
+        $numOfRows = $adb->num_rows($groupresult);
+        if ($numOfRows > 0) {
+            for ($i = 0; $i < $numOfRows; $i++) {
+                $ownerIds[count($ownerIds)] = $adb->query_result($groupresult, $i, "groupid");
+            }
+        }
+    }
+        // End
+    
+        
 		if(!isset($elementType) || $elementType=='' || $elementType==null){
 			$typed=false;
 		}

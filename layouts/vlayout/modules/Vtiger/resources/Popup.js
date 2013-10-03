@@ -376,6 +376,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		params['page'] = this.getPageNumber();
 		params['related_parent_module'] = this.getRelatedParentModule();
 		params['related_parent_id'] = this.getRelatedParentRecord();
+		params['module'] = app.getModuleName();
 
 		if(this.isMultiSelectMode()) {
 			params['multi_select'] = true;
@@ -387,6 +388,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 	 * Function to get Page Records
 	 */
 	getPageRecords : function(params){
+		var thisInstance = this;
 		var aDeferred = jQuery.Deferred();
 		var progressIndicatorElement = jQuery.progressIndicator({
 			'position' : 'html',
@@ -400,7 +402,9 @@ jQuery.Class("Vtiger_Popup_Js",{
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
-					aDeferred.resolve(data);
+					thisInstance.calculatePages().then(function(data){
+						aDeferred.resolve(data);
+					});
 				},
 
 				function(textStatus, errorThrown){
@@ -409,14 +413,58 @@ jQuery.Class("Vtiger_Popup_Js",{
 			);
 		return aDeferred.promise();
 	},
+	
+		/**
+	 * Function to calculate number of pages
+	 */
+	calculatePages : function() {
+		var aDeferred = jQuery.Deferred();
+		var element = jQuery('#totalPageCount');
+		var totalPageNumber = element.text();
+		if(totalPageNumber == ""){
+			var totalRecordCount = jQuery('#totalCount').val();
+			if(totalRecordCount != '') {
+				var recordPerPage = jQuery('#noOfEntries').val();
+				if(recordPerPage == '0') recordPerPage = 1;
+				pageCount = Math.ceil(totalRecordCount/recordPerPage);
+				if(pageCount == 0){
+					pageCount = 1;
+				}
+				element.text(pageCount);
+				aDeferred.resolve();
+				return aDeferred.promise();
+			}
+			this.getPageCount().then(function(data){
+				var pageCount = data['result']['page'];
+				if(pageCount == 0){
+					pageCount = 1;
+				}
+				element.text(pageCount);
+				aDeferred.resolve();
+			});
+		} else{
+			aDeferred.resolve();
+		}
+		return aDeferred.promise();
+	},
+	
 	/**
 	 * Function to handle search event
 	 */
 
 	searchHandler : function(){
+		var aDeferred = jQuery.Deferred();
 		var completeParams = this.getCompleteParams();
 		completeParams['page'] = 1;
-		return this.getPageRecords(completeParams);
+		return this.getPageRecords(completeParams).then(
+			function(data){
+				aDeferred.resolve(data);
+			},
+
+			function(textStatus, errorThrown){
+				aDeferred.reject(textStatus, errorThrown);
+		});
+		return aDeferred.promise();
 	},
 
 	/**
@@ -424,9 +472,13 @@ jQuery.Class("Vtiger_Popup_Js",{
 	 */
 	registerEventForSearch : function(){
 		var thisInstance = this;
-		var popupPageContentsContainer = this.getPopupPageContainer();
 		jQuery('#popupSearchButton').on('click',function(e){
-			thisInstance.searchHandler();
+			jQuery('#totalPageCount').text("");
+			thisInstance.searchHandler().then(function(data){
+				jQuery('#pageNumber').val(1);
+				jQuery('#pageToJump').val(1);
+				thisInstance.updatePagination();
+			});
 		});
 	},
 
@@ -434,6 +486,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 	 * Function to handle Sort
 	 */
 	sortHandler : function(headerElement){
+		var aDeferred = jQuery.Deferred();
 		var fieldName = headerElement.data('columnname');
 		var sortOrderVal = headerElement.data('nextsortorderval');
 		var sortingParams = {
@@ -442,7 +495,16 @@ jQuery.Class("Vtiger_Popup_Js",{
 		}
 		var completeParams = this.getCompleteParams();
 		jQuery.extend(completeParams,sortingParams);
-		return this.getPageRecords(completeParams);
+		return this.getPageRecords(completeParams).then(
+			function(data){
+				aDeferred.resolve(data);
+			},
+
+			function(textStatus, errorThrown){
+				aDeferred.reject(textStatus, errorThrown);
+			}
+		);
+		return aDeferred.promise();
 	},
 
 	/**
@@ -453,34 +515,9 @@ jQuery.Class("Vtiger_Popup_Js",{
 		var popupPageContentsContainer = this.getPopupPageContainer();
 		popupPageContentsContainer.on('click','.listViewHeaderValues',function(e){
 			var element = jQuery(e.currentTarget);
-			thisInstance.sortHandler(element);
-		});
-	},
-
-	/**
-	 * Function to handle Sort
-	 */
-	sortHandler : function(headerElement){
-		var fieldName = headerElement.data('columnname');
-		var sortOrderVal = headerElement.data('nextsortorderval');
-		var sortingParams = {
-			"orderby" : fieldName,
-			"sortorder" : sortOrderVal
-		}
-		var completeParams = this.getCompleteParams();
-		jQuery.extend(completeParams,sortingParams);
-		return this.getPageRecords(completeParams);
-	},
-
-	/**
-	 * Function to register Event for Sorting
-	 */
-	registerEventForSort : function(){
-		var thisInstance = this;
-		var popupPageContentsContainer = this.getPopupPageContainer();
-		popupPageContentsContainer.on('click','.listViewHeaderValues',function(e){
-			var element = jQuery(e.currentTarget);
-			thisInstance.sortHandler(element);
+			thisInstance.sortHandler(element).then(function(data){
+				thisInstance.updatePagination();
+			});
 		});
 	},
 
@@ -503,6 +540,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 			this.getPageRecords(completeParams).then(
 				function(data){
 					jQuery('#pageNumber').val(nextPageNumber);
+					jQuery('#pageToJump').val(nextPageNumber);
 					aDeferred.resolve(data);
 				},
 
@@ -530,6 +568,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 			this.getPageRecords(completeParams).then(
 				function(data){
 					jQuery('#pageNumber').val(previousPageNumber);
+					jQuery('#pageToJump').val(previousPageNumber);
 					aDeferred.resolve(data);
 				},
 
@@ -546,12 +585,87 @@ jQuery.Class("Vtiger_Popup_Js",{
 	 */
 	registerEventForPagination : function(){
 		var thisInstance = this;
-		var popupPageContentsContainer = this.getPopupPageContainer();
-		popupPageContentsContainer.on('click','#listViewNextPageButton',function(){
-			thisInstance.nextPageHandler();
+		jQuery('#listViewNextPageButton').on('click',function(){
+			thisInstance.nextPageHandler().then(function(data){
+				thisInstance.updatePagination();
+			});
 		});
-		popupPageContentsContainer.on('click','#listViewPreviousPageButton',function(){
-			thisInstance.previousPageHandler();
+		jQuery('#listViewPreviousPageButton').on('click',function(){
+			thisInstance.previousPageHandler().then(function(data){
+				thisInstance.updatePagination();
+			});
+		});
+		jQuery('#listViewPageJump').on('click',function(e){
+			jQuery('#pageToJump').validationEngine('hideAll');
+			var element = jQuery('#totalPageCount');
+			var totalPageNumber = element.text();
+			if(totalPageNumber == ""){
+				var totalRecordCount = jQuery('#totalCount').val();
+				if(totalRecordCount != '') {
+					var recordPerPage = jQuery('#pageLimit').val();
+					if(recordPerPage == '0') recordPerPage = 1;
+					pageCount = Math.ceil(totalRecordCount/recordPerPage);
+					if(pageCount == 0){
+						pageCount = 1;
+					}
+					element.text(pageCount);
+					return;
+				}
+				element.progressIndicator({});
+				thisInstance.getPageCount().then(function(data){
+					var pageCount = data['result']['page'];
+					element.text(pageCount);
+					element.progressIndicator({'mode': 'hide'});
+			});
+		}
+		})
+
+		jQuery('#listViewPageJumpDropDown').on('click','li',function(e){
+			e.stopImmediatePropagation();
+		}).on('keypress','#pageToJump',function(e){
+			if(e.which == 13){
+				e.stopImmediatePropagation();
+				var element = jQuery(e.currentTarget);
+				var response = Vtiger_WholeNumberGreaterThanZero_Validator_Js.invokeValidation(element);
+				if(typeof response != "undefined"){
+					element.validationEngine('showPrompt',response,'',"topLeft",true);
+				} else {
+					element.validationEngine('hideAll');
+					var currentPageElement = jQuery('#pageNumber');
+					var currentPageNumber = currentPageElement.val();
+					var newPageNumber = parseInt(element.val());
+					var totalPages = parseInt(jQuery('#totalPageCount').text());
+					if(newPageNumber > totalPages){
+						var error = app.vtranslate('JS_PAGE_NOT_EXIST');
+						element.validationEngine('showPrompt',error,'',"topLeft",true);
+						return;
+					}
+					if(newPageNumber == currentPageNumber){
+						var message = app.vtranslate('JS_YOU_ARE_IN_PAGE_NUMBER')+" "+newPageNumber;
+						var params = {
+							text: message,
+							type: 'info'
+						};
+						Vtiger_Helper_Js.showMessage(params);
+						return;
+					}
+					var pagingParams = {
+						"page": newPageNumber
+					}
+					var completeParams = thisInstance.getCompleteParams();
+					jQuery.extend(completeParams,pagingParams);
+					thisInstance.getPageRecords(completeParams).then(
+						function(data){
+							currentPageElement.val(newPageNumber);
+							thisInstance.updatePagination();
+							element.closest('.btn-group ').removeClass('open');
+						},
+						function(textStatus, errorThrown){
+						}
+					);
+				}
+				return false;
+		}
 		});
 	},
 
@@ -570,22 +684,117 @@ jQuery.Class("Vtiger_Popup_Js",{
 			elements.addClass(widthType);
 		}
 	},
+		/**
+	 * Function to get page count and total number of records in list
+	 */
+	getPageCount : function(){
+		var aDeferred = jQuery.Deferred();
+		var pageJumpParams = {
+			'mode' : "getPageCount"
+		}
+		var completeParams = this.getCompleteParams();
+		jQuery.extend(completeParams,pageJumpParams);
+		AppConnector.request(completeParams).then(
+			function(data) {
+				var response;
+				if(typeof data != "object"){
+					response = JSON.parse(data);
+				} else{
+					response = data;
+				}
+				aDeferred.resolve(response);
+			},
+			function(error,err){
+
+			}
+		);
+		return aDeferred.promise();
+	},
+	
+	/**
+	 * Function to show total records count in listview on hover
+	 * of pageNumber text
+	 */
+	registerEventForTotalRecordsCount : function(){
+		var thisInstance = this;
+		jQuery('.pageNumbers').on('hover',function(e){
+			var element = jQuery(e.currentTarget);
+			var totalRecordsElement = jQuery('#totalCount');
+			var totalNumberOfRecords = totalRecordsElement.val();
+			if(totalNumberOfRecords == '') {
+				thisInstance.getPageCount().then(function(data){
+					totalNumberOfRecords = data['result']['numberOfRecords'];
+					totalRecordsElement.val(totalNumberOfRecords);
+				});
+			}
+			if(totalNumberOfRecords != ''){
+				var titleWithRecords = app.vtranslate("JS_TOTAL_RECORDS")+" "+totalNumberOfRecords;
+				element.data('tooltip').options.title = titleWithRecords;
+			} else {
+				element.data('tooltip').options.title = "";
+			}
+		})
+	},
+	
+	/**
+	 * Function to update Pagining status
+	 */
+	updatePagination : function(){
+		var previousPageExist = jQuery('#previousPageExist').val();
+		var nextPageExist = jQuery('#nextPageExist').val();
+		var previousPageButton = jQuery('#listViewPreviousPageButton');
+		var nextPageButton = jQuery('#listViewNextPageButton');
+		var listViewEntriesCount = jQuery('#noOfEntries').val();
+		var pageStartRange = jQuery('#pageStartRange').val();
+		var pageEndRange = jQuery('#pageEndRange').val();
+		var pageJumpButton = jQuery('#listViewPageJump');
+		var pages = jQuery('#totalPageCount').text();
+
+		if(pages == 1){
+			pageJumpButton.attr('disabled',"disabled");
+		}
+		if(pages > 1){
+			pageJumpButton.removeAttr('disabled');
+		}
+
+		if(previousPageExist != ""){
+			previousPageButton.removeAttr('disabled');
+		} else if(previousPageExist == "") {
+			previousPageButton.attr("disabled","disabled");
+		}
+
+		if((nextPageExist != "") && (pages >1)){
+			nextPageButton.removeAttr('disabled');
+		} else if((nextPageExist == "") || (pages == 1)) {
+			nextPageButton.attr("disabled","disabled");
+		}
+		if(listViewEntriesCount != 0){
+			var pageNumberText = pageStartRange+" "+app.vtranslate('to')+" "+pageEndRange;
+			jQuery('.pageNumbers').html(pageNumberText);
+		} else {
+			jQuery('.pageNumbers').html("");
+		}
+
+	},
 
 	registerEvents: function(){
-		var thisInstance = this;
 		var pageNumber = jQuery('#pageNumber').val();
 		if(pageNumber == 1){
 			jQuery('#listViewPreviousPageButton').attr("disabled", "disabled");
 		}
-		var popupPageContentsContainer = this.getPopupPageContainer();
 		this.registerEventForSelectAllInCurrentPage();
 		this.registerSelectButton();
 		this.registerEventForCheckboxChange();
 		this.registerEventForSearch();
 		this.registerEventForSort();
-		this.registerEventForPagination();
 		this.registerEventForListViewEntries();
 		this.triggerDisplayTypeEvent();
+		var popupPageContainer = jQuery('#popupPageContainer');
+		if(popupPageContainer.length > 0){
+			this.registerEventForTotalRecordsCount();
+			this.registerEventForPagination();
+			jQuery('.pageNumbers').tooltip();
+		}
 	}
 });
 jQuery(document).ready(function() {

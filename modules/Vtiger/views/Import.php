@@ -183,15 +183,21 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		$result = $db->pquery($query, array(Import_Data_Action::$IMPORT_RECORD_CREATED));
 		$noOfRecords = $db->num_rows($result);
 		$noOfRecordsDeleted = 0;
+        $entityData = array();
 		for($i=0; $i<$noOfRecords; $i++) {
 			$recordId = $db->query_result($result, $i, 'recordid');
 			if(isRecordExists($recordId) && isPermitted($moduleName, 'Delete', $recordId) == 'yes') {
 				$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
                 $recordModel->setId($recordId);
                 $recordModel->delete();
+                $focus = $recordModel->getEntity();
+                $focus->id = $recordId;
+                $entityData[] = VTEntityData::fromCRMEntity($focus);
 				$noOfRecordsDeleted++;
 			}
 		}
+        $entity = new VTEventsManager($db);        
+        $entity->triggerEvent('vtiger.batchevent.delete',$entityData);
         $VTIGER_BULK_SAVE_MODE = $previousBulkSaveMode;
 		$viewer->assign('FOR_MODULE', $moduleName);
 		$viewer->assign('MODULE', 'Import');

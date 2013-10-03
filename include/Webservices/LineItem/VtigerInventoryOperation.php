@@ -25,9 +25,16 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
             $handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 			$handler->setLineItems('LineItem', $lineItems, $element);
             $parent = $handler->getParentById($element['id']);
+			$handler->updateParent($lineItems, $parent);
+            $updatedParent = $handler->getParentById($element['id']);
+            //since subtotal and grand total is updated in the update parent api 
+            $parent['hdnSubTotal'] = $updatedParent['hdnSubTotal'];
+            $parent['hdnGrandTotal'] = $updatedParent['hdnGrandTotal'];
+            $parent['pre_tax_total'] = $updatedParent['pre_tax_total'];
             $components = vtws_getIdComponents($element['id']);
             $parentId = $components[1]; 
             $parent['LineItems'] = $handler->getAllLineItemForParent($parentId);
+            
 		} else {
 			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING, "Mandatory Fields Missing..");
 		}
@@ -36,12 +43,20 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 
 	public function update($element) {
 		$element = $this->sanitizeInventoryForInsert($element);
+		$element = $this->sanitizeShippingTaxes($element);
 		$lineItemList = $element['LineItems'];
 		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 		if (!empty($lineItemList)) {
 			$updatedElement = parent::update($element);
-			$handler->cleanLineItemList($updatedElement['id']);
 			$handler->setLineItems('LineItem', $lineItemList, $updatedElement);
+			$parent = $handler->getParentById($element['id']);
+			$handler->updateParent($lineItemList, $parent);
+            $updatedParent = $handler->getParentById($element['id']);
+            //since subtotal and grand total is updated in the update parent api 
+            $parent['hdnSubTotal'] = $updatedParent['hdnSubTotal'];
+            $parent['hdnGrandTotal'] = $updatedParent['hdnGrandTotal'];
+            $parent['pre_tax_total'] = $updatedParent['pre_tax_total'];
+            $updatedElement = array_merge($updatedElement,$parent);
 		} else {
 			$updatedElement = $this->revise($element);
 		}
@@ -50,6 +65,7 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 
 	public function revise($element) {
 		$element = $this->sanitizeInventoryForInsert($element);
+		$element = $this->sanitizeShippingTaxes($element);
 		$handler = vtws_getModuleHandlerFromName('LineItem', $this->user);
 		$components = vtws_getIdComponents($element['id']);
 		$parentId = $components[1];
@@ -60,9 +76,14 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 			$lineItemList = $handler->getAllLineItemForParent($parentId);
 		}
 		$updatedElement = parent::revise($element);
-		$handler->cleanLineItemList($updatedElement['id']);
 		$handler->setLineItems('LineItem', $lineItemList, $updatedElement);
         $parent = $handler->getParentById($element['id']);
+		$handler->updateParent($lineItemList, $parent);
+        $updatedParent = $handler->getParentById($element['id']);
+        //since subtotal and grand total is updated in the update parent api 
+        $parent['hdnSubTotal'] = $updatedParent['hdnSubTotal'];
+        $parent['hdnGrandTotal'] = $updatedParent['hdnGrandTotal'];
+        $parent['pre_tax_total'] = $updatedParent['pre_tax_total'];
         $parent['LineItems'] = $handler->getAllLineItemForParent($parentId);
 		return array_merge($element,$parent);
 	}
@@ -103,41 +124,58 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 		if (!empty($element['hdnSubTotal'])) {
 			$_REQUEST['subtotal'] = $element['hdnSubTotal'];
 		}
-		$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
-		if (!empty($element['hdnDiscountAmount'])) {
+
+		if (($element['hdnDiscountAmount'])) {
 			$_REQUEST['discount_type_final'] = 'amount';
 			$_REQUEST['discount_amount_final'] = $element['hdnDiscountAmount'];
-		} elseif (!empty($element['hdnDiscountPercent'])) {
+		} elseif (($element['hdnDiscountPercent'])) {
 			$_REQUEST['discount_type_final'] = 'percentage';
 			$_REQUEST['discount_percentage_final'] = $element['hdnDiscountPercent'];
+		} else {
+			$_REQUEST['discount_type_final'] = '';
+			$_REQUEST['discount_percentage_final'] = '';
 		}
 		
 
-		if (!empty($element['txtAdjustment'])) {
+		if (($element['txtAdjustment'])) {
 			$_REQUEST['adjustmentType'] = ((int) $element['txtAdjustment'] < 0) ? '-' : '+';
 			$_REQUEST['adjustment'] = abs($element['txtAdjustment']);
+		}else {
+			$_REQUEST['adjustmentType'] = '';
+			$_REQUEST['adjustment'] = '';
 		}
 		if (!empty($element['hdnGrandTotal'])) {
 			$_REQUEST['total'] = $element['hdnGrandTotal'];
 		}
-
-
-
+		
 		return $element;
 	}
 	
 	public function sanitizeShippingTaxes($element){
-			$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
-			$taxDetails = getAllTaxes('all', 'sh');
-			foreach ($taxDetails as $taxInfo) {
-				if ($taxInfo['deleted'] == '0' || $taxInfo['deleted'] === 0) {
+		$_REQUEST['shipping_handling_charge'] = $element['hdnS_H_Amount'];
+		$taxDetails = getAllTaxes('all', 'sh');
+		foreach ($taxDetails as $taxInfo) {
+			//removing previous taxes
+			unset($_REQUEST[$taxInfo['taxname'] . '_sh_percent']);
+			if ($taxInfo['deleted'] == '0' || $taxInfo['deleted'] === 0) {
+				if(isset($element['hdnS_H_Percent']) && $element['hdnS_H_Percent'] != 0){
+					$_REQUEST[$taxInfo['taxname'] . '_sh_percent'] = $element['hdnS_H_Percent'];
+					break;
+				} else {
+					if(isset($element[$taxInfo['taxname'] . '_sh_percent'])){
+						$_REQUEST[$taxInfo['taxname'] . '_sh_percent'] = $element[$taxInfo['taxname'] . '_sh_percent'];
+					}
+					//if there is Shipping Amount and shipping taxes is provided with 0 
+					elseif($element['hdnS_H_Amount'] > 0 && $element['hdnS_H_Percent'] === 0){
+						$_REQUEST[$taxInfo['taxname'] . '_sh_percent'] = 0;
+					}else{
 						$_REQUEST[$taxInfo['taxname'] . '_sh_percent'] = $taxInfo['percentage'];
+					}
 				}
 			}
-			return $element;
-		
-	}
-	
+		}
+		return $element;		
+	}	
 }
 
 

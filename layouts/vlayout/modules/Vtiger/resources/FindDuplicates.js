@@ -7,7 +7,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
-	
+
 	massDeleteRecords : function(url) {
 		var listInstance = new Vtiger_FindDuplicates_Js();
 		Vtiger_List_Js.massDeleteRecords(url,listInstance);
@@ -20,18 +20,37 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 	 * Function that is triggered after deleting records
 	 */
 	postMassDeleteRecords : function() {
-		window.location.reload();
+		var aDeferred = jQuery.Deferred();
+		var thisInstance = this;
+		var fields = jQuery('#duplicateSearchFields').val();
+		var moduleName = app.getModuleName();
+		var pageNumber = jQuery('#pageNumber').val();
+		var ignoreEmpty = jQuery('#ignoreEmpty').val();
+		var url = 'module='+moduleName+'&view=FindDuplicates&fields='+fields+'&ignoreEmpty='+ignoreEmpty;
+		AppConnector.requestPjax(url+'&page='+pageNumber).then(
+			function(data){
+				jQuery('#listViewContents').html(data);
+				jQuery('#recordsCount').val('');
+				jQuery('#totalPageCount').text('');
+				thisInstance.calculatePages().then(function(){
+					thisInstance.updatePagination();
+				});
+				thisInstance.registerMergeRecordEvent(thisInstance.mergeRecordPopupCallback);
+				aDeferred.resolve();
+			}
+		);
+		return aDeferred.promise();
 	},
 
 	/**
 	 * Function registers events for navigation in duplicate search view
 	 */
 	registerPageNavigationEvents : function() {
-		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var fields = jQuery('#duplicateSearchFields').val();
 		var moduleName = app.getModuleName();
-		var url = 'module='+moduleName+'&view=FindDuplicates&fields='+fields;
+		var ignoreEmpty = jQuery('#ignoreEmpty').val();
+		var url = 'module='+moduleName+'&view=FindDuplicates&fields='+fields+'&ignoreEmpty='+ignoreEmpty;
 
 		jQuery('#listViewNextPageButton').on('click',function() {
 			var pageLimit = jQuery('#pageLimit').val();
@@ -42,7 +61,10 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 				AppConnector.requestPjax(url+'&page='+nextPageNumber).then(function(data) {
 					jQuery('#listViewContents').html(data);
 					jQuery('#pageNumber').val(nextPageNumber);
-					thisInstance.updatePagination();
+					jQuery('#pageToJump').val(nextPageNumber);
+					thisInstance.calculatePages().then(function(){
+						thisInstance.updatePagination();
+					});
 					thisInstance.registerMergeRecordEvent(thisInstance.mergeRecordPopupCallback);
 				});
 			}
@@ -57,7 +79,9 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 				AppConnector.requestPjax(url+'&page='+previousPageNumber).then(
 					function(data){
 						jQuery('#listViewContents').html(data);
-						thisInstance.updatePagination();
+						thisInstance.calculatePages().then(function(){
+							thisInstance.updatePagination();
+						});
 						thisInstance.registerMergeRecordEvent(thisInstance.mergeRecordPopupCallback);
 					}
 				);
@@ -65,19 +89,32 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 		});
 
 		jQuery('#listViewPageJump').on('click', function(e) {
-			var pageCountParams = thisInstance.getPageJumpParams();
+			jQuery('#pageToJump').validationEngine('hideAll');
 			var element = jQuery('#totalPageCount');
 			var totalPageNumber = element.text();
 			if(totalPageNumber == "") {
 				var totalRecordCount = jQuery('#totalCount').val();
 				if(totalRecordCount != 'undefined') {
-					var recordPerPage = jQuery('#numberOfEntries').val();
+					var recordPerPage = jQuery('#noOfEntries').val();
 					if(recordPerPage == '0') recordPerPage = 1;
-					element.text(Math.round(totalRecordCount/recordPerPage));
-					return false;
+					var totalPages = Math.ceil(totalRecordCount/recordPerPage);
+					if(totalPages == 0){
+						totalPages = 1;
+					}
+					element.text(totalPages);
+					return;
 				}
+				element.progressIndicator({});
+				thisInstance.getPageCount().then(function(data){
+					var pageCount = data['result']['page'];
+					if(pageCount == 0){
+						pageCount = 1;
+					}
+					element.text(pageCount);
+					element.progressIndicator({'mode': 'hide'});
+				});
 			}
-		})
+		});
 
 		jQuery('#listViewPageJumpDropDown').on('click','li',function(e) {
 				e.stopImmediatePropagation();
@@ -90,9 +127,27 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 						element.validationEngine('showPrompt',response,'',"topLeft",true);
 					} else {
 						element.validationEngine('hideAll');
-						var pageNumber = jQuery(e.currentTarget).val();
-						jQuery('#pageNumber').val(pageNumber);
-						AppConnector.requestPjax(url+'&page='+pageNumber).then(
+						var currentPageElement = jQuery('#pageNumber');
+						var currentPageNumber = currentPageElement.val();
+						var newPageNumber = parseInt(jQuery(e.currentTarget).val());
+						var totalPages = parseInt(jQuery('#totalPageCount').text());
+						if(newPageNumber > totalPages){
+							var error = app.vtranslate('JS_PAGE_NOT_EXIST');
+							element.validationEngine('showPrompt',error,'',"topLeft",true);
+							return;
+						}
+						if(newPageNumber == currentPageNumber){
+							var message = app.vtranslate('JS_YOU_ARE_IN_PAGE_NUMBER')+" "+newPageNumber;
+							var params = {
+								text: message,
+								type: 'info'
+							};
+							Vtiger_Helper_Js.showMessage(params);
+							return;
+						}
+						currentPageElement.val(newPageNumber);
+
+						AppConnector.requestPjax(url+'&page='+newPageNumber).then(
 							function(data){
 								jQuery('#listViewContents').html(data);
 								thisInstance.updatePagination();
@@ -179,6 +234,8 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 		thisInstance.registerCheckBoxClickEvent();
 		thisInstance.registerSelectAllClickEvent();
 		thisInstance.registerDeselectAllClickEvent();
+		thisInstance.registerEventForTotalRecordsCount();
+		jQuery('.pageNumbers').tooltip();
 	},
 
 	/**
@@ -201,10 +258,11 @@ Vtiger_List_Js('Vtiger_FindDuplicates_Js',{
 			var module = app.getModuleName();
 			var parent = app.getParentModuleName();
 			var fields = jQuery('#duplicateSearchFields').val();
+			var ignoreEmpty = jQuery('#ignoreEmpty').val();
 			var postData = {
 				"module": module, "parent": parent,
 				"view": "FindDuplicatesAjax", "mode": "getRecordsCount",
-				"fields": fields
+				"fields": fields, "ignoreEmpty":ignoreEmpty
 			}
 			AppConnector.request(postData).then(
 				function(data) {

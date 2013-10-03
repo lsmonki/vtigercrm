@@ -164,6 +164,15 @@ class Vtiger_Language_Handler {
 	}
 
 	/**
+	 * Function that returns current language short name
+	 * @return <String> -
+	 */
+	public static function getShortLanguageName() {
+		$language = self::getLanguage();
+		return substr($language, 0, 2);
+	}
+
+	/**
 	 * Function returns module strings
 	 * @param <String> $module - module Name
 	 * @param <String> languageStrings or jsLanguageStrings

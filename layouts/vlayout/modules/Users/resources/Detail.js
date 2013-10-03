@@ -69,27 +69,27 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 	 * function to trigger delete record action
 	 * @params: delete record url.
 	 */
-    deleteRecord : function(deleteRecordActionUrl) {
+    triggerDeleteUser : function(deleteUserUrl) {
 		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
 		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
-				AppConnector.request(deleteRecordActionUrl).then(
+				AppConnector.request(deleteUserUrl).then(
 				function(data){
 					if(data){
 						var callback = function(data) {
-						var params = app.validationEngineOptions;
-						params.onValidationComplete = function(form, valid){
-							if(valid){
-								Users_Detail_Js.deleteUser(form)
+							var params = app.validationEngineOptions;
+							params.onValidationComplete = function(form, valid){
+								if(valid){
+									Users_Detail_Js.deleteUser(form)
+								}
+								return false;
 							}
-							return false;
+							jQuery('#deleteUser').validationEngine(app.validationEngineOptions);
 						}
-						jQuery('#deleteUser').validationEngine(app.validationEngineOptions);
-					}
-					app.showModalWindow(data, function(data){
-						if(typeof callback == 'function'){
-							callback(data);
-						}
-					});
+						app.showModalWindow(data, function(data){
+							if(typeof callback == 'function'){
+								callback(data);
+							}
+						});
 					}
 				});
 			},
@@ -109,11 +109,63 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 				'transfer_user_id' : transferUserId,
 				'userid' : userid
 			}
-			console.log(params);
 		AppConnector.request(params).then(
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
+					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
+					var url = data.result.listViewUrl;
+					window.location.href=url;
+				}
+			}
+		);
+	},
+	
+	triggerTransferOwner : function(transferOwnerUrl){
+		var message = app.vtranslate('LBL_TRANSFEROWNER_CONFIRMATION');
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
+				AppConnector.request(transferOwnerUrl).then(
+				function(data){
+					if(data){
+						var callback = function(data) {
+							var params = app.validationEngineOptions;
+							params.onValidationComplete = function(form, valid){
+								if(valid){
+									Users_Detail_Js.transferOwner(form)
+								}
+								return false;
+							}
+							jQuery('#transferOwner').validationEngine(app.validationEngineOptions);
+						}
+						app.showModalWindow(data, function(data){
+							if(typeof callback == 'function'){
+								callback(data);
+							}
+						});
+					}
+				});
+			},
+			function(error, err){
+			}
+		);
+	},
+	
+	transferOwner : function(form){
+		var userid = form.find('[name="userid"]').val();
+		var transferUserId = form.find('[name="tranfer_owner_id"]').val();
+		
+		var params = {
+				'module': app.getModuleName(),
+				'action' : "SaveAjax",
+				'mode' : 'transferOwner',
+				'transfer_user_id' : transferUserId,
+				'userid' : userid
+			}
+		AppConnector.request(params).then(
+			function(data) {
+				if(data.success){
+					app.hideModalWindow();
+					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.message));
 					var url = data.result.listViewUrl;
 					window.location.href=url;
 				}

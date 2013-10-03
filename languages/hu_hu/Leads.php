@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vevőjelöltek - Egyedi mezők leképezése', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Mező leképezés szerkesztése', 
 	'LBL_WEBFORMS'                 => 'Webes űrlap beállítása'  , 
-	'LBL_LEAD_SOURCE'              => 'Vevőjelölt forrása:'      , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Válassz Kapcsolatot a művelethez', 

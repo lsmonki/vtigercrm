@@ -10,9 +10,12 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="contentsDiv span10 marginLeftZero">
+<div id="toggleButton" class="toggleButton" title="Left Panel Show/Hide"> 
+	<i id="tButtonImage" class="{if $LEFTPANELHIDE neq '1'}icon-chevron-left{else}icon-chevron-right{/if}"></i>
+</div>&nbsp
+<div style="padding-left: 15px;">
 	<input type="hidden" name="module" value="{$MODULE}" />
-	<table style="width:80%;margin-left:auto;margin-right:auto;margin-top: 10px" cellpadding="5" class="searchUIBasic well">
+	<table style=" width:90%;margin-left: 5%" cellpadding="5" class="searchUIBasic well">
 		<tr>
 			<td class="font-x-large" align="left" colspan="2">
 				<strong>{'LBL_IMPORT'|@vtranslate:$MODULE} {$FOR_MODULE|@vtranslate:$MODULE} - {'LBL_RESULT'|@vtranslate:$MODULE}</strong>
@@ -64,5 +67,4 @@
 			</td>
 		</tr>
 	</table>
-</div>
 {/strip}

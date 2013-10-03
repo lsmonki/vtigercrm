@@ -17,6 +17,19 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 	function getModule($request) {
 		return 'Products';
 	}
+	
+	function process (Vtiger_Request $request) {
+		$viewer = $this->getViewer ($request);
+		$companyDetails = Vtiger_CompanyDetails_Model::getInstanceById();
+		$companyLogo = $companyDetails->getLogo();
+
+		$this->initializeListViewContents($request, $viewer);
+
+		$viewer->assign('COMPANY_LOGO',$companyLogo);
+		$moduleName = 'Inventory';
+		$viewer->assign('MODULE_NAME',$moduleName);
+		$viewer->view('Popup.tpl', $moduleName);
+	}
 
 	/*
 	 * Function to initialize the required data in smarty to display the List View Contents
@@ -49,7 +62,7 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 		if(empty($cvId)) {
 			$cvId = '0';
 		}
-		if(empty ($pageNumber)){
+		if(empty ($pageNumber)) {
 			$pageNumber = '1';
 		}
 
@@ -69,35 +82,35 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$listViewModel->set('src_field', $sourceField);
 			$listViewModel->set('src_record', $sourceRecord);
 		}
-		if((!empty($searchKey)) && (!empty($searchValue)))  {
+		if((!empty($searchKey)) && (!empty($searchValue))) {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
 
-		if(!$this->listViewHeaders){
+		if(!$this->listViewHeaders) {
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
-		if(!$this->listViewEntries){
+		if(!$this->listViewEntries) {
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
 		}
-		
+
 		foreach ($this->listViewEntries as $key => $listViewEntry) {
 			$productId = $listViewEntry->getId();
 			$subProducts = $listViewModel->getSubProducts($productId);
-			if($subProducts){
+			if($subProducts) {
 				$listViewEntry->set('subProducts', $subProducts);
 			}
 		}
-		
+
 		$noOfEntries = count($this->listViewEntries);
 
-		if(empty($sortOrder)){
+		if(empty($sortOrder)) {
 			$sortOrder = "ASC";
 		}
-		if($sortOrder == "ASC"){
+		if($sortOrder == "ASC") {
 			$nextSortOrder = "DESC";
 			$sortImage = "downArrowSmall.png";
-		}else{
+		}else {
 			$nextSortOrder = "ASC";
 			$sortImage = "upArrowSmall.png";
 		}
@@ -126,10 +139,26 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
+		
+		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
+			if(!$this->listViewCount){
+				$this->listViewCount = $listViewModel->getListViewCount();
+			}
+			$totalCount = $this->listViewCount;
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('LISTVIEW_COUNT', $totalCount);
+		}
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
-		
+
+		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('GETURL', 'getTaxesURL');
 		$viewer->assign('VIEW', 'ProductsPopup');
 	}

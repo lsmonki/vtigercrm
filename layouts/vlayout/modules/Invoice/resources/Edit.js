@@ -31,7 +31,7 @@ Inventory_Edit_Js("Invoice_Edit_Js",{},{
 		if(sourceFieldElement.attr('name') == 'contact_id') {
 			var form = this.getForm();
 			var parentIdElement  = form.find('[name="account_id"]');
-			if(parentIdElement.val().length > 0) {
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 				var closestContainer = parentIdElement.closest('td');
 				params['related_parent_id'] = parentIdElement.val();
 				params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
@@ -56,7 +56,7 @@ Inventory_Edit_Js("Invoice_Edit_Js",{},{
 		if (params.search_module == 'Contacts') {
 			var form = this.getForm();
 			var parentIdElement  = form.find('[name="account_id"]');
-			if(parentIdElement.val().length > 0) {
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
 				var closestContainer = parentIdElement.closest('td');
 				params.parent_id = parentIdElement.val();
 				params.parent_module = closestContainer.find('[name="popupReferenceModule"]').val();

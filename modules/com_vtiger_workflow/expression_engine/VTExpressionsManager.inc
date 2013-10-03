@@ -41,7 +41,7 @@ class VTExpressionsManager{
 	function expressionFunctions() {
 		return array('concat' => 'concat(a,b)', 'time_diffdays' => 'time_diffdays(a,b)', 'time_diff' => 'time_diff(a,b)',
 			'add_days' => 'add_days(datefield, noofdays)', 'sub_days' => 'sub_days(datefield, noofdays)',
-			'get_date' => "get_date('today')");
+			'today' => "get_date('today')", 'tomorrow' => "get_date('tomorrow')",  'yesterday' => "get_date('yesterday')");
 	}
 }
 

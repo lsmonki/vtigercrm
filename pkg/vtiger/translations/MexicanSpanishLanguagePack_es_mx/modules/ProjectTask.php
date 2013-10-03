@@ -14,4 +14,32 @@ $languageStrings = array(
 	'LBL_PROJECT_TASK_INFORMATION' => 'Información Actividad'      , 
 	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
 	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
+	
+	//Field Labels
+	'Project Task Name' => 'Project Task Name',
+    'Project Task No' => 'Project Task No',
+    'Project Task Number' => 'Project Task Number',
+	'Status' => 'Status',
+	'Priority' => 'Priority',
+    'Progress' => 'Progress',
+    'Type'=>'Type',
+    'Worked Hours'=>'Worked Hours',
+    'Start Date'=>'Start Date',
+    'End Date'=>'End Date',
+    'Related To' => 'Related To',
+    'administrative' => 'administrative',
+    'operative' => 'operative',
+    'other' => 'other',
+    'low' => 'low',
+    'normal' => 'normal',
+    'high' => 'high',
+    'Created Time' => 'Created Time',
+    'Modified Time' => 'Modified Time',
+    'description' => 'Description',
+	'Assigned To' => 'Assigned To',
+	'Open' => 'Open',
+	'In Progress' => 'In Progress',
+	'Completed' => 'Completed',
+	'Deferred' => 'Deferred',
+	'Canceled ' => 'Canceled',
 );

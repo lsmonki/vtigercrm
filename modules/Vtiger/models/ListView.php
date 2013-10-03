@@ -142,6 +142,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$headerFieldModels = array();
 		$headerFields = $listViewContoller->getListViewHeaderFields();
 		foreach($headerFields as $fieldName => $webserviceField) {
+			if($webserviceField && !in_array($webserviceField->getPresence(), array(0,2))) continue;
 			$headerFieldModels[$fieldName] = Vtiger_Field_Model::getInstance($fieldName,$module);
 		}
 		return $headerFieldModels;
@@ -169,6 +170,26 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
+        $orderBy = $this->getForSql('orderby');
+		$sortOrder = $this->getForSql('sortorder');
+
+		//List view will be displayed on recently created/modified records
+		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
+			$orderBy = 'modifiedtime';
+			$sortOrder = 'DESC';
+		}
+
+        if(!empty($orderBy)){
+            $columnFieldMapping = $moduleModel->getColumnFieldMapping();
+            $orderByFieldName = $columnFieldMapping[$orderBy];
+            $orderByFieldModel = $moduleModel->getField($orderByFieldName);
+            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+                //IF it is reference add it in the where fields so that from clause will be having join of the table
+                $queryGenerator = $this->get('query_generator');
+                $queryGenerator->addWhereField($orderByFieldName);
+                //$queryGenerator->whereFields[] = $orderByFieldName;
+            }
+        }
 		$listQuery = $this->getQuery();
 
 		$sourceModule = $this->get('src_module');
@@ -184,17 +205,28 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
 
-		$orderBy = $this->getForSql('orderby');
-		$sortOrder = $this->getForSql('sortorder');
-
-		//List view will be displayed on recently created/modified records
-		if(empty($orderBy) && empty($sortOrder) && $moduleName != "Users"){
-			$orderBy = 'modifiedtime';
-			$sortOrder = 'DESC';
-		}
-
 		if(!empty($orderBy)) {
-			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            if($orderByFieldModel->isReferenceField()){
+                $referenceModules = $orderByFieldModel->getReferenceList();
+                $referenceNameFieldOrderBy = array();
+                foreach($referenceModules as $referenceModuleName) {
+                    $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
+                    $referenceNameFields = $referenceModuleModel->getNameFields();
+                    $columnList = array();
+                    foreach($referenceNameFields as $nameField) {
+                        $fieldModel = $referenceModuleModel->getField($nameField);
+                        $columnList[] = $fieldModel->get('table').$orderByFieldModel->getName().'.'.$fieldModel->get('column');
+                    }
+                    if(count($columnList) > 1) {
+                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users').' '.$sortOrder;
+                    } else {
+                        $referenceNameFieldOrderBy[] = implode('', $columnList).' '.$sortOrder ;
+                    }
+                }
+                $listQuery .= ' ORDER BY '. implode(',',$referenceNameFieldOrderBy);
+            }else{
+                $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            }
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
@@ -247,17 +279,17 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 
 		$sourceModule = $this->get('src_module');
 		if(!empty($sourceModule)) {
-			$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
-			if(method_exists($sourceModuleModel, 'getQueryByModuleField')) {
-				$overrideQuery = $sourceModuleModel->getQueryByModuleField($sourceModule, $this->get('src_field'), $this->get('src_record'), $listQuery);
+			$moduleModel = $this->getModule();
+			if(method_exists($moduleModel, 'getQueryByModuleField')) {
+				$overrideQuery = $moduleModel->getQueryByModuleField($sourceModule, $this->get('src_field'), $this->get('src_record'), $listQuery);
 				if(!empty($overrideQuery)) {
 					$listQuery = $overrideQuery;
 				}
 			}
 		}
-		$position = stripos($listQuery, 'from');
+		$position = stripos($listQuery, ' from ');
 		if ($position) {
-			$split = spliti('from', $listQuery);
+			$split = spliti(' from ', $listQuery);
 			$splitCount = count($split);
 			$listQuery = 'SELECT count(*) AS count ';
 			for ($i=1; $i<$splitCount; $i++) {

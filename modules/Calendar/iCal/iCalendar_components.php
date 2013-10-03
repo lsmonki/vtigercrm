@@ -276,14 +276,39 @@ class iCalendar_component {
 		if($activitytype=='VEVENT'){
 			$activity['activitytype'] = 'Meeting';
 			if(!empty($ical_activity['VALARM'])){
-				$temp = str_replace("PT",'',$ical_activity['VALARM']['TRIGGER']);
-				$duration_type = $temp[strlen($temp)-1];
-				$duration = intval($temp);
-				if($duration_type=='H'){
-					$reminder_time = $duration*60;
-				} else if($duration_type=='M'){
-					$reminder_time = $duration;
-				}
+				$temp = str_replace("P",'',$ical_activity['VALARM']['TRIGGER']);
+                //if there is negative value then ignore it because in vtiger even though its negative or postiview we 
+                //make reminder to be before the event
+                $temp = str_replace("-",'',$temp);
+                $durationTypeCharacters = array('W','D','T','H','M','S');
+                $reminder_time = 0;
+                foreach($durationTypeCharacters as $durationType) {
+                    if(strpos($temp,$durationType) == false){
+                        continue;
+                    }
+                    $parts = explode($durationType, $temp);
+                    $durationValue = $parts[0];
+                    $temp = $parts[1];
+                    $duration_type = $durationType;
+                    $duration = intval($durationValue);
+                    switch($duration_type){
+                        case 'W' : 
+                                    $reminder_time += 24*24*60*$durationValue;
+                                    break;
+                        case 'D' :
+                                    $reminder_time += 24*60*$durationValue;
+                                    break;
+                        case 'T' : 
+                                    //Skip this symbol since its just indicates the start of time component
+                                    break;
+                        case 'H' :
+                                    $reminder_time += $duration*60;
+                                    break;
+                        case 'M' :
+                                    $reminder_time = $duration;
+                                    break;
+                    }
+                }
 				$activity['reminder_time'] = $reminder_time;
 			}
 		} else {

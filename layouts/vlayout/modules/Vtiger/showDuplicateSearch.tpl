@@ -36,6 +36,9 @@
 						</select>
 					</span>
 				</div>
+				<div class="row-fluid">
+					<label><input type="checkbox" name="ignoreEmpty" checked /><span class="alignMiddle">&nbsp;{vtranslate('LBL_IGNORE_EMPTY_VALUES', $MODULE)}</span></label
+				</div>
 			</div>
 		</div>
 		<div class="modal-footer">

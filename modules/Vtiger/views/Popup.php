@@ -66,6 +66,9 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 			'modules.Vtiger.resources.BaseList',
 			"modules.$moduleName.resources.BaseList",
 			'libraries.jquery.jquery_windowmsg',
+			'modules.Vtiger.resources.validator.BaseValidator',
+			'modules.Vtiger.resources.validator.FieldValidator',
+			"modules.$moduleName.resources.validator.FieldValidator"
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
@@ -170,9 +173,79 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
+		
+		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
+			if(!$this->listViewCount){
+				$this->listViewCount = $listViewModel->getListViewCount();
+			}
+			$totalCount = $this->listViewCount;
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('LISTVIEW_COUNT', $totalCount);
+		}
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 	}
+	
+	/**
+	 * Function to get listView count
+	 * @param Vtiger_Request $request
+	 */
+	function getListViewCount(Vtiger_Request $request){
+		$moduleName = $this->getModule($request);
+		$sourceModule = $request->get('src_module');
+		$sourceField = $request->get('src_field');
+		$sourceRecord = $request->get('src_record');
+		$orderBy = $request->get('orderby');
+		$sortOrder = $request->get('sortorder');
 
+		$searchKey = $request->get('search_key');
+		$searchValue = $request->get('search_value');
+
+		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+		if(!empty($sourceModule)) {
+			$listViewModel->set('src_module', $sourceModule);
+			$listViewModel->set('src_field', $sourceField);
+			$listViewModel->set('src_record', $sourceRecord);
+		}
+		
+		if(!empty($orderBy)) {
+			$listViewModel->set('orderby', $orderBy);
+			$listViewModel->set('sortorder', $sortOrder);
+		}
+		if((!empty($searchKey)) && (!empty($searchValue)))  {
+			$listViewModel->set('search_key', $searchKey);
+			$listViewModel->set('search_value', $searchValue);
+		}
+		$count = $listViewModel->getListViewCount();
+
+		return $count;
+	}
+	
+	/**
+	 * Function to get the page count for list
+	 * @return total number of pages
+	 */
+	function getPageCount(Vtiger_Request $request){
+		$listViewCount = $this->getListViewCount($request);
+		$pagingModel = new Vtiger_Paging_Model();
+		$pageLimit = $pagingModel->getPageLimit();
+		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
+
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
+		$result = array();
+		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $listViewCount;
+		$response = new Vtiger_Response();
+		$response->setResult($result);
+		$response->emit();
+	}
 }

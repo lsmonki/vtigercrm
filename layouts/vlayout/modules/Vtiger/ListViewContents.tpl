@@ -11,20 +11,21 @@
 -->*}
 {strip}
 <input type="hidden" id="view" value="{$VIEW}" />
-<input type="hidden" id="listViewEntriesCount" value="{$LISTVIEW_ENTIRES_COUNT}" />
 <input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
 <input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
-<input type="hidden" id="pageNumberValue" value= "{$PAGE_NUMBER}"/>
-<input type="hidden" id="pageLimitValue" value= "{$PAGING_MODEL->getPageLimit()}" />
-<input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
 <input type="hidden" id="alphabetSearchKey" value= "{$MODULE_MODEL->getAlphabetSearchField()}" />
 <input type="hidden" id="Operator" value="{$OPERATOR}" />
 <input type="hidden" id="alphabetValue" value="{$ALPHABET_VALUE}" />
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
+<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
+<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
+<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
 
-{assign var=ALPHABETS value=','|explode:'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'}
+{assign var = ALPHABETS_LABEL value = vtranslate('LBL_ALPHABETS', 'Vtiger')}
+{assign var = ALPHABETS value = ','|explode:$ALPHABETS_LABEL}
+
 <div class="alphabetSorting noprint">
 	<table width="100%" class="table-bordered" style="border: 1px solid #ddd;table-layout: fixed">
 		<tbody>
@@ -33,7 +34,7 @@
 				<td class="alphabetSearch textAlignCenter cursorPointer {if $ALPHABET_VALUE eq $ALPHABET} highlightBackgroundColor {/if}" style="padding : 0px !important"><a id="{$ALPHABET}" href="#">{$ALPHABET}</a></td>
 			{/foreach}
 			</tr>
-		</tbody>	
+		</tbody>
 	</table>
 </div>
 <div id="selectAllMsgDiv" class="alert-block msgDiv noprint">

@@ -14,12 +14,13 @@
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
 <input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
-<input type="hidden" id="pageNumberValue" value= "{$PAGE_NUMBER}"/>
-<input type="hidden" id="pageLimitValue" value= "{$PAGING_MODEL->getPageLimit()}" />
-<input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="pageNumber" value= "{$PAGE_NUMBER}"/>
+<input type="hidden" id="pageLimit" value= "{$PAGING_MODEL->getPageLimit()}" />
+<input type="hidden" id="noOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
 <input type="hidden" id="duplicateSearchFields" value={Zend_Json::encode($DUPLICATE_SEARCH_FIELDS)} />
 <input type="hidden" id="viewName" value="{$VIEW_NAME}" />
 <input type="hidden" id="totalCount" value="{$TOTAL_COUNT}" />
+<input type='hidden' id='ignoreEmpty' value="{$IGNORE_EMPTY}" />
 
 <div id="selectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($MODULE ,$MODULE)}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>
@@ -41,7 +42,7 @@
 				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 				<th nowrap {*if $LISTVIEW_HEADER@last} colspan="2" {/if*}>
-					<a class="listViewHeaderValues">{vtranslate($LISTVIEW_HEADER->get('label', $MODULE))}</a>
+					<a class="listViewHeaderValues">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}</a>
 				</th>
 				{/foreach}
 				<th>{vtranslate('LBL_MERGE_SELECT', $MODULE)}</th>
@@ -74,7 +75,7 @@
 					</td>
 					{if $recordCount eq 0}
 					<td align='center' rowspan="{$groupCount}" style="border-left:1px solid #DDD;border-bottom:1px solid #DDD;vertical-align: middle;text-align: center">
-						<input type="button" value="Merge" name="merge" class="btn" data-group="{$GROUP_NAME}">
+						<input type="button" value="Merge" name="merge" class="btn btn-success" data-group="{$GROUP_NAME}">
 					</td>
 					{/if}
 					{assign var=recordCount value=$recordCount+1}

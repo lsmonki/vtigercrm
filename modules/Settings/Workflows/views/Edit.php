@@ -23,11 +23,18 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 		parent::preProcess($request);
 		$viewer = $this->getViewer($request);
 
+		$recordId = $request->get('record');
+		$viewer->assign('RECORDID', $recordId);
+		if($recordId) {
+			$workflowModel = Settings_Workflows_Record_Model::getInstance($recordId);
+			$viewer->assign('WORKFLOW_MODEL', $workflowModel);
+		}
 		$viewer->assign('RECORD_MODE', $request->getMode());
 		$viewer->view('EditHeader.tpl', $request->getModule(false));
 	}
 
 	public function step1(Vtiger_Request $request) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
@@ -52,7 +59,7 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-
+		$viewer->assign('CURRENT_USER', $currentUser);
 		$viewer->view('Step1.tpl', $qualifiedModuleName);
 	}
 
@@ -126,13 +133,6 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 			$selectedModule = Vtiger_Module_Model::getInstance($selectedModuleName);
 			$workFlowModel = Settings_Workflows_Record_Model::getCleanInstance($selectedModuleName);
 		}
-
-		$requestData = $request->getAll();
-		foreach($requestData as $name=>$value) {
-			$workFlowModel->set($name,$value);
-		}
-
-		$workFlowModel->save();
 
 		$moduleModel = $workFlowModel->getModule();
 		$viewer->assign('TASK_TYPES', Settings_Workflows_TaskType_Model::getAllForModule($moduleModel));

@@ -69,7 +69,29 @@ class Vtiger_SaveAjax_Action extends Vtiger_Save_Action {
 				$recordModel->set($fieldName, $fieldValue);
 			}
 		} else {
-			$recordModel = parent::getRecordModelFromRequest($request);
+			$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+
+			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+			$recordModel->set('mode', '');
+
+			$fieldModelList = $moduleModel->getFields();
+			foreach ($fieldModelList as $fieldName => $fieldModel) {
+				if ($request->has($fieldName)) {
+					$fieldValue = $request->get($fieldName, null);
+				} else {
+					$fieldValue = $fieldModel->getDefaultFieldValue();
+				}
+				$fieldDataType = $fieldModel->getFieldDataType();
+				if ($fieldDataType == 'time') {
+					$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+				}
+				if ($fieldValue !== null) {
+					if (!is_array($fieldValue)) {
+						$fieldValue = trim($fieldValue);
+					}
+					$recordModel->set($fieldName, $fieldValue);
+				}
+			} 
 		}
 
 		return $recordModel;

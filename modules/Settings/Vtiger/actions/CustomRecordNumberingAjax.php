@@ -69,7 +69,7 @@ class Settings_Vtiger_CustomRecordNumberingAjax_Action extends Settings_Vtiger_I
 		if ($result['success']) {
 			$response->setResult(vtranslate('LBL_SUCCESSFULLY_UPDATED', $qualifiedModuleName));
 		} else {
-			$message = vtranslate('LBL_SEQUENCE_NUMBER_MESSAGE', $qualifiedModuleName) .' '. $result['sequenceNumber'];
+			$message = vtranslate('LBL_PREFIX_IN_USE', $qualifiedModuleName);
 			$response->setError($message);
 		}
 		$response->emit();

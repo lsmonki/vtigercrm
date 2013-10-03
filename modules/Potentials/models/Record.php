@@ -12,7 +12,7 @@ class Potentials_Record_Model extends Vtiger_Record_Model {
 
 	function getCreateInvoiceUrl() {
 		$invoiceModuleModel = Vtiger_Module_Model::getInstance('Invoice');
-		return 'index.php?module='.$invoiceModuleModel->getName().'&view='.$invoiceModuleModel->getEditViewName().'&account_id='.$this->get('related_to').'&contact_id='.$this->get('related_to');
+		return 'index.php?module='.$invoiceModuleModel->getName().'&view='.$invoiceModuleModel->getEditViewName().'&account_id='.$this->get('related_to').'&contact_id='.$this->get('contact_id');
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Potentials_Record_Model extends Vtiger_Record_Model {
 	public function getInventoryMappingFields() {
 		return array(
 				array('parentField'=>'related_to', 'inventoryField'=>'account_id', 'defaultValue'=>''),
-				array('parentField'=>'related_to', 'inventoryField'=>'contact_id', 'defaultValue'=>''),
+				array('parentField'=>'contact_id', 'inventoryField'=>'contact_id', 'defaultValue'=>''),
 		);
 	}
 }

@@ -48,6 +48,18 @@ function vtlib_getModuleNameById($tabid) {
 }
 
 /**
+ * Get module names for which sharing access can be controlled.
+ * NOTE: Ignore the standard modules which is already handled.
+ */
+function vtlib_getModuleNameForSharing() {
+	global $adb;
+	$std_modules = array('Calendar','Leads','Accounts','Contacts','Potentials',
+			'HelpDesk','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Events');
+	$modulesList = getSharingModuleList($std_modules);
+	return $modulesList;
+}
+
+/**
  * Cache the module active information for performance
  */
 $__cache_module_activeinfo = Array();
@@ -161,6 +173,88 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 	}
 
 	Vtiger_Module::fireEvent($module, $event_type);
+}
+
+/**
+ * Get list of module with current status which can be controlled.
+ */
+function vtlib_getToggleModuleInfo() {
+	global $adb;
+
+	$modinfo = Array();
+
+	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users','Home') AND presence IN (0,1) ORDER BY name");
+	$num_rows  = $adb->num_rows($sqlresult);
+	for($idx = 0; $idx < $num_rows; ++$idx) {
+		$module = $adb->query_result($sqlresult, $idx, 'name');
+		$presence=$adb->query_result($sqlresult, $idx, 'presence');
+		$customized=$adb->query_result($sqlresult, $idx, 'customized');
+		$isentitytype=$adb->query_result($sqlresult, $idx, 'isentitytype');
+		$hassettings=file_exists("modules/$module/Settings.php");
+
+		$modinfo[$module] = Array( 'customized'=>$customized, 'presence'=>$presence, 'hassettings'=>$hassettings, 'isentitytype' => $isentitytype );
+	}
+	return $modinfo;
+}
+
+/**
+ * Get list of language and its current status.
+ */
+function vtlib_getToggleLanguageInfo() {
+	global $adb;
+
+	// The table might not exists!
+	$old_dieOnError = $adb->dieOnError;
+	$adb->dieOnError = false;
+
+	$langinfo = Array();
+	$sqlresult = $adb->query("SELECT * FROM vtiger_language");
+	if($sqlresult) {
+		for($idx = 0; $idx < $adb->num_rows($sqlresult); ++$idx) {
+			$row = $adb->fetch_array($sqlresult);
+			$langinfo[$row['prefix']] = Array( 'label'=>$row['label'], 'active'=>$row['active'] );
+		}
+	}
+	$adb->dieOnError = $old_dieOnError;
+	return $langinfo;
+}
+
+/**
+ * Toggle the language (enable/disable)
+ */
+function vtlib_toggleLanguageAccess($langprefix, $enable_disable) {
+	global $adb;
+
+	// The table might not exists!
+	$old_dieOnError = $adb->dieOnError;
+	$adb->dieOnError = false;
+
+	if($enable_disable === true) $enable_disable = 1;
+	else if($enable_disable === false) $enable_disable = 0;
+
+	$adb->pquery('UPDATE vtiger_language set active = ? WHERE prefix = ?', Array($enable_disable, $langprefix));
+
+	$adb->dieOnError = $old_dieOnError;
+}
+
+/**
+ * Get help information set for the module fields.
+ */
+function vtlib_getFieldHelpInfo($module) {
+	global $adb;
+	$fieldhelpinfo = Array();
+	if(in_array('helpinfo', $adb->getColumnNames('vtiger_field'))) {
+		$result = $adb->pquery('SELECT fieldname,helpinfo FROM vtiger_field WHERE tabid=?', Array(getTabid($module)));
+		if($result && $adb->num_rows($result)) {
+			while($fieldrow = $adb->fetch_array($result)) {
+				$helpinfo = decode_html($fieldrow['helpinfo']);
+				if(!empty($helpinfo)) {
+					$fieldhelpinfo[$fieldrow['fieldname']] = getTranslatedString($helpinfo, $module);
+				}
+			}
+		}
+	}
+	return $fieldhelpinfo;
 }
 
 /**
@@ -315,6 +409,42 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_index'=> 'projectid',
 				'related_tables'=> Array( 
 					'vtiger_projectcf' => Array('projectid', 'vtiger_project', 'projectid')
+					),
+			),
+            'ProjectMilestone' =>
+            Array(
+                'IsCustomModule'=>false,
+				'table_name' => 'vtiger_projectmilestone',
+				'table_index'=> 'projectmilestoneid',
+				'related_tables'=> Array( 
+					'vtiger_projectmilestonecf' => Array('projectmilestoneid', 'vtiger_projectmilestone', 'projectmilestoneid')
+					),
+            ),
+            'ProjectTask' => 
+            Array(
+                'IsCustomModule'=>false,
+				'table_name' => 'vtiger_projecttask',
+				'table_index'=> 'projecttaskid',
+				'related_tables'=> Array( 
+					'vtiger_projecttaskcf' => Array('projecttaskid', 'vtiger_projecttask', 'projecttaskid')
+					),
+            ),
+			'Services' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_service',
+				'table_index'=> 'serviceid',
+				'related_tables'=> Array( 
+					'vtiger_servicecf' => Array('serviceid')
+					),
+			),
+			'ServiceContracts' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_servicecontracts',
+				'table_index'=> 'servicecontractsid',
+				'related_tables'=> Array( 
+					'vtiger_servicecontractscf' => Array('servicecontractsid')
 					),
 			)
 		);
@@ -523,6 +653,40 @@ function vtlib_purifyForSql($string, $skipEmpty=true) {
 		return $string;
 	}
 	return false;
+}
+
+/**
+ * Process the UI Widget requested
+ * @param Vtiger_Link $widgetLinkInfo
+ * @param Current Smarty Context $context
+ * @return
+ */
+function vtlib_process_widget($widgetLinkInfo, $context = false) {
+	if (preg_match("/^block:\/\/(.*)/", $widgetLinkInfo->linkurl, $matches)) {
+		list($widgetControllerClass, $widgetControllerClassFile) = explode(':', $matches[1]);
+		if (!class_exists($widgetControllerClass)) {
+			checkFileAccessForInclusion($widgetControllerClassFile);
+			include_once $widgetControllerClassFile;
+		}
+		if (class_exists($widgetControllerClass)) {
+			$widgetControllerInstance = new $widgetControllerClass;
+			$widgetInstance = $widgetControllerInstance->getWidget($widgetLinkInfo->linklabel);
+			if ($widgetInstance) {
+				return $widgetInstance->process($context);
+			}
+		}
+	}
+	return "";
+}
+
+function vtlib_module_icon($modulename){
+	if($modulename == 'Events'){
+		return "modules/Calendar/Events.png";
+	}
+	if(file_exists("modules/$modulename/$modulename.png")){
+		return "modules/$modulename/$modulename.png";
+	}
+	return "modules/Vtiger/Vtiger.png";
 }
 
 ?>

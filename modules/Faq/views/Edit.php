@@ -69,7 +69,7 @@ class Faq_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('SOURCE_RECORD', $request->get('sourceRecord'));
 		}
 
-		$viewer->assign('MAX_UPLOAD_LIMIT_MB', vglobal('upload_maxsize')/1000000);
+		$viewer->assign('MAX_UPLOAD_LIMIT_MB', Vtiger_Util_Helper::getMaxUploadSize());
 		$viewer->assign('MAX_UPLOAD_LIMIT', vglobal('upload_maxsize'));
 		$viewer->view('EditView.tpl', $moduleName);
 	}

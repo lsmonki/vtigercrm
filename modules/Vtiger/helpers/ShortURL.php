@@ -26,6 +26,7 @@ class Vtiger_ShortURL_Helper {
 	 */
 	static function generateURL(array $options) {
 		global $site_URL;
+		if (!isset($options['onetime'])) $options['onetime'] = 0;
 		$uid = self::generate($options);
 		return "$site_URL/shorturl.php?id=" . $uid;
 	}
@@ -45,8 +46,8 @@ class Vtiger_ShortURL_Helper {
 			throw new Exception("Invalid options for generate");
 		}
 		
-		$sql = "INSERT INTO vtiger_shorturls(uid, handler_path, handler_class, handler_function, handler_data) VALUES (?,?,?,?,?)";
-		$params = array($uid, $handlerPath, $handlerClass, $handlerFn, json_encode($handlerData));
+		$sql = "INSERT INTO vtiger_shorturls(uid, handler_path, handler_class, handler_function, handler_data, onetime) VALUES (?,?,?,?,?,?)";
+		$params = array($uid, $handlerPath, $handlerClass, $handlerFn, json_encode($handlerData), $options['onetime']);
 		
 		$db->pquery($sql, $params);
 		return $uid;
@@ -67,12 +68,20 @@ class Vtiger_ShortURL_Helper {
 			require_once $handlerPath;
 			
 			$handler = new $handlerClass();
+			
+			// Delete onetime URL
+			if ($record['onetime']) $db->pquery('DELETE FROM vtiger_shorturls WHERE id=?', array($record['id']));
 			call_user_func(array($handler, $handlerFn), $handlerData);
+		} else {
+			echo '<h3>Link you have used is invalid or has expired. .</h3>';
 		}
 	}
 	
+	/**
+	 * Function will send tracker image of 1X1 pixel transparent Image 
+	 */
 	static function sendTrackerImage() {
-		// TODO send 1px x 1px transparent image
-		echo "1 x 1 px transparent image\n";
+		header('Content-Type: image/png');
+		echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
 	}
 }

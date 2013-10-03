@@ -252,6 +252,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 						var attachmentElement = thisInstance.getDocumentAttachmentElement(selectedFileName,id,selectedFileSize);
 						//TODO handle the validation if the size exceeds 5mb before appending.
 						jQuery(attachmentElement).appendTo(jQuery('#attachments'));
+						jQuery('.MultiFile-applied,.MultiFile').addClass('removeNoFileChosen');
 						thisInstance.setDocumentsFileSize(selectedFileSize);
 					}
 				}
@@ -349,6 +350,9 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			currentTarget.closest('.MultiFile-label').remove();
 			thisInstance.removeDocumentsFileSize(fileSize);
 			thisInstance.removeDocumentIds(id);
+			if (jQuery('#attachments').is(':empty')){
+				jQuery('.MultiFile,.MultiFile-applied').removeClass('removeNoFileChosen');
+			}
 		});
 	},
 	
@@ -513,9 +517,15 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			jQuery("#multiFile").MultiFile({
 				list: '#attachments',
 				'afterFileSelect' : function(element, value, master_element){
+					var masterElement = master_element;
+					var newElement = jQuery(masterElement.current);
+					newElement.addClass('removeNoFileChosen');
 					thisInstance.fileAfterSelectHandler(element, value, master_element);
 				},
 				'afterFileRemove' : function(element, value, master_element){
+					if (jQuery('#attachments').is(':empty')){
+						jQuery('.MultiFile,.MultiFile-applied').removeClass('removeNoFileChosen');
+					}
 					thisInstance.removeAttachmentFileSizeByElement(jQuery(element));
 				}
 			});

@@ -23,7 +23,7 @@
 		<h3>{vtranslate('LBL_CREATE_VIEW',$MODULE)}</h3>
 		<hr style='margin:5px 5px 5px 0px;'>
 		<input type="hidden" id="sourceModule" value="{$SOURCE_MODULE}">
-        <input type="hidden" name="date_filters" data-value='{ZEND_JSON::encode($DATE_FILTERS)}' />
+        <input type="hidden" name="date_filters" data-value='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($DATE_FILTERS))}' />
 		<div class="filterBlocksAlignment">
 			<h4 class="filterHeaders">{vtranslate('LBL_BASIC_DETAILS',$MODULE)} :</h4>
 			<div class="row-fluid">

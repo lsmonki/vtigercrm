@@ -36,6 +36,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	 * @param Vtiger_Request $request
 	 */
 	function ExportData(Vtiger_Request $request) {
+		$default_charset = vglobal('default_charset');
 		$db = PearDatabase::getInstance();
 		$moduleName = $request->get('source_module');
 
@@ -62,7 +63,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			foreach($this->moduleFieldInstances as $field) $headers[] = $field->get('label');
 		}
 		$translatedHeaders = array();
-		foreach($headers as $header) $translatedHeaders[] = vtranslate($header, $moduleName);
+		foreach($headers as $header) $translatedHeaders[] = vtranslate(html_entity_decode($header, ENT_QUOTES, $default_charset), $moduleName);
 
 		$entries = array();
 		for($j=0; $j<$db->num_rows($result); $j++) {
@@ -100,8 +101,8 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		
 		if(in_array($moduleName, getInventoryModules())){
 			$query = $this->moduleInstance->getExportQuery($this->focus, $query);
-		} 
-	
+		}
+
 		$this->accessibleFields = $queryGenerator->getFields();
 
 		switch($mode) {
@@ -185,7 +186,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 
 	private $picklistValues;
 	private $fieldArray;
-
+	private $fieldDataTypeCache = array();
 	/**
 	 * this function takes in an array of values for an user and sanitizes it for export
 	 * @param array $arr - the array of values
@@ -218,21 +219,26 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			$value = decode_html($value);
 			$uitype = $fieldInfo->get('uitype');
 			$fieldname = $fieldInfo->get('name');
-			$type = $fieldInfo->getFieldDataType();
+
+			if(!$this->fieldDataTypeCache[$fieldName]) {
+				$this->fieldDataTypeCache[$fieldName] = $fieldInfo->getFieldDataType();
+			}
+			$type = $this->fieldDataTypeCache[$fieldName];
+			
 			if($fieldname != 'hdnTaxType' && ($uitype == 15 || $uitype == 16 || $uitype == 33)){
 				if(empty($this->picklistValues[$fieldname])){
-					$this->picklistValues[$fieldname] = getAssignedPicklistValues($fieldname, $roleid, $db);
+					$this->picklistValues[$fieldname] = $this->fieldArray[$fieldname]->getPicklistValues();
 				}
-				// If the value being exported is accessible to current user 
+				// If the value being exported is accessible to current user
 				// or the picklist is multiselect type.
-				if($uitype == 33 || in_array($value,$this->picklistValues[$fieldname])){
+				if($uitype == 33 || $uitype == 16 || in_array($value,$this->picklistValues[$fieldname])){
 					// NOTE: multipicklist (uitype=33) values will be concatenated with |# delim
 					$value = trim($value);
 				} else {
-					$value = "";
+					$value = '';
 				}
 			} elseif($uitype == 52 || $type == 'owner') {
-				$value = getOwnerName($value);
+				$value = Vtiger_Util_Helper::getOwnerName($value);
 			}elseif($type == 'reference'){
 				$value = trim($value);
 				if(!empty($value)) {

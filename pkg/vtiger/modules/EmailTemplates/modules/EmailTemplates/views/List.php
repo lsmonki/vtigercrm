@@ -184,6 +184,7 @@ class EmailTemplates_List_View extends Vtiger_Index_View {
 
 		$result = array();
 		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $listViewCount;
 		$response = new Vtiger_Response();
 		$response->setResult($result);
 		$response->emit();

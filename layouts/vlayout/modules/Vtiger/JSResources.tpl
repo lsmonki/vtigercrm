@@ -41,7 +41,7 @@
 	<script type="text/javascript" src="resources/Connector.js"></script>
 	<script type="text/javascript" src="resources/ProgressIndicator.js" ></script>
 	<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
-	<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>
+	<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/languages/jquery.validationEngine-{Vtiger_Language_Handler::getShortLanguageName()}.js"></script>
 	<script type="text/javascript" src="libraries/guidersjs/guiders-1.2.6.js"></script>
 	<script type="text/javascript" src="libraries/jquery/datepicker/js/datepicker.js"></script>
 	<script type="text/javascript" src="libraries/jquery/dangrossman-bootstrap-daterangepicker/date.js"></script>

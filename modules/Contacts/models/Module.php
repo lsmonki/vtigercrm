@@ -132,7 +132,7 @@ class Contacts_Module_Model extends Vtiger_Module_Model {
 		} else if ($parentId && $parentModule == 'HelpDesk') {
             $query = "SELECT * FROM vtiger_crmentity
                         INNER JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid
-                        INNER JOIN vtiger_troubletickets ON vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid
+                        INNER JOIN vtiger_troubletickets ON vtiger_troubletickets.contact_id = vtiger_contactdetails.contactid
                         WHERE deleted=0 AND vtiger_troubletickets.ticketid  = $parentId  AND label like '%$searchValue%'";
 
             return $query;

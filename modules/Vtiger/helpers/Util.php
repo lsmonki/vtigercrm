@@ -326,29 +326,86 @@ class Vtiger_Util_Helper {
 	}
 	
 	/**
-	 * Function to check with database has utf-8 support or not.
-	 * @global type $db_type
-	 * @param type $conn
-	 * @return character_set_database and collation_database
+	 * Function to get maximum upload size
+	 * @return <Float> maximum upload size
 	 */
-	function checkDbUTF8Support($conn) {
-		global $db_type;
-		if($db_type == 'pgsql')
-			return true;
-		$dbvarRS = &$conn->Execute("show variables like '%_database' ");
-		$db_character_set = null;
-		$db_collation_type = null;
-		while(!$dbvarRS->EOF) {
-			$arr = $dbvarRS->FetchRow();
-			$arr = array_change_key_case($arr);
-			switch($arr['variable_name']) {
-				case 'character_set_database' : $db_character_set = $arr['value']; break;
-				case 'collation_database'     : $db_collation_type = $arr['value']; break;
-			}
-			// If we have all the required information break the loop.
-			if($db_character_set != null && $db_collation_type != null) break;
-		}
-		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
+	public static function getMaxUploadSize() {
+		return vglobal('upload_maxsize') / (1024 * 1024);
 	}
 
+	/**
+	 * Function to get Owner name for ownerId
+	 * @param <Integer> $ownerId
+	 * @return <String> $ownerName
+	 */
+	public static function getOwnerName($ownerId) {
+		$cache = Vtiger_Cache::getInstance();
+		if ($cache->hasOwnerDbName($ownerId)) {
+			return $cache->getOwnerDbName($ownerId);
+		}
+
+		$ownerModel = Users_Record_Model::getInstanceById($ownerId, 'Users');
+		$userName = $ownerModel->get('user_name');
+        $ownerName = '';
+		if ($userName) {
+			$ownerName = $userName;
+		} else {
+			$ownerModel = Settings_Groups_Record_Model::getInstance($ownerId);
+            if(!empty($ownerModel)) {
+				$ownerName = $ownerModel->getName();
+            }
+		}
+        if(!empty($ownerName)) {
+		$cache->setOwnerDbName($ownerId, $ownerName);
+        }
+		return $ownerName;
+	}
+
+	/**
+	 * Function decodes the utf-8 characters
+	 * @param <String> $string
+	 * @return <String>
+	 */
+	public static function getDecodedValue($string) {
+		return html_entity_decode($string, ENT_COMPAT, 'UTF-8');
+	}
+	
+	public static function getActiveAdminCurrentDateTime() {
+		global $default_timezone;
+		$admin = Users::getActiveAdminUser();
+		$adminTimeZone = $admin->time_zone;
+		@date_default_timezone_set($adminTimeZone);
+		$date = date('Y-m-d H:i:s');
+		@date_default_timezone_set($default_timezone);
+		return $date;
+	}
+/**
+	 * Function to get Creator of this record
+	 * @param <Integer> $recordId
+	 * @return <Integer>
+	 */
+	public static function getCreator($recordId) {
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery('SELECT smcreatorid FROM vtiger_crmentity WHERE crmid = ?', array($recordId));
+		return $db->query_result($result, 0, 'smcreatorid');
+	}
+    
+    /***
+     * Function to get the label of the record
+     * @param <Integer> $recordId - id of the record
+     * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records 
+     */
+    public static function getLabel($recordId , $ignoreDelete=true){
+        $db = PearDatabase::getInstance();
+        $query = 'SELECT label from vtiger_crmentity WHERE crmid=?';
+        if($ignoreDelete) {
+            $query .= ' AND deleted=0';
+        }
+        $result = $db->pquery($query,array($recordId));
+        $name = '';
+        if($db->num_rows($result) > 0) {
+            $name = $db->query_result($result,0,'label');
+        }
+        return $name;
+    }
 }

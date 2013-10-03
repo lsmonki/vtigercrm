@@ -16,10 +16,14 @@
 
 <div class="bodyContents">
 	<div class="mainContainer row-fluid">
-		<div class="span2 row-fluid">
+		{assign var=LEFTPANELHIDE value=$CURRENT_USER_MODEL->get('leftpanelhide')}
+		<div class="span2{if $LEFTPANELHIDE eq '1'} hide {/if} row-fluid" id="leftPanel">
 			{include file="DetailViewSidebar.tpl"|vtemplate_path:$MODULE_NAME}
 		</div>
-		<div class="contentsDiv span10 marginLeftZero">
-			{include file="DetailViewHeader.tpl"|vtemplate_path:$MODULE_NAME}
+		<div class="contentsDiv {if $LEFTPANELHIDE neq '1'} span10 {/if}marginLeftZero" id="rightPanel">
+			<div id="toggleButton" class="toggleButton" title="Left Panel Show/Hide"> 
+				<i id="tButtonImage" class="{if $LEFTPANELHIDE neq '1'}icon-chevron-left{else}icon-chevron-right{/if}"></i>
+			</div>
+				{include file="DetailViewHeader.tpl"|vtemplate_path:$MODULE_NAME}
 
 {/strip}

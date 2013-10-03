@@ -103,6 +103,11 @@ Class Inventory_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('SOURCE_MODULE', $sourceModule);
 			$viewer->assign('SOURCE_RECORD', $sourceRecord);
 		}
+		if(!empty($record)  && $request->get('isDuplicate') == true) {
+			$viewer->assign('IS_DUPLICATE',true);
+		} else {
+			$viewer->assign('IS_DUPLICATE',false);
+		}
 		$currencies = Inventory_Module_Model::getAllCurrencies();
 		$picklistDependencyDatasource = Vtiger_DependencyPicklist::getPicklistDependencyDatasource($moduleName);
 

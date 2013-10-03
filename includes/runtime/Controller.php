@@ -124,12 +124,14 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 	}
 
 	function preProcess(Vtiger_Request $request, $display=true) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
 		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
 		$viewer->assign('SKIN_PATH', Vtiger_Theme::getCurrentUserThemePath());
 		$viewer->assign('LANGUAGE_STRINGS', $this->getJSLanguageStrings($request));
+		$viewer->assign('LANGUAGE', $currentUser->get('language'));
 		if($display) {
 			$this->preProcessDisplay($request);
 		}
@@ -224,12 +226,9 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 					$filePath = str_replace('.','/', $cssFileName) . '.'.$fileExtension;
 					$filePath = Vtiger_Theme::getStylePath($filePath);
 				}
-			} else {
-				$filePath = str_replace('.','/', $cssFileName) . '.'.$fileExtension;
-				$filePath =  'layouts/' . Vtiger_Viewer::getLayoutName() . '/'.$filePath;
+				$cssScriptModel = new Vtiger_CssScript_Model();
+				$cssStyleInstances[] = $cssScriptModel->set('href', $filePath);
 			}
-			$cssScriptModel = new Vtiger_CssScript_Model();
-			$cssStyleInstances[] = $cssScriptModel->set('href', $filePath);
 		}
 		return $cssStyleInstances;
 	}

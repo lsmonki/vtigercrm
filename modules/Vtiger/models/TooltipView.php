@@ -36,7 +36,12 @@ class Vtiger_TooltipView_Model extends Vtiger_DetailRecordStructure_Model {
 	public function getFields() {
 		return $this->fields;
 	}
-	
+
+	/**
+	 * Function to load record
+	 * @param <Number> $recordId
+	 * @return <Vtiger_Record_Model>
+	 */
 	protected function loadRecord($recordId) {
 		$moduleName = $this->module->getName();
 		
@@ -57,13 +62,14 @@ class Vtiger_TooltipView_Model extends Vtiger_DetailRecordStructure_Model {
 		// Retrieves only required fields of the record with permission check.
 		try {
 			$data = array_shift(vtws_query($q, Users_Record_Model::getCurrentUserModel()));
-			
-			// De-transform the webservice ID to CRM ID.
-			foreach ($data as $key => $value) {
-				if (in_array($key, $referenceFields)) {
-					$value = array_pop(explode('x', $value));
+			if ($data) {
+				// De-transform the webservice ID to CRM ID.
+				foreach ($data as $key => $value) {
+					if (in_array($key, $referenceFields)) {
+						$value = array_pop(explode('x', $value));
+					}
+					$data[$key] = $value;
 				}
-				$data[$key] = $value;
 			}
 			
 			$this->record = Vtiger_Record_Model::getCleanInstance($moduleName);

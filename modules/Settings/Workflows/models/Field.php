@@ -70,7 +70,10 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'does not equal' => 'does not equal',
 			'less than or equal to' => 'less than or equal to',
 			'greater than or equal to' => 'greater than or equal to',
-			'has changed' => 'has changed'
+			'has changed' => 'has changed',
+			'before' => 'before',
+			'after' => 'after',
+			'between' => 'between',
 		);
 	}
 
@@ -91,12 +94,14 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'currency' => array('equal to', 'less than', 'greater than', 'does not equal', 'less than or equal to', 'greater than or equal to', 'has changed'),
 			'picklist' => array('is', 'is not', 'has changed'),
 			'multipicklist' => array('is', 'is not', 'has changed'),
-			'datetime' => array('is', 'is not', 'has changed'),
+			'datetime' => array('is', 'is not', 'has changed','less than hours before', 'less than hours later', 'more than hours before', 'more than hours later'),
 			'time' => array('is', 'is not', 'has changed'),
-			'date' => array('is', 'is not', 'has changed'),
+			'date' => array('is', 'is not', 'has changed', 'between', 'before', 'after', 'is today', 'less than days ago', 'more than days ago', 'in less than', 'in more than',
+							'days ago', 'days later'),
 			'boolean' => array('is', 'is not', 'has changed'),
 			'reference' => array('has changed'),
-			'owner' => array('has changed')
+			'owner' => array('has changed'),
+			'recurrence' => array('is', 'is not', 'has changed')
 		);
 	}
 }

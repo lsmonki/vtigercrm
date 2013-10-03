@@ -218,7 +218,17 @@ $languageStrings = array(
     'LBL_LAST_SCAN_TIMED_OUT' => 'Tiempo agotado en última revisión',
     'LBL_LAST_SCAN_AT' => 'Ultima revisión @ ',
     'LBL_TIME_TAKEN' => ' tiempo invertido ',
-    'LBL_SHORT_SECONDS' => 'seg'
+    'LBL_SHORT_SECONDS' => 'seg',
+	
+	//User Login History
+	'LoginHistory' => 'User Login History',
+	'LBL_LOGIN_HISTORY_DETAILS' => 'Login History',
+	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
+	'LBL_USER_NAME'=> 'User Name',
+	'LBL_USER_IP_ADDRESS'=> 'User IP Address', 
+	'LBL_LOGIN_TIME' => 'Sign-in Time',
+	'LBL_LOGGED_OUT_TIME' => 'Sign-out Time', 
+	'LBL_STATUS' => 'Status'
 );
 
 $jsLanguageStrings = array(

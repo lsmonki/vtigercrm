@@ -9,9 +9,37 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ProjectTask'           => 'Projekt Feladat'             , 
-	'LBL_ADD_RECORD'               => 'Projekt Feladat hozzáadása'  , 
-	'LBL_RECORDS_LIST'             => 'Projekt Feladatok listája'   , 
+	'LBL_ADD_RECORD'               => 'Projekt Feladat hozzÃ¡adÃ¡sa'  , 
+	'LBL_RECORDS_LIST'             => 'Projekt Feladatok listÃ¡ja'   , 
 	'LBL_PROJECT_TASK_INFORMATION' => 'Projekt Feladat adatai'      , 
 	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
 	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
+	
+	//Field Labels
+	'Project Task Name' => 'Project Task Name',
+    'Project Task No' => 'Project Task No',
+    'Project Task Number' => 'Project Task Number',
+	'Status' => 'Status',
+	'Priority' => 'Priority',
+    'Progress' => 'Progress',
+    'Type'=>'Type',
+    'Worked Hours'=>'Worked Hours',
+    'Start Date'=>'Start Date',
+    'End Date'=>'End Date',
+    'Related To' => 'Related To',
+    'administrative' => 'administrative',
+    'operative' => 'operative',
+    'other' => 'other',
+    'low' => 'low',
+    'normal' => 'normal',
+    'high' => 'high',
+    'Created Time' => 'Created Time',
+    'Modified Time' => 'Modified Time',
+    'description' => 'Description',
+	'Assigned To' => 'Assigned To',
+	'Open' => 'Open',
+	'In Progress' => 'In Progress',
+	'Completed' => 'Completed',
+	'Deferred' => 'Deferred',
+	'Canceled ' => 'Canceled',
 );

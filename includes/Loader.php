@@ -180,7 +180,7 @@ class Vtiger_Loader {
 			$fileName = $parts[$noOfParts-2];
 			$fileComponentName = strtolower($parts[$noOfParts-1]).'s';
 			$filePath .= $fileComponentName. '.' .$fileName;
-			return Vtiger_Loader::includeOnce($filePath);
+            return Vtiger_Loader::includeOnce($filePath);
 		}
 		return false;
 	}

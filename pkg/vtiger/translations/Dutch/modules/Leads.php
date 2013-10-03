@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Leads Maatwerk Veldmapping'  , 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Bewerk Veld Mapping'         , 
 	'LBL_WEBFORMS'                 => 'Configureer Webformulieren'  , 
-	'LBL_LEAD_SOURCE'              => 'Lead bron:'                  , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecteer Contacten om verder te gaan', 

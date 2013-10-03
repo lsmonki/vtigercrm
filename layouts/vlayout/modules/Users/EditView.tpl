@@ -26,9 +26,9 @@
 		{assign var=SINGLE_MODULE_NAME value='Single_'|cat:$MODULE}
 			<span class="span8">
 		{if $RECORD_ID neq ''}
-			<span class="span8 font-x-x-large" title='{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"'>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</span>
+			<h3 class="span8 marginLeftZero" title='{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"'>{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} "{$RECORD_STRUCTURE_MODEL->getRecordName()}"</h3>
 		{else}
-			<span class="span8 font-x-x-large" title="{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
+			<h3 class="span8 marginLeftZero" title="{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</h3>
 		{/if}
 			</span>
 			<span class="span4">
@@ -57,7 +57,7 @@
 				</span>
 			</span>
 		</div>
-		<div style='padding:10px'>
+		<div>
 			{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$RECORD_STRUCTURE}
 				<table class="table table-bordered marginLeftZero">
 				{if $BLOCK_FIELDS|@count gt 0}
@@ -100,6 +100,7 @@
 				</tr>
 				{/if}
 				</table>
+                                <br>
 			{/foreach}
 
 			{* tag cloud starts *}
@@ -110,10 +111,11 @@
 				<tr>
 					<td class="fieldLabel">{vtranslate('LBL_TAG_CLOUD', $MODULE)}</td>
 					<td class="fieldValue">
-						<input type="checkbox" name="tagcloudview" {if $TAG_CLOUD} checked {/if} />
-					</td><td></td><td></td><td></td>
+						<label><input type="checkbox" name="tagcloudview" {if $TAG_CLOUD} checked {/if} /></label>
+					</td><td></td><td></td>
 				</tr>
 			</table>
+                        <br>
 			{* tag cloud ends *}
 
 			<div class='pull-right'>

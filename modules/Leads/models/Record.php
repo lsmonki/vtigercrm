@@ -158,7 +158,8 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 
             $complusoryFields = array('amount');
 			foreach($fieldModels as $fieldName => $fieldModel) {
-				if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id' && $fieldName != 'related_to') {
+				if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id' && $fieldName != 'related_to'
+						&& $fieldName != 'contact_id') {
                     $keyIndex = array_search($fieldName,$complusoryFields);
                     if($keyIndex !== false) {
                         unset($complusoryFields[$keyIndex]);
@@ -195,19 +196,19 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 
 			$result = $db->pquery('SELECT * FROM vtiger_convertleadmapping', array());
 			$numOfRows = $db->num_rows($result);
-			
+
 			$accountInstance = Vtiger_Module_Model::getInstance('Accounts');
 			$accountFieldInstances = $accountInstance->getFieldsById();
-			
+
 			$contactInstance = Vtiger_Module_Model::getInstance('Contacts');
 			$contactFieldInstances = $contactInstance->getFieldsById();
-			
+
 			$potentialInstance = Vtiger_Module_Model::getInstance('Potentials');
 			$potentialFieldInstances = $potentialInstance->getFieldsById();
-			
+
 			$leadInstance = Vtiger_Module_Model::getInstance('Leads');
 			$leadFieldInstances = $leadInstance->getFieldsById();
-			
+
 			for($i=0; $i<$numOfRows; $i++) {
 				$row = $db->query_result_rowdata($result,$i);
 				if(empty($row['leadfid'])) continue;

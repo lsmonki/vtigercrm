@@ -98,6 +98,78 @@ jQuery.Class("Vtiger_Detail_Js",{
 			}
 		});
     },
+	
+	triggerTransferOwnership : function(massActionUrl){
+		var thisInstance = this;
+		thisInstance.getRelatedModulesContainer = false;
+		var actionParams = {
+			"type":"POST",
+			"url":massActionUrl,
+			"dataType":"html",
+			"data" : {}
+		};
+		AppConnector.request(actionParams).then(
+			function(data) {
+				if(data) {
+					var callback = function(data) {
+						var params = app.validationEngineOptions;
+						params.onValidationComplete = function(form, valid){
+							if(valid){
+								thisInstance.transferOwnershipSave(form)
+							}
+							return false;
+						}
+						jQuery('#changeOwner').validationEngine(app.validationEngineOptions);
+					}
+					app.showModalWindow(data, function(data){
+						var selectElement = thisInstance.getRelatedModuleContainer();
+						app.changeSelectElementView(selectElement, 'select2');
+						if(typeof callback == 'function'){
+							callback(data);
+						}
+					});
+				}
+			}
+		);
+	},
+	
+	transferOwnershipSave : function (form){
+		var thisInstance = this;
+		var transferOwner = jQuery('#transferOwnerId').val();
+		var relatedModules = jQuery('#related_modules').val();
+		var recordId = jQuery('#recordId').val();
+		var params = {
+			'module': app.getModuleName(),
+			'action' : 'TransferOwnership',
+			'record':recordId,
+			'transferOwnerId' : transferOwner,
+			'related_modules' : relatedModules
+		}
+		AppConnector.request(params).then(
+			function(data) {
+				if(data.success){
+					app.hideModalWindow();
+					var params = {
+						title : app.vtranslate('JS_MESSAGE'),
+						text: app.vtranslate('JS_RECORDS_TRANSFERRED_SUCCESSFULLY'),
+						animation: 'show',
+						type: 'info'
+					};
+					Vtiger_Helper_Js.showPnotify(params);
+				}
+			}
+		);
+	},
+	
+	/*
+	 * Function to get the related module container 
+	 */
+	getRelatedModuleContainer  : function(){
+		if(this.getRelatedModulesContainer == false){
+			this.getRelatedModulesContainer = jQuery('#related_modules'); 
+		}
+		return this.getRelatedModulesContainer;
+	},
 
 	/*
 	 * function to trigger delete record action
@@ -228,6 +300,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 				app.registerEventForTextAreaFields(jQuery(".commentcontent"));
 				jQuery('.commentcontent').autosize();
 				thisInstance.getForm().validationEngine();
+				jQuery('.pageNumbers',detailContentsHolder).tooltip();
 				aDeferred.resolve(responseData);
 			},
 			function(){
@@ -392,12 +465,6 @@ jQuery.Class("Vtiger_Detail_Js",{
 		}
 		if(commentMode == "edit"){
 			var editCommentReason = closestCommentBlock.find('[name="reasonToEdit"]').val();
-			if(editCommentReason == ""){
-				errorMsg = app.vtranslate('JS_REASON_TO_EDIT_COMMENT_CANT_BE_EMPTY')
-				commentContent.validationEngine('showPrompt', errorMsg , 'error','bottomLeft',true);
-				aDeferred.reject();
-				return aDeferred.promise();
-			}
 		}
 
 		var progressIndicatorElement = jQuery.progressIndicator({});
@@ -609,6 +676,8 @@ jQuery.Class("Vtiger_Detail_Js",{
 	registerRelatedRowClickEvent: function(){
 		var detailContentsHolder = this.getContentHolder();
 		detailContentsHolder.on('click','.listViewEntries',function(e){
+            var targetElement = jQuery(e.target, jQuery(e.currentTarget));
+            if(targetElement.is('td:first-child') && (targetElement.children('input[type="checkbox"]').length > 0)) return;
 			if(jQuery(e.target).is('input[type="checkbox"]')) return;
 			var elem = jQuery(e.currentTarget);
 			var recordUrl = elem.data('recordurl');
@@ -675,7 +744,6 @@ jQuery.Class("Vtiger_Detail_Js",{
 		});
 		
 		detailContentsHolder.on('click', 'button.selectRelation', function(e){
-			var selectButton = jQuery(e.currentTarget);
 			var selectedTabElement = thisInstance.getSelectedTab();
 			var relatedModuleName = thisInstance.getRelatedModuleName();
 			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
@@ -1487,7 +1555,36 @@ jQuery.Class("Vtiger_Detail_Js",{
 		});
 		return aDeferred.promise();
 	},
-
+	
+	/**
+	 * Function to show total records count in listview on hover
+	 * of pageNumber text
+	 */
+	registerEventForTotalRecordsCount : function(){
+		var thisInstance = this;
+		var detailContentsHolder = this.getContentHolder();
+		detailContentsHolder.on('hover','.pageNumbers',function(e){
+			var element = jQuery(e.currentTarget);
+			var totalNumberOfRecords;
+			var totalRecordsElement = jQuery('#totalCount');
+			totalNumberOfRecords = totalRecordsElement.val();
+			if(totalNumberOfRecords == '') {
+				var selectedTabElement = thisInstance.getSelectedTab();
+				var relatedModuleName = thisInstance.getRelatedModuleName();
+				var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
+				relatedController.totalRecordsCount().then(function(numberOfRecords){
+					totalRecordsElement.val(numberOfRecords);
+				});
+			}
+			if(totalNumberOfRecords != ''){
+				var titleWithRecords = app.vtranslate("JS_TOTAL_RECORDS")+" "+totalNumberOfRecords;
+				element.data('tooltip').options.title = titleWithRecords;
+			} else {
+				element.data('tooltip').options.title = "";
+			}
+		})
+	},
+	
 	registerEvents : function(){
 		var thisInstance = this;
 		thisInstance.triggerDisplayTypeEvent();
@@ -1506,7 +1603,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		this.registerEventForRelatedTabClick();
 		Vtiger_Helper_Js.showHorizontalTopScrollBar();
 		this.registerUrlFieldClickEvent();
-
+		
 		var detailViewContainer = jQuery('div.detailViewContainer');
 		if(detailViewContainer.length <= 0) {
 			// Not detail view page
@@ -1721,5 +1818,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		thisInstance.loadWidgets();
 
 		app.registerEventForTextAreaFields(jQuery('.commentcontent'));
+		this.registerEventForTotalRecordsCount();
+		jQuery('.pageNumbers',detailContentsHolder).tooltip();
 	}
 });

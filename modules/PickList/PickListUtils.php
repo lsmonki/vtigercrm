@@ -182,20 +182,19 @@ function getNonEditablePicklistValues($fieldName, $lang=array(), $adb){
  */
 function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 	$cache = Vtiger_Cache::getInstance();
-	if($cache->getAssignedPicklistValues($tableName,$roleid)){
+	if($cache->hasAssignedPicklistValues($tableName,$roleid)) {
 		return $cache->getAssignedPicklistValues($tableName,$roleid);
 	} else {
 	$arr = array();
-
-	$sub = getSubordinateRoleAndUsers($roleid);
-	$subRoles = array($roleid);
-	$subRoles = array_merge($subRoles, array_keys($sub));
-
+	
 	$sql = "select picklistid from vtiger_picklist where name = ?";
 	$result = $adb->pquery($sql, array($tableName));
 	if($adb->num_rows($result)){
 		$picklistid = $adb->query_result($result, 0, "picklistid");
 
+		$sub = getSubordinateRoleAndUsers($roleid);
+		$subRoles = array($roleid);
+		$subRoles = array_merge($subRoles, array_keys($sub));
 
 		$roleids = array();
 		foreach($subRoles as $role){

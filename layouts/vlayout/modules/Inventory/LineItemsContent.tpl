@@ -68,7 +68,7 @@
 			{/if}
 		</div>
 		<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" class="subProductIds" />
-		<div id="{$subprod_names}" name="{$subprod_names}" class="subInformation"><span class="subProductsContainer"></span>{$data.$subprod_names}</div>
+		<div id="{$subprod_names}" name="{$subprod_names}" class="subInformation"><span class="subProductsContainer">{$data.$subprod_names}</span></div>
 		{if $data.$productDeleted}
 			<div class="row-fluid deletedItem redColor">
 				{if empty($data.$productName)}

@@ -47,6 +47,7 @@ $languageStrings = array(
 	'Dr.'                          => 'Dr.'                         , 
 	'Prof.'                        => 'Prof.'                       , 
 	'User List'                    => 'Kullanıcı Listesi'         , 
+	'Contact Id' => 'İlgili Kişi Id',
 );
 $jsLanguageStrings = array(
 	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review

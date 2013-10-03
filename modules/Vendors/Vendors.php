@@ -125,7 +125,8 @@ class Vendors extends CRMEntity {
 					vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendor.vendorname
 			  		FROM vtiger_products
 			  		INNER JOIN vtiger_vendor ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			  		INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
+			  		INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid INNER JOIN vtiger_productcf
+				    ON vtiger_products.productid = vtiger_productcf.productid 
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_groups

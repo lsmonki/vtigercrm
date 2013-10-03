@@ -39,6 +39,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 				var element = form.find('.dependencyMapping');
 				app.showHorizontalScrollBar(element);
 				instance.registerDependencyGraphEvents();
+				instance.registerSubmitEvent();
 			}
 		);
 	},
@@ -316,6 +317,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 		thisInstance.registerCancelAddView(form);
 		thisInstance.getModuleDependencyGraph(form);
 		thisInstance.registerPicklistFieldsChangeEvent(form);
+		thisInstance.registerSubmitEvent();
 	},
 	
 	/**
@@ -328,17 +330,6 @@ jQuery.Class('Settings_PickListDependency_Js', {
 		form.find('.cancelAddView').addClass('hide');
 		thisInstance.registerTargetFieldsClickEvent(dependencyGraph);
 		thisInstance.registerSelectSourceValuesClick(dependencyGraph);
-		
-		form.submit(function(e) {
-			e.preventDefault();
-            try{
-                thisInstance.updateValueMapping(dependencyGraph);
-            }catch(e) {
-                bootbox.alert(e.message);
-                return;
-            }
-			thisInstance.savePickListDependency(form);
-		})
 		thisInstance.registerCancelDependency(form);
 	},
 	
@@ -399,16 +390,16 @@ jQuery.Class('Settings_PickListDependency_Js', {
 			} else {
 				encodedSourceValue = sourceValuesArray[key];
 			}
-			var selectedTargetValues = dependencyTable.find('td[class*="'+encodedSourceValue+'"]').filter('.selectedCell');
-            if(selectedTargetValues.length <= 0) {
-                var translatedSourcePickListValue = dependencyTable.find('th[class*="'+encodedSourceValue+'"]').text();
-                throw new RangeError(app.vtranslate('JS_DEPENDENCY_ATLEAST_ONE_VALUE')+ ' ' +translatedSourcePickListValue);
-            }
+			var selectedTargetValues = dependencyTable.find('td[data-source-value="'+encodedSourceValue+'"]').filter('.selectedCell');
 			var targetValues = [];
-			jQuery.each(selectedTargetValues, function(index, element) {
-				targetValues.push(jQuery(element).data('targetValue'));
-			})
-			thisInstance.valueMapping.push({'sourcevalue' : sourceValuesArray[key], 'targetvalues' : targetValues})
+			if(selectedTargetValues.length > 0) {
+				jQuery.each(selectedTargetValues, function(index, element) {
+					targetValues.push(jQuery(element).data('targetValue'));
+				});
+			} else {
+				targetValues.push('');
+			}
+			thisInstance.valueMapping.push({'sourcevalue' : sourceValuesArray[key], 'targetvalues' : targetValues});
 		}
 	},
 	
@@ -467,7 +458,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 			} else {
 				encodedSourcePickListValue = allSourcePickListValues[key];
 			}
-			var mappingCells = dependencyTable.find('[class*="'+encodedSourcePickListValue+'"]');
+			var mappingCells = dependencyTable.find('[data-source-value="'+encodedSourcePickListValue+'"]');
 			if(jQuery.inArray(allSourcePickListValues[key], thisInstance.selectedSourceValues) == -1) {
 				mappingCells.hide();
 			} else {
@@ -564,6 +555,25 @@ jQuery.Class('Settings_PickListDependency_Js', {
 	},
 	
 	/**
+	 * register the form submit event
+	 */
+	registerSubmitEvent : function() {
+		var thisInstance = this;
+		var form = jQuery('#pickListDependencyForm');
+		var dependencyGraph = jQuery('#dependencyGraph');
+		form.submit(function(e) {
+			e.preventDefault();
+			try{
+				thisInstance.updateValueMapping(dependencyGraph);
+			}catch(e) {
+				bootbox.alert(e.message);
+				return;
+			}
+			thisInstance.savePickListDependency(form);
+		});
+	},
+	
+	/**
 	 * register events for picklist dependency
 	 */
 	registerEvents : function() {
@@ -575,6 +585,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 			if(form.find('.editDependency').val() == "true") {
 				form.find('[name="sourceModule"],[name="sourceField"],[name="targetField"]').select2('disable');
 				thisInstance.registerDependencyGraphEvents();
+				thisInstance.registerSubmitEvent();
 			} else {
 				thisInstance.registerAddViewEvents();
 			}

@@ -18,7 +18,7 @@ class Inventory_ListView_Model extends Vtiger_ListView_Model {
 	 *	@RETURN array of advanced links
 	 */
 	public function getAdvancedLinks(){
-		return array();
+		return parent::getAdvancedLinks();
 	}
 
 	/**

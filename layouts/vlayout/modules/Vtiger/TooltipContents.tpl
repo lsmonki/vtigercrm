@@ -15,7 +15,7 @@
 		{foreach item=FIELD_MODEL key=FIELD_NAME from=$RECORD_STRUCTURE['TOOLTIP_FIELDS']}
 			<tr>
 				<td class="fieldLabel narrowWidthType" nowrap>
-					<label class="muted marginRight10px">{vtranslate({$FIELD_MODEL->get('label')},{$MODULE_NAME})}</label>
+					<label class="muted marginRight10px">{vtranslate($FIELD_MODEL->get('label'),$MODULE)}</label>
 				</td>
 				<td class="fieldValue narrowWidthType">
 					<span class="value">

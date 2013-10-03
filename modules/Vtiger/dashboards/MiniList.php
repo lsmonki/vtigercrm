@@ -30,7 +30,8 @@ class Vtiger_MiniList_Dashboard extends Vtiger_IndexAjax_View {
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('MINILIST_WIDGET_MODEL', $minilistWidgetModel);
-		
+		$viewer->assign('BASE_MODULE', $minilistWidgetModel->getTargetModule());
+
 		$content = $request->get('content');
 		if(!empty($content)) {
 			$viewer->view('dashboards/MiniListContents.tpl', $moduleName);

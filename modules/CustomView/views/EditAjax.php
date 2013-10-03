@@ -31,8 +31,14 @@ Class CustomView_EditAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('ADVANCE_CRITERIA', $customViewModel->transformToNewAdvancedFilter());
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
 		$viewer->assign('DATE_FILTERS', Vtiger_Field_Model::getDateFilterTypes());
+		
+		if($moduleName == 'Calendar'){
+			$advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
+		} else{
+			$advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
+		}
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
         $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
         foreach($dateFilters as $comparatorKey => $comparatorInfo) {
             $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);
@@ -51,6 +57,7 @@ Class CustomView_EditAjax_View extends Vtiger_IndexAjax_View {
         $viewer->assign('CV_PRIVATE_VALUE', CustomView_Record_Model::CV_STATUS_PRIVATE);
 		$viewer->assign('CV_PENDING_VALUE', CustomView_Record_Model::CV_STATUS_PENDING);
         $viewer->assign('CV_PUBLIC_VALUE', CustomView_Record_Model::CV_STATUS_PUBLIC);
+		$viewer->assign('MODULE_MODEL',$moduleModel);
 
 		echo $viewer->view('EditView.tpl', $module, true);
 	}

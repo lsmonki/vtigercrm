@@ -77,10 +77,7 @@
 			$data = $adb->raw_query_result_rowdata($result, 0);
 			$task = $data["task"];
 			$task = $this->unserializeTask($task);
-			$timeFieldList = $task->getTimeFieldList();
-			foreach ($timeFieldList as $field) {
-				//$task->$field = $task->formatTimeForTimePicker($task->$field);
-			}
+			
 			return $task;
 		}
 
@@ -162,6 +159,14 @@
 			return array();
 		}
 
+		public function getContents($entity) {
+			return $this->contents;
+		}
+
+		public function setContents($contents) {
+			$this->contents = $contents;
+		}
+
 		public function formatTimeForTimePicker($time) {
 			list($h, $m, $s) = explode(':', $time);
 			$mn = str_pad($m - $m % 15, 2, 0, STR_PAD_LEFT);
@@ -174,6 +179,7 @@
 				'Current Date' => '(general : (__VtigerMeta__) date)',
 				'Current Time' => '(general : (__VtigerMeta__) time)',
 				'System Timezone' => '(general : (__VtigerMeta__) dbtimezone)',
+				'User Timezone' => '(general : (__VtigerMeta__) usertimezone)',
 				'CRM Detail View URL' => '(general : (__VtigerMeta__) crmdetailviewurl)',
 				'Portal Detail View URL' => '(general : (__VtigerMeta__) portaldetailviewurl)',
 				'Site Url' => '(general : (__VtigerMeta__) siteurl)',
@@ -207,18 +213,31 @@ class VTTaskType {
 
 	public static function registerTaskType($taskType) {
 		$adb = PearDatabase::getInstance();
+		if (!Vtiger_Utils::CheckTable('com_vtiger_workflow_tasktypes')) {
+			Vtiger_Utils::CreateTable(
+					'com_vtiger_workflow_tasktypes',
+					"(id int(11) NOTNULL,
+						tasktypename varchar(255) NOTNULL,
+						label varchar(255),
+						classname varchar(255),
+						classpath varchar(255),
+						templatepath varchar(255),
+						modules text(500),
+						sourcemodule varchar(255)) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+					true);
+		}
 		$modules = Zend_Json::encode($taskType['modules']);
 
 		$taskTypeId = $adb->getUniqueID("com_vtiger_workflow_tasktypes");
 		$taskType['id'] = $taskTypeId;
 
-		$taskResult = $adb->pquery('SELECT 1 FROM com_vtiger_workflow_tasktypes WHERE tasktypename = ?', array($taskType['name']));
-		if($adb->num_rows($taskResult) === 0) {
-			$adb->pquery("INSERT INTO com_vtiger_workflow_tasktypes (id, tasktypename, label, classname, classpath,
-				templatepath, modules, sourcemodule) values (?,?,?,?,?,?,?,?)",
-					array($taskTypeId, $taskType['name'], $taskType['label'], $taskType['classname'],  $taskType['classpath'],
-					$taskType['templatepath'], $modules, $taskType['sourcemodule']));
-		}
+		$adb->pquery("INSERT INTO com_vtiger_workflow_tasktypes
+									(id, tasktypename, label, classname, classpath, templatepath, modules, sourcemodule)
+									values (?,?,?,?,?,?,?,?)",
+				array($taskTypeId, $taskType['name'], $taskType['label'], $taskType['classname'],  $taskType['classpath'], $taskType['templatepath'], $modules, $taskType['sourcemodule']));
+
+
+
 	}
 
 	public static function getAll($moduleName='') {

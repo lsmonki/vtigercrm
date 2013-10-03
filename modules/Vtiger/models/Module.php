@@ -47,18 +47,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	public function isQuickCreateSupported() {
 		return $this->isEntityModule();
 	}
-
+	
 	/**
-	 * Function to check whether the module is supported for summary view or not
+	 * Function to check whether the module is summary view supported
 	 * @return <Boolean> - true/false
 	 */
 	public function isSummaryViewSupported() {
-		$moduleName = $this->get('name');
-		$supportedModules = array('Accounts', 'Contacts', 'Potentials', 'HelpDesk', 'Project', 'Leads');
-		if(in_array($moduleName, $supportedModules)) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -119,7 +114,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		$enabled = false;
 		$db = PearDatabase::getInstance();
 		$commentsModuleModel = Vtiger_Module_Model::getInstance('ModComments');
-		if($commentsModuleModel->isActive()) {
+		if($commentsModuleModel && $commentsModuleModel->isActive()) {
 			$relatedToFieldResult = $db->pquery('SELECT fieldid FROM vtiger_field WHERE fieldname = ? AND tabid = ?',
 					array('related_to', $commentsModuleModel->getId()));
 			$fieldId = $db->query_result($relatedToFieldResult, 0, 'fieldid');
@@ -193,6 +188,10 @@ class Vtiger_Module_Model extends Vtiger_Module {
     //Note : This api is using only in RelationListview - for getting columnfields of Related Module
     //Need to review........
 
+	/**
+	 * Function to get the module field mapping
+	 * @return <array>
+	 */
 	public function getColumnFieldMapping(){
 		$moduleMeta = $this->getModuleMeta();
 		$meta = $moduleMeta->getMeta();
@@ -568,7 +567,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		}
         return $relatedListFields;
 	}
-	
+
 	public function getConfigureRelatedListFields(){
 		$showRelatedFieldModel = $this->getSummaryViewFieldsList();
 		$relatedListFields = array();
@@ -1098,10 +1097,10 @@ class Vtiger_Module_Model extends Vtiger_Module {
 					$ownerSql = ' smownerid = '. $currentUserModel->getId();
 				}
 			} else {
-				$ownerSql = ' smownerid = '. $currentUserModel->getId();
+				$ownerSql = ' smownerid = '. $owner ;
 			}
 		} else {//If no owner filter, then check if the module access is Private
-			if($sharingAccessModel->isPrivate()) {
+			if($sharingAccessModel->isPrivate() && (!$currentUserModel->isAdminUser())) {
 				$subordinateUserModels = $currentUserModel->getSubordinateUsers();
 				foreach($subordinateUserModels as $id=>$name) {
 					$subordinateUsers[] = $id;
@@ -1221,7 +1220,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @param <String> $parentModule - parent module name
 	 * @return <Array of Vtiger_Record_Model>
 	 */
-	public function searchRecord($searchValue, $parentId=false, $parentModule=false) {
+	public function searchRecord($searchValue, $parentId=false, $parentModule=false, $relatedModule=false) {
 		if(!empty($searchValue) && empty($parentId) && empty($parentModule)) {
 			$matchingRecords = Vtiger_Record_Model::getSearchResult($searchValue, $this->getName());
 		} else if($parentId && $parentModule) {
@@ -1266,7 +1265,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		$result = $focus->$functionName($recordId, $this->getId(), $relatedModule->getId());
 		$query = $result['query'].' '.$this->getSpecificRelationQuery($relatedModuleName);
 		$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
-		
+
 		//modify query if any module has summary fields, those fields we are displayed in related list of that module
 		$relatedListFields = $relatedModule->getConfigureRelatedListFields();
 		if(count($relatedListFields) > 0) {
@@ -1278,7 +1277,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 			$selectColumnSql = 'SELECT vtiger_crmentity.crmid,'.$selectColumnSql;
 			$query = $selectColumnSql.' FROM '.$newQuery[1];
 		}
-		
+
 		if ($nonAdminQuery) {
 			$query = appendFromClauseToQuery($query, $nonAdminQuery);
 		}
@@ -1344,6 +1343,51 @@ class Vtiger_Module_Model extends Vtiger_Module {
 			}
 		}
 		return $mandatoryFields;
+	}
+	
+	public function getRelatedModuleRecordIds(Vtiger_Request $request, $recordIds = array()) {
+		$db = PearDatabase::getInstance();
+		$relatedModules = $request->get('related_modules');
+		$focus = CRMEntity::getInstance($this->getName());
+		$relatedModuleMapping = $focus->related_module_table_index;
+		$relatedIds = array();
+		if(!empty($relatedModules)) {
+			for ($i=0; $i<count($relatedModules); $i++) {
+				$params = array();
+				$module = $relatedModules[$i];				
+				$tablename = $relatedModuleMapping[$module]['table_name'];
+				$tabIndex = $relatedModuleMapping[$module]['table_index'];
+				$relIndex = $relatedModuleMapping[$module]['rel_index'];
+				$sql = "SELECT vtiger_crmentity.crmid FROM vtiger_crmentity";
+				if($tablename == 'vtiger_crmentityrel'){
+					$sql .= " INNER JOIN $tablename ON ($tablename.relcrmid = vtiger_crmentity.crmid OR $tablename.crmid = vtiger_crmentity.crmid)
+						WHERE ($tablename.crmid IN (".  generateQuestionMarks($recordIds).")) OR ($tablename.relcrmid IN (".  generateQuestionMarks($recordIds)."))";
+					foreach ($recordIds as $key => $recordId) {
+						array_push($params, $recordId);
+					}
+				} else {
+					$sql .= " INNER JOIN $tablename ON $tablename.$tabIndex = vtiger_crmentity.crmid
+						WHERE $tablename.$relIndex IN (".  generateQuestionMarks($recordIds).")";
+				}
+				foreach ($recordIds as $key => $recordId) {
+					array_push($params, $recordId);
+				}
+				$result1 = $db->pquery($sql, $params);
+				$num_rows = $db->num_rows($result1);
+				for($j=0; $j<$num_rows; $j++){
+					$relatedIds[] = $db->query_result($result1, $j, 'crmid');
+				}
+			}
+			return $relatedIds;
+		} else {
+			return $relatedIds;
+		}
+	}
+	
+	public function transferRecordsOwnership($transferOwnerId, $relatedModuleRecordIds){
+		$db = PearDatabase::getInstance();
+		$query = 'UPDATE vtiger_crmentity SET smownerid = ? WHERE crmid IN ('.  generateQuestionMarks($relatedModuleRecordIds).')';
+		$db->pquery($query, array($transferOwnerId,$relatedModuleRecordIds));
 	}
 
 }

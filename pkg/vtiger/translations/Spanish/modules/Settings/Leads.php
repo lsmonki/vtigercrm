@@ -70,4 +70,5 @@ $jsLanguageStrings = array(
 	'JS_decimal' => 'Decimal',
 	'JS_percent' => 'Porcentaje',
 	'JS_skype' => 'Skype',
+	'JS_integer' => 'Integer',
 );

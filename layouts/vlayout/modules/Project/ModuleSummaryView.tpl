@@ -18,7 +18,7 @@
 		</div>
 		<div class="row-fluid textAlignCenter roundedCorners">
 			{foreach key=FIELD_NAME item=FIELD_VALUE from=$SUMMARY_INFORMATION}
-				<span class="shade7 well squeezedWell marginLeftZero span" style='width:100px'>
+				<span class="well squeezedWell marginLeftZero span" style='width:100px'>
 					<div>
 						<label class="font-x-small">
 							{vtranslate($FIELD_NAME,$MODULE_NAME)}
@@ -26,7 +26,7 @@
 					</div>
 					<div>
 						<label class="font-x-x-large">
-							{$FIELD_VALUE}
+							{if !empty($FIELD_VALUE)}{$FIELD_VALUE}{else}0{/if}
 						</label>
 					</div>
 				</span>

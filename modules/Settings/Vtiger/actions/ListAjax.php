@@ -14,12 +14,35 @@ class Settings_Vtiger_ListAjax_Action extends Settings_Vtiger_ListAjax_View{
         parent::__construct();
         $this->exposeMethod('getPageCount');
     }
+	/**
+	 * Function returns the number of records for the current filter
+	 * @param Vtiger_Request $request
+	 */
+	function getRecordsCount(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+		$cvId = $request->get('viewname');
+		$count = $this->getListViewCount($request);
+
+		$result = array();
+		$result['module'] = $moduleName;
+		$result['viewname'] = $cvId;
+		$result['count'] = $count;
+
+		$response = new Vtiger_Response();
+		$response->setEmitType(Vtiger_Response::$EMIT_JSON);
+		$response->setResult($result);
+		$response->emit();
+	}
     
     public function getListViewCount(Vtiger_Request $request) {
-        $moduleName = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
+		$sourceModule = $request->get('sourceModule');
 
 		$listViewModel = Settings_Vtiger_ListView_Model::getInstance($qualifiedModuleName);
+		
+		if(!empty($sourceModule)) {
+			$listViewModel->set('sourceModule', $sourceModule);
+		}
 
 		return $listViewModel->getListViewCount();
     }
@@ -29,8 +52,12 @@ class Settings_Vtiger_ListAjax_Action extends Settings_Vtiger_ListAjax_View{
         $pagingModel = new Vtiger_Paging_Model();
         $pageCount = ceil((int) $numOfRecords/(int)($pagingModel->getPageLimit()));
         
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
 		$result = array();
 		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $numOfRecords;
 		$response = new Vtiger_Response();
 		$response->setResult($result);
 		$response->emit();

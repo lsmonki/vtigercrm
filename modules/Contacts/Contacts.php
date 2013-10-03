@@ -137,6 +137,24 @@ class Contacts extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'lastname';
+	
+	var $related_module_table_index = array(
+		'Potentials' => array('table_name' => 'vtiger_potential', 'table_index' => 'potentialid', 'rel_index' => 'contact_id'),
+		'Quotes' => array('table_name' => 'vtiger_quotes', 'table_index' => 'quoteid', 'rel_index' => 'contactid'),
+		'SalesOrder' => array('table_name' => 'vtiger_salesorder', 'table_index' => 'salesorderid', 'rel_index' => 'contactid'),
+		'PurchaseOrder' => array('table_name' => 'vtiger_purchaseorder', 'table_index' => 'purchaseorderid', 'rel_index' => 'contactid'),
+		'Invoice' => array('table_name' => 'vtiger_invoice', 'table_index' => 'invoiceid', 'rel_index' => 'contactid'),
+		'HelpDesk' => array('table_name' => 'vtiger_troubletickets', 'table_index' => 'ticketid', 'rel_index' => 'contact_id'),
+		'Products' => array('table_name' => 'vtiger_seproductsrel', 'table_index' => 'productid', 'rel_index' => 'crmid'),
+		'Calendar' => array('table_name' => 'vtiger_cntactivityrel', 'table_index' => 'activityid', 'rel_index' => 'contactid'),
+		'Documents' => array('table_name' => 'vtiger_senotesrel', 'table_index' => 'notesid', 'rel_index' => 'crmid'),
+		'ServiceContracts' => array('table_name' => 'vtiger_servicecontracts', 'table_index' => 'servicecontractsid', 'rel_index' => 'sc_related_to'),
+		'Services' => array('table_name' => 'vtiger_crmentityrel', 'table_index' => 'crmid', 'rel_index' => 'crmid'),
+		'Campaigns' => array('table_name' => 'vtiger_campaigncontrel', 'table_index' => 'campaignid', 'rel_index' => 'contactid'),
+		'Assets' => array('table_name' => 'vtiger_assets', 'table_index' => 'assetsid', 'rel_index' => 'contact'),
+		'Project' => array('table_name' => 'vtiger_project', 'table_index' => 'projectid', 'rel_index' => 'linktoaccountscontacts'),
+		'Emails' => array('table_name' => 'vtiger_seactivityrel', 'table_index' => 'crmid', 'rel_index' => 'activityid'),
+	);
 
 	function Contacts() {
 		$this->log = LoggerManager::getLogger('contact');
@@ -343,20 +361,20 @@ class Contacts extends CRMEntity {
 		$query ='select case when (vtiger_users.user_name not like "") then '.$userNameSql.' else vtiger_groups.groupname end as user_name,
 		vtiger_contactdetails.accountid, vtiger_contactdetails.contactid , vtiger_potential.potentialid, vtiger_potential.potentialname,
 		vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate,
-		vtiger_potential.related_to, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_account.accountname
+		vtiger_potential.related_to, vtiger_potential.contact_id, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_account.accountname
 		from vtiger_contactdetails
 		left join vtiger_contpotentialrel on vtiger_contpotentialrel.contactid=vtiger_contactdetails.contactid
-		left join vtiger_potential on (vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid or vtiger_potential.related_to=vtiger_contactdetails.contactid)
+		left join vtiger_potential on (vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid or vtiger_potential.contact_id=vtiger_contactdetails.contactid)
 		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid
 		left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid
 		LEFT JOIN vtiger_potentialscf ON vtiger_potential.potentialid = vtiger_potentialscf.potentialid
 		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		where  vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid ='.$id;
-			
+
 		if (!$ignoreOrganizationCheck) {
 			// Restrict the scope of listing to only related contacts of the organization linked to potential via related_to of Potential
-			$query .= ' and (vtiger_contactdetails.accountid = vtiger_potential.related_to or vtiger_contactdetails.contactid=vtiger_potential.related_to)';
+			$query .= ' and (vtiger_contactdetails.accountid = vtiger_potential.related_to or vtiger_contactdetails.contactid=vtiger_potential.contact_id)';
 		}
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
@@ -516,9 +534,9 @@ class Contacts extends CRMEntity {
 		$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 				vtiger_crmentity.crmid, vtiger_troubletickets.title, vtiger_contactdetails.contactid, vtiger_troubletickets.parent_id,
 				vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_troubletickets.status, vtiger_troubletickets.priority,
-				vtiger_crmentity.smownerid, vtiger_troubletickets.ticket_no
+				vtiger_crmentity.smownerid, vtiger_troubletickets.ticket_no, vtiger_troubletickets.contact_id
 				from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
-				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id
+				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.contact_id
 				LEFT JOIN vtiger_ticketcf ON vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
@@ -673,7 +691,9 @@ class Contacts extends CRMEntity {
 				  vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname
 				FROM vtiger_products
 				INNER JOIN vtiger_seproductsrel
-					ON vtiger_seproductsrel.productid=vtiger_products.productid and vtiger_seproductsrel.setype="Contacts"
+					ON vtiger_seproductsrel.productid=vtiger_products.productid and vtiger_seproductsrel.setype="Contacts"  
+				INNER JOIN vtiger_productcf
+					ON vtiger_products.productid = vtiger_productcf.productid 
 				INNER JOIN vtiger_crmentity
 					ON vtiger_crmentity.crmid = vtiger_products.productid
 				INNER JOIN vtiger_contactdetails
@@ -843,6 +863,7 @@ class Contacts extends CRMEntity {
 					vtiger_crmentity.modifiedtime from vtiger_campaign
 					inner join vtiger_campaigncontrel on vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid
 					inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid
+					inner join vtiger_campaignscf ON vtiger_campaignscf.campaignid = vtiger_campaign.campaignid
 					left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 					where vtiger_campaigncontrel.contactid=".$id." and vtiger_crmentity.deleted=0";
@@ -1171,17 +1192,20 @@ function get_contactsforol($user_name)
 		$rel_table_arr = Array("Potentials"=>"vtiger_contpotentialrel","Activities"=>"vtiger_cntactivityrel","Emails"=>"vtiger_seactivityrel",
 				"HelpDesk"=>"vtiger_troubletickets","Quotes"=>"vtiger_quotes","PurchaseOrder"=>"vtiger_purchaseorder",
 				"SalesOrder"=>"vtiger_salesorder","Products"=>"vtiger_seproductsrel","Documents"=>"vtiger_senotesrel",
-				"Attachments"=>"vtiger_seattachmentsrel","Campaigns"=>"vtiger_campaigncontrel");
+				"Attachments"=>"vtiger_seattachmentsrel","Campaigns"=>"vtiger_campaigncontrel",'Invoice'=>'vtiger_invoice',
+                'ServiceContracts'=>'vtiger_servicecontracts','Project'=>'vtiger_project','Assets'=>'vtiger_assets');
 
 		$tbl_field_arr = Array("vtiger_contpotentialrel"=>"potentialid","vtiger_cntactivityrel"=>"activityid","vtiger_seactivityrel"=>"activityid",
 				"vtiger_troubletickets"=>"ticketid","vtiger_quotes"=>"quoteid","vtiger_purchaseorder"=>"purchaseorderid",
 				"vtiger_salesorder"=>"salesorderid","vtiger_seproductsrel"=>"productid","vtiger_senotesrel"=>"notesid",
-				"vtiger_seattachmentsrel"=>"attachmentsid","vtiger_campaigncontrel"=>"campaignid");
+				"vtiger_seattachmentsrel"=>"attachmentsid","vtiger_campaigncontrel"=>"campaignid",'vtiger_invoice'=>'invoiceid',
+                'vtiger_servicecontracts'=>'servicecontractsid','vtiger_project'=>'projectid','vtiger_assets'=>'assetsid');
 
 		$entity_tbl_field_arr = Array("vtiger_contpotentialrel"=>"contactid","vtiger_cntactivityrel"=>"contactid","vtiger_seactivityrel"=>"crmid",
-				"vtiger_troubletickets"=>"parent_id","vtiger_quotes"=>"contactid","vtiger_purchaseorder"=>"contactid",
+				"vtiger_troubletickets"=>"contact_id","vtiger_quotes"=>"contactid","vtiger_purchaseorder"=>"contactid",
 				"vtiger_salesorder"=>"contactid","vtiger_seproductsrel"=>"crmid","vtiger_senotesrel"=>"crmid",
-				"vtiger_seattachmentsrel"=>"crmid","vtiger_campaigncontrel"=>"contactid");
+				"vtiger_seattachmentsrel"=>"crmid","vtiger_campaigncontrel"=>"contactid",'vtiger_invoice'=>'contactid',
+                'vtiger_servicecontracts'=>'sc_related_to','vtiger_project'=>'linktoaccountscontacts','vtiger_assets'=>'contact');
 
 		foreach($transferEntityIds as $transferId) {
 			foreach($rel_table_arr as $rel_module=>$rel_table) {
@@ -1269,7 +1293,7 @@ function get_contactsforol($user_name)
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" => array("vtiger_cntactivityrel"=>array("contactid","activityid"),"vtiger_contactdetails"=>"contactid"),
-			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_contactdetails"=>"contactid"),
+			"HelpDesk" => array("vtiger_troubletickets"=>array("contact_id","ticketid"),"vtiger_contactdetails"=>"contactid"),
 			"Quotes" => array("vtiger_quotes"=>array("contactid","quoteid"),"vtiger_contactdetails"=>"contactid"),
 			"PurchaseOrder" => array("vtiger_purchaseorder"=>array("contactid","purchaseorderid"),"vtiger_contactdetails"=>"contactid"),
 			"SalesOrder" => array("vtiger_salesorder"=>array("contactid","salesorderid"),"vtiger_contactdetails"=>"contactid"),
@@ -1306,7 +1330,7 @@ function get_contactsforol($user_name)
 		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
 
 		//Backup Contact-Trouble Tickets Relation
-		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE parent_id=?';
+		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE contact_id=?';
 		$tkt_res = $this->db->pquery($tkt_q, array($id));
 		if ($this->db->num_rows($tkt_res) > 0) {
 			$tkt_ids_list = array();
@@ -1314,11 +1338,11 @@ function get_contactsforol($user_name)
 			{
 				$tkt_ids_list[] = $this->db->query_result($tkt_res,$k,"ticketid");
 			}
-			$params = array($id, RB_RECORD_UPDATED, 'vtiger_troubletickets', 'parent_id', 'ticketid', implode(",", $tkt_ids_list));
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_troubletickets', 'contact_id', 'ticketid', implode(",", $tkt_ids_list));
 			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
 		}
 		//removing the relationship of contacts with Trouble Tickets
-		$this->db->pquery('UPDATE vtiger_troubletickets SET parent_id=0 WHERE parent_id=?', array($id));
+		$this->db->pquery('UPDATE vtiger_troubletickets SET contact_id=0 WHERE contact_id=?', array($id));
 
 		//Backup Contact-PurchaseOrder Relation
 		$po_q = 'SELECT purchaseorderid FROM vtiger_purchaseorder WHERE contactid=?';

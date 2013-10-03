@@ -388,22 +388,29 @@ class ServiceContracts extends CRMEntity {
 
 	 // Function to Update the parent_id of HelpDesk with sc_related_to of ServiceContracts if the parent_id is not set.
 	 function updateHelpDeskRelatedTo($focusId, $entityIds) {
-		global $log;
-		$log->debug("Entering into function updateHelpDeskRelatedTo(".$entityIds.").");
 
 		if(!is_array($entityIds)) $entityIds = array($entityIds);
-		$selectTicketsQuery = "SELECT ticketid FROM vtiger_troubletickets WHERE (parent_id IS NULL OR parent_id = 0) AND ticketid IN (" . generateQuestionMarks($entityIds) .")";
-		$selectTicketsResult = $this->db->pquery($selectTicketsQuery, array($entityIds));
+		$selectTicketsQuery = "SELECT ticketid FROM vtiger_troubletickets
+								WHERE (parent_id IS NULL OR parent_id = 0 OR contact_id IS NULL OR contact_id =0)
+									AND ticketid IN (" . generateQuestionMarks($entityIds) .")";$selectTicketsResult = $this->db->pquery($selectTicketsQuery, array($entityIds));
 		$noOfTickets = $this->db->num_rows($selectTicketsResult);
 		for($i=0; $i < $noOfTickets; ++$i) {
 			$ticketId = $this->db->query_result($selectTicketsResult,$i,'ticketid');
-			$updateQuery = "UPDATE vtiger_troubletickets, vtiger_servicecontracts SET parent_id=vtiger_servicecontracts.sc_related_to" .
-						" WHERE vtiger_servicecontracts.sc_related_to IS NOT NULL AND vtiger_servicecontracts.sc_related_to != 0" .
-						" AND vtiger_servicecontracts.servicecontractsid = ? AND vtiger_troubletickets.ticketid = ?";
-			$updateResult = $this->db->pquery($updateQuery, array($focusId, $ticketId));
+			$serviceContractsRelateToTypeResult = $this->db->pquery('SELECT setype FROM vtiger_crmentity WHERE crmid =
+				(SELECT sc_related_to FROM vtiger_servicecontracts WHERE servicecontractsid = ?)', array($focusId));
+			$serviceContractsRelateToType = $this->db->query_result($serviceContractsRelateToTypeResult, 0, 'setype');
+			if($serviceContractsRelateToType == 'Accounts') {
+				$updateQuery = "UPDATE vtiger_troubletickets, vtiger_servicecontracts SET parent_id=vtiger_servicecontracts.sc_related_to" .
+					" WHERE vtiger_servicecontracts.sc_related_to IS NOT NULL AND vtiger_servicecontracts.sc_related_to != 0" .
+					" AND vtiger_servicecontracts.servicecontractsid = ? AND vtiger_troubletickets.ticketid = ?";
+				$this->db->pquery($updateQuery, array($focusId, $ticketId));
+			} elseif($serviceContractsRelateToType == 'Contacts') {
+				$updateQuery = "UPDATE vtiger_troubletickets, vtiger_servicecontracts SET contact_id=vtiger_servicecontracts.sc_related_to" .
+					" WHERE vtiger_servicecontracts.sc_related_to IS NOT NULL AND vtiger_servicecontracts.sc_related_to != 0" .
+					" AND vtiger_servicecontracts.servicecontractsid = ? AND vtiger_troubletickets.ticketid = ?";
+				$this->db->pquery($updateQuery, array($focusId, $ticketId));
+			}
 		}
-
-		$log->debug("Exit from function updateHelpDeskRelatedTo(".$entityIds.")");
 	}
 
 	// Function to Compute and Update the Used Units and Progress of the Service Contract based on all the related Trouble tickets.
@@ -580,6 +587,44 @@ class ServiceContracts extends CRMEntity {
 			$updateParams = array(null, $id);
 			$this->db->pquery($updateQuery, $updateParams);
 		}
+	}
+
+    /**
+	 * Move the related records of the specified list of id's to the given record.
+	 * @param String This module name
+	 * @param Array List of Entity Id's from which related records need to be transfered
+	 * @param Integer Id of the the Record to which the related records are to be moved
+	 */
+	function transferRelatedRecords($module, $transferEntityIds, $entityId) {
+		global $adb,$log;
+		$log->debug("Entering function transferRelatedRecords ($module, $transferEntityIds, $entityId)");
+
+		$rel_table_arr = Array("Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel");
+
+		$tbl_field_arr = Array("vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid");
+
+		$entity_tbl_field_arr = Array("vtiger_senotesrel"=>"crmid","vtiger_seattachmentsrel"=>"crmid");
+
+		foreach($transferEntityIds as $transferId) {
+			foreach($rel_table_arr as $rel_module=>$rel_table) {
+				$id_field = $tbl_field_arr[$rel_table];
+				$entity_id_field = $entity_tbl_field_arr[$rel_table];
+				// IN clause to avoid duplicate entries
+				$sel_result =  $adb->pquery("select $id_field from $rel_table where $entity_id_field=? " .
+						" and $id_field not in (select $id_field from $rel_table where $entity_id_field=?)",
+						array($transferId,$entityId));
+				$res_cnt = $adb->num_rows($sel_result);
+				if($res_cnt > 0) {
+					for($i=0;$i<$res_cnt;$i++) {
+						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
+						$adb->pquery("update $rel_table set $entity_id_field=? where $entity_id_field=? and $id_field=?",
+							array($entityId,$transferId,$id_field_value));
+					}
+				}
+			}
+		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
+		$log->debug("Exiting transferRelatedRecords...");
 	}
 }
 ?>

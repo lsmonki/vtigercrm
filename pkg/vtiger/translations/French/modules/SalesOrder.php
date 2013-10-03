@@ -34,4 +34,20 @@ $languageStrings = array(
 	'Sent'                         => 'Envoyé'                     , 
 	'Credit Invoice'               => 'Facture au Crédit'          , 
 	'Paid'                         => 'Soldé'                      , 
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'Date de validité',
+	'Phone: ' => 'Téléphone: ',
+	'Issued Date' => 'Date d\'émission',
+	'Shipping & Handling Charges' => 'Frais d\'expédition',
+	'Shipping & Handling Tax:' => 'Taxe d\'expédition:',
+	'Discount' => 'Remise',
+	'Net Total' => 'Total Net',
+	'Product Code' => 'Ref',
+	'Customer Name' => 'Nom client',
+	'Price' => 'Prix',
+	'Tax:' => 'Taxe:',
+	'Tax' => 'Taxe',
+	'Contact Name' => 'Nom contact',
+	'Grand Total:' => 'Total:',
 );

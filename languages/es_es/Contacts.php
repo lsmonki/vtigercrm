@@ -55,6 +55,7 @@ $languageStrings = array(
 	'User List'                    => 'Lista de Usuarios',
 	'LBL_COPY_OTHER_ADDRESS' => 'Copiar Dirección Alternativa',
 	'LBL_COPY_MAILING_ADDRESS' => 'Copiar Dirección Envío',
+	'Contact Id' => 'Contacto Id',
 );
 
 $jsLanguageStrings = array(

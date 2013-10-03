@@ -51,7 +51,8 @@ Vtiger_Detail_Js("Reports_Detail_Js",{},{
 			AppConnector.request(postData).then(
 				function(data){
 					progressIndicatorElement.progressIndicator({mode:'hide'})
-					thisInstance.getContentHolder().find('#reportDetails').replaceWith(data);
+					thisInstance.getContentHolder().find('#reportContentsDiv').html(data);
+					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					var updatedCount = jQuery('#updatedCount',data).val();
 					jQuery('#countValue').text(updatedCount);
 				}

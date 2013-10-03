@@ -40,8 +40,12 @@ class Settings_LayoutEditor_Index_View extends Settings_Vtiger_Index_View {
 
 
 		$blockIdFieldMap = array();
+		$inactiveFields = array();
 		foreach($fieldModels as $fieldModel) {
 			$blockIdFieldMap[$fieldModel->getBlockId()][$fieldModel->getName()] = $fieldModel;
+			if(!$fieldModel->isActiveField()) {
+				$inactiveFields[$fieldModel->getBlockId()][$fieldModel->getId()] = vtranslate($fieldModel->get('label'), $sourceModule);
+			}
 		}
 
 		foreach($blockModels as $blockLabel => $blockModel) {
@@ -59,6 +63,7 @@ class Settings_LayoutEditor_Index_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('ADD_SUPPORTED_FIELD_TYPES', $moduleModel->getAddSupportedFieldTypes());
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModule);
+		$viewer->assign('IN_ACTIVE_FIELDS', $inactiveFields);
 		$viewer->view('Index.tpl',$qualifiedModule);
 	}
 

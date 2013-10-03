@@ -54,9 +54,9 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				responseData = thisInstance.relatedContentContainer.html();
 				thisInstance.triggerDisplayTypeEvent();
 				Vtiger_Helper_Js.showHorizontalTopScrollBar();
+				jQuery('.pageNumbers',thisInstance.relatedContentContainer).tooltip();
 				aDeferred.resolve(responseData);
 				jQuery('input[name="currentPageNum"]', thisInstance.relatedContentContainer).val(completeParams.page);
-				
 				// Let listeners know about page state change.
 				app.notifyPostAjaxReady();
 			},
@@ -225,7 +225,6 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	nextPageHandler : function(){
 		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
-		var aDeferred = jQuery.Deferred();
 		var pageLimit = jQuery('#pageLimit').val();
 		var noOfEntries = jQuery('#noOfEntries').val();
 		if(noOfEntries == pageLimit){
@@ -289,20 +288,40 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				e.preventDefault();
 			} else {
 				element.validationEngine('hideAll');
-				var jumpToPage = element.val();
-				var jumptoPageParams = {
-					'page' : jumpToPage
+				var jumpToPage = parseInt(element.val());
+				var totalPages = parseInt(jQuery('#totalPageCount').text());
+				if(jumpToPage > totalPages){
+					var error = app.vtranslate('JS_PAGE_NOT_EXIST');
+					element.validationEngine('showPrompt',error,'',"topLeft",true);
 				}
-				this.loadRelatedList(jumptoPageParams).then(
-					function(data){
-						thisInstance.setCurrentPageNumber(jumpToPage);
-						aDeferred.resolve(data);
-					},
-
-					function(textStatus, errorThrown){
-						aDeferred.reject(textStatus, errorThrown);
+				var invalidFields = element.parent().find('.formError');
+				if(invalidFields.length < 1){
+					var currentPage = jQuery('input[name="currentPageNum"]').val();
+					if(jumpToPage == currentPage){
+						var message = app.vtranslate('JS_YOU_ARE_IN_PAGE_NUMBER')+" "+jumpToPage;
+						var params = {
+							text: message,
+							type: 'info'
+						};
+						Vtiger_Helper_Js.showMessage(params);
+						e.preventDefault();
 					}
-				);
+					var jumptoPageParams = {
+						'page' : jumpToPage
+					}
+					this.loadRelatedList(jumptoPageParams).then(
+						function(data){
+							thisInstance.setCurrentPageNumber(jumpToPage);
+							aDeferred.resolve(data);
+						},
+
+						function(textStatus, errorThrown){
+							aDeferred.reject(textStatus, errorThrown);
+						}
+					);
+				} else {
+					e.preventDefault();
+				}
 			}
 		}
 		return aDeferred.promise();
@@ -321,8 +340,30 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		var relatedField = element.data('name');
 		var fullFormUrl = element.data('url');
 		relatedParams[relatedField] = parentId;
+		var eliminatedKeys = new Array('view', 'module', 'mode', 'action');
+		
 		var preQuickCreateSave = function(data){
-			data.find('#goToFullForm').data('editViewUrl',fullFormUrl);
+
+			var index,queryParam,queryParamComponents;
+			
+			//To handle switch to task tab when click on add task from related list of activities
+			//As this is leading to events tab intially even clicked on add task
+			if(typeof fullFormUrl != 'undefined' && fullFormUrl.indexOf('?')!== -1) {
+				var urlSplit = fullFormUrl.split('?');
+				var queryString = urlSplit[1];
+				var queryParameters = queryString.split('&');
+				for(index=0; index<queryParameters.length; index++) {
+					queryParam = queryParameters[index];
+					queryParamComponents = queryParam.split('=');
+					if(queryParamComponents[0] == 'mode' && queryParamComponents[1] == 'Calendar'){
+						data.find('a[data-tab-name="Task"]').trigger('click');
+					}
+				}
+			}
+			jQuery('<input type="hidden" name="sourceModule" value="'+parentModule+'" />').appendTo(data);
+			jQuery('<input type="hidden" name="sourceRecord" value="'+parentId+'" />').appendTo(data);
+			jQuery('<input type="hidden" name="relationOperation" value="true" />').appendTo(data);
+			
 			if(typeof relatedField != "undefined"){
 				var field = data.find('[name="'+relatedField+'"]');
 				//If their is no element with the relatedField name,we are adding hidden element with
@@ -331,10 +372,13 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 					jQuery('<input type="hidden" name="'+relatedField+'" value="'+parentId+'" />').appendTo(data);
 				}
 			}
-
-			jQuery('<input type="hidden" name="sourceModule" value="'+parentModule+'" />').appendTo(data);
-			jQuery('<input type="hidden" name="sourceRecord" value="'+parentId+'" />').appendTo(data);
-			jQuery('<input type="hidden" name="relationOperation" value="true" />').appendTo(data);
+			for(index=0; index<queryParameters.length; index++) {
+				queryParam = queryParameters[index];
+				queryParamComponents = queryParam.split('=');
+				if(jQuery.inArray(queryParamComponents[0], eliminatedKeys) == '-1' && data.find('[name="'+queryParamComponents[0]+'"]').length == 0) {
+					jQuery('<input type="hidden" name="'+queryParamComponents[0]+'" value="'+queryParamComponents[1]+'" />').appendTo(data);
+				}
+			}
 
 		}
 		var postQuickCreateSave  = function(data) {
@@ -344,9 +388,21 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				})
 		}
 		
-		if(typeof relatedField != "undefined"){
-			quickCreateParams['data'] = relatedParams;
+		//If url contains params then seperate them and make them as relatedParams
+		if(typeof fullFormUrl != 'undefined' && fullFormUrl.indexOf('?')!== -1) {
+			var urlSplit = fullFormUrl.split('?');
+			var queryString = urlSplit[1];
+			var queryParameters = queryString.split('&');
+			for(var index=0; index<queryParameters.length; index++) {
+				var queryParam = queryParameters[index];
+				var queryParamComponents = queryParam.split('=');
+				if(jQuery.inArray(queryParamComponents[0], eliminatedKeys) == '-1') {
+					relatedParams[queryParamComponents[0]] = queryParamComponents[1];
+				}
+			}
 		}
+		
+		quickCreateParams['data'] = relatedParams;
 		quickCreateParams['callbackFunction'] = postQuickCreateSave;
 		quickCreateParams['callbackPostShown'] = preQuickCreateSave;
 		quickCreateParams['noCache'] = true;
@@ -384,6 +440,30 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		}
 	},
 	
+	/**
+	 * Function to get total records count in related list
+	 */
+	totalRecordsCount : function(){
+		var aDeferred = jQuery.Deferred();
+		var thisInstance = this;
+			var params = {};
+			params['action'] = "RelationAjax";
+			params['module'] = thisInstance.parentModuleName;
+			params['record'] = thisInstance.getParentId(),
+			params['relatedModule'] = thisInstance.relatedModulename,
+			params['tab_label'] = thisInstance.selectedRelatedTabElement.data('label-key');
+			params['mode'] = "getRelatedListPageCount"
+
+			AppConnector.request(params).then(
+				function(data) {
+					var totalNumberOfRecords = data['result']['numberOfRecords'];
+					aDeferred.resolve(totalNumberOfRecords);
+			},
+			function(error,err){
+
+			});
+		return aDeferred.promise();
+	},
 	init : function(parentId, parentModule, selectedRelatedTabElement, relatedModuleName){
 		this.selectedRelatedTabElement = selectedRelatedTabElement,
 		this.parentRecordId = parentId;

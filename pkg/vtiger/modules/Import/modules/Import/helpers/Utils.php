@@ -46,8 +46,7 @@ class Import_Utils_Helper {
 
 	public static function getImportDirectory() {
 		global $import_dir;
-		$importDir = dirname(__FILE__). '/../../../'.$import_dir;
-		return $importDir;
+		return $import_dir;
 	}
 
 	public static function getImportFilePath($user) {

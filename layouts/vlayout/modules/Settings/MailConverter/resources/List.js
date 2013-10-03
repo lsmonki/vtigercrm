@@ -182,4 +182,8 @@ jQuery.Class('Settings_MailConverter_List_Js',{
             }
         );
     }
-},{})
+},{
+	registerEvents : function(){
+		
+	}
+})

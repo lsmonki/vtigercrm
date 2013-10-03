@@ -47,8 +47,8 @@ class Accounts_DetailView_Model extends Vtiger_DetailView_Model {
 			}
 			$index++;
 		}
-
-		$CalendarActionLinks[] = array();
+		
+		$CalendarActionLinks = array();
 		$CalendarModuleModel = Vtiger_Module_Model::getInstance('Calendar');
 		if($currentUserModel->hasModuleActionPermission($CalendarModuleModel->getId(), 'EditView')) {
 			$CalendarActionLinks[] = array(
@@ -67,7 +67,7 @@ class Accounts_DetailView_Model extends Vtiger_DetailView_Model {
 		}
 
 		$SMSNotifierModuleModel = Vtiger_Module_Model::getInstance('SMSNotifier');
-		if($SMSNotifierModuleModel && $currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
+		if($currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'LBL_SEND_SMS',
@@ -77,35 +77,22 @@ class Accounts_DetailView_Model extends Vtiger_DetailView_Model {
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
+		
+		$moduleModel = $this->getModule();
+		if($currentUserModel->hasModuleActionPermission($moduleModel->getId(), 'EditView')) {
+			$massActionLink = array(
+				'linktype' => 'LISTVIEWMASSACTION',
+				'linklabel' => 'LBL_TRANSFER_OWNERSHIP',
+				'linkurl' => 'javascript:Vtiger_Detail_Js.triggerTransferOwnership("index.php?module='.$moduleModel->getName().'&view=MassActionAjax&mode=transferOwnership")',
+				'linkicon' => ''
+			);
+			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($massActionLink);
+		}
 
         foreach($CalendarActionLinks as $basicLink) {
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicLink);
 		}
 
 		return $linkModelList;
-	}
-
-	/**
-	 * Function to get the detail view related links
-	 * @return <array> - list of links parameters
-	 */
-	public function getDetailViewRelatedLinks() {
-		$recordModel = $this->getRecord();
-		$moduleName = $recordModel->getModuleName();
-		$relatedLinks = array(array(
-				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_SUMMARY', $moduleName),
-				'linkKey' => 'LBL_RECORD_SUMMARY',
-				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=summary',
-				'linkicon' => ''
-		));
-
-		$relatedLinksFromParent = parent::getDetailViewRelatedLinks();
-
-		foreach ($relatedLinksFromParent as $link) {
-			array_push($relatedLinks, $link);
-		}
-
-		return $relatedLinks;
 	}
 }

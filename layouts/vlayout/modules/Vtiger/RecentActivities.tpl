@@ -30,15 +30,17 @@
 							</div>
 
 							{foreach item=FIELDMODEL from=$RECENT_ACTIVITY->getFieldInstances()}
-								<div class='font-x-small updateInfoContainer'>
-									<i>{vtranslate($FIELDMODEL->getName(),$MODULE_NAME)}</i> :&nbsp;
-									{if $FIELDMODEL->get('prevalue') neq ''}
-										{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('prevalue'))}&nbsp;{vtranslate('LBL_TO', $MODULE_NAME)}&nbsp;
-									{else}
-										{* First time change *}
-									{/if}
-									<b>{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('postvalue'))}</b>
-								</div>
+								{if $FIELDMODEL && $FIELDMODEL->getFieldInstance() && $FIELDMODEL->getFieldInstance()->isViewableInDetailView()}
+									<div class='font-x-small updateInfoContainer'>
+										<i>{vtranslate($FIELDMODEL->getName(),$MODULE_NAME)}</i> :&nbsp;
+										{if $FIELDMODEL->get('prevalue') neq ''}
+											{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('prevalue'))}&nbsp;{vtranslate('LBL_TO', $MODULE_NAME)}&nbsp;
+										{else}
+											{* First time change *}
+										{/if}
+										<b>{$FIELDMODEL->getDisplayValue($FIELDMODEL->get('postvalue'))}</b>
+									</div>
+								{/if}
 							{/foreach}
 
 						</li>

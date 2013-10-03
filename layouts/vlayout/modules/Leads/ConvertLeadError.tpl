@@ -25,6 +25,9 @@
 										<ul> {vtranslate('LBL_FOLLOWING_ARE_POSSIBLE_REASONS', $MODULE)} :
 											<li>{vtranslate('LBL_LEADS_FIELD_MAPPING_INCOMPLETE', $MODULE)}</li>
 											<li>{vtranslate('LBL_MANDATORY_FIELDS_ARE_EMPTY', $MODULE)}</li>
+											{if $EXCEPTION}
+											<li>{$EXCEPTION}</li>
+											{/if}
 										</ul>
 									</span>
 								</span>
@@ -33,7 +36,7 @@
 						<tr>
 							<td class='small' align='right' nowrap='nowrap'>
 				{if $CURRENT_USER->isAdminUser()}
-					<a href='index.php?module=Settings&action=CustomFieldList&parenttab=Settings&formodule=Leads'>{vtranslate('LBL_LEADS_FIELD_MAPPING', $MODULE)}</a><br>
+					<a href='index.php?parent=Settings&module=Leads&view=MappingDetail'>{vtranslate('LBL_LEADS_FIELD_MAPPING', $MODULE)}</a><br>
 				{/if}
 					<a href='javascript:window.history.back();'>{vtranslate('LBL_GO_BACK', $MODULE)}</a><br>
 				</td>

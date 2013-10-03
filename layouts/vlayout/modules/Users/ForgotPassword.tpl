@@ -63,7 +63,7 @@
 					alert('Please enter new Password');
 					return false;
 				} else if(password != confirmPassword) {
-					alert('Password and ConfirmPassword should be same');
+					alert('Password and Confirm Password should be same');
 					return false;
 				}else{
 					return true;
@@ -74,23 +74,23 @@
     <body>
         <div id="container">
             <div class="logo">
-				<img  src="{$LOGOURL}" alt="{$TITLE}"><br><br><br>
+				<img  src="{$LOGOURL}" alt="{$TITLE}" style="height: 4em;width: 12em;"><br><br><br>
 			</div>
 			<div>
 				<div id="content">
-					<span><b>{vtranslate('CHANGE PASSWORD',$MODULE)}</b></span>
+					<span><b>{vtranslate('LBL_CHANGE_PASSWORD',$MODULE)}</b></span>
 					<hr>
 					<div id="changePasswordBlock" align='left'>
 						<form name="changePassword" id="changePassword" action="{$TRACKURL}" method="post" accept-charset="utf-8">
 							<input type="hidden" name="username" value="{$USERNAME}">
 							<table align='center'>
 								<tr>
-									<td><label class="control-label" for="password">New Password</label></td>
+									<td><label class="control-label" for="password">{vtranslate('LBL_NEW_PASSWORD',$MODULE)}</label></td>
 									<td><input type="password" id="password" name="password" placeholder="New Password"></td>
 								</tr>
 								<tr><td></td></tr>
 								<tr>
-									<td><label class="control-label" for="confirm_password">Confirm Password</label></td>
+									<td><label class="control-label" for="confirm_password">{vtranslate('LBL_CONFIRM_PASSWORD',$MODULE)}</label></td>
 									<td><input type="password" id="confirmPassword" name="confirmPassword"  placeholder="Confirm Password"></td>
 								</tr>
 								<tr><td></td></tr>

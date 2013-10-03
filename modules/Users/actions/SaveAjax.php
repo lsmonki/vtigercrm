@@ -85,7 +85,7 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	
 	public function savePassword(Vtiger_Request $request) {
 		$module = $request->getModule();
-		$userModel = Users_Record_Model::getCurrentUserModel();
+		$userModel = vglobal('current_user');
 		$newPassword = $request->get('new_password');
 		$oldPassword = $request->get('old_password');
 		

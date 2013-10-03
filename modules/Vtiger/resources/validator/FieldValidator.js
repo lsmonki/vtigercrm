@@ -36,7 +36,7 @@ Vtiger_Base_Validator_Js("Vtiger_Email_Validator_Js",{
 	 * @return false if validation error occurs
 	 */
 	validateValue : function(fieldValue){
-		var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/ ;
+		var emailFilter = /^[_/a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
 		var illegalChars= /[\(\)\<\>\,\;\:\\\"\[\]]/ ;
 
 		if (!emailFilter.test(fieldValue)) {
@@ -87,7 +87,22 @@ Vtiger_Base_Validator_Js("Vtiger_PositiveNumber_Validator_Js",{
 	}
 })
 
-Vtiger_Base_Validator_Js("Vtiger_Integer_Validator_Js",{},{
+Vtiger_Base_Validator_Js("Vtiger_Integer_Validator_Js",{
+
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var integerInstance = new Vtiger_Integer_Validator_Js();
+		integerInstance.setElement(field);
+		var response = integerInstance.validate();
+		if(response != true){
+			return integerInstance.getError();
+		}
+	}
+},{
 
 	/**
 	 * Function to validate the Integre field data
@@ -97,7 +112,7 @@ Vtiger_Base_Validator_Js("Vtiger_Integer_Validator_Js",{},{
 	validate: function(){
 		var fieldValue = this.getFieldValue();
 		var integerRegex= /(^[-+]?\d+)$/ ;
-		var decimalIntegerRegex = /(^[-+]?\d+).\d+$/ ;
+		var decimalIntegerRegex = /(^[-+]?\d?).\d+$/ ;
 		if ((!fieldValue.match(integerRegex))) {
 			if(!fieldValue.match(decimalIntegerRegex)){
 				var errorInfo = app.vtranslate("JS_PLEASE_ENTER_INTEGER_VALUE");
@@ -112,33 +127,8 @@ Vtiger_Base_Validator_Js("Vtiger_Integer_Validator_Js",{},{
 	}
 })
 
-Vtiger_Base_Validator_Js("Vtiger_Phone_Validator_Js",{},{
-
-	/**
-	 * Function to validate the Phone field data
-	 * @return true if validation is successfull
-	 * @return false if validation error occurs
-	 */
-	validate: function(){
-		var fieldValue = this.getFieldValue();
-		var strippedValue = fieldValue.replace(/[\(\)\.\-\+\ ]/g, '');
-		strippedValue = strippedValue.replace(/[a-z0-9]/gi,'');
-		// TODO : need to review this validation
-	   /*if (isNaN(strippedValue)) {
-			var errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
-			this.setError(errorInfo);
-			return false;
-		} else*/ if (fieldValue.length > 30) {
-			var errorInfo = app.vtranslate('JS_PHONE_NUMBER_LENGTH_EXCEEDED');
-			this.setError(errorInfo);
-			return false;
-		}
-        return true;
-	}
-})
-
 Vtiger_PositiveNumber_Validator_Js("Vtiger_Percentage_Validator_Js",{
-	
+
 	/**
 	 *Function which invokes field validation
 	 *@param accepts field element as parameter
@@ -152,7 +142,7 @@ Vtiger_PositiveNumber_Validator_Js("Vtiger_Percentage_Validator_Js",{
 			return percentageInstance.getError();
 		}
 	}
-	
+
 },{
 
 	/**
@@ -185,7 +175,7 @@ Vtiger_Base_Validator_Js('Vtiger_Url_Validator_Js',{},{
 	 */
 	validate: function(){
 		var fieldValue = this.getFieldValue();
-		var regexp = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		var result = regexp.test(fieldValue);
 		if (!result ) {
 			var errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');//"Please enter valid url";
@@ -496,12 +486,17 @@ Vtiger_Base_Validator_Js('Vtiger_Currency_Validator_Js',{
 	 * @return false if validation error occurs
 	 */
 	validate: function(){
+		var response = this._super();
+		if(response != true){
+			return response;
+		}
 		var field = this.getElement();
 		var fieldValue = this.getFieldValue();
 		var fieldData = field.data();
 
 		if(fieldData.decimalSeperator == "'") fieldData.decimalSeperator = "''";
 		var strippedValue = fieldValue.replace(fieldData.decimalSeperator, '');
+		var errorInfo;
 
         var regex = new RegExp(fieldData.groupSeperator,'g');
         strippedValue = strippedValue.replace(regex, '');
@@ -512,7 +507,12 @@ Vtiger_Base_Validator_Js('Vtiger_Currency_Validator_Js',{
 			return false;
 		}*/
 		if(isNaN(strippedValue)){
-			var errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
+			errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');
+			this.setError(errorInfo);
+			return false;
+		}
+		if(strippedValue < 0){
+			errorInfo = app.vtranslate('JS_ACCEPT_POSITIVE_NUMBER');
 			this.setError(errorInfo);
 			return false;
 		}

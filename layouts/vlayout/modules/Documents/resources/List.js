@@ -131,6 +131,8 @@ Vtiger_List_Js("Documents_List_Js", {
 			var validationResult = jQuery(e.currentTarget).validationEngine('validate');
 			if(validationResult == true){
 				var formData = jQuery(e.currentTarget).serializeFormData();
+				var foldername = jQuery.trim(formData.foldername);
+				formData.foldername = foldername;
 				AppConnector.request(formData).then(
 					function(data){
 						aDeferred.resolve(data);
@@ -158,7 +160,7 @@ Vtiger_List_Js("Documents_List_Js", {
 
 	constructOptionElement : function(info){
 		var cvId = this.getCurrentCvId();
-		return '<option data-foldername="'+info.folderName+'" data-id="'+cvId+'" >'+info.folderName+'</option>';
+		return '<option data-deletable="1" data-folderid="'+info.folderid+'" data-foldername="'+info.folderName+'" class="filterOptionId_folder'+info.folderid+' folderOption" id="filterOptionId_folder'+info.folderid+'"  data-id="'+cvId+'" >'+info.folderName+'</option>';
 
 	},
 
@@ -185,8 +187,127 @@ Vtiger_List_Js("Documents_List_Js", {
 		var params = this._super();
 		jQuery.extend(params,customParams);
 		return params;
+	},
+	
+	registerDeleteFilterClickEvent: function(){
+		var thisInstance = this;
+		var listViewFilterBlock = this.getFilterBlock();
+		if(listViewFilterBlock != false){
+			//used mouseup event to stop the propagation of customfilter select change event.
+			listViewFilterBlock.on('mouseup','li i.deleteFilter',function(event){
+				//to close the dropdown
+				thisInstance.getFilterSelectElement().data('select2').close();
+				var liElement = jQuery(event.currentTarget).closest('.select2-result-selectable');
+				var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE');
+				if(liElement.hasClass('folderOption')){
+					if(liElement.find('.deleteFilter').hasClass('dull')){
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_FOLDER_IS_NOT_EMPTY'));
+						return;
+					} else {
+						Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+							function(e) {
+								var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
+								var folderId = currentOptionElement.data('folderid');
+								var params = {
+									module : app.getModuleName(),
+									mode  : 'delete',
+									action : 'Folder',
+									folderid : folderId
+								}
+								AppConnector.request(params).then(function(data) {
+									if(data.success) {
+										currentOptionElement.remove();
+										thisInstance.getFilterSelectElement().trigger('change');
+									}
+								})
+							},
+							function(error, err){
+							}
+						);
+					}
+
+				} else {
+					Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+						function(e) {
+							var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
+							var deleteUrl = currentOptionElement.data('deleteurl');
+							window.location.href = deleteUrl;
+						},
+						function(error, err){
+						}
+					);
+				}
+			});
+		}	
+	},
+	
+	performFilterImageActions : function(liElement) {
+		jQuery('.filterActionImages').clone(true,true).removeClass('filterActionImages').addClass('filterActionImgs').appendTo(liElement.find('.select2-result-label')).show();
+		var currentOptionElement = this.getSelectOptionFromChosenOption(liElement);
+		var deletable = currentOptionElement.data('deletable');
+		if(deletable != '1'){
+			if(liElement.hasClass('folderOption')){
+				liElement.find('.deleteFilter').addClass('dull');
+			}else{
+				liElement.find('.deleteFilter').remove();
+			}
+		}
+		if(liElement.hasClass('defaultFolder')) {
+			liElement.find('.deleteFilter').remove();
+		}
+		var editable = currentOptionElement.data('editable');
+		if(editable != '1'){
+			liElement.find('.editFilter').remove();
+		}
+		var pending = currentOptionElement.data('pending');
+		if(pending != '1'){
+			liElement.find('.approveFilter').remove();
+		}
+		var approve = currentOptionElement.data('public');
+		if(approve != '1'){
+			liElement.find('.denyFilter').remove();
+		}
 	}
 
+});
+
+Vtiger_Base_Validator_Js("Vtiger_FolderName_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var instance = new Vtiger_FieldLabel_Validator_Js();
+		instance.setElement(field);
+		var response = instance.validate();
+		if(response != true){
+			return instance.getError();
+		}
+	}
+	
+},{
+	/**
+	 * Function to validate the field label
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(){
+		var fieldValue = this.getFieldValue();
+		return this.validateValue(fieldValue);
+	},
+	
+	validateValue : function(fieldValue){
+		var specialChars = /[&\<\>\:\'\"\,\_]/ ;
+
+		if (specialChars.test(fieldValue)) {
+			var errorInfo = app.vtranslate('JS_SPECIAL_CHARACTERS')+" & < > ' \" : , _ "+app.vtranslate('JS_NOT_ALLOWED');
+			this.setError(errorInfo);
+			return false;
+		} 
+        return true;
+	}
 });
 
 

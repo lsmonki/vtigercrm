@@ -10,6 +10,13 @@
 
 class Inventory_ProductsPopupAjax_View extends Inventory_ProductsPopup_View {
 	
+	function __construct() {
+		parent::__construct();
+		$this->exposeMethod('getListViewCount');
+		$this->exposeMethod('getRecordsCount');
+		$this->exposeMethod('getPageCount');
+	}
+	
 	/**
 	 * Function returns module name for which Popup will be initialized
 	 * @param type $request
@@ -27,11 +34,16 @@ class Inventory_ProductsPopupAjax_View extends Inventory_ProductsPopup_View {
 	}
 
 	function process (Vtiger_Request $request) {
+		$mode = $request->get('mode');
+		if(!empty($mode)) {
+			$this->invokeExposedMethod($mode, $request);
+			return;
+		}
 		$viewer = $this->getViewer ($request);
-		$moduleName = $this->getModule($request);
 
 		$this->initializeListViewContents($request, $viewer);
-		$viewer->assign('MODULE_NAME', $moduleName);
+		$moduleName = 'Inventory';
+		$viewer->assign('MODULE_NAME',$moduleName);
 		echo $viewer->view('PopupContents.tpl', $moduleName, true);
 	}
 }

@@ -47,10 +47,15 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	//if the newly defined from email field is set, then use this email address as the from address
 	//and use the username as the reply-to address
-	$query = "select * from vtiger_systems where server_type=?";
-	$params = array('email');
-	$result = $adb->pquery($query,$params);
-	$from_email_field = $adb->query_result($result,0,'from_email_field');
+    $cachedFromEmail = VTCacheUtils::getOutgoingMailFromEmailAddress();
+    if($cachedFromEmail === null) {
+        $query = "select from_email_field from vtiger_systems where server_type=?";
+        $params = array('email');
+        $result = $adb->pquery($query,$params);
+        $from_email_field = $adb->query_result($result,0,'from_email_field');
+        VTCacheUtils::setOutgoingMailFromEmailAddress($from_email_field);
+    }
+    
 	if(isUserInitiated()) {
 		$replyToEmail = $from_email;
 	} else {
@@ -140,8 +145,17 @@ function addSignature($contents, $fromname)
 {
 	global $adb;
 	$adb->println("Inside the function addSignature");
-
-	$sign = nl2br($adb->query_result($adb->pquery("select signature from vtiger_users where user_name=?", array($fromname)),0,"signature"));
+    
+    $sign = VTCacheUtils::getUserSignature($fromname);
+    if($sign === null) {
+        $result = $adb->pquery("select signature, first_name, last_name from vtiger_users where user_name=?", array($fromname));
+        $sign = $adb->query_result($result,0,"signature");
+        VTCacheUtils::setUserSignature($fromname, $sign);
+        VTCacheUtils::setUserFullName($fromname, $adb->query_result($result,0,"first_name").' '.$adb->query_result($result,0,"last_name"));
+    }
+    
+    $sign = nl2br($sign);
+    
 	if($sign != '')
 	{
 		$contents .= '<br><br>'.$sign;
@@ -172,9 +186,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$adb->println("Inside the function setMailerProperties");
 	if($module == "Support" || $logo ==1)
 		$mail->AddEmbeddedImage('themes/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
-
+	
 	$mail->Subject = $subject;
-	$mail->Body = $contents;
+	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
+	$mail->Body = html_entity_decode($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
 	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
@@ -184,12 +199,18 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	setMailServerProperties($mail);
 
 	//Handle the from name and email for HelpDesk
-	$mail->From = $from_email;
-	$rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
-	$num_rows = $adb->num_rows($rs);
-	if($num_rows > 0)
-		$from_name = getFullNameFromQResult($rs, 0, 'Users');
-
+    $mail->From = $from_email;
+    
+    $userFullName = VTCacheUtils::getUserFullName($from_name);
+    if(empty($userFullName)) {
+        $rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
+        $num_rows = $adb->num_rows($rs);
+        if($num_rows > 0)
+            $from_name = getFullNameFromQResult($rs, 0, 'Users');
+        VTCacheUtils::setUserFullName($userName, $fullName);
+    } else {
+        $from_name = $userFullName;
+    }
 	$mail->FromName = decode_html($from_name);
 
 //	$mail->Sender= getReturnPath($mail->Host);
@@ -558,9 +579,12 @@ function getDefaultAssigneeEmailIds($groupId) {
 		require_once 'include/utils/GetGroupUsers.php';
 		$userGroups = new GetGroupUsers();
 		$userGroups->getAllUsersInGroup($groupId);
+
+		if(count($userGroups->group_users) == 0) return array();
+
 		$result = $adb->pquery('SELECT email1,email2,secondaryemail FROM vtiger_users WHERE vtiger_users.id IN
-									('.  generateQuestionMarks($userGroups->group_users).') AND status = "Active"',
-								array($userGroups->group_users));
+											('.  generateQuestionMarks($userGroups->group_users).') AND vtiger_users.status= ?',
+								array($userGroups->group_users, 'Active'));
 		$rows = $adb->num_rows($result);
 		for($i = 0;$i < $rows; $i++) {
 			$email = $adb->query_result($result,$i,'email1');
@@ -578,7 +602,7 @@ function getDefaultAssigneeEmailIds($groupId) {
 		return $emails;
 	} else {
 		$adb->println("User id is empty. so return value is ''");
-		return '';
+		return array();
 	}
 }
 

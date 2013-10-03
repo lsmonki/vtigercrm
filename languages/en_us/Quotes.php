@@ -38,5 +38,5 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-	'JS_PLEASE_UPDATE_THE_ITEM' => 'Please update the item',
+	'JS_PLEASE_REMOVE_LINE_ITEM_THAT_IS_DELETED' => 'Please remove line item that is deleted',
 );

@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Zuordnung der benutzerdefinierten Lead Felder', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
 	'LBL_WEBFORMS'                 => 'Setup Webforms'              , 
-	'LBL_LEAD_SOURCE'              => 'Leadquelle:'                 , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

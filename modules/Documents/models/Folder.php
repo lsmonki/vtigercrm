@@ -32,14 +32,14 @@ class Documents_Folder_Model extends Vtiger_Base_Model {
 	 */
 	public function hasDocuments() {
 		$db = PearDatabase::getInstance();
-		$folderName = $this->getName();
+		$folderId = $this->getId();
 
 		$result = $db->pquery("SELECT 1 FROM vtiger_notes
 						INNER JOIN vtiger_attachmentsfolder ON vtiger_attachmentsfolder.folderid = vtiger_notes.folderid
 						INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_notes.notesid
-						WHERE vtiger_attachmentsfolder.foldername = ?
+						WHERE vtiger_attachmentsfolder.folderid = ?
 						AND vtiger_attachmentsfolder.foldername != 'Default'
-						AND vtiger_crmentity.deleted = 0", array($folderName));
+						AND vtiger_crmentity.deleted = 0", array($folderId));
 		$num_rows = $db->num_rows($result);
 		if ($num_rows>0) {
 			return true;
@@ -59,15 +59,16 @@ class Documents_Folder_Model extends Vtiger_Base_Model {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$currentUserId = $currentUserModel->getId();
 
-		$result = $db->pquery("SELECT max(sequence) AS max FROM vtiger_attachmentsfolder", array());
+		$result = $db->pquery("SELECT max(sequence) AS max, max(folderid) AS max_folderid FROM vtiger_attachmentsfolder", array());
 		$sequence = $db->query_result($result, 0, 'max') + 1;
-		
-		$params = array($folderName, $folderDesc, $currentUserId, $sequence);
+		$folderId = $db->query_result($result,0,'max_folderid') + 1;
+		$params = array($folderId,$folderName, $folderDesc, $currentUserId, $sequence);
 
-		$db->pquery("INSERT INTO vtiger_attachmentsfolder(foldername, description, createdby, sequence) VALUES(?, ?, ?, ?)", $params);
+		$db->pquery("INSERT INTO vtiger_attachmentsfolder(folderid,foldername, description, createdby, sequence) VALUES(?, ?, ?, ?, ?)", $params);
 		
 		$this->set('sequence', $sequence);
 		$this->set('createdby', $currentUserId);
+		$this->set('folderid',$folderId);
 		
 		return $this;
 	}
@@ -78,9 +79,8 @@ class Documents_Folder_Model extends Vtiger_Base_Model {
 	 */
 	public function delete() {
 		$db = PearDatabase::getInstance();
-		$folderName = $this->getName();
-
-		$result = $db->pquery("DELETE FROM vtiger_attachmentsfolder WHERE foldername = ? AND foldername != 'Default'", array($folderName));
+		$folderId = $this->getId();
+		$result = $db->pquery("DELETE FROM vtiger_attachmentsfolder WHERE folderid = ? AND foldername != 'Default'", array($folderId));
 		return $this;
 	}
 
@@ -97,11 +97,11 @@ class Documents_Folder_Model extends Vtiger_Base_Model {
 	 * @param foldername
 	 * @return Documents_Folder_Model
 	 */
-	public static function getInstanceByName($folderName) {
+	public static function getInstanceById($folderId) {
 		$db = PearDatabase::getInstance();
 		$folderModel = Documents_Folder_Model::getInstance();
 
-		$result = $db->pquery("SELECT * FROM vtiger_attachmentsfolder WHERE foldername = ?", array($folderName));
+		$result = $db->pquery("SELECT * FROM vtiger_attachmentsfolder WHERE folderid = ?", array($folderId));
 		$num_rows = $db->num_rows($result);
 		if ($num_rows > 0) {
 			$values = $db->query_result_rowdata($result, 0);
@@ -158,7 +158,7 @@ class Documents_Folder_Model extends Vtiger_Base_Model {
 	 * @return Array  info array
 	 */
 	public function getInfoArray() {
-		return array('folderName' => $this->getName());
+		return array('folderName' => $this->getName(),'folderid' => $this->getId());
 	}
 
 }

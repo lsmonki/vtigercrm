@@ -112,5 +112,6 @@
 		</tr>
 		</tbody>
 	</table>
+	<br>
 	{/foreach}
 {/strip}

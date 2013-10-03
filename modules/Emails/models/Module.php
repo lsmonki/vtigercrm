@@ -24,6 +24,14 @@ class Emails_Module_Model extends Vtiger_Module_Model{
 	}
 
 	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
+	
+	/**
 	 * Function to get emails related modules
 	 * @return <Array> - list of modules 
 	 */	

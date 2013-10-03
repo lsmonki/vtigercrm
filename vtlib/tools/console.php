@@ -273,8 +273,6 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 				$moduleFileContents = str_replace($key, $value, $moduleFileContents);
 			}
 			file_put_contents($targetpath.'/'.$module->name.'.php', $moduleFileContents);
-
-			file_put_contents($targetpath.'/language/en_us.lang.php', "<?php\n\$mod_strings = array(); ?>");
 		}
 	}
 
@@ -413,7 +411,7 @@ class Vtiger_Tools_Console_LanguageController extends Vtiger_Tools_Console_Contr
 		}
 
 		$db = PearDatabase::getInstance();
-		$check = $db->pquery('SELECT 1 FROM vtiger_language WHERE prefix=?', array($languageInformation['prefix']));
+		$check = $db->pquery('SELECT 1 FROM vtiger_language WHERE prefix=?', $languageInformation['prefix']);
 		if ($check && $db->num_rows($check)) {
 			;
 		} else {

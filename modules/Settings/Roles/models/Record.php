@@ -96,6 +96,30 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 		return $this->children;
 	}
+	
+	public function getSameLevelRoles() {
+		$db = PearDatabase::getInstance();
+		if(!$this->children) {
+			$parentRoles = getParentRole($this->getId());
+			$currentRoleDepth = $this->getDepth();
+			$parentRoleString = '';
+			foreach ($parentRoles as $key => $role) {
+				if(empty($parentRoleString)) $parentRoleString = $role;
+				else $parentRoleString = $parentRoleString.'::'.$role;
+			}
+			$sql = 'SELECT * FROM vtiger_role WHERE parentrole LIKE ? AND depth = ?';
+			$params = array($parentRoleString.'::%', $currentRoleDepth);
+			$result = $db->pquery($sql, $params);
+			$noOfRoles = $db->num_rows($result);
+			$roles = array();
+			for ($i=0; $i<$noOfRoles; ++$i) {
+				$role = self::getInstanceFromQResult($result, $i);
+				$roles[$role->getId()] = $role;
+			}
+			$this->children = $roles;
+		}
+		return $this->children;
+	}
 
 	/**
 	 * Function to get all the children roles
@@ -237,6 +261,7 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 
 		$this->set('depth', $newDepth);
 		$this->set('parentrole', $newParentRoleString);
+		$this->set('allowassignedrecordsto', $this->get('allowassignedrecordsto'));
 		$this->save();
 
 		foreach($allChildren as $roleId => $roleModel) {
@@ -248,6 +273,7 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 
 			$roleModel->set('depth', $newChildDepth);
 			$roleModel->set('parentrole', $newChildParentRoleString);
+			$roleModel->set('allowassignedrecordsto', $roleModel->get('allowassignedrecordsto'));
 			$roleModel->save();
 		}
 	}
@@ -272,13 +298,13 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 
 		if($mode == 'edit') {
-			$sql = 'UPDATE vtiger_role SET rolename=?, parentrole=?, depth=? WHERE roleid=?';
-			$params = array($this->getName(), $this->getParentRoleString(), $this->getDepth(), $roleId);
+			$sql = 'UPDATE vtiger_role SET rolename=?, parentrole=?, depth=?, allowassignedrecordsto=? WHERE roleid=?';
+			$params = array($this->getName(), $this->getParentRoleString(), $this->getDepth(), $this->get('allowassignedrecordsto'), $roleId);
 			$db->pquery($sql, $params);
 		} else {
-			$sql = 'INSERT INTO vtiger_role(roleid, rolename, parentrole, depth) VALUES (?,?,?,?)';
-			$params = array($roleId, $this->getName(), $this->getParentRoleString(), $this->getDepth());
-		$db->pquery($sql, $params);
+			$sql = 'INSERT INTO vtiger_role(roleid, rolename, parentrole, depth, allowassignedrecordsto) VALUES (?,?,?,?,?)';
+			$params = array($roleId, $this->getName(), $this->getParentRoleString(), $this->getDepth(), $this->get('allowassignedrecordsto'));
+			$db->pquery($sql, $params);
 			$picklist2RoleSQL = "INSERT INTO vtiger_role2picklist SELECT '".$roleId."',picklistvalueid,picklistid,sortid
 					FROM vtiger_role2picklist WHERE roleid = ?";
 			$db->pquery($picklist2RoleSQL, array($parentRole->getId()));
@@ -461,4 +487,20 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 	   return null;
    }
 
+   /**
+    * Function to get Users who are from this role
+    * @return <Array> User record models list <Users_Record_Model>
+    */
+   public function getUsers() {
+	   $db = PearDatabase::getInstance();
+	   $result = $db->pquery('SELECT userid FROM vtiger_user2role WHERE roleid = ?', array($this->getId()));
+	   $numOfRows = $db->num_rows($result);
+
+	   $usersList = array();
+	   for($i=0; $i<$numOfRows; $i++) {
+		   $userId = $db->query_result($result, $i, 'userid');
+		   $usersList[$userId] = Users_Record_Model::getInstanceById($userId, 'Users');
+	   }
+	   return $usersList;
+   }
 }

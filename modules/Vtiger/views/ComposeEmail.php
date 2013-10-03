@@ -44,6 +44,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$excludedIds = $request->get('excluded_ids',array());
 		$selectedFields = $request->get('selectedFields');
 		$relatedLoad = $request->get('relatedLoad');
+		$documentIds = $request->get('documentIds');
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODULE', $moduleName);
@@ -53,7 +54,24 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('USER_MODEL', $userRecordModel);
 		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize'));
 		$viewer->assign('RELATED_MODULES', $moduleModel->getEmailRelatedModules());
-		
+		if ($documentIds) {
+			$attachements = array();
+			foreach ($documentIds as $documentId) {
+				$documentRecordModel = Vtiger_Record_Model::getInstanceById($documentId, $sourceModule);
+				if ($documentRecordModel->get('filelocationtype') == 'I') {
+					$fileDetails = $documentRecordModel->getFileDetails();
+					if ($fileDetails) {
+						$fileDetails['fileid'] = $fileDetails['attachmentsid'];
+						$fileDetails['docid'] = $fileDetails['crmid'];
+						$fileDetails['attachment'] = $fileDetails['name'];
+						$fileDetails['size'] = filesize($fileDetails['path'] . $fileDetails['attachmentsid'] . "_". $fileDetails['name']);
+						$attachements[] = $fileDetails;
+					}
+				}
+			}
+			$viewer->assign('ATTACHMENTS', $attachements);
+		}
+        
         $searchKey = $request->get('search_key');
         $searchValue = $request->get('search_value');
 		$operator = $request->get('operator');
@@ -122,8 +140,8 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer = $this->getViewer($request);
 		$attachment = array();
 		
-		if(!$this->record){
-		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+		if(!$this->record) {
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 		$recordModel = $this->record->getRecord();
 		

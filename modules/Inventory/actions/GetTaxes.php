@@ -34,7 +34,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 
 			$response->setResult(array(
 									$recordId => array(
-										'id'=>$recordId, 'name'=>$recordModel->getName(),
+										'id'=>$recordId, 'name'=>decode_html($recordModel->getName()),
 										'taxes'=>$taxes, 'listprice'=>$listPrice,
 										'description' => decode_html($recordModel->get('description')),
 										'quantityInStock' => $recordModel->get('qtyinstock')
@@ -54,7 +54,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 				$listPrice = (float)$recordModel->get('unit_price') * (float)$conversionRate;
 				$info[] = array(
 							$id => array(
-								'id'=>$id, 'name'=>$recordModel->getName(),
+								'id'=>$id, 'name'=>decode_html($recordModel->getName()),
 								'taxes'=>$taxes, 'listprice'=>$listPrice,
 								'description' => $recordModel->get('description'),
 								'quantityInStock' => $recordModel->get('qtyinstock')

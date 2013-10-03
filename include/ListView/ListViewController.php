@@ -313,7 +313,6 @@ class ListViewController {
 								$currencyInfo = getInventoryCurrencyInfo($module, $recordId);
 								$currencySymbol = $currencyInfo['currency_symbol'];
 							}
-							$value = number_format($value, 2,'.','');
 							$value = CurrencyField::convertToUserFormat($value, null, true);
 							$row['currencySymbol'] = $currencySymbol;
 //							$value = CurrencyField::appendCurrencySymbol($currencyValue, $currencySymbol);

@@ -27,10 +27,14 @@ class VTSimpleTemplate{
 		if(count($matches)==0){
 			$fieldname = $match[1];
 			$data = $this->parent->getData();
-			if($this->useValue($data, $fieldname)){
-				$result = $data[$fieldname];
-			}else{
-				$result ='';
+			if(isset($data[$fieldname])) {
+				if($this->useValue($data, $fieldname)){
+					$result = nl2br($data[$fieldname]);
+				}else{
+					$result ='';
+				}
+			} else {
+				$result ='$'.$fieldname;
 			}
 		}else{
 			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
@@ -56,7 +60,7 @@ class VTSimpleTemplate{
 							$entity = $this->cache->forId($refId);
 							$data = $entity->getData();
 							if($this->useValue($data, $fieldname)){
-								$parts[] = $data[$fieldname];
+								$parts[] = nl2br($data[$fieldname]);
 							}
 						}
 						$result = implode(",", $parts);
@@ -64,7 +68,17 @@ class VTSimpleTemplate{
 					} elseif($entity->getModuleName()===$referenceModule){
 						$data = $entity->getData();
 						if($this->useValue($data, $fieldname)){
-							$result = $data[$fieldname];
+                            $handler = vtws_getModuleHandlerFromName($referenceModule, $this->cache->user);
+                            $meta = $handler->getMeta();
+                            $referenceFieldList = $meta->getReferenceFieldDetails();
+                            if(array_key_exists($fieldname,$referenceFieldList)) {
+                                $webserviceId = $data[$fieldname];
+                                $idComponents = vtws_getIdComponents($webserviceId);
+                                require_once 'modules/Vtiger/helpers/Util.php';
+                                $result = Vtiger_Util_Helper::getLabel($idComponents[1]);
+                            }else{                            
+							$result = nl2br($data[$fieldname]);
+                            }
 						}else{
 							$result = '';
 						}
@@ -83,7 +97,7 @@ class VTSimpleTemplate{
 	}
 
 	function parseTemplate(){
-		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\)),?/', array($this,"matchHandler"), $this->template);
+		return preg_replace_callback('/\\$(\w+|\((\w+) : \(([_\w]+)\) (\w+)\))/', array($this,"matchHandler"), $this->template);
 	}
 
 	function getMetaValue($fieldname){
@@ -93,11 +107,32 @@ class VTSimpleTemplate{
 			case 'date'					:	return getNewDisplayDate();
 			case 'time'					:	return date('h:i:s');
 			case 'dbtimezone'			:	return DateTimeField::getDBTimeZone();
+			case 'usertimezone'			:	$referenceId = $this->parent->get('assigned_user_id');
+											if ($referenceId) {
+												$entity = $this->cache->forId($referenceId);
+												list($entityId, $ownerId) = vtws_getIdComponents($referenceId);
+												if($entity->getModuleName() === 'Groups') {
+													require_once('include/utils/GetGroupUsers.php');
+
+													$groupModel = new GetGroupUsers();
+													$groupModel->getAllUsersInGroup($ownerId);
+													$usersList = $groupModel->group_users;
+													if ($usersList) {
+														$ownerId = $usersList[0];
+													}
+												}
+												if ($ownerId) {
+													$ownerFocus = CRMEntity::getInstance('Users');
+													$ownerFocus->retrieve_entity_info($ownerId, 'Users');
+													return getTranslatedString($ownerFocus->column_fields['time_zone'], 'Users');
+												}
+											}
+											return '';
 			case 'crmdetailviewurl'		:	$wsId = $this->parent->getId();
 											$parts = explode('x', $wsId);
 											$recordId = $parts[1];
 											$moduleName = $this->parent->getModuleName();
-											return $site_URL.'/index.php?action=DetailView&module='.$moduleName.'&record='.$recordId;
+											return "$site_URL/index.php?module=$moduleName&view=Detail&record=$recordId";
 			case 'portaldetailviewurl'	: 	$wsId = $this->parent->getId();
 											$parts = explode('x', $wsId);
 											$recordId = $parts[1];

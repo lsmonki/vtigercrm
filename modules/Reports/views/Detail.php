@@ -48,6 +48,7 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$this->calculationFields = $reportModel->getReportCalulationData();
 
 		$primaryModule = $reportModel->getPrimaryModule();
+		$secondaryModules = $reportModel->getSecondaryModules();
 		$primaryModuleModel = Vtiger_Module_Model::getInstance($primaryModule);
 
 		$currentUser = Users_Record_Model::getCurrentUserModel();
@@ -68,8 +69,15 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		$viewer->assign('PRIMARY_MODULE', $primaryModule);
 		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $reportModel->getPrimaryModuleRecordStructure());
 		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
+		
+		$secondaryModuleIsCalendar = strpos($secondaryModules, 'Calendar');
+		if(($primaryModule == 'Calendar') || ($secondaryModuleIsCalendar !== FALSE)){
+			$advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
+		} else{
+			$advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
+		}
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
         $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
         foreach($dateFilters as $comparatorKey => $comparatorInfo) {
             $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);

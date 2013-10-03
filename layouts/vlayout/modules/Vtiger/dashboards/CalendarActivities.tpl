@@ -15,7 +15,7 @@
 	<thead>
 		<tr>
 			<th class="span4">
-				<div class="dashboardTitle"><b>&nbsp;&nbsp;{vtranslate($WIDGET->getTitle())}</b></div>
+				<div class="dashboardTitle" title="{vtranslate($WIDGET->getTitle(), $MODULE_NAME)}"><b>&nbsp;&nbsp;{vtranslate($WIDGET->getTitle())}</b></div>
 			</th>
 			<th class="span2">
 				<div>

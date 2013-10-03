@@ -28,8 +28,7 @@ class Users_ForgotPassword_Action {
 		$confirmPassword = $request->get('confirmPassword');
 
 		$userId = getUserId_Ol($username);
-		$user = new Users();
-		$user->retrieve_entity_info($userId, 'Users');
+		$user = Users::getActiveAdminUser();
 		$wsUserId = vtws_getWebserviceEntityId('Users', $userId);
 		vtws_changePassword($wsUserId, '', $newPassword, $confirmPassword, $user);
 

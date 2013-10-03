@@ -18,4 +18,6 @@
 	require_once 'VTEventHandler.inc';
 	require_once 'VTEventsManager.inc';
 	require_once 'VTEventTrigger.inc';
+    require_once 'VTBatchData.inc';
+    require_once 'VTBatchEventTrigger.inc';
 ?>

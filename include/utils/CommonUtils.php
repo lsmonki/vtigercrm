@@ -25,6 +25,7 @@ require_once('include/utils/RecurringType.php');
 require_once('include/utils/EmailTemplate.php');
 require_once 'include/QueryGenerator/QueryGenerator.php';
 require_once 'include/ListView/ListViewController.php';
+require_once 'includes/runtime/Cache.php';
 
 function is_admin($user) {
 	return Vtiger_Functions::userIsAdministrator($user);

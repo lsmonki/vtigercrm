@@ -162,5 +162,6 @@
 			{/foreach}
 			</tr>
 			</table>
+			<br>
 		{/foreach}
 {/strip}

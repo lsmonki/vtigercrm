@@ -60,12 +60,14 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 		var params = {}
 		var sourceModule = editViewForm.find('[name="sourceModule"]').val();
 		var sourceModuleLabel = editViewForm.find('option[value="'+sourceModule+'"]').text();
-		var prefix = editViewForm.find('[name="prefix"]').val();
+		var prefix = editViewForm.find('[name="prefix"]');
+		var currentPrefix = jQuery.trim(prefix.val());
+		var oldPrefix = prefix.data('oldPrefix');
 		var sequenceNumberElement = editViewForm.find('[name="sequenceNumber"]');
 		var sequenceNumber = sequenceNumberElement.val();
 		var oldSequenceNumber = sequenceNumberElement.data('oldSequenceNumber');
 
-		if(sequenceNumber < oldSequenceNumber){
+		if((sequenceNumber < oldSequenceNumber) && (currentPrefix == oldPrefix)){
 			var errorMessage = app.vtranslate('JS_SEQUENCE_NUMBER_MESSAGE')+" "+oldSequenceNumber;
 			sequenceNumberElement.validationEngine('showPrompt', errorMessage , 'error','topLeft',true);
 			return;
@@ -77,21 +79,27 @@ jQuery.Class('Settings_CustomRecordNumbering_Js', {}, {
 			'action' : "CustomRecordNumberingAjax",
 			'mode' : "saveModuleCustomNumberingData",
 			'sourceModule' : sourceModule,
-			'prefix' : prefix,
+			'prefix' : currentPrefix,
 			'sequenceNumber' : sequenceNumber
 		}
 		
 		jQuery('.saveButton').attr("disabled","disabled");
 		AppConnector.request(params).then(
 				function(data){
+					var params;
 					var successfullSaveMessage = app.vtranslate('JS_RECORD_NUMBERING_SAVED_SUCCESSFULLY_FOR')+" "+sourceModuleLabel;
 					if(data.success == true){
-						var params = {
+						params = {
 							text: successfullSaveMessage
 						};
 						Settings_Vtiger_Index_Js.showMessage(params);
 					}else{
-						Settings_Vtiger_Index_Js.showMessage(data.error.message);
+						var errorMessage = currentPrefix+" "+app.vtranslate(data.error.message);
+						params = {
+							text: errorMessage,
+							type: 'error'
+						};
+						Settings_Vtiger_Index_Js.showMessage(params);
 					}
 				},
 				function(jqXHR,textStatus, errorThrown){

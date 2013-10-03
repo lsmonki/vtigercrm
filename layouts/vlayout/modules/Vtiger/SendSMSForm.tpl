@@ -34,8 +34,12 @@
 			<select name="fields[]" data-placeholder="{vtranslate('LBL_ADD_MORE_FIELDS',$MODULE)}" multiple class="chzn-select">
 				<optgroup>
 					{foreach item=PHONE_FIELD from=$PHONE_FIELDS}
-						<option value="{$PHONE_FIELD->get('name')}">
-							{vtranslate($PHONE_FIELD->get('label'), $SOURCE_MODULE)}
+						{assign var=PHONE_FIELD_NAME value=$PHONE_FIELD->get('name')}
+						<option value="{$PHONE_FIELD_NAME}">
+							{if !empty($SINGLE_RECORD)}
+								{assign var=FIELD_VALUE value=$SINGLE_RECORD->get($PHONE_FIELD_NAME)}
+							{/if}
+							{vtranslate($PHONE_FIELD->get('label'), $SOURCE_MODULE)}{if !empty($FIELD_VALUE)} ({$FIELD_VALUE}){/if}
 						</option>
 					{/foreach}
 				</optgroup>
@@ -48,7 +52,12 @@
 			</div>
 			<textarea class="input-xxlarge" name="message" id="message" placeholder="{vtranslate('LBL_WRITE_YOUR_MESSAGE_HERE', $MODULE)}"></textarea>
 		</div>
-		{include file='ModalFooter.tpl'|@vtemplate_path:$MODULE}
+		<div class="modal-footer">
+			<div class=" pull-right cancelLinkContainer">
+				<a class="cancelLink" type="reset" data-dismiss="modal">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+			</div>
+			<button class="btn btn-success" type="submit" name="saveButton"><strong>{vtranslate('LBL_SEND', $MODULE)}</strong></button>
+		</div>
 	</form>
 </div>
 {/strip}

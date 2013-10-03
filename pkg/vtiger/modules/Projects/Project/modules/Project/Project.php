@@ -101,7 +101,7 @@ class Project extends CRMEntity {
 	var $default_sort_order='ASC';
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projectname');
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projectname', 'assigned_user_id');
 
 	function __construct() {
 	    global $log, $currentModule;
@@ -588,6 +588,47 @@ class Project extends CRMEntity {
 			$updateParams = array(null, $id);
 			$this->db->pquery($updateQuery, $updateParams);
 		}
+	}
+    
+    /**
+	 * Move the related records of the specified list of id's to the given record.
+	 * @param String This module name
+	 * @param Array List of Entity Id's from which related records need to be transfered
+	 * @param Integer Id of the the Record to which the related records are to be moved
+	 */
+	function transferRelatedRecords($module, $transferEntityIds, $entityId) {
+		global $adb,$log;
+		$log->debug("Entering function transferRelatedRecords ($module, $transferEntityIds, $entityId)");
+
+		$rel_table_arr = Array("ProjectTask"=>"vtiger_projecttask",'ProjectMilestone'=>'vtiger_projectmilestone',
+                                "Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel");
+
+		$tbl_field_arr = Array("vtiger_projecttask"=>"projecttaskid",'vtiger_projectmilestone'=>'projectmilestoneid',
+                                "vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid");
+
+		$entity_tbl_field_arr = Array("vtiger_projecttask"=>"projectid",'vtiger_projectmilestone'=>'projectid',
+                                    "vtiger_senotesrel"=>"crmid","vtiger_seattachmentsrel"=>"crmid");
+
+		foreach($transferEntityIds as $transferId) {
+			foreach($rel_table_arr as $rel_module=>$rel_table) {
+				$id_field = $tbl_field_arr[$rel_table];
+				$entity_id_field = $entity_tbl_field_arr[$rel_table];
+				// IN clause to avoid duplicate entries
+				$sel_result =  $adb->pquery("select $id_field from $rel_table where $entity_id_field=? " .
+						" and $id_field not in (select $id_field from $rel_table where $entity_id_field=?)",
+						array($transferId,$entityId));
+				$res_cnt = $adb->num_rows($sel_result);
+				if($res_cnt > 0) {
+					for($i=0;$i<$res_cnt;$i++) {
+						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
+						$adb->pquery("update $rel_table set $entity_id_field=? where $entity_id_field=? and $id_field=?",
+							array($entityId,$transferId,$id_field_value));
+					}
+				}
+			}
+		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
+		$log->debug("Exiting transferRelatedRecords...");
 	}
 
 }

@@ -105,7 +105,7 @@
 				<span class="span9">
 					<div class="row-fluid">
 						<input type="file" id="multiFile" name="file[]"/>&nbsp;
-						<button type="button" class="btn-x-small" id="browseCrm" data-url="{$DOCUMENTS_URL}" title="{vtranslate('LBL_BROWSE_CRM',$MODULE)}">{vtranslate('LBL_BROWSE_CRM',$MODULE)}</button>
+						<button type="button" class="btn btn-small" id="browseCrm" data-url="{$DOCUMENTS_URL}" title="{vtranslate('LBL_BROWSE_CRM',$MODULE)}">{vtranslate('LBL_BROWSE_CRM',$MODULE)}</button>
 					</div>
 					<div id="attachments" class="row-fluid">
 						{foreach item=ATTACHMENT from=$ATTACHMENTS}

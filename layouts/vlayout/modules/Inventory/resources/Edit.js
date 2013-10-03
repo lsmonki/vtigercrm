@@ -243,7 +243,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	},
 
 	setListPriceValue : function(lineItemRow, listPriceValue) {
-		lineItemRow.find('.listPrice').val(listPriceValue)
+		var listPrice = parseFloat(listPriceValue).toFixed(2);
+		lineItemRow.find('.listPrice').val(listPrice)
 		return this;
 	},
 
@@ -1273,7 +1274,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				lineItemTable.find('tr.'+thisInstance.rowClass).each(function(index,domElement){
 					var lineItemRow = jQuery(domElement);
 					lineItemRow.find('.individualTaxContainer,.productTaxTotal').removeClass('hide');
-					thisInstance.calculateLineItemNetPrice(lineItemRow);
+					thisInstance.lineItemRowCalculations(lineItemRow);
 				});
 			}else{
 				jQuery('#group_tax_row').removeClass('hide');
@@ -1435,7 +1436,6 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			'items' : 'tr.'+this.rowClass,
 			'revert' : true,
 			'tolerance':'pointer',
-			'dealy' : '3000',
 			'helper' : function(e,ui){
 				//while dragging helper elements td element will take width as contents width
 				//so we are explicity saying that it has to be same width so that element will not
@@ -1470,6 +1470,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				return false;
 			}
 			thisInstance.updateLineItemElementByOrder();
+			var lineItemTable = thisInstance.getLineItemContentsContainer();
+			jQuery('.discountSave',lineItemTable).trigger('click');
+			thisInstance.lineItemToTalResultCalculations();
 			thisInstance.saveProductCount();
 			thisInstance.saveSubTotalValue();
 			thisInstance.saveTotalValue();
@@ -1578,8 +1581,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 					var serverDataFormat = data.result
 					if(serverDataFormat.length <= 0) {
 						serverDataFormat = new Array({
-							//TODO : client translation
-							'label' : 'No Results Found',
+							'label' : app.vtranslate('JS_NO_RESULTS_FOUND'),
 							'type'  : 'no results'
 						});
 					}

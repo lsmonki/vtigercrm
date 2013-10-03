@@ -34,7 +34,7 @@
 					<span class="span10" >
 						{include file='AdvanceFilter.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE}
 					</span>
-					{include file="FieldExpressions.tpl"|@vtemplate_path:$QUALIFIED_MODULE}
+					{include file="FieldExpressions.tpl"|@vtemplate_path:$QUALIFIED_MODULE EXECUTION_CONDITION=$WORKFLOW_MODEL->get('execution_condition')}
 				</div>
 			</div><br>
 			<div class="pull-right">

@@ -258,72 +258,79 @@ function getAllTaxes($available='all', $sh='',$mode='',$id='')
 	global $adb, $log;
 	$log->debug("Entering into the function getAllTaxes($available,$sh,$mode,$id)");
 	$taxtypes = Array();
-	if($sh != '' && $sh == 'sh')
-	{
+	if($sh != '' && $sh == 'sh') {
 		$tablename = 'vtiger_shippingtaxinfo';
 		$value_table='vtiger_inventoryshippingrel';
-	}
-	else
-	{
+		if($mode == 'edit' && id != '') {
+			$sql = "SELECT * FROM $tablename WHERE deleted=0";
+			$result = $adb->pquery($sql, array());
+			$noofrows=$adb->num_rows($result);
+			for($i=0; $i<$noofrows; $i++) {
+				$taxtypes[$i]['taxid'] = $adb->query_result($result,$i,'taxid');
+				$taxname = $adb->query_result($result,$i,'taxname');
+				$taxtypes[$i]['taxname'] = $taxname;
+				$inventory_tax_val_result = $adb->pquery("SELECT $taxname FROM $value_table WHERE id=?",array($id));
+				$taxtypes[$i]['percentage'] = $adb->query_result($inventory_tax_val_result, 0, $taxname);;
+				$taxtypes[$i]['taxlabel'] = $adb->query_result($result,$i,'taxlabel');
+				$taxtypes[$i]['deleted'] = $adb->query_result($result,$i,'deleted');
+			}
+		} else {
+			//This where condition is added to get all products or only availble products
+			if ($available != 'all' && $available == 'available') {
+				$where = " WHERE $tablename.deleted=0";
+			}
+			$result = $adb->pquery("SELECT * FROM $tablename $where ORDER BY deleted", array());
+			$noofrows = $adb->num_rows($result);
+			for ($i = 0; $i < $noofrows; $i++) {
+				$taxtypes[$i]['taxid'] = $adb->query_result($result, $i, 'taxid');
+				$taxtypes[$i]['taxname'] = $adb->query_result($result, $i, 'taxname');
+				$taxtypes[$i]['taxlabel'] = $adb->query_result($result, $i, 'taxlabel');
+				$taxtypes[$i]['percentage'] = $adb->query_result($result, $i, 'percentage');
+				$taxtypes[$i]['deleted'] = $adb->query_result($result, $i, 'deleted');
+			}
+		}
+	} else {
 		$tablename = 'vtiger_inventorytaxinfo';
 		$value_table='vtiger_inventoryproductrel';
-	}
-
-	if($mode == 'edit' && $id != '' )
-	{
-		//Getting total no of taxes
-
-		$result_ids=array();
-		$result=$adb->pquery("select taxname,taxid from $tablename",array());
-		$noofrows=$adb->num_rows($result);
-
-		$inventory_tax_val_result=$adb->pquery("select * from $value_table where id=?",array($id));
-
-		//Finding which taxes are associated with this (SO,PO,Invoice,Quotes) and getting its taxid.
-		for($i=0;$i<$noofrows;$i++)
-		{
-
-			$taxname=$adb->query_result($result,$i,'taxname');
-			$taxid=$adb->query_result($result,$i,'taxid');
-
-			$tax_val=$adb->query_result($inventory_tax_val_result,0,$taxname);
-			if($tax_val != '')
-			{
-				array_push($result_ids,$taxid);
+		if($mode == 'edit' && $id != '' ) {
+			//Getting total no of taxes
+			$result_ids = array();
+			$result = $adb->pquery("select taxname,taxid from $tablename", array());
+			$noofrows = $adb->num_rows($result);
+			$inventory_tax_val_result = $adb->pquery("select * from $value_table where id=?", array($id));
+			//Finding which taxes are associated with this (SO,PO,Invoice,Quotes) and getting its taxid.
+			for ($i = 0; $i < $noofrows; $i++) {
+				$taxname = $adb->query_result($result, $i, 'taxname');
+				$taxid = $adb->query_result($result, $i, 'taxid');
+				$tax_val = $adb->query_result($inventory_tax_val_result, 0, $taxname);
+				if ($tax_val != '') {
+					array_push($result_ids, $taxid);
+				}
 			}
-
-		}
-		//We are selecting taxes using that taxids. So It will get the tax even if the tax is disabled.
-		$where_ids='';
-		if (count($result_ids) > 0)
-		{
-			$insert_str = str_repeat("?,", count($result_ids)-1);
-			$insert_str .= "?";
-			$where_ids="taxid in ($insert_str) or";
-		}
-
-		$res = $adb->pquery("select * from $tablename  where $where_ids  deleted=0 order by taxid",$result_ids);
-	}
-	else
-	{
-		//This where condition is added to get all products or only availble products
-		if($available != 'all' && $available == 'available')
-		{
-			$where = " where $tablename.deleted=0";
+			//We are selecting taxes using that taxids. So It will get the tax even if the tax is disabled.
+			$where_ids = '';
+			if (count($result_ids) > 0) {
+				$insert_str = str_repeat("?,", count($result_ids) - 1);
+				$insert_str .= "?";
+				$where_ids = "taxid in ($insert_str) or";
+			}
+			$res = $adb->pquery("select * from $tablename  where $where_ids  deleted=0 order by taxid",$result_ids);
+		} else {
+			//This where condition is added to get all products or only availble products
+			if ($available != 'all' && $available == 'available') {
+				$where = " where $tablename.deleted=0";
+			}
+			$res = $adb->pquery("select * from $tablename $where order by deleted", array());
 		}
 
-		$res = $adb->pquery("select * from $tablename $where order by deleted",array());
-
-	}
-
-	$noofrows = $adb->num_rows($res);
-	for($i=0;$i<$noofrows;$i++)
-	{
-		$taxtypes[$i]['taxid'] = $adb->query_result($res,$i,'taxid');
-		$taxtypes[$i]['taxname'] = $adb->query_result($res,$i,'taxname');
-		$taxtypes[$i]['taxlabel'] = $adb->query_result($res,$i,'taxlabel');
-		$taxtypes[$i]['percentage'] = $adb->query_result($res,$i,'percentage');
-		$taxtypes[$i]['deleted'] = $adb->query_result($res,$i,'deleted');
+		$noofrows = $adb->num_rows($res);
+		for ($i = 0; $i < $noofrows; $i++) {
+			$taxtypes[$i]['taxid'] = $adb->query_result($res, $i, 'taxid');
+			$taxtypes[$i]['taxname'] = $adb->query_result($res, $i, 'taxname');
+			$taxtypes[$i]['taxlabel'] = $adb->query_result($res, $i, 'taxlabel');
+			$taxtypes[$i]['percentage'] = $adb->query_result($res, $i, 'percentage');
+			$taxtypes[$i]['deleted'] = $adb->query_result($res, $i, 'deleted');
+		}
 	}
 	$log->debug("Exit from the function getAllTaxes($available,$sh,$mode,$id)");
 
@@ -687,26 +694,23 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	array_push($updateparams, $adjustmentType.$adjustment);
 
 	$total = $_REQUEST['total'];
-	$updatequery .= " total=?";
+	$updatequery .= " total=?,";
 	array_push($updateparams, $total);
 
-	//$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
-	//Added where condition to which entity we want to update these values
-	$updatequery .= " where ".$focus->table_index."=?";
-	array_push($updateparams, $focus->id);
 
-	$adb->pquery($updatequery,$updateparams);
 
 	//to save the S&H tax details in vtiger_inventoryshippingrel table
 	$sh_tax_details = getAllTaxes('all','sh');
 	$sh_query_fields = "id,";
 	$sh_query_values = "?,";
 	$sh_query_params = array($focus->id);
+	$sh_tax_pecent = 0;
 	for($i=0;$i<count($sh_tax_details);$i++)
 	{
 		$tax_name = $sh_tax_details[$i]['taxname']."_sh_percent";
 		if($_REQUEST[$tax_name] != '')
 		{
+			$sh_tax_pecent = $sh_tax_pecent + $_REQUEST[$tax_name];
 			$sh_query_fields .= $sh_tax_details[$i]['taxname'].",";
 			$sh_query_values .= "?,";
 			array_push($sh_query_params, $_REQUEST[$tax_name]);
@@ -714,7 +718,16 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	}
 	$sh_query_fields = trim($sh_query_fields,',');
 	$sh_query_values = trim($sh_query_values,',');
+	
+	$updatequery .= " s_h_percent=?";
+	array_push($updateparams, $sh_tax_pecent);
 
+	//$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	//Added where condition to which entity we want to update these values
+	$updatequery .= " where ".$focus->table_index."=?";
+	array_push($updateparams, $focus->id);
+	$adb->pquery($updatequery,$updateparams);
+	
 	$sh_query = "insert into vtiger_inventoryshippingrel($sh_query_fields) values($sh_query_values)";
 	$adb->pquery($sh_query,$sh_query_params);
 
@@ -907,7 +920,7 @@ function getPriceDetailsForProduct($productid, $unit_price, $available='availabl
 			if ($cur_value == null || $cur_value == '') {
 				$price_details[$i]['check_value'] = false;
 				if	($unit_price != null) {
-					$cur_value = CurrencyField::convertFromMasterCurrency($unit_price, $actual_conversion_rate);
+					$cur_value = convertFromMasterCurrency($unit_price, $actual_conversion_rate);
 				} else {
 					$cur_value = '0';
 				}
@@ -1170,7 +1183,7 @@ function createRecords($obj) {
 		$fieldData = array();
 		$lineItems = array();
 		$subject = $row['subject'];
-		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Controller::$IMPORT_RECORD_NONE .' AND subject = "'. str_replace("\"", "\\\"", $subject) .'"';
+		$sql = 'SELECT * FROM ' . $tableName . ' WHERE status = '. Import_Data_Action::$IMPORT_RECORD_NONE .' AND subject = "'. str_replace("\"", "\\\"", $subject) .'"';
 		$subjectResult = $adb->query($sql);
 		$count = $adb->num_rows($subjectResult);
 		$subjectRowIDs = array();
@@ -1283,6 +1296,8 @@ function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
 			foreach ($fieldMapping as $fieldName => $index) {
 				if($moduleFields[$fieldName]->getTableName() == 'vtiger_inventoryproductrel') {
 					$lineItemData[$fieldName] = $lineItemFieldData[$fieldName];
+					if($fieldName != 'productid')
+						$inventoryFieldData[$fieldName] = '';
 				}
 			}
 			array_push($lineItems,$lineItemData);
@@ -1415,7 +1430,7 @@ function getCurrencyId($fieldValue) {
  */
 function getLineItemFields(){
 	global $adb;
-
+	
 	$sql = 'SELECT DISTINCT columnname FROM vtiger_field WHERE tablename=?';
 	$result = $adb->pquery($sql, array('vtiger_inventoryproductrel'));
 	$lineItemdFields = array();

@@ -117,11 +117,86 @@ class Users_List_View extends Settings_Vtiger_List_View {
 			if(!$this->listViewCount){
 				$this->listViewCount = $listViewModel->getListViewCount();
 			}
-			$viewer->assign('LISTVIEW_COUNT', $this->listViewCount);
+			$totalCount = $this->listViewCount;
+			$pageLimit = $pagingModel->getPageLimit();
+			$pageCount = ceil((int) $totalCount / (int) $pageLimit);
+
+			if($pageCount == 0){
+				$pageCount = 1;
+			}
+			$viewer->assign('PAGE_COUNT', $pageCount);
+			$viewer->assign('LISTVIEW_COUNT', $totalCount);
 		}
 		$viewer->assign('MODULE_MODEL', $listViewModel->getModule());
 		$viewer->assign('IS_MODULE_EDITABLE', $listViewModel->getModule()->isPermitted('EditView'));
 		$viewer->assign('IS_MODULE_DELETABLE', $listViewModel->getModule()->isPermitted('Delete'));
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+	}
+	
+	/**
+	 * Function returns the number of records for the current filter
+	 * @param Vtiger_Request $request
+	 */
+	function getRecordsCount(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+		$cvId = $request->get('viewname');
+		$count = $this->getListViewCount($request);
+
+		$result = array();
+		$result['module'] = $moduleName;
+		$result['viewname'] = $cvId;
+		$result['count'] = $count;
+
+		$response = new Vtiger_Response();
+		$response->setEmitType(Vtiger_Response::$EMIT_JSON);
+		$response->setResult($result);
+		$response->emit();
+	}
+
+	/**
+	 * Function to get listView count
+	 * @param Vtiger_Request $request
+	 */
+	function getListViewCount(Vtiger_Request $request){
+		$moduleName = $request->getModule();
+		$cvId = $request->get('viewname');
+		if(empty($cvId)) {
+			$cvId = '0';
+		}
+
+		$searchKey = $request->get('search_key');
+		$searchValue = $request->get('search_value');
+
+		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
+		$listViewModel->set('search_key', $searchKey);
+		$listViewModel->set('search_value', $searchValue);
+		$listViewModel->set('operator', $request->get('operator'));
+
+		$count = $listViewModel->getListViewCount();
+
+		return $count;
+	}
+
+
+
+	/**
+	 * Function to get the page count for list
+	 * @return total number of pages
+	 */
+	function getPageCount(Vtiger_Request $request){
+		$listViewCount = $this->getListViewCount($request);
+		$pagingModel = new Vtiger_Paging_Model();
+		$pageLimit = $pagingModel->getPageLimit();
+		$pageCount = ceil((int) $listViewCount / (int) $pageLimit);
+
+		if($pageCount == 0){
+			$pageCount = 1;
+		}
+		$result = array();
+		$result['page'] = $pageCount;
+		$result['numberOfRecords'] = $listViewCount;
+		$response = new Vtiger_Response();
+		$response->setResult($result);
+		$response->emit();
 	}
 }

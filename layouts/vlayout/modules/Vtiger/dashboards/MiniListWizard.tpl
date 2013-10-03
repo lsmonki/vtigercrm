@@ -66,7 +66,7 @@
 {elseif $WIZARD_STEP eq 'step3'}
 	<option></option>
 	{foreach from=$LIST_VIEW_CONTROLLER->getListViewHeaderFields() item=FIELD key=FIELD_NAME}
-		<option value="{$FIELD_NAME}">{vtranslate($FIELD->getFieldLabelKey(),MODULE_NAME)}</option>
+		<option value="{$FIELD_NAME}">{vtranslate($FIELD->getFieldLabelKey(),$SELECTED_MODULE)}</option>
 	{/foreach}
 {/if}
 {/strip}

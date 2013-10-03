@@ -42,11 +42,11 @@ function HelpDesk_nofifyOnPortalTicketCreation($entityData) {
 		$ownerId = $ownerIdInfo['Groups'];
 		$to_email = implode(',', getDefaultAssigneeEmailIds($ownerId));
 	}
-	$wsParentId = $entityData->get('parent_id');
+	$wsParentId = $entityData->get('contact_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
 
-	$subject = "[From Portal] " .$entityData->get('ticket_no')." [ Ticket ID : $entityId ] ".$entityData->get('ticket_title');
+	$subject = '[From Portal] ' .$entityData->get('ticket_no'). " [ Ticket Id : $entityId ] " .$entityData->get('ticket_title');
 	$contents = ' Ticket No : '.$entityData->get('ticket_no'). '<br> Ticket ID : '.$entityId.'<br> Ticket Title : '.
 							$entityData->get('ticket_title').'<br><br>'.$entityData->get('description');
 
@@ -83,7 +83,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 		$ownerName = $groupInfo[0];
 		$to_email = implode(',', getDefaultAssigneeEmailIds($ownerId));
 	}
-	$wsParentId = $entityData->get('parent_id');
+	$wsParentId = $entityData->get('contact_id');
 	$parentIdParts = explode('x', $wsParentId);
 	$parentId = $parentIdParts[1];
 
@@ -94,7 +94,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$latestComment = strip_tags($commentDiff);
 
 	//send mail to the assigned to user when customer add comment
-	$subject = getTranslatedString('LBL_RESPONDTO_TICKETID', $moduleName)."##". $entityId."##". getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
+	$subject = getTranslatedString('LBL_RESPONSE_TO_TICKET_NUMBER', $moduleName). ' : ' .$entityData->get('ticket_no'). ' ' .getTranslatedString('LBL_CUSTOMER_PORTAL', $moduleName);
 	$contents = getTranslatedString('Dear', $moduleName)." ".$ownerName.","."<br><br>"
 						.getTranslatedString('LBL_CUSTOMER_COMMENTS', $moduleName)."<br><br>
 						<b>".$latestComment."</b><br><br>"
@@ -108,9 +108,7 @@ function HelpDesk_notifyOnPortalTicketComment($entityData) {
 	$customername = decode_html($customername);//Fix to display the original UTF-8 characters in sendername instead of ascii characters
 	$from_email = $adb->query_result($result,0,'email');
 
-	//send mail to assigned to user
-	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
-	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
+	send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
 }
 
 function HelpDesk_notifyParentOnTicketChange($entityData) {
@@ -121,10 +119,6 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 	$parts = explode('x', $wsId);
 	$entityId = $parts[1];
 
-	$wsParentId = $entityData->get('parent_id');
-	$parentIdParts = explode('x', $wsParentId);
-	$parentId = $parentIdParts[1];
-
 	$isNew = $entityData->isNew();
 
 	if(!$isNew) {
@@ -133,63 +127,51 @@ function HelpDesk_notifyParentOnTicketChange($entityData) {
 		$reply = '';
 	}
 
-	$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
-						.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
+	$subject = $entityData->get('ticket_no') . " [ Ticket Id : $entityId ] " . $reply . $entityData->get('ticket_title');
 	$emailoptout = 0;
-
+	$wsContactId = $entityData->get('contact_id');
+	$contactId = explode('x', $wsContactId);
+	$wsAccountId = $entityData->get('parent_id');
+	$accountId = explode('x', $wsAccountId);
 	//To get the emailoptout vtiger_field value and then decide whether send mail about the tickets or not
-	if($parentId != '') {
-		$parent_module = getSalesEntityType($parentId);
-		if($parent_module == 'Contacts') {
-			$result = $adb->pquery('SELECT email, emailoptout FROM vtiger_contactdetails WHERE contactid=?',
-										array($parentId));
-			$emailoptout = $adb->query_result($result,0,'emailoptout');
-			$parent_email = $contact_mailid = $adb->query_result($result,0,'email');
-			$displayValueArray = getEntityName($parent_module, $parentId);
-			if (!empty($displayValueArray)) {
-				foreach ($displayValueArray as $key => $field_value) {
-					$contact_name = $field_value;
-				}
-			}
-			$parentname = $contactname = $contact_name;
+	if(!empty($contactId[0])) {
+		$result = $adb->pquery('SELECT email, emailoptout, lastname, firstname FROM vtiger_contactdetails WHERE
+						contactid=?', array($contactId[1]));
+		$emailoptout = $adb->query_result($result,0,'emailoptout');
+		$parent_email = $contact_mailid = $adb->query_result($result,0,'email');
+		$parentname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'firstname');
 
-			//Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
-			if($contact_mailid != '') {
-				$sql = "SELECT * FROM vtiger_portalinfo WHERE user_name=?";
-				$isPortalUser = $adb->query_result($adb->pquery($sql, array($contact_mailid)),0,'isactive');
-			}
+		//Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
+		if($parent_email != '') {
+			$sql = "SELECT * FROM vtiger_portalinfo WHERE user_name=?";
+			$isPortalUser = $adb->query_result($adb->pquery($sql, array($contact_mailid)),0,'isactive');
 		}
-		if($parent_module == 'Accounts') {
-			$result = $adb->pquery("SELECT accountname, emailoptout, email1 FROM vtiger_account WHERE accountid=?",
-										array($parentId));
-			$emailoptout = $adb->query_result($result,0,'emailoptout');
-			$parent_email = $adb->query_result($result,0,'email1');
-			$parentname = $adb->query_result($result,0,'accountname');
-		}
-
-		//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
-		if($emailoptout == 0) {
-
+	} elseif(!empty($accountId[0])) {
+		$result = $adb->pquery("SELECT accountname, emailoptout, email1 FROM vtiger_account WHERE accountid=?",
+									array($accountId[1]));
+		$emailoptout = $adb->query_result($result,0,'emailoptout');
+		$parent_email = $adb->query_result($result,0,'email1');
+		$parentname = $adb->query_result($result,0,'accountname');
+	}
+	//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
+	if($emailoptout == 0) {
+		if($isPortalUser == 1) {
 			$email_body = HelpDesk::getTicketEmailContents($entityData);
-			if($isNew) {
-				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
-			} else {
-				$entityDelta = new VTEntityDelta();
-				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
-				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
-				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged) {
-					if($isPortalUser == 1)
-						$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
-				}
-			}
-			$mail_status_str .= $parent_email."=".$mail_status."&&&";
-
 		} else {
-			$adb->println("'".$parentname."' is not want to get the email about the ticket details as emailoptout is selected");
+			$email_body = HelpDesk::getTicketEmailContents($entityData);
 		}
 
-		if ($mail_status != '') {
-			$mail_error_status = getMailErrorString($mail_status_str);
+		if($isNew) {
+			send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+		} else {
+			$entityDelta = new VTEntityDelta();
+			$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
+			$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
+			$descriptionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'description');
+
+			if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged || $descriptionHasChanged) {
+				send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			}
 		}
 	}
 }
@@ -210,8 +192,7 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 		$reply = '';
 	}
 
-	$subject = $entityData->get('ticket_no') . ' [ '.getTranslatedString('LBL_TICKET_ID', $moduleName)
-						.' : '.$entityId.' ] '.$reply.$entityData->get('ticket_title');
+	$subject = getTranslatedString('LBL_TICKET_NUMBER', $moduleName). ' : ' .$entityData->get('ticket_no'). ' ' .$reply.$entityData->get('ticket_title');
 
 	$email_body = HelpDesk::getTicketEmailContents($entityData, true);
 	if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
@@ -236,9 +217,8 @@ function HelpDesk_notifyOwnerOnTicketChange($entityData) {
 				$statusHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'ticketstatus');
 				$solutionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'solution');
 				$ownerHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'assigned_user_id');
-
-				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged || $ownerHasChanged) {
-
+				$descriptionHasChanged = $entityDelta->hasChanged($entityData->getModuleName(), $entityId, 'description');
+				if(($statusHasChanged && $entityData->get('ticketstatus') == "Closed") || $solutionHasChanged || $ownerHasChanged || $descriptionHasChanged) {
 					$mail_status = send_mail('HelpDesk',$to_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 				}
 			}

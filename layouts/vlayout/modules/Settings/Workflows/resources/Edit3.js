@@ -221,7 +221,7 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 				for(var key in fieldList) {
 					var field = fieldList[key];
 					if(field == 'value' && valueSelectElement.is('select')){
-						rowValues[field] = valueSelectElement.find('option:selected').text();
+						rowValues[field] = valueSelectElement.find('option:selected').val();
 					} else {
 						rowValues[field] = jQuery('[name="'+field+'"]', rowElement).val();
 					}

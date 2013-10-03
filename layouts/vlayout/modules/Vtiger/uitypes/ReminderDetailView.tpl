@@ -13,5 +13,5 @@
 {if $REMINDER_VALUES eq ''}
     {vtranslate('LBL_NO', $MODULE)}
 {else}
-    {$REMINDER_VALUES[0]}&nbsp;{vtranslate('LBL_DAYS', $MODULE)}&nbsp;{$REMINDER_VALUES[1]}&nbsp;{vtranslate('LBL_HOURS', $MODULE)}&nbsp;{$REMINDER_VALUES[2]}&nbsp;{vtranslate('LBL_MINUTES', $MODULE)}{vtranslate('LBL_BEFORE_EVENT', $MODULE)}
+    {$REMINDER_VALUES}{vtranslate('LBL_BEFORE_EVENT', $MODULE)}
 {/if}

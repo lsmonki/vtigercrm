@@ -11,6 +11,8 @@
 class Vtiger_History_Dashboard extends Vtiger_IndexAjax_View {
 
 	public function process(Vtiger_Request $request) {
+		$LIMIT = 10;
+		
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$viewer = $this->getViewer($request);
 
@@ -21,7 +23,7 @@ class Vtiger_History_Dashboard extends Vtiger_IndexAjax_View {
 
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $page);
-		$pagingModel->set('limit', 10);
+		$pagingModel->set('limit', $LIMIT);
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$history = $moduleModel->getHistory($pagingModel, $type);
@@ -30,6 +32,8 @@ class Vtiger_History_Dashboard extends Vtiger_IndexAjax_View {
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('HISTORIES', $history);
+		$viewer->assign('PAGE', $page);
+		$viewer->assign('NEXTPAGE', (count($history) < $LIMIT)? 0 : $page+1);
 
 		$content = $request->get('content');
 		if(!empty($content)) {

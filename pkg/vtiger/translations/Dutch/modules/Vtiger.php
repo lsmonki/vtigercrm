@@ -140,6 +140,7 @@ $languageStrings = array(
 	'SalesOrder'                   => 'Verkooporder'                , 
 	'Invoice'                      => 'Factuur'                     , 
 	'MailManager'                  => 'Mail Manager'                , // TODO: Review
+	'Activities'				   => 'Activities'					,
 	'LBL_ADD_RECORD'               => 'Voeg Record toe'             , 
 	'LBL_RECENTLY_MODIFIED'        => 'Recent Aangepast'            , 
 	'LBL_RECORDS_LIST'             => 'Records Lijst'               , 
@@ -495,7 +496,7 @@ $languageStrings = array(
 	'Sales End Date'               => 'Verkoop Einddatum'           , 
 	'Open Ticktes'                 => 'Open Tickets'                , // TODO: Review
 	'LBL_SELECT_STATUS'            => 'Select Status'               , // TODO: Review
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM'        , 
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand'        , 
 	'SINGLE_Accounts'              => 'Organization'                , // TODO: Review
 	'SINGLE_Contacts'              => 'Contact'                     , // TODO: Review
 	'LBL_Sun'                      => 'Sun'                         , // TODO: Review
@@ -548,11 +549,46 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+	
+	//Translations used for Export to Pdf
+	'Valid Date' => 'geldige Date',
+	'Phone: ' => 'telefoon: ',
+	'Issued Date' => 'uitgegeven Datum',
+	'Shipping & Handling Charges' => 'Behandeling en verzendkosten',
+	'Shipping & Handling Tax:' => 'Het verschepen & Behandeling Tax:',
+	'Discount'=>'korting',
+	'Net Total' => 'netto Totaal',
+	'Product Code'=>'Product Code',
+	'Customer Name'=>'Naam van de klant',
+	'Price'=>'prijs',
+	'Tax:' => 'belasting:',
+	'Contact Name' => 'Contacteer Naam',
+	'Grand Total:' => 'algemeen totaal:',
+	'Fax: ' => 'Fax: ',
+	'Website: ' => 'Website: ',
+	'Tax' => 'belasting',
+    'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+	
+	//Realted tab strings
+	'Service Contracts' => 'Service Contracten',
+	'Projects' => 'Projecten',
+	'Sales Order' => 'Verkoop Order',
+	'Purchase Order' => 'Inkoop Order',
+	'Payments' => 'Payments',
+	'List and Campaigns' => 'List and Campaigns',
+	'Project Tasks' => 'Project Tasks',
+	'Project Milestones' => 'Project Milestones',
+	
+	'Labels Editor' => 'Labels Editor',
+	
+	//Related tabs of Products
+	'Product Bundles' => 'Product Bundles',
+	'Parent Product' => 'Parent Product',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Configureer a.u.b. uw uitgaande server instellingen op de instellingenpagina', 
 	'JS_SMS_SERVER_CONFIGURATION'  => 'Configureer a.u.b. uw SMS notifier op de SMS notifier instellingenpagina', 
-	'JS_PLEASE_SELECT_ONE_RECORD'  => 'Selecteer a.u.b. minstens één record', 
+	'JS_PLEASE_SELECT_ONE_RECORD'  => 'Selecteer a.u.b. minstens Ã©Ã©n record', 
 	'JS_PLEASE_ENTER_VALID_EMAIL_ADDRESS' => 'Voer a.u.b. een geldig e/mailadres', 
 	'JS_CONTAINS_ILLEGAL_CHARACTERS' => 'bevat ongeldige tekens'      , 
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'lengte van telefoonummer langer dan maximum', 
@@ -650,4 +686,6 @@ $jsLanguageStrings = array(
 	'JS_MORE_THAN_ONE_ITEM_SELECTED' => 'More than one Item selected' , // TODO: Review
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully'  , // TODO: Review
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
+	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
+	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 );

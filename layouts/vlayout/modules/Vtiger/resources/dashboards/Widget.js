@@ -254,6 +254,71 @@ jQuery.Class('Vtiger_Widget_Js',{
 	}
 });
 
+Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
+	
+	postLoadWidget: function() {
+		this._super();
+		
+		var widgetContent = jQuery('.dashboardWidgetContent', this.getContainer());
+		widgetContent.css({height: widgetContent.height()-40});
+		this.registerLoadMore();
+	},
+	
+	postRefreshWidget: function() {
+		this._super();
+		this.registerLoadMore();
+	},
+	
+	registerLoadMore: function() {
+		var thisInstance  = this;
+		var parent = thisInstance.getContainer();
+		var contentContainer = parent.find('.dashboardWidgetContent');
+
+		var loadMoreHandler = contentContainer.find('.load-more');
+		loadMoreHandler.click(function(){
+			var parent = thisInstance.getContainer();
+			var element = parent.find('a[name="drefresh"]');
+			var url = element.data('url');
+			var params = url;
+
+			var widgetFilters = parent.find('.widgetFilter');
+			if(widgetFilters.length > 0) {
+				params = { url: url, data: {}};
+				widgetFilters.each(function(index, domElement){
+					var widgetFilter = jQuery(domElement);
+					var filterName = widgetFilter.attr('name');
+					var filterValue = widgetFilter.val();
+					params.data[filterName] = filterValue;
+				});
+			}
+		
+			var filterData = thisInstance.getFilterData();
+			if(! jQuery.isEmptyObject(filterData)) {
+				if(typeof params == 'string') {
+					params = { url: url, data: {}};
+				}
+				params.data = jQuery.extend(params.data, thisInstance.getFilterData())
+			}
+			
+			// Next page.
+			params.data['page'] = loadMoreHandler.data('nextpage');
+			
+			var refreshContainer = parent.find('.refresh');
+			refreshContainer.progressIndicator({
+				'smallLoadingImage' : true
+			});
+			AppConnector.request(params).then(function(data){
+				refreshContainer.progressIndicator({'mode': 'hide'});
+				loadMoreHandler.replaceWith(data);
+				thisInstance.registerLoadMore();
+			}, function(){
+				refreshContainer.progressIndicator({'mode': 'hide'});
+			});
+		});
+	}
+	
+});
+
 
 Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
 

@@ -21,7 +21,7 @@ class SyncServer {
         private $update = "update";
         private $delete = "delete";
         private $save = "save";
-        private $syncTypes = array("user","app");
+        private $syncTypes = array("user","app","userandgroup");
 
         
     /**

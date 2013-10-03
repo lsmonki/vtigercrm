@@ -73,13 +73,6 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 
 	loadRelatedModules : function(primaryModule){
 		var relatedModulesMapping = this.getRelatedModulesFromPrimaryModule(primaryModule);
-		
-		//for none in primary module
-		if(typeof relatedModulesMapping == 'undefined') {
-			relatedModulesMapping = {};
-			relatedModulesMapping['none'] = 'None';
-		}
-		
 		var options = '';
 		for(var key in relatedModulesMapping) {
 			//IE Browser consider the prototype properties also, it should consider has own properties only.

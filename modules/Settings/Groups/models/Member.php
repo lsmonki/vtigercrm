@@ -89,7 +89,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 				$qualifiedId = self::getQualifiedId(self::MEMBER_TYPE_USERS, $userId);
 				$name = getFullNameFromArray('Users', $row);
 				$member = new self();
-				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name);
+				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name)->set('userId', $userId);
 			}
 		}
 
@@ -106,7 +106,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 				$qualifiedId = self::getQualifiedId(self::MEMBER_TYPE_GROUPS, $row['groupid']);
 				$name = $row['groupname'];
 				$member = new self();
-				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name);
+				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name)->set('groupId', $row['groupid']);
 			}
 		}
 
@@ -123,7 +123,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 				$qualifiedId = self::getQualifiedId(self::MEMBER_TYPE_ROLES, $row['roleid']);
 				$name = $row['rolename'];
 				$member = new self();
-				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name);
+				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name)->set('roleId', $row['roleid']);
 			}
 		}
 
@@ -140,7 +140,7 @@ class Settings_Groups_Member_Model extends Vtiger_Base_Model {
 				$qualifiedId = self::getQualifiedId(self::MEMBER_TYPE_ROLE_AND_SUBORDINATES, $row['roleid']);
 				$name = $row['rolename'];
 				$member = new self();
-				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name);
+				$members[$qualifiedId] = $member->set('id', $qualifiedId)->set('name', $name)->set('roleId', $row['roleid']);
 			}
 		}
 

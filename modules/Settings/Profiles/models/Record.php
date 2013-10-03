@@ -543,7 +543,12 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 					if ($actionsIdsList) {
 						$db->pquery($actionsUpdateQuery, array($profileId, $tabId));
 					}
-
+					
+					foreach (Vtiger_Action_Model::$utilityActions as $utilityActionId => $utilityActionName) {
+						if(!isset($utilityIdsList[$utilityActionId])) {
+							$utilityIdsList[$utilityActionId] = 'off';
+						}
+					}
 					//Utility permissions
 					$utilityUpdateQuery = 'UPDATE vtiger_profile2utility SET permission = CASE ';
 					foreach($utilityIdsList as $actionId => $permission) {
@@ -632,7 +637,7 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 	}
 
 	protected function tranformInputPermissionValue($value) {
-		if($value) {
+		if($value == 'on' || $value == '1') {
 			return Settings_Profiles_Module_Model::IS_PERMITTED_VALUE;
 		} else {
 			return Settings_Profiles_Module_Model::NOT_PERMITTED_VALUE;

@@ -12,6 +12,11 @@ abstract class Vtiger_Mass_Action extends Vtiger_Action_Controller {
 
 	protected function getRecordsListFromRequest(Vtiger_Request $request) {
 		$cvId = $request->get('viewname');
+		$module = $request->get('module');
+		if(!empty($cvId) && $cvId=="undefined"){
+			$sourceModule = $request->get('sourceModule');
+			$cvId = CustomView_Record_Model::getAllFilterByModule($sourceModule)->getId();
+		}
 		$selectedIds = $request->get('selected_ids');
 		$excludedIds = $request->get('excluded_ids');
 
@@ -31,7 +36,7 @@ abstract class Vtiger_Mass_Action extends Vtiger_Action_Controller {
                 $customViewModel->set('search_key', $searchKey);
                 $customViewModel->set('search_value', $searchValue);
             }
-			return $customViewModel->getRecordIds($excludedIds);
+			return $customViewModel->getRecordIds($excludedIds,$module);
 		}
 	}
 }

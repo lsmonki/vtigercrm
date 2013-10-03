@@ -14,7 +14,8 @@
 {include file="BasicHeader.tpl"|vtemplate_path:$MODULE}
 <div class="bodyContents">
 	<div class="mainContainer row-fluid">
-		<div class="span2 row-fluid">
-			<div class="row-fluid">{include file='SideBar.tpl'|@vtemplate_path:$QUALIFIED_MODULE}</div>
+		{assign var=LEFTPANELHIDE value=$CURRENT_USER_MODEL->get('leftpanelhide')}
+		<div class="span2 {if $LEFTPANELHIDE eq '1'} hide {/if}" id="leftPanel">
+			{include file="ListViewSidebar.tpl"|vtemplate_path:$MODULE}
 		</div>
-		<div class="contentsDiv span10 marginLeftZero">
+		<div class="contentsDiv {if $LEFTPANELHIDE neq '1'} span10 {/if}marginLeftZero" id="rightPanel">

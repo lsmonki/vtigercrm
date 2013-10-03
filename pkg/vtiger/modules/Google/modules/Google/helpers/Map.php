@@ -14,7 +14,7 @@ class Google_Map_Helper {
     /**
      * get the location for the record based on the module type
      * @param type $request
-     * @return type 
+     * @return type
      */
     static function getLocation($request) {
         $recordId = $request->get('recordid');
@@ -24,7 +24,7 @@ class Google_Map_Helper {
         if (!empty($locationFields)) {
             $recordModel = Vtiger_Record_Model::getInstanceById($recordId, $module);
             foreach ($locationFields as $key => $value) {
-                $address[$key] = $recordModel->get($value);
+                $address[$key] = Vtiger_Util_Helper::getDecodedValue($recordModel->get($value));
             }
         }
         return $address;
@@ -34,7 +34,7 @@ class Google_Map_Helper {
      * get location values for:
      * street, city, country
      * @param type $module
-     * @return type 
+     * @return type
      */
     static function getLocationFields($module) {
         switch ($module) {

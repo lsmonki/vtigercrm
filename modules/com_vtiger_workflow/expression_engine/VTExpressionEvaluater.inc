@@ -139,6 +139,10 @@ function __vt_get_date($arr) {
 	switch ($type) {
 		case 'today': return date('Y-m-d');
 			break;
+		case 'tomorrow': return date('Y-m-d', strtotime('+1 day'));
+			break;
+		case 'yesterday': return date('Y-m-d', strtotime('-1 day'));
+			break;
 		default : return date('Y-m-d');
 			break;
 	}
@@ -202,7 +206,11 @@ class VTFieldExpressionEvaluater{
 	}
 
 	function env($sym){
-		return $this->env->get($sym->value);
+		if($this->env) {
+			return $this->env->get($sym->value);
+		} else {
+			return $sym->value;
+		}
 	}
 }
 ?>

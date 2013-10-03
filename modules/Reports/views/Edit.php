@@ -184,7 +184,9 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 			$reportModel->setSecondaryModule($secondaryModules);
 
 			$secondaryModules = explode(':',$secondaryModules);
-		}
+		}else{
+            $secondaryModules = array();
+        }
 
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('REPORT_MODEL', $reportModel);
@@ -200,8 +202,14 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
             $dateFilters[$comparatorKey] = $comparatorInfo;
         }
 		$viewer->assign('DATE_FILTERS', $dateFilters);
+		
+		if(($primaryModule == 'Calendar') || (in_array('Calendar', $secondaryModules))){
+			$advanceFilterOpsByFieldType = Calendar_Field_Model::getAdvancedFilterOpsByFieldType();
+		} else{
+			$advanceFilterOpsByFieldType = Vtiger_Field_Model::getAdvancedFilterOpsByFieldType();
+		}
 		$viewer->assign('ADVANCED_FILTER_OPTIONS', Vtiger_Field_Model::getAdvancedFilterOptions());
-		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', Vtiger_Field_Model::getAdvancedFilterOpsByFieldType());
+		$viewer->assign('ADVANCED_FILTER_OPTIONS_BY_TYPE', $advanceFilterOpsByFieldType);
 		$viewer->assign('MODULE', $moduleName);
 
 		$calculationFields = $reportModel->get('calculation_fields');

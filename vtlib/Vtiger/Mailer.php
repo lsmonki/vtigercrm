@@ -66,13 +66,11 @@ class Vtiger_Mailer extends PHPMailer {
 	 * @access private
 	 */
 	function reinitialize() {
-		$this->to = Array();
-		$this->cc = Array();
-		$this->bcc = Array();
-		$this->ReplyTo = Array();
+		$this->ClearAllRecipients();
+		$this->ClearReplyTos();
 		$this->Body = '';
 		$this->Subject ='';
-		$this->attachment = Array();
+		$this->ClearAttachments();
 	}
 
 	/**

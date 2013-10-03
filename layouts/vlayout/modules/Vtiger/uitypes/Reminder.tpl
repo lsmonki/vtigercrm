@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-{assign var=REMINDER_VALUES value=$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'))}
+{assign var=REMINDER_VALUES value=$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('fieldvalue'))}
 {if $REMINDER_VALUES eq ''}
     {assign var=DAYS value=0}
 	{assign var=HOURS value=0}

@@ -67,4 +67,30 @@ class Products_Module_Model extends Vtiger_Module_Model {
 	public function getPricesForProducts($currencyId, $productIdsList) {
 		return getPricesForProducts($currencyId, $productIdsList, $this->getName());
 	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
+	
+	/**
+	 * Function searches the records in the module, if parentId & parentModule
+	 * is given then searches only those records related to them.
+	 * @param <String> $searchValue - Search value
+	 * @param <Integer> $parentId - parent recordId
+	 * @param <String> $parentModule - parent module name
+	 * @return <Array of Vtiger_Record_Model>
+	 */
+	public function searchRecord($searchValue, $parentId=false, $parentModule=false, $relatedModule=false) {
+		if(!empty($searchValue) && empty($parentId) && empty($parentModule) && (in_array($relatedModule, getInventoryModules()))) {
+			$matchingRecords = Products_Record_Model::getSearchResult($searchValue, $this->getName());
+		}else {
+			parent::searchRecord($searchValue);
+		}
+
+		return $matchingRecords;
+	}
 }

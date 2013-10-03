@@ -21,6 +21,14 @@ class Campaigns_Module_Model extends Vtiger_Module_Model {
 			return $specificQuery;
 		}
  	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
     
     public function getSettingLinks() {
         vimport('~~modules/com_vtiger_workflow/VTWorkflowUtils.php');

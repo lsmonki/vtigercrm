@@ -30,7 +30,8 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 		$recordId = $recordModel->getId();
 
 		$values = array();
-		$moduleModel = $this->getModule();
+
+		$baseModuleModel = $moduleModel = $this->getModule();
 		$blockModelList = $moduleModel->getBlocks();
 		foreach($blockModelList as $blockLabel=>$blockModel) {
 			$fieldModelList = $blockModel->getFields();
@@ -38,6 +39,13 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 				$values[$blockLabel] = array();
 				foreach($fieldModelList as $fieldName=>$fieldModel) {
 					if($fieldModel->isViewable()) {
+						if ($moduleModel->getName() === 'Calendar' && $fieldName != 'modifiedby' && $fieldModel->getDisplayType() == 3) {
+							/* Restricting the following fields(Event module fields) for "Calendar" module
+							 * time_start, time_end, eventstatus, activitytype,	visibility, duration_hours,
+							 * duration_minutes, reminder_time, recurringtype, notime
+							 */
+							continue;
+						}
 						if(!empty($recordId)) {
 							//Set the fieldModel with the valuetype for the client side.
 							$fieldValueType = $recordModel->getFieldFilterValueType($fieldName);
@@ -46,7 +54,7 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 							$fieldModel->setFieldInfo($fieldInfo);
 						}
 						// This will be used during editing task like email, sms etc
-						$fieldModel->set('workflow_columnname', $fieldName)->set('workflow_columnlabel', $fieldModel->get('label'));
+						$fieldModel->set('workflow_columnname', $fieldName)->set('workflow_columnlabel', vtranslate($fieldModel->get('label'), $moduleModel->getName()));
 						// This is used to identify the field belongs to source module of workflow
 						$fieldModel->set('workflow_sourcemodule_field', true);
 						$values[$blockLabel][$fieldName] = clone $fieldModel;
@@ -70,7 +78,7 @@ class Settings_Workflows_RecordStructure_Model extends Vtiger_RecordStructure_Mo
 						foreach($fieldModelList as $fieldName=>$fieldModel) {
 							if($fieldModel->isViewable()) {
 								$name = "($parentFieldName : ($refModule) $fieldName)";
-								$label = vtranslate($field->get('label', $moduleModel->getName()), $refModule).' : ('.$refModule.') '.vtranslate($fieldModel->get('label'), $refModule);
+								$label = vtranslate($field->get('label'), $baseModuleModel->getName()).' : ('.vtranslate($refModule, $refModule).') '.vtranslate($fieldModel->get('label'), $refModule);
 								$fieldModel->set('workflow_columnname', $name)->set('workflow_columnlabel', $label);
 								if(!empty($recordId)) {
 									$fieldValueType = $recordModel->getFieldFilterValueType($name);

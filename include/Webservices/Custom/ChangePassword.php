@@ -28,7 +28,7 @@ function vtws_changePassword($id, $oldPassword, $newPassword, $confirmPassword, 
 	$idComponents = vtws_getIdComponents($id);
 	if($idComponents[1] == $user->id || is_admin($user)) {
 		$newUser = new Users();
-		$newUser->retrieveCurrentUserInfoFromFile($idComponents[1]);
+		$newUser->retrieve_entity_info($idComponents[1], 'Users');
 		if(!is_admin($user)) {
 			if(empty($oldPassword)) {
 				throw new WebServiceException(WebServiceErrorCode::$INVALIDOLDPASSWORD, 

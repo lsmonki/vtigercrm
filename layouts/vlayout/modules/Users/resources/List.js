@@ -7,8 +7,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-Settings_Vtiger_List_Js("Users_List_Js",{
-	
+Settings_Vtiger_List_Js("Settings_Users_List_Js",{
+
 	/*
 	 * function to trigger delete record action
 	 * @params: delete record url.
@@ -23,7 +23,7 @@ Settings_Vtiger_List_Js("Users_List_Js",{
 						var params = app.validationEngineOptions;
 						params.onValidationComplete = function(form, valid){
 							if(valid){
-								Users_List_Js.deleteUser(form)
+								Settings_Users_List_Js.deleteUser(form)
 							}
 							return false;
 						}
@@ -45,19 +45,17 @@ Settings_Vtiger_List_Js("Users_List_Js",{
 	deleteUser: function (form){
 		var userid = form.find('[name="userid"]').val();
 		var transferUserId = form.find('[name="tranfer_owner_id"]').val();
-		
 		var params = {
-				'module': app.getModuleName(),
-				'action' : "DeleteAjax",
-				'mode' : 'deleteUser',
-				'transfer_user_id' : transferUserId,
-				'userid' : userid
-			}
-			console.log(params);
+			'module': app.getModuleName(),
+			'action' : "DeleteAjax",
+			'transfer_user_id' : transferUserId,
+			'userid' : userid
+		}		
 		AppConnector.request(params).then(
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
+					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
 					var url = data.result.listViewUrl;
 					window.location.href=url;
 				}
@@ -90,9 +88,8 @@ Settings_Vtiger_List_Js("Users_List_Js",{
 		listViewContentDiv.on('click','.deleteRecordButton',function(e){
 			var elem = jQuery(e.currentTarget);
 			var rowElement = elem.closest('tr');
-			var recordId = rowElement.data('id');
 			var deleteActionUrl = jQuery('[name="deleteActionUrl"]',rowElement).val();
-			Users_List_Js.deleteRecord(deleteActionUrl);
+			Settings_Users_List_Js.deleteRecord(deleteActionUrl);
 			e.stopPropagation();
 		});
 	},

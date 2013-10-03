@@ -48,7 +48,6 @@ $languageStrings = array(
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vinculación de Campos Personalizados', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Editar mapeo de campos'      , 
 	'LBL_WEBFORMS'                 => 'Configurar formularios Web'  , 
-	'LBL_LEAD_SOURCE'              => 'Origen:'                     , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecciona un contacto para proceder', 

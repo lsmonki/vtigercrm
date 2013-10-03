@@ -223,18 +223,7 @@ class RecurringType {
 
 		if ($recurringType == 'Weekly') {
 			if ($this->dayofweek_to_rpt != null) {
-				$dbStartDateTime = new DateTime($this->startdate->get_DB_formatted_date() . ' ' . $this->startdate->get_formatted_time());
-				$dayOfWeek = $this->dayofweek_to_rpt;
-				$userDaysOfWeek = array();
-				for ($i = 0; $i < count($dayOfWeek); ++$i) {
-					$selectedDayOfWeek = $dayOfWeek[$i];
-					$currentDayOfWeek = $dbStartDateTime->format('w');
-					$newDate = $dbStartDateTime->format('d') + ($selectedDayOfWeek - $currentDayOfWeek);
-					$dbStartDateTime->setDate($dbStartDateTime->format('Y'), $dbStartDateTime->format('m'), $newDate);
-					$userStartDateTime = DateTimeField::convertToUserTimeZone($dbStartDateTime->format('Y-m-d') . ' ' . $dbStartDateTime->format('H:i'));
-					$userDaysOfWeek[] = $userStartDateTime->format('w');
-				}
-				$recurringInfo['dayofweek_to_repeat'] = $userDaysOfWeek;
+				$recurringInfo['dayofweek_to_repeat'] = $this->dayofweek_to_rpt;
 			}
 		} elseif ($recurringType == 'Monthly') {
 			$dbStartDateTime = new DateTime($this->startdate->get_DB_formatted_date() . ' ' . $this->startdate->get_formatted_time());
@@ -326,7 +315,16 @@ class RecurringType {
 		$tempdateObj = $startdateObj;
 		$tempdate = $startdate;
 		$enddate = $this->enddate->get_DB_formatted_date();
-		
+
+		$dbDateTime = strtotime($startdate);
+		$userDateTime = strtotime($startdateObj->get_userTimezone_formatted_date());
+		$dateDiff = $dbDateTime - $userDateTime;
+		if ($dateDiff < 0) {
+			$dayDiff = $dateDiff/3600/24;
+		} elseif ($dateDiff > 0) {
+			$dayDiff = $dateDiff/3600/24;
+		}
+
 		while ($tempdate <= $enddate) {
 			$date = $tempdateObj->get_Date();
 			$month = $tempdateObj->getMonth();
@@ -356,13 +354,16 @@ class RecurringType {
 					}
 					$repeatDay = $tempdateObj->getThisweekDaysbyIndex($repeat);
 					$repeatDate = $repeatDay->get_DB_formatted_date();
+					if ($dayDiff) {
+						$repeatDate = date('Y-m-d', strtotime($dayDiff.' day', strtotime($repeatDate)));
+					}
 					if ($isSunday) {
 						$repeatDate = date('Y-m-d', strtotime('-1 day', strtotime($repeatDate)));
 						$isSunday = false;
 					}
-				   if ($repeatDate > $startdate && $repeatDate <= $enddate) {
-						   $recurringDates[] = $repeatDate;
-				   }
+					if ($repeatDate > $startdate && $repeatDate <= $enddate) {
+						$recurringDates[] = $repeatDate;
+					}
 				}
 
 				if (isset($this->recur_freq)) {

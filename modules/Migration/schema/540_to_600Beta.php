@@ -7,7 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-
 if (!defined('VTIGER_UPGRADE')) die('Invalid entry point');
 
 vimport('~~include/utils/utils.php');
@@ -49,6 +48,9 @@ if(!defined(VTIGER_UPGRADE)) {
 	installVtlibModule('Turkce', 'packages/vtiger/optional/TurkishLanguagePack_tr_tr.zip');
 	installVtlibModule('Russian', 'packages/vtiger/optional/Russian.zip');
 	installVtlibModule('Polish', 'packages/vtiger/optional/PolishLanguagePack_pl_pl.zip');
+	installVtlibModule('Russian', 'packages/vtiger/optional/Russian.zip');
+	installVtlibModule('Sweden_sv_se', 'packages/vtiger/optional/Sweden_sv_se.zip');
+	installVtlibModule('Arabic_ar_ae', 'packages/vtiger/optional/Arabic_ar_ae.zip');
 }
 
 if(!defined('INSTALLATION_MODE')) {
@@ -454,6 +456,8 @@ for ($i=0; $i<$num_rows; $i++) {
 
 	Migration_Index_View::ExecuteQuery($updateQuery, $updateParams);
 }
+
+Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_ws_referencetype VALUES (?,?)', array(31,'Campaigns'));
 
 $moduleInstance = Vtiger_Module::getInstance('Users');
 $currencyBlock = Vtiger_Block::getInstance('LBL_CURRENCY_CONFIGURATION', $moduleInstance);
@@ -1476,3 +1480,381 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_leaddetails SET salutation='' 
 //Update contacts salutation value of none to empty value
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_contactdetails SET salutation='' WHERE salutation = ?", array('--None--'));
 // END 2013-06-25
+
+// Start 2013-09-24 
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_eventhandlers SET handler_path = ? WHERE handler_class = ?',
+				array('modules/Vtiger/handlers/RecordLabelUpdater.php', 'Vtiger_RecordLabelUpdater_Handler'));
+
+$inventoryModules = array('Invoice','Quotes','PurchaseOrder','SalesOrder');
+foreach ($inventoryModules as $key => $moduleName) {
+	$moduleInstance = Vtiger_Module::getInstance($moduleName);
+	$focus = CRMEntity::getInstance($moduleName);
+	$blockInstance = Vtiger_Block::getInstance('LBL_ITEM_DETAILS',$moduleInstance);
+
+	$field = new Vtiger_Field();
+	$field->name = 'hdnS_H_Percent';
+	$field->label = 'S&H Percent';
+	$field->column = 's_h_percent';
+	$field->table = $focus->table_name;
+	$field->uitype = 1;
+	$field->typeofdata = 'N~O';
+	$field->readonly = '0';
+	$field->displaytype = '5';
+	$field->masseditable = '0';
+	$field->quickcreate = '0';
+	$field->columntype = 'INT(11)';
+	$blockInstance->addField($field);
+}
+
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_invoice_recurring_info ADD PRIMARY KEY (salesorderid)',array()); 
+
+$result = $adb->pquery('SELECT task_id FROM com_vtiger_workflowtasks WHERE workflow_id IN
+						(SELECT workflow_id FROM com_vtiger_workflows WHERE module_name IN (?, ?))
+						AND summary = ?', array('Calendar', 'Events', 'Send Notification Email to Record Owner'));
+$numOfRows = $adb->num_rows($result);
+require_once 'modules/com_vtiger_workflow/tasks/VTSendNotificationTask.inc';
+for($i=0; $i<$numOfRows; $i++) {
+	$tm = new VTTaskManager($adb);
+	$task = $tm->retrieveTask($adb->query_result($result, $i, 'task_id'));
+
+	$sendNotificationTask = new VTSendNotificationTask();
+	$properties = get_object_vars($task);
+	foreach ($properties as $propertyName => $propertyValue) {
+		$sendNotificationTask->$propertyName = str_replace('$(general : (__VtigerMeta__) dbtimezone)', '$(general : (__VtigerMeta__) usertimezone)', $propertyValue);
+	}
+	$tm->saveTask($sendNotificationTask);
+}
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET masseditable = ? where fieldname = ? and tabid = ?',
+			array('1', 'accountname', getTabid('Accounts')));
+
+$result = $adb->pquery('SELECT taxname FROM vtiger_shippingtaxinfo', array());
+$numOfRows = $adb->num_rows($result);
+$shippingTaxes = array();
+$tabIds = array();
+for ($i = 0; $i < $numOfRows; $i++) {
+	$shippingTaxName = $adb->query_result($result, $i, 'taxname');
+	array_push($shippingTaxes, $shippingTaxName);
+}
+
+$modules = array('Invoice','Quotes','PurchaseOrder','SalesOrder');
+$tabIdQuery = 'SELECT tabid FROM vtiger_tab where name IN ('.generateQuestionMarks($modules).')';
+$tabIdRes = $adb->pquery($tabIdQuery,$modules);
+$num_rows = $adb->num_rows($tabIdRes);
+for ($i = 0; $i < $num_rows; $i++) {
+	$tabIds[] = $adb->query_result($tabIdRes,0,'tabid');
+}
+
+$query = 'DELETE FROM vtiger_field WHERE tabid IN (' . generateQuestionMarks($tabIds) . ') AND fieldname IN (' . generateQuestionMarks($shippingTaxes) . ')';
+Migration_Index_View::ExecuteQuery($query, array_merge($tabIds, $shippingTaxes));
+
+$entityModules = Vtiger_Module_Model::getEntityModules();
+
+foreach($entityModules as $moduleModel) {
+	$crmInstance = CRMEntity::getInstance($moduleModel->getName());
+	$tabId = $moduleModel->getId();
+	$defaultRelatedFields = $crmInstance->list_fields_name;
+	$updateQuery = 'UPDATE vtiger_field SET summaryfield=1  where tabid=? and fieldname IN ('.generateQuestionMarks($defaultRelatedFields).')';
+	Migration_Index_View::ExecuteQuery($updateQuery,  array_merge(array($tabId),$defaultRelatedFields));
+}
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_currencies SET currency_name = ? where currency_name = ? and currency_code = ?',
+		array('Hong Kong, Dollars', 'LvHong Kong, Dollars', 'HKD'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_currency_info SET currency_name = ? where currency_name = ?',
+		array('Hong Kong, Dollars', 'LvHong Kong, Dollars'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=1 WHERE fieldname = ?',array("filestatus"));
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_role ADD allowassignedrecordsto INT(2) NOT NULL DEFAULT 1', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_assets MODIFY datesold date', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_assets MODIFY dateinservice date', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_assets MODIFY serialnumber varchar(200)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_assets MODIFY account int(19)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflowtask_queue ADD COLUMN task_contents text', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE com_vtiger_workflowtask_queue DROP INDEX com_vtiger_workflowtask_queue_idx',array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_ids modify column messageid varchar(512)' , array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_ids add index scanner_message_ids_idx (scannerid, messageid)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_folders add index folderid_idx (folderid)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_leaddetails add index email_idx (email)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_contactdetails add index email_idx (email)', array());
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_account add index email_idx (email1, email2)', array());
+
+$moduleInstance = Vtiger_Module::getInstance('Users');
+$blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION',$moduleInstance);
+
+$field = new Vtiger_Field();
+$field->name = 'leftpanelhide';
+$field->label = 'Left Panel Hide';
+$field->column = 'leftpanelhide';
+$field->table = 'vtiger_users';
+$field->uitype = 56;
+$field->typeofdata = 'V~O';
+$field->readonly = 1;
+$field->displaytype = 1;
+$field->masseditable = 1;
+$field->quickcreate = 1;
+$field->defaultvalue = 0;
+$field->columntype = 'VARCHAR(3)';
+$blockInstance->addField($field);
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_users SET leftpanelhide = ?', array(0));
+$potentialModule = Vtiger_Module::getInstance('Potentials');
+$block = Vtiger_Block::getInstance('LBL_OPPORTUNITY_INFORMATION', $potentialModule);
+
+$relatedToField = Vtiger_Field::getInstance('related_to', $potentialModule);
+$relatedToField->unsetRelatedModules(array('Contacts'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET typeofdata = ? WHERE fieldid = ?', array('V~O', $relatedToField->id));
+
+$contactField = Vtiger_Field::getInstance('contact_id', $potentialModule);
+if(!$contactField) {
+	$contactField = new Vtiger_Field();
+	$contactField->name = 'contact_id';
+	$contactField->label = 'Contact Name';
+	$contactField->uitype = '10';
+	$contactField->column = 'contact_id';
+	$contactField->table = 'vtiger_potential';
+	$contactField->columntype = 'INT(19)';
+	$block->addField($contactField);
+	$contactField->setRelatedModules(array('Contacts'));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET summaryfield=1 WHERE fieldid = ?', array($contactField->id));
+}
+
+$lastPotentialId = 0;
+do {
+	$result = $adb->pquery("SELECT potentialid ,related_to FROM vtiger_potential WHERE potentialid > ? LIMIT 500",
+			array($lastPotentialId));
+	if (!$adb->num_rows($result)) break;
+
+	while ($row = $adb->fetch_array($result)) {
+		$relatedTo = $row['related_to'];
+		$potentialId = $row['potentialid'];
+
+		$relatedToType = getSalesEntityType($relatedTo);
+		if($relatedToType != 'Accounts') {
+			Migration_Index_View::ExecuteQuery('UPDATE vtiger_potential SET contact_id = ?, related_to = null WHERE potentialid = ?',
+					array($relatedTo, $potentialId));
+		}
+		if (intval($potentialId) > $lastPotentialId) {
+			$lastPotentialId = intval($row['potentialid']);
+		}
+		unset($relatedTo);
+	}
+	unset($result);
+} while(true);
+
+$filterResult = $adb->pquery('SELECT * FROM vtiger_cvadvfilter WHERE columnname like ?',
+		array('vtiger_potential:related_to:related_to:Potentials_Related_%'));
+$rows = $adb->num_rows($filterResult);
+for($i=0; $i<$rows; $i++) {
+	$cvid = $adb->query_result($filterResult, $i, 'cvid');
+	$columnIndex = $adb->query_result($filterResult, $i, 'columnindex');
+	$comparator = $adb->query_result($filterResult, $i, 'comparator');
+	$value = $adb->query_result($filterResult, $i, 'value');
+
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_cvadvfilter SET groupid = 2, column_condition = ? WHERE cvid = ?', array('or', $cvid));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_cvadvfilter_grouping SET groupid = 2 WHERE cvid = ?', array($cvid));
+
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition)
+		VALUES(?,?,?,?,?,?,?)', array($cvid, ++$columnIndex,'vtiger_potential:contact_id:contact_id:Potentials_Contact_Name:V',
+			$comparator, $value, 2, ''));
+}
+unset($filterResult);
+
+$filterColumnList = $adb->pquery('SELECT * FROM vtiger_cvcolumnlist WHERE columnname like ?',
+		array('vtiger_potential:related_to:related_to:Potentials_Related_%'));
+$filterColumnRows = $adb->num_rows($filterColumnList);
+for($j=0; $j<$filterColumnRows; $j++) {
+	$cvid = $adb->query_result($filterColumnList, $j, 'cvid');
+	$filterResult = $adb->pquery('SELECT MAX(columnindex) AS maxcolumn FROM vtiger_cvcolumnlist WHERE cvid = ?', array($cvid));
+	$maxColumnIndex = $adb->query_result($filterResult, 0, 'maxcolumn');
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES (?,?,?)', array($cvid, ++$maxColumnIndex,
+		'vtiger_potential:contact_id:contact_id:Potentials_Contact_Name:V'));
+	unset($filterResult);
+}
+unset($filterColumnList);
+
+$reportColumnResult = $adb->pquery('SELECT * FROM vtiger_selectcolumn WHERE columnname = ?',
+		array('vtiger_potential:related_to:Potentials_Related_To:related_to:V'));
+$reportColumnRows = $adb->num_rows($reportColumnResult);
+
+for($k=0; $k<$reportColumnRows; $k++) {
+	$reportId = $adb->query_result($reportColumnResult, $k, 'queryid');
+	$filterResult = $adb->pquery('SELECT MAX(columnindex) AS maxcolumn FROM vtiger_selectcolumn WHERE queryid = ?', array($reportId));
+	$maxColumnIndex = $adb->query_result($filterResult, 0, 'maxcolumn');
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_selectcolumn(queryid,columnindex,columnname) VALUES (?,?,?)', array($reportId,
+		++$maxColumnIndex, 'vtiger_potential:contact_id:Potentials_Contact_Name:contact_id:V'));
+	unset($filterResult);
+}
+unset($reportColumnResult);
+
+$filterResult = $adb->pquery('SELECT * FROM vtiger_relcriteria WHERE columnname = ?',
+					array('vtiger_potential:related_to:Potentials_Related_To:related_to:V'));
+$rows = $adb->num_rows($filterResult);
+for($i=0; $i<$rows; $i++) {
+
+	$reportId = $adb->query_result($filterResult, $i, 'queryid');
+	$columnIndex = $adb->query_result($filterResult, $i, 'columnindex');
+	$comparator = $adb->query_result($filterResult, $i, 'comparator');
+	$value = $adb->query_result($filterResult, $i, 'value');
+
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_relcriteria SET groupid = 2, column_condition = ? WHERE queryid = ?', array('or', $reportId));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_relcriteria_grouping SET groupid = 2 WHERE queryid = ?', array($reportId));
+
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_relcriteria(queryid,columnindex,columnname,comparator,value,groupid,column_condition)
+		VALUES(?,?,?,?,?,?,?)', array($reportId, ++$columnIndex,'vtiger_potential:contact_id:Potentials_Contact_Name:contact_id:V',
+			$comparator, $value, 2, ''));
+}
+unset($filterResult);
+
+$ticketsModule = Vtiger_Module::getInstance('HelpDesk');
+$ticketsBlock = Vtiger_Block::getInstance('LBL_TICKET_INFORMATION', $ticketsModule);
+
+$relatedToField = Vtiger_Field::getInstance('parent_id', $ticketsModule);
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET uitype = 10 WHERE fieldid = ?', array($relatedToField->id));
+$relatedToField->setRelatedModules(array('Accounts'));
+
+$contactField = Vtiger_Field::getInstance('contact_id', $ticketsModule);
+if(!$contactField) {
+	$contactField = new Vtiger_Field();
+	$contactField->name = 'contact_id';
+	$contactField->label = 'Contact Name';
+	$contactField->table = 'vtiger_troubletickets';
+	$contactField->column = 'contact_id';
+	$contactField->columntype = 'INT(19)';
+	$contactField->uitype = '10';
+	$ticketsBlock->addField($contactField);
+
+	$contactField->setRelatedModules(array('Contacts'));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET summaryfield = 1 WHERE fieldid = ?', array($contactField->id));
+}
+
+$lastTicketId = 0;
+do {
+	$ticketsResult = $adb->pquery("SELECT ticketid ,parent_id FROM vtiger_troubletickets WHERE ticketid > ?
+						LIMIT 500", array($lastTicketId));
+	if (!$adb->num_rows($ticketsResult)) break;
+
+	while ($row = $adb->fetch_array($ticketsResult)) {
+		$parent = $row['parent_id'];
+		$ticketId = $row['ticketid'];
+
+		$parentType = getSalesEntityType($parent);
+		if($parentType != 'Accounts') {
+			Migration_Index_View::ExecuteQuery('UPDATE vtiger_troubletickets SET contact_id = ?, parent_id = null WHERE ticketid = ?',
+					array($parent, $ticketId));
+		}
+		if (intval($ticketId) > $lastTicketId) {
+			$lastTicketId = intval($row['ticketid']);
+		}
+		unset($parent);
+	}
+	unset($ticketsResult);
+} while(true);
+
+$ticketFilterResult = $adb->pquery('SELECT * FROM vtiger_cvadvfilter WHERE columnname like ?',
+						array('vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related%'));
+$rows = $adb->num_rows($ticketFilterResult);
+for($i=0; $i<$rows; $i++) {
+	$cvid = $adb->query_result($ticketFilterResult, $i, 'cvid');
+	$columnIndex = $adb->query_result($ticketFilterResult, $i, 'columnindex');
+	$comparator = $adb->query_result($ticketFilterResult, $i, 'comparator');
+	$value = $adb->query_result($ticketFilterResult, $i, 'value');
+
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_cvadvfilter SET groupid = 2, column_condition = ? WHERE cvid = ?', array('or', $cvid));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_cvadvfilter_grouping SET groupid = 2 WHERE cvid = ?', array($cvid));
+
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value,groupid,column_condition)
+		VALUES(?,?,?,?,?,?,?)', array($cvid, ++$columnIndex,'vtiger_troubletickets:contact_id:contact_id:HelpDesk_Contact_Name:V',
+			$comparator, $value, 2, ''));
+}
+unset($ticketFilterResult);
+
+$filterColumnList = $adb->pquery('SELECT * FROM vtiger_cvcolumnlist WHERE columnname like ?',
+		array('vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_%'));
+$filterColumnRows = $adb->num_rows($filterColumnList);
+for($j=0; $j<$filterColumnRows; $j++) {
+	$cvid = $adb->query_result($filterColumnList, $j, 'cvid');
+	$filterResult = $adb->pquery('SELECT MAX(columnindex) AS maxcolumn FROM vtiger_cvcolumnlist WHERE cvid = ?', array($cvid));
+	$maxColumnIndex = $adb->query_result($filterResult, 0, 'maxcolumn');
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES (?,?,?)', array($cvid, ++$maxColumnIndex,
+		'vtiger_troubletickets:contact_id:contact_id:HelpDesk_Contact_Name:V'));
+	unset($filterResult);
+}
+unset($filterColumnList);
+
+$reportColumnResult = $adb->pquery('SELECT * FROM vtiger_selectcolumn WHERE columnname like ?',
+		array('vtiger_troubletickets:parent_id:HelpDesk_Related_To:parent_id%'));
+$reportColumnRows = $adb->num_rows($reportColumnResult);
+for($k=0; $k<$reportColumnRows; $k++) {
+	$reportId = $adb->query_result($reportColumnResult, $k, 'queryid');
+	$filterResult = $adb->pquery('SELECT MAX(columnindex) AS maxcolumn FROM vtiger_selectcolumn WHERE queryid = ?', array($reportId));
+	$maxColumnIndex = $adb->query_result($filterResult, 0, 'maxcolumn');
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_selectcolumn(queryid,columnindex,columnname) VALUES (?,?,?)', array($reportId,
+		++$maxColumnIndex, 'vtiger_troubletickets:contact_id:HelpDesk_Contact_Name:contact_id:V'));
+	unset($filterResult);
+}
+unset($reportColumnResult);
+
+$filterResult = $adb->pquery('SELECT * FROM vtiger_relcriteria WHERE columnname like ?',
+					array('vtiger_troubletickets:parent_id:HelpDesk_Related_To:parent_id%'));
+$rows = $adb->num_rows($filterResult);
+for($i=0; $i<$rows; $i++) {
+	$reportId = $adb->query_result($filterResult, $i, 'queryid');
+	$columnIndex = $adb->query_result($filterResult, $i, 'columnindex');
+	$comparator = $adb->query_result($filterResult, $i, 'comparator');
+	$value = $adb->query_result($filterResult, $i, 'value');
+
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_relcriteria SET groupid = 2, column_condition = ? WHERE queryid = ?', array('or', $reportId));
+	Migration_Index_View::ExecuteQuery('UPDATE vtiger_relcriteria_grouping SET groupid = 2 WHERE queryid = ?', array($reportId));
+
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_relcriteria(queryid,columnindex,columnname,comparator,value,groupid,column_condition)
+		VALUES(?,?,?,?,?,?,?)', array($reportId, ++$columnIndex,'vtiger_troubletickets:contact_id:HelpDesk_Contact_Name:contact_id:V',
+			$comparator, $value, 2, ''));
+}
+unset($filterResult);
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Active', 'vtiger_users', 'status'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('12', 'vtiger_users', 'hour_format'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('softed', 'vtiger_users', 'theme'));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET defaultvalue=? WHERE tablename=? AND fieldname= ? ', array('Monday', 'vtiger_users', 'dayoftheweek'));
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_shorturls ADD COLUMN onetime int(5)', array());
+
+$checkQuery = 'SELECT 1 FROM vtiger_currencies  WHERE currency_name=?';
+$checkResult = $adb->pquery($checkQuery,array('Iraqi Dinar'));
+if($adb->num_rows($checkResult) <= 0) {
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies VALUES ('.$adb->getUniqueID("vtiger_currencies").',"Iraqi Dinar","IQD","ID")',array());
+}
+
+$potentialModule = Vtiger_Module::getInstance('Potentials');
+$potentialTabId = getTabid('Potentials');
+
+$contactField = Vtiger_Field::getInstance('contact_id', $potentialModule);
+$relatedToField = Vtiger_Field::getInstance('related_to', $potentialModule);
+
+$result = $adb->pquery('SELECT sequence,block FROM vtiger_field WHERE fieldid = ? and tabid = ?', array($relatedToField->id, $potentialTabId));
+$relatedToFieldSequence = $adb->query_result($result, 0, 'sequence');
+$relatedToFieldBlock = $adb->query_result($result, 0, 'block');
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET sequence = sequence+1 WHERE sequence > ? and tabid = ? and block = ?', array($relatedToFieldSequence, $potentialTabId, $relatedToFieldBlock));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET sequence = ? WHERE fieldid = ?', array($relatedToFieldSequence+1, $contactField->id));
+
+$ticketsModule = Vtiger_Module::getInstance('HelpDesk');
+$ticketsTabId = getTabid('HelpDesk');
+
+$contactField = Vtiger_Field::getInstance('contact_id', $ticketsModule);
+$relatedToField = Vtiger_Field::getInstance('parent_id', $ticketsModule);
+
+$result = $adb->pquery('SELECT sequence,block FROM vtiger_field WHERE fieldid = ? and tabid = ?', array($relatedToField->id, $ticketsTabId));
+$relatedToFieldSequence = $adb->query_result($result, 0, 'sequence');
+$relatedToFieldBlock = $adb->query_result($result, 0, 'block');
+
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET sequence = sequence+1 WHERE sequence > ? and tabid = ? and block = ?', array($relatedToFieldSequence, $ticketsTabId, $relatedToFieldBlock));
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_field SET sequence = ? WHERE fieldid = ?', array($relatedToFieldSequence+1, $contactField->id));
+
+$checkQuery = 'SELECT 1 FROM vtiger_currencies  WHERE currency_name=?';
+$checkResult = $adb->pquery($checkQuery,array('Maldivian Ruffiya'));
+if($adb->num_rows($checkResult) <= 0) {
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies VALUES ('.$adb->getUniqueID("vtiger_currencies").',"Maldivian Ruffiya","MVR","MVR")',array());
+}
+
+
+$result = $adb->pquery('SELECT count(*) AS count FROM vtiger_emailtemplates', array());
+Migration_Index_View::ExecuteQuery('UPDATE vtiger_emailtemplates_seq SET id = ?', array(1 + ((int)$adb->query_result($result, 0, 'count'))));

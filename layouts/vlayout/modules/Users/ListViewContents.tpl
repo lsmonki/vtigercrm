@@ -22,8 +22,13 @@
 <input type="hidden" id="Operator" value="{$OPERATOR}" />
 <input type="hidden" id="alphabetValue" value="{$ALPHABET_VALUE}" />
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
+<input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
+<input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
+<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
 
-{assign var=ALPHABETS value=','|explode:'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'}
+{assign var = ALPHABETS_LABEL value = vtranslate('LBL_ALPHABETS', 'Vtiger')}
+{assign var = ALPHABETS value = ','|explode:$ALPHABETS_LABEL}
+
 <div class="alphabetSorting">
 	<table width="100%" class="table-bordered" style="border: 1px solid #ddd;table-layout: fixed">
 		<tbody>

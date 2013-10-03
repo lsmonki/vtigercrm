@@ -31,21 +31,23 @@
 				{if $HISTORY->isUpdate()}
 					{assign var=FIELDS value=$HISTORY->getFieldInstances()}
 					<div class="">
-						<div><b>{$USER->getName()}</b> {vtranslate('LBL_UPDATED')} <a class="cursorPointer" {if stripos($DETAILVIEW_URL, 'javascript:')===0} 
+						<div><b>{$USER->getName()}</b> {vtranslate('LBL_UPDATED')} <a class="cursorPointer" {if stripos($DETAILVIEW_URL, 'javascript:')===0}
 							onclick='{$DETAILVIEW_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$DETAILVIEW_URL}"' {/if}>
 							{$PARENT->getName()}</a>
 						</div>
 						{foreach from=$FIELDS key=INDEX item=FIELD}
 						{if $INDEX lt 2}
-						<div class='font-x-small'>
-							<i>{$FIELD->getName()}</i>
-							{if $FIELD->get('prevalue') neq ''}
-								{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
-							{else}
-								{vtranslate('LBL_CHANGED')}
+							{if $FIELD && $FIELD->getFieldInstance() && $FIELD->getFieldInstance()->isViewableInDetailView()}
+							<div class='font-x-small'>
+								<i>{vtranslate($FIELD->getName(), $FIELD->getModuleName())}</i>
+								{if $FIELD->get('prevalue') neq ''}
+									{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
+								{else}
+									{vtranslate('LBL_CHANGED')}
+								{/if}
+									{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
+							</div>
 							{/if}
-								{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
-						</div>
 						{else}
 							<a href="{$PARENT->getUpdatesUrl()}">{vtranslate('LBL_MORE')}</a>
 							{break}
@@ -54,7 +56,7 @@
 					</div>
 				{else if $HISTORY->isCreate()}
 					<div class=''  style='margin-top:5px'>
-						<b>{$USER->getName()}</b> {vtranslate('LBL_ADDED')} <a class="cursorPointer" {if stripos($DETAILVIEW_URL, 'javascript:')===0} 
+						<b>{$USER->getName()}</b> {vtranslate('LBL_ADDED')} <a class="cursorPointer" {if stripos($DETAILVIEW_URL, 'javascript:')===0}
 							onclick='{$DETAILVIEW_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$DETAILVIEW_URL}"' {/if}>
 							{$PARENT->getName()}</a>
 					</div>
@@ -63,10 +65,10 @@
 					{assign var=LINKED_RECORD_DETAIL_URL value=$RELATION->getLinkedRecord()->getDetailViewUrl()}
 					{assign var=PARENT_DETAIL_URL value=$RELATION->getParent()->getParent()->getDetailViewUrl()}
 					<div class='' style='margin-top:5px'>
-						<b>{$USER->getName()}</b> {vtranslate('LBL_ADDED')} <a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} 
+						<b>{$USER->getName()}</b> {vtranslate('LBL_ADDED')} <a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0}
 							onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$LINKED_RECORD_DETAIL_URL}"' {/if}>
 							{$RELATION->getLinkedRecord()->getName()}</a>
-						{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0} 
+						{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0}
 							onclick='{$PARENT_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$PARENT_DETAIL_URL}"' {/if}>
 							{$RELATION->getParent()->getParent()->getName()}</a>
 					</div>
@@ -75,10 +77,10 @@
 					{assign var=LINKED_RECORD_DETAIL_URL value=$RELATION->getLinkedRecord()->getDetailViewUrl()}
 					{assign var=PARENT_DETAIL_URL value=$RELATION->getParent()->getParent()->getDetailViewUrl()}
 					<div class='' style='margin-top:5px'>
-						<b>{$USER->getName()}</b> {vtranslate('LBL_REMOVED')} 
-							<a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}' 
+						<b>{$USER->getName()}</b> {vtranslate('LBL_REMOVED')}
+							<a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}'
 								{else} onclick='window.location.href="{$LINKED_RECORD_DETAIL_URL}"' {/if}>{$RELATION->getLinkedRecord()->getName()}</a>
-						{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0} 
+						{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0}
 							onclick='{$PARENT_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$PARENT_DETAIL_URL}"' {/if}>
 							{$RELATION->getParent()->getParent()->getName()}</a>
 					</div>
@@ -101,6 +103,15 @@
 			</div>
 		{/if}
 	{/foreach}
+
+	{if $NEXTPAGE}
+	<div class="row-fluid">
+		<div class="span12">
+			<a href="javascript:;" class="load-more" data-page="{$PAGE}" data-nextpage="{$NEXTPAGE}">{vtranslate('LBL_MORE')}...</a>
+		</div>
+	</div>
+	{/if}
+
 {else}
 	<span class="noDataMsg">
 		{vtranslate('LBL_NO_UPDATES_OR_COMMENTS', $MODULE_NAME)}

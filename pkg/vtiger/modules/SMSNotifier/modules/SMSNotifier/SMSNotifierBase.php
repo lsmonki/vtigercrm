@@ -92,7 +92,7 @@ class SMSNotifierBase extends CRMEntity {
 	
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'message');
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'message', 'assigned_user_id');
 	
 	function __construct() {
 		global $log, $currentModule;

@@ -236,7 +236,7 @@ var Vtiger_Index_Js = {
 		} while (!stopLoop);
 		
 		// Required to get the functionality of All drop-down working.
-		menuBarWrapper.parent().css({'overflow':''});
+		menuBarWrapper.parent().css({'overflow':'visible'});
 	},
 	
 	/**
@@ -281,9 +281,10 @@ var Vtiger_Index_Js = {
 				trigger: 'manual',
 				content: data,
 				animation: false,
-				template: '<div class="popover popover-tooltip"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><div></div></div></div></div>'
+				template: '<div class="popover popover-tooltip"><div class="arrow"></div><div class="popover-inner"><button name="vtTooltipClose" class="close" style="color:white;opacity:1;font-weight:lighter;position:relative;top:3px;right:3px;">x</button><h3 class="popover-title"></h3><div class="popover-content"><div></div></div></div></div>'
 			});
 			lastPopovers.push(el.popover('show'));
+			registerToolTipDestroy();
 		}
 		
 		function hideAllTooltipViews() {
@@ -303,6 +304,40 @@ var Vtiger_Index_Js = {
 				out: hideAllTooltipViews
 			});
 		});
+
+		function registerToolTipDestroy() {
+			jQuery('button[name="vtTooltipClose"]').on('click', function(e){
+				var lastPopover = lastPopovers.pop();
+				lastPopover.popover('hide');
+			});
+		}
+	},
+
+	registerShowHideLeftPanelEvent : function() {
+		jQuery('#toggleButton').click(function(e){
+			e.preventDefault();
+			var leftPanel = jQuery('#leftPanel');
+			var rightPanel = jQuery('#rightPanel');
+			var tButtonImage = jQuery('#tButtonImage');
+			if (leftPanel.attr('class').indexOf(' hide') == -1) {
+                var leftPanelshow = 1;
+				leftPanel.addClass('hide');
+				rightPanel.removeClass('span10').addClass('span12');
+				tButtonImage.removeClass('icon-chevron-left').addClass("icon-chevron-right");
+			} else {
+                var leftPanelshow = 0;
+				leftPanel.removeClass('hide');
+				rightPanel.removeClass('span12').addClass('span10');
+				tButtonImage.removeClass('icon-chevron-right').addClass("icon-chevron-left");
+			}
+            var params = {
+                'module' : 'Users',
+                'action' : 'IndexAjax',
+                'mode' : 'toggleLeftPanel',
+                'showPanel' : leftPanelshow
+            }
+            AppConnector.request(params);
+		});
 	},
 
 	registerEvents : function(){
@@ -311,6 +346,7 @@ var Vtiger_Index_Js = {
 		Vtiger_Index_Js.registerActivityReminder();
 		Vtiger_Index_Js.adjustTopMenuBarItems();
 		Vtiger_Index_Js.registerPostAjaxEvents();
+		Vtiger_Index_Js.registerShowHideLeftPanelEvent();
 	},
 	
 	registerPostAjaxEvents: function() {

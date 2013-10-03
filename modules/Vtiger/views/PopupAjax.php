@@ -9,6 +9,13 @@
  ************************************************************************************/
 
 class Vtiger_PopupAjax_View extends Vtiger_Popup_View {
+	
+	function __construct() {
+		parent::__construct();
+		$this->exposeMethod('getListViewCount');
+		$this->exposeMethod('getRecordsCount');
+		$this->exposeMethod('getPageCount');
+	}
 
 	function preProcess(Vtiger_Request $request) {
 		return true;
@@ -19,6 +26,11 @@ class Vtiger_PopupAjax_View extends Vtiger_Popup_View {
 	}
 
 	function process (Vtiger_Request $request) {
+		$mode = $request->get('mode');
+		if(!empty($mode)) {
+			$this->invokeExposedMethod($mode, $request);
+			return;
+		}
 		$viewer = $this->getViewer ($request);
 		$moduleName = $request->getModule();
 

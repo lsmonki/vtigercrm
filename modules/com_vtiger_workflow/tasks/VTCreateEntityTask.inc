@@ -100,6 +100,9 @@ class VTCreateEntityTask extends VTTask {
 				$newEntity->column_fields[$fieldName] = $fieldValue;
 			}
 			$newEntity->column_fields[$this->reference_field] = $focus->id;
+			// To handle cyclic process
+			$newEntity->_from_workflow = true;
+
 			$newEntity->save($entityType);
 			relateEntities($focus, $moduleName, $recordId, $entityType, $newEntity->id);
 		}

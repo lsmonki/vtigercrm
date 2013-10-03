@@ -275,6 +275,10 @@ class Vtiger_Cache  {
 		}
 	}
 
+	public function hasAssignedPicklistValues($tableName, $roleId) {
+		$values = $this->getAssignedPicklistValues($tableName, $roleId);
+		return $values !== false;
+	}
 
 	private static $_block_fields;
 
@@ -317,5 +321,45 @@ class Vtiger_Cache  {
 		if (self::$cacheEnable) {
 			$this->connector->set('purify', $key, $value);
 		}
+	}
+
+	private static $_owners_names_list;
+
+	public function getOwnerName($id){
+		if(isset(self::$_owners_names_list[$id])) {
+			return self::$_owners_names_list[$id];
+		}
+		return false;
+	}
+
+	public function setOwnerName($id, $value){
+		if(self::$cacheEnable){
+			self::$_owners_names_list[$id] = $value;
+		}
+	}
+
+	public function hasOwnerName($id) {
+		$value = $this->getOwnerName($id);
+		return $value !== false;
+	}
+
+	private static $_owners_db_names_list;
+
+	public function getOwnerDbName($id){
+		if(isset(self::$_owners_db_names_list[$id])) {
+			return self::$_owners_db_names_list[$id];
+		}
+		return false;
+	}
+
+	public function setOwnerDbName($id, $value){
+		if(self::$cacheEnable){
+			self::$_owners_db_names_list[$id] = $value;
+		}
+	}
+
+	public function hasOwnerDbName($id) {
+		$value = $this->getOwnerDbName($id);
+		return $value !== false;
 	}
 }
