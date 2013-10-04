@@ -324,7 +324,7 @@ class Vtiger_Util_Helper {
 		}
 		return $newFileName;
 	}
-	
+
 	/**
 	 * Function to get maximum upload size
 	 * @return <Float> maximum upload size
@@ -369,7 +369,7 @@ class Vtiger_Util_Helper {
 	public static function getDecodedValue($string) {
 		return html_entity_decode($string, ENT_COMPAT, 'UTF-8');
 	}
-	
+
 	public static function getActiveAdminCurrentDateTime() {
 		global $default_timezone;
 		$admin = Users::getActiveAdminUser();
@@ -389,11 +389,11 @@ class Vtiger_Util_Helper {
 		$result = $db->pquery('SELECT smcreatorid FROM vtiger_crmentity WHERE crmid = ?', array($recordId));
 		return $db->query_result($result, 0, 'smcreatorid');
 	}
-    
+
     /***
      * Function to get the label of the record
      * @param <Integer> $recordId - id of the record
-     * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records 
+     * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records
      */
     public static function getLabel($recordId , $ignoreDelete=true){
         $db = PearDatabase::getInstance();
@@ -408,4 +408,30 @@ class Vtiger_Util_Helper {
         }
         return $name;
     }
+
+	/**
+	 * Function checks if the database has utf8 support
+	 * @global type $db_type
+	 * @param type $conn
+	 * @return boolean
+	 */
+	public static function checkDbUTF8Support($conn) {
+		global $db_type;
+		if($db_type == 'pgsql')
+			return true;
+		$dbvarRS = $conn->Execute("show variables like '%_database' ");
+		$db_character_set = null;
+		$db_collation_type = null;
+		while(!$dbvarRS->EOF) {
+			$arr = $dbvarRS->FetchRow();
+			$arr = array_change_key_case($arr);
+			switch($arr['variable_name']) {
+				case 'character_set_database' : $db_character_set = $arr['value']; break;
+				case 'collation_database'     : $db_collation_type = $arr['value']; break;
+			}
+			// If we have all the required information break the loop.
+			if($db_character_set != null && $db_collation_type != null) break;
+		}
+		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
+	}
 }
