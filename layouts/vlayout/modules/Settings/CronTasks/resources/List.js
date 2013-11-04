@@ -113,6 +113,6 @@ Settings_Vtiger_List_Js("Settings_CronTasks_List_Js",{
 
 	registerEvents : function() {
 		this.registerSortableEvent();
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 	}
 });

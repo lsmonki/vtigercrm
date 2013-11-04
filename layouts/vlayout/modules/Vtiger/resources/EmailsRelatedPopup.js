@@ -13,7 +13,14 @@ Vtiger_Popup_Js("Vtiger_EmailsRelatedModule_Popup_Js",{},{
 		var row  = jQuery(e.currentTarget);
 		var id = row.data('id');
 		var recordName = row.data('name');
-		var emailValue = jQuery(row).find('.emailField').text();
+		var emailFields = jQuery(row).find('.emailField');
+		var emailValue = '';
+		jQuery.each(emailFields,function(i,element) {
+			emailValue = jQuery(element).text();
+			if(emailValue != ''){
+				return false;
+			}
+		});
 		if(emailValue == ""){
 			var error = recordName+" "+app.vtranslate("JS_DO_NOT_HAVE_AN_EMAIL_ID");
 			alert(error);

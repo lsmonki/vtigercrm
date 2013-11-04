@@ -50,10 +50,20 @@ Vtiger_Detail_Js("Accounts_Detail_Js",{
 	 * function to display the AccountHierarchy response data
 	 */
 	displayAccountHierarchyResponseData : function(data) {
-		app.showModalWindow(data);
+        var callbackFunction = function(data) {
+            app.showScrollBar(jQuery('#hierarchyScroll'), {
+                height: '200px',
+                railVisible: true,
+                alwaysVisible: true,
+                size: '6px'
+            });
+        }
+        app.showModalWindow(data, function(data){
+            if(typeof callbackFunction == 'function'){
+                callbackFunction(data);
+            }
+        });
 	}
-	
-	
 },{
 	//Cache which will store account name and whether it is duplicate or not
 	accountDuplicationCheckCache : {},

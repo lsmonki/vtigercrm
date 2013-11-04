@@ -22,7 +22,7 @@ class Products_DetailView_Model extends Vtiger_DetailView_Model {
 		$linkModelList = parent::getDetailViewLinks($linkParams);
 		$recordModel = $this->getRecord();
 
-		if ($recordModel->get('discontinued')) {
+		if ($recordModel->getActiveStatusOfRecord()) {
 			$quotesModuleModel = Vtiger_Module_Model::getInstance('Quotes');
 			if($currentUserModel->hasModuleActionPermission($quotesModuleModel->getId(), 'EditView')) {
 				$basicActionLink = array(

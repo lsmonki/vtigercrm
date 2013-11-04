@@ -126,7 +126,7 @@ class Contacts extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('assigned_user_id','lastname','createdtime' ,'modifiedtime','imagename');
+	var $mandatory_fields = Array('assigned_user_id','lastname','createdtime' ,'modifiedtime');
 
 	//Default Fields for Email Templates -- Pavani
 	var $emailTemplate_defaultFields = array('firstname','lastname','salutation','title','email','department','phone','mobile','support_start_date','support_end_date');
@@ -351,7 +351,7 @@ class Contacts extends CRMEntity {
 					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
 			}
 		}
-		
+
 		// Should Opportunities be listed on Secondary Contacts ignoring the boundaries of Organization.
 		// Useful when the Reseller are working to gain Potential for other Organization.
 		$ignoreOrganizationCheck = true;
@@ -1425,11 +1425,13 @@ function get_contactsforol($user_name)
 	//type argument included when when addin customizable tempalte for sending portal login details
 	public static function getPortalEmailContents($entityData, $password, $type='') {
         require_once 'config.inc.php';
-		global $PORTAL_URL;
+		global $PORTAL_URL, $HELPDESK_SUPPORT_EMAIL_ID;
 
 		$adb = PearDatabase::getInstance();
 		$moduleName = $entityData->getModuleName();
-
+		
+		$companyDetails = getCompanyDetails();
+		
 		$portalURL = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.getTranslatedString('Please Login Here', $moduleName).'</a>';
 
 		//here id is hardcoded with 5. it is for support start notification in vtiger_notificationscheduler
@@ -1439,7 +1441,7 @@ function get_contactsforol($user_name)
 					WHERE schedulednotificationid=5';
 
 		$result = $adb->pquery($query, array());
-		$body=$adb->query_result($result,0,'body');
+		$body=decode_html($adb->query_result($result,0,'body'));
 		$contents=$body;
 		$contents = str_replace('$contact_name$',$entityData->get('firstname')." ".$entityData->get('lastname'),$contents);
 		$contents = str_replace('$login_name$',$entityData->get('email'),$contents);
@@ -1447,10 +1449,17 @@ function get_contactsforol($user_name)
 		$contents = str_replace('$URL$',$portalURL,$contents);
 		$contents = str_replace('$support_team$',getTranslatedString('Support Team', $moduleName),$contents);
 		$contents = str_replace('$logo$','<img src="cid:logo" />',$contents);
-
+		
+		//Company Details
+		$contents = str_replace('$address$',$companyDetails['address'],$contents);
+		$contents = str_replace('$companyname$',$companyDetails['companyname'],$contents);
+		$contents = str_replace('$phone$',$companyDetails['phone'],$contents);
+		$contents = str_replace('$companywebsite$',$companyDetails['website'],$contents);
+		$contents = str_replace('$supportemail$',$HELPDESK_SUPPORT_EMAIL_ID,$contents);
+		
 		if($type == "LoginDetails") {
 			$temp=$contents;
-			$value["subject"]=$adb->query_result($result,0,'subject');
+			$value["subject"]=decode_html($adb->query_result($result,0,'subject'));
 			$value["body"]=$temp;
 			return $value;
 		}

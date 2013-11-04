@@ -704,7 +704,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			if (!empty ($blocks)) {
 				foreach ($blocks as $fieldType => $fieldName) {
 					$fieldDetails = explode(':', $fieldType);
-					if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N") {
+					if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
 						$calculationFields[$fieldType] = $fieldName;
 					}
 				}
@@ -734,7 +734,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 					if (!empty ($blocks)) {
 						foreach ($blocks as $fieldType => $fieldName) {
 							$fieldDetails = explode(':', $fieldType);
-							if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N") {
+							if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
 								$calculationFields[$fieldType] = $fieldName;
 							}
 						}
@@ -755,38 +755,6 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$secondaryModuleCalculationFields = $this->getSecondaryModuleCalculationFields();
 
 		return array_merge($primaryModuleCalculationFields, $secondaryModuleCalculationFields);
-	}
-
-	/**
-	 * Function returns the Primary Module Record Structure
-	 * @return <Vtiger_RecordStructure_Model>
-	 */
-	function getPrimaryModuleRecordStructure() {
-		$primaryModule = $this->getPrimaryModule();
-		$primaryModuleModel = Vtiger_Module_Model::getInstance($primaryModule);
-		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($primaryModuleModel);
-		return $recordStructureInstance;
-	}
-
-	/**
-	 * Function returns the Secondary Modules Record Structure
-	 * @return <Array of Vtiger_RecordSructure_Models>
-	 */
-	function getSecondaryModuleRecordStructure() {
-		$recordStructureInstances = array();
-
-		$secondaryModule = $this->getSecondaryModules();
-		if(!empty($secondaryModule)) {
-			$moduleList = explode(':', $secondaryModule);
-
-			foreach($moduleList as $module) {
-				if(!empty($module)) {
-					$moduleModel = Vtiger_Module_Model::getInstance($module);
-					$recordStructureInstances[$module] = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel);
-				}
-			}
-		}
-		return $recordStructureInstances;
 	}
 
 	/**
@@ -925,7 +893,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		$params = array($this->getName());
 
 		$record = $this->getId();
-		if ($record) {
+		if ($record && !$this->get('isDuplicate')) {
 			$query .= " AND reportid != ?";
 			array_push($params, $record);
 		}

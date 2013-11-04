@@ -9,7 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Calendar' => 'Kalendarz',
+	'SINGLE_Calendar' => 'Zadanie',
 	'LBL_ADD_TASK' => 'Dodaj zadanie',
 	'LBL_ADD_EVENT' => 'Dodaj Czynność',
 	'LBL_RECORDS_LIST' => 'Lista wydarzeń',
@@ -52,14 +52,15 @@ $languageStrings = array(
 	'LBL_EVENT' => 'Czynność',
 	'LBL_TASK' => 'Zadanie',
 
-	'LBL_RECORDS_LIST' => 'Widok listy',
-	'LBL_CALENDAR_VIEW' => 'Widok kalendarza'
+	'LBL_CALENDAR_VIEW' => 'Widok kalendarza',
+	'LBL_EVENT_OR_TASK' => 'Wydarzenie / Zadanie',
 
 );
 
 $jsLanguageStrings = array(
 
 	'LBL_ADD_EVENT_TASK' => 'Dodaj zadanie / Czynność',
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Nie może być pociągnięty do przyszłego',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

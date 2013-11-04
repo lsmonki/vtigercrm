@@ -14,7 +14,7 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 	 * @params: delete record url.
 	 */
     deleteRecord : function(deleteRecordActionUrl) {
-		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
+		var message = app.vtranslate('LBL_DELETE_USER_CONFIRMATION');
 		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
 				AppConnector.request(deleteRecordActionUrl).then(
 				function(data){
@@ -55,7 +55,7 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
-					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
+					Vtiger_Helper_Js.showPnotify(data.result.message);
 					var url = data.result.listViewUrl;
 					window.location.href=url;
 				}

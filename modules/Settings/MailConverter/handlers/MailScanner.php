@@ -9,8 +9,8 @@
  *
  ********************************************************************************/
 
-require_once('modules/Settings/MailConverter/helpers/MailBox.php');
-require_once('modules/Settings/MailConverter/helpers/MailAttachmentMIME.php');
+require_once('modules/Settings/MailConverter/handlers/MailBox.php');
+require_once('modules/Settings/MailConverter/handlers/MailAttachmentMIME.php');
 
 /**
  * Mail Scanner provides the ability to scan through the given mailbox

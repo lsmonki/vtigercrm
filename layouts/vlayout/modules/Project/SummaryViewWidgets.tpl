@@ -40,7 +40,7 @@
 			<div class="summaryWidgetContainer">
 				<div class="widgetContainer_comments" data-url="{$COMMENTS_WIDGET_MODEL->getUrl()}" data-name="{$COMMENTS_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
-						<span class="span9"><h4 class="textOverflowEllipsis">{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9"><h4>{vtranslate($COMMENTS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 
 						<span class="span3">
 							{if $COMMENTS_WIDGET_MODEL->get('action')}
@@ -65,7 +65,7 @@
 					<div class="widget_header row-fluid">
 						<span class="span9">
 							<div class="row-fluid">
-								<span class="span4 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($HELPDESK_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+								<span class="span4 margin0px"><h4>{vtranslate($HELPDESK_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 								<span class="span7">
 									{assign var=RELATED_MODULE_MODEL value=Vtiger_Module_Model::getInstance('HelpDesk')}
 									{assign var=FIELD_MODEL value=$RELATED_MODULE_MODEL->getField('ticketstatus')}
@@ -104,7 +104,7 @@
 			<div class="summaryWidgetContainer">
 				<div class="widgetContainer_mileStone" data-url="{$MILESTONE_WIDGET_MODEL->getUrl()}" data-name="{$MILESTONE_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
-						<span class="span9"><h4 class="textOverflowEllipsis">{vtranslate($MILESTONE_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9"><h4>{vtranslate($MILESTONE_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 						<span class="span3">
 							<span class=" pull-right">
 								{if $MILESTONE_WIDGET_MODEL->get('action')}
@@ -130,7 +130,7 @@
 					<div class="widget_header row-fluid">
 						<span class="span9">
 							<div class="row-fluid">
-								<span class="span4 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($TASKS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+								<span class="span4 margin0px"><h4>{vtranslate($TASKS_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 								<span class="span7">
 									{assign var=RELATED_MODULE_MODEL value=Vtiger_Module_Model::getInstance('ProjectTask')}
 									{assign var=FIELD_MODEL value=$RELATED_MODULE_MODEL->getField('projecttaskstatus')}
@@ -167,7 +167,7 @@
 			<div class="summaryWidgetContainer">
 				<div class="widgetContainer_documents" data-url="{$DOCUMENT_WIDGET_MODEL->getUrl()}" data-name="{$DOCUMENT_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
-						<span class="span9"><h4 class="textOverflowEllipsis">{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9"><h4>{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 						<span class="span3">
 							{if $DOCUMENT_WIDGET_MODEL->get('action')}
 								<button class="btn pull-right addButton createRecord" type="button" data-url="{$DOCUMENT_WIDGET_MODEL->get('actionURL')}">
@@ -189,7 +189,7 @@
 			<div class="summaryWidgetContainer">
 				<div class="widgetContainer_updates" data-url="{$UPDATES_WIDGET_MODEL->getUrl()}" data-name="{$UPDATES_WIDGET_MODEL->getLabel()}">
 					<div class="widget_header row-fluid">
-						<span class="span9"><h4 class="textOverflowEllipsis">{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
+						<span class="span9"><h4>{vtranslate($UPDATES_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
 
 						<span class="span3">
 							{if $UPDATES_WIDGET_MODEL->get('action')}

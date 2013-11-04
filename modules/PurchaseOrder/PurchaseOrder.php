@@ -84,7 +84,7 @@ class PurchaseOrder extends CRMEntity {
 				      );
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('subject', 'vendor_id','createdtime' ,'modifiedtime');
+	var $mandatory_fields = Array('subject', 'vendor_id','createdtime' ,'modifiedtime', 'assigned_user_id');
 
 	// This is the list of vtiger_fields that are required.
 	var $required_fields =  array("accountname"=>1);

@@ -74,6 +74,8 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'Da',
+	'Optional' => 'Opzionale',
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

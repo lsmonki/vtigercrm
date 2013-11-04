@@ -11,8 +11,9 @@
 -->*}
 
 {strip}
-<div class='editViewContainer'>
+<div class='container-fluid editViewContainer'>
 	<form class="form-horizontal recordEditView" id="EditView" name="EditView" method="post" action="index.php" enctype="multipart/form-data">
+		{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
 		{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 			<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 		{/if}
@@ -59,7 +60,7 @@
 				{assign var="isReferenceField" value=$FIELD_MODEL->getFieldDataType()}
 				{if $FIELD_MODEL->get('uitype') eq "20" or $FIELD_MODEL->get('uitype') eq "19"}
 					{if $COUNTER eq '1'}
-						<td></td><td></td></tr><tr>
+						<td class="{$WIDTHTYPE}"></td><td class="{$WIDTHTYPE}"></td></tr><tr>
 						{assign var=COUNTER value=0}
 					{/if}
 				{/if}
@@ -69,7 +70,7 @@
 				{else}
 					{assign var=COUNTER value=$COUNTER+1}
 				{/if}
-				<td class="fieldLabel">
+				<td class="fieldLabel {$WIDTHTYPE}">
 					{if $isReferenceField neq "reference"}<label class="muted pull-right marginRight10px">{/if}
 						{if $FIELD_MODEL->isMandatory() eq true && $isReferenceField neq "reference"} <span class="redColor">*</span> {/if}
 						{if $isReferenceField eq "reference"}
@@ -102,7 +103,7 @@
 					{if $isReferenceField neq "reference"}</label>{/if}
 				</td>
 				{if $FIELD_MODEL->get('uitype') neq "83"}
-					<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19' or $FIELD_MODEL->get('uitype') eq '20'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
+					<td class="fieldValue {$WIDTHTYPE}" {if $FIELD_MODEL->get('uitype') eq '19' or $FIELD_MODEL->get('uitype') eq '20'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if}>
 						<div class="row-fluid">
 							<span class="span10">
 								{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE) BLOCK_FIELDS=$BLOCK_FIELDS}
@@ -110,10 +111,12 @@
 						</div>
 					</td>
 				{/if}
-				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20" and $FIELD_MODEL->get('uitype') neq "30" and $FIELD_MODEL->get('name') neq "recurringtype"}<td></td><td></td>{/if}
-				{if $MODULE eq 'Events' && $BLOCK_LABEL eq 'LBL_EVENT_INFORMATION' && $smarty.foreach.blockfields.last }	
+				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20" and $FIELD_MODEL->get('uitype') neq "30" and $FIELD_MODEL->get('name') neq "recurringtype"}
+					<td class="{$WIDTHTYPE}"></td><td class="{$WIDTHTYPE}"></td>
+				{/if}
+				{if $MODULE eq 'Events' && $BLOCK_LABEL eq 'LBL_EVENT_INFORMATION' && $smarty.foreach.blockfields.last }
 					{include file=vtemplate_path('uitypes/FollowUp.tpl',$MODULE) COUNTER=$COUNTER}
-				{/if}	
+				{/if}
 			{/foreach}
 			</tr>
 			</table>

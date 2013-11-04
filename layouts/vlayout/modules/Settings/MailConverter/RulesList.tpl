@@ -12,7 +12,8 @@
 {strip}
 	<input type="hidden" id="scannerId" value="{$SCANNER_ID}"/>
 	<div class="listViewPageDiv">
-		<label class="themeTextColor font-x-x-large pull-left">{vtranslate($MODULE,$QUALIFIED_MODULE)}</label><span class="alignMiddle"><strong>&nbsp;-&nbsp;&nbsp;</strong>{vtranslate('LBL_CONVERT_EMAILS_TO_RESPECTIVE_RECORDS',$QUALIFIED_MODULE)}</span><hr>
+		<h3>{vtranslate($MODULE,$QUALIFIED_MODULE)} - {vtranslate('LBL_CONVERT_EMAILS_TO_RESPECTIVE_RECORDS',$QUALIFIED_MODULE)}</h3>
+        <hr>
 		<div class="row-fluid padding-bottom1per">
 			<div class="span2">&nbsp;</div>
 			<div class="span9"><i class="icon-info-sign"></i>&nbsp;&nbsp;{vtranslate('LBL_DRAG_AND_DROP_BLOCK_TO_PRIORITISE_THE_RULE',$QUALIFIED_MODULE)}</div>

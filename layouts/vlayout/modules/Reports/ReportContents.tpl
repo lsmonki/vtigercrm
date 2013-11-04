@@ -35,8 +35,10 @@
 						{assign var=CALCULATION_FIELD_KEYS value=array_keys($CALCULATION_FIELD)}
 						{assign var=CALCULATION_FIELD_KEYS value=$CALCULATION_FIELD_KEYS|replace:$ESCAPE_CHAR:''}
 						{assign var=FIELD_IMPLODE value=explode('_',$CALCULATION_FIELD_KEYS['0'])}
-						{assign var=FIELD_LABEL value=$FIELD_IMPLODE['1']|cat:' '|cat:$FIELD_IMPLODE['2']}
-						<td>{vtranslate($FIELD_IMPLODE['0'],$MODULE)} {vtranslate($FIELD_LABEL, $MODULE)}</td>
+						{assign var=MODULE_NAME value=$FIELD_IMPLODE['0']}
+						{assign var=FIELD_LABEL value=" "|implode:$FIELD_IMPLODE}
+						{assign var=FIELD_LABEL value=$FIELD_LABEL|replace:$MODULE_NAME:''}
+						<td>{vtranslate($MODULE_NAME,$MODULE)} {vtranslate($FIELD_LABEL, $MODULE)}</td>
 						{foreach from=$CALCULATION_FIELD item=CALCULATION_VALUE}
 							<td width="15%">{$CALCULATION_VALUE}</td>
 						{/foreach}

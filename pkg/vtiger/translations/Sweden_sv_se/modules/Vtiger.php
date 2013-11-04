@@ -628,7 +628,7 @@ $languageStrings = array(
 	'Sales End Date'=>'Försäljningsslutdatum',
 
 	//Dashboard list of widgets translation
-	'Open Ticktes' => 'Öppna Ärenden',
+	'Open Tickets' => 'Öppna Ärenden',
 	'LBL_SELECT_STATUS' => 'Välj Status',
 	'LBL_BLANK' => '-Blank-',
 
@@ -716,10 +716,10 @@ $languageStrings = array(
 	'LBL_RECORD' => 'Post',
 	'LBL_NO_DUPLICATED_FOUND' => 'Inga dubbletter funna',
 	'LBL_MERGE_SELECT' => 'Välj Sammanfogning',
-	
+
 	//sbproducts translation
 	'LBL_BACK_TO_PRODUCTS' => 'Tillbaka till produkter',
-	
+
 	//Translations used för Exportera till Pdf
 	'Valid Date' => 'Giltigt Datum',
 	'Phone: ' => 'Telefon: ',
@@ -895,11 +895,11 @@ $jsLanguageStrings = array(
 	'JS_TOTAL_RECORDS' => 'Totalt antal poster',
 	'JS_PAGE_NOT_EXIST' => 'Sida existerar inte',
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'Du är på sidnummer',
-	
+
 	//More currencies message
 	'JS_PLEASE_ENABLE_BASE_CURRENCY_FOR_PRODUCT' => 'Vänligen aktivera basvaluta för produkt',
 	'JS_PLEASE_SELECT_BASE_CURRENCY_FOR_PRODUCT' => 'Vänligen aktivera basvaluta för produkt',
-	
+
 	//Delete Records message
 	'JS_RECORDS_ARE_GETTING_DELETED' => 'Poster håller på att Raderas',
 	'JS_RECORD_GETTING_DELETED' => 'Poster Raderas',

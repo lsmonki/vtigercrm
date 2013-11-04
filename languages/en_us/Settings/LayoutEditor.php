@@ -48,6 +48,7 @@ $languageStrings = array(
 	'LBL_DUPLICATE_FIELD_EXISTS' => 'Duplicate Field Exists',
 	'LBL_WRONG_FIELD_TYPE' => 'Wrong Field Type',
 	'LBL_ROLE_BASED_PICKLIST' => 'Role Based Picklist',
+	'LBL_CLICK_HERE_TO_EDIT' => 'Click here to edit',
 
 	//Field Types
 	'Text'=>'Text',

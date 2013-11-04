@@ -31,7 +31,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&parent=Settings&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
-
+	
 	/**
 	 * Function to get the Detail View url for the Preferences page
 	 * @return <String> - Record Detail View Url
@@ -40,7 +40,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&view=PreferenceDetail&record='.$this->getId();
 	}
-
+	
 	/**
 	 * Function to get the url for the Profile page
 	 * @return <String> - Profile Url
@@ -49,7 +49,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module=Users&view=ChangePassword&mode=Profile';
 	}
-
+	
 	/**
 	 * Function to get the Edit View url for the record
 	 * @return <String> - Record Edit View Url
@@ -131,7 +131,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		//TODO : Remove the global dependency
 		$currentUser = vglobal('current_user');
 		if(!empty($currentUser)) {
-
+			
 			// Optimization to avoid object creation every-time
 			// Caching is per-id as current_user can get swapped at runtime (ex. workflow)
 			$currentUserModel = NULL;
@@ -280,13 +280,13 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$curentUserPrivileges = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
 		if($currentUser->isAdminUser() || $curentUserPrivileges->hasGlobalWritePermission()) {
-			$groups = $this->getAccessibleUsers("",$module);
+			$groups = $this->getAccessibleGroups("",$module);
 		} else {
 			$sharingAccessModel = Settings_SharingAccess_Module_Model::getInstance($module);
 			if($sharingAccessModel->isPrivate()) {
 				$groups = $this->getAccessibleGroups('private',$module);
 			} else {
-				$groups = $this->getAccessibleUsers("",$module);
+				$groups = $this->getAccessibleGroups("",$module);
 			}
 		}
 		return $groups;
@@ -500,8 +500,8 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$visibility = $db->query_result($db->pquery($query, array($this->getId())), 0, 'visible');
 		if($visibility == 0) {
 			return true;
-		}
-		return false;
+		} 
+		return false; 
 	}
 
 	/**
@@ -558,8 +558,8 @@ class Users_Record_Model extends Vtiger_Record_Model {
 			}
 		}
 		return $activityReminderInSeconds;
-	}
-
+	}	
+    
     /**
      * Function to get the users count
      * @param <Boolean> $onlyActive - If true it returns count of only acive users else only inactive users
@@ -569,14 +569,14 @@ class Users_Record_Model extends Vtiger_Record_Model {
         $db = PearDatabase::getInstance();
         $query = 'SELECT 1 FROM vtiger_users ';
         $params = array();
-
+        
         if($onlyActive) {
             $query.= ' WHERE status=? ';
             array_push($params,'active');
         }
 
         $result = $db->pquery($query,$params);
-
+        
         $numOfUsers = $db->num_rows($result);
         return $numOfUsers;
     }

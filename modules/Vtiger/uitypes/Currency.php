@@ -87,7 +87,6 @@ class Vtiger_Currency_UIType extends Vtiger_Base_UIType {
 	 * @return <String>
 	 */
 	public function getEditViewDisplayValue($value) {
-		$value = (float)$value;
 		if(!empty($value))
 			return $this->getDisplayValue($value);
         return $value;

@@ -506,6 +506,12 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDate();
 						} elseif ($col[4] == 'DT') {
+							$comparator = array('e','n','b','a');
+							if(in_array($criteria['comparator'], $comparator)) {
+								$originalValue = $temp_val[$x];
+								$dateTime = explode(' ',$originalValue);
+								$temp_val[$x] = $dateTime[0];
+							}
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDateTimeValue();
 						} else {

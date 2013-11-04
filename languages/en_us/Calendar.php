@@ -9,7 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Calendar' => 'Calendar',
+	'SINGLE_Calendar' => 'Task',
 	'SINGLE_Events' => 'Event',
 	'LBL_ADD_TASK' => 'Add Task',
 	'LBL_ADD_EVENT' => 'Add Event',
@@ -23,6 +23,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS' => 'Other Events',
 	'LBL_MINUTES' => 'Minutes',
 	'LBL_SELECT_USERS' => 'Select Users',
+	'LBL_EVENT_OR_TASK' => 'Event / Task',
 
 	// Blocks
 	'LBL_TASK_INFORMATION' => 'Task Details',
@@ -109,6 +110,7 @@ $jsLanguageStrings = array(
     'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
     'LBL_FIELD_MAPPING' => 'Field Mapping',
     'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
+    'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

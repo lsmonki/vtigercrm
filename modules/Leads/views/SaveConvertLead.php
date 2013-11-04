@@ -54,6 +54,11 @@ class Leads_SaveConvertLead_View extends Vtiger_View_Controller {
 						$fieldValue = Vtiger_Currency_UIType::convertToDBFormat($fieldValue);
 					} elseif ($fieldModel->getFieldDataType() === 'date') {
 						$fieldValue = DateTimeField::convertToDBFormat($fieldValue);
+					} elseif ($fieldModel->getFieldDataType() === 'reference' && $fieldValue) {
+						$ids = vtws_getIdComponents($fieldValue);
+						if (count($ids) === 1) {
+							$fieldValue = vtws_getWebserviceEntityId(getSalesEntityType($fieldValue), $fieldValue);
+						}
 					}
 					$entityValues['entities'][$module][$fieldName] = $fieldValue;
 				}

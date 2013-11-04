@@ -200,6 +200,22 @@ class Vtiger_Cache  {
 		}
     }
 
+	//cache for the module Instance
+    private static  $_workflow_for_module_supporting_comments = array();
+
+    public function getWorkflowForModuleSupportingComments($module){
+		if(isset(self::$_workflow_for_module_supporting_comments[$module])){
+			return self::$_workflow_for_module_supporting_comments[$module];
+		}
+		return false;
+    }
+
+    public function setWorkflowForModuleSupportingComments($module,$workflows){
+		if(self::$cacheEnable){
+			self::$_workflow_for_module_supporting_comments[$module] = $workflows;
+		}
+    }
+
 
 	private static $_user_id ;
 
@@ -360,6 +376,26 @@ class Vtiger_Cache  {
 
 	public function hasOwnerDbName($id) {
 		$value = $this->getOwnerDbName($id);
+		return $value !== false;
+	}
+
+	private static $_creator_ids_list;
+
+	public function getCreator($id){
+		if(isset(self::$_creator_ids_list[$id])) {
+			return self::$_creator_ids_list[$id];
+		}
+		return false;
+	}
+
+	public function setCreator($id, $value){
+		if(self::$cacheEnable){
+			self::$_creator_ids_list[$id] = $value;
+		}
+	}
+
+	public function hasCreator($id) {
+		$value = $this->getCreator($id);
 		return $value !== false;
 	}
 }

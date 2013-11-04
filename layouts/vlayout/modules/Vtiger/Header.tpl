@@ -56,6 +56,8 @@
 		<div id="js_strings" class="hide noprint">{Zend_Json::encode($LANGUAGE_STRINGS)}</div>
 		{assign var=CURRENT_USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
 		<input type="hidden" id="start_day" value="{$CURRENT_USER_MODEL->get('dayoftheweek')}" />
+		<input type="hidden" id="row_type" value="{$CURRENT_USER_MODEL->get('rowheight')}" />
+		<input type="hidden" id="current_user_id" value="{$CURRENT_USER_MODEL->get('id')}" />
 		<div id="page">
 			<!-- container which holds data temporarly for pjax calls -->
 			<div id="pjaxContainer" class="hide noprint"></div>

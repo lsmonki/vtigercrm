@@ -67,8 +67,13 @@ class Reports_Detail_View extends Vtiger_Index_View {
 		// Advanced filter conditions
 		$viewer->assign('SELECTED_ADVANCED_FILTER_FIELDS', $reportModel->transformToNewAdvancedFilter());
 		$viewer->assign('PRIMARY_MODULE', $primaryModule);
-		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $reportModel->getPrimaryModuleRecordStructure());
-		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
+			
+		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($reportModel);
+		$primaryModuleRecordStructure = $recordStructureInstance->getPrimaryModuleRecordStructure();
+		$secondaryModuleRecordStructures = $recordStructureInstance->getSecondaryModuleRecordStructure();
+		
+		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
+		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
 		
 		$secondaryModuleIsCalendar = strpos($secondaryModules, 'Calendar');
 		if(($primaryModule == 'Calendar') || ($secondaryModuleIsCalendar !== FALSE)){

@@ -8,18 +8,23 @@
  *************************************************************************************/
 Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
 
+	validationSupportedFieldConditionMap : {
+				'email' : ['e','n'],
+				'date' : ['is'],
+				'datetime' : ['is']
+	},
 	//Hols field type for which there is validations always needed
 	allConditionValidationNeededFieldList : ['double', 'integer'],
 
 	// comparators which do not have any field Specific UI.
-	comparatorsWithNoValueBoxMap : ['has changed','is empty','is not empty'],
+	comparatorsWithNoValueBoxMap : ['has changed','is empty','is not empty', 'is added'],
 
 	getFieldSpecificType : function(fieldSelected) {
 		var fieldInfo = fieldSelected.data('fieldinfo');
 		var type = fieldInfo.type;
 		return type;
 	},
-
+	
 	getModuleName : function() {
 		return app.getModuleName();
 	},
@@ -214,23 +219,30 @@ Vtiger_Date_Field_Js('Workflows_Date_Field_Js',{},{
 	getUi : function() {
 		var comparatorSelectedOptionVal = this.get('comparatorElementVal');
         var dateSpecificConditions = this.get('dateSpecificConditions');
-		if(comparatorSelectedOptionVal == 'between' || comparatorSelectedOptionVal == 'custom'){
-			var html = '<div class="date"><input class="dateField" data-calendar-type="range" name="'+ this.getName() +'" data-date-format="'+ this.getDateFormat() +'" type="text" ReadOnly="true" value="'+  this.getValue() + '"></div>';
-			var element = jQuery(html);
+		if(comparatorSelectedOptionVal.length > 0) {
+			if(comparatorSelectedOptionVal == 'between' || comparatorSelectedOptionVal == 'custom'){
+				var html = '<div class="date"><input class="dateField" data-calendar-type="range" name="'+ this.getName() +'" data-date-format="'+ this.getDateFormat() +'" type="text" ReadOnly="true" value="'+  this.getValue() + '"></div>';
+				var element = jQuery(html);
+				return this.addValidationToElement(element);
+			} else if(this._specialDateComparator(comparatorSelectedOptionVal)) {
+				var html = '<input name="'+ this.getName() +'" type="text" value="'+this.getValue()+'" data-validation-engine="validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" data-validator="[{"name":"PositiveNumber"}]">\n\
+							<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
+				return jQuery(html);
+			} else if (comparatorSelectedOptionVal in dateSpecificConditions) {
+				var startValue = dateSpecificConditions[comparatorSelectedOptionVal]['startdate'];
+				var endValue = dateSpecificConditions[comparatorSelectedOptionVal]['enddate'];
+				var html = '<input name="'+ this.getName() +'"  type="text" ReadOnly="true" value="'+  startValue +','+ endValue +'">'
+				return jQuery(html);
+			} else if(comparatorSelectedOptionVal == 'is today') {
+				//show nothing
+			}else {
+				return this._super();
+			}
+		} else {
+			var html = '<input type="text" class="getPopupUi date" name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'+ 
+							'<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />' 
+			var element = jQuery(html); 
 			return this.addValidationToElement(element);
-		} else if(this._specialDateComparator(comparatorSelectedOptionVal)) {
-			var html = '<input name="'+ this.getName() +'" type="text" value="'+this.getValue()+'" data-validation-engine="validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" data-validator="[{"name":"PositiveNumber"}]">\n\
-						<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
-			return jQuery(html);
-		} else if (comparatorSelectedOptionVal in dateSpecificConditions) {
-			var startValue = dateSpecificConditions[comparatorSelectedOptionVal]['startdate'];
-            var endValue = dateSpecificConditions[comparatorSelectedOptionVal]['enddate'];
-            var html = '<input name="'+ this.getName() +'"  type="text" ReadOnly="true" value="'+  startValue +','+ endValue +'">'
-            return jQuery(html);
-        } else if(comparatorSelectedOptionVal == 'is today') {
-			//show nothing
-		}else {
-			return this._super();
 		}
 	},
 
@@ -260,15 +272,14 @@ Vtiger_Date_Field_Js('Workflows_Datetime_Field_Js',{},{
 	getUi : function() {
 		var comparatorSelectedOptionVal = this.get('comparatorElementVal');
 		if(this._specialDateTimeComparator(comparatorSelectedOptionVal)) {
-			var html = '<input name="'+ this.getName() +'" type="text" value="'+this.getValue()+'" data-validation-engine="validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" data-validator="[{"name":"PositiveNumber"}]">\n\
-						<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
+			var html = '<input name="'+ this.getName() +'" type="text" value="'+this.getValue()+'" data-validator="[{name:PositiveNumber}]"><input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />';
 			var element = jQuery(html);
 		} else {
 			var html = '<input type="text" class="getPopupUi date" name="'+ this.getName() +'"  data-date-format="'+ this.getDateFormat() +'"  value="'+  this.getValue() + '" />'+
 						'<input type="hidden" name="valuetype" value="'+this.get('workflow_valuetype')+'" />'
 			var element = jQuery(html);
 		}
-		return this.addValidationToElement(element);
+		return element;
 	},
 
 	_specialDateTimeComparator : function(comp) {

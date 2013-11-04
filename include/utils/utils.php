@@ -1816,6 +1816,26 @@ function getCombinations($array, $tempString = '') {
 	return $result;
 }
 
+function getCompanyDetails() {
+	global $adb;
+	
+	$sql="select * from vtiger_organizationdetails";
+	$result = $adb->pquery($sql, array());
+	
+	$companyDetails = array();
+	$companyDetails['companyname'] = $adb->query_result($result,0,'organizationname');
+	$companyDetails['website'] = $adb->query_result($result,0,'website');
+	$companyDetails['address'] = $adb->query_result($result,0,'address');
+	$companyDetails['city'] = $adb->query_result($result,0,'city');
+	$companyDetails['state'] = $adb->query_result($result,0,'state');
+	$companyDetails['country'] = $adb->query_result($result,0,'country');
+	$companyDetails['phone'] = $adb->query_result($result,0,'phone');
+	$companyDetails['fax'] = $adb->query_result($result,0,'fax');
+	$companyDetails['logoname'] = $adb->query_result($result,0,'logoname');
+	
+	return $companyDetails;
+}
+
 /**
  *  call back function to change the array values in to lower case 
  */

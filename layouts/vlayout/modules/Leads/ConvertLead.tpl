@@ -15,18 +15,12 @@
 		<input type="hidden" id="convertLeadErrorTitle" value="{vtranslate('LBL_CONVERT_LEAD_ERROR_TITLE',$MODULE)}"/>
 		<input id="convertLeadError" class="convertLeadError" type="hidden" value="{vtranslate('LBL_CONVERT_LEAD_ERROR',$MODULE)}"/>
 	{else}
-		<div class="modal-header">
-			<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
-			<div class="row-fluid">
-				<span class="span5">
-					<h3>{vtranslate('LBL_CONVERT_LEAD', $MODULE)} :</h3>
-				</span>
-				<span class=" span6 margin0px">
-					<h3 class="convertLeadName textOverflowEllipsis">{$RECORD->getName()}</h3>
-				</span>
+		<div class="modal-header contentsBackground">
+            <button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
+            <h3>{vtranslate('LBL_CONVERT_LEAD', $MODULE)} : {$RECORD->getName()}</h3>
 			</div>
 		</div>
-		<form class="form-horizontal contentsBackground" id="convertLeadForm" method="post" action="index.php">
+		<form class="form-horizontal" id="convertLeadForm" method="post" action="index.php">
 			<input type="hidden" name="module" value="{$MODULE}"/>
 			<input type="hidden" name="view" value="SaveConvertLead"/>
 			<input type="hidden" name="record" value="{$RECORD->getId()}"/>
@@ -39,7 +33,7 @@
 								<input id="{$MODULE_NAME}Module" class="convertLeadModuleSelection alignBottom" data-module="{vtranslate($MODULE_NAME,$MODULE_NAME)}" value="{$MODULE_NAME}" type="checkbox" {if $MODULE_NAME != 'Potentials'} {if $MODULE_NAME == 'Accounts' && $ACCOUNT_FIELD_MODEL && $ACCOUNT_FIELD_MODEL->isMandatory()} disabled="disabled" {/if} {if $MODULE_NAME == 'Contacts' && $CONTACT_FIELD_MODEL && $CONTACT_FIELD_MODEL->isMandatory()} disabled="disabled" {/if} checked="" {/if}/>
 									{assign var=SINGLE_MODULE_NAME value="SINGLE_$MODULE_NAME"}
 									<span style="position:relative;top:2px;">&nbsp;&nbsp;&nbsp;{vtranslate('LBL_CREATE', $MODULE)}&nbsp;{vtranslate($SINGLE_MODULE_NAME, $MODULE_NAME)}</span>
-									<span class="pull-right"><i class="iconArrow {if $CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Accounts"} icon-chevron-up {elseif !$CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Contacts"} icon-chevron-up {else} icon-chevron-down {/if}alignBottom"></i></span>
+									<span class="pull-right"><i class="iconArrow{if $CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Accounts"} icon-inverted icon-chevron-up {elseif !$CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Contacts"} icon-inverted icon-chevron-up {else} icon-inverted icon-chevron-down {/if}alignBottom"></i></span>
 							</div>
 						</div>
 						<div id="{$MODULE_NAME}_FieldInfo" class="{$MODULE_NAME}_FieldInfo accordion-body collapse fieldInfo {if $CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Accounts"} in {elseif !$CONVERT_LEAD_FIELDS['Accounts'] && $MODULE_NAME == "Contacts"} in {/if}">
@@ -48,16 +42,12 @@
 								<tr>
 									<td class="fieldLabel">
 										<label class='muted pull-right marginRight10px'>
-											{vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
-											{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
+											<span class="redColor">*</span> {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
+											{if $FIELD_MODEL->isMandatory() eq true} {/if}
 										</label>
 									</td>
 									<td class="fieldValue">
-										{if $FIELD_MODEL->getFieldDataType() eq 'reference'}
-											<input type="text" class="reference" readonly name="{$FIELD_MODEL->getName()}" value="{$FIELD_MODEL->get('fieldvalue')}" />
-										{else}
 											{include file=$FIELD_MODEL->getUITypeModel()->getTemplateName()|@vtemplate_path}
-										{/if}
 									</td>
 								</tr>
 								{/foreach}
@@ -70,9 +60,9 @@
 						{assign var=FIELD_MODEL value=$ASSIGN_TO}
 						<tr>
 							<td class="fieldLabel">
-								<label class='muted pull-right marginRight10px'>
-									{vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
-									{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}
+								<label class='muted pull-right'>
+									<span class="redColor">*</span> {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
+									{if $FIELD_MODEL->isMandatory() eq true} {/if}
 								</label>
 							</td>
 							<td class="fieldValue">
@@ -80,8 +70,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td>{vtranslate('LBL_TRANSFER_RELATED_RECORD', $MODULE)}</td>
-							<td>
+							<td class="fieldLabel">
+                                <label class='muted pull-right'>
+                                    {vtranslate('LBL_TRANSFER_RELATED_RECORD', $MODULE)}
+                                </label>
+                            </td>
+							<td class="fieldValue">
 								{foreach item=MODULE_FIELD_MODEL key=MODULE_NAME from=$CONVERT_LEAD_FIELDS}
 									{if $MODULE_NAME != 'Potentials'}
 										<input type="radio" id="transfer{$MODULE_NAME}" class="transferModule alignBottom" name="transferModule" value="{$MODULE_NAME}"

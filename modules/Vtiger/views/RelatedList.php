@@ -79,6 +79,7 @@ class Vtiger_RelatedList_View extends Vtiger_Index_View {
 
 		$viewer->assign('IS_EDITABLE', $relationModel->isEditable());
 		$viewer->assign('IS_DELETABLE', $relationModel->isDeletable());
+		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('VIEW', $request->get('view'));
 
 		return $viewer->view('RelatedList.tpl', $moduleName, 'true');

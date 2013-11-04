@@ -2411,7 +2411,9 @@ Should any need arise,please do give us a call.';
 			"terms.gif",
 			"settingsInvNumber.gif",
 			"mailScanner.gif",
-			"settingsWorkflow.png");
+			"settingsWorkflow.png",
+			"migrate.gif",
+			"Cron.png");
 
 		//labels for blocks
 		$blocks = array(
@@ -2445,7 +2447,9 @@ Should any need arise,please do give us a call.';
 			'INVENTORYTERMSANDCONDITIONS',
 			'LBL_CUSTOMIZE_MODENT_NUMBER',
 			'LBL_MAIL_SCANNER',
-			'LBL_LIST_WORKFLOWS'
+			'LBL_LIST_WORKFLOWS',
+			'LBL_CONFIG_EDITOR',
+			'Scheduler'
 			);
 
 
@@ -2473,6 +2477,8 @@ Should any need arise,please do give us a call.';
 			'LBL_CUSTOMIZE_MODENT_NUMBER' => 'LBL_OTHER_SETTINGS',
 			'LBL_MAIL_SCANNER' => 'LBL_OTHER_SETTINGS',
 			'LBL_LIST_WORKFLOWS' => 'LBL_OTHER_SETTINGS',
+			'LBL_CONFIG_EDITOR'=> 'LBL_OTHER_SETTINGS',
+			'Scheduler' => 'LBL_OTHER_SETTINGS'
 			);
 
 
@@ -2500,7 +2506,9 @@ Should any need arise,please do give us a call.';
 			'LBL_INV_TANDC_DESCRIPTION',
 			'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION',
 			'LBL_MAIL_SCANNER_DESCRIPTION',
-			'LBL_LIST_WORKFLOWS_DESCRIPTION');
+			'LBL_LIST_WORKFLOWS_DESCRIPTION',
+			'LBL_CONFIG_EDITOR_DESCRIPTION',
+			'Allows you to Configure Cron Task');
 
 		$links = array(
 			'index.php?module=Users&parent=Settings&view=List',
@@ -2526,7 +2534,9 @@ Should any need arise,please do give us a call.';
 			'index.php?parent=Settings&module=Vtiger&view=TermsAndConditionsEdit',
 			'index.php?module=Vtiger&parent=Settings&view=CustomRecordNumbering',
 			'index.php?parent=Settings&module=MailConverter&view=List',
-			'index.php?module=Workflows&parent=Settings&view=List'
+			'index.php?module=Workflows&parent=Settings&view=List',
+			'index.php?module=Vtiger&parent=Settings&view=ConfigEditorDetail',
+			'index.php?module=CronTasks&parent=Settings&view=List'
 			);
 
 		//insert settings blocks

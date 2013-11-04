@@ -8,7 +8,7 @@
  *************************************************************************************/
 
 var Vtiger_Index_Js = {
-	
+
 	/**
 	 * Function to show email preview in popup
 	 */
@@ -103,7 +103,7 @@ var Vtiger_Index_Js = {
 	 * one given option for user to select email for whom mail should
 	 * be sent,or else straight away open compose email popup
 	 * @params : accepts params object
-	 * 
+	 *
 	 * @cb: callback function to recieve the child window reference.
 	 */
 
@@ -124,7 +124,15 @@ var Vtiger_Index_Js = {
 							if(length > 1) {
 								app.showModalWindow(data,function(data){
 									emailEditInstance.registerEmailFieldSelectionEvent();
-								},css)
+									if( jQuery('#multiEmailContainer').height() > 300 ){
+										jQuery('#multiEmailContainer').slimScroll({
+											height: '300px',
+											railVisible: true,
+											alwaysVisible: true,
+											size: '6px',
+										});
+									}
+								},css);
 							} else {
 								emailFields.attr('checked','checked');
 								var params = form.serializeFormData();
@@ -210,12 +218,12 @@ var Vtiger_Index_Js = {
 			AppConnector.request(url);
 		});
 	},
-	
+
 	/**
 	 * Function to make top-bar menu responsive.
 	 */
 	adjustTopMenuBarItems: function() {
-		var TOLERANT_MAX_GAP = 40; // px		
+		var TOLERANT_MAX_GAP = 40; // px
 		var menuBarWrapper = jQuery('.nav.modulesList');
 		var topMenuBarWidth = menuBarWrapper.parent().outerWidth();
 		var optionalBarItems = jQuery('.opttabs', menuBarWrapper), optionalBarItemsCount = optionalBarItems.length;
@@ -227,29 +235,29 @@ var Vtiger_Index_Js = {
 		}
 		// Loop and enable hidden menu item until the tolerant width is reached.
 		var stopLoop = false;
-		do { 
+		do {
 			var lastOptTab = enableOptionalTopMenuItem();
 			if (lastOptTab == null || (topMenuBarWidth - menuBarWrapper.outerWidth()) > TOLERANT_MAX_GAP) {
-				if(lastOptTab) lastOptTab.hide(); 
+				if(lastOptTab) lastOptTab.hide();
 				stopLoop = true; break;
 			}
 		} while (!stopLoop);
-		
+
 		// Required to get the functionality of All drop-down working.
 		menuBarWrapper.parent().css({'overflow':'visible'});
 	},
-	
+
 	/**
 	 * Function to trigger tooltip feature.
 	 */
 	registerTooltipEvents: function() {
 		var references = jQuery.merge(jQuery('[data-field-type="reference"] > a'), jQuery('[data-field-type="multireference"] > a'));
 		var lastPopovers = [];
-		
+
 		// Fetching reference fields often is not a good idea on a given page.
 		// The caching is done based on the URL so we can reuse.
 		var CACHE_ENABLED = true; // TODO - add cache timeout support.
-		
+
 		function prepareAndShowTooltipView() {
 			hideAllTooltipViews();
 
@@ -258,10 +266,10 @@ var Vtiger_Index_Js = {
 			if (url == '') {
 				return;
 			}
-			
+
 			// Rewrite URL to retrieve Tooltip view.
 			url = url.replace('view=', 'xview=') + '&view=TooltipAjax';
-			
+
 			var cachedView = CACHE_ENABLED ? jQuery('[data-url-cached="'+url+'"]') : null;
 			if (cachedView && cachedView.length) {
 				showTooltip(el, cachedView.html());
@@ -274,7 +282,7 @@ var Vtiger_Index_Js = {
 				});
 			}
 		}
-		
+
 		function showTooltip(el, data) {
 			el.popover({
 				//title: '', - Is derived from the Anchor Element (el).
@@ -286,7 +294,7 @@ var Vtiger_Index_Js = {
 			lastPopovers.push(el.popover('show'));
 			registerToolTipDestroy();
 		}
-		
+
 		function hideAllTooltipViews() {
 			// Hide all previous popover
 			var lastPopover = null;
@@ -294,13 +302,13 @@ var Vtiger_Index_Js = {
 				lastPopover.popover('hide');
 			}
 		}
-		
+
 		references.each(function(index, el){
 			jQuery(el).hoverIntent({
 				interval: 100,
 				sensitivity: 7,
 				timeout: 10,
-				over: prepareAndShowTooltipView, 
+				over: prepareAndShowTooltipView,
 				out: hideAllTooltipViews
 			});
 		});
@@ -348,7 +356,7 @@ var Vtiger_Index_Js = {
 		Vtiger_Index_Js.registerPostAjaxEvents();
 		Vtiger_Index_Js.registerShowHideLeftPanelEvent();
 	},
-	
+
 	registerPostAjaxEvents: function() {
 		Vtiger_Index_Js.registerTooltipEvents();
 	}

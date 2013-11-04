@@ -10,34 +10,35 @@
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
 	<input type="hidden" value="Inventory_Popup_Js" id="popUpClassName"/>
+	{assign var=WIDTHTYPE value=$CURRENT_USER_MODEL->get('rowheight')}
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
 				{if $MULTI_SELECT}
-				<td>
+				<td class="{$WIDTHTYPE}">
 					<input type="checkbox"  class="selectAllInCurrentPage" />
 				</td>
 				{/if}
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<th>
+				<th class="{$WIDTHTYPE}">
 					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
 						{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE)}">{/if}</a>
 				</th>
 				{/foreach}
-				<th>{vtranslate('Action', $MODULE_NAME)}</th>
+				<th class="{$WIDTHTYPE}">{vtranslate('Action', $MODULE_NAME)}</th>
 			</tr>
 		</thead>
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=popupListView}
 		<tr class="listViewEntries" data-id="{$LISTVIEW_ENTRY->getId()}" data-name='{$LISTVIEW_ENTRY->getName()}' data-info='{ZEND_JSON::encode($LISTVIEW_ENTRY->getRawData())}'
 			{if $GETURL neq '' } data-url='{$LISTVIEW_ENTRY->$GETURL()}' {/if}  id="{$MODULE}_popUpListView_row_{$smarty.foreach.popupListView.index+1}">
 			{if $MULTI_SELECT}
-			<td>
+			<td class="{$WIDTHTYPE}">
 				<input class="entryCheckBox" type="checkbox" />
 			</td>
 			{/if}
 			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			<td class="listViewEntryValue">
+			<td class="listViewEntryValue {$WIDTHTYPE}">
 				{if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
 					<a>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{else if $LISTVIEW_HEADER->get('uitype') eq '72'}
@@ -52,7 +53,7 @@
 				{/if}
 			</td>
 			{/foreach}
-			<td class="listViewEntryValue">
+			<td class="listViewEntryValue {$WIDTHTYPE}">
 				{if $LISTVIEW_ENTRY->get('subProducts') eq true}
 					<a class="subproducts"><b>{vtranslate('Sub Products',$MODULE_NAME)}</b></a>
 					<!--<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid" src="{vimage_path('Products.png')}"/>-->

@@ -17,30 +17,31 @@
 	<input type="hidden" value="{$SOURCE_RECORD}" id="sourceRecord">
 	<input type="hidden" value="{$SOURCE_MODULE}" id="parentModule">
 	<input type="hidden" value="PriceBook_Products_Popup_Js" id="popUpClassName"/>
+	{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
-				<th>
+				<th class="{$WIDTHTYPE}">
 					<input type="checkbox"  class="selectAllInCurrentPage" />
 				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<th>
+				<th class="{$WIDTHTYPE}">
 					<a class="listViewHeaderValues cursorPointer" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE_NAME)}
 						{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE_NAME)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE_NAME)}">{/if}</a>
 				</th>
 				{/foreach}
-				<th class="listViewHeaderValues noSorting">{vtranslate('LBL_LIST_PRICE',$MODULE)}</th>
+				<th class="listViewHeaderValues noSorting {$WIDTHTYPE}">{vtranslate('LBL_LIST_PRICE',$MODULE)}</th>
 			</tr>
 		</thead>
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=popupListView}
 		<tr class="listViewEntries" data-id="{$LISTVIEW_ENTRY->getId()}" data-name='{$LISTVIEW_ENTRY->getName()}'
 			{if $GETURL neq '' } data-url='{$LISTVIEW_ENTRY->$GETURL()}' {/if} id="{$MODULE}_popUpListView_row_{$smarty.foreach.popupListView.index+1}">
-			<td>
+			<td class="{$WIDTHTYPE}">
 				<input class="entryCheckBox" type="checkbox" />
 			</td>
 			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			<td class="listViewEntryValue">
+			<td class="listViewEntryValue {$WIDTHTYPE}">
 				{if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
 					<a>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{else}
@@ -48,7 +49,7 @@
 				{/if}
 			</td>
 			{/foreach}
-			<td class="listViewEntryValue">
+			<td class="listViewEntryValue {$WIDTHTYPE}">
 				<div class="row-fluid">
 					<input type="text" value="{$LISTVIEW_ENTRY->get('unit_price')}" name="listPrice" class="invisible span10 zeroPaddingAndMargin" data-validation-engine="validate[required,funcCall[Vtiger_Currency_Validator_Js.invokeValidation]]"
 						   data-decimal-seperator='{$USER_MODEL->get('currency_decimal_separator')}' data-group-seperator='{$USER_MODEL->get('currency_grouping_separator')}'/>

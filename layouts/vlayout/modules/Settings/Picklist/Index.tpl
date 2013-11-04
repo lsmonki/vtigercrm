@@ -12,7 +12,8 @@
 {strip}
 	<div class="listViewPageDiv">
 		<div class="listViewTopMenuDiv">
-			<label class="themeTextColor font-x-x-large">{vtranslate('LBL_PICKLIST_EDITOR',$QUALIFIED_MODULE)}</label><hr>
+			<h3>{vtranslate('LBL_PICKLIST_EDITOR',$QUALIFIED_MODULE)}</h3>
+            <hr>
 			<div class="clearfix"></div>
 		</div>
 		<div class="listViewContentDiv" id="listViewContents">

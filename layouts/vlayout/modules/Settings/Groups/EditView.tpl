@@ -7,7 +7,7 @@
  * All Rights Reserved.
  *************************************************************************************}
 {strip}
-<div class="editViewContainer">
+<div class="editViewContainer container-fluid">
 	<form name="EditGroup" action="index.php" method="post" id="EditView" class="form-horizontal">
 		<input type="hidden" name="module" value="Groups">
 		<input type="hidden" name="action" value="Save">
@@ -16,17 +16,18 @@
 		<input type="hidden" name="mode" value="{$MODE}">
 		
 		<div class="contentHeader row-fluid">
-			<span class="settingsHeader"> 
+			<h3> 
 				{if !empty($MODE)}
 					{vtranslate('LBL_EDITING', $QUALIFIED_MODULE)} {vtranslate('SINGLE_'|cat:$MODULE, $QUALIFIED_MODULE)} - {$RECORD_MODEL->getName()}
 				{else}
 					{vtranslate('LBL_CREATING_NEW', $QUALIFIED_MODULE)} {vtranslate('SINGLE_'|cat:$MODULE, $QUALIFIED_MODULE)}
 				{/if}
-			</span><hr>
+			</h3>
+            <hr>
 		</div>
 		<div class="control-group">
 			<span class="control-label">
-				{vtranslate('LBL_GROUP_NAME', $QUALIFIED_MODULE)} <span class="redColor">*</span>
+				<span class="redColor">*</span> {vtranslate('LBL_GROUP_NAME', $QUALIFIED_MODULE)}
 			</span>
 			<div class="controls">
 				<input class="input-large" name="groupname" value="{$RECORD_MODEL->getName()}" data-validation-engine="validate[required]">
@@ -60,7 +61,7 @@
 							{/foreach}
 						</select>
 					</span>
-					<span class="span6">
+					<span class="span3">
 						<span class="pull-right groupMembersColors">
 							<ul class="liStyleNone">
 								<li class="Users padding5per textAlignCenter"><strong>{vtranslate('LBL_USERS', $QUALIFIED_MODULE)}</strong></li>

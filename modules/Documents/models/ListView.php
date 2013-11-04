@@ -97,14 +97,14 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 
 		return $links;
 	}
-    
+
     /**
 	 * Function to get the list view entries
 	 * @param Vtiger_Paging_Model $pagingModel
 	 * @return <Array> - Associative array of record id mapped to Vtiger_Record_Model instance.
 	 */
 	public function getListViewEntries($pagingModel) {
-        
+
 		$db = PearDatabase::getInstance();
 
 		$moduleName = $this->getModule()->get('name');
@@ -113,7 +113,7 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 
 		$queryGenerator = $this->get('query_generator');
 		$listViewContoller = $this->get('listview_controller');
-        
+
         $folderKey = $this->get('folder_id');
         $folderValue = $this->get('folder_value');
         if(!empty($folderValue)) {
@@ -140,7 +140,7 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
             $columnFieldMapping = $moduleModel->getColumnFieldMapping();
             $orderByFieldName = $columnFieldMapping[$orderBy];
             $orderByFieldModel = $moduleModel->getField($orderByFieldName);
-            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+            if($orderByFieldModel && $orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
                 //IF it is reference add it in the where fields so that from clause will be having join of the table
                 $queryGenerator = $this->get('query_generator');
                 $queryGenerator->addWhereField($orderByFieldName);
@@ -164,7 +164,7 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		if(!empty($orderBy)) {
-            if($orderByFieldModel->isReferenceField()){
+            if($orderByFieldModel && $orderByFieldModel->isReferenceField()){
                 $referenceModules = $orderByFieldModel->getReferenceList();
                 $referenceNameFieldOrderBy = array();
                 foreach($referenceModules as $referenceModuleName) {

@@ -173,7 +173,18 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 	 * @return <array> - array of Vtiger_JsScript_Model
 	 */
 	function getHeaderScripts(Vtiger_Request $request){
-		return array();
+		$headerScriptInstances = array();
+		$languageHandlerShortName = Vtiger_Language_Handler::getShortLanguageName();
+		$fileName = "libraries/jquery/posabsolute-jQuery-Validation-Engine/js/languages/jquery.validationEngine-$languageHandlerShortName.js";
+		if (!file_exists($fileName)) {
+			$fileName = "~libraries/jquery/posabsolute-jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js";
+		} else {
+			$fileName = "~libraries/jquery/posabsolute-jQuery-Validation-Engine/js/languages/jquery.validationEngine-$languageHandlerShortName.js";
+		}
+		$jsFileNames = array($fileName);
+		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
+		$headerScriptInstances = array_merge($jsScriptInstances,$headerScriptInstances);
+		return $headerScriptInstances;
 	}
 
 	function checkAndConvertJsScripts($jsFileNames) {
@@ -181,7 +192,14 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 
 		$jsScriptInstances = array();
 		foreach($jsFileNames as $jsFileName) {
-			// TODO Handle absolute inclusions (~/...) like in checkAndConvertCssStyles
+			$jsScript = new Vtiger_JsScript_Model();
+
+			// external javascript source file handling
+			if(strpos($jsFileName, 'http://') === 0 || strpos($jsFileName, 'https://') === 0) {
+				$jsScriptInstances[$jsFileName] = $jsScript->set('src', $jsFileName);
+				continue;
+			}
+
 			$completeFilePath = Vtiger_Loader::resolveNameToPath($jsFileName, $fileExtension);
 
 			if(file_exists($completeFilePath)) {
@@ -191,13 +209,11 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 					$filePath = str_replace('.','/', $jsFileName) . '.'.$fileExtension;
 				}
 
-				$jsScript = new Vtiger_JsScript_Model();
 				$jsScriptInstances[$jsFileName] = $jsScript->set('src', $filePath);
 			} else {
 				$fallBackFilePath = Vtiger_Loader::resolveNameToPath(Vtiger_JavaScript::getBaseJavaScriptPath().'/'.$jsFileName, 'js');
 				if(file_exists($fallBackFilePath)) {
 					$filePath = str_replace('.','/', $jsFileName) . '.js';
-					$jsScript = new Vtiger_JsScript_Model();
 					$jsScriptInstances[$jsFileName] = $jsScript->set('src', Vtiger_JavaScript::getFilePath($filePath));
 				}
 			}
@@ -217,6 +233,12 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 	function checkAndConvertCssStyles($cssFileNames, $fileExtension='css') {
 		$cssStyleInstances = array();
 		foreach($cssFileNames as $cssFileName) {
+			$cssScriptModel = new Vtiger_CssScript_Model();
+
+			if(strpos($cssFileName, 'http://') === 0 || strpos($cssFileName, 'https://') === 0) {
+				$cssStyleInstances[] = $cssScriptModel->set('href', $cssFileName);
+				continue;
+			}
 			$completeFilePath = Vtiger_Loader::resolveNameToPath($cssFileName, $fileExtension);
 			$filePath = NULL;
 			if(file_exists($completeFilePath)) {
@@ -226,7 +248,6 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 					$filePath = str_replace('.','/', $cssFileName) . '.'.$fileExtension;
 					$filePath = Vtiger_Theme::getStylePath($filePath);
 				}
-				$cssScriptModel = new Vtiger_CssScript_Model();
 				$cssStyleInstances[] = $cssScriptModel->set('href', $filePath);
 			}
 		}

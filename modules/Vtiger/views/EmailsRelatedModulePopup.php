@@ -20,7 +20,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 
 		$viewer->assign('MODULE_NAME',$moduleName);
 		$viewer->assign('COMPANY_LOGO',$companyLogo);
-		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+
 
 		$viewer->view('Popup.tpl', $moduleName);
 	}
@@ -148,6 +148,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('PRIMARY_EMAIL_FIELD_NAME', $primaryEmailFieldName);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 	}
 	
 	/**

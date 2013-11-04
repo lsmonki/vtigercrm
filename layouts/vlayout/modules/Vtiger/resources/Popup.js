@@ -788,7 +788,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		this.registerEventForSearch();
 		this.registerEventForSort();
 		this.registerEventForListViewEntries();
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 		var popupPageContainer = jQuery('#popupPageContainer');
 		if(popupPageContainer.length > 0){
 			this.registerEventForTotalRecordsCount();

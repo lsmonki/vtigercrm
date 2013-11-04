@@ -10,12 +10,12 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div id="massEditContainer" class='modelContainer'>
+<div id="massEditContainer contentsBackground" class='modelContainer'>
 	<div class="modal-header">
-		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+        <button type="button" class="close " data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3 id="massEditHeader">{vtranslate('LBL_CHANGE_OWNER', $MODULE)}</h3>
 	</div>
-	<form class="form-horizontal calendarMassEdit contentsBackground" id="massEdit" name="MassEdit" method="post" action="index.php">
+	<form class="form-horizontal calendarMassEdit" id="massEdit" name="MassEdit" method="post" action="index.php">
 		{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 			<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 		{/if}

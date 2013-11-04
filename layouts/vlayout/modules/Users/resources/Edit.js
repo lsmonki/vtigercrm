@@ -16,7 +16,6 @@ Vtiger_Edit_Js("Users_Edit_Js",{},{
 	
 	
 	registerWidthChangeEvent : function() {
-		var thisInstance = this;
 		var widthType = app.cacheGet('widthType', 'narrowWidthType');
 		jQuery('#currentWidthType').html(jQuery('li[data-class="'+widthType+'"]').html());
 		jQuery('#widthType').on('click', 'li', function(e){

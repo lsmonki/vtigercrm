@@ -291,7 +291,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 			function(responseData){
 				detailContentsHolder.html(responseData);
 				responseData = detailContentsHolder.html();
-				thisInstance.triggerDisplayTypeEvent();
+				//thisInstance.triggerDisplayTypeEvent();
 				thisInstance.registerBlockStatusCheckOnLoad();
 				//Make select box more usability
 				app.changeSelectElementView(detailContentsHolder);
@@ -1587,7 +1587,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 	
 	registerEvents : function(){
 		var thisInstance = this;
-		thisInstance.triggerDisplayTypeEvent();
+		//thisInstance.triggerDisplayTypeEvent();
 		thisInstance.registerSendSmsSubmitEvent();
 		thisInstance.registerAjaxEditEvent();
 		this.registerRelatedRowClickEvent();

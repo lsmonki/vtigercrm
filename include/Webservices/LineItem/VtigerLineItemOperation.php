@@ -179,7 +179,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			$id = $id[1];
 			$sql = 'UPDATE vtiger_inventoryproductrel set ';
 			$sql .= implode('=?,',array_keys($this->taxList));
-			$sql .= '=? WHERE id = ?';
+			$sql .= '=? WHERE lineitem_id = ?';
 			$params = array();
 			foreach ($this->taxList as $taxInfo) {
 				$params[] = $taxInfo['percentage'];
@@ -429,7 +429,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		} elseif(!empty($parent['hdnDiscountPercent'])){
 			$discount = ($parent['hdnDiscountPercent']/100 * $parent['hdnSubTotal']);
 		}
-		$parent['pre_tax_total'] = $total = $parent['hdnSubTotal'] - $discount;
+		$parent['pre_tax_total'] = $total = $parent['hdnSubTotal'] - $discount + $parent['hdnS_H_Amount'];
 		if(strcasecmp($parent['hdnTaxType'], $this->Individual) !==0){
 			$this->initTax($createdElement, $parent);
 			foreach ($this->taxList as $taxInfo) {
@@ -443,17 +443,16 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			$shippingTaxInfo[$taxInfo['taxname']] = $taxInfo['percentage'];
 		}
 
-		$parent['hdnGrandTotal'] = $total + $taxAmount
-			+ $parent['hdnS_H_Amount'] + $parent['txtAdjustment'];
+		$parent['hdnGrandTotal'] = $total + $taxAmount + $parent['txtAdjustment'];
 
 		$parentTypeHandler = vtws_getModuleHandlerFromId($parent['id'], $this->user);
 		$parentTypeMeta = $parentTypeHandler->getMeta();
 		$parentType = $parentTypeMeta->getEntityName();
 
 		$parentInstance = CRMEntity::getInstance($parentType);
-		$sql = 'update '.$parentInstance->table_name.' set subtotal=?, total=? where '.
+		$sql = 'update '.$parentInstance->table_name.' set subtotal=?, total=?, pre_tax_total=? where '.
 		$parentInstance->tab_name_index[$parentInstance->table_name].'=?';
-		$params = array($parent['hdnSubTotal'],$parent['hdnGrandTotal'],$parentId);
+		$params = array($parent['hdnSubTotal'],$parent['hdnGrandTotal'],$parent['pre_tax_total'],$parentId);
 		$transactionSuccessful = vtws_runQueryAsTransaction($sql,$params,$result);
         self::$parentCache[$parent['id']] = $parent; 
 		if(!$transactionSuccessful){

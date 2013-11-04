@@ -10,47 +10,6 @@
 
 class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 
-
-	/**
-	 * Function to get all the date filter type informations
-	 * @return <Array>
-	 */
-	public static function getDateFilterTypes() {
-		$dateFilters = Array('custom' => array('label' => 'LBL_CUSTOM'),
-								'prevfy' => array('label' => 'LBL_PREVIOUS_FY'),
-								'thisfy' => array('label' => 'LBL_CURRENT_FY'),
-								'nextfy' => array('label' => 'LBL_NEXT_FY'),
-								'prevfq' => array('label' => 'LBL_PREVIOUS_FQ'),
-								'thisfq' => array('label' => 'LBL_CURRENT_FQ'),
-								'nextfq' => array('label' => 'LBL_NEXT_FQ'),
-								'yesterday' => array('label' => 'LBL_YESTERDAY'),
-								'today' => array('label' => 'LBL_TODAY'),
-								'tomorrow' => array('label' => 'LBL_TOMORROW'),
-								'lastweek' => array('label' => 'LBL_LAST_WEEK'),
-								'thisweek' => array('label' => 'LBL_CURRENT_WEEK'),
-								'nextweek' => array('label' => 'LBL_NEXT_WEEK'),
-								'lastmonth' => array('label' => 'LBL_LAST_MONTH'),
-								'thismonth' => array('label' => 'LBL_CURRENT_MONTH'),
-								'nextmonth' => array('label' => 'LBL_NEXT_MONTH'),
-								'last7days' => array('label' => 'LBL_LAST_7_DAYS'),
-								'last30days' => array('label' => 'LBL_LAST_30_DAYS'),
-								'last60days' => array('label' => 'LBL_LAST_60_DAYS'),
-								'last90days' => array('label' => 'LBL_LAST_90_DAYS'),
-								'last120days' => array('label' => 'LBL_LAST_120_DAYS'),
-								'next30days' => array('label' => 'LBL_NEXT_30_DAYS'),
-								'next60days' => array('label' => 'LBL_NEXT_60_DAYS'),
-								'next90days' => array('label' => 'LBL_NEXT_90_DAYS'),
-								'next120days' => array('label' => 'LBL_NEXT_120_DAYS')
-							);
-
-		foreach($dateFilters as $filterType => $filterDetails) {
-			$dateValues = self::getDateForStdFilterBytype($filterType);
-			$dateFilters[$filterType]['startdate'] = $dateValues[0];
-			$dateFilters[$filterType]['enddate'] = $dateValues[1];
-		}
-		return $dateFilters;
-	}
-
 	/**
 	 * Function to get all the supported advanced filter operations
 	 * @return <Array>
@@ -63,6 +22,7 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'starts with' => 'starts with',
 			'ends with' => 'ends with',
 			'has changed' => 'has changed',
+			'has changed to' => 'has changed to',
 			'is empty' => 'is empty',
 			'is not empty' => 'is not empty',
 			'less than' => 'less than',
@@ -74,6 +34,7 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'before' => 'before',
 			'after' => 'after',
 			'between' => 'between',
+			'is added' => 'is added',
 		);
 	}
 
@@ -92,8 +53,8 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'integer' => array('equal to', 'less than', 'greater than', 'does not equal', 'less than or equal to', 'greater than or equal to', 'has changed'),
 			'double' => array('equal to', 'less than', 'greater than', 'does not equal', 'less than or equal to', 'greater than or equal to', 'has changed'),
 			'currency' => array('equal to', 'less than', 'greater than', 'does not equal', 'less than or equal to', 'greater than or equal to', 'has changed'),
-			'picklist' => array('is', 'is not', 'has changed'),
-			'multipicklist' => array('is', 'is not', 'has changed'),
+			'picklist' => array('is', 'is not', 'has changed', 'has changed to'),
+			'multipicklist' => array('is', 'is not', 'has changed', 'has changed to'),
 			'datetime' => array('is', 'is not', 'has changed','less than hours before', 'less than hours later', 'more than hours before', 'more than hours later'),
 			'time' => array('is', 'is not', 'has changed'),
 			'date' => array('is', 'is not', 'has changed', 'between', 'before', 'after', 'is today', 'less than days ago', 'more than days ago', 'in less than', 'in more than',
@@ -101,7 +62,42 @@ class Settings_Workflows_Field_Model extends Vtiger_Field_Model {
 			'boolean' => array('is', 'is not', 'has changed'),
 			'reference' => array('has changed'),
 			'owner' => array('has changed'),
-			'recurrence' => array('is', 'is not', 'has changed')
+			'recurrence' => array('is', 'is not', 'has changed'),
+			'comment' => array('is added'),
 		);
+	}
+
+	/**
+	 * Function to get comment field which will useful in creating conditions
+	 * @param <Vtiger_Module_Model> $moduleModel
+	 * @return <Vtiger_Field_Model>
+	 */
+	public static function getCommentFieldForFilterConditions($moduleModel) {
+		$commentField = new Vtiger_Field_Model();
+		$commentField->set('name', '_VT_add_comment');
+		$commentField->set('label', 'Comment');
+		$commentField->setModule($moduleModel);
+		$commentField->fieldDataType = 'comment';
+
+		return $commentField;
+	}
+
+	/**
+	 * Function to get comment fields list which are useful in tasks
+	 * @param <Vtiger_Module_Model> $moduleModel
+	 * @return <Array> list of Field models <Vtiger_Field_Model>
+	 */
+	public static function getCommentFieldsListForTasks($moduleModel) {
+		$commentsFieldsInfo = array('lastComment' => 'Last Comment', 'last5Comments' => 'Last 5 Comments', 'allComments' => 'All Comments');
+
+		$commentFieldModelsList = array();
+		foreach ($commentsFieldsInfo as $fieldName => $fieldLabel) {
+			$commentField = new Vtiger_Field_Model();
+			$commentField->setModule($moduleModel);
+			$commentField->set('name', $fieldName);
+			$commentField->set('label', $fieldLabel);
+			$commentFieldModelsList[$fieldName] = $commentField;
+		}
+		return $commentFieldModelsList;
 	}
 }

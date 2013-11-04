@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_TYPE_THE_MESSAGE' => 'Skriv meddelandet',
 	'LBL_WRITE_YOUR_MESSAGE_HERE' => 'skriv ditt meddelande here',
 	'LBL_ADD_MORE_FIELDS' => 'Lägg till mer fält',
-	'LBL_SEREVER_CONFIG' => 'Server Inställningar',
+	'LBL_SERVER_CONFIG' => 'Server Inställningar',
 
 	//DetailView Actions
 	'LBL_CHECK_STATUS' => 'Kontrollera Status',

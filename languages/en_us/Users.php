@@ -59,7 +59,6 @@ $languageStrings = array(
 	'INTERNAL_MAIL_COMPOSER' => 'Internal Mail Composer',
 	'Asterisk Extension'  =>  'Asterisk Extension',
 	' Receive Incoming Calls'  =>  'Receive Incoming Calls',
-	'Reminder Interval' => 'Reminder Interval',
 	'Webservice Access Key' => 'Access Key',
 	'Language' => 'Language',
 	'Theme' =>  'Theme',

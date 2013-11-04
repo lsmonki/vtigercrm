@@ -631,6 +631,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		fieldContainer.addClass('opacity editFields').attr('data-field-id', result['id']).attr('data-block-id', result['blockid']);
 		fieldContainer.find('.deleteCustomField, .saveFieldDetails').attr('data-field-id', result['id']);
 		fieldContainer.find('.fieldLabel').text(result['label']);
+		if(!result['customField']){
+			fieldContainer.find('.deleteCustomField').remove();
+		}
 		var block = relatedBlock.find('.blockFieldsList');
 		var sortable1 = block.find('ul[name=sortable1]');
 		var length1 = sortable1.children().length;

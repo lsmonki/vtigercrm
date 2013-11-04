@@ -167,7 +167,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
      */
     public function isQuickCreateOptionDisabled() {
 		$moduleModel = $this->getModule();
-		if($this->get('quickcreate') == 0 || $this->get('quickcreate') == 3 || !$moduleModel->isQuickCreateSupported()) {
+		if($this->get('quickcreate') == 0 || $this->get('quickcreate') == 3 || !$moduleModel->isQuickCreateSupported() || $this->get('uitype') == 69) {
 			return true;
         }
         return false;
@@ -178,7 +178,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
      * @return boolean
      */
     public function isMassEditOptionDisabled() {
-        if($this->get('masseditable') == 0 || $this->get('displaytype') != 1 || $this->get('masseditable') == 3) {
+        if($this->get('masseditable') == 0 || $this->get('displaytype') != 1 || $this->get('masseditable') == 3 || $this->get('uitype') == 69) {
             return true;
         }
         return false;
@@ -189,7 +189,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
      * @return boolean
      */
     public function isDefaultValueOptionDisabled() {
-        if($this->isMandatoryOptionDisabled() || $this->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+        if($this->isMandatoryOptionDisabled() || $this->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE || $this->get('uitype') == 69){
             return true;
         }
         return false;

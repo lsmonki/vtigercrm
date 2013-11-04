@@ -13,7 +13,7 @@
     <form class="form-horizontal" id="mailBoxEditView">
     <div class="modelContainer">
         <div class="modal-header">
-            <button data-dismiss="modal" type="button" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+            <button data-dismiss="modal" type="button" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
             <h3>
                 {if empty($RECORD_ID)}
                     {vtranslate('LBL_CREATE_MAILBOX',$QUALIFIED_MODULE)}
@@ -42,8 +42,9 @@
                 <div class="control-group">
                      <div class="control-label">
                         <label>
+                            <span class="redColor">*</span>&nbsp;
                             {vtranslate($FIELD_MODEL->get('label'),$QUALIFIED_MODULE)}
-                            {if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if}
+                        {if $FIELD_MODEL->isMandatory()}{/if}
                         </label>
                     </div>
                     <div class="controls">

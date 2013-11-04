@@ -175,7 +175,19 @@ class VtigerInventoryOperation extends VtigerModuleOperation {
 			}
 		}
 		return $element;		
-	}	
+	}
+    /* NOTE: Special case to pull the default setting of TermsAndCondition */
+
+    public function describe($elementType) {
+        $describe = parent::describe($elementType);
+        $tandc = getTermsAndConditions();
+        foreach ($describe['fields'] as $key => $list){
+            if($list["name"] == 'terms_conditions'){
+                $describe['fields'][$key]['default'] = $tandc;
+            }
+        }
+        return $describe;
+    }
 }
 
 

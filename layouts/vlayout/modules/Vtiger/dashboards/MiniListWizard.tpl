@@ -12,11 +12,11 @@
 {strip}
 {if $WIZARD_STEP eq 'step1'}
 	<div id="minilistWizardContainer" class='modelContainer'>
-		<div class="modal-header">
-			<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+		<div class="modal-header contentsBackground">
+            <button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
 			<h3 id="massEditHeader">{vtranslate('LBL_MINI_LIST', $MODULE)} {vtranslate($MODULE, $MODULE)}</h3>
 		</div>
-		<form class="form-horizontal contentsBackground" method="post" action="javascript:;">
+		<form class="form-horizontal" method="post" action="javascript:;">
 			<input type="hidden" name="module" value="{$MODULE}" />
 			<input type="hidden" name="action" value="MassSave" />
 

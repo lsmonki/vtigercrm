@@ -9,7 +9,7 @@
  ************************************************************************************/
 
 class Reports_List_View extends Vtiger_Index_View {
-	
+
 	protected $listViewHeaders = false;
 	protected $listViewEntries = false;
 	protected $listViewCount   = false;
@@ -59,10 +59,10 @@ class Reports_List_View extends Vtiger_Index_View {
 		}
 		if(!$this->listViewEntries){
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
-		}	
+		}
 
 		$noOfEntries = count($this->listViewEntries);
-		
+
 		$viewer->assign('LISTVIEW_LINKS', $linkModels);
 		$viewer->assign('FOLDERS', $folders);
 		$viewer->assign('MODULE', $moduleName);
@@ -133,7 +133,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 
 		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
-		
+
 		if(!$this->listViewHeaders){
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
@@ -147,19 +147,20 @@ class Reports_List_View extends Vtiger_Index_View {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 
 		$noOfEntries = count($this->listViewEntries);
-		
+
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
 		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 		$viewer->assign('VIEWNAME',$folderId);
-		
+
 		$viewer->assign('ORDER_BY',$orderBy);
 		$viewer->assign('SORT_ORDER',$sortOrder);
 		$viewer->assign('NEXT_SORT_ORDER',$nextSortOrder);
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			if(!$this->listViewCount){
@@ -178,7 +179,7 @@ class Reports_List_View extends Vtiger_Index_View {
 
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
-    
+
 	/**
 	 * Function to get the list of Script models to be included
 	 * @param Vtiger_Request $request

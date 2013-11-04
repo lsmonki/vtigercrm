@@ -97,6 +97,7 @@ class PriceBooks_Detail_View extends Vtiger_Detail_View {
 		$viewer->assign('NEXT_SORT_ORDER',$nextSortOrder);
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
+		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		
 		return $viewer->view('RelatedList.tpl', $moduleName, 'true');
 	}

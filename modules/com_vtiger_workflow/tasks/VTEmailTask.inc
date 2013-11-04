@@ -16,7 +16,7 @@ class VTEmailTask extends VTTask{
 	public $executeImmediately = false;
 
 	public function getFieldNames(){
-		return array("subject", "content", "recepient", 'emailcc', 'emailbcc');
+		return array("subject", "content", "recepient", 'emailcc', 'emailbcc', 'fromEmail');
 	}
 	public function doTask($entity){
 		global $adb, $current_user;
@@ -40,7 +40,6 @@ class VTEmailTask extends VTTask{
 			$moduleName = 'Emails';
 			$userId = $current_user->id;
 			$emailFocus = CRMEntity::getInstance($moduleName);
-			$dateTime = new DateTimeField(null);
 			$emailFieldValues = array(
 					'assigned_user_id' => $userId,
 					'subject' => $subject,
@@ -52,8 +51,8 @@ class VTEmailTask extends VTTask{
 					'parent_id' => $entityId."@$userId|",
 					'email_flag' => 'SENT',
 					'activitytype' => $moduleName,
-					'date_start' => date($dateTime->getDisplayDate($current_user)),
-					'time_start' => date($dateTime->getDisplayTime($current_user)),
+					'date_start' => date('Y-m-d'),
+					'time_start' => date('H:i:s'),
 					'mode' => '',
 					'id' => ''
 			);
@@ -61,27 +60,27 @@ class VTEmailTask extends VTTask{
 			$emailFocus->save($moduleName);
 	
 
-				//Including email tracking details
-				global $site_URL, $application_unique_key;
-				$emailId = $emailFocus->id;
-				$trackURL = "$site_URL/modules/Emails/TrackAccess.php?record=$entityId&mailid=$emailId&app_key=$application_unique_key";
-				$content = "<img src='$trackURL' alt='' width='1' height='1'>$content";
+			//Including email tracking details
+			global $site_URL, $application_unique_key;
+			$emailId = $emailFocus->id;
+			$trackURL = "$site_URL/modules/Emails/TrackAccess.php?record=$entityId&mailid=$emailId&app_key=$application_unique_key";
+			$content = "<img src='$trackURL' alt='' width='1' height='1'>$content";
 
-				if (stripos($content, '<img src="cid:logo" />')) {
-					$logo = 1;
-				}
+			if (stripos($content, '<img src="cid:logo" />')) {
+				$logo = 1;
+			}
 
-				$status = send_mail($module, $to_email, $from_name, $from_email, $subject, $content, $cc, $bcc, '', '', $logo);
+			$status = send_mail($module, $to_email, $from_name, $from_email, $subject, $content, $cc, $bcc, '', '', $logo);
 
-				if(!empty($emailId)) {
-					$emailFocus->setEmailAccessCountValue($emailId);
-				}
-				if(!$status) {
-					//If mail is not sent then removing the details about email
-					$emailFocus->trash($moduleName, $emailId);
-				}
-				}
-				$util->revertUser();
+			if(!empty($emailId)) {
+				$emailFocus->setEmailAccessCountValue($emailId);
+			}
+			if(!$status) {
+				//If mail is not sent then removing the details about email
+				$emailFocus->trash($moduleName, $emailId);
+			}
+		}
+		$util->revertUser();
         
 	}
 
@@ -95,46 +94,81 @@ class VTEmailTask extends VTTask{
 		if (!$this->contents) {
 			global $adb, $current_user;
 			$taskContents = array();
+			$entityId = $entity->getId();
+            
+            $utils = new VTWorkflowUtils();
+            $adminUser = $utils->adminUser();
+			if (!$entityCache) {
+				$entityCache = new VTEntityCache($adminUser);
+			}
 
-			$fromUserId = 1;
+			$fromUserId = Users::getActiveAdminId();
 			$entityOwnerId = $entity->get('assigned_user_id');
 			if ($entityOwnerId) {
 				list ($moduleId, $fromUserId) = explode('x', $entityOwnerId);
 			}
 
-			$utils = new VTWorkflowUtils();
-			$adminUser = $utils->adminUser();
-			if(!$entityCache) $entityCache = new VTEntityCache($adminUser);
-
 			$ownerEntity = $entityCache->forId($entityOwnerId);
 			if($ownerEntity->getModuleName() === 'Groups') {
-				list($moduleId, $recordId) = vtws_getIdComponents($entity->getId());
+				list($moduleId, $recordId) = vtws_getIdComponents($entityId);
 				$fromUserId = Vtiger_Util_Helper::getCreator($recordId);
 			}
 
-            $userObj = CRMEntity::getInstance('Users');
-            $userObj->retrieveCurrentUserInfoFromFile($fromUserId);
+			if ($this->fromEmail && !($ownerEntity->getModuleName() === 'Groups' && strpos($this->fromEmail, 'assigned_user_id : (Users) ') !== false)) {
+				$et = new VTEmailRecipientsTemplate($this->fromEmail);
+				$fromEmailDetails = $et->render($entityCache, $entityId);
 
-            if($userObj) {
-                $taskContents['fromEmail'] = $userObj->email1;
-                $taskContents['fromName'] =	$userObj->user_name;
-            } else {
-                $result = $adb->pquery('SELECT user_name, email1 FROM vtiger_users WHERE id = ?', array($fromUserId));
-                $taskContents['fromEmail'] = $adb->query_result($result, 0, 'email1');
-                $taskContents['fromName'] =	$adb->query_result($result, 0, 'user_name');
-            }
+				list($fromName, $fromEmail) = explode('&lt;', $fromEmailDetails);
+				list($fromEmail, $rest) = explode('&gt;', $fromEmail);
+			} else {
+				$userObj = CRMEntity::getInstance('Users');
+				$userObj->retrieveCurrentUserInfoFromFile($fromUserId);
+				if ($userObj) {
+					$fromEmail = $userObj->email1;
+					$fromName =	$userObj->user_name;
+				} else {
+					$result = $adb->pquery('SELECT user_name, email1 FROM vtiger_users WHERE id = ?', array($fromUserId));
+					$fromEmail = $adb->query_result($result, 0, 'email1');
+					$fromName =	$adb->query_result($result, 0, 'user_name');
+				}
+			}
 
-			
+			if (!$fromEmail) {
+                $utils->revertUser();
+				return false;
+			}
+
+			$taskContents['fromEmail'] = $fromEmail;
+			$taskContents['fromName'] =	$fromName;
+
+			if ($entity->getModuleName() === 'Events') {
+				$contactId = $entity->get('contact_id');
+				if ($contactId) {
+					$contactIds = '';
+					list($wsId, $recordId) = explode('x', $entityId);
+					$webserviceObject = VtigerWebserviceObject::fromName($adb, 'Contacts');
+
+					$result = $adb->pquery('SELECT contactid FROM vtiger_cntactivityrel WHERE activityid = ?', array($recordId));
+					$numOfRows = $adb->num_rows($result);
+					for($i=0; $i<$numOfRows; $i++) {
+						$contactIds .= vtws_getId($webserviceObject->getEntityId(), $adb->query_result($result, $i, 'contactid')).',';
+					}
+				}
+				$entity->set('contact_id', trim($contactIds, ','));
+				$entityCache->cache[$entityId] = $entity;
+			}
+
 			$et = new VTEmailRecipientsTemplate($this->recepient);
-			$toEmail = $et->render($entityCache, $entity->getId());
+			$toEmail = $et->render($entityCache, $entityId);
 
 			$ecct = new VTEmailRecipientsTemplate($this->emailcc);
-			$ccEmail = $ecct->render($entityCache, $entity->getId());
+			$ccEmail = $ecct->render($entityCache, $entityId);
 
 			$ebcct = new VTEmailRecipientsTemplate($this->emailbcc);
-			$bccEmail = $ebcct->render($entityCache, $entity->getId());
+			$bccEmail = $ebcct->render($entityCache, $entityId);
 
 			if(strlen(trim($toEmail, " \t\n,")) == 0 && strlen(trim($ccEmail, " \t\n,")) == 0 && strlen(trim($bccEmail, " \t\n,")) == 0) {
+                $utils->revertUser();
 				return false;
 			}
 
@@ -143,10 +177,10 @@ class VTEmailTask extends VTTask{
 			$taskContents['bccEmail'] = $bccEmail;
 
 			$st = new VTSimpleTemplate($this->subject);
-			$taskContents['subject'] = $st->render($entityCache, $entity->getId());
+			$taskContents['subject'] = $st->render($entityCache, $entityId);
 
 			$ct = new VTSimpleTemplate($this->content);
-			$taskContents['content'] = $ct->render($entityCache, $entity->getId());
+			$taskContents['content'] = $ct->render($entityCache, $entityId);
 			$this->contents = $taskContents;
             $utils->revertUser();
 		}

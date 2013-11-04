@@ -111,7 +111,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$documentsModel = Vtiger_Module_Model::getInstance('Documents');
 		$documentsURL = $documentsModel->getInternalDocumentsURL();
 
-		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplate');
+		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('EmailTemplates');
 		$emailTemplateListURL = $emailTemplateModuleModel->getListViewUrl();
 		
 		$viewer->assign('DOCUMENTS_URL', $documentsURL);

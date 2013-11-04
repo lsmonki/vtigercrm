@@ -36,7 +36,6 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	 * @param Vtiger_Request $request
 	 */
 	function ExportData(Vtiger_Request $request) {
-		$default_charset = vglobal('default_charset');
 		$db = PearDatabase::getInstance();
 		$moduleName = $request->get('source_module');
 
@@ -63,7 +62,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 			foreach($this->moduleFieldInstances as $field) $headers[] = $field->get('label');
 		}
 		$translatedHeaders = array();
-		foreach($headers as $header) $translatedHeaders[] = vtranslate(html_entity_decode($header, ENT_QUOTES, $default_charset), $moduleName);
+		foreach($headers as $header) $translatedHeaders[] = vtranslate(html_entity_decode($header, ENT_QUOTES), $moduleName);
 
 		$entries = array();
 		for($j=0; $j<$db->num_rows($result); $j++) {
@@ -87,7 +86,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 		$queryGenerator = new QueryGenerator($moduleName, $currentUser);
 		$queryGenerator->initForCustomViewById($cvId);
 		$fieldInstances = $this->moduleFieldInstances;
-        
+
         $accessiblePresenceValue = array(0,2);
 		foreach($fieldInstances as $field) {
             // Check added as querygenerator is not checking this for admin users
@@ -98,7 +97,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
         }
 		$queryGenerator->setFields($fields);
 		$query = $queryGenerator->getQuery();
-		
+
 		if(in_array($moduleName, getInventoryModules())){
 			$query = $this->moduleInstance->getExportQuery($this->focus, $query);
 		}
@@ -162,7 +161,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	 */
 	function output($request, $headers, $entries) {
 		$moduleName = $request->get('source_module');
-		$fileName = vtranslate($moduleName, $moduleName);
+		$fileName = str_replace(' ','_',vtranslate($moduleName, $moduleName));    
 		$exportType = $this->getExportContentType($request);
 
 		header("Content-Disposition:attachment;filename=$fileName.csv");
@@ -203,10 +202,10 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 					$fieldName = 'item_'.$fieldName;
 					$this->fieldArray[$fieldName] = $fieldObj;
 				} else {
-				$columnName = $fieldObj->get('column');
-				$this->fieldArray[$columnName] = $fieldObj;
+					$columnName = $fieldObj->get('column');
+					$this->fieldArray[$columnName] = $fieldObj;
+				}
 			}
-		}
 		}
 		$moduleName = $this->moduleInstance->getName();
 		foreach($arr as $fieldName=>&$value){

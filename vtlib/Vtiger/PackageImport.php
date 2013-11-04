@@ -262,7 +262,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Initialize Import
 	 * @access private
 	 */
-	function initImport($zipfile, $overwrite) {
+	function initImport($zipfile, $overwrite=true) {
 		$module = $this->getModuleNameFromZip($zipfile);
 		if($module != null) {
 
@@ -291,7 +291,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'settings/templates' => "layouts/vlayout/modules/Settings/$module"
 				)
 			);
-
+			
+			if($unzip->checkFileExistsInRootFolder("$module.png")) {
+				$unzip->unzip("$module.png", "layouts/vlayout/skins/images/$module.png");
+			}
 
 			if($unzip) $unzip->close();
 		}

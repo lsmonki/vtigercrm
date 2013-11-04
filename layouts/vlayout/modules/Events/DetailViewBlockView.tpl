@@ -10,6 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
+	{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
     {include file='DetailViewBlockView.tpl'|@vtemplate_path:'Vtiger' RECORD_STRUCTURE=$RECORD_STRUCTURE MODULE_NAME=$MODULE_NAME}
 
     {assign var="IS_HIDDEN" value=false}
@@ -24,8 +25,8 @@
 		</tr>
 		</thead>
         <tr>
-            <td class="fieldLabel"><label class="muted pull-right marginRight10px">{vtranslate('LBL_INVITE_USERS',$MODULE_NAME)}</label></td>
-            <td class="fieldValue">
+            <td class="fieldLabel {$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_INVITE_USERS',$MODULE_NAME)}</label></td>
+            <td class="fieldValue {$WIDTHTYPE}">
                  {foreach key=USER_ID item=USER_NAME from=$ACCESSIBLE_USERS}
 					{if in_array($USER_ID,$INVITIES_SELECTED)}
                         {$USER_NAME}

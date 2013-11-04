@@ -205,11 +205,11 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
                 $qualifiedOrderBy = $orderBy;
                 $orderByField = $relationModule->getFieldByColumn($orderBy);
                 if ($orderByField) {
-                    $qualifiedOrderBy = $orderByField->get('table') . '.' . $qualifiedOrderBy;
-                }
+					$qualifiedOrderBy = $relationModule->getOrderBySql($qualifiedOrderBy);
+				}
                 $query = "$query ORDER BY $qualifiedOrderBy $sortOrder";
-            }
-		}
+				}
+			}
 
 		$limitQuery = $query .' LIMIT '.$startIndex.','.$pageLimit;
 		$result = $db->pquery($limitQuery, array());
@@ -293,9 +293,9 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 	public function getRelatedEntriesCount() {
 		$db = PearDatabase::getInstance();
 		$relationQuery = $this->getRelationQuery();
-		$position = stripos($relationQuery, 'from');
+		$position = stripos($relationQuery, ' from ');
 		if ($position) {
-			$split = spliti('from', $relationQuery);
+			$split = spliti(' from ', $relationQuery);
 			$splitCount = count($split);
 			$relationQuery = 'SELECT count(*) AS count ';
 			for ($i=1; $i<$splitCount; $i++) {

@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-vimport('~~/include/Webservices/DeleteUser.php');
+vimport('~~/include/Webservices/Custom/DeleteUser.php');
 
 class Users_DeleteAjax_Action extends Vtiger_Delete_Action {
 
@@ -23,7 +23,7 @@ class Users_DeleteAjax_Action extends Vtiger_Delete_Action {
 		$listViewUrl = $userModuleModel->getListViewUrl();
 		
 		$response = new Vtiger_Response();
-		$response->setResult(array('status'=>$result, 'listViewUrl' => $listViewUrl));
+		$response->setResult(array('message'=>vtranslate('LBL_USER_DELETED_SUCCESSFULLY', $moduleName), 'listViewUrl' => $listViewUrl));
 		$response->emit();
 	}
 }

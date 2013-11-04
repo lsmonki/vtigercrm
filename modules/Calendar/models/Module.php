@@ -455,4 +455,14 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 		}
 		return $settingLinks;
 	}
+	
+	/**
+	 * Function to get orderby sql from orderby field
+	 */
+	public function getOrderBySql($orderBy){
+		 if($orderBy == 'status'){
+			 return $orderBy;
+		 }
+		 return parent::getOrderBySql($orderBy);
+	}
 }

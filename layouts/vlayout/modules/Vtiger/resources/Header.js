@@ -443,7 +443,7 @@ jQuery.Class("Vtiger_Header_Js", {
         }
 
         // setting sidebar Height wrt Content
-        contentsHeight = jQuery('.contentsDiv').outerHeight();
+        var contentsHeight = jQuery('.contentsDiv').outerHeight();
         jQuery(".mainContainer > .span2").css('height', contentsHeight);
     }
 });

@@ -30,8 +30,8 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 		}
 		return Users_Privileges_Model::isPermitted($this->getName(), $actionName);
 	}
-    
-    
+
+
     /**
 	 * Function to get Settings links
 	 * @return <Array>
@@ -51,10 +51,10 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 					'linkicon' => $editWorkflowsImagePath
 			);
 		}
-		
+
         $settingsLinks[] =  array(
 					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => vtranslate('LBL_SEREVER_CONFIG', $moduleName),
+					'linklabel' => vtranslate('LBL_SERVER_CONFIG', $moduleName),
 					'linkurl' => 'index.php?module=SMSNotifier&parent=Settings&view=List',
 					'linkicon' => ''
 				);

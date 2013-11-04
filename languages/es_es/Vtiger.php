@@ -601,6 +601,14 @@ $languageStrings = array(
 	'LBL_MANAGE_USERS' => 'Manage Users',
 	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership',
 	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
+
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'Personalizar Menú Principal',//TODO REVIEW
+	//Comments Field Labels for Workflow
+	'Comment' => 'Comentario',
+	'Last Comment' => 'Último comentario',
+	'Last 5 Comments' => 'Últimos 5 Comentarios',
+	'All Comments' => 'Todos los comentarios',
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'Personalizar Menú Principal',//TODO REVIEW
 	
 );
 $jsLanguageStrings = array(

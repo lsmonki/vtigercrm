@@ -140,7 +140,23 @@ class VTJsonCondition {
 				$value = $exprEvaluater->evaluate($entityData);
 			}
 		}
-
+		
+		global $current_user;
+		$handler = vtws_getModuleHandlerFromName($entityData->getModuleName(), $current_user);
+		$moduleFields = $handler->getMeta()->getModuleFields();
+		$fieldInstance = $moduleFields[$cond['fieldname']];
+		
+		if($fieldInstance && $fieldInstance->getFieldDataType() == 'datetime') {
+			//Convert the DB Date Time Format to User Date Time Format
+			$date = new DateTimeField($fieldValue);
+			$fieldValue = $date->getDisplayDateTimeValue();
+			$valueArray = explode(' ', $value);
+			if(count($valueArray) == 1) {
+				$fieldValueArray = explode(' ', $fieldValue);
+				$fieldValue = $fieldValueArray[0];
+			}
+		}
+		
 		switch ($condition) {
 			case "equal to":
 				return $fieldValue == $value;
@@ -233,6 +249,117 @@ class VTJsonCondition {
 				if($fieldValue > $values[0] && $fieldValue < $values[1]) {
 					return true;
 				}
+				return false;
+			case 'is today':
+				$today = date('Y-m-d');
+
+				if($fieldValue == $today) {
+					return true;
+				}
+				return false;
+			case 'less than days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$today = date('Y-m-d');
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($olderDate <= $fieldValue && $fieldValue <= $today) {
+					return true;
+				}
+				return false;
+			case 'more than days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($fieldValue <= $olderDate) {
+					return true;
+				}
+				return false;
+			case 'in less than':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$today = date('Y-m-d');
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($today <= $fieldValue && $fieldValue <= $futureDate) {
+					return true;
+				}
+				return false;
+			case 'in more than':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($fieldValue >= $futureDate) {
+					return true;
+				}
+				return false;
+			case 'days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($fieldValue == $olderDate) {
+					return true;
+				}
+				return false;
+			case 'days later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($fieldValue == $futureDate) {
+					return true;
+				}
+				return false;
+
+			case 'less than hours before':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$currentTime = date('Y-m-d H:i:s');
+				$olderDateTime = date('Y-m-d H:i:s', strtotime('-'.$value.' hours'));
+				if($olderDateTime <= $fieldValue && $fieldValue <= $currentTime) {
+					return true;
+				}
+				return false;
+
+			case 'less than hours later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$currentTime = date('Y-m-d H:i:s');
+				$futureDateTime = date('Y-m-d H:i:s', strtotime('+'.$value.' hours'));
+				if($currentTime <= $fieldValue && $fieldValue <= $futureDateTime) {
+					return true;
+				}
+				return false;
+
+			case 'more than hours before':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDateTime = date('Y-m-d H:i:s', strtotime('-'.$value.' hours'));
+				if($fieldValue <= $olderDateTime) {
+					return true;
+				}
+				return false;
+			case 'more than hours later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDateTime = date('Y-m-d H:i:s', strtotime('+'.$value.' hours'));
+				if($fieldValue >= $futureDateTime) {
+					return true;
+				}
+				return false;
+			case 'has changed to' :
+				$entityDelta = new VTEntityDelta();
+				$idParts = vtws_getIdComponents($entityData->getId());
+				return $entityDelta->hasChanged($entityData->getModuleName(), $idParts[1], $cond['fieldname'], $value);
+			case 'is added':
+				//This condition was used only for comments. It should not execute from not from workflows, So it was always "FALSE"
 				return false;
 			default:
 				//Unexpected condition

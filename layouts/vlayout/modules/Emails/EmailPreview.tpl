@@ -148,7 +148,7 @@
 						{else}
 							<small><em>{vtranslate('LBL_SENT_ON',$MODULE)}</em></small>
                             {assign var="SEND_TIME" value=$RECORD->get('date_start')|@cat:' '|@cat:$RECORD->get('time_start')}
-                            <span><small><em>&nbsp;{Vtiger_Datetime_UIType::getDisplayDateTimeValue($SEND_TIME)}</em></small></span>
+                            <span><small><em>&nbsp;{Vtiger_Datetime_UIType::getDateTimeValue($SEND_TIME)}</em></small></span>
 						{/if}
 					</span>
 				</span>

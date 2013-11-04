@@ -154,7 +154,7 @@ Settings_Vtiger_List_Js("Settings_SMSNotifier_List_Js",{
 	 * Function to register all the events
 	 */
 	registerEvents : function() {
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 		this.registerPageNavigationEvents();
 	}
 })

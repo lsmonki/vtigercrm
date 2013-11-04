@@ -20,10 +20,10 @@
 				<input type="hidden" name="module" value="{$MODULE_NAME}" />
 				<input type="hidden" name="action" value="Save" />
 				<input type="hidden" name="parent" value="Settings" />
-				<div class="row-fluid padding10">
+				<div class="row-fluid paddingTop20">
 					{assign var=SELECTED_MODULE_IDS value=array()}
 					
-					<select data-placeholder="{vtranslate('LBL_ADD_MENU_ITEM',$QUALIFIED_MODULE)}" id="menuListSelectElement" class="select2 span11" multiple="" data-validation-engine="validate[required]" >
+					<select data-placeholder="{vtranslate('LBL_ADD_MENU_ITEM',$QUALIFIED_MODULE)}" id="menuListSelectElement" class="select2 span12" multiple="" data-validation-engine="validate[required]" >
 						{foreach key=SELECTED_MODULE item=MODULE_MODEL from=$SELECTED_MODULES}
 							{array_push($SELECTED_MODULE_IDS, $MODULE_MODEL->getId())}
 						{/foreach}
@@ -39,9 +39,13 @@
 						{/foreach}
 					</select>
 				</div>
-				<div class="pull-right marginRight10px">
-					<button class="btn btn-success hide" type="submit" name="saveMenusList"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
-				</div>
+                <div class="row-fluid paddingTop20">
+                    <div class=" span6">
+                        <button class="btn btn-success hide pull-right" type="submit" name="saveMenusList">
+                            <strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong>
+                        </button>
+                    </div>
+                </div>
 				<input type="hidden" name="selectedModulesList" value='' />
 				<input type="hidden" name="topMenuIdsList" value='{ZEND_JSON::encode($SELECTED_MODULE_IDS)}' />
 			</form>

@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_TYPE_THE_MESSAGE' => 'اكتب الرسالة',
 	'LBL_WRITE_YOUR_MESSAGE_HERE' => 'اكتب الرسالة هنا',
 	'LBL_ADD_MORE_FIELDS' => 'اضافة حقول اخرى هنا',
-	'LBL_SEREVER_CONFIG' => 'اعدادات الخادم',
+	'LBL_SERVER_CONFIG' => 'اعدادات الخادم',
 
 	//DetailView Actions
 	'LBL_CHECK_STATUS' => 'التحقق من الحالة',

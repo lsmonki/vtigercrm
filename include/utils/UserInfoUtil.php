@@ -291,251 +291,263 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 
-	//Checking whether the user is admin
-	if($is_admin)
-	{
-		$permission ="yes";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
 	//Retreiving the Tabid and Action Id
 	$tabid = getTabid($module);
 	$actionid=getActionid($actionname);
-	//If no actionid, then allow action is vtiger_tab permission is available
-	if($actionid === '')
-	{
-		if($profileTabsPermission[$tabid] ==0)
-        	{
-                	$permission = "yes";
-			$log->debug("Exiting isPermitted method ...");
-        	}
-		else
-		{
-			$permission ="no";
-		}
-               	return $permission;
-
+	$checkModule = $module;
+	
+	if($checkModule == 'Events'){
+		$checkModule = 'Calendar';
 	}
-
-	$action = getActionname($actionid);
-	//Checking for view all permission
-	if($profileGlobalPermission[1] ==0 || $profileGlobalPermission[2] ==0)
-	{
-		if($actionid == 3 || $actionid == 4)
+	
+	if(vtlib_isModuleActive($checkModule)){
+	
+		//Checking whether the user is admin
+		if($is_admin)
 		{
-			$permission = "yes";
+			$permission ="yes";
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;
+		}
+
+		//If no actionid, then allow action is vtiger_tab permission is available
+		if($actionid === '')
+		{
+			if($profileTabsPermission[$tabid] ==0)
+				{
+						$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				}
+			else
+			{
+				$permission ="no";
+			}
+					return $permission;
 
 		}
-	}
-	//Checking for edit all permission
-	if($profileGlobalPermission[2] ==0)
-	{
-		if($actionid == 3 || $actionid == 4 || $actionid ==0 || $actionid ==1)
+
+		$action = getActionname($actionid);
+		//Checking for view all permission
+		if($profileGlobalPermission[1] ==0 || $profileGlobalPermission[2] ==0)
 		{
-			$permission = "yes";
+			if($actionid == 3 || $actionid == 4)
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+
+			}
+		}
+		//Checking for edit all permission
+		if($profileGlobalPermission[2] ==0)
+		{
+			if($actionid == 3 || $actionid == 4 || $actionid ==0 || $actionid ==1)
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+
+			}
+		}
+		//Checking for vtiger_tab permission
+		if($profileTabsPermission[$tabid] !=0)
+		{
+			$permission = "no";
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;
-
 		}
-	}
-	//Checking for vtiger_tab permission
-	if($profileTabsPermission[$tabid] !=0)
-	{
-		$permission = "no";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
-	//Checking for Action Permission
-	if(strlen($profileActionPermission[$tabid][$actionid]) <  1 && $profileActionPermission[$tabid][$actionid] == '')
-	{
-		$permission = "yes";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
-
-	if($profileActionPermission[$tabid][$actionid] != 0 && $profileActionPermission[$tabid][$actionid] != '')
-	{
-		$permission = "no";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
-	//Checking and returning true if recorid is null
-	if($record_id == '')
-	{
-		$permission = "yes";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
-
-	//If modules is Products,Vendors,Faq,PriceBook then no sharing
-	if($record_id != '')
-	{
-		if(getTabOwnedBy($module) == 1)
+		//Checking for Action Permission
+		if(strlen($profileActionPermission[$tabid][$actionid]) <  1 && $profileActionPermission[$tabid][$actionid] == '')
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
-	}
 
-	//Retreiving the RecordOwnerId
-	$recOwnType='';
-	$recOwnId='';
-	$recordOwnerArr=getRecordOwnerId($record_id);
-	foreach($recordOwnerArr as $type=>$id)
-	{
-		$recOwnType=$type;
-		$recOwnId=$id;
-	}
-	//Retreiving the default Organisation sharing Access
-	$others_permission_id = $defaultOrgSharingPermission[$tabid];
+		if($profileActionPermission[$tabid][$actionid] != 0 && $profileActionPermission[$tabid][$actionid] != '')
+		{
+			$permission = "no";
+			$log->debug("Exiting isPermitted method ...");
+			return $permission;
 
-	if($recOwnType == 'Users')
-	{
-		//Checking if the Record Owner is the current User
-		if($current_user->id == $recOwnId)
+		}
+		//Checking and returning true if recorid is null
+		if($record_id == '')
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
-		//Checking if the Record Owner is the Subordinate User
-		foreach($subordinate_roles_users as $roleid=>$userids)
+
+		//If modules is Products,Vendors,Faq,PriceBook then no sharing
+		if($record_id != '')
 		{
-			if(in_array($recOwnId,$userids))
+			if(getTabOwnedBy($module) == 1)
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+		}
+
+		//Retreiving the RecordOwnerId
+		$recOwnType='';
+		$recOwnId='';
+		$recordOwnerArr=getRecordOwnerId($record_id);
+		foreach($recordOwnerArr as $type=>$id)
+		{
+			$recOwnType=$type;
+			$recOwnId=$id;
+		}
+		//Retreiving the default Organisation sharing Access
+		$others_permission_id = $defaultOrgSharingPermission[$tabid];
+
+		if($recOwnType == 'Users')
+		{
+			//Checking if the Record Owner is the current User
+			if($current_user->id == $recOwnId)
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			//Checking if the Record Owner is the Subordinate User
+			foreach($subordinate_roles_users as $roleid=>$userids)
+			{
+				if(in_array($recOwnId,$userids))
+				{
+					$permission='yes';
+					$log->debug("Exiting isPermitted method ...");
+					return $permission;
+				}
+
+			}
+
+
+		}
+		elseif($recOwnType == 'Groups')
+		{
+			//Checking if the record owner is the current user's group
+			if(in_array($recOwnId,$current_user_groups))
 			{
 				$permission='yes';
 				$log->debug("Exiting isPermitted method ...");
 				return $permission;
 			}
-
 		}
 
-
-	}
-	elseif($recOwnType == 'Groups')
-	{
-		//Checking if the record owner is the current user's group
-		if(in_array($recOwnId,$current_user_groups))
+		//Checking for Default Org Sharing permission
+		if($others_permission_id == 0)
 		{
-			$permission='yes';
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-	}
-
-	//Checking for Default Org Sharing permission
-	if($others_permission_id == 0)
-	{
-		if($actionid == 1 || $actionid == 0)
-		{
-
-			if($module == 'Calendar')
+			if($actionid == 1 || $actionid == 0)
 			{
-				if($recOwnType == 'Users')
+
+				if($module == 'Calendar')
 				{
-					$permission = isCalendarPermittedBySharing($record_id);
+					if($recOwnType == 'Users')
+					{
+						$permission = isCalendarPermittedBySharing($record_id);
+					}
+					else
+					{
+						$permission='no';
+					}
 				}
 				else
 				{
-					$permission='no';
+					$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
 				}
-			}
-			else
-			{
-				$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
-			}
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-		elseif($actionid == 2)
-		{
-			$permission = "no";
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-		else
-		{
-			$permission = "yes";
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-	}
-	elseif($others_permission_id == 1)
-	{
-		if($actionid == 2)
-		{
-			$permission = "no";
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-		else
-		{
-			$permission = "yes";
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-	}
-	elseif($others_permission_id == 2)
-	{
-
-		$permission = "yes";
-		$log->debug("Exiting isPermitted method ...");
-		return $permission;
-	}
-	elseif($others_permission_id == 3)
-	{
-
-		if($actionid == 3 || $actionid == 4)
-		{
-			if($module == 'Calendar')
-			{
-				if($recOwnType == 'Users')
-				{
-					$permission = isCalendarPermittedBySharing($record_id);
-				}
-				else
-				{
-					$permission='no';
-				}
-			}
-			else
-			{
-				$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
-			}
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-		elseif($actionid ==0 || $actionid ==1)
-		{
-			if($module == 'Calendar')
-			{
-				$permission='no';
-			}
-			else
-			{
-				$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
-			}
-			$log->debug("Exiting isPermitted method ...");
-			return $permission;
-		}
-		elseif($actionid ==2)
-		{
-				$permission ="no";
+				$log->debug("Exiting isPermitted method ...");
 				return $permission;
+			}
+			elseif($actionid == 2)
+			{
+				$permission = "no";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			else
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
 		}
-		else
+		elseif($others_permission_id == 1)
+		{
+			if($actionid == 2)
+			{
+				$permission = "no";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			else
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+		}
+		elseif($others_permission_id == 2)
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
-	}
-	else
-	{
-		$permission = "yes";
+		elseif($others_permission_id == 3)
+		{
+
+			if($actionid == 3 || $actionid == 4)
+			{
+				if($module == 'Calendar')
+				{
+					if($recOwnType == 'Users')
+					{
+						$permission = isCalendarPermittedBySharing($record_id);
+					}
+					else
+					{
+						$permission='no';
+					}
+				}
+				else
+				{
+					$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
+				}
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			elseif($actionid ==0 || $actionid ==1)
+			{
+				if($module == 'Calendar')
+				{
+					$permission='no';
+				}
+				else
+				{
+					$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+				}
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+			elseif($actionid ==2)
+			{
+					$permission ="no";
+					return $permission;
+			}
+			else
+			{
+				$permission = "yes";
+				$log->debug("Exiting isPermitted method ...");
+				return $permission;
+			}
+		}
+		else
+		{
+			$permission = "yes";
+		}
+	}else {
+		$permission = "no";
 	}
 
 	$log->debug("Exiting isPermitted method ...");

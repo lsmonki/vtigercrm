@@ -11,15 +11,15 @@
 -->*}
 {strip}
 <div class="modal">
-	<div class="modal-header">
-		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+	<div class="modal-header contentsBackground">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		{if $RECORD_ID}
 			<h3>{vtranslate('LBL_EDIT_CONFIGURATION', $QUALIFIED_MODULE_NAME)} </h3>
 		{else}
 			<h3>{vtranslate('LBL_ADD_CONFIGURATION', $QUALIFIED_MODULE_NAME)} </h3>
 		{/if}
 	</div>
-	<form class="form-horizontal contentsBackground" id="smsConfig">
+	<form class="form-horizontal" id="smsConfig">
 		<div class="modal-body configContent">
 			{if $RECORD_ID}
 				<input type="hidden" value="{$RECORD_ID}" name="record" id="recordId"/>

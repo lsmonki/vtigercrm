@@ -718,7 +718,7 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	}
 	$sh_query_fields = trim($sh_query_fields,',');
 	$sh_query_values = trim($sh_query_values,',');
-	
+
 	$updatequery .= " s_h_percent=?";
 	array_push($updateparams, $sh_tax_pecent);
 
@@ -727,7 +727,7 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	$updatequery .= " where ".$focus->table_index."=?";
 	array_push($updateparams, $focus->id);
 	$adb->pquery($updatequery,$updateparams);
-	
+
 	$sh_query = "insert into vtiger_inventoryshippingrel($sh_query_fields) values($sh_query_values)";
 	$adb->pquery($sh_query,$sh_query_params);
 
@@ -920,7 +920,7 @@ function getPriceDetailsForProduct($productid, $unit_price, $available='availabl
 			if ($cur_value == null || $cur_value == '') {
 				$price_details[$i]['check_value'] = false;
 				if	($unit_price != null) {
-					$cur_value = convertFromMasterCurrency($unit_price, $actual_conversion_rate);
+					$cur_value = CurrencyField::convertFromMasterCurrency($unit_price, $actual_conversion_rate);
 				} else {
 					$cur_value = '0';
 				}
@@ -1372,9 +1372,9 @@ function undoLastImport($obj, $user) {
 	$owner = new Users();
 	$owner->id = $ownerId;
 	$owner->retrieve_entity_info($ownerId, 'Users');
-	
+
 	$dbTableName = Import_Utils_Helper::getDbTableName($owner);
-	
+
 	if(!is_admin($user) && $user->id != $owner->id) {
 		$viewer = new Import_UI_Viewer();
 		$viewer->display('OperationNotPermitted.tpl', 'Vtiger');
@@ -1430,7 +1430,7 @@ function getCurrencyId($fieldValue) {
  */
 function getLineItemFields(){
 	global $adb;
-	
+
 	$sql = 'SELECT DISTINCT columnname FROM vtiger_field WHERE tablename=?';
 	$result = $adb->pquery($sql, array('vtiger_inventoryproductrel'));
 	$lineItemdFields = array();

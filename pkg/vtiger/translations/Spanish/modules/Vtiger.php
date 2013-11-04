@@ -588,7 +588,6 @@ $languageStrings = array(
 	'Projects' => 'Proyectos',
 	'Sales Order' => 'Ordenes de Venta',
 	'Purchase Order' => 'Ordenes de Compra',
-	'Payments' => 'Payments',
 	'List and Campaigns' => 'List and Campaigns',
 	'Project Tasks' => 'Project Tasks',
 	'Project Milestones' => 'Project Milestones',

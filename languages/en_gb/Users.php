@@ -55,7 +55,6 @@ $languageStrings = array(
 	'INTERNAL_MAIL_COMPOSER'       => 'Internal Mail Composer'      , 
 	'Asterisk Extension'           => 'Asterisk Extension'          , 
 	' Receive Incoming Calls'      => 'Receive Incoming Calls'      , // TODO: Review
-	'Reminder Interval'            => 'Reminder Interval'           , 
 	'Webservice Access Key'        => 'Access Key'                  , 
 	'Language'                     => 'Language'                    , 
 	'Theme'                        => 'Theme'                       , 
@@ -173,4 +172,7 @@ $languageStrings = array(
 	'LBL_CHANGE_PASSWORD'	       => 'Change Password',
 	'LBL_NEW_PASSWORD'			   => 'New Password',
 	'LBL_CONFIRM_PASSWORD'		   => 'Confirm Password',
+	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Owner',
+	'LBL_LOGIN_AS' => 'Login as ',
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'User deleted successfully',
 );

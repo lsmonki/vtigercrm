@@ -340,7 +340,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 		var thisInstance = this;
 		var forModule = jQuery('.contentsDiv').find('.pickListSupportedModules').val();
 		thisInstance.listViewForModule = forModule;
-		thisInstance.triggerDisplayTypeEvent();
+		//thisInstance.triggerDisplayTypeEvent();
 		thisInstance.registerSourceModuleChangeEvent();
 	},
 	

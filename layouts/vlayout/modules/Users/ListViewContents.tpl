@@ -47,17 +47,18 @@
 		<img class="listViewLoadingImage" src="{vimage_path('loading.gif')}" alt="no-image" title="{vtranslate('LBL_LOADING', $MODULE)}"/>
 		<p class="listViewLoadingMsg">{vtranslate('LBL_LOADING_LISTVIEW_CONTENTS', $MODULE)}........</p>
 	</span>
+	{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 					{if $LISTVIEW_HEADER->getName() eq 'first_name'}
-						<th nowrap>
+						<th nowrap class="{$WIDTHTYPE}">
 							<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate('LBL_USER_LIST_DETAILS', $MODULE)}
 							&nbsp;&nbsp;{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
 						</th>
 					{elseif $LISTVIEW_HEADER->getName() neq 'last_name' and $LISTVIEW_HEADER->getName() neq 'email1'}
-						<th nowrap><a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
+						<th nowrap class="{$WIDTHTYPE}"><a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
 							&nbsp;&nbsp;{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
 						</th>
 					{/if}
@@ -70,7 +71,7 @@
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
 			<input type="hidden" name="deleteActionUrl" value="{$LISTVIEW_ENTRY->getDeleteUrl()}">
 				{if $LISTVIEW_HEADER->getName() eq 'first_name'}
-					<td class="listViewEntryValue">
+					<td class="listViewEntryValue {$WIDTHTYPE}">
 					<div class='row-fluid'>
 						<div class='span6'>
 							{assign var=IMAGE_DETAILS value=$LISTVIEW_ENTRY->getImageDetails()}
@@ -98,21 +99,20 @@
 					</div>
 					</td>
 				{elseif $LISTVIEW_HEADER->getName() neq 'last_name' and $LISTVIEW_HEADER->getName() neq 'email1'}
-					<td nowrap>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+					<td class="{$WIDTHTYPE}" nowrap>{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 						{if !$LISTVIEW_HEADER@last}</td>{/if}
 				{/if}
 				{if $LISTVIEW_HEADER@last}
 					<div class="pull-right actions">
 						<span class="actionImages">
-							{if $IS_MODULE_EDITABLE}
+							{if $IS_MODULE_EDITABLE && $LISTVIEW_ENTRY->get('status') eq 'Active'}
 								<a id="{$MODULE}_LISTVIEW_ROW_{$LISTVIEW_ENTRY->getId()}_EDIT" href='{$LISTVIEW_ENTRY->getEditViewUrl()}'><i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-pencil alignMiddle"></i></a>&nbsp;
 							{/if}
-							{if $IS_MODULE_DELETABLE && $LISTVIEW_ENTRY->getId() != $USER_MODEL->getId()}
+							{if $IS_MODULE_DELETABLE && $LISTVIEW_ENTRY->getId() != $USER_MODEL->getId() && $LISTVIEW_ENTRY->get('status') eq 'Active'}
 								<a id="{$MODULE}_LISTVIEW_ROW_{$LISTVIEW_ENTRY->getId()}_DELETE" class="deleteRecordButton"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
 							{/if}
 						</span>
 					</div>
-					</td>
 				{/if}
 			{/foreach}
 		</tr>

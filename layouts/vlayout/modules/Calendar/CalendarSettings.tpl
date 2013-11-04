@@ -11,11 +11,11 @@
 -->*}
 {strip}
 <div class='modelContainer calendarSettingsContainer'>
-	<div class="modal-header">
+	<div class="modal-header contentsBackground">
 		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
 		<h3>{vtranslate('LBL_CALENDAR_SETTINGS', $MODULE)}</h3>
 	</div>
-	<form class="form-horizontal contentsBackground" id="CalendarSettings" name="CalendarSettings" method="post" action="index.php">
+	<form class="form-horizontal" id="CalendarSettings" name="CalendarSettings" method="post" action="index.php">
 		<input type="hidden" name="module" value="Users" />
 		<input type="hidden" name="action" value="SaveCalendarSettings" />
 		<input type="hidden" name="record" value="{$RECORD}" />

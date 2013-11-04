@@ -27,6 +27,7 @@ class Reports_CheckDuplicate_Action extends Vtiger_Action_Controller {
 
 		$recordModel->set('reportname', $reportName);
 		$recordModel->set('reportid', $record);
+		$recordModel->set('isDuplicate', $request->get('isDuplicate'));
 		
 		if (!$recordModel->checkDuplicate()) {
 			$result = array('success'=>false);

@@ -76,8 +76,10 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 		$result = $db->pquery($query, array($pickListFieldName));
 		$num_rows = $db->num_rows($result);
 
-		$query = 'UPDATE ' . $this->getPickListTableName($pickListFieldName) . ' SET ' . $pickListFieldName . '=? WHERE ' . $pickListFieldName . '=?';
-		$db->pquery($query, array($newValue, $oldValue));
+		//As older look utf8 characters are pushed as html-entities,and in new utf8 characters are pushed to database
+		//so we are checking for both the values
+		$query = 'UPDATE ' . $this->getPickListTableName($pickListFieldName) . ' SET ' . $pickListFieldName . '=? WHERE ' . $pickListFieldName . '=? OR ' . $pickListFieldName . '=?';
+		$db->pquery($query, array($newValue, $oldValue, Vtiger_Util_Helper::toSafeHTML($oldValue)));
 
 		for ($i = 0; $i < $num_rows; $i++) {
 			$row = $db->query_result_rowdata($result, $i);
@@ -94,6 +96,15 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
 		$query = "UPDATE vtiger_picklist_dependency SET sourcevalue=? WHERE sourcevalue=? AND sourcefield=?";
 		$db->pquery($query, array($newValue, $oldValue, $pickListFieldName));
+				
+		$em = new VTEventsManager($db);
+		$data = array();
+		$data['fieldname'] = $pickListFieldName;
+		$data['oldvalue'] = $oldValue;
+		$data['newvalue'] = $newValue;
+		$data['module'] = $moduleName;
+		$em->triggerEvent('vtiger.picklist.afterrename', $data);
+		
 		return true;
 	}
 
@@ -102,14 +113,20 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 		if(!is_array($valueToDelete)) {
 			$valueToDelete = array($valueToDelete);
 		}
-
+		//As older look utf8 characters are pushed as html-entities,and in new utf8 characters are pushed to database
+		//so we are checking for both the values
+		foreach ($valueToDelete as $key => $value) {
+			$encodedValueToDelete[$key]  = Vtiger_Util_Helper::toSafeHTML($value);
+		}
+		$mergedValuesToDelete = array_merge($valueToDelete, $encodedValueToDelete);
+		
         $fieldModel = Settings_Picklist_Field_Model::getInstance($pickListFieldName,$this);
         //if role based then we need to delete all the values in role based picklist
         if($fieldModel->isRoleBased()) {
             $picklistValueIdToDelete = array();
             $query = 'SELECT picklist_valueid FROM '.$this->getPickListTableName($pickListFieldName).
-                     ' WHERE '.$pickListFieldName.' IN ('.generateQuestionMarks($valueToDelete).')';
-            $result = $db->pquery($query,$valueToDelete);
+                     ' WHERE '.$pickListFieldName.' IN ('.generateQuestionMarks($valueToDelete).') OR '.$pickListFieldName.' IN ('.generateQuestionMarks($encodedValueToDelete).')';
+            $result = $db->pquery($query,$mergedValuesToDelete);
             $num_rows = $db->num_rows($result);
             for($i=0;$i<$num_rows;$i++) {
                 $picklistValueIdToDelete[] = $db->query_result($result,$i,'picklist_valueid');
@@ -119,14 +136,15 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
         }
 
         $query = 'DELETE FROM '. $this->getPickListTableName($pickListFieldName).
-					' WHERE '.$pickListFieldName.' IN ('.  generateQuestionMarks($valueToDelete).')';
-        $db->pquery($query, $valueToDelete);
+					' WHERE '.$pickListFieldName.' IN ('.  generateQuestionMarks($valueToDelete).') OR '.$pickListFieldName.' IN ('.generateQuestionMarks($encodedValueToDelete).')';
+        $db->pquery($query,$mergedValuesToDelete);
 
         vimport('~~/include/utils/CommonUtils.php');
         $tabId = getTabId($moduleName);
         $query = 'DELETE FROM vtiger_picklist_dependency WHERE sourcevalue IN ('. generateQuestionMarks($valueToDelete) .')'.
 				' AND sourcefield=?';
-		$params = $valueToDelete;
+		$params = array();
+		array_push($params, $valueToDelete);
 		array_push($params, $pickListFieldName);
         $db->pquery($query, $params);
 
@@ -141,16 +159,24 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
             $query = 'UPDATE '.$tableName.' SET '.$columnName.'=? WHERE '.$columnName.' IN ('.  generateQuestionMarks($valueToDelete).')';
 			$params = array($replaceValue);
-			$params = array_merge($params, $valueToDelete);
+			array_push($params, $valueToDelete);
             $db->pquery($query, $params);
         }
 		
 		$query = 'UPDATE vtiger_field SET defaultvalue=? WHERE defaultvalue IN ('. generateQuestionMarks($valueToDelete) .') AND columnname=?';
 		$params = array($replaceValue);
-		$params = array_merge($params, $valueToDelete);
+		array_push($params, $valueToDelete);
 		array_push($params, $columnName);
 		$db->pquery($query, $params);
 		
+		$em = new VTEventsManager($db);
+		$data = array();
+		$data['fieldname'] = $pickListFieldName;
+		$data['valuetodelete'] = $valueToDelete;
+		$data['replacevalue'] = $replaceValue;
+		$data['module'] = $moduleName;
+		$em->triggerEvent('vtiger.picklist.afterdelete', $data);
+
         return true;
     }
 
@@ -162,14 +188,24 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
 		$sql = "select picklistid from vtiger_picklist where name=?";
 		$result = $db->pquery($sql, array($picklistFieldName));
-		$picklistid = $db->query_result($result,0,"picklistid");;
+		$picklistid = $db->query_result($result,0,"picklistid");
 
         $pickListValueList = array_merge($valuesToEnables,$valuesToDisable);
+		
+		//As older look utf8 characters are pushed as html-entities,and in new utf8 characters are pushed to database
+		//so we are checking for both the values
+		foreach ($pickListValueList as $key => $value) {
+			$encodedValueToAssign[$key]  = Vtiger_Util_Helper::toSafeHTML($value);
+		}
+		
         $pickListValueDetails = array();
         $query = 'SELECT picklist_valueid,'. $picklistFieldName.
                  ' FROM '.$this->getPickListTableName($picklistFieldName).
-                 ' WHERE '.$picklistFieldName .' IN ('.  generateQuestionMarks($pickListValueList).')';
-        $result = $db->pquery($query, $pickListValueList);
+                 ' WHERE '.$picklistFieldName .' IN ('.  generateQuestionMarks($pickListValueList).') OR '.$picklistFieldName .' IN ('.  generateQuestionMarks($encodedValueToAssign).')';
+		$params = array();
+		array_push($params, $pickListValueList);
+		array_push($params, $encodedValueToAssign);
+        $result = $db->pquery($query, $params);
 		$num_rows = $db->num_rows($result);
 
         for($i=0; $i<$num_rows; $i++) {
@@ -183,6 +219,9 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
         foreach($roleIdList as $roleId) {
             foreach($valuesToEnables  as $picklistValue) {
 		        $valueDetail = $pickListValueDetails[$picklistValue];
+				if(empty($valueDetail)){
+					 $valueDetail = $pickListValueDetails[Vtiger_Util_Helper::toSafeHTML($picklistValue)];
+				}
                 $pickListValueId = $valueDetail['picklistvalueid'];
                 $picklistId = $valueDetail['picklistid'];
                 $insertValueList[] = '("'.$roleId.'","'.$pickListValueId.'","'.$picklistId.'")';
@@ -190,6 +229,9 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
             foreach($valuesToDisable as $picklistValue) {
                 $valueDetail = $pickListValueDetails[$picklistValue];
+				if(empty($valueDetail)){
+					 $valueDetail = $pickListValueDetails[Vtiger_Util_Helper::toSafeHTML($picklistValue)];
+				}
                 $pickListValueId = $valueDetail['picklistvalueid'];
                 $picklistId = $valueDetail['picklistid'];
                 $deleteValueList[] = ' ( roleid = "'.$roleId.'" AND '.'picklistvalueid = "'.$pickListValueId.'") ';
@@ -212,7 +254,7 @@ class Settings_Picklist_Module_Model extends Vtiger_Module_Model {
 
         $query = 'UPDATE '.$this->getPickListTableName($pickListFieldName).' SET sortorderid = CASE ';
         foreach($picklistValues as $values => $sequence) {
-            $query .= ' WHEN '.$pickListFieldName.'="'.$db->sql_escape_string($values).'" THEN "'.$sequence.'"';
+            $query .= ' WHEN '.$pickListFieldName.'="'.$db->sql_escape_string($values).'" OR '.$pickListFieldName.'="'.$db->sql_escape_string(Vtiger_Util_Helper::toSafeHTML($values)).'" THEN "'.$sequence.'"';
         }
 		$query .= ' END';
         $result = $db->pquery($query, array());

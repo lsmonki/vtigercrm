@@ -66,6 +66,7 @@ Vtiger_List_Js("Reports_List_Js",{
 			var selectedIds = listInstance.readSelectedIds(true);
 			var excludedIds = listInstance.readExcludedIds(true);
 			var cvId = listInstance.getCurrentCvId();
+			
 			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
 			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
@@ -207,7 +208,7 @@ Vtiger_List_Js("Reports_List_Js",{
 					listViewContainer.html(data);
 					jQuery('#deSelectAllMsg').trigger('click');
 					thisInstance.calculatePages().then(function(){
-						thisInstance.updatePagination();					
+						thisInstance.updatePagination();
 					});
 				});
 		} else {

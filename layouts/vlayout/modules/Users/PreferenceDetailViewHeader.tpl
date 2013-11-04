@@ -37,23 +37,6 @@
                 <div class="span4">
                     <div class="row-fluid pull-right detailViewButtoncontainer">
 						<div class="btn-toolbar pull-right">
-								<div class='btn-group' title="{vtranslate('LBL_DISPLAY_TYPE', 'Vtiger')}">
-									<a class='btn dropdown-toggle' data-toggle='dropdown' href='#'>
-										<span id='currentWidthType'><i class='icon-th-list'></i></span>&nbsp;<span class='caret'></span>
-									</a>
-									<ul class='dropdown-menu pull-right' id='widthType'>
-										<li class="cursorPointer" data-class='wideWidthType' title="{vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}">
-											<i class='icon-th-list'></i>  {vtranslate('LBL_DISPLAY_WIDETYPE', 'Vtiger')}
-										</li>
-										<li class="cursorPointer" data-class='mediumWidthType' title="{vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}">
-											<i class='icon-list'></i>  {vtranslate('LBL_DISPLAY_MEDIUMTYPE', 'Vtiger')}
-										</li>
-										<li class="cursorPointer" data-class='narrowWidthType' title="{vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}">
-											<i class='icon-list-alt'></i>  {vtranslate('LBL_DISPLAY_NARROWTYPE', 'Vtiger')}
-										</li>
-									</ul>
-								</div>
-
                             {foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWPREFERENCE']}
                                 <div class="btn-group">
                                     <button class="btn"

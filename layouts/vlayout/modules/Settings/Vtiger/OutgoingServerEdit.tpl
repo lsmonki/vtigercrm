@@ -27,13 +27,6 @@
 			<input type="hidden" name="server_type" value="email" />
 			<input type="hidden" name="id" value="{$MODEL->get('id')}" />
 
-			<div class="accordion">{vtranslate('LBL_DEFAULT', $QUALIFIED_MODULE)}&nbsp;&nbsp;
-				<a class="cursorPointer accordion-heading accordion-toggle" data-toggle="collapse" data-target="#serverSteps">{vtranslate('LBL_MORE', $QUALIFIED_MODULE)}..</a>
-				<div id="serverSteps" class="accordion-body collapse themeTextColor"><ul>
-					<br><li>{vtranslate('LBL_OPTIONS1', $QUALIFIED_MODULE)}</li><br>
-					<li>{vtranslate('LBL_OPTIONS2', $QUALIFIED_MODULE)}</li>
-				</ul></div>
-			</div>
 			<div class="row-fluid hide errorMessage">
 				<div class="alert alert-error">
 				  {vtranslate('LBL_TESTMAILSTATUS', $QUALIFIED_MODULE)}<strong>{vtranslate('LBL_MAILSENDERROR', $QUALIFIED_MODULE)}</strong>  

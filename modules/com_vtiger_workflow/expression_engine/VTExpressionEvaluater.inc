@@ -76,8 +76,18 @@ function __vt_time_diff($arr) {
             $time_operand1 = $arr[0];
             $time_operand2 = $arr[1];
     } else {
-            $time_operand1 = date('Y-m-d H:i:s'); // Current time
-            $time_operand2 = $arr[0];
+
+		// Added as we need to compare with the values based on the user date format and timezone
+		global $default_timezone;
+		$admin = Users::getActiveAdminUser();
+		$adminTimeZone = $admin->time_zone;
+		@date_default_timezone_set($adminTimeZone);
+
+        $time_operand1 = date('Y-m-d H:i:s'); // Current time
+
+		@date_default_timezone_set($default_timezone);
+
+        $time_operand2 = $arr[0];
     }
 
     if(empty($time_operand1) || empty($time_operand2)) return 0;

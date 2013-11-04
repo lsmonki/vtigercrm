@@ -591,7 +591,7 @@ $languageStrings = array(
 	'Sales End Date'=>'Data zakończenia sprzedaży',
 
 	//Dashboard list of widgets translation
-	'Open Ticktes' => 'Otwarte zgłoszenia',
+	'Open Tickets' => 'Otwarte zgłoszenia',
 
 	//PageTitle translations
 	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Honest Open Source',
@@ -608,7 +608,7 @@ $jsLanguageStrings = array(
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'numer telefonu ma za dużo znaków',
 	'JS_ACCEPT_POSITIVE_NUMBER' => 'przyjmuje tylko wartości dodatnie',
 	'JS_VALUE_SHOULD_BE_GREATER_THAN_ZERO' => 'wartość ta powinna być większa niż zero',
-	
+
 
 	'INVALID_NUMBER_OF' => 'niepoprawny numer',
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Czy na pewno chcesz usunąć rekordy?',

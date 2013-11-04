@@ -220,10 +220,10 @@ class ReportRun extends CRMEntity
 
     // All UItype 72 fields are added here so that in reports the values are append currencyId::value
 	var $append_currency_symbol_to_value = array('Products_Unit_Price','Services_Price',
-						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment',
-						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment',
-						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment',
-						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment',
+						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_Pre_Tax_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment',
+						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_Pre_Tax_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment',
+						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_Pre_Tax_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment',
+						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_Pre_Tax_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment',
                         'Invoice_Received','PurchaseOrder_Paid','Invoice_Balance','PurchaseOrder_Balance'
 						);
 	var $ui10_fields = array();
@@ -1676,11 +1676,12 @@ class ReportRun extends CRMEntity
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";
 				if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
-					$sqlvalue = "".$adb->sql_escape_string(decode_html($selectedfields[2]))." ".$sortorder;
+					//In sql queries forward slash(/) is treated as query terminator,so to avoid this problem
+					//the column names are enclosed within ('[]'),which will treat this as part of column name
+					$sqlvalue = "`".$adb->sql_escape_string(decode_html($selectedfields[2]))."` ".$sortorder; 
 				} else {
-					$sqlvalue = "".self::replaceSpecialChar($selectedfields[2])." ".$sortorder;
+					$sqlvalue = "`".self::replaceSpecialChar($selectedfields[2])."` ".$sortorder; 
 				}
-				/************** MONOLITHIC phase 6 customization********************************/
 				if($selectedfields[4]=="D" && strtolower($reportsortrow["dategroupbycriteria"])!="none"){
 					$groupField = $module_field;
 					$groupCriteria = $reportsortrow["dategroupbycriteria"];
@@ -3856,7 +3857,6 @@ class ReportRun extends CRMEntity
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 		$pdf->setLanguageArray($l);
-		//echo '<pre>';print_r($columnlength);echo '</pre>';
 		$pdf->AddPage();
 
 		$pdf->SetFillColor(224,235,255);

@@ -21,6 +21,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
+	'LBL_EVENT_OR_TASK'            => 'Event / Task'                ,
 	'LBL_TASK_INFORMATION'         => 'Task Information'            , 
 	'Subject'                      => 'Subject'                     , 
 	'Start Date & Time'            => 'Start Date & Time'           , 
@@ -70,6 +71,7 @@ $jsLanguageStrings = array(
 	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

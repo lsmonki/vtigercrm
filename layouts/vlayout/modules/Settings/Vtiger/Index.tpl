@@ -34,7 +34,7 @@
 			</span>
 		</div>
 		<br><br>
-		<label class="themeTextColor font-x-x-large">{vtranslate('LBL_SETTINGS_SHORTCUTS',$MODULE)}</label>
+		<h3>{vtranslate('LBL_SETTINGS_SHORTCUTS',$MODULE)}</h3>
 		<hr>
 		<div id="settingsShortCutsContainer" class="row-fluid"/>
 		{foreach item=SETTINGS_SHORTCUT from=$SETTINGS_SHORTCUTS name=shortcuts}

@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class Events_Save_Action extends Calendar_Save_Action {
-	
+
 	/**
 	 * Function to save record
 	 * @param <Vtiger_Request> $request - values of the record
@@ -33,15 +33,15 @@ class Events_Save_Action extends Calendar_Save_Action {
 			$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relatedModule);
 			$relationModel->addRelation($parentRecordId, $relatedRecordId);
 		}
-		
+
 		// Handled to save follow up event
 		$followupMode = $request->get('followup');
-		
+
 		//Start Date and Time values
 		$startTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('followup_time_start'));
 		$startDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('followup_date_start') . " " . $startTime);
 		list($startDate, $startTime) = explode(' ', $startDateTime);
-		
+
 		$subject = $request->get('subject');
 		if($followupMode == 'on' && $startTime != '' && $startDate != ''){
 			$recordModel->set('eventstatus', 'Planned');
@@ -66,45 +66,17 @@ class Events_Save_Action extends Calendar_Save_Action {
 			$recordModel->save();
 			$heldevent = true;
 		}
-		
+
 		//TODO: remove the dependency on $_REQUEST
 		if($_REQUEST['recurringtype'] != '' && $_REQUEST['recurringtype'] != '--None--') {
 			vimport('~~/modules/Calendar/RepeatEvents.php');
 			$focus =  new Activity();
-			
+
 			//get all the stored data to this object
 			$focus->column_fields = $recordModel->getData();
-			
+
 			Calendar_RepeatEvents::repeatFromRequest($focus);
 		}
-		$contactIdList = $request->get('contactidlist');
-        $recordId = $recordModel->getId();
-		$idLists = array();
-        if(isset($contactIdList))
-        {
-            //split the string and store in an array
-            $storearray = explode (";",$contactIdList);
-			array_push($idLists, $recordId);
-			if($heldevent) {
-				array_push($idLists, $originalRecordId);
-			}
-            $del_sql = 'delete from vtiger_cntactivityrel where activityid IN(' . generateQuestionMarks($idLists) . ')';
-            $adb->pquery($del_sql, $idLists);
-            $record = $recordId;
-            foreach($storearray as $id)
-            {
-                if($id != '')
-                {
-
-                    $sql = "insert into vtiger_cntactivityrel values (?,?)";
-                    $adb->pquery($sql, array($id, $record));
-                    if($heldevent) {
-						$sql = "insert into vtiger_cntactivityrel values (?,?)";
-						$adb->pquery($sql, array($id, $originalRecordId));
-                    }
-                }
-            }
-        }
         return $recordModel;
     }
 

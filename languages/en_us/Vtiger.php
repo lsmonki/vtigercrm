@@ -54,7 +54,7 @@ $languageStrings = array(
 	'LBL_SEND_EMAIL' => 'Send Email',
 	//SEND EMAIL translations
 	'LBL_ALL_EMAILS' => 'All email accounts',
-	'LBL_MUTIPLE_EMAIL_SELECT_ONE' => 'This record stores multiple email accounts. Please select the accounts to which the email should be sent to',
+	'LBL_MUTIPLE_EMAIL_SELECT_ONE' => 'Please select one of the options below',
 	//SEND EMAIL translations
 	'LBL_GO_TO_FULL_FORM' => 'Go to full form',
 	'LBL_SEND_SMS' => 'Send SMS',
@@ -447,6 +447,7 @@ $languageStrings = array(
 	'LBL_CUSTOM_VIEW_NAME_DUPLICATES_EXIST' => 'filter already exists',
 
 	'LBL_ADD_MANAGE_MODULES' => 'Add / Manage Modules',
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'Customize Main Menu',
 
 	// Added Common Keys for all modules
 	'Account Name' => 'Organization Name',
@@ -633,7 +634,7 @@ $languageStrings = array(
 	'Sales End Date'=>'Sales End Date',
 
 	//Dashboard list of widgets translation
-	'Open Ticktes' => 'Open Tickets',
+	'Open Tickets' => 'Open Tickets',
 	'LBL_SELECT_STATUS' => 'Select Status',
 	'LBL_BLANK' => '-Blank-',
 
@@ -711,7 +712,6 @@ $languageStrings = array(
 	'LBL_EXCEEDED' => 'Exceeded',
 	'LBL_OPERATION_NOT_PERMITTED' => 'Operation not permitted',
     'LBL_MERGE' => 'Merge',
-	'LBL_FIND_DUPLICATES' => 'Find Duplicates',
 	'LBL_MERGING_CRITERIA_SELECTION' => 'Merging Criteria Selection',
 	'LBL_AVAILABLE_FIELDS' => 'Available Fields',
 	'LBL_MERGE_RECORDS_DESCRIPTION' => 'The primary record will be retained after the merge. You can select the column to retain the values.
@@ -743,7 +743,7 @@ $languageStrings = array(
 	'Website: ' => 'Website: ',
 	'Tax' => 'Tax',
 	'LBL_ALPHABETS' => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
-	
+
 	//Realted tab strings
 	'Service Contracts' => 'Service Contracts',
 	'Projects' => 'Projects',
@@ -752,21 +752,26 @@ $languageStrings = array(
 	'List and Campaigns' => 'List and Campaigns',
 	'Project Tasks' => 'Project Tasks',
 	'Project Milestones' => 'Project Milestones',
-	
+
 	'Labels Editor' => 'Labels Editor',
 	'LBL_IGNORE_EMPTY_VALUES' =>'Ignore empty values',
-	
+
 	//Related tabs of Products
 	'Product Bundles' => 'Product Bundles',
 	'Parent Product' => 'Parent Product',
-	
+
 	'LBL_MANAGE_USERS' => 'Manage Users',
 	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership',
 	'LBL_SELECT_RELATED_MODULES' => 'Select Related Modules',
 	'LBL_ASSIGNED_TO' => 'Assigned To',
-	
+
 	//Report Detail View
 	'LBL_VIEW_DETAILS' => 'View Details',
+	//Comments Field Labels for Workflow
+	'Comment' => 'Comment',
+	'Last Comment' => 'Last Comment',
+	'Last 5 Comments' => 'Last 5 Comments',
+	'All Comments' => 'All Comments',
 );
 
 $jsLanguageStrings = array(
@@ -914,14 +919,11 @@ $jsLanguageStrings = array(
 	'JS_ITEMS_DELETED_SUCCESSFULLY' => 'Items Deleted Successfully',
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value',
 	'JS_SELECT_RECORDS_TO_MERGE_FROM_SAME_GROUP' => 'You have to select the records in the same groups for merging',
-	'JS_SELECT_ATLEAST_TWO_RECORD_FOR_MERGING' => 'Select atleast two records for merging',
+	'JS_SELECT_ATLEAST_TWO_RECORD_FOR_MERGING' => 'Select at least two records for merging',
 	'JS_ALLOWED_TO_SELECT_MAX_OF_THREE_RECORDS' => 'You are allowed to select a maximum of three records',
 	//Notification message for dashboard widget delete
 	'JS_ARE_YOU_SURE_TO_DELETE_WIDGET' => 'Are you sure to delete widget',
 	'JS_DUPLICATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value',
-	'JS_SELECT_RECORDS_TO_MERGE_FROM_SAME_GROUP' => 'You have to select the records in the same groups for merging',
-	'JS_SELECT_ATLEAST_TWO_RECORD_FOR_MERGING' => 'Select atleast two records for merging',
-	'JS_ALLOWED_TO_SELECT_MAX_OF_THREE_RECORDS' => 'You are allowed to select a maximum of three records',
 	'JS_TOTAL_RECORDS' => 'Total records',
 	'JS_PAGE_NOT_EXIST' => 'Page not exist',
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'You are in page number',
@@ -934,9 +936,9 @@ $jsLanguageStrings = array(
 	'JS_RECORDS_ARE_GETTING_DELETED' => 'Records are getting deleted',
 	'JS_RECORD_GETTING_DELETED' => 'Record getting deleted',
 	'JS_NO_RESULTS_FOUND' => 'No Results Found',
-	 
+
 	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Records ownership has been tranferred successfully',
-    
+
 	'JS_USER_EXISTS' => 'User Already Exists',
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',
 );

@@ -21,6 +21,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , 
 	'LBL_MINUTES'                  => 'Minutes'                     , 
 	'LBL_SELECT_USERS'             => 'Select Users'                , 
+	'LBL_EVENT_OR_TASK'            => 'Termin / Aufgabe'                ,
 	'LBL_TASK_INFORMATION'         => 'Aufgabeninformation'         , 
 	'Subject'                      => 'Betreff'                     , 
 	'Start Date & Time'            => 'Termin beginnt'              , 
@@ -70,6 +71,7 @@ $jsLanguageStrings = array(
 	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', 
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , 
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Kann nicht For Future gehalten zu werden',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

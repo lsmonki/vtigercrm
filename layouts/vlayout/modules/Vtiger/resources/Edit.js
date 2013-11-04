@@ -412,10 +412,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 		var recordId = formElement.find('input[name="record"]').val();
 		formElement.find('.imageDelete').on('click',function(e){
 			var element = jQuery(e.currentTarget);
+			var parentTd = element.closest('td');
+			var imageUploadElement = parentTd.find('[name="imagename[]"]');
+			var fieldInfo = imageUploadElement.data('fieldinfo');
+			var mandatoryStatus = fieldInfo.mandatory;
 			var imageData = element.closest('div').find('img').data();
 			var params = {
 				'module' : app.getModuleName(),
-				'action' : 'DeleteImage',
+				'action' : 'DeleteImage', 
 				'imageid' : imageData.imageId,
 				'record' : recordId
 
@@ -424,6 +428,12 @@ jQuery.Class("Vtiger_Edit_Js",{
 				function(data){
 					if(data.success ==  true){
 						element.closest('div').remove();
+						var exisitingImages = parentTd.find('[name="existingImages"]');
+						if(exisitingImages.length < 1 && mandatoryStatus){
+							formElement.validationEngine('detach');
+							imageUploadElement.attr('data-validation-engine','validate[required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
+							formElement.validationEngine('attach');
+						}
 					}
 				},
 				function(error){
@@ -590,6 +600,6 @@ jQuery.Class("Vtiger_Edit_Js",{
 		editViewForm.validationEngine(app.validationEngineOptions);
 
 		this.registerReferenceCreate(editViewForm);
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 	}
 });

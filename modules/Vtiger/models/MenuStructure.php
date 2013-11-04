@@ -32,7 +32,13 @@ class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 	 * @return <array> - Associate array of Parent name mapped to Vtiger_Menu_Model instances
 	 */
 	public function getMore() {
-		return $this->get(self::MORE_MENU_INDEX);
+		$moreTabs = $this->get(self::MORE_MENU_INDEX); 
+		foreach($moreTabs as $key=>$value){ 
+			if(!$value){ 
+						unset($moreTabs[$key]); 
+				} 
+		} 
+		return $moreTabs;
 	}
 
 	/**

@@ -16,7 +16,7 @@
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Calendario',
+	'SINGLE_Calendar'              => 'Tarea',
 	'LBL_ADD_TASK'                 => 'Añadir Tarea',
 	'LBL_ADD_EVENT'                => 'Añadir Evento',
 	'LBL_RECORDS_LIST'             => 'Vista de Lista',
@@ -51,6 +51,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS' => 'Otros Eventos',
 	'LBL_MINUTES' => 'Minutos',
 	'LBL_SELECT_USERS' => 'Selecciona Usuarios',
+	'LBL_EVENT_OR_TASK' => 'Evento / Tarea',
 	'LBL_ADDED_CALENDARS' => 'Calendarios Añadidos',
 	'Task' => 'Tarea',
 	'LBL_SHARED_CALENDAR' => 'Calendario Compartido',
@@ -78,6 +79,7 @@ $jsLanguageStrings = array(
 	'LBL_NOT_SYNCRONIZED' => 'No se ha sincronizado todavía',
 	'LBL_FIELD_MAPPING' => 'Asociación de Campos',
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'No se puede seleccionar contactos relacionados por pre-contactos',
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'No puede ser considerado para futuras',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

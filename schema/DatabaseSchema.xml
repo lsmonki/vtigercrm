@@ -6373,18 +6373,18 @@
 			<key />
 		</field>
 		<field name="tabid" type="I" />
-		<field name="linktype" type="C" size="20" />
-		<field name="linklabel" type="C" size="30" />
+		<field name="linktype" type="C" size="50" />
+		<field name="linklabel" type="C" size="50" />
 		<field name="linkurl" type="C" size="255" />
 		<field name="linkicon" type="C" size="100" />
 		<field name="sequence" type="I" />
 		<field name="handler_path" type="C" size="128">
 			<default value="NULL" />
 		</field>
-		<field name="handler_class" type="C" size="32">
+		<field name="handler_class" type="C" size="50">
 			<default value="NULL" />
 		</field>
-		<field name="handler" type="C" size="32">
+		<field name="handler" type="C" size="50">
 			<default value="NULL" />
 		</field>
 		<opt platform="mysql">Engine=InnoDB</opt>

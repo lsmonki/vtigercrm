@@ -38,14 +38,14 @@
         </div>
         <hr>
 		<div class="row-fluid">
-			<span class="span4">
+			<span class="span4 btn-toolbar">
 				<button class="btn addButton" {if stripos($MODULE_MODEL->getCreateViewUrl(), 'javascript:')===0} onclick="{$MODULE_MODEL->getCreateViewUrl()|substr:strlen('javascript:')};"
                         {else} onclick='window.location.href="{$MODULE_MODEL->getCreateViewUrl()}"' {/if}>
 					<i class="icon-plus icon-white"></i>&nbsp;
 					<strong>{vtranslate('LBL_NEW', $QUALIFIED_MODULE)} {vtranslate('LBL_WORKFLOW',$QUALIFIED_MODULE)}</strong>
 				</button>
 			</span>
-			<span class="span4">
+			<span class="span4 btn-toolbar">
 				<select class="chzn-select" id="moduleFilter" >
 					<option value="">{vtranslate('LBL_ALL', $QUALIFIED_MODULE)}</option>
 					{foreach item=MODULE_MODEL key=TAB_ID from=$SUPPORTED_MODULE_MODELS}
@@ -53,7 +53,7 @@
 					{/foreach}
 				</select>
 			</span>
-			<span class="span4 btn-toolbar margin0px">
+			<span class="span4 btn-toolbar">
 				{include file='ListViewActions.tpl'|@vtemplate_path}
 			</span>
 		</div>

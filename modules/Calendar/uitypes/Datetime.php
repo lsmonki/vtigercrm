@@ -21,7 +21,7 @@ class Calendar_Datetime_UIType extends Vtiger_Datetime_UIType {
 
 	public function hasTimeComponent($value) {
 		$component = explode(' ', $value);
-		if(count($component) > 1) {
+		if(!empty($component[1])) {
 			return true;
 		}
 		return false;

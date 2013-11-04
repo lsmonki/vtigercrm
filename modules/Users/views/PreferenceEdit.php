@@ -11,10 +11,11 @@
 Class Users_PreferenceEdit_View extends Vtiger_Edit_View {
 
 	public function checkPermission(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$record = $request->get('record');
-
-		if($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $record) {
+		
+		if(($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $record)) {
 			return true;
 		} else {
 			throw new AppException('LBL_PERMISSION_DENIED');

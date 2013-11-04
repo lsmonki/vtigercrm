@@ -11,8 +11,9 @@
 -->*}
 
 {strip}
-<div class='editViewContainer'>
+<div class='editViewContainer container-fluid'>
 	<form class="form-horizontal recordEditView" id="EditView" name="EditView" method="post" action="index.php" enctype="multipart/form-data">
+		{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
 		{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 			<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 		{/if}
@@ -27,9 +28,11 @@
 		<div class="contentHeader row-fluid">
 		{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
 		{if $RECORD_ID neq ''}
-			<span class="span8 font-x-x-large textOverflowEllipsis" title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</span>
-		{else}
-			<span class="span8 font-x-x-large textOverflowEllipsis">{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</span>
+			<h3 title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</h3>
+            <hr>
+        {else}
+			<h3>{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</h3>
+            <hr>
 		{/if}
 			<span class="pull-right">
 				<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
@@ -44,10 +47,10 @@
 			</tr>
 			{if ($BLOCK_LABEL eq 'LBL_ADDRESS_INFORMATION') and ($MODULE neq 'PurchaseOrder') }
 				<tr>
-				<td class="fieldLabel" name="copyHeader1">
+				<td class="fieldLabel {$WIDTHTYPE}" name="copyHeader1">
 					<label class="muted pull-right marginRight10px" name="togglingHeader">{vtranslate('LBL_BILLING_ADDRESS_FROM', $MODULE)}</label>
 				</td>
-				<td class="fieldValue" name="copyAddress1">
+				<td class="fieldValue {$WIDTHTYPE}" name="copyAddress1">
 					<div class="row-fluid">
 						<div class="span5">
 							<span class="row-fluid margin0px">
@@ -73,10 +76,10 @@
 						</div>
 					</div>
 				</td>
-				<td class="fieldLabel" name="copyHeader2">
+				<td class="fieldLabel {$WIDTHTYPE}" name="copyHeader2">
 					<label class="muted pull-right marginRight10px" name="togglingHeader">{vtranslate('LBL_SHIPPING_ADDRESS_FROM', $MODULE)}</label>
 				</td>
-				<td class="fieldValue" name="copyAddress2">
+				<td class="fieldValue {$WIDTHTYPE}" name="copyAddress2">
 					<div class="row-fluid">
 						<div class="span5">
 							<span class="row-fluid margin0px">
@@ -111,7 +114,7 @@
 				{assign var="isReferenceField" value=$FIELD_MODEL->getFieldDataType()}
 				{if $FIELD_MODEL->get('uitype') eq "20" or $FIELD_MODEL->get('uitype') eq "19"}
 					{if $COUNTER eq '1'}
-						<td></td><td></td></tr><tr>
+						<td class="{$WIDTHTYPE}"></td><td class="{$WIDTH_TYPE_CLASSSES[$WIDTHTYPE]}"></td></tr><tr>
 						{assign var=COUNTER value=0}
 					{/if}
 				{/if}
@@ -121,7 +124,7 @@
 				{else}
 					{assign var=COUNTER value=$COUNTER+1}
 				{/if}
-				<td class="fieldLabel">
+				<td class="fieldLabel {$WIDTHTYPE}">
 					{if $isReferenceField neq "reference"}<label class="muted pull-right marginRight10px">{/if}
 						{if $FIELD_MODEL->isMandatory() eq true && $isReferenceField neq "reference"} <span class="redColor">*</span> {/if}
 						{if $isReferenceField eq "reference"}
@@ -142,7 +145,7 @@
 											{/foreach}
 										</optgroup>
 									</select>
-								</span>		
+								</span>
 							{else}
 								<label class="muted pull-right marginRight10px">{if $FIELD_MODEL->isMandatory() eq true} <span class="redColor">*</span> {/if}{vtranslate($FIELD_MODEL->get('label'), $MODULE)}</label>
 							{/if}
@@ -154,11 +157,13 @@
 					{if $isReferenceField neq "reference"}</label>{/if}
 				</td>
 				{if $FIELD_MODEL->get('uitype') neq "83"}
-					<td class="fieldValue" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if} {if $FIELD_MODEL->get('uitype') eq '20'} colspan="3"{/if}>
+					<td class="fieldValue {$WIDTHTYPE}" {if $FIELD_MODEL->get('uitype') eq '19'} colspan="3" {assign var=COUNTER value=$COUNTER+1} {/if} {if $FIELD_MODEL->get('uitype') eq '20'} colspan="3"{/if}>
 						{include file=vtemplate_path($FIELD_MODEL->getUITypeModel()->getTemplateName(),$MODULE) BLOCK_FIELDS=$BLOCK_FIELDS}
 					</td>
 				{/if}
-				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20" and $FIELD_MODEL->get('uitype') neq "30" and $FIELD_MODEL->get('name') neq "recurringtype"}<td></td><td></td>{/if}
+				{if $BLOCK_FIELDS|@count eq 1 and $FIELD_MODEL->get('uitype') neq "19" and $FIELD_MODEL->get('uitype') neq "20" and $FIELD_MODEL->get('uitype') neq "30" and $FIELD_MODEL->get('name') neq "recurringtype"}
+					<td class="{$WIDTHTYPE}"></td><td class="{$WIDTHTYPE}"></td>
+				{/if}
 			{/foreach}
 			</tr>
 			</table>

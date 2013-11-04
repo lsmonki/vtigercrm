@@ -78,7 +78,7 @@
 				{/if}
 			</div>
 		{else}
-			<div><textarea id="{$comment}" name="{$comment}" class="lineItemCommentBox">{$data.$comment}</textarea>
+			<div><br><textarea id="{$comment}" name="{$comment}" class="lineItemCommentBox">{$data.$comment}</textarea>
 		{/if}
 	</td>
 	<td>

@@ -627,7 +627,7 @@ $languageStrings = array(
 	'Sales End Date'=>'تاريخ انتهاء المبيعات',
 
 	//Dashboard list of widgets translation
-	'Open Ticktes' => 'فتح تذاكر',
+	'Open Tickets' => 'فتح تذاكر',
 	'LBL_SELECT_STATUS' => 'حدد الحالة',
 	'LBL_BLANK' => '-فارغ-',
 
@@ -715,7 +715,7 @@ $languageStrings = array(
 	'LBL_RECORD' => 'سجل',
 	'LBL_NO_DUPLICATED_FOUND' => 'لم يتم العثور على تكرار',
 	'LBL_MERGE_SELECT' => 'دمج الاختيارات',
-	
+
 	//sbproducts translation
 	'LBL_BACK_TO_PRODUCTS' => 'العودة للمنتجات',
 );

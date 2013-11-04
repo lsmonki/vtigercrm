@@ -119,6 +119,15 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit2_Js",{},{
 	
 	
 	registerEvents : function(){
+		var opts = app.validationEngineOptions;
+		// to prevent the page reload after the validation has completed
+		opts['onValidationComplete'] = function(form,valid) {
+            //returns the valid status
+            return valid;
+        };
+		opts['promptPosition'] = "bottomRight";
+		jQuery('#workflow_step2').validationEngine(opts);
+
 		var container = this.getContainer();
 		app.changeSelectElementView(container);
 		this.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',container));

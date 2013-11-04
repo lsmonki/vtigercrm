@@ -31,8 +31,8 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: url('../../../resources/fonts/OpenSans-Regular-webfont.eot');
-  src: url('../../../resources/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../../resources/fonts/OpenSans-Regular-webfont.woff') format('woff'), url('../../../resources/fonts/OpenSans-Regular-webfont.ttf') format('truetype'), url('../../../resources/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+  src: url('../../../../resources/fonts/OpenSans-Regular-webfont.eot');
+  src: url('../../../../resources/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../../../resources/fonts/OpenSans-Regular-webfont.woff') format('woff'), url('../../../../resources/fonts/OpenSans-Regular-webfont.ttf') format('truetype'), url('../../../resources/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
 }
 body {
   background-color: #ffffff;
@@ -56,6 +56,30 @@ body {
   background: #777777;
 }
 /** General **/
+[class^="icon-"]:last-child,
+[class*=" icon-"]:last-child {
+  *margin-left: 0;
+}
+.vtGlyph {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../images/vtGlyph.png");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  *margin-right: .3em;
+}
+.vticon-pageJump {
+  background-position: 0 0;
+}
+.vticon-call-inbound {
+  background-position: -14px 0;
+}
+.vticon-call-outbound {
+  background-position: -28px 0;
+}
 .themeLinkColor {
   color: #8c5e15;
 }
@@ -88,7 +112,7 @@ th a:hover {
   width: 100% !important;
 }
 .icon-inverted {
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
 }
 hr {
   border-top: 1px solid #d3d3d3;
@@ -331,6 +355,7 @@ hr {
 .dropdown-menu.pull-right {
   right: 0;
   left: auto !important;
+  cursor: pointer;
 }
 .zeroOpacity {
   opacity: 0;
@@ -505,6 +530,9 @@ tr.collapseRow + tr > td {
 .mergeTables {
   margin-bottom: 0px;
 }
+.dropdown-menu.pull-right {
+  padding: 0;
+}
 .dropdown-menu.pull-right:after,
 .dropdown-menu.pull-right:before {
   right: 3px;
@@ -635,7 +663,7 @@ tr.collapseRow + tr > td {
   left: 292px !important;
 }
 .moreMenus hr {
-  border-color: #999999;
+  border-color: #545252;
 }
 .moreMenus div span .moduleNames:hover {
   background-color: #faf6d9;
@@ -689,6 +717,7 @@ tr.collapseRow + tr > td {
   border: 0;
   border-bottom: 1px solid #d3d3d3;
   padding: 0 1%;
+  margin-bottom: 0 !important;
 }
 .commonActionsContainer .actionsContainer {
   -webkit-box-sizing: border-box;
@@ -778,7 +807,7 @@ tr.collapseRow + tr > td {
   cursor: pointer;
 }
 .searchElement .searchBar .search-icon i {
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
 }
 .searchElement .searchBar .search-icon:hover {
@@ -810,7 +839,7 @@ tr.collapseRow + tr > td {
 }
 .adv-search a {
   width: 15%;
-  line-height: 24px;
+  line-height: 26px;
   margin-left: 7px;
   cursor: pointer;
   color: #8c5e15;
@@ -992,6 +1021,32 @@ tr.collapseRow + tr > td {
   cursor: pointer;
   color: #002476;
 }
+table tbody tr td a,
+table thead tr th a,
+.table thead > tr > th,
+.table tbody > tr > th,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table tbody > tr > td,
+.table tfoot > tr > td {
+  white-space: -moz-pre-wrap !important;
+  /* Mozilla, since 1999 */
+
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+
+  white-space: pre-wrap;
+  /* css-3 */
+
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */
+
+  white-space: normal;
+  vertical-align: middle;
+}
 .table {
   border-collapse: none !important;
   background-color: #ffffff;
@@ -1070,6 +1125,7 @@ tr.collapseRow + tr > td {
 
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
+  min-width: 60px;
 }
 .listViewEntriesTable tr.listViewEntries:hover td .actions {
   opacity: 1;
@@ -1167,7 +1223,7 @@ tr.collapseRow + tr > td {
 }
 .dropdownStyles hr {
   margin: 0 12px -2px;
-  border-color: #999999;
+  border-color: #545252;
 }
 #lastVisitedRecords li {
   padding-left: 8px;
@@ -1218,7 +1274,7 @@ div.blockPage {
 }
 #customFilter_chzn .filterActionImgs i.filterActionImage,
 .select2-results .filterActionImgs i.filterActionImage {
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
 }
 .pageNumbers {
@@ -1281,7 +1337,7 @@ div.blockPage {
   color: #333333;
 }
 .emptyRecordsDiv {
-  border: 3px double #777777;
+  border: 1px solid #d3d3d3;
   font-weight: bold !important;
   width: 100%;
   text-align: center;
@@ -1874,7 +1930,6 @@ form#EditView table td.chznDropDown {
   color: #333333;
 }
 .massEditContent {
-  margin-top: 1px;
   overflow: visible !important;
 }
 .massEditTable {
@@ -1892,6 +1947,8 @@ form#EditView table td.chznDropDown {
   border-radius: 2px;
   border: 1px solid;
   border-color: #d3d3d3 !important;
+  border-top: 3px solid #a26d1f !important;
+  z-index: 100;
 }
 .massEditTable td {
   border-left: none !important;
@@ -2025,6 +2082,12 @@ form#EditView table td.chznDropDown {
 }
 .commentsList > ul {
   margin-left: 0;
+}
+.createFieldModal {
+  border-radius: 2px;
+}
+.layoutContent {
+  border-top: 3px solid #a26d1f !important;
 }
 /******************************************************
 Please check for the below classes if it is being used
@@ -2353,7 +2416,7 @@ Please check for the below classes if it is being used
   border-top-color: #ffffff;
 }
 .addButton i {
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
 }
 .saveButton {
@@ -2622,6 +2685,10 @@ Please check for the below classes if it is being used
   padding: 2px 5px;
   cursor: move;
 }
+.gridster ul li .dashboardWidgetHeader th,
+.gridster ul li .dashboardWidgetHeader .dashboardTitle {
+  color: #ffffff;
+}
 .gridster ul li .dashboardWidgetHeader select#historyType {
   width: 100px;
   margin-bottom: 0px;
@@ -2639,7 +2706,7 @@ Please check for the below classes if it is being used
   text-decoration: none;
 }
 .gridster ul li .widgeticons a i {
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
 }
 .gridster ul li .dashboardTitle {
@@ -2769,8 +2836,8 @@ div#chart2 {
 }
 .fc-event-style1,
 .fc-event-style1 .fc-event-skin {
-  background: #3366cc;
-  border-color: #3366cc;
+  background: #17309a;
+  border-color: #17309a;
   font-weight: normal;
   text-shadow: none;
 }
@@ -2783,8 +2850,8 @@ div#chart2 {
 }
 .fc-event-style3,
 .fc-event-style3 .fc-event-skin {
-  background: #c67605;
-  border-color: #c67605;
+  background: #aa6705;
+  border-color: #aa6705;
   font-weight: normal;
   text-shadow: none;
 }
@@ -2797,15 +2864,15 @@ div#chart2 {
 }
 .fc-event-style5,
 .fc-event-style5 .fc-event-skin {
-  background: #999999;
-  border-color: #999999;
+  background: #545252;
+  border-color: #545252;
   font-weight: normal;
   text-shadow: none;
 }
 .fc-event-style6,
 .fc-event-style6 .fc-event-skin {
-  background: #cccc99;
-  border-color: #cccc99;
+  background: #87865d;
+  border-color: #87865d;
   font-weight: normal;
   text-shadow: none;
 }
@@ -2830,24 +2897,9 @@ div#chart2 {
   overflow: visible !important;
   height: auto !important;
 }
-.fieldInfo.in .moduleBlock tbody tr:nth-child(odd) td {
-  background-color: #faf6d9 !important;
-}
-.fieldInfo.in .moduleBlock tbody tr:nth-child(even) td {
-  background-color: #faf6d9;
-  background-image: -moz-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -ms-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#faf6d9), to(#faf6d9));
-  background-image: -webkit-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: -o-linear-gradient(top, #faf6d9, #faf6d9);
-  background-image: linear-gradient(top, #faf6d9, #faf6d9);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faf6d9', endColorstr='#faf6d9', GradientType=0);
-  border-color: #faf6d9 #faf6d9 #f1e695;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-}
 .moduleSelection {
-  border-radius: 0px !important;
+  border-radius: 2px 2px 0 0 !important;
+  border: 1px solid #a26d1f !important;
   background-color: #a26d1f;
   background-image: -moz-linear-gradient(top, #a26d1f, #a26d1f);
   background-image: -ms-linear-gradient(top, #a26d1f, #a26d1f);
@@ -2860,11 +2912,11 @@ div#chart2 {
   border-color: #a26d1f #a26d1f #624213;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   color: #ffffff;
-  text-shadow: 0 0 2px #ffffff;
   font-weight: bold !important;
 }
 .convertLeadModules {
   margin-bottom: 2%;
+  border: 1px none;
 }
 .moduleBlock {
   border-radius: 0px !important;
@@ -2928,6 +2980,26 @@ div#chart2 {
 }
 #myPrefHeading {
   border-right: 0 !important;
+}
+/* My Preferences Header */
+#prefPageHeader {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  max-height: 70px;
+  padding: 6px 1.5%;
+  width: 100%;
+  margin: 0;
+}
+#prefPageHeader .logo {
+  min-width: 57px;
+  max-width: 57px;
+}
+#prefPageHeader .logo img {
+  width: 4em;
+  height: 4em;
+  min-width: 57px;
 }
 /* Calendar Mass Edit */
 .calendarMassEdit {
@@ -2999,7 +3071,7 @@ div#chart2 {
 }
 .summaryImg {
   box-shadow: 0 0 4px #000000 inset;
-  border-radius: 5px;
+  border-radius: 2px;
 }
 .massEditActiveField,
 .selectedListItem {
@@ -3022,15 +3094,15 @@ div#chart2 {
   height: 3em;
   width: 12em !important;
 }
-.wideWidthType {
+.wide {
   padding-top: 11px !important;
   padding-bottom: 11px !important;
 }
-.mediumWidthType {
+.medium {
   padding-top: 6px !important;
   padding-bottom: 6px !important;
 }
-.narrowWidthType {
+.narrow {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
@@ -3123,6 +3195,7 @@ input[type="text"],
 input,
 textarea {
   color: #444444 !important;
+  font-family: 'Open Sans', 'Lucida Grande', Verdana, Tahoma, Arial, sans-serif !important;
 }
 #listViewPageJumpDropDown,
 #relatedListPageJumpDropDown {
@@ -3420,7 +3493,7 @@ textarea {
   color: #666666;
   white-space: nowrap;
 }
-.pickListDepen dencyTable tbody tr:hover td {
+.pickListDependencyTable tbody tr:hover td {
   background-color: none !important;
 }
 .overWriteAddOnStyles {
@@ -3428,6 +3501,12 @@ textarea {
   display: inline-block !important;
   padding-top: 3px !important;
   padding-bottom: 5px !important;
+}
+.workFlowContents .form-horizontal .control-label {
+  width: 225px !important;
+}
+.workFlowContents .form-horizontal .controls {
+  margin-left: 245px !important;
 }
 .border1px {
   border: 1px solid #d3d3d3;
@@ -3447,7 +3526,6 @@ textarea {
 }
 .layoutBlockHeader .blockLabel {
   color: #ffffff;
-  text-shadow: 0px 0px 2px #000000;
 }
 .blockFieldsList .editFields {
   margin-left: 0.5% !important;
@@ -3476,9 +3554,9 @@ textarea {
 .conditionGroup {
   border: 1px solid #d3d3d3;
   padding: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .conditionGroup .contents,
 .conditionGroup .header {
@@ -3600,13 +3678,18 @@ textarea {
 }
 .toggleButton .icon-chevron-left {
   background-position: -434px -72px !important;
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
 }
 .toggleButton .icon-chevron-right {
   background-position: -460px -72px !important;
-  background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+  background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;
+}
+.nonEditableValuesDiv {
+  border: 1px solid #d3d3d3;
+  background-color: #eeeeee;
+  border-radius: 2px;
 }
 .icon-inverted {
   background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png") !important;

@@ -55,9 +55,18 @@ class VTUpdateFieldsTask extends VTTask {
 				$fieldValue = trim($fieldInfo['value']);
 
 				$fieldInstance = $moduleFields[$fieldName];
-
+				
 				if ($fieldValueType == 'fieldname') {
+					$fieldDataType = $fieldInstance->getFieldDataType();
 					$fieldValue = $focus->column_fields[$fieldValue];
+					if($fieldDataType == 'date') {
+						//Convert the DB Date Time Format to User Date Time Format
+						$dateTime = new DateTimeField($fieldValue);
+						$fieldValue = $dateTime->getDisplayDateTimeValue();
+						
+						$date = explode(' ', $fieldValue);
+						$fieldValue = $date[0];
+					}
 				} elseif ($fieldValueType == 'expression') {
 					require_once 'modules/com_vtiger_workflow/expression_engine/include.inc';
 

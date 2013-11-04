@@ -62,7 +62,7 @@ Settings_Vtiger_Edit_Js('Settings_Webforms_Edit_Js', {}, {
 			parentInputPrepend.find('.add-on').addClass('overWriteAddOnStyles');
 		}
 
-		var webFormTargetFieldStructure = '<tr data-name="'+selectedOptionName+'" data-mandatory-field="'+fieldMandatoryStatus+'" class="listViewEntries">'+
+		var webFormTargetFieldStructure = '<tr data-name="'+selectedOptionName+'" data-mandatory-field="'+fieldMandatoryStatus+'" >'+
 											'<td class="textAlignCenter">'+
 								'<input type="hidden" value="0" name="selectedFieldsData['+selectedField+'][required]"/>'+
 								'<input type="checkbox" class="markRequired" name="selectedFieldsData['+selectedField+'][required]" value="1"/></td>';
@@ -77,7 +77,7 @@ Settings_Vtiger_Edit_Js('Settings_Webforms_Edit_Js', {}, {
 		}
 		
 		webFormTargetFieldStructure+=	'<div class="pull-right actions">'+
-										'<span class="actionImages"><a class="removeTargetModuleField"><i class="icon-remove-sign"></i></a></span></div></td></tr>';
+										'<span class="actionImages cursorPointer"><a class="removeTargetModuleField"><i class="icon-remove-sign"></i></a></span></div></td></tr>';
 		
 		targetFieldsTable.append(webFormTargetFieldStructure);
 		targetFieldsTable.find('[name="fieldUI_'+selectedOptionName+'"]').html(UI);

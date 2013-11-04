@@ -309,8 +309,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
     public function isQuickCreateEnabled() {
 		$moduleModel = $this->getModule();
         $quickCreate = $this->get('quickcreate');
-        if($quickCreate == self::QUICKCREATE_MANDATORY || $quickCreate == self::QUICKCREATE_ENABLED
-                || $this->isMandatory()) {
+        if(($quickCreate == self::QUICKCREATE_MANDATORY || $quickCreate == self::QUICKCREATE_ENABLED
+                || $this->isMandatory()) && $this->get('uitype') != 69) {
             //isQuickCreateSupported will not be there for settings
 			if(method_exists($moduleModel,'isQuickCreateSupported') && $moduleModel->isQuickCreateSupported()) {
             return true;

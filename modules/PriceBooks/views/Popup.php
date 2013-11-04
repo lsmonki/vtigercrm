@@ -125,5 +125,6 @@ class PriceBooks_Popup_View extends Vtiger_Popup_View {
 			$viewer->assign('LISTVIEW_COUNT', $totalCount);
 		}
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 	}
 }

@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="row-fluid conditionRow">
+<div class="row-fluid conditionRow marginBottom10px">
 	<span class="span4">
 		<select class="{if empty($NOCHOSEN)}chzn-select{/if} row-fluid" name="columnname" data-placeholder="{vtranslate('LBL_SELECT_FIELD',$QUALIFIED_MODULE)}">
 			<option value="none"></option>

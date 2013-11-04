@@ -233,5 +233,12 @@
 <linkicon><![CDATA[themes/images/reload.gif]]></linkicon>
 <sequence>0</sequence>
 </customlink>
+<customlink>
+<linktype>HEADERSCRIPT</linktype>
+<linklabel>SMSNotifierCommonJS</linklabel>
+<linkurl><![CDATA[modules/SMSNotifier/SMSNotifierCommon.js]]></linkurl>
+<linkicon><![CDATA[]]></linkicon>
+<sequence>0</sequence>
+</customlink>
 </customlinks>
 </module>

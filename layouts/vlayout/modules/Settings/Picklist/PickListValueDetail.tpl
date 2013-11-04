@@ -10,11 +10,11 @@
 ********************************************************************************/
 -->*}
 {strip}
-<ul class="nav nav-tabs" style="margin-bottom: 0;border-bottom: 0">
+<ul class="nav nav-tabs massEditTabs" style="margin-bottom: 0;border-bottom: 0">
 	<li class="active"><a href="#allValuesLayout" data-toggle="tab"><strong>{vtranslate('LBL_ALL_VALUES',$QUALIFIED_MODULE)}</strong></a></li>
 	{if $SELECTED_PICKLIST_FIELDMODEL->isRoleBased()}<li id="assignedToRoleTab"><a href="#AssignedToRoleLayout" data-toggle="tab"><strong>{vtranslate('LBL_VALUES_ASSIGNED_TO_A_ROLE',$QUALIFIED_MODULE)}</strong></a></li>{/if}
 </ul>
-<div class="tab-content layoutContent padding20 themeTableColor border1px overflowVisible" style="border-radius: 0px 4px 8px;position: static !important">
+<div class="tab-content layoutContent padding20 themeTableColor overflowVisible">
 	<div class="tab-pane active" id="allValuesLayout">	
 		<div class="row-fluid">
 			<div class="span5 marginLeftZero textOverflowEllipsis">
@@ -36,7 +36,7 @@
 			<div class="span2 row-fluid">
 				{if $SELECTED_PICKLIST_FIELDMODEL->isEditable()}
 					{if $SELECTED_PICKLIST_FIELDMODEL->isRoleBased()}
-						<button class="btn span10" id="assignValue">{vtranslate('LBL_ASSIGN_VALUE',$QUALIFIED_MODULE)}</button><br><br>
+						<button class="btn span10 marginLeftZero" id="assignValue">{vtranslate('LBL_ASSIGN_VALUE',$QUALIFIED_MODULE)}</button><br><br>
 					{/if}	
 					<button class="btn span10 marginLeftZero" id="addItem">{vtranslate('LBL_ADD_VALUE',$QUALIFIED_MODULE)}</button><br><br>
 					<button class="btn span10 marginLeftZero" id="renameItem">{vtranslate('LBL_RENAME_VALUE',$QUALIFIED_MODULE)}</button><br><br>

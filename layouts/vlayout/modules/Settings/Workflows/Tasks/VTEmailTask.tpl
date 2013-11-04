@@ -14,6 +14,18 @@
 		<div class="row-fluid">
 			<div class="row-fluid padding-bottom1per">
 				<span class="span7 row-fluid">
+					<span class="span2">{vtranslate('LBL_FROM', $QUALIFIED_MODULE)}</span>
+					<input data-validation-engine='validate[]' name="fromEmail" class="span9 fields" type="text" value="{$TASK_OBJECT->fromEmail}" />
+				</span>
+				<span class="span5">
+					<select id="fromEmailOption" style="min-width: 300px" class="chzn-select" data-placeholder={vtranslate('LBL_SELECT_OPTIONS',$QUALIFIED_MODULE)}>
+						<option></option>
+						{$FROM_EMAIL_FIELD_OPTION}
+					</select>
+				</span>
+			</div>
+			<div class="row-fluid padding-bottom1per">
+				<span class="span7 row-fluid">
 					<span class="span2">{vtranslate('LBL_TO',$QUALIFIED_MODULE)}<span class="redColor">*</span></span>
 					<input data-validation-engine='validate[required]' name="recepient" class="span9 fields" type="text" value="{$TASK_OBJECT->recepient}" />
 				</span>

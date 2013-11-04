@@ -73,7 +73,9 @@ $languageStrings = array(
 	'LBL_EXAMPLE_FIELD_NAME'       => 'Field'                       , 
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , 
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , 
-	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', 
+	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end',
+	'LBL_FROM' => 'Van',
+	'Optional' => 'Facultatief',
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , 

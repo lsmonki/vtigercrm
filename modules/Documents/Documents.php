@@ -24,12 +24,12 @@ class Documents extends CRMEntity {
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_notescf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_notescf'=>'notesid');
-
+	
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
 	var $customFieldTable = Array('vtiger_notescf', 'notesid');
-
+	
 	var $column_fields = Array();
 
     var $sortby_fields = Array('title','modifiedtime','filename','createdtime','lastname','filedownloadcount','smownerid');
@@ -148,7 +148,7 @@ class Documents extends CRMEntity {
 			$filedownloadcount = null;
 		}
 		$query = "UPDATE vtiger_notes SET filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? WHERE notesid = ?";
- 		$re=$adb->pquery($query,array($filename,$filesize,$filetype,$filelocationtype,$filedownloadcount,$this->id));
+ 		$re=$adb->pquery($query,array(decode_html($filename),$filesize,$filetype,$filelocationtype,$filedownloadcount,$this->id));
 		//Inserting into attachments table
 		if($filelocationtype == 'I') {
 			$this->insertIntoAttachment($this->id,'Documents');
@@ -157,6 +157,11 @@ class Documents extends CRMEntity {
 			$qparams = array($this->id);
 			$adb->pquery($query, $qparams);
 		}
+        //set the column_fields so that its available in the event handlers
+        $this->column_fields['filename'] = $filename;
+        $this->column_fields['filesize'] = $filesize;
+        $this->column_fields['filetype'] = $filetype;
+        $this->column_fields['filedownloadcount'] = $filedownloadcount;
 	}
 
 
@@ -294,7 +299,7 @@ class Documents extends CRMEntity {
 	function del_create_def_folder($query)
 	{
 		global $adb;
-		$dbQuery = $query." and vtiger_attachmentsfolder.folderid = 0";
+		$dbQuery = $query." and vtiger_attachmentsfolderfolderid.folderid = 0";
 		$dbresult = $adb->pquery($dbQuery,array());
 		$noofnotes = $adb->num_rows($dbresult);
 		if($noofnotes > 0)
@@ -358,12 +363,12 @@ class Documents extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryplanner) {
-
+		
 		$matrix = $queryplanner->newDependencyMatrix();
-
+		
 		$matrix->setDependency("vtiger_crmentityDocuments",array("vtiger_groupsDocuments","vtiger_usersDocuments","vtiger_lastModifiedByDocuments"));
 		$matrix->setDependency("vtiger_notes",array("vtiger_crmentityDocuments","vtiger_attachmentsfolder"));
-
+		
 		if (!$queryplanner->requireTable('vtiger_notes', $matrix)) {
 			return '';
 		}
@@ -512,7 +517,7 @@ class Documents extends CRMEntity {
 			return $query;
 		}
 	}
-
+	
 	/**
 	 * Function to check the module active and user action permissions before showing as link in other modules
 	 * like in more actions of detail view.

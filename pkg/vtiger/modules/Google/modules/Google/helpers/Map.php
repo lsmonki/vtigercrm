@@ -38,10 +38,12 @@ class Google_Map_Helper {
      */
     static function getLocationFields($module) {
         switch ($module) {
-            case 'Contacts': return array('street' => 'mailingstreet', 'city' => 'mailingcity', 'country' => 'mailingcountry');
+            case 'Contacts': return array('street' => 'mailingstreet', 'city' => 'mailingcity', 'country' => 'mailingcountry', 'postal_code' => 'mailingzip');
                 break;
-            case 'Leads' : return array('street' => 'lane', 'city' => 'city', 'country' => 'country');
+            case 'Leads' : return array('street' => 'lane', 'city' => 'city', 'country' => 'country', 'postal_code' => 'code');
                 break;
+			case 'Accounts' : return array('street' => 'bill_street', 'city' => 'bill_city', 'country' => 'bill_country', 'postal_code' => 'bill_code');
+				break;
             default : return array();
                 break;
         }

@@ -113,7 +113,7 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
-					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
+					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.message));
 					var url = data.result.listViewUrl;
 					window.location.href=url;
 				}

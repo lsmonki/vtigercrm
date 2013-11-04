@@ -39,7 +39,7 @@
 				$workflow->id = $workflowId;
 				$wf=$workflow;
 				if($wf->filtersavedinnew == null) $wf->filtersavedinnew = 5;
-				
+
 				$result=$adb->getColumnNames("com_vtiger_workflows");
 				if(in_array("type",$result)) {
 					$adb->pquery("insert into com_vtiger_workflows
@@ -205,6 +205,43 @@
 			return $workflow;
 		}
 
+		/**
+		 * Function to get workflows modules those are supporting comments
+		 * @param <String> $moduleName
+		 * @return <Array> list of Workflow models
+		 */
+		public function getWorkflowsForModuleSupportingComments($moduleName) {
+			$adb = $this->adb;
+			$cache = Vtiger_Cache::getInstance();
+
+			if($cache->getWorkflowForModuleSupportingComments($moduleName)) {
+				return $cache->getWorkflowForModuleSupportingComments($moduleName);
+			}
+			$result = $adb->getColumnNames('com_vtiger_workflows');
+			if(in_array('defaultworkflow', $result)) {
+				$result = $adb->pquery('SELECT workflow_id, module_name, summary, test, execution_condition, defaultworkflow, type, filtersavedinnew
+									FROM com_vtiger_workflows WHERE module_name = ? AND test LIKE (?)', array($moduleName, '%_VT_add_comment%'));
+			} else {
+				$result = $adb->pquery('SELECT workflow_id, module_name, summary, test, execution_condition, type, filtersavedinnew
+									FROM com_vtiger_workflows where module_name = ? AND test LIKE (?)', array($moduleName, '%_VT_add_comment%'));
+			}
+			$workflowModels = $this->getWorkflowsForResult($result);
+			$commentSupportedWorkflowModels = array();
+			foreach ($workflowModels as $workflowId => $workflowModel) {
+				$conditions = Zend_Json::decode($workflowModel->test);
+				if (is_array($conditions)) {
+					foreach ($conditions as $key => $conditionInfo) {
+						if ($conditionInfo['fieldname'] === '_VT_add_comment') {
+							unset($conditions[$key]);
+							$workflowModel->test = Zend_Json::encode($conditions);
+							$commentSupportedWorkflowModels[$workflowId] = $workflowModel;
+						}
+					}
+				}
+			}
+			$cache->setWorkflowForModuleSupportingComments($moduleName, $commentSupportedWorkflowModels);
+			return $commentSupportedWorkflowModels;
+		}
 	}
 
 	class Workflow{
@@ -283,7 +320,10 @@
 					if($task->executeImmediately==true){
 						$task->doTask($entityData);
 					} else {
-						$taskQueue->queueTask($task->id,$entityData->getId(), $delay, $task->getContents($entityData));
+						$hasContents = $task->hasContents($entityData);
+						if ($hasContents) {
+							$taskQueue->queueTask($task->id,$entityData->getId(), $delay, $task->getContents($entityData));
+						}
 					}
 				}
 			}

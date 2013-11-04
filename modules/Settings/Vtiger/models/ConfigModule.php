@@ -30,7 +30,7 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 	 * @return menu item Model
 	 */
 	public function getMenuItem() {
-		$menuItem = Settings_Vtiger_MenuItem_Model::getInstance('Configuration Editor');
+		$menuItem = Settings_Vtiger_MenuItem_Model::getInstance('LBL_CONFIG_EDITOR');
 		return $menuItem;
 	}
     

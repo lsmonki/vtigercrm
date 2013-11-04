@@ -58,7 +58,7 @@ class Install_InitSchema_Model {
 	 * Function upgrades the schema with changes post 540 version
 	 */
 	public static function upgrade() {
-		$migrateVersions = array('540' => '600Beta');
+		$migrateVersions = array('540' => '600rc');
 
 		define(VTIGER_UPGRADE, true);
 		foreach($migrateVersions as $oldVersion => $newVersion) {
@@ -751,6 +751,8 @@ class Install_InitSchema_Model {
     	VTCacheUtils::clearRoleSubordinates();
 
 		$adminPassword = $_SESSION['config_file_info']['password'];
+		$userDateFormat = $_SESSION['config_file_info']['dateformat'];
+		$userTimeZone = $_SESSION['config_file_info']['timezone'];
         // create default admin user
     	$user = CRMEntity::getInstance('Users');
         $user->column_fields["last_name"] = 'Administrator';
@@ -758,7 +760,7 @@ class Install_InitSchema_Model {
         $user->column_fields["status"] = 'Active';
         $user->column_fields["is_admin"] = 'on';
         $user->column_fields["user_password"] = $adminPassword;
-        $user->column_fields["tz"] = 'Europe/Berlin';
+        $user->column_fields["time_zone"] = $userTimeZone;
         $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
         $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
         $user->column_fields["weekstart"] = '1';
@@ -766,7 +768,7 @@ class Install_InitSchema_Model {
         $user->column_fields["currency_id"] = 1;
         $user->column_fields["reminder_interval"] = '1 Minute';
         $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
-		$user->column_fields["date_format"] = 'yyyy-mm-dd';
+		$user->column_fields["date_format"] = $userDateFormat;
 		$user->column_fields["hour_format"] = 'am/pm';
 		$user->column_fields["start_hour"] = '08:00';
 		$user->column_fields["end_hour"] = '23:00';

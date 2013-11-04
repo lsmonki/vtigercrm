@@ -35,7 +35,9 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('TASK_TYPE_MODEL', $taskTypeModel);
 
 		$viewer->assign('TASK_TEMPLATE_PATH', $taskTypeModel->getTemplatePath());
-		$recordStructureInstance = Settings_Workflows_RecordStructure_Model::getInstanceForWorkFlowModule($workflowModel);
+		$recordStructureInstance = Settings_Workflows_RecordStructure_Model::getInstanceForWorkFlowModule($workflowModel,
+																			Settings_Workflows_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDITTASK);
+
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
 
@@ -99,7 +101,31 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		foreach($emailFields as $metaKey => $emailField) {
 			$emailFieldoptions .= '<option value=",$'.$metaKey.'">'.$emailField->get('workflow_columnlabel').'</option>';
 		}
-		
+
+		$nameFields = $recordStructureInstance->getNameFields();
+		$fromEmailFieldOptions = '<option value="">'. vtranslate('Optional', $qualifiedModuleName) .'</option>';
+		$fromEmailFieldOptions .= '<option value="$(general : (__VtigerMeta__) supportName)<$(general : (__VtigerMeta__) supportEmailId)>"
+									>'.vtranslate('LBL_HELPDESK_SUPPORT_EMAILID', $qualifiedModuleName).
+									'</option>';
+
+		foreach($emailFields as $metaKey => $emailField) {
+			list($relationFieldName, $rest) = explode(' ', $metaKey);
+			$value = '<$'.$metaKey.'>';
+
+			if ($nameFields) {
+				$nameFieldValues = '';
+					foreach (array_keys($nameFields) as $fieldName) {
+					if (strstr($fieldName, $relationFieldName) || (count(explode(' ', $metaKey)) === 1 && count(explode(' ', $fieldName)) === 1)) {
+						$fieldName = '$'.$fieldName;
+						$nameFieldValues .= ' '.$fieldName;
+					}
+				}
+				$value = trim($nameFieldValues).$value;
+			}
+
+			$fromEmailFieldOptions .= '<option value="'.$value.'">'.$emailField->get('workflow_columnlabel').'</option>';
+		}
+
 		$structure = $recordStructureInstance->getStructure();
 		foreach($structure as $fields) {
 			foreach($fields as $field) {
@@ -116,6 +142,7 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 
 		$viewer->assign('ASSIGNED_TO', $assignedToValues);
 		$viewer->assign('EMAIL_FIELD_OPTION', $emailFieldoptions);
+		$viewer->assign('FROM_EMAIL_FIELD_OPTION', $fromEmailFieldOptions);
 		$viewer->assign('ALL_FIELD_OPTIONS',$allFieldoptions);
 		$viewer->view('EditTask.tpl', $qualifiedModuleName);
 	}

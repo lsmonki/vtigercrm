@@ -93,6 +93,54 @@ class Settings_Picklist_Field_Model extends Vtiger_Field_Model {
 		return $fieldModel;
 	}
 
+	/**
+     * Function which will give the editable picklist values for a field
+     * @param type $fieldName -- string
+     * @return type -- array of values
+     */
+	public static function getEditablePicklistValues($fieldName){
+		$cache = Vtiger_Cache::getInstance();
+		$EditablePicklistValues = $cache->get('EditablePicklistValues', $fieldName);
+        if($EditablePicklistValues) {
+            return $EditablePicklistValues;
+        }
+        $db = PearDatabase::getInstance();
+		
+        $query="SELECT $fieldName FROM vtiger_$fieldName WHERE presence=1 AND $fieldName <> '--None--'";
+        $values = array();
+        $result = $db->pquery($query, array());
+        $num_rows = $db->num_rows($result);
+        for($i=0; $i<$num_rows; $i++) {
+			//Need to decode the picklist values twice which are saved from old ui
+            $values[] = decode_html(decode_html($db->query_result($result,$i,$fieldName)));
+        }
+		$cache->set('EditablePicklistValues', $fieldName, $values);
+        return $values;
+	}
 
+	/**
+     * Function which will give the non editable picklist values for a field
+     * @param type $fieldName -- string
+     * @return type -- array of values
+     */
+	public static function getNonEditablePicklistValues($fieldName){
+		$cache = Vtiger_Cache::getInstance();
+		$NonEditablePicklistValues = $cache->get('NonEditablePicklistValues', $fieldName);
+        if($NonEditablePicklistValues) {
+            return $NonEditablePicklistValues;
+        }
+        $db = PearDatabase::getInstance();
+
+        $query = "select $fieldName from vtiger_$fieldName where presence=0";
+        $values = array();
+        $result = $db->pquery($query, array());
+        $num_rows = $db->num_rows($result);
+        for($i=0; $i<$num_rows; $i++) {
+			//Need to decode the picklist values twice which are saved from old ui
+            $values[] = decode_html(decode_html($db->query_result($result,$i,$fieldName)));
+        }
+        $cache->set('NonEditablePicklistValues', $fieldName, $values);
+        return $values;
+	}
 
 }

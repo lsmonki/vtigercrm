@@ -227,6 +227,7 @@ var Settings_Picklist_Js = {
 	},
 	
 	registerRenameItemEvent : function() {
+		var thisInstance = this;
 		jQuery('#renameItem').on('click',function(e){
 			var pickListValuesTable = jQuery('#pickListValuesTable');
 			var selectedListItem = jQuery('.selectedListItem',pickListValuesTable);
@@ -252,11 +253,23 @@ var Settings_Picklist_Js = {
 				}
 				AppConnector.request(params).then(function(data){
 					app.showModalWindow(data);
-					jQuery('#renameItemForm').validationEngine();
+					var form = jQuery('#renameItemForm');
+					thisInstance.registerScrollForNonEditablePicklistValues(form);
+					form.validationEngine();
 					Settings_Picklist_Js.registerRenameItemSaveEvent();
 				});
 			}
 		});
+	},
+	
+	/**
+	 * Function to register the scroll bar for NonEditable Picklist Values
+	 */
+	registerScrollForNonEditablePicklistValues : function(container) {
+		jQuery(container).find('.nonEditablePicklistValues').slimScroll({
+				height: '70px',
+				size: '6px'
+			});
 	},
 	
 	registerDeleteItemEvent : function() {
@@ -316,18 +329,18 @@ var Settings_Picklist_Js = {
 		var pickListValuesArr = new Array();
 		jQuery.each(pickListValues,function(i,e){
 			var decodedValue = app.getDecodedValue(e);
-			pickListValuesArr.push(decodedValue.toLowerCase());
+			pickListValuesArr.push(jQuery.trim(decodedValue.toLowerCase()));
 		});
 		
 		var mode = jQuery('[name="mode"]', container).val();
-		var newValue = jQuery('[name="newValue"]',container).val();
-		var lowerCasedNewValue = jQuery('[name="newValue"]',container).val().toLowerCase(); 
+		var newValue = jQuery.trim(jQuery('[name="newValue"]',container).val());
+		var lowerCasedNewValue = newValue.toLowerCase();
 		
 		//Checking the new picklist value is already exists 
 		if(jQuery.inArray(lowerCasedNewValue,pickListValuesArr) != -1){
 			//while renaming the picklist values
 			if(mode == 'rename') {
-				var oldValue = jQuery('[name="oldValue"]',container).val();
+				var oldValue = jQuery.trim(jQuery('[name="oldValue"]',container).val());
 				var lowerCasedOldValue = oldValue.toLowerCase();
 				//allow to rename when the new value should not be same as old value and the new value only with case diffrence
 				if(oldValue != newValue && lowerCasedOldValue == lowerCasedNewValue) {
@@ -387,8 +400,10 @@ var Settings_Picklist_Js = {
 				}
 				
 				var params = jQuery(e.currentTarget).serializeFormData();
+				var newValue = params.newValue;
+				params.newValue = jQuery.trim(newValue);
 				AppConnector.request(params).then(function(data) {
-					var newValue = jQuery('[name="newValue"]',container).val();
+					var newValue = jQuery.trim(jQuery('[name="newValue"]',container).val());
 					var dragImagePath = jQuery('#dragImagePath').val();
 					var newElement = '<tr class="pickListValue cursorPointer"><td class="textOverflowEllipsis"><img class="alignMiddle" src="'+dragImagePath+'" />&nbsp;&nbsp;'+newValue+'</td></tr>';
 					var newPickListValueRow = jQuery(newElement).appendTo(jQuery('#pickListValuesTable').find('tbody'));
@@ -420,7 +435,7 @@ var Settings_Picklist_Js = {
 			if(validationResult == true) {
 				var duplicateCheckResult = Settings_Picklist_Js.duplicateItemNameCheck(form);
 				var newValueEle = jQuery('[name="newValue"]',form);
-				var newValue = newValueEle.val();
+				var newValue = jQuery.trim(newValueEle.val());
 				if(duplicateCheckResult == true) {
 					var errorMessage = app.vtranslate('JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE');
 					newValueEle.validationEngine('showPrompt', errorMessage+' '+'"'+newValue+'"'  , 'error','bottomLeft',true);
@@ -429,6 +444,7 @@ var Settings_Picklist_Js = {
 				}
 				var oldValue = jQuery('[name="oldValue"]',form).val();
 				var params = jQuery(e.currentTarget).serializeFormData();
+				params.newValue = newValue;
 				var invalidFields = form.data('jqv').InvalidFields;
 				if(invalidFields.length == 0){
 					form.find('[name="saveButton"]').attr('disabled',"disabled");
@@ -464,6 +480,7 @@ var Settings_Picklist_Js = {
 	},
 	
 	showDeleteItemForm : function(params) {
+		var thisInstance = this;
 		AppConnector.request(params).then(function(data){
 			app.showModalWindow(data, function(data) {
 				if(typeof callBackFunction == 'function') {
@@ -474,6 +491,7 @@ var Settings_Picklist_Js = {
 			
 		var callBackFunction = function(data) {
 			var form = data.find('#deleteItemForm');
+			thisInstance.registerScrollForNonEditablePicklistValues(form);
 			var maximumSelectionSize = jQuery('#pickListValuesCount').val()-1;
 			app.changeSelectElementView(jQuery('[name="delete_value[]"]'), 'select2', {maximumSelectionSize: maximumSelectionSize,dropdownCss : {'z-index' : 100001}});
 			Settings_Picklist_Js.registerDeleteOptionEvent();

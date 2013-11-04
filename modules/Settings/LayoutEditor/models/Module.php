@@ -10,9 +10,9 @@
  ************************************************************************************/
 
 class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
-    
+
     public static $supportedModules = false;
-    
+
     /**
 	 * Function that returns all the fields for the module
 	 * @return <Array of Vtiger_Field_Model> - list of field models
@@ -38,7 +38,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                 $blockModel->set('id','EVENT_INVITE_USER_BLOCK_ID');
                 $blockModel->set('label','LBL_INVITE_USER_BLOCK');
                 $blockModel->set('module', $this);
-                
+
                 $fieldModel = new Settings_LayoutEditor_Field_Model();
                 $fieldModel->set('name','selectedusers');
                 $fieldModel->set('label','LBL_INVITE_USERS');
@@ -50,7 +50,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		}
 		return $this->fields;
 	}
-    
+
     /**
 	 * Function returns all the blocks for the module
 	 * @return <Array of Vtiger_Block_Model> - list of block models
@@ -66,7 +66,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                 if($this->getName() == 'HelpDesk' && $block->get('label') == 'LBL_COMMENTS'){
                     continue;
                 }
-                
+
 				if($block->get('label') != 'LBL_ITEM_DETAILS') {
 					$blocksList[$block->get('label')] = $block;
 				}
@@ -83,17 +83,17 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		}
 		return $this->blocks;
 	}
-    
+
     public function getAddSupportedFieldTypes() {
         return array(
             'Text','Decimal','Integer','Percent','Currency','Date','Email','Phone','Picklist',
             'URL','Checkbox','TextArea','MultiSelectCombo','Skype','Time'
         );
     }
-    
+
     /**
      * Function whcih will give information about the field types that are supported for add
-     * @return <Array> 
+     * @return <Array>
      */
     public function getAddFieldTypeInfo() {
         $fieldTypesInfo = array();
@@ -102,7 +102,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
         foreach($addFieldSupportedTypes as $fieldType) {
             $details = array();
             if(in_array($fieldType,$lengthSupportedFieldTypes)) {
-                $details['lengthsupported'] = true; 
+                $details['lengthsupported'] = true;
             }
             if($fieldType == 'Decimal' || $fieldType == 'Currency') {
                 $details['decimalSupported']  = true;
@@ -124,11 +124,11 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
         }
         return $fieldTypesInfo;
     }
-    
+
     public function addField($fieldType, $blockId, $params) {
-        
+
         $db = PearDatabase::getInstance();
-        
+
         $label = $params['fieldLabel'];
         if($this->checkFIeldExists($label)){
             throw new Exception(vtranslate('LBL_DUPLICATE_FIELD_EXISTS', 'Settings::LayoutEditor'), 513);
@@ -137,26 +137,26 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
         if(!in_array($fieldType, $supportedFieldTypes)) {
             throw new Exception(vtranslate('LBL_WRONG_FIELD_TYPE', 'Settings::LayoutEditor'), 513);
         }
-        
+
         $max_fieldid = $db->getUniqueID("vtiger_field");
 		$columnName = 'cf_'.$max_fieldid;
 		$custfld_fieldid = $max_fieldid;
         $moduleName = $this->getName();
-        
+
         $focus = CRMEntity::getInstance($moduleName);
         if (isset($focus->customFieldTable)) {
             $tableName=$focus->customFieldTable[0];
         } else {
             $tableName= 'vtiger_'.strtolower($moduleName).'cf';
         }
-        
+
         $details = $this->getTypeDetailsForAddField($fieldType, $params);
         $uitype = $details['uitype'];
         $typeofdata = $details['typeofdata'];
         $dbType = $details['dbType'];
-        
+
         $quickCreate = in_array($moduleName,  getInventoryModules()) ? 3 : 1;
-        
+
         $fieldModel = new Settings_LayoutEditor_Field_Model();
         $fieldModel->set('name', $columnName)
                    ->set('table', $tableName)
@@ -166,26 +166,26 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                    ->set('typeofdata',$typeofdata)
                    ->set('quickcreate',$quickCreate)
                    ->set('columntype', $dbType);
-        
+
         $blockModel = Vtiger_Block_Model::getInstance($blockId, $this);
         $blockModel->addField($fieldModel);
-        
+
         if($fieldType == 'Picklist' || $fieldType == 'MultiSelectCombo') {
             $pickListValues = explode(',',$params['pickListValues']);
             $fieldModel->setPicklistValues($pickListValues);
         }
         return $fieldModel;
     }
-    
+
     public function getTypeDetailsForAddField($fieldType,$params) {
         switch ($fieldType) {
-                Case 'Text' : 
+                Case 'Text' :
                                $fieldLength = $params['fieldLength'];
                                $uichekdata='V~O~LE~'.$fieldLength;
                                $uitype = 1;
                                $type = "VARCHAR(".$fieldLength.") default ''"; // adodb type
                                break;
-                Case 'Decimal' : 
+                Case 'Decimal' :
                                $fieldLength = $params['fieldLength'];
                                $decimal = $params['decimal'];
                                $uitype = 7;
@@ -195,7 +195,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                                // Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/6363
                                $uichekdata='NN~O';
                                break;
-               Case 'Percent' : 
+               Case 'Percent' :
                                $uitype = 9;
                                $type="NUMERIC(5,2)"; //adodb type
                                $uichekdata='N~O~2~2';
@@ -236,7 +236,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                                $type = "VARCHAR(255) default '' "; //adodb type
                                $uichekdata='V~O';
                                break;
-               Case 'URL' : 
+               Case 'URL' :
                                $uitype = 17;
                                $type = "VARCHAR(255) default '' "; //adodb type
                                $uichekdata='V~O';
@@ -264,7 +264,11 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
                Case 'Integer' :
                                $fieldLength = $params['fieldLength'];
                                $uitype = 7;
-                               $type = "INTEGER(".$fieldLength.")"; //adodb type
+							   if ($fieldLength > 10) {
+                                    $type = "BIGINT(".$fieldLength.")"; //adodb type
+							   } else {
+                                    $type = "INTEGER(".$fieldLength.")"; //adodb type
+							   }
                                $uichekdata='I~O';
                                break;
         }
@@ -273,9 +277,9 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
             'typeofdata' => $uichekdata,
             'dbType' => $type,
         );
-        
+
     }
-    
+
     public function checkFIeldExists($fieldLabel) {
         $db = PearDatabase::getInstance();
         $tabId = array($this->getId());
@@ -294,8 +298,8 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
         }
         return self::$supportedModules;
     }
-    
-    
+
+
     public static function getInstanceByName($moduleName) {
         $moduleInstance = Vtiger_Module_Model::getInstance($moduleName);
         $objectProperties = get_object_vars($moduleInstance);
@@ -315,7 +319,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		self::preModuleInitialize2();
 
 		$presence = array(0, 2);
-		$restrictedModules = array('Webmails', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'PBXManager', 'vtmessages', 'vttwitter');
+		$restrictedModules = array('Webmails', 'SMSNotifier', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'PBXManager', 'vtmessages', 'vttwitter');
 
 		$query = 'SELECT name FROM vtiger_tab WHERE
 						presence IN ('. generateQuestionMarks($presence) .')
@@ -331,7 +335,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		}
 		return $modulesList;
 	}
-	
+
 	/**
 	 * Function to check field is editable or not
 	 * @return <Boolean> true/false
@@ -343,7 +347,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Function to check blocks are sortable for the module
 	 * @return <Boolean> true/false
@@ -355,19 +359,22 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Function to check fields are sortable for the block
 	 * @return <Boolean> true/false
 	 */
 	public function isFieldsSortableAllowed($blockName) {
 		$moduleName = $this->getName();
-		$blocksEliminatedArray = array('HelpDesk' => array('LBL_TICKET_RESOLUTION', 'LBL_COMMENTS'), 'Faq' => array('LBL_COMMENT_INFORMATION'));
+		$blocksEliminatedArray = array('HelpDesk' => array('LBL_TICKET_RESOLUTION', 'LBL_COMMENTS'),
+										'Faq' => array('LBL_COMMENT_INFORMATION'),
+										'Calendar' => array('LBL_TASK_INFORMATION', 'LBL_DESCRIPTION_INFORMATION'),
+										'Events' => array('LBL_EVENT_INFORMATION', 'LBL_REMINDER_INFORMATION', 'LBL_RECURRENCE_INFORMATION', 'LBL_RELATED_TO', 'LBL_DESCRIPTION_INFORMATION', 'LBL_INVITE_USER_BLOCK'));
 		if (in_array($moduleName, array('Calendar', 'Events', 'HelpDesk', 'Faq'))) {
 			if(!empty($blocksEliminatedArray[$moduleName])) {
 				if(in_array($blockName, $blocksEliminatedArray[$moduleName])) {
 					return false;
-				} 
+				}
 			} else {
 				return false;
 			}
@@ -379,7 +386,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		if($this->relations === null) {
 			$this->relations = Vtiger_Relation_Model::getAllRelations($this, false);
 		}
-		
+
 		// Contacts relation-tab is turned into custom block on DetailView.
 		if ($this->getName() == 'Calendar') {
 			$contactsIndex = false;
@@ -393,7 +400,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 				array_splice($this->relations, $contactsIndex, 1);
 			}
 		}
-		
+
 		return $this->relations;
 	}
 }

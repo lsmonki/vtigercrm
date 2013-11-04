@@ -67,6 +67,9 @@
                                                     {if $moduleModel->isPermitted('EditView')}
                                                         {assign var='quickCreateModule' value=$moduleModel->isQuickCreateSupported()}
                                                         {assign var='singularLabel' value=$moduleModel->getSingularLabelKey()}
+														{if $singularLabel == 'SINGLE_Calendar'}
+															{assign var='singularLabel' value='LBL_EVENT_OR_TASK'}
+														{/if}	
                                                         {if $quickCreateModule == '1'}
                                                             {if $count % 3 == 0}
                                                                 <div class="row-fluid">

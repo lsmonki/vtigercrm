@@ -52,7 +52,7 @@ $languageStrings = array(
 	'LBL_AVAILABLE_WORKLIST_LIST' => 'Available Workflows',
 	'LBL_FIELDFORMULAS' => 'Field Formulas',
 	'LBL_FIELDFORMULAS_DESCRIPTION' => 'Add custom equations to custom fields',
-
+    
 	'VTLIB_LBL_MODULE_MANAGER' => 'Module Manager',
 	'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION' => 'Manage module behavior inside vtiger CRM',
 	'LBL_PICKLIST_EDITOR' => 'Picklist Editor',
@@ -97,6 +97,7 @@ $languageStrings = array(
 
 	'LBL_LIST_WORKFLOWS' => 'Workflows',
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Create and edit workflows',
+    'LBL_SELECT_DATE' => 'Select dates',
 
 	'Configuration Editor' => 'Configuration Editor',
 	'Update configuration file of the application' => 'Update configuration file of the application',
@@ -253,6 +254,8 @@ $languageStrings = array(
 	'LBL_STATUS' => 'Status',
 	'LBL_LOGIN_HISTORY_DETAILS' => 'Login History',
 	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
+	
+	'LBL_CONFIG_EDITOR_DESCRIPTION' => 'Update configuration file of the application',
 );
 
 $jsLanguageStrings = array(

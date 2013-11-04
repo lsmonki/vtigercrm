@@ -87,7 +87,7 @@ Vtiger_List_Js("Settings_Vtiger_List_Js",{
 	},
 	
 	registerEvents : function() {
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 		this.registerRowClickEvent();
 		this.registerHeadersClickEvent();
 		this.registerPageNavigationEvents();

@@ -132,7 +132,8 @@ class Users_PreferenceDetail_View extends Vtiger_Detail_View {
 
 		$jsFileNames = array(
             "modules.Users.resources.Detail",
-            'modules.'.$moduleName.'.resources.PreferenceDetail'
+            'modules.'.$moduleName.'.resources.PreferenceDetail',
+			'modules.'.$moduleName.'.resources.PreferenceEdit'
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);

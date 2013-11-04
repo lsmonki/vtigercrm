@@ -11,7 +11,7 @@
 		<input type="hidden" name="module" value="Workflows" />
 		<input type="hidden" name="record" value="{$RECORD}" />
 		<input type="hidden" class="step" value="3" />
-			<div class="padding1per" style="border:1px solid #ccc;box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">
+			<div class="padding1per">
 				<div class="btn-group">
 					<a class="btn dropdown-toggle addButton" data-toggle="dropdown" href="#">
 						<strong>{vtranslate('LBL_ADD_TASK',$QUALIFIED_MODULE)}</strong>&nbsp;

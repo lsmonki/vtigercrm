@@ -16,7 +16,7 @@
 	</div>
 	<hr>
 	<div class="row-fluid">
-		<span class="span6">
+		<span class="span6 btn-toolbar">
 			{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
 			<button class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0} onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'
 					{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"' {/if}>
@@ -25,7 +25,7 @@
 			</button>
 			{/foreach}
 		</span>
-		<span class="span6 btn-toolbar margin0px">
+		<span class="span6 btn-toolbar">
 			{include file='ListViewActions.tpl'|@vtemplate_path:$QUALIFIED_MODULE}
 		</span>
 	</div>

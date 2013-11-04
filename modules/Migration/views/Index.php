@@ -175,4 +175,61 @@ class Migration_Index_View extends Vtiger_Basic_View {
 			self::ExecuteQuery('INSERT INTO vtiger_relcriteria_grouping VALUES(?,?,?,?)', array(1, $queryid, '', $conditionExpression));
 		}
 	}
+	
+		/**
+	 * Function to transform workflow filter of old look in to new look
+	 * @param <type> $conditions
+	 * @return <type>
+	 */
+	public static function transformAdvanceFilterToWorkFlowFilter($conditions) {
+		$wfCondition = array();
+
+		if(!empty($conditions)) {
+			$previousConditionGroupId = 0;
+			foreach($conditions as $condition) {
+
+				$fieldName = $condition['fieldname'];
+				$fieldNameContents = explode(' ', $fieldName);
+				if (count($fieldNameContents) > 1) {
+					$fieldName = '('. $fieldName .')';
+				}
+
+				$groupId = $condition['groupid'];
+				if (!$groupId) {
+					$groupId = 0;
+				}
+
+				$groupCondition = 'or';
+				if ($groupId === $previousConditionGroupId || count($conditions) === 1) {
+					$groupCondition = 'and';
+				}
+
+				$joinCondition = 'or';
+				if (isset ($condition['joincondition'])) {
+					$joinCondition = $condition['joincondition'];
+				} elseif($groupId === 0) {
+					$joinCondition = 'and';
+				}
+
+				$value = $condition['value'];
+				switch ($value) {
+					case 'false:boolean'	: $value = 0;	break;
+					case 'true:boolean'		: $value = 1;	break;
+					default					: $value;		break;
+				}
+
+				$wfCondition[] = array(
+						'fieldname' => $fieldName,
+						'operation' => $condition['operation'],
+						'value' => $value,
+						'valuetype' => 'rawtext',
+						'joincondition' => $joinCondition,
+						'groupjoin' => $groupCondition,
+						'groupid' => $groupId
+				);
+				$previousConditionGroupId = $groupId;
+			}
+		}
+		return $wfCondition;
+	}
 }

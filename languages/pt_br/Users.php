@@ -169,4 +169,5 @@ $languageStrings = array(
 	'Summary'                      => 'Summary'                     , // TODO: Review
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Usuário excluído com sucesso',
 );

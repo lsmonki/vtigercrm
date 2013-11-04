@@ -9,6 +9,5 @@
  *************************************************************************************/
 $mod_strings=Array(
 	'EmailTemplates' => 'Email Templates',
-    'LBL_PERMISSION' => 'Email Templates is available only for vtiger6. Please switch to new look'
 )
 ?>

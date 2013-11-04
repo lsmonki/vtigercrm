@@ -13,7 +13,7 @@
  */
 class Calendar_ListView_Model extends Vtiger_ListView_Model {
 
-	
+
 	public function getBasicLinks() {
 		$basicLinks = array();
 		$moduleModel = $this->getModule();
@@ -154,7 +154,7 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
             $columnFieldMapping = $moduleModel->getColumnFieldMapping();
             $orderByFieldName = $columnFieldMapping[$orderBy];
             $orderByFieldModel = $moduleModel->getField($orderByFieldName);
-            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+            if($orderByFieldModel && $orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
                 //IF it is reference add it in the where fields so that from clause will be having join of the table
                 $queryGenerator = $this->get('query_generator');
                 $queryGenerator->addWhereField($orderByFieldName);
@@ -187,7 +187,7 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 
 
 		if(!empty($orderBy)) {
-            if($orderByFieldModel->isReferenceField()){
+            if($orderByFieldModel && $orderByFieldModel->isReferenceField()){
                 $referenceModules = $orderByFieldModel->getReferenceList();
                 $referenceNameFieldOrderBy = array();
                 foreach($referenceModules as $referenceModuleName) {
@@ -216,12 +216,12 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 
 		$listQueryWithNoLimit = $listQuery;
 		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);
-        
+
 		$listResult = $db->pquery($listQuery, array());
 
 		$listViewRecordModels = array();
 		$listViewEntries =  $listViewContoller->getListViewRecords($moduleFocus,$moduleName, $listResult);
-		
+
 		$pagingModel->calculatePageRange($listViewEntries);
 
 		if($db->num_rows($listResult) > $pageLimit){

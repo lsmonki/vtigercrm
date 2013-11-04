@@ -11,11 +11,11 @@
 -->*}
 {strip}
 <div id="sendSmsContainer" class='modelContainer'>
-	<div class="modal-header">
-		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+	<div class="modal-header contentsBackground">
+        <button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
 		<h3>{vtranslate('LBL_SEND_SMS_TO_SELECTED_NUMBERS', $MODULE)}</h3>
 	</div>
-	<form class="form-horizontal contentsBackground" id="massSave" method="post" action="index.php">
+	<form class="form-horizontal" id="massSave" method="post" action="index.php">
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="source_module" value="{$SOURCE_MODULE}" />
 		<input type="hidden" name="action" value="MassSaveAjax" />

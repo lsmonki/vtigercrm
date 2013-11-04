@@ -351,4 +351,18 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		return $matchingRecords;
 	}
 	
+	/**
+	 * Function to get acive status of record
+	 */
+	public function getActiveStatusOfRecord(){
+		$activeStatus = $this->get('discontinued');
+		if($activeStatus){
+			return $activeStatus;
+		}
+		$recordId = $this->getId();
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery('SELECT discontinued FROM vtiger_products WHERE productid = ?',array($recordId));
+		$activeStatus = $db->query_result($result, 'discontinued');
+		return $activeStatus;
+	}
 }

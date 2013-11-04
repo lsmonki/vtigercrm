@@ -223,7 +223,7 @@ jQuery.Class('Settings_Currency_Js', {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 				//replace the new list view contents
 				jQuery('#listViewContents').html(data);
-				thisInstance.triggerDisplayTypeEvent();
+				//thisInstance.triggerDisplayTypeEvent();
 			}, function(error, err) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 			}

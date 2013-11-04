@@ -14,6 +14,7 @@
 <div class='editViewContainer'>
 	<form class="form-horizontal recordEditView" id="EditView" name="EditView" method="post" action="index.php">
 		{assign var=QUALIFIED_MODULE_NAME value={$MODULE}}
+		{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
 		<input type="hidden" name="module" value="{$MODULE}" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="record" value="{$RECORD_ID}" />
@@ -35,13 +36,13 @@
 				<th class="blockHeader" colspan="4">{vtranslate('SINGLE_EmailTemplates', $MODULE)}</th>
 			</tr>
 			<tr>
-				<td class="fieldLabel"><span class="redColor">*</span>{vtranslate('LBL_TEMPLATE_NAME', $MODULE)}</td>
-				<td class="fieldValue">
+				<td class="fieldLabel {$WIDTHTYPE}"><span class="redColor">*</span>{vtranslate('LBL_TEMPLATE_NAME', $MODULE)}</td>
+				<td class="fieldValue {$WIDTHTYPE}">
 					<input id="{$MODULE}_editView_fieldName_templatename" type="text" class="input-large" data-validation-engine="validate[required]" name="templatename" value="{decode_html($RECORD->get('templatename'))}">
 			</tr>
 			<tr>
-				<td class="fieldLabel">{vtranslate('LBL_DESCRIPTION', $MODULE)}</td>
-				<td class="fieldValue"><textarea class="row-fluid" id="description" name="description">{decode_html($RECORD->get('description'))}</textarea></td>
+				<td class="fieldLabel {$WIDTHTYPE}">{vtranslate('LBL_DESCRIPTION', $MODULE)}</td>
+				<td class="fieldValue {$WIDTHTYPE}"><textarea class="row-fluid" id="description" name="description">{decode_html($RECORD->get('description'))}</textarea></td>
 			</tr>
 		</table>
 		<table class="table table-bordered blockContainer showInlineTable">
@@ -49,12 +50,12 @@
 				<th class="blockHeader" colspan="4">{vtranslate('LBL_EMAIL_TEMPLATE', $MODULE)} {vtranslate('LBL_DESCRIPTION', $MODULE)}</th>
 			</tr>
 			<tr>
-				<td class="fieldLabel"><span class="redColor">*</span>{vtranslate('LBL_SUBJECT', $MODULE)}</td>
-				<td class="fieldValue"><input id="{$MODULE}_editView_fieldName_subject" type="text" class="input-large" data-validation-engine="validate[required]" name="subject" value="{decode_html($RECORD->get('subject'))}"></td>
+				<td class="fieldLabel {$WIDTHTYPE}"><span class="redColor">*</span>{vtranslate('LBL_SUBJECT', $MODULE)}</td>
+				<td class="fieldValue {$WIDTHTYPE}"><input id="{$MODULE}_editView_fieldName_subject" type="text" class="input-large" data-validation-engine="validate[required]" name="subject" value="{decode_html($RECORD->get('subject'))}"></td>
 			</tr>
 			<tr>
-				<td class="fieldLabel">{vtranslate('LBL_SELECT_FIELD_TYPE', $MODULE)}</td>
-				<td class="fieldValue">
+				<td class="fieldLabel {$WIDTHTYPE}">{vtranslate('LBL_SELECT_FIELD_TYPE', $MODULE)}</td>
+				<td class="fieldValue {$WIDTHTYPE}">
 					<span class="filterContainer" >
 						<input type=hidden name="moduleFields" data-value='{ZEND_JSON::encode($ALL_FIELDS)}' />
 						<span class="span4 conditionRow">

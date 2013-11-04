@@ -123,14 +123,31 @@ class Activity extends CRMEntity {
 		{
 			$this->deleteRelation("vtiger_seactivityrel");
 		}
-		//Insert into cntactivity rel		
-		if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
-		}
-		elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_cntactivityrel');
+        //Insert into cntactivity rel            
+        if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '') 
+        { 
+                $this->insertIntoEntityTable('vtiger_cntactivityrel', $module); 
+        } 
+        elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit") 
+        { 
+                $this->deleteRelation('vtiger_cntactivityrel'); 
+        } 
+		$recordId = $this->id;
+		if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '') {
+			$adb->pquery( 'DELETE from vtiger_cntactivityrel WHERE activityid = ?', array($recordId));
+		
+
+			$contactIdsList = explode (';', $_REQUEST['contactidlist']);
+			$count = count($contactIdsList);
+
+			$sql = 'INSERT INTO vtiger_cntactivityrel VALUES ';
+			for($i=0; $i<$count; $i++) {
+				$sql .= " ($contactIdsList[$i], $recordId)";
+				if ($i != $count - 1) {
+					$sql .= ',';
+				}
+			}
+			$adb->pquery($sql, array());
 		}
 		$recur_type='';	
 		if(($recur_type == "--None--" || $recur_type == '') && $this->mode == "edit")

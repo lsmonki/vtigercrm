@@ -860,7 +860,7 @@ var app = {
 		if(typeof window[moduleClassName] == 'undefined') {
 			moduleClassName = "Vtiger_"+view+"_Js";
 		}
-		if(typeof window[moduleClassName] != 'undefined') {
+        if(typeof window[moduleClassName] != 'undefined') {
 			return new window[moduleClassName]();
 		}
 	},
@@ -871,7 +871,7 @@ var app = {
 	getDecodedValue : function(value) {
 		return jQuery('<div></div>').html(value).text();
 	},
-	
+
 	/**
 	 * Function to check whether the color is dark or light
 	 */
@@ -881,7 +881,32 @@ var app = {
 		var b = parseInt(hexcolor.substr(4,2),16);
 		var yiq = ((r*299)+(g*587)+(b*114))/1000;
 		return (yiq >= 128) ? 'light' : 'dark';
-	}
+	},
+    
+    updateRowHeight : function() {
+        var rowType = jQuery('#row_type').val();
+        if(rowType.length <=0 ){
+            //Need to update the row height
+            var widthType = app.cacheGet('widthType', 'mediumWidthType');
+            var serverWidth = widthType;
+            switch(serverWidth) {
+                case 'narrowWidthType' : serverWidth = 'narrow'; break;
+                case 'wideWidthType' : serverWidth = 'wide'; break;
+                default : serverWidth = 'medium';
+            }
+			var userid = jQuery('#current_user_id').val();
+            var params = {
+                'module' : 'Users',
+                'action' : 'SaveAjax',
+                'record' : userid,
+                'value' : serverWidth,
+                'field' : 'rowheight'
+            };
+            AppConnector.request(params).then(function(){
+                jQuery(rowType).val(serverWidth);
+            });
+        }
+    }
 }
 
 jQuery(document).ready(function(){
@@ -891,7 +916,10 @@ jQuery(document).ready(function(){
 	app.showSelect2ElementView(jQuery('body').find('select.select2'));
 
 	app.setContentsHeight();
-
+	
+	//Updating row height
+	app.updateRowHeight();
+	
 	jQuery(window).resize(function(){
 		app.setContentsHeight();
 	})

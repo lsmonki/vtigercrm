@@ -73,7 +73,7 @@ class Products extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'productname', 'imagename', 'assigned_user_id');
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'productname', 'assigned_user_id');
 	 // Josh added for importing and exporting -added in patch2
     var $unit_price;
 
@@ -175,7 +175,7 @@ class Products extends CRMEntity {
 		}
 
 		$product_base_conv_rate = getBaseConversionRateForProduct($this->id, $this->mode);
-
+		$currencySet = 0;
 		//Save the Product - Currency relationship if corresponding currency check box is enabled
 		for($i=0;$i<count($currency_details);$i++)
 		{
@@ -199,9 +199,11 @@ class Products extends CRMEntity {
 
 				// Update the Product information with Base Currency choosen by the User.
 				if ($_REQUEST['base_currency'] == $cur_valuename) {
+					$currencySet = 1;
 					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actualPrice, $this->id));
 				}
-			}else{
+			}
+			if(!$currencySet){
 				$curid = fetchCurrency($current_user->id);
 				$adb->pquery("update vtiger_products set currency_id=? where productid=?", array($curid, $this->id));
 			}
@@ -1172,7 +1174,7 @@ class Products extends CRMEntity {
 	function generateReportsSecQuery($module,$secmodule,$queryplanner) {
 		global $current_user;
 		$matrix = $queryplanner->newDependencyMatrix();
-		
+
 		$matrix->setDependency("vtiger_crmentityProducts",array("vtiger_groupsProducts","vtiger_usersProducts","vtiger_lastModifiedByProducts"));
 		$matrix->setDependency("vtiger_products",array("innerProduct","vtiger_crmentityProducts","vtiger_productcf","vtiger_vendorRelProducts"));
 		//query planner Support  added

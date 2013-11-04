@@ -83,4 +83,5 @@ class Users_Detail_View extends Users_PreferenceDetail_View {
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
+	
 }

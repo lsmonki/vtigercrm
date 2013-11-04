@@ -11,7 +11,7 @@
 -->*}
 {strip}
 <div class="container-fluid">
-	<label class="themeTextColor font-x-x-large">{vtranslate('LBL_CREATE_PROFILE', $QUALIFIED_MODULE)}</label>
+	<h3>{vtranslate('LBL_CREATE_PROFILE', $QUALIFIED_MODULE)}</h3>
 	<hr>
 	<form id="EditView" name="EditProfile" action="index.php" method="post" class="form-horizontal">
 		<input type="hidden" name="module" value="Profiles" />

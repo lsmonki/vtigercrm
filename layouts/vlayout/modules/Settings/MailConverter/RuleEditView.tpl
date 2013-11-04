@@ -12,7 +12,7 @@
 {strip}
 	<div class='modelContainer'>
 	<div class="modal-header contentsBackground">
-		<button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">x</button>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3>{vtranslate('LBL_ADD_RULE', $QUALIFIED_MODULE)}</h3>
 	</div>
 	<form class="form-horizontal" id="ruleSave" method="post" action="index.php">

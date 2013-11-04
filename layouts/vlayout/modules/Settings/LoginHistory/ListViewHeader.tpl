@@ -16,7 +16,7 @@
 	</div>
 	<hr>
 	<div class="row-fluid">
-		<span class="span6">
+		<span class="span6 btn-toolbar">
 				<select class="chzn-select" id="usersFilter" >
 					<option value="">{vtranslate('LBL_ALL', $QUALIFIED_MODULE)}</option>
 					{foreach item=USERNAME key=USER from=$USERSLIST}
@@ -24,7 +24,7 @@
 					{/foreach}
 				</select>
 		</span>
-		<span class="span6 btn-toolbar margin0px">
+		<span class="span6 btn-toolbar">
 			{include file='ListViewActions.tpl'|@vtemplate_path:$QUALIFIED_MODULE}
 		</span>
 	</div>

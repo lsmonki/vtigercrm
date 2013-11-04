@@ -847,13 +847,13 @@ class CustomView extends CRMEntity {
 		$stdfilterrow = $adb->fetch_array($result);
         return $this->resolveDateFilterValue($stdfilterrow);
 	}
-    
+
     function resolveDateFilterValue ($dateFilterRow) {
         $stdfilterlist = array();
 		$stdfilterlist["columnname"] = $dateFilterRow["columnname"];
 		$stdfilterlist["stdfilter"] = $dateFilterRow["stdfilter"];
 
-		if ($dateFilterRow["stdfilter"] == "custom" || $dateFilterRow["stdfilter"] == "") {
+		if ($dateFilterRow["stdfilter"] == "custom" || $dateFilterRow["stdfilter"] == "" || $dateFilterRow["stdfilter"] == "e" || $dateFilterRow["stdfilter"] == "n") {
 			if ($dateFilterRow["startdate"] != "0000-00-00" && $dateFilterRow["startdate"] != "") {
 				$startDateTime = new DateTimeField($dateFilterRow["startdate"] . ' ' . date('H:i:s'));
 				$stdfilterlist["startdate"] = $startDateTime->getDisplayDate();
@@ -917,6 +917,12 @@ class CustomView extends CRMEntity {
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDate();
 						} elseif ($col[4] == 'DT') {
+							$comparator = array('e','n','b','a');
+							if(in_array($criteria['comparator'], $comparator)) {
+								$originalValue = $temp_val[$x];
+								$dateTime = explode(' ',$originalValue);
+								$temp_val[$x] = $dateTime[0];
+							}
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDateTimeValue();
 						} else {

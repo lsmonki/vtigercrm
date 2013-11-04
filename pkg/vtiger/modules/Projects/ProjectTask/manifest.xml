@@ -461,9 +461,9 @@
 <linkurl><![CDATA[index.php?module=Documents&action=EditView&return_module=ProjectTask&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$]]></linkurl>
 <linkicon><![CDATA[]]></linkicon>
 <sequence>0</sequence>
-<handler_path><![CDATA[modules/Documents/Documents.php]]></handler_path> 
-<handler_class><![CDATA[Documents]]></handler_class> 
-<handler><![CDATA[isLinkPermitted]]></handler> 
+<handler_path><![CDATA[modules/Documents/Documents.php]]></handler_path>
+<handler_class><![CDATA[Documents]]></handler_class>
+<handler><![CDATA[isLinkPermitted]]></handler>
 </customlink>
 </customlinks>
 </module>

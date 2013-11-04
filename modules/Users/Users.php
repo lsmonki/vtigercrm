@@ -99,7 +99,7 @@ class Users extends CRMEntity {
             'Last Name'=>Array('vtiger_users'=>'last_name'),
             'Role Name'=>Array('vtiger_user2role'=>'roleid'),
             'User Name'=>Array('vtiger_users'=>'user_name'),
-            'Status'=>Array('vtiger_users'=>'status'),
+			'Status'=>Array('vtiger_users'=>'status'),
             'Email'=>Array('vtiger_users'=>'email1'),
             'Email2'=>Array('vtiger_users'=>'email2'),
             'Admin'=>Array('vtiger_users'=>'is_admin'),
@@ -110,7 +110,7 @@ class Users extends CRMEntity {
             'First Name'=>'first_name',
             'Role Name'=>'roleid',
             'User Name'=>'user_name',
-            'Status'=>'status',
+			'Status'=>'status',
             'Email'=>'email1',
             'Email2'=>'email2',
             'Admin'=>'is_admin',
@@ -130,7 +130,7 @@ class Users extends CRMEntity {
     var $new_schema = true;
 
     var $DEFAULT_PASSWORD_CRYPT_TYPE; //'BLOWFISH', /* before PHP5.3*/ MD5;
-
+    
     //Default Widgests
     var $default_widgets = array('PLVT', 'CVLVT', 'UA');
 
@@ -708,39 +708,43 @@ class Users extends CRMEntity {
         if(empty($this->column_fields['date_format'])) {
             $this->column_fields['date_format'] = 'yyyy-mm-dd';
         }
-
+		
 		if(empty($this->column_fields['start_hour'])) {
             $this->column_fields['start_hour'] = '09:00';
         }
-
+		
 		if(empty($this->column_fields['dayoftheweek'])) {
             $this->column_fields['dayoftheweek'] = 'Sunday';
         }
-
+		
 		if(empty($this->column_fields['callduration'])) {
             $this->column_fields['callduration'] = 5;
         }
-
+		
 		if(empty($this->column_fields['othereventduration'])) {
             $this->column_fields['othereventduration'] = 5;
         }
-
+		
 		if(empty($this->column_fields['hour_format'])) {
             $this->column_fields['hour_format'] = 12;
         }
-
+		
 		if(empty($this->column_fields['activity_view'])) {
             $this->column_fields['activity_view'] = 'Today';
         }
-
+		
 		if(empty($this->column_fields['calendarsharedtype'])) {
             $this->column_fields['calendarsharedtype'] = 'public';
         }
-
+		
 		if(empty($this->column_fields['default_record_view'])) {
             $this->column_fields['default_record_view'] = 'Summary';
         }
 		
+		if(empty($this->column_fields['status'])) {
+			$this->column_fields['status'] = 'Active';
+		}
+
 		if(empty($this->column_fields['currency_decimal_separator'])) {
 			$this->column_fields['currency_decimal_separator'] = '.';
 		}
@@ -936,7 +940,7 @@ class Users extends CRMEntity {
             //Check done by Don. If update is empty the the query fails
             if(trim($update) != '') {
                 $sql1 = "update $table_name set $update where ".$this->tab_name_index[$table_name]."=?";
-                array_push($update_params, $this->id);
+				array_push($update_params, $this->id);
                 $this->db->pquery($sql1, $update_params);
             }
 
@@ -979,12 +983,12 @@ class Users extends CRMEntity {
         $log->debug("Exiting from insertIntoAttachment($id,$module) method.");
     }
 
-	/** Function to retreive the user info of the specifed user id The user info will be available in $this->column_fields array
+    /** Function to retreive the user info of the specifed user id The user info will be available in $this->column_fields array
      * @param $record -- record id:: Type integer
      * @param $module -- module:: Type varchar
      */
     function retrieve_entity_info($record, $module) {
-		global $adb,$log;
+        global $adb,$log;
         $log->debug("Entering into retrieve_entity_info($record, $module) method.");
 
         if($record == '') {
@@ -1187,7 +1191,7 @@ class Users extends CRMEntity {
             }
         }else {
             for($i = 0;$i < count($this->homeorder_array);$i++) {
-              if(in_array($this->homeorder_array[$i], $this->default_widgets)){
+              if(in_array($this->homeorder_array[$i], $this->default_widgets)){                
                 $return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
               }else{
                   $return_array[$this->homeorder_array[$i]] = '';
@@ -1451,14 +1455,14 @@ class Users extends CRMEntity {
 
 	function transformOwnerShipAndDelete($userId,$transformToUserId){
 		$adb = PearDatabase::getInstance();
-
+		
 		$em = new VTEventsManager($adb);
 
         // Initialize Event trigger cache
 		$em->initTriggerCache();
 
 		$entityData  = VTEntityData::fromUserId($adb, $userId);
-
+		
 		//set transform user id
 		$entityData->set('transformtouserid',$transformToUserId);
 
@@ -1532,7 +1536,7 @@ class Users extends CRMEntity {
 		if (isset($requestArray['lang_name'])) $updateData['language'] = vtlib_purify ($requestArray['lang_name']);
 		if (isset($requestArray['time_zone'])) $updateData['time_zone']= vtlib_purify ($requestArray['time_zone']);
 		if (isset($requestArray['date_format'])) $updateData['date_format']= vtlib_purify ($requestArray['date_format']);
-
+		
 		if (!empty($updateData)) {
 			$updateQuery = 'UPDATE vtiger_users SET '. ( implode('=?,', array_keys($updateData)). '=?') . ' WHERE id = ?';
 			$updateQueryParams = array_values($updateData);
@@ -1540,7 +1544,7 @@ class Users extends CRMEntity {
 			$adb->pquery($updateQuery, $updateQueryParams);
 		}
 	}
-
+	
 	/**
 	 * Function to set the Company Logo
 	 * @param- $_REQUEST array
@@ -1635,7 +1639,7 @@ class Users_CRMSetup {
 		}
 		return $isFirstUser;
 	}
-
+	
 	/**
 	 * Function to get user setup status
 	 * @return-is First User or not

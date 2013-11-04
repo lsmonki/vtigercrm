@@ -24,7 +24,7 @@ class Users_ForgotPassword_Handler {
 		$viewer->assign('TITLE', $logoTitle);
 		$viewer->assign('COMPANYNAME', $companyName);
 		$viewer->assign('USERNAME', $request->get('username'));
-		$changePasswordTrackUrl = $site_URL."/vtiger6/modules/Users/actions/ForgotPassword.php";
+		$changePasswordTrackUrl = $site_URL."/modules/Users/actions/ForgotPassword.php";
 		$viewer->assign('TRACKURL',$changePasswordTrackUrl);
 		$viewer->assign('MODULE',$moduleName);
 		$viewer->view('ForgotPassword.tpl',$moduleName);

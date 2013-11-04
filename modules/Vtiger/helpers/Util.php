@@ -263,7 +263,7 @@ class Vtiger_Util_Helper {
         $cache->setPicklistValues($fieldName, $values);
         return $values;
     }
-
+	
 	/**
 	 * Function gets the CRM's base Currency information
 	 * @return Array
@@ -369,7 +369,7 @@ class Vtiger_Util_Helper {
 	public static function getDecodedValue($string) {
 		return html_entity_decode($string, ENT_COMPAT, 'UTF-8');
 	}
-
+	
 	public static function getActiveAdminCurrentDateTime() {
 		global $default_timezone;
 		$admin = Users::getActiveAdminUser();
@@ -385,53 +385,89 @@ class Vtiger_Util_Helper {
 	 * @return <Integer>
 	 */
 	public static function getCreator($recordId) {
+		$cache = Vtiger_Cache::getInstance();
+		if ($cache->hasCreator($recordId)) {
+			return $cache->getCreator($recordId);
+		}
+
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery('SELECT smcreatorid FROM vtiger_crmentity WHERE crmid = ?', array($recordId));
-		return $db->query_result($result, 0, 'smcreatorid');
-	}
+		$creatorId = $db->query_result($result, 0, 'smcreatorid');
 
-    /***
-     * Function to get the label of the record
-     * @param <Integer> $recordId - id of the record
-     * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records
-     */
-    public static function getLabel($recordId , $ignoreDelete=true){
-        $db = PearDatabase::getInstance();
-        $query = 'SELECT label from vtiger_crmentity WHERE crmid=?';
-        if($ignoreDelete) {
-            $query .= ' AND deleted=0';
-        }
-        $result = $db->pquery($query,array($recordId));
-        $name = '';
-        if($db->num_rows($result) > 0) {
-            $name = $db->query_result($result,0,'label');
-        }
-        return $name;
-    }
+		if ($creatorId) {
+			$cache->setCreator($recordId, $creatorId);
+		}
+		return $creatorId;
+	}
+    
+    
+	/**
+	 * Function to get the datetime value in user preferred hour format
+	 * @param <DateTime> $dateTime
+	 * @param <Vtiger_Users_Model> $userObject
+	 * @return <String> date and time with hour format
+	 */
+	public static function convertDateTimeIntoUsersDisplayFormat($dateTime, $userObject = null) {
+        require_once 'includes/runtime/LanguageHandler.php';
+		if ($userObject) {
+			$userModel = Users_Privileges_Model::getInstanceFromUserObject($userObject);
+		} else {
+			$userModel = Users_Privileges_Model::getCurrentUserModel();
+		}
+
+		$date = new DateTime($dateTime);
+		$dateTimeField = new DateTimeField($date->format('Y-m-d H:i:s'));
+
+		$date = $dateTimeField->getDisplayDate($userModel);
+		$time = $dateTimeField->getDisplayTime($userModel);
+
+		if($userModel->get('hour_format') == '12') {
+			$time = Vtiger_Time_UIType::getTimeValueInAMorPM($time);
+		}
+
+		return $date . ' ' .$time;
+	}
 
 	/**
-	 * Function checks if the database has utf8 support
-	 * @global type $db_type
-	 * @param type $conn
-	 * @return boolean
+	 * Function to get the time value in user preferred hour format
+	 * @param <Time> $time
+	 * @param <Vtiger_Users_Model> $userObject
+	 * @return <String> time with hour format
 	 */
-	public static function checkDbUTF8Support($conn) {
-		global $db_type;
-		if($db_type == 'pgsql')
-			return true;
-		$dbvarRS = $conn->Execute("show variables like '%_database' ");
-		$db_character_set = null;
-		$db_collation_type = null;
-		while(!$dbvarRS->EOF) {
-			$arr = $dbvarRS->FetchRow();
-			$arr = array_change_key_case($arr);
-			switch($arr['variable_name']) {
-				case 'character_set_database' : $db_character_set = $arr['value']; break;
-				case 'collation_database'     : $db_collation_type = $arr['value']; break;
-			}
-			// If we have all the required information break the loop.
-			if($db_character_set != null && $db_collation_type != null) break;
+	public static function convertTimeIntoUsersDisplayFormat($time, $userObject = null) {
+        require_once 'includes/runtime/LanguageHandler.php';
+		if ($userObject) {
+			$userModel = Users_Privileges_Model::getInstanceFromUserObject($userObject);
+		} else {
+			$userModel = Users_Privileges_Model::getCurrentUserModel();
 		}
-		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
+
+		$dateTimeField = new DateTimeField($time);
+		$time = $dateTimeField->getDisplayTime($userModel);
+
+		if($userModel->get('hour_format') == '12') {
+			$time = Vtiger_Time_UIType::getTimeValueInAMorPM($time);
+		}
+
+		return $time;
 	}
+    
+    /*** 
+    * Function to get the label of the record 
+    * @param <Integer> $recordId - id of the record 
+    * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records  
+    */ 
+	    public static function getLabel($recordId , $ignoreDelete=true){ 
+	        $db = PearDatabase::getInstance(); 
+	        $query = 'SELECT label from vtiger_crmentity WHERE crmid=?'; 
+	        if($ignoreDelete) { 
+	            $query .= ' AND deleted=0'; 
+	        } 
+	        $result = $db->pquery($query,array($recordId)); 
+            $name = ''; 
+	        if($db->num_rows($result) > 0) { 
+	            $name = $db->query_result($result,0,'label'); 
+	        } 
+	        return $name; 
+    } 
 }

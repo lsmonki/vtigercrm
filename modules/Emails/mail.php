@@ -12,6 +12,7 @@
 
 require_once("modules/Emails/class.phpmailer.php");
 require_once 'include/utils/CommonUtils.php';
+require_once 'include/utils/VTCacheUtils.php';
 
 /**   Function used to send email
   *   $module 		-- current module
@@ -55,7 +56,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
         $from_email_field = $adb->query_result($result,0,'from_email_field');
         VTCacheUtils::setOutgoingMailFromEmailAddress($from_email_field);
     }
-    
+
 	if(isUserInitiated()) {
 		$replyToEmail = $from_email;
 	} else {
@@ -145,7 +146,7 @@ function addSignature($contents, $fromname)
 {
 	global $adb;
 	$adb->println("Inside the function addSignature");
-    
+
     $sign = VTCacheUtils::getUserSignature($fromname);
     if($sign === null) {
         $result = $adb->pquery("select signature, first_name, last_name from vtiger_users where user_name=?", array($fromname));
@@ -153,9 +154,9 @@ function addSignature($contents, $fromname)
         VTCacheUtils::setUserSignature($fromname, $sign);
         VTCacheUtils::setUserFullName($fromname, $adb->query_result($result,0,"first_name").' '.$adb->query_result($result,0,"last_name"));
     }
-    
+
     $sign = nl2br($sign);
-    
+
 	if($sign != '')
 	{
 		$contents .= '<br><br>'.$sign;
@@ -186,10 +187,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$adb->println("Inside the function setMailerProperties");
 	if($module == "Support" || $logo ==1)
 		$mail->AddEmbeddedImage('themes/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
-	
+
 	$mail->Subject = $subject;
 	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
-	$mail->Body = html_entity_decode($contents);
+	$mail->Body = decode_html($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
 	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
@@ -200,20 +201,19 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	//Handle the from name and email for HelpDesk
     $mail->From = $from_email;
-    
-    $userFullName = VTCacheUtils::getUserFullName($from_name);
+    $userFullName = trim(VTCacheUtils::getUserFullName($from_name));
     if(empty($userFullName)) {
         $rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
         $num_rows = $adb->num_rows($rs);
-        if($num_rows > 0)
-            $from_name = getFullNameFromQResult($rs, 0, 'Users');
-        VTCacheUtils::setUserFullName($userName, $fullName);
+        if($num_rows > 0) {
+            $fullName = getFullNameFromQResult($rs, 0, 'Users');
+			VTCacheUtils::setUserFullName($from_name, $fullName);
+		}
     } else {
         $from_name = $userFullName;
     }
 	$mail->FromName = decode_html($from_name);
 
-//	$mail->Sender= getReturnPath($mail->Host);
 
 	if($to_email != '')
 	{
@@ -295,10 +295,19 @@ function setMailServerProperties($mail)
 	if($smtp_auth == "true"){
 		$mail->SMTPAuth = true;	// turn on SMTP authentication
 	}
-	$mail->Host = $server;		// specify main and backup server
+    $mail->Host = $server;		// specify main and backup server
 	$mail->Username = $username ;	// SMTP username
-        $mail->Password = $password ;	// SMTP password
-
+    $mail->Password = $password ;	// SMTP password
+    
+    // To Support TLS
+    $serverinfo = explode("://", $server);
+    $smtpsecure = $serverinfo[0];
+    if($smtpsecure == 'tls'){
+        $mail->SMTPSecure = $smtpsecure;
+        $mail->Host = $serverinfo[1];
+    }
+    // End
+    
 	return;
 }
 

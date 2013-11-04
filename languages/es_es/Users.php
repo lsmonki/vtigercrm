@@ -183,6 +183,7 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland',
 	'Asia/Magadan'                 => '(UTC+12:00) Magadan',
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa',
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Usuario eliminado correctamente',
 );
 
 $jsLanguageStrings = array(

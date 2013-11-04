@@ -125,7 +125,6 @@ class Settings_Picklist_SaveAjax_Action extends Settings_Vtiger_Basic_Action {
         $picklistValues = $request->get('picklistValues');
         
         $moduleModel = new Settings_Picklist_Module_Model();
-        $moduleModel->updateSequence($pickListFieldName, $picklistValues);
         $response = new Vtiger_Response();
         try{
             $moduleModel->updateSequence($pickListFieldName, $picklistValues);

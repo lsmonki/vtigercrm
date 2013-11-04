@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Compromisso'                 , 
+	'SINGLE_Calendar'              => 'Tarefa'                 , 
 	'LBL_ADD_TASK'                 => 'Add Task'                    , 
 	'LBL_ADD_EVENT'                => 'Evento'                      , 
 	'LBL_RECORDS_LIST'             => 'Lista'                       , 
@@ -21,6 +21,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
+	'LBL_EVENT_OR_TASK'            => 'Evento / Tarefa'                ,
 	'LBL_TASK_INFORMATION'         => 'Informação Tarefa'         , 
 	'Subject'                      => 'Assunto'                     , 
 	'Start Date & Time'            => 'Data & Hora Início'         , 
@@ -70,6 +71,7 @@ $jsLanguageStrings = array(
 	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Não pode ser detida para futuro',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

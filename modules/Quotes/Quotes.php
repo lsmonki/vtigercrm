@@ -102,7 +102,7 @@ class Quotes extends CRMEntity {
 	var $default_sort_order = 'ASC';
 	//var $groupTable = Array('vtiger_quotegrouprelation','quoteid');
 
-	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
+	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime', 'assigned_user_id');
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';

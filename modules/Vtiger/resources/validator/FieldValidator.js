@@ -7,7 +7,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 Vtiger_Base_Validator_Js("Vtiger_Email_Validator_Js",{
-	
+
 	/**
 	 *Function which invokes field validation
 	 *@param accepts field element as parameter
@@ -78,7 +78,8 @@ Vtiger_Base_Validator_Js("Vtiger_PositiveNumber_Validator_Js",{
 	 */
 	validate: function(){
 		var fieldValue = this.getFieldValue();
-		if(isNaN(fieldValue) || fieldValue < 0){
+		var negativeRegex= /(^[-]+\d+)$/ ;
+		if(isNaN(fieldValue) || fieldValue < 0 || fieldValue.match(negativeRegex)){
 			var errorInfo = app.vtranslate('JS_ACCEPT_POSITIVE_NUMBER');
 			this.setError(errorInfo);
 			return false;
@@ -293,7 +294,7 @@ Vtiger_PositiveNumber_Validator_Js("Vtiger_GreaterThanZero_Validator_Js",{
 })
 
 Vtiger_PositiveNumber_Validator_Js("Vtiger_WholeNumber_Validator_Js",{
-    
+
     /**
 	 *Function which invokes field validation
 	 *@param accepts field element as parameter
@@ -409,6 +410,40 @@ Vtiger_Base_Validator_Js("Vtiger_greaterThanDependentField_Validator_Js",{},{
 			return false;
 		}
 		return dateTimeInstance;
+	}
+})
+
+Vtiger_Base_Validator_Js("Vtiger_futureEventCannotBeHeld_Validator_Js",{},{
+
+	/**
+	 * Function to validate event status , which cannot be held for future events
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(dependentFieldList){
+		var field = this.getElement();
+		var fieldLabel = field.data('fieldinfo').label;
+                var status = field.val();
+		var contextFormElem = field.closest('form');
+		for(var i=0; i<dependentFieldList.length; i++){
+			var dependentField = dependentFieldList[i];
+			var dependentFieldInContext = jQuery('input[name='+dependentField+']',contextFormElem);
+			if(dependentFieldInContext.length > 0){
+				var dependentFieldLabel = dependentFieldInContext.data('fieldinfo').label;
+				var todayDateInstance = new Date();
+                                var dateFormat = dependentFieldInContext.data('dateFormat');
+                                var time = jQuery('input[name=time_start]',contextFormElem);
+                                var fieldValue = dependentFieldInContext.val()+" "+time.val();
+				var dependentFieldDateInstance = Vtiger_Helper_Js.getDateInstance(fieldValue,dateFormat);
+				var comparedDateVal =  todayDateInstance - dependentFieldDateInstance;
+				if(comparedDateVal < 0 && status == "Held"){
+					var errorInfo = fieldLabel+' '+app.vtranslate('JS_FUTURE_EVENT_CANNOT_BE_HELD')+' '+dependentFieldLabel+'';
+					this.setError(errorInfo);
+					return false;
+				}
+			}
+		}
+        return true;
 	}
 })
 
@@ -579,7 +614,7 @@ Vtiger_Base_Validator_Js("Vtiger_Date_Validator_Js",{
 		if(response != true){
 			return dateValidatorInstance.getError();
 		}
-		return response;  
+		return response;
 	}
 
 },{
@@ -609,7 +644,7 @@ Vtiger_Base_Validator_Js("Vtiger_Date_Validator_Js",{
 })
 
 Vtiger_Base_Validator_Js("Vtiger_Time_Validator_Js",{
-	
+
 	/**
 	 * Function which invokes field validation
 	 * @param accepts field element as parameter
@@ -625,7 +660,7 @@ Vtiger_Base_Validator_Js("Vtiger_Time_Validator_Js",{
 			return validatorInstance.getError();
 		}
 	}
-	
+
 },{
 
 	/**
@@ -666,7 +701,7 @@ Vtiger_greaterThanDependentField_Validator_Js("Calendar_greaterThanDependentFiel
                 timeFieldValue = '11:59 PM';
             }
 		}
-        
+
 		var dateFieldValue = field.val()+" "+ timeFieldValue;
         var dateFormat = field.data('dateFormat');
         return Vtiger_Helper_Js.getDateInstance(dateFieldValue,dateFormat);
@@ -806,7 +841,7 @@ Vtiger_Base_Validator_Js("Vtiger_AlphaNumeric_Validator_Js",{
 	 * @return false if validation error occurs
 	 */
 	validate: function(){
-		var field = this.getElement();;
+		var field = this.getElement();
 		var fieldValue = field.val();
 		var alphaNumericRegex = /^[a-z0-9 _-]*$/i;
 		if (!fieldValue.match(alphaNumericRegex)) {

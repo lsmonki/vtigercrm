@@ -66,12 +66,12 @@ class Vtiger_Functions {
 	protected static $userIdCurrencyIdCache = array();
 
 	static function userCurrencyId($userid) {
-		global $current_user, $adb;
-
+		global $adb;
 		if (!isset(self::$userIdCurrencyIdCache[$userid])) {
-			$result = $adb->pquery('SELECT currency_id FROM vtiger_users', array());
+			$result = $adb->pquery('SELECT id,currency_id FROM vtiger_users', array());
 			while ($row = $adb->fetch_array($result)) {
-				self::$userIdCurrencyIdCache[$row['id']] = $row['currency_id'];
+				self::$userIdCurrencyIdCache[$row['id']] =
+						$row['currency_id'];
 			}
 		}
 		return self::$userIdCurrencyIdCache[$userid];

@@ -620,6 +620,11 @@ class Vtiger_Module_Model extends Vtiger_Module {
             if($moduleObject) {
                 $instance = self::getInstanceFromModuleObject($moduleObject);
                 Vtiger_Cache::set('module',$value,$instance);
+				if (is_string($value)) {
+					Vtiger_Cache::set('module', $moduleObject->id, $instance);
+				} else if (is_int($value)) {
+					Vtiger_Cache::set('module', $moduleObject->name, $instance);
+				}
             }
         }
 		return $instance;
@@ -924,12 +929,18 @@ class Vtiger_Module_Model extends Vtiger_Module {
 				return $comments;
 			}
 		}
+        $nonAdminAccessQuery = Users_Privileges_Model::getNonAdminAccessControlQuery('ModComments');
 
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery('SELECT vtiger_modtracker_basic.*
 								FROM vtiger_modtracker_basic
 								INNER JOIN vtiger_crmentity ON vtiger_modtracker_basic.crmid = vtiger_crmentity.crmid
 									AND deleted = 0 AND module = ?
+                                INNER JOIN vtiger_crmentity crmentity2 ON vtiger_modcomments.related_to = crmentity2.crmid
+                                    AND crmentity2.deleted = 0
+                                INNER JOIN vtiger_crmentity crmentity3 ON vtiger_modcomments.customer = crmentity3.crmid 
+                                    AND crmentity3.deleted = 0
+                                '.$nonAdminAccessQuery.'
 								ORDER BY vtiger_modtracker_basic.id DESC LIMIT ?, ?',
 								array($this->getName(), $pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
 
@@ -1069,6 +1080,9 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @return <type>
 	 */
 	public function getSpecificRelationQuery($relatedModule) {
+		if($relatedModule == 'Documents'){
+			return ' AND vtiger_notes.filestatus = 1 ';
+		}
 		return;
 	}
 
@@ -1263,7 +1277,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		$focus->id = $recordId;
 
 		$result = $focus->$functionName($recordId, $this->getId(), $relatedModule->getId());
-		$query = $result['query'].' '.$this->getSpecificRelationQuery($relatedModuleName);
+		$query = $result['query'] .' '. $this->getSpecificRelationQuery($relatedModuleName);
 		$nonAdminQuery = $this->getNonAdminAccessControlQueryForRelation($relatedModuleName);
 
 		//modify query if any module has summary fields, those fields we are displayed in related list of that module
@@ -1389,5 +1403,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		$query = 'UPDATE vtiger_crmentity SET smownerid = ? WHERE crmid IN ('.  generateQuestionMarks($relatedModuleRecordIds).')';
 		$db->pquery($query, array($transferOwnerId,$relatedModuleRecordIds));
 	}
+    
+    /** 
+    * Function to get orderby sql from orderby field 
+    */ 
+    public function getOrderBySql($orderBy){ 
+             $orderByField = $this->getFieldByColumn($orderBy); 
+             return $orderByField->get('table') . '.' . $orderBy; 
+    } 
 
 }

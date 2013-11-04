@@ -36,19 +36,31 @@ class VTWorkflowEventHandler extends VTEventHandler {
 	 * Push tasks to the task queue if the conditions are true
 	 * @param $entityData A VTEntityData object representing the entity.
 	 */
-	function handleEvent($eventName, $entityData) {
+	function handleEvent($eventName, $entityData, $entityCache = false) {
 		$util = new VTWorkflowUtils();
 		$user = $util->adminUser();
 		global $adb;
 		$isNew = $entityData->isNew();
-		$entityCache = new VTEntityCache($user);
+
+		if (!$entityCache) {
+			$entityCache = new VTEntityCache($user);
+		}
+
 		$wsModuleName = $util->toWSModuleName($entityData);
 		$wsId = vtws_getWebserviceEntityId($wsModuleName,
 						$entityData->getId());
 		$entityData = $entityCache->forId($wsId);
 
-		$wfs = new VTWorkflowManager($adb);
-		$workflows = $wfs->getWorkflowsForModule($entityData->getModuleName());
+		/*
+		 * Customer - Feature #10254 Configuring all Email notifications including Ticket notifications
+		 * workflows are intialised from ModCommentsHandler.php
+		 * While adding a comment on any record which are supporting Comments ModCommentsHandler will trigger
+		 */
+		if (!is_array($this->workflows)) {
+			$wfs = new VTWorkflowManager($adb);
+			$this->workflows = $wfs->getWorkflowsForModule($entityData->getModuleName());
+		}
+		$workflows = $this->workflows;
 
 		foreach ($workflows as $workflow) {
 			if (!is_a($workflow, 'Workflow'))

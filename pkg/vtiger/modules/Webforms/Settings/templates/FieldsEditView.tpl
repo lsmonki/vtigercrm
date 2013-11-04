@@ -56,7 +56,7 @@
 						{assign var=SELECETED_FIELD_MODEL value=$SELECTED_FIELD_MODELS_LIST.$FIELD_NAME}
 						{assign var=FIELD_MODEL value=$FIELD_MODEL->set('fieldvalue',$SELECETED_FIELD_MODEL->get('fieldvalue'))}
 					{/if}
-					<tr data-name="{$FIELD_MODEL->getFieldName()}" class="listViewEntries" data-mandatory-field={($FIELD_MODEL->isMandatory(true) eq 1) ? "true":"false"}>
+					<tr data-name="{$FIELD_MODEL->getFieldName()}" data-mandatory-field={($FIELD_MODEL->isMandatory(true) eq 1) ? "true":"false"}>
 						<td class="textAlignCenter">
 							<input type="hidden" value="0" name='selectedFieldsData[{$FIELD_NAME}][required]'/>
 							<input type="checkbox" {if ($FIELD_MODEL->isMandatory(true) eq 1) or ($SELECETED_FIELD_MODEL->get('required') eq 1)}checked="checked"{/if} 
@@ -73,7 +73,7 @@
 							{/if}
 							{if !$FIELD_MODEL->isMandatory(true)}
 								<div class="pull-right actions">
-									<span class="actionImages"><a class="removeTargetModuleField"><i class="icon-remove-sign"></i></a></span>
+									<span class="actionImages cursorPointer"><a class="removeTargetModuleField"><i class="icon-remove-sign"></i></a></span>
 								</div>
 							{/if}
 						</td>

@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_TYPE_THE_MESSAGE' => 'Type the message',
 	'LBL_WRITE_YOUR_MESSAGE_HERE' => 'write your message here',
 	'LBL_ADD_MORE_FIELDS' => 'Add more fields',
-	'LBL_SEREVER_CONFIG' => 'Server Configuration',
+	'LBL_SERVER_CONFIG' => 'Server Configuration',
 
 	//DetailView Actions
 	'LBL_CHECK_STATUS' => 'Check Status',

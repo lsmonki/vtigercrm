@@ -27,6 +27,9 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 		'Portal Detail View URL' => '(general : (__VtigerMeta__) portaldetailviewurl)',
 		'Site Url' => '(general : (__VtigerMeta__) siteurl)',
 		'Portal Url' => '(general : (__VtigerMeta__) portalurl)',
+		'Record Id' => '(general : (__VtigerMeta__) recordId)',
+		'LBL_HELPDESK_SUPPORT_NAME' => '(general : (__VtigerMeta__) supportName)',
+		'LBL_HELPDESK_SUPPORT_EMAILID' => '(general : (__VtigerMeta__) supportEmailid)',
 	);
 
 	static $triggerTypes = array(
@@ -53,7 +56,7 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 	public static function getCreateViewUrl() {
 		return "javascript:Settings_Workflows_List_Js.triggerCreate('index.php?module=Workflows&parent=Settings&view=Edit')";
 	}
-	
+
 	public static function getCreateRecordUrl() {
 		return 'index.php?module=Workflows&parent=Settings&view=Edit';
 	}
@@ -83,7 +86,7 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 	public static function getMetaVariables() {
 		return self::$metaVariables;
 	}
-	
+
 	public function getListFields() {
 		if(!$this->listFieldModels) {
 			$fields = $this->listFields;

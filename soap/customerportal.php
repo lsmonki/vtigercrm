@@ -932,6 +932,7 @@ function update_ticket_comment($input_array)
 		$modComments->column_fields['assigned_user_id'] =  $current_user->id;
 		$modComments->column_fields['customer'] = $ownerid;
 		$modComments->column_fields['related_to'] = $ticketid;
+		$modComments->column_fields['from_portal'] = true;
 		$modComments->save('ModComments');
 	}
 }

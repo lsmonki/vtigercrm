@@ -350,7 +350,7 @@ jQuery.Class("Vtiger_List_Js",{
 					app.showModalWindow(data,function(data){
 						if(typeof callBackFunction == 'function'){
 							callBackFunction(data);
-							listInstance.triggerDisplayTypeEvent();
+							//listInstance.triggerDisplayTypeEvent();
 						}
 					},css)
 
@@ -551,7 +551,7 @@ jQuery.Class("Vtiger_List_Js",{
 				})
                 jQuery('#listViewContents').html(data);
 				thisInstance.calculatePages().then(function(data){
-					thisInstance.triggerDisplayTypeEvent();
+					//thisInstance.triggerDisplayTypeEvent();
 					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 
 					var selectedIds = thisInstance.readSelectedIds();
@@ -1723,7 +1723,7 @@ jQuery.Class("Vtiger_List_Js",{
 		this.registerDenyFilterClickEvent();
 		this.registerCustomFilterOptionsHoverEvent();
 		this.registerEmailFieldClickEvent();
-		this.triggerDisplayTypeEvent();
+		//this.triggerDisplayTypeEvent();
 		Vtiger_Helper_Js.showHorizontalTopScrollBar();
 		this.registerUrlFieldClickEvent();
 		this.registerEventForTotalRecordsCount();
@@ -1749,7 +1749,7 @@ jQuery.Class("Vtiger_List_Js",{
 				jQuery('#totalPageCount').text('');
 				var listViewContainer = listInstance.getListViewContentContainer();
 				listViewContainer.html(data);
-				listInstance.triggerDisplayTypeEvent();
+				//listInstance.triggerDisplayTypeEvent();
 				jQuery('#deSelectAllMsg').trigger('click');
 				listInstance.calculatePages().then(function(){
 					listInstance.updatePagination();

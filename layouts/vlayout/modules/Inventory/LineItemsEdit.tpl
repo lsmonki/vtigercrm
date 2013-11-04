@@ -27,7 +27,7 @@
 
     <table class="table table-bordered blockContainer lineItemTable" id="lineItemTab">
         <tr>
-            <th colspan="3"><span class="inventoryLineItemHeader">{vtranslate('LBL_ITEM_DETAILS', $MODULE)}</span></th>
+            <th colspan="2"><span class="inventoryLineItemHeader">{vtranslate('LBL_ITEM_DETAILS', $MODULE)}</span></th>
             <td colspan="1" class="chznDropDown">
                 <b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
                 {assign var=SELECTED_CURRENCY value=$CURRENCINFO}
@@ -58,7 +58,7 @@
                 <!-- TODO : To get default currency in even better way than depending on first element -->
                 <input type="hidden" id="default_currency_id" value="{$CURRENCIES.0.curid}" />
             </td>
-            <td colspan="2" class="chznDropDown">
+            <td colspan="3" class="chznDropDown">
                 <div class="pull-right">
                     <div class="inventoryLineItemHeader">
                         <span class="alignTop">{vtranslate('LBL_TAX_MODE', $MODULE)}</span>

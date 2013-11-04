@@ -69,7 +69,7 @@
 		{/if}
 		{if !empty($LINE_ITEM_DETAIL["productName$INDEX"])}
 			<div>
-				{$LINE_ITEM_DETAIL["comment$INDEX"]}
+				{$LINE_ITEM_DETAIL["comment$INDEX"]|nl2br}
 			</div>
 		{/if}
 	    </td>

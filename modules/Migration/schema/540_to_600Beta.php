@@ -20,7 +20,7 @@ if(!defined(VTIGER_UPGRADE)) {
 	//Collating all module package updates here
 	updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
 	updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
-
+	updateVtlibModule('MailManager', 'packages/vtiger/mandatory/MailManager.zip');
 	updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
 	updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
 	updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
@@ -434,14 +434,6 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_settings_field SET description
 
 Migration_Index_View::ExecuteQuery('CREATE TABLE IF NOT EXISTS vtiger_crmsetup(userid INT(11) NOT NULL, setup_status INT(2))', array());
 
-$result = $adb->pquery('SELECT id FROM vtiger_users', array());
-$num_rows = $adb->num_rows($result);
-
-for ($i=0; $i<$num_rows; $i++) {
-	$userid = $adb->query_result($result, $i, 'id');
-	Users_CRMSetup::insertEntryIntoCRMSetup($userid);
-}
-
 $discountResult = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_selectcolumn WHERE columnname LIKE "vtiger_inventoryproductrel:discount:%" ORDER BY columnindex', array());
 $num_rows = $adb->num_rows($discountResult);
 
@@ -631,7 +623,7 @@ $leads->addLink('DASHBOARDWIDGET', 'Overdue Activities', 'index.php?module=Leads
 
 $helpDesk = Vtiger_Module::getInstance('HelpDesk');
 $helpDesk->addLink('DASHBOARDWIDGET', 'Tickets by Status', 'index.php?module=HelpDesk&view=ShowWidget&name=TicketsByStatus','', '1');
-$helpDesk->addLink('DASHBOARDWIDGET', 'Open Ticktes', 'index.php?module=HelpDesk&view=ShowWidget&name=OpenTickets','', '2');
+$helpDesk->addLink('DASHBOARDWIDGET', 'Open Tickets', 'index.php?module=HelpDesk&view=ShowWidget&name=OpenTickets','', '2');
 
 $home = Vtiger_Module::getInstance('Home');
 $home->addLink('DASHBOARDWIDGET', 'History', 'index.php?module=Home&view=ShowWidget&name=History','', '1');
@@ -650,7 +642,7 @@ $home->addLink('DASHBOARDWIDGET', 'Leads by Industry', 'index.php?module=Leads&v
 $home->addLink('DASHBOARDWIDGET', 'Overdue Activities', 'index.php?module=Home&view=ShowWidget&name=OverdueActivities','', '13');
 
 $home->addLink('DASHBOARDWIDGET', 'Tickets by Status', 'index.php?module=HelpDesk&view=ShowWidget&name=TicketsByStatus','', '13');
-$home->addLink('DASHBOARDWIDGET', 'Open Ticktes', 'index.php?module=HelpDesk&view=ShowWidget&name=OpenTickets','', '14');
+$home->addLink('DASHBOARDWIDGET', 'Open Tickets', 'index.php?module=HelpDesk&view=ShowWidget&name=OpenTickets','', '14');
 
 //Calendar and Events module clean up
 $calendarTabId = getTabid('Calendar');
@@ -1481,7 +1473,7 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_leaddetails SET salutation='' 
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_contactdetails SET salutation='' WHERE salutation = ?", array('--None--'));
 // END 2013-06-25
 
-// Start 2013-09-24 
+// Start 2013-09-24
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_eventhandlers SET handler_path = ? WHERE handler_class = ?',
 				array('modules/Vtiger/handlers/RecordLabelUpdater.php', 'Vtiger_RecordLabelUpdater_Handler'));
 
@@ -1506,7 +1498,7 @@ foreach ($inventoryModules as $key => $moduleName) {
 	$blockInstance->addField($field);
 }
 
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_invoice_recurring_info ADD PRIMARY KEY (salesorderid)',array()); 
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_invoice_recurring_info ADD PRIMARY KEY (salesorderid)',array());
 
 $result = $adb->pquery('SELECT task_id FROM com_vtiger_workflowtasks WHERE workflow_id IN
 						(SELECT workflow_id FROM com_vtiger_workflows WHERE module_name IN (?, ?))
@@ -1858,3 +1850,574 @@ if($adb->num_rows($checkResult) <= 0) {
 
 $result = $adb->pquery('SELECT count(*) AS count FROM vtiger_emailtemplates', array());
 Migration_Index_View::ExecuteQuery('UPDATE vtiger_emailtemplates_seq SET id = ?', array(1 + ((int)$adb->query_result($result, 0, 'count'))));
+
+$usersInstance = Vtiger_Module::getInstance('Users');
+$blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $usersInstance);
+$usersRowHeightField = Vtiger_Field::getInstance('rowheight', $usersInstance);
+if (!$usersRowHeightField) {
+	$field = new Vtiger_Field();
+	$field->name = 'rowheight';
+	$field->label = 'Row Height';
+	$field->table = 'vtiger_users';
+	$field->uitype = 16;
+	$field->typeofdata = 'V~O';
+	$field->readonly = 1;
+	$field->displaytype = 1;
+	$field->masseditable = 1;
+	$field->quickcreate = 1;
+	$field->columntype = 'VARCHAR(10)';
+	$field->defaultvalue = 'medium';
+	$blockInstance->addField($field);
+
+	$field->setPicklistValues(array('wide', 'medium', 'narrow'));
+}
+
+//Start: Customer - Feature #10254 Configuring all Email notifications including Ticket notifications
+$moduleName = 'HelpDesk';
+//Start: Moving Entity methods of Comments to Workflows
+$result = $adb->pquery('SELECT DISTINCT workflow_id FROM com_vtiger_workflowtasks WHERE workflow_id IN
+				(SELECT workflow_id FROM com_vtiger_workflows WHERE module_name IN (?) AND defaultworkflow = ?)
+				AND task LIKE ?', array('ModComments', 1, '%VTEntityMethodTask%'));
+$numOfRows = $adb->num_rows($result);
+
+for ($i = 0; $i < $numOfRows; $i++) {
+	$wfs = new VTWorkflowManager($adb);
+	$workflowModel = $wfs->retrieve($adb->query_result($result, $i, 'workflow_id'));
+	$workflowModel->filtersavedinnew = 6;
+	$workflowModel->executionCondition = 3;
+	$workflowModel->moduleName = $moduleName;
+
+	$newWorkflowModel = $wfs->newWorkflow($moduleName);
+	$workflowProperties = get_object_vars($workflowModel);
+	foreach ($workflowProperties as $workflowPropertyName => $workflowPropertyValue) {
+		$newWorkflowModel->$workflowPropertyName = $workflowPropertyValue;
+	}
+
+	$newConditions = array(
+		array('fieldname' => '_VT_add_comment',
+			'operation' => 'is added',
+			'value' => '',
+			'valuetype' => 'rawtext',
+			'joincondition' => '',
+			'groupjoin' => 'and',
+			'groupid' => '0')
+	);
+
+	$tm = new VTTaskManager($adb);
+	$tasks = $tm->getTasksForWorkflow($workflowModel->id);
+	foreach ($tasks as $task) {
+		$properties = get_object_vars($task);
+
+		$emailTask = new VTEmailTask();
+		$emailTask->executeImmediately = 0;
+		$emailTask->summary = $properties['summary'];
+		$emailTask->active = $properties['active'];
+
+		switch ($properties['methodName']) {
+			case 'CustomerCommentFromPortal' :
+				$tm->deleteTask($task->id);
+
+				$newWorkflowConditions = $newConditions;
+				$newWorkflowConditions[] = array(
+					'fieldname' => 'from_portal',
+					'operation' => 'is',
+					'value' => '1',
+					'valuetype' => 'rawtext',
+					'joincondition' => '',
+					'groupjoin' => 'and',
+					'groupid' => '0'
+				);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->test = Zend_Json::encode($newWorkflowConditions);
+				$newWorkflowModel->description = 'Comment Added From Portal : Send Email to Record Owner';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Comment Added From Portal : Send Email to Record Owner';
+				$emailTask->fromEmail = '$(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname)&lt;$(contact_id : (Contacts) email)&gt;';
+				$emailTask->recepient = ',$(assigned_user_id : (Users) email1)';
+				$emailTask->subject = 'Respond to Ticket ID## $(general : (__VtigerMeta__) recordId) ## in Customer Portal - URGENT';
+				$emailTask->content = 'Dear $(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name),<br><br>
+								Customer has provided the following additional information to your reply:<br><br>
+								<b>$lastComment</b><br><br>
+								Kindly respond to above ticket at the earliest.<br><br>
+								Regards<br>Support Administrator';
+				$tm->saveTask($emailTask);
+				break;
+
+
+			case 'TicketOwnerComments' :
+				$tm->deleteTask($task->id);
+
+				$newConditions[] = array(
+					'fieldname' => 'from_portal',
+					'operation' => 'is',
+					'value' => '0',
+					'valuetype' => 'rawtext',
+					'joincondition' => '',
+					'groupjoin' => 'and',
+					'groupid' => '0'
+				);
+
+				$newWorkflowConditions = $newConditions;
+				$newWorkflowConditions[] = array(
+					'fieldname' => '(contact_id : (Contacts) emailoptout)',
+					'operation' => 'is',
+					'value' => '0',
+					'valuetype' => 'rawtext',
+					'joincondition' => 'and',
+					'groupjoin' => 'and',
+					'groupid' => '0'
+				);
+
+				$portalCondition = array(
+					array('fieldname' => '(contact_id : (Contacts) portal)',
+						'operation' => 'is',
+						'value' => '0',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'and',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->test = Zend_Json::encode(array_merge($portalCondition, $newWorkflowConditions));
+				$newWorkflowModel->description = 'Comment Added From CRM : Send Email to Contact, where Contact is not a Portal User';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Comment Added From CRM : Send Email to Contact, where Contact is not a Portal User';
+				$emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
+				$emailTask->recepient = ',$(contact_id : (Contacts) email)';
+				$emailTask->subject = '$ticket_no [ Ticket Id : $(general : (__VtigerMeta__) recordId) ] $ticket_title';
+				$emailTask->content = 'Dear $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname),<br><br>
+							The Ticket is replied the details are :<br><br>
+							Ticket No : $ticket_no<br>
+							Status : $ticketstatus<br>
+							Category : $ticketcategories<br>
+							Severity : $ticketseverities<br>
+							Priority : $ticketpriorities<br><br>
+							Description : <br>$description<br><br>
+							Solution : <br>$solution<br>
+							The comments are : <br>
+							$allComments<br><br>
+							Regards<br>Support Administrator';
+				$tm->saveTask($emailTask);
+
+				$portalCondition = array(
+					array('fieldname' => '(contact_id : (Contacts) portal)',
+						'operation' => 'is',
+						'value' => '1',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'and',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->test = Zend_Json::encode(array_merge($portalCondition, $newWorkflowConditions));
+				$newWorkflowModel->description = 'Comment Added From CRM : Send Email to Contact, where Contact is Portal User';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Comment Added From CRM : Send Email to Contact, where Contact is Portal User';
+				$emailTask->content = 'Ticket No : $ticket_no<br>
+										Ticket Id : $(general : (__VtigerMeta__) recordId)<br>
+										Subject : $ticket_title<br><br>
+										Dear $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname),<br><br>
+										There is a reply to <b>$ticket_title</b> in the "Customer Portal" at VTiger.
+										You can use the following link to view the replies made:<br>
+										<a href="$(general : (__VtigerMeta__) portaldetailviewurl)">Ticket Details</a><br><br>
+										Thanks<br>$(general : (__VtigerMeta__) supportName)';
+				$tm->saveTask($emailTask);
+
+				$newConditions[] = array(
+					'fieldname' => '(parent_id : (Accounts) emailoptout)',
+					'operation' => 'is',
+					'value' => '0',
+					'valuetype' => 'rawtext',
+					'joincondition' => 'and',
+					'groupjoin' => 'and',
+					'groupid' => '0'
+				);
+
+				$workflowModel->test = Zend_Json::encode($newConditions);
+				$workflowModel->description = 'Comment Added From CRM : Send Email to Organization';
+				$wfs->save($workflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $workflowModel->id;
+				$emailTask->summary = 'Comment Added From CRM : Send Email to Organization';
+				$emailTask->recepient = ',$(parent_id : (Accounts) email1),';
+				$emailTask->content = 'Ticket ID : $(general : (__VtigerMeta__) recordId)<br>Ticket Title : $ticket_title<br><br>
+								Dear $(parent_id : (Accounts) accountname),<br><br>
+								The Ticket is replied the details are :<br><br>
+								Ticket No : $ticket_no<br>
+								Status : $ticketstatus<br>
+								Category : $ticketcategories<br>
+								Severity : $ticketseverities<br>
+								Priority : $ticketpriorities<br><br>
+								Description : <br>$description<br><br>
+								Solution : <br>$solution<br>
+								The comments are : <br>
+								$allComments<br><br>
+								Regards<br>Support Administrator';
+				$tm->saveTask($emailTask);
+
+				break;
+		}
+	}
+}
+//End: Moved Entity methods of Comments to Workflows
+//Start: Moving Entity methods of Tickets to Workflows
+$result = $adb->pquery('SELECT DISTINCT workflow_id FROM com_vtiger_workflowtasks WHERE workflow_id IN
+				(SELECT workflow_id FROM com_vtiger_workflows WHERE module_name IN (?) AND defaultworkflow = ?)
+				AND task LIKE ?', array($moduleName, 1, '%VTEntityMethodTask%'));
+$numOfRows = $adb->num_rows($result);
+
+for ($i = 0; $i < $numOfRows; $i++) {
+	$wfs = new VTWorkflowManager($adb);
+	$workflowModel = $wfs->retrieve($adb->query_result($result, $i, 'workflow_id'));
+	$workflowModel->filtersavedinnew = 6;
+
+	$tm = new VTTaskManager($adb);
+	$tasks = $tm->getTasksForWorkflow($workflowModel->id);
+	foreach ($tasks as $task) {
+		$properties = get_object_vars($task);
+
+		$emailTask = new VTEmailTask();
+		$emailTask->executeImmediately = 0;
+		$emailTask->summary = $properties['summary'];
+		$emailTask->active = $properties['active'];
+		switch ($properties['methodName']) {
+			case 'NotifyOnPortalTicketCreation' :
+				$oldCondtions = Migration_Index_View::transformAdvanceFilterToWorkFlowFilter(Zend_Json::decode($workflowModel->test));
+				$newConditions = array(
+					array('fieldname' => 'from_portal',
+						'operation' => 'is',
+						'value' => '1',
+						'valuetype' => 'rawtext',
+						'joincondition' => '',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+				$newConditions = array_merge($oldCondtions, $newConditions);
+
+				$workflowModel->test = Zend_Json::encode($newConditions);
+				$workflowModel->description = 'Ticket Creation From Portal : Send Email to Record Owner and Contact';
+				$wfs->save($workflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $properties['workflowId'];
+				$emailTask->summary = 'Notify Record Owner when Ticket is created from Portal';
+				$emailTask->fromEmail = '$(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
+				$emailTask->recepient = ',$(assigned_user_id : (Users) email1)';
+				$emailTask->subject = '[From Portal] $ticket_no [ Ticket Id : $(general : (__VtigerMeta__) recordId) ] $ticket_title';
+				$emailTask->content = 'Ticket No : $ticket_no<br>
+							  Ticket ID : $(general : (__VtigerMeta__) recordId)<br>
+							  Ticket Title : $ticket_title<br><br>
+							  $description';
+				$tm->saveTask($emailTask);
+
+				$emailTask->id = $properties['id'];
+				$emailTask->summary = 'Notify Related Contact when Ticket is created from Portal';
+				$emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
+				$emailTask->recepient = ',$(contact_id : (Contacts) email)';
+
+				$tm->saveTask($emailTask);
+				break;
+
+
+			case 'NotifyOnPortalTicketComment' :
+				$tm->deleteTask($properties['id']);
+				Migration_Index_View::ExecuteQuery('DELETE FROM com_vtiger_workflows WHERE workflow_id = ?', array($workflowModel->id));
+				break;
+
+
+			case 'NotifyParentOnTicketChange' :
+				$newWorkflowModel = $wfs->newWorkflow($workflowModel->moduleName);
+				$workflowProperties = get_object_vars($workflowModel);
+				foreach ($workflowProperties as $workflowPropertyName => $workflowPropertyValue) {
+					$newWorkflowModel->$workflowPropertyName = $workflowPropertyValue;
+				}
+
+				$oldCondtions = Migration_Index_View::transformAdvanceFilterToWorkFlowFilter(Zend_Json::decode($newWorkflowModel->test));
+				$newConditions = array(
+					array('fieldname' => 'ticketstatus',
+						'operation' => 'has changed to',
+						'value' => 'Closed',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1'),
+					array('fieldname' => 'solution',
+						'operation' => 'has changed',
+						'value' => '',
+						'valuetype' => '',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1'),
+					array('fieldname' => 'description',
+						'operation' => 'has changed',
+						'value' => '',
+						'valuetype' => '',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1')
+				);
+				$newConditions = array_merge($oldCondtions, $newConditions);
+
+				$newAccountCondition = array(
+					array('fieldname' => '(parent_id : (Accounts) emailoptout)',
+						'operation' => 'is',
+						'value' => '0',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'and',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+				$newWorkflowConditions = array_merge($newAccountCondition, $newConditions);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->test = Zend_Json::encode($newWorkflowConditions);
+				$newWorkflowModel->description = 'Send Email to Organization on Ticket Update';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->summary = 'Send Email to Organization on Ticket Update';
+				$emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
+				$emailTask->recepient = ',$(parent_id : (Accounts) email1)';
+				$emailTask->subject = '$ticket_no [ Ticket Id : $(general : (__VtigerMeta__) recordId) ] $ticket_title';
+				$emailTask->content = 'Ticket ID : $(general : (__VtigerMeta__) recordId)<br>Ticket Title : $ticket_title<br><br>
+								Dear $(parent_id : (Accounts) accountname),<br><br>
+								The Ticket is replied the details are :<br><br>
+								Ticket No : $ticket_no<br>
+								Status : $ticketstatus<br>
+								Category : $ticketcategories<br>
+								Severity : $ticketseverities<br>
+								Priority : $ticketpriorities<br><br>
+								Description : <br>$description<br><br>
+								Solution : <br>$solution<br>
+								The comments are : <br>
+								$allComments<br><br>
+								Regards<br>Support Administrator';
+
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$tm->saveTask($emailTask);
+
+				$portalCondition = array(
+					array('fieldname' => 'from_portal',
+						'operation' => 'is',
+						'value' => '0',
+						'valuetype' => 'rawtext',
+						'joincondition' => '',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->executionCondition = 1;
+				$newWorkflowModel->test = Zend_Json::encode(array_merge($newAccountCondition, $portalCondition));
+				$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Organization';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Ticket Creation From CRM : Send Email to Organization';
+				$tm->saveTask($emailTask);
+
+				$newContactCondition = array(
+					array('fieldname' => '(contact_id : (Contacts) emailoptout)',
+						'operation' => 'is',
+						'value' => '0',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'and',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+				$newConditions = array_merge($newContactCondition, $newConditions);
+
+				$workflowModel->test = Zend_Json::encode($newConditions);
+				$workflowModel->description = 'Send Email to Contact on Ticket Update';
+				$wfs->save($workflowModel);
+
+				$emailTask->id = $properties['id'];
+				$emailTask->workflowId = $properties['workflowId'];
+				$emailTask->summary = 'Send Email to Contact on Ticket Update';
+				$emailTask->recepient = ',$(contact_id : (Contacts) email)';
+				$emailTask->content = 'Ticket ID : $(general : (__VtigerMeta__) recordId)<br>Ticket Title : $ticket_title<br><br>
+								Dear $(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname),<br><br>
+								The Ticket is replied the details are :<br><br>
+								Ticket No : $ticket_no<br>
+								Status : $ticketstatus<br>
+								Category : $ticketcategories<br>
+								Severity : $ticketseverities<br>
+								Priority : $ticketpriorities<br><br>
+								Description : <br>$description<br><br>
+								Solution : <br>$solution<br>
+								The comments are : <br>
+								$allComments<br><br>
+								Regards<br>Support Administrator';
+
+				$tm->saveTask($emailTask);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->executionCondition = 1;
+				$newWorkflowModel->test = Zend_Json::encode(array_merge($newContactCondition, $portalCondition));
+				$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Contact';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Ticket Creation From CRM : Send Email to Contact';
+				$tm->saveTask($emailTask);
+				break;
+
+
+			case 'NotifyOwnerOnTicketChange' :
+				$tm->deleteTask($task->id);
+
+				$newWorkflowModel = $wfs->newWorkflow($workflowModel->moduleName);
+				$workflowProperties = get_object_vars($workflowModel);
+				foreach ($workflowProperties as $workflowPropertyName => $workflowPropertyValue) {
+					$newWorkflowModel->$workflowPropertyName = $workflowPropertyValue;
+				}
+
+				$oldCondtions = Migration_Index_View::transformAdvanceFilterToWorkFlowFilter(Zend_Json::decode($newWorkflowModel->test));
+				$newConditions = array(
+					array('fieldname' => 'ticketstatus',
+						'operation' => 'has changed to',
+						'value' => 'Closed',
+						'valuetype' => 'rawtext',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1'),
+					array('fieldname' => 'solution',
+						'operation' => 'has changed',
+						'value' => '',
+						'valuetype' => '',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1'),
+					array('fieldname' => 'assigned_user_id',
+						'operation' => 'has changed',
+						'value' => '',
+						'valuetype' => '',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1'),
+					array('fieldname' => 'description',
+						'operation' => 'has changed',
+						'value' => '',
+						'valuetype' => '',
+						'joincondition' => 'or',
+						'groupjoin' => 'and',
+						'groupid' => '1')
+				);
+				$newConditions = array_merge($oldCondtions, $newConditions);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->test = Zend_Json::encode($newConditions);
+				$newWorkflowModel->description = 'Send Email to Record Owner on Ticket Update';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Send Email to Record Owner on Ticket Update';
+				$emailTask->fromEmail = '$(general : (__VtigerMeta__) supportName)&lt;$(general : (__VtigerMeta__) supportEmailId)&gt;';
+				$emailTask->recepient = ',$(assigned_user_id : (Users) email1)';
+				$emailTask->subject = 'Ticket Number : $ticket_no $ticket_title';
+				$emailTask->content = 'Ticket ID : $(general : (__VtigerMeta__) recordId)<br>Ticket Title : $ticket_title<br><br>
+								Dear $(assigned_user_id : (Users) last_name) $(assigned_user_id : (Users) first_name),<br><br>
+								The Ticket is replied the details are :<br><br>
+								Ticket No : $ticket_no<br>
+								Status : $ticketstatus<br>
+								Category : $ticketcategories<br>
+								Severity : $ticketseverities<br>
+								Priority : $ticketpriorities<br><br>
+								Description : <br>$description<br><br>
+								Solution : <br>$solution
+								$allComments<br><br>
+								Regards<br>Support Administrator';
+				$emailTask->id = '';
+				$tm->saveTask($emailTask);
+
+				$portalCondition = array(
+					array('fieldname' => 'from_portal',
+						'operation' => 'is',
+						'value' => '0',
+						'valuetype' => 'rawtext',
+						'joincondition' => '',
+						'groupjoin' => 'and',
+						'groupid' => '0')
+				);
+
+				unset($newWorkflowModel->id);
+				$newWorkflowModel->executionCondition = 1;
+				$newWorkflowModel->test = Zend_Json::encode($portalCondition);
+				$newWorkflowModel->description = 'Ticket Creation From CRM : Send Email to Record Owner';
+				$wfs->save($newWorkflowModel);
+
+				$emailTask->id = '';
+				$emailTask->workflowId = $newWorkflowModel->id;
+				$emailTask->summary = 'Ticket Creation From CRM : Send Email to Record Owner';
+				$tm->saveTask($emailTask);
+				break;
+		}
+	}
+}
+$em = new VTEventsManager($adb);
+$em->registerHandler('vtiger.entity.aftersave', 'modules/ModComments/ModCommentsHandler.php', 'ModCommentsHandler');
+$result = $adb->pquery('SELECT blockid FROM vtiger_blocks where tabid = ? AND (blocklabel is NULL OR blocklabel = "")', array(getTabid('Emails')));
+$numOfRows = $adb->num_rows($result);
+
+$query = 'UPDATE vtiger_blocks SET blocklabel = CASE blockid ';
+for ($i = 0; $i < $numOfRows; $i++) {
+	$blockId = $adb->query_result($result, $i, 'blockid');
+	$blockLabel = 'Emails_Block' . ($i + 1);
+	$query .= "WHEN $blockId THEN '$blockLabel' ";
+}
+$query .= 'ELSE blocklabel END';
+Migration_Index_View::ExecuteQuery($query, array());
+
+$result = $adb->pquery('SELECT task_id FROM com_vtiger_workflowtasks WHERE workflow_id IN
+																	(SELECT workflow_id FROM com_vtiger_workflows WHERE module_name IN (?, ?))
+																	AND task LIKE ?', array('Calendar', 'Events', '%$(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname)%'));
+$numOfRows = $adb->num_rows($result);
+
+for ($i = 0; $i < $numOfRows; $i++) {
+	$tm = new VTTaskManager($adb);
+	$task = $tm->retrieveTask($adb->query_result($result, $i, 'task_id'));
+
+	$emailTask = new VTEmailTask();
+	$properties = get_object_vars($task);
+	foreach ($properties as $propertyName => $propertyValue) {
+		$propertyValue = str_replace('$date_start  $time_start ( $(general : (__VtigerMeta__) usertimezone) ) ', '$date_start', $propertyValue);
+		$propertyValue = str_replace('$due_date  $time_end ( $(general : (__VtigerMeta__) usertimezone) )', '$due_date', $propertyValue);
+		$propertyValue = str_replace('$due_date ( $(general : (__VtigerMeta__) usertimezone) )', '$due_date', $propertyValue);
+		$propertyValue = str_replace('$(contact_id : (Contacts) lastname) $(contact_id : (Contacts) firstname)', '$contact_id', $propertyValue);
+		$emailTask->$propertyName = $propertyValue;
+	}
+
+	$tm->saveTask($emailTask);
+}
+
+$result = $adb->pquery('SELECT 1 FROM vtiger_currencies WHERE currency_name = ?', array('Ugandan Shilling'));
+if(!$adb->num_rows($result)) {
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies (currencyid, currency_name, currency_code, currency_symbol) VALUES(?, ?, ?, ?)',
+			array($adb->getUniqueID('vtiger_currencies'), 'Ugandan Shilling', 'UGX', 'Sh'));
+}
+$em = new VTEventsManager($adb);
+$em->registerHandler('vtiger.picklist.afterrename', 'vtiger6/modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
+$em->registerHandler('vtiger.picklist.afterdelete', 'vtiger6/modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
+
+Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_inventoryproductrel MODIFY comment varchar(500)', array());
+
+$module = Vtiger_Module::getInstance('Accounts');
+$module->addLink('DETAILVIEWSIDEBARWIDGET', 'Google Map', 'module=Google&view=Map&mode=showMap&viewtype=detail', '', '', '');
+
+

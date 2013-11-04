@@ -34,6 +34,8 @@ class Home_Module_Model extends Vtiger_Module_Model {
 							AND vtiger_crmentity.deleted = 0
 						INNER JOIN vtiger_crmentity crmentity2 ON vtiger_modcomments.related_to = crmentity2.crmid
 							AND crmentity2.deleted = 0
+                        LEFT JOIN vtiger_crmentity crmentity3 ON vtiger_modcomments.customer = crmentity3.crmid 
+                            AND crmentity3.deleted = 0
 						 '.$nonAdminAccessQuery.'
 						ORDER BY vtiger_crmentity.crmid DESC LIMIT ?, ?',
 				array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
@@ -41,10 +43,12 @@ class Home_Module_Model extends Vtiger_Module_Model {
 		$comments = array();
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$row = $db->query_result_rowdata($result, $i);
-			$commentModel = Vtiger_Record_Model::getCleanInstance('ModComments');
-			$commentModel->setData($row);
-			$time = $commentModel->get('createdtime');
-			$comments[$time] = $commentModel;
+			if(Users_Privileges_Model::isPermitted($row['setype'], 'DetailView', $row['related_to'])){
+				$commentModel = Vtiger_Record_Model::getCleanInstance('ModComments');
+				$commentModel->setData($row);
+				$time = $commentModel->get('createdtime');
+				$comments[$time] = $commentModel;
+			}
 		}
 
 		return $comments;
@@ -69,19 +73,23 @@ class Home_Module_Model extends Vtiger_Module_Model {
 			}
 		}
 		$db = PearDatabase::getInstance();
+		//As getComments api is used to get comment infomation,no need of getting
+		//comment information again,so avoiding from modtracker
 		$result = $db->pquery('SELECT vtiger_modtracker_basic.*
 								FROM vtiger_modtracker_basic
 								INNER JOIN vtiger_crmentity ON vtiger_modtracker_basic.crmid = vtiger_crmentity.crmid
-									AND deleted = 0
+									AND deleted = 0 AND module != "ModComments"
 								ORDER BY vtiger_modtracker_basic.id DESC LIMIT ?, ?',
 				array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
 
 		$activites = array();
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$row = $db->query_result_rowdata($result, $i);
-			if(Users_Privileges_Model::isPermitted($row['module'], 'DetailView', $row['crmid'])){
+			$moduleName = $row['module'];
+			$recordId = $row['crmid'];
+			if(Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $recordId)){
 				$modTrackerRecorModel = new ModTracker_Record_Model();
-				$modTrackerRecorModel->setData($row)->setParent($row['crmid'], $row['module']);
+				$modTrackerRecorModel->setData($row)->setParent($recordId, $moduleName);
 				$time = $modTrackerRecorModel->get('changedon');
 				$activites[$time] = $modTrackerRecorModel;
 			}

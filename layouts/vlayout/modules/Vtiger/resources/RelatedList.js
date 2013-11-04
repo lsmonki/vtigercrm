@@ -52,7 +52,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 				thisInstance.selectedRelatedTabElement.addClass('active');
 				thisInstance.relatedContentContainer.html(responseData);
 				responseData = thisInstance.relatedContentContainer.html();
-				thisInstance.triggerDisplayTypeEvent();
+				//thisInstance.triggerDisplayTypeEvent();
 				Vtiger_Helper_Js.showHorizontalTopScrollBar();
 				jQuery('.pageNumbers',thisInstance.relatedContentContainer).tooltip();
 				aDeferred.resolve(responseData);

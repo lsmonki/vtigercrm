@@ -12,12 +12,12 @@
 {strip}
 <div class="container-fluid">
 	<br>
-	<label class="pull-left themeTextColor font-x-x-large">{vtranslate('LBL_PROFILE_VIEW', $QUALIFIED_MODULE)}</label>
+	<h3>{vtranslate('LBL_PROFILE_VIEW', $QUALIFIED_MODULE)}</h3>
 	<button class="btn pull-right" type="button" onclick='window.location.href="{$RECORD_MODEL->getEditViewUrl()}"'>{vtranslate('LBL_EDIT',$QUALIFIED_MODULE)}</button>
 	<div class="clearfix"></div>
 	<hr>
 	<div class="profileDetailView">
-		
+
 		<div class="row-fluid">
 			<div class="row-fluid">
 				<label class="fieldLabel span2 muted"><span class="redColor">*</span>{vtranslate('LBL_PROFILE_NAME', $QUALIFIED_MODULE)}: </label>
@@ -50,20 +50,20 @@
 			<div class="row-fluid">
 				<table class="table table-striped table-bordered">
 					<thead>
-						
+
 						<tr>
 							<th width="27%" style="border-left: 1px solid #DDD !important;">
 								{vtranslate('LBL_MODULES', $QUALIFIED_MODULE)}
 							</th>
 							<th width="11%" style="border-left: 1px solid #DDD !important;">
 								<span class="horizontalAlignCenter">
-									
+
 									&nbsp;{'LBL_VIEW_PRVILIGE'|vtranslate:$QUALIFIED_MODULE}
 								</span>
 							</th>
 							<th width="12%" style="border-left: 1px solid #DDD !important;">
 								<span class="horizontalAlignCenter" >
-									
+
 									&nbsp;{'LBL_EDIT_PRVILIGE'|vtranslate:$QUALIFIED_MODULE}
 								</span>
 							</th>
@@ -173,7 +173,7 @@
 									{if $ACTION_MODEL->isModuleEnabled($PROFILE_MODULE)}
 										{assign var="testArray" array_push($ALL_UTILITY_ACTIONS_ARRAY,$ACTION_MODEL)}
 									{/if}
-								{/foreach}	
+								{/foreach}
 								{foreach from=$ALL_UTILITY_ACTIONS_ARRAY item=ACTION_MODEL name="actions"}
 									{if $smarty.foreach.actions.index % 3 == 0}
 										<tr>
@@ -195,7 +195,7 @@
 					{/foreach}
 				</tbody>
 			</table>
-			</div>	
+			</div>
 		</div>
 	</div>
 </div>

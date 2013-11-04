@@ -151,11 +151,11 @@ class CurrencyField {
 		if($skipConversion == false) {
 			$value = self::convertFromDollar($value,$this->conversionRate);
 		}
-		
+
 		if($skipFormatting == false) {
 			$value = $this->_formatCurrencyValue($value);
 		}
-		return self::currentUserDecimalFormat($value);
+		return $this->currencyDecimalFormat($value, $user);
     }
 
 	/**
@@ -409,20 +409,23 @@ class CurrencyField {
 		return $amount * $conversionRate;
 	}
 	
-	public static function currentUserDecimalFormat($value){
+	function currencyDecimalFormat($value, $user = null){
 		global $current_user;
-		if($current_user->truncate_trailing_zeros == true) {
+		if (!$user) {
+			$user = $current_user;
+		}
+		if($user->truncate_trailing_zeros == true) {
 			$value = rtrim($value, '0');
-			$fld_value = explode($current_user->currency_decimal_separator, $value);
+			$fld_value = explode($user->currency_decimal_separator, $value);
 			if(strlen($fld_value[1]) <= 1){
 				if(strlen($fld_value[1]) == 1)
-					return $value = $fld_value[0].$current_user->currency_decimal_separator.$fld_value[1].'0';
+					return $value = $fld_value[0].$user->currency_decimal_separator.$fld_value[1].'0';
 				else
-					return $value = $fld_value[0].$current_user->currency_decimal_separator.'00';
+					return $value = $fld_value[0].$user->currency_decimal_separator.'00';
 			}else{
 				return preg_replace("/(?<=\\.[0-9])[0]+\$/","",$value);
 			}
-		} else {
+		}else{
 			return $value;
 		}
 	}

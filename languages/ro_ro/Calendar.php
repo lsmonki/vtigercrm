@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Calendar'                    , 
+	'SINGLE_Calendar'              => 'Sarcină'                    , 
 	'LBL_ADD_TASK'                 => 'Add Task'                    , 
 	'LBL_ADD_EVENT'                => 'Adauga eveniment'            , 
 	'LBL_RECORDS_LIST'             => 'Lista'                       , 
@@ -21,6 +21,7 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
+	'LBL_EVENT_OR_TASK'            => 'Eveniment / activități'                ,
 	'LBL_TASK_INFORMATION'         => 'Info task'                   , 
 	'Subject'                      => 'Subiect'                     , 
 	'Start Date & Time'            => 'Data & ora inceput'          , 
@@ -70,6 +71,7 @@ $jsLanguageStrings = array(
 	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Nu poate fi reținută pentru viitor',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',

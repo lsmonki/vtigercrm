@@ -4,11 +4,11 @@
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('../../../resources/fonts/OpenSans-Regular-webfont.eot');
-    src: url('../../../resources/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../../resources/fonts/OpenSans-Regular-webfont.woff') format('woff'),
-         url('../../../resources/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
-         url('../../../resources/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+    src: url('../../../../resources/fonts/OpenSans-Regular-webfont.eot');
+    src: url('../../../../resources/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../../../resources/fonts/OpenSans-Regular-webfont.woff') format('woff'),
+         url('../../../../resources/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+         url('../../../../resources/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
 } 
 
 body {
@@ -25,6 +25,35 @@ body {
 }
 
 /** General **/
+
+[class^="icon-"]:last-child,
+[class*=" icon-"]:last-child {
+  *margin-left: 0;
+}
+
+.vtGlyph {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../images/vtGlyph.png");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  *margin-right: .3em;
+}
+
+.vticon-pageJump{
+      background-position: 0 0;
+}
+
+.vticon-call-inbound{
+      background-position: -14px 0;
+}
+
+.vticon-call-outbound{
+      background-position: -28px 0;
+}
 
 .themeLinkColor{
 	color: @themeLinkColor;
@@ -60,7 +89,7 @@ th, th a, th:hover, th a:hover{
 }
 
 .icon-inverted {
-    background-image: url("../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+    background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
 }
 
 hr{
@@ -262,8 +291,9 @@ hr{
 }
 
 .dropdown-menu.pull-right {
-  right: 0;
-  left: auto !important;
+    right: 0;
+    left: auto !important;
+    cursor: pointer;
 }
 .zeroOpacity {
     opacity : 0;
@@ -603,6 +633,7 @@ tr.collapseRow{
     border: 0;
     border-bottom: 1px solid @lightColorBorder;
 	padding: 0 1%;
+    margin-bottom: 0 !important;
     .actionsContainer{
         .boxSizingBorderBox;
         padding-top: 2px;
@@ -700,7 +731,7 @@ tr.collapseRow{
 
 .adv-search a {
          width:15%;
-         line-height: 24px;
+         line-height: 26px;
          margin-left: 7px;
          cursor: pointer;
          .themeLinkColor;
@@ -852,6 +883,18 @@ tr.collapseRow{
 
 // Table Stylings //
 
+//Table list view column responsiveness//
+
+table tbody tr td a,table thead tr th a, .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td{
+       white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+       white-space: -pre-wrap;      /* Opera 4-6 */
+       white-space: -o-pre-wrap;    /* Opera 7 */
+       white-space: pre-wrap;       /* css-3 */
+       word-wrap: break-word;       /* Internet Explorer 5.5+ */
+       white-space: normal;
+       vertical-align: middle;
+}
+
 .table{
     border-collapse: none !important;
     .gradientBar(@tableBackgroundColor,@tableBackgroundColor);
@@ -911,6 +954,7 @@ tr.collapseRow{
     tr.listViewEntries{
         td .actions{
             .zeroOpacity;
+            min-width: 60px;
         }
         &:hover{
             td .actions{
@@ -1099,7 +1143,7 @@ div.blockPage {
 }
 
 .emptyRecordsDiv{
-	border: 3px double @borderColor;
+	border: 1px solid @lightColorBorder;
 	.fontBold;
 	width: 100%;
 	text-align: center;
@@ -1505,7 +1549,6 @@ form#EditView table td.chznDropDown{
 }
 
 .massEditContent{
-	margin-top:1px;
 	overflow: visible !important;
 }
 
@@ -1513,6 +1556,8 @@ form#EditView table td.chznDropDown{
 	.gradientBar(@gradient1EndColor,@gradient1EndColor);
 	border-radius: 2px;
 	.border(1px, @lightColorBorder);
+    border-top: 3px solid @headerColor !important;
+    z-index : 100;
     td{
 		border-left: none !important;
 		font-size: 12px;
@@ -1620,7 +1665,6 @@ form#EditView table td.chznDropDown{
 		.backgroundImageNone;
    }
 }
-// Settings > Groups completed//
 
 //Spacing between Summary widgets
 .widget_contents{
@@ -1665,6 +1709,14 @@ form#EditView table td.chznDropDown{
 	margin-left: 0;
 }
 
+// Settings > Studio > Edit Fields //
+.createFieldModal{
+    border-radius: 2px;
+}
+
+.layoutContent{
+    border-top: 3px solid @headerColor !important;
+}
 /******************************************************
 Please check for the below classes if it is being used
 *******************************************************/
@@ -2118,6 +2170,9 @@ Please check for the below classes if it is being used
         .gradientBar(@gradient14StrtColor,@gradient14EndColor);
         padding: 2px 5px;
         cursor: move;
+        th, .dashboardTitle{
+            color: @headerTextColor;
+        }
         select#historyType{
                 width:100px;
                 margin-bottom:0px;
@@ -2306,23 +2361,19 @@ div#chart2{
 .fieldInfo.in{
 	overflow:visible !important;
 	height: auto !important;
-	.moduleBlock tbody tr:nth-child(odd) td {
-		background-color: @gradient6StrtColor !important;
-	}
-	.moduleBlock tbody tr:nth-child(even) td {
-		.contentsBackground();
-	}
 }
 
 .moduleSelection{
-	border-radius: 0px !important;
+	border-radius: 2px 2px 0 0 !important;
+    border: 1px solid @headerColor !important;
 	.gradientBar(@gradient5StrtColor,@gradient5EndColor);
-	.textShadow(@headerTextColor,0,0,2px,@headerTextShadowColor);
+	color: @headerTextColor;
 	.fontBold;
 }
 
 .convertLeadModules{
 	margin-bottom: 2%;
+    border: 1px none;
 }
 
 .moduleBlock{
@@ -2492,7 +2543,7 @@ div#chart2{
 
 .summaryImg{
 	box-shadow: 0 0 4px @black inset;
-	border-radius : 5px;
+	border-radius : 2px;
 }
 
 .massEditActiveField,.selectedListItem{
@@ -2510,17 +2561,17 @@ div#chart2{
     }
 }
 
-.wideWidthType{
+.wide {
 	padding-top:11px !important;
 	padding-bottom:11px !important;
 }
 
-.mediumWidthType {
+.medium {
 	padding-top:6px !important;
 	padding-bottom:6px !important;
 }
 
-.narrowWidthType {
+.narrow {
 	padding-top:2px !important;
 	padding-bottom:2px !important;
 }
@@ -2604,7 +2655,8 @@ div#chart2{
 
 input[type="text"], input, textarea{
 	color: #444444 !important;
-}
+    font-family: 'Open Sans',@baseFontFamily !important;
+    }
 
 #listViewPageJumpDropDown, #relatedListPageJumpDropDown{
 	.padding5per;
@@ -2669,7 +2721,7 @@ input[type="text"], input, textarea{
 }
 
 .vtReminder-icon {
-	background: url('images/Events.png') no-repeat right center
+	background: url('../images/Events.png') no-repeat right center
 }
 
 // Settings page Css
@@ -2853,8 +2905,7 @@ input[type="text"], input, textarea{
     color: @seperatorColor;
     white-space : nowrap;
 }
-.pickListDepen
-dencyTable {
+.pickListDependencyTable {
 	tbody tr:hover td {
 		background-color: none !important;
 	}
@@ -2867,6 +2918,17 @@ dencyTable {
 	padding-bottom: 5px !important;
 }
 
+//Workflows
+
+.workFlowContents .form-horizontal{
+    .control-label {
+        width: 225px !important;
+    }
+    .controls{
+        margin-left: 245px !important;
+    }
+}
+
 //layout Editor
 .border1px {
 	border: 1px solid @lightColorBorder;
@@ -2875,8 +2937,7 @@ dencyTable {
 .layoutBlockHeader {
 	.gradientBar(@gradient5StrtColor,@gradient5EndColor);
 	.blockLabel {
-		color : @bodyColor;
-		text-shadow : 0px 0px 2px @black;
+		color : @headerTextColor;
 	}
 }
 
@@ -2913,7 +2974,7 @@ dencyTable {
 .conditionGroup{
     border: 1px solid @lightColorBorder;
     padding: 5px;
-    .border-radius(5px);
+    .border-radius(2px);
     .contents, .header{
         padding : 1%;
     }
@@ -3063,4 +3124,10 @@ dencyTable {
 .toggleButton .icon-chevron-right {
     background-position: -460px -72px !important;
     .icon-inverted;
+}
+
+.nonEditableValuesDiv {
+	border: 1px solid @grayLight;
+	background-color: @grayLighter;
+	border-radius: 2px;
 }

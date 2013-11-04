@@ -75,8 +75,8 @@ class Campaigns extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'campaignname';
-	
-	function Campaigns() 
+
+	function Campaigns()
 	{
 		$this->log =LoggerManager::getLogger('campaign');
 		$this->db = PearDatabase::getInstance();
@@ -573,14 +573,14 @@ class Campaigns extends CRMEntity {
 	function generateReportsSecQuery($module,$secmodule,$queryplanner){
 		$matrix = $queryplanner->newDependencyMatrix();
         $matrix->setDependency('vtiger_crmentityCampaigns',array('vtiger_groupsCampaigns','vtiger_usersCampaignss','vtiger_lastModifiedByCampaigns','vtiger_campaignscf'));
-        $matrix->setDependency('vtiger_Campaigns', array('vtiger_crmentityCampaigns','vtiger_productsCampaigns'));
-		
+        $matrix->setDependency('vtiger_campaign', array('vtiger_crmentityCampaigns','vtiger_productsCampaigns'));
+
 		if (!$queryplanner->requireTable("vtiger_campaign",$matrix)){
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_campaign","campaignid", $queryplanner);
-		
+
 		if ($queryplanner->requireTable("vtiger_crmentityCampaigns",$matrix)){
 			$query .=" left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid and vtiger_crmentityCampaigns.deleted=0";
 		}

@@ -103,7 +103,7 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 			}
 			$relatedModules[$primaryModule] = $translatedRelatedModules;
 		}
-
+        
         $viewer->assign('MODULELIST', $modulesList);
 		$viewer->assign('RELATED_MODULES', $relatedModules);
 		$viewer->assign('REPORT_MODEL', $reportModel);
@@ -191,9 +191,14 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('REPORT_MODEL', $reportModel);
 		$viewer->assign('PRIMARY_MODULE',$primaryModule);
+	
+		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($reportModel);
+		$primaryModuleRecordStructure = $recordStructureInstance->getPrimaryModuleRecordStructure();
+		$secondaryModuleRecordStructures = $recordStructureInstance->getSecondaryModuleRecordStructure();
+
 		$viewer->assign('SECONDARY_MODULES',$secondaryModules);
-		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $reportModel->getPrimaryModuleRecordStructure());
-		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $reportModel->getSecondaryModuleRecordStructure());
+		$viewer->assign('PRIMARY_MODULE_RECORD_STRUCTURE', $primaryModuleRecordStructure);
+		$viewer->assign('SECONDARY_MODULE_RECORD_STRUCTURES', $secondaryModuleRecordStructures);
         $dateFilters = Vtiger_Field_Model::getDateFilterTypes();
         foreach($dateFilters as $comparatorKey => $comparatorInfo) {
             $comparatorInfo['startdate'] = DateTimeField::convertToUserFormat($comparatorInfo['startdate']);

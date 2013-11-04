@@ -1,25 +1,25 @@
 {*<!--
 /*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
- ********************************************************************************/
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+* ("License"); You may not use this file except in compliance with the License
+* The Original Code is:  vtiger CRM Open Source
+* The Initial Developer of the Original Code is vtiger.
+* Portions created by vtiger are Copyright (C) vtiger.
+* All Rights Reserved.
+*
+********************************************************************************/
 -->*}
 {strip}
-{foreach key=index item=jsModel from=$SCRIPTS}
+    {foreach key=index item=jsModel from=$SCRIPTS}
 	<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
-{/foreach}
+    {/foreach}
 		
-<div class="modelContainer">
-	<div class="modal-header">
-		<button class="close" aria-hidden="true" data-dismiss="modal" type="button" title="{vtranslate('LBL_CLOSE')}">x</button>
-		<h3>{vtranslate('LBL_QUICK_CREATE', $MODULE)} {vtranslate($MODULE, $MODULE)}</h3>
+    <div class="modelContainer">
+        <div class="modal-header contentsBackground">
+            <button class="close" aria-hidden="true" data-dismiss="modal" type="button" title="{vtranslate('LBL_CLOSE')}">&times;</button>
+            <h3>{vtranslate('LBL_QUICK_CREATE', $MODULE)} {vtranslate('LBL_EVENT_OR_TASK', $MODULE)}</h3>
 	</div>
-<form class="form-horizontal recordEditView contentsBackground" id="quickCreate" name="QuickCreate" method="post" action="index.php">
+        <form class="form-horizontal recordEditView" id="quickCreate" name="QuickCreate" method="post" action="index.php">
 	{if !empty($PICKIST_DEPENDENCY_DATASOURCE)}
 		<input type="hidden" name="picklistDependency" value='{Vtiger_Util_Helper::toSafeHTML($PICKIST_DEPENDENCY_DATASOURCE)}' />
 	{/if}
@@ -109,6 +109,6 @@
 			{/foreach}
 		</div>
 		</div>
-</form>
+    </form>
 </div>
 {/strip}

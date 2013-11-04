@@ -371,7 +371,7 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 		jQuery.each(fieldSelectElement,function(i,elem){
 			var currentElement = jQuery(elem);
 			if(currentElement.val() != 'none'){
-				currentElement.trigger('change');
+				currentElement.trigger('change', {'_intialize': true});
 			}
 		});
 		return this;
@@ -566,9 +566,15 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 	registerFieldChange : function() {
 		var filterContainer = this.getFilterContainer();
 		var thisInstance = this;
-		filterContainer.on('change','select[name="columnname"]',function(e){
-			thisInstance.loadConditions(jQuery(e.currentTarget));
-			thisInstance.loadFieldSpecificUi(jQuery(e.currentTarget));
+		filterContainer.on('change','select[name="columnname"]',function(e,data){
+            var currentElement = jQuery(e.currentTarget);
+            if(typeof data == 'undefined' || data._intialize != true){
+                var row = currentElement.closest('div.conditionRow');
+                var conditionSelectElement = row.find('select[name="comparator"]');
+                conditionSelectElement.empty();
+            }
+			thisInstance.loadConditions(currentElement);
+			thisInstance.loadFieldSpecificUi(currentElement);
 		});
 	},
 
@@ -753,6 +759,25 @@ Vtiger_Date_Field_Js('AdvanceFilter_Date_Field_Js',{},{
 		if(comparatorSelectedOptionVal == 'bw' || comparatorSelectedOptionVal == 'custom'){
 			var html = '<div class="date"><input class="dateField" data-calendar-type="range" name="'+ this.getName() +'" data-date-format="'+ this.getDateFormat() +'" type="text" ReadOnly="true" value="'+  this.getValue() + '"></div>';
 			var element = jQuery(html);
+			var dateFieldUi = element.find('.dateField');
+			if(dateFieldUi.val().indexOf(',') !== -1) {
+				var valueArray = this.getValue().split(',');
+				var startDateTime = valueArray[0];
+				var endDateTime = valueArray[1];
+				if(startDateTime.indexOf(' ') !== -1) {
+					var dateTime = startDateTime.split(' ');
+					if(dateTime[1] == '00:00:00') {
+						startDateTime = dateTime[0];
+					}
+				}
+				if(endDateTime.indexOf(' ') !== -1) {
+					var dateTimeValue = endDateTime.split(' ');
+					if(dateTimeValue[1] == '00:00:00') {
+						endDateTime = dateTimeValue[0];
+					}
+				}
+				dateFieldUi.val(startDateTime+','+endDateTime);
+			}
 			return this.addValidationToElement(element);
 		}
         else if (comparatorSelectedOptionVal in dateSpecificConditions) {
@@ -762,7 +787,19 @@ Vtiger_Date_Field_Js('AdvanceFilter_Date_Field_Js',{},{
             return jQuery(html);
         }
         else {
-			return this._super();
+			var fieldUi = this._super();
+			var dateTimeFieldValue = fieldUi.find('.dateField').val();
+			var dateValue = dateTimeFieldValue.split(' ');
+			if(dateValue[1] == '00:00:00') {
+				dateTimeFieldValue = dateValue[0];
+			}
+			else if(comparatorSelectedOptionVal == 'e' || comparatorSelectedOptionVal == 'n' || 
+					comparatorSelectedOptionVal == 'b' || comparatorSelectedOptionVal == 'a') {
+				var dateTimeArray = dateTimeFieldValue.split(' ');
+				dateTimeFieldValue = dateTimeArray[0];
+			}
+			fieldUi.find('.dateField').val(dateTimeFieldValue);
+			return fieldUi;
 		}
 	}
 });
