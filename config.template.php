@@ -13,6 +13,9 @@
  * Contributor(s): ______________________________________.
 ********************************************************************************/
 
+// Adjust error_reporting favourable to deployment.
+error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED);
+
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
