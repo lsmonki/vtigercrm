@@ -142,6 +142,9 @@ class Install_Index_view extends Vtiger_View_Controller {
 	}
 
 	public function Step6(Vtiger_Request $request) {
+		// Set favourable error reporting
+		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
 		$moduleName = $request->getModule();
 		if($_SESSION['config_file_info']['authentication_key'] != $request->get('auth_key')) {
 			die(vtranslate('ERR_NOT_AUTHORIZED_TO_PERFORM_THE_OPERATION', $moduleName));

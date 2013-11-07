@@ -6826,4 +6826,11 @@
 		<constraint>ADD CONSTRAINT fk_1_vtiger_reportgroupbycolumn FOREIGN KEY (reportid) REFERENCES vtiger_report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Engine=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_crmsetup">
+		<field name="userid" type="I" size="11" />
+		<field name="setup_status" type="I" size="2" />
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+
 </schema>
