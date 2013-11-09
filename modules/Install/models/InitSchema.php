@@ -58,9 +58,9 @@ class Install_InitSchema_Model {
 	 * Function upgrades the schema with changes post 540 version
 	 */
 	public static function upgrade() {
-		$migrateVersions = array('540' => '600rc');
+		$migrateVersions = array('540' => '600Beta');
 
-		define(VTIGER_UPGRADE, true);
+		define('VTIGER_UPGRADE', true);
 		foreach($migrateVersions as $oldVersion => $newVersion) {
 			$filename =  "modules/Migration/schema/".$oldVersion."_to_".$newVersion.".php";
 			if(is_file($filename)) {
