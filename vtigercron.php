@@ -19,6 +19,10 @@ if (file_exists('config_override.php')) {
 	include_once 'config_override.php';
 }
 
+// Extended inclusions
+require_once 'includes/Loader.php';
+vimport ('includes.runtime.EntryPoint');
+
 $site_URLArray = explode('/',$site_URL);
 $organization_name = $site_URLArray[2];
 $organization_name = str_replace('.od1.vtiger.com', '', $organization_name);
