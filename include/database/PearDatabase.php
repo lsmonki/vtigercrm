@@ -336,7 +336,7 @@ class PearDatabase{
    	* @param $dieOnError -- Set to true, when query execution fails
    	* @param $msg -- Error message on query execution failure
    	*/
-	function pquery($sql, $params, $dieOnError=false, $msg='') {
+	function pquery($sql, $params=array(), $dieOnError=false, $msg='') {
 		global $log, $default_charset;
 		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
