@@ -77,4 +77,12 @@ class ModTracker_Field_Model extends Vtiger_Record_Model {
 		return $this->getFieldInstance()->getDisplayValue($value);
 	}
 
+	/**
+	 * Function returns the module name of the field
+	 * @return <String>
+	 */
+	public function getModuleName() {
+		return $this->getParent()->getParent()->getModule()->getName();
+	}
+
 }
