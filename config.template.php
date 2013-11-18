@@ -15,7 +15,7 @@
 
 // Adjust error_reporting favourable to deployment.
 error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED); // PRODUCTION
-//error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);   // DEBUGGING
+//ini_set('display_errors','on'); error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);   // DEBUGGING
 
 
 include('vtigerversion.php');
