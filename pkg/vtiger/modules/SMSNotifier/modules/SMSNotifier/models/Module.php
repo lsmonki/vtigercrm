@@ -18,6 +18,14 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 		//SMSNotifier module is not enabled for quick create
 		return false;
 	}
+	
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
+	}
 
 	/**
 	 * Function to get the module is permitted to specific action
@@ -30,8 +38,8 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 		}
 		return Users_Privileges_Model::isPermitted($this->getName(), $actionName);
 	}
-
-
+    
+    
     /**
 	 * Function to get Settings links
 	 * @return <Array>
@@ -51,10 +59,10 @@ class SMSNotifier_Module_Model extends Vtiger_Module_Model {
 					'linkicon' => $editWorkflowsImagePath
 			);
 		}
-
+		
         $settingsLinks[] =  array(
 					'linktype' => 'LISTVIEWSETTING',
-					'linklabel' => vtranslate('LBL_SERVER_CONFIG', $moduleName),
+					'linklabel' => vtranslate('LBL_SEREVER_CONFIG', $moduleName),
 					'linkurl' => 'index.php?module=SMSNotifier&parent=Settings&view=List',
 					'linkicon' => ''
 				);
