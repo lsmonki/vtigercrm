@@ -370,7 +370,10 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	public function getRoleBasedSubordinateUsers(){
 		$currentUserRoleModel = Settings_Roles_Record_Model::getInstanceById($this->getRole());
 		$childernRoles = $currentUserRoleModel->getAllChildren();
-		return $this->getAllUsersOnRoles($childernRoles);
+		$users = $this->getAllUsersOnRoles($childernRoles);
+        $currentUserDetail = array($this->getId() => $this->get('first_name').' '.$this->get('last_name'));
+        $users = $currentUserDetail + $users;
+        return $users;
 	}
 
 	/**
@@ -380,7 +383,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 	 */
 	public function getAllUsersOnRoles($roles) {
 		$db = PearDatabase::getInstance();
-		$roleIds[] = $this->getRole();
+		$roleIds = array();
 		foreach ($roles as $key => $role) {
 			$roleIds[] = $role->getId();
 		}
