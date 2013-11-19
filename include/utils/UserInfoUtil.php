@@ -874,7 +874,8 @@ $log->debug("Entering getProfileTabsPermission(".$profileid.") method ...");
   $sql = "select * from vtiger_profile2tab where profileid=?" ;
   $result = $adb->pquery($sql, array($profileid));
   $num_rows = $adb->num_rows($result);
-
+  
+  $copy = array();
   for($i=0; $i<$num_rows; $i++)
   {
 	$tab_id = $adb->query_result($result,$i,"tabid");
