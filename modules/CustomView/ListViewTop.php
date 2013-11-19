@@ -153,6 +153,9 @@ function getMetricList()
 	}
 	$ssql .= " order by vtiger_customview.entitytype";
 	$result = $adb->pquery($ssql, $sparams);
+
+	$metriclists = array();
+
 	while($cvrow=$adb->fetch_array($result))
 	{
 		$metricslist = Array();
