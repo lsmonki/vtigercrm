@@ -70,8 +70,8 @@ jQuery.Class("Vtiger_CkEditor_Js",{},{
 			CKEDITOR.remove(instance);
 		}
 		
-		config.filebrowserBrowseUrl = '../kcfinder/browse.php?type=images';
-		config.filebrowserUploadUrl = '../kcfinder/upload.php?type=images';
+		config.filebrowserBrowseUrl = 'kcfinder/browse.php?type=images';
+		config.filebrowserUploadUrl = 'kcfinder/upload.php?type=images';
 		
 		CKEDITOR.replace( elementName,config);
 	},
