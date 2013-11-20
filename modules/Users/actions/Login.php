@@ -31,11 +31,13 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 			$_SESSION['app_unique_key'] = vglobal('application_unique_key');
 			$_SESSION['authenticated_user_language'] = vglobal('default_language');
             
-            //Enabled session variable for KCFINDER 
-            $_SESSION['KCFINDER'] = array(); 
-            $_SESSION['KCFINDER']['disabled'] = false; 
-            $_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
-            $_SESSION['KCFINDER']['uploadDir'] = "test/upload";
+            		//Enabled session variable for KCFINDER 
+            		$_SESSION['KCFINDER'] = array(); 
+            		$_SESSION['KCFINDER']['disabled'] = false; 
+            		$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
+            		$_SESSION['KCFINDER']['uploadDir'] = "test/upload";
+			$deniedExts = implode(" ", vglobal('upload_badext'));
+			$_SESSION['KCFINDER']['deniedExts'] = $deniedExts;
 			// End
 
 			//Track the login History
