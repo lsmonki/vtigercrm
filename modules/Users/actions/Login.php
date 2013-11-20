@@ -35,7 +35,7 @@ class Users_Login_Action extends Vtiger_Action_Controller {
             $_SESSION['KCFINDER'] = array(); 
             $_SESSION['KCFINDER']['disabled'] = false; 
             $_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
-            $_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
+            $_SESSION['KCFINDER']['uploadDir'] = "test/upload";
 			// End
 
 			//Track the login History
