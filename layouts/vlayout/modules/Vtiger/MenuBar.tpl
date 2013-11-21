@@ -28,7 +28,7 @@
 							
 							{assign var="topmenuClassName" value="tabs"}
 							{* Make sure to keep selected + few menu persistently and rest responsive *}
-							{if $smarty.foreach.topmenu.index > $MENU_TOPITEMS_LIMIT && $MENU_SELECTED_MODULENAME != $moduleName}
+							{if $smarty.foreach.topmenu.index > $MENU_TOPITEMS_LIMIT}
 								{assign var="topmenuClassName" value="tabs opttabs"}
 							{/if}
 							
