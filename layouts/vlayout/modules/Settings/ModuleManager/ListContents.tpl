@@ -20,11 +20,6 @@
 							<strong>{vtranslate('LBL_IMPORT_ZIP', $QUALIFIED_MODULE)}</strong>
 						</button>
 					</span>
-					<span class="btn-group">
-						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_MODULE_URL}"'>
-							<strong>{vtranslate('LBL_IMPORT_MODULE', $QUALIFIED_MODULE)}</strong>
-						</button>
-					</span>
 				</span>
 			</div>
 		</div>
