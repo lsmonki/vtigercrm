@@ -131,13 +131,19 @@ class Vtiger_MailRecord {
 	 * Helper function to convert the encoding of input to target charset.
 	 */
 	static function __convert_encoding($input, $to, $from = false) {
-		if(function_exists('mb_convert_encoding')) {
+		static $mb_function = NULL;
+		static $iconv_function = NULL;
+
+		if ($mb_function === NULL) $mb_function = function_exists('mb_convert_encoding');
+		if ($iconv_function === NULL) $iconv_function = function_exists('iconv');
+
+		if($mb_function) {
 			if(!$from) $from = mb_detect_encoding($input);
 
 			if(strtolower(trim($to)) == strtolower(trim($from))) {				
 				return $input;
 			} else {
-				return mb_convert_encoding($input, $to, $from);
+				return $iconv_function ? iconv($from, $to, $input) : mb_convert_encoding($input, $to, $from);
 			}
 		}
 		return $input;
