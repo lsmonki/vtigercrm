@@ -46,17 +46,17 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
     <head>
 		<title>Vtiger CRM Setup</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script type="text/javascript" src="../test/migration/js/jquery-min.js"></script>
-		<link href="../test/migration/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<link href="../test/migration/css/mkCheckbox.css" rel="stylesheet">
-		<link href="../test/migration/css/style.css" rel="stylesheet">
+		<script type="text/javascript" src="resources/js/jquery-min.js"></script>
+		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="resources/css/mkCheckbox.css" rel="stylesheet">
+		<link href="resources/css/style.css" rel="stylesheet">
     </head>
     <body>
 		<div class="container-fluid page-container">
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="logo">
-						<img src="../test/migration/images/vt1.png" alt="Vtiger Logo"/>
+						<img src="resources/images/vt1.png" alt="Vtiger Logo"/>
 					</div>
 				</div>
 				<div class="span6">
@@ -73,14 +73,14 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 						</div>
 						<div class="span2">
 							<a href="https://wiki.vtiger.com/vtiger6/" target="_blank" class="pull-right">
-								<img src="../test/migration/images/help40.png" alt="Help-Icon"/>
+								<img src="resources/images/help40.png" alt="Help-Icon"/>
 							</a>
 						</div>
 					</div>
 					<hr>
 					<div class="row-fluid">
 						<div class="span4 welcome-image">
-							<img src="../test/migration/images/migration_screen.png" alt="Vtiger Logo"/>
+							<img src="resources/images/migration_screen.png" alt="Vtiger Logo"/>
 						</div>
 						<div class="span8">
 							<?php $currentVersion = explode('.', $vtiger_current_version);
