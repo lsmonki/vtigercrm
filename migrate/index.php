@@ -29,15 +29,15 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 				$zip->close();
 				header('Location: ../index.php?module=Migration&view=Index&mode=step1');
 			} else {
-				$errorMessage = '<p>ERROR IN FILE EXTRACTING!</p>';
+				$errorMessage = '<p>ERROR EXTRACTING MIGRATION ZIP FILE!</p>';
 				header('Location: index.php?error='.$errorMessage);
 			}
 		} else {
-			$errorMessage = 'Error reading zip-archive!';
+			$errorMessage = 'ERROR READING MIGRATION ZIP FILE!';
 			header('Location: index.php?error='.$errorMessage);
 		}
 	} else {
-		$errorMessage = 'Authentication is Fails : Invalid Username OR Password';
+		$errorMessage = 'INVALID CREDENTIALS';
 		header('Location: index.php?error='.$errorMessage);
 	}
 }
