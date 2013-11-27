@@ -121,9 +121,9 @@ class Vtiger_Language_Handler {
         $module = str_replace(':', '.', $module);
 		if(empty(self::$languageContainer[$language][$module])){
 
-			//Search in customized folder where the users translated string are placed
-			$qualifiedName = 'languages.'.$language.'.custom.'.$module;
-			$customizedLangFile = Vtiger_Loader::resolveNameToPath($qualifiedName);
+
+
+
 
 			$qualifiedName = 'languages.'.$language.'.'.$module;
 			$file = Vtiger_Loader::resolveNameToPath($qualifiedName);
@@ -135,19 +135,19 @@ class Vtiger_Language_Handler {
 				self::$languageContainer[$language][$module]['jsLanguageStrings'] = $jsLanguageStrings;
 			}
 
-			// Override the user custom strings from the language/custom folder
-			if(file_exists($customizedLangFile)){
-				require $customizedLangFile;
-				$baseModuleStrings = self::$languageContainer[$language][$module]['languageStrings'];
-				if(!$baseModuleStrings) $baseModuleStrings = array();
-				$languageStrings = array_merge($baseModuleStrings, $languageStrings);
-				self::$languageContainer[$language][$module]['languageStrings'] = $languageStrings;
 
-				$baseModuleJSStrings = self::$languageContainer[$language][$module]['jsLanguageStrings'];
-				if(!$baseModuleJSStrings) $baseModuleJSStrings = array();
-				$jsLanguageStrings = array_merge($baseModuleJSStrings, $jsLanguageStrings);
-				self::$languageContainer[$language][$module]['jsLanguageStrings'] = $jsLanguageStrings;
-			}
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 		return self::$languageContainer[$language][$module];
 	}
