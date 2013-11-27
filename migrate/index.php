@@ -11,6 +11,8 @@ chdir (dirname(__FILE__) . '/..');
 include_once 'vtigerversion.php';
 include_once 'data/CRMEntity.php';
 
+@session_start();
+
 if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 	global $root_directory, $log;
 	$userName = $_REQUEST['username'];
@@ -27,6 +29,10 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 			}
 			if ($zip->extractTo($root_directory)) {
 				$zip->close();
+				
+				$userid = $user->retrieve_user_id($userName);
+				$_SESSION['authenticated_user_id'] = $userid;
+
 				header('Location: ../index.php?module=Migration&view=Index&mode=step1');
 			} else {
 				$errorMessage = '<p>ERROR EXTRACTING MIGRATION ZIP FILE!</p>';
