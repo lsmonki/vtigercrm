@@ -49,8 +49,6 @@ if(!defined(VTIGER_UPGRADE)) {
 	installVtlibModule('Russian', 'packages/vtiger/optional/Russian.zip');
 	installVtlibModule('Polish', 'packages/vtiger/optional/PolishLanguagePack_pl_pl.zip');
 	installVtlibModule('Russian', 'packages/vtiger/optional/Russian.zip');
-	installVtlibModule('Sweden_sv_se', 'packages/vtiger/optional/Sweden_sv_se.zip');
-	installVtlibModule('Arabic_ar_ae', 'packages/vtiger/optional/Arabic_ar_ae.zip');
 }
 
 if(!defined('INSTALLATION_MODE')) {
