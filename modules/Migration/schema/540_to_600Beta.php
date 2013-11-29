@@ -778,7 +778,7 @@ do {
 		/**
 		 * TODO: Optimize underlying API to cache re-usable data, for speedy data.
 		 */
-		$labelInfo = getEntityName($row['setype'], array(intval($row['crmid'])));
+		$labelInfo = getEntityName($row['setype'], array(intval($row['crmid'])), true);
 
 		if ($labelInfo) {
 			$label = $labelInfo[$row['crmid']];
