@@ -2420,4 +2420,8 @@ Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_inventoryproductrel MODIF
 $module = Vtiger_Module::getInstance('Accounts');
 $module->addLink('DETAILVIEWSIDEBARWIDGET', 'Google Map', 'module=Google&view=Map&mode=showMap&viewtype=detail', '', '', '');
 
+// Changes as on 2013.11.29
 
+Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name=?', array('LBL_BACKUP_SERVER_SETTINGS'));
+
+// Changes ends as on 2013.11.29
