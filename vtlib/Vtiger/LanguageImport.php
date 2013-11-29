@@ -72,6 +72,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		self::log("Importing $label [$prefix] ... STARTED");
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
+		$vtiger6format = false;
 
 		foreach($filelist as $filename=>$fileinfo) {
 			if(!$unzip->isdir($filename)) {
@@ -115,18 +116,21 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 							$dounzip = true;
 						}
 					}
-					
-				} else {
-					// Create a folder if it does not exists in vtiger6
-					if(stripos($targetdir, 'vtiger6') === 0) {
-						@mkdir($targetdir);
-						@chmod($targetdir, 0777);
+					// vtiger6 format
+					else if ($targetdir == "modules" || $targetdir == "modules/Settings" || $targetdir == "modules". DIRECTORY_SEPARATOR. "Settings") {
+						$vtiger6format = true;
 						$dounzip = true;
 					}
 				}
 
 				if($dounzip) {
-					if($unzip->unzip($filename, $filename) !== false) {
+					// vtiger6 format
+					if ($vtiger6format) {
+						$targetdir = "languages/$prefix/" . str_replace("modules", "", $targetdir);
+						@mkdir($targetdir, 077, true);
+					}
+
+					if($unzip->unzip($filename, "$targetdir/$targetfile") !== false) {
 						self::log("Copying file $filename ... DONE");
 					} else {
 						self::log("Copying file $filename ... FAILED");
