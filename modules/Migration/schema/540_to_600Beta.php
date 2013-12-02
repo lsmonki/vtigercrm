@@ -731,37 +731,56 @@ ModComments::addWidgetTo(array("HelpDesk", "Faq"));
 global $current_user, $VTIGER_BULK_SAVE_MODE;
 $VTIGER_BULK_SAVE_MODE = true;
 
-$ticketComments = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_ticketcomments', array());
-$rows = $adb->num_rows($ticketComments);
+$stopLoop = false;
+$pageCount = 0;
+do {
+	$ticketComments = Migration_Index_View::ExecuteQuery(sprintf('SELECT * FROM vtiger_ticketcomments ORDER BY commentid ASC LIMIT %s,%s', $pageCount*1000, 1000),  array());
+	$rows = $adb->num_rows($ticketComments);
+	if (empty($rows)) {
+		$stopLoop = true;
+		break;
+	}
+	for($i=0; $i<$rows; $i++) {
+		$modComments = CRMEntity::getInstance('ModComments');
+		$modComments->column_fields['commentcontent'] = decode_html($adb->query_result($ticketComments, $i, 'comments'));
+		$ownerId = $adb->query_result($ticketComments, $i, 'ownerid');
+		$current_user->id = $ownerId;
+		$modComments->column_fields['assigned_user_id'] = $modComments->column_fields['creator'] = $ownerId;
+		$modComments->column_fields['createdtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
+		$modComments->column_fields['modifiedtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
+		$modComments->column_fields['related_to'] = $adb->query_result($ticketComments, $i, 'ticketid');
+		$modComments->save('ModComments');
+		Migration_Index_View::ExecuteQuery('UPDATE vtiger_crmentity SET modifiedtime = ?, smcreatorid = ?, modifiedby = ? WHERE crmid = ?',
+			array($modComments->column_fields['createdtime'], $ownerId, $ownerId, $modComments->id));
+	}
+	++$pageCount;
+} while (!$stopLoop);
 
-$modComments = CRMEntity::getInstance('ModComments');
-for($i=0; $i<$rows; $i++) {
-	$modComments->column_fields['commentcontent'] = $adb->query_result($ticketComments, $i, 'comments');
-	$ownerId = $adb->query_result($ticketComments, $i, 'ownerid');
-	$current_user->id = $ownerId;
-	$modComments->column_fields['assigned_user_id'] = $modComments->column_fields['creator'] = $ownerId;
-	$modComments->column_fields['createdtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
-	$modComments->column_fields['modifiedtime'] = $adb->query_result($ticketComments, $i, 'createdtime');
-	$modComments->column_fields['related_to'] = $adb->query_result($ticketComments, $i, 'ticketid');
-	$modComments->save('ModComments');
-	Migration_Index_View::ExecuteQuery('UPDATE vtiger_crmentity SET modifiedtime = ?, smcreatorid = ?, modifiedby = ? WHERE crmid = ?',
-		array($modComments->column_fields['createdtime'], $ownerId, $ownerId, $modComments->id));
-}
+$stopLoop = false;
+$pageCount = 0;
+do {
+	$faqComments = Migration_Index_View::ExecuteQuery(sprintf('SELECT * FROM vtiger_faqcomments ORDER BY commentid ASC LIMIT %s, %s', $pageCount*1000, 1000), array());
+	$rows = $adb->num_rows($faqComments);
+	if (empty($rows)) {
+		$stopLoop = true;
+		break;
+	}
+	for($i=0; $i<$rows; $i++) {
+		$modComments = CRMEntity::getInstance('ModComments');
+		$modComments->column_fields['commentcontent'] = decode_html($adb->query_result($faqComments, $i, 'comments'));
+		$modComments->column_fields['assigned_user_id'] = $modComments->column_fields['creator'] = Users::getActiveAdminId();
+		$modComments->column_fields['createdtime'] = $adb->query_result($faqComments, $i, 'createdtime');
+		$modComments->column_fields['modifiedtime'] = $adb->query_result($faqComments, $i, 'createdtime');
+		$modComments->column_fields['related_to'] = $adb->query_result($faqComments, $i, 'faqid');
+		$modComments->save('ModComments');
+		Migration_Index_View::ExecuteQuery('UPDATE vtiger_crmentity SET modifiedtime = ?, smcreatorid = ?, modifiedby = ? WHERE crmid = ?',
+			array($modComments->column_fields['createdtime'], '6', '6', $modComments->id));
+	}
+	++$pageCount;
+} while (!$stopLoop);
 
+$VTIGER_BULK_SAVE_MODE = false;
 
-$faqComments = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_faqcomments', array());
-$rows = $adb->num_rows($faqComments);
-
-for($i=0; $i<$rows; $i++) {
-	$modComments->column_fields['commentcontent'] = $adb->query_result($faqComments, $i, 'comments');
-	$modComments->column_fields['assigned_user_id'] = $modComments->column_fields['creator'] = '6';
-	$modComments->column_fields['createdtime'] = $adb->query_result($faqComments, $i, 'createdtime');
-	$modComments->column_fields['modifiedtime'] = $adb->query_result($faqComments, $i, 'createdtime');
-	$modComments->column_fields['related_to'] = $adb->query_result($faqComments, $i, 'faqid');
-	$modComments->save('ModComments');
-	Migration_Index_View::ExecuteQuery('UPDATE vtiger_crmentity SET modifiedtime = ?, smcreatorid = ?, modifiedby = ? WHERE crmid = ?',
-		array($modComments->column_fields['createdtime'], '6', '6', $modComments->id));
-}
 // Added label column in vtiger_crmentity table for easier lookup - Also added Event handler to update the label on save of a record
 Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_crmentity ADD COLUMN label varchar(255)", array());
 

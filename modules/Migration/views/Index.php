@@ -92,7 +92,7 @@ class Migration_Index_View extends Vtiger_Basic_View {
 
 		$patchCount  = count($migrateVersions);
 
-		define(VTIGER_UPGRADE, true);
+		define('VTIGER_UPGRADE', true);
 
 		for($i=0; $i<$patchCount; $i++){
 			$filename =  "modules/Migration/schema/".$migrateVersions[$i]."_to_".$migrateVersions[$i+1].".php";
@@ -101,9 +101,11 @@ class Migration_Index_View extends Vtiger_Basic_View {
 					echo "<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Starts. </font></b></span></th></tr></table>";
 					echo "<table class='config-table'>";
 				}
+				$_i_statesaved = $i;
 				include($filename);
+				$i = $_i_statesaved;
 				if(!defined('INSTALLATION_MODE')) {
-					echo -"<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Ends.</font></b></span></th></tr></table>";
+					echo "<table class='config-table'><tr><th><span><b><font color='red'>".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]." Database changes -- Ends.</font></b></span></th></tr></table>";
 				}
 			} else if(isset($migrateVersions[$patchCount+1])){
 				echo "<table class='config-table'><tr><th><span><b><font color='red'> There is no Database Changes from ".$migrateVersions[$i]." ==> ".$migrateVersions[$i+1]."</font></b></span></th></tr></table>";
@@ -122,11 +124,12 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		if(!defined('INSTALLATION_MODE')) {
 			$query = $adb->convert2sql($query, $params);
 			if(is_object($status)) {
-				echo '<tr><td width="80%"><span>'.$query.'</span></td><td><b><font color="green"> Success </font></b></td></tr>';
+				echo '<tr><td width="80%"><span>'.$query.'</span></td><td style="color:green">Success</td></tr>';
 			} else {
-				echo '<tr><td width="80%"><span>'.$query.'</span></td><td><b><font color="red"> Fail </font></b></td></tr>';
+				echo '<tr><td width="80%"><span>'.$query.'</span></td><td style="color:red">Failure</td></tr>';
 			}
 		}
+		return $status;
 	}
 
 	public static function insertSelectQuery() {
