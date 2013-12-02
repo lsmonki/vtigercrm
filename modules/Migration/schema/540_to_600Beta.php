@@ -431,6 +431,9 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_picklist_dependency SET source
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_settings_field SET description=? WHERE description=?", array('LBL_WEBFORMS_DESCRIPTION', 'Allows you to manage Webforms'));
 
 Migration_Index_View::ExecuteQuery('CREATE TABLE IF NOT EXISTS vtiger_crmsetup(userid INT(11) NOT NULL, setup_status INT(2))', array());
+if (!defined('INSTALLATION_MODE')) {
+	Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_crmsetup(userid, setup_status) SELECT id, 1 FROM vtiger_users', array());
+}
 
 $discountResult = Migration_Index_View::ExecuteQuery('SELECT * FROM vtiger_selectcolumn WHERE columnname LIKE "vtiger_inventoryproductrel:discount:%" ORDER BY columnindex', array());
 $num_rows = $adb->num_rows($discountResult);
