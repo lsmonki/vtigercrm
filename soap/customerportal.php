@@ -17,12 +17,12 @@ if (file_exists('config_override.php')) {
 	include_once 'config_override.php';
 }
 
-require_once('include/logging.php');
+include_once 'vtlib/Vtiger/Module.php';
+include_once 'includes/main/WebUI.php';
+
 require_once('libraries/nusoap/nusoap.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Emails/mail.php');
-require_once('include/utils/CommonUtils.php');
-require_once('include/utils/VtlibUtils.php');
 require_once 'modules/Users/Users.php';
 
 
