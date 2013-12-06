@@ -103,8 +103,8 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 									So, it is important to take a backup of the <?php echo $vtiger_current_version?> installation, including the source files
 									and database.</p><br>
 								<form action="index.php" method="POST">
-									<div><input type="checkbox" id="checkBox1" name="checkBox1"/> <div class="chkbox"></div> I have taken the backup of database <a href="https://wiki.vtiger.com/vtiger6/" target="_blank" > (how to ?)</a> </div><br>
-									<div><input type="checkbox" id="checkBox2" name="checkBox2"/> <div class="chkbox"></div> I have taken the backup of source folder <a href="https://wiki.vtiger.com/vtiger6/" target="_blank" > (how to ?)</a></div><br>
+									<div><input type="checkbox" id="checkBox1" name="checkBox1"/> <div class="chkbox"></div> I have taken the backup of database <a href="http://community.vtiger.com/help/vtigercrm/administrators/backup.html" target="_blank" >(how to?)</a> </div><br>
+									<div><input type="checkbox" id="checkBox2" name="checkBox2"/> <div class="chkbox"></div> I have taken the backup of source folder <a href="http://community.vtiger.com/help/vtigercrm/administrators/backup.html" target="_blank" >(how to?)</a></div><br>
 									<br><div>
 										<span id="error"></span>
 										User Name <span class="no">&nbsp;</span>
