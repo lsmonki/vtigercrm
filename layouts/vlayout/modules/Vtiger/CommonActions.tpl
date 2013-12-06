@@ -52,7 +52,7 @@
 
                             <div class="btn-group cursorPointer" id="guiderHandler">
                                 {if !$MAIN_PRODUCT_WHITELABEL}
-                                    <img src="{vimage_path('circle_question_mark.png')}" class="alignMiddle" alt="?" title="{vtranslate('LBL_GUIDER',$MODULE)}"/>
+                                    <img src="{vimage_path('circle_question_mark.png')}" class="alignMiddle" alt="?" title="{vtranslate('LBL_GUIDER',$MODULE)}" style="display:none;"/>
                                 {/if}
                             </div>&nbsp;
 
