@@ -100,6 +100,9 @@
 											{foreach key=index item=obj from=$childLinks}
 												{if $obj->getLabel() eq NULL}
 													<li class="divider">&nbsp;</li>
+												{else if $obj->getLabel() eq 'LBL_FEEDBACK'}
+													<li>
+														<a href="https://discussions.vtiger.com" target="_blank">{vtranslate($obj->getLabel(),$MODULE)}</a></li>
 												{else}
 													{assign var="id" value=$obj->getId()}
 													{assign var="href" value=$obj->getUrl()}
