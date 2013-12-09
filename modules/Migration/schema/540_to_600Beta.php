@@ -790,7 +790,7 @@ Migration_Index_View::ExecuteQuery("ALTER TABLE vtiger_crmentity ADD COLUMN labe
 // To avoid infinite-loop if we not able fix label for non-entity/special modules.
 $lastMaxCRMId = 0;
 do {
-	$rs = $adb->pquery("SELECT crmid,setype FROM vtiger_crmentity WHERE label IS NULL AND crmid > ? LIMIT 500", array($lastMaxCRMId));
+	$rs = $adb->pquery("SELECT crmid,setype FROM vtiger_crmentity INNER JOIN vtiger_tab ON vtiger_tab.name=vtiger_crmentity.setype WHERE label IS NULL AND crmid > ? LIMIT 500", array($lastMaxCRMId));
 	if (!$adb->num_rows($rs)) {
 		break;
 	}
