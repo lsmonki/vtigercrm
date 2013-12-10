@@ -29,7 +29,7 @@ if(defined('VTIGER_UPGRADE')) {
 	updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
 	updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
 	updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-	updateVtlibModule('CustomerPortal', 'packages/vtiger/mandatory/CustomerPortal.zip');
+	updateVtlibModule('CustomerPortal', 'packages/vtiger/optional/CustomerPortal.zip');
 	updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
 	installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
 	installVtlibModule('EmailTemplates', 'packages/vtiger/optional/EmailTemplates.zip');
