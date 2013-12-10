@@ -16,7 +16,7 @@ vimport('~~modules/com_vtiger_workflow/VTEntityMethodManager.inc');
 vimport('~~include/Webservices/Utils.php');
 vimport('~~modules/Users/Users.php');
 
-if(!defined('VTIGER_UPGRADE')) {
+if(defined('VTIGER_UPGRADE')) {
 	//Collating all module package updates here
 	updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
 	updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
