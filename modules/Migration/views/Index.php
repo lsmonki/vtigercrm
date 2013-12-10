@@ -79,8 +79,8 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		$moduleModel = Migration_Module_Model::getInstance();
 
 		$getAllowedMigrationVersions = $moduleModel->getAllowedMigrationVersions();
-		$getDBVersion = str_replace('.','', $moduleModel->getDBVersion());
-		$getLatestSourceVersion = str_replace('.','', $moduleModel->getLatestSourceVersion());
+		$getDBVersion = str_replace(array('.', ' '),'', $moduleModel->getDBVersion());
+		$getLatestSourceVersion = str_replace(array('.', ' '),'', $moduleModel->getLatestSourceVersion());
 		$migrateVersions = array();
 		foreach($getAllowedMigrationVersions as $version => $label) {
 			if($version == $getDBVersion || $reach == 1) {
