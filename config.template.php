@@ -22,7 +22,7 @@ include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
-ini_set('memory_limit','64M');
+//ini_set('memory_limit','64M');
 
 // show or hide calendar, world clock, calculator, chat and CKEditor 
 // Do NOT remove the quotes if you set these to false! 
