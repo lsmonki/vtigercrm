@@ -43,7 +43,7 @@ class Vtiger_Request {
 		if(isset($this->valuemap[$key])) {
 			$value = $this->valuemap[$key];
 		}
-		if($defvalue === '' && isset($this->defaultmap[$key])) {
+		if($value === '' && isset($this->defaultmap[$key])) {
 			$value = $this->defaultmap[$key];
 		}
 
@@ -64,7 +64,12 @@ class Vtiger_Request {
 			}
 			Zend_Json::$useBuiltinEncoderDecoder  = $oldValue;
 		}
-		return vtlib_purify($value);
+
+        //Handled for null because vtlib_purify returns empty string
+        if(!empty($value)){
+            $value = vtlib_purify($value);
+        }
+		return $value;
 	}
 
 	/**
