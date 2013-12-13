@@ -15,6 +15,7 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 		$this->exposeMethod('importUserModuleStep1');
 		$this->exposeMethod('importUserModuleStep2');
 		$this->exposeMethod('importUserModuleStep3');
+		$this->exposeMethod('updateUserModuleStep3');
 	}
 
 	public function process(Vtiger_Request $request) {
@@ -80,6 +81,16 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 				checkFileAccessForDeletion($uploadFileName);
 				unlink($uploadFileName);
 			} else {
+				
+				// We need these information to push for Update if module is detected to be present.
+				$moduleLicence = $package->getLicense();
+				
+				$viewer->assign("MODULEIMPORT_FILE", $uploadFile);
+				$viewer->assign("MODULEIMPORT_TYPE", $package->type());
+				$viewer->assign("MODULEIMPORT_NAME", $importModuleName);
+				$viewer->assign("MODULEIMPORT_DEP_VTVERSION", $importModuleDepVtVersion);
+				$viewer->assign("MODULEIMPORT_LICENSE", $moduleLicence);
+				
 				if(!$package->isLanguageType() && !$package->isModuleBundle()) {
 					$moduleInstance = Vtiger_Module::getInstance($importModuleName);
 					$moduleimport_exists = ($moduleInstance)? "true" : "false";
@@ -89,14 +100,6 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 					$viewer->assign("MODULEIMPORT_DIR", $moduleimport_dir_name);
 					$viewer->assign("MODULEIMPORT_DIR_EXISTS", $moduleimport_dir_exists);
 				}
-
-				$moduleLicence = $package->getLicense();
-				
-				$viewer->assign("MODULEIMPORT_FILE", $uploadFile);
-				$viewer->assign("MODULEIMPORT_TYPE", $package->type());
-				$viewer->assign("MODULEIMPORT_NAME", $importModuleName);
-				$viewer->assign("MODULEIMPORT_DEP_VTVERSION", $importModuleDepVtVersion);
-				$viewer->assign("MODULEIMPORT_LICENSE", $moduleLicence);
 			}
 		}
 		$viewer->view('ImportUserModuleStep2.tpl', $qualifiedModuleName);
@@ -125,5 +128,35 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 		$viewer->assign("IMPORT_MODULE_NAME", $importModuleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 		$viewer->view('ImportUserModuleStep3.tpl', $qualifiedModuleName);
+	}
+	
+	public function updateUserModuleStep3(Vtiger_Request $request){
+		$viewer = $this->getViewer($request);
+		$qualifiedModuleName = $request->getModule(false);
+		$importModuleName = $request->get('module_import_name');
+		$uploadFile = $request->get('module_import_file');
+		$uploadDir = Settings_ModuleManager_Extension_Model::getUploadDirectory();
+		$uploadFileName = "$uploadDir/$uploadFile";
+		checkFileAccess($uploadFileName);
+		
+		$importType = $request->get('module_import_type');
+		if(strtolower($importType) == 'language') {
+			$package = new Vtiger_Language();
+		} else {
+			$package = new Vtiger_Package();
+		}
+
+		if (strtolower($importType) == 'language') {
+			$package->import($uploadFileName);
+		} else {
+			$package->update(Vtiger_Module::getInstance($importModuleName), $uploadFileName);
+		}
+		
+		checkFileAccessForDeletion($uploadFileName);
+		unlink($uploadFileName);
+		
+		$viewer->assign("UPDATE_MODULE_NAME", $importModuleName);
+		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+		$viewer->view('UpdateUserModuleStep3.tpl', $qualifiedModuleName);
 	}
 }

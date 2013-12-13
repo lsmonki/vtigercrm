@@ -78,6 +78,17 @@
 									   onclick="this.form.mode.value='';">
 									<strong>{vtranslate('LBL_CANCEL', $MODULE)}</strong>
 								</button>
+								{if $MODULEIMPORT_EXISTS eq 'true'}
+									<input type="hidden" name="view" value="ModuleImport">
+									<input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">
+									<input type="hidden" name="module_import_type" value="{$MODULEIMPORT_TYPE}">
+									<input type="hidden" name="module_import_name" value="{$MODULEIMPORT_NAME}">
+									<input type="hidden" name="mode" value="importUserModuleStep3">
+
+									<input type="checkbox" class="pull-right" onclick="this.form.mode.value='updateUserModuleStep3';this.form.submit();" >
+									<span class="pull-right">I would like to update now.&nbsp;</span>
+								{/if}
+							
 							{else}
 								<input type="hidden" name="view" value="ModuleImport">
 								<input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">
