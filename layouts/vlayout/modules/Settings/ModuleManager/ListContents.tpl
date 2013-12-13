@@ -39,8 +39,13 @@
 
 					<td class="opacity">
 						<div class="row-fluid moduleManagerBlock">
-							<span class="span2">
+							<span class="span1">
 								<input type="checkbox" value="" name="moduleStatus" data-module="{$MODULE_NAME}" data-module-translation="{vtranslate($MODULE_NAME, $MODULE_NAME)}" {if $MODULE_MODEL->isActive()}checked{/if} />
+							</span>
+							<span class="span1">
+								{if $MODULE_MODEL->isExportable()}
+									<a href="index.php?module=ModuleManager&parent=Settings&action=ModuleExport&mode=exportModule&forModule={$MODULE_MODEL->get('name')}"><i class="icon icon-download"></i></a>
+								{/if}&nbsp;
 							</span>
 							<span class="span2 moduleImage {if !$MODULE_ACTIVE}dull {/if}">
 								{if vimage_path($MODULE_NAME|cat:'.png') != false}
