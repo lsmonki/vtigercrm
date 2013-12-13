@@ -36,6 +36,7 @@ class Vtiger_ModuleBasic {
 	var $ownedby = 0; // 0 - Sharing Access Enabled, 1 - Sharing Access Disabled
 	var $tabsequence = false;
 	var $parent = false;
+	var $customized = 0;
 
 	var $isentitytype = true; // Real module or an extension?
 
@@ -75,6 +76,7 @@ class Vtiger_ModuleBasic {
 		$this->ownedby = $valuemap['ownedby'];
 		$this->tabsequence = $valuemap['tabsequence'];
 		$this->parent = $valuemap['parent'];
+		$this->customized = $valuemap['customized'];
 
 		$this->isentitytype = $valuemap['isentitytype'];
 
