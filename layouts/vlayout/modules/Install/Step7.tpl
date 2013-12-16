@@ -17,6 +17,6 @@
 	<input type=hidden name="username" value="admin" >
 	<input type=hidden name="password" value="{$PASSWORD}" >
 </form>
-<script type="text/javascriptx">
+<script type="text/javascript">
 	jQuery(function() { /* Delay to let page load complete */ setTimeout(function() { jQuery('form[name="step7"]').submit(); }, 150); });
 </script>
