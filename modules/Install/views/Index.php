@@ -23,6 +23,7 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$this->exposeMethod('Step4');
 		$this->exposeMethod('Step5');
 		$this->exposeMethod('Step6');
+		$this->exposeMethod('Step7');
 	}
 
 	public function preProcess(Vtiger_Request $request) {
@@ -140,8 +141,16 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$viewer->assign('AUTH_KEY', $authKey);
 		$viewer->view('Step5.tpl', $moduleName);
 	}
-
+	
 	public function Step6(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+		$viewer = $this->getViewer($request);
+		
+		$viewer->assign('AUTH_KEY', $_SESSION['config_file_info']['authentication_key']);
+		$viewer->view('Step6.tpl', $moduleName);
+	}
+
+	public function Step7(Vtiger_Request $request) {
 		// Set favourable error reporting
 		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
@@ -172,7 +181,8 @@ class Install_Index_view extends Vtiger_View_Controller {
 		$viewer->assign('PASSWORD', $_SESSION['config_file_info']['password']);
 		$viewer->assign('APPUNIQUEKEY', $this->retrieveConfiguredAppUniqueKey());
 		$viewer->assign('CURRENT_VERSION', $_SESSION['vtiger_version']);
-		$viewer->view('Step6.tpl', $moduleName);
+		$viewer->assign('INDUSTRY', $request->get('industry'));
+		$viewer->view('Step7.tpl', $moduleName);
 	}
 
 	// Helper function as configuration file is still not loaded.
