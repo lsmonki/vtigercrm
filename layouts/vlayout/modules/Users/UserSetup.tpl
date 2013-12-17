@@ -59,7 +59,7 @@
 		<div class="container">
 			<div class="modal-backdrop"></div>
 			<form class="form" method="POST" action="index.php?module=Users&action=UserSetupSave">
-				<div class="modal" {if $IS_FIRST_USER}style="width: 700px;"{/if}>
+				<div class="modal" {if false && $IS_FIRST_USER}style="width: 700px;"{/if}> {* FirstUser information gather - paused *}
 					<div class="modal-header">
 						<h3>Almost there!</h3>
 					</div>
