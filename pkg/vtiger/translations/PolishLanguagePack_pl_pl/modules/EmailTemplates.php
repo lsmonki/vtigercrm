@@ -8,20 +8,17 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'SINGLE_ModComments' => 'Komentarz',
-	'LBL_RECORDS_LIST' => 'Lista komentarzy',
-
-	// Blocks
-	'LBL_MODCOMMENTS_INFORMATION' => 'Komentarze',
-	'LBL_OTHER_INFORMATION' => 'Dodatkowe informacje',
-
-	'LBL_ADDING_COMMENT' => 'Dodano komentarz',
-	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Wpisz komentarz tutaj',
+	'LBL_ADD_RECORD' => 'Dodaj rekord',
+	'SINGLE_EmailTemplates' => 'Szablon mailowy',
+	'LBL_EMAIL_TEMPLATES'=> 'Szablony mailowe',
+	'LBL_EMAIL_TEMPLATE' => 'Szablon mailowy',
 	
-	//Field Labels
-	'Comment' => 'Komentarz',
-	'Creator' => 'Kreator',
-	'Related To Comments' => 'Powiązany z',
+	'LBL_TEMPLATE_NAME' => 'Nazwa szablonu',
+	'LBL_DESCRIPTION' => 'Opis',
+	'LBL_SUBJECT' => 'Temat',
+	'LBL_GENERAL_FIELDS' => 'Pola podstawowe',
+	'LBL_SELECT_FIELD_TYPE' => 'Zaznacz typ pliku',
+	
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Zarządzaj szablonami dla modułu mailowego',
 	
 );

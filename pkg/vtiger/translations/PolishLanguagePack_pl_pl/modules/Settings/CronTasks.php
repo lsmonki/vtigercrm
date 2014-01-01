@@ -8,20 +8,22 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'SINGLE_ModComments' => 'Komentarz',
-	'LBL_RECORDS_LIST' => 'Lista komentarzy',
+	'CronTasks' => 'Harmonogram',
 
-	// Blocks
-	'LBL_MODCOMMENTS_INFORMATION' => 'Komentarze',
-	'LBL_OTHER_INFORMATION' => 'Dodatkowe informacje',
+	//Basic Field Names
+	'Id' => 'Id',
+	'Cron Job' => 'Zadania wyzwalacza',
+	'Frequency' => 'Częstotliwość',
+    
+	'Status' => 'Status',
+	'Last Start' => 'Start ostatniego skanowania',
+	'Last End' => 'Koniec ostatniego skanowania',
+	'Sequence' => 'Kolejność',
 
-	'LBL_ADDING_COMMENT' => 'Dodano komentarz',
-	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Wpisz komentarz tutaj',
-	
-	//Field Labels
-	'Comment' => 'Komentarz',
-	'Creator' => 'Kreator',
-	'Related To Comments' => 'Powiązany z',
-	
+	//Actions
+	'LBL_COMPLETED' => 'Ukończone',
+	'LBL_RUNNING' => 'Uruchomione',
+	'LBL_ACTIVE' => 'Aktywny',
+	'LBL_INACTIVE' => 'Nieaktywny',
+        'Frequency(H:M)' => 'Częstotliwość (Godz/Min)',
 );
