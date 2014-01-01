@@ -6,13 +6,10 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013   
  ************************************************************************************/
-$languageStrings = array(
-	'EmailTemplate'                => 'Modèle de mail'              , 
-	'LBL_TEMPLATE_NAME'            => 'Nom du modèle de mail'               , 
-	'LBL_DESCRIPTION'              => 'Description'                 , 
-	'LBL_SUBJECT'                  => 'Sujet'                     , 
+$mod_strings = Array (
+'Mobile' => 'Mobile',
+
 );
+
+?>
