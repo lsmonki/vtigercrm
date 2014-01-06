@@ -93,6 +93,17 @@ class Install_Index_view extends Vtiger_View_Controller {
 		require_once 'modules/Users/UserTimeZonesArray.php';
 		$timeZone = new UserTimeZones();
 		$viewer->assign('TIMEZONES', $timeZone->userTimeZones());
+
+		$defaultParameters = Install_Utils_Model::getDefaultPreInstallParameters();		
+		$viewer->assign('DB_HOSTNAME', $defaultParameters['db_hostname']);
+		$viewer->assign('DB_USERNAME', $defaultParameters['db_username']);
+		$viewer->assign('DB_PASSWORD', $defaultParameters['db_password']);			
+		$viewer->assign('DB_NAME', $defaultParameters['db_name']);
+		$viewer->assign('ADMIN_NAME', $defaultParameters['admin_name']);	
+		$viewer->assign('ADMIN_LASTNAME', $defaultParameters['admin_lastname']);	
+		$viewer->assign('ADMIN_PASSWORD', $defaultParameters['admin_password']);	
+		$viewer->assign('ADMIN_EMAIL', $defaultParameters['admin_email']);		
+						
 		$viewer->view('Step4.tpl', $moduleName);
 	}
 
