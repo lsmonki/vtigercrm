@@ -161,7 +161,7 @@ class Install_Utils_Model {
 		
 		if (isset($dbconfig) && isset($vtconfig)) {
 			if (isset($dbconfig['db_server']) && $dbconfig['db_server'] != '_DBC_SERVER_') {
-				$parameters['db_hostname'] = $dbconfig['db_server'] . $dbconfig['db_port'];
+				$parameters['db_hostname'] = $dbconfig['db_server'] . ':' . $dbconfig['db_port'];
 				$parameters['db_username'] = $dbconfig['db_username'];
 				$parameters['db_password'] = $dbconfig['db_password'];
 				$parameters['db_name']     = $dbconfig['db_name'];
