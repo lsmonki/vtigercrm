@@ -61,14 +61,21 @@ class Install_InitSchema_Model {
 		$migrateVersions = Migration_Module_Model::getInstance()->getAllowedMigrationVersions();
 
 		define('VTIGER_UPGRADE', true);
+		$oldVersion = null;
 		foreach($migrateVersions as $migrateVersion) {
-			foreach($migrateVersion as $oldVersion => $newVersion) {
+			foreach($migrateVersion as $newVersion => $versionLabel) {
+				// Not ready?	
+				if ($oldVersion == null) {
+					$oldVersion = $newVersion;
+					break;
+				}
 				$oldVersion = str_replace(array('.', ' '), '', $oldVersion);
 				$newVersion = str_replace(array('.', ' '), '', $newVersion);
 				$filename =  "modules/Migration/schema/".$oldVersion."_to_".$newVersion.".php";
 				if(is_file($filename)) {
 					include($filename);
 				}
+				$oldVersion = $newVersion;
 			}
 		}
 	}
