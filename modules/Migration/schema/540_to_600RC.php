@@ -2433,8 +2433,8 @@ if(!$adb->num_rows($result)) {
 			array($adb->getUniqueID('vtiger_currencies'), 'Ugandan Shilling', 'UGX', 'Sh'));
 }
 $em = new VTEventsManager($adb);
-$em->registerHandler('vtiger.picklist.afterrename', 'vtiger6/modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
-$em->registerHandler('vtiger.picklist.afterdelete', 'vtiger6/modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
+$em->registerHandler('vtiger.picklist.afterrename', 'modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
+$em->registerHandler('vtiger.picklist.afterdelete', 'modules/Settings/Picklist/handlers/PickListHandler.php', 'PickListHandler');
 
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_inventoryproductrel MODIFY comment varchar(500)', array());
 
