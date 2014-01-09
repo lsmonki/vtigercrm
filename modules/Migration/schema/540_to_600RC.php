@@ -19,18 +19,19 @@ vimport('~~modules/Users/Users.php');
 if(defined('VTIGER_UPGRADE')) {
 	//Collating all module package updates here
 	updateVtlibModule('Import', 'packages/vtiger/mandatory/Import.zip');
-	updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
 	updateVtlibModule('MailManager', 'packages/vtiger/mandatory/MailManager.zip');
+	updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
+	updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
 	updateVtlibModule('Services', "packages/vtiger/mandatory/Services.zip");
 	updateVtlibModule('ServiceContracts', "packages/vtiger/mandatory/ServiceContracts.zip");
-	updateVtlibModule('Assets', "packages/vtiger/optional/Assets.zip");
+	updateVtlibModule('WSAPP', 'packages/vtiger/mandatory/WSAPP.zip');
+	updateVtlibModule('Assets', 'packages/vtiger/optional/Assets.zip');
+	updateVtlibModule('CustomerPortal', 'packages/vtiger/optional/CustomerPortal.zip');
 	updateVtlibModule('ModComments', "packages/vtiger/optional/ModComments.zip");
 	updateVtlibModule('Projects', "packages/vtiger/optional/Projects.zip");
+	updateVtlibModule('RecycleBin', 'packages/vtiger/optional/RecycleBin.zip');
 	updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
-	updateVtlibModule('Mobile', 'packages/vtiger/mandatory/Mobile.zip');
 	updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-	updateVtlibModule('CustomerPortal', 'packages/vtiger/optional/CustomerPortal.zip');
-	updateVtlibModule('ModTracker', 'packages/vtiger/mandatory/ModTracker.zip');
 	installVtlibModule('Google', 'packages/vtiger/optional/Google.zip');
 	installVtlibModule('EmailTemplates', 'packages/vtiger/optional/EmailTemplates.zip');
 
