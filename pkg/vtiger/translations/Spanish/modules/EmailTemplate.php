@@ -16,20 +16,17 @@
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transferir Asignado',
-	'SINGLE_Groups' => 'Grupo',
-	'LBL_TO_OTHER_GROUP'           => 'A Otro Grupo ',
-	'LBL_ADD_RECORD' => 'Añadir Grupo',
-	'LBL_GROUP_NAME' => 'Nombre Grupo',
-	'LBL_GROUP_MEMBERS' => 'Miembros Grupo',
-	'LBL_ADD_USERS_ROLES' => 'Añadir Usuarios, Roles...',
-	'LBL_ROLEANDSUBORDINATE' => 'Rol y Subordinados',
-	'RoleAndSubordinates' => 'Rol y Subordinados',
-	'LBL_DUPLICATES_EXIST' => 'Nombre de Grupo ya existe',
-);
+	'LBL_ADD_RECORD' => 'Añadir Plantilla Email',
+	'SINGLE_EmailTemplates' => 'Plantilla Email',
+	'LBL_EMAIL_TEMPLATES'=> 'Plantillas de Email',
+	'LBL_EMAIL_TEMPLATE' => 'Plantilla Email',
 
-$jsLanguageStrings = array(
-	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Selecciona al menos un miembro para el grupo',
-	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Se ha eliminado el grupo correctamente',
+	'LBL_TEMPLATE_NAME' => 'Nombre Plantilla',
+	'LBL_DESCRIPTION' => 'Descripción',
+	'LBL_SUBJECT' => 'Asunto',
+	'LBL_GENERAL_FIELDS' => 'Campos Generales',
+	'LBL_SELECT_FIELD_TYPE' => 'Selecciona Tipo de Campo',
+
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Administrar plantillas de E-Mail',
+
 );
-		
