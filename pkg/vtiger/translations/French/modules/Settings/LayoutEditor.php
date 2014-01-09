@@ -10,6 +10,7 @@
  * Boris CLEMENT
  * December 2013  
  ************************************************************************************/
+ 
 $languageStrings = array(
 	'LBL_FIELDS_AND_LAYOUT_EDITOR' => 'Editeur d\'agencement et des champs'    , 
 	'LBL_CREATE_CUSTOM_FIELD'      => 'Création d\'un champ personnalisé'         , 
@@ -49,7 +50,24 @@ $languageStrings = array(
 	'LBL_DUPLICATE_FIELD_EXISTS'   => 'Nom du champ existant'      , 
 	'LBL_WRONG_FIELD_TYPE'         => 'Type de champ incorrect'            , 
 	'LBL_ROLE_BASED_PICKLIST'      => 'Liste à choix basée sur les rôles'         , 
+	//Field Types
+	'Text'						   => 'Texte',
+	'Decimal'					   => 'Décimal',
+	'Integer'					   => 'Entier',
+	'Percent'					   => 'Pourcentage',
+	'Currency'					   => 'Monétaire',
+	'Date'						   => 'Date',
+	'Email'						   => 'Email',
+	'Phone'						   => 'Téléphone',
+	'PickList'					   => 'Liste déroulante',
+	'MultiSelectCombo'			   => 'Case à cocher multiple',
+	'URL' 						   => 'URL',
+	'Checkbox' 					   => 'Case à cocher',
+	'TextArea' 					   => 'Zone de texte',
+	'Skype'						   => 'Skype',
+	'Time'						   => 'Heure',	
 );
+
 $jsLanguageStrings = array(
 	'JS_BLOCK_VISIBILITY_SHOW'     => 'Affichage du Bloc activé'          , 
 	'JS_BLOCK_VISIBILITY_HIDE'     => 'Masquage du Bloc activé'          , 

@@ -27,4 +27,15 @@ $languageStrings = array(
 	'LBL_ASSIGN_NEW_PRIVILEGES'    => 'Assigner les privilèges directement au rôle', 
 	'LBL_ASSIGN_EXISTING_PRIVILEGES' => 'Assigner les privilèges depuis un profile existant', 
 	'LBL_PRIVILEGES'               => 'Privilèges'                  , 
+	
+	//Assign Records to
+	'LBL_CAN_ASSIGN_RECORDS_TO' => 'Peut assigner à',
+	'LBL_ALL_USERS' => 'Tout le monde',
+	'LBL_USERS_WITH_LOWER_LEVEL' => 'Les utilisateurs ayant un rôle subordonné',
+	'LBL_USERS_WITH_SAME_OR_LOWER_LEVEL' => 'Les utilisateurs ayant le même rôle ou un rôle subordonné',
+);
+
+$jsLanguageStrings = array(
+	'JS_PERMISSION_DENIED' => 'Permission refusée',
+	'JS_NO_PERMISSIONS_TO_MOVE' => 'Aucune permission de déplacer',
 );

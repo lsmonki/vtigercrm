@@ -11,10 +11,10 @@
  * December 2013  
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_IMPORT_MODULE'            => 'Importer Module'               , 
+	'LBL_IMPORT_MODULE_FROM_FILE' => 'Importer un module à partir d\'un fichier',
 	'LBL_VTIGER_EXTENSION_STORE'   => 'Catalogue des extensions Vtiger'      , 
 	'LBL_PUBLISHER'                => 'Editeur'                   , 
-	'LBL_LICENSE'                  => 'License'                     , 
+	'LBL_LICENSE'                  => 'Licence'                     , 
 	'LBL_PUBLISHED_ON'             => 'Publié le'                , 
 	'LBL_INSTALL'                  => 'Installer'                     , 
 	'LBL_UPGRADE'                  => 'Mettre à jour'                     , 
@@ -25,9 +25,24 @@ $languageStrings = array(
 	'LBL_OK'                       => 'OK'                          , 
 	'LBL_EXTENSION_NOT_COMPATABLE' => 'Cette extension n\'est pas comptaible avec Vtiger', 
 	'LBL_INVALID_FILE'             => 'Fichier invalide'                , 
-	'LBL_NO_LICENSE_PROVIDED'      => 'Aucune license fournie'         , 
+	'LBL_NO_LICENSE_PROVIDED'      => 'Aucune licence fournie'         , 
 	'LBL_INSTALLATION'             => 'Installation'                , 
 	'LBL_FAILED'                   => 'abortée'                      , 
 	'LBL_SUCCESSFULL'              => 'réussie'                 , 
 	'LBL_INSTALLATION_LOG'         => 'Installation Log'            , 
+		//Install From file labels
+	'LBL_VERIFY_IMPORT_DETAILS' 	=> 'Verifier les informations avant l\'import',
+	'LBL_MODULE_NAME' 				=> 'Nom du module',
+	'LBL_REQ_VTIGER_VERSION'		=> 'Version Vtiger ',
+	'LBL_LICENSE_ACCEPT_AGREEMENT' 	=> 'J\'accepte les termes de la licence.',
+	'LBL_EXISTS'					=> 'Existe',
+	'LBL_PROCEED_WITH_IMPORT' 		=> 'Commencer l\'import?',
+	'LBL_VERSION_NOT_SUPPORTED' 	=> 'La version du module n\'est pas compatible avec la version de Vtiger',
+	'LBL_FINISH' 					=> 'Terminer',
+	'LBL_IMPORT_ZIP' 				=> 'Installation depuis un fichier',
+	'LBL_IMPORT_MODULE' 			=> 'Installation depuis Vtiger',
+	'LBL_NOT_FOUND' 				=> "Désolé, aucune extension disponible pour votre version de Vtiger",
+	'LBL_INVALID_IMPORT_TRY_AGAIN' 	=> ' fourni pour l\'import de module! Essayez à nouveau.',
+	'LBL_IMPORTED_MODULE' 			=> ' module importé avec succès.',
+	'LBL__IMPORTING_MODULE' 		=> 'Import du module',	
 );

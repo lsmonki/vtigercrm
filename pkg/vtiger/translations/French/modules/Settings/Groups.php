@@ -20,6 +20,7 @@ $languageStrings = array(
 	'LBL_ADD_USERS_ROLES'          => 'Ajouter Collaborateurs, Rôles...'         , 
 	'LBL_ROLEANDSUBORDINATE'       => 'Rôle et Subordonnés'       , 
 	'RoleAndSubordinates'          => 'Rôle et Subordonnés'       , 
+	'Groups'					   => 'Groupes',
 );
 $jsLanguageStrings = array(
 	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Choisir au moins une personne pour ce groupe', 

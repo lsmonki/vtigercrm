@@ -31,6 +31,10 @@ $languageStrings = array(
 	'SINGLE_Roles'                 => 'Rôle'                        , 
 	'SINGLE_RoleAndSubordinates'   => 'Rôle et subordonnées'          , 
 	'Read, Create/Edit, Delete'	   => 'Lecture, Ecriture, Suppression',
+	'Public: Read Only'				=> 'Public: Lecture',
+	'Public: Read, Create/Edit'		=> 'Public: Lecture, Ecriture',
+	'Public: Read, Create/Edit, Delete'		=> 'Public: Lecture, Ecriture, Suppression',	
+	'Private'                		=> 'Privé'                       , 
 );
 $jsLanguageStrings = array(
 	'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Règle de partage enregistrée', 

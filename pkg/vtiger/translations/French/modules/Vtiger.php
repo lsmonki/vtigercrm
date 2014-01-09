@@ -13,7 +13,7 @@
 $languageStrings = array(
 	'APPTITLE'                     => 'vtiger CRM'                  , 
 	'POWEREDBY'                    => 'Propulsé par vtiger CRM'       , 
-	'LBL_READ_LICENSE'             => 'License'                     , 
+	'LBL_READ_LICENSE'             => 'Licence'                     , 
 	'LBL_PRIVACY_POLICY'           => 'Politique de confidentialité', 
 	'LBL_SELECT_ALL'               => 'Tous'                        , 
 	'LBL_SELECT_TO_LOAD_LIST'      => 'Selectionner la liste'         , 
@@ -454,11 +454,11 @@ $languageStrings = array(
 	'Item Discount Amount'         => 'Remise en pourcentage'        , 
 	'Item Discount Percent'        => 'Remise en montant'       , 
 	'Due Date'                     => 'Echéance'                   , 
-	'Due Date & Time'              => 'DAte et heure de fin'             , 
+	'Due Date & Time'              => 'Date et heure de fin'             , 
 	'Email'                        => 'Email'                       , 
 	'Secondary Email'              => 'Email alternatif'             , 
 	'Other Email'                  => 'Autre Email'                 , 
-	'Email Opt Out'                => 'Email Opt Out'               , 
+	'Email Opt Out'                => 'Ne pas envoyer d\'email'               , 
 	'Expected Close Date'          => 'Echéance'                   , 
 	'Fax'                          => 'Fax'                         , 
 	'Last Name'                    => 'Nom'                         , 
@@ -606,7 +606,7 @@ $languageStrings = array(
 	'LBL_CUSTOMIZE_MAIN_MENU' => 'Personnaliser le menu principal',//TODO REVIEW
 
 	//Comments Field Labels for Workflow
-	'Comment' => 'Commenter',
+	'Comment' => 'Commentaire',
 	'Last Comment' => 'Dernier commentaire',
 	'Last 5 Comments' => '5 derniers commentaires',
 	'All Comments' => 'Tous les commentaires',	
@@ -619,6 +619,8 @@ $languageStrings = array(
 	'Key Metrics'                     => 'Indicateurs clés'                     , 
 	'Total Amount by Sales stage'     => 'Montant total par phase de vente'                     , 
 	'LBL_TRANSFER_OWNERSHIP' => 'Modifier l\'assignation',
+	'LBL_ASSIGNED_TO' 		=> 'Assigné à',
+	'LBL_VIEW_DETAILS' 		=> 'Afficher les détails',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Veuillez configurer le serveur de messagerie sortant (SMTP)', 
