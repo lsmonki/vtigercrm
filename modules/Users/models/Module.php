@@ -19,7 +19,10 @@ class Users_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getQueryByModuleField($sourceModule, $field, $record, $listQuery) {
 		if($sourceModule == 'Users' && $field == 'reports_to_id') {
-			$overRideQuery = $listQuery. " AND vtiger_users.id != ". $record;
+			$overRideQuery = $listQuery;
+			if(!empty($record)){
+				$overRideQuery = $overRideQuery. " AND vtiger_users.id != ". $record;
+			}
 			return $overRideQuery;
 		}
 	}
