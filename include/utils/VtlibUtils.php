@@ -361,6 +361,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_invoice',
 				'table_index'=> 'invoiceid',
 				'popup_fields'=> Array('subject'),
+                'related_tables'=> Array( 
+					'vtiger_invoicecf' => Array('invoiceid', 'vtiger_invoice', 'invoiceid')
+					),
 			),
 			'HelpDesk'=>
 			Array(
@@ -445,6 +448,15 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_index'=> 'servicecontractsid',
 				'related_tables'=> Array( 
 					'vtiger_servicecontractscf' => Array('servicecontractsid')
+					),
+			),
+            'Assets' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_assets',
+				'table_index'=> 'assetsid',
+				'related_tables'=> Array( 
+					'vtiger_assetscf' => Array('assetsid')
 					),
 			)
 		);
