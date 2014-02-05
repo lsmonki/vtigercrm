@@ -33,7 +33,7 @@ class Users_UserSetup_View extends Vtiger_Index_View {
 				$viewer->assign('IS_FIRST_USER', $isFirstUser);
 				$viewer->assign('CURRENCIES', $currenciesList);
 			}
-
+			$viewer->assign('CURRENT_USER_MODEL',$userModel);
 			$viewer->assign('MODULE', $moduleName);
 			$viewer->assign('USER_NAME', $userName);
 			$viewer->assign('TIME_ZONES', $userModuleModel->getTimeZonesList());

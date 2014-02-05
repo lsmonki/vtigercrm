@@ -424,11 +424,7 @@
 									<select name="lang_name" id="lang_name" style="width:250px;" placeholder="Language" data-errormessage="Choose Language" class="validate[required]">
 										<option value=""></option>
 										{foreach key=header item=language from=$LANGUAGES}
-											{if $language eq 'US English'}
-												<option value="{$header}" selected>{$language|@getTranslatedString:$MODULE}</option>
-											{else}
-												<option value="{$header}">{$language|@getTranslatedString:$MODULE}</option>
-											{/if}
+												<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('language')}selected{/if}>{$language|@getTranslatedString:$MODULE}</option>
 										{/foreach}
 									</select>
 									<div style="padding-top:10px;"></div>
@@ -437,12 +433,7 @@
 									<select name="time_zone" id="time_zone" style="width:250px;" placeholder="Choose Timezone" data-errormessage="Choose Timezone" class="validate[required]">
 										<option value=""></option>
 										{foreach key=header item=time_zone from=$TIME_ZONES}
-											<option value="{$header}">{$time_zone|@getTranslatedString:$MODULE}</option>
-											{if $time_zone eq 'UTC'}
-												<option value="{$header}" selected>{$time_zone|@getTranslatedString:$MODULE}</option>
-											{else}
-												<option value="{$header}">{$time_zone|@getTranslatedString:$MODULE}</option>
-											{/if}
+												<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('time_zone')}selected{/if}>{$time_zone|@getTranslatedString:$MODULE}</option>
 										{/foreach}
 									</select>
 									<div style="padding-top:10px;"></div>
@@ -450,9 +441,9 @@
 								<div class="controls">
 									<select name="date_format" id="date_format" style="width:250px;" placeholder="Date Format" data-errormessage="Choose Date Format" class="validate[required]">
 										<option value=""></option>
-										<option value="dd-mm-yyyy">dd-mm-yyyy</option>
-										<option value="mm-dd-yyyy" selected>mm-dd-yyyy</option>
-										<option value="yyyy-mm-dd">yyyy-mm-dd</option>
+										<option value="dd-mm-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "dd-mm-yyyy"} selected{/if}>dd-mm-yyyy</option>
+										<option value="mm-dd-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "mm-dd-yyyy"} selected{/if}>mm-dd-yyyy</option>
+										<option value="yyyy-mm-dd" {if $CURRENT_USER_MODEL->get('date_format') eq "yyyy-mm-dd"} selected{/if}>yyyy-mm-dd</option>
 									</select>
 									<div style="padding-top:10px;"></div>
 								</div>
