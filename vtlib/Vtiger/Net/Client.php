@@ -36,6 +36,25 @@ class Vtiger_Net_Client {
 		$this->url = $url;
 		$this->client = new HTTP_Request();
 		$this->response = false;
+		$this->setDefaultHeaders();
+	}
+	
+	function setDefaultHeaders() {
+		$headers = array();
+		if (isset($_SERVER)) {
+			global $site_URL;
+			$headers['referer'] = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : ($site_URL . "?noreferer");
+			
+			if (isset($_SERVER['HTTP_USER_AGENT'])) {
+				$headers['user-agent'] = $_SERVER['HTTP_USER_AGENT'];
+			}
+			
+		} else {
+			global $site_URL;
+			$headers['referer'] = ($site_URL . "?noreferer");
+		}
+		
+		$this->setHeaders($headers);
 	}
 
 	/**
@@ -47,7 +66,7 @@ class Vtiger_Net_Client {
 			$this->client->addHeader($key, $value);
 		}
 	}
-
+	
 	/**
 	 * Perform a GET request
 	 * @param Map key-value pair or false

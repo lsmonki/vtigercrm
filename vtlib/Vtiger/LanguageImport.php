@@ -20,6 +20,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	 */
 	function __construct() {
 		parent::__construct();
+		$this->_export_tmpdir;
 	}
 
 	function getPrefix() {
@@ -34,6 +35,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		$this->__initSchema();
 
 		$name = $this->getModuleNameFromZip($zipfile);
+		return $name;
 	}
 
 	/**
@@ -43,7 +45,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	 */
 	function import($zipfile, $overwrite=false) {
 		$this->initImport($zipfile, $overwrite);
-	
+
 		// Call module import function
 		$this->import_Language($zipfile);
 	}
@@ -70,10 +72,11 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		self::log("Importing $label [$prefix] ... STARTED");
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
+		$vtiger6format = false;
 
 		foreach($filelist as $filename=>$fileinfo) {
 			if(!$unzip->isdir($filename)) {
-				
+
 				if(strpos($filename, '/') === false) continue;
 
 				$targetdir  = substr($filename, 0, strripos($filename,'/'));
@@ -98,25 +101,36 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 							if(file_exists("$targetdir/phpmailer.lang-en_us.php")) {
 								$dounzip = true;
 							}
-					} 
+					}
 					// Handle javascript language file
 					else if(preg_match("/$prefix.lang.js/", $targetfile)) {
 						$corelangfile = "$targetdir/en_us.lang.js";
 						if(file_exists($corelangfile)) {
 							$dounzip = true;
 						}
-					} 
-					// Handle php language file 
+					}
+					// Handle php language file
 					else if(preg_match("/$prefix.lang.php/", $targetfile)) {
 						$corelangfile = "$targetdir/en_us.lang.php";
 						if(file_exists($corelangfile)) {
 							$dounzip = true;
 						}
 					}
+					// vtiger6 format
+					else if ($targetdir == "modules" || $targetdir == "modules/Settings" || $targetdir == "modules". DIRECTORY_SEPARATOR. "Settings") {
+						$vtiger6format = true;
+						$dounzip = true;
+					}
 				}
 
-				if($dounzip) {					
-					if($unzip->unzip($filename, $filename) !== false) {
+				if($dounzip) {
+					// vtiger6 format
+					if ($vtiger6format) {
+						$targetdir = "languages/$prefix/" . str_replace("modules", "", $targetdir);
+						@mkdir($targetdir, 0777, true);
+					}
+
+					if($unzip->unzip($filename, "$targetdir/$targetfile") !== false) {
 						self::log("Copying file $filename ... DONE");
 					} else {
 						self::log("Copying file $filename ... FAILED");
@@ -129,10 +143,9 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 		if($unzip) $unzip->close();
 
 		self::register($prefix, $label, $name);
-		
+
 		self::log("Importing $label [$prefix] ... DONE");
 
 		return;
 	}
-}			
-?>
+}

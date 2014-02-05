@@ -373,6 +373,15 @@ class vt_DateTime
 		$date = $this->year."-".$this->z_month."-".$this->z_day;
 		return DateTimeField::convertToUserFormat($date);		
 	}
+
+	/**
+	 * Function to get formatted date in users time zone
+	 * @return <Date>
+	 */
+	function get_userTimezone_formatted_date(){
+		$dateTimeInUserFormat = DateTimeField::convertToUserTimeZone($this->get_DB_formatted_date(). ' ' .$this->get_formatted_time());
+		return $dateTimeInUserFormat->format('Y-m-d');
+	}
 	
 	/**
 	 *
@@ -388,7 +397,7 @@ class vt_DateTime
 	 */
 	function get_formatted_time(){
 		$hour = $this->z_hour;
-		$min = $this->min;
+		$min = $this->minute;
 		if(empty($hour)) $hour = '00';
 		if(empty($min)) $min = '00';
 		return $hour.':'.$min;

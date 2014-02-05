@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once dirname(__FILE__) . '/SMSNotifierBase.php';
-include_once dirname(__FILE__) . '/ext/SMSProvider.php';
+include_once dirname(__FILE__) . '/providers/SMSProvider.php';
 include_once 'include/Zend/Json.php';
 
 class SMSNotifier extends SMSNotifierBase {
@@ -239,7 +239,7 @@ class SMSNotifierManager {
 
 	/** Server configuration management */
 	static function listAvailableProviders() {
-		return SMSProvider::listAll();
+		return SMSNotifier_Provider_Model::listAll();
 	}
 
 	static function getActiveProviderInstance() {
@@ -247,7 +247,7 @@ class SMSNotifierManager {
 		$result = $adb->pquery("SELECT * FROM vtiger_smsnotifier_servers WHERE isactive = 1 LIMIT 1", array());
 		if($result && $adb->num_rows($result)) {
 			$resultrow = $adb->fetch_array($result);
-			$provider = SMSProvider::getInstance($resultrow['providertype']);
+			$provider = SMSNotifier_Provider_Model::getInstance($resultrow['providertype']);
 			$parameters = array();
 			if(!empty($resultrow['parameters'])) $parameters = Zend_Json::decode(decode_html($resultrow['parameters']));
 			foreach($parameters as $k=>$v) {
@@ -286,7 +286,7 @@ class SMSNotifierManager {
 		$password     = vtlib_purify($frmvalues['smsserver_password']);
 		$isactive     = vtlib_purify($frmvalues['smsserver_isactive']);
 
-		$provider = SMSProvider::getInstance($providertype);
+		$provider = SMSNotifier_Provider_Model::getInstance($providertype);
 
 		$parameters = '';
 		if($provider) {

@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-      /** to get the details of a KeyMetrics on Home page 
+      /** to get the details of a KeyMetrics on Home page
         * @returns  $customviewlist Array in the following format
 	* $values = Array('Title'=>Array(0=>'image name',
 	*				 1=>'Key Metrics',
@@ -42,7 +42,7 @@
         *				   $cvid=>Array(
         *                                               0=>$customview name,
         *                                               1=>$no of records for the view
-        *                                              )	
+        *                                              )
 	*				  )
 	*
        */
@@ -63,12 +63,12 @@ function getKeyMetrics($maxval,$calCnt)
 	$log = LoggerManager::getLogger('metrics');
 
 	$metriclists = getMetricList();
-	
+
 	// Determine if the KeyMetrics widget should appear or not?
 	if($calCnt == 'calculateCnt') {
 		return count($metriclists);
 	}
-	
+
 	$log->info("Metrics :: Successfully got MetricList to be displayed");
 	if(isset($metriclists))
 	{
@@ -78,19 +78,19 @@ function getKeyMetrics($maxval,$calCnt)
 				$listquery = getListQuery($metriclist['module']);
 				$oCustomView = new CustomView($metriclist['module']);
 				$metricsql = $oCustomView->getModifiedCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
-				$metricsql = mkCountQuery($metricsql);
+				$metricsql = Vtiger_Functions::mkCountQuery($metricsql);
 				$metricresult = $adb->query($metricsql);
 				if($metricresult)
 				{
 					$rowcount = $adb->fetch_array($metricresult);
 					$metriclists[$key]['count'] = $rowcount['count'];
 				}
-				
+
 			} else {
 				$queryGenerator = new QueryGenerator($metriclist['module'], $current_user);
 				$queryGenerator->initForCustomViewById($metriclist['id']);
 				$metricsql = $queryGenerator->getQuery();
-				$metricsql = mkCountQuery($metricsql);
+				$metricsql = Vtiger_Functions::mkCountQuery($metricsql);
 				$metricresult = $adb->query($metricsql);
 				if($metricresult)
 				{
@@ -129,34 +129,37 @@ function getKeyMetrics($maxval,$calCnt)
 		return $values;
 
 }
-	
+
 	/** to get the details of a customview Entries
 	  * @returns  $metriclists Array in the following format
 	  * $customviewlist []= Array('id'=>custom view id,
 	  *                         'name'=>custom view name,
 	  *                         'module'=>modulename,
 	  			    'count'=>''
-			           )	
+			           )
 	 */
 function getMetricList()
 {
 	global $adb, $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	
+
 	$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
 	$ssql .= " where vtiger_customview.setmetrics = 1 ";
 	$sparams = array();
-	
+
 	if($is_admin == false){
 	      $ssql .= " and (vtiger_customview.status=0 or vtiger_customview.userid = ? or vtiger_customview.status =3 or vtiger_customview.userid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
 	      array_push($sparams, $current_user->id);
 	}
 	$ssql .= " order by vtiger_customview.entitytype";
 	$result = $adb->pquery($ssql, $sparams);
+
+	$metriclists = array();
+
 	while($cvrow=$adb->fetch_array($result))
 	{
 		$metricslist = Array();
-		
+
 		if(vtlib_isModuleActive($cvrow['entitytype'])){
 			$metricslist['id'] = $cvrow['cvid'];
 			$metricslist['name'] = $cvrow['viewname'];

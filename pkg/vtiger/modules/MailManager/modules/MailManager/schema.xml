@@ -41,6 +41,7 @@
   `lastsavedtime` int(11) default NULL,
   `attachid` int(19) NOT NULL,
   `path` varchar(200) NOT NULL,
+  `cid` varchar(50) default NULL,
   KEY `userid_muid_idx` (`userid`,`muid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>

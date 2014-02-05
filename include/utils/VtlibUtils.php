@@ -103,14 +103,15 @@ function vtlib_isModuleActive($module) {
 
 	if(!isset($__cache_module_activeinfo[$module])) {
 		include 'tabdata.php';
-		$presence = isset($tab_info_array[$module])? 0: 1;
+		$tabId = $tab_info_array[$module];
+		$presence = $tab_seq_array[$tabId];
 		$__cache_module_activeinfo[$module] = $presence;
 	} else {
 		$presence = $__cache_module_activeinfo[$module];
 	}
 
 	$active = false;
-	if($presence != 1) $active = true;
+	if($presence == 0) $active = true;
 
 	return $active;
 }
@@ -134,8 +135,7 @@ function vtlib_RecreateUserPrivilegeFiles() {
 function vtlib_moduleAlwaysActive() {
 	$modules = Array (
 		'Administration', 'CustomView', 'Settings', 'Users', 'Migration',
-		'Utilities', 'uploads', 'Import', 'System', 'com_vtiger_workflow', 'PickList',
-		'Ondemand'
+		'Utilities', 'uploads', 'Import', 'System', 'com_vtiger_workflow', 'PickList'
 	);
 	return $modules;
 }
@@ -183,7 +183,7 @@ function vtlib_getToggleModuleInfo() {
 
 	$modinfo = Array();
 
-	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users') AND presence IN (0,1) ORDER BY name");
+	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users','Home') AND presence IN (0,1) ORDER BY name");
 	$num_rows  = $adb->num_rows($sqlresult);
 	for($idx = 0; $idx < $num_rows; ++$idx) {
 		$module = $adb->query_result($sqlresult, $idx, 'name');
@@ -282,6 +282,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array(
 					'vtiger_accountbillads' => Array ('accountaddressid', 'vtiger_account', 'accountid'),
 					'vtiger_accountshipads' => Array ('accountaddressid', 'vtiger_account', 'accountid'),
+					'vtiger_accountscf' => Array ('accountid', 'vtiger_account', 'accountid'),
 				),
 				'popup_fields' => Array('accountname'), // TODO: Add this initialization to all the standard module
 			),
@@ -290,7 +291,14 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_contactdetails',
 				'table_index' => 'contactid',
-				'related_tables'=> Array( 'vtiger_account' => Array ('accountid' ) ),
+				'related_tables'=> Array( 
+					'vtiger_account' => Array ('accountid' ),
+					//REVIEW: Added these tables for displaying the data into relatedlist (based on configurable fields)
+					'vtiger_contactaddress' => Array('contactaddressid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_contactsubdetails' => Array('contactsubscriptionid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_customerdetails' => Array('customerid', 'vtiger_contactdetails', 'contactid'),
+					'vtiger_contactscf' => Array('contactid', 'vtiger_contactdetails', 'contactid')
+					),
 				'popup_fields' => Array ('lastname'),
 			),
 			'Leads' =>
@@ -301,6 +309,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array (
 					'vtiger_leadsubdetails' => Array ( 'leadsubscriptionid', 'vtiger_leaddetails', 'leadid' ),
 					'vtiger_leadaddress'    => Array ( 'leadaddressid', 'vtiger_leaddetails', 'leadid' ),
+					'vtiger_leadscf'    => Array ( 'leadid', 'vtiger_leaddetails', 'leadid' ),
 				),
 				'popup_fields'=> Array ('lastname'),
 			),
@@ -319,6 +328,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				// NOTE: UIType 10 is being used instead of direct relationship from 5.1.0
 				//'related_tables' => Array ('vtiger_account' => Array('accountid')),
 				'popup_fields'=> Array('potentialname'),
+				'related_tables' => Array (
+					'vtiger_potentialscf'    => Array ( 'potentialid', 'vtiger_potential', 'potentialid' ),
+				),
 			),
 			'Quotes' =>
 			Array(
@@ -355,6 +367,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_troubletickets',
 				'table_index'=> 'ticketid',
+				'related_tables'=> Array ('vtiger_ticketcf' => Array('ticketid')),
 				'popup_fields'=> Array('ticket_title')
 			),
 			'Faq'=>
@@ -388,6 +401,51 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_vendor',
 				'table_index'=> 'vendorid',
 				'popup_fields'=>Array('vendorname'),
+			),
+			'Project' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_project',
+				'table_index'=> 'projectid',
+				'related_tables'=> Array( 
+					'vtiger_projectcf' => Array('projectid', 'vtiger_project', 'projectid')
+					),
+			),
+            'ProjectMilestone' =>
+            Array(
+                'IsCustomModule'=>false,
+				'table_name' => 'vtiger_projectmilestone',
+				'table_index'=> 'projectmilestoneid',
+				'related_tables'=> Array( 
+					'vtiger_projectmilestonecf' => Array('projectmilestoneid', 'vtiger_projectmilestone', 'projectmilestoneid')
+					),
+            ),
+            'ProjectTask' => 
+            Array(
+                'IsCustomModule'=>false,
+				'table_name' => 'vtiger_projecttask',
+				'table_index'=> 'projecttaskid',
+				'related_tables'=> Array( 
+					'vtiger_projecttaskcf' => Array('projecttaskid', 'vtiger_projecttask', 'projecttaskid')
+					),
+            ),
+			'Services' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_service',
+				'table_index'=> 'serviceid',
+				'related_tables'=> Array( 
+					'vtiger_servicecf' => Array('serviceid')
+					),
+			),
+			'ServiceContracts' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_servicecontracts',
+				'table_index'=> 'servicecontractsid',
+				'related_tables'=> Array( 
+					'vtiger_servicecontractscf' => Array('servicecontractsid')
+					),
 			)
 		);
 	return $mod_var_mapping[$module][$varname];
@@ -539,6 +597,15 @@ $__htmlpurifier_instance = false;
 function vtlib_purify($input, $ignore=false) {
 	global $__htmlpurifier_instance, $root_directory, $default_charset;
 
+	static $purified_cache = array();
+	if(!is_array($input)) {
+		$md5OfInput = md5($input); 
+		if (array_key_exists($md5OfInput, $purified_cache)) { 
+			$value =  $purified_cache[$md5OfInput]; 
+            //to escape cleaning up again
+            $ignore = true;
+		} 
+	}
 	$use_charset = $default_charset;
 	$use_root_directory = $root_directory;
 
@@ -549,7 +616,7 @@ function vtlib_purify($input, $ignore=false) {
 			if(empty($use_charset)) $use_charset = 'UTF-8';
 			if(empty($use_root_directory)) $use_root_directory = dirname(__FILE__) . '/../..';
 
-			include_once ('include/htmlpurifier/library/HTMLPurifier.auto.php');
+			include_once ('libraries/htmlpurifier/library/HTMLPurifier.auto.php');
 
 			$config = HTMLPurifier_Config::createDefault();
 	    	$config->set('Core', 'Encoding', $use_charset);
@@ -568,9 +635,24 @@ function vtlib_purify($input, $ignore=false) {
 				$value = $__htmlpurifier_instance->purify($input);
 			}
 		}
+		$purified_cache[$md5OfInput] = $value;
 	}
 	$value = str_replace('&amp;','&',$value);
 	return $value;
+}
+
+/**
+ * Function to return the valid SQl input.
+ * @param <String> $string
+ * @param <Boolean> $skipEmpty Skip the check if string is empty.
+ * @return <String> $string/false
+ */
+function vtlib_purifyForSql($string, $skipEmpty=true) {
+	$pattern = "/^[_a-zA-Z0-9.]+$/";
+	if ((empty($string) && $skipEmpty) || preg_match($pattern, $string)) {
+		return $string;
+	}
+	return false;
 }
 
 /**
@@ -605,20 +687,6 @@ function vtlib_module_icon($modulename){
 		return "modules/$modulename/$modulename.png";
 	}
 	return "modules/Vtiger/Vtiger.png";
-}
-
-/**
- * Function to return the valid SQl input.
- * @param <String> $string
- * @param <Boolean> $skipEmpty Skip the check if string is empty.
- * @return <String> $string/false
- */
-function vtlib_purifyForSql($string, $skipEmpty=true) {
-	$pattern = "/^[_a-zA-Z0-9.]+$/";
-	if ((empty($string) && $skipEmpty) || preg_match($pattern, $string)) {
-		return $string;
-	}
-	return false;
 }
 
 ?>

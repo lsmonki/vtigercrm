@@ -214,17 +214,33 @@ function vtws_getModuleInstance($webserviceObject){
 
 function vtws_isRecordOwnerUser($ownerId){
 	global $adb;
-	$result = $adb->pquery("select first_name from vtiger_users where id = ?",array($ownerId));
-	$rowCount = $adb->num_rows($result);
-	$ownedByUser = ($rowCount > 0);
+	
+	static $cache = array();
+	if (!array_key_exists($ownerId, $cache)) {
+		$result = $adb->pquery("select first_name from vtiger_users where id = ?",array($ownerId));
+		$rowCount = $adb->num_rows($result);
+		$ownedByUser = ($rowCount > 0);
+		$cache[$ownerId] = $ownedByUser;
+	} else {
+		$ownedByUser = $cache[$ownerId];
+	}
+	
 	return $ownedByUser;
 }
 
 function vtws_isRecordOwnerGroup($ownerId){
 	global $adb;
-	$result = $adb->pquery("select groupname from vtiger_groups where groupid = ?",array($ownerId));
-	$rowCount = $adb->num_rows($result);
-	$ownedByGroup = ($rowCount > 0);
+
+	static $cache = array();
+	if (!array_key_exists($ownerId, $cache)) {
+		$result = $adb->pquery("select groupname from vtiger_groups where groupid = ?",array($ownerId));
+		$rowCount = $adb->num_rows($result);
+		$ownedByGroup = ($rowCount > 0);
+		$cache[$ownerId] = $ownedByGroup;
+	} else {
+		$ownedByGroup = $cache[$ownerId];
+	}
+	
 	return $ownedByGroup;
 }
 
@@ -462,6 +478,7 @@ function vtws_CreateCompanyLogoFile($fieldname) {
 		if(in_array($fileTypeValue, $allowedFileTypes)) {
 			move_uploaded_file($_FILES[$fieldname]["tmp_name"],
 					$uploaddir.$_FILES[$fieldname]["name"]);
+			copy($uploaddir.$_FILES[$fieldname]["name"], $uploaddir.'application.ico');
 			return $binFile;
 		}
 		throw new WebServiceException(WebServiceErrorCode::$INVALIDTOKEN,
@@ -792,11 +809,11 @@ function vtws_transferComments($sourceRecordId, $destinationRecordId) {
 function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 	$db = PearDatabase::getInstance();
 	//Updating the smcreatorid,smownerid, modifiedby in vtiger_crmentity
-	$sql = "update vtiger_crmentity set smcreatorid=? where smcreatorid=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
+	$sql = "UPDATE vtiger_crmentity SET smcreatorid=? WHERE smcreatorid=? AND setype<>?";
+	$db->pquery($sql, array($newOwnerId, $ownerId,'ModComments'));
 
-	$sql = "update vtiger_crmentity set smownerid=? where smownerid=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
+	$sql = "UPDATE vtiger_crmentity SET smownerid=? WHERE smownerid=? AND setype<>?";
+	$db->pquery($sql, array($newOwnerId, $ownerId, 'ModComments'));
 
 	$sql = "update vtiger_crmentity set modifiedby=? where modifiedby=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
@@ -807,16 +824,8 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 		$db->pquery($sql, array($ownerId));
 	}
 
-	//updating created by in vtiger_lar
-	$sql = "update vtiger_lar set createdby=? where createdby=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
-
 	//updating the vtiger_import_maps
 	$sql ="update vtiger_import_maps set assigned_user_id=? where assigned_user_id=?";
-	$db->pquery($sql, array($newOwnerId, $ownerId));
-
-	//update assigned_user_id in vtiger_files
-	$sql ="update vtiger_files set assigned_user_id=? where assigned_user_id=?";
 	$db->pquery($sql, array($newOwnerId, $ownerId));
 
 	if(Vtiger_Utils::CheckTable('vtiger_customerportal_prefs')) {
@@ -835,11 +844,6 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 		$db->pquery($sql, array($ownerId));
 	}
 
-	//delete from vtiger_users to group vtiger_table
-	if ($delete) {
-		$sql = "delete from vtiger_user2role where userid=?";
-		$db->pquery($sql, array($ownerId));
-	}
 
 	//delete from vtiger_users to vtiger_role vtiger_table
 	if ($delete) {
@@ -857,8 +861,13 @@ function vtws_transferOwnership($ownerId, $newOwnerId, $delete=true) {
 		$column = $row->tablename.'.'.$row->columnname;
 		if(!in_array($column, $columnList)) {
 			$columnList[] = $column;
-			$sql = "update $row->tablename set $row->columnname=? where $row->columnname=?";
-			$db->pquery($sql, array($newOwnerId, $ownerId));
+			if($row->columnname == 'smcreatorid' || $row->columnname == 'smownerid') {
+				$sql = "update $row->tablename set $row->columnname=? where $row->columnname=? and setype<>?";
+				$db->pquery($sql, array($newOwnerId, $ownerId, 'ModComments'));
+			} else {
+				$sql = "update $row->tablename set $row->columnname=? where $row->columnname=?";
+				$db->pquery($sql, array($newOwnerId, $ownerId));
+			}
 		}
 	}
 }

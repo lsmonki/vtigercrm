@@ -245,12 +245,11 @@ class ModCommentsCore extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('ModComments', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 
@@ -350,7 +349,43 @@ class ModCommentsCore extends CRMEntity {
 
 		return $query;
 	}
+	
+	/*
+	 * Function to get the secondary query part of a report
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule,$queryplanner){
+		$matrix = $queryplanner->newDependencyMatrix();
+		
+		$matrix->setDependency('vtiger_crmentityModComments',array('vtiger_groupsModComments','vtiger_usersModComments', 'vtiger_contactdetailsRelModComments', 'vtiger_modcommentsRelModComments'));
+		$matrix->setDependency('vtiger_modcomments', array('vtiger_crmentityModComments'));
 
+		if (!$queryplanner->requireTable("vtiger_modcomments",$matrix)){
+			return '';
+		}
+
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_modcomments","modcommentsid", $queryplanner);
+
+		if ($queryplanner->requireTable("vtiger_crmentityModComments",$matrix)){
+			$query .= " left join vtiger_crmentity as vtiger_crmentityModComments on vtiger_crmentityModComments.crmid=vtiger_modcomments.modcommentsid and vtiger_crmentityModComments.deleted=0";
+		}
+		if ($queryplanner->requireTable("vtiger_groupsModComments")){
+			$query .= " left join vtiger_groups vtiger_groupsModComments on vtiger_groupsModComments.groupid = vtiger_crmentityModComments.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersModComments")){
+			$query .= " left join vtiger_users as vtiger_usersModComments on vtiger_usersModComments.id = vtiger_crmentityModComments.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_contactdetailsRelModComments")){
+			$query .= " left join vtiger_contactdetails as vtiger_contactdetailsRelModComments on vtiger_contactdetailsRelModComments.contactid = vtiger_crmentityModComments.crmid";
+		}
+		if ($queryplanner->requireTable("vtiger_modcommentsRelModComments")){
+			$query .= " left join vtiger_modcomments as vtiger_modcommentsRelModComments on vtiger_modcommentsRelModComments.modcommentsid = vtiger_crmentityModComments.crmid";
+		}
+		return $query;
+	}
+	
 	/**
 	 * Invoked when special actions are performed on the module.
 	 * @param String Module name

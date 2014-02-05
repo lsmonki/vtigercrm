@@ -197,12 +197,11 @@
 			global $adb,$log;
 			$references = $meta->getReferenceFieldDetails();
 			foreach($references as $field=>$typeList){
-                            if(strtolower($meta->getEntityName()) == "emails"){
-				if(isset($row['parent_id'])){
-                                    list($row['parent_id'], $fieldId) = explode('@',
-					    $row['parent_id']);
-                                }
-                            }
+				if(strtolower($meta->getEntityName()) == "emails"){
+					if(isset($row['parent_id'])){
+						list($row['parent_id'], $fieldId) = explode('@', $row['parent_id']);
+					}
+				}
 				if($row[$field]){
 					$found = false;
 					foreach ($typeList as $entity) {
@@ -264,14 +263,15 @@
 			global $current_user;
 			$moduleFields = $meta->getModuleFields();
 			foreach($moduleFields as $fieldName=>$fieldObj){
-				if($fieldObj->getFieldDataType()=="currency"){
-					if(!empty($row[$fieldName])){
+				if($fieldObj->getFieldDataType()=="currency" && !empty($row[$fieldName])) {
+					if($fieldObj->getUIType() == '71') {
+						$row[$fieldName] = CurrencyField::convertToUserFormat($row[$fieldName],$current_user);
+					} else if($fieldObj->getUIType() == '72') {
 						$row[$fieldName] = CurrencyField::convertToUserFormat($row[$fieldName],$current_user,true);
 					}
 				}
 			}
 			return $row;
 		}
-	}
-	
+	}	
 ?>

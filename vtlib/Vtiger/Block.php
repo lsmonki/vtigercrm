@@ -8,6 +8,7 @@
  * All Rights Reserved.
  ******************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
+require_once 'includes/runtime/Cache.php';
 
 /**
  * Provides API to work with vtiger CRM Module Blocks
@@ -26,10 +27,13 @@ class Vtiger_Block {
 	var $ineditview = 0;
 	var $indetailview = 0;
 
+    var $display_status=1;
+	var $iscustom=0;
+
 	var $module;
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 */
 	function __construct() {
 	}
@@ -69,6 +73,9 @@ class Vtiger_Block {
 	function initialize($valuemap, $moduleInstance=false) {
 		$this->id = $valuemap[blockid];
 		$this->label= $valuemap[blocklabel];
+        $this->display_status = $valuemap[display_status];
+		$this->sequence = $valuemap[sequence];
+        $this->iscustom = $valuemap[iscustom];
 		$this->module=$moduleInstance? $moduleInstance: Vtiger_Module::getInstance($valuemap[tabid]);
 	}
 
@@ -84,9 +91,9 @@ class Vtiger_Block {
 		$this->id = $this->__getUniqueId();
 		if(!$this->sequence) $this->sequence = $this->__getNextSequence();
 
-		$adb->pquery("INSERT INTO vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view) 
-			VALUES(?,?,?,?,?,?,?,?,?)", Array($this->id, $this->module->id, $this->label,$this->sequence, 
-			$this->showtitle, $this->visible,$this->increateview, $this->ineditview, $this->indetailview));
+		$adb->pquery("INSERT INTO vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view,iscustom) 
+			VALUES(?,?,?,?,?,?,?,?,?,?)", Array($this->id, $this->module->id, $this->label,$this->sequence, 
+			$this->showtitle, $this->visible,$this->increateview, $this->ineditview, $this->indetailview, $this->iscustom));
 		self::log("Creating Block $this->label ... DONE");
 		self::log("Module language entry for $this->label ... CHECK");
 	}
@@ -160,23 +167,28 @@ class Vtiger_Block {
 	 */
 	static function getInstance($value, $moduleInstance=false) {
 		global $adb;
-		$instance = false;
-
-		$query = false;
-		$queryParams = false;
-		if(Vtiger_Utils::isNumber($value)) {
-			$query = "SELECT * FROM vtiger_blocks WHERE blockid=?";
-			$queryParams = Array($value);
+		$cache = Vtiger_Cache::getInstance();
+		if($moduleInstance && $cache->getBlockInstance($value, $moduleInstance->id)){
+			return $cache->getBlockInstance($value, $moduleInstance->id);
 		} else {
-			$query = "SELECT * FROM vtiger_blocks WHERE blocklabel=? AND tabid=?";
-			$queryParams = Array($value, $moduleInstance->id);
+			$instance = false;
+			$query = false;
+			$queryParams = false;
+			if(Vtiger_Utils::isNumber($value)) {
+				$query = "SELECT * FROM vtiger_blocks WHERE blockid=?";
+				$queryParams = Array($value);
+			} else {
+				$query = "SELECT * FROM vtiger_blocks WHERE blocklabel=? AND tabid=?";
+				$queryParams = Array($value, $moduleInstance->id);
+			}
+			$result = $adb->pquery($query, $queryParams);
+			if($adb->num_rows($result)) {
+				$instance = new self();
+				$instance->initialize($adb->fetch_array($result), $moduleInstance);
+			}
+			$cache->setBlockInstance($value,$instance->module->id, $instance);
+			return $instance;
 		}
-		$result = $adb->pquery($query, $queryParams);
-		if($adb->num_rows($result)) {
-			$instance = new self();
-			$instance->initialize($adb->fetch_array($result), $moduleInstance);
-		}
-		return $instance;
 	}
 
 	/**
@@ -187,9 +199,9 @@ class Vtiger_Block {
 		global $adb;
 		$instances = false;
 
-		$query = "SELECT * FROM vtiger_blocks WHERE tabid=?";
+		$query = "SELECT * FROM vtiger_blocks WHERE tabid=? ORDER BY sequence";
 		$queryParams = Array($moduleInstance->id);
-		
+
 		$result = $adb->pquery($query, $queryParams);
 		for($index = 0; $index < $adb->num_rows($result); ++$index) {
 			$instance = new self();

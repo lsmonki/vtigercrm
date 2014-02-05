@@ -33,8 +33,8 @@ class Invoice extends CRMEntity {
 
 	var $table_name = "vtiger_invoice";
 	var $table_index= 'invoiceid';
-	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_invoice'=>'invoiceid','vtiger_invoicebillads'=>'invoicebilladdressid','vtiger_invoiceshipads'=>'invoiceshipaddressid','vtiger_invoicecf'=>'invoiceid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf', 'vtiger_inventoryproductrel');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_invoice'=>'invoiceid','vtiger_invoicebillads'=>'invoicebilladdressid','vtiger_invoiceshipads'=>'invoiceshipaddressid','vtiger_invoicecf'=>'invoiceid','vtiger_inventoryproductrel'=>'id');
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
@@ -74,11 +74,17 @@ class Invoice extends CRMEntity {
 				//'Invoice No'=>Array('crmentity'=>'crmid'),
 				'Invoice No'=>Array('invoice'=>'invoice_no'),
 				'Subject'=>Array('purchaseorder'=>'subject'),
+                'Account Name'=>Array('contactdetails'=>'account_id'),
+                'Created Date' => Array('crmentity'=>'createdtime'),
+                'Assigned To'=>Array('crmentity'=>'smownerid'),
 				);
 
 	var $search_fields_name = Array(
-				        'Invoice No'=>'',
-				        'Subject'=>'subject',
+				        'Invoice No'          => 'invoice_no',
+				        'Subject'             => 'subject',
+                        'Account Name'        => 'account_id',
+                        'Created Time'        => 'createdtime',
+                        'Assigned To'         => 'assigned_user_id'
 				      );
 
 	// This is the list of vtiger_fields that are required.
@@ -90,13 +96,18 @@ class Invoice extends CRMEntity {
 
 	//var $groupTable = Array('vtiger_invoicegrouprelation','invoiceid');
 
-	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
+	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime', 'assigned_user_id');
 	var $_salesorderid;
 	var $_recurring_mode;
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';
 
+	var $entity_table = "vtiger_crmentity";
+
+	// For workflows update field tasks is deleted all the lineitems.
+	var $isLineItemUpdate = true;
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Invoice() {
@@ -112,15 +123,9 @@ class Invoice extends CRMEntity {
 
 	*/
 
-	function save_module($module)
-	{
-		//Checking if vtiger_salesorderid is present and updating the quote status
-		if($this->column_fields["salesorder_id"] != '')
-		{
-        		$so_id = $this->column_fields["salesorder_id"];
-        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=?";
-        		$this->db->pquery($query1, array($so_id));
-		}
+	function save_module($module) {
+		global $updateInventoryProductRel_deduct_stock;
+		$updateInventoryProductRel_deduct_stock = true;
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if(isset($this->_recurring_mode) && $this->_recurring_mode == 'recurringinvoice_from_so' && isset($this->_salesorderid) && $this->_salesorderid!='') {
@@ -129,14 +134,14 @@ class Invoice extends CRMEntity {
 
 		} else if(isset($_REQUEST)) {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
-					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates')
-			{
+					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
+					&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Invoice');
+			} else if($_REQUEST['action'] == 'InvoiceAjax' || $_REQUEST['action'] == 'MassEditSave') {
+				$updateInventoryProductRel_deduct_stock = false;
 			}
 		}
-
-
 		// Update the currency id and the conversion rate for the invoice
 		$update_query = "update vtiger_invoice set currency_id=?, conversion_rate=? where invoiceid=?";
 
@@ -144,6 +149,29 @@ class Invoice extends CRMEntity {
 		$this->db->pquery($update_query, $update_params);
 	}
 
+	/**
+	 * Customizing the restore procedure.
+	 */
+	function restore($module, $id) {
+		global $updateInventoryProductRel_deduct_stock;
+		$status = getInvoiceStatus($id);
+		if($status != 'Cancel') {
+			$updateInventoryProductRel_deduct_stock = true;
+		}
+		parent::restore($module, $id);
+	}
+
+	/**
+	 * Customizing the Delete procedure.
+	 */
+	function trash($module, $recordId) {
+		$status = getInvoiceStatus($recordId);
+		if($status != 'Cancel') {
+			addProductsToStock($recordId);
+		}
+		parent::trash($module, $recordId);
+	}
+	
 	/**	function used to get the name of the current object
 	 *	@return string $this->name - name of the current object
 	 */
@@ -197,7 +225,7 @@ class Invoice extends CRMEntity {
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 				vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,
-				vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+				vtiger_activity.*,vtiger_seactivityrel.crmid as parent_id,vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 				vtiger_crmentity.modifiedtime
 				from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
@@ -326,23 +354,65 @@ class Invoice extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_invoice","invoiceid");
-		$query .= " left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid and vtiger_crmentityInvoice.deleted=0
-			left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
-			left join vtiger_currency_info as vtiger_currency_info$secmodule on vtiger_currency_info$secmodule.id = vtiger_invoice.currency_id
-			left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
-			left join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid
-			left join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid
-			left join vtiger_inventoryproductrel as vtiger_inventoryproductrelInvoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrelInvoice.id
-			left join vtiger_products as vtiger_productsInvoice on vtiger_productsInvoice.productid = vtiger_inventoryproductrelInvoice.productid
-			left join vtiger_service as vtiger_serviceInvoice on vtiger_serviceInvoice.serviceid = vtiger_inventoryproductrelInvoice.productid
-			left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupid = vtiger_crmentityInvoice.smownerid
-			left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentityInvoice.smownerid
-			left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_invoice.contactid = vtiger_contactdetailsInvoice.contactid
-			left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
-			left join vtiger_users as vtiger_lastModifiedByInvoice on vtiger_lastModifiedByInvoice.id = vtiger_crmentityInvoice.modifiedby ";
+	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
+		
+		// Define the dependency matrix ahead
+		$matrix = $queryPlanner->newDependencyMatrix();
+		$matrix->setDependency('vtiger_crmentityInvoice', array('vtiger_usersInvoice', 'vtiger_groupsInvoice', 'vtiger_lastModifiedByInvoice'));		
+		$matrix->setDependency('vtiger_inventoryproductrelInvoice', array('vtiger_productsInvoice', 'vtiger_serviceInvoice'));
+		$matrix->setDependency('vtiger_invoice',array('vtiger_crmentityInvoice', "vtiger_currency_info$secmodule",
+				'vtiger_invoicecf', 'vtiger_salesorderInvoice', 'vtiger_invoicebillads',
+				'vtiger_invoiceshipads', 'vtiger_inventoryproductrelInvoice', 'vtiger_contactdetailsInvoice', 'vtiger_accountInvoice'));
 
+		if (!$queryPlanner->requireTable('vtiger_invoice', $matrix)) {
+			return '';
+		}
+		
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_invoice","invoiceid", $queryPlanner);
+		
+		if ($queryPlanner->requireTable('vtiger_crmentityInvoice', $matrix)) {
+			$query .= " left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid and vtiger_crmentityInvoice.deleted=0";
+		}
+		if ($queryPlanner->requireTable('vtiger_invoicecf')) {
+			$query .= " left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid";
+		}
+		if ($queryPlanner->requireTable("vtiger_currency_info$secmodule")) {
+			$query .= " left join vtiger_currency_info as vtiger_currency_info$secmodule on vtiger_currency_info$secmodule.id = vtiger_invoice.currency_id";
+		}
+		if ($queryPlanner->requireTable('vtiger_salesorderInvoice')) {
+			$query .= " left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid";
+		}
+		if ($queryPlanner->requireTable('vtiger_invoicebillads')) {
+			$query .= " left join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid";
+		}
+		if ($queryPlanner->requireTable('vtiger_invoiceshipads')) {
+			$query .= " left join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid";
+		}
+		if ($queryPlanner->requireTable('vtiger_inventoryproductrelInvoice', $matrix)) {
+			$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelInvoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrelInvoice.id";
+		}
+		if ($queryPlanner->requireTable('vtiger_productsInvoice')) {
+			$query .= " left join vtiger_products as vtiger_productsInvoice on vtiger_productsInvoice.productid = vtiger_inventoryproductrelInvoice.productid";
+		}
+		if ($queryPlanner->requireTable('vtiger_serviceInvoice')) {
+			$query .= " left join vtiger_service as vtiger_serviceInvoice on vtiger_serviceInvoice.serviceid = vtiger_inventoryproductrelInvoice.productid";
+		}
+		if ($queryPlanner->requireTable('vtiger_groupsInvoice')) {
+			$query .= " left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupid = vtiger_crmentityInvoice.smownerid";
+		}
+		if ($queryPlanner->requireTable('vtiger_usersInvoice')) {
+			$query .= " left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentityInvoice.smownerid";
+		}
+		if ($queryPlanner->requireTable('vtiger_contactdetailsInvoice')) {
+			$query .= " left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_invoice.contactid = vtiger_contactdetailsInvoice.contactid";
+		}
+		if ($queryPlanner->requireTable('vtiger_accountInvoice')) {
+			$query .= " left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid";
+		}
+		if ($queryPlanner->requireTable('vtiger_lastModifiedByInvoice')) {
+			$query .= " left join vtiger_users as vtiger_lastModifiedByInvoice on vtiger_lastModifiedByInvoice.id = vtiger_crmentityInvoice.modifiedby ";
+		}
+		
 		return $query;
 	}
 
@@ -479,6 +549,85 @@ class Invoice extends CRMEntity {
 
 			$adb->pquery($updatequery, $updateparams);
 		}
+	}
+
+	function insertIntoEntityTable($table_name, $module, $fileid = '')  {
+		//Ignore relation table insertions while saving of the record
+		if($table_name == 'vtiger_inventoryproductrel') {
+			return;
+		}
+		parent::insertIntoEntityTable($table_name, $module, $fileid);
+	}
+
+	/*Function to create records in current module.
+	**This function called while importing records to this module*/
+	function createRecords($obj) {
+		$createRecords = createRecords($obj);
+		return $createRecords;
+	}
+
+	/*Function returns the record information which means whether the record is imported or not
+	**This function called while importing records to this module*/
+	function importRecord($obj, $inventoryFieldData, $lineItemDetails) {
+		$entityInfo = importRecord($obj, $inventoryFieldData, $lineItemDetails);
+		return $entityInfo;
+	}
+
+	/*Function to return the status count of imported records in current module.
+	**This function called while importing records to this module*/
+	function getImportStatusCount($obj) {
+		$statusCount = getImportStatusCount($obj);
+		return $statusCount;
+	}
+
+	function undoLastImport($obj, $user) {
+		$undoLastImport = undoLastImport($obj, $user);
+	}
+
+	/** Function to export the lead records in CSV Format
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Invoice Query.
+	*/
+	function create_export_query($where)
+	{
+		global $log;
+		global $current_user;
+		$log->debug("Entering create_export_query(".$where.") method ...");
+
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Invoice", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+		$fields_list .= getInventoryFieldsForExport($this->table_name);
+		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+
+		$query = "SELECT $fields_list FROM ".$this->entity_table."
+				INNER JOIN vtiger_invoice ON vtiger_invoice.invoiceid = vtiger_crmentity.crmid
+				LEFT JOIN vtiger_invoicecf ON vtiger_invoicecf.invoiceid = vtiger_invoice.invoiceid
+				LEFT JOIN vtiger_salesorder ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
+				LEFT JOIN vtiger_invoicebillads ON vtiger_invoicebillads.invoicebilladdressid = vtiger_invoice.invoiceid
+				LEFT JOIN vtiger_invoiceshipads ON vtiger_invoiceshipads.invoiceshipaddressid = vtiger_invoice.invoiceid
+				LEFT JOIN vtiger_inventoryproductrel ON vtiger_inventoryproductrel.id = vtiger_invoice.invoiceid
+				LEFT JOIN vtiger_products ON vtiger_products.productid = vtiger_inventoryproductrel.productid
+				LEFT JOIN vtiger_service ON vtiger_service.serviceid = vtiger_inventoryproductrel.productid
+				LEFT JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_invoice.contactid
+				LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_invoice.accountid
+				LEFT JOIN vtiger_currency_info ON vtiger_currency_info.id = vtiger_invoice.currency_id
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+
+		$query .= $this->getNonAdminAccessControlQuery('Invoice',$current_user);
+		$where_auto = " vtiger_crmentity.deleted=0";
+
+		if($where != "") {
+			$query .= " where ($where) AND ".$where_auto;
+		} else {
+			$query .= " where ".$where_auto;
+		}
+
+		$log->debug("Exiting create_export_query method ...");
+		return $query;
 	}
 
 }

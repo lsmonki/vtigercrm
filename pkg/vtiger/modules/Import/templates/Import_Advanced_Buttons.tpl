@@ -10,8 +10,9 @@
  ********************************************************************************/
 -->*}
 
-<input type="submit" name="import" value="{'LBL_IMPORT_BUTTON_LABEL'|@getTranslatedString:$MODULE}" class="crmButton big edit"
-	   onclick="return ImportJs.sanitizeAndSubmit();" />
+<button type="submit" name="import" id="importButton" class="crmButton big edit btn btn-success"
+		><strong>{'LBL_IMPORT_BUTTON_LABEL'|@vtranslate:$MODULE}</strong></button>
 &nbsp;&nbsp;
-<input type="button" name="cancel" value="{'LBL_CANCEL_BUTTON_LABEL'|@getTranslatedString:$MODULE}" class="crmButton big cancel"
-	   onclick="window.history.back()" />
+<a type="button" name="cancel" value="{'LBL_CANCEL'|@vtranslate:$MODULE}" class="cursorPointer cancelLink" onclick="window.history.back()">
+	{'LBL_CANCEL'|@vtranslate:$MODULE}
+</a>

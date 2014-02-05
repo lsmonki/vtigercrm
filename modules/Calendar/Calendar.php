@@ -14,7 +14,7 @@ class Calendar
 {
 	var $view='day';
 	var $date_time;
-	var $hour_format = 'am/pm';
+	var $hour_format = 12;
 	var $day_slice;
 	var $week_slice;
 	var $week_array;

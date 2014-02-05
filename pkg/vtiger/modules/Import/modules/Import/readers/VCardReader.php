@@ -8,9 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-require_once 'modules/Import/readers/FileReader.php';
-
-class Import_VCard_Reader extends Import_File_Reader {
+class Import_VCardReader_Reader extends Import_FileReader_Reader {
 
 	protected $vCardPattern = '/BEGIN:VCARD.*?END:VCARD/si';
 	protected $skipLabels = array('BEGIN', 'END', 'VERSION');
@@ -40,7 +38,7 @@ class Import_VCard_Reader extends Import_File_Reader {
 			list($label, $value) = explode(':', $fieldValueMapping, 2);
 			$value = str_replace(';', ' ', $value);
 			if(!in_array($label, $this->skipLabels)) {
-				$data[$label] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+				$data[$label] = $this->convertCharacterEncoding($value, $this->request->get('file_encoding'), $default_charset);
 			}
 		}
 		return $data;
@@ -55,7 +53,7 @@ class Import_VCard_Reader extends Import_File_Reader {
 			return false;
 		}
 
-		$fieldMapping = $this->userInputObject->get('field_mapping');
+		$fieldMapping = $this->request->get('field_mapping');
 
 		if(empty(self::$fileContents)) {
 			self::$fileContents = file_get_contents($filePath);
@@ -81,8 +79,8 @@ class Import_VCard_Reader extends Import_File_Reader {
 			foreach($fieldMapping as $fieldName => $index) {
 				$fieldValue = $data[$index];
 				$mappedData[$fieldName] = $fieldValue;
-				if($this->userInputObject->get('file_encoding') != $default_charset) {
-					$mappedData[$fieldName] = $this->convertCharacterEncoding($fieldValue, $this->userInputObject->get('file_encoding'), $default_charset);
+				if($this->request->get('file_encoding') != $default_charset) {
+					$mappedData[$fieldName] = $this->convertCharacterEncoding($fieldValue, $this->request->get('file_encoding'), $default_charset);
 				}
 				if(!empty($fieldValue)) $allValuesEmpty = false;
 			}
@@ -93,4 +91,3 @@ class Import_VCard_Reader extends Import_File_Reader {
 		}
 	}
 }
-?>

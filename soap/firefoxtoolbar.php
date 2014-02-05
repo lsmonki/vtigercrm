@@ -9,10 +9,18 @@
 *
  ********************************************************************************/
 
-require_once("config.php");
-require_once('include/logging.php');
-require_once('include/nusoap/nusoap.php');
-require_once('include/database/PearDatabase.php');
+/**
+ * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode.
+ */
+require_once 'config.php';
+if (file_exists('config_override.php')) {
+	                include_once 'config_override.php';
+}
+
+include_once 'vtlib/Vtiger/Module.php';
+include_once 'includes/main/WebUI.php';
+
+require_once('libraries/nusoap/nusoap.php');
 
 $log = &LoggerManager::getLogger('firefoxlog');
 
@@ -905,7 +913,7 @@ function getServerSessionId($id)
 	$id = (int) $id;
 
 	$query = "select * from vtiger_soapservice where type='FireFox' and id={$id}";
-	$sessionid = $adb->query_result($adb->pquery($query, array()),0,'sessionid');
+	$sessionid = $adb->query_result($adb->query($query),0,'sessionid');
 
 	return $sessionid;
 }

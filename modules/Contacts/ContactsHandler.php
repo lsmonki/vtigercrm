@@ -47,12 +47,12 @@ function Contacts_sendCustomerPortalLoginDetails($entityData){
 		}
 
 		if($insert == true || $update == true) {
+			global $current_user,$HELPDESK_SUPPORT_EMAIL_ID, $HELPDESK_SUPPORT_NAME;
 			require_once("modules/Emails/mail.php");
-			global $current_user;
 			$emailData = Contacts::getPortalEmailContents($entityData,$password,'LoginDetails');
 			$subject = $emailData['subject'];
 			$contents = $emailData['body'];
-			$mail_status = send_mail('Contacts',$entityData->get('email'),$current_user->user_name,"",$subject,$contents);
+			send_mail('Contacts', $entityData->get('email'), $HELPDESK_SUPPORT_NAME, $HELPDESK_SUPPORT_EMAIL_ID, $subject, $contents,'','','','','',true);
 		}
 	} else {
 		$sql = "UPDATE vtiger_portalinfo SET user_name=?,isactive=0 WHERE id=?";

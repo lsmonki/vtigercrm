@@ -10,6 +10,7 @@
 require_once 'include/Webservices/Utils.php';
 require_once 'include/Webservices/ModuleTypes.php';
 require_once 'include/utils/CommonUtils.php';
+require_once 'include/Webservices/DescribeObject.php';
 
 	function vtws_sync($mtime,$elementType,$syncType,$user){
 		global $adb, $recordString,$modifiedTimeString;
@@ -33,14 +34,28 @@ require_once 'include/utils/CommonUtils.php';
 			$user = $syncType;
 		} else if($syncType == 'application'){
 			$applicationSync = true;
-		}
+		} else if($syncType == 'userandgroup'){
+            $userAndGroupSync = true;
+        }
 
 		if($applicationSync && !is_admin($user)){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Only admin users can perform application sync");
 		}
 		
 		$ownerIds = array($user->id);
-
+        // To get groupids in which this user exist
+        if ($userAndGroupSync) {
+        $groupresult = $adb->pquery("select groupid from vtiger_users2group where userid=?", array($user->id));
+        $numOfRows = $adb->num_rows($groupresult);
+        if ($numOfRows > 0) {
+            for ($i = 0; $i < $numOfRows; $i++) {
+                $ownerIds[count($ownerIds)] = $adb->query_result($groupresult, $i, "groupid");
+            }
+        }
+    }
+        // End
+    
+        
 		if(!isset($elementType) || $elementType=='' || $elementType==null){
 			$typed=false;
 		}
@@ -116,9 +131,6 @@ require_once 'include/utils/CommonUtils.php';
 		if(!$maxModifiedTime){
 			$maxModifiedTime = $datetime;
 		}
-
-
-
 		foreach($accessableModules as $elementType){
 			$handler = vtws_getModuleHandlerFromName($elementType, $user);
 			$moduleMeta = $handler->getMeta();
@@ -136,15 +148,15 @@ require_once 'include/utils/CommonUtils.php';
 
 			$queryGenerator = new QueryGenerator($elementType, $user);
 			$fields = array();
-			$moduleFeilds = $moduleMeta->getModuleFields();
-			$moduleFeildNames = array_keys($moduleFeilds);
-			$moduleFeildNames[]='id';
-			$queryGenerator->setFields($moduleFeildNames);
+			$moduleFields = $moduleMeta->getModuleFields();
+            $moduleFieldNames = getSelectClauseFields($elementType,$moduleMeta,$user);
+			$moduleFieldNames[]='id';
+			$queryGenerator->setFields($moduleFieldNames);
 			$selectClause = "SELECT ".$queryGenerator->getSelectClauseColumnSQL();
 			// adding the fieldnames that are present in the delete condition to the select clause
 			// since not all fields present in delete condition will be present in the fieldnames of the module
 			foreach($deleteColumnNames as $table_fieldName=>$columnName){
-				if(!in_array($columnName,$moduleFeildNames)){
+				if(!in_array($columnName,$moduleFieldNames)){
 					$selectClause .=", ".$table_fieldName;
 				}
 			}
@@ -152,6 +164,7 @@ require_once 'include/utils/CommonUtils.php';
 				$fromClause = vtws_getEmailFromClause();
 			else
 				$fromClause = $queryGenerator->getFromClause();
+
 			$fromClause .= " INNER JOIN (select modifiedtime, crmid,deleted,setype FROM $baseCRMTable WHERE setype=? and modifiedtime >? and modifiedtime<=?";
 			if(!$applicationSync){
 				$fromClause.= 'and smownerid IN('.generateQuestionMarks($ownerIds).')';
@@ -175,7 +188,7 @@ require_once 'include/utils/CommonUtils.php';
 						continue;
 					}
 					try{
-						$output["updated"][] = DataTransform::sanitizeDataWithColumn($arre,$moduleMeta);;
+						$output["updated"][] = DataTransform::sanitizeDataWithColumn($arre,$moduleMeta);
 					}catch(WebServiceException $e){
 						//ignore records the user doesn't have access to.
 						continue;
@@ -188,7 +201,7 @@ require_once 'include/utils/CommonUtils.php';
 
 		$q = "SELECT crmid FROM $baseCRMTable WHERE modifiedtime>?  and setype IN(".generateQuestionMarks($accessableModules).")";
 		$params = array($maxModifiedTime);
-		
+
 		foreach($accessableModules as $entityModule){
 			if($entityModule == "Events")
 				$entityModule = "Calendar";
@@ -278,5 +291,24 @@ require_once 'include/utils/CommonUtils.php';
 			$activityCondition = "vtiger_activity.activitytype ='Task'";
 		return $activityCondition;
 	}
+    
+    function getSelectClauseFields($module,$moduleMeta,$user){
+        $moduleFieldNames = $moduleMeta->getModuleFields();
+        $inventoryModules = getInventoryModules();
+        if(in_array($module, $inventoryModules)){
+			
+            $fields = vtws_describe('LineItem', $user);
+            foreach($fields['fields'] as $field){
+                unset($moduleFieldNames[$field['name']]);
+            }
+			foreach ($moduleFieldNames as $field => $fieldObj){
+				if(substr($field, 0, 5) == 'shtax'){
+					unset($moduleFieldNames[$field]);
+				}
+			}
+            
+        }
+        return array_keys($moduleFieldNames);
+    }
 
 ?>

@@ -79,7 +79,8 @@ class Vtiger_Link {
 	 * Initialize the schema (tables)
 	 */
 	static function __initSchema() {
-		if(empty(self::$__cacheSchemaChanges['vtiger_links'])) {
+		/* vtiger_links is already core product table */
+		/*if(empty(self::$__cacheSchemaChanges['vtiger_links'])) {
 			if(!Vtiger_Utils::CheckTable('vtiger_links')) {
 				Vtiger_Utils::CreateTable(
 					'vtiger_links',
@@ -90,7 +91,7 @@ class Vtiger_Link {
 					'CREATE INDEX link_tabidtype_idx on vtiger_links(tabid,linktype)');
 			}
 			self::$__cacheSchemaChanges['vtiger_links'] = true;
-		}
+		}*/
 	}
 
 	/**
@@ -186,13 +187,14 @@ class Vtiger_Link {
 					$params = $type;
 					$permittedTabIdList = getPermittedModuleIdList();
 					if(count($permittedTabIdList) > 0 && $current_user->is_admin !== 'on') {
+                        array_push($permittedTabIdList, 0);     // Added to support one link for all modules
 						$sql .= ' and tabid IN ('.
 							Vtiger_Utils::implodestr('?', count($permittedTabIdList), ',').')';
 						$params[] = $permittedTabIdList;
 					}
 					$result = $adb->pquery($sql, Array($adb->flatten_array($params)));
 				} else {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype IN ('.
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE (tabid=? OR tabid=0) AND linktype IN ('.
 						Vtiger_Utils::implodestr('?', count($type), ',') .')',
 							Array($tabid, $adb->flatten_array($type)));
 				}			
@@ -201,7 +203,7 @@ class Vtiger_Link {
 				if($tabid === self::IGNORE_MODULE) {
 					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE linktype=?', Array($type));
 				} else {
-					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=? AND linktype=?', Array($tabid, $type));				
+					$result = $adb->pquery('SELECT * FROM vtiger_links WHERE (tabid=? OR tabid=0) AND linktype=?', Array($tabid, $type));				
 				}
 			}
 		} else {
@@ -238,10 +240,25 @@ class Vtiger_Link {
 			if($multitype) {
 				$instances[$instance->linktype][] = $instance;
 			} else {
-				$instances[] = $instance;
+				$instances[$instance->linktype] = $instance;
 			}
 		}
 		return $instances;
+	}
+
+	/**
+	 * Extract the links of module for export.
+	 */
+	static function getAllForExport($tabid) {
+		global $adb;
+		$result = $adb->pquery('SELECT * FROM vtiger_links WHERE tabid=?', array($tabid));
+		$links  = array();
+		while($row = $adb->fetch_array($result)) {
+			$instance = new self();
+			$instance->initialize($row);
+			$links[] = $instance;
+		}
+		return $links;
 	}
 
 	/**

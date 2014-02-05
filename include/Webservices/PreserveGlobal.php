@@ -17,9 +17,10 @@ class VTWS_PreserveGlobal{
 		global $$name;
 		
 		if(!is_array(VTWS_PreserveGlobal::$globalData[$name])){
-			VTWS_PreserveGlobal::$globalData[$name] = array();
+			VTWS_PreserveGlobal::$globalData[$name] = array();		
 			VTWS_PreserveGlobal::$globalData[$name][] = $$name;
 		}
+
 		$$name = $value;
 		return $$name;
 	}

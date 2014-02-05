@@ -19,7 +19,7 @@
 	<td align="center" colspan="3">
 		{if $LinkToAvailableActions|count neq 0}
 		<select class="small" onchange="MailManager.mail_associate_actions(this.form);" name="_mlinktotype"  id="_mlinktotype">
-			<option value="" class="mm_blur">{'LBL_ACTIONS'|getTranslatedString}</option>
+			<option value="" class="mm_blur">{vtranslate('LBL_ACTIONS',$MODULE)}</option>
 			{foreach item=moduleName from=$LinkToAvailableActions}
 				<option value="{$moduleName}">{"LBL_MAILMANAGER_ADD_$moduleName"|getTranslatedString:'MailManager'}</option>
 			{/foreach}
@@ -42,7 +42,7 @@
 			<input type="radio" name="_mlinkto" value="{$RECORD.id}" style="align: absmiddle;">
 		</td>
 		<td align=left>
-			<a target="_blank" href="index.php?module={$MODULE}&action=DetailView&record={$RECORD.id}">{$RECORD.label|textlength_check}</a>
+			<a target="_blank" href="vtiger6/index.php?module={$MODULE}&view=Detail&record={$RECORD.id}">{$RECORD.label|textlength_check}</a>
 		</td>
 		<td align=right>
 			{assign var=RECORD_MODNAME value=$MODULES.$MODULE.name}
@@ -58,7 +58,7 @@
 	<td colspan="3" align="center">
 		{if $LinkToAvailableActions|count neq 0}
 		<select class="small" onchange="MailManager.mail_associate_actions(this.form);" name="_mlinktotype"  id="_mlinktotype">
-			<option value="" class="mm_blur">{'LBL_ACTIONS'|getTranslatedString}</option>
+			<option value="" class="mm_blur">{vtranslate('LBL_ACTIONS',$MODULE)}</option>
 			{foreach item=moduleName from=$LinkToAvailableActions}
 				<option value="{$moduleName}">{"LBL_MAILMANAGER_ADD_$moduleName"|getTranslatedString:'MailManager'}</option>
 			{/foreach}
@@ -69,10 +69,10 @@
 {else}
 <tr>
 	<td align="center" colspan=3>
-		{'LBL_No_Matching_Record_Found'|getTranslatedString}<br/>
+		{vtranslate('LBL_No_Matching_Record_Found','MailManager')}<br/>
 		{if $AllowedModules|count neq 0}
 		<select class="small" onchange="MailManager.mail_associate_create_wizard(this.form);" name="_mlinktotype"  id="_mlinktotype">
-			<option value="" class="mm_blur">{'LBL_ACTIONS'|getTranslatedString}</option>
+			<option value="" class="mm_blur">{vtranslate('LBL_ACTIONS','MailManager')}</option>
 			{foreach item=moduleName from=$AllowedModules}
 				<option value="{$moduleName}">{"LBL_MAILMANAGER_ADD_$moduleName"|getTranslatedString:'MailManager'}</option>
 			{/foreach}
@@ -87,10 +87,10 @@
 	<table width="100%" cellpadding=0 cellspacing=0 border=0>
 		<tr>
 			<td align="center" colspan=3>
-				{'LBL_No_Matching_Record_Found'|getTranslatedString}<br/>
+				{vtranslate('LBL_No_Matching_Record_Found','MailManager')}<br/>
 				{if $AllowedModules|count neq 0}
 				<select class="small" onchange="MailManager.mail_associate_create_wizard(this.form);" name="_mlinktotype"  id="_mlinktotype">
-					<option value="" class="mm_blur">{'LBL_ACTIONS'|getTranslatedString}</option>
+					<option value="" class="mm_blur">{vtranslate('LBL_ACTIONS','MailManager')}</option>
 					{foreach item=moduleName from=$AllowedModules}
 						<option value="{$moduleName}">{"LBL_MAILMANAGER_ADD_$moduleName"|getTranslatedString:'MailManager'}</option>
 					{/foreach}

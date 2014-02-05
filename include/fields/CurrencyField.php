@@ -64,10 +64,15 @@ class CurrencyField {
 
     /**
      * Value to be converted
-     * @param Number $value 
+     * @param Number $value
      */
     var $value = null;
-	
+
+	/**
+	 * Maximum Number Of Currency Decimals
+	 * @var Number
+	 */
+	var $maxNumberOfDecimals = 5;
     /**
      * Constructor
      * @param Number $value
@@ -102,16 +107,14 @@ class CurrencyField {
 		$this->currencySymbol = $currencyRateAndSymbol['symbol'];
 		$this->conversionRate = $currencyRateAndSymbol['rate'];
 		$this->currencySymbolPlacement = $user->currency_symbol_placement;
+		$this->numberOfDecimal = getCurrencyDecimalPlaces();
     }
 
 	public function getCurrencySymbol() {
 		return $this->currencySymbol;
 	}
 
-	public function setNumberofDecimals($numberOfDecimals) {
-		$this->numberOfDecimal = $numberOfDecimals;
-	}
-    
+
     /**
      * Returns the Formatted Currency value for the User
      * @global Users $current_user
@@ -119,18 +122,25 @@ class CurrencyField {
 	 * @param Boolean $skipConversion
      * @return String - Formatted Currency
      */
-    public static function convertToUserFormat($value, $user=null, $skipConversion=false) {
+    public static function convertToUserFormat($value, $user=null, $skipConversion=false, $skipFormatting=false) {
+		// To support negative values
+		$negative = false;
+		if(stripos($value, '-') === 0) {
+			$negative = true;
+			$value = substr($value, 1);
+		}
         $self = new self($value);
-		return $self->getDisplayValue($user,$skipConversion);
+		$value = $self->getDisplayValue($user,$skipConversion,$skipFormatting);
+		return ($negative) ? '-'.$value : $value;
     }
 
     /**
-     * Function that converts the Number into Users Currency 
+     * Function that converts the Number into Users Currency
      * @param Users $user
 	 * @param Boolean $skipConversion
      * @return Formatted Currency
      */
-    public function getDisplayValue($user=null, $skipConversion=false) {
+    public function getDisplayValue($user=null, $skipConversion=false, $skipFormatting=false) {
         global $current_user;
 		if(empty($user)) {
 			$user = $current_user;
@@ -139,11 +149,13 @@ class CurrencyField {
 
 		$value = $this->value;
 		if($skipConversion == false) {
-			$value = convertFromDollar($value,$this->conversionRate);
+			$value = self::convertFromDollar($value,$this->conversionRate);
 		}
 
-		$number = $this->_formatCurrencyValue($value);
-		return $number;
+		if($skipFormatting == false) {
+			$value = $this->_formatCurrencyValue($value);
+		}
+		return $this->currencyDecimalFormat($value, $user);
     }
 
 	/**
@@ -189,6 +201,8 @@ class CurrencyField {
         $currencyPattern = $this->currencyFormat;
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
+		$currencyDecimalPlaces = $this->numberOfDecimal;
+		$value = number_format($value, $currencyDecimalPlaces,'.','');
 		if(empty($currencySeparator)) $currencySeparator = ' ';
 		if(empty($decimalSeparator)) $decimalSeparator = ' ';
 
@@ -218,9 +232,22 @@ class CurrencyField {
 			return $number;
         }
 		if($currencyPattern == $this->CURRENCY_PATTERN_THOUSAND_GROUPING) {
+			$negativeNumber = false;
+			if($value < 0) {
+				$negativeNumber = true;
+			}
+			
 			// Separate the numeric and decimal parts
 			$numericParts = explode('.', $value);
 			$wholeNumber = $numericParts[0];
+			
+			//check the whole number is negative value, then separate the negative symbol from whole number
+			if($wholeNumber < 0 || $negativeNumber) {
+				$negativeNumber = true;
+				$positiveValues = explode('-', $wholeNumber);
+				$wholeNumber = $positiveValues[1];
+			}
+			
 			// Pad the rest of the length in the number string with Leading 0, to get it to the multiples of 3
 			$numberLength = strlen($wholeNumber);
 			// First grouping digits length
@@ -232,19 +259,38 @@ class CurrencyField {
 			$wholeNumberParts = str_split($wholeNumber,3);
 			// Re-create the whole number with user's configured currency separator
 			$numericParts[0] = $wholeNumber = implode($currencySeparator, $wholeNumberParts);
-			if($wholeNumber > 0) {
+			if($wholeNumber != 0) {
 				$numericParts[0] = ltrim($wholeNumber, '0');
 			} else {
 				$numericParts[0] = 0;
 			}
+			
+			//if its negative number, append-back the negative symbol to the whole number part
+			if($negativeNumber) {
+				$numericParts[0] = '-'.$numericParts[0];
+			}
+			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
 			return $number;
 		}
 		if($currencyPattern == $this->CURRENCY_PATTERN_MIXED_GROUPING) {
+			$negativeNumber = false;
+			if($value < 0) {
+				$negativeNumber = true;
+			}
+			
 			// Separate the numeric and decimal parts
 			$numericParts = explode('.', $value);
 			$wholeNumber = $numericParts[0];
+			
+			//check the whole number is negative value, then separate the negative symbol from whole number
+			if($wholeNumber < 0 || $negativeNumber) {
+				$negativeNumber = true;
+				$positiveValues = explode('-', $wholeNumber);
+				$wholeNumber = $positiveValues[1];
+			}
+			
 			// First part of the number which needs separate division
 			if(strlen($wholeNumber) > 3) {
 				$wholeNumberFirstPart = substr($wholeNumber,0,strlen($wholeNumber)-3);
@@ -263,7 +309,7 @@ class CurrencyField {
 				$wholeNumberFirstPartElements = str_split($wholeNumberFirstPart,2);
 				$wholeNumberFirstPart = ltrim(implode($currencySeparator, $wholeNumberFirstPartElements), '0');
 				$wholeNumberFirstPart = implode($currencySeparator, $wholeNumberFirstPartElements);
-				if($wholeNumberFirstPart > 0) {
+				if($wholeNumberFirstPart != 0) {
 					$wholeNumberFirstPart = ltrim($wholeNumberFirstPart, '0');
 				} else {
 					$wholeNumberFirstPart = 0;
@@ -273,6 +319,12 @@ class CurrencyField {
 			} else {
 				$numericParts[0] = $wholeNumberLastPart;
 			}
+			
+			//if its negative number, append-back the negative symbol to the whole number part
+			if($negativeNumber) {
+				$numericParts[0] = '-'.$numericParts[0];
+			}
+			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
 			return $number;
@@ -296,7 +348,7 @@ class CurrencyField {
         $this->initialize($user);
 
 		$value = $this->value;
-		
+
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
 		if(empty($currencySeparator)) $currencySeparator = ' ';
@@ -305,10 +357,10 @@ class CurrencyField {
         $value = str_replace("$decimalSeparator", ".", $value);
 
 		if($skipConversion == false) {
-			$value = convertToDollar($value,$this->conversionRate);
+			$value = self::convertToDollar($value,$this->conversionRate);
 		}
-		$value = round($value, $this->numberOfDecimal);
-		
+		//$value = round($value, $this->maxNumberOfDecimals);
+
         return $value;
     }
 
@@ -337,6 +389,45 @@ class CurrencyField {
 			return $adb->query_result($result, 0, 'id');
 		}
 		return null;
+	}
+	
+	public static function convertToDollar($amount, $conversionRate) {
+		if ($conversionRate == 0) return 0;
+		return $amount / $conversionRate;
+	}
+	
+	public static function convertFromDollar($amount, $conversionRate) {
+		$currencyField = new CurrencyField($amount);
+		return round($amount * $conversionRate, $currencyField->maxNumberOfDecimals);
+	}
+	
+	/** This function returns the amount converted from master currency.
+	 * param $amount - amount to be converted.
+	 * param $crate - conversion rate.
+	 */
+	public static function convertFromMasterCurrency($amount, $conversionRate) {
+		return $amount * $conversionRate;
+	}
+	
+	function currencyDecimalFormat($value, $user = null){
+		global $current_user;
+		if (!$user) {
+			$user = $current_user;
+		}
+		if($user->truncate_trailing_zeros == true) {
+			$value = rtrim($value, '0');
+			$fld_value = explode($user->currency_decimal_separator, $value);
+			if(strlen($fld_value[1]) <= 1){
+				if(strlen($fld_value[1]) == 1)
+					return $value = $fld_value[0].$user->currency_decimal_separator.$fld_value[1].'0';
+				else
+					return $value = $fld_value[0].$user->currency_decimal_separator.'00';
+			}else{
+				return preg_replace("/(?<=\\.[0-9])[0]+\$/","",$value);
+			}
+		}else{
+			return $value;
+		}
 	}
 }
 ?>

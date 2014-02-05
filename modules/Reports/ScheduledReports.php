@@ -143,7 +143,7 @@ class VTScheduledReport extends Reports {
 
 		$baseFileName = preg_replace('/[^a-zA-Z0-9_-\s]/', '', $this->reportname).'_'. preg_replace('/[^a-zA-Z0-9_-\s]/', '', $currentTime);
 
-		$oReportRun = new ReportRun($this->id);
+		$oReportRun = ReportRun::getInstance($this->id);
 		$reportFormat = $this->scheduledFormat;
 		$attachments = array();
 

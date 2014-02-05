@@ -19,7 +19,7 @@ $reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
-$oReportRun = new ReportRun($reportid);
+$oReportRun = ReportRun::getInstance($reportid);
 
 $startdate = DateTimeField::convertToDBFormat($_REQUEST["startdate"]);//Convert the user date format to DB date format
 $enddate = DateTimeField::convertToDBFormat($_REQUEST["enddate"]);//Convert the user date format to DB date format

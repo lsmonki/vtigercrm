@@ -9,7 +9,7 @@
   `module` varchar(50) default NULL,
   `whodid` int(20) default NULL,
   `changedon` datetime default NULL,
-  `deleted` int(1) default '0',
+  `status` int(1) default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>
@@ -28,6 +28,15 @@
   `fieldname` varchar(100) default NULL,
   `prevalue` text,
   `postvalue` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
+		</table>
+		<table>
+			<name>vtiger_modtracker_relations</name>
+			<sql><![CDATA[CREATE TABLE `vtiger_modtracker_relations` (
+	id INT(19) PRIMARY KEY, 
+	targetmodule VARCHAR(100) NOT NULL,
+    targetid INT(19) NOT NULL, 
+	changedon DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 		</table>
 	</tables>

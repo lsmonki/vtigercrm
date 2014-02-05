@@ -52,7 +52,8 @@ class Potentials extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
-			'Related to'=>Array('potential'=>'related_to'),
+			'Organization Name'=>Array('potential'=>'related_to'),
+			'Contact Name'=>Array('potential'=>'contact_id'),
 			'Sales Stage'=>Array('potential'=>'sales_stage'),
 			'Amount'=>Array('potential'=>'amount'),
 			'Expected Close Date'=>Array('potential'=>'closingdate'),
@@ -61,7 +62,8 @@ class Potentials extends CRMEntity {
 
 	var $list_fields_name = Array(
 			'Potential'=>'potentialname',
-			'Related to'=>'related_to',
+			'Organization Name'=>'related_to',
+			'Contact Name'=>'contact_id',
 			'Sales Stage'=>'sales_stage',
 			'Amount'=>'amount',
 			'Expected Close Date'=>'closingdate',
@@ -85,7 +87,7 @@ class Potentials extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'potentialname', 'related_to');
+	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'potentialname');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'potentialname';
@@ -166,7 +168,7 @@ class Potentials extends CRMEntity {
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 				LEFT JOIN vtiger_account on vtiger_potential.related_to=vtiger_account.accountid
-				LEFT JOIN vtiger_contactdetails on vtiger_potential.related_to=vtiger_contactdetails.contactid
+				LEFT JOIN vtiger_contactdetails on vtiger_potential.contact_id=vtiger_contactdetails.contactid
 				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid
                 LEFT JOIN vtiger_groups
         	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
@@ -237,6 +239,10 @@ class Potentials extends CRMEntity {
 					vtiger_crmentity.modifiedtime , vtiger_account.accountname from vtiger_potential
 					inner join vtiger_contpotentialrel on vtiger_contpotentialrel.potentialid = vtiger_potential.potentialid
 					inner join vtiger_contactdetails on vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid
+					INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+					INNER JOIN vtiger_contactsubdetails ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
+					INNER JOIN vtiger_customerdetails ON vtiger_contactdetails.contactid = vtiger_customerdetails.customerid
+					INNER JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
 					inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 					left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
 					left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
@@ -297,8 +303,8 @@ class Potentials extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "SELECT vtiger_activity.activityid as 'tmp_activity_id',vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname,vtiger_contactdetails.firstname,
-					vtiger_cntactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,
+		$query = "SELECT vtiger_activity.activityid as 'tmp_activity_id',vtiger_activity.*,vtiger_seactivityrel.crmid as parent_id, vtiger_contactdetails.lastname,vtiger_contactdetails.firstname,
+					vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,
 					case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 					vtiger_recurringevents.recurringtype from vtiger_activity
 					inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
@@ -364,6 +370,8 @@ class Potentials extends CRMEntity {
 				vtiger_crmentity.crmid, vtiger_crmentity.smownerid
 				FROM vtiger_products
 				INNER JOIN vtiger_seproductsrel ON vtiger_products.productid = vtiger_seproductsrel.productid and vtiger_seproductsrel.setype = 'Potentials'
+				INNER JOIN vtiger_productcf
+				ON vtiger_products.productid = vtiger_productcf.productid 
 				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
 				INNER JOIN vtiger_potential ON vtiger_potential.potentialid = vtiger_seproductsrel.crmid
 				LEFT JOIN vtiger_users
@@ -628,6 +636,7 @@ class Potentials extends CRMEntity {
 				}
 			}
 		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 
@@ -637,16 +646,43 @@ class Potentials extends CRMEntity {
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_potential","potentialid");
-		$query .= " left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid and vtiger_crmentityPotentials.deleted=0
-		left join vtiger_account as vtiger_accountPotentials on vtiger_potential.related_to = vtiger_accountPotentials.accountid
-		left join vtiger_contactdetails as vtiger_contactdetailsPotentials on vtiger_potential.related_to = vtiger_contactdetailsPotentials.contactid
-		left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
-		left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupid = vtiger_crmentityPotentials.smownerid
-		left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
-		left join vtiger_campaign as vtiger_campaignPotentials on vtiger_potential.campaignid = vtiger_campaignPotentials.campaignid
-        left join vtiger_users as vtiger_lastModifiedByPotentials on vtiger_lastModifiedByPotentials.id = vtiger_crmentityPotentials.modifiedby ";
+	function generateReportsSecQuery($module,$secmodule,$queryplanner){
+		$matrix = $queryplanner->newDependencyMatrix();
+		$matrix->setDependency('vtiger_crmentityPotentials',array('vtiger_groupsPotentials','vtiger_usersPotentials','vtiger_lastModifiedByPotentials'));
+		$matrix->setDependency('vtiger_potential', array('vtiger_crmentityPotentials','vtiger_accountPotentials',
+											'vtiger_contactdetailsPotentials','vtiger_campaignPotentials','vtiger_potentialscf'));
+				
+				
+		if (!$queryplanner->requireTable("vtiger_potential",$matrix)){
+			return '';
+		}
+		
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_potential","potentialid", $queryplanner);
+			
+		if ($queryplanner->requireTable("vtiger_crmentityPotentials",$matrix)){
+			$query .= " left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid and vtiger_crmentityPotentials.deleted=0";
+		}
+		if ($queryplanner->requireTable("vtiger_accountPotentials")){
+			$query .= " left join vtiger_account as vtiger_accountPotentials on vtiger_potential.related_to = vtiger_accountPotentials.accountid";
+		}
+		if ($queryplanner->requireTable("vtiger_contactdetailsPotentials")){
+			$query .= " left join vtiger_contactdetails as vtiger_contactdetailsPotentials on vtiger_potential.contact_id = vtiger_contactdetailsPotentials.contactid";
+		}
+		if ($queryplanner->requireTable("vtiger_potentialscf")){
+			$query .= " left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid";
+		}
+		if ($queryplanner->requireTable("vtiger_groupsPotentials")){
+			$query .= " left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupid = vtiger_crmentityPotentials.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersPotentials")){
+			$query .= " left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_campaignPotentials")){
+			$query .= " left join vtiger_campaign as vtiger_campaignPotentials on vtiger_potential.campaignid = vtiger_campaignPotentials.campaignid";
+		}
+		if ($queryplanner->requireTable("vtiger_lastModifiedByPotentials")){
+			$query .= " left join vtiger_users as vtiger_lastModifiedByPotentials on vtiger_lastModifiedByPotentials.id = vtiger_crmentityPotentials.modifiedby ";
+		}
 		return $query;
 	}
 
@@ -663,6 +699,7 @@ class Potentials extends CRMEntity {
 			"SalesOrder" => array("vtiger_salesorder"=>array("potentialid","salesorderid"),"vtiger_potential"=>"potentialid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_potential"=>"potentialid"),
 			"Accounts" => array("vtiger_potential"=>array("potentialid","related_to")),
+			"Contacts" => array("vtiger_potential"=>array("potentialid","contact_id")),
 		);
 		return $rel_tables[$secmodule];
 	}
@@ -705,7 +742,7 @@ class Potentials extends CRMEntity {
 			$this->db->pquery($sql, array($id, $return_id));
 
 			// Potential directly linked with Contact (not through Account - vtiger_contpotentialrel)
-			$directRelCheck = $this->db->pquery('SELECT related_to FROM vtiger_potential WHERE potentialid=? AND related_to=?', array($id, $return_id));
+			$directRelCheck = $this->db->pquery('SELECT related_to FROM vtiger_potential WHERE potentialid=? AND contact_id=?', array($id, $return_id));
 			if($this->db->num_rows($directRelCheck)) {
 				$this->trash($this->module_name, $id);
 			}

@@ -10,8 +10,8 @@
 	<author>Vicus eBusiness Solutions bv www.vicus.nl</author>
 	<license>VPL1.0</license>
 	<dependencies>
-		<vtiger_version>5.3.0</vtiger_version>
-		<vtiger_max_version>5.*</vtiger_max_version>
+		<vtiger_version>6.0.0</vtiger_version>
+		<vtiger_max_version>6.*</vtiger_max_version>
 	</dependencies>
   <license>
    <inline><![CDATA[

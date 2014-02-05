@@ -18,6 +18,12 @@ class VtigerWebserviceObject{
 	private function VtigerWebserviceObject($entityId,$entityName,$handler_path,$handler_class){
 		$this->id = $entityId;
 		$this->name = $entityName;
+		// Quick Fix to override default Actor class & path (good to update DB itself)
+		if ($entityName == 'CompanyDetails') {
+			$handler_path = 'include/Webservices/Custom/VtigerCompanyDetails.php';
+			$handler_class= 'VtigerCompanyDetails';
+		}
+		// END
 		$this->handlerPath = $handler_path;
 		$this->handlerClass = $handler_class;
 	}
@@ -31,12 +37,22 @@ class VtigerWebserviceObject{
 		
 		// If the information not available in cache?
 		if(!isset(self::$_fromNameCache[$entityName])) {
-			$result = $adb->pquery("select * from vtiger_ws_entity where name=?",array($entityName));
+			$cacheLength = count(self::$_fromNameCache);
+			
+			$result = null;
+			if ($cacheLength == 0) {
+				$result = $adb->pquery("select * from vtiger_ws_entity where name=?",array($entityName));
+			} else {
+				// Could repeat more number of times...so let us pull rest of details into cache.
+				$result = $adb->pquery("select * from vtiger_ws_entity", array());
+			}
+			
 			if($result){
 				$rowCount = $adb->num_rows($result);
-				if($rowCount === 1){
-					$rowData = $adb->query_result_rowdata($result,0);
-					self::$_fromNameCache[$entityName] = $rowData;
+				while ($rowCount > 0) {
+					$rowData = $adb->query_result_rowdata($result,$rowCount-1);
+					self::$_fromNameCache[$rowData['name']] = $rowData;
+					--$rowCount;
 				}
 			}
 		}

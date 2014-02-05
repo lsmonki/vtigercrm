@@ -28,7 +28,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $cron_desc = $cronTask->getDescription();
     $cron = Array();
     $cron['label'] = $label;
-    if($cron_freq/(60*60)>1){
+    if($cron_freq/(60*60)>1 && is_int($cron_freq/(60*60))){
         $cron['frequency']=(int)($cron_freq/(60*60));
         $cron['time'] = 'hour';
     }

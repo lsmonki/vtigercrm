@@ -77,12 +77,12 @@ class Vtiger_InventoryPDFController {
 		if(is_null($this->focus)) return;
 
 		$pdfgenerator = $this->getPDFGenerator();
-		
+
 		$pdfgenerator->setPagerViewer($this->getPagerViewer());
 		$pdfgenerator->setHeaderViewer($this->getHeaderViewer());
 		$pdfgenerator->setFooterViewer($this->getFooterViewer());
 		$pdfgenerator->setContentViewer($this->getContentViewer());
-		
+
 		$pdfgenerator->generate($filename, $type);
 	}
 
@@ -94,6 +94,7 @@ class Vtiger_InventoryPDFController {
 		$contentModels = array();
 		$productLineItemIndex = 0;
 		$totaltaxes = 0;
+		$no_of_decimal_places = getCurrencyDecimalPlaces();
 		foreach($associated_products as $productLineItem) {
 			++$productLineItemIndex;
 
@@ -110,7 +111,7 @@ class Vtiger_InventoryPDFController {
 			$listPrice	= $productLineItem["listPrice{$productLineItemIndex}"];
 			$discount	= $productLineItem["discountTotal{$productLineItemIndex}"];
 			$taxable_total = $quantity * $listPrice - $discount;
-			$taxable_total = number_format($taxable_total, 2,'.',''); //Convert to 2 decimals
+			$taxable_total = number_format($taxable_total, $no_of_decimal_places,'.','');
 			$producttotal = $taxable_total;
 			if($this->focus->column_fields["hdnTaxType"] == "individual") {
 				for($tax_count=0;$tax_count<count($productLineItem['taxes']);$tax_count++) {
@@ -121,34 +122,34 @@ class Vtiger_InventoryPDFController {
 				}
 			}
 
-			$producttotal_taxes = number_format($producttotal_taxes, 2,'.',''); //Convert to 2 decimals
+			$producttotal_taxes = number_format($producttotal_taxes, $no_of_decimal_places,'.','');
 			$producttotal = $taxable_total+$producttotal_taxes;
-			$producttotal = number_format($producttotal, 2,'.',''); //Convert to 2 decimals
+			$producttotal = number_format($producttotal, $no_of_decimal_places,'.','');
 			$tax = $producttotal_taxes;
 			$totaltaxes += $tax;
-			$totaltaxes = number_format($totaltaxes, 2,'.',''); //Convert to 2 decimals
+			$totaltaxes = number_format($totaltaxes, $no_of_decimal_places,'.','');
 			$discountPercentage = $productLineItem["discount_percent{$productLineItemIndex}"];
-			$productName = $productLineItem["productName{$productLineItemIndex}"];
+			$productName = decode_html($productLineItem["productName{$productLineItemIndex}"]);
 			//get the sub product
-            $subProducts = $productLineItem["subProductArray{$productLineItemIndex}"];
-            if($subProducts != ''){
+			$subProducts = $productLineItem["subProductArray{$productLineItemIndex}"];
+			if($subProducts != '') {
 				foreach($subProducts as $subProduct) {
 					$productName .="\n"." - ".decode_html($subProduct);
-                    }
+				}
 			}
-            $contentModel->set('Name', $productName);
-			$contentModel->set('Code', $productLineItem["hdnProductcode{$productLineItemIndex}"]);
+			$contentModel->set('Name', $productName);
+			$contentModel->set('Code', decode_html($productLineItem["hdnProductcode{$productLineItemIndex}"]));
 			$contentModel->set('Quantity', $quantity);
 			$contentModel->set('Price',     $this->formatPrice($listPrice));
 			$contentModel->set('Discount',  $this->formatPrice($discount)."\n ($discountPercentage%)");
 			$contentModel->set('Tax',       $this->formatPrice($tax)."\n ($total_tax_percent%)");
 			$contentModel->set('Total',     $this->formatPrice($producttotal));
-			$contentModel->set('Comment',   $productLineItem["comment{$productLineItemIndex}"]);
+			$contentModel->set('Comment',   decode_html($productLineItem["comment{$productLineItemIndex}"]));
 
 			$contentModels[] = $contentModel;
 		}
 		$this->totaltaxes = $totaltaxes; //will be used to add it to the net total
-		
+
 		return $contentModels;
 	}
 
@@ -180,20 +181,22 @@ class Vtiger_InventoryPDFController {
 			++$productLineItemIndex;
 			$netTotal += $productLineItem["netPrice{$productLineItemIndex}"];
 		}
-		$netTotal = number_format(($netTotal + $this->totaltaxes), 2,'.', '');
+		$netTotal = number_format(($netTotal + $this->totaltaxes), getCurrencyDecimalPlaces(),'.', '');
 		$summaryModel->set(getTranslatedString("Net Total", $this->moduleName), $this->formatPrice($netTotal));
-		
+
 		$discount_amount = $final_details["discount_amount_final"];
 		$discount_percent = $final_details["discount_percentage_final"];
 
 		$discount = 0.0;
-		if(!empty($discount_amount)) {
+        $discount_final_percent = '0.00';
+		if($final_details['discount_type_final'] == 'amount') {
 			$discount = $discount_amount;
-		} else if(!empty($discount_percent)) {
+		} else if($final_details['discount_type_final'] == 'percentage') {
+            $discount_final_percent = $discount_percent;
 			$discount = (($discount_percent*$final_details["hdnSubTotal"])/100);
 		}
-		$summaryModel->set(getTranslatedString("Discount", $this->moduleName), $this->formatPrice($discount));
-		
+		$summaryModel->set(getTranslatedString("Discount", $this->moduleName)."($discount_final_percent%)", $this->formatPrice($discount));
+
 		$group_total_tax_percent = '0.00';
 		//To calculate the group tax amount
 		if($final_details['taxtype'] == 'group') {
@@ -210,12 +213,23 @@ class Vtiger_InventoryPDFController {
 		}
 		//obtain the Currency Symbol
 		$currencySymbol = $this->buildCurrencySymbol();
-		
+
 		$summaryModel->set(getTranslatedString("Shipping & Handling Charges", $this->moduleName), $this->formatPrice($final_details['shipping_handling_charge']));
 		$summaryModel->set(getTranslatedString("Shipping & Handling Tax:", $this->moduleName)."($sh_tax_percent%)", $this->formatPrice($final_details['shtax_totalamount']));
 		$summaryModel->set(getTranslatedString("Adjustment", $this->moduleName), $this->formatPrice($final_details['adjustment']));
-		$summaryModel->set(getTranslatedString("Grand Total : (in $currencySymbol)", $this->moduleName), $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
-		
+		$summaryModel->set(getTranslatedString("Grand Total:", $this->moduleName)."(in $currencySymbol)", $this->formatPrice($final_details['grandTotal'])); // TODO add currency string
+
+		if ($this->moduleName == 'Invoice') {
+			$receivedVal = $this->focusColumnValue("received");
+			if (!$receivedVal) {
+				$this->focus->column_fields["received"] = 0;
+			}
+			//If Received value is exist then only Recieved, Balance details should present in PDF
+			if ($this->formatPrice($this->focusColumnValue("received")) > 0) {
+				$summaryModel->set(getTranslatedString("Received", $this->moduleName), $this->formatPrice($this->focusColumnValue("received")));
+				$summaryModel->set(getTranslatedString("Balance", $this->moduleName), $this->formatPrice($this->focusColumnValue("balance")));
+			}
+		}
 		return $summaryModel;
 	}
 
@@ -224,14 +238,14 @@ class Vtiger_InventoryPDFController {
 		$headerModel->set('title', $this->buildHeaderModelTitle());
 		$modelColumns = array($this->buildHeaderModelColumnLeft(), $this->buildHeaderModelColumnCenter(), $this->buildHeaderModelColumnRight());
 		$headerModel->set('columns', $modelColumns);
-		
+
 		return $headerModel;
 	}
 
 	function buildHeaderModelTitle() {
 		return $this->moduleName;
 	}
-	
+
 	function buildHeaderModelColumnLeft() {
 		global $adb;
 
@@ -247,21 +261,20 @@ class Vtiger_InventoryPDFController {
 			if(!empty($resultrow['state'])) $addressValues[]= ",".$resultrow['state'];
 			if(!empty($resultrow['code'])) $addressValues[]= $resultrow['code'];
 			if(!empty($resultrow['country'])) $addressValues[]= "\n".$resultrow['country'];
-			
+
 
 			if(!empty($resultrow['phone']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Phone: ", $this->moduleName). $resultrow['phone'];
 			if(!empty($resultrow['fax']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Fax: ", $this->moduleName). $resultrow['fax'];
 			if(!empty($resultrow['website']))	$additionalCompanyInfo[]= "\n".getTranslatedString("Website: ", $this->moduleName). $resultrow['website'];
 
 			$modelColumnLeft = array(
-				'logo' => "test/logo/".$resultrow['logoname'],
-				'summary' => decode_html($resultrow['organizationname']),
-				'content' => $this->joinValues($addressValues, ' '). $this->joinValues($additionalCompanyInfo, ' ')
+					'logo' => "test/logo/".$resultrow['logoname'],
+					'summary' => decode_html($resultrow['organizationname']),
+					'content' => decode_html($this->joinValues($addressValues, ' '). $this->joinValues($additionalCompanyInfo, ' '))
 			);
 		}
 		return $modelColumnLeft;
 	}
-
 
 	function buildHeaderModelColumnCenter() {
 		$customerName = $this->resolveReferenceLabel($this->focusColumnValue('account_id'), 'Accounts');
@@ -272,7 +285,7 @@ class Vtiger_InventoryPDFController {
 		$modelColumnCenter = array(
 				$customerNameLabel => $customerName,
 				$contactNameLabel  => $contactName,
-			);
+		);
 		return $modelColumnCenter;
 	}
 
@@ -284,12 +297,12 @@ class Vtiger_InventoryPDFController {
 
 		$modelColumnRight = array(
 				'dates' => array(
-					$issueDateLabel  => $this->formatDate(date("Y-m-d")),
-					$validDateLabel  => $this->formatDate($this->focusColumnValue('validtill')),
+						$issueDateLabel  => $this->formatDate(date("Y-m-d")),
+						$validDateLabel  => $this->formatDate($this->focusColumnValue('validtill')),
 				),
 				$billingAddressLabel  => $this->buildHeaderBillingAddress(),
 				$shippingAddressLabel => $this->buildHeaderShippingAddress()
-			);
+		);
 		return $modelColumnRight;
 	}
 
@@ -306,13 +319,13 @@ class Vtiger_InventoryPDFController {
 		$labelModel->set(Vtiger_PDF_InventoryFooterViewer::$TERMSANDCONDITION_LABEL_KEY, getTranslatedString('Terms & Conditions',$this->moduleName));
 		return $labelModel;
 	}
-	
+
 	function buildPagerModel() {
 		$footerModel = new Vtiger_PDF_Model();
 		$footerModel->set('format', '-%s-');
 		return $footerModel;
 	}
-	
+
 	function getWatermarkContent() {
 		return '';
 	}
@@ -358,6 +371,7 @@ class Vtiger_InventoryPDFController {
 		}
 		return false;
 	}
+
 	function focusColumnValues($names, $delimeter="\n") {
 		if(!is_array($names)) {
 			$names = array($names);
@@ -375,7 +389,7 @@ class Vtiger_InventoryPDFController {
 	function focusColumnValue($key, $defvalue='') {
 		$focus = $this->focus;
 		if(isset($focus->column_fields[$key])) {
-			return $focus->column_fields[$key];
+			return decode_html($focus->column_fields[$key]);
 		}
 		return $defvalue;
 	}

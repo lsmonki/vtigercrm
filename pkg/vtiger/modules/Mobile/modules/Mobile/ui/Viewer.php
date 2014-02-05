@@ -8,8 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-include_once 'Smarty_setup.php';
-
 class Mobile_UI_Viewer {
 	
 	private $parameters = array();
@@ -18,7 +16,7 @@ class Mobile_UI_Viewer {
 	}
 	
 	function viewController() {
-		$smarty = new vtigerCRM_Smarty();
+		$smarty = Vtiger_Viewer::getInstance();
 		
 		foreach($this->parameters as $k => $v) {
 			$smarty->assign($k, $v);

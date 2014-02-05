@@ -13,13 +13,12 @@ require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
-require_once('modules/Settings/MailScanner/core/MailScannerInfo.php');
-require_once('modules/Settings/MailScanner/core/MailBox.php');
-require_once('modules/Settings/MailScanner/core/MailScanner.php');
+require_once('modules/Settings/MailConverter/handlers/MailScannerInfo.php');
+require_once('modules/Settings/MailConverter/handlers/MailBox.php');
+require_once('modules/Settings/MailConverter/handlers/MailScanner.php');
 
 //Added as sometimes the php.ini file used for command line php and
 //for Apache php is different.
-require_once('include/install/language/en_us.lang.php');
 if(!function_exists('imap_open')) {
 	echo $installationStrings['LBL_NO'].' '.$installationStrings['LBL_IMAP_SUPPORT'];
 } elseif(!function_exists('openssl_encrypt')) {

@@ -8,11 +8,19 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('config.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/nusoap/nusoap.php');
-require_once('include/language/en_us.lang.php');
+
+/**
+ * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode.
+ */
+require_once 'config.php';
+if (file_exists('config_override.php')) {
+	        include_once 'config_override.php';
+}
+
+include_once 'vtlib/Vtiger/Module.php';
+include_once 'includes/main/WebUI.php';
+
+require_once('libraries/nusoap/nusoap.php');
 
 $log = &LoggerManager::getLogger('vtigerolservice');
 
@@ -224,7 +232,7 @@ $server->register(
    'DeleteContacts',
     array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
-    $NAMESPACE);   
+    $NAMESPACE);
 //End for Contacts Sync
 
 //For Tasks Sync
@@ -250,7 +258,7 @@ $server->register(
    'DeleteTasks',
     array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
-    $NAMESPACE); 
+    $NAMESPACE);
 //End for Tasks Sync
 
 //For Calendar Sync
@@ -276,7 +284,7 @@ $server->register(
    'DeleteClndr',
     array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
-    $NAMESPACE); 
+    $NAMESPACE);
 //End for Calendar Sync
 
 function SearchContactsByEmail($username,$session,$emailaddress)
@@ -284,7 +292,7 @@ function SearchContactsByEmail($username,$session,$emailaddress)
 	if(!validateSession($username,$session))
 	return null;
 	require_once('modules/Contacts/Contacts.php');
-     
+
      $seed_contact = new Contacts();
      $output_list = Array();
 
@@ -293,7 +301,7 @@ function SearchContactsByEmail($username,$session,$emailaddress)
 
 	 $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
      $contactList = $response['list'];
-     
+
      // create a return array of names and email addresses.
      foreach($contactList as $contact)
      {
@@ -305,11 +313,11 @@ function SearchContactsByEmail($username,$session,$emailaddress)
                "emailaddress" => decode_html($contact[email]),
           );
      }
-     
+
      //to remove an erroneous compiler warning
      $seed_contact = $seed_contact;
      return $output_list;
-}    
+}
 
 function AddMessageToContact($username,$session,$contactid,$msgdtls)
 {
@@ -319,32 +327,32 @@ function AddMessageToContact($username,$session,$contactid,$msgdtls)
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Emails/Emails.php');
-	
+
 	$current_user = new Users();
 	$user_id = $current_user->retrieve_user_id($username);
 	$query = "select email1 from vtiger_users where id = ?";
 	$result = $adb->pquery($query, array($user_id));
 	$user_emailid = $adb->query_result($result,0,"email1");
 	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
-	
+
 	foreach($msgdtls as $msgdtl)
 	{
 	    if(isset($msgdtl))
-	    {    
+	    {
 	        $email = new Emails();
 	        //$log->debug($msgdtls['contactid']);
 			$email_body = str_replace("'", "''", $msgdtl['body']);
 			$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
 	        $email_subject = str_replace("'", "''",$msgdtl['subject']);
 	        $date_sent = DateTimeField::convertToUserFormat($msgdtl['datesent']);
-	        
+
 	        $email->column_fields[subject] = $email_subject;
 	        $email->column_fields[assigned_user_id] = $user_id;
 	        $email->column_fields[date_start] = $date_sent;
 	        $email->column_fields[description]  = $email_body;
-	        $email->column_fields[activitytype] = 'Emails'; 
+	        $email->column_fields[activitytype] = 'Emails';
 	        $email->column_fields[email_flag] = 'SENT';
-	        $email->plugin_save = true; 
+	        $email->plugin_save = true;
 	       	$email->save("Emails");
 			$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
 			$result = $adb->pquery($query, array());
@@ -352,7 +360,7 @@ function AddMessageToContact($username,$session,$contactid,$msgdtls)
 	        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
 	        $email->set_emails_se_invitee_relationship($email->id,$contactid);
 			$email->set_emails_user_invitee_relationship($email->id,$user_id);
-	        
+
 	        return $email->id;
 		}else{
 				return "";
@@ -371,9 +379,9 @@ function LoginToVtiger($user_name,$password,$version)
 		return array("VERSION",'00');
 	}
 	$return_access = array("FALSES",'00');
-	
+
 	$objuser = new Users();
-	
+
 	if($password != "")
 	{
 		$objuser->column_fields['user_name'] = $user_name;
@@ -396,7 +404,7 @@ function LoginToVtiger($user_name,$password,$version)
 			$return_access = array("LOGIN",'00');
 	}
 	$objuser = $objuser;
-	return $return_access;	
+	return $return_access;
 }
 function CheckEmailPermission($username,$session)
 {
@@ -461,13 +469,13 @@ function CheckActivityPermission($username,$session)
 function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username,$session)
 {
 	if(!validateSession($username,$session)) return null;
-	
+
 	if(empty($emailid)) return null;
-	
+
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');
-	$filename = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
+	$filename = vtlib_purifyForSql(sanitizeUploadFileName(str_replace('..','_',$filename), $upload_badext)); // Avoid relative file path attacks.
 	$date_var = date('Y-m-d H:i:s');
 
 	$seed_user = new Users();
@@ -483,7 +491,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 
 	$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values (?,?,?,?,?,?,?)";
 	$params1 = array($crmid, $user_id, $user_id, 'Emails Attachment', ' ', $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
-	$entityresult = $adb->pquery($sql1, $params1);	
+	$entityresult = $adb->pquery($sql1, $params1);
 
 	$filetype="application/octet-stream";
 
@@ -496,11 +504,11 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 		$sql3='insert into vtiger_seattachmentsrel values(?,?)';
 		$adb->pquery($sql3, array($emailid, $crmid));
 
-		return $crmid;   
+		return $crmid;
 	}
 	else
 	{
-		//$server->setError("Invalid username and/or password"); 
+		//$server->setError("Invalid username and/or password");
 		return "";
 	}
 }
@@ -537,9 +545,9 @@ function GetContacts($username,$session)
 		$middlename = "";
 		if(isset($namelist))
 		{
-			if(count($namelist) >= 2) 
+			if(count($namelist) >= 2)
 			{
-				$contact["lastname"] = $namelist[count($namelist)-1];       	
+				$contact["lastname"] = $namelist[count($namelist)-1];
 				for($i=0; $i<count($namelist)-2; $i++)
 				{
 				  if($namelist[$i] != '')
@@ -561,7 +569,7 @@ function GetContacts($username,$session)
 	$server->methodreturnisliteralxml = true;
 	$output = "<return xsi:type='SOAP-ENC:Array' SOAP-ENC:arrayType='tns:contactdetail[$outputcount]'>$outputxml</return>";
 	return $output;
-	 
+
 }
 
 function __GetContactSOAPNode($contact) {
@@ -609,17 +617,17 @@ function AddContacts($username,$session,$cntdtls)
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Contacts/Contacts.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	$contact = new Contacts();
-	
+
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
 		$params1 = array();
@@ -633,19 +641,19 @@ function AddContacts($username,$session,$cntdtls)
 		}
 	}
   	$result1 = $adb->pquery($sql1, $params1);
-  
+
   	for($i=0;$i < $adb->num_rows($result1);$i++)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-	
+
 	foreach($cntdtls as $cntrow)
 	{
 		if(isset($cntrow))
 		{
-		  		$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
+		  		$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";
      			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
-    			
+
     			if($cntrow["middlename"] != "")
     			{
     				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
@@ -656,7 +664,7 @@ function AddContacts($username,$session,$cntdtls)
     			{
     			   $contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
           		}
-    
+
     			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? DateTimeField::convertToUserFormat($cntrow["birthdate"]) : "";
     			$contact->column_fields[email]=in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
     			$contact->column_fields[title]=in_array('title',$permitted_lists) ? $cntrow["jobtitle"] : "";
@@ -668,25 +676,25 @@ function AddContacts($username,$session,$cntdtls)
     			$contact->column_fields[fax]= in_array('fax',$permitted_lists) ? $cntrow["fax"] : "";
     			$contact->column_fields[mobile]=in_array('mobile',$permitted_lists) ? $cntrow["mobile"] : "";
     			$contact->column_fields[assistant]= in_array('assistant',$permitted_lists) ? $cntrow["asstname"] : "";
-    			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";     
+    			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";
     			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
     			$contact->column_fields[mailingstreet]=in_array('mailingstreet',$permitted_lists) ? $cntrow["mailingstreet"] : "";
     			$contact->column_fields[mailingcity]=in_array('mailingcity',$permitted_lists) ? $cntrow["mailingcity"] : "";
     			$contact->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $cntrow["mailingstate"] : "";
     			$contact->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $cntrow["mailingzip"] : "";
-    			$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";    
+    			$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";
     			$contact->column_fields[otherstreet]=in_array('otherstreet',$permitted_lists) ? $cntrow["otherstreet"] : "";
     			$contact->column_fields[othercity]=in_array('othercity',$permitted_lists) ? $cntrow["othercity"] : "";
     			$contact->column_fields[otherstate]=in_array('otherstate',$permitted_lists) ? $cntrow["otherstate"] : "";
     			$contact->column_fields[otherzip]=in_array('otherzip',$permitted_lists) ? $cntrow["otherzip"] : "";
-    			$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
-    			$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
+    			$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";
+    			$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
     			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
-    			$contact->save("Contacts");	
-		  
-    }	
+    			$contact->save("Contacts");
+
+    }
 	}
-	$contact = $contact;	
+	$contact = $contact;
 	return $contact->id;
 }
 
@@ -698,16 +706,16 @@ function UpdateContacts($username,$session,$cntdtls)
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Contacts/Contacts.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	$contact = new Contacts();
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
   		$params1 = array();
@@ -721,18 +729,18 @@ function UpdateContacts($username,$session,$cntdtls)
 		}
 	}
   	$result1 = $adb->pquery($sql1, $params1);
-  
+
   	for($i=0;$i < $adb->num_rows($result1);$i++)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-	
+
 	foreach($cntdtls as $cntrow)
 	{
 		if(isset($cntrow))
 		{
 			$contact->retrieve_entity_info($cntrow["id"],"Contacts");
-			$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
+			$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";
 			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
 			if($cntrow["middlename"] != "")
 			{
@@ -744,7 +752,7 @@ function UpdateContacts($username,$session,$cntdtls)
 			{
 				$contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
       			}
-      
+
 			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? DateTimeField::convertToUserFormat($cntrow["birthdate"]) : "";
 			$contact->column_fields[email]= in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
 			$contact->column_fields[title]= in_array('title',$permitted_lists) ? $cntrow["jobtitle"] : "";
@@ -756,29 +764,29 @@ function UpdateContacts($username,$session,$cntdtls)
 			$contact->column_fields[fax]= in_array('fax',$permitted_lists) ? $cntrow["fax"] : "";
 			$contact->column_fields[mobile]= in_array('mobile',$permitted_lists) ? $cntrow["mobile"] : "";
 			$contact->column_fields[assistant]= in_array('assistant',$permitted_lists) ? $cntrow["asstname"] : "";
-			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";     
+			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";
 			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
 			$contact->column_fields[mailingstreet]= in_array('mailingstreet',$permitted_lists) ? $cntrow["mailingstreet"] : "";
 			$contact->column_fields[mailingcity]= in_array('mailingcity',$permitted_lists) ? $cntrow["mailingcity"] : "";
 			$contact->column_fields[mailingstate]= in_array('mailingstate',$permitted_lists) ? $cntrow["mailingstate"] : "";
 			$contact->column_fields[mailingzip]= in_array('mailingzip',$permitted_lists) ? $cntrow["mailingzip"] : "";
-			$contact->column_fields[mailingcountry]= in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";    
+			$contact->column_fields[mailingcountry]= in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";
 			$contact->column_fields[otherstreet]= in_array('otherstreet',$permitted_lists) ? $cntrow["otherstreet"] : "";
 			$contact->column_fields[othercity]= in_array('othercity',$permitted_lists) ? $cntrow["othercity"] : "";
 			$contact->column_fields[otherstate]= in_array('otherstate',$permitted_lists) ? $cntrow["otherstate"] : "";
 			$contact->column_fields[otherzip]= in_array('otherzip',$permitted_lists) ? $cntrow["otherzip"] : "";
-			$contact->column_fields[othercountry]= in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
-			$contact->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
+			$contact->column_fields[othercountry]= in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";
+			$contact->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
 			$contact->id = $cntrow["id"];
 			$contact->mode = "edit";
 			//saving date information in 'yyyy-mm-dd' format and displaying it in user's date format
 			$user_old_date_format = $current_user->date_format;
 			$current_user->date_format = 'yyyy-mm-dd';
-			$contact->save("Contacts");	
+			$contact->save("Contacts");
 			$current_user->date_format = $user_old_date_format;
-		}	
-	}	
+		}
+	}
 	$contact = $contact;
 	return $contact->id;
 }
@@ -832,13 +840,13 @@ function retrieve_account_id($account_name,$user_id)
 	{
 		$row = $db->fetchByAssoc($result, 0);
 		//mysql_close();
-		return $row["accountid"];	    
+		return $row["accountid"];
 	}
 	else
 	{
 		$row = $db->fetchByAssoc($result, 0);
 		//mysql_close();
-		return $row["accountid"];	    
+		return $row["accountid"];
 	}
 
 }
@@ -849,13 +857,13 @@ function GetTasks($username,$session)
 	return null;
 	global $adb,$log;
 	require_once('modules/Calendar/Activity.php');
-		
+
 	$seed_task = new Activity();
 	$output_list = Array();
-  
+
 	$query = $seed_task->get_tasksforol($username);
 	$result = $adb->query($query);
-    
+
 	while($task = $adb->fetch_array($result))
 	{
   		if($task["date_start"] == "0000-00-00" || $task["date_start"] == NULL)
@@ -866,7 +874,7 @@ function GetTasks($username,$session)
         	{
 		       	$task["due_date"] = "";
         	}
-        
+
         	if($task["status"] == "Not Started")
         	{
        			$task["status"] = "0";
@@ -886,7 +894,7 @@ function GetTasks($username,$session)
         	{
         		$task["status"] = "0";
         	}
-        
+
         	if($task["priority"] == "High")
         	{
        			$task["priority"] = "2";
@@ -897,7 +905,7 @@ function GetTasks($username,$session)
         	{
         		$task["priority"] = "1";
         	}
-        
+
 		$output_list[] = Array(
 						"id" => $task["taskid"],
 						"subject" => decode_html($task["subject"]),
@@ -907,7 +915,7 @@ function GetTasks($username,$session)
 						"priority" => decode_html($task["priority"]),
 						"description" => decode_html($task["description"]),
 						"contactname" => decode_html($task["firstname"])." ".decode_html($task["lastname"]),
-						"category" => "",        
+						"category" => "",
 						);
 	}
 	$seed_task = $seed_task;
@@ -921,15 +929,15 @@ function AddTasks($username,$session,$taskdtls)
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9 and vtiger_field.presence in (0,2)";
 		$params1 = array();
@@ -943,14 +951,14 @@ function AddTasks($username,$session,$taskdtls)
 		}
 	}
   	$result1 = $adb->pquery($sql1, $params1);
-  
+
   	for($i=0;$i < $adb->num_rows($result1);$i++)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-	
+
 	$task = new Activity();
-	
+
 	foreach($taskdtls as $taskrow)
 	{
 	//Currently only 3 status avail Note ************************************************
@@ -994,7 +1002,7 @@ function AddTasks($username,$session,$taskdtls)
 			$task->column_fields[taskpriority]= in_array('taskpriority',$permitted_lists) ? $taskrow["priority"] : "";
 			$task->column_fields[description]= in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype]="Task";
-			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null);
 			$task->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$task->save("Calendar");
 		  }
@@ -1009,18 +1017,18 @@ function UpdateTasks($username,$session,$taskdtls)
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9 and vtiger_field.presence in (0,2)";
-  		$params1 = array();	
+  		$params1 = array();
 	} else {
     	$profileList = getCurrentUserProfileList();
     	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
@@ -1035,9 +1043,9 @@ function UpdateTasks($username,$session,$taskdtls)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-  
+
 	$task = new Activity();
-	
+
 	foreach($taskdtls as $taskrow)
 	{
 		if(isset($taskrow))
@@ -1061,7 +1069,7 @@ function UpdateTasks($username,$session,$taskdtls)
 			{
 				$taskrow["status"] = "Not Started";
 			}
-        
+
     	if($taskrow["priority"] == "2")
 			{
       	$taskrow["priority"] = "High";
@@ -1072,7 +1080,7 @@ function UpdateTasks($username,$session,$taskdtls)
    		{
    		 	$taskrow["priority"] = "Medium";
    		}
-		
+
 			$task->retrieve_entity_info($taskrow["id"],"Calendar");
 			$task->column_fields[subject] = in_array('subject',$permitted_lists) ? $taskrow["subject"] : "";
 			$task->column_fields[date_start] = in_array('date_start',$permitted_lists) ? DateTimeField::convertToUserFormat($taskrow["startdate"]) : "";
@@ -1081,7 +1089,7 @@ function UpdateTasks($username,$session,$taskdtls)
 			$task->column_fields[taskpriority] = in_array('taskpriority',$permitted_lists) ? $taskrow["priority"] : "";
 			$task->column_fields[description] = in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype] = "Task";
-			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null);
 			$task->column_fields[assigned_user_id] = in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 
 			$task->id = $taskrow["id"];
@@ -1100,7 +1108,7 @@ function DeleteTasks($username,$session,$crmid)
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	   
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
@@ -1109,7 +1117,7 @@ function DeleteTasks($username,$session,$crmid)
 	$task = new Activity();
 	$task->id = $crmid;
 	$task->mark_deleted($task->id);
-	return $task->id;     
+	return $task->id;
 }
 
 function GetClndr($username,$session)
@@ -1124,7 +1132,7 @@ function GetClndr($username,$session)
 
 	$query = $seed_clndr->get_calendarsforol($username);
 	$result = $adb->query($query);
-    
+
 	while($clndr = $adb->fetch_array($result))
 	{
 		if($clndr["date_start"] == "0000-00-00" || $clndr["date_start"] == NULL)
@@ -1141,7 +1149,7 @@ function GetClndr($username,$session)
 
 		$expldtimestart = Array(0,0);
 		if(strpos($clndr["time_start"],":"))
-			$expldtimestart = explode(":", $clndr["time_start"]);	
+			$expldtimestart = explode(":", $clndr["time_start"]);
 
 		//this makes a timestamp out of the exploded date this number is in seconds
 		$startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
@@ -1165,7 +1173,7 @@ function GetClndr($username,$session)
 			"location" => decode_html($clndr["location"]),
 			"description" => decode_html($clndr["description"]),
 			"contactname" => decode_html($clndr["firstname"])." ".decode_html($clndr["lastname"]),
-			"category" => "",        
+			"category" => "",
 		);
 	}
 	//$log->fatal($output_list);
@@ -1180,15 +1188,15 @@ function AddClndr($username,$session,$clndrdtls)
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16 and vtiger_field.presence in (0,2)";
 		$params1 = array();
@@ -1202,27 +1210,27 @@ function AddClndr($username,$session,$clndrdtls)
 		}
 	}
   	$result1 = $adb->pquery($sql1, $params1);
-  
+
   	for($i=0;$i < $adb->num_rows($result1);$i++)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-  
+
 	$clndr = new Activity();
-	
+
 	foreach($clndrdtls as $clndrow)
 	{
 		if(isset($clndrow))
 		{
 			$astartdtm = explode(" ",$clndrow["startdate"]);
 			$aduedtm = explode(" ",$clndrow["duedate"]);
-			
+
 			$atimestart = explode(":",trim($astartdtm[1]));
 			$atimedue = explode(":",trim($aduedtm[1]));
 
 			$stimestart = $atimestart[0].":".$atimestart[1];
 			$stimeend = $atimedue[0].":".$atimedue[1];
-		
+
 			/*if( $diff=@get_time_difference($stimestart, $stimeend) )
 			{
 				$stimeduehr = sprintf('%02d',$diff['hours']);
@@ -1234,9 +1242,9 @@ function AddClndr($username,$session,$clndrdtls)
 			$clndr->column_fields[due_date]= in_array('due_date',$permitted_lists) ? DateTimeField::convertToUserFormat(trim($aduedtm[0])) : "";
 			$clndr->column_fields[time_start]= in_array('time_start',$permitted_lists) ? $stimestart : "";
 			$clndr->column_fields[time_end]= in_array('time_end',$permitted_lists) ? $stimeend : "";
-			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";        
+			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";
 			//$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";
-        
+
 			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
 			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
@@ -1256,15 +1264,15 @@ function UpdateClndr($username,$session,$clndrdtls)
 	global $adb,$log;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
-	
+
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
     	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16 and vtiger_field.presence in (0,2)";
 		$params1 = array();
@@ -1278,27 +1286,27 @@ function UpdateClndr($username,$session,$clndrdtls)
 		}
 	}
   	$result1 = $adb->pquery($sql1, $params1);
-  
+
   	for($i=0;$i < $adb->num_rows($result1);$i++)
   	{
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   	}
-	
+
 	$clndr = new Activity();
-	
+
 	foreach($clndrdtls as $clndrow)
 	{
 		if(isset($clndrow))
 		{
 			$astartdtm = explode(" ",$clndrow["startdate"]);
 			$aduedtm = explode(" ",$clndrow["duedate"]);
-			
+
 			$atimestart = explode(":",trim($astartdtm[1]));
 			$atimedue = explode(":",trim($aduedtm[1]));
 
 			$stimestart = $atimestart[0].":".$atimestart[1];
 			$stimeend = $atimedue[0].":".$atimedue[1];
-		
+
 			/*if( $diff=@get_time_difference($stimestart, $stimeend) )
 			{
 				$stimeduehr = sprintf('%02d',$diff['hours']);
@@ -1311,8 +1319,8 @@ function UpdateClndr($username,$session,$clndrdtls)
 			$clndr->column_fields[due_date]= in_array('due_date',$permitted_lists) ? DateTimeField::convertToUserFormat(trim($aduedtm[0])) : "";
 			$clndr->column_fields[time_start]= in_array('time_start',$permitted_lists) ? $stimestart : "";
 			$clndr->column_fields[time_end]= in_array('time_end',$permitted_lists) ? $stimeend : "";
-			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";       
-			//$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";              
+			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";
+			//$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";
 			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
 			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
@@ -1332,7 +1340,7 @@ function DeleteClndr($username,$session,$crmid)
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
-	   
+
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
@@ -1341,7 +1349,7 @@ function DeleteClndr($username,$session,$crmid)
 	$clndr = new Activity();
 	$clndr->id = $crmid;
 	$clndr->mark_deleted($clndr->id);
-	return $clndr->id;     
+	return $clndr->id;
 }
 
 //To find the Difference between time
@@ -1360,13 +1368,13 @@ function get_time_difference( $start, $end )
 			$diff = $diff % 3600;
 			if( $minutes=intval((floor($diff/60))) )
 			$diff = $diff % 60;
-			$diff    =    intval( $diff );            
+			$diff    =    intval( $diff );
 			return( array('days'=>$days, 'hours'=>$hours, 'minutes'=>$minutes, 'seconds'=>$diff) );
 		}
 	}
 	return( false );
 }
- 
+
 function unsetServerSessionId($id)
 {
 	global $adb;
@@ -1387,7 +1395,7 @@ function validateSession($username, $sessionid)
 	$id = $seed_user->retrieve_user_id($username);
 
 	if(empty($sessionid)) return false;
-	
+
 	$server_sessionid = getServerSessionId($id);
 
 	$adb->println("Checking Server session id and customer input session id ==> $server_sessionid == $sessionid");
@@ -1402,16 +1410,16 @@ function validateSession($username, $sessionid)
 }
 
 function __GetSOAPEncode($text)
-{	
+{
 	$text = decode_html($text);
 	$seek[0]='/&/';
 	$seek[1]='/</';
 	$seek[2]='/>/';
-	
+
 	$replace[0]='&amp;';
 	$replace[1]='&lt;';
 	$replace[2]='&gt;';
-	
+
 	return preg_replace($seek, $replace, $text);
 }
 
@@ -1431,11 +1439,11 @@ function getServerSessionId($id)
 	}
 	return $sessionid;
 }
-/* Begin the HTTP listener service and exit. */ 
+/* Begin the HTTP listener service and exit. */
 if (!isset($HTTP_RAW_POST_DATA)){
 	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
 }
-$server->service($HTTP_RAW_POST_DATA); 
+$server->service($HTTP_RAW_POST_DATA);
 exit();
 
 ?>

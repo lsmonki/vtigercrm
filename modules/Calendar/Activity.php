@@ -123,14 +123,31 @@ class Activity extends CRMEntity {
 		{
 			$this->deleteRelation("vtiger_seactivityrel");
 		}
-		//Insert into cntactivity rel		
-		if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
-		}
-		elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_cntactivityrel');
+        //Insert into cntactivity rel            
+        if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '') 
+        { 
+                $this->insertIntoEntityTable('vtiger_cntactivityrel', $module); 
+        } 
+        elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit") 
+        { 
+                $this->deleteRelation('vtiger_cntactivityrel'); 
+        } 
+		$recordId = $this->id;
+		if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '') {
+			$adb->pquery( 'DELETE from vtiger_cntactivityrel WHERE activityid = ?', array($recordId));
+		
+
+			$contactIdsList = explode (';', $_REQUEST['contactidlist']);
+			$count = count($contactIdsList);
+
+			$sql = 'INSERT INTO vtiger_cntactivityrel VALUES ';
+			for($i=0; $i<$count; $i++) {
+				$sql .= " ($contactIdsList[$i], $recordId)";
+				if ($i != $count - 1) {
+					$sql .= ',';
+				}
+			}
+			$adb->pquery($sql, array());
 		}
 		$recur_type='';	
 		if(($recur_type == "--None--" || $recur_type == '') && $this->mode == "edit")
@@ -870,6 +887,11 @@ function insertIntoRecurringTable(& $recurObj)
 		} elseif($return_module == 'HelpDesk') {
 			$sql = 'DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ?';
 			$this->db->pquery($sql, array($return_id, $id));
+		} elseif($return_module == 'Accounts') {
+			$sql = 'DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ?';
+			$this->db->pquery($sql, array($return_id, $id));
+			$sql = 'DELETE FROM vtiger_cntactivityrel WHERE activityid = ? AND contactid IN	(SELECT contactid from vtiger_contactdetails where accountid=?)';
+			$this->db->pquery($sql, array($id, $return_id));
 		} else {
 			$sql='DELETE FROM vtiger_seactivityrel WHERE activityid=?';
 			$this->db->pquery($sql, array($id));
@@ -920,28 +942,83 @@ function insertIntoRecurringTable(& $recurObj)
 	 * @param - $secmodule secondary module name
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
-	function generateReportsSecQuery($module,$secmodule){
-		$query = $this->getRelationQuery($module,$secmodule,"vtiger_activity","activityid");
-		$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0
-				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
-				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
-				left join vtiger_activitycf on vtiger_activitycf.activityid = vtiger_activity.activityid
-				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
-				left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid
-				left join vtiger_recurringevents on vtiger_recurringevents.activityid = vtiger_activity.activityid
-				left join vtiger_crmentity as vtiger_crmentityRelCalendar on vtiger_crmentityRelCalendar.crmid = vtiger_seactivityrel.crmid and vtiger_crmentityRelCalendar.deleted=0
-				left join vtiger_account as vtiger_accountRelCalendar on vtiger_accountRelCalendar.accountid=vtiger_crmentityRelCalendar.crmid
-				left join vtiger_leaddetails as vtiger_leaddetailsRelCalendar on vtiger_leaddetailsRelCalendar.leadid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_potential as vtiger_potentialRelCalendar on vtiger_potentialRelCalendar.potentialid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_quotes as vtiger_quotesRelCalendar on vtiger_quotesRelCalendar.quoteid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_purchaseorder as vtiger_purchaseorderRelCalendar on vtiger_purchaseorderRelCalendar.purchaseorderid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_invoice as vtiger_invoiceRelCalendar on vtiger_invoiceRelCalendar.invoiceid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_salesorder as vtiger_salesorderRelCalendar on vtiger_salesorderRelCalendar.salesorderid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_troubletickets as vtiger_troubleticketsRelCalendar on vtiger_troubleticketsRelCalendar.ticketid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid
-				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupid = vtiger_crmentityCalendar.smownerid
-				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid
-                left join vtiger_users as vtiger_lastModifiedByCalendar on vtiger_lastModifiedByCalendar.id = vtiger_crmentityCalendar.modifiedby ";
+	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
+		$matrix = $queryPlanner->newDependencyMatrix();
+		$matrix->setDependency('vtiger_crmentityCalendar',array('vtiger_groupsCalendar','vtiger_usersCalendar','vtiger_lastModifiedByCalendar'));
+		$matrix->setDependency('vtiger_cntactivityrel',array('vtiger_contactdetailsCalendar'));
+		$matrix->setDependency('vtiger_seactivityrel',array('vtiger_crmentityRelCalendar'));
+		$matrix->setDependency('vtiger_crmentityRelCalendar',array('vtiger_accountRelCalendar','vtiger_leaddetailsRelCalendar','vtiger_potentialRelCalendar',
+								'vtiger_quotesRelCalendar','vtiger_purchaseorderRelCalendar','vtiger_invoiceRelCalendar',
+								'vtiger_salesorderRelCalendar','vtiger_troubleticketsRelCalendar','vtiger_campaignRelCalendar'));
+		$matrix->setDependency('vtiger_activity',array('vtiger_crmentityCalendar','vtiger_cntactivityrel','vtiger_activitycf',
+								'vtiger_seactivityrel','vtiger_activity_reminder','vtiger_recurringevents'));
+		
+		if (!$queryPlanner->requireTable('vtiger_activity', $matrix)) {
+			return '';
+		}
+		
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_activity","activityid", $queryPlanner);
+	
+		if ($queryPlanner->requireTable("vtiger_crmentityCalendar",$matrix)){
+			$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0";
+		}
+		if ($queryPlanner->requireTable("vtiger_cntactivityrel",$matrix)){
+			$query .=" 	left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid";	
+		}
+		if ($queryPlanner->requireTable("vtiger_contactdetailsCalendar")){
+			$query .=" 	left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid";
+		}
+		if ($queryPlanner->requireTable("vtiger_activitycf")){
+			$query .=" 	left join vtiger_activitycf on vtiger_activitycf.activityid = vtiger_activity.activityid";
+		}
+		if ($queryPlanner->requireTable("vtiger_seactivityrel",$matrix)){
+			$query .=" 	left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid";
+		}
+		if ($queryPlanner->requireTable("vtiger_activity_reminder")){
+			$query .=" 	left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid";
+		}
+		if ($queryPlanner->requireTable("vtiger_recurringevents")){
+			$query .=" 	left join vtiger_recurringevents on vtiger_recurringevents.activityid = vtiger_activity.activityid";
+		}
+		if ($queryPlanner->requireTable("vtiger_crmentityRelCalendar",$matrix)){
+			$query .=" 	left join vtiger_crmentity as vtiger_crmentityRelCalendar on vtiger_crmentityRelCalendar.crmid = vtiger_seactivityrel.crmid and vtiger_crmentityRelCalendar.deleted=0";
+		}
+		if ($queryPlanner->requireTable("vtiger_accountRelCalendar")){
+			$query .=" 	left join vtiger_account as vtiger_accountRelCalendar on vtiger_accountRelCalendar.accountid=vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_leaddetailsRelCalendar")){
+			$query .=" 	left join vtiger_leaddetails as vtiger_leaddetailsRelCalendar on vtiger_leaddetailsRelCalendar.leadid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_potentialRelCalendar")){
+			$query .=" 	left join vtiger_potential as vtiger_potentialRelCalendar on vtiger_potentialRelCalendar.potentialid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_quotesRelCalendar")){
+			$query .=" 	left join vtiger_quotes as vtiger_quotesRelCalendar on vtiger_quotesRelCalendar.quoteid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_purchaseorderRelCalendar")){
+			$query .=" 	left join vtiger_purchaseorder as vtiger_purchaseorderRelCalendar on vtiger_purchaseorderRelCalendar.purchaseorderid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_invoiceRelCalendar")){
+			$query .=" 	left join vtiger_invoice as vtiger_invoiceRelCalendar on vtiger_invoiceRelCalendar.invoiceid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_salesorderRelCalendar")){
+			$query .=" 	left join vtiger_salesorder as vtiger_salesorderRelCalendar on vtiger_salesorderRelCalendar.salesorderid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_troubleticketsRelCalendar")){
+			$query .=" left join vtiger_troubletickets as vtiger_troubleticketsRelCalendar on vtiger_troubleticketsRelCalendar.ticketid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_campaignRelCalendar")){
+			$query .=" 	left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid";
+		}
+		if ($queryPlanner->requireTable("vtiger_groupsCalendar")){
+			$query .=" left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupid = vtiger_crmentityCalendar.smownerid";
+		}
+		if ($queryPlanner->requireTable("vtiger_usersCalendar")){
+			$query .=" 	left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid";
+		}
+		if ($queryPlanner->requireTable("vtiger_lastModifiedByCalendar")){
+			$query .="  left join vtiger_users as vtiger_lastModifiedByCalendar on vtiger_lastModifiedByCalendar.id = vtiger_crmentityCalendar.modifiedby ";
+		}
 		return $query;
 	}
 	
@@ -980,10 +1057,14 @@ function insertIntoRecurringTable(& $recurObj)
 		$db = PearDatabase::getInstance();
 		$result = $db->pquery($query, array());
 		if(is_object($result)) {
-			$query = "create temporary table IF NOT EXISTS $tableName(id int(11) primary key, shared ".
-			"int(1) default 0) replace select 1, userid as id from vtiger_sharedcalendar where ".
-			"sharedid = $user->id";
-			$result = $db->pquery($query, array());
+			$query = "REPLACE INTO $tableName (id) SELECT userid as id FROM vtiger_sharedcalendar WHERE sharedid = ?";
+			$result = $db->pquery($query, array($user->id));
+			
+			//For newly created users, entry will not be there in vtiger_sharedcalendar table
+			//so, consider the users whose having the calendarsharedtype is public
+			$query = "REPLACE INTO $tableName (id) SELECT id FROM vtiger_users WHERE calendarsharedtype = ?";
+			$result = $db->pquery($query, array('public'));
+			
 			if(is_object($result)) {
 				return true;
 			}

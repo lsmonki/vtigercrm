@@ -21,7 +21,7 @@ class SyncServer {
         private $update = "update";
         private $delete = "delete";
         private $save = "save";
-        private $syncTypes = array("user","app");
+        private $syncTypes = array("user","app","userandgroup");
 
         
     /**
@@ -263,8 +263,10 @@ class SyncServer {
         $serverKey = wsapp_getAppKey("vtigerCRM");
         $serverAppId = $this->appid_with_key($serverKey);
         $handlerDetails  = $this->getDestinationHandleDetails();
+        $clientApplicationSyncType = wsapp_getAppSyncType($key);
         require_once $handlerDetails['handlerpath'];
         $this->destHandler = new $handlerDetails['handlerclass']($serverKey);
+        $this->destHandler->setClientSyncType($clientApplicationSyncType);
 
         $recordDetails = array();
 
@@ -299,6 +301,7 @@ class SyncServer {
                     $updateRecords[$clientRecordId] = $record['values'];
                     $updateRecords[$clientRecordId]['module'] = $record['module'];
                     $clientModifiedTimeList[$clientRecordId] = $record['values']['modifiedtime'];
+					
                 }
 			}
         }
@@ -306,7 +309,6 @@ class SyncServer {
        $recordDetails['created'] = $createRecords;
        $recordDetails['updated'] = $updateRecords;
        $recordDetails['deleted'] = $deleteRecords;
-
        $result = $this->destHandler->put($recordDetails,$user);
 	   
 	   $response= array();
@@ -367,8 +369,8 @@ class SyncServer {
 		}
 		$clientApplicationSyncType = wsapp_getAppSyncType($key);
         //hardcoded since the destination handler will be vtigerCRM
-        $serverKey = wsapp_getAppKey("vtigerCRM");
-        $handlerDetails  = wsapp_getHandler('vtigerCRM');
+		$serverKey = wsapp_getAppKey("vtigerCRM");
+        $handlerDetails  = $this->getDestinationHandleDetails();
         require_once $handlerDetails['handlerpath'];
         $this->destHandler = new $handlerDetails['handlerclass']($serverKey);
 		$this->destHandler->setClientSyncType($clientApplicationSyncType);
@@ -488,6 +490,40 @@ class SyncServer {
             $recordFormat['id'] = $record['id'];
             return $recordFormat;
         }
+    }
+  /**
+  * Retrieve serverid  of record   for the given
+  *  client
+  */
+    function idmap_get_serverId($clientid,$appId){
+		
+        $db = PearDatabase::getInstance();
+
+        $result = $db->pquery("SELECT serverid, clientid FROM vtiger_wsapp_recordmapping WHERE  clientid = ? and appid=?", array($clientid,$appId));
+        $mapping = array();
+        if($db->num_rows($result)){
+            while($row = $db->fetch_array($result)){
+                return $row['serverid'];
+            }
+        }
+        return false;
+    }
+  /**
+  * Retrieve clientid  of record   for the given
+  *  client
+  */
+    function idmap_get_clientId($serverid,$appId){
+		
+        $db = PearDatabase::getInstance();
+
+        $result = $db->pquery("SELECT serverid, clientid FROM vtiger_wsapp_recordmapping WHERE  serverid = ? and appid=?", array($serverid,$appId));
+        $mapping = array();
+        if($db->num_rows($result)){
+            while($row = $db->fetch_array($result)){
+                return $row['clientid'];
+            }
+        }
+        return false;
     }
 }
  

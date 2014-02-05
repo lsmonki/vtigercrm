@@ -6,8 +6,8 @@
   <prefix>de_de</prefix>
   <version>5.4.0</version>
   <dependencies>
-    <vtiger_version>5.4.0</vtiger_version>
-	<vtiger_max_version>5.*</vtiger_max_version>
+    <vtiger_version>6.0.0</vtiger_version>
+	<vtiger_max_version>6.*</vtiger_max_version>
   </dependencies>
   <license>
    <inline><![CDATA[

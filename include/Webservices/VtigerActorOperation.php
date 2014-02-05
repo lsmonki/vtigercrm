@@ -39,21 +39,21 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	protected function getActorTables(){
 		static $actorTables = array();
 		
-		if(isset($actorTables[$this->webserviceObject->getEntityName()])){
-			return $actorTables[$this->webserviceObject->getEntityName()];
+		if(isset($actorTables[$this->webserviceObject->getEntityId()])){
+			return $actorTables[$this->webserviceObject->getEntityId()];
 		}
-		$sql = 'select table_name from vtiger_ws_entity_tables where webservice_entity_id=?';
-		$result = $this->pearDB->pquery($sql,array($this->webserviceObject->getEntityId()));
-		$tableName = null;
+		$sql = 'select table_name, webservice_entity_id from vtiger_ws_entity_tables';
+		$result = $this->pearDB->pquery($sql,array());
 		if($result){
 			$rowCount = $this->pearDB->num_rows($result);
 			for($i=0;$i<$rowCount;++$i){
 				$row = $this->pearDB->query_result_rowdata($result,$i);
-				$tableName = $row['table_name'];
+				// Cache the result for further re-use
+				$actorTables[$row['webservice_entity_id']] = $row['table_name'];
 			}
-			// Cache the result for further re-use
-			$actorTables[$this->webserviceObject->getEntityName()] = $tableName;
 		}
+		
+		$tableName = isset($actorTables[$this->webserviceObject->getEntityId()])? $actorTables[$this->webserviceObject->getEntityId()]:null;
 		return $tableName;
 	}
 	

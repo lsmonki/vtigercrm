@@ -17,74 +17,76 @@ class VTJsonCondition {
 
 	function evaluate($condition, $entityCache, $id) {
 		$expr = Zend_Json::decode($condition);
-		$entityData = $entityCache->forId($id);
-		$data = $entityData->getData();
+		$finalResult = TRUE;
+		if (is_array($expr)) {
+			$entityData = $entityCache->forId($id);
+			$data = $entityData->getData();
 
-		$groupResults = array();
-		$expressionResults = array();
-		$i = 0;
-		foreach ($expr as $cond) {
-			$conditionGroup = $cond['groupid'];
-			if (empty($conditionGroup))
-				$conditionGroup = 0;
-			preg_match('/(\w+) : \((\w+)\) (\w+)/', $cond['fieldname'], $matches);
-			if (count($matches) == 0) {
-				$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entityData, $cond);
-			} else {
-				list($full, $referenceField, $referenceModule, $fieldname) = $matches;
-				$referenceFieldId = $data[$referenceField];
-				if ($referenceFieldId != 0) {
-					$entity = $entityCache->forId($data[$referenceField]);
-					if ($entity->getModuleName() == $referenceModule) {
-						$cond['fieldname'] = $fieldname;
-						$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entity, $cond, $entityData);
+			$groupResults = array();
+			$expressionResults = array();
+			$i = 0;
+			foreach ($expr as $cond) {
+				$conditionGroup = $cond['groupid'];
+				if (empty($conditionGroup))
+					$conditionGroup = 0;
+				preg_match('/(\w+) : \((\w+)\) (\w+)/', $cond['fieldname'], $matches);
+				if (count($matches) == 0) {
+					$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entityData, $cond);
+				} else {
+					list($full, $referenceField, $referenceModule, $fieldname) = $matches;
+					$referenceFieldId = $data[$referenceField];
+					if ($referenceFieldId != 0) {
+						$entity = $entityCache->forId($data[$referenceField]);
+						if ($entity->getModuleName() == $referenceModule) {
+							$cond['fieldname'] = $fieldname;
+							$expressionResults[$conditionGroup][$i]['result'] = $this->checkCondition($entity, $cond, $entityData);
+						} else {
+							$expressionResults[$conditionGroup][$i]['result'] = FALSE;
+						}
 					} else {
 						$expressionResults[$conditionGroup][$i]['result'] = FALSE;
 					}
-				} else {
-					$expressionResults[$conditionGroup][$i]['result'] = FALSE;
 				}
+				$expressionResults[$conditionGroup][$i + 1]['logicaloperator'] = (!empty($cond['joincondition'])) ? $cond['joincondition'] : 'and';
+				$groupResults[$conditionGroup]['logicaloperator'] = (!empty($cond['groupjoin'])) ? $cond['groupjoin'] : 'and';
+				$i++;
 			}
-			$expressionResults[$conditionGroup][$i + 1]['logicaloperator'] = (!empty($cond['joincondition'])) ? $cond['joincondition'] : 'and';
-			$groupResults[$conditionGroup]['logicaloperator'] = (!empty($cond['groupjoin'])) ? $cond['groupjoin'] : 'and';
-			$i++;
-		}
 
-		foreach ($expressionResults as $groupId => $groupExprResultSet) {
-			$groupResult = TRUE;
-			foreach ($groupExprResultSet as $exprResult) {
-				$result = $exprResult['result'];
-				$logicalOperator = $exprResult['logicaloperator'];
+			foreach ($expressionResults as $groupId => $groupExprResultSet) {
+				$groupResult = TRUE;
+				foreach ($groupExprResultSet as $exprResult) {
+					$result = $exprResult['result'];
+					$logicalOperator = $exprResult['logicaloperator'];
+					if (isset($result)) { // Condition to skip last condition
+						if (!empty($logicalOperator)) {
+							switch ($logicalOperator) {
+								case 'and' : $groupResult = ($groupResult && $result);
+									break;
+								case 'or' : $groupResult = ($groupResult || $result);
+									break;
+							}
+						} else { // Case for the first condition
+							$groupResult = $result;
+						}
+					}
+				}
+				$groupResults[$groupId]['result'] = $groupResult;
+			}
+
+			foreach ($groupResults as $groupId => $groupResult) {
+				$result = $groupResult['result'];
+				$logicalOperator = $groupResult['logicaloperator'];
 				if (isset($result)) { // Condition to skip last condition
 					if (!empty($logicalOperator)) {
 						switch ($logicalOperator) {
-							case 'and' : $groupResult = ($groupResult && $result);
+							case 'and' : $finalResult = ($finalResult && $result);
 								break;
-							case 'or' : $groupResult = ($groupResult || $result);
+							case 'or' : $finalResult = ($finalResult || $result);
 								break;
 						}
 					} else { // Case for the first condition
-						$groupResult = $result;
+						$finalResult = $result;
 					}
-				}
-			}
-			$groupResults[$groupId]['result'] = $groupResult;
-		}
-
-		$finalResult = TRUE;
-		foreach ($groupResults as $groupId => $groupResult) {
-			$result = $groupResult['result'];
-			$logicalOperator = $groupResult['logicaloperator'];
-			if (isset($result)) { // Condition to skip last condition
-				if (!empty($logicalOperator)) {
-					switch ($logicalOperator) {
-						case 'and' : $finalResult = ($finalResult && $result);
-							break;
-						case 'or' : $finalResult = ($finalResult || $result);
-							break;
-					}
-				} else { // Case for the first condition
-					$finalResult = $result;
 				}
 			}
 		}
@@ -138,7 +140,23 @@ class VTJsonCondition {
 				$value = $exprEvaluater->evaluate($entityData);
 			}
 		}
-
+		
+		global $current_user;
+		$handler = vtws_getModuleHandlerFromName($entityData->getModuleName(), $current_user);
+		$moduleFields = $handler->getMeta()->getModuleFields();
+		$fieldInstance = $moduleFields[$cond['fieldname']];
+		
+		if($fieldInstance && $fieldInstance->getFieldDataType() == 'datetime') {
+			//Convert the DB Date Time Format to User Date Time Format
+			$date = new DateTimeField($fieldValue);
+			$fieldValue = $date->getDisplayDateTimeValue();
+			$valueArray = explode(' ', $value);
+			if(count($valueArray) == 1) {
+				$fieldValueArray = explode(' ', $fieldValue);
+				$fieldValue = $fieldValueArray[0];
+			}
+		}
+		
 		switch ($condition) {
 			case "equal to":
 				return $fieldValue == $value;
@@ -177,6 +195,7 @@ class VTJsonCondition {
 			case "contains":
 				return strpos($fieldValue, $value) !== FALSE;
 			case "does not contain":
+				if(empty($value)) unset($value);
 				return strpos($fieldValue, $value) === FALSE;
 			case "starts with":
 				return $this->startsWith($fieldValue, $value);
@@ -193,6 +212,155 @@ class VTJsonCondition {
 				} else {
 					return $hasChanged && $fieldValue == $value;
 				}
+			case "is empty":
+				if(empty($fieldValue)) {
+					return true;
+				}
+				return false;
+			case "is not empty":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				return true;
+			case "before":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$dbValue = getValidDBInsertDateValue($value);
+				if($fieldValue < $dbValue) {
+					return true;
+				}
+				return false;
+			case "after":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$dbValue = getValidDBInsertDateValue($value);
+				if($fieldValue > $dbValue) {
+					return true;
+				}
+				return false;
+			case "between":
+				if(empty($fieldValue)) {
+					return false;
+				}
+				$values = explode(',', $value);
+				$values = array_map('getValidDBInsertDateValue',$values);
+				if($fieldValue > $values[0] && $fieldValue < $values[1]) {
+					return true;
+				}
+				return false;
+			case 'is today':
+				$today = date('Y-m-d');
+
+				if($fieldValue == $today) {
+					return true;
+				}
+				return false;
+			case 'less than days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$today = date('Y-m-d');
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($olderDate <= $fieldValue && $fieldValue <= $today) {
+					return true;
+				}
+				return false;
+			case 'more than days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($fieldValue <= $olderDate) {
+					return true;
+				}
+				return false;
+			case 'in less than':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$today = date('Y-m-d');
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($today <= $fieldValue && $fieldValue <= $futureDate) {
+					return true;
+				}
+				return false;
+			case 'in more than':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($fieldValue >= $futureDate) {
+					return true;
+				}
+				return false;
+			case 'days ago':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDate = date('Y-m-d', strtotime('-'.$value.' days'));
+				if($fieldValue == $olderDate) {
+					return true;
+				}
+				return false;
+			case 'days later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDate = date('Y-m-d', strtotime('+'.$value.' days'));
+				if($fieldValue == $futureDate) {
+					return true;
+				}
+				return false;
+
+			case 'less than hours before':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$currentTime = date('Y-m-d H:i:s');
+				$olderDateTime = date('Y-m-d H:i:s', strtotime('-'.$value.' hours'));
+				if($olderDateTime <= $fieldValue && $fieldValue <= $currentTime) {
+					return true;
+				}
+				return false;
+
+			case 'less than hours later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$currentTime = date('Y-m-d H:i:s');
+				$futureDateTime = date('Y-m-d H:i:s', strtotime('+'.$value.' hours'));
+				if($currentTime <= $fieldValue && $fieldValue <= $futureDateTime) {
+					return true;
+				}
+				return false;
+
+			case 'more than hours before':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$olderDateTime = date('Y-m-d H:i:s', strtotime('-'.$value.' hours'));
+				if($fieldValue <= $olderDateTime) {
+					return true;
+				}
+				return false;
+			case 'more than hours later':
+				if(empty($fieldValue) || empty($value)) {
+					return false;
+				}
+				$futureDateTime = date('Y-m-d H:i:s', strtotime('+'.$value.' hours'));
+				if($fieldValue >= $futureDateTime) {
+					return true;
+				}
+				return false;
+			case 'has changed to' :
+				$entityDelta = new VTEntityDelta();
+				$idParts = vtws_getIdComponents($entityData->getId());
+				return $entityDelta->hasChanged($entityData->getModuleName(), $idParts[1], $cond['fieldname'], $value);
+			case 'is added':
+				//This condition was used only for comments. It should not execute from not from workflows, So it was always "FALSE"
+				return false;
 			default:
 				//Unexpected condition
 				throw new Exception("Found an unexpected condition: " . $condition);

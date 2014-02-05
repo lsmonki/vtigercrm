@@ -105,23 +105,24 @@ class ListViewController {
 		}
 	}
 
-	/**This function generates the List view entries in a list view
-	 * Param $focus - module object
-	 * Param $result - resultset of a listview query
-	 * Param $navigation_array - navigation values in an array
-	 * Param $relatedlist - check for related list flag
-	 * Param $returnset - list query parameters in url string
-	 * Param $edit_action - Edit action value
-	 * Param $del_action - delete action value
-	 * Param $oCv - vtiger_customview object
-	 * Returns an array type
-	 */
-	function getListViewEntries($focus, $module,$result,$navigationInfo,$skipActions=false) {
+	public function getListViewHeaderFields() {
+		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
+		$moduleFields = $meta->getModuleFields();
+		$fields = $this->queryGenerator->getFields();
+		$headerFields = array();
+		foreach($fields as $fieldName) {
+			if(array_key_exists($fieldName, $moduleFields)) {
+				$headerFields[$fieldName] = $moduleFields[$fieldName];
+			}
+		}
+		return $headerFields;
+	}
+
+	function getListViewRecords($focus, $module, $result) {
+		global $listview_max_textlength, $theme, $default_charset;
 
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
-		global $listview_max_textlength, $theme,$default_charset;
 		$fields = $this->queryGenerator->getFields();
-		$whereFields = $this->queryGenerator->getWhereFields();
 		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
 
 		$moduleFields = $meta->getModuleFields();
@@ -183,7 +184,6 @@ class ListViewController {
 				$baseTableIndex = $moduleTableIndexList[$baseTable];
 
 				$recordId = $db->query_result($result,$i,$baseTableIndex);
-				$ownerId = $db->query_result($result,$i,"smownerid");
 			}else {
 				$recordId = $db->query_result($result,$i,"id");
 			}
@@ -193,9 +193,6 @@ class ListViewController {
 				$field = $moduleFields[$fieldName];
 				$uitype = $field->getUIType();
 				$rawValue = $this->db->query_result($result, $i, $field->getColumnName());
-				if($module == 'Calendar') {
-					$activityType = $this->db->query_result($result, $i, 'activitytype');
-				}
 
 				if($uitype != 8){
 					$value = html_entity_decode($rawValue,ENT_QUOTES,$default_charset);
@@ -205,42 +202,6 @@ class ListViewController {
 
 				if($module == 'Documents' && $fieldName == 'filename') {
 					$downloadtype = $db->query_result($result,$i,'filelocationtype');
-					if($downloadtype == 'I') {
-						$ext =substr($value, strrpos($value, ".") + 1);
-						$ext = strtolower($ext);
-						if($value != ''){
-							if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm') {
-								$fileicon = "<img src='" . vtiger_imageurl('fExeBin.gif', $theme).
-										"' hspace='3' align='absmiddle' border='0'>";
-							} elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp') {
-								$fileicon = "<img src='".vtiger_imageurl('fbImageFile.gif', $theme).
-										"' hspace='3' align='absmiddle' border='0'>";
-							} elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls') {
-								$fileicon = "<img src='".vtiger_imageurl('fbTextFile.gif', $theme).
-										"' hspace='3' align='absmiddle' border='0'>";
-							} elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar') {
-								$fileicon = "<img src='".vtiger_imageurl('fbZipFile.gif', $theme).
-										"' hspace='3' align='absmiddle'	border='0'>";
-							} else {
-								$fileicon = "<img src='".vtiger_imageurl('fbUnknownFile.gif',$theme)
-										. "' hspace='3' align='absmiddle' border='0'>";
-							}
-						}
-					} elseif($downloadtype == 'E') {
-						if(trim($value) != '' ) {
-							$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) .
-									"' alt='".getTranslatedString('LBL_EXTERNAL_LNK',$module).
-									"' title='".getTranslatedString('LBL_EXTERNAL_LNK',$module).
-									"' hspace='3' align='absmiddle' border='0'>";
-						} else {
-							$value = '--';
-							$fileicon = '';
-						}
-					} else {
-						$value = ' --';
-						$fileicon = '';
-					}
-
 					$fileName = $db->query_result($result,$i,'filename');
 
 					$downloadType = $db->query_result($result,$i,'filelocationtype');
@@ -250,16 +211,17 @@ class ListViewController {
 					$fileId = $db->query_result($fileIdRes,0,'attachmentsid');
 					if($fileName != '' && $status == 1) {
 						if($downloadType == 'I' ) {
-							$value = "<a href='index.php?module=uploads&action=downloadfile&".
-									"entityid=$recordId&fileid=$fileId' title='".
-									getTranslatedString("LBL_DOWNLOAD_FILE",$module).
-									"' onclick='javascript:dldCntIncrease($recordId);'>".textlength_check($value).
-									"</a>";
+							$value = '<a onclick="Javascript:Documents_Index_Js.updateDownloadCount(\'index.php?module=Documents&action=UpdateDownloadCount&record='.$recordId.'\');"'.
+									' href="index.php?module=Documents&action=DownloadFile&record='.$recordId.'&fileid='.$fileId.'"'.
+									' title="'.	getTranslatedString('LBL_DOWNLOAD_FILE',$module).
+									'" >'.textlength_check($value).
+									'</a>';
 						} elseif($downloadType == 'E') {
-							$value = "<a target='_blank' href='$fileName' onclick='javascript:".
-									"dldCntIncrease($recordId);' title='".
-									getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".textlength_check($value).
-									"</a>";
+							$value = '<a onclick="Javascript:Documents_Index_Js.updateDownloadCount(\'index.php?module=Documents&action=UpdateDownloadCount&record='.$recordId.'\');"'.
+									' href="'.$fileName.'" target="_blank"'.
+									' title="'.	getTranslatedString('LBL_DOWNLOAD_FILE',$module).
+									'" >'.textlength_check($value).
+									'</a>';
 						} else {
 							$value = ' --';
 						}
@@ -299,25 +261,47 @@ class ListViewController {
 						$value = ' --';
 					}
 				}elseif ($field->getFieldDataType() == 'picklist') {
-					if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
-							!in_array($value, $this->picklistValueMap[$fieldName])) {
-						$value = "<font color='red'>".getTranslatedString('LBL_NOT_ACCESSIBLE',
+					//not check for permissions for non admin users for status and activity type field
+                    if($module == 'Calendar' && ($fieldName == 'taskstatus' || $fieldName == 'eventstatus' || $fieldName == 'activitytype')) {
+                        $value = Vtiger_Language_Handler::getTranslatedString($value,$module);
+						$value = textlength_check($value);
+                    }
+					else if ($value != '' && !$is_admin && $this->picklistRoleMap[$fieldName] &&
+							!in_array($value, $this->picklistValueMap[$fieldName]) && strtolower($value) != '--none--' && strtolower($value) != 'none' ) {
+						$value = "<font color='red'>". Vtiger_Language_Handler::getTranslatedString('LBL_NOT_ACCESSIBLE',
 								$module)."</font>";
 					} else {
-						$value = getTranslatedString($value,$module);
+						$value =  Vtiger_Language_Handler::getTranslatedString($value,$module);
 						$value = textlength_check($value);
 					}
-				}elseif($field->getFieldDataType() == 'date' ||
-						$field->getFieldDataType() == 'datetime') {
+				}elseif($field->getFieldDataType() == 'date' || $field->getFieldDataType() == 'datetime') {
 					if($value != '' && $value != '0000-00-00') {
-						$date = new DateTimeField($value);
-						$value = $date->getDisplayDate();
-						if($field->getFieldDataType() == 'datetime') {
-							$value .= (' ' . $date->getDisplayTime());
+						$fieldDataType = $field->getFieldDataType();
+						if($module == 'Calendar' &&($fieldName == 'date_start' || $fieldName == 'due_date')) {
+                            if($fieldName == 'date_start') {
+								$timeField = 'time_start';
+							}else if($fieldName == 'due_date') {
+								$timeField = 'time_end';
+							}
+                            $timeFieldValue = $this->db->query_result($result, $i, $timeField);
+                            if(!empty($timeFieldValue)){
+                                $value .= ' '. $timeFieldValue;
+                                //TO make sure it takes time value as well
+                                $fieldDataType = 'datetime';
+                            }
+						}
+						if($fieldDataType == 'datetime') {
+							$value = Vtiger_Datetime_UIType::getDateTimeValue($value);
+						} else if($fieldDataType == 'date') {
+							$date = new DateTimeField($value);
+							$value = $date->getDisplayDate();
 						}
 					} elseif ($value == '0000-00-00') {
 						$value = '';
 					}
+				} elseif($field->getFieldDataType() == 'time') {
+					if(!empty($value))
+						$value = Vtiger_Time_UIType::getTimeValueInAMorPM($value);
 				} elseif($field->getFieldDataType() == 'currency') {
 					if($value != '') {
 						if($field->getUIType() == 72) {
@@ -329,13 +313,11 @@ class ListViewController {
 								$currencyInfo = getInventoryCurrencyInfo($module, $recordId);
 								$currencySymbol = $currencyInfo['currency_symbol'];
 							}
-							$value = number_format($value, 2,'.','');
-							$currencyValue = CurrencyField::convertToUserFormat($value, null, true);
-							$value = CurrencyField::appendCurrencySymbol($currencyValue, $currencySymbol);
+							$value = CurrencyField::convertToUserFormat($value, null, true);
+							$row['currencySymbol'] = $currencySymbol;
+//							$value = CurrencyField::appendCurrencySymbol($currencyValue, $currencySymbol);
 						} else {
-							//changes made to remove vtiger_currency symbol infront of each
-							//vtiger_potential amount
-							if ($value != 0) {
+							if (!empty($value)) {
 								$value = CurrencyField::convertToUserFormat($value);
 							}
 						}
@@ -344,20 +326,25 @@ class ListViewController {
                     $matchPattern = "^[\w]+:\/\/^";
                     preg_match($matchPattern, $rawValue, $matches);
                     if(!empty ($matches[0])){
-                        $value = '<a href="'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
+                        $value = '<a class="urlField cursorPointer" href="'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }else{
-                        $value = '<a href="http://'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
+                        $value = '<a class="urlField cursorPointer" href="http://'.$rawValue.'" target="_blank">'.textlength_check($value).'</a>';
                     }
 				} elseif ($field->getFieldDataType() == 'email') {
-					if($_SESSION['internal_mailer'] == 1) {
+					global $current_user;
+					if($current_user->internal_mailer == 1){
 						//check added for email link in user detailview
-						$fieldId = $field->getFieldId();
-						$value = "<a href=\"javascript:InternalMailer($recordId,$fieldId,".
-						"'$fieldName','$module','record_id');\">".textlength_check($value)."</a>";
-					}else {
-						$value = '<a href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
+						$value = "<a class='emailField' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId,".
+						"'$fieldName');\">".textlength_check($value)."</a>";
+					} else {
+						$value = '<a class="emailField" href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
 					}
 				} elseif($field->getFieldDataType() == 'boolean') {
+					if ($value === 'on') {
+						$value = 1;
+					} else if ($value == 'off') {
+						$value = 0;
+					}
 					if($value == 1) {
 						$value = getTranslatedString('yes',$module);
 					} elseif($value == 0) {
@@ -366,8 +353,7 @@ class ListViewController {
 						$value = '--';
 					}
 				} elseif($field->getUIType() == 98) {
-					$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab='.
-						'Settings&roleid='.$value.'">'.textlength_check(getRoleName($value)).'</a>';
+					$value = '<a href="index.php?module=Roles&parent=Settings&view=Edit&record='.$value.'">'.textlength_check(getRoleName($value)).'</a>';
 				} elseif($field->getFieldDataType() == 'multipicklist') {
 					$value = ($value != "") ? str_replace(' |##| ',', ',$value) : "";
 					if(!$is_admin && $value != '') {
@@ -417,7 +403,7 @@ class ListViewController {
 						$parentMeta = $this->queryGenerator->getMeta($parentModule);
 						$value = textlength_check($this->nameList[$fieldName][$value]);
 						if ($parentMeta->isModuleEntity() && $parentModule != "Users") {
-							$value = "<a href='index.php?module=$parentModule&action=DetailView&".
+							$value = "<a href='?module=$parentModule&view=Detail&".
 								"record=$rawValue' title='".getTranslatedString($parentModule, $parentModule)."'>$value</a>";
 						}
 					} else {
@@ -447,271 +433,15 @@ class ListViewController {
 					$value = textlength_check($value);
 				}
 
-                                    $parenttab = getParentTab();
-				$nameFields = $this->queryGenerator->getModuleNameFields($module);
-				$nameFieldList = explode(',',$nameFields);
-				if(in_array($fieldName, $nameFieldList) && $module != 'Emails' ) {
-					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
-					"$recordId' title='".getTranslatedString($module, $module)."'>$value</a>";
-				} elseif($fieldName == $focus->list_link_field && $module != 'Emails') {
-					$value = "<a href='index.php?module=$module&parenttab=$parenttab&action=DetailView&record=".
-					"$recordId' title='".getTranslatedString($module, $module)."'>$value</a>";
-				}
-
-				// vtlib customization: For listview javascript triggers
-				$value = "$value <span type='vtlib_metainfo' vtrecordid='{$recordId}' vtfieldname=".
-					"'{$fieldName}' vtmodule='$module' style='display:none;'></span>";
-				// END
-				$row[] = $value;
-			}
-
-			//Added for Actions ie., edit and delete links in listview
-			$actionLinkInfo = "";
-			if(isPermitted($module,"EditView","") == 'yes'){
-				$edit_link = $this->getListViewEditLink($module,$recordId);
-				if(isset($navigationInfo['start']) && $navigationInfo['start'] > 1 && $module != 'Emails') {
-					$actionLinkInfo .= "<a href=\"$edit_link&start=".
-						$navigationInfo['start']."\">".getTranslatedString("LNK_EDIT",
-								$module)."</a> ";
-				} else {
-					$actionLinkInfo .= "<a href=\"$edit_link\">".getTranslatedString("LNK_EDIT",
-								$module)."</a> ";
-				}
-			}
-
-			if(isPermitted($module,"Delete","") == 'yes'){
-				$del_link = $this->getListViewDeleteLink($module,$recordId);
-				if($actionLinkInfo != "" && $del_link != "")
-					$actionLinkInfo .=  " | ";
-				if($del_link != "")
-					$actionLinkInfo .=	"<a href='javascript:confirmdelete(\"".
-						addslashes(urlencode($del_link))."\")'>".getTranslatedString("LNK_DELETE",
-								$module)."</a>";
-			}
-			// Record Change Notification
-			if(method_exists($focus, 'isViewed') &&
-					PerformancePrefs::getBoolean('LISTVIEW_RECORD_CHANGE_INDICATOR', true)) {
-				if(!$focus->isViewed($recordId)) {
-					$actionLinkInfo .= " | <img src='" . vtiger_imageurl('important1.gif',
-							$theme) . "' border=0>";
-				}
-			}
-			// END
-			if($actionLinkInfo != "" && !$skipActions) {
-				$row[] = $actionLinkInfo;
+//				// vtlib customization: For listview javascript triggers
+//				$value = "$value <span type='vtlib_metainfo' vtrecordid='{$recordId}' vtfieldname=".
+//					"'{$fieldName}' vtmodule='$module' style='display:none;'></span>";
+//				// END
+				$row[$fieldName] = $value;
 			}
 			$data[$recordId] = $row;
-
 		}
 		return $data;
 	}
-
-	public function getListViewEditLink($module,$recordId, $activityType='') {
-		if($module == 'Emails')
-	        return 'javascript:;" onclick="OpenCompose(\''.$recordId.'\',\'edit\');';
-		if($module != 'Calendar') {
-			$return_action = "index";
-		} else {
-			$return_action = 'ListView';
-		}
-		//Added to fix 4600
-		$url = getBasic_Advance_SearchURL();
-		$parent = getParentTab();
-		//Appending view name while editing from ListView
-		$link = "index.php?module=$module&action=EditView&record=$recordId&return_module=$module".
-			"&return_action=$return_action&parenttab=$parent".$url."&return_viewname=".
-			$_SESSION['lvs'][$module]["viewname"];
-
-		if($module == 'Calendar') {
-			if($activityType == 'Task') {
-				$link .= '&activity_mode=Task';
-			} else {
-				$link .= '&activity_mode=Events';
-			}
-		}
-		return $link;
-	}
-
-	public function getListViewDeleteLink($module,$recordId) {
-		$parenttab = getParentTab();
-		$viewname = $_SESSION['lvs'][$module]['viewname'];
-		//Added to fix 4600
-		$url = getBasic_Advance_SearchURL();
-		if($module == "Calendar")
-			$return_action = "ListView";
-		else
-			$return_action = "index";
-		//This is added to avoid the del link in Product related list for the following modules
-		$link = "index.php?module=$module&action=Delete&record=$recordId".
-			"&return_module=$module&return_action=$return_action".
-			"&parenttab=$parenttab&return_viewname=".$viewname.$url;
-
-		// vtlib customization: override default delete link for custom modules
-		$requestModule = vtlib_purify($_REQUEST['module']);
-		$requestRecord = vtlib_purify($_REQUEST['record']);
-		$requestAction = vtlib_purify($_REQUEST['action']);
-		$requestFile = vtlib_purify($_REQUEST['file']);
-		$isCustomModule = vtlib_isCustomModule($requestModule);
-
-		if($isCustomModule && (!in_array($requestAction, Array('index','ListView')) &&
-				($requestAction == $requestModule.'Ajax' && !in_array($requestFile, Array('index','ListView'))))) {
-
-			$link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";
-			$link .= "&destination_module=$module&idlist=$entity_id&mode=delete&parenttab=$parenttab";
-		}
-		// END
-		return $link;
-	}
-
-	public function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$orderBy='',
-			$skipActions=false) {
-		global $log, $singlepane_view;
-		global $theme;
-
-		$arrow='';
-		$qry = getURLstring($focus);
-		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
-		$header = Array();
-
-		//Get the vtiger_tabid of the module
-		$tabid = getTabid($module);
-		$tabname = getParentTab();
-		global $current_user;
-
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		$fields = $this->queryGenerator->getFields();
-		$whereFields = $this->queryGenerator->getWhereFields();
-		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
-
-		$moduleFields = $meta->getModuleFields();
-		$accessibleFieldList = array_keys($moduleFields);
-		$listViewFields = array_intersect($fields, $accessibleFieldList);
-		//Added on 14-12-2005 to avoid if and else check for every list
-		//vtiger_field for arrow image and change order
-		$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
-		$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
-		foreach($listViewFields as $fieldName) {
-			$field = $moduleFields[$fieldName];
-
-			if(in_array($field->getColumnName(),$focus->sortby_fields)) {
-				if($orderBy == $field->getColumnName()) {
-					$temp_sorder = $change_sorder[$sorder];
-					$arrow = "&nbsp;<img src ='".vtiger_imageurl($arrow_gif[$sorder], $theme)."' border='0'>";
-				} else {
-					$temp_sorder = 'ASC';
-				}
-				$label = getTranslatedString($field->getFieldLabelKey(), $module);
-				//added to display vtiger_currency symbol in listview header
-				if($label =='Amount') {
-					$label .=' ('.getTranslatedString('LBL_IN', $module).' '.
-							$user_info['currency_symbol'].')';
-				}
-				if($field->getUIType() == '9') {
-					$label .=' (%)';
-				}
-				if($module == 'Users' && $fieldName == 'User Name') {
-					$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
-						"\",\"parenttab=".$tabname."&order_by=".$field->getColumnName()."&sorder=".
-						$temp_sorder.$sort_qry."\");' class='listFormHeaderLinks'>".
-						getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
-				} else {
-					if($this->isHeaderSortingEnabled()) {
-						$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module.
-							"\",\"parenttab=".$tabname."&foldername=Default&order_by=".$field->getColumnName()."&start=".
-							$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".
-						$sort_qry."\");' class='listFormHeaderLinks'>".$label."".$arrow."</a>";
-
-					} else {
-						$name = $label;
-					}
-				}
-				$arrow = '';
-			} else {
-				$name = getTranslatedString($field->getFieldLabelKey(), $module);
-			}
-			//added to display vtiger_currency symbol in related listview header
-			if($name =='Amount') {
-				$name .=' ('.getTranslatedString('LBL_IN').' '.$user_info['currency_symbol'].')';
-			}
-
-			$header[]=$name;
-		}
-
-		//Added for Action - edit and delete link header in listview
-		if(!$skipActions && (isPermitted($module,"EditView","") == 'yes' ||
-				isPermitted($module,"Delete","") == 'yes'))
-			$header[] = getTranslatedString("LBL_ACTION", $module);
-		return $header;
-	}
-
-	public function getBasicSearchFieldInfoList() {
-		$fields = $this->queryGenerator->getFields();
-		$whereFields = $this->queryGenerator->getWhereFields();
-		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
-
-		$moduleFields = $meta->getModuleFields();
-		$accessibleFieldList = array_keys($moduleFields);
-		$listViewFields = array_intersect($fields, $accessibleFieldList);
-		$basicSearchFieldInfoList = array();
-		foreach ($listViewFields as $fieldName) {
-			$field = $moduleFields[$fieldName];
-			$basicSearchFieldInfoList[$fieldName] = getTranslatedString($field->getFieldLabelKey(),
-					$this->queryGenerator->getModule());
-		}
-		return $basicSearchFieldInfoList;
-	}
-
-	public function getAdvancedSearchOptionString() {
-		$module = $this->queryGenerator->getModule();
-		$meta = $this->queryGenerator->getMeta($module);
-
-		$moduleFields = $meta->getModuleFields();
-		$i =0;
-		foreach ($moduleFields as $fieldName=>$field) {
-			if($field->getFieldDataType() == 'reference') {
-				$typeOfData = 'V';
-			} else if($field->getFieldDataType() == 'boolean') {
-				$typeOfData = 'C';
-			} else {
-				$typeOfData = $field->getTypeOfData();
-				$typeOfData = explode("~",$typeOfData);
-				$typeOfData = $typeOfData[0];
-			}
-			$label = getTranslatedString($field->getFieldLabelKey(), $module);
-			if(empty($label)) {
-				$label = $field->getFieldLabelKey();
-			}
-			if($label == "Start Date & Time") {
-				$fieldlabel = "Start Date";
-			}
-			$selected = '';
-			if($i++ == 0) {
-				$selected = "selected";
-			}
-
-			// place option in array for sorting later
-			//$blockName = getTranslatedString(getBlockName($field->getBlockId()), $module);
-			$blockName = getTranslatedString($field->getBlockName(), $module);
-
-			$fieldLabelEscaped = str_replace(" ","_",$field->getFieldLabelKey());
-			$optionvalue = $field->getTableName().":".$field->getColumnName().":".$fieldName.":".$module."_".$fieldLabelEscaped.":".$typeOfData;
-
-			$OPTION_SET[$blockName][$label] = "<option value=\'$optionvalue\' $selected>$label</option>";
-
-		}
-	   	// sort array on block label
-	    ksort($OPTION_SET, SORT_STRING);
-
-		foreach ($OPTION_SET as $key=>$value) {
-	  		$shtml .= "<optgroup label='$key' class='select' style='border:none'>";
-	   		// sort array on field labels
-	   		ksort($value, SORT_STRING);
-	  		$shtml .= implode('',$value);
-	  	}
-
-	    return $shtml;
-	}
-
 }
 ?>

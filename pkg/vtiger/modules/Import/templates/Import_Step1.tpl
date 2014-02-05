@@ -9,23 +9,23 @@
  *
  ********************************************************************************/
 -->*}
-
-<table width="100%" cellspacing="0" cellpadding="5">
+<table width="100%" cellspacing="0" cellpadding="2">
 	<tr>
-		<td class="heading2">{'LBL_IMPORT_STEP_1'|@getTranslatedString:$MODULE}:</td>
-		<td class="big">{'LBL_IMPORT_STEP_1_DESCRIPTION'|@getTranslatedString:$MODULE}</td>
+		<td><strong>{'LBL_IMPORT_STEP_1'|@vtranslate:$MODULE}:</strong></td>
+		<td class="big">{'LBL_IMPORT_STEP_1_DESCRIPTION'|@vtranslate:$MODULE}</td>
+		<td>&nbsp;</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td>
+		<td data-import-upload-size="{$IMPORT_UPLOAD_SIZE}">
 			<input type="hidden" name="type" value="csv" />
 			<input type="hidden" name="is_scheduled" value="1" />
-			<input type="file" name="import_file" id="import_file" class="small" size="60" onchange="ImportJs.checkFileType()"/>
+			<input type="file" name="import_file" id="import_file" onchange="ImportJs.checkFileType()"/>
 			<!-- input type="hidden" name="userfile_hidden" value=""/ -->
 		</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td class="small">{'LBL_IMPORT_SUPPORTED_FILE_TYPES'|@getTranslatedString:$MODULE}</td>
+		<td>{'LBL_IMPORT_SUPPORTED_FILE_TYPES'|@vtranslate:$MODULE}</td>
 	</tr>
 </table>

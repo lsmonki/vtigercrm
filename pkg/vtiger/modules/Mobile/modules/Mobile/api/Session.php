@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-include_once dirname(__FILE__) . '/../../../include/HTTP_Session/Session.php';
+include_once dirname(__FILE__) . '/../../../libraries/HTTP_Session/Session.php';
 
 class Mobile_API_Session {
 	

@@ -32,7 +32,11 @@ function __vt_mul($arr){
 }
 
 function __vt_div($arr){
-	return $arr[0]/$arr[1];
+	try {
+		return $arr[0]/$arr[1];
+	}catch(Exception $e) {
+		return 0;
+	}
 }
 
 function __vt_equals($arr){
@@ -72,14 +76,24 @@ function __vt_time_diff($arr) {
             $time_operand1 = $arr[0];
             $time_operand2 = $arr[1];
     } else {
-            $time_operand1 = date('Y-m-d H:i:s'); // Current time
-            $time_operand2 = $arr[0];
+
+		// Added as we need to compare with the values based on the user date format and timezone
+		global $default_timezone;
+		$admin = Users::getActiveAdminUser();
+		$adminTimeZone = $admin->time_zone;
+		@date_default_timezone_set($adminTimeZone);
+
+        $time_operand1 = date('Y-m-d H:i:s'); // Current time
+
+		@date_default_timezone_set($default_timezone);
+
+        $time_operand2 = $arr[0];
     }
 
     if(empty($time_operand1) || empty($time_operand2)) return 0;
 
-    $time_operand1 = getValidDBInsertDateValue($time_operand1);
-	$time_operand2 = getValidDBInsertDateValue($time_operand2);
+    $time_operand1 = getValidDBInsertDateTimeValue($time_operand1);
+	$time_operand2 = getValidDBInsertDateTimeValue($time_operand2);
 
     return (strtotime($time_operand1) - strtotime($time_operand2));
 }
@@ -134,6 +148,10 @@ function __vt_get_date($arr) {
 	$type = $arr[0];
 	switch ($type) {
 		case 'today': return date('Y-m-d');
+			break;
+		case 'tomorrow': return date('Y-m-d', strtotime('+1 day'));
+			break;
+		case 'yesterday': return date('Y-m-d', strtotime('-1 day'));
 			break;
 		default : return date('Y-m-d');
 			break;
@@ -198,7 +216,11 @@ class VTFieldExpressionEvaluater{
 	}
 
 	function env($sym){
-		return $this->env->get($sym->value);
+		if($this->env) {
+			return $this->env->get($sym->value);
+		} else {
+			return $sym->value;
+		}
 	}
 }
 ?>

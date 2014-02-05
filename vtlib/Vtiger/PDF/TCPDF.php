@@ -7,8 +7,8 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once dirname(__FILE__) . '/../../../include/tcpdf/config/lang/eng.php';
-require_once dirname(__FILE__) . '/../../../include/tcpdf/tcpdf.php';
+require_once 'libraries/tcpdf/config/lang/eng.php';
+require_once 'libraries/tcpdf/tcpdf.php';
 
 class Vtiger_PDF_TCPDF extends TCPDF {
 
@@ -30,7 +30,7 @@ class Vtiger_PDF_TCPDF extends TCPDF {
 
 	function GetStringHeight($sa,$w) {
 		if(empty($sa)) return 0;
-		
+
 		$sa = str_replace("\r","",$sa);
 		// remove the last newline
 		if (substr($sa,-1) == "\n")

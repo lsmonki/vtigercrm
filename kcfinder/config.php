@@ -30,7 +30,7 @@ $_CONFIG = array(
     'dirPerms' => 0755,
     'filePerms' => 0644,
 
-    'deniedExts' => "exe com msi bat php cgi pl",
+    'deniedExts' => "exe com msi bat php phps phtml php3 php4 cgi pl", // UPDATED: http://kcfinder.sunhater.com/docs/install
 
     'types' => array(
 

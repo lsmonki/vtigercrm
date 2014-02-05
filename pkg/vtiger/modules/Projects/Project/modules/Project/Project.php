@@ -101,11 +101,11 @@ class Project extends CRMEntity {
 	var $default_sort_order='ASC';
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projectname');
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'projectname', 'assigned_user_id');
 
 	function __construct() {
 	    global $log, $currentModule;
-	    $this->column_fields = getColumnFields($currentModule);
+	    $this->column_fields = getColumnFields(get_class($this));
 	    $this->db = PearDatabase::getInstance();
 	    $this->log = $log;
 	}
@@ -228,12 +228,11 @@ class Project extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('Project', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 
@@ -382,6 +381,12 @@ class Project extends CRMEntity {
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
 			}
 
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PROJ', 1, 1, 1));
+			}
+
 		} else if($event_type == 'module.disabled') {
 			// TODO Handle actions when this module is disabled.
 		} else if($event_type == 'module.enabled') {
@@ -410,6 +415,12 @@ class Project extends CRMEntity {
 			if($modcommentsModuleInstance && file_exists('modules/ModComments/ModComments.php')) {
 				include_once 'modules/ModComments/ModComments.php';
 				if(class_exists('ModComments')) ModComments::addWidgetTo(array('Project'));
+			}
+
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($modulename));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $modulename, 'PROJ', 1, 1, 1));
 			}
 		}
 	}
@@ -440,6 +451,7 @@ class Project extends CRMEntity {
              return;
          }
         $destinationModule = vtlib_purify($_REQUEST['destination_module']);
+		if(empty($destinationModule)) $destinationModule = $with_module;
         if (!is_array($with_crmid)) $with_crmid = Array($with_crmid);
         foreach($with_crmid as $relcrmid) {
             $child = CRMEntity::getInstance($destinationModule);
@@ -541,6 +553,82 @@ class Project extends CRMEntity {
 		$entries[0] = array("<a href='$fullGanttChartImageUrl' border='0' target='_blank'><img src='$thumbGanttChartImageUrl' border='0'></a>");
 
 		return array('header'=> $headers, 'entries'=> $entries);
+	}
+
+	/** Function to unlink an entity with given Id from another entity */
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log, $currentModule;
+
+		if($return_module == 'Accounts') {
+			$focus = new $return_module;
+			$entityIds = $focus->getRelatedContactsIds($return_id);
+			array_push($entityIds, $return_id);
+			$entityIds = implode(',', $entityIds);
+			$return_modules = "'Accounts','Contacts'";
+		} else {
+			$entityIds = $return_id;
+			$return_modules = "'".$return_module."'";
+		}
+
+		$query = 'DELETE FROM vtiger_crmentityrel WHERE (relcrmid='.$id.' AND module IN ('.$return_modules.') AND crmid IN ('.$entityIds.')) OR (crmid='.$id.' AND relmodule IN ('.$return_modules.') AND relcrmid IN ('.$entityIds.'))';
+		$this->db->pquery($query, array());
+
+		$sql = 'SELECT tabid, tablename, columnname FROM vtiger_field WHERE fieldid IN (SELECT fieldid FROM vtiger_fieldmodulerel WHERE module=? AND relmodule IN ('.$return_modules.'))';
+		$fieldRes = $this->db->pquery($sql, array($currentModule));
+		$numOfFields = $this->db->num_rows($fieldRes);
+
+		for ($i = 0; $i < $numOfFields; $i++) {
+			$tabId = $this->db->query_result($fieldRes, $i, 'tabid');
+			$tableName = $this->db->query_result($fieldRes, $i, 'tablename');
+			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
+			$relatedModule = vtlib_getModuleNameById($tabId);
+			$focusObj = CRMEntity::getInstance($relatedModule);
+
+			$updateQuery = "UPDATE $tableName SET $columnName=? WHERE $columnName IN ($entityIds) AND $focusObj->table_index=?";
+			$updateParams = array(null, $id);
+			$this->db->pquery($updateQuery, $updateParams);
+		}
+	}
+    
+    /**
+	 * Move the related records of the specified list of id's to the given record.
+	 * @param String This module name
+	 * @param Array List of Entity Id's from which related records need to be transfered
+	 * @param Integer Id of the the Record to which the related records are to be moved
+	 */
+	function transferRelatedRecords($module, $transferEntityIds, $entityId) {
+		global $adb,$log;
+		$log->debug("Entering function transferRelatedRecords ($module, $transferEntityIds, $entityId)");
+
+		$rel_table_arr = Array("ProjectTask"=>"vtiger_projecttask",'ProjectMilestone'=>'vtiger_projectmilestone',
+                                "Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel");
+
+		$tbl_field_arr = Array("vtiger_projecttask"=>"projecttaskid",'vtiger_projectmilestone'=>'projectmilestoneid',
+                                "vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid");
+
+		$entity_tbl_field_arr = Array("vtiger_projecttask"=>"projectid",'vtiger_projectmilestone'=>'projectid',
+                                    "vtiger_senotesrel"=>"crmid","vtiger_seattachmentsrel"=>"crmid");
+
+		foreach($transferEntityIds as $transferId) {
+			foreach($rel_table_arr as $rel_module=>$rel_table) {
+				$id_field = $tbl_field_arr[$rel_table];
+				$entity_id_field = $entity_tbl_field_arr[$rel_table];
+				// IN clause to avoid duplicate entries
+				$sel_result =  $adb->pquery("select $id_field from $rel_table where $entity_id_field=? " .
+						" and $id_field not in (select $id_field from $rel_table where $entity_id_field=?)",
+						array($transferId,$entityId));
+				$res_cnt = $adb->num_rows($sel_result);
+				if($res_cnt > 0) {
+					for($i=0;$i<$res_cnt;$i++) {
+						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
+						$adb->pquery("update $rel_table set $entity_id_field=? where $entity_id_field=? and $id_field=?",
+							array($entityId,$transferId,$id_field_value));
+					}
+				}
+			}
+		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
+		$log->debug("Exiting transferRelatedRecords...");
 	}
 
 }

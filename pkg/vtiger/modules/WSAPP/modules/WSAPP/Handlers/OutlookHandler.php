@@ -10,11 +10,12 @@
 require_once 'include/fields/DateTimeField.php';
 require_once 'modules/WSAPP/SyncServer.php';
 require_once 'modules/WSAPP/Handlers/SyncHandler.php';
+require_once 'modules/WSAPP/OutlookSyncServer.php';
 
 Class OutlookHandler extends SyncHandler {
 
     public function __construct($appkey){
-        $this->syncServer = new SyncServer();
+        $this->syncServer = new OutlookSyncServer();
         $this->key = $appkey;
     }
 
@@ -70,28 +71,24 @@ Class OutlookHandler extends SyncHandler {
             $record['time_start'] = date($timeFormat,strtotime($startTime));
 
             $record['due_date'] = date($dateFormat,strtotime($endTime));
-            $record['time_end'] = date($timeFormat,strtotime($endTime));
+            // Because there is no end time for Task module
+            if($module == 'Events')
+                $record['time_end'] = date($timeFormat,strtotime($endTime));
 
             $record['duration_hours'] = date('H',(strtotime($endTime)-strtotime($startTime)));
             $record['duration_minutes'] = date('i',(strtotime($endTime)-strtotime($startTime)));
 	
-			//TODO:Make the Oulook client not to send the activity type parameter
-			if($module=="Events"){
-				unset($record['activitytype']);
-			}
         }
         $record['modifiedtime'] = $record['utclastmodifiedtime'];
         return $record;
     }
-
 
     private function convertRecordToNativeFormat($module, $record){
         if($module == 'Events'){
             $record['start_time'] = $record['date_start']." ".$record['time_start'];
             $record['end_time'] = $record['due_date']." ".$record['time_end'];
         } else if($module == 'Calendar') {
-
-            $dformat = "Y-m-d H:i:s";
+                $dformat = "Y-m-d H:i:s";
 
             $record['start_time'] = date($dformat,strtotime($record['date_start']));
             $record['end_time'] = date($dformat,strtotime($record['due_date']));
@@ -99,11 +96,11 @@ Class OutlookHandler extends SyncHandler {
             // convert the start time and end time to user time zone as outlook does not take the datetime in utc
             $oldDateFormat = $this->user->date_format;
             $this->user->date_format = 'yyyy-mm-dd';
-            $startDateTimeField = new DateTimeField($record['start_time']);
-            $record['start_time'] = $startDateTimeField->getDBInsertDateTimeValue($this->user);
+				$dateTimeField = new DateTimeField($record['start_time']);
+				$record['start_time'] = $dateTimeField->getDisplayDateTimeValue($this->user);
 
-            $endDateTimeField = new DateTimeField($record['end_time']);
-            $record['end_time'] = $endDateTimeField->getDBInsertDateTimeValue($this->user);
+				$dateTimeField = new DateTimeField($record['end_time']);
+				$record['end_time'] = $dateTimeField->getDisplayDateTimeValue($this->user);
             $this->user->date_format = $oldDateFormat;
         }
         return $record;

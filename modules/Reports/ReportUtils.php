@@ -12,6 +12,8 @@
  * Function to get the field information from module name and field label
  */
 function getFieldByReportLabel($module, $label) {
+	$cacheLabel = VTCacheUtils::getReportFieldByLabel($module, $label);
+	if($cacheLabel) return $cacheLabel;
 
 	// this is required so the internal cache is populated or reused.
 	getColumnFields($module);
@@ -23,6 +25,7 @@ function getFieldByReportLabel($module, $label) {
 	foreach ($cachedModuleFields as $fieldInfo) {
 		$fieldLabel = str_replace(' ', '_', $fieldInfo['fieldlabel']);
 		if($label == $fieldLabel) {
+			VTCacheUtils::setReportFieldByLabel($module, $label, $fieldInfo);
 			return $fieldInfo;
 		}
 	}
@@ -52,7 +55,7 @@ function isReferenceUIType($uitype) {
  * @return String
  */
 function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $fieldName) {
-	global $current_user;
+	global $current_user, $default_charset;
 
 	$db = PearDatabase::getInstance();
 	$value = $valueArray[$fieldName];
@@ -74,6 +77,12 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 			$currency_value = $curid_value[1];
 			$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
 			if($value!='') {
+				if(($dbField->name == 'Products_Unit_Price')) { // need to do this only for Products Unit Price
+					if ($currency_id != 1) {
+						$currency_value = (float)$cur_sym_rate['rate'] * (float)$currency_value;
+					}
+				}
+
 				$formattedCurrencyValue = CurrencyField::convertToUserFormat($currency_value, null, true);
 				$fieldvalue = CurrencyField::appendCurrencySymbol($formattedCurrencyValue, $cur_sym_rate['symbol']);
 			}
@@ -107,8 +116,12 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		$fieldvalue = $date->getDisplayDateTimeValue();
 	} elseif( $fieldType == 'time' && !empty($value) && $field->getFieldName()
 			!= 'duration_hours') {
-		$date = new DateTimeField($value);
-		$fieldvalue = $date->getDisplayTime();
+		if($field->getFieldName() == "time_start" || $field->getFieldName() == "time_end") {
+			$date = new DateTimeField($value);
+			$fieldvalue = $date->getDisplayTime();
+		} else {
+			$fieldvalue = $value;
+		}
 	} elseif( $fieldType == "picklist" && !empty($value) ) {
 		if(is_array($picklistArray)) {
 			if(is_array($picklistArray[$dbField->name]) &&
@@ -141,7 +154,10 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		} else {
 			implode(', ', $translatedValueList);
 		}
-	}
+	} elseif ($fieldType == 'double') {
+        if($current_user->truncate_trailing_zeros == true)
+            $fieldvalue = decimalFormat($fieldvalue);
+    }
 	if($fieldvalue == "") {
 		return "-";
 	}
@@ -158,7 +174,11 @@ function getReportFieldValue ($report, $picklistArray, $dbField, $valueArray, $f
 		$fieldvalue = $date->getDisplayDateTimeValue();
 	}
 
-	return $fieldvalue;
+	// Added to render html tag for description fields
+	if($fieldInfo['uitype'] == '19' && ($module == 'Documents' || $module == 'Emails')) {
+		return $fieldvalue;
+	}
+	return htmlentities($fieldvalue, ENT_QUOTES, $default_charset);
 }
 
 ?>

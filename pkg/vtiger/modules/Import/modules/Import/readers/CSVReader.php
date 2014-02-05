@@ -8,9 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-require_once 'modules/Import/readers/FileReader.php';
-
-class Import_CSV_Reader extends Import_File_Reader {
+class Import_CSVReader_Reader extends Import_FileReader_Reader {
 
 	public function getFirstRowData($hasHeader=true) {
 		global $default_charset;
@@ -20,15 +18,15 @@ class Import_CSV_Reader extends Import_File_Reader {
 		$headers = array();
 		$firstRowData = array();
 		$currentRow = 0;
-		while($data = fgetcsv($fileHandler, 0, $this->userInputObject->get('delimiter'))) {
+		while($data = fgetcsv($fileHandler, 0, $this->request->get('delimiter'))) {
 			if($currentRow == 0 || ($currentRow == 1 && $hasHeader)) {
 				if($hasHeader && $currentRow == 0) {
 					foreach($data as $key => $value) {
-						$headers[$key] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+						$headers[$key] = $this->convertCharacterEncoding($value, $this->request->get('file_encoding'), $default_charset);
 					}
 				} else {
 					foreach($data as $key => $value) {
-						$firstRowData[$key] = $this->convertCharacterEncoding($value, $this->userInputObject->get('file_encoding'), $default_charset);
+						$firstRowData[$key] = $this->convertCharacterEncoding($value, $this->request->get('file_encoding'), $default_charset);
 					}
 					break;
 				}
@@ -63,19 +61,19 @@ class Import_CSV_Reader extends Import_File_Reader {
 			return false;
 		}
 
-		$fieldMapping = $this->userInputObject->get('field_mapping');
+		$fieldMapping = $this->request->get('field_mapping');
 
 		$i=-1;
-		while($data = fgetcsv($fileHandler, 0, $this->userInputObject->get('delimiter'))) {
+		while($data = fgetcsv($fileHandler, 0, $this->request->get('delimiter'))) {
 			$i++;
-			if($this->userInputObject->get('has_header') && $i == 0) continue;
+			if($this->request->get('has_header') && $i == 0) continue;
 			$mappedData = array();
 			$allValuesEmpty = true;
 			foreach($fieldMapping as $fieldName => $index) {
 				$fieldValue = $data[$index];
 				$mappedData[$fieldName] = $fieldValue;
-				if($this->userInputObject->get('file_encoding') != $default_charset) {
-					$mappedData[$fieldName] = $this->convertCharacterEncoding($fieldValue, $this->userInputObject->get('file_encoding'), $default_charset);
+				if($this->request->get('file_encoding') != $default_charset) {
+					$mappedData[$fieldName] = $this->convertCharacterEncoding($fieldValue, $this->request->get('file_encoding'), $default_charset);
 				}
 				if(!empty($fieldValue)) $allValuesEmpty = false;
 			}

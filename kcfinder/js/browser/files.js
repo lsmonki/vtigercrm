@@ -215,7 +215,11 @@ browser.returnFile = function(file) {
             this.opener.callBackMultiple([fileURL]);
         }
 
-    }
+    } else { // This condition added to handle image select in Email Templates of Email Campaign - sudheer
+		var imageURL = fileURL.replace(/\s/g,"%20");
+		window.opener.CKEDITOR.tools.callFunction(0, imageURL,'');
+		window.close();
+	}
 };
 
 browser.returnFiles = function(files) {

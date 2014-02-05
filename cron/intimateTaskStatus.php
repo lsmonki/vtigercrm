@@ -12,9 +12,9 @@ ini_set("include_path", "../");
 require('send_mail.php');
 require_once('config.php');
 require_once('include/utils/utils.php');
-require_once('include/language/en_us.lang.php');
-global $app_strings;
+
 // Email Setup
+global $adb;
 $emailresult = $adb->pquery("SELECT email1 from vtiger_users", array());
 $emailid = $adb->fetch_array($emailresult);
 $emailaddress = $emailid[0];
@@ -38,7 +38,7 @@ if($activevalue[0] == 1)
 	//Delayed Tasks Notification
 
 	//get all those activities where the status is not completed even after the passing of 24 hours
-	$today = date("Ymd"); 
+	$today = date("Ymd");
 	$result = $adb->pquery("select vtiger_activity.status,vtiger_activity.activityid,subject,(vtiger_activity.date_start +1),vtiger_crmentity.smownerid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where vtiger_crmentity.deleted=0 and vtiger_activity.status <> 'Completed' and activitytype='Task' and ".$today." > (vtiger_activity.date_start+1)", array());
 
 	while ($myrow = $adb->fetch_array($result))
@@ -51,8 +51,8 @@ if($activevalue[0] == 1)
 			$user_res = $adb->pquery('select user_name from vtiger_users where id=?',array($user_id));
 			$assigned_user = $adb->query_result($user_res,0,'user_name');
 		}
-		$mail_body = $app_strings['Dear_Admin_tasks_not_been_completed']." ".$app_strings['LBL_SUBJECT'].": ".$subject."<br> ".$app_strings['LBL_ASSIGNED_TO'].": ".$assigned_user."<br><br>".$app_strings['Task_sign'];
-	 	sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'].': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+		$mail_body = getTranslatedString('Dear_Admin_tasks_not_been_completed')." ".getTranslatedString('LBL_SUBJECT').": ".$subject."<br> ".getTranslatedString('LBL_ASSIGNED_TO').": ".$assigned_user."<br><br>".getTranslatedString('Task_sign');
+	 	sendmail($emailaddress,$emailaddress,getTranslatedString('Task_Not_completed').': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
@@ -68,9 +68,9 @@ if($activevalue[0] == 1)
 	{
 		$pot_id = $myrow['potentialid'];
 		$pot_name = $myrow['potentialname'];
-		$body_content = $app_strings['Dear_Team'].$app_strings['Dear_Team_Time_to_Party']."<br><br>".$app_strings['Potential_Id']." ".$pot_id;
-		$body_content .= $app_strings['Potential_Name']." ".$pot_name."<br><br>";
-		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+		$body_content = getTranslatedString('Dear_Team').getTranslatedString('Dear_Team_Time_to_Party')."<br><br>".getTranslatedString('Potential_Id')." ".$pot_id;
+		$body_content .= getTranslatedString('Potential_Name')." ".$pot_name."<br><br>";
+		sendmail($emailaddress,$emailaddress,getTranslatedString('Big_Deal_Closed_Successfully'),$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 //Pending tickets
@@ -85,7 +85,7 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$ticketid = $myrow['ticketid'];
-		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
+		sendmail($emailaddress,$emailaddress,getTranslatedString('Pending_Ticket_notification'),getTranslatedString('Kind_Attention').$ticketid .getTranslatedString('Thank_You_HelpDesk'),$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
@@ -101,7 +101,7 @@ $count = $adb->query_result($result,0,'count');
 //changes made to get too many tickets notification only when tickets count is greater than or equal to 5
 	if($count >= 5)
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+		sendmail($emailaddress,$emailaddress,getTranslatedString('Too_many_pending_tickets'),getTranslatedString('Dear_Admin_too_ many_tickets_pending'),$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
@@ -116,7 +116,7 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
+		sendmail($emailaddress,$emailaddress,getTranslatedString('Support_starting'),getTranslatedString('Hello_Support').$productname ."\n ".getTranslatedString('Congratulations'),$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
@@ -131,7 +131,7 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+		sendmail($emailaddress,$emailaddress,getTranslatedString('Support_Ending_Subject'),getTranslatedString('Support_Ending_Content').$productname.getTranslatedString('kindly_renew'),$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 

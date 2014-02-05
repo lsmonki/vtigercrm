@@ -91,7 +91,7 @@ class Assets extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('assetname', 'product');
+	var $mandatory_fields = Array('assetname', 'product', 'assigned_user_id');
 
 	// Callback function list during Importing
 	var $special_functions = Array('set_import_assigned_user');
@@ -105,7 +105,7 @@ class Assets extends CRMEntity {
 	 */
 	function __construct() {
 		global $log;
-		$this->column_fields = getColumnFields('Assets');
+		$this->column_fields = getColumnFields(get_class($this));
 		$this->db = PearDatabase::getInstance();
 		$this->log = $log;
 	}
@@ -216,12 +216,11 @@ class Assets extends CRMEntity {
 	function create_export_query($where)
 	{
 		global $current_user;
-		$thismodule = $_REQUEST['module'];
 
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery($thismodule, "detail_view");
+		$sql = getPermittedFieldsQuery('Assets', "detail_view");
 
 		$fields_list = getFieldsListFromQuery($sql);
 
@@ -386,6 +385,12 @@ class Assets extends CRMEntity {
 			$InvoiceInstance = Vtiger_Module::getInstance('Invoice');
 			$InvoiceInstance->setRelatedlist($assetInstance,$assetLabel,array(ADD),'get_dependents_list');
 
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active = 1", array($moduleName));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+			}
+
 		} else if($eventType == 'module.disabled') {
 		// TODO Handle actions when this module is disabled.
 		} else if($eventType == 'module.enabled') {
@@ -396,6 +401,12 @@ class Assets extends CRMEntity {
 		// TODO Handle actions before this module is updated.
 		} else if($eventType == 'module.postupdate') {
 			$this->addModuleToCustomerPortal();
+
+			$result = $adb->pquery("SELECT 1 FROM vtiger_modentity_num WHERE semodule = ? AND active =1 ", array($moduleName));
+			if (!($adb->num_rows($result))) {
+				//Initialize module sequence for the module
+				$adb->pquery("INSERT INTO vtiger_modentity_num values(?,?,?,?,?,?)", array($adb->getUniqueId("vtiger_modentity_num"), $moduleName, 'ASSET', 1, 1, 1));
+			}
 		}
  	}
 
@@ -417,6 +428,44 @@ class Assets extends CRMEntity {
 				$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($assetsTabId,'showrelatedinfo',1)");
 			}
 		}
+	}
+    
+    /**
+	 * Move the related records of the specified list of id's to the given record.
+	 * @param String This module name
+	 * @param Array List of Entity Id's from which related records need to be transfered
+	 * @param Integer Id of the the Record to which the related records are to be moved
+	 */
+	function transferRelatedRecords($module, $transferEntityIds, $entityId) {
+		global $adb,$log;
+		$log->debug("Entering function transferRelatedRecords ($module, $transferEntityIds, $entityId)");
+
+		$rel_table_arr = Array("Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel");
+
+		$tbl_field_arr = Array("vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid");
+
+		$entity_tbl_field_arr = Array("vtiger_senotesrel"=>"crmid","vtiger_seattachmentsrel"=>"crmid");
+
+		foreach($transferEntityIds as $transferId) {
+			foreach($rel_table_arr as $rel_module=>$rel_table) {
+				$id_field = $tbl_field_arr[$rel_table];
+				$entity_id_field = $entity_tbl_field_arr[$rel_table];
+				// IN clause to avoid duplicate entries
+				$sel_result =  $adb->pquery("select $id_field from $rel_table where $entity_id_field=? " .
+						" and $id_field not in (select $id_field from $rel_table where $entity_id_field=?)",
+						array($transferId,$entityId));
+				$res_cnt = $adb->num_rows($sel_result);
+				if($res_cnt > 0) {
+					for($i=0;$i<$res_cnt;$i++) {
+						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
+						$adb->pquery("update $rel_table set $entity_id_field=? where $entity_id_field=? and $id_field=?",
+							array($entityId,$transferId,$id_field_value));
+					}
+				}
+			}
+		}
+		parent::transferRelatedRecords($module, $transferEntityIds, $entityId);
+		$log->debug("Exiting transferRelatedRecords...");
 	}
 }
 ?>

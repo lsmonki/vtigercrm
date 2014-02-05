@@ -26,19 +26,12 @@
 		 * @param $when The time after which the task should be executed. This is 
 		 *        an optional value with a default value of 0.
 		 */
-		public function queueTask($taskId, $entityId, $when=0){
+		public function queueTask($taskId, $entityId, $when=0, $taskContents = false){
 			$adb = $this->adb;
-			$result = $adb->pquery("select * from com_vtiger_workflowtask_queue 
-				where task_id=? and entity_id=?", array($taskId, $entityId));
-			if($adb->num_rows($result)==1){
-				return false;
-			}else{
-				$adb->pquery("insert into com_vtiger_workflowtask_queue (task_id, entity_id, do_after) 
-						  	values (?,?,?)", array($taskId, $entityId, $when));
-				return true;
-			}
+			$adb->pquery('INSERT INTO com_vtiger_workflowtask_queue (task_id, entity_id, do_after, task_contents) VALUES(?, ?, ?, ?)',
+																array($taskId, $entityId, $when, $taskContents));
+			return true;
 		}
-		
 		
 		/**
 		 * Get a list of taskId/entityId pairs ready for execution.
@@ -51,11 +44,11 @@
 		public function getReadyTasks(){
 			$adb = $this->adb;
 			$time = time();
-			$result = $adb->pquery("select task_id, entity_id from com_vtiger_workflowtask_queue where do_after<?", array($time));
+			$result = $adb->pquery('SELECT task_id, entity_id, task_contents FROM com_vtiger_workflowtask_queue WHERE do_after<?', array($time));
 			$it =  new SqlResultIterator($adb, $result);
 			$arr = array();
 			foreach($it as $row){
-				$arr[]=array($row->task_id, $row->entity_id);
+				$arr[]=array($row->task_id, $row->entity_id, $row->task_contents);
 			}
 			$adb->pquery("delete from com_vtiger_workflowtask_queue where do_after<?", array($time));
 			return $arr;

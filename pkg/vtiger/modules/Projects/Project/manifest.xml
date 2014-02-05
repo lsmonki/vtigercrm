@@ -4,9 +4,9 @@
 <name>Project</name>
 <label>Project</label>
 <parent>Support</parent>
-<version>2.7</version>
+<version>3.3</version>
 <dependencies>
-<vtiger_version>5.2.0</vtiger_version>
+<vtiger_version>6.0.0rc</vtiger_version>
 </dependencies>
 <tables>
 <table>
@@ -506,7 +506,6 @@
 <presence>0</presence>
 <actions>
 <action>ADD</action>
-<action>SELECT</action>
 </actions>
 <relatedmodule>ProjectTask</relatedmodule>
 </relatedlist>
@@ -517,7 +516,6 @@
 <presence>0</presence>
 <actions>
 <action>ADD</action>
-<action>SELECT</action>
 </actions>
 <relatedmodule>ProjectMilestone</relatedmodule>
 </relatedlist>
@@ -545,7 +543,7 @@
 </relatedlist>
 <relatedlist>
 <function>get_related_list</function>
-<label>Trouble Tickets</label>
+<label>HelpDesk</label>
 <sequence>5</sequence>
 <presence>0</presence>
 <actions>
@@ -562,6 +560,9 @@
 <linkurl><![CDATA[index.php?module=ProjectTask&action=EditView&projectid=$RECORD$&return_module=Project&return_action=DetailView&return_id=$RECORD$]]></linkurl>
 <linkicon><![CDATA[]]></linkicon>
 <sequence>0</sequence>
+<handler_path><![CDATA[modules/ProjectTask/ProjectTask.php]]></handler_path>
+<handler_class><![CDATA[ProjectTask]]></handler_class>
+<handler><![CDATA[isLinkPermitted]]></handler>
 </customlink>
 <customlink>
 <linktype>DETAILVIEWBASIC</linktype>
@@ -569,6 +570,9 @@
 <linkurl><![CDATA[index.php?module=Documents&action=EditView&return_module=Project&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$]]></linkurl>
 <linkicon><![CDATA[]]></linkicon>
 <sequence>1</sequence>
+<handler_path><![CDATA[modules/Documents/Documents.php]]></handler_path>
+<handler_class><![CDATA[Documents]]></handler_class>
+<handler><![CDATA[isLinkPermitted]]></handler>
 </customlink>
 </customlinks>
 </module>

@@ -10,20 +10,26 @@
 // Switch the working directory to base
 chdir(dirname(__FILE__) . '/../..');
 
-include_once 'include/Zend/Json.php';
-include_once 'vtlib/Vtiger/Module.php';
-include_once 'include/utils/VtlibUtils.php';
+require_once 'config.php';
+if (file_exists('config_override.php')) {
+    include_once 'config_override.php';
+}
+
+include_once 'includes/main/WebUI.php';
+
 include_once 'include/Webservices/Create.php';
 include_once 'modules/Webforms/model/WebformsModel.php';
 include_once 'modules/Webforms/model/WebformsFieldModel.php';
-include_once 'include/QueryGenerator/QueryGenerator.php';
 
 class Webform_Capture {
 	
 	function captureNow($request) {
 		$returnURL = false;
 		try {
-
+			
+			foreach ($request as $key=>$value) {
+				$request[utf8_decode($key)] = $value;
+			}
 			if(!vtlib_isModuleActive('Webforms')) throw new Exception('webforms is not active');
 			
 			$webform = Webforms_Model::retrieveWithPublicId(vtlib_purify($request['publicid']));
@@ -43,11 +49,13 @@ class Webform_Capture {
 				if($webformField->getDefaultValue()!=null){
 					$parameters[$webformField->getFieldName()] = decode_html($webformField->getDefaultValue());
 				}else{
-					if(is_array(vtlib_purify($request[$webformField->getNeutralizedField()]))){
-						$fieldData=implode(" |##| ",vtlib_purify($request[$webformField->getNeutralizedField()]));
+					$webformNeutralizedField = html_entity_decode($webformField->getNeutralizedField());
+					if(is_array(vtlib_purify($request[$webformNeutralizedField]))){
+						$fieldData=implode(" |##| ",vtlib_purify($request[$webformNeutralizedField]));
 					}
 					else{
-						$fieldData=vtlib_purify($request[$webformField->getNeutralizedField()]);
+						$fieldData=vtlib_purify($request[$webformNeutralizedField]);
+						$fieldData = decode_html($fieldData);
 					}
 				
 					$parameters[$webformField->getFieldName()] = stripslashes($fieldData);
@@ -84,7 +92,12 @@ class Webform_Capture {
 				echo $response;
 			}
 		} else {
-			header(sprintf("Location: http://%s?%s=%s", $url, ($success? 'success' : 'error'), ($success? $success: $failure)));
+			$pos = strpos($url, 'http');
+			if($pos !== false){
+				header(sprintf("Location: %s?%s=%s", $url, ($success? 'success' : 'error'), ($success? $success: $failure)));
+			}else{
+				header(sprintf("Location: http://%s?%s=%s", $url, ($success? 'success' : 'error'), ($success? $success: $failure)));
+			}
 		}
 	}
 }

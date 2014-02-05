@@ -457,7 +457,9 @@ Class ChartUtils {
 							$tablename = 'vtiger_crmentity';
 							$colname = 'smownerid';
 						}
-
+                        if ($fieldname == 'serviceid' && in_array($module, getInventoryModules())) {
+                            $fieldname = 'productid';
+                        }
 						if ($module == 'Calendar') {
 							$link_val = "index.php?module=" . $module . "&action=ListView&search_text=" . $esc_search_str . "&search_field=" . $fieldname . "&searchtype=BasicSearch&query=true&operator=e&viewname=" . $cvid;
 						} else {

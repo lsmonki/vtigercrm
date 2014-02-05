@@ -15,6 +15,7 @@ include_once('include/utils/utils.php');
  * @package vtlib
  */
 class Vtiger_Utils {
+    protected static $logFileName = 'vtigermodule.log';
 
 	/**
 	 * Check if given value is a number or not
@@ -27,7 +28,7 @@ class Vtiger_Utils {
 	/**
 	 * Implode the prefix and suffix as string for given number of times
 	 * @param String prefix to use
-	 * @param Integer Number of times 
+	 * @param Integer Number of times
 	 * @param String suffix to use (optional)
 	 */
 	static function implodestr($prefix, $count, $suffix=false) {
@@ -78,8 +79,8 @@ class Vtiger_Utils {
 		return true;
 	}
 
-	/** 
-	 * Function to check the file access is made within web root directory. 
+	/**
+	 * Function to check the file access is made within web root directory.
 	 * @param String File path to check
 	 * @param Boolean False to avoid die() if check fails
 	 */
@@ -112,13 +113,13 @@ class Vtiger_Utils {
 	}
 
 	/**
-	 * Log the debug message 
+	 * Log the debug message
 	 * @param String Log message
 	 * @param Boolean true to append end-of-line, false otherwise
 	 */
 	static function Log($message, $delimit=true) {
 		global $Vtiger_Utils_Log, $log;
-		
+
 		$log->debug($message);
 		if(!isset($Vtiger_Utils_Log) || $Vtiger_Utils_Log == false) return;
 
@@ -149,10 +150,10 @@ class Vtiger_Utils {
 		$adb->dieOnError = false;
 
 		$tablename = Vtiger_Utils::SQLEscape($tablename);
-		$tablecheck = $adb->pquery("SELECT 1 FROM $tablename LIMIT 1", array());
+		$tablecheck = $adb->pquery("SHOW TABLES LIKE ?", array($tablename));
 
 		$tablePresent = true;
-		if(empty($tablecheck))
+		if(empty($tablecheck) || $adb->num_rows($tablecheck) === 0)
 			$tablePresent = false;
 
 		$adb->dieOnError = $old_dieOnError;
@@ -162,7 +163,7 @@ class Vtiger_Utils {
 	/**
 	 * Create table (supressing failure)
 	 * @param String tablename to create
-	 * @param String table creation criteria like '(columnname columntype, ....)' 
+	 * @param String table creation criteria like '(columnname columntype, ....)'
 	 * @param String Optional suffix to add during table creation
 	 * <br>
 	 * will be appended to CREATE TABLE $tablename SQL
@@ -184,7 +185,7 @@ class Vtiger_Utils {
 			$sql .= $suffixTableMeta;
 		}
 		$adb->pquery($sql, array());
-		$adb->dieOnError = $org_dieOnError;	
+		$adb->dieOnError = $org_dieOnError;
 	}
 
 	/**
@@ -195,14 +196,14 @@ class Vtiger_Utils {
 	 */
 	static function AlterTable($tablename, $criteria) {
 		global $adb;
-		$adb->pquery("ALTER TABLE " . $tablename . $criteria, array());
+		$adb->query("ALTER TABLE " . $tablename . $criteria);
 	}
 
 	/**
 	 * Add column to existing table
 	 * @param String tablename to alter
 	 * @param String columnname to add
-	 * @param String columntype (criteria like 'VARCHAR(100)') 
+	 * @param String columntype (criteria like 'VARCHAR(100)')
 	 */
 	static function AddColumn($tablename, $columnname, $criteria) {
 		global $adb;
@@ -254,11 +255,52 @@ class Vtiger_Utils {
 	 * @param String SQL String
 	 */
 	static function IsDestructiveSql($sql) {
-		if(preg_match('/(DROP TABLE)|(DROP COLUMN)|(DELETE FROM)/', 
+		if(preg_match('/(DROP TABLE)|(DROP COLUMN)|(DELETE FROM)/',
 			strtoupper($sql))) {
 			return true;
 		}
 		return false;
 	}
+
+    /**
+     * funtion to log the exception messge to module.log file
+     * @global type $site_URL
+     * @param <string> $module name of the log file and It should be a alphanumeric string
+     * @param <Exception>/<string> $exception Massage show in the log ,It should be a string or Exception object
+     * @param <array> $extra extra massages need to be displayed
+     * @param <boolean> $backtrace flag to enable or disable backtrace in log
+     * @param <boolean> $request flag to enable or disable request in log
+     */
+    static function ModuleLog($module, $mixed, $extra = array()) {
+        if (ALLOW_MODULE_LOGGING) {
+            global $site_URL;
+            $date = date('Y-m-d H:i:s');
+            $log = array($site_URL,$module, $date);
+            if ($mixed instanceof Exception) {
+                array_push($log, $mixed->getMessage());
+                array_push($log, $mixed->getTraceAsString());
+            } else {
+                array_push($log, $mixed);
+                array_push($log, "");
+            }
+            if (isset($_REQUEST)) {
+                array_push($log, json_encode($_REQUEST));
+            } else {
+                array_push($log, "");
+            };
+
+            if ($extra) {
+                if (is_array($extra))
+                    $extra = json_encode($extra);
+                array_push($log, $extra);
+            } else {
+                array_push($log, "");
+            }
+            $fileName =self::$logFileName;
+            $fp = fopen("logs/$fileName", 'a+');
+            fputcsv($fp, $log);
+            fclose($fp);
+        }
+    }
 }
 ?>

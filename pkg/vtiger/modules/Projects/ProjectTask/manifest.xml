@@ -4,9 +4,9 @@
 <name>ProjectTask</name>
 <label>ProjectTask</label>
 <parent>Support</parent>
-<version>2.7</version>
+<version>3.1</version>
 <dependencies>
-<vtiger_version>5.2.0</vtiger_version>
+<vtiger_version>6.0.0rc</vtiger_version>
 </dependencies>
 <tables>
 <table>
@@ -461,6 +461,9 @@
 <linkurl><![CDATA[index.php?module=Documents&action=EditView&return_module=ProjectTask&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$]]></linkurl>
 <linkicon><![CDATA[]]></linkicon>
 <sequence>0</sequence>
+<handler_path><![CDATA[modules/Documents/Documents.php]]></handler_path>
+<handler_class><![CDATA[Documents]]></handler_class>
+<handler><![CDATA[isLinkPermitted]]></handler>
 </customlink>
 </customlinks>
 </module>

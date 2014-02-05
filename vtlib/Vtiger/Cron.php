@@ -22,6 +22,7 @@ class Vtiger_Cron {
     static $STATUS_DISABLED = 0;
     static $STATUS_ENABLED = 1;
     static $STATUS_RUNNING = 2;
+	static $STATUS_COMPLETED = 3;
     protected $data;
     protected $bulkMode = false;
 
@@ -33,6 +34,15 @@ class Vtiger_Cron {
         self::$instanceCache[$this->getName()] = $this;
     }
 
+    /**
+     * set the value to the data
+     * @param type $value,$key
+     */
+    protected function set($key,$value){
+        $this->data[$key] = $value;
+        return $this;
+    }
+    
     /**
      * Get id reference of this instance.
      */
@@ -146,9 +156,10 @@ class Vtiger_Cron {
 
         if (!$this->isDisabled()) {
             // Take care of last time (end - on success, start - if timedout)
-            $lastTime = ($this->getLastEnd() > 0) ? $this->getLastEnd() : $this->getLastStart();
+            // Take care to start the cron im
+            $lastTime = ($this->getLastStart() > 0) ? $this->getLastStart() : $this->getLastEnd();
             $elapsedTime = time() - $lastTime;
-            $runnable = ($elapsedTime >= $this->getFrequency());
+            $runnable = ($elapsedTime >= ($this->getFrequency()-60));
         }
         return $runnable;
     }
@@ -208,16 +219,18 @@ class Vtiger_Cron {
      * Mark this instance as running.
      */
     function markRunning() {
-        self::querySilent('UPDATE vtiger_cron_task SET status=?, laststart=?, lastend=? WHERE id=?', array(self::$STATUS_RUNNING, time(), 0, $this->getId()));
-        return $this;
+        $time = time();
+        self::querySilent('UPDATE vtiger_cron_task SET status=?, laststart=?, lastend=? WHERE id=?', array(self::$STATUS_RUNNING, $time, 0, $this->getId()));
+        return $this->set('laststart',$time);
     }
 
     /**
      * Mark this instance as finished.
      */
     function markFinished() {
-        self::querySilent('UPDATE vtiger_cron_task SET status=?, lastend=? WHERE id=?', array(self::$STATUS_ENABLED, time(), $this->getId()));
-        return $this;
+        $time = time();
+        self::querySilent('UPDATE vtiger_cron_task SET status=?, lastend=? WHERE id=?', array(self::$STATUS_ENABLED, $time, $this->getId()));
+        return $this->set('lastend',$time);
     }
 
     /**
@@ -264,7 +277,7 @@ class Vtiger_Cron {
                 Vtiger_Utils::CreateTable('vtiger_cron_task',
                         '(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 					name VARCHAR(100) UNIQUE KEY, handler_file VARCHAR(100) UNIQUE KEY,
-					frequency int, laststart long, lastend long, status int,module VARCHAR(100),
+					frequency int, laststart int(11) unsigned, lastend int(11) unsigned, status int,module VARCHAR(100),
                                         sequence int,description TEXT )',true);
             }
             self::$schemaInitialized = true;
@@ -382,5 +395,86 @@ class Vtiger_Cron {
         }
         return $instances;
     }
+	
+	/*
+	 * Fuction uses to log the cron when it is in running 
+	 *  for long time
+	 *  @Params <boolean> Completed - flag when then the cron is completed after long time
+	 */
+	public function log($completed = false){
+		global $adb;
+		self::initializeLogSchema();
+		 $result = self::querySilent('SELECT * from vtiger_cron_log where start = ? AND name=?',array($this->getLastStart(),$this->getName()));
+		  if ($result && $adb->num_rows($result) > 0) {
+			  $row = $adb->fetch_array($result);
+			  if($completed){
+				  self::querySilent('UPDATE vtiger_cron_log set status = ?,end = ? where id = ?',array(self::$STATUS_COMPLETED,time(),$row['id']));
+			  } else{
+				  
+				 self::querySilent('UPDATE vtiger_cron_log set iteration = ? where id = ?',array($row['iteration']+1,$row['id']));
+			  }
+		  } else {
+			  self::querySilent('INSERT INTO vtiger_cron_log (name,start,iteration,status) VALUES(?,?,?,?)',
+								 array($this->getName(),$this->getLastStart(),1,self::$STATUS_RUNNING));
+		  }
+		 
+	 }
+	 
+	 /*
+	  *  Function to verify where the log Mail is sent are not
+	  */
+	 public function isSentLogMail(){
+		 global $adb;
+		 self::initializeLogSchema();
+		 $result = self::querySilent('SELECT 1 from vtiger_cron_log where start = ? AND name=? AND iteration >= 4 ',array($this->getLastStart(),$this->getName()));
+		 if ($result && $adb->num_rows($result)) {
+			 return true;
+		 }	else {
+			return false;
+		 }
+	 }
+	 
+	 /*
+	  *  Function to get number of times a Cron task was skipped due to running state
+	  *		@returns <int> Iterations
+	  */
+	 public function getIterations(){
+		 global $adb;
+		 self::initializeLogSchema();
+		 $result = self::querySilent('SELECT iteration from vtiger_cron_log where start = ? AND name=?',array($this->getLastStart(),$this->getName()));
+		 if ($result && $adb->num_rows($result)) {
+			 $row = $adb->fetch_array($result);
+			 return $row['iteration'];
+		 }
+	 }
+	 
+	 /*
+	  *  Function to get time to Complete the cron when it take 
+	  *		@returns <string> competed time in hours and mins
+	  */
+	 public function getCompletedTime(){
+		 global $adb;
+		 self::initializeLogSchema();
+		 $result = self::querySilent('SELECT start,end from vtiger_cron_log where start = ? AND name=?',array($this->getLastStart(),$this->getName()));
+		 if ($result && $adb->num_rows($result)) {
+			$row = $adb->fetch_array($result);
+			$duration = $row['end'] - $row['start'];
+			$hours = (int) ($duration / 60);
+			$minutes = $duration - ($hours * 60);
+			
+			return "$hours hours and $minutes minutes";
+		}
+	 }
+
+	 /*
+	  *  Function to Create table for cron logs
+	  */
+	 public static function initializeLogSchema(){
+		 if(!Vtiger_Utils::CheckTable('vtiger_cron_log')) {
+                Vtiger_Utils::CreateTable('vtiger_cron_log',
+                        '(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+					name VARCHAR(100),start int(11) unsigned,end int(11) unsigned,iteration int,status int,logmessage TEXT)',true);
+            }
+	 }
 }
 ?>

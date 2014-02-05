@@ -27,20 +27,17 @@ $now_action = vtlib_purify($_REQUEST['action']);
 
 $sql = "select * from vtiger_report where reportid=?";
 $res = $adb->pquery($sql, array($reportid));
-$Report_ID = $adb->query_result($res,0,'reportid');
-if(empty($folderid)) {
-	$folderid = $adb->query_result($res,0,'folderid');
-}
-$reporttype = $adb->query_result($res,0,'reporttype');
-$showCharts = false;
-if($reporttype == 'summary'){
-	$showCharts = true;
-}
-//END Customization
+
 $numOfRows = $adb->num_rows($res);
 
 if($numOfRows > 0) {
-
+	$Report_ID = $adb->query_result($res,0,'reportid');
+	if(empty($folderid)) {
+		$folderid = $adb->query_result($res,0,'folderid');
+	}
+	$reporttype = $adb->query_result($res,0,'reporttype');
+	$showCharts = false;
+	
 	global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
 	//added to fix the ticket #5117
 	global $current_user;
@@ -67,7 +64,7 @@ if($numOfRows > 0) {
 	}
 
 	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true) {
-		$oReportRun = new ReportRun($reportid);
+		$oReportRun = ReportRun::getInstance($reportid);
 
 		require_once 'include/Zend/Json.php';
 		$json = new Zend_Json();
@@ -82,44 +79,11 @@ if($numOfRows > 0) {
 		}
 
 		$filtersql = $oReportRun->RunTimeAdvFilter($advft_criteria,$advft_criteria_groups);
+		
+		$showCharts = (($reporttype == 'summary') && $oReportRun->hasGroupingList())? true : false;
 
 		$list_report_form = new vtigerCRM_Smarty;
-		//Monolithic phase 6 changes
-		if($showCharts == true){
-			$list_report_form->assign("SHOWCHARTS",$showCharts);
-			require_once 'modules/Reports/CustomReportUtils.php';
-			require_once 'include/ChartUtils.php';
-
-			$groupBy = $oReportRun->getGroupingList($reportid);
-			if(!empty($groupBy)){
-				foreach ($groupBy as $key => $value) {
-					//$groupByConditon = explode(" ",$value);
-					//$groupByNew = explode("'",$groupByConditon[0]);
-					list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$key);
-					list($module,$field)= split("_",$module_field);
-					$fieldDetails = $key;
-					break;
-				}
-				//$groupByField = $oReportRun->GetFirstSortByField($reportid);
-				$queryReports = CustomReportUtils::getCustomReportsQuery($Report_ID,$filtersql);
-				$queryResult = $adb->pquery($queryReports,array());
-				//ChartUtils::generateChartDataFromReports($queryResult, strtolower($groupByNew[1]));
-                if($adb->num_rows($queryResult)){
-					$pieChart = ChartUtils::getReportPieChart($queryResult, strtolower($module_field),$fieldDetails,$reportid);
-					$barChart = ChartUtils::getReportBarChart($queryResult, strtolower($module_field),$fieldDetails,$reportid);
-					$list_report_form->assign("PIECHART",$pieChart);
-					$list_report_form->assign("BARCHART",$barChart);
-				}
-				else{
-					$showCharts = false;
-				}
-			}
-			else{
-				$showCharts = false;
-			}
-			$list_report_form->assign("SHOWCHARTS",$showCharts);
-		}
-		//Monolithic Changes Ends
+		$list_report_form->assign("SHOWCHARTS",$showCharts);
 
         // Performance Optimization: Direct output of the report result
         if($_REQUEST['submode'] == 'generateReport' && empty($advft_criteria)) {

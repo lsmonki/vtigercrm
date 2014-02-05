@@ -12,6 +12,9 @@ require_once 'include/Webservices/Retrieve.php';
 require_once 'include/Webservices/Create.php';
 require_once 'include/Webservices/Delete.php';
 require_once 'include/Webservices/DescribeObject.php';
+require_once 'includes/Loader.php';
+vimport ('includes.runtime.Globals');
+vimport ('includes.runtime.BaseModel');
 
 function vtws_convertlead($entityvalues, $user) {
 
@@ -75,8 +78,9 @@ function vtws_convertlead($entityvalues, $user) {
 			if ($entityvalue['name'] == 'Potentials') {
 				if (!empty($entityIds['Accounts'])) {
 					$entityObjectValues['related_to'] = $entityIds['Accounts'];
-				} else {
-					$entityObjectValues['related_to'] = $entityIds['Contacts'];
+				}
+				if (!empty($entityIds['Contacts'])) {
+					$entityObjectValues['contact_id'] = $entityIds['Contacts'];
 				}
 			}
 
@@ -102,7 +106,8 @@ function vtws_convertlead($entityvalues, $user) {
 					$entityIds[$entityName] = $entityRecord['id'];
 				}
 			} catch (Exception $e) {
-				return null;
+				throw new WebServiceException(WebServiceErrorCode::$UNKNOWNOPERATION,
+						$e->getMessage().' : '.$entityvalue['name']);
 			}
 		}
 	}
@@ -261,6 +266,23 @@ function vtws_updateConvertLeadStatus($entityIds, $leadId, $user) {
 		$crmentityUpdateSql = "UPDATE vtiger_crmentity SET modifiedtime=?, modifiedby=? WHERE crmid=?";
 		$adb->pquery($crmentityUpdateSql, array($leadModifiedTime, $user->id, $leadIdComponents[1]));
 	}
+    $moduleArray = array('Accounts','Contacts','Potentials');
+
+    foreach($moduleArray as $module){
+        if(!empty($entityIds[$module])) {
+            $idComponents = vtws_getIdComponents($entityIds[$module]);
+            $id = $idComponents[1];
+            $webserviceModule = vtws_getModuleHandlerFromName($module, $user);
+            $meta = $webserviceModule->getMeta();
+            $fields = $meta->getModuleFields();
+            $field = $fields['isconvertedfromlead'];
+            $tablename = $field->getTableName();
+            $tableList = $meta->getEntityTableIndexList();
+            $tableIndex = $tableList[$tablename];
+            $adb->pquery("UPDATE $tablename SET isconvertedfromlead = ? WHERE $tableIndex = ?",array(1,$id));
+        }
+    }
+
 }
 
 ?>
