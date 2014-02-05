@@ -193,6 +193,26 @@ $languageStrings = array(
 	
 	'LBL_TRANSFER_RECORDS_TO_USER' => 'Transfer records to user',
 	'LBL_USER_TO_BE_DELETED' => 'User to be Deleted',
+	'LBL_ALMOST_THERE'	=>	'Almost there!',
+	'LBL_ABOUT_ME'		=>	'About Me',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(We promise to keep this private)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(All fields below are required)',
+	'LBL_GET_STARTED'	=> 'Get Started',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Your Contact Number',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Where are you from?',
+	'LBL_SELECT_COUNTRY'	=> 'Select Country',
+	'LBL_COMPANY_SIZE'		=> 'Company Size',
+	'LBL_JOB_TITLE'			=> 'Job Title',
+	'LBL_DEPARTMENT'		=> 'Department',
+	'LBL_BASE_CURRENCY'		=> 'Base Currency',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Choose Base Currency',
+	'LBL_OPERATING_CURRENCY'	=> 'Base currency cannot be modified later. Select your operating currency',
+	'LBL_LANGUAGE' => 'Language',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Choose Language',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Choose Timezone',
+	'LBL_DATE_FORMAT'		=> 'Date Format',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Choose Date Format',
+	'LBL_PHONE'	=> 'Phone',
 );
 
 $jsLanguageStrings = array(
