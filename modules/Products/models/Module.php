@@ -89,7 +89,7 @@ class Products_Module_Model extends Vtiger_Module_Model {
 		if(!empty($searchValue) && empty($parentId) && empty($parentModule) && (in_array($relatedModule, getInventoryModules()))) {
 			$matchingRecords = Products_Record_Model::getSearchResult($searchValue, $this->getName());
 		}else {
-			parent::searchRecord($searchValue);
+			$matchingRecords = parent::searchRecord($searchValue);
 		}
 
 		return $matchingRecords;
