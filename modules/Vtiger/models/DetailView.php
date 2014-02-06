@@ -191,7 +191,8 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 					'linktype' => 'DETAILVIEWRELATED',
 					'linklabel' => $relation->get('label'),
 					'linkurl' => $relation->getListUrl($recordModel),
-					'linkicon' => ''
+					'linkicon' => '',
+					'relatedModuleName' => $relation->get('relatedModuleName') 
 			);
 			$relatedLinks[] = $link;
 		}

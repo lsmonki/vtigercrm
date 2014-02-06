@@ -283,5 +283,12 @@ class Vtiger_Link_Model extends Vtiger_Link {
         
 		return $linkModels;
 	}
+	/** 
+	* Function to get the relatedModuleName 
+	* @return <String> 
+	*/ 
+   public function getRelatedModuleName() { 
+		return $this->relatedModuleName; 
+	} 
 
 }
