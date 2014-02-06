@@ -38,11 +38,11 @@
 				{/if}
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 				<th class="{$WIDTHTYPE}">
-					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
+					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $TARGET_MODULE)}
 						{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE)}">{/if}</a>
 				</th>
 				{/foreach}
-				<th class="{$WIDTHTYPE}">{vtranslate('Action', $MODULE_NAME)}</th>
+				<th class="{$WIDTHTYPE}">{vtranslate('LBL_ACTION', $MODULE_NAME)}</th>
 			</tr>
 		</thead>
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=popupListView}
@@ -72,10 +72,10 @@
 			{/foreach}
 			<td class="listViewEntryValue {$WIDTHTYPE}">
 				{if $LISTVIEW_ENTRY->get('subProducts') eq true}
-					<a class="subproducts"><b>{vtranslate('Sub Products',$MODULE_NAME)}</b></a>
+					<a class="subproducts"><b>{vtranslate('LBL_SUB_PRODUCTS',$MODULE_NAME)}</b></a>
 					<!--<img class="lineItemPopup cursorPointer alignMiddle" data-popup="ProductsPopup" title="{vtranslate('Products',$MODULE)}" data-module-name="Products" data-field-name="productid" src="{vimage_path('Products.png')}"/>-->
 				{else} 
-					{vtranslate('LBL_NOT_A_BUNDLE',$MODULE_NAME)}
+					{vtranslate('LBL_NOT_A_BUNDLE',$MODULE)}
 				{/if}
 			</td>
 		</tr>

@@ -27,4 +27,7 @@ $languageStrings = array(
 	'Paid'                         => 'Ödendi'                     , 
 	'AutoCreated'                  => 'AutoCreated'                 , 
 	'Cancel'                       => 'İptal'                      , 
+	'LBL_NOT_A_BUNDLE' => 'Değil bir Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Alt Ürünler',
+	'LBL_ACTION'	=> 'Eylem',
 );

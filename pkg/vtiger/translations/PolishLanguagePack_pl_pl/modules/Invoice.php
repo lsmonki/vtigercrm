@@ -41,6 +41,9 @@ $languageStrings = array(
 	'LBL_THIS' => 'Ta',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ten produkt/usługa został/a usunięta, spróbuj zastąpić ją innym produktem/usługą.',
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Ta linia została usunięta w systemie, usuń ją z rekordu.',
+	'LBL_NOT_A_BUNDLE' => 'Pakiet nie',
+	'LBL_SUB_PRODUCTS'	=> 'Produkty cząstkowe',
+	'LBL_ACTION'	=> 'Akcja',
 );
 
 $jsLanguageStrings = array(

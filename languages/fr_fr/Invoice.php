@@ -43,4 +43,7 @@ $languageStrings = array(
 	'Tax' => 'Taxe',
 	'Contact Name' => 'Nom contact',
 	'Grand Total:' => 'Total:',
+	'LBL_NOT_A_BUNDLE' => 'Pas Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Produits sous',
+	'LBL_ACTION'	=> 'Action',
 );

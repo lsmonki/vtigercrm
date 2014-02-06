@@ -88,5 +88,4 @@ $languageStrings = array(
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'Dodaj do cenników',
 	'LBL_CONVERSION_RATE' => 'Przelicznik',
-	'LBL_NOT_A_BUNDLE' => 'Poza pakietem',
 );

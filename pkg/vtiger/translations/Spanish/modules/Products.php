@@ -80,5 +80,4 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Cuaderno espiral',
 	'Sq Ft'                        => 'm<sup>2</sup>',
 	'LBL_CONVERSION_RATE' => 'Tasa Conversión',
-	'LBL_NOT_A_BUNDLE' => 'No es Compuesto',
 );

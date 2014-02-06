@@ -114,7 +114,6 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$nextSortOrder = "ASC";
 			$sortImage = "upArrowSmall.png";
 		}
-		$viewer->assign('MODULE', $moduleName);
 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
@@ -157,7 +156,7 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
-
+		$viewer->assign('TARGET_MODULE', $moduleName);
 		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('GETURL', 'getTaxesURL');
 		$viewer->assign('VIEW', 'ProductsPopup');

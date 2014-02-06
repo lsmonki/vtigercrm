@@ -27,4 +27,7 @@ $languageStrings = array(
 	'Paid'                         => 'Оплачен'              , 
 	'AutoCreated'                  => 'АвтоСоздан'        , 
 	'Cancel'                       => 'Отменить'            , // KEY 5.x: LBL_CANCEL_BUTTON_LABEL
+	'LBL_NOT_A_BUNDLE' => 'Не Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Вспомогательные изделия',
+	'LBL_ACTION'	=> 'Действие',
 );
