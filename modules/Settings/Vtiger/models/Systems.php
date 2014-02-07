@@ -18,7 +18,7 @@ class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
     
     public function isSmtpAuthEnabled() {
         $smtp_auth_value = $this->get('smtp_auth');
-        return ($smtp_auth_value == 'on' || $smtp_auth_value == 1) ? "true" : "false";
+        return ($smtp_auth_value == 'on' || $smtp_auth_value == 1 || $smtp_auth_value == 'true') ? true : false;
     }
     
     public function save() {
