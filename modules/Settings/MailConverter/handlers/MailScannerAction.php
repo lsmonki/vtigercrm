@@ -195,20 +195,25 @@ class Vtiger_MailScannerAction {
 
 		// There will be only on FROM address to email, so pick the first one
 		$fromemail = $mailrecord->_from[0];	
+		$ticket = new HelpDesk();
 		$linktoid = $mailscanner->LookupContact($fromemail);
-		if(!$linktoid) $linktoid = $mailscanner->LookupAccount($fromemail);
+		if($linktoid){
+			$ticket->column_fields['contact_id'] = $linktoid;
+		}
+		if(!$linktoid) {
+			$linktoid = $mailscanner->LookupAccount($fromemail);
+			if($linktoid) $ticket->column_fields['parent_id'] = $linktoid;
+		}
 
 		/** Now Create Ticket **/
 		global $current_user;
 		if(!$current_user) $current_user = new Users();
 		$current_user->id = 1;
 		// Create trouble ticket record
-		$ticket = new HelpDesk();
 		$ticket->column_fields['ticket_title'] = $usetitle;
 		$ticket->column_fields['description'] = $description;
 		$ticket->column_fields['ticketstatus'] = 'Open';
 		$ticket->column_fields['assigned_user_id'] = $current_user->id;
-		if($linktoid) $ticket->column_fields['parent_id'] = $linktoid;
 		$ticket->save('HelpDesk');
 
 		// Associate any attachement of the email to ticket
