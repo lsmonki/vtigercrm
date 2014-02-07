@@ -190,7 +190,11 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
                                     break;
 
 				case 'HelpDesk' :   $from = $mail->from();
-                                    $focus->column_fields['parent_id'] = $this->setParentForHelpDesk($parent, $from);
+									if($linkedto['module'] == 'Contacts') {
+										$focus->column_fields['contact_id'] = $this->setParentForHelpDesk($parent, $from);
+									} else {
+										$focus->column_fields['parent_id'] = $this->setParentForHelpDesk($parent, $from);
+									}
                                     break;
 
                 case 'ModComments': $focus->column_fields['assigned_user_id'] = $current_user->id;
