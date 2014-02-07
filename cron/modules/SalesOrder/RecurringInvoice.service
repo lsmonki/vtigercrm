@@ -57,7 +57,7 @@ for($i=0; $i<$no_of_salesorder;$i++) {
 		$nextRecurringDate = $currentRecurringDate;
 	}
 
-	if(strtotime($currentRecurringDate) == strtotime(date('Y-m-d'))) {
+	if(strtotime($nextRecurringDate) == strtotime(date('Y-m-d'))) {
 		createInvoice($salesorder_id);
 		$adb->pquery('UPDATE vtiger_invoice_recurring_info SET last_recurring_date = ? WHERE salesorderid = ?', array($nextRecurringDate, $salesorder_id));
 	}
