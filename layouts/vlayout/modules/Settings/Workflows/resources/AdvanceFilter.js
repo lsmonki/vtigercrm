@@ -81,16 +81,7 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
 				var fieldDataInfo = fieldSelectElement.find('option:selected').data('fieldinfo');
 				var fieldType = fieldDataInfo.type;
 				var rowValues = {};
-				if(fieldType == 'owner'){
-					for(var key in fieldList) {
-						var field = fieldList[key];
-						if(field == 'value' && valueSelectElement.is('select')){
-							rowValues[field] = valueSelectElement.find('option:selected').text();
-						} else {
-							rowValues[field] = jQuery('[name="'+field+'"]', rowElement).val();
-						}
-					}
-				} else if (fieldType == 'picklist' || fieldType == 'multipicklist') {
+				if (fieldType == 'picklist' || fieldType == 'multipicklist') {
 					for(var key in fieldList) {
 						var field = fieldList[key];
 						if(field == 'value' && valueSelectElement.is('input')) {
