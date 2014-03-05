@@ -505,38 +505,64 @@ class Import_Data_Action extends Vtiger_Action_Controller {
 	}
 
 	public function createEntityRecord($moduleName, $entityLabel) {
-		$moduleHandler = vtws_getModuleHandlerFromName($moduleName, $this->user);
-		$moduleMeta = $moduleHandler->getMeta();
-		$moduleFields = $moduleMeta->getModuleFields();
-		$mandatoryFields = $moduleMeta->getMandatoryFields();
-		$entityNameFieldsString = $moduleMeta->getNameFields();
-		$entityNameFields = explode(',', $entityNameFieldsString);
-		$fieldData = array();
-		foreach ($entityNameFields as $entityNameField) {
-			$entityNameField = trim($entityNameField);
-			if (in_array($entityNameField, $mandatoryFields)) {
-				$fieldData[$entityNameField] = $entityLabel;
-			}
-		}
-		foreach ($mandatoryFields as $mandatoryField) {
-			if (empty($fieldData[$mandatoryField])) {
-				$fieldInstance = $moduleFields[$mandatoryField];
-				if ($fieldInstance->getFieldDataType() == 'owner') {
-					$fieldData[$mandatoryField] = $this->user->id;
-				} else if (!in_array($mandatoryField, $entityNameFields) && $fieldInstance->getFieldDataType() != 'reference') {
-					$fieldData[$mandatoryField] = '????';
-				}
-			}
-		}
+        $moduleHandler = vtws_getModuleHandlerFromName($moduleName, $this->user);
+        $moduleMeta = $moduleHandler->getMeta();
+        $moduleFields = $moduleMeta->getModuleFields();
+        $mandatoryFields = $moduleMeta->getMandatoryFields();
+        $entityNameFieldsString = $moduleMeta->getNameFields();
+        $entityNameFields = explode(',', $entityNameFieldsString);
+        $fieldData = array();
+        foreach ($entityNameFields as $entityNameField) {
+            $entityNameField = trim($entityNameField);
+            if (in_array($entityNameField, $mandatoryFields)) {
+                $fieldData[$entityNameField] = $entityLabel;
+            }
+        }
+        foreach ($mandatoryFields as $mandatoryField) {
+            if (empty($fieldData[$mandatoryField])) {
+                $fieldInstance = $moduleFields[$mandatoryField];
+                if ($fieldInstance->getFieldDataType() == 'owner') {
+                    $fieldData[$mandatoryField] = $this->user->id;
+                } else if (!in_array($mandatoryField, $entityNameFields) && $fieldInstance->getFieldDataType() != 'reference') {
+                    $fieldData[$mandatoryField] = '????';
+                }
+            }
+        }
 
-		$fieldData = DataTransform::sanitizeData($fieldData, $moduleMeta);
-		$entityIdInfo = vtws_create($moduleName, $fieldData, $this->user);
-		$focus = CRMEntity::getInstance($moduleName);
-		$focus->updateMissingSeqNumber($moduleName);
-		return $entityIdInfo;
-	}
+        $fieldData = DataTransform::sanitizeData($fieldData, $moduleMeta);
+        $entityIdInfo = vtws_create($moduleName, $fieldData, $this->user);
+        $adb = PearDatabase::getInstance();
+        $entityIdComponents = vtws_getIdComponents($entityIdInfo['id']);
+        $recordId = $entityIdComponents[1];
+        $entityfields = getEntityFieldNames($moduleName);
+        switch ($moduleName) {
+            case 'HelpDesk': $entityfields['fieldname'] = array('ticket_title');
+                break;
+            case 'Documents': $entityfields['fieldname'] = array('notes_title');
+                break;
+        }
+        $label = '';
+        if (is_array($entityfields['fieldname'])) {
+            foreach ($entityfields['fieldname'] as $field) {
+                $label .= $fieldData[$field] . " ";
+            }
+        } else {
+            $label = $fieldData[$entityfields['fieldname']];
+        }
 
-	public function getImportStatusCount() {
+        $label = trim($label);
+        $adb->pquery('UPDATE vtiger_crmentity SET label=? WHERE crmid=?', array($label, $recordId));
+
+        $recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
+        $focus = $recordModel->getEntity();
+        $focus->id = $recordId;
+        $focus->column_fields = $fieldData;
+        $this->entityData[] = VTEntityData::fromCRMEntity($focus);
+        $focus->updateMissingSeqNumber($moduleName);
+        return $entityIdInfo;
+    }
+
+    public function getImportStatusCount() {
 		$adb = PearDatabase::getInstance();
 
 		$tableName = Import_Utils_Helper::getDbTableName($this->user);
