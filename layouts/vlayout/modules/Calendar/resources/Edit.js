@@ -221,24 +221,26 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 			var timeFormat = endTimeElement.data('format');
 			var date = Vtiger_Helper_Js.getDateInstance(dateTime,dateFormat);
 
-			var endDateInstance = Date.parse(date);
-			if(container.find('[name="activitytype"]').val() == 'Call'){
-				var defaulCallDuration = container.find('[name="defaultCallDuration"]').val();
-				endDateInstance.addMinutes(defaulCallDuration);
-			} else {
-				var defaultOtherEventDuration = container.find('[name="defaultOtherEventDuration"]').val();
-				endDateInstance.addMinutes(defaultOtherEventDuration);
-			}
-			var endDateString = app.getDateInVtigerFormat(dateFormat,endDateInstance);
-			if(timeFormat == 24){
-				var defaultTimeFormat = 'HH:mm';
-			} else {
-				defaultTimeFormat = 'hh:mm tt';
-			}
-			var endTimeString = endDateInstance.toString(defaultTimeFormat);
+                        if(date){
+                            var endDateInstance = Date.parse(date);
+                            if(container.find('[name="activitytype"]').val() == 'Call'){
+                                    var defaulCallDuration = container.find('[name="defaultCallDuration"]').val();
+                                    endDateInstance.addMinutes(defaulCallDuration);
+                            } else {
+                                    var defaultOtherEventDuration = container.find('[name="defaultOtherEventDuration"]').val();
+                                    endDateInstance.addMinutes(defaultOtherEventDuration);
+                            }
+                            var endDateString = app.getDateInVtigerFormat(dateFormat,endDateInstance);
+                            if(timeFormat == 24){
+                                    var defaultTimeFormat = 'HH:mm';
+                            } else {
+                                    defaultTimeFormat = 'hh:mm tt';
+                            }
+                            var endTimeString = endDateInstance.toString(defaultTimeFormat);
 
-			endDateElement.val(endDateString);
-			endTimeElement.val(endTimeString);
+                            endDateElement.val(endDateString);
+                            endTimeElement.val(endTimeString);
+                        }
 		});
         
         container.find('[name="date_start"]').on('change',function(e) {

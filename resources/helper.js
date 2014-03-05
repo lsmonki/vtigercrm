@@ -54,8 +54,10 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var dateTimeComponents = dateTime.split(" ");
 		var dateComponent = dateTimeComponents[0];
 		var timeComponent = dateTimeComponents[1];
-        var seconds = '00';
-
+                var seconds = '00';
+                if((dateComponent.length == 0) || (timeComponent.length == 0)){
+                    return false;
+                }
 		var splittedDate = dateComponent.split("-");
 		var splittedDateFormat = dateFormat.split("-");
 		var year = splittedDate[splittedDateFormat.indexOf("yyyy")];
