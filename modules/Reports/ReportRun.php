@@ -2974,11 +2974,12 @@ class ReportRun extends CRMEntity
 								for($i =0;$i<$y;$i++)
 								{
 										$fld = $adb->field_name($result, $i);
+                                                                                $fld->name = str_replace(" ", "", $fld->name);
 										$keyhdr[$fld->name] = $custom_field_values[$i];
 								}
 
 								$rowcount=0;
-								foreach($totclmnflds as $key=>$value)
+                                                                foreach($totclmnflds as $key=>$value)
 								{
 										$col_header = trim(str_replace($modules," ",$value));
 										$fld_name_1 = $this->primarymodule . "_" . trim($value);
