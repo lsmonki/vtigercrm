@@ -348,6 +348,7 @@ class Documents extends CRMEntity {
 		    $query .= " left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid";
 		}
 		$query .= " left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid";
+                $query .= " left join vtiger_notescf on vtiger_notes.notesid = vtiger_notescf.notesid";
 		$query .= " left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
 		if ($queryplanner->requireTable("vtiger_lastModifiedBy".$module)){
 		    $query .= " left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby ";
