@@ -9,17 +9,9 @@
  ********************************************************************************/
 if(isset($_REQUEST['service']))
 {
-	if($_REQUEST['service'] == "outlook")
-	{
-		include("soap/vtigerolservice.php");
-	}
-	elseif($_REQUEST['service'] == "customerportal")
+	if($_REQUEST['service'] == "customerportal")
 	{
 		include("soap/customerportal.php");
-	}
-	elseif($_REQUEST['service'] == "webforms")
-	{
-		include("soap/webforms.php");
 	}
 	elseif($_REQUEST['service'] == "firefox")
 	{
