@@ -37,7 +37,6 @@ if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
             )
         );
         $trackURL = Vtiger_ShortURL_Helper::generateURL($options);
-        $trackURL = Vtiger_ShortURL_Helper::generateURL($options);
 		$contents = 'Hi '.$username.', <br>
 					This email was sent to you as you submitted the request to change password for Vtiger CRM.<br>
 					Please follow this link to reset your password. <br><br>'.$trackURL;
