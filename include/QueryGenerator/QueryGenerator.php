@@ -716,7 +716,8 @@ class QueryGenerator {
 						$field->getColumnName().' '.$valueSql;
 					}
 				}
-				if($conditionInfo['operator'] == 'n' && ($field->getFieldDataType() == 'owner' || $field->getFieldDataType() == 'picklist') ) {
+				//Custom Filter check for k(does not contains) 
+ 	                        if(($conditionInfo['operator'] == 'n' || $conditionInfo['operator'] == 'k') && ($field->getFieldDataType() == 'owner' || $field->getFieldDataType() == 'picklist') ) {
 					$fieldGlue = ' AND';
 				} else {
 					$fieldGlue = ' OR';
