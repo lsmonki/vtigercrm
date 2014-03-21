@@ -1141,9 +1141,18 @@ jQuery.Class("Vtiger_List_Js",{
 			jQuery('#totalPageCount').text("");
 			thisInstance.getListViewRecords(urlParams).then (function(){
 				thisInstance.updatePagination();
+                                thisInstance.filterLoadPostOperation(); 
             });
 		});
 	},
+        
+        /**
+         * Function to handle operation after filter is loaded
+         */
+        
+        filterLoadPostOperation : function(){ 
+            return true;   
+         },
 
 	/*
 	 * Function to register the click event for list view main check box.
