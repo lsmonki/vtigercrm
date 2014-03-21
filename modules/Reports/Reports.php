@@ -402,6 +402,59 @@ class Reports extends CRMEntity{
 		$log->info("Reports :: ListView->Successfully returned vtiger_report folder HTML");
 		return $returndata;
 	}
+    
+    /** Function to get all Reports when in list view
+	 *  This function accepts the folderid,paramslist
+	 *  This Generates the Reports under each Reports module
+	 *  This Returns a HTML sring
+	 */
+    
+    function sgetAllRpt($fldrId,$paramsList)
+    {
+        global $adb;
+        global $log;
+        $returndata=Array();
+        $sql ="select vtiger_report.*, vtiger_reportmodules.*, vtiger_reportfolder.folderid from vtiger_report inner join vtiger_reportfolder on vtiger_reportfolder.folderid = vtiger_report.folderid";
+        $sql.=" inner join vtiger_reportmodules on vtiger_reportmodules.reportmodulesid = vtiger_report.reportid";
+         if($paramsList){
+            $startIndex = $paramsList['startIndex'];
+			$pageLimit = $paramsList['pageLimit'];
+			$orderBy = $paramsList['orderBy'];
+			$sortBy = $paramsList['sortBy'];
+			if ($orderBy) {
+				$sql .= " ORDER BY $orderBy $sortBy";  
+            }
+			$sql .= " LIMIT $startIndex,".($pageLimit+1);
+		}
+          $result = $adb->pquery($sql,$params);
+          $report = $adb->fetch_array($result);
+		if(count($report)>0)
+		{
+			do
+			{
+				$report_details = Array();
+				$report_details ['customizable'] = $report["customizable"];
+				$report_details ['reportid'] = $report["reportid"];
+				$report_details ['primarymodule'] = $report["primarymodule"];
+				$report_details ['secondarymodules'] = $report["secondarymodules"];
+				$report_details ['state'] = $report["state"];
+				$report_details ['description'] = $report["description"];
+				$report_details ['reportname'] = $report["reportname"];
+				$report_details ['sharingtype'] = $report["sharingtype"];
+                $report_details['folderid']=$report["folderid"];
+				if($is_admin==true)
+					$report_details ['editable'] = 'true';
+				else
+					$report_details['editable'] = 'false';
+
+				if(isPermitted($report["primarymodule"],'index') == "yes")
+					$returndata[] = $report_details;
+			}while($report = $adb->fetch_array($result));
+		}
+		$log->info("Reports :: ListView->Successfully returned vtiger_report details HTML");
+        return $returndata;
+    }
+    
 
 	/** Function to get the Reports inside each modules
 	 *  This function accepts the folderid
@@ -454,7 +507,7 @@ class Reports extends CRMEntity{
 			if ($orderBy) {
 				$sql .= " ORDER BY $orderBy $sortBy";
 			}
-			$sql .= " LIMIT $startIndex,".($pageLimit+1);
+			$sql .= " LIMIT $startIndex, $pageLimit";
 		}
 		$query = $adb->pquery("select userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'",array());
 		$subordinate_users = Array();

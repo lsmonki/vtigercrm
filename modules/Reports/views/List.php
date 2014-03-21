@@ -41,7 +41,13 @@ class Reports_List_View extends Vtiger_Index_View {
 		if(empty($folderId) || $folderId == 'undefined'){
 			$folderId = 'All';
 		}
+                $sortBy = $request->get('sortorder'); 
+                $orderBy=$request->get('orderby'); 
+                
 		$listViewModel->set('folderid', $folderId);
+                $listViewModel->set('orderby',$orderBy); 
+	        $listViewModel->set('sortorder',$sortBy); 
+
 
 		$linkModels = $listViewModel->getListViewLinks();
 		$pageNumber = $request->get('page');

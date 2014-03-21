@@ -91,25 +91,22 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 								 'orderBy'=>$this->get('orderby'),
 								 'sortBy'=>$this->get('sortby')
 							);
+            $reportsList = $reportClassInstance->sgetAllRpt($fldrId,$paramsList);
 		}
-		
+		else{
 		$reportsList = $reportClassInstance->sgetRptsforFldr($fldrId, $paramsList);
-		if(!$fldrId){
-			foreach ($reportsList as $reportId => $reports) {
-				$reportsCount += count($reports);
-			}
+        }
+        if(!$fldrId){
+				$reportsCount += count($reportsList);
 		}else{
 			$reportsCount = count($reportsList);
 		}
 		
 		$pageLimit = $pagingModel->getPageLimit();
 		if($reportsCount > $pageLimit){
-			if(!$fldrId){
 				$lastKey = end(array_keys($reportsList));
 				array_pop($reportsList[$lastKey]);
-			}else{
 				array_pop($reportsList);
-			}
 			$pagingModel->set('nextPageExists', true);
 		}else{
 			$pagingModel->set('nextPageExists', false);
@@ -338,17 +335,14 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 	 * @return <Array> Reports Record Models
 	 */
 	public function getAllReportModels($allReportsList, $reportModuleModel){
-		$allReportModels = array();
         $folders = self::getAll();
-		foreach ($allReportsList as $key => $reportsList) {
-			for($i=0; $i < count($reportsList); $i++) {
+			for($i=0; $i < count($allReportsList); $i++) {
 				$reportModel = new Reports_Record_Model();
-				$reportModel->setData($reportsList[$i])->setModuleFromInstance($reportModuleModel);
-				$reportModel->set('foldername', $folders[$key]->getName());
+				$reportModel->setData($allReportsList[$i])->setModuleFromInstance($reportModuleModel);
+				$reportModel->set('foldername', $folders[$allReportsList[$i]['folderid']]->getName());
 				$allReportModels[] = $reportModel;
 				unset($reportModel);
 			}
-		}
 		return $allReportModels;
 	}
 }
