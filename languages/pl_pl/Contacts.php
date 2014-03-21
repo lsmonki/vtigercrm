@@ -37,13 +37,13 @@ $languageStrings = array(
 	'Mailing State' => 'Dane adresowe - województwo',
 	'Mailing Zip' => 'Dane adresowe - kod pocztowy',
 	'Mailing Country' => 'Dane adresowe - kraj',
-	'Mailing PO Box' => 'Dane adresowe - skrytka pocztowa',
+	'Mailing Po Box' => 'Dane adresowe - skrytka pocztowa',
 	'Other Street' => 'Adres dodatkowy - ulica',
 	'Other City' => 'Adres dodatkowy - miasto',
 	'Other State' => 'Adres dodatkowy - województwo',
 	'Other Zip' => 'Adres dodatkowy - kod pocztowy',
 	'Other Country' => 'Adres dodatkowy - kraj',
-	'Other PO Box' => 'Adres dodatkowy - skrytka pocztowa',
+	'Other Po Box' => 'Adres dodatkowy - skrytka pocztowa',
 	'Contact Image' => 'Zdjęcie kontaktu',
 	
 	//Added for Picklist Values
