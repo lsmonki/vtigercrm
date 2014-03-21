@@ -2462,3 +2462,8 @@ $module->addLink('DETAILVIEWSIDEBARWIDGET', 'Google Map', 'module=Google&view=Ma
 Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name=?', array('LBL_BACKUP_SERVER_SETTINGS'));
 
 // Changes ends as on 2013.11.29
+Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_faqcf ( 
+                                faqid int(19), 
+                                PRIMARY KEY (faqid), 
+                                CONSTRAINT fk_1_vtiger_faqcf FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE 
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8", array()); 
