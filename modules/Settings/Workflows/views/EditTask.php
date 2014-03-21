@@ -67,7 +67,7 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 						$fieldMapping[$key]['value'] = $ownerName;
 					}
 				}
-				$taskObject->field_value_mapping = Zend_Json::encode($fieldMapping);
+				$taskObject->field_value_mapping = json_encode($fieldMapping,JSON_HEX_APOS); 
 			}
 		}
 		
