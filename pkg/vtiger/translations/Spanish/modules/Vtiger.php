@@ -777,7 +777,7 @@ $jsLanguageStrings = array(
 	'JS_RECORD_GETTING_DELETED' => 'Eliminando registro',
 	'JS_NO_RESULTS_FOUND' => 'No se han encontrado resultados',
 
-	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Se ha cambiado el propietario correctamente',
+	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Mudou o proprietÃ¡rio do registro corretamente', 
 
 	'JS_USER_EXISTS' => 'Usuario ya existe',
 	'JS_REENTER_PASSWORDS' => 'Introduce las contraseñas de nuevo',

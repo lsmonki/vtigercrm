@@ -975,7 +975,7 @@ $jsLanguageStrings = array(
 	'JS_RECORD_GETTING_DELETED' => 'Rekord jest usuwany',
 	'JS_NO_RESULTS_FOUND' => 'Nie znaleziono',
 	 
-	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Pomyścnie zmieniono właściela rekordów',
+	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'PomyÅlnie zmieniono wÅaÅciciela rekordÃ³w', 
     
 	'JS_USER_EXISTS' => 'Taki użytkownik istnieje',
 	'JS_REENTER_PASSWORDS' => 'Wpisz hasło ponownie',
