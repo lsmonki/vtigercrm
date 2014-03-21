@@ -84,7 +84,6 @@ $languageStrings = array(
 	'LBL_FEEDBACK' => 'Feedback',
 	'LBL_CRM_SETTINGS' => 'CRM Settings',
 	'LBL_ON_DEMAND_ADMIN' => 'Add / Delete Users',
-	'LBL_ANNOUNCEMENT' => 'Announcement',
 	'LBL_CALENDAR' => 'Calendar',
 	'LBL_POST' => 'Post',
 	'LBL_GUIDER' => 'Guider',
@@ -937,7 +936,7 @@ $jsLanguageStrings = array(
 	'JS_RECORD_GETTING_DELETED' => 'Record getting deleted',
 	'JS_NO_RESULTS_FOUND' => 'No Results Found',
 
-	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Records ownership has been tranferred successfully',
+	'JS_RECORDS_TRANSFERRED SUCCESSFULLY' => 'Records ownership has been transferred successfully',
 
 	'JS_USER_EXISTS' => 'User Already Exists',
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',

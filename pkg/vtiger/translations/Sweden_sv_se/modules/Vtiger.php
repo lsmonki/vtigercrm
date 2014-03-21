@@ -84,7 +84,6 @@ $languageStrings = array(
 	'LBL_FEEDBACK' => 'Feedback',
 	'LBL_CRM_SETTINGS' => 'CRM Inställningar',
 	'LBL_ON_DEMAND_ADMIN' => 'Lägg till / Ta Bort Användare',
-	'LBL_ANNOUNCEMENT' => 'Tillkännagivande',
 	'LBL_CALENDAR' => 'Kalender',
 	'LBL_POST' => 'Inlägg',
 	'LBL_GUIDER' => 'Guider',

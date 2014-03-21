@@ -84,6 +84,7 @@ $languageStrings = array(
 	'INVENTORYTERMSANDCONDITIONS' => 'Inventory: Terms and Conditions',
 	'LBL_INV_TANDC_DESCRIPTION' => 'Specify terms and conditions for Quotes, Invoices, and Sales Orders',
 
+        'LBL_ANNOUNCEMENT' => 'اعلان',
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Manage company wide announcements',
 
 	'LBL_CURRENCY_SETTINGS' => 'Currencies',

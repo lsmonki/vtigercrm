@@ -72,7 +72,6 @@ $languageStrings = array(
 	'LBL_FEEDBACK'                 => 'Feedback'                    ,
 	'LBL_CRM_SETTINGS'             => 'CRM Settings'                ,
 	'LBL_ON_DEMAND_ADMIN'          => 'Add / Delete Users'          , // TODO: Review
-	'LBL_ANNOUNCEMENT'             => 'Announcement'                ,
 	'LBL_CALENDAR'                 => 'Calendar'                    ,
 	'LBL_POST'                     => 'Post'                        ,
 	'LBL_GUIDER'                   => 'Guider'                      , // TODO: Review

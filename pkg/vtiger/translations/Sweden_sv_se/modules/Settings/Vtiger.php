@@ -84,6 +84,7 @@ $languageStrings = array(
 	'INVENTORYTERMSANDCONDITIONS' => 'Inventering: Villkor',
 	'LBL_INV_TANDC_DESCRIPTION' => 'Lägg villkoren för offerter, fakturor och kundorder',
 
+        'LBL_ANNOUNCEMENT' => 'Tillkännagivande',
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Hantera hela företagets tillkännagivanden',
 
 	'LBL_CURRENCY_SETTINGS' => 'Valutor',

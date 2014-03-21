@@ -84,7 +84,6 @@ $languageStrings = array(
 	'LBL_FEEDBACK' => 'الانطباع المتروك',
 	'LBL_CRM_SETTINGS' => 'CRM اعدادات',
 	'LBL_ON_DEMAND_ADMIN' => 'اضافة \ حذف المستخدمين',
-	'LBL_ANNOUNCEMENT' => 'اعلان',
 	'LBL_CALENDAR' => 'مفكرة',
 	'LBL_POST' => 'ارسال',
 	'LBL_GUIDER' => 'الهادي',

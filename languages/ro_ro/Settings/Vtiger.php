@@ -61,6 +61,7 @@ $languageStrings = array(
 	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Configureaza detaliile serverului plecare a emailurilor', 
 	'INVENTORYTERMSANDCONDITIONS'  => 'Inventar : Termeni & Conditii', 
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Specifica termeni si conditii pentru oferte, comenzi, si facturi', 
+        'LBL_ANNOUNCEMENT'             => 'anunÈ›'                ,
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Administreaza anunturile mari ale companiei', 
 	'LBL_CURRENCY_SETTINGS'        => 'Monede'                      , 
 	'LBL_CURRENCY_DESCRIPTION'     => 'Administreaza monede internationale si rate schimb', 

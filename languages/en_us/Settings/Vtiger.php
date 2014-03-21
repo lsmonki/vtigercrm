@@ -256,6 +256,7 @@ $languageStrings = array(
 	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
 	
 	'LBL_CONFIG_EDITOR_DESCRIPTION' => 'Update configuration file of the application',
+        'LBL_ANNOUNCEMENT'=> 'Announcement',
 );
 
 $jsLanguageStrings = array(

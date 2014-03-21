@@ -61,6 +61,7 @@ $languageStrings = array(
 	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Instellingen van de uitgaande e-mail server', 
 	'INVENTORYTERMSANDCONDITIONS'  => 'Algemene Voorwaarden'        , 
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Tekstinhoud vand e Algemene Voorwaarden', 
+        'LBL_ANNOUNCEMENT'             => 'Annoncering'                 ,
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Verander de teksten van de aankondigingen', 
 	'LBL_CURRENCY_SETTINGS'        => 'Valuta instellingen'         , 
 	'LBL_CURRENCY_DESCRIPTION'     => 'Instellen valuta en wissel koersen', 
