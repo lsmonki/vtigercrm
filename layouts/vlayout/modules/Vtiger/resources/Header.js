@@ -270,6 +270,13 @@ jQuery.Class("Vtiger_Header_Js", {
                     thisInstance.quickCreateSave(form).then(
                             function(data) {
                                 app.hideModalWindow();
+                                //fix for Refresh list view after Quick create 
+                                var parentModule=app.getModuleName(); 
+                                var viewname=app.getViewName(); 
+                                if((module == parentModule) && (viewname=="List")){ 
+                                    var listinstance = new Vtiger_List_Js(); 
+                                    listinstance.getListViewRecords();      
+                                } 
                                 submitSuccessCallbackFunction(data);
                                 var registeredCallBackList = thisInstance.quickCreateCallBacks;
                                 for (var index = 0; index < registeredCallBackList.length; index++) {
