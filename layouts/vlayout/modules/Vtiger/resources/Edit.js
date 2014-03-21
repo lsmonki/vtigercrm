@@ -417,14 +417,18 @@ jQuery.Class("Vtiger_Edit_Js",{
 			var fieldInfo = imageUploadElement.data('fieldinfo');
 			var mandatoryStatus = fieldInfo.mandatory;
 			var imageData = element.closest('div').find('img').data();
-			var params = {
+                        //Avoid deteleImage ajax call, if recordID is null
+                        if(!recordId){
+                            element.closest('div').remove();
+                            return;
+                        }
+                            var params = {
 				'module' : app.getModuleName(),
 				'action' : 'DeleteImage', 
 				'imageid' : imageData.imageId,
 				'record' : recordId
-
-			}
-			AppConnector.request(params).then(
+                            };
+                            AppConnector.request(params).then(
 				function(data){
 					if(data.success ==  true){
 						element.closest('div').remove();
@@ -439,7 +443,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 				function(error){
 					//TODO : Handle error
 				}
-			)
+                            )
 		});
 	},
 
