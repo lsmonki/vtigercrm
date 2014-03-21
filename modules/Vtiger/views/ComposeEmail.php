@@ -51,6 +51,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('VIEWNAME', $cvId);
 		$viewer->assign('SELECTED_IDS', $selectedIds);
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
+                $viewer->assign('SELECTED_FIELDS',$selectedFields);  
 		$viewer->assign('USER_MODEL', $userRecordModel);
 		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize'));
 		$viewer->assign('RELATED_MODULES', $moduleModel->getEmailRelatedModules());

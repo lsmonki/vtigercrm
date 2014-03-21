@@ -23,6 +23,7 @@
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
 	{if $SOURCE_MODULE eq "Emails"}
 		<input type="hidden" value="Vtiger_EmailsRelatedModule_Popup_Js" id="popUpClassName"/>
+                 <input type="hidden" name="selectFields" value='{ZEND_JSON::encode($SELECT_FIELDS)}'/>  
 	{/if}
 	{assign var=WIDTHTYPE value=$CURRENT_USER_MODEL->get('rowheight')}
 	<table class="table table-bordered listViewEntriesTable">

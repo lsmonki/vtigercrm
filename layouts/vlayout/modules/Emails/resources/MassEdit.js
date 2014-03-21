@@ -365,10 +365,12 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			var moduleSelected = jQuery('.emailModulesList').val();
 			var parentElem = jQuery(e.target).closest('.toEmailField');
 			var sourceModule = jQuery('[name=module]').val();
+                        var selectedFields= JSON.parse(jQuery('input[name="selectedFields"]').val());
 			var params = {
 				'module' : moduleSelected,
 				'src_module' : sourceModule,
-				'view': 'EmailsRelatedModulePopup'
+				'view': 'EmailsRelatedModulePopup', 
+                                'selectedFields': selectedFields 
 			}
 			var popupInstance =Vtiger_Popup_Js.getInstance();
 			popupInstance.show(params, function(data){

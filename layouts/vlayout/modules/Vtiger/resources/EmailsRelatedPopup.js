@@ -10,23 +10,20 @@ Vtiger_Popup_Js("Vtiger_EmailsRelatedModule_Popup_Js",{},{
 	
 	getListViewEntries: function(e){
 		var thisInstance = this;
+                var selectFields=JSON.parse(jQuery('input[name="selectFields"]').val());  
 		var row  = jQuery(e.currentTarget);
 		var id = row.data('id');
 		var recordName = row.data('name');
-		var emailFields = jQuery(row).find('.emailField');
+		var emailFields = JSON.parse(jQuery(row).attr('data-info')); 
 		var emailValue = '';
-		jQuery.each(emailFields,function(i,element) {
-			emailValue = jQuery(element).text();
-			if(emailValue != ''){
-				return false;
-			}
-		});
-		if(emailValue == ""){
-			var error = recordName+" "+app.vtranslate("JS_DO_NOT_HAVE_AN_EMAIL_ID");
-			alert(error);
-			e.preventDefault();
-			return;
-		}
+		jQuery.each(selectFields,function(i,element){ 
+                    emailValue = emailFields[selectFields[element]]; 
+                    if(typeof(emailFields[selectFields[element]]) == "undefined"){  
+                        var error = recordName+" "+app.vtranslate("JS_DO_NOT_HAVE_AN_EMAIL_ID");
+                        alert(error);  
+                        return;  
+                    } 
+                });
 		var response ={};
 		response[id] = {'name' : recordName,'email' : emailValue} ;
 		thisInstance.done(response, thisInstance.getEventName());

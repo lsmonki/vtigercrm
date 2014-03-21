@@ -20,6 +20,7 @@
 		<input type="hidden" name="excluded_ids" value='{ZEND_JSON::encode($EXCLUDED_IDS)}' />
 		<input type="hidden" name="viewname" value="{$VIEWNAME}" />
 		<input type="hidden" name="module" value="{$MODULE}"/>
+                <input type="hidden" name="selectedFields" value='{ZEND_JSON::encode($SELECTED_FIELDS)}'/>  
 		<input type="hidden" name="mode" value="massSave" />
 		<input type="hidden" name="toemailinfo" value='{ZEND_JSON::encode($TOMAIL_INFO)}' />
 		<input type="hidden" name="view" value="MassSaveAjax" />

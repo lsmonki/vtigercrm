@@ -40,6 +40,10 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
 		$currencyId = $request->get('currency_id');
+                $selectedFields=$request->get('selectedFields'); 
+                foreach($selectedFields as $key=>$value){  
+                    $selectFields[$value]=$value;  
+                }  
 		$view = $request->get('view');
 
 		//To handle special operation when selecting record from Popup
@@ -65,12 +69,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel);
 
-		$primaryEmailFieldName = 'email';
-		if ($moduleName == 'Accounts' || $moduleName == 'Users') {
-			$primaryEmailFieldName = 'email1';
-		}
-		
-		$listViewModel->extendPopupFields(array($primaryEmailFieldName=>$primaryEmailFieldName));
+		$listViewModel->extendPopupFields($selectedFields); 
 		
 		if(!empty($orderBy)) {
 			$listViewModel->set('orderby', $orderBy);
@@ -106,6 +105,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		}
 		$viewer->assign('MODULE', $moduleName);
 
+                $viewer->assign('SELECT_FIELDS',$selectFields); 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
 		$viewer->assign('SOURCE_RECORD', $sourceRecord);
