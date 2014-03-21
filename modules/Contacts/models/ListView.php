@@ -32,7 +32,7 @@ class Contacts_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		$SMSNotifierModuleModel = Vtiger_Module_Model::getInstance('SMSNotifier');
-		if($currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
+		if(!empty($SMSNotifierModuleModel) && $currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
 			$massActionLink = array(
 				'linktype' => 'LISTVIEWMASSACTION',
 				'linklabel' => 'LBL_SEND_SMS',
