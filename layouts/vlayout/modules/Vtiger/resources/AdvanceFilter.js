@@ -307,7 +307,12 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 		
 		fieldSpecificUi.filter('[name="'+ fieldName +'"]').attr('data-value', 'value').removeAttr('data-validation-engine');
 		fieldSpecificUi.find('[name="'+ fieldName +'"]').attr('data-value','value').removeAttr('data-validation-engine');
-
+		
+		if(fieldModel.getType() == 'currency') {
+			fieldSpecificUi.filter('[name="'+ fieldName +'"]').attr('data-decimal-seperator', fieldInfo.decimal_seperator).attr('data-group-seperator', fieldInfo.group_seperator);
+			fieldSpecificUi.find('[name="'+ fieldName +'"]').attr('data-decimal-seperator', fieldInfo.decimal_seperator).attr('data-group-seperator', fieldInfo.group_seperator);
+		}
+		
 		fieldUiHolder.html(fieldSpecificUi);
 
 		if(fieldSpecificUi.is('input.select2')){
@@ -350,9 +355,10 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 			comparatorContainer.show();
 		}
 		
-		// Is Empty condition does not need any field input value - hide the UI
+		// Is Empty, today, tomorrow, yesterday conditions does not need any field input value - hide the UI
 		// re-enable if condition element is chosen.
-		if (conditionSelectElement.val() == 'y') {
+        var specialConditions = ["y","today","tomorrow","yesterday","ny"];
+		if (specialConditions.indexOf(conditionSelectElement.val()) != -1) {
 			fieldUiHolder.hide();
 		} else {
 			fieldUiHolder.show();
@@ -385,6 +391,7 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 		var selectedOption = selectFieldElement.find('option:selected');
 		var row = selectFieldElement.closest('div.conditionRow');
 		var fieldSpecificElement = row.find('[data-value="value"]');
+        var validator = selectedOption.attr('data-validator');
 
 		if(this.isFieldSupportsValidation(selectFieldElement)) {
 			//data attribute will not be present while attaching validation engine events . so we are
@@ -393,6 +400,9 @@ jQuery.Class("Vtiger_AdvanceFilter_Js",{
 			fieldSpecificElement.addClass('validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]')
 								.attr('data-validation-engine','validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]')
 								.attr('data-fieldinfo', JSON.stringify(selectedOption.data('fieldinfo')));
+            if(typeof validator!='undefined') {
+                fieldSpecificElement.attr('data-validator',validator);
+            }
 		}else{
 			fieldSpecificElement.removeClass('validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]')
 								.removeAttr('data-validation-engine')
@@ -766,24 +776,32 @@ Vtiger_Date_Field_Js('AdvanceFilter_Date_Field_Js',{},{
 				var endDateTime = valueArray[1];
 				if(startDateTime.indexOf(' ') !== -1) {
 					var dateTime = startDateTime.split(' ');
-					if(dateTime[1] == '00:00:00') {
-						startDateTime = dateTime[0];
-					}
+                    startDateTime = dateTime[0];
 				}
 				if(endDateTime.indexOf(' ') !== -1) {
 					var dateTimeValue = endDateTime.split(' ');
-					if(dateTimeValue[1] == '00:00:00') {
-						endDateTime = dateTimeValue[0];
-					}
+                    endDateTime = dateTimeValue[0];
 				}
 				dateFieldUi.val(startDateTime+','+endDateTime);
-			}
+			}else{
+                // while changing to between/custom from equal/notequal/... we'll only have one value
+                var value = this.getValue().split(' ');
+                var startDate = value[0];
+                var endDate = value[0];
+                if(startDate != '' && endDate != ''){
+                    dateFieldUi.val(startDate+','+endDate);
+                }
+            }
 			return this.addValidationToElement(element);
 		}
         else if (comparatorSelectedOptionVal in dateSpecificConditions) {
             var startValue = dateSpecificConditions[comparatorSelectedOptionVal]['startdate'];
             var endValue = dateSpecificConditions[comparatorSelectedOptionVal]['enddate'];
-            var html = '<input name="'+ this.getName() +'"  type="text" ReadOnly="true" value="'+  startValue +','+ endValue +'">'
+            if(comparatorSelectedOptionVal == 'today' || comparatorSelectedOptionVal == 'tomorrow' || comparatorSelectedOptionVal == 'yesterday') {
+                    var html = '<input name="'+ this.getName() +'" type="text" ReadOnly="true" value="'+ startValue +'">'; 
+            } else {
+                    var html = '<input name="'+ this.getName() +'" type="text" ReadOnly="true" value="'+ startValue +','+ endValue +'">'; 
+            }
             return jQuery(html);
         }
         else {

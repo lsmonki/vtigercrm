@@ -181,7 +181,14 @@ $languageStrings = array(
 	'LBL_CHANGE_PASSWORD' => 'Change Password',
 	'LBL_NEW_PASSWORD' => 'New Password',
 	'LBL_CONFIRM_PASSWORD' => 'Confirm Password',
-	
+	'LBL_TRANSFER_OWNERSHIP' => 'Transfer Owner',
+	'LBL_LOGIN_AS' => 'Login as ',
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'User deleted successfully',
+    'LBL_ACTIVE_USERS' => 'Active Users',
+    'LBL_INACTIVE_USERS' => 'Inactive Users',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Delete User Permanently',
+    'LBL_RESTORE' => 'Restore',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'User restored successfully',
 	//Login strings
 	'LBL_TO_CRM' => 'Login to Vtiger CRM',
 	'LBL_INVALID_USER_OR_PASSWORD' => 'Invalid username or password.',
@@ -216,6 +223,9 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
 	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
 	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
 	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',

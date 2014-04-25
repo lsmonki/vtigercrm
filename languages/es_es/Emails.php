@@ -43,4 +43,6 @@ $languageStrings = array(
 	'LBL_SENT_ON' => 'Enviado el',
 	'LBL_OWNER' => 'Proietario',
 	'Date & Time Sent' => 'Fecha Envío',
+    'Time Start'       => 'Hora de envío',
+    'LBL_EMAIL_INFORMATION' => 'Información E-mail',
 );

@@ -12,7 +12,7 @@
 <div style="margin:0 auto;width: 50em;">
 	<table border='0' cellpadding='5' cellspacing='0' height='600px' width="700px">
 	<tr><td align='center'>
-		<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 100000020;'>
+		<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 100000020;'>
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tr>

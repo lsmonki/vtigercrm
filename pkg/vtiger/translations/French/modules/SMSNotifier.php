@@ -18,7 +18,6 @@ $languageStrings = array(
 	'LBL_TYPE_THE_MESSAGE'         => 'Saisir le message'            , 
 	'LBL_WRITE_YOUR_MESSAGE_HERE'  => 'Saisir le message ici'     , 
 	'LBL_ADD_MORE_FIELDS'          => 'Ajouter plus de champs'             , 
-	'LBL_SEREVER_CONFIG'           => 'Configuration du serveur'    , 
 	'LBL_CHECK_STATUS'             => 'Vérifier le statut'         , 
 	'message'                      => 'Message'                     , 
 	'LBL_SMSNOTIFIER_INFORMATION'  => 'Information SMS'             , 

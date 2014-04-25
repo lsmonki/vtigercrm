@@ -14,6 +14,7 @@
 		<div class="listViewTopMenuDiv">
 			<div class="listViewActionsDiv row-fluid">
 				<span class="btn-toolbar span4">
+					{if $LISTVIEW_MASSACTIONS}
 					<span class="btn-group listViewMassActions">
 						<button class="btn dropdown-toggle" data-toggle="dropdown"><strong>{vtranslate('LBL_ACTIONS', $MODULE)}</strong>&nbsp;&nbsp;<i class="caret"></i></button>
 						<ul class="dropdown-menu">
@@ -24,12 +25,12 @@
 							{/foreach}
 						</ul>
 					</span>
-					{* Empty Recycle bin Button *}
-                                        {foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
-						<span class="btn-group"> 
-                                                    <button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn clearRecycleBin" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0} onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if} {if $LISTVIEW_ENTIRES_COUNT eq 0} disabled="disabled" {/if}>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
-                                                </span>
-					{/foreach}  
+					{/if}
+					{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
+						<span class="btn-group">
+							<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0} onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
+						</span>
+					{/foreach}
 				</span>
 			<span class="btn-toolbar span4">
 				<span class="customFilterMainSpan btn-group">

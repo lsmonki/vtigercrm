@@ -42,4 +42,39 @@ class ModComments_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		$response->setResult($result);
 		$response->emit();
 	}
+	
+	/**
+	 * Function to save record
+	 * @param <Vtiger_Request> $request - values of the record
+	 * @return <RecordModel> - record Model of saved record
+	 */
+	public function saveRecord($request) {
+		$recordModel = $this->getRecordModelFromRequest($request);
+		
+		$recordModel->save();
+		if($request->get('relationOperation')) {
+			$parentModuleName = $request->get('sourceModule');
+			$parentModuleModel = Vtiger_Module_Model::getInstance($parentModuleName);
+			$parentRecordId = $request->get('sourceRecord');
+			$relatedModule = $recordModel->getModule();
+			$relatedRecordId = $recordModel->getId();
+
+			$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relatedModule);
+			$relationModel->addRelation($parentRecordId, $relatedRecordId);
+		}
+		return $recordModel;
+	}
+	
+	/**
+	 * Function to get the record model based on the request parameters
+	 * @param Vtiger_Request $request
+	 * @return Vtiger_Record_Model or Module specific Record Model instance
+	 */
+	public function getRecordModelFromRequest(Vtiger_Request $request) {
+		$recordModel = parent::getRecordModelFromRequest($request);
+		
+		$recordModel->set('commentcontent', $request->getRaw('commentcontent'));
+
+		return $recordModel;
+	}
 }

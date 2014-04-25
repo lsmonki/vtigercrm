@@ -25,6 +25,16 @@
 		<input type="hidden" name="advanced_filter" id="advanced_filter" value="" />
 		<input type="hidden" name="isDuplicate" value="{$IS_DUPLICATE}" />
 		<input type="hidden" class="step" value="3" />
+		<input type="hidden" name="enable_schedule" value="{$REPORT_MODEL->get('enable_schedule')}">
+		<input type="hidden" name="schtime" value="{$REPORT_MODEL->get('schtime')}">
+		<input type="hidden" name="schdate" value="{$REPORT_MODEL->get('schdate')}">
+		<input type="hidden" name="schdayoftheweek" value={ZEND_JSON::encode($REPORT_MODEL->get('schdayoftheweek'))}>
+		<input type="hidden" name="schdayofthemonth" value={ZEND_JSON::encode($REPORT_MODEL->get('schdayofthemonth'))}>
+		<input type="hidden" name="schannualdates" value={ZEND_JSON::encode($REPORT_MODEL->get('schannualdates'))}>
+		<input type="hidden" name="recipients" value={ZEND_JSON::encode($REPORT_MODEL->get('recipients'))}>
+        <input type="hidden" name="specificemails" value={ZEND_JSON::encode($REPORT_MODEL->get('specificemails'))}>
+		<input type="hidden" name="schtypeid" value="{$REPORT_MODEL->get('schtypeid')}">
+
         <input type="hidden" name="date_filters" data-value='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($DATE_FILTERS))}' />
 		{assign var=RECORD_STRUCTURE value=array()}
 		{assign var=PRIMARY_MODULE_LABEL value=vtranslate($PRIMARY_MODULE, $PRIMARY_MODULE)}
@@ -48,11 +58,13 @@
 		<div class="padding1per contentsBackground">
 			<div class="row-fluid">
 				<h4><strong>{vtranslate('LBL_CHOOSE_FILTER_CONDITIONS',$MODULE)}</strong></h4>
+				<br>
 				<span class="span10 well contentsBackground">
 					{include file='AdvanceFilter.tpl'|@vtemplate_path RECORD_STRUCTURE=$RECORD_STRUCTURE ADVANCE_CRITERIA=$SELECTED_ADVANCED_FILTER_FIELDS COLUMNNAME_API=getReportFilterColumnName}
 				</span>
 			</div>
 		</div>
+		<br>
 		<div class="pull-right block">
 			<button type="button" class="btn btn-danger backStep"><strong>{vtranslate('LBL_BACK',$MODULE)}</strong></button>&nbsp;&nbsp;
 			<button type="submit" class="btn btn-success" id="generateReport"><strong>{vtranslate('LBL_GENERATE_REPORT',$MODULE)}</strong></button>&nbsp;&nbsp;

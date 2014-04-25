@@ -21,4 +21,7 @@ $languageStrings = array(
 	//Field Labels
 	'Price Book Name' => 'اسم كتاب الاسعار',
 	'PriceBook No' => 'رقم كتاب الاسعار',
+	
+	'LBL_UNIT_PRICE' => 'سعر الوحدة',
+	'LBL_ADD_TO' => 'إضافة إلى',
 );

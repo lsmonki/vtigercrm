@@ -31,7 +31,18 @@ Class Vtiger_Edit_View extends Vtiger_Index_View {
 		$record = $request->get('record');
         if(!empty($record) && $request->get('isDuplicate') == true) {
             $recordModel = $this->record?$this->record:Vtiger_Record_Model::getInstanceById($record, $moduleName);
-            $viewer->assign('MODE', '');
+			$viewer->assign('MODE', '');
+
+			//While Duplicating record, If the related record is deleted then we are removing related record info in record model
+			$mandatoryFieldModels = $recordModel->getModule()->getMandatoryFieldModels();
+			foreach ($mandatoryFieldModels as $fieldModel) {
+				if ($fieldModel->isReferenceField()) {
+					$fieldName = $fieldModel->get('name');
+					if (Vtiger_Util_Helper::checkRecordExistance($recordModel->get($fieldName))) {
+						$recordModel->set($fieldName, '');
+					}
+				}
+			}  
         }else if(!empty($record)) {
             $recordModel = $this->record?$this->record:Vtiger_Record_Model::getInstanceById($record, $moduleName);
             $viewer->assign('RECORD_ID', $record);

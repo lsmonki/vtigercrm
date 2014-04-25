@@ -12,14 +12,17 @@ $languageStrings = array(
 	'PriceBooks' => 'Cenniki',
 	'SINGLE_PriceBooks' => 'Cennik',
 	'LBL_ADD_RECORD' => 'Dodaj Cennik',
-	'LBL_RECORDS_LIST' => 'Lista Cennik�w',
+	'LBL_RECORDS_LIST' => 'Lista Cenników',
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie Cennika',
 
 	// Blocks
-	'LBL_PRICEBOOK_INFORMATION' => 'Informacje podstawowe',
-	'LBL_EDIT_LIST_PRICE' => 'Edytuj list� cennik�w',
+	'LBL_PRICEBOOK_INFORMATION' => 'Cena Zarezerwuj Szczegóły',
+	'LBL_EDIT_LIST_PRICE' => 'Edytuj listê cenników',
 
 	//Field Labels
 	'Price Book Name' => 'Nazwa cennika',
 	'PriceBook No' => 'Numer cennika',
+	
+	'LBL_UNIT_PRICE' => 'Cena za sztukę',
+	'LBL_ADD_TO' => 'Dodać do',
 );

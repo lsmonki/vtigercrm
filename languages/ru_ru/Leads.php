@@ -10,8 +10,8 @@
 $languageStrings = array(
 	'Leads'                        => 'Обращения'          , 
 	'SINGLE_Leads'                 => 'Обращение'          , 
-	'LBL_RECORDS_LIST'             => 'Leads List'                  , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add Lead'                    , // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Ведет список'                  , 
+	'LBL_ADD_RECORD'               => 'Добавить свинец'                    , 
 	'LBL_LEAD_INFORMATION'         => 'Информация об Обращении', 
 	'Lead No'                      => 'Обращение №'      , 
 	'Company'                      => 'Организация'      , 
@@ -38,19 +38,19 @@ $languageStrings = array(
 	'Qualified'                    => 'Классифицирован', 
 	'Warm'                         => 'Теплый'                , 
 	'LBL_CONVERT_LEAD'             => 'Преобразовать:' , 
-	'LBL_TRANSFER_RELATED_RECORD'  => 'Transfer related record to'  , // TODO: Review
-	'LBL_CONVERT_LEAD_ERROR'       => 'You have to enable either Organization or Contact to convert the Lead', // TODO: Review
-	'LBL_CONVERT_LEAD_ERROR_TITLE' => 'Modules Disabled'            , // TODO: Review
+	'LBL_TRANSFER_RELATED_RECORD'  => 'Передача связанных запись в'  , 
+	'LBL_CONVERT_LEAD_ERROR'       => 'Вы должны включить либо организации или Контакт преобразовать свинец', 
+	'LBL_CONVERT_LEAD_ERROR_TITLE' => 'Модули для инвалидов'            , 
 	'CANNOT_CONVERT'               => 'Невозможно Конвертировать', 
 	'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Ниже приведены возможные причины', 
 	'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'поле отображения неполной', 
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'обязательные поля пусты', 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Ведет поле отображения', 
-	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , // TODO: Review
-	'LBL_WEBFORMS'                 => 'Setup Webforms'              , // TODO: Review
+	'LBL_CUSTOM_FIELD_MAPPING'     => 'Редактировать поле Mapping'          , 
+	
 );
 $jsLanguageStrings = array(
-	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , // TODO: Review
-	'JS_SELECT_ORGANIZATION'       => 'Select Organization to proceed', // TODO: Review
-	'JS_SELECT_ORGANIZATION_OR_CONTACT_TO_CONVERT_LEAD' => 'Conversion requires selection of Contact or Organization', // TODO: Review
+	'JS_SELECT_CONTACTS'           => 'Контакты для исходящее'  , 
+	'JS_SELECT_ORGANIZATION'       => 'Выберите организацию для продолжения', 
+	'JS_SELECT_ORGANIZATION_OR_CONTACT_TO_CONVERT_LEAD' => 'Преобразование требует выбора Связаться или организации', 
 );

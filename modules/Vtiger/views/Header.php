@@ -36,7 +36,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 			$filename = $filename;
 		}
 
-		return file_exists($filename);
+        return file_exists($filename);
 	}
 
 	/**

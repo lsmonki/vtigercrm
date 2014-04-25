@@ -11,6 +11,10 @@
 -->*}
 {strip}
 {assign var=FILE_LOCATION_TYPE_FIELD value=$RECORD_STRUCTURE['LBL_FILE_INFORMATION']['filelocationtype']}
+{if $FILE_LOCATION_TYPE_FIELD eq NULL}
+    {assign var=DOCUMENTS_MODULE_MODEL value=Vtiger_Module_Model::getInstance('Documents')}
+    {assign var=FILE_LOCATION_TYPE_FIELD value=$DOCUMENTS_MODULE_MODEL->getField('filelocationtype')}
+{/if}
 {assign var=IS_INTERNAL_LOCATION_TYPE value=$FILE_LOCATION_TYPE_FIELD->get('fieldvalue') neq 'E'}
 {assign var=IS_EXTERNAL_LOCATION_TYPE value=$FILE_LOCATION_TYPE_FIELD->get('fieldvalue') eq 'E'}
 

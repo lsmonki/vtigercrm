@@ -8,11 +8,6 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-require_once('data/CRMEntity.php');
-
 // Note is used to store customer information.
 class Documents extends CRMEntity {
 
@@ -24,12 +19,12 @@ class Documents extends CRMEntity {
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_notescf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_notescf'=>'notesid');
-	
+
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
 	var $customFieldTable = Array('vtiger_notescf', 'notesid');
-	
+
 	var $column_fields = Array();
 
     var $sortby_fields = Array('title','modifiedtime','filename','createdtime','lastname','filedownloadcount','smownerid');
@@ -348,7 +343,7 @@ class Documents extends CRMEntity {
 		    $query .= " left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid";
 		}
 		$query .= " left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid";
-                $query .= " left join vtiger_notescf on vtiger_notes.notesid = vtiger_notescf.notesid";
+        $query .= " left join vtiger_notescf on vtiger_notes.notesid = vtiger_notescf.notesid";
 		$query .= " left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
 		if ($queryplanner->requireTable("vtiger_lastModifiedBy".$module)){
 		    $query .= " left join vtiger_users as vtiger_lastModifiedBy".$module." on vtiger_lastModifiedBy".$module.".id = vtiger_crmentity.modifiedby ";
@@ -364,17 +359,18 @@ class Documents extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryplanner) {
-		
+
 		$matrix = $queryplanner->newDependencyMatrix();
-		
+
 		$matrix->setDependency("vtiger_crmentityDocuments",array("vtiger_groupsDocuments","vtiger_usersDocuments","vtiger_lastModifiedByDocuments"));
 		$matrix->setDependency("vtiger_notes",array("vtiger_crmentityDocuments","vtiger_attachmentsfolder"));
-		
+
 		if (!$queryplanner->requireTable('vtiger_notes', $matrix)) {
 			return '';
 		}
 		// TODO Support query planner
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_notes","notesid", $queryplanner);
+        $query .= " left join vtiger_notescf on vtiger_notes.notesid = vtiger_notescf.notesid";
 		if ($queryplanner->requireTable("vtiger_crmentityDocuments",$matrix)){
 		    $query .=" left join vtiger_crmentity as vtiger_crmentityDocuments on vtiger_crmentityDocuments.crmid=vtiger_notes.notesid and vtiger_crmentityDocuments.deleted=0";
 		}
@@ -389,6 +385,9 @@ class Documents extends CRMEntity {
 		}
 		if ($queryplanner->requireTable("vtiger_lastModifiedByDocuments")){
 		    $query .=" left join vtiger_users as vtiger_lastModifiedByDocuments on vtiger_lastModifiedByDocuments.id = vtiger_crmentityDocuments.modifiedby ";
+		}
+        if ($queryplanner->requireTable("vtiger_createdbyDocuments")){
+			$query .= " left join vtiger_users as vtiger_createdbyDocuments on vtiger_createdbyDocuments.id = vtiger_crmentityDocuments.smcreatorid ";
 		}
 		return $query;
 	}
@@ -518,7 +517,7 @@ class Documents extends CRMEntity {
 			return $query;
 		}
 	}
-	
+
 	/**
 	 * Function to check the module active and user action permissions before showing as link in other modules
 	 * like in more actions of detail view.

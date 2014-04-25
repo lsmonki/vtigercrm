@@ -16,8 +16,8 @@
 			<input type="text" class="span5 fields" data-validation-engine='validate[required]' name="sms_recepient" value="{$TASK_OBJECT->sms_recepient}" />
 			<span class="span6">
 				<select class="chzn-select task-fields">
-					{foreach from=$RECORD_STRUCTURE_MODEL->getFieldsByType('phone') item=FIELD}
-						<option value=",${$FIELD->get('name')}">({vtranslate($FIELD->getModule()->get('name'),$FIELD->getModule()->get('name'))})  {vtranslate($FIELD->get('label'),$FIELD->getModule()->get('name'))}</option>
+                    {foreach from=$RECORD_STRUCTURE_MODEL->getFieldsByType('phone') item=FIELD key=FIELD_VALUE}
+						<option value=",${$FIELD_VALUE}">({vtranslate($FIELD->getModule()->get('name'),$FIELD->getModule()->get('name'))})  {vtranslate($FIELD->get('label'),$FIELD->getModule()->get('name'))}</option>
 					{/foreach}
 				</select>	
 			</span>

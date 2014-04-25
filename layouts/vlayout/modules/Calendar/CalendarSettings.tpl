@@ -33,8 +33,14 @@
 							{assign var=EVENT_DURATION_MODEL value=$FIELD_MODEL}
 						{elseif $FIELD_NAME eq 'hour_format'}
 							{assign var=HOUR_FORMAT_VALUE value=$FIELD_MODEL->get('fieldvalue')}
+                                                {elseif $FIELD_NAME eq 'defaulteventstatus'}
+                                                        {assign var=DEFAULT_EVENT_STATUS_MODEL value=$FIELD_MODEL}
+                                                {elseif $FIELD_NAME eq 'defaultactivitytype'}
+                                                        {assign var=DEFAULT_ACTIVITY_TYPE_MODEL value=$FIELD_MODEL}
+                                                {elseif $FIELD_NAME eq 'hidecompletedevents'}
+                                                        {assign var=HIDE_COMPLETED_EVENTS_MODEL value=$FIELD_MODEL}
 						{/if}
-						{if $FIELD_NAME neq 'callduration' && $FIELD_NAME neq 'othereventduration'}
+						{if $FIELD_NAME neq 'callduration' && $FIELD_NAME neq 'othereventduration' && $FIELD_NAME neq 'defaulteventstatus' && $FIELD_NAME neq 'defaultactivitytype' && $FIELD_NAME neq 'hidecompletedevents'}
 							<div class="control-group">
 								<label class="control-label">{vtranslate($FIELD_MODEL->get('label'),$MODULE)}</label>
 								<div class="controls">
@@ -54,19 +60,43 @@
 										</select>	
 									{else}	
 										<select class="select2" name="{$FIELD_NAME}" {if $FIELD_NAME eq 'time_zone'} style="min-width: 350px" {else} style="min-width: 150px" {/if}>
-										{foreach key=ID item=LABEL from=$FIELD_MODEL->getPicklistValues()}
-											<option value="{$ID}" {if $FIELD_VALUE eq $ID} selected="" {/if}>{vtranslate($LABEL,$MODULE)}</option>
-										{/foreach}	
+											 <option value="">{vtranslate('LBL_SELECT_OPTION',$MODULE)}</option>
+											{foreach key=ID item=LABEL from=$FIELD_MODEL->getPicklistValues()}
+												<option value="{$ID}" {if $FIELD_VALUE eq $ID} selected="" {/if}>{vtranslate($LABEL,$MODULE)}</option>
+											{/foreach}	
 									</select>
 									{/if}
 								</div>
 							</div>	
 						{/if}			
 					{/foreach}
+                    {*For consisitent picklist values betweeen event status field and default event status fields*}
+                    {assign var=EVENTS_MODULE_MODEL value=Vtiger_Module_Model::getInstance('Events')}
+                    {assign var=EVENT_STATUS_MODEL value=$EVENTS_MODULE_MODEL->getField('eventstatus')}
+                    {assign var=ACTIVITY_TYPE_MODEL value=$EVENTS_MODULE_MODEL->getField('activitytype')}
+                    <div class="control-group">
+						<label class="control-label">{vtranslate('LBL_DEFAULT_STATUS_TYPE',$MODULE)}</label>
+						<div class="controls">
+							<span class="alignMiddle">{vtranslate('LBL_STATUS',$MODULE)}</span>&nbsp;&nbsp;
+							<select class="select2" style="min-width: 133px" name="{$DEFAULT_EVENT_STATUS_MODEL->get('name')}">
+                                <option value="{vtranslate('LBL_SELECT_OPTION',$MODULE)}">{vtranslate('LBL_SELECT_OPTION',$MODULE)}</option>
+								{foreach key=ID item=LABEL from=$EVENT_STATUS_MODEL->getPicklistValues()}
+									<option value="{$ID}" {if $DEFAULT_EVENT_STATUS_MODEL->get('fieldvalue') eq $ID} selected="" {/if}>{vtranslate($LABEL,$MODULE)}</option>
+								{/foreach}	
+							</select>&nbsp;&nbsp;&nbsp;
+                            <span class="alignMiddle">{vtranslate('LBL_TYPE',$MODULE)}</span>&nbsp;&nbsp;
+                            <select class="select2" style="min-width: 133px" name="{$DEFAULT_ACTIVITY_TYPE_MODEL->get('name')}">
+                                <option value="{vtranslate('LBL_SELECT_OPTION','Vtiger')}">{vtranslate('LBL_SELECT_OPTION','Vtiger')}</option>
+								{foreach key=ID item=LABEL from=$ACTIVITY_TYPE_MODEL->getPicklistValues()}
+									<option value="{$ID}" {if $DEFAULT_ACTIVITY_TYPE_MODEL->get('fieldvalue') eq $ID} selected="" {/if}>{vtranslate($LABEL,$MODULE)}</option>
+								{/foreach}	
+							</select>
+						</div>	
+					</div>
 					<div class="control-group">
 						<label class="control-label">{vtranslate('LBL_DEFAULT_EVENT_DURATION',$MODULE)}</label>
 						<div class="controls">
-							<span class="alignMiddle">{vtranslate('LBL_CALL',$MODULE)}</span>&nbsp;&nbsp;
+							<span class="alignMiddle">{vtranslate('LBL_CALL',$MODULE)}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<select class="select2" name="{$CALL_DURATION_MODEL->get('name')}">
 								{foreach key=ID item=LABEL from=$CALL_DURATION_MODEL->getPicklistValues()}
 									<option value="{$ID}" {if $CALL_DURATION_MODEL->get('fieldvalue') eq $ID} selected="" {/if}>{vtranslate($LABEL,$MODULE)}&nbsp;{vtranslate('LBL_MINUTES',$MODULE)}</option>
@@ -79,7 +109,14 @@
 								{/foreach}	
 							</select>
 						</div>	
-					</div>	
+					</div>
+                    <div class="control-group">
+                        <label class="control-label">{vtranslate($HIDE_COMPLETED_EVENTS_MODEL->get('label'),$MODULE)}</label>
+                        <div class="controls">
+                            <br />
+                            {include file=vtemplate_path($HIDE_COMPLETED_EVENTS_MODEL->getUITypeModel()->getTemplateName(),$MODULE)}
+                        </div>
+                    </div>
 					{assign var=SHARED_TYPE value=$SHAREDTYPE}
 					<div class="control-group">
 						<label class="control-label">{vtranslate('LBL_CALENDAR_SHARING',$MODULE)}</label>
@@ -89,7 +126,7 @@
 							<label class="radio inline"><input type="radio" value="selectedusers" {if $SHARED_TYPE == 'selectedusers'} checked="" {/if} data-sharingtype="selectedusers" name="sharedtype" id="selectedUsers" />&nbsp;{vtranslate('Selected Users',$MODULE)}</label><br><br>
 							<select class="select2 row-fluid {if $SHARED_TYPE != 'selectedusers'} hide {/if}" id="selectedUsers" name="sharedIds[]" multiple="" data-placeholder="{vtranslate('LBL_SELECT_USERS',$MODULE)}">
 								{foreach key=ID item=USER_MODEL from=$ALL_USERS}
-									{if $ID neq $CURRENTUSER_MODEL->get('id') && $ID neq 1}
+									{if $ID neq $CURRENTUSER_MODEL->get('id')}
 										<option value="{$ID}" {if array_key_exists($ID, $SHAREDUSERS)} selected="" {/if}>{vtranslate($USER_MODEL->getName(),$MODULE)}</option> 
 									{/if}
 								{/foreach}	

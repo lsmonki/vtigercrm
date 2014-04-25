@@ -27,26 +27,26 @@ class RelatedListViewSession {
 	function RelatedListViewSession() {
 		global $log,$currentModule;
 		$log->debug("Entering RelatedListViewSession() method ...");
-		
+
 		$this->module = $currentModule;
 		$this->start =1;
 	}
-	
+
 	public static function addRelatedModuleToSession($relationId, $header) {
 		global $currentModule;
 		$_SESSION['relatedlist'][$currentModule][$relationId] = $header;
 		$start = RelatedListViewSession::getRequestStartPage();
 		RelatedListViewSession::saveRelatedModuleStartPage($relationId, $start);
 	}
-	
+
 	public static function removeRelatedModuleFromSession($relationId, $header) {
-		global $currentModule;		
-		
+		global $currentModule;
+
 		unset($_SESSION['relatedlist'][$currentModule][$relationId]);
 	}
-	
+
 	public static function getRelatedModulesFromSession() {
-		global $currentModule;		
+		global $currentModule;
 
 		$allRelatedModuleList = isPresentRelatedLists($currentModule);
 		$moduleList = array();
@@ -59,22 +59,22 @@ class RelatedListViewSession {
 		}
 		return $moduleList;
 	}
-	
+
 	public static function saveRelatedModuleStartPage($relationId, $start) {
 		global $currentModule;
-		
+
 		$_SESSION['rlvs'][$currentModule][$relationId]['start'] = $start;
 	}
-	
+
 	public static function getCurrentPage($relationId) {
 		global $currentModule;
-		
+
 		if(!empty($_SESSION['rlvs'][$currentModule][$relationId]['start'])){
 			return $_SESSION['rlvs'][$currentModule][$relationId]['start'];
 		}
 		return 1;
 	}
-	
+
 	public static function getRequestStartPage(){
 		$start = $_REQUEST['start'];
 		if(!is_numeric($start)){
@@ -86,16 +86,16 @@ class RelatedListViewSession {
 		$start = ceil($start);
 		return $start;
 	}
-	
+
 	public static function getRequestCurrentPage($relationId, $query) {
 		global $list_max_entries_per_page, $adb;
-		
+
 		$start = 1;
 		if(!empty($_REQUEST['start'])){
 			$start = $_REQUEST['start'];
 			if($start == 'last'){
-				$count_result = $adb->query( mkCountQuery( $query));
-				$noofrows = $adb->query_result($count_result,0,"count");				
+				$count_result = $adb->query( Vtiger_Functions::mkCountQuery( $query));
+				$noofrows = $adb->query_result($count_result,0,"count");
 				if($noofrows > 0){
 					$start = ceil($noofrows/$list_max_entries_per_page);
 				}
@@ -111,6 +111,6 @@ class RelatedListViewSession {
 		}
 		return $start;
 	}
-	
+
 }
 ?>

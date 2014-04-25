@@ -28,7 +28,7 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 							'linklabel' => 'LBL_ADD_RECORD',
 							'linkurl' => $this->getCreateRecordUrl(),
 							'linkicon' => ''
-					),
+								),
 					array(
 							'linktype' => 'LISTVIEWBASIC',
 							'linklabel' => 'LBL_ADD_FOLDER',
@@ -39,7 +39,13 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		foreach($basicLinks as $basicLink) {
-			$links['LISTVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($basicLink);
+			$headerLinkInstance = Vtiger_Link_Model::getInstanceFromValues($basicLink);
+			if(!empty($basicLink['childlinks'])){
+				foreach($basicLink['childlinks'] as $childLink) {
+					$headerLinkInstance->addChildLink(Vtiger_Link_Model::getInstanceFromValues($childLink));
+				}
+			}
+			$links['LISTVIEWBASIC'][] = $headerLinkInstance;
 		}
 
 		return $links;
@@ -98,6 +104,12 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 		$reportFolderModel->set('folderid', $this->get('folderid'));
 
 		$orderBy = $this->get('orderby');
+		if (!empty($orderBy) && $orderBy === 'smownerid') {
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel);
+			if ($fieldModel->getFieldDataType() == 'owner') {
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)';
+			}
+		}
 		if(!empty($orderBy)) {
 			$reportFolderModel->set('orderby', $orderBy);
 			$reportFolderModel->set('sortby', $this->get('sortorder'));
@@ -117,7 +129,7 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 		$reportFolderModel->set('folderid', $this->get('folderid'));
 		return $reportFolderModel->getReportsCount();
 	}
-	
+
 	public function getCreateRecordUrl(){
 		return 'javascript:Reports_List_Js.addReport("'.$this->getModule()->getCreateRecordUrl().'")';
 	}

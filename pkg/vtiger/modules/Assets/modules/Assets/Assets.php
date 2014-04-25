@@ -7,9 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/CRMEntity.php');
-require_once('data/Tracker.php');
-
 class Assets extends CRMEntity {
 	var $db, $log; // Used in class functions of CRMEntity
 
@@ -429,7 +426,7 @@ class Assets extends CRMEntity {
 			}
 		}
 	}
-    
+
     /**
 	 * Move the related records of the specified list of id's to the given record.
 	 * @param String This module name

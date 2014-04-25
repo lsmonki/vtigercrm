@@ -106,5 +106,9 @@ class Vtiger_Time_UIType extends Vtiger_Base_UIType {
 	public function getEditViewDisplayValue($value) {
 		return self::getTimeValueInAMorPM($value);
 	}
+    
+    public function getListSearchTemplateName() {
+        return 'uitypes/TimeFieldSearchView.tpl';
+    }
 	
 }

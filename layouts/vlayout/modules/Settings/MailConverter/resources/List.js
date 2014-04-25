@@ -13,12 +13,7 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 		AppConnector.request(url).then(
             function(response) {
 				if(typeof response.result != 'undefined'){
-					var url = {
-						module : app.getModuleName(),
-						parent : app.getParentModuleName(),
-						view : 'Edit'
-					}
-					Settings_MailConverter_List_Js.triggerEdit(url);
+					window.location.href = 'index.php?module='+app.getModuleName()+'&parent='+app.getParentModuleName()+'&view=Edit&mode=step1&create=new';
 				} else {
 					var params = {
 						title : app.vtranslate('JS_MESSAGE'),
@@ -29,8 +24,7 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 					Vtiger_Helper_Js.showPnotify(params);
 				}
 			}
-		)	
-		//alert("module=MailConverter&parent='.$this->getParentName().'&view=Edit'");
+			)	
 		
 	},
 	
@@ -63,33 +57,6 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 		);	
 	},
 	
-    triggerEdit : function(url){
-        AppConnector.request(url).then(
-            function(data) {
-                app.showModalWindow(
-                    {
-                        'data' : data,
-                        'cb' : function(container) {
-                            app.showScrollBar(container.find('.modal-body'));
-                            var validationEngineOptions = app.validationEngineOptions;
-                            validationEngineOptions['promptPosition'] = 'bottomRight'
-                            validationEngineOptions['onValidationComplete'] = function(form, isValid) {
-                                if(isValid){
-                                    Settings_MailConverter_List_Js.saveMailBox(form.serializeFormData());
-                                }
-                                return false;
-                            }
-                            container.find('form').validationEngine('attach',validationEngineOptions);
-                        }
-                    }
-                );
-                
-            },
-            function(error) {
-                
-            }
-        )
-    },
     
     triggerDelete : function(url) {
         
@@ -113,45 +80,17 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 					animation: 'show',
 					type: 'success'
 				};
+				var url = window.location.href;
+				var url1 = url.split('&');
+				var path = url1[0]+"&"+url1[1]+"&"+url1[2];
+				window.location.assign(path);
 				Vtiger_Helper_Js.showPnotify(params);
-            });
-        });
-    },
-    
-    saveMailBox : function(data) {
-		var progressInstance = jQuery.progressIndicator();
-		var saveButton = jQuery('#mailBoxEditView').find('[name="saveButton"]');
-		saveButton.attr('disabled','disabled');
-        var thisInstance = this;
-        data.module = app.getModuleName();
-        data.parent = app.getParentModuleName();
-        data.action = "SaveMailBox";
-        AppConnector.request(data).then(
-            function(response){
-                progressInstance.progressIndicator({
-                    'mode' : 'hide'
-                });
-				if(typeof response.result != 'undefined'){
-					var params = {};
-					params.record = response.result.id;
-					thisInstance.loadMailBox(params);
-					app.hideModalWindow();
-				} else {
-					saveButton.removeAttr('disabled');
-					var params = {
-						title : app.vtranslate('JS_MESSAGE'),
-						text: response.error.message,
-						animation: 'show',
-						type: 'error'
-					};
-					Vtiger_Helper_Js.showPnotify(params);
-				}
-            }
-        );  
-    },
-    
-    loadMailBox : function(data) {
-        var progressIndicatorElement = jQuery.progressIndicator({
+			});
+		});
+	},    
+        
+	loadMailBox : function(data) {
+		var progressIndicatorElement = jQuery.progressIndicator({
 			'position' : 'html',
 			'blockInfo' : {
 				'enabled' : true
@@ -179,9 +118,13 @@ jQuery.Class('Settings_MailConverter_List_Js',{
 					type: 'success'
 				};
 				Vtiger_Helper_Js.showPnotify(params);
-            }
-        );
-    }
+				if(typeof data.listViewUrl != 'undefined') {
+					var path = data.listViewUrl+'&record='+data.record;
+					window.location.assign(path);
+				}
+			}
+			);
+	}
 },{
 	registerEvents : function(){
 		

@@ -19,6 +19,8 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie czynności',
 	'LBL_EVENTS' => 'Czynności',
 	'LBL_TODOS' => 'Zadania',
+    'LBL_HOLD_FOLLOWUP_ON' => 'Trzymaj Nawiązanie na',
+    'LBL_CREATE_FOLLOWUP_EVENT'    => 'Stwórz śledzić wydarzenie',
 	
 	// Blocks
 	'LBL_EVENT_INFORMATION' => 'Szczegóły czynności',
@@ -52,6 +54,7 @@ $languageStrings = array(
 	'LBL_HOURS' => 'Godzin',
 	
 	'LBL_RECORDS_LIST' => 'Widok listy',
-	'LBL_CALENDAR_VIEW' => 'Widok kalendarza'
+	'LBL_CALENDAR_VIEW' => 'Widok kalendarza',
+	'LBL_REPEATEVENT' => 'Raz w każdy',
 
 );

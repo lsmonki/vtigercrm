@@ -44,6 +44,9 @@ $languageStrings = array(
 	'LBL_ASSIGN_VALUES_TO_ROLES' => 'Asignar Valores a Roles',
 	'LBL_SELECTED_VALUES' => 'Valores Seleccionados',
     'NO_PICKLIST_FIELDS'=> 'no tiene campos de tipo lista desplegable',
+	
+	//Translation for module
+	'Calendar' => 'Para hacer',
 );
 $jsLanguageStrings = array(
 	//PickList 

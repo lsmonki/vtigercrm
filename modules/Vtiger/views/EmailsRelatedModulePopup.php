@@ -49,11 +49,8 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		//To handle special operation when selecting record from Popup
 		$getUrl = $request->get('get_url');
 
-		//Check whether the request is in multi select mode
-		$multiSelectMode = $request->get('multi_select');
-		if(empty($multiSelectMode)) {
-			$multiSelectMode = false;
-		}
+		//Enable multiselect mode for email related popup
+		$multiSelectMode = true;
 
 		if(empty($cvId)) {
 			$cvId = '0';
@@ -69,7 +66,12 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel);
 
-		$listViewModel->extendPopupFields($selectedFields); 
+		$primaryEmailFieldName = 'email';
+		if ($moduleName == 'Accounts' || $moduleName == 'Users') {
+			$primaryEmailFieldName = 'email1';
+		}
+		
+		$listViewModel->extendPopupFields(array($primaryEmailFieldName=>$primaryEmailFieldName));
 		
 		if(!empty($orderBy)) {
 			$listViewModel->set('orderby', $orderBy);

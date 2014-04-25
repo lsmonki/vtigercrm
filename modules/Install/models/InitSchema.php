@@ -764,9 +764,15 @@ class Install_InitSchema_Model {
 		$adminPassword = $_SESSION['config_file_info']['password'];
 		$userDateFormat = $_SESSION['config_file_info']['dateformat'];
 		$userTimeZone = $_SESSION['config_file_info']['timezone'];
+                //Fix for opensource ticket (http://redmine.vtiger.in/issues/20553)
+                $userFirstName = $_SESSION['config_file_info']['firstname']; 
+                $userLastName = $_SESSION['config_file_info']['lastname']; 
         // create default admin user
     	$user = CRMEntity::getInstance('Users');
-        $user->column_fields["last_name"] = 'Administrator';
+         //Fix for opensource ticket (http://redmine.vtiger.in/issues/20553)
+        $user->column_fields["first_name"] = $userFirstName; 
+ 	$user->column_fields["last_name"] = $userLastName; 
+        //Ends
         $user->column_fields["user_name"] = 'admin';
         $user->column_fields["status"] = 'Active';
         $user->column_fields["is_admin"] = 'on';
@@ -874,7 +880,7 @@ class Install_InitSchema_Model {
 	/**
 	 * Function registers all the event handlers
 	 */
-	function registerEvents($adb) {
+	static function registerEvents($adb) {
 		vimport('~~include/events/include.inc');
 		$em = new VTEventsManager($adb);
 
@@ -902,7 +908,7 @@ class Install_InitSchema_Model {
 	 * Function registers all the work flow custom entity methods
 	 * @param <PearDatabase> $adb
 	 */
-	function registerEntityMethods($adb) {
+	static function registerEntityMethods($adb) {
 		vimport("~~modules/com_vtiger_workflow/include.inc");
 		vimport("~~modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 		vimport("~~modules/com_vtiger_workflow/VTEntityMethodManager.inc");
@@ -932,7 +938,7 @@ class Install_InitSchema_Model {
 	 * Function adds default system workflows
 	 * @param <PearDatabase> $adb
 	 */
-	function populateDefaultWorkflows($adb) {
+	static function populateDefaultWorkflows($adb) {
 		vimport("~~modules/com_vtiger_workflow/include.inc");
 		vimport("~~modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 		vimport("~~modules/com_vtiger_workflow/VTEntityMethodManager.inc");

@@ -54,13 +54,21 @@ $result = $adb->pquery($query, array());
 
 if($adb->num_rows($result) >= 1)
 {
+	//To fetch reminder frequency from cron tasks
+	$reminderFrequencyQuery = 'SELECT frequency FROM vtiger_cron_task WHERE name = "SendReminder" AND handler_file = "cron/SendReminder.service"';
+	$reminderResult = $adb->pquery($reminderFrequencyQuery, array());
+	$reminderFrequency = $adb->query_result($reminderResult,0,'frequency');
+
 	while($result_set = $adb->fetch_array($result))
 	{
 		$date_start = $result_set['date_start'];
 		$time_start = $result_set['time_start'];
 		$reminder_time = $result_set['reminder_time']*60;
 		$date = new DateTimeField( null );
-		$curr_time = strtotime($date->getDisplayDateTimeValue());
+        $userFormatedString = $date->getDisplayDate();
+        $timeFormatedString = $date->getDisplayTime();
+        $dBFomatedDate = DateTimeField::convertToDBFormat($userFormatedString);
+		$curr_time = strtotime($dBFomatedDate." ". $timeFormatedString);
 		$activity_id = $result_set['activityid'];
 		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
 		$parent_type = $result_set['setype'];
@@ -84,8 +92,12 @@ if($adb->num_rows($result) >= 1)
 		}
 		//code included for recurring events by jaguar ends
 		$date = new DateTimeField("$date_start $time_start");
-		$activity_time = strtotime($date->getDisplayDateTimeValue());
-		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) <= $reminder_time)
+        $userFormatedString = $date->getDisplayDate();
+        $timeFormatedString = $date->getDisplayTime();
+        $dBFomatedDate = DateTimeField::convertToDBFormat($userFormatedString);
+		$activity_time = strtotime($dBFomatedDate.' '.$timeFormatedString);
+		$differenceOfActivityTimeAndCurrentTime = ($activity_time - $curr_time);
+		if (($differenceOfActivityTimeAndCurrentTime > 0) && (($differenceOfActivityTimeAndCurrentTime <= $reminder_time) || ($differenceOfActivityTimeAndCurrentTime <= $reminderFrequency)))
 		{
 			$log->debug(" InSide  REMINDER");
 			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =? and vtiger_users.deleted=0";
@@ -184,7 +196,7 @@ function send_email($to,$from,$subject,$contents,$mail_server,$mail_server_usern
 
 
 	$mail->Host = $mail_server;			// specify main and backup server
-	if($smtp_auth == 'true')
+	if($smtp_auth == 'true' || $smtp_auth == '1')
 		$mail->SMTPAuth = true;
 	else
 		$mail->SMTPAuth = false;

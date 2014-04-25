@@ -33,6 +33,9 @@ class Settings_MailConverter_SaveRule_Action extends Settings_Vtiger_Index_Actio
 			$recordModel = Settings_MailConverter_RuleRecord_Model::getCleanInstance($scannerId);
 		}
 
+		$recordModel->assignedTo = $request->get('assignedTo');
+		$recordModel->cc = $request->get('cc');
+		$recordModel->bcc = $request->get('bcc');
 		$fieldsList = $recordModel->getFields();
 		foreach ($fieldsList as $fieldName) {
 			$recordModel->set($fieldName, $request->get($fieldName));
@@ -42,7 +45,8 @@ class Settings_MailConverter_SaveRule_Action extends Settings_Vtiger_Index_Actio
 		$ruleId = $recordModel->save();
 
 		$response = new Vtiger_Response();
-		$response->setResult(array('message' => vtranslate('LBL_SAVED_SUCCESSFULLY', $qualifiedModuleName),'id' => $ruleId));
+		$response->setResult(array('message' => vtranslate('LBL_SAVED_SUCCESSFULLY', $qualifiedModuleName), 'id' => $ruleId, 'scannerId' => $scannerId));
 		$response->emit();
 	}
+
 }

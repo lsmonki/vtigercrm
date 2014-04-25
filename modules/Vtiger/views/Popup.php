@@ -91,6 +91,8 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
 		$currencyId = $request->get('currency_id');
+		$relatedParentModule = $request->get('related_parent_module');
+		$relatedParentId = $request->get('related_parent_id');
 
 		//To handle special operation when selecting record from Popup
 		$getUrl = $request->get('get_url');
@@ -112,8 +114,24 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$pagingModel->set('page', $pageNumber);
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel);
+		
+        $isRecordExists = Vtiger_Util_Helper::checkRecordExistance($relatedParentId);
+        
+        if($isRecordExists) {
+            $relatedParentModule = '';
+            $relatedParentId = '';
+        } else if($isRecordExists === NULL) {
+            $relatedParentModule = '';
+            $relatedParentId = '';
+        }
+        
+		if(!empty($relatedParentModule) && !empty($relatedParentId)) {
+			$parentRecordModel = Vtiger_Record_Model::getInstanceById($relatedParentId, $relatedParentModule);
+			$listViewModel = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $moduleName, $label);
+		}else{
+			$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+		}
 
 		if(!empty($orderBy)) {
 			$listViewModel->set('orderby', $orderBy);
@@ -129,14 +147,52 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 			$listViewModel->set('search_value', $searchValue);
 		}
 
-		if(!$this->listViewHeaders){
+		if(!empty($relatedParentModule) && !empty($relatedParentId)) {
+			$this->listViewHeaders = $listViewModel->getHeaders();
+			
+			$models = $listViewModel->getEntries($pagingModel);
+			$noOfEntries = count($models);
+			foreach ($models as $recordId => $recordModel) {
+				foreach ($this->listViewHeaders as $fieldName => $fieldModel) {
+					$recordModel->set($fieldName, $recordModel->getDisplayValue($fieldName));
+				}
+				$models[$recordId] = $recordModel;
+			}
+			$this->listViewEntries = $models;
+            if(count($this->listViewEntries) > 0 ){
+                $parent_related_records = true;
+            }
+		}else{
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
-		}
-		if(!$this->listViewEntries){
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
 		}
+        
+        // If there are no related records with parent module then, we should show all the records
+        if(!$parent_related_records && !empty($relatedParentModule) && !empty($relatedParentId)){
+            $relatedParentModule = null;
+            $relatedParentId = null;
+            $listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+            
+            if(!empty($orderBy)) {
+                $listViewModel->set('orderby', $orderBy);
+                $listViewModel->set('sortorder', $sortOrder);
+            }
+            if(!empty($sourceModule)) {
+                $listViewModel->set('src_module', $sourceModule);
+                $listViewModel->set('src_field', $sourceField);
+                $listViewModel->set('src_record', $sourceRecord);
+            }
+            if((!empty($searchKey)) && (!empty($searchValue)))  {
+                $listViewModel->set('search_key', $searchKey);
+                $listViewModel->set('search_value', $searchValue);
+            }
+            $this->listViewHeaders = $listViewModel->getListViewHeaders();
+			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
+        }
+        // End
+        
 		$noOfEntries = count($this->listViewEntries);
-
+		
 		if(empty($sortOrder)){
 			$sortOrder = "ASC";
 		}
@@ -148,11 +204,14 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 			$sortImage = "upArrowSmall.png";
 		}
 		$viewer->assign('MODULE', $moduleName);
+        $viewer->assign('RELATED_MODULE', $moduleName);
 		$viewer->assign('MODULE_NAME',$moduleName);
 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
 		$viewer->assign('SOURCE_RECORD', $sourceRecord);
+		$viewer->assign('RELATED_PARENT_MODULE', $relatedParentModule);
+		$viewer->assign('RELATED_PARENT_ID', $relatedParentId);
 
 		$viewer->assign('SEARCH_KEY', $searchKey);
 		$viewer->assign('SEARCH_VALUE', $searchValue);
@@ -204,15 +263,26 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 		$sourceRecord = $request->get('src_record');
 		$orderBy = $request->get('orderby');
 		$sortOrder = $request->get('sortorder');
+		$currencyId = $request->get('currency_id');
 
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
+		
+		$relatedParentModule = $request->get('related_parent_module');
+		$relatedParentId = $request->get('related_parent_id');
 
-		$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+		if(!empty($relatedParentModule) && !empty($relatedParentId)) {
+			$parentRecordModel = Vtiger_Record_Model::getInstanceById($relatedParentId, $relatedParentModule);
+			$listViewModel = Vtiger_RelationListView_Model::getInstance($parentRecordModel, $moduleName, $label);
+		}else{
+			$listViewModel = Vtiger_ListView_Model::getInstanceForPopup($moduleName);
+		}
+		
 		if(!empty($sourceModule)) {
 			$listViewModel->set('src_module', $sourceModule);
 			$listViewModel->set('src_field', $sourceField);
 			$listViewModel->set('src_record', $sourceRecord);
+			$listViewModel->set('currency_id', $currencyId);
 		}
 		
 		if(!empty($orderBy)) {
@@ -223,8 +293,12 @@ class Vtiger_Popup_View extends Vtiger_Footer_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
-		$count = $listViewModel->getListViewCount();
-
+		if(!empty($relatedParentModule) && !empty($relatedParentId)) {
+			$count = $listViewModel->getRelatedEntriesCount();
+		}else{
+			$count = $listViewModel->getListViewCount();
+		}
+		
 		return $count;
 	}
 	

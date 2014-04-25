@@ -11,8 +11,15 @@ $languageStrings = array(
 	'SINGLE_ProjectMilestone'      => 'Projekt Mérföldkő'        , 
 	'LBL_ADD_RECORD'               => 'Projekt Mérföldkő hozzáadása', 
 	'LBL_RECORDS_LIST'             => 'Projekt Mérföldkövek listája', 
+    'LBL_PROJECTS_LIST'            => 'Projektek listája',
+	'LBL_TASKS_LIST'               => 'Feladatok lista', 
+    'LBL_MILESTONES_LIST'          => 'Mérföldkövek listája',
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Projekt Mérföldkő adatai' , 
 	'Project Milestone Name'       => 'Mérföldkő megnevezése'   , 
 	'Milestone Date'               => 'Mérföldkő dátuma'        , 
 	'Project Milestone No'         => 'Mérföldkő No.'            , 
+	//picklist values
+	'administrative' => 'Adminisztratív',
+    'operative' => 'Működő',
+    'other' => 'Más',
 );

@@ -21,4 +21,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'TudásTár bejegyzéseim'    , 
 	'UA'                           => 'Rám váró Tevékenységek' , 
 	'PA'                           => 'Befejezetlen Tevékenységek', 
+        'Home'                         => 'Kezdőlap'                   ,
 );

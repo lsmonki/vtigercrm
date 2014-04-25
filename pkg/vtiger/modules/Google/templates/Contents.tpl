@@ -28,9 +28,17 @@
        {/if}
         <div class='row-fluid'>
             <span class='span0'>&nbsp;</span>
-            <button id="sync_button" class="btn btn-success span0"  data-url='index.php?module=Google&view=List&operation=sync&sourcemodule={$SOURCEMODULE}'><b>{vtranslate('LBL_SYNC_BUTTON',$MODULE_NAME)}</b></button>
+            <button id="sync_button" class="btn btn-success span9"  data-url='index.php?module=Google&view=List&operation=sync&sourcemodule={$SOURCEMODULE}'><b>{vtranslate('LBL_SYNC_BUTTON',$MODULE_NAME)}</b></button>
             <span class="span0">
                 <i class="icon-question-sign pushDown" id="popid"  data-placement="right" rel="popover" ></i>
+            </span>
+        </div>
+        <br />
+        <div class='row-fluid {if !$FIRSTTIME}hide {/if}' id="removeSyncBlock">
+            <span class='span0'>&nbsp;</span>
+            <button id="remove_sync" class="btn btn-danger span9"  data-url='index.php?module=Google&view=List&operation=removeSync&sourcemodule={$SOURCEMODULE}'><b>{vtranslate('LBL_REMOVE_SYNC',$MODULE_NAME)}</b></button>
+            <span class="span0">
+                <i class="icon-question-sign pushDown" id="removePop"  data-placement="right" rel="popover" ></i>
             </span>
         </div>
     </div>

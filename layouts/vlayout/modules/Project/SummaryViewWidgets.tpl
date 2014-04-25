@@ -161,7 +161,7 @@
 			</div>
 		{/if}
 		{* Summary View Tasks Widget Ends Here *}
-
+        
 		{* Summary View Document Widget*}
 		{if $DOCUMENT_WIDGET_MODEL}
 			<div class="summaryWidgetContainer">

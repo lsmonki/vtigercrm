@@ -7,7 +7,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 Settings_Workflows_Edit_Js("Settings_Workflows_Edit1_Js",{},{
-	
+
 	init : function() {
 		this.initialize();
 	},
@@ -28,7 +28,7 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit1_Js",{},{
 		this.step1Container = element;
 		return this;
 	},
-	
+
 	/**
 	 * Function  to intialize the reports step1
 	 */
@@ -42,7 +42,7 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit1_Js",{},{
 			this.setContainer(jQuery('#workflow_step1'));
 		}
 	},
-	
+
 	submit : function(){
 		var aDeferred = jQuery.Deferred();
 		var form = this.getContainer();

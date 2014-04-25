@@ -19,30 +19,34 @@
             <div class="span2">
                 <span class="companyLogo"><img src="{$COMPANY_LOGO->get('imagepath')}" title="{$COMPANY_LOGO->get('title')}" alt="{$COMPANY_LOGO->get('alt')}"/>&nbsp;</span>
             </div>
-            <div class="span10 marginLeftZero">
+            <div class="span10">
                 <div class="row-fluid">
-                    <div class="searchElement span7">
+                    <div class="searchElement span8">
                         <div class="select-search">
                             <select class="chzn-select" id="basicSearchModulesList" style="width:150px;">
                                 <option value="" class="globalSearch_module_All">{vtranslate('LBL_ALL_RECORDS', $MODULE_NAME)}</option>
                                 {foreach key=MODULE_NAME item=fieldObject from=$SEARCHABLE_MODULES}
-                                    <option value="{$MODULE_NAME}" class="globalSearch_module_{$MODULE_NAME}">{vtranslate($MODULE_NAME,$MODULE_NAME)}</option>
+                                    {if isset($SEARCHED_MODULE) && $SEARCHED_MODULE eq $MODULE_NAME && $SEARCHED_MODULE !== 'All'}
+                                        <option value="{$MODULE_NAME}" class="globalSearch_module_{$MODULE_NAME}" selected>{vtranslate($MODULE_NAME,$MODULE_NAME)}</option>
+                                    {else}
+                                        <option value="{$MODULE_NAME}" class="globalSearch_module_{$MODULE_NAME}">{vtranslate($MODULE_NAME,$MODULE_NAME)}</option>
+                                    {/if}
                                 {/foreach}
                             </select>
                         </div>
                         <div class="input-append searchBar">
                             <input type="text" class="" id="globalSearchValue" placeholder="{vtranslate('LBL_GLOBAL_SEARCH')}" results="10" />
                             <span id="searchIcon" class="add-on search-icon"><i class="icon-white icon-search "></i></span>
-                            <span class="adv-search">
+                            <span class="adv-search  pull-left">
                                 <a class="alignMiddle" id="globalSearch">{vtranslate('LBL_ADVANCE_SEARCH')}</a>
                             </span>
                         </div>
 
                     </div>
-                    <div class="notificationMessageHolder span3">
+                    <div class="notificationMessageHolder span2">
 
                     </div>
-                    <div class="nav quickActions btn-toolbar span2 pull-right">
+                    <div class="nav quickActions btn-toolbar span2 pull-right marginLeftZero">
                         <div class="pull-right commonActionsButtonContainer">
                             {if !empty($announcement)}
                                 <div class="btn-group cursorPointer">
@@ -52,7 +56,7 @@
 
                             <div class="btn-group cursorPointer" id="guiderHandler">
                                 {if !$MAIN_PRODUCT_WHITELABEL}
-                                    <img src="{vimage_path('circle_question_mark.png')}" class="alignMiddle" alt="?" title="{vtranslate('LBL_GUIDER',$MODULE)}" style="display:none;"/>
+                                    <img src="{vimage_path('circle_question_mark.png')}" class="alignMiddle" alt="?" title="{vtranslate('LBL_GUIDER',$MODULE)}"/>
                                 {/if}
                             </div>&nbsp;
 

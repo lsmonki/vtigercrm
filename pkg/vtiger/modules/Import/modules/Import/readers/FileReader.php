@@ -121,7 +121,8 @@ class Import_FileReader_Reader {
         $columnsListQuery = '';
         $fieldName = $fieldObject->getName();
         $dataType = $fieldObject->getFieldDataType();
-        if($dataType == 'reference' || $dataType == 'owner' || $dataType == 'currencyList'){
+		$skipDataType = array('reference','owner', 'currencyList', 'date', 'datetime');
+        if(in_array($dataType, $skipDataType)){
             $columnsListQuery .= ','.$fieldName.' varchar(250)';
         } else {
             $columnsListQuery .= ','.$fieldName.' '.$fieldTypes[$fieldObject->get('column')];

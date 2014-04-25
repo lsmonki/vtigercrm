@@ -31,4 +31,6 @@ $languageStrings = array(
 	'LBL_COPY_BILLING_ADDRESS' => 'Copiar Dirección Facturación',
 	'LBL_PAID' => 'Pagado',
 	'LBL_BALANCE' => 'Balance',
+        'LBL_LIST_PRICE'               => 'Precio de lista',
+        'List Price'                   => 'Precio de lista',
 );

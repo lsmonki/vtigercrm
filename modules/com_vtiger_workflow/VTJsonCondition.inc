@@ -168,16 +168,16 @@ class VTJsonCondition {
 			$value = $value.':00';	// time fields will not have seconds appended to it, so we are adding 
 		}
         
-                if($fieldInstance && $fieldInstance->getFieldDataType() == 'owner' ) { 
-                    if($condition == 'is' || $condition == 'is not') { 
-                        //To avoid again checking whether it is user or not 
-                        $idList = array();
-                        $idList[] = vtws_getWebserviceEntityId('Users',$value); 
-                        $idList[] = vtws_getWebserviceEntityId('Groups',$value);
-                        $value = $idList;
-                        $condition = ($condition == 'is') ? 'contains' : 'does not contain';
-                    } 
-                }
+        if($fieldInstance && $fieldInstance->getFieldDataType() == 'owner' ) { 
+            if($condition == 'is' || $condition == 'is not') { 
+                //To avoid again checking whether it is user or not 
+                $idList = array();
+                $idList[] = vtws_getWebserviceEntityId('Users',$value); 
+                $idList[] = vtws_getWebserviceEntityId('Groups',$value);
+                $value = $idList;
+                $condition = ($condition == 'is') ? 'contains' : 'does not contain';
+            } 
+        }
 
 		switch ($condition) {
 			case "equal to":
@@ -215,15 +215,15 @@ class VTJsonCondition {
 					return $fieldValue != $value;
 				}
 			case "contains":
-                                if(is_array($value)){ 
-                                    return in_array($fieldValue, $value); 
-                                }
-                                return strpos($fieldValue, $value) !== FALSE;
-                        case "does not contain":
-                                if(empty($value)) unset($value);
-                                if(is_array($value)){ 
-                                    return !in_array($fieldValue, $value); 
-                                } 
+                if(is_array($value)){ 
+                    return in_array($fieldValue, $value); 
+                }
+				return strpos($fieldValue, $value) !== FALSE;
+			case "does not contain":
+				if(empty($value)) unset($value);
+                if(is_array($value)){ 
+                    return !in_array($fieldValue, $value); 
+                } 
 				return strpos($fieldValue, $value) === FALSE;
 			case "starts with":
 				return $this->startsWith($fieldValue, $value);
@@ -231,6 +231,7 @@ class VTJsonCondition {
 				return $this->endsWith($fieldValue, $value);
 			case "matches":
 				return preg_match($value, $fieldValue);
+
 			case "has changed" :
 				$entityDelta = new VTEntityDelta();
 				$idParts = vtws_getIdComponents($entityData->getId());

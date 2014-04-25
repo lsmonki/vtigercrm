@@ -214,6 +214,14 @@ class Vtiger_Mailer extends PHPMailer {
 		}
 	}
 
+    /**
+     * Function to prepares email as string
+     * @return type
+     */
+    public function getMailString() {
+        return $this->MIMEHeader.$this->MIMEBody;
+    }
+
 	/**
 	 * Dispatch (send) email that was queued.
 	 */

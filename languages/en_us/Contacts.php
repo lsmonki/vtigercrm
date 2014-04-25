@@ -50,6 +50,8 @@ $languageStrings = array(
 	'Email' => 'Primary Email',
 	'Secondary Email' => 'Secondary Email',
 	'Contact Id' => 'Contact Id',
+    'Support Start Date' => 'Support Start Date',
+    'Support End Date'   => 'Support End Date',
 	
 	//Added for Picklist Values
 	'Mr.'=>'Mr.',
@@ -62,8 +64,4 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-        'LBL_SYNC_BUTTON' => 'Synchronize Now',
-        'LBL_SYNCRONIZING' => 'Synchronizing....',
-        'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
-        'LBL_FIELD_MAPPING' => 'Field Mapping'
  );

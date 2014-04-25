@@ -8,13 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('include/RelatedListView.php');
-require_once('user_privileges/default_module_view.php');
-
 class Vendors extends CRMEntity {
 	var $log;
 	var $db;
@@ -68,7 +61,7 @@ class Vendors extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'vendorname';
-	
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Vendors() {
@@ -126,7 +119,7 @@ class Vendors extends CRMEntity {
 			  		FROM vtiger_products
 			  		INNER JOIN vtiger_vendor ON vtiger_vendor.vendorid = vtiger_products.vendor_id
 			  		INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid INNER JOIN vtiger_productcf
-				    ON vtiger_products.productid = vtiger_productcf.productid 
+				    ON vtiger_products.productid = vtiger_productcf.productid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_groups
@@ -181,7 +174,7 @@ class Vendors extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.*, vtiger_purchaseorder.*,vtiger_vendor.vendorname from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid left outer join vtiger_vendor on vtiger_purchaseorder.vendorid=vtiger_vendor.vendorid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_purchaseorder.vendorid=".$id;
+		$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_crmentity.*, vtiger_purchaseorder.*,vtiger_vendor.vendorname from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid left outer join vtiger_vendor on vtiger_purchaseorder.vendorid=vtiger_vendor.vendorid LEFT JOIN vtiger_purchaseordercf ON vtiger_purchaseordercf.purchaseorderid = vtiger_purchaseorder.purchaseorderid LEFT JOIN vtiger_pobillads ON vtiger_pobillads.pobilladdressid = vtiger_purchaseorder.purchaseorderid LEFT JOIN vtiger_poshipads ON vtiger_poshipads.poshipaddressid = vtiger_purchaseorder.purchaseorderid  left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_purchaseorder.vendorid=".$id;
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
 
@@ -270,16 +263,16 @@ class Vendors extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
-		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendorcontactrel.vendorid,vtiger_account.accountname from vtiger_contactdetails 
-				inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid  
+		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendorcontactrel.vendorid,vtiger_account.accountname from vtiger_contactdetails
+				inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 				inner join vtiger_vendorcontactrel on vtiger_vendorcontactrel.contactid=vtiger_contactdetails.contactid
 				INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 				INNER JOIN vtiger_contactsubdetails ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
 				INNER JOIN vtiger_customerdetails ON vtiger_contactdetails.contactid = vtiger_customerdetails.customerid
 				INNER JOIN vtiger_contactscf ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
-				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid 
-				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid 
-				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid 
+				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
+				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted=0 and vtiger_vendorcontactrel.vendorid = ".$id;
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
@@ -368,7 +361,7 @@ class Vendors extends CRMEntity {
 		$query = "SELECT case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name,
 			vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.activitytype, vtiger_crmentity.modifiedtime,
-			vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_activity.date_start, vtiger_seactivityrel.crmid as parent_id
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_activity.date_start,vtiger_activity.time_start, vtiger_seactivityrel.crmid as parent_id
 			FROM vtiger_activity, vtiger_seactivityrel, vtiger_vendor, vtiger_users, vtiger_crmentity
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid=vtiger_crmentity.smownerid
@@ -394,7 +387,7 @@ class Vendors extends CRMEntity {
 	 * @param - $module Primary module name
 	 * returns the query string formed on fetching the related data for report for primary module
 	 */
-	function generateReportsQuery($module){
+	function generateReportsQuery($module, $queryPlanner) {
 		$moduletable = $this->table_name;
 		$moduleindex = $this->table_index;
 		$modulecftable = $this->tab_name[2];
@@ -418,9 +411,9 @@ class Vendors extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule, $queryplanner) {
-		
+
 		$matrix = $queryplanner->newDependencyMatrix();
-		
+
 		$matrix->setDependency("vtiger_crmentityVendors",array("vtiger_usersVendors","vtiger_lastModifiedByVendors"));
 		$matrix->setDependency("vtiger_vendor",array("vtiger_crmentityVendors","vtiger_vendorcf","vtiger_email_trackVendors"));
 		if (!$queryplanner->requireTable('vtiger_vendor', $matrix)) {
@@ -442,6 +435,9 @@ class Vendors extends CRMEntity {
 		}
 		if ($queryplanner->requireTable("vtiger_lastModifiedByVendors")){
 		    $query .=" left join vtiger_users as vtiger_lastModifiedByVendors on vtiger_lastModifiedByVendors.id = vtiger_crmentityVendors.modifiedby ";
+		}
+        if ($queryplanner->requireTable("vtiger_createdbyVendors")){
+			$query .= " left join vtiger_users as vtiger_createdbyVendors on vtiger_createdbyVendors.id = vtiger_crmentityVendors.smcreatorid ";
 		}
 		return $query;
 	}
@@ -528,6 +524,18 @@ class Vendors extends CRMEntity {
 			else {
 				parent::save_related_module($module, $crmid, $with_module, $with_crmid);
 			}
+		}
+	}
+
+    // Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+        if($return_module == 'Contacts') {
+			$sql = 'DELETE FROM vtiger_vendorcontactrel WHERE vendorid=? AND contactid=?';
+			$this->db->pquery($sql, array($id,$return_id));
+		} else {
+			parent::unlinkRelationship($id, $return_module, $return_id);
 		}
 	}
 

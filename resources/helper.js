@@ -54,16 +54,15 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var dateTimeComponents = dateTime.split(" ");
 		var dateComponent = dateTimeComponents[0];
 		var timeComponent = dateTimeComponents[1];
-                var seconds = '00';
-                if((dateComponent.length == 0) || (timeComponent.length == 0)){
-                    return false;
-                }
+        var seconds = '00';
+
 		var splittedDate = dateComponent.split("-");
 		var splittedDateFormat = dateFormat.split("-");
 		var year = splittedDate[splittedDateFormat.indexOf("yyyy")];
 		var month = splittedDate[splittedDateFormat.indexOf("mm")];
 		var date = splittedDate[splittedDateFormat.indexOf("dd")];
-		if((year.length > 4) || (month.length > 2) || (date.length > 2)){
+        var dateInstance = Date.parse(year+"-"+month+"-"+date);
+		if((year.length > 4) || (month.length > 2) || (date.length > 2) || (dateInstance == null)){
 				var errorMsg = app.vtranslate("JS_INVALID_DATE");
 				throw errorMsg;
 		}
@@ -95,13 +94,14 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var dateInstance = new Date(year,month,date,timeSections[0],timeSections[1],seconds);
         return dateInstance;
 	},
-	requestToShowComposeEmailForm : function(selectedId,fieldname){
+	requestToShowComposeEmailForm : function(selectedId,fieldname,fieldmodule){
 		var selectedFields = new Array();
 		selectedFields.push(fieldname);
 		var selectedIds =  new Array();
 		selectedIds.push(selectedId);
 		var params = {
 			'module' : 'Emails',
+            'fieldModule' : fieldmodule,
 			'selectedFields' : selectedFields,
 			'selected_ids' : selectedIds,
 			'view' : 'ComposeEmail'
@@ -113,12 +113,12 @@ jQuery.Class("Vtiger_Helper_Js",{
 	/*
 	 * Function to get the compose email popup
 	 */
-	getInternalMailer  : function(selectedId,fieldname){
+	getInternalMailer  : function(selectedId,fieldname,fieldmodule){
 		var module = 'Emails';
 		var cacheResponse = Vtiger_Helper_Js.checkServerConfigResponseCache;
 		var  checkServerConfigPostOperations = function (data) {
 			if(data == true){
-				Vtiger_Helper_Js.requestToShowComposeEmailForm(selectedId,fieldname);
+				Vtiger_Helper_Js.requestToShowComposeEmailForm(selectedId,fieldname,fieldmodule);
 			} else {
 				alert(app.vtranslate('JS_EMAIL_SERVER_CONFIGURATION'));
 			}
@@ -245,6 +245,7 @@ jQuery.Class("Vtiger_Helper_Js",{
 		var bottomScroll = jQuery('.contents-bottomscroll', container);
 		
 		jQuery('.topscroll-div', container).css('width', jQuery('.bottomscroll-div', container).outerWidth());
+		jQuery('.bottomscroll-div', container).css('width', jQuery('.topscroll-div', container).outerWidth());
 		
 		topScroll.scroll(function(){
 			bottomScroll.scrollLeft(topScroll.scrollLeft());

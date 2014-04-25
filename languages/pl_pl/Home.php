@@ -22,4 +22,5 @@ $languageStrings = array(
 	'LTFAQ' => 'Moje ostatnie instrukcje',
 	'UA' => 'Nadchodzące wydarzenia',
 	'PA' => 'Oczekujące wydarzenia',
+	'Home' => 'Pulpit',
 );

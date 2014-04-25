@@ -8,17 +8,17 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
+	'LBL_ADD_RECORD' => 'Добавить E-mail шаблон',
+	'SINGLE_EmailTemplates' => 'E-mail шаблона',
+	'LBL_EMAIL_TEMPLATES'=> 'Шаблоны Email',
+	'LBL_EMAIL_TEMPLATE' => 'E-mail шаблона',
 	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
+	'LBL_TEMPLATE_NAME' => 'Имя шаблона ',
+	'LBL_DESCRIPTION' => 'Описание',
+	'LBL_SUBJECT' => 'Тема',
+	'LBL_GENERAL_FIELDS' => 'Общие поля',
+	'LBL_SELECT_FIELD_TYPE' => 'Выберите тип поле',
 	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Управление шаблонами для модуля E-Mail',
 	
 );

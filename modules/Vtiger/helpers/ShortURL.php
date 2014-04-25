@@ -7,7 +7,7 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * *********************************************************************************** */
+ *************************************************************************************/
 
 /**
  * Helper methods to work with ShortURLs

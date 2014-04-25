@@ -48,6 +48,8 @@ $languageStrings = array(
 	'Prof.'                        => 'Prof.'                       , 
 	'User List'                    => 'Felhasználó lista'         , 
 	'Contact Id' => 'Kapcsolat Id',
+    'Support Start Date'           => 'Támogatás Indítás dátuma',
+    'Support End Date'             => 'Támogatás End Date',
 );
 $jsLanguageStrings = array(
 	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review

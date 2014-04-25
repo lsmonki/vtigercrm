@@ -22,12 +22,26 @@ class Vtiger_Email_UIType extends Vtiger_Base_UIType {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$internalMailer = $currentUser->get('internal_mailer');
 		if($value){
+            $moduleName = $this->get('field')->get('block')->module->name;
+            $fieldName = $this->get('field')->get('name');
 			if ($internalMailer == 1) {
-				$fieldName = $this->get('field')->get('name');
-				$value = "<a class='emailField cursorPointer' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId," .
-						"'$fieldName');\">" . textlength_check($value) . "</a>";
+				/**
+                 *  We should not add "emailField" class to user name field.
+                 *  If we do so, for sending mail from list view is taking that value as a TO field. 
+                 */
+                if($moduleName == "Users" && $fieldName == "user_name"){
+                    $value = "<a class='cursorPointer' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId," .
+                    		"'$fieldName','$moduleName');\">" . textlength_check($value) . "</a>";
+                }else{
+                	$value = "<a class='emailField cursorPointer' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId," .
+                    		"'$fieldName','$moduleName');\">" . textlength_check($value) . "</a>";
+                }
 			} else {
-				$value = "<a class='emailField cursorPointer'  href='mailto:" . $value . "'>" . textlength_check($value) . "</a>";
+                if($moduleName == "Users" && $fieldName == "user_name"){
+                    $value = "<a class='cursorPointer'  href='mailto:" . $value . "'>" . textlength_check($value) . "</a>";
+                }else{
+                    $value = "<a class='emailField cursorPointer'  href='mailto:" . $value . "'>" . textlength_check($value) . "</a>";
+                }
 			}
 		}
 		return $value;

@@ -19,6 +19,7 @@ $languageStrings = array(
 	'LBL_EVENTS' => 'Events',
 	'LBL_TODOS' => 'To Do',
 	'LBL_HOLD_FOLLOWUP_ON' => 'Hold Followup on',
+    'LBL_CREATE_FOLLOWUP_EVENT' => 'Create Follow Up Event',
 	
 	// Blocks
 	'LBL_EVENT_INFORMATION' => 'Event Details',
@@ -83,7 +84,7 @@ $languageStrings = array(
 	'Monthly'=>'Month(s)',
 	'Yearly'=>'Year',
 	
-	'LBL_REPEATEVENT' => 'Repeat once in every',
+	'LBL_REPEATEVENT' => 'Once in every',
 	'LBL_UNTIL' => 'Until',
 	'LBL_DAY_OF_THE_MONTH' => 'day of the month',
 	'LBL_ON' => 'on',
@@ -94,5 +95,6 @@ $languageStrings = array(
     'LBL_INVITE_USER_BLOCK' => 'Invite',
     'LBL_INVITE_USERS' => 'Invite Users',
 	'INVITATION'=>' Invitation ',
+	'Busy' => 'Busy'
 
 );

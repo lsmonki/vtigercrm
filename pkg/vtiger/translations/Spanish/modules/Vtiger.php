@@ -520,7 +520,7 @@ $languageStrings = array(
 	'LBL_BLANK' => '-vacío-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM - CRM de Código Abierto',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
 	'SINGLE_Accounts' => 'Cuenta',
 	'SINGLE_Contacts' => 'Contacto',
 	'LBL_Sun' => 'Dom',

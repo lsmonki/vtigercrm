@@ -25,5 +25,9 @@ class Vtiger_CurrencyList_UIType extends Vtiger_Base_UIType {
 		}
 		return $value;
 	}
+
+	public function getCurrenyListReferenceFieldName() {
+		return 'currency_name';
+	}
 }
 ?>

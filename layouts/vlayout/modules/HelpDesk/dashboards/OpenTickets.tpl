@@ -21,7 +21,7 @@
 		/**
 		 * Function which will give chart related Data
 		 */
-		getChartRelatedData : function() {
+		generateData : function() {
 			var container = this.getContainer();
 			var jData = container.find('.widgetData').val();
 			var data = JSON.parse(jData);
@@ -31,7 +31,7 @@
 				var rowData = [row.name, parseInt(row.count), row.id];
 				chartData.push(rowData);
 			}
-			return chartData;
+			return {literal}{'chartData':chartData}{/literal};
 		}
 	});
 </script>

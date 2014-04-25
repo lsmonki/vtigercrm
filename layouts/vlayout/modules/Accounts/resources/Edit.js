@@ -26,6 +26,22 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 										'bill_code'	:'ship_code',
 										'bill_country':'ship_country'
 								},
+   
+   // mapping address fields of MemberOf field in the module              
+   memberOfAddressFieldsMapping : {
+                                        'bill_street':'bill_street',
+										'bill_pobox':'bill_pobox',
+										'bill_city'	:'bill_city',
+										'bill_state':'bill_state',
+										'bill_code'	:'bill_code',
+										'bill_country':'bill_country',
+                                        'ship_street' : 'ship_street',        
+                                        'ship_pobox' : 'ship_pobox',
+                                        'ship_city':'ship_city',
+                                        'ship_state':'ship_state',
+                                        'ship_code':'ship_code',
+                                        'ship_country':'ship_country'
+                                   },                          
 								
 	/**
 	 * This function will return the current form
@@ -202,7 +218,7 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 		thisInstance.getRecordDetails(data).then(
 			function(data){
 				var response = data['result'];
-				thisInstance.mapAddressDetails(thisInstance.addressFieldsMappingInModule, response['data'], container);
+				thisInstance.mapAddressDetails(thisInstance.memberOfAddressFieldsMapping, response['data'], container);
 			},
 			function(error, err){
 
@@ -214,6 +230,10 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 	 */
 	mapAddressDetails : function(addressDetails, result, container) {
 		for(var key in addressDetails) {
+			// While Quick Creat we don't have address fields, we should  add
+            if(container.find('[name="'+key+'"]').length == 0) { 
+                   container.append("<input type='hidden' name='"+key+"'>"); 
+            } 
 			container.find('[name="'+key+'"]').val(result[addressDetails[key]]);
 			container.find('[name="'+key+'"]').trigger('change');
 			container.find('[name="'+addressDetails[key]+'"]').val(result[addressDetails[key]]);

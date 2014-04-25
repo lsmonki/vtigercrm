@@ -20,13 +20,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('user_privileges/default_module_view.php');
-
-// Account is used to store vtiger_account information.
 class PurchaseOrder extends CRMEntity {
 	var $log;
 	var $db;
@@ -117,13 +110,17 @@ class PurchaseOrder extends CRMEntity {
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 				&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
+				&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false && $_REQUEST['action'] != 'FROM_WS') {
 
 			$requestProductIdsList = $requestQuantitiesList = array();
 			$totalNoOfProducts = $_REQUEST['totalProductCount'];
 			for($i=1; $i<=$totalNoOfProducts; $i++) {
 				$productId = $_REQUEST['hdnProductId'.$i];
 				$requestProductIdsList[$productId] = $productId;
+                if(array_key_exists($productId, $requestQuantitiesList)){
+                    $requestQuantitiesList[$productId] = $requestQuantitiesList[$productId] + $_REQUEST['qty'.$i];
+                    continue;
+                }
 				$requestQuantitiesList[$productId] =  $_REQUEST['qty'.$i];
 			}
 
@@ -367,6 +364,14 @@ class PurchaseOrder extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_inventoryproductrelPurchaseOrder", $matrix)){
 			$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelPurchaseOrder on vtiger_purchaseorder.purchaseorderid = vtiger_inventoryproductrelPurchaseOrder.id";
+            // To Eliminate duplicates in reports
+            if(($module == 'Products' || $module == 'Services') && $secmodule == "PurchaseOrder"){
+                if($module == 'Products'){
+                    $query .= " and vtiger_inventoryproductrelPurchaseOrder.productid = vtiger_products.productid ";    
+                }else if($module == 'Services'){
+                    $query .= " and vtiger_inventoryproductrelPurchaseOrder.productid = vtiger_service.serviceid ";
+                }
+            }
 		}
 		if ($queryPlanner->requireTable("vtiger_productsPurchaseOrder")){
 			$query .= " left join vtiger_products as vtiger_productsPurchaseOrder on vtiger_productsPurchaseOrder.productid = vtiger_inventoryproductrelPurchaseOrder.productid";
@@ -388,6 +393,9 @@ class PurchaseOrder extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByPurchaseOrder")){
 			$query .= " left join vtiger_users as vtiger_lastModifiedByPurchaseOrder on vtiger_lastModifiedByPurchaseOrder.id = vtiger_crmentityPurchaseOrder.modifiedby ";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbyPurchaseOrder")){
+			$query .= " left join vtiger_users as vtiger_createdbyPurchaseOrder on vtiger_createdbyPurchaseOrder.id = vtiger_crmentityPurchaseOrder.smcreatorid ";
 		}
 		return $query;
 	}

@@ -93,6 +93,7 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 			$viewer->assign('VIEW_MODE', $viewMode);
 		}
 		
+        $userChangedEndDateTime = $request->get('userChangedEndDateTime');
 		//If followup value is passed from request to process the value and sent to client
 		$requestFollowUpDate = $request->get('followup_date_start');
 		$requestFollowUpTime = $request->get('followup_time_start');
@@ -113,6 +114,8 @@ Class Calendar_Edit_View extends Vtiger_Edit_View {
 		}else{
 			$viewer->assign('SHOW_FOLLOW_UP',FALSE);
 		}
+        
+		$viewer->assign('USER_CHANGED_END_DATE_TIME',$userChangedEndDateTime);
 		$viewer->assign('FOLLOW_UP_DATE',$followUpDate);
 		$viewer->assign('FOLLOW_UP_TIME',$followUpTime);
 		$viewer->assign('RECURRING_INFORMATION', $recordModel->getRecurrenceInformation());

@@ -39,7 +39,7 @@ $mobileAPITestController->doFetchRecord('16x196', false);
 
 class Mobile_API_TestController {
 	
-	private $URL = 'http://localhost/vtiger/develop/ondemand/prasad_odu14/wip/modules/Mobile/api.php';
+	private $URL;
 	private $userid;
 	private $session;
 	private $listing;

@@ -88,7 +88,7 @@ class Vtiger_InventoryPDFController {
 
 
 	// Helper methods
-	
+
 	function buildContentModels() {
 		$associated_products = $this->associated_products;
 		$contentModels = array();
@@ -155,10 +155,10 @@ class Vtiger_InventoryPDFController {
 
 	function buildContentLabelModel() {
 		$labelModel = new Vtiger_PDF_Model();
-		$labelModel->set('Code',	  getTranslatedString('Product Code',$this->moduleName));
-		$labelModel->set('Name',	  getTranslatedString('Product Name',$this->moduleName));
+		$labelModel->set('Code',      getTranslatedString('Product Code',$this->moduleName));
+		$labelModel->set('Name',      getTranslatedString('Product Name',$this->moduleName));
 		$labelModel->set('Quantity',  getTranslatedString('Quantity',$this->moduleName));
-		$labelModel->set('Price',     getTranslatedString('Price',$this->moduleName));
+		$labelModel->set('Price',     getTranslatedString('LBL_LIST_PRICE',$this->moduleName));
 		$labelModel->set('Discount',  getTranslatedString('Discount',$this->moduleName));
 		$labelModel->set('Tax',       getTranslatedString('Tax',$this->moduleName));
 		$labelModel->set('Total',     getTranslatedString('Total',$this->moduleName));
@@ -262,7 +262,7 @@ class Vtiger_InventoryPDFController {
 			if(!empty($resultrow['code'])) $addressValues[]= $resultrow['code'];
 			if(!empty($resultrow['country'])) $addressValues[]= "\n".$resultrow['country'];
 
-
+			$additionalCompanyInfo = array();
 			if(!empty($resultrow['phone']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Phone: ", $this->moduleName). $resultrow['phone'];
 			if(!empty($resultrow['fax']))		$additionalCompanyInfo[]= "\n".getTranslatedString("Fax: ", $this->moduleName). $resultrow['fax'];
 			if(!empty($resultrow['website']))	$additionalCompanyInfo[]= "\n".getTranslatedString("Website: ", $this->moduleName). $resultrow['website'];

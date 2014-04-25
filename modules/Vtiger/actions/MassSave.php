@@ -65,8 +65,13 @@ class Vtiger_MassSave_Action extends Vtiger_Mass_Action {
 					}
 					$recordModel->set($fieldName, $fieldValue);
 				} else {
-					$uiTypeModel = $fieldModel->getUITypeModel();
-					$recordModel->set($fieldName, $uiTypeModel->getUserRequestValue($recordModel->get($fieldName)));
+                    $uiType = $fieldModel->get('uitype');
+                    if($uiType == 70) {
+                        $recordModel->set($fieldName, $recordModel->get($fieldName));
+                    }  else {
+                        $uiTypeModel = $fieldModel->getUITypeModel();
+                        $recordModel->set($fieldName, $uiTypeModel->getUserRequestValue($recordModel->get($fieldName)));
+                    }
 				}
 			}
 			$recordModels[$recordId] = $recordModel;

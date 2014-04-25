@@ -130,6 +130,12 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$moduleName = $request->getModule();
 		$duplicateSearchFields = $request->get('fields');
 		$dataModelInstance = Vtiger_FindDuplicate_Model::getInstance($moduleName);
+
+		$ignoreEmpty = $request->get('ignoreEmpty');
+		$ignoreEmptyValue = false;
+		if($ignoreEmpty == 'on' || $ignoreEmpty == 'true' || $ignoreEmpty == '1') $ignoreEmptyValue = true;
+		$dataModelInstance->set('ignoreEmpty', $ignoreEmptyValue);
+
 		$dataModelInstance->set('fields', $duplicateSearchFields);
 		$count = $dataModelInstance->getRecordCount();
 

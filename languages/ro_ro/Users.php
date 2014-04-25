@@ -170,6 +170,11 @@ $languageStrings = array(
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
 	'LBL_USER_DELETED_SUCCESSFULLY' => 'Utilizator șters cu succes',
+    'LBL_ACTIVE_USERS' => 'Utilizatori activi',
+    'LBL_INACTIVE_USERS' => 'Utilizatorii inactivi',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Sterge utilizator permanent',
+    'LBL_RESTORE' => 'Restabili',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Utilizatorul restaurat cu succes',
 	'LBL_ALMOST_THERE'	=>	'Aproape acolo!',
 	'LBL_ABOUT_ME'		=>	'Despre mine',
 	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Am promisiunea de a menține acest privat)',
@@ -190,4 +195,18 @@ $languageStrings = array(
 	'LBL_DATE_FORMAT'		=> 'Format dată',
 	'LBL_CHOOSE_DATE_FORMAT'=> 'Alegeți Format dată',
 	'LBL_PHONE'	=> 'Telefon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

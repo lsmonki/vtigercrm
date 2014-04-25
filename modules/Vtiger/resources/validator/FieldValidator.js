@@ -36,7 +36,7 @@ Vtiger_Base_Validator_Js("Vtiger_Email_Validator_Js",{
 	 * @return false if validation error occurs
 	 */
 	validateValue : function(fieldValue){
-		var emailFilter = /^[_/a-zA-Z0-9]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
+		var emailFilter = /^[_/a-zA-Z0-9*]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
 		var illegalChars= /[\(\)\<\>\,\;\:\\\"\[\]]/ ;
 
 		if (!emailFilter.test(fieldValue)) {
@@ -176,7 +176,7 @@ Vtiger_Base_Validator_Js('Vtiger_Url_Validator_Js',{},{
 	 */
 	validate: function(){
 		var fieldValue = this.getFieldValue();
-		var regexp = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+		var regexp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
 		var result = regexp.test(fieldValue);
 		if (!result ) {
 			var errorInfo = app.vtranslate('JS_CONTAINS_ILLEGAL_CHARACTERS');//"Please enter valid url";
@@ -366,11 +366,96 @@ Vtiger_Base_Validator_Js("Vtiger_lessThanToday_Validator_Js",{},{
 			this.setError(errorInfo);
 			return false;
 		}
+                return true;
+	}
+})
+
+Vtiger_Base_Validator_Js("Vtiger_lessThanOrEqualToToday_Validator_Js",{},{
+
+	/**
+	 * Function to validate the datesold field
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(){
+		var field = this.getElement();
+		var fieldData = field.data();
+		var fieldDateFormat = fieldData.dateFormat;
+		var fieldInfo = fieldData.fieldinfo;
+		var fieldValue = this.getFieldValue();
+		try{
+			var fieldDateInstance = Vtiger_Helper_Js.getDateInstance(fieldValue,fieldDateFormat);
+		}
+		catch(err){
+			this.setError(err);
+			return false;
+		}
+		fieldDateInstance.setHours(0,0,0,0);
+		var todayDateInstance = new Date();
+		todayDateInstance.setHours(0,0,0,0);
+		var comparedDateVal =  todayDateInstance - fieldDateInstance;
+		if(comparedDateVal < 0){
+			var errorInfo = fieldInfo.label+" "+app.vtranslate('JS_SHOULD_BE_LESS_THAN_OR_EQUAL_TO')+" "+app.vtranslate('JS_CURRENT_DATE');
+			this.setError(errorInfo);
+			return false;
+		}
+                return true;
+	}
+})
+
+Vtiger_Base_Validator_Js('Vtiger_greaterThanOrEqualToToday_Validator_Js',{},{
+
+	/**
+	 * Function to validate the dateinservice field
+	 * @return true if validation is successfull
+	 * @return false if validation error occurs
+	 */
+	validate: function(){
+		var field = this.getElement();
+		var fieldData = field.data();
+		var fieldDateFormat = fieldData.dateFormat;
+		var fieldInfo = fieldData.fieldinfo;
+		var fieldValue = this.getFieldValue();
+		try{
+			var fieldDateInstance = Vtiger_Helper_Js.getDateInstance(fieldValue,fieldDateFormat);
+		}
+		catch(err){
+			this.setError(err);
+			return false;
+		}
+		fieldDateInstance.setHours(0,0,0,0);
+		var todayDateInstance = new Date();
+		todayDateInstance.setHours(0,0,0,0);
+		var comparedDateVal =  todayDateInstance - fieldDateInstance;
+		if(comparedDateVal > 0){
+			var errorInfo = fieldInfo.label+" "+app.vtranslate('JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO')+" "+app.vtranslate('JS_CURRENT_DATE');;
+			this.setError(errorInfo);
+			return false;
+		}
         return true;
 	}
 })
 
-Vtiger_Base_Validator_Js("Vtiger_greaterThanDependentField_Validator_Js",{},{
+Vtiger_Base_Validator_Js("Vtiger_greaterThanDependentField_Validator_Js",{
+	
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var fieldForValidation = field[0];
+		if(jQuery(fieldForValidation).attr('name') == 'followup_date_start'){
+			var dependentFieldList = new Array('date_start');
+		}
+		var instance = new Vtiger_greaterThanDependentField_Validator_Js();
+		instance.setElement(field);
+		var response = instance.validate(dependentFieldList);
+		if(response != true){
+			return instance.getError();
+		}
+	}
+},{
 
 	/**
 	 * Function to validate the birthday field
@@ -379,7 +464,13 @@ Vtiger_Base_Validator_Js("Vtiger_greaterThanDependentField_Validator_Js",{},{
 	 */
 	validate: function(dependentFieldList){
 		var field = this.getElement();
-		var fieldLabel = field.data('fieldinfo').label;
+		var fieldInfo = field.data('fieldinfo');
+		var fieldLabel;
+		if(typeof fieldInfo == "undefined"){
+			fieldLabel = jQuery(field).attr('name');
+		}else{
+			fieldLabel = fieldInfo.label;
+		}
 		var contextFormElem = field.closest('form');
 		for(var i=0; i<dependentFieldList.length; i++){
 			var dependentField = dependentFieldList[i];
@@ -588,7 +679,7 @@ Vtiger_Integer_Validator_Js("Vtiger_Double_Validator_Js",{},{
 		var response = this._super();
 		if(response == false){
 			var fieldValue = this.getFieldValue();
-			var doubleRegex= /^\d+.\d+$/ ;
+			var doubleRegex= /(^[-+]?\d+)\.\d+$/ ;
 			if (!fieldValue.match(doubleRegex)) {
 				var errorInfo = app.vtranslate("JS_PLEASE_ENTER_DECIMAL_VALUE");
 				this.setError(errorInfo);

@@ -21,6 +21,6 @@ $languageStrings = array(
 	'LBL_MIGRATION_COMPLETED_SUCCESSFULLY' => 'Your vtiger6 migration completed successfully.',
 	'LBL_RELEASE_NOTES' => 'To know what is new in this version, please read <a href="#" target="_blank">Release Notes</a> <br>',
 	'LBL_WAIT' => 'Please wait ...',
-	'LBL_INPROGRESS' => 'Migration in progress',
+	'LBL_INPROGRESS' => 'Migration Inprogress',
 	'LBL_DATABASE_CHANGE_LOG' => 'Migration : Database Changes Log',
 );

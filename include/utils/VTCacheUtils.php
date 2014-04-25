@@ -292,7 +292,34 @@ class VTCacheUtils {
 			unset(self::$_subroles_roleid_cache[$roleid]);
 		}
 	}
-
+	
+	/** Record Owner Id */
+	static $_record_ownerid_cache = array();
+	static function lookupRecordOwner($record) {
+		if(isset(self::$_record_ownerid_cache[$record])) {
+			return self::$_record_ownerid_cache[$record];
+		}
+		return false;
+	}
+	
+	static function updateRecordOwner($record, $ownerId) {
+		self::$_record_ownerid_cache[$record] = $ownerId;
+	}
+	
+	
+	/** Record Owner Type */
+	static $_record_ownertype_cache = array();
+	static function lookupOwnerType($ownerId) {
+		if(isset(self::$_record_ownertype_cache[$ownerId])) {
+			return self::$_record_ownertype_cache[$ownerId];
+		}
+		return false;
+	}
+	
+	static function updateOwnerType($ownerId, $count) {
+		self::$_record_ownertype_cache[$ownerId] = $count;
+	}
+	
 	/** Related module information for Report */
 	static $_report_listofmodules_cache = false;
 	static function lookupReport_ListofModuleInfos() {

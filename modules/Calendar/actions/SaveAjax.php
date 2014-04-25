@@ -25,7 +25,7 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
                 $dateTimeFieldInstance = new DateTimeField($fieldValue . ' ' . $timeStart);
 
 				$fieldValue = $fieldValue.' '.$timeStart;
-                
+
                 $userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue();
                 $dateTimeComponents = explode(' ',$userDateTimeString);
                 $dateComponent = $dateTimeComponents[0];
@@ -37,7 +37,7 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
                 $dateTimeFieldInstance = new DateTimeField($fieldValue . ' ' . $timeEnd);
 
 				$fieldValue = $fieldValue.' '.$timeEnd;
-                
+
                 $userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue();
                 $dateTimeComponents = explode(' ',$userDateTimeString);
                 $dateComponent = $dateTimeComponents[0];
@@ -46,12 +46,12 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
                 $result[$fieldName]['calendar_display_value']   =  $dataBaseDateFormatedString.' '. $dateTimeComponents[1];
 			}
 			$result[$fieldName]['value'] = $fieldValue;
-            $result[$fieldName]['display_value'] = $fieldModel->getDisplayValue($fieldValue);
+            $result[$fieldName]['display_value'] = decode_html($fieldModel->getDisplayValue($fieldValue));
 		}
 
 		$result['_recordLabel'] = $recordModel->getName();
 		$result['_recordId'] = $recordModel->getId();
-		
+
 		// Handled to save follow up event
 		$followupMode = $request->get('followup');
 
@@ -104,7 +104,7 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 			$startTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('time_start'));
 			$startDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('date_start')." ".$startTime);
 			list($startDate, $startTime) = explode(' ', $startDateTime);
-			
+
 			$recordModel->set('date_start', $startDate);
 			$recordModel->set('time_start', $startTime);
 		}
@@ -132,12 +132,12 @@ class Calendar_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 			$visibility = 'Private';
 			$recordModel->set('visibility', $visibility);
 		}
-		
+
 		if(empty($visibility)) {
 			$assignedUserId = $recordModel->get('assigned_user_id');
 			$sharedType = Calendar_Module_Model::getSharedType($assignedUserId);
 			if($sharedType == 'selectedusers') {
-				$sharedType = 'private';
+				$sharedType = 'public';
 			}
 			$recordModel->set('visibility', ucfirst($sharedType));
 		}

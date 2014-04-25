@@ -25,7 +25,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 	function preProcess (Vtiger_Request $request, $display=true) {
 		parent::preProcess($request, false);
 
-		$viewer = $this->getViewer($request);
+                $viewer = $this->getViewer($request);
 
 		$menuModelsList = Vtiger_Menu_Model::getAll(true);
 		$selectedModule = $request->getModule();
@@ -36,13 +36,14 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		$currentDate  = Vtiger_Date_UIType::getDisplayDateValue(date('Y-n-j'));
 		$viewer->assign('CURRENTDATE', $currentDate);
 		$viewer->assign('MODULE', $selectedModule);
+                $viewer->assign('MODULE_NAME', $selectedModule);
 		$viewer->assign('QUALIFIED_MODULE', $selectedModule);
 		$viewer->assign('PARENT_MODULE', $request->get('parent'));
 		$viewer->assign('VIEW', $request->get('view'));
-		
+
 		// Order by pre-defined automation process for QuickCreate.
 		uksort($menuModelsList, array('Vtiger_MenuStructure_Model', 'sortMenuItemsByProcess'));
-
+                
 		$viewer->assign('MENUS', $menuModelsList);
 		$viewer->assign('MENU_STRUCTURE', $menuStructure);
 		$viewer->assign('MENU_SELECTED_MODULENAME', $selectedModule);
@@ -112,7 +113,7 @@ abstract class Vtiger_Basic_View extends Vtiger_Footer_View {
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
+		$headerScriptInstances = array_merge($jsScriptInstances,$headerScriptInstances);
 		return $headerScriptInstances;
 	}
 

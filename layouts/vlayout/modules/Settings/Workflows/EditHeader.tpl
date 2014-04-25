@@ -15,7 +15,6 @@
                 {vtranslate('LBL_EDITING_WORKFLOW',$QUALIFIED_MODULE)} : {$WORKFLOW_MODEL->get('summary')}
             {/if}
         </h3>
-
         <hr>
         <div id="breadcrumb">
             <ul class="crumbs marginLeftZero">

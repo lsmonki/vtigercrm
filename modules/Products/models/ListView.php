@@ -25,12 +25,25 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 		$queryGenerator = $this->get('query_generator');
 		$listViewContoller = $this->get('listview_controller');
 
+         $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
+        
 		$searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
 		$operator = $this->get('operator');
 		if(!empty($searchKey)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
+        
+        
         $orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 
@@ -50,6 +63,13 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
                 $queryGenerator->addWhereField($orderByFieldName);
             }
         }
+		
+		if (!empty($orderBy) && $orderBy === 'smownerid') { 
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+			if ($fieldModel->getFieldDataType() == 'owner') { 
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+			} 
+		} 
 
 		$listQuery = $this->getQuery();
 
@@ -97,6 +117,10 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
+        if(empty($viewid)){
+            $viewid = $pagingModel->get('viewid');
+        }
+        $_SESSION['lvs'][$moduleName][$viewid]['start'] = $pagingModel->get('page');
 		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
 
 		//For Products popup in Price Book Related list
@@ -140,8 +164,11 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 	public function getSubProducts($subProductId){
 		$flag = false;
 		if(!empty($subProductId)){
-			$db = PearDatabase::getInstance();
-			$result = $db->pquery('SELECT crmid FROM vtiger_seproductsrel WHERE productid = ?', array($subProductId));
+            $db = PearDatabase::getInstance();
+			$result = $db->pquery("SELECT vtiger_seproductsrel.crmid from vtiger_seproductsrel INNER JOIN
+                vtiger_crmentity ON vtiger_seproductsrel.crmid = vtiger_crmentity.crmid 
+					AND vtiger_crmentity.deleted = 0 AND vtiger_seproductsrel.setype=? 
+				WHERE vtiger_seproductsrel.productid=?", array($this->getModule()->get('name'), $subProductId ));
 			if($db->num_rows($result) > 0){
 				$flag = true;
 			}
@@ -159,12 +186,25 @@ class Products_ListView_Model extends Vtiger_ListView_Model {
 
 		$queryGenerator = $this->get('query_generator');
 
+        $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
+        
         $searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
 		$operator = $this->get('operator');
 		if(!empty($searchKey)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
+        
+        
 
 		$listQuery = $this->getQuery();
 

@@ -6848,5 +6848,57 @@
 		<field name="setup_status" type="I" size="2" />
 		<opt platform="mysql">Engine=InnoDB</opt>
 	</table>
+        
+        <table name="vtiger_feedback">
+		<field name="userid" type="I" size="19">
+		</field>
+		<field name="dontshow" type="C" size="19" >
+                    <default value="false" />
+                </field>
+
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+        
+        <table name="vtiger_shareduserinfo">
+		<field name="userid" type="I" size="19">
+                    <notnull />
+                    <default value="0" />
+		</field>
+		<field name="shareduserid" type="I" size="19">
+                    <notnull />
+                    <default value="0" />
+		</field>
+                <field name="color" type="C" size="50" />
+                <field name="visible" type="I" size="19" >
+                    <default value="1" />
+                </field>
+
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+        
+        <table name="vtiger_calendar_default_activitytypes">
+		<field name="id" type="I" size="19">
+			<key />
+		</field>
+		<field name="module" type="C" size="50" />
+                <field name="fieldname" type="C" size="50" />
+                <field name="defaultcolor" type="C" size="50" />
+
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
+        
+        <table name="vtiger_calendar_user_activitytypes">
+		<field name="id" type="I" size="19">
+			<key />
+		</field>
+		<field name="defaultid" type="I" size="19" />
+                <field name="userid" type="I" size="19" />
+                <field name="color" type="C" size="50" />
+                <field name="visible" type="I" size="19" >
+                    <default value="0" />
+                </field>
+
+		<opt platform="mysql">Engine=InnoDB</opt>
+	</table>
 
 </schema>

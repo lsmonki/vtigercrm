@@ -29,5 +29,5 @@ $languageStrings = array(
 	'Cancel'                       => 'Anuleaza'                    , 
 	'LBL_NOT_A_BUNDLE' => 'Nu este o Bundle',
 	'LBL_SUB_PRODUCTS'	=> 'Sub Produse',
-	'LBL_ACTION'	=> 'Acțiune',
+	'LBL_ACTION'	=> 'Ac?iune',
 );

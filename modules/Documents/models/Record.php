@@ -15,8 +15,7 @@ class Documents_Record_Model extends Vtiger_Record_Model {
 	 * @return <String> - Entity Display Name for the record
 	 */
 	function getDisplayName() {
-		//Since vtiger_entityname name field is made as title instead of notes_title
-		return $this->get('notes_title');
+		return Vtiger_Util_Helper::getLabel($this->getId());
 	}
 
 	function getDownloadFileURL() {

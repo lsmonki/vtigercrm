@@ -19,6 +19,7 @@
 				{foreach key=FIELD_NAME item=FIELD_MODEL from=$BLOCK_FIELDS}
 					{assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}
 					{assign var=MODULE_MODEL value=$FIELD_MODEL->getModule()}
+                    {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
 					{if !empty($COLUMNNAME_API)}
 						{assign var=columnNameApi value=$COLUMNNAME_API}
 					{else}
@@ -35,7 +36,8 @@
 						{assign var=PICKLIST_VALUES value = Calendar_Field_Model::getReccurencePicklistValues()}
 						{$FIELD_INFO['picklistvalues'] = $PICKLIST_VALUES}
 					{/if}
-					data-fieldinfo='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($FIELD_INFO))}' >
+					data-fieldinfo='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($FIELD_INFO))}' 
+                    {if !empty($SPECIAL_VALIDATOR)}data-validator='{Zend_Json::encode($SPECIAL_VALIDATOR)}'{/if}>
 					{if $SELECTED_MODULE_NAME neq $MODULE_MODEL->get('name')} 
 						({vtranslate($MODULE_MODEL->get('name'), $MODULE_MODEL->get('name'))})  {vtranslate($FIELD_MODEL->get('label'), $MODULE_MODEL->get('name'))}
 					{else}

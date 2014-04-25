@@ -32,7 +32,13 @@
                         {else}
                             <select class="chzn-select" id="moduleName" name="module_name" required="true" data-placeholder="Select Module...">
                                 {foreach from=$ALL_MODULES key=TABID item=MODULE_MODEL}
-                                    <option value="{$MODULE_MODEL->getName()}" {if $SELECTED_MODULE == $MODULE_MODEL->getName()} selected {/if}>{vtranslate($MODULE_MODEL->getName(), $MODULE_MODEL->getName())}</option>
+                                    <option value="{$MODULE_MODEL->getName()}" {if $SELECTED_MODULE == $MODULE_MODEL->getName()} selected {/if}>
+										{if $MODULE_MODEL->getName() eq 'Calendar'}
+											{vtranslate('LBL_TASK', $MODULE_MODEL->getName())}
+										{else}
+											{vtranslate($MODULE_MODEL->getName(), $MODULE_MODEL->getName())}
+										{/if}
+									</option>
                                 {/foreach}
                             </select>
                         {/if}
@@ -46,9 +52,13 @@
                         <input type="text" name="summary" class="span5" data-validation-engine='validate[required]' value="{$WORKFLOW_MODEL->get('summary')}" id="summary" />
                     </div>
                 </div>
-			</div>
-			<div class="controls">
-				{assign var=WORKFLOW_MODEL_OBJ value=$WORKFLOW_MODEL->getWorkflowObject()}
+
+                <div class="control-group">
+                    <div class="control-label">
+                        {vtranslate('LBL_SPECIFY_WHEN_TO_EXECUTE', $QUALIFIED_MODULE)}
+                    </div>
+                    <div class="controls">
+                        {assign var=WORKFLOW_MODEL_OBJ value=$WORKFLOW_MODEL->getWorkflowObject()}
 
 				{foreach from=$TRIGGER_TYPES item=LABEL key=LABEL_ID}
 					<div>

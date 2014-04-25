@@ -89,8 +89,16 @@ class Settings_CronTasks_Record_Model extends Settings_Vtiger_Record_Model {
      * Get the user datetimefeild
      */
     function getLastEndDateTime() {
-        if($this->get('lastend') != NULL){
-            return Vtiger_Datetime_UIType::getDisplayDateTimeValue(date('Y-m-d H:i:s', $this->get('lastend')));
+        if($this->get('lastend') != NULL) {
+		    $lastScannedTime = Vtiger_Datetime_UIType::getDisplayDateTimeValue(date('Y-m-d H:i:s', $this->get('lastend')));
+		    $userModel = Users_Record_Model::getCurrentUserModel();
+			$hourFormat = $userModel->get('hour_format');
+		    if($hourFormat == '24') {
+				return $lastScannedTime;
+		    } else {
+				$dateTimeList = explode(" ", $lastScannedTime);
+                return $dateTimeList[0]." ".date('g:i:sa', strtotime($dateTimeList[1]));
+			}
 		} else {
 			return '';
 		}

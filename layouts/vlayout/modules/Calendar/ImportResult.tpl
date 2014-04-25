@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div id="toggleButton" class="toggleButton" title="Left Panel Show/Hide"> 
+<div id="toggleButton" class="toggleButton" title="{vtranslate('LBL_LEFT_PANEL_SHOW_HIDE', 'Vtiger')}">
 	<i id="tButtonImage" class="{if $LEFTPANELHIDE neq '1'}icon-chevron-left{else}icon-chevron-right{/if}"></i>
 </div>&nbsp
 <div style="padding-left: 15px;">

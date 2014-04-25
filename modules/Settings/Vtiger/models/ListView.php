@@ -69,6 +69,12 @@ class Settings_Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$orderBy = $this->getForSql('orderby');
+		if (!empty($orderBy) && $orderBy === 'smownerid') { 
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+			if ($fieldModel->getFieldDataType() == 'owner') { 
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+			} 
+		}
 		if (!empty($orderBy)) {
 			$listQuery .= ' ORDER BY ' . $orderBy . ' ' . $this->getForSql('sortorder');
 		}
@@ -142,8 +148,17 @@ class Settings_Vtiger_ListView_Model extends Vtiger_Base_Model {
 	public function getListViewCount() {
 		$db = PearDatabase::getInstance();
 
-		$module = $this->getModule();
-		$listQuery = 'SELECT count(*) AS count FROM ' . $module->baseTable;
+		$listQuery = $this->getBasicListQuery();
+
+        $position = stripos($listQuery, ' from ');
+		if ($position) {
+			$split = spliti(' from ', $listQuery);
+			$splitCount = count($split);
+			$listQuery = 'SELECT count(*) AS count ';
+			for ($i=1; $i<$splitCount; $i++) {
+				$listQuery = $listQuery. ' FROM ' .$split[$i];
+			}
+		}
 
 		$listResult = $db->pquery($listQuery, array());
 		return $db->query_result($listResult, 0, 'count');

@@ -39,24 +39,30 @@ class Reports_DetailView_Model extends Vtiger_DetailView_Model {
 		$moduleName = $moduleModel->getName();
 
 		$detailViewLinks = array();
-		$detailViewLinks[] = array(
-			'linklabel' => vtranslate('LBL_REPORT_PRINT', $moduleName),
-			'linkurl' => $recordModel->getReportPrintURL(),
-			'linkicon' => 'print.png'
-		);
+        $printPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'Print');
+        if($printPermission) {
+            $detailViewLinks[] = array(
+                'linklabel' => vtranslate('LBL_REPORT_PRINT', $moduleName),
+                'linkurl' => $recordModel->getReportPrintURL(),
+                'linkicon' => 'print.png'
+            );
+        }
+        
+        $exportPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'Export');
+        if($exportPermission) {
+            $detailViewLinks[] = array(
+                'linklabel' => vtranslate('LBL_REPORT_CSV', $moduleName),
+                'linkurl' => $recordModel->getReportCSVURL(),
+                'linkicon' => 'csv.png'
+            );
 
-		$detailViewLinks[] = array(
-			'linklabel' => vtranslate('LBL_REPORT_CSV', $moduleName),
-			'linkurl' => $recordModel->getReportCSVURL(),
-			'linkicon' => 'csv.png'
-		);
 
-
-		$detailViewLinks[] = array(
-			'linklabel' => vtranslate('LBL_REPORT_EXPORT_EXCEL', $moduleName),
-			'linkurl' => $recordModel->getReportExcelURL(),
-			'linkicon' => 'xlsx.png'
-		);
+            $detailViewLinks[] = array(
+                'linklabel' => vtranslate('LBL_REPORT_EXPORT_EXCEL', $moduleName),
+                'linkurl' => $recordModel->getReportExcelURL(),
+                'linkicon' => 'xlsx.png'
+            );
+        }
 
 		$linkModelList = array();
 		foreach($detailViewLinks as $detailViewLinkEntry) {

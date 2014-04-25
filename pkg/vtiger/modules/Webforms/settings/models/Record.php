@@ -153,7 +153,7 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 	 * Function to get list of Selected Fields from target module for this record instance
 	 * @return <Array> list of field models <Settings_Webforms_Field_Model>
 	 */
-	public function getSelectedFieldsList() {
+	public function getSelectedFieldsList($mode='') {
 		if (!$this->selectedFields) {
 			$targetModule = $this->get('targetmodule');
 			if ($targetModule) {
@@ -161,7 +161,7 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 				$targetModuleModel = Vtiger_Module_Model::getInstance($targetModule);
 				$allFields = $targetModuleModel->getFields();
 
-				$result = $db->pquery("SELECT * FROM vtiger_webforms_field WHERE webformid = ?", array($this->getId()));
+				$result = $db->pquery("SELECT * FROM vtiger_webforms_field WHERE webformid = ? ORDER BY sequence", array($this->getId()));
 				$numOfRows = $db->num_rows($result);
 
 				for($i=0; $i<$numOfRows; $i++) {
@@ -170,11 +170,27 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 					if (array_key_exists($fieldName, $allFields)) {
 						$fieldModel = $allFields[$fieldName];
 
+						//Check for hidden fields made as mandatory from layout editor,to unset hidden option
+						$mandatoryStatus = $fieldModel->isMandatory(true);
+						$hiddenStatus = $fieldData['hidden'];
+						$fieldValue = trim($fieldData['defaultvalue']);
+						$fieldType = $fieldModel->getFieldDataType();
+						if(($mandatoryStatus == 1) and ($hiddenStatus == 1) and ($fieldValue == "") and ($fieldType != "boolean")){
+							$fieldData['hidden'] = 0;
+						}
+						if(($fieldType == 'reference') && $mode != 'showForm'){
+							$explodeResult = explode("x",$fieldValue);
+							$fieldValue = $explodeResult[1];
+							if(!isRecordExists($fieldValue)){
+								$fieldValue = 0;
+							}
+						}
+						
 						if ($fieldModel->isViewable()) {
 							foreach ($fieldData as $key => $value) {
 								$fieldModel->set($key, $value);
 							}
-							$fieldModel->set('fieldvalue', $fieldData['defaultvalue']);
+							$fieldModel->set('fieldvalue', $fieldValue);
 							$selectedFields[$fieldName] = $fieldModel;
 						}
 					}
@@ -204,11 +220,13 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 				if (in_array($fieldModel->get('uitype'), $restrictedFields) || !$fieldModel->isViewable()) {
 					continue;
 				}
-				$webformFieldInstnace = Settings_Webforms_ModuleField_Model::getInstanceFromFieldObject($fieldModel);
-				if ($fieldModel->getDefaultFieldValue()) {
-					$webformFieldInstnace->set('fieldvalue', $fieldModel->getDefaultFieldValue());
+				if($fieldModel->isEditable()){
+					$webformFieldInstnace = Settings_Webforms_ModuleField_Model::getInstanceFromFieldObject($fieldModel);
+					if ($fieldModel->getDefaultFieldValue()) {
+						$webformFieldInstnace->set('fieldvalue', $fieldModel->getDefaultFieldValue());
+					}
+					$webformFieldList[$webformFieldInstnace->getName()] = $webformFieldInstnace;
 				}
-				$webformFieldList[$webformFieldInstnace->getName()] = $webformFieldInstnace;
 			}
 			$targetModuleAllFieldsList[$blockLabel] = $webformFieldList;
 		}
@@ -229,29 +247,41 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 	public function delete() {
 		$this->getModule()->deleteRecord($this);
 	}
+    
+    /**
+     * Function to set db insert value value for checkbox
+     * @param <string> $fieldName
+     */
+    public function setCheckBoxValue($fieldName) {
+        if($this->get($fieldName) == "on"){
+			$this->set($fieldName,1);
+		} else {
+			$this->set($fieldName,0);
+		}
+    }
 
-	/**
+    /**
 	 * Function to save the record
 	 */
 	public function save() {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$mode = $this->get('mode');
-		$db = PearDatabase::getInstance();
-		
-		if($this->get('enabled') == "on"){
-			$this->set('enabled',1);
-		} else {
-			$this->set('enabled',0);
-		}
-
+    
+		$db = PearDatabase::getInstance();		
+		$this->setCheckBoxValue('enabled');
+        $this->setCheckBoxValue('captcha');
+        $this->setCheckBoxValue('roundrobin');
+        if(is_array($this->get('roundrobin_userid'))){
+            $roundrobinUsersList = json_encode($this->get('roundrobin_userid'),JSON_FORCE_OBJECT);
+        }
 		//Saving data about webform
 		if ($mode) {
-			$updateQuery = "UPDATE vtiger_webforms SET description = ?, returnurl = ?, ownerid = ?, enabled = ? WHERE id = ?";
-			$params = array($this->get('description'), $this->get('returnurl'), $this->get('ownerid'), $this->get('enabled'), $this->getId());
-
-			$db->pquery($updateQuery, $params);
+			$updateQuery = "UPDATE vtiger_webforms SET description = ?, returnurl = ?, ownerid = ?, enabled = ?, captcha = ? , roundrobin = ?, roundrobin_userid = ?, roundrobin_logic = ? ,targetmodule = ? WHERE id = ?";
+            $params = array($this->get('description'), $this->get('returnurl'), $this->get('ownerid'), $this->get('enabled'), $this->get('captcha'),  $this->get('roundrobin'), $roundrobinUsersList, 0, $this->get('targetmodule'),$this->getId()); 
+            $db->pquery($updateQuery, $params);
 		} else {
-			$insertQuery = "INSERT INTO vtiger_webforms(name, targetmodule, publicid, enabled, description, ownerid, returnurl) VALUES(?, ?, ?, ?, ?, ?, ?)";
-			$params = array($this->getName(), $this->get('targetmodule'), $this->generatePublicId(), $this->get('enabled'),  $this->get('description'), $this->get('ownerid'), $this->get('returnurl'));
+			$insertQuery = "INSERT INTO vtiger_webforms(name, targetmodule, publicid, enabled, description, ownerid, returnurl, captcha, roundrobin, roundrobin_userid, roundrobin_logic) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$params = array($this->getName(), $this->get('targetmodule'), $this->generatePublicId(), $this->get('enabled'),  $this->get('description'), $this->get('ownerid'), $this->get('returnurl'), $this->get('captcha'), $this->get('roundrobin'),$roundrobinUsersList,0);
 
 			$db->pquery($insertQuery, $params);
 			$this->set('id', $db->getLastInsertID());
@@ -264,7 +294,7 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 		$selectedFieldsData = $this->get('selectedFieldsData');
 		$sourceModuleModel = Vtiger_Module_Model::getInstance($this->get('targetmodule'));
 
-		$fieldInsertQuery = "INSERT INTO vtiger_webforms_field(webformid, fieldname, neutralizedfield, defaultvalue, required) VALUES(?, ?, ?, ?, ?)";
+		$fieldInsertQuery = "INSERT INTO vtiger_webforms_field(webformid, fieldname, neutralizedfield, defaultvalue, required, sequence, hidden) VALUES(?, ?, ?, ?, ?, ?, ?)";
 		foreach ($selectedFieldsData as $fieldName => $fieldDetails) {
 			$params = array($this->getId());
 			$neutralizedField = $fieldName;
@@ -300,8 +330,21 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 					$fieldDefaultValue = '';
 				}
 			}
+			if ($dataType === 'reference') {
+				$referenceModule = $fieldDetails['referenceModule'];
+				$referenceObject = VtigerWebserviceObject::fromName($db,$referenceModule);
+				$referenceEntityId = $referenceObject->getEntityId();
+				$fieldDefaultValue = $referenceEntityId."x".$fieldDefaultValue;
+			}
+			
+			if ($dataType === 'currency') {
+				$decimalSeperator = $currentUser->get('currency_decimal_separator');
+				$groupSeperator = $currentUser->get('currency_grouping_separator');
+				$fieldDefaultValue = str_replace($decimalSeperator, '.', $fieldDefaultValue);
+				$fieldDefaultValue = str_replace($groupSeperator, '', $fieldDefaultValue);
+			}
 
-			array_push($params, $fieldName, $neutralizedField, $fieldDefaultValue, $fieldDetails['required']);
+			array_push($params, $fieldName, $neutralizedField, $fieldDefaultValue, $fieldDetails['required'], $fieldDetails['sequence'], $fieldDetails['hidden']);
 			$db->pquery($fieldInsertQuery, $params);
 	}
 	}
@@ -378,4 +421,16 @@ class Settings_Webforms_Record_Model extends Settings_Vtiger_Record_Model {
 		$fieldModel = $fields[$key];
 		return $fieldModel->getDisplayValue($this->get($key));
 	}
+    
+    /**
+     * Function to check whether the captcha is enabled or not
+     * @return <boolean> true/false
+     */
+    public function isCaptchaEnabled() { 
+        if ($this->get('captcha') == '1') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

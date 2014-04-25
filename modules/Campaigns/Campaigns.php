@@ -12,13 +12,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('modules/Contacts/Contacts.php');
-require_once('modules/Leads/Leads.php');
-require_once('user_privileges/default_module_view.php');
-
 class Campaigns extends CRMEntity {
 	var $log;
 	var $db;
@@ -598,6 +591,9 @@ class Campaigns extends CRMEntity {
 		}
 		if ($queryplanner->requireTable("vtiger_lastModifiedByCampaigns")){
 			$query .=" left join vtiger_users as vtiger_lastModifiedByCampaigns on vtiger_lastModifiedByCampaigns.id = vtiger_crmentityCampaigns.modifiedby ";
+		}
+        if ($queryplanner->requireTable("vtiger_createdbyCampaigns")){
+			$query .= " left join vtiger_users as vtiger_createdbyCampaigns on vtiger_createdbyCampaigns.id = vtiger_crmentityCampaigns.smcreatorid ";
 		}
 		return $query;
 	}

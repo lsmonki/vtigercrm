@@ -15,19 +15,19 @@
 	</span>
 	<span class="span8 margin0px">
 		<span class="row-fluid">
-			<span class="recordLabel font-x-x-large textOverflowEllipsis pushDown span" title="{$RECORD->getName()}">
+			<h4 class="recordLabel pushDown" title="{$RECORD->getName()}">
 				{foreach item=NAME_FIELD from=$MODULE_MODEL->getNameFields()}
 					{assign var=FIELD_MODEL value=$MODULE_MODEL->getField($NAME_FIELD)}
 						{if $FIELD_MODEL->getPermissions()}
 							<span class="{$NAME_FIELD}">{$RECORD->get($NAME_FIELD)}</span>&nbsp;
 						{/if}
 				{/foreach}
-			</span>
+			</h4>
 		</span>
 		{assign var=RELATED_TO value=$RECORD->get('linktoaccountscontacts')}
 		{if !empty($RELATED_TO)}
 		<span class="row-fluid">
-			<span class="muted">{vtranslate('Related to',$MODULE_NAME)} </span>
+			<span class="muted">{vtranslate('Related to',$MODULE_NAME)} - </span>
 			{$RECORD->getDisplayValue('linktoaccountscontacts')}
 		</span>
 		{/if}

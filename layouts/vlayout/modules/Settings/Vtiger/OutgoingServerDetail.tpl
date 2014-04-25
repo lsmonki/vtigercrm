@@ -16,27 +16,35 @@
 	</div>
 	<hr>
 	<div class="contents row-fluid">
+		{assign var=WIDTHTYPE value=$CURRENT_USER_MODEL->get('rowheight')}
+		<div class="accordion">{vtranslate('LBL_DEFAULT', $QUALIFIED_MODULE)}&nbsp;&nbsp;
+			<a class="cursorPointer accordion-heading accordion-toggle" data-toggle="collapse" data-target="#serverSteps">{vtranslate('LBL_MORE', $QUALIFIED_MODULE)}..</a>
+			<div id="serverSteps" class="accordion-body collapse themeTextColor"><ul>
+				<br><li>{vtranslate('LBL_OPTIONS1', $QUALIFIED_MODULE)}</li><br>
+				<li>{vtranslate('LBL_OPTIONS2', $QUALIFIED_MODULE)}</li>
+			</ul></div>
+		</div>
 		<table class="table table-bordered table-condensed themeTableColor">
 			<thead>
 				<tr class="blockHeader">
-					<th colspan="2" class="mediumWidthType">
+					<th colspan="2" class="{$WIDTHTYPE}">
 						<span class="alignMiddle">{vtranslate('LBL_MAIL_SERVER_SMTP', $QUALIFIED_MODULE)}</span>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr><td width="25%"><label class="muted pull-right marginRight10px">{vtranslate('LBL_SERVER_NAME', $QUALIFIED_MODULE)}</label></td>
-					<td style="border-left: none;"><span>{$MODEL->get('server')}</span></td></tr>
-				<tr><td><label class="muted pull-right marginRight10px">{vtranslate('LBL_USER_NAME', $QUALIFIED_MODULE)}</label></td>
-					<td style="border-left: none;"><span>{$MODEL->get('server_username')}</span></td></tr>
-				<tr><td><label class="muted pull-right marginRight10px">{vtranslate('LBL_PASSWORD', $QUALIFIED_MODULE)}</label></td>
-					<td style="border-left: none;"><span class="password">{if $MODEL->get('server_password') neq ''}
+				<tr><td width="25%" class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_SERVER_NAME', $QUALIFIED_MODULE)}</label></td>
+					<td class="{$WIDTHTYPE}" style="border-left: none;"><span>{$MODEL->get('server')}</span></td></tr>
+				<tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_USER_NAME', $QUALIFIED_MODULE)}</label></td>
+					<td class="{$WIDTHTYPE}" style="border-left: none;"><span>{$MODEL->get('server_username')}</span></td></tr>
+				<tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_PASSWORD', $QUALIFIED_MODULE)}</label></td>
+					<td class="{$WIDTHTYPE}" style="border-left: none;"><span class="password">{if $MODEL->get('server_password') neq ''}
 													******
 													{/if}&nbsp;</span></td></tr>
-				<tr><td><label class="muted pull-right marginRight10px">{vtranslate('LBL_FROM_EMAIL', $QUALIFIED_MODULE)}</label></td>
-					<td style="border-left: none;"><span>{$MODEL->get('from_email_field')}</span></td></tr>
-				<tr><td><label class="muted pull-right marginRight10px">{vtranslate('LBL_REQUIRES_AUTHENTICATION', $QUALIFIED_MODULE)}</label></td>
-					<td style="border-left: none;"><span>{if $MODEL->isSmtpAuthEnabled()}{vtranslate('LBL_YES', $QUALIFIED_MODULE)} {else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td></tr>
+				<tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_FROM_EMAIL', $QUALIFIED_MODULE)}</label></td>
+					<td class="{$WIDTHTYPE}" style="border-left: none;"><span>{$MODEL->get('from_email_field')}</span></td></tr>
+				<tr><td class="{$WIDTHTYPE}"><label class="muted pull-right marginRight10px">{vtranslate('LBL_REQUIRES_AUTHENTICATION', $QUALIFIED_MODULE)}</label></td>
+					<td class="{$WIDTHTYPE}" style="border-left: none;"><span>{if $MODEL->isSmtpAuthEnabled()}{vtranslate('LBL_YES', $QUALIFIED_MODULE)} {else}{vtranslate('LBL_NO', $QUALIFIED_MODULE)}{/if}</span></td></tr>
 			</tbody>
 		</table>
 	</div>

@@ -95,7 +95,21 @@ class Calendar_ExportData_Action extends Vtiger_ExportData_Action {
 			if($type != 'Task') {
 				$temp = $moduleModel->get('eventFields');
 				foreach($temp as $fieldName => $access) {
-					$temp[$fieldName] = $eventFields[$fieldName];
+                    /* Priority property of ical is Integer
+                     * http://kigkonsult.se/iCalcreator/docs/using.html#PRIORITY
+                     * Fix for issue http://redmine.vtiger.in/issues/17532
+                     */
+                    if($fieldName == 'priority'){
+                        $priorityMap = array('High'=>'1','Medium'=>'2','Low'=>'3');
+                        $priorityval = $eventFields[$fieldName];
+                        $icalZeroPriority = 0;
+                        if(array_key_exists($priorityval, $priorityMap))
+                            $temp[$fieldName] = $priorityMap[$priorityval];
+                        else 
+                            $temp[$fieldName] = $icalZeroPriority;
+                    }
+                    else
+                        $temp[$fieldName] = $eventFields[$fieldName];
 				}
 				$temp['id'] = $id;
 
@@ -108,7 +122,17 @@ class Calendar_ExportData_Action extends Vtiger_ExportData_Action {
 			} else {
 				$temp = $moduleModel->get('todoFields');
 				foreach($temp as $fieldName => $access) {
-					$temp[$fieldName] = $eventFields[$fieldName];
+                    if($fieldName == 'priority'){
+                        $priorityMap = array('High'=>'1','Medium'=>'2','Low'=>'3');
+                        $priorityval = $eventFields[$fieldName];
+                        $icalZeroPriority = 0;
+                        if(array_key_exists($priorityval, $priorityMap))
+                            $temp[$fieldName] = $priorityMap[$priorityval];
+                        else 
+                            $temp[$fieldName] = $icalZeroPriority;
+                    }
+                    else
+                        $temp[$fieldName] = $eventFields[$fieldName];
 				}
 				$iCalTask = new iCalendar_todo;
 				$iCalTask->assign_values($temp);

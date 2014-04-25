@@ -34,8 +34,6 @@ class Home_Module_Model extends Vtiger_Module_Model {
 							AND vtiger_crmentity.deleted = 0
 						INNER JOIN vtiger_crmentity crmentity2 ON vtiger_modcomments.related_to = crmentity2.crmid
 							AND crmentity2.deleted = 0
-                        LEFT JOIN vtiger_crmentity crmentity3 ON vtiger_modcomments.customer = crmentity3.crmid 
-                            AND crmentity3.deleted = 0
 						 '.$nonAdminAccessQuery.'
 						ORDER BY vtiger_crmentity.crmid DESC LIMIT ?, ?',
 				array($pagingModel->getStartIndex(), $pagingModel->getPageLimit()));
@@ -67,7 +65,10 @@ class Home_Module_Model extends Vtiger_Module_Model {
 		//TODO: need to handle security
 		$comments = array();
 		if($type == 'all' || $type == 'comments') {
-			$comments = $this->getComments($pagingModel);
+			$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments'); 
+			if($modCommentsModel->isPermitted('DetailView')){
+				$comments = $this->getComments($pagingModel);
+			}
 			if($type == 'comments') {
 				return $comments;
 			}
@@ -140,9 +141,9 @@ class Home_Module_Model extends Vtiger_Module_Model {
 					AND (vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus NOT IN ('Held'))";
 
 		if ($mode === 'upcoming') {
-			$query .= " AND due_date >= '$currentDate'";
+			$query .= " AND CASE WHEN vtiger_activity.activitytype='Task' THEN due_date >= '$currentDate' ELSE CONCAT(due_date,' ',time_end) >= '$nowInDBFormat' END";
 		} elseif ($mode === 'overdue') {
-			$query .= " AND due_date < '$currentDate'";
+			$query .= " AND CASE WHEN vtiger_activity.activitytype='Task' THEN due_date < '$currentDate' ELSE CONCAT(due_date,' ',time_end) < '$nowInDBFormat' END";
 		}
 
 		$params = array();
@@ -165,6 +166,14 @@ class Home_Module_Model extends Vtiger_Module_Model {
 			$row = $db->query_result_rowdata($result, $i);
 			$model = Vtiger_Record_Model::getCleanInstance('Calendar');
 			$model->setData($row);
+            if($row['activitytype'] == 'Task'){
+                $due_date = $row["due_date"];
+                $dayEndTime = "23:59:59";
+                $EndDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($due_date." ".$dayEndTime);
+                $dueDateTimeInDbFormat = explode(' ',$EndDateTime);
+                $dueTimeInDbFormat = $dueDateTimeInDbFormat[1];
+                $model->set('time_end',$dueTimeInDbFormat);
+            }
 			$model->setId($row['crmid']);
 			$activities[] = $model;
 		}

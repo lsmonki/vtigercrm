@@ -38,24 +38,26 @@
 				{/foreach}
 				</ul>
 				</span>
-				<span class="span7"><i class="icon-info-sign alignMiddle"></i>&nbsp;{vtranslate('LBL_RELATED_LIST_INFO', $QUALIFIED_MODULE)}.<br><br>
+				<span class="span7" style="padding: 5% 0;">
+					<i class="icon-info-sign alignMiddle"></i>&nbsp;{vtranslate('LBL_RELATED_LIST_INFO', $QUALIFIED_MODULE)}.<br><br>
 					<i class="icon-info-sign alignMiddle"></i>&nbsp;{vtranslate('LBL_REMOVE_INFO', $QUALIFIED_MODULE)}.<br><br>
 					<i class="icon-info-sign alignMiddle"></i>&nbsp;{vtranslate('LBL_ADD_MODULE_INFO', $QUALIFIED_MODULE)}
 				</span>
 			</div>
 		</div>
+		<br>
 		<div class="row-fluid">
 			<div class="span2">
 				<strong>
 					{vtranslate('LBL_SELECT_MODULE_TO_ADD', $QUALIFIED_MODULE)}
 				</strong>
 			</div>
-			<div class="span10">
+			<div class="span4">
 				{assign var=ModulesList value=[]}
 				{assign var=removedModuleIds value=array()}
-				<ul style="list-style: none;">
+				<ul style="list-style: none; width:213px;" class="displayInlineBlock">
 					<li>
-					<span class="row-fluid"><select class="select2 span3" multiple name="addToList" placeholder="{vtranslate('LBL_SELECT_MODULE', $QUALIFIED_MODULE)}">
+					<div class="row-fluid"><select class="select2" multiple name="addToList" placeholder="{vtranslate('LBL_SELECT_MODULE', $QUALIFIED_MODULE)}">
 					{foreach item=MODULE_MODEL from=$RELATED_MODULES}
 						{$ModulesList[$MODULE_MODEL->getId()] = vtranslate($MODULE_MODEL->get('label'), $MODULE_MODEL->getRelationModuleName())}
 						{if !$MODULE_MODEL->isActive()}
@@ -65,23 +67,25 @@
 						</option>
 						{/if}
 					{/foreach}
-					</select></span>
+					</select>
+					</div>
 					</li>
 				</ul>
 				<input type="hidden" class="ModulesListArray" value='{ZEND_JSON::encode($ModulesList)}' />
 				<input type="hidden" class="RemovedModulesListArray" value='{ZEND_JSON::encode($removedModuleIds)}' />
 			</div>
+			<div class="span6">
+				<button class="btn btn-success saveRelatedList" type="button" disabled="disabled"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
+				<br>
+			</div>
 		</div>
 		<li class="moduleCopy hide border1px contentsBackground" style="width: 200px; padding: 5px;">
-			<a><img src="{vimage_path('drag.png')}" title="{vtranslate('LBL_DRAG',$QUALIFIED_MODULE)}"/></a>&nbsp;&nbsp;
+			<a>
+				<img src="{vimage_path('drag.png')}" title="{vtranslate('LBL_DRAG',$QUALIFIED_MODULE)}"/>
+			</a>&nbsp;&nbsp;
 			<span class="moduleLabel"></span>
 			<button class="close" data-dismiss="modal" title="{vtranslate('LBL_CLOSE')}">x</button>
 		</li>
-		<div class="row-fluid">
-			<span class="pull-right">
-				<button class="btn btn-success saveRelatedList" type="button" disabled="disabled"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
-			</span>
-		</div>
 	</div>
 {/if}
 </div>

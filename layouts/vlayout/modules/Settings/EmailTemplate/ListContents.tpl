@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div id="popupPageContainer" class="popupBackgroundColor">
+<div id="popupPageContainer">
 	<div class="emailTemplatesContainer">
 		<h3>{vtranslate($MODULE,$QUALIFIED_MODULE)}</h3>
 		<hr>

@@ -9,18 +9,18 @@
  ************************************************************************************/
 $languageStrings = array(
 	'CustomerPortal'               => 'Клиентский Портал', 
-	'LBL_PORTAL_DESCRIPTION'       => 'Setup Privileges of Portal User', // TODO: Review
+	'LBL_PORTAL_DESCRIPTION'       => 'Настройка Привилегии Portal пользователя', 
 	'LBL_PRIVILEGES'               => 'Права'                  , 
-	'LBL_DEFAULT_ASSIGNEE'         => 'Default Assignee'            , // TODO: Review
-	'LBL_PORTAL_URL'               => 'Portal Url'                  , // TODO: Review
+	'LBL_DEFAULT_ASSIGNEE'         => 'По умолчанию Назначена'            , 
+	'LBL_PORTAL_URL'               => 'Портал Адрес'                  , 
 	'LBL_MODULE_NAME'              => 'Параметры'          , 
-	'LBL_ENABLE_MODULE'            => 'Enable Module'               , // TODO: Review
-	'LBL_VIEW_ALL_RECORDS'         => 'See Records across Organization', // TODO: Review
-	'LBL_PREVILEGES_MESSAGE'       => 'This Role\'s privileges will be applied to the Portal User.', // TODO: Review
-	'LBL_DEFAULT_ASSIGNEE_MESSAGE' => 'Tickets will be Assigned to the selected Assignee by the default Group/User from the Customer Portal.', // TODO: Review
-	'LBL_PORTAL_URL_MESSAGE'       => 'This is URL for the Portal where your contacts can login to submit/track tickets, access knowledge base and do more. Contacts will be sent the login details when Portal access is enabled from Contact details page.', // TODO: Review
-	'LBL_DRAG_AND_DROP_MESSAGE'    => 'Drag and Drop modules to reorder in the Customer Portal', // TODO: Review
+	'LBL_ENABLE_MODULE'            => 'Включить модуль'               , 
+	'LBL_VIEW_ALL_RECORDS'         => 'См. отчеты через организации', 
+	'LBL_PREVILEGES_MESSAGE'       => 'Этого пользователя \'ы льготы будут применяться на портал пользователя.', 
+	'LBL_DEFAULT_ASSIGNEE_MESSAGE' => 'Билеты будут назначены выбранному правопреемником по умолчанию пользователя / группы в от Клиентский Портал.', 
+	'LBL_PORTAL_URL_MESSAGE'       => 'Это URL для Portal, где ваши контакты могут авторизуйтесь, чтобы представить / дорожки билеты, база знаний доступ и сделать больше. Контакты будут отправлены данные для входа, когда доступ Портал включена с контактными данными странице.', 
+	'LBL_DRAG_AND_DROP_MESSAGE'    => 'Перетаскивание модулей для изменения порядка в Портал клиентов', 
 );
 $jsLanguageStrings = array(
-	'JS_PORTAL_INFO_SAVED'         => 'Customer Portal settings saved', // TODO: Review
+	'JS_PORTAL_INFO_SAVED'         => 'Настройки Портал для клиентов сохраняются', 
 );

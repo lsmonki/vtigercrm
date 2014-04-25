@@ -1,5 +1,4 @@
 <?php
-
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -56,7 +55,15 @@ class RecycleBin_List_View extends Vtiger_Index_View {
 		
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
-	
+
+    function postProcess(Vtiger_Request $request) {
+        $viewer = $this->getViewer ($request);
+		$moduleName = $request->getModule();
+
+		$viewer->view('ListViewPostProcess.tpl', $moduleName);
+		parent::postProcess($request);
+    }
+
 	/*
 	 * Function to initialize the required data in smarty to display the List View Contents
 	 */
@@ -79,8 +86,15 @@ class RecycleBin_List_View extends Vtiger_Index_View {
 			$pageNumber = '1';
 		}
 
-		$listViewModel = RecycleBin_ListView_Model::getInstance($moduleName, $sourceModule);
 		$moduleModel = RecycleBin_Module_Model::getInstance($moduleName);
+		//If sourceModule is empty, pick the first module name from the list
+		if(empty($sourceModule)) {
+			foreach($moduleModel->getAllModuleList() as $model) {
+				$sourceModule = $model->get('name');
+				break;
+			}
+		}
+		$listViewModel = RecycleBin_ListView_Model::getInstance($moduleName, $sourceModule);
 		
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'));
 		$linkModels = $moduleModel->getListViewMassActions($linkParams);

@@ -56,11 +56,9 @@ $languageStrings = array(
 	'LBL_COPY_OTHER_ADDRESS' => 'Copiar Dirección Alternativa',
 	'LBL_COPY_MAILING_ADDRESS' => 'Copiar Dirección Envío',
 	'Contact Id' => 'Contacto Id',
+    'Support Start Date'           => 'Support Start Date',
+    'Support End Date'             => 'Support End Date',
 );
 
 $jsLanguageStrings = array(
-	'LBL_SYNC_BUTTON' => 'Sincronizar Ahora',
-	'LBL_SYNCRONIZING' => 'Sincronizando....',
-	'LBL_NOT_SYNCRONIZED' => 'No se ha sincronizado todavía',
-	'LBL_FIELD_MAPPING' => 'Vinculación Campos'
 );

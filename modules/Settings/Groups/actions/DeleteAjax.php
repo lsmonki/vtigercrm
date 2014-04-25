@@ -21,7 +21,7 @@ class Settings_Groups_DeleteAjax_Action extends Settings_Vtiger_Basic_Action {
 
 		$transferToOwner = Settings_Groups_Record_Model::getInstance($transferRecordId);
 		if(!$transferToOwner){
-			$transferToOwner = Users_Record_Model::getInstanceById($recordId, 'Users');
+			$transferToOwner = Users_Record_Model::getInstanceById($transferRecordId, 'Users');
 		}
 
 		if($recordModel && $transferToOwner) {

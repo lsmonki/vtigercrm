@@ -39,4 +39,6 @@ $languageStrings = array(
 	'Tax' => 'Taxe',
 	'Contact Name' => 'Nom contact',
 	'Grand Total:' => 'Total:',
+        'LBL_LIST_PRICE'               => 'Prix',
+        'List Price'                   => 'Prix',
 );

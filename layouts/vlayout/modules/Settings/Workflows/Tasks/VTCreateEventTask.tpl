@@ -37,23 +37,24 @@
 				<select name="eventType" class="chzn-select">
 					{foreach  from=$EVENTTYPE_PICKLIST_VALUES item=EVENTTYPE_PICKLIST_VALUE key=EVENTTYPE_PICKLIST_KEY}
 						<option value="{$EVENTTYPE_PICKLIST_KEY}" {if $EVENTTYPE_PICKLIST_KEY eq $TASK_OBJECT->eventType} selected="" {/if}>{$EVENTTYPE_PICKLIST_VALUE}</option>
-					{/foreach}	
-				</select>				
+					{/foreach}
+				</select>
 			</span>
 		</div>
 		<div class="row-fluid padding-bottom1per">
 			<span class="span2">{vtranslate('LBL_ASSIGNED_TO',$QUALIFIED_MODULE)}</span>
 			<span class="span5">
 				<select name="assigned_user_id" class="chzn-select">
+					<option value="">{vtranslate('LBL_SELECT_OPTION','Vtiger')}</option>
 					{foreach from=$ASSIGNED_TO key=LABEL item=ASSIGNED_USERS_LIST}
 						<optgroup label="{vtranslate($LABEL,$QUALIFIED_MODULE)}">
 							{foreach from=$ASSIGNED_USERS_LIST item=ASSIGNED_USER key=ASSIGNED_USER_KEY}
 								<option value="{$ASSIGNED_USER_KEY}" {if $ASSIGNED_USER_KEY eq $TASK_OBJECT->assigned_user_id} selected="" {/if}>{$ASSIGNED_USER}</option>
-							{/foreach}	
+							{/foreach}
 						</optgroup>
-					{/foreach}	
+					{/foreach}
 				</select>
-			</span>	
+			</span>
 		</div>
 		<div class="row-fluid padding-bottom1per">
 			{if $TASK_OBJECT->startTime neq ''}
@@ -62,10 +63,10 @@
 				{assign var=DATE_TIME_VALUE value=Vtiger_Datetime_UIType::getDateTimeValue('now')}
 				{assign var=DATE_TIME_COMPONENTS value=explode(' ' ,$DATE_TIME_VALUE)}
 				{assign var=START_TIME value=implode(' ',array($DATE_TIME_COMPONENTS[1],$DATE_TIME_COMPONENTS[2]))}
-			{/if}	
+			{/if}
 			<span class="span2">{vtranslate('LBL_START_TIME',$QUALIFIED_MODULE)}</span>
 			<div class="input-append time span6">
-				<input  type="text" class="timepicker-default input-small" value="{$START_TIME}" name="startTime" />
+				<input  type="text" class="timepicker-default input-small" data-format="{$timeFormat}" value="{$START_TIME}" name="startTime" />
 				<span class="add-on cursorPointer">
 					<i class="icon-time"></i>
 				</span>
@@ -111,7 +112,7 @@
 		<div class="row-fluid padding-bottom1per">
 			<span class="span2">{vtranslate('LBL_END_DATE',$QUALIFIED_MODULE)}</span>
 			<span class="span2 row-fluid">
-				<input class="span6" type="text" value="{$TASK_OBJECT->endDays}" name="endDays" 
+				<input class="span6" type="text" value="{$TASK_OBJECT->endDays}" name="endDays"
 					   data-validation-engine="validate[funcCall[Vtiger_WholeNumber_Validator_Js.invokeValidation]]">&nbsp;
 				<span class="alignMiddle">{vtranslate('LBL_DAYS',$QUALIFIED_MODULE)}</span>
 			</span>
@@ -132,7 +133,7 @@
 		<div class="row-fluid padding-bottom1per">
 			<span class="span2">{vtranslate('LBL_ENABLE_REPEAT',$QUALIFIED_MODULE)}</span>
 			<div class="span6">
-				<input type="checkbox" name="recurringcheck" {if $TASK_OBJECT->recurringcheck eq 'on'}checked{/if} /> 
+				<input type="checkbox" name="recurringcheck" {if $TASK_OBJECT->recurringcheck eq 'on'}checked{/if} />
 			</div>
 		</div>
 		<div class="row-fluid padding-bottom1per">
@@ -165,7 +166,7 @@
 							</div>
 							<div class="span">
 								<div class="input-append date">
-									<input type="text" id="calendar_repeat_limit_date" class="dateField input-small" name="calendar_repeat_limit_date" data-date-format="{$dateFormat}" 
+									<input type="text" id="calendar_repeat_limit_date" class="dateField input-small" name="calendar_repeat_limit_date" data-date-format="{$dateFormat}"
 										   value="{$REPEAT_DATE}" data-validation-engine='validate[funcCall[Vtiger_Date_Validator_Js.invokeValidation]]'/>
 									<span class="add-on"><i class="icon-calendar"></i></span>
 								</div>
@@ -213,5 +214,5 @@
 				</div>
 			</div>
 		</div>
-	</div>								
-{/strip}	
+	</div>
+{/strip}

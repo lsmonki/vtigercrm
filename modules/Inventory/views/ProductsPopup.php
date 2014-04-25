@@ -86,14 +86,21 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
-
+        
+        $productModel = Vtiger_Module_Model::getInstance('Products');        
 		if(!$this->listViewHeaders) {
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
-		if(!$this->listViewEntries) {
+        
+		if(!$this->listViewEntries && $productModel->isActive()) {
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
 		}
 
+        if(!$productModel->isActive()){
+            $this->listViewEntries = array(); 
+            $viewer->assign('LBL_MODULE_DISABLED', true);
+        }
+        
 		foreach ($this->listViewEntries as $key => $listViewEntry) {
 			$productId = $listViewEntry->getId();
 			$subProducts = $listViewModel->getSubProducts($productId);
@@ -114,7 +121,8 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$nextSortOrder = "ASC";
 			$sortImage = "upArrowSmall.png";
 		}
-
+		$viewer->assign('MODULE', $moduleName);
+        $viewer->assign('RELATED_MODULE', $moduleName); 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
 		$viewer->assign('SOURCE_RECORD', $sourceRecord);

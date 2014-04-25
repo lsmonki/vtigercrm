@@ -38,4 +38,6 @@ $languageStrings = array(
 	'LBL_OWNER' => 'Owner',
 	
 	'Date & Time Sent' => 'Date Sent',
+    'Time Start' => 'Time Sent',
+    'LBL_EMAIL_INFORMATION' => 'Email Information',
 );

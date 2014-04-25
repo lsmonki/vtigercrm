@@ -147,5 +147,4 @@ class VTWorkflowUtils {
 		}
 		return $modules;
 	}
-
 }

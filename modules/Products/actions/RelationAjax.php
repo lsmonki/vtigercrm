@@ -10,6 +10,11 @@
 
 class Products_RelationAjax_Action extends Vtiger_RelationAjax_Action {
 	
+	function __construct() {
+		parent::__construct();
+		$this->exposeMethod('addListPrice');
+	}
+	
 	/*
 	 * Function to add relation for specified source record id and related record id list
 	 * @param <array> $request
@@ -35,6 +40,25 @@ class Products_RelationAjax_Action extends Vtiger_RelationAjax_Action {
 			}
 		}		
 	}
-}
+	
+	/**
+	 * Function adds Products/Services-PriceBooks Relation
+	 * @param type $request
+	 */
+	function addListPrice($request) {
+		$sourceModule = $request->getModule();
+		$sourceRecordId = $request->get('src_record');
+		$relatedModule =  $request->get('related_module');
+		$relInfos = $request->get('relinfo');
 
+		$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
+		$relatedModuleModel = Vtiger_Module_Model::getInstance($relatedModule);
+		$relationModel = Vtiger_Relation_Model::getInstance($sourceModuleModel, $relatedModuleModel);
+		foreach($relInfos as $relInfo) {
+			$price = CurrencyField::convertToDBFormat($relInfo['price'], null, true);
+			$relationModel->addListPrice($sourceRecordId, $relInfo['id'], $price);
+		}
+	}
+	
+}
 ?>

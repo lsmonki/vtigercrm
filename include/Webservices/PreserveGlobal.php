@@ -15,9 +15,13 @@ class VTWS_PreserveGlobal{
 	static function preserveGlobal($name,$value){
 		//$name store the name of the global.
 		global $$name;
-		
-		if(!is_array(VTWS_PreserveGlobal::$globalData[$name])){
-			VTWS_PreserveGlobal::$globalData[$name] = array();		
+		//To not push null value . Ideally we should not push null value for any name
+		//But current user null is dangerous so we are checking for only current user
+        if(!empty($$name) || $name != 'current_user') {
+			if(!is_array(VTWS_PreserveGlobal::$globalData[$name])){
+				VTWS_PreserveGlobal::$globalData[$name] = array();		
+			}
+			
 			VTWS_PreserveGlobal::$globalData[$name][] = $$name;
 		}
 

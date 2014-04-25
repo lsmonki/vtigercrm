@@ -27,6 +27,7 @@ class Settings_Vtiger_TaxIndex_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('TAX_RECORD_MODEL', $taxRecordModel);
         $viewer->assign('PRODUCT_AND_SERVICES_TAXES',$productAndServicesTaxList);
         $viewer->assign('SHIPPING_AND_HANDLING_TAXES',$shippingAndHandlingTaxList);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
         $viewer->view('TaxIndex.tpl',$qualifiedModuleName);
     }
 	

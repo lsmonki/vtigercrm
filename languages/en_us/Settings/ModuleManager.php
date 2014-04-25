@@ -8,8 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_IMPORT_MODULE_FROM_FILE' => 'Import Module From File',
-	'LBL_VTIGER_EXTENSION_STORE' => 'Vtiger App Store',
+	'LBL_IMPORT_MODULE' => 'Import Module',
+	'LBL_VTIGER_EXTENSION_STORE' => 'Vtiger Extension Store',
 	'LBL_PUBLISHER' => 'Publisher',
 	'LBL_LICENSE' => 'License',
 	'LBL_PUBLISHED_ON' => 'Published on',

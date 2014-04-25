@@ -11,24 +11,24 @@
 class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
 
     const tableName = 'vtiger_systems';
-    
+
     public function getId() {
         return $this->get('id');
     }
-    
+
     public function isSmtpAuthEnabled() {
         $smtp_auth_value = $this->get('smtp_auth');
         return ($smtp_auth_value == 'on' || $smtp_auth_value == 1 || $smtp_auth_value == 'true') ? true : false;
     }
-    
+
     public function save() {
         $db = PearDatabase::getInstance();
-        
+
         $id = $this->getId();
         $params = array();
         array_push($params, $this->get('server'),$this->get('server_port'),$this->get('server_username'),$this->get('server_password'),$this->get('server_type'),
                    $this->isSmtpAuthEnabled(),$this->get('server_path'),$this->get('from_email_field'));
-        
+
         if(empty($id)) {
             $id = $db->getUniqueID(self::tableName);
             //To keep id in the beginning
@@ -42,7 +42,7 @@ class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
         $db->pquery($query,$params);
         return $id;
     }
-    
+
     public static function getInstanceFromServerType($type,$componentName) {
         $db = PearDatabase::getInstance();
         $query = 'SELECT * FROM '.self::tableName.' WHERE server_type=?';
@@ -60,5 +60,5 @@ class Settings_Vtiger_Systems_Model extends Vtiger_Base_Model{
         }
         return $instance;
     }
-    
+
 }

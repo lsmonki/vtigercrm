@@ -28,13 +28,15 @@ class Vtiger_History_Dashboard extends Vtiger_IndexAjax_View {
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$history = $moduleModel->getHistory($pagingModel, $type);
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments'); 
 
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('HISTORIES', $history);
 		$viewer->assign('PAGE', $page);
 		$viewer->assign('NEXTPAGE', (count($history) < $LIMIT)? 0 : $page+1);
-
+		$viewer->assign('COMMENTS_MODULE_MODEL', $modCommentsModel); 
+		
 		$content = $request->get('content');
 		if(!empty($content)) {
 			$viewer->view('dashboards/HistoryContents.tpl', $moduleName);

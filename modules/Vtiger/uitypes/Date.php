@@ -45,7 +45,7 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 	public function getUserRequestValue($value) {
 		return $this->getDisplayValue($value);
 	}
-    
+
     /**
 	 * Function to get the DB Insert Value, for the current field type with given User Value
 	 * @param <Object> $value
@@ -104,5 +104,19 @@ class Vtiger_Date_UIType extends Vtiger_Base_UIType {
 		$date = new DateTimeField($date);
 		return $date->getDisplayDate();
 	}
+
+	/**
+	 * Function to get DateTime value for Display
+	 * @param <type> $dateTime
+	 * @return <String>
+	 */
+	public static function getDisplayDateTimeValue($dateTime) {
+		$date = new DateTimeField($dateTime);
+		return $date->getDisplayDateTimeValue();
+	}
+
+     public function getListSearchTemplateName() {
+        return 'uitypes/DateFieldSearchView.tpl';
+    }
 
 }

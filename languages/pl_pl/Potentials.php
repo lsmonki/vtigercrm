@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie Szans Sprzedaży',
 
 	// Blocks
-	'LBL_OPPORTUNITY_INFORMATION' => 'Informacje podstawowe',
+	'LBL_OPPORTUNITY_INFORMATION' => 'Szczegóły szans',
 	
 	//Field Labels
 	'Potential No' => 'Numer Szansy Sprzedaży',

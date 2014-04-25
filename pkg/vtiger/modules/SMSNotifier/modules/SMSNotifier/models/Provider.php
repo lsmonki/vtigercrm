@@ -32,7 +32,7 @@ class SMSNotifier_Provider_Model extends Vtiger_Base_Model {
 		$providers = array();
 		if ($handle = opendir( dirname(__FILE__) . '/../providers')) {
 			while ($file = readdir($handle)) {
-				if (!in_array($file, array('.', '..', 'MyProvider.php', 'CVS'))) {
+				if (!in_array($file, array('.', '..', 'MyProvider.php', 'CVS', 'SMSProvider.php'))) {
 					if(preg_match("/(.*)\.php$/", $file, $matches)) {
 						$providers[] = self::getInstance($matches[1]);
 					}

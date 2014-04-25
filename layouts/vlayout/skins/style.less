@@ -9,7 +9,7 @@
          url('../../../../resources/fonts/OpenSans-Regular-webfont.woff') format('woff'),
          url('../../../../resources/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
          url('../../../../resources/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
-} 
+}
 
 body {
 	.gradientBar(@gradient1StrtColor,@gradient1EndColor);
@@ -17,6 +17,7 @@ body {
 	font-family : 'Open Sans',@baseFontFamily;
 	font-size : @baseFontSize !important;
 	line-height: 1.4;
+    color: @grayDarker;
 }
 
 #page{
@@ -90,6 +91,10 @@ th, th a, th:hover, th a:hover{
 
 .icon-inverted {
     background-image: url("../../../../libraries/bootstrap/img/glyphicons-halflings-white.png");
+}
+
+i{
+    .cursorPointer;
 }
 
 hr{
@@ -173,6 +178,10 @@ hr{
 	margin-bottom: 10px;
 }
 
+.marginBottom5px{
+	margin-bottom: 5px;
+}
+
 .margin0px{
 	margin: 0px !important;
 }
@@ -230,14 +239,17 @@ hr{
     color: @headerTextColor;
 }
 
-.popover.popover-tooltip {
-	.popover-title {
-		.blockHeader;
-		font-size: @baseFontSize;
-		color: @headerTextColor;
-	}
-	.popover-content {
-		padding: 0 0 14px 0;
+.popover {
+	z-index : 1030 !important;
+	.popover-tooltip {
+		.popover-title {
+			.blockHeader;
+			font-size: @baseFontSize;
+			color: @headerTextColor;
+		}
+		.popover-content {
+			padding: 0 0 14px 0;
+		}
 	}
 }
 
@@ -514,14 +526,22 @@ tr.collapseRow{
          background: @menubarColor;
 			.menuBar .span9 {
 				height: 30px;
+				ul.nav{
+					margin-right: 0;
+				}
+				#commonMoreMenu li > a{
+					max-width: 100px;
+					overflow: hidden;
+					text-overflow : ellipsis;
+				}
 			}
-     }
+	}
+
     .nav{
             li.tabs, li.dropdown{
                 a{
-                    padding: 5px 15px;
-                    height: 21px;
-                    height: 20px\9;
+                    padding: 5px 14px;
+                    height: 20px;
                     color: @menubarTextColor;
                     &:hover{
                         color: @menubarTextHoverColor;
@@ -573,6 +593,115 @@ tr.collapseRow{
 .nav-collapse.collapse {
   height: auto;
   overflow: visible;
+}
+@media screen and (min-width: 1161px) {
+	#mediumNav, #shortNav, #headerLinksCompact{
+		display: none;
+	}
+}
+@media screen and (max-width: 1160px) and  (min-width: 960px){
+	#largeNav, #shortNav,#headerLinksCompact, .adv-search, .notificationMessageHolder {
+		display: none;
+	}
+	.customFilterMainSpan .select2-container{
+		width:300px !important;
+	}
+	*{
+		zoom:1 !important;
+	}
+}
+@media screen and (max-width: 960px){
+	#mediumNav, #largeNav,#headerLinksBig, #commonMoreMenu,.nav.quickActions, #leftPanel, #toggleButton,.companyLogo,.notificationMessageHolder, .adv-search, .select-search .chzn-container.chzn-container-single{
+		display: none;
+	}
+	.bodyContents{
+		margin: 0 !important;
+	}
+	#rightPanel{
+		width: 100% !important;
+	}
+	.actionsContainer .span10{
+		.boxSizingBorderBox;
+		padding: 0 10px;
+		width: 100% !important;
+	}
+	.menuBar .span9, .span3#headerLinks{
+		width: 48%;
+		.boxSizingBorderBox;
+		.qCreate{
+			display: inline-block;
+			margin: 0px;
+			img{
+				margin-bottom: 3px;
+				margin-right: 5px;
+			}
+		}
+	}
+	.customFilterMainSpan .select2-container{
+		width:300px !important;
+	}
+	#quickCreateModules{
+		width: 100% !important;
+		padding: 0 !important;
+	}
+	.CompactQC{
+			max-height: 300px;
+			overflow-y: scroll;
+			overflow-x: hidden;
+
+		}
+	#headerLinksCompact{
+			 display: inline-block;
+			 float: right;
+			.btn-navbar{
+				display: inline-block;
+				margin-right: 3px;
+				margin-top: 2px;
+				float: none;
+			}
+			.dropdown-menu{
+				margin-right: 12px;
+			}
+			#compactquickCreate{
+				&:hover{
+					background: none;
+				}
+				.quickCreateModule :hover{
+					text-decoration: none;
+				}
+			}
+		}
+}
+#collapsedMenu{
+	display: block;
+	position: relative;
+	.dropdown-menu{
+		max-height: 300px;
+		overflow-y: scroll;
+		position: absolute;
+		z-index: 10000;
+		-webkit-overflow-scrolling: touch;
+		.shortDropdown{
+			padding: 10px;
+			position: relative;
+			-webkit-transform: translateZ(0);
+		}
+		.moduleNames{
+			&:hover{
+				.gradientBar(@gradient2StrtColor,@gradient2EndColor);
+			}
+			a{
+				font-size: 0.9em;
+				padding : 2% !important;
+				color: @generalLinkColor !important;
+				&:hover{
+					text-decoration : none;
+					color : @generalLinkColor;
+				}
+			}
+
+		}
+	}
 }
 
 .moreMenus{
@@ -654,7 +783,7 @@ tr.collapseRow{
 }
 
 .searchElement{
-    min-width:550px;
+    min-width:600px;
     margin-top: 2px;
     margin-left: 15px;
     .select-search{
@@ -693,7 +822,7 @@ tr.collapseRow{
         #globalSearchValue{
                 border: 1px solid @lightColorBorder;
                 border-radius:0 !important;
-                min-width: 250px;
+                min-width: 200px;
                 height: 21px;
                 margin-bottom: 0;
         }
@@ -715,8 +844,25 @@ tr.collapseRow{
     }
 }
 
+#popupSearchButton{
+                i{
+                    .icon-inverted;
+                }
+                border: 1px solid @headerColor;
+                border-radius: 2px !important;
+                margin-left: 8px;
+                padding: 4px 11px;
+                background: @headerColor;
+                .dullOpacity;
+                cursor: pointer;
+                &:hover{
+                    .fullOpacity;
+                }
+    }
+
 .notificationMessageHolder{
-    margin-top: 4px;
+    line-height: 14px;
+	text-align: center;
 }
 
 .quickActions{
@@ -730,10 +876,11 @@ tr.collapseRow{
 }
 
 .adv-search a {
-         width:15%;
+		 display: inline-block;
          line-height: 26px;
          margin-left: 7px;
          cursor: pointer;
+		 .textOverflowEllipsisMixin(135px,ellipsis);
          .themeLinkColor;
 }
 
@@ -1024,6 +1171,7 @@ table tbody tr td a,table thead tr th a, .table thead > tr > th, .table tbody > 
 	margin-right: 15px;
 	.gradientBar(@gradient1StrtColor,@gradient1EndColor);
 	border-bottom-color: @secondaryBorderColor !important;
+	min-width: 1100px;
 }
 
 .dropdownStyles .title{
@@ -1088,7 +1236,6 @@ div.blockPage {
 }
 
 .pageNumbers{
-	margin-right: 10px;
 	position: relative;
 	top: 5px;
 }
@@ -1149,6 +1296,9 @@ div.blockPage {
 	text-align: center;
 	tbody tr td {
 		padding: 10em;
+        a{
+            vertical-align: baseline;
+        }
 	}
 }
 
@@ -1277,11 +1427,12 @@ form#EditView table td.chznDropDown{
     }
 }
 
-.chzn-container{
+.chzn-container.chzn-container-single{
     font-size: 12px !important;
+    vertical-align: middle;
     .chzn-results .highlighted {
-            color: @generalLinkColor;
-            .gradientBar(@gradient2StrtColor,@gradient2EndColor);
+        color: @generalLinkColor;
+        .gradientBar(@gradient2StrtColor,@gradient2EndColor);
     }
 }
 
@@ -1418,8 +1569,7 @@ form#EditView table td.chznDropDown{
 }
 
 .filterConditionsDiv{
-    border: 1px solid @lightColorBorder;
-    background-color: @white;
+    background: none;
 }
 
 .advanceFilterCondition{
@@ -1513,7 +1663,8 @@ form#EditView table td.chznDropDown{
 .massEditTabs{
     margin-left: 2%;
 	border-bottom: none;
-	margin-bottom:0px;
+    margin-bottom: -1px;
+    padding-bottom: 1px;
     li{
 		.gradientBar(@gradient1EndColor,@gradient1EndColor);
 		border: 1px solid @lightColorBorder;
@@ -1620,17 +1771,17 @@ form#EditView table td.chznDropDown{
 
 .mini-slider-control[data-value="0"] .ui-slider-handle {
 	background: gray;
-	background-image : url('images/black.png');
+	background-image : url('../images/black.png');
 }
 
 .mini-slider-control[data-value="1"] .ui-slider-handle {
 	background: orange;
-	background-image : url('images/yellow.png');
+	background-image : url('../images/yellow.png');
 }
 
 .mini-slider-control[data-value="2"] .ui-slider-handle {
 	background: green;
-	background-image : url('images/green.png');
+	background-image : url('../images/green.png');
 }
 
 .paddingLeft20{
@@ -1670,27 +1821,60 @@ form#EditView table td.chznDropDown{
 .widget_contents{
 	margin-top: 5px;
 }
-//Recent Comments
+// Comments block
 .commentContainer{
+	padding: 10px 10px 10px 20px ;
+	border-radius: 2px;
 	hr{
 		margin: 0 !important;
-		border-bottom: 1px solid @lightColorBorder;
     }
-    .commentorName{
-		color: @generalLinkColor;
-		&:hover{
-			color: @linkColorHover;
+	.addCommentBlock .commentsControls{
+		display: inline-block;
+	}
+	.commentsList > .liStyleNone > .commentDetails{
+		.commentDiv{
+			width:100%;
+		}
+	}
+	.commentDetails{
+		background:@bodyColor;
+		border: 1px solid #ccc;
+		margin-bottom: 5px;
+		border-radius: 2px;
+		padding: 10px 10px 5px;
+		display: inline-block;
+		min-width: 400px;
+		.boxSizingBorderBox;
+		.commentDiv{
+			width: 380px;
+		}
+
+	}
+	.commentorInfo{
+		p{
+			margin-bottom: 0;
+		}
+		.commentorName{
+			color: @generalLinkColor;
+			&:hover{
+				color: @linkColorHover;
+			}
 		}
 	}
 	.addCommentBlock {
+		.gradientBar(@bodyColor,@bodyColor);
+		border: 1px solid @lightColorBorder;
+		padding: 12px 12px 5px;
 		min-height: 115px;
         margin-top: 15px;
+		display: block;
 		.commentcontent{
-			.textarea-autosize;
+			box-shadow: inset 0px 0px 8px -5px @boxShadowColor !important;
+			padding : 8px !important;
+			.boxSizingBorderBox;
+			width: 100%;
+			resize: none;
 		}
-    }
-    .singleComment .addCommentBlock .commentcontent{
-			min-width: 100%;
     }
     .commentInfoContent{
 		padding: 1px 0;
@@ -1699,16 +1883,77 @@ form#EditView table td.chznDropDown{
 }
 
 .commentTitle {
-	img {
-		width:32px;
-		height:30px;
+	.span1 {
+		.boxSizingBorderBox;
+		img{
+			min-width:32px;
+			min-height:32px;
+		}
 	}
 }
 
 .commentsList > ul{
 	margin-left: 0;
 }
+.singleComment{
+	.editedStatus{
+		.boxSizingBorderBox;
+		padding: 5px 0 5px 32px;
+		p{
+			margin-bottom: 0;
+		}
+	}
+	.commentActionsDiv{
+		display: none;
+		p{
+			margin-bottom: 0;
+		}
+	}
+	&:hover{
+		.commentActionsDiv{
+			display: block;
+			margin-bottom: 3px;
+		}
+	}
+}
 
+
+// Recent Comments block
+.recentComments{
+	margin: 0;
+	padding: 0;
+	.boxSizingBorderBox;
+	.commentDiv{
+		min-width: 100%;
+	}
+	.addCommentBlock{
+		background: none;
+		border: 0;
+		display: block;
+	}
+	.commentDetails{
+		display: block;
+	}
+}
+
+.singleComment:hover .commentActions .replyComment{
+	.displayInlineBlock;
+}
+
+.commentActionsContainer{
+	a{
+		&:hover{
+			text-decoration : none;
+		}
+	}
+	.editStatus{
+		padding:5px 2px;
+		.boxSizingBorderBox;
+		p{
+			margin-bottom: 0;
+		}
+	}
+}
 // Settings > Studio > Edit Fields //
 .createFieldModal{
     border-radius: 2px;
@@ -1716,20 +1961,6 @@ form#EditView table td.chznDropDown{
 
 .layoutContent{
     border-top: 3px solid @headerColor !important;
-}
-/******************************************************
-Please check for the below classes if it is being used
-*******************************************************/
-.singleComment:hover .commentActions .replyComment{
-	.displayInlineBlock;
-}
-/******************************************************/
-.commentActionsContainer{
-	a{
-		&:hover{
-			text-decoration : none;
-		}
-	}
 }
 
 //Recent Activities
@@ -1779,17 +2010,19 @@ Please check for the below classes if it is being used
 	min-width: 50%;
 }
 
-//End of Send Email
-
 /** Advance Search **/
+
+form[name="advanceFilterForm"]{
+    padding: 0 20px;
+}
 
 #advanceSearchContainer {
     background-color : @white;
     position: relative;
     left: -150px;
     top: 3px;
-    .filterElements{
-        margin-top : 2%;
+    .filterContainer{
+        padding: 0 20px;
     }
 }
 
@@ -1803,8 +2036,6 @@ Please check for the below classes if it is being used
     }
 }
 
-/** Advance Search **/
-
 //Export
 #exportForm{
     h4{
@@ -1816,7 +2047,6 @@ Please check for the below classes if it is being used
         background-color: @lightColorBorder;
     }
 }
-//Export
 
 //Import
 .searchUIBasic{
@@ -1843,10 +2073,8 @@ Please check for the below classes if it is being used
 		.gradientBar(@gradient6StrtColor,@gradient6EndColor);
 	}
 }
-//Import
 
 //Line Items
-
 // fix for line item taxmode, currency background header block
 #lineItemTab.table{
 	tr:first-child{
@@ -1990,6 +2218,9 @@ Please check for the below classes if it is being used
     i{
       .icon-inverted;
     }
+	i.caret{
+		background-size:0;
+	}
 }
 
 .saveButton{
@@ -2005,9 +2236,9 @@ Please check for the below classes if it is being used
 .cancelLink{
 	.cursorPointer;
         color:	@deleteButton;
-        margin-left: 8px;
+        margin: 6px 0 6px 8px;
         font-size : @baseFontSize !important;
-        padding: 10px 0;
+
 	&:hover{
         color: @deleteButton !important;
 	 }
@@ -2050,7 +2281,7 @@ Please check for the below classes if it is being used
     cursor: pointer;
 }
 
-.cancelLinkContainer{
+#massEdit .cancelLinkContainer{
 	padding: 5px 0;
 	margin-left: 0.5em;
 }
@@ -2087,10 +2318,7 @@ Please check for the below classes if it is being used
 	.gradientBar(@gradient5StrtColor,@gradient5EndColor);
 }
 
-//Reports CSS Ends
-
 // BreadCrumbs Css
-
 #reportBreadCrumbs {
     .gradientBar(@gradient5StrtColor,@gradient5EndColor);
     border-radius: 3px 3px 3px 3px;
@@ -2113,8 +2341,6 @@ Please check for the below classes if it is being used
 	}
 }
 
-// BreadCrumbs CSS ends
-
 .textOverflowEllipsis{
 	.textOverflowEllipsisMixin(9em,ellipsis);
 }
@@ -2126,14 +2352,23 @@ Please check for the below classes if it is being used
 #detailView,#EditView{
 	.table{
 		.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
+        .boxSizingBorderBox;
 		th,td{
 			border-bottom : 1px solid @lightColorBorder!important;
 			border-left : none !important;
 			border-top : none !important;
 		}
-		td:last-child{
-			border-right: none !important;
-		}
+        td{
+            &.fieldValue{
+                textarea{
+                    .boxSizingBorderBox;
+                    width:100%;
+                }
+            }
+            &:last-child{
+                border-right: none !important;
+            }
+        }
 		tr:last-child{
 			td{
 				border-bottom: none !important;
@@ -2310,6 +2545,7 @@ div#chart2{
 		border-left: 1px solid @lightColorBorder;
         padding-top: 3px;
 		background-color:@white;
+		position: relative;
 	}
 }
 
@@ -2343,6 +2579,9 @@ div#chart2{
 			background-color: @gradient4StrtColor !important;
 		}
 	}
+}
+.fc-event{
+min-height: 14px !important;
 }
 .fc-event-style1,.fc-event-style1 .fc-event-skin { background: @fc-style1; border-color: @fc-style1; font-weight: normal; text-shadow: none; }
 .fc-event-style2,.fc-event-style2 .fc-event-skin { background: @fc-style2; border-color: @fc-style2; font-weight: normal; text-shadow: none; }
@@ -2384,8 +2623,6 @@ div#chart2{
 	overflow:visible !important;
 }
 
-//Convert Lead CSS Ends
-
 //Datetime picker style
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
@@ -2404,6 +2641,27 @@ div#chart2{
 .datepicker {
 	//layout editor drop down should show
 	z-index: 1029 !important;
+}
+
+//Color picker styles
+.colorpicker {
+	//color picker should highlight than full calendar view
+	z-index: 1029 !important;
+
+	//color picker input override by bootstrap
+	input {
+		width : 30px !important;
+	}
+
+	//color picker input color overriding by editview inputs
+	input[type="text"], input {
+		color : #898989 !important;
+	}
+}
+
+//color picker input override by bootstrap
+.colorpicker_hex input {
+	width : 45px !important;
 }
 
 //Account Hierarchy
@@ -2464,8 +2722,6 @@ div#chart2{
 	}
 }
 
-/* Calendar Mass Edit */
-
 /**BootStrap Updated Css  (Should be removed once we update bootstrap**/
 
 .input-prepend.input-append input,
@@ -2492,8 +2748,6 @@ div#chart2{
           border-radius: 0 3px 3px 0;
 }
 
-/**BootStrap Updated Css **/
-
 /* Guider-JS */
 .guider .guider_title {
 	line-height: 24px;
@@ -2510,7 +2764,6 @@ div#chart2{
 	position: fixed;
 	bottom: 50px;
 	left: -30px;
-        left: 0\9;
         bottom: 100px\9;
 	background: #2C2C2C;
 	color: white;
@@ -2596,11 +2849,11 @@ div#chart2{
 }
 
 /*opacity applied for summary view edit, comment actions, activity widget edit*/
-.summaryViewEntries .summaryViewEdit, .commentActionsDiv, .activityStatus .editStatus{
+.summaryViewEntries .summaryViewEdit, .activityStatus .editStatus, .addedCalendars .actionImage{
 	.zeroOpacity;
 }
 
-.summaryViewEntries:hover .fieldValue .summaryViewEdit, .activityStatus:hover .editStatus{
+.summaryViewEntries:hover .fieldValue .summaryViewEdit, .activityStatus:hover .editStatus, .addedCalendars:hover .actionImage{
 	.fullOpacity;
 }
 
@@ -2618,17 +2871,6 @@ div#chart2{
     hr{
         margin : 5px 0 10px 0 !important;
     }
-}
-
-.singleComment:hover{
-	.gradientBar(@gradient2StrtColor,@gradient2EndColor);
-	.commentActionsDiv{
-		.fullOpacity;
-	}
-}
-
-.singleComment{
-	padding: 10px 2px 0px 0px;
 }
 
 .summaryWidgetContainer{
@@ -2788,9 +3030,19 @@ input[type="text"], input, textarea{
 		}
 	}
 }
+
 // overwriting tax calculations modal-header
 .blockUI{
     border-radius: 2px !important;
+}
+
+//Customer Portal
+
+.portalModuleRow{
+    cursor: move;
+    &:hover{
+        background-color : @lightColorBorder !important;
+    }
 }
 
 //Sharing Access Stylings
@@ -2853,14 +3105,18 @@ input[type="text"], input, textarea{
 	}
 }
 
-//Module Manager - genaral class to apply opacity to actions
-.opacity .actions{
-	.zeroOpacity;
+//Module Manager - general class to apply opacity to actions
+.opacity{
+	.actions{
+		.zeroOpacity;
+	}
+	&:hover {
+		.actions{
+			.fullOpacity;
+		}
+		background-color: @rowHoverColor1 !important;
+	}
 }
-.opacity:hover .actions{
-	.fullOpacity;
-}
-
 .settingsHeader{
 	.font-x-x-large;
 	color : @headerColor;
@@ -2876,6 +3132,7 @@ input[type="text"], input, textarea{
 .themeTableColor {
 	.gradientBar(@tableBackgroundColor,@tableBackgroundColor);
 }
+
 //General class for textarea autosize
 .textarea-autosize{
 	min-width: 100%;
@@ -2894,6 +3151,14 @@ input[type="text"], input, textarea{
 	}
 }
 
+//Picklist Editor
+.pickListValue{
+    cursor: move;
+    &:hover{
+        background-color : @lightColorBorder !important;
+    }
+}
+
 //Picklist dependency
 .selectedCell {
 	background-color: lightBlue;
@@ -2905,6 +3170,7 @@ input[type="text"], input, textarea{
     color: @seperatorColor;
     white-space : nowrap;
 }
+
 .pickListDependencyTable {
 	tbody tr:hover td {
 		background-color: none !important;
@@ -2944,7 +3210,6 @@ input[type="text"], input, textarea{
 .blockFieldsList {
 	.editFields {
 		margin-left : 0.5% !important;
-
 		//default value ui- multi select values ui breaking
 		.dropdown-menu a {
 			padding : 0px !important;
@@ -2955,15 +3220,31 @@ input[type="text"], input, textarea{
 	}
 }
 
+#importModules .contents{
+	margin-left: 2.2%;
+}
+
 .extensionWidgetContainer{
 	background-color: @white;
 	border: 1px solid @summaryWidgetBorderColor;
-	border-radius : 4px;
 	min-height: 200px;
-	.padding5per;
+	padding: 2%;
+	.extension_contents{
+		margin-top: 2%;
+		.contentsBackground;
+		border: 1px solid @lightColorBorder;
+		padding: 15px 20px;
+		.slimScrollDiv{
+			padding-right: 10px;
+		}
+	}
+	.extension_contents{
+		margin-top: 5%;
+		.slimScrollDiv{
+			padding-right: 10px;
+		}
+	}
 	.extensionDescription {
-		padding-top: 5%;
-		padding-bottom: 5%;
 		line-height: 20px;
 	}
 	.extensionInfo{
@@ -2995,8 +3276,13 @@ input[type="text"], input, textarea{
 
 //Control the overlapping of cells (due to many rows+cell) during reporting
 //Observed specially in Chrome having 1000+ rows with 9 cells.
-#reportDetails table tr td {
-	padding: 5px;
+#reportDetails table tr{
+    th{
+        border-left: none;
+    }
+    td {
+        padding: 5px;
+    }
 }
 
 //Breadcrumb styles
@@ -3109,7 +3395,7 @@ input[type="text"], input, textarea{
     background: @headerColor;
     font-weight: bold;
     padding: 50px 2px;
-    position: fixed;
+    position: absolute;
     top: 40%;
     cursor: pointer;
     width: 10px;
@@ -3130,4 +3416,95 @@ input[type="text"], input, textarea{
 	border: 1px solid @grayLight;
 	background-color: @grayLighter;
 	border-radius: 2px;
+}
+
+
+.mailConveterDesc {
+    height:350px;
+    width:96%;
+    border: 1.5px solid;
+    border-radius:10px;
+    border-color:#dddddd;
+    font-size:11pt;
+    margin-top: 55px;
+    margin-left: 20px;
+}
+
+#mailBoxLabel {
+    margin-top:15px;
+    margin-left: -18px;
+    font-size: 12pt;
+    width: 75px;
+}
+.mailBoxDropdownWrapper {
+    height: 49px;
+    width: 70%;
+    background: url('../images/mailbox-icon.png') no-repeat 5px 5px;
+    overflow: hidden;
+    border: 1px solid #dddddd;
+}
+.mailBoxDropdown {
+    background: transparent url('../images/downArrowBlue.png') no-repeat 236px 13px;
+    width: 110%;
+    height: 50px;
+    font-size: 14pt;
+    color: #0065a6;
+    padding: 10px 55px;
+    padding-right: 0;
+}
+
+#mailConverterDragIcon {
+    margin-top: 12px;
+}
+
+#mailConverterBody {
+    padding-top: 20px;
+    margin-left: 0px;
+}
+
+.mailConverterRuleBlock {
+    font-size:14px;
+    line-height: 30px;
+    border: 1.5px solid;
+    border-color:#dddddd;
+}
+
+.mailConverterRuleLegend {
+    font-size: 12pt;
+    color: #0065a6;
+    margin-bottom:10px;
+    background: #EEE;
+}
+
+#mailConverterStats {
+    font-size: 10pt;
+    margin-top: 5px;
+    margin-left: -10px;
+}
+
+.addMailBoxBlock {
+    border: 1.5px solid;
+    border-color: #dddddd;
+    margin-left: 83px;
+    margin-top: 20px;
+    padding-top: 30px;
+    padding-left: 200px;
+    padding-bottom: 20px;
+    padding-right: 30px;
+    font-size: 11pt;
+}
+
+.rightAligned {
+    text-align: right;
+}
+
+input.listSearchContributor{
+  margin-bottom : 0px !important;
+}
+
+.listSearchContributor {
+    min-width : 125px !important;
+}
+.backgroundColor {
+    background-color: @containerColor1 !important;
 }

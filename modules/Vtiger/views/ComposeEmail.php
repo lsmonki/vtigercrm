@@ -36,6 +36,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 
 	public function composeMailData($request){
 		$moduleName = 'Emails';
+        $fieldModule = $request->get('fieldModule');
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$userRecordModel = Users_Record_Model::getCurrentUserModel();
 		$sourceModule = $request->getModule();
@@ -48,13 +49,15 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODULE', $moduleName);
+        $viewer->assign('FIELD_MODULE',$fieldModule);
 		$viewer->assign('VIEWNAME', $cvId);
 		$viewer->assign('SELECTED_IDS', $selectedIds);
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
-                $viewer->assign('SELECTED_FIELDS',$selectedFields);  
+        $viewer->assign('SELECTED_FIELDS',$selectedFields);  
 		$viewer->assign('USER_MODEL', $userRecordModel);
 		$viewer->assign('MAX_UPLOAD_SIZE', vglobal('upload_maxsize'));
 		$viewer->assign('RELATED_MODULES', $moduleModel->getEmailRelatedModules());
+
 		if ($documentIds) {
 			$attachements = array();
 			foreach ($documentIds as $documentId) {
@@ -82,8 +85,14 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
 		
+        $searchParams = $request->get('search_params');
+        if(!empty($searchParams)) {
+            $viewer->assign('SEARCH_PARAMS',$searchParams);
+        }
+		
 		$to =array();
 		$toMailInfo = array();
+		$toMailNamesList = array();
 		$selectIds = $this->getRecordsListFromRequest($request);
 
 		$ccMailInfo = $request->get('ccemailinfo');
@@ -97,18 +106,31 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		}
 		
 		foreach($selectIds as $id) {
-			$recordModel = Vtiger_Record_Model::getInstanceById($id);
-			if($selectedFields){
-				foreach($selectedFields as $field) {
-					$value = $recordModel->get($field);
-					$emailOptOutValue = $recordModel->get('emailoptout');
-					if(!empty($value) && (!$emailOptOutValue)) {
-						$to[] =	$recordModel->get($field);
-						$toMailInfo[$id][] = $value;
+			if ($id) {
+				if($fieldModule) {
+					$recordModel = Vtiger_Record_Model::getInstanceById($id, $fieldModule);
+				} else {
+					$recordModel = Vtiger_Record_Model::getInstanceById($id);
+				}
+				if($selectedFields){
+					foreach($selectedFields as $field) {
+						$value = $recordModel->get($field);
+						$emailOptOutValue = $recordModel->get('emailoptout');
+						if(!empty($value) && (!$emailOptOutValue)) {
+							$to[] =	$value;
+							$toMailInfo[$id][] = $value;
+							$toMailNamesList[$id][] = array('label' => $recordModel->getName(), 'value' => $value);
+						}
 					}
 				}
 			}
 		}
+
+		$requestTo = $request->get('to');
+		if (!$to && is_array($requestTo)) {
+			$to = $requestTo;
+		}
+
 		$documentsModel = Vtiger_Module_Model::getInstance('Documents');
 		$documentsURL = $documentsModel->getInternalDocumentsURL();
 
@@ -119,6 +141,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer->assign('EMAIL_TEMPLATE_URL', $emailTemplateListURL);
 		$viewer->assign('TO', $to);
 		$viewer->assign('TOMAIL_INFO', $toMailInfo);
+		$viewer->assign('TOMAIL_NAMES_LIST', $toMailNamesList);
 		$viewer->assign('CC', $request->get('cc'));
 		$viewer->assign('CCMAIL_INFO', $ccMailInfo);
 		$viewer->assign('BCC', $request->get('bcc'));
@@ -133,7 +156,6 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 			$viewer->assign('RELATED_LOAD', true);
 		}
 	}
-
 
 	public function emailActionsData($request){
 		$recordId = $request->get('record');
@@ -201,6 +223,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
                 $customViewModel->set('search_key', $searchKey);
                 $customViewModel->set('search_value', $searchValue);
             }
+            $customViewModel->set('search_params', $request->get('search_params'));
 			return $customViewModel->getRecordIds($excludedIds);
 		}
         return array();
@@ -290,20 +313,28 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 
         $parentIds = explode('|',$recordModel->get('parent_id'));
 
-
-        $toMailInfo = array();
+		$toMailInfo = $toMailNamesList = array();
         foreach($parentIds as $index=>$parentFieldId) {
             if(empty($parentFieldId)){
                 continue;
             }
             $parentIdComponents = explode('@',$parentFieldId);
             $parentId = $parentIdComponents[0];
-            //expecting parent ids and to will be same order
-            $toMailInfo[$parentId][] = $TO[$index];
+			$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId);
+			$emailFields = array_keys($parentRecordModel->getModule()->getFieldsByType('email'));
+			foreach ($emailFields as $emailField) {
+				$emailValue = $parentRecordModel->get($emailField);
+				if (in_array($emailValue, $TO)) {
+					//expecting parent ids and to will be same order
+					$toMailInfo[$parentId][] = $emailValue;
+					$toMailNamesList[$parentId][] = array('label' => Vtiger_Util_Helper::getRecordName($parentId), 'value' => $emailValue);
+				}
+			}
         }
 
 		$viewer->assign('TO',$TO);
         $viewer->assign('TOMAIL_INFO', $toMailInfo);
+		$viewer->assign('TOMAIL_NAMES_LIST', $toMailNamesList);
 		$viewer->assign('CC', implode(',',$CC));
 		$viewer->assign('BCC', implode(',',$BCC));
         $viewer->assign('RECORDID', $request->get('record'));
@@ -317,7 +348,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$moduleName = $request->getModule();
 		$this->emailActionsData($request);
 		$viewer->assign('TO', '');
-		$viewer->assign('TOMAIL_INFO', '');
+		$viewer->assign('TOMAIL_INFO', array());
         $viewer->assign('RELATED_LOAD', true);
 		$viewer->assign('EMAIL_MODE', 'forward');
 		echo $viewer->view('ComposeEmailForm.tpl', $moduleName, true);

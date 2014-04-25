@@ -88,7 +88,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 	function process (Vtiger_Request $request) {
 		Vtiger_Session::init();
 
-		// TODO - Get rid of global variable $current_user
+                // TODO - Get rid of global variable $current_user
 		// common utils api called, depend on this variable right now
 		$currentUser = $this->getLogin();
 		vglobal('current_user', $currentUser);
@@ -99,18 +99,18 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 		vglobal('current_language',$currentLanguage);
 		$module = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
-
+                
 		if ($currentUser && $qualifiedModuleName) {
 			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage,$qualifiedModuleName);
 			vglobal('mod_strings', $moduleLanguageStrings['languageStrings']);
 		}
-
+                
 		if ($currentUser) {
 			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage);
 			vglobal('app_strings', $moduleLanguageStrings['languageStrings']);
 		}
 
-		$view = $request->get('view');
+                $view = $request->get('view');
 		$action = $request->get('action');
 		$response = false;
 
@@ -125,7 +125,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 					$defaultModule = vglobal('default_module');
 					if(!empty($defaultModule) && $defaultModule != 'Home') {
 						$module = $defaultModule; $qualifiedModuleName = $defaultModule; $view = 'List';
-                        if($module == 'Calendar') { 
+                        if($module == 'Calendar') {
                             // To load MyCalendar instead of list view for calendar
                             //TODO: see if it has to enhanced and get the default view from module model
                             $view = 'Calendar';
@@ -140,7 +140,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 				$request->set('view', $view);
 			}
 
-			if (!empty($action)) {
+                        if (!empty($action)) {
 				$componentType = 'Action';
 				$componentName = $action;
 			} else {

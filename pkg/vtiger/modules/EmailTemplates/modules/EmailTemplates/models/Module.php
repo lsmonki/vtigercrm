@@ -219,4 +219,11 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		return $recordIds;
 	}
+    
+    /**
+     * Funxtion to identify if the module supports quick search or not
+     */
+    public function isQuickSearchEnabled() {
+        return false;
+    }
 }

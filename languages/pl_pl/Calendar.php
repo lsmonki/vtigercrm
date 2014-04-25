@@ -9,16 +9,18 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Calendar' => 'Zadanie',
-	'LBL_ADD_TASK' => 'Dodaj zadanie',
+	'SINGLE_Calendar' => 'Uwagi',
+	'LBL_ADD_TASK' => 'Dodaj Uwagi',
 	'LBL_ADD_EVENT' => 'Dodaj Czynność',
 	'LBL_RECORDS_LIST' => 'Lista wydarzeń',
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie wydarzenia',
 	'LBL_EVENTS' => 'Czynności',
 	'LBL_TODOS' => 'Zadania',
+	'LBL_EVENT_OR_TASK' => 'Wydarzenie / Uwagi',
 
 	// Blocks
-	'LBL_TASK_INFORMATION' => 'Szczegóły zadania',
+	'LBL_TASK_INFORMATION' => 'Szczegóły Uwagi',
+    'LBL_EVENT_INFORMATION'=> 'Szczegóły wydarzenia',
 
 	//Fields
 	'Subject' => 'Temat',
@@ -50,67 +52,88 @@ $languageStrings = array(
 	'LBL_CHANGE_OWNER' => 'Zmień właściciela',
 
 	'LBL_EVENT' => 'Czynność',
-	'LBL_TASK' => 'Zadanie',
+	'LBL_TASK' => 'Uwagi',
+	'LBL_TASKS' => 'Uwagi',
 
+	'LBL_RECORDS_LIST' => 'Widok listy',
 	'LBL_CALENDAR_VIEW' => 'Widok kalendarza',
-	'LBL_EVENT_OR_TASK' => 'Wydarzenie / Zadanie',
+	
+	'Mobile Call' => 'Mobile Call',
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Kolor Edit',
+	'LBL_ADD_CALENDAR_VIEW' => 'Dodaj kalendarz',
+	'LBL_SELECT_USER_CALENDAR' => 'Wybierz kalendarz użytkownika',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Wybierz kolor kalendarz',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Montaż kalendarza View',
+	'LBL_DELETE_CALENDAR' => 'Usuń kalendarz',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Wybierz typ aktywny',
+	'Tasks' => 'Zadania',
 
 );
 
 $jsLanguageStrings = array(
 
-	'LBL_ADD_EVENT_TASK' => 'Dodaj zadanie / Czynność',
-        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Nie może być pociągnięty do przyszłego',
-	
+	'LBL_ADD_EVENT_TASK' => 'Dodaj zadanie / Uwagi',
+    
 	//Calendar view label translation
-	'LBL_MONTH' => 'Month',
-	'LBL_TODAY' => 'Today',
-	'LBL_DAY' => 'Day',
-	'LBL_WEEK' => 'Week',
+	'LBL_MONTH' => 'Miesiąc',
+	'LBL_TODAY' => 'Dzisiaj',
+	'LBL_DAY' => 'Dzień',
+	'LBL_WEEK' => 'Tydzień',
 	
-	'LBL_SUNDAY' => 'Sunday',
-	'LBL_MONDAY' => 'Monday',
-	'LBL_TUESDAY' => 'Tuesday',
-	'LBL_WEDNESDAY' => 'Wednesday',
-	'LBL_THURSDAY' => 'Thursday',
-	'LBL_FRIDAY' => 'Friday',
-	'LBL_SATURDAY' => 'Saturday',
+	'LBL_SUNDAY' => 'Niedziela',
+	'LBL_MONDAY' => 'Poniedziałek',
+	'LBL_TUESDAY' => 'Wtorek',
+	'LBL_WEDNESDAY' => 'Środa',
+	'LBL_THURSDAY' => 'Czwartek',
+	'LBL_FRIDAY' => 'Piątek',
+	'LBL_SATURDAY' => 'Sobota',
 	
-	'LBL_SUN' => 'Sun',
-	'LBL_MON' => 'Mon',
-	'LBL_TUE' => 'Tue',
-	'LBL_WED' => 'Wed',
-	'LBL_THU' => 'Thu',
-	'LBL_FRI' => 'Fri',
-	'LBL_SAT' => 'Sat',
+	'LBL_SUN' => 'Cz',
+	'LBL_MON' => 'pon',
+	'LBL_TUE' => 'Wt',
+	'LBL_WED' => 'Poślubić',
+	'LBL_THU' => 'Czw',
+	'LBL_FRI' => 'pt',
+	'LBL_SAT' => 'Sob',
 	
-	'LBL_JANUARY' => 'January',
-	'LBL_FEBRUARY' => 'February',
-	'LBL_MARCH' => 'March',
-	'LBL_APRIL' => 'April',
-	'LBL_MAY' => 'May',
-	'LBL_JUNE' => 'June',
-	'LBL_JULY' => 'July',
-	'LBL_AUGUST' => 'August',
-	'LBL_SEPTEMBER' => 'September',
-	'LBL_OCTOBER' => 'October',
-	'LBL_NOVEMBER' => 'November',
-	'LBL_DECEMBER' => 'December',
+	'LBL_JANUARY' => 'Styczen',
+	'LBL_FEBRUARY' => 'Luty',
+	'LBL_MARCH' => 'mar',
+	'LBL_APRIL' => 'kwi',
+	'LBL_MAY' => 'maja',
+	'LBL_JUNE' => 'cze',
+	'LBL_JULY' => 'lipiec',
+	'LBL_AUGUST' => 'Sierpień',
+	'LBL_SEPTEMBER' => 'wrzesnia',
+	'LBL_OCTOBER' => 'paź',
+	'LBL_NOVEMBER' => 'Listopad',
+	'LBL_DECEMBER' => 'Grudzień',
 	
-	'LBL_JAN' => 'Jan',
-	'LBL_FEB' => 'Feb',
-	'LBL_MAR' => 'Mar',
-	'LBL_APR' => 'Apr',
-	'LBL_MAY' => 'May',
-	'LBL_JUN' => 'Jun',
-	'LBL_JUL' => 'Jul',
-	'LBL_AUG' => 'Aug',
-	'LBL_SEP' => 'Sep',
-	'LBL_OCT' => 'Oct',
-	'LBL_NOV' => 'Nov',
-	'LBL_DEC' => 'Dec',
+	'LBL_JAN' => 'Sty',
+	'LBL_FEB' => 'Lutego',
+	'LBL_MAR' => 'Zniszczyć',
+	'LBL_APR' => 'Kwietnia',
+	'LBL_MAY' => 'maja',
+	'LBL_JUN' => 'Czer',
+	'LBL_JUL' => 'Lipca',
+	'LBL_AUG' => 'Sie',
+	'LBL_SEP' => 'Wrz',
+	'LBL_OCT' => 'Październik',
+	'LBL_NOV' => 'Listopad',
+	'LBL_DEC' => 'Grudnia',
 	
-	'LBL_ALL_DAY' => 'All-Day',
+	'LBL_ALL_DAY' => 'Wszystkie dni',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
 	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Zobacz kalendarz kolor zaktualizowane',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Czy na pewno chcesz usunąć ten pogląd kalendarz?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Kalendarz Zobacz pomyślnie dodana',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Kalendarz Zobacz pomyślnie usunięty',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Nie Kalendarz Zobacz dodać',
+	'JS_EDIT_CALENDAR' => 'Edit Calendar',
 );

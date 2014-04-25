@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 
-<div style='padding:10px;padding-left:20px;'>
+<div class='dashboardHeading'>
 	{if $DASHBOARDHEADER_TITLE}
 		<h2 class="pull-left">{$DASHBOARDHEADER_TITLE}</h2>
 	{/if}

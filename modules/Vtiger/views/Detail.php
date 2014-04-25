@@ -109,6 +109,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'));
 		$linkModels = $this->record->getSideBarLinks($linkParams);
 		$viewer->assign('QUICK_LINKS', $linkModels);
+        $viewer->assign('MODULE_NAME', $moduleName);
 
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$viewer->assign('DEFAULT_RECORD_VIEW', $currentUserModel->get('default_record_view'));
@@ -160,7 +161,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
                 } else {
                     $selectedTabLabel = vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_DETAILS', $moduleName);
                 }
-            } 
+            }
         }
 
 		$viewer = $this->getViewer($request);
@@ -317,6 +318,10 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$recentActivities = ModTracker_Record_Model::getUpdates($parentRecordId, $pagingModel);
 		$pagingModel->calculatePageRange($recentActivities);
 
+		if($pagingModel->getCurrentPage() == ModTracker_Record_Model::getTotalRecordCount($parentRecordId)/$pagingModel->getPageLimit()) {
+        	$pagingModel->set('nextPageExists', false);
+        }
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECENT_ACTIVITIES', $recentActivities);
 		$viewer->assign('MODULE_NAME', $moduleName);
@@ -349,12 +354,14 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$recentComments = ModComments_Record_Model::getRecentComments($parentId, $pagingModel);
 		$pagingModel->calculatePageRange($recentComments);
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('COMMENTS', $recentComments);
 		$viewer->assign('CURRENTUSER', $currentUserModel);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('PAGING_MODEL', $pagingModel);
+		$viewer->assign('COMMENTS_MODULE_MODEL', $modCommentsModel);
 
 		return $viewer->view('RecentComments.tpl', $moduleName, 'true');
 	}
@@ -397,10 +404,12 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$parentCommentModel = ModComments_Record_Model::getInstanceById($parentCommentId);
 		$childComments = $parentCommentModel->getChildComments();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('PARENT_COMMENTS', $childComments);
 		$viewer->assign('CURRENTUSER', $currentUserModel);
+		$viewer->assign('COMMENTS_MODULE_MODEL', $modCommentsModel);
 
 		return $viewer->view('CommentsList.tpl', $moduleName, 'true');
 	}
@@ -415,6 +424,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 		$commentRecordId = $request->get('commentid');
 		$moduleName = $request->getModule();
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
 
 		$parentCommentModels = ModComments_Record_Model::getAllParentComments($parentRecordId);
 
@@ -424,6 +434,7 @@ class Vtiger_Detail_View extends Vtiger_Index_View {
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('CURRENTUSER', $currentUserModel);
+		$viewer->assign('COMMENTS_MODULE_MODEL', $modCommentsModel);
 		$viewer->assign('PARENT_COMMENTS', $parentCommentModels);
 		$viewer->assign('CURRENT_COMMENT', $currentCommentModel);
 

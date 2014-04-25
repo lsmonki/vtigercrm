@@ -16,11 +16,12 @@
         'LBL_UPDATED' => 'Updated',
         'LBL_ADDED' => 'Added',
         'LBL_DELETED' => 'Deleted',
-        'LBL_SYNCRONIZED' => 'Syncronized',
-        'LBL_NOT_SYNCRONIZED' => 'You have not syncronized yet',
-        'LBL_SYNC_BUTTON' => 'Syncronize Now',
-        'LBL_MORE_VTIGER' => 'There are more records to be syncronized in vtiger',
-        'LBL_MORE_GOOGLE' => 'There are more records to be syncronized in Google',
+        'LBL_SYNCRONIZED' => 'Synchronized',
+        'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
+        'LBL_SYNC_BUTTON' => 'Synchronize Now',
+        'LBL_REMOVE_SYNC' => 'Remove Sync',
+        'LBL_MORE_VTIGER' => 'There are more records to be synchronized in vtiger',
+        'LBL_MORE_GOOGLE' => 'There are more records to be synchronized in Google',
         'Contact Name'=>'Contact Name',
         'Email'=>'Email',
         'Mobile Phone'=>'Mobile Phone',
@@ -31,7 +32,7 @@
         'Description'=>'Description'
     );
     $jsLanguageStrings = array(
-        'LBL_SYNC_BUTTON' => 'Syncronize Now',
-        'LBL_SYNCRONIZING' => 'Syncronizing....',
-        'LBL_NOT_SYNCRONIZE' => 'You have not syncronized yet'
+        'LBL_SYNC_BUTTON' => 'Synchronize Now',
+        'LBL_SYNCRONIZING' => 'Synchronizing....',
+        'LBL_NOT_SYNCRONIZE' => 'You have not synchronized yet'
     );

@@ -35,7 +35,7 @@ class Calendar_DetailRecordStructure_Model extends Vtiger_DetailRecordStructure_
 					if($fieldModel->isViewableInDetailView()) {
 						if($recordExists) {
 							$fieldModel->set('fieldvalue', $recordModel->get($fieldName));
-							if($fieldName == 'due_date') {
+							if($fieldName == 'due_date' && $moduleModel->get('name') != 'Calendar') {
 								$fieldModel->set('label', 'Due Date & Time');
 							}
 						}

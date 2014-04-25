@@ -20,7 +20,7 @@
 				<div>
 					<select class="widgetFilter" id="historyType" name="type" style='width:100px;margin-bottom:0px'>
 						<option value="all" >{vtranslate('LBL_ALL')}</option>
-						<option value="comments" >{vtranslate('LBL_COMMENTS')}</option>
+						{if $COMMENTS_MODULE_MODEL->isPermitted('DetailView')}<option value="comments" >{vtranslate('LBL_COMMENTS')}</option>{/if}
 						<option value="updates" >{vtranslate('LBL_UPDATES')}</option>
 					</select>
 				</div>

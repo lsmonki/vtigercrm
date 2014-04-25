@@ -184,6 +184,178 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 		app.changeSelectElementView(secondaryModulesContainer, 'select2', {maximumSelectionSize: 2});
 	},
 	
+	/**
+	 * Function to register event for scheduled reports UI
+	 */
+	registerEventForScheduledReprots : function() {
+		var thisInstance = this;
+		jQuery('input[name="enable_schedule"]').on('click', function(e) {
+			var element = jQuery(e.currentTarget);
+			var scheduleBoxContainer = jQuery('#scheduleBox');
+			if(element.is(':checked')) {
+				element.val(element.is(':checked'));
+				scheduleBoxContainer.removeClass('hide');
+			} else {
+				element.val(element.is(':checked'));
+				scheduleBoxContainer.addClass('hide');
+			}
+		});
+		app.registerEventForTimeFields('#schtime', true);
+		app.registerEventForDatePickerFields('#scheduleByDate', true);
+		
+		jQuery('#annualDates').chosen();
+		jQuery('#schdayoftheweek').chosen();
+		jQuery('#schdayofthemonth').chosen();
+		jQuery('#recipients').chosen();
+		
+		var currentYear = new Date().getFullYear();
+		jQuery('#annualDatePicker').datepick({autoSize: true, multiSelect:100,monthsToShow: [1,2],
+				minDate: '01/01/'+currentYear, maxDate: '12/31/'+currentYear,
+				yearRange: currentYear+':'+currentYear,
+				onShow : function() {
+					//Hack to remove the year
+					thisInstance.removeYearInAnnualReport();
+				},
+				onSelect : function(dates) {
+					var datesInfo = [];
+					var values = [];
+					var html='';
+					// reset the annual dates
+					var annualDatesEle = jQuery('#annualDates');
+					thisInstance.updateAnnualDates(annualDatesEle);
+					for(index in dates) {
+						var date = dates[index];
+						datesInfo.push({
+								id:thisInstance.DateToYMD(date),
+								text:thisInstance.DateToYMD(date)
+							});
+						values.push(thisInstance.DateToYMD(date));
+						html += '<option selected value='+thisInstance.DateToYMD(date)+'>'+thisInstance.DateToYMD(date)+'</option>';
+					}
+					annualDatesEle.append(html);
+					annualDatesEle.trigger("liszt:updated");
+				}
+			});
+			var annualDatesEle = jQuery('#annualDates');
+			thisInstance.updateAnnualDates(annualDatesEle);
+			annualDatesEle.trigger("liszt:updated");
+	},
+
+	removeYearInAnnualReport : function() {
+		setTimeout(function() {
+			var year = jQuery('.datepick-month.first').find('.datepick-month-year').get(1);
+			jQuery(year).hide();
+			var monthHeaders = jQuery('.datepick-month-header');
+			jQuery.each(monthHeaders, function( key, ele ) {
+				var header = jQuery(ele);
+				var str = header.html().replace(/[\d]+/, '');
+				header.html(str);
+			});
+		},100);
+	},
+
+	updateAnnualDates : function(annualDatesEle) {
+		annualDatesEle.html('');
+		var annualDatesJSON = jQuery('#hiddenAnnualDates').val();
+		if(annualDatesJSON) {
+			var hiddenDates = '';
+			var annualDates = JSON.parse(annualDatesJSON);
+			for(i in annualDates) {
+				hiddenDates += '<option selected value='+annualDates[i]+'>'+annualDates[i]+'</option>';
+			}
+			annualDatesEle.html(hiddenDates);
+		}
+	},
+
+	DateToYMD : function (date) {
+        var year, month, day;
+        year = String(date.getFullYear());
+        month = String(date.getMonth() + 1);
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        day = String(date.getDate());
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        return year + "-" + month + "-" + day;
+    },
+
+	registerEventForChangeInScheduledType : function() {
+		var thisInstance = this;
+		jQuery('#schtypeid').on('change', function(e){
+			var element = jQuery(e.currentTarget);
+			var value = element.val();
+
+			thisInstance.showScheduledTime();
+			thisInstance.hideScheduledWeekList();
+			thisInstance.hideScheduledMonthByDateList();
+			thisInstance.hideScheduledAnually();
+			thisInstance.hideScheduledSpecificDate();
+
+			if(value == '2') { //weekly
+				thisInstance.showScheduledWeekList();
+			} else if(value == '3') { //monthly by day
+				thisInstance.showScheduledMonthByDateList();
+			} else if(value == '4') { //Anually
+				thisInstance.showScheduledAnually();
+			} else if(value == '5') { //specific date
+				thisInstance.showScheduledSpecificDate();
+			}
+		});
+	},
+	
+	//Remove annual dates element 
+	registerEventForRemoveAnnualDates : function() {
+		var thisInstance = this;
+		jQuery("#annualDates").chosen().change(function(e){
+			jQuery('#hiddenAnnualDates').val(JSON.stringify(jQuery(e.target).val()));
+			var element = jQuery(e.currentTarget);
+			thisInstance.updateAnnualDates(element);
+			element.trigger("liszt:updated");
+		});
+	},
+
+	hideScheduledTime : function() {
+		jQuery('#scheduledTime').addClass('hide');
+	},
+
+	showScheduledTime : function() {
+		jQuery('#scheduledTime').removeClass('hide');
+	},
+
+	hideScheduledWeekList : function() {
+		jQuery('#scheduledWeekDay').addClass('hide');
+	},
+
+	showScheduledWeekList : function() {
+		jQuery('#scheduledWeekDay').removeClass('hide');
+	},
+
+	hideScheduledMonthByDateList : function() {
+		jQuery('#scheduleMonthByDates').addClass('hide');
+	},
+
+	showScheduledMonthByDateList : function() {
+		jQuery('#scheduleMonthByDates').removeClass('hide');
+	},
+
+	hideScheduledSpecificDate : function() {
+		jQuery('#scheduleByDate').addClass('hide');
+	},
+
+	showScheduledSpecificDate : function() {
+		jQuery('#scheduleByDate').removeClass('hide');
+	},
+
+	hideScheduledAnually : function() {
+		jQuery('#scheduleAnually').addClass('hide');
+	},
+
+	showScheduledAnually : function() {
+		jQuery('#scheduleAnually').removeClass('hide');
+	},
+	
 	registerEvents : function(){
 		this.registerPrimaryModuleChangeEvent();
 		this.registerSelect2ElementForSecondaryModulesSelection();
@@ -197,5 +369,9 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
         };
 		opts['promptPosition'] = "bottomRight";
 		container.validationEngine(opts);
+		//schedule reports
+		this.registerEventForScheduledReprots();
+		this.registerEventForChangeInScheduledType();
+		this.registerEventForRemoveAnnualDates();
 	}
 });

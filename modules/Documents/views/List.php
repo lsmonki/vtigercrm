@@ -56,6 +56,7 @@ class Documents_List_View extends Vtiger_List_View {
 
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $pageNumber);
+        $pagingModel->set('viewid', $request->get('viewname'));
 
 		if(!empty($orderBy)) {
 			$listViewModel->set('orderby', $orderBy);
@@ -74,6 +75,26 @@ class Documents_List_View extends Vtiger_List_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
+        
+         $searchParmams = $request->get('search_params');
+        if(empty($searchParmams)) {
+            $searchParmams = array();
+        }
+        $transformedSearchParams = $this->transferListSearchParamsToFilterCondition($searchParmams, $listViewModel->getModule());
+        $listViewModel->set('search_params',$transformedSearchParams);
+     
+        
+        //To make smarty to get the details easily accesible
+        foreach($searchParmams as $fieldListGroup){
+            foreach($fieldListGroup as $fieldSearchInfo){
+                $fieldSearchInfo['searchValue'] = $fieldSearchInfo[2];
+                $fieldSearchInfo['fieldName'] = $fieldName = $fieldSearchInfo[0];
+                $searchParmams[$fieldName] = $fieldSearchInfo;
+            }
+            
+        }
+        
+        
         
         $listViewModel->set('folder_id',$request->get('folder_id'));
         $listViewModel->set('folder_value',$request->get('folder_value'));
@@ -127,5 +148,6 @@ class Documents_List_View extends Vtiger_List_View {
 
 		$viewer->assign('IS_MODULE_EDITABLE', $listViewModel->getModule()->isPermitted('EditView'));
 		$viewer->assign('IS_MODULE_DELETABLE', $listViewModel->getModule()->isPermitted('Delete'));
+        $viewer->assign('SEARCH_DETAILS', $searchParmams);
 	}
 }

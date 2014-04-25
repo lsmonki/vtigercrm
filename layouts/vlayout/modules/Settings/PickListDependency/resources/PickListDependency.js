@@ -259,7 +259,7 @@ jQuery.Class('Settings_PickListDependency_Js', {
 		AppConnector.request(params).then(
 			function(data) {
 				var dependencyGraph = jQuery('#dependencyGraph');
-				dependencyGraph.html(data);
+				dependencyGraph.html(data).css(	{'padding': '10px','border': '1px solid #ddd','background': '#fff'});
 				
 				var element = dependencyGraph.find('.dependencyMapping');
 				app.showHorizontalScrollBar(element);

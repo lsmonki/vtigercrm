@@ -30,7 +30,7 @@ class Vtiger_PDF_TCPDF extends TCPDF {
 
 	function GetStringHeight($sa,$w) {
 		if(empty($sa)) return 0;
-
+		
 		$sa = str_replace("\r","",$sa);
 		// remove the last newline
 		if (substr($sa,-1) == "\n")

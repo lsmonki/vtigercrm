@@ -31,7 +31,7 @@ Inventory_Edit_Js("Quotes_Edit_Js",{},{
 		if(sourceFieldElement.attr('name') == 'contact_id' || sourceFieldElement.attr('name') == 'potential_id') {
 			var form = this.getForm();
 			var parentIdElement  = form.find('[name="account_id"]');
-			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0 && parentIdElement.val() != 0) {
 				var closestContainer = parentIdElement.closest('td');
 				params['related_parent_id'] = parentIdElement.val();
 				params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();

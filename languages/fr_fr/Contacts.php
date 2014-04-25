@@ -33,7 +33,7 @@ $languageStrings = array(
 	'Mailing State'                => 'Département'                , 
 	'Mailing Zip'                  => 'Code postal'                 , 
 	'Mailing Country'              => 'Pays'                        , 
-	'Mailing Po Box'               => 'Mailing P.O. Box'            , 
+	'Mailing Po Box'               => 'Case postale postale'            , 
 	'Other Street'                 => 'Adresse (alt.)'              , 
 	'Other City'                   => 'Ville (alt.)'                , 
 	'Other State'                  => 'Département (alt.)'         , 
@@ -48,10 +48,8 @@ $languageStrings = array(
 	'Prof.'                        => 'Prof'                        , 
 	'User List'                    => 'Liste des collaborateurs'    , 
 	'Contact Id' => 'Contact Id',
+    'Support Start Date'           => 'Soutien Date de début'       ,
+    'Support End Date'             => 'Soutien Date de fin'         ,
 );
 $jsLanguageStrings = array(
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 );

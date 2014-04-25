@@ -24,7 +24,10 @@ class Vtiger_Theme_UIType extends Vtiger_Base_UIType {
 	 * @return <Object>
 	 */
 	public function getDisplayValue($value) {
-		return vtranslate($value, $this->get('field')->getModuleName());
+		$allSkins = Vtiger_Theme::getAllSkins();
+		$skinColor = $allSkins[$value];
+		$value = ucfirst($value);
+		return "<div class='span4' style='width:230px; background-color:$skinColor;' title='$value'>&nbsp;</div>";
 	}
 
 }

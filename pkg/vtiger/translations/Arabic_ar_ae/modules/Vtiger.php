@@ -49,7 +49,7 @@ $languageStrings = array(
 	'LBL_NO' => 'لا',
 	'LBL_SHOW_COMPLETE_DETAILS' => 'اكمال التفاصيل',
     'LBL_MASS_EDITING' => 'تعديل جماعي',
-	'LBL_DESELECT_ALL_RECORDS' => 'الغاء اختيار جميع السجلات',
+	'LBL_DESELECT_ALL_RECORDS' => 'إلغاء جميع',
 	'LBL_QUICK_CREATE' => 'إنشاء سريعة',
 	'LBL_SEND_EMAIL' => 'ارسال بريد الكتروني',
 	//SEND EMAIL translations
@@ -64,7 +64,7 @@ $languageStrings = array(
 	'LBL_ADD_NOTE' => 'اضافة وثيقة',
 	'LBL_CREATE_NEW' => 'انشاء جديد',
     'LBL_ADD_EVENT' => 'اضافة حدث',
-    'LBL_ADD_TASK' => 'اضافة مهمة',
+    'LBL_ADD_TASK' => 'إضافة إلى عدم',
 	'LBL_MARKETING_AND_SALES' => 'التسويق و المبيعات',
 	'LBL_TOOLS_HEADER' => 'ادوات',
 	'LBL_SUPPORT' => 'الدعم',
@@ -82,8 +82,10 @@ $languageStrings = array(
 	'LBL_DOCUMENTATION' => 'الوثائق',
 	'LBL_VIDEO_TUTORIAL' => 'فيديو تعليمي',
 	'LBL_FEEDBACK' => 'الانطباع المتروك',
+	'LBL_CHAT_SUPPORT'=>'دعم الدردشة',
 	'LBL_CRM_SETTINGS' => 'CRM اعدادات',
 	'LBL_ON_DEMAND_ADMIN' => 'اضافة \ حذف المستخدمين',
+	'LBL_ANNOUNCEMENT' => 'اعلان',
 	'LBL_CALENDAR' => 'مفكرة',
 	'LBL_POST' => 'ارسال',
 	'LBL_GUIDER' => 'الهادي',
@@ -170,6 +172,7 @@ $languageStrings = array(
 	'SalesOrder'=>'طلبات المبيعات',
 	'Invoice'=>'الفواتير',
 	'MailManager' => 'التحكم بالبريد',
+    'Portal' => 'مواقعنا',
 
 
 	//Basic String Translation
@@ -391,7 +394,6 @@ $languageStrings = array(
 	'LBL_NEXT_120_DAYS' => 'Next 120 Days',
 
 	//advanced Filter Options
-	'LBL_NONE' => 'لاشئ',
 	'LBL_EQUALS' => 'يساوي',
 	'LBL_NOT_EQUAL_TO' => 'لا يساوي',
 	'LBL_STARTS_WITH' => 'يبدء ب',
@@ -406,6 +408,7 @@ $languageStrings = array(
 	'LBL_AFTER' => 'بعد',
 	'LBL_BETWEEN' => 'بين',
 	'LBL_IS_EMPTY'=> 'فارغ',
+    'LBL_IS_NOT_EMPTY' => 'ليس فارغا',
 
 	//Detail view summary widgets
 	'LBL_OWNER' => 'مالك',
@@ -551,6 +554,7 @@ $languageStrings = array(
 	'Due Date' => 'تاريخ الاستحقاق',
 	'Due Date & Time' => 'تاريخ و وقت الاستحقاق',
 	'Email Opt Out' => 'انسحاب البريد الالكتروني',
+    'Is Converted From Lead' => 'يتم تحويلها من الرصاص' , 
 
 	'Expected Close Date' => 'تاريخ الاغلاق المتوقع',
 
@@ -626,12 +630,12 @@ $languageStrings = array(
 	'Sales End Date'=>'تاريخ انتهاء المبيعات',
 
 	//Dashboard list of widgets translation
-	'Open Tickets' => 'فتح تذاكر',
+	'Open Ticktes' => 'فتح تذاكر',
 	'LBL_SELECT_STATUS' => 'حدد الحالة',
 	'LBL_BLANK' => '-فارغ-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger إدارة علاقات العملاء المصدر المفتوح',
 
 	//Translations used in inventory modules for sopy address
 	'SINGLE_Accounts' => 'المنظمات',
@@ -714,9 +718,37 @@ $languageStrings = array(
 	'LBL_RECORD' => 'سجل',
 	'LBL_NO_DUPLICATED_FOUND' => 'لم يتم العثور على تكرار',
 	'LBL_MERGE_SELECT' => 'دمج الاختيارات',
-
+	
 	//sbproducts translation
 	'LBL_BACK_TO_PRODUCTS' => 'العودة للمنتجات',
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'تخصيص القائمة الرئيسية',//TODO REVIEW
+
+	//Comments Field Labels for Workflow
+	'Comment' => 'تعليق',
+	'Last Comment' => 'آخر تعليق',
+	'Last 5 Comments' => 'آخر 5 تعليقات',
+	'All Comments' => 'جميع التعليقات',
+	
+	//Feedback on removing old version
+	'LBL_OLD_VERSION_REMOVED_SOON' => 'ملاحظة هامة على نظرة قديم',
+	'LBL_FEEDBACK_ON_REMOVING_OLD_VERSION' => 'ونحن سعداء لتبادل والتي تبدو قديمة تكون متاحة حتى فبراير عام 2014. أضفنا الميزات التالية إلى المظهر الجديد مؤخرا <BR> <BR> 1. تقارير محور <BR> 2. المخططات المخصصة <BR> 3. بحث سريع في قوائم <BR> <BR> إذا كان لديك اقتراحات حول نظرة جديدة، يرجى حصة معنا أدناه.',
+	'LBL_FEEDBACK_PLACEHOLDER' => 'مشاركة اقتراحاتكم هنا ..',
+	'LBL_SUBMIT_FEEDBACK' => 'إرسال الملاحظات',
+	'LBL_DONT_SHOW_AGAIN' => 'لا تظهر هذا مرة أخرى',
+	'LBL_CONTINUE_TO_OLD_LOOK' => 'تواصل تبدو قديمة',
+	
+	//For Print Templates
+	'Print Templates' => 'قوالب الطباعة',
+	'Print' => 'الطباعة / التصدير إلى PDF',
+    
+     'LBL_TRANSFER_OWNERSHIP' => 'نقل ملكية',
+    
+    //Products Popup View
+    'NOT_A_BUNDLE' => 'لا ربطة',
+    'LBL_MARK_AS_HELD' => 'علامة على أنها محتفظ بها',
+    'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'يسمح أقصى 160 حرفا للرسالة نصية',
+    'LBL_HIDE_COMPLETED_EVENTS' => 'إخفاء مكتمل الأحداث',
+    'LBL_SETUP_WEBFORMS' => 'اعداد نموذج الويب'
 );
 
 $jsLanguageStrings = array(
@@ -730,6 +762,7 @@ $jsLanguageStrings = array(
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'تجاوز عدد الهاتف طول المحدد',
 	'JS_ACCEPT_POSITIVE_NUMBER' => 'يقبل الأرقام الموجبة فقط',
 	'JS_VALUE_SHOULD_BE_GREATER_THAN_ZERO' => 'يجب أن تكون القيمة أكبر من الصفر',
+    'JS_MASS_EDIT_LIMIT' => 'ويمكن أن يتم عملية تحرير الشامل على 500 أو أقل السجلات في وقت واحد',
 	'JS_NUMBER_SHOULD_BE_LESS_THAN_32' => 'يجب أن يكون العدد أقل من ٣٢',
 	'JS_PLEASE_ENTER_VALID_DATE' => 'الرجاء إدخال تاريخ صالح',
 	'JS_PLEASE_ENTER_VALID_TIME' => 'الرجاء إدخال وقت صالح',
@@ -769,6 +802,7 @@ $jsLanguageStrings = array(
 	'JS_MAX_FILE_UPLOAD_EXCEEDS' => 'الحد الاعلى للملف يتجاوز التحميل',
 	'JS_THIS_DOCUMENT_HAS_ALREADY_BEEN_SELECTED' => 'قد تم بالفعل ارفاق هذه الوثيقة',
 	'JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO' => 'ينبغي أن يكون أكبر من أو يساوي',
+    'JS_CURRENT_DATE' => 'التاريخ الحالي',
 
 
 	//Roles
@@ -875,4 +909,47 @@ $jsLanguageStrings = array(
 	'JS_TOTAL_RECORDS' => 'اجمالي السجلات',
 	'JS_PAGE_NOT_EXIST' => 'الصفحة غير موجودة',
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'انت بالصفحة رقم',
+	'SINGLE_Vendors' => 'مورد',
+	
+	//Feedback on removing old version
+	'JS_PLEASE_GIVE_YOUR_FEEDBACK' => 'يرجى ملء ردود الفعل الخاصة بك',
+	
+	//For Print Templates
+    'JS_MAX_RECORDS_LIMIT' => 'الحد الأقصى لعدد السجلات للاختيار هي:',
+	'JS_NONE' => 'لا شيء',
+    
+        //For PhoneCalls
+        'JS_PBX_CALL_FROM'            =>            'استدعاء من',
+        'JS_PBX_INCOMING_CALL'            =>            'مكالمة واردة',
+        'JS_PBX_OUTGOING_SUCCESS'            =>            'تلتقط المتلقي ملحق لطلب الرقم',
+        'JS_PBX_OUTGOING_FAILURE'            =>            'فشل استدعاء',
+        'JS_PBX_FILL_ALL_FIELDS'            =>            'الرجاء تعبئة كافة الحقول',
+    'JS_NO_EDIT_PERMISSION' => 'أنت لا تملك الصلاحيات لتعديل هذا الحدث',
+    
+        //Google Synchronization
+        'SYNC_REMOVED_SUCCESSFULLY' => 'تزامن جوجل إزالة بنجاح.',
+        'REMOVE_SYNCHRONIZATION_MESSAGE' => 'سوف النقر على هذا التوثيق إزالة Gmail حالي. انها لن حذف أي السجلات التي يتم مزامنتها مسبقا.',
+        'REMOVE_SYNCHRONIZATION' => 'إزالة التزامن',
+        'FIELD_MAPPING' => 'رسم الخرائط الميدانية',
+        'LBL_SYNC_BUTTON' => 'مزامنة الآن',
+        'LBL_SYNCRONIZING' => 'مزامنة ....',
+        'LBL_NOT_SYNCRONIZED' => 'هل غير متزامنة بعد',
+        'LBL_FIELD_MAPPING' => 'رسم الخرائط الميدانية',
+    
+        'LBL_RESTORE_CONFIRMATION' => 'لن يتم استعادة السجلات التي كانت مخصصة لهذا المستخدم. هل أنت متأكد من أنك تريد استعادة هذا المستخدم؟',
+        'LBL_DELETE_USER_PERMANENT_CONFIRMATION' => 'لا يمكن استعادة بمجرد حذف هذا المستخدم مرة أخرى. هل أنت متأكد أنك تريد حذف هذا المستخدم نهائيا؟',
+    
+        'LBL_LANGUAGE_LABEL_VALIDATION' => 'قيمة التسمية لا يمكن أن تكون فارغة. يجب عليك إدخال بعض القيمة.',
+    	'JS_CHANGES_WILL_BE_LOST' => 'التغييرات الخاصة بك سوف تضيع!',
+		'JS_RECORD_DELETED' => 'سجل محذوف',
+    'JS_NO_DELETE_PERMISSION' => 'لا توجد صلاحية الحذف',
+    'JS_CONFIRM_MARK_AS_HELD' => 'هل أنت متأكد أنك تريد وضع علامة حدث / توضأ كما عقد؟',
+    'JS_TODO_MARKED_AS_COMPLETED' => 'كما تميزت تودو مكتمل',
+    'JS_EVENT_MARKED_AS_HELD' => 'شهد الحدث كما عقدت',
+    'JS_FUTURE_EVENT_CANNOT_BE_MARKED_AS_HELD' => 'الحدث في المستقبل لا يمكن أن تكون علامة على أنها محتفظ بها',
+    'JS_PERMISSION_DENIED' => 'تعذر في الوصول',
+    'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'يسمح أقصى 160 حرفا للرسالة نصية',
+    'JS_VIEWNAME_ALERT' => 'والحد الأقصى المسموح به 40 حرفا لاسم مرشح',
+    'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'تجاوز الحد الأقصى لحجم التحميل',
+	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'لا يمكن عقد لمستقبل',
 );

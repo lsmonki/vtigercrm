@@ -38,8 +38,7 @@ $languageStrings = Array (
 	'LBL_No_Matching_Record_Found' => 'No matching records found.',
 	'LBL_ACTIONS'         => 'Actions',
 	'LBL_Search'          => 'Search',
-	'LBL_Delete'            =>  'Delete',
-	
+	'LBL_Delete'          =>  'Delete',
 	'LBL_Username'             => 'User Name',
 	'LBL_Your_Mailbox_Account' => 'your mailbox account',
 	'LBL_Password'             => 'Password',
@@ -55,7 +54,6 @@ $languageStrings = Array (
 	'LBL_Validate_Cert'           => 'Validate cert',
 	'LBL_Do_Not_Validate_Cert'    => 'Do not validate cert',
 	'LBL_SELECT_ACCOUNT_TYPE'     => 'Select Organization Type',
-	
 	'LBL_FROM'        => 'From',
 	'LBL_TO'          => 'To',
 	'LBL_CC'          => 'CC',
@@ -83,7 +81,7 @@ $languageStrings = Array (
     'LBL_MAILMANAGER_ADD_Contacts' => 'Add Contact',
     'LBL_MAILMANAGER_ADD_Accounts' => 'Add Organization',
     'LBL_MAILMANAGER_ADD_Leads' => 'Add Lead',
-    'LBL_MAILMANAGER_ADD_Calendar' => 'Add ToDo',
+    'LBL_MAILMANAGER_ADD_Calendar' => 'Add Event/To Do',
     'LBL_MAILMANAGER_ADD_HelpDesk' => 'Add Ticket',
     'LBL_MAILMANAGER_ADD_Emails' => 'Attach Email',
     'LBL_MAILMANAGER_ADD_ModComments' => 'Add Comment',
@@ -96,11 +94,19 @@ $languageStrings = Array (
 	'LBL_TO_USERS' => 'To Users',
 	'LBL_SENT_MAILS' => 'Sent Mails',
 	'LBL_Print' => 'Print',
-	
 	'LBL_SAVE_BUTTON_LABEL' => 'Save',
 	'LBL_CANCEL_BUTTON_LABEL' => 'Cancel',
 	'LBL_CREATE_MAILBOX' => 'Create Mailbox',
-	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Add your comment here ...'
+	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Add your comment here ...',
+	'LBL_MAILBOX_DETAILS' => 'Mailbox Details',
+	'LBL_DELETE_Mailbox' => 'Delete Mailbox',
+	'LBL_ACCOUNT_TYPE' => 'Account Type',
+	'LBL_MODULE_DESCRIPTION' => "Mail Manager is an integrated email client that allows users to perform CRM related actions on incoming email. It helps you create Leads, Contacts, Organizations, Trouble Tickets and To Dos from the emails that you receive in your inbox. Should sender's email id match with a record in vtiger CRM, you can perform more actions like, Attaching email, Adding To do, Comment and Ticket. Additionally, you can manage composing, replying, forwarding emails etc.",
+    'LBL_CHOOSE_EXISTING_FOLDER' => 'Choose an existing folder',
+    'LBL_CHOOSE_FOLDER_DESC' => 'Copies of the sent mails for this account will be saved in the default <b>Sent Mail</b> folder.<br><br>
+            If you want to change the default sent mail folder, after creating the mail box click on <b>Settings</b> icon and <b>Edit</b> the MailBox.',
+    'LBL_CHOOSE_FOLDER' => 'Copies of the sent mails for this account will be saved in this folder.',
+    'LBL_SELECTED_FOLDER' => 'Selected Folder',
 );
 
 $jsLanguageStrings = Array (
@@ -172,7 +178,8 @@ $jsLanguageStrings = Array (
     'JSLBL_NO_EMAILS_SELECTED' => 'No Emails Selected.',
     'JSLBL_ENTER_SOME_VALUE' => 'Enter some string to search',
     'JSLBL_DRAFT_MAIL_SAVED'=>'Mail is saved under Drafts',
+	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 );
 
-// Special Handling: Mix of language strings are used.
+//Special Handling: Mix of language strings are used.
 $languageStrings = array_merge($languageStrings, $jsLanguageStrings);

@@ -27,7 +27,7 @@
 			</div>
 			<div  style="border-bottom: 1px solid black;" class="widgetContainer accordion-body {if $SELECTED_MENU->get('blockid') eq $MENU->get('blockid')  && !empty($SELECTED_FIELDID)} in {/if} collapse" id="Settings_sideBar_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($MENU->getLabel())}">
 			{foreach item=MENUITEM from=$MENU->getMenuItems()}
-				<div class="{if $MENUITEM->getId() eq $SELECTED_FIELDID} selectedMenuItem selectedListItem{/if}" style='padding-left:10px;border-top:0px;padding-bottom: 5px'>
+				<div class="{if $MENUITEM->getId() eq $SELECTED_FIELDID} selectedMenuItem selectedListItem{/if}" style="padding:7px;border-top:0px;">
 					<div class="row-fluid menuItem"  data-actionurl="{$MENUITEM->getPinUnpinActionUrl()}">
 						<a href="{$MENUITEM->getUrl()}" data-id="{$MENUITEM->getId()}" class="span9 menuItemLabel" data-menu-item="true" >{vtranslate($MENUITEM->get('name'), $QUALIFIED_MODULE)}</a>
 						<span class="span1">&nbsp;</span>

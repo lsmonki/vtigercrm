@@ -38,12 +38,12 @@ if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
         );
         $trackURL = Vtiger_ShortURL_Helper::generateURL($options);
         $content = 'Dear Customer,<br><br> 
-                            You recently requested a password reset for your VtigerCRM OnDemand Account.<br> 
+                            You recently requested a password reset for your VtigerCRM Open source Account.<br> 
                             To create a new password, click on the link <a target="_blank" href=' . $trackURL . '>here</a>. 
                             <br><br> 
                             This request was made on ' . date("Y-m-d H:i:s") . ' and will expire in next 24 hours.<br><br> 
 		            Regards,<br> 
-		            VtigerCRM OnDemand Support Team.<br>' .
+		            VtigerCRM Open source Support Team.<br>' .
                 $mail = new PHPMailer();
         setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $contents, 'support@vtiger.com', $username, $email);
         $status = MailSend($mail);

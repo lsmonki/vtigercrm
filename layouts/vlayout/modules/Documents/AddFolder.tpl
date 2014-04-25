@@ -10,7 +10,7 @@
 ********************************************************************************/
 -->*}
 {strip}
-    <div class="modelContainer">
+    <div class="modelContainer" style='min-width:350px;'>
         <div class="modal-header contentsBackground">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3>{vtranslate('LBL_ADD_NEW_FOLDER', $MODULE)}</h3>

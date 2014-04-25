@@ -8,12 +8,10 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-class Users_ListAjax_Action extends Users_List_View{
+class Users_ListAjax_Action extends Vtiger_BasicAjax_Action{
 	function __construct() {
 		parent::__construct();
-		$this->exposeMethod('getListViewCount');
-		$this->exposeMethod('getRecordsCount');
-		$this->exposeMethod('getPageCount');
+		$this->exposeMethod('signInAsUser');
 	}
 
 	function preProcess(Vtiger_Request $request) {
@@ -31,4 +29,4 @@ class Users_ListAjax_Action extends Users_List_View{
 			return;
 		}
 	}
-}
+		}

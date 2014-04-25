@@ -25,7 +25,7 @@ class Accounts_CheckDuplicate_Action extends Vtiger_Action_Controller {
 			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
 		}
 
-		$recordModel->set('accountname', $accountName);
+		$recordModel->set('label', $accountName);
 
 		if (!$recordModel->checkDuplicate()) {
 			$result = array('success'=>false);

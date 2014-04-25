@@ -72,6 +72,44 @@
 
 		}
 
+		/**
+		 * Function returns scheduled workflows
+		 * @param DateTime $referenceTime
+		 * @return Workflow
+		 */
+		function getScheduledWorkflows($referenceTime='') {
+			$adb=$this->adb;
+			$query = 'SELECT * FROM com_vtiger_workflows WHERE execution_condition = ?';
+			$params = array(VTWorkflowManager::$ON_SCHEDULE);
+			if($referenceTime != '') {
+				$query .= " AND (nexttrigger_time = '' OR nexttrigger_time IS NULL OR nexttrigger_time <= ?)";
+				array_push($params, $referenceTime);
+			}
+			$result = $adb->pquery($query, $params);
+			return $this->getWorkflowsForResult($result);
+
+		}
+
+		/**
+		 * Function to get the number of scheduled workflows
+		 * @return Integer
+		 */
+		function getScheduledWorkflowsCount() {
+			$adb=$this->adb;
+			$query = 'SELECT count(*) AS count FROM com_vtiger_workflows WHERE execution_condition = ?';
+			$params = array(VTWorkflowManager::$ON_SCHEDULE);
+			$result = $adb->pquery($query, $params);
+			return $adb->query_result($result, 0, 'count');
+		}
+
+		/**
+		 * Function returns the maximum allowed scheduled workflows
+		 * @return int
+		 */
+		function getMaxAllowedScheduledWorkflows() {
+			return 10;
+		}
+
 		function getWorkflowsForModule($moduleName){
 			$adb=$this->adb;
 			$cache= Vtiger_Cache::getInstance();
@@ -217,6 +255,7 @@
 			if($cache->getWorkflowForModuleSupportingComments($moduleName)) {
 				return $cache->getWorkflowForModuleSupportingComments($moduleName);
 			}
+
 			$result = $adb->getColumnNames('com_vtiger_workflows');
 			if(in_array('defaultworkflow', $result)) {
 				$result = $adb->pquery('SELECT workflow_id, module_name, summary, test, execution_condition, defaultworkflow, type, filtersavedinnew
@@ -226,6 +265,7 @@
 									FROM com_vtiger_workflows where module_name = ? AND test LIKE (?)', array($moduleName, '%_VT_add_comment%'));
 			}
 			$workflowModels = $this->getWorkflowsForResult($result);
+
 			$commentSupportedWorkflowModels = array();
 			foreach ($workflowModels as $workflowId => $workflowModel) {
 				$conditions = Zend_Json::decode($workflowModel->test);
@@ -238,6 +278,7 @@
 						}
 					}
 				}
+
 			}
 			$cache->setWorkflowForModuleSupportingComments($moduleName, $commentSupportedWorkflowModels);
 			return $commentSupportedWorkflowModels;

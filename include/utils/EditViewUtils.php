@@ -188,13 +188,13 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$entitytype=$adb->query_result($result,$i-1,'entitytype');
-		
+
 		if(($deleted) || (!isset($deleted))){
 			$product_Detail[$i]['productDeleted'.$i] = true;
 		}elseif(!$deleted){
 			$product_Detail[$i]['productDeleted'.$i] = false;
 		}
-		
+
 		if (!empty($entitytype)) {
 			$product_Detail[$i]['entityType'.$i]=$entitytype;
 		}
@@ -227,7 +227,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 				$str_sep = "";
 				if($j>0) $str_sep = ":";
 				$subprodid_str .= $str_sep.$sprod_id;
-				$subprodname_str .= $str_sep." - ".$sprod_name;
+				if(isset($sprod_name)){
+					$subprodname_str .= $str_sep." - ".$sprod_name;
+				}
 			}
 		}
 
@@ -267,17 +269,14 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['discount_percent'.$i] = 0;
 		$product_Detail[$i]['discount_amount'.$i] = 0;
 
-		if($discount_percent != 'NULL' && $discount_percent != '')
-		{
+		if(!empty($discount_percent)) {
 			$product_Detail[$i]['discount_type'.$i] = "percentage";
 			$product_Detail[$i]['discount_percent'.$i] = $discount_percent;
 			$product_Detail[$i]['checked_discount_percent'.$i] = ' checked';
 			$product_Detail[$i]['style_discount_percent'.$i] = ' style="visibility:visible"';
 			$product_Detail[$i]['style_discount_amount'.$i] = ' style="visibility:hidden"';
 			$discountTotal = $productTotal*$discount_percent/100;
-		}
-		elseif($discount_amount != 'NULL' && $discount_amount != '')
-		{
+		} elseif(!empty($discount_amount)) {
 			$product_Detail[$i]['discount_type'.$i] = "amount";
 			$product_Detail[$i]['discount_amount'.$i] = $discount_amount;
 			$product_Detail[$i]['checked_discount_amount'.$i] = ' checked';

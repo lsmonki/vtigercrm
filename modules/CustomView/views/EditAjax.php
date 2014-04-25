@@ -15,7 +15,7 @@ Class CustomView_EditAjax_View extends Vtiger_IndexAjax_View {
 		$moduleName = $request->get('source_module');
 		$module = $request->getModule();
 		$record = $request->get('record');
-
+                
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$recordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($moduleModel);
 
@@ -48,7 +48,22 @@ Class CustomView_EditAjax_View extends Vtiger_IndexAjax_View {
         }
         $viewer->assign('DATE_FILTERS', $dateFilters);
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
-		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
+        $recordStructure = $recordStructureInstance->getStructure();
+        // for Inventory module we should now allow item details block
+        if(in_array($moduleName, getInventoryModules())){
+            $itemsBlock = "LBL_ITEM_DETAILS";
+            unset($recordStructure[$itemsBlock]);
+        }
+		$viewer->assign('RECORD_STRUCTURE', $recordStructure);
+		// Added to show event module custom fields
+		if($moduleName == 'Calendar'){
+        	$relatedModuleName = 'Events';
+            $relatedModuleModel = Vtiger_Module_Model::getInstance($relatedModuleName);
+            $relatedRecordStructureInstance = Vtiger_RecordStructure_Model::getInstanceForModule($relatedModuleModel);
+            $eventBlocksFields = $relatedRecordStructureInstance->getStructure();
+            $viewer->assign('EVENT_RECORD_STRUCTURE_MODEL', $relatedRecordStructureInstance);
+            $viewer->assign('EVENT_RECORD_STRUCTURE', $eventBlocksFields);
+        }
 		$viewer->assign('CUSTOMVIEW_MODEL', $customViewModel);
 		$viewer->assign('RECORD_ID', $record);
 		$viewer->assign('MODULE', $module);

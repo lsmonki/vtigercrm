@@ -38,4 +38,5 @@ $languageStrings = array(
 	'LBL_OWNER' => 'المالك',
 	
 	'Date & Time Sent' => 'تاريخ الارسال',
+    'LBL_EMAIL_INFORMATION' => 'معلومات البريد الإلكتروني',
 );

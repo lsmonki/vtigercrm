@@ -10,11 +10,11 @@
  ************************************************************************************/
 
 class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
-    
+
     public function delete() {
         $adb = PearDatabase::getInstance();
         parent::delete();
-       
+
         $fld_module = $this->getModuleName();
         $id = $this->getId();
         $uitype = $this->get('uitype');
@@ -35,7 +35,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         $dbquery = 'alter table '. $adb->sql_escape_string($focus->customFieldTable[0]).' drop column '. $adb->sql_escape_string($columnname);
         $adb->pquery($dbquery, array());
 
-	
+
         //we have to remove the entries in customview and report related tables which have this field ($colName)
         $adb->pquery("delete from vtiger_cvcolumnlist where columnname = ? ", array($deletecolumnname));
         $adb->pquery("delete from vtiger_cvstdfilter where columnname = ?", array($column_cvstdfilter));
@@ -78,28 +78,22 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 
 		$newSequence = $fieldNewDetails['sequence'];
 		$olderSequence = $fieldOlderDetails['sequence'];
-		global $log;
-		$log->fatal(var_export($fieldNewDetails, true));
-		$log->fatal(var_export($fieldOlderDetails, true));
+
 		if ($olderBlockId == $newBlockId) {
 			if ($newSequence > $olderSequence) {
 				$updateQuery = 'UPDATE vtiger_field SET sequence = sequence-1 WHERE sequence > ? AND sequence <= ? AND block = ?';
 				$params = array($olderSequence, $newSequence, $olderBlockId);
 				$db->pquery($updateQuery, $params);
-				global $log;
-				$log->fatal($db->convert2Sql($updateQuery, $params));
+
 			} else if($newSequence < $olderSequence) {
 				$updateQuery = 'UPDATE vtiger_field SET sequence = sequence+1 WHERE sequence < ? AND sequence >= ? AND block = ?';
 				$params = array($olderSequence, $newSequence, $olderBlockId);
 				$db->pquery($updateQuery, $params);
-				global $log;
-				$log->fatal($db->convert2Sql($updateQuery, $params));
+
 			}
 			$query = 'UPDATE vtiger_field SET sequence = ? WHERE fieldid = ?';
 			$params = array($newSequence, $this->getId());
 			$db->pquery($query, $params);
-			global $log;
-			$log->fatal($db->convert2Sql($query, $params));
 		} else {
 			$updateOldBlockQuery = 'UPDATE vtiger_field SET sequence = sequence-1 WHERE sequence > ? AND block = ?';
 			$params = array($olderSequence, $olderBlockId);
@@ -128,10 +122,10 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 		}
 		$query .= ' ELSE sequence END';
 		$query .= ' WHERE fieldid IN ('.generateQuestionMarks($fieldIdsList).')';
-		
+
 		$db->pquery($query, array_merge($fieldIdsList,$fieldIdsList));
     }
-    
+
     /**
      * Function which specifies whether the field can have mandatory switch to happen
      * @return <Boolean> - true if we can make a field mandatory and non mandatory , false if we cant change previous state
@@ -149,7 +143,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         }
         return false;
     }
-    
+
     /**
      * Function which will specify whether the active option is disabled
      * @return boolean
@@ -160,7 +154,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         }
         return false;
     }
-    
+
     /**
      * Function which will specify whether the quickcreate option is disabled
      * @return boolean
@@ -172,7 +166,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         }
         return false;
     }
-    
+
     /**
      * Function which will specify whether the mass edit option is disabled
      * @return boolean
@@ -183,7 +177,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         }
         return false;
     }
-    
+
     /**
      * Function which will specify whether the default value option is disabled
      * @return boolean
@@ -194,7 +188,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         }
         return false;
     }
-    
+
 	/**
 	 * Function to check whether summary field option is disable or not
 	 * @return <Boolean> true/false
@@ -218,7 +212,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 		}
 		return true;
 	}
-    
+
     /**
 	 * Function to get instance
 	 * @param <String> $value - fieldname or fieldid
@@ -282,7 +276,7 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 		}
 		return $fieldModelsList;
 	}
-	
+
 	/**
 	 * Function to get the field details
 	 * @return <Array> - array of field values
@@ -292,17 +286,19 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
 		$fieldInfo['isQuickCreateDisabled'] = $this->isQuickCreateOptionDisabled();
 		$fieldInfo['isSummaryField'] = $this->isSummaryField();
 		$fieldInfo['isSummaryFieldDisabled'] = $this->isSummaryFieldOptionDisabled();
+		$fieldInfo['isMassEditDisabled'] = $this->isMassEditOptionDisabled();
+		$fieldInfo['isDefaultValueDisabled'] = $this->isDefaultValueOptionDisabled();
 		return $fieldInfo;
 	}
-    
-    
+
+
     public static function getInstanceFromFieldId($fieldId, $moduleTabId) {
         $db = PearDatabase::getInstance();
-        
+
         if(is_string($fieldId)) {
             $fieldId = array($fieldId);
         }
-        
+
         $query = 'SELECT * FROM vtiger_field WHERE fieldid IN ('.generateQuestionMarks($fieldId).') AND tabid=?';
         $result = $db->pquery($query, array($fieldId,$moduleTabId));
         $fieldModelList = array();

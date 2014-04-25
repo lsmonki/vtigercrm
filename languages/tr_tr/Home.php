@@ -21,4 +21,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'Yakın SSS'                  , 
 	'UA'                           => 'Gelecek İşler'             , 
 	'PA'                           => 'Bekleyen İşler'            , 
+        'Home'                         => 'Ana Sayfa'                 ,
 );

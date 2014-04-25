@@ -129,6 +129,19 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit2_Js",{},{
 		jQuery('#workflow_step2').validationEngine(opts);
 
 		var container = this.getContainer();
+        // When you come to step2 we should remove validation for condition values other than rawtwxt
+        jQuery('button[type="submit"]',container).on('click',function(e){
+            var fieldUiHolders = jQuery('.fieldUiHolder')
+            for(var i=0; i<fieldUiHolders.length;i++){
+                var fieldUiHolder  = fieldUiHolders[i];
+                var fieldValueElement = jQuery('.getPopupUi',fieldUiHolder);
+                var valueType = jQuery('[name="valuetype"]',fieldUiHolder).val();
+                if(valueType != 'rawtext'){
+                    fieldValueElement.removeAttr('data-validation-engine');
+                    fieldValueElement.removeClass('validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
+                }
+            }
+        });
 		app.changeSelectElementView(container);
 		this.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',container));
 		this.getPopUp();

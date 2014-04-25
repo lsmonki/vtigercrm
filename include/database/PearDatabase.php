@@ -115,7 +115,7 @@ class PearDatabase{
     function println($msg)
     {
 		require_once('include/logging.php');
-		$log1 =& LoggerManager::getLogger('VT');
+		$log1 = LoggerManager::getLogger('VT');
 		if(is_array($msg)) {
 		    $log1->info("PearDatabse ->".print_r($msg,true));
 		} else {
@@ -354,9 +354,9 @@ class PearDatabase{
 
 		if($this->avoidPreparedSql || empty($params)) {
 			$sql = $this->convert2Sql($sql, $params);
-			$result = &$this->database->Execute($sql);
+			$result = $this->database->Execute($sql);
 		} else {
-			$result = &$this->database->Execute($sql, $params);
+			$result = $this->database->Execute($sql, $params);
 		}
 		$sql_end_time = microtime(true);
 		$this->logSqlTiming($sql_start_time, $sql_end_time, $sql, $params);

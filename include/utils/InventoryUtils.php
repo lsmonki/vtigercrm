@@ -60,7 +60,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 	$log->debug("Inside sendPrdStckMail function, module=".$module);
 	$log->debug("Prd reorder level ".$reorderlevel);
 	if($upd_qty < $reorderlevel)
-	{
+	{	
 		//send mail to the handler
 		$handler = getRecordOwnerId($product_id);
 		foreach($handler as $type=>$id){
@@ -697,8 +697,6 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	$updatequery .= " total=?,";
 	array_push($updateparams, $total);
 
-
-
 	//to save the S&H tax details in vtiger_inventoryshippingrel table
 	$sh_tax_details = getAllTaxes('all','sh');
 	$sh_query_fields = "id,";
@@ -718,7 +716,7 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	}
 	$sh_query_fields = trim($sh_query_fields,',');
 	$sh_query_values = trim($sh_query_values,',');
-
+	
 	$updatequery .= " s_h_percent=?";
 	array_push($updateparams, $sh_tax_pecent);
 
@@ -727,7 +725,7 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	$updatequery .= " where ".$focus->table_index."=?";
 	array_push($updateparams, $focus->id);
 	$adb->pquery($updatequery,$updateparams);
-
+	
 	$sh_query = "insert into vtiger_inventoryshippingrel($sh_query_fields) values($sh_query_values)";
 	$adb->pquery($sh_query,$sh_query_params);
 
@@ -917,6 +915,10 @@ function getPriceDetailsForProduct($productid, $unit_price, $available='availabl
 			$conversion_rate = $adb->query_result($res,$i,'conversion_rate');
 			$actual_conversion_rate = $product_base_conv_rate * $conversion_rate;
 
+            $is_basecurrency = false;
+			if ($currency_id == $product_currency_id) {
+				$is_basecurrency = true;
+			}
 			if ($cur_value == null || $cur_value == '') {
 				$price_details[$i]['check_value'] = false;
 				if	($unit_price != null) {
@@ -924,16 +926,11 @@ function getPriceDetailsForProduct($productid, $unit_price, $available='availabl
 				} else {
 					$cur_value = '0';
 				}
-			} else {
+			} else if($is_basecurrency){
 				$price_details[$i]['check_value'] = true;
 			}
 			$price_details[$i]['curvalue'] = CurrencyField::convertToUserFormat($cur_value, null, true);
 			$price_details[$i]['conversionrate'] = $actual_conversion_rate;
-
-			$is_basecurrency = false;
-			if ($currency_id == $product_currency_id) {
-				$is_basecurrency = true;
-			}
 			$price_details[$i]['is_basecurrency'] = $is_basecurrency;
 		}
 	}
@@ -1372,12 +1369,12 @@ function undoLastImport($obj, $user) {
 	$owner = new Users();
 	$owner->id = $ownerId;
 	$owner->retrieve_entity_info($ownerId, 'Users');
-
+	
 	$dbTableName = Import_Utils_Helper::getDbTableName($owner);
-
+	
 	if(!is_admin($user) && $user->id != $owner->id) {
-		$viewer = new Import_UI_Viewer();
-		$viewer->display('OperationNotPermitted.tpl', 'Vtiger');
+		$viewer = new Vtiger_Viewer();
+		$viewer->view('OperationNotPermitted.tpl', 'Vtiger');
 		exit;
 	}
 	$result = $adb->query("SELECT recordid FROM $dbTableName WHERE status = ". Import_Data_Controller::$IMPORT_RECORD_CREATED
@@ -1394,11 +1391,11 @@ function undoLastImport($obj, $user) {
 		}
 	}
 
-	$viewer = new Import_UI_Viewer();
+	$viewer = new Vtiger_Viewer();
 	$viewer->assign('FOR_MODULE', $moduleName);
 	$viewer->assign('TOTAL_RECORDS', $noOfRecords);
 	$viewer->assign('DELETED_RECORDS_COUNT', $noOfRecordsDeleted);
-	$viewer->display('ImportUndoResult.tpl');
+	$viewer->view('ImportUndoResult.tpl');
 }
 
 function getInventoryFieldsForExport($tableName) {
@@ -1430,7 +1427,7 @@ function getCurrencyId($fieldValue) {
  */
 function getLineItemFields(){
 	global $adb;
-
+	
 	$sql = 'SELECT DISTINCT columnname FROM vtiger_field WHERE tablename=?';
 	$result = $adb->pquery($sql, array('vtiger_inventoryproductrel'));
 	$lineItemdFields = array();

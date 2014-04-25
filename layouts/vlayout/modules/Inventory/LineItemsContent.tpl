@@ -40,6 +40,8 @@
     {assign var="FINAL" value=$RELATED_PRODUCTS.1.final_details}
 	
 	{assign var="productDeleted" value="productDeleted"|cat:$row_no}
+        {assign var="productId" value=$data[$hdnProductId]}
+        {assign var="listPriceValues" value=Products_Record_Model::getListPriceValues($productId)}
 	<td>
 		<i class="icon-trash deleteRow cursorPointer" title="{vtranslate('LBL_DELETE',$MODULE)}"></i>
 		&nbsp;<a><img src="{vimage_path('drag.png')}" border="0" title="{vtranslate('LBL_DRAG',$MODULE)}"/></a>
@@ -94,7 +96,7 @@
 	</td>
 	<td>
 		<div>
-			<input id="{$listPrice}" name="{$listPrice}" value="{if !empty($data.$listPrice)}{$data.$listPrice}{else}0{/if}" type="text" data-validation-engine="validate[required,funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="listPrice smallInputBox" />
+			<input id="{$listPrice}" name="{$listPrice}" value="{if !empty($data.$listPrice)}{$data.$listPrice}{else}0{/if}" type="text" data-validation-engine="validate[required,funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" class="listPrice smallInputBox" list-info='{if !empty($data.$listPrice)}{Zend_Json::encode($listPriceValues)}{/if}'/>
 			&nbsp;
 			{assign var=PRICEBOOK_MODULE_MODEL value=Vtiger_Module_Model::getInstance('PriceBooks')}
 			{if $PRICEBOOK_MODULE_MODEL->isPermitted('DetailView')}
@@ -106,7 +108,7 @@
 				(-)&nbsp; <b><a href="javascript:void(0)" class="individualDiscount">{vtranslate('LBL_DISCOUNT',$MODULE)}</a> : </b>
 			</span>
 		</div>
-		<div class="discountUI hide" id="discount_div{$row_no}">
+		<div class="discountUI validCheck hide" id="discount_div{$row_no}">
 		{assign var="DISCOUNT_TYPE" value="zero"}
 		{if !empty($data.$discount_type)}
 			{assign var="DISCOUNT_TYPE" value=$data.$discount_type}
@@ -140,7 +142,7 @@
 					</td>
 					<td>
 						<span class="pull-right">&nbsp;%</span>
-						<input type="text" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" class="discount_percentage smallInputBox pull-right discountVal {if empty($data.$checked_discount_percent)}hide{/if}" />
+						<input type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" class="discount_percentage smallInputBox pull-right discountVal {if empty($data.$checked_discount_percent)}hide{/if}" />
 					</td>
 			   </tr>
 			   <tr>
@@ -150,7 +152,7 @@
 						{vtranslate('LBL_DIRECT_PRICE_REDUCTION',$MODULE)}
 					</td>
 					<td>
-						<input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" value="{$data.$discount_amount}" class="smallInputBox pull-right discount_amount discountVal {if empty($data.$checked_discount_amount)}hide{/if}"/>
+						<input type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" id="discount_amount{$row_no}" name="discount_amount{$row_no}" value="{$data.$discount_amount}" class="smallInputBox pull-right discount_amount discountVal {if empty($data.$checked_discount_amount)}hide{/if}"/>
 					</td>
 			   </tr>
 			</table>
@@ -185,7 +187,7 @@
 			   {assign var="popup_tax_rowname" value="popup_tax_row"|cat:$row_no}
 			   <tr>
 				<td>
-					<input type="text" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" class="smallInputBox taxPercentage" />&nbsp;%
+					<input type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" class="smallInputBox taxPercentage" />&nbsp;%
 				</td>
 				<td><div class="textOverflowEllipsis">{$tax_data.taxlabel}</div></td>
 				<td>

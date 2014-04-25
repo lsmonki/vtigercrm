@@ -10,19 +10,19 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div class="row-fluid ruleListContainer">
-		<hr>
-		<div class="title padding-bottom1per">
-			<span class="themeLinkColor padding-left1per">
+	<div class="ruleListContainer">
+		<div class="title row-fluid">
+			<div class="rulehead span6">
 				<!-- Check if the module should the for module to get the translations-->
 				<strong>{vtranslate('LBL_SHARING_RULE', $QUALIFIED_MODULE)}&nbsp;{vtranslate('LBL_FOR', $MODULE)}&nbsp;
 					{if $FOR_MODULE == 'Accounts'}{vtranslate($FOR_MODULE, $QUALIFIED_MODULE)}{else}{vtranslate($FOR_MODULE, $MODULE)}{/if} :</strong>
-			</span>
-			<span class="pull-right padding-right1per">
+			</div>
+			<div class="span6">
 				<button class="btn addButton addCustomRule" type="button" data-url="{$MODULE_MODEL->getCreateRuleUrl()}">
 					<strong>{vtranslate('LBL_ADD_CUSTOM_RULE', $QUALIFIED_MODULE)}</strong></button>
-			</span>
+			</div>
 		</div>
+		<hr>	
 		<div class="contents padding1per">
 			{if $RULE_MODEL_LIST}
 			<table class="table table-bordered table-condensed customRuleTable">

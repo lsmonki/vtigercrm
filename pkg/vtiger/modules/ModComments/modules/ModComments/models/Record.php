@@ -42,7 +42,12 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		if($commentor) {
 			$customer = $this->get('customer');
 			if (!empty($customer)) {
-				return 'CustomerPortal.png';
+                $recordModel = Contacts_Record_Model::getInstanceById($customer);
+                $imageDetails = $recordModel->getImageDetails();
+                if(!empty($imageDetails)) {
+                    return $imageDetails[0]['path'].'_'.$imageDetails[0]['name'];
+                } else
+                    return vimage_path('CustomerPortal.png');
 			} else {
 				$imagePath = $commentor->getImageDetails();
 				if (!empty($imagePath[0]['name'])) {
@@ -107,8 +112,14 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 			return Vtiger_Record_Model::getInstanceById($customer, 'Contacts');
 		} else {
 			$commentedBy = $this->get('smownerid');
-			if($commentedBy)
-			return Vtiger_Record_Model::getInstanceById($commentedBy, 'Users');
+			if($commentedBy) {
+			    $commentedByModel = Vtiger_Record_Model::getInstanceById($commentedBy, 'Users');
+			    if(empty($commentedByModel->entity->column_fields['user_name'])) {
+				$activeAdmin = Users::getActiveAdminUser();
+				$commentedByModel = Vtiger_Record_Model::getInstanceById($activeAdmin->id, 'Users');
+			    }
+			    return $commentedByModel;
+			}
 		}
 		return false;
 	}
@@ -121,7 +132,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$commentTime = $this->get('createdtime');
 		return $commentTime;
 	}
-
+	
 	/**
 	 * Function returns the commented time
 	 * @return <String>
@@ -179,7 +190,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		//Condition are directly added as query_generator transforms the
 		//reference field and searches their entity names
 		$query = $query ." AND related_to = ? AND parent_comments = '' ORDER BY vtiger_crmentity.createdtime DESC";
-
+		
 		$result = $db->pquery($query, array($parentId));
 		$rows = $db->num_rows($result);
 
@@ -240,7 +251,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 			$recordInstance->setData($row);
 			$recordInstances[] = $recordInstance;
 		}
-
+		
 		return $recordInstances;
 	}
 

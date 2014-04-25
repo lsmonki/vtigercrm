@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-<div class="navbar navbar-fixed-top  navbar-inverse noprint" style='min-width:1050px'>
+<div class="navbar navbar-fixed-top  navbar-inverse noprint">
 {include file='MenuBar.tpl'|@vtemplate_path}
 {include file='CommonActions.tpl'|@vtemplate_path}
 </div>

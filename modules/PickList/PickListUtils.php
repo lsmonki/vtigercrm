@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *********************************************************************************/
-require_once  'includes/runtime/Cache.php'; 
+require_once 'includes/runtime/Cache.php';
 /**
  * this file will be used to store the functions to be used in the picklist module
  */
@@ -186,7 +186,7 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 		return $cache->getAssignedPicklistValues($tableName,$roleid);
 	} else {
 	$arr = array();
-	
+
 	$sql = "select picklistid from vtiger_picklist where name = ?";
 	$result = $adb->pquery($sql, array($tableName));
 	if($adb->num_rows($result)){
@@ -209,7 +209,11 @@ function getAssignedPicklistValues($tableName, $roleid, $adb, $lang=array()){
 
 		if($count) {
 			while($resultrow = $adb->fetch_array($result)) {
-				$pick_val = decode_html($resultrow[$tableName]);
+                /** Earlier we used to save picklist values by encoding it. Now, we are directly saving those(getRaw()).
+                 *  If value in DB is like "test1 &amp; test2" then $abd->fetch_array() is giving it as
+                 *  "test1 &amp;$amp; test2" which we should decode two time to get result
+                 */
+				$pick_val = decode_html(decode_html($resultrow[$tableName]));
 				if($lang[$pick_val] != '') {
 					$arr[$pick_val] = $lang[$pick_val];
 				}

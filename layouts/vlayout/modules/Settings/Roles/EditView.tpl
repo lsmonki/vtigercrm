@@ -8,7 +8,8 @@
 *************************************************************************************}
 {strip}
 	<div class="container-fluid">
-		<label class="themeTextColor font-x-x-large">{vtranslate($MODULE, $QUALIFIED_MODULE)}</label>
+		<br>
+		<h3 class="themeTextColor">{vtranslate($MODULE, $QUALIFIED_MODULE)}</h3>
 		<hr>
 
 		<form name="EditRole" action="index.php" method="post" id="EditView" class="form-horizontal">
@@ -24,13 +25,13 @@
 				<input type="hidden" name="parent_roleid" value="{$RECORD_MODEL->getParent()->getId()}">
 			{/if}
 
-			<div class="row-fluid">
+			<div style="padding:20px;">
 				<div class="row-fluid">
-					<label class="fieldLabel span3"><strong>{vtranslate('LBL_NAME', $QUALIFIED_MODULE)}<span class="redColor">*</span>: </strong></label>
-					<input type="text" class="fieldValue span6" name="rolename" id="profilename" value="{$RECORD_MODEL->getName()}" data-validation-engine='validate[required]'  />
+					<label class="span3"><strong>{vtranslate('LBL_NAME', $QUALIFIED_MODULE)}<span class="redColor">*</span>: </strong></label>
+					<input type="text" class="fieldValue span7" name="rolename" id="profilename" value="{$RECORD_MODEL->getName()}" data-validation-engine='validate[required]'  />
 				</div><br>
 				<div class="row-fluid">
-					<label class="fieldLabel span3"><strong>{vtranslate('LBL_REPORTS_TO', $QUALIFIED_MODULE)}: </strong></label>
+					<label class="span3"><strong>{vtranslate('LBL_REPORTS_TO', $QUALIFIED_MODULE)}: </strong></label>
 					<div class="span8 fieldValue">
 						<input type="hidden" name="parent_roleid" {if $HAS_PARENT}value="{$RECORD_MODEL->getParent()->getId()}"{/if}>
 						<input type="text" class="input-large" name="parent_roleid_display" {if $HAS_PARENT}value="{$RECORD_MODEL->getParent()->getName()}"{/if} readonly>
@@ -38,7 +39,7 @@
 				</div><br>
                 <div class="row-fluid">
 					<label class="fieldLabel span3"><strong>{vtranslate('LBL_CAN_ASSIGN_RECORDS_TO', $QUALIFIED_MODULE)}: </strong></label>
-					<div class="row-fluid span8 fieldValue">
+					<div class="row-fluid span9 fieldValue">
 						<div class="span">
 							<input type="radio" value="1"{if !$RECORD_MODEL->get('allowassignedrecordsto')} checked=""{/if} {if $RECORD_MODEL->get('allowassignedrecordsto') eq '1'} checked="" {/if} name="allowassignedrecordsto" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_ALL_USERS',$QUALIFIED_MODULE)}</span>
 						</div>
@@ -53,7 +54,7 @@
 				</div>
                 </div><br>
 				<div class="row-fluid">
-					<label class="fieldLabel span3"><strong>{vtranslate('LBL_PRIVILEGES',$QUALIFIED_MODULE)}:</strong></label>
+					<label class="span3"><strong>{vtranslate('LBL_PRIVILEGES',$QUALIFIED_MODULE)}:</strong></label>
 					<div class="row-fluid span8 fieldValue">
 						<div class="span">
 							<input type="radio" value="1" {if $PROFILE_DIRECTLY_RELATED_TO_ROLE} checked="" {/if} name="profile_directly_related_to_role" data-handler="new" class="alignTop"/>&nbsp;<span>{vtranslate('LBL_ASSIGN_NEW_PRIVILEGES',$QUALIFIED_MODULE)}</span>
@@ -64,11 +65,11 @@
 						</div>
 					</div>
 				</div>
-				
-				<div class="row-fluid hide" data-content="new">
-					<div class="fieldValue span12 contentsBackground padding1per">
+				<br>
+				<div class="row-fluid hide padding20px boxSizingBorderBox contentsBackground" data-content="new">
+					<div class="fieldValue span12">
 					</div>
-				</div><br>
+				</div>
 				<div class="row-fluid hide" data-content="existing">
 					<div class="fieldValue row-fluid">
 						{assign var="ROLE_PROFILES" value=$RECORD_MODEL->getProfiles()}
@@ -80,14 +81,14 @@
 							{/foreach}
 						</select>
 					</div>
-				</div><br>
-                
+				</div>
 			</div>
 
-			<div class="pull-right">
+			<div class="textAlignCenter">
 				<button class="btn btn-success" type="submit">{vtranslate('LBL_SAVE',$MODULE)}</button>
 				<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">Cancel</a>
 			</div>
+			<br>
 		</form>
 	</div>
 {/strip}

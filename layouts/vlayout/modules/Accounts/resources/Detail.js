@@ -52,18 +52,18 @@ Vtiger_Detail_Js("Accounts_Detail_Js",{
 	displayAccountHierarchyResponseData : function(data) {
         var callbackFunction = function(data) {
             app.showScrollBar(jQuery('#hierarchyScroll'), {
-                height: '200px',
+                height: '300px',
                 railVisible: true,
-                alwaysVisible: true,
                 size: '6px'
             });
         }
         app.showModalWindow(data, function(data){
-            if(typeof callbackFunction == 'function'){
+            
+            if(typeof callbackFunction == 'function' && jQuery('#hierarchyScroll').height() > 300){
                 callbackFunction(data);
             }
         });
-	}
+        }
 },{
 	//Cache which will store account name and whether it is duplicate or not
 	accountDuplicationCheckCache : {},
@@ -137,6 +137,39 @@ Vtiger_Detail_Js("Accounts_Detail_Js",{
 			}
 		)
 		return aDeferred.promise();
+	},
+        
+        /**
+	 * Function to register event for adding related record for module
+	 */
+	registerEventForAddingRelatedRecord : function(){
+		var thisInstance = this;
+		var detailContentsHolder = this.getContentHolder();
+		detailContentsHolder.on('click','[name="addButton"]',function(e){
+			var element = jQuery(e.currentTarget);
+			var selectedTabElement = thisInstance.getSelectedTab();
+			var relatedModuleName = thisInstance.getRelatedModuleName();
+            var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ relatedModuleName +'"]');
+            if(quickCreateNode.length <= 0) {
+                window.location.href = element.data('url');
+                return;
+            }
+
+			var relatedController = new Vtiger_RelatedList_Js(thisInstance.getRecordId(), app.getModuleName(), selectedTabElement, relatedModuleName);
+                        var postPopupViewController = function() {
+                            var instance = new Contacts_Edit_Js();
+                            var data = new Object;
+                            var container = jQuery("[name='QuickCreate']");
+                            data.source_module = app.getModuleName();
+                            data.record = thisInstance.getRecordId();
+                            data.selectedName = container.find("[name='account_id_display']").val();
+                            instance.referenceSelectionEventHandler(data,container);
+                        }
+                        if(relatedModuleName == 'Contacts')
+                            relatedController.addRelatedRecord(element , postPopupViewController);
+                        else
+                            relatedController.addRelatedRecord(element);
+		})
 	}
 
 });

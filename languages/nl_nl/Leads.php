@@ -47,7 +47,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Enkele van de verplichte velden zijn leeg', 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Leads Maatwerk Veldmapping'  , 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Bewerk Veld Mapping'         , 
-	'LBL_WEBFORMS'                 => 'Configureer Webformulieren'  , 
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecteer Contacten om verder te gaan', 

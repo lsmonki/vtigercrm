@@ -15,7 +15,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie dokumentu',
 
 	// Blocks
-	'LBL_NOTE_INFORMATION' => 'Informacje podstawowe',
+	'LBL_NOTE_INFORMATION' => 'Podstawowe informacje',
 	'LBL_FILE_INFORMATION' => 'Informacje o pliku',
 	'LBL_DESCRIPTION' => 'Opis',
 	
@@ -64,7 +64,6 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'Przekroczony maksymalny rozmiar pliku',
 	'JS_NEW_FOLDER' => 'Nowy folder',
 	'JS_MOVE_DOCUMENTS' => 'Przenieś dokument',
 	//Move documents confirmation message

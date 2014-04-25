@@ -2,27 +2,27 @@
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
+ * The Original Code is: vtiger CRM Open source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-include_once 'include/Webservices/DescribeObject.php';
-include_once 'include/Webservices/Query.php';
+
+include_once 'config.php';
 require_once 'include/utils/utils.php';
+include_once 'include/Webservices/Query.php';
+require_once 'includes/runtime/Cache.php';
+include_once 'include/Webservices/DescribeObject.php';
+require_once 'modules/Vtiger/helpers/Util.php';
 include_once 'modules/Settings/MailConverter/handlers/MailScannerAction.php';
 include_once 'modules/Settings/MailConverter/handlers/MailAttachmentMIME.php';
-include_once dirname(__FILE__) . '/../Config.php';
 
-/**
- * Class used to manage the emails relationship with vtiger records
- */
 class MailManager_Relation_View extends MailManager_Abstract_View {
 
-    /**
-     * Used to check the MailBox connection
-     * @var Boolean
-     */
+	/**
+	 * Used to check the MailBox connection
+	 * @var Boolean
+	 */
 	protected $skipConnection = false;
 
 	/** To avoid working with mailbox */
@@ -31,22 +31,22 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 		return parent::getMailboxModel();
 	}
 
-    /**
-     * List of modules used to match the Email address
-     * @var Array
-     */
+	/**
+	 * List of modules used to match the Email address
+	 * @var Array
+	 */
 	static $MODULES = array ( 'Contacts', 'Accounts', 'Leads');
 
-    /**
-     * Process the request to perform relationship operations
-     * @global Users Instance $current_user
-     * @global PearDataBase Instance $adb
-     * @global String $currentModule
-     * @param Vtiger_Request $request
-     * @return boolean
-     */
-	function process(Vtiger_Request $request) {
-		global $current_user, $adb;
+	/**
+	 * Process the request to perform relationship operations
+	 * @global Users Instance $currentUserModel
+	 * @global PearDataBase Instance $adb
+	 * @global String $currentModule
+	 * @param Vtiger_Request $request
+	 * @return boolean
+	 */
+	public function process(Vtiger_Request $request) {
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$response = new Vtiger_Response(true);
 		$viewer = $this->getViewer($request);
 
@@ -63,11 +63,11 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 				foreach (self::$MODULES as $MODULE) {
 					if(!in_array($MODULE, $allowedModules)) continue;
 
-                    $from = $request->get('_mfrom');
-                    if(empty($from)) continue;
+					$from = $request->get('_mfrom');
+					if(empty($from)) continue;
 
-                    $results[$MODULE] = $this->lookupModuleRecordsWithEmail($MODULE, $from);
-                    $describe = $this->ws_describe($MODULE);
+					$results[$MODULE] = $this->lookupModuleRecordsWithEmail($MODULE, $from);
+					$describe = $this->ws_describe($MODULE);
 					$modules[$MODULE] = array('label' => $describe['label'], 'name' => textlength_check($describe['name']), 'id' => $describe['idPrefix'] );
 
 					// If look is found in a module, skip rest. - for performance
@@ -79,8 +79,8 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 				$viewer->assign('LINKEDTO', $linkedto);
 			}
 
-			$viewer->assign('LinkToAvailableActions', $this->linkToAvailableActions());
-			$viewer->assign('AllowedModules', $allowedModules);
+			$viewer->assign('LINK_TO_AVAILABLE_ACTIONS', $this->linkToAvailableActions());
+			$viewer->assign('ALLOWED_MODULES', $allowedModules);
 			$viewer->assign('MSGNO', $request->get('_msgno'));
 			$viewer->assign('FOLDER', $request->get('_folder'));
 
@@ -92,24 +92,23 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 			$foldername = $request->get('_folder');
 			$connector = $this->getConnector($foldername);
 
-            // This is to handle larger uploads
-            $memory_limit = MailManager_Config::get('MEMORY_LIMIT');
-            ini_set('memory_limit', $memory_limit);
+			// This is to handle larger uploads
+			$memory_limit = MailManager_Config_Model::get('MEMORY_LIMIT');
+			ini_set('memory_limit', $memory_limit);
 
 			$mail = $connector->openMail($request->get('_msgno'));
 			$mail->attachments(); // Initialize attachments
 
 			$linkedto = MailManager_Relate_Action::associate($mail, $linkto);
 
-			$viewer->assign('LinkToAvailableActions', $this->linkToAvailableActions());
-			$viewer->assign('AllowedModules', $this->getCurrentUserMailManagerAllowedModules());
+			$viewer->assign('LINK_TO_AVAILABLE_ACTIONS', $this->linkToAvailableActions());
+			$viewer->assign('ALLOWED_MODULES', $this->getCurrentUserMailManagerAllowedModules());
 			$viewer->assign('LINKEDTO', $linkedto);
 			$viewer->assign('MSGNO', $request->get('_msgno'));
 			$viewer->assign('FOLDER', $foldername);
 			$response->setResult( array( 'ui' => $viewer->view( 'Relationship.tpl', 'MailManager', true ) ) );
 
 		} else if ('create_wizard' == $this->getOperationArg($request)) {
-			global $currentModule;
 			$moduleName = $request->get('_mlinktotype');
 			$parent =  $request->get('_mlinkto');
 			$foldername = $request->get('_folder');
@@ -138,91 +137,143 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 		} else if ('create' == $this->getOperationArg($request)) {
 			$linkModule = $request->get('_mlinktotype');
 			$parent =  $request->get('_mlinkto');
-
-			$focus = CRMEntity::getInstance($linkModule);
-
-            // This is added as ModComments module has a bug that will not initialize column_fields
-            // Basically $currentModule is set to MailManager, so the fields are not set properly.
-            if(empty($focus->column_fields)) {
-                $focus->column_fields = getColumnFields($linkModule);
-            }
-
-			foreach ($focus->column_fields as $fieldname => $val) {
-				if ($request->has($fieldname)) {
-					$focus->column_fields[$fieldname] = $request->get($fieldname);
-				}
-			}
-
 			$foldername = $request->get('_folder');
 
 			if(!empty($foldername)) {
-                // This is to handle larger uploads
-                $memory_limit = MailManager_Config::get('MEMORY_LIMIT');
-                ini_set('memory_limit', $memory_limit);
+				// This is to handle larger uploads
+				$memory_limit = MailManager_Config_Model::get('MEMORY_LIMIT');
+				ini_set('memory_limit', $memory_limit);
 
-                $connector = $this->getConnector($foldername);
-                $mail = $connector->openMail($request->get('_msgno'));
-                $attachments = $mail->attachments(); // Initialize attachments
-            }
+				$connector = $this->getConnector($foldername);
+				$mail = $connector->openMail($request->get('_msgno'));
+				$attachments = $mail->attachments(); // Initialize attachments
+			}
 
 			$linkedto = MailManager_Relate_Action::getSalesEntityInfo($parent);
+			$recordModel = Vtiger_Record_Model::getCleanInstance($linkModule);
+
+			$fields = $recordModel->getModule()->getFields();
+			foreach ($fields as $fieldName => $fieldModel) {
+				if ($request->has($fieldName)) {
+					$fieldValue = $request->get($fieldName);
+					$fieldDataType = $fieldModel->getFieldDataType();
+					if($fieldDataType == 'time') {
+						$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+					}
+					$recordModel->set($fieldName, $fieldValue);
+				}
+			}
 
 			switch ($linkModule) {
-				case 'Calendar' :   if (empty($focus->column_fields['activitytype'])) {
-                                        $focus->column_fields['activitytype'] = 'Task';
-                                    }
+				case 'Calendar' :   $activityType = $recordModel->get('activitytype');
+									if (!$activityType) {
+										$activityType = 'Task';
+									}
+									$recordModel->set('activitytype', $activityType);
 
-                                    if (empty($focus->column_fields['due_date'])) {
-                                        if(!empty($focus->column_fields['date_start'])) {
-                                            $dateStart = getValidDBInsertDateValue($focus->column_fields['date_start']);
-                                            $focus->column_fields['due_date'] = date("Y-m-d", strtotime(date("Y-m-d", strtotime($dateStart)) . " +1 day"));
-                                        } else {
-                                            $focus->column_fields['due_date'] = date('Y-m-d', strtotime("+1 day"));
-                                        }
-                                    }
-                                    if(!empty($parent)) {
-                                        if($linkedto['module'] == 'Contacts') {
-                                            $focus->column_fields['contact_id'] = $parent;
-                                        } else {
-                                            $focus->column_fields['parent_id'] = $parent;
-                                        }
-                                    }
-                                    break;
+									//Start Date and Time values
+									$startTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('time_start'));
+									$startDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('date_start')." ".$startTime);
+									list($startDate, $startTime) = explode(' ', $startDateTime);
+
+									$recordModel->set('date_start', $startDate);
+									$recordModel->set('time_start', $startTime);
+
+									//End Date and Time values
+									$endDate = Vtiger_Date_UIType::getDBInsertedValue($request->get('due_date'));
+									if ($activityType != 'Task') {
+										$endTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('time_end'));
+										$endDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('due_date')." ".$endTime);
+										list($endDate, $endTime) = explode(' ', $endDateTime);
+									} else {
+										$endTime = '';
+									}
+									$recordModel->set('time_end', $endTime);
+									$recordModel->set('due_date', $endDate);
+
+									if($parent) {
+										if($linkedto['module'] == 'Contacts') {
+											$recordModel->set('contact_id', $parent);
+										} else {
+											$recordModel->set('parent_id', $parent);
+										}
+									}
+									$recordModel->set('visibility', 'Public');
+									break;
 
 				case 'HelpDesk' :   $from = $mail->from();
-									if($linkedto['module'] == 'Contacts') {
-										$focus->column_fields['contact_id'] = $this->setParentForHelpDesk($parent, $from);
-									} else {
-										$focus->column_fields['parent_id'] = $this->setParentForHelpDesk($parent, $from);
+									if ($parent) {
+										if($linkedto['module'] == 'Contacts') {
+											$referenceFieldName = 'contact_id';
+										} elseif ($linkedto['module'] == 'Accounts') {
+											$referenceFieldName = 'parent_id';
+										}
 									}
-                                    break;
+									$recordModel->set($referenceFieldName, $this->setParentForHelpDesk($parent, $from));
+									break;
 
-                case 'ModComments': $focus->column_fields['assigned_user_id'] = $current_user->id;
-                                    $focus->column_fields['creator'] = $current_user->id;
-                                    $focus->column_fields['related_to'] = $parent;
-                                    break;
+				case 'ModComments': $recordModel->set('assigned_user_id', $currentUserModel->getId());
+									$recordModel->set('commentcontent', $request->getRaw('commentcontent'));
+									$recordModel->set('userid', $currentUserModel->getId());
+									$recordModel->set('creator', $currentUserModel->getId());
+									$recordModel->set('related_to', $parent);
+									break;
 			}
 
 			try {
-				$focus->save($linkModule);
+				$recordModel->save();
 
-                // This condition is added so that emails are not created for Tickets and Todo without Parent,
-                // as there is no way to relate them
+				// This condition is added so that emails are not created for Tickets and Todo without Parent,
+				// as there is no way to relate them
 				if(empty($parent) && $linkModule != 'HelpDesk' && $linkModule != 'Calendar') {
-					$linkedto = MailManager_Relate_Action::associate($mail, $focus->id);
+					$linkedto = MailManager_Relate_Action::associate($mail, $recordModel->getId());
 				}
 
-                // add attachments to the tickets as Documents
-                if($linkModule == 'HelpDesk' && !empty($attachments)) {
-                    $relationController = new MailManager_Relate_Action();
-                    $relationController->__SaveAttachements($mail, $linkModule, $focus);
-                }
+				if ($linkModule === 'Calendar') {
+					// Handled to save follow up event
+					$followupMode = $request->get('followup');
+
+					//Start Date and Time values
+					$startTime = Vtiger_Time_UIType::getTimeValueWithSeconds($request->get('followup_time_start'));
+					$startDateTime = Vtiger_Datetime_UIType::getDBDateTimeValue($request->get('followup_date_start') . " " . $startTime);
+					list($startDate, $startTime) = explode(' ', $startDateTime);
+
+					$subject = $request->get('subject');
+					if($followupMode == 'on' && $startTime != '' && $startDate != '') {
+						$recordModel->set('eventstatus', 'Planned');
+						$recordModel->set('subject', '[Followup] '.$subject);
+						$recordModel->set('date_start', $startDate);
+						$recordModel->set('time_start', $startTime);
+
+						$currentUser = Users_Record_Model::getCurrentUserModel();
+						$activityType = $recordModel->get('activitytype');
+						if($activityType == 'Call') {
+							$minutes = $currentUser->get('callduration');
+						} else {
+							$minutes = $currentUser->get('othereventduration');
+						}
+						$dueDateTime = date('Y-m-d H:i:s', strtotime("$startDateTime+$minutes minutes"));
+						list($startDate, $startTime) = explode(' ', $dueDateTime);
+
+						$recordModel->set('due_date', $startDate);
+						$recordModel->set('time_end', $startTime);
+						$recordModel->set('recurringtype', '');
+						$recordModel->set('mode', 'create');
+						$recordModel->save();
+					}
+				}
+
+				// add attachments to the tickets as Documents
+				if($linkModule == 'HelpDesk' && !empty($attachments)) {
+					$relationController = new MailManager_Relate_Action();
+					$relationController->__SaveAttachements($mail, $linkModule, $recordModel);
+				}
 
 				$viewer->assign('MSGNO', $request->get('_msgno'));
 				$viewer->assign('LINKEDTO', $linkedto);
-				$viewer->assign('AllowedModules', $this->getCurrentUserMailManagerAllowedModules());
-				$viewer->assign('LinkToAvailableActions', $this->linkToAvailableActions());
-                $viewer->assign('FOLDER', $foldername);
+				$viewer->assign('ALLOWED_MODULES', $this->getCurrentUserMailManagerAllowedModules());
+				$viewer->assign('LINK_TO_AVAILABLE_ACTIONS', $this->linkToAvailableActions());
+				$viewer->assign('FOLDER', $foldername);
 
 				$response->setResult( array( 'ui' => $viewer->view( 'Relationship.tpl', 'MailManager', true ) ) );
 			} catch(Exception $e) {
@@ -238,28 +289,28 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 			$uploadResponse = $connector->saveAttachment($request);
 			$response->setResult($uploadResponse);
 		} else if ('commentwidget' == $this->getOperationArg($request)) {
-            $viewer->assign('LINKMODULE', $request->get('_mlinktotype'));
-            $viewer->assign('PARENT', $request->get('_mlinkto'));
-            $viewer->assign('MSGNO', $request->get('_msgno'));
-            $viewer->assign('FOLDER', $request->get('_folder'));
-            $viewer->view( 'MailManagerCommentWidget.tpl', 'MailManager' );
+			$viewer->assign('LINKMODULE', $request->get('_mlinktotype'));
+			$viewer->assign('PARENT', $request->get('_mlinkto'));
+			$viewer->assign('MSGNO', $request->get('_msgno'));
+			$viewer->assign('FOLDER', $request->get('_folder'));
+			$viewer->view( 'MailManagerCommentWidget.tpl', 'MailManager' );
 			$response = false;
-        }
+		}
 		return $response;
 	}
 
-    /**
-     * Returns the Parent for Tickets module
-     * @global Users Instance $current_user
-     * @param Integer $parent - crmid of Parent
-     * @param Email Address $from - Email Address of the received mail
-     * @return Integer - Parent(crmid)
-     */
+	/**
+	 * Returns the Parent for Tickets module
+	 * @global Users Instance $currentUserModel
+	 * @param Integer $parent - crmid of Parent
+	 * @param Email Address $from - Email Address of the received mail
+	 * @return Integer - Parent(crmid)
+	 */
 	public function setParentForHelpDesk($parent, $from) {
-		global $current_user;
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		if(empty($parent)) {
 			if(!empty($from)) {
-				$parentInfo = MailManager::lookupMailInVtiger($from[0], $current_user);
+				$parentInfo = MailManager::lookupMailInVtiger($from[0], $currentUserModel);
 				if(!empty($parentInfo[0]['record'])) {
 					$parentId = vtws_getIdComponents($parentInfo[0]['record']);
 					return $parentId[1];
@@ -271,13 +322,13 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 	}
 
 
-    /**
-     * Function used to set the record fields with the information from mail.
-     * @param Array $qcreate_array
-     * @param MailManager_Message_Model $mail
-     * @return Array
-     */
-	 function processFormData($mail) {
+	/**
+	 * Function used to set the record fields with the information from mail.
+	 * @param Array $qcreate_array
+	 * @param MailManager_Message_Model $mail
+	 * @return Array
+	 */
+	public function processFormData($mail) {
 		$subject = $mail->subject();
 		$from = $mail->from();
 
@@ -294,58 +345,58 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 				'subject'		=> $subject,
 		);
 		return $defaultFieldValueMap;
-	 }
+	}
 
-     /**
-      * Returns the available List of accessible modules for Mail Manager
-      * @return Array
-      */
-	 public function getCurrentUserMailManagerAllowedModules() {
-		 $moduleListForCreateRecordFromMail = array('Contacts', 'Accounts', 'Leads', 'HelpDesk', 'Calendar');
+	/**
+	 * Returns the available List of accessible modules for Mail Manager
+	 * @return Array
+	 */
+	public function getCurrentUserMailManagerAllowedModules() {
+		$moduleListForCreateRecordFromMail = array('Contacts', 'Accounts', 'Leads', 'HelpDesk', 'Calendar');
 
-		 foreach($moduleListForCreateRecordFromMail as $module) {
+		foreach($moduleListForCreateRecordFromMail as $module) {
 			if(MailManager::checkModuleWriteAccessForCurrentUser($module)) {
 				$mailManagerAllowedModules[] = $module;
 			}
-		 }
-		 return $mailManagerAllowedModules;
-	 }
+		}
+		return $mailManagerAllowedModules;
+	}
 
-     /**
-      * Returns the list of accessible modules on which Actions(Relationship) can be taken.
-      * @return string
-      */
-	 public function linkToAvailableActions() {
-		 $moduleListForLinkTo = array('Calendar','HelpDesk','ModComments','Emails');
+	/**
+	 * Returns the list of accessible modules on which Actions(Relationship) can be taken.
+	 * @return string
+	 */
+	public function linkToAvailableActions() {
+		$moduleListForLinkTo = array('Calendar','HelpDesk','ModComments','Emails');
 
-		 foreach($moduleListForLinkTo as $module) {
-			 if(MailManager::checkModuleWriteAccessForCurrentUser($module)) {
-				 $mailManagerAllowedModules[] = $module;
-			 }
-		 }
-		 return $mailManagerAllowedModules;
-	 }
+		foreach($moduleListForLinkTo as $module) {
+			if(MailManager::checkModuleWriteAccessForCurrentUser($module)) {
+				$mailManagerAllowedModules[] = $module;
+			}
+		}
+		return $mailManagerAllowedModules;
+	}
 
 	/**
 	 * Helper function to scan for relations
 	 */
 	protected $wsDescribeCache = array();
-	function ws_describe($module) {
-		$current_user = vglobal('current_user');
+	public function ws_describe($module) {
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		if (!isset($this->wsDescribeCache[$module])) {
-			$this->wsDescribeCache[$module] = vtws_describe( $module, $current_user );
+			$this->wsDescribeCache[$module] = vtws_describe( $module, $currentUserModel);
 		}
 		return $this->wsDescribeCache[$module];
 	}
 
-    /**
-     * Funtion used to build Web services query
-     * @param String $module - Name of the module
-     * @param String $text - Search String
-     * @param String $type - Tyoe of fields Phone, Email etc
-     * @return String
-     */
-	function buildSearchQuery($module, $text, $type) {
+	/**
+	 * Funtion used to build Web services query
+	 * @param String $module - Name of the module
+	 * @param String $text - Search String
+	 * @param String $type - Tyoe of fields Phone, Email etc
+	 * @return String
+	 */
+	public function buildSearchQuery($module, $text, $type) {
 		$describe = $this->ws_describe($module);
 		$whereClause = '';
 		foreach($describe['fields'] as $field) {
@@ -356,17 +407,17 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 		return sprintf( "SELECT %s FROM %s WHERE %s;", $describe['labelFields'], $module, rtrim($whereClause, 'OR') );
 	}
 
-    /**
-     * Returns the List of Matching records with the Email Address
-     * @global Users Instance $current_user
-     * @param String $module
-     * @param Email Address $email
-     * @return Array
-     */
-	function lookupModuleRecordsWithEmail($module, $email) {
-		$current_user = vglobal('current_user');
+	/**
+	 * Returns the List of Matching records with the Email Address
+	 * @global Users Instance $currentUserModel
+	 * @param String $module
+	 * @param Email Address $email
+	 * @return Array
+	 */
+	public function lookupModuleRecordsWithEmail($module, $email) {
+		$currentUserModel = vglobal('current_user');
 		$query = $this->buildSearchQuery($module, $email, 'EMAIL');
-		$qresults = vtws_query( $query, $current_user );
+		$qresults = vtws_query( $query, $currentUserModel );
 		$describe = $this->ws_describe($module);
 		$labelFields = explode(',', $describe['labelFields']);
 

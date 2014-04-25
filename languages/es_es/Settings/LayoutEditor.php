@@ -52,7 +52,10 @@ $languageStrings = array(
 	'LBL_NON_ROLE_BASED_PICKLIST' => 'Lista Desplegable sin Roles',
 	'LBL_DUPLICATE_FIELD_EXISTS' => 'Existe un Campo Duplicado',
 	'LBL_WRONG_FIELD_TYPE' => 'Tipo de Campo Erróneo',
-	'LBL_ROLE_BASED_PICKLIST' => 'Lista Desplegable con Roles'
+	'LBL_ROLE_BASED_PICKLIST' => 'Lista Desplegable con Roles',
+	
+	//Translation for module
+	'Calendar' => 'Para hacer',
 
 );
 

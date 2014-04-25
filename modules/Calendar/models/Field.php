@@ -142,4 +142,15 @@ class Calendar_Field_Model extends Vtiger_Field_Model {
 		
 		return $filterOpsByFieldType;
 	}
+	
+	/**
+     * Function which will check if empty piclist option should be given
+     */
+    public function isEmptyPicklistOptionAllowed() {
+		if($this->getFieldName() == 'visibility') {
+			return false;
+		}
+        return true;
+    }
+	
 }

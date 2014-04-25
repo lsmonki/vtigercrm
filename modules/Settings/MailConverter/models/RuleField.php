@@ -19,7 +19,7 @@ class Settings_MailConverter_RuleField_Model extends Vtiger_Field_Model {
         $fieldName = $this->getName();
         $pickListValues = array();
         if($fieldName == 'subject') {
-            $optionList = array('Contains', 'Not Contains', 'Equals', 'Not Equals', 'Begins With', 'Ends With', 'Regex');
+            $optionList = array('Contains', 'Not Contains', 'Equals', 'Not Equals', 'Has Ticket Number', 'Begins With', 'Ends With', 'Regex');
             foreach($optionList as $option) {
                 $pickListValues[$option] = vtranslate($option, 'Settings::MailConverter');
             }
@@ -27,10 +27,10 @@ class Settings_MailConverter_RuleField_Model extends Vtiger_Field_Model {
             $optionList = array('Contains', 'Not Contains', 'Equals', 'Not Equals', 'Begins With', 'Ends With');
             foreach($optionList as $option) {
 				$pickListValues[$option] = vtranslate($option, 'Settings::MailConverter');
-            }
-        }else if($fieldName == 'action') {
-			$optionList = array('CREATE_HelpDesk_FROM', 'UPDATE_HelpDesk_SUBJECT', 'LINK_Contacts_FROM', 'LINK_Contacts_TO', 'LINK_Accounts_FROM', 'LINK_Accounts_TO');
-            foreach($optionList as $option) {
+			}
+		} else if ($fieldName == 'action') {
+			$optionList = array('CREATE_HelpDesk_FROM', 'UPDATE_HelpDesk_SUBJECT', 'CREATE_Leads_SUBJECT', 'CREATE_Contacts_SUBJECT', 'CREATE_Accounts_SUBJECT', 'LINK_Contacts_FROM', 'LINK_Contacts_TO', 'LINK_Leads_FROM', 'LINK_Leads_TO', 'LINK_Accounts_FROM', 'LINK_Accounts_TO');
+			foreach ($optionList as $option) {
 				$pickListValues[$option] = vtranslate($option, 'Settings::MailConverter');
             }
 		}

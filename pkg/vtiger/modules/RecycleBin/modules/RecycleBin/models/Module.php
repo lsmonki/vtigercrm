@@ -16,7 +16,7 @@ class RecycleBin_Module_Model extends Vtiger_Module_Model {
 	 * @return <string> - url
 	 */
 	public function getDefaultUrl() {
-		return 'index.php?module='.$this->get('name').'&view='.$this->getListViewName().'&sourceModule=Accounts';
+		return 'index.php?module='.$this->get('name').'&view='.$this->getListViewName();
 	}
 	
 	/**

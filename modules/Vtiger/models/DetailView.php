@@ -125,7 +125,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		foreach($widgets as $widgetLinkModel) {
 			$linkModelList['DETAILVIEWWIDGET'][] = $widgetLinkModel;
 		}
-		
+
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		if($currentUserModel->isAdminUser()) {
 			$settingsLinks = $moduleModel->getSettingLinks();
@@ -146,7 +146,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$moduleName = $recordModel->getModuleName();
 		$parentModuleModel = $this->getModule();
 		$relatedLinks = array();
-		
+
 		if($parentModuleModel->isSummaryViewSupported()) {
 			$relatedLinks = array(array(
 				'linktype' => 'DETAILVIEWTAB',
@@ -164,7 +164,8 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 				'linkicon' => ''
 		);
 
-		if($parentModuleModel->isCommentEnabled()) {
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
+		if($parentModuleModel->isCommentEnabled() && $modCommentsModel->isPermitted('DetailView')) {
 			$relatedLinks[] = array(
 					'linktype' => 'DETAILVIEWTAB',
 					'linklabel' => 'ModComments',
@@ -209,7 +210,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 		$widgets = array();
 
 		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
-		if($moduleModel->isCommentEnabled() && $modCommentsModel->isPermitted('EditView')) {
+		if($moduleModel->isCommentEnabled() && $modCommentsModel->isPermitted('DetailView')) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',
 					'linklabel' => 'ModComments',
@@ -217,7 +218,7 @@ class Vtiger_DetailView_Model extends Vtiger_Base_Model {
 							'&mode=showRecentComments&page=1&limit=5'
 			);
 		}
-		
+
 		if($moduleModel->isTrackingEnabled()) {
 			$widgets[] = array(
 					'linktype' => 'DETAILVIEWWIDGET',

@@ -29,7 +29,7 @@
 				<div class="controls">
 					<select multiple class="select2" id="assignValues" style="min-width: 220px" name="assign_values[]">
 						{foreach key=PICKLIST_KEY item=PICKLIST_VALUE from=$SELECTED_PICKLISTFIELD_ALL_VALUES}
-							<option value="{$PICKLIST_VALUE}">{vtranslate($PICKLIST_VALUE,$SELECTED_MODULE_NAME)}</option>
+							<option value="{$PICKLIST_KEY}">{vtranslate($PICKLIST_VALUE,$SELECTED_MODULE_NAME)}</option>
 						{/foreach}
 					</select>
 				</div>

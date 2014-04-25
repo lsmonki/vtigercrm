@@ -24,99 +24,106 @@ class VTSimpleTemplate{
 		if ($match[1] == 'logo') {
 			return $this->getMetaValue($match[1]);
 		}
-		if(count($matches)==0){
-			$fieldname = $match[1];
+        // If parent is empty then we can't do any thing here
+        if(!empty($this->parent)){
+            if(count($matches)==0){
+                $fieldname = $match[1];
 
-			//To handle comments for this module
-			if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
-				return $this->getComments($this->parent->getModuleName(), $fieldname, $this->parent->getId());
-			}
+                //To handle comments for this module
+                if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
+                    return $this->getComments($this->parent->getModuleName(), $fieldname, $this->parent->getId());
+                }
 
-			$data = $this->parent->getData();
-			if(isset($data[$fieldname])) {
-				if($this->useValue($data, $fieldname)){
-					$result = $this->transformToUserFormat($this->parent->getModuleName(), $fieldname, $data[$fieldname]);
-				}else{
-					$result ='';
-				}
-			} else {
-				$result ='$'.$fieldname;
-			}
-		}else{
-			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
-			if($referenceModule === '__VtigerMeta__' || $fieldname === 'dbLabel') {
-				$result = $this->getMetaValue($fieldname);
-			}else{
-				$referenceId = $this->parent->get($referenceField);
-				if($referenceId==null){
-					$result="";
-				}else{
-					//To handle comments for this reference module
-					if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
-						return $this->getComments($referenceModule, $fieldname, $referenceId);
-					}
+                $data = $this->parent->getData();
 
-					if ($referenceField === 'contact_id') {
-						$referenceIdsList = explode(',', $referenceId);
-						$parts = array();
-						foreach ($referenceIdsList as $referenceId) {
-							$entity = $this->cache->forId($referenceId);
-							$data = $entity->getData();
-							if($this->useValue($data, $fieldname)) {
-								$parts[] = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
-							}
-						}
-						return implode(',', $parts);
-					}
-					$entity = $this->cache->forId($referenceId);
-					if($referenceModule==="Users" && $entity->getModuleName()=="Groups"){
-						list($groupEntityId, $groupId) = vtws_getIdComponents($referenceId);
+                if(isset($data[$fieldname]) || $fieldname === '_DATE_FORMAT_') {
+                    if($this->useValue($data, $fieldname)){
+                        $result = $this->transformToUserFormat($this->parent->getModuleName(), $fieldname, $data[$fieldname]);
+                    } else {
+                        $result ='';
+                    }
+                } else {
+                    $result ='$'.$fieldname;
+                }
+            }else{
+                list($full, $referenceField, $referenceModule, $fieldname) = $matches;
+                if($referenceModule === '__VtigerMeta__' || $fieldname === 'dbLabel') {
+                    $result = $this->getMetaValue($fieldname);
+                }else{
+                    $referenceId = $this->parent->get($referenceField);
+                    if($referenceId==null){
+                        $result="";
+                    }else{
+                        //To handle comments for this reference module
+                        if (in_array($fieldname, array('lastComment', 'last5Comments', 'allComments'))) {
+                            return $this->getComments($referenceModule, $fieldname, $referenceId);
+                        }
 
-						require_once('include/utils/GetGroupUsers.php');
-						$ggu = new GetGroupUsers();
-						$ggu->getAllUsersInGroup($groupId);
-
-						$users = $ggu->group_users;
-						$parts = Array();
-						foreach($users as $userId){
-							$refId = vtws_getWebserviceEntityId("Users", $userId);
-							$entity = $this->cache->forId($refId);
-							$data = $entity->getData();
-							if($this->useValue($data, $fieldname)){
-								$parts[] = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
-							}
-						}
-						$result = implode(",", $parts);
-
-					} elseif($entity->getModuleName()===$referenceModule){
-						$data = $entity->getData();
-						if($this->useValue($data, $fieldname)){
-                            $handler = vtws_getModuleHandlerFromName($referenceModule, $this->cache->user);
-                            $meta = $handler->getMeta();
-                            $referenceFieldList = $meta->getReferenceFieldDetails();
-                            if(array_key_exists($fieldname,$referenceFieldList)) {
-                                $webserviceId = $data[$fieldname];
-                                $idComponents = vtws_getIdComponents($webserviceId);
-                                require_once 'modules/Vtiger/helpers/Util.php';
-                                $result = decode_html(Vtiger_Util_Helper::getLabel($idComponents[1]));
-                            }else{                            
-								$result = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
+                        if ($referenceField === 'contact_id') {
+                            $referenceIdsList = explode(',', $referenceId);
+                            $parts = array();
+                            foreach ($referenceIdsList as $referenceId) {
+                                $entity = $this->cache->forId($referenceId);
+                                $data = $entity->getData();
+                                if($this->useValue($data, $fieldname)) {
+                                    $parts[] = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
+                                }
                             }
-						}else{
-							$result = '';
-						}
-					}else{
-						$result = '';
-					}
-				}
-			}
-		}
+                            return implode(',', $parts);
+                        }
+                        $entity = $this->cache->forId($referenceId);
+                        if($referenceModule==="Users" && $entity->getModuleName()=="Groups"){
+                            list($groupEntityId, $groupId) = vtws_getIdComponents($referenceId);
+
+                            require_once('include/utils/GetGroupUsers.php');
+                            $ggu = new GetGroupUsers();
+                            $ggu->getAllUsersInGroup($groupId);
+
+                            $users = $ggu->group_users;
+                            $parts = Array();
+                            foreach($users as $userId){
+                                $refId = vtws_getWebserviceEntityId("Users", $userId);
+                                $entity = $this->cache->forId($refId);
+                                $data = $entity->getData();
+                                if($this->useValue($data, $fieldname)){
+                                    $parts[] = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
+                                }
+                            }
+                            $result = implode(",", $parts);
+
+                        } elseif($entity->getModuleName()===$referenceModule){
+                            $data = $entity->getData();
+                            if($this->useValue($data, $fieldname)){
+                                $handler = vtws_getModuleHandlerFromName($referenceModule, $this->cache->user);
+                                $meta = $handler->getMeta();
+                                $referenceFieldList = $meta->getReferenceFieldDetails();
+                                if(array_key_exists($fieldname,$referenceFieldList)) {
+                                    $webserviceId = $data[$fieldname];
+                                    $idComponents = vtws_getIdComponents($webserviceId);
+                                    if($fieldname == 'currency_id' && $referenceModule == 'Users') {
+                                        $result = decode_html(getCurrencyName($idComponents[1]));
+                                    } else {
+                                        $result = decode_html(Vtiger_Util_Helper::getLabel($idComponents[1]));
+                                    }
+                                }else{
+                                    $result = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
+                                }
+                            }else{
+                                $result = '';
+                            }
+                        }else{
+                            $result = '';
+                        }
+                    }
+                }
+            }
+        }
 		return $result;
 
 	}
 
 	protected function useValue($data, $fieldname) {
-		return !empty($data[$fieldname]);
+        return true;
 	}
 
 	function parseTemplate(){
@@ -140,7 +147,7 @@ class VTSimpleTemplate{
 											$ownerObject->retrieveCurrentUserInfoFromFile($ownerId);
 
 											$date = new DateTimeField(null);
-											return $date->getDisplayDate($ownerObject) .' ('. $ownerObject->column_fields['date_format'] .') ';
+											return $date->getDisplayDate($ownerObject);
 			case 'time'					:	return Vtiger_Util_Helper::convertTimeIntoUsersDisplayFormat(date('h:i:s'));
 			case 'dbtimezone'			:	return DateTimeField::getDBTimeZone();
 			case 'usertimezone'			:	$referenceId = $this->parent->get('assigned_user_id');
@@ -172,7 +179,13 @@ class VTSimpleTemplate{
 											if($moduleName == 'HelpDesk') $recorIdName = 'ticketid';
 											if($moduleName == 'Faq') $recorIdName = 'faqid';
 											if($moduleName == 'Products') $recorIdName = 'productid';
-											return $PORTAL_URL.'/index.php?module='.$moduleName.'&action=index&'.$recorIdName.'='.$recordId.'&fun=detail';
+											return $PORTAL_URL.'/index.php?module='.$moduleName.'&action=index&'.$recorIdName.'='.$recordId.'&status=true';
+            case 'portalpdfurl'         :   $wsId = $this->parent->getId();
+											$parts = explode('x', $wsId);
+											$recordId = $parts[1];
+											$moduleName = $this->parent->getModuleName();
+											$recorIdName='id';
+											return $PORTAL_URL.'/index.php?module='.$moduleName.'&action=index&'.$recorIdName.'='.$recordId.'&downloadfile=true';
 			case 'siteurl'				:	return $site_URL;
 			case 'portalurl'			:	return $PORTAL_URL;
 			case 'logo'					:	return '<img src="cid:logo" />';
@@ -196,18 +209,7 @@ class VTSimpleTemplate{
 	public function transformToUserFormat($moduleName, $fieldName, $fieldValue) {
 		global $adb, $log, $current_user;
 
-		$entityObject = VtigerWebserviceObject::fromName($adb, $moduleName);
-		$handlerPath = $entityObject->getHandlerPath();
-		$handlerClass = $entityObject->getHandlerClass();
-
-		require_once $handlerPath;
-
-		$entityHandler = new $handlerClass($entityObject, $current_user, $adb, $log);
-		$entityMeta = $entityHandler->getMeta();
-
-		$entityFields = $entityMeta->getModuleFields();
-		$fieldInstance = $entityFields[$fieldName];
-
+		//getting owner info
 		$referenceId = $this->parent->get('assigned_user_id');
 		if ($referenceId) {
 			$entity = $this->cache->forId($referenceId);
@@ -218,9 +220,26 @@ class VTSimpleTemplate{
 				$ownerId = Vtiger_Util_Helper::getCreator($recordId);
 			}
 		}
+		if(!empty($ownerId)) {
+			$ownerObject = new Users();
+			$ownerObject->retrieveCurrentUserInfoFromFile($ownerId);
+		}
+		
+		if ($ownerObject && $fieldName === '_DATE_FORMAT_') {
+			return $ownerObject->column_fields['date_format'];
+		}
 
-		$ownerObject = new Users();
-		$ownerObject->retrieveCurrentUserInfoFromFile($ownerId);
+		//getting field instance info
+		$entityObject = VtigerWebserviceObject::fromName($adb, $moduleName);
+		$handlerPath = $entityObject->getHandlerPath();
+		$handlerClass = $entityObject->getHandlerClass();
+
+		require_once $handlerPath;
+
+		$entityHandler = new $handlerClass($entityObject, $current_user, $adb, $log);
+		$entityMeta = $entityHandler->getMeta();
+		$entityFields = $entityMeta->getModuleFields();
+		$fieldInstance = $entityFields[$fieldName];
 
 		switch($fieldInstance->getFieldDataType()) {
 
@@ -232,17 +251,15 @@ class VTSimpleTemplate{
 											$dateTime = $this->parent->get('due_date') .' '. $this->parent->get('time_end');
 										}
 
-										$fieldValue = Vtiger_Util_Helper::convertDateTimeIntoUsersDisplayFormat($dateTime, $ownerObject)
-															.' ('. getTranslatedString($ownerObject->column_fields['time_zone'], 'Users') .') ';
+										$fieldValue = Vtiger_Util_Helper::convertDateTimeIntoUsersDisplayFormat($dateTime, $ownerObject);
 
 									} else {
 										$dateFieldObj = new DateTimeField($fieldValue);
-										$fieldValue = $dateFieldObj->getDisplayDate($ownerObject) .' ('. $ownerObject->column_fields['date_format'] .') ';
+										$fieldValue = $dateFieldObj->getDisplayDate($ownerObject);
 									}
 									break;
 
-			case 'datetime'		:	$fieldValue = Vtiger_Util_Helper::convertDateTimeIntoUsersDisplayFormat($fieldValue, $ownerObject)
-															.' ('. getTranslatedString($ownerObject->column_fields['time_zone'], 'Users') .') ';
+			case 'datetime'		:	$fieldValue = Vtiger_Util_Helper::convertDateTimeIntoUsersDisplayFormat($fieldValue, $ownerObject);
 									break;
 
 			case 'currency'		:	if ($fieldInstance->getUIType() === '72') {
@@ -259,7 +276,7 @@ class VTSimpleTemplate{
                                     require_once 'includes/runtime/Globals.php';
                                     $fieldValue = vtranslate($fieldValue,$moduleName,$ownerObject->column_fields['language']);
                                     break;
-                                
+
             case 'multipicklist' :  require_once 'includes/runtime/LanguageHandler.php';
                                     require_once 'includes/runtime/Globals.php';
                                     $fieldValueParts = explode(';',$fieldValue);
@@ -268,7 +285,29 @@ class VTSimpleTemplate{
                                     }
                                     $fieldValue = implode(';', $fieldValueParts);
                                     break;
-                                    
+            case 'boolean'       :  require_once 'includes/runtime/LanguageHandler.php';
+                                    require_once 'includes/runtime/Globals.php';
+                                    if($fieldValue == 1){
+                                        $fieldValue = vtranslate('LBL_YES',$moduleName);
+                                    }else {
+                                        $fieldValue = vtranslate('LBL_NO',$moduleName);
+                                    }
+                                    break;
+            case 'reference'     :  if($fieldName == 'currency_id') {
+                                        $currencyId = explode('x', $fieldValue);
+                                        $currencyId = $currencyId[1];
+                                        $fieldValue = decode_html(getCurrencyName($currencyId));
+                                    }else{
+                                        if($fieldValue != 0 && $fieldValue != null){
+                                            $id = explode('x', $fieldValue);
+                                            $webServiceObject = VtigerWebserviceObject::fromId($adb,$id[0]);
+                                            if($webServiceObject){
+                                                $Value = getEntityName($webServiceObject->getEntityName(), $id);
+                                                $fieldValue = $Value[$id[1]];
+                                            }
+                                        }
+                                    }
+
 			default				:	$fieldValue;
 
 		}

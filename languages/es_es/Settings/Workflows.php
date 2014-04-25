@@ -90,6 +90,14 @@ $languageStrings = array(
 	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",
 	'LBL_FROM' => 'De',
 	'Optional' => 'Opcional',
+	'LBL_ADD_TASK' => 'Add Tarea',
+    'Portal Pdf Url' =>'Portal del Cliente Pdf Url',
+    'LBL_ADD_TEMPLATE' => 'Añadir plantilla',
+    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloque de grupo impuesto',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloque de impuesto Individual',
+	
+	//Translation for module
+	'Calendar' => 'Para hacer',
 );
 
 $jsLanguageStrings = array(

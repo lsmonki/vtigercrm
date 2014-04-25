@@ -48,10 +48,8 @@ $languageStrings = array(
 	'Prof.'                        => 'Prof.'                       , 
 	'User List'                    => 'Lista de Usuarios'           , 
 	'Contact Id' => 'Contacto Id',
+    'Support Start Date'           => 'Soporte Fecha de Inicio'     ,
+    'Support End Date'             => 'Soporte Fecha de finalización',
 );
 $jsLanguageStrings = array(
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 );

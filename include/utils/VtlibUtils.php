@@ -610,6 +610,8 @@ function vtlib_purify($input, $ignore=false) {
 	global $__htmlpurifier_instance, $root_directory, $default_charset;
 
 	static $purified_cache = array();
+    $value = $input;
+    
 	if(!is_array($input)) {
 		$md5OfInput = md5($input); 
 		if (array_key_exists($md5OfInput, $purified_cache)) { 
@@ -621,7 +623,7 @@ function vtlib_purify($input, $ignore=false) {
 	$use_charset = $default_charset;
 	$use_root_directory = $root_directory;
 
-	$value = $input;
+	
 	if(!$ignore) {
 		// Initialize the instance if it has not yet done
 		if($__htmlpurifier_instance == false) {

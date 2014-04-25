@@ -40,7 +40,7 @@ function vtws_convertlead($entityvalues, $user) {
 	$sql = "select converted from vtiger_leaddetails where converted = 1 and leadid=?";
 	$leadIdComponents = vtws_getIdComponents($entityvalues['leadId']);
 	$result = $adb->pquery($sql, array($leadIdComponents[1]));
-	if ($result === false) {
+    if ($result === false) {
 		throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				vtws_getWebserviceTranslatedString('LBL_' .
 						WebServiceErrorCode::$DATABASEQUERYERROR));

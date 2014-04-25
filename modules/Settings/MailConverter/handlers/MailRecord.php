@@ -62,12 +62,14 @@ class Vtiger_MailRecord {
 	 */
 	function __toString() {
 		$tostring = '';
-		$tostring .= 'FROM: ['. implode(',', $this->_from) . ']';
-		$tostring .= ',TO: [' . implode(',', $this->_to) .   ']';
-		if(!empty($this->_cc)) $tostring .= ',CC: [' . implode(',', $this->_cc) .   ']';
-		if(!empty($this->_bcc))$tostring .= ',BCC: [' . implode(',', $this->_bcc) .   ']';
-		$tostring .= ',DATE: ['. $this->_date . ']';
-		$tostring .= ',SUBJECT: ['. $this->_subject . ']';
+		$tostring .= 'FROM: [' . implode(',', $this->_from) . ']';
+		$tostring .= ',TO: [' . implode(',', $this->_to) . ']';
+		if (!empty($this->_cc))
+		    $tostring .= ',CC: [' . implode(',', $this->_cc) . ']';
+		if (!empty($this->_bcc))
+		    $tostring .= ',BCC: [' . implode(',', $this->_bcc) . ']';
+		$tostring .= ',DATE: [' . $this->_date . ']';
+		$tostring .= ',SUBJECT: [' . $this->_subject . ']';
 		return $tostring;
 	}
 
@@ -140,10 +142,10 @@ class Vtiger_MailRecord {
 		if($mb_function) {
 			if(!$from) $from = mb_detect_encoding($input);
 
-			if(strtolower(trim($to)) == strtolower(trim($from))) {				
-				return $input;
+			if(strtolower(trim($to)) == strtolower(trim($from))) {                         
+					return $input;
 			} else {
-				return $iconv_function ? iconv($from, $to, $input) : mb_convert_encoding($input, $to, $from);
+				return mb_convert_encoding($input, $to, $from);
 			}
 		}
 		return $input;
@@ -254,6 +256,17 @@ class Vtiger_MailRecord {
 
 		if($this->_attachments) {
 			$this->log("Attachments: ");
+		    $filename = array();
+		    $content = array();
+		    $attachmentKeys = array_keys($this->_attachments);
+		    for ($i = 0; $i < count($attachmentKeys); $i++) {
+				$filename[$i] = self::__mime_decode($attachmentKeys[$i]);
+				$content[$i] = $this->_attachments[$attachmentKeys[$i]];
+		    }
+		    unset($this->_attachments);
+		    for ($i = 0; $i < count($attachmentKeys); $i++) {
+				$this->_attachments[$filename[$i]] = $content[$i];
+		    }
 			$this->log(array_keys($this->_attachments));
 		}
 

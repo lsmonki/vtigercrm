@@ -104,7 +104,7 @@ class Settings_LayoutEditor_Field_Action extends Settings_Vtiger_Index_Action {
             Settings_LayoutEditor_Field_Model::makeFieldActive($fieldIds, $request->get('blockId'));
 			$responseData = array();
 			foreach($fieldIds as $fieldId) {
-				$fieldModel = Vtiger_Field_Model::getInstance($fieldId);
+				$fieldModel = Settings_LayoutEditor_Field_Model::getInstance($fieldId);
 				$fieldInfo = $fieldModel->getFieldInfo();
 				$responseData[] = array_merge(array('id'=>$fieldModel->getId(), 'blockid'=>$fieldModel->get('block')->id, 'customField'=>$fieldModel->isCustomField()),$fieldInfo);
 			}

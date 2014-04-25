@@ -26,10 +26,10 @@ class Settings_Profiles_Module_Model extends Settings_Vtiger_Module_Model {
 
 	const FIELD_ACTIVE = 0;
 	const FIELD_INACTIVE = 1;
-
+	
 	const FIELD_READWRITE = 0;
 	const FIELD_READONLY = 1;
-
+	
 	var $name = 'Profiles';
 
 	/**

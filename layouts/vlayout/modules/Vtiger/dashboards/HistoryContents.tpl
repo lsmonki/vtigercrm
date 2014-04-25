@@ -48,12 +48,16 @@
 								{if $FIELD && $FIELD->getFieldInstance() && $FIELD->getFieldInstance()->isViewableInDetailView()}
 								<div class='font-x-small'>
 									<i>{vtranslate($FIELD->getName(), $FIELD->getModuleName())}</i>
-									{if $FIELD->get('prevalue') neq ''}
-										{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
-									{else}
-										{vtranslate('LBL_CHANGED')}
+									{if $FIELD->get('prevalue') neq '' && $FIELD->get('postvalue') neq '' && !($FIELD->getFieldInstance()->getFieldDataType() eq 'reference' && ($FIELD->get('postvalue') eq '0' || $FIELD->get('prevalue') eq '0'))}
+										&nbsp;{vtranslate('LBL_FROM')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</b>
+									{else if $FIELD->get('postvalue') eq '' || ($FIELD->getFieldInstance()->getFieldDataType() eq 'reference' && $FIELD->get('postvalue') eq '0')}
+	                                    &nbsp; <b> {vtranslate('LBL_DELETED')} </b> ( <del>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('prevalue'))))}</del> )
+	                                {else}
+										&nbsp;{vtranslate('LBL_CHANGED')}
 									{/if}
+	                                {if $FIELD->get('postvalue') neq '' && !($FIELD->getFieldInstance()->getFieldDataType() eq 'reference' && $FIELD->get('postvalue') eq '0')}
 										{vtranslate('LBL_TO')} <b>{Vtiger_Util_Helper::toVtiger6SafeHTML($FIELD->getDisplayValue(decode_html($FIELD->get('postvalue'))))}</b>
+	                                {/if}    
 								</div>
 								{/if}
 							{else}
@@ -68,27 +72,40 @@
 								onclick='{$DETAILVIEW_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$DETAILVIEW_URL}"' {/if}>
 								{$PARENT->getName()}</a>
 						</div>
-					{else if $HISTORY->isRelationLink()}
-						{assign var=RELATION value=$HISTORY->getRelationInstance()}
-							{assign var=LINKED_RECORD_DETAIL_URL value=$RELATION->getLinkedRecord()->getDetailViewUrl()}
-							{assign var=PARENT_DETAIL_URL value=$RELATION->getParent()->getParent()->getDetailViewUrl()}
-							<div class='' style='margin-top:5px'>
-								<b>{$USER->getName()}</b> {vtranslate('LBL_ADDED')} <a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0}
-									onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$LINKED_RECORD_DETAIL_URL}"' {/if}>
-									{$RELATION->getLinkedRecord()->getName()}</a>
-								{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0}
-									onclick='{$PARENT_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$PARENT_DETAIL_URL}"' {/if}>
-									{$RELATION->getParent()->getParent()->getName()}</a>
-							</div>
-					{else if $HISTORY->isRelationUnLink()}
+					{else if ($HISTORY->isRelationLink() || $HISTORY->isRelationUnLink())}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 						{assign var=RELATION value=$HISTORY->getRelationInstance()}
 						{assign var=LINKED_RECORD_DETAIL_URL value=$RELATION->getLinkedRecord()->getDetailViewUrl()}
 						{assign var=PARENT_DETAIL_URL value=$RELATION->getParent()->getParent()->getDetailViewUrl()}
 						<div class='' style='margin-top:5px'>
-							<b>{$USER->getName()}</b> {vtranslate('LBL_REMOVED')}
-								<a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}'
+							<b>{$USER->getName()}</b>
+								{if $HISTORY->isRelationLink()}
+									{vtranslate('LBL_ADDED', $MODULE_NAME)}
+								{else}
+									{vtranslate('LBL_REMOVED', $MODULE_NAME)}
+								{/if}
+								{if $RELATION->getLinkedRecord()->getModuleName() eq 'Calendar'}
+									{if isPermitted('Calendar', 'DetailView', $RELATION->getLinkedRecord()->getId()) eq 'yes'}
+										<a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}'
+											{else} onclick='window.location.href="{$LINKED_RECORD_DETAIL_URL}"' {/if}>{$RELATION->getLinkedRecord()->getName()}</a>
+									{else}
+										{vtranslate($RELATION->getLinkedRecord()->getModuleName(), $RELATION->getLinkedRecord()->getModuleName())}
+									{/if}
+								{else}
+								 <a class="cursorPointer" {if stripos($LINKED_RECORD_DETAIL_URL, 'javascript:')===0} onclick='{$LINKED_RECORD_DETAIL_URL|substr:strlen("javascript:")}'
 									{else} onclick='window.location.href="{$LINKED_RECORD_DETAIL_URL}"' {/if}>{$RELATION->getLinkedRecord()->getName()}</a>
-							{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0}
+								{/if}{vtranslate('LBL_FOR')} <a class="cursorPointer" {if stripos($PARENT_DETAIL_URL, 'javascript:')===0}
 								onclick='{$PARENT_DETAIL_URL|substr:strlen("javascript:")}' {else} onclick='window.location.href="{$PARENT_DETAIL_URL}"' {/if}>
 								{$RELATION->getParent()->getParent()->getName()}</a>
 						</div>
@@ -119,7 +136,7 @@
 					<div>
 						<b>{$HISTORY->getCommentedByModel()->getName()}</b> {vtranslate('LBL_COMMENTED')} {vtranslate('LBL_ON')} <a class="textOverflowEllipsis" href="{$HISTORY->getParentRecordModel()->getDetailViewUrl()}">{$HISTORY->getParentRecordModel()->getName()}</a>
 					</div>
-					<div class='font-x-small'><i>"{$HISTORY->get('commentcontent')}"</i></div>
+					<div class='font-x-small'><i>"{nl2br($HISTORY->get('commentcontent'))}"</i></div>
 				</div>
 			</div>
 		{/if}

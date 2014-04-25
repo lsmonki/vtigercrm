@@ -14,6 +14,7 @@ $languageStrings = array(
 	'LBL_PROJECT_TASK_INFORMATION' => 'Informação Tarefa Projeto' , 
 	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
 	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
+    'LBL_MILESTONES_LIST'          => 'Lista Milestones'            ,
 	
 	//Field Labels
 	'Project Task Name' => 'Project Task Name',
@@ -27,12 +28,12 @@ $languageStrings = array(
     'Start Date'=>'Start Date',
     'End Date'=>'End Date',
     'Related To' => 'Related To',
-    'administrative' => 'administrative',
-    'operative' => 'operative',
-    'other' => 'other',
-    'low' => 'low',
-    'normal' => 'normal',
-    'high' => 'high',
+    'administrative' => 'Administrativo',
+    'operative' => 'Operativo',
+    'other' => 'Outro',
+    'low' => 'Baixo',
+    'normal' => 'Normal',
+    'high' => 'Alto',
     'Created Time' => 'Created Time',
     'Modified Time' => 'Modified Time',
     'description' => 'Description',

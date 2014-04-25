@@ -12,32 +12,73 @@
 {strip}
 <div name='calendarViewTypes'>
 	<div id="calendarview-feeds" style="margin-left:10px;">
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Events" data-calendar-feed="Events" data-calendar-feed-css="fc-event-style1" > <span class="label fc-event-style1">{vtranslate('LBL_EVENTS', $MODULE)}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Tasks" data-calendar-feed="Tasks" data-calendar-feed-css="fc-event-style2" > <span class="label fc-event-style2">{vtranslate('LBL_TODOS', $MODULE)}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Potentials" data-calendar-feed="Potentials" data-calendar-feed-css="fc-event-style3"> <span class="label fc-event-style3">{vtranslate('Potentials', 'Potentials')}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Contacts_Support_End_Date" data-calendar-feed="Contacts" data-calendar-feed-css="fc-event-style4" data-custom-data='{ldelim}"fieldname":"support_end_date"{rdelim}' />
-			<span class="label fc-event-style4">{vtranslate('LBL_CONTACTS_SUPPORT_END_DATE', $MODULE)}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Contacts_Birthday" data-calendar-feed="Contacts" data-calendar-feed-css="fc-event-style6" data-custom-data='{ldelim}"fieldname":"birthday"{rdelim}' />
-			<span class="label fc-event-style6">{vtranslate('LBL_CONTACTS_BIRTH_DAY', $MODULE)}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Invoice" data-calendar-feed="Invoice" data-calendar-feed-css="fc-event-style5"> <span class="label fc-event-style5">{vtranslate('SINGLE_Invoice', 'Invoice')}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="Project" data-calendar-feed="Project" data-calendar-feed-css="fc-event-style7"> <span class="label fc-event-style7">{vtranslate('SINGLE_Project', 'Project')}</span>
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" data-calendar-sourcekey="ProjectTask" data-calendar-feed="ProjectTask" data-calendar-feed-css="fc-event-style8"> <span class="label fc-event-style8">{vtranslate('SINGLE_ProjectTask', 'ProjectTask')}</span>
-		</label>
+		<!--Adding or Editing calendar views in My Calendar-->
+		<div class="modal addViewsToCalendar hide">
+			<div class="modal-header contentsBackground">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>{vtranslate('LBL_ADD_CALENDAR_VIEW', $MODULE)}</h3>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+					<input type="hidden" class="selectedUser" value="" />
+					<input type="hidden" class="selectedUserColor" value="" />
+					<input type="hidden" class="selectedViewModule" value="" />
+					<input type="hidden" class="userCalendarMode" value="" />
+					<div class="control-group addCalendarViewsList">
+						<label class="control-label">{vtranslate('LBL_SELECT_ACTIVITY_TYPE', $MODULE)}</label>
+						<div class="controls">
+							<select class="select2" name="usersCalendarList" style="min-width: 250px;">
+								{foreach item=VIEWINFO from=$VIEWTYPES['invisible']}
+									<option value="{$VIEWINFO['fieldname']}" data-viewmodule="{$VIEWINFO['module']}">{vtranslate($VIEWINFO['fieldlabel'], $VIEWINFO['module'])}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="control-group editCalendarViewsList">
+						<label class="control-label">{vtranslate('LBL_EDITING_CALENDAR_VIEW', $MODULE)}</label>
+						<div class="controls">
+							<select class="select2" name="editingUsersList" style="min-width: 250px;">
+								{foreach item=VIEWINFO from=$VIEWTYPES['visible']}
+									<option value="{$VIEWINFO['fieldname']}" data-viewmodule="{$VIEWINFO['module']}">{vtranslate($VIEWINFO['fieldlabel'], $VIEWINFO['module'])}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">{vtranslate('LBL_SELECT_CALENDAR_COLOR', $MODULE)}</label>
+						<div class="controls">
+							<p class="calendarColorPicker"></p>
+						</div>
+					</div>
+				</form>
+			</div>
+			{include file='ModalFooter.tpl'|@vtemplate_path:$MODULE}
+		</div>
+		<!--Adding or Editing calendar views in Shared Calendar-->
+		
+		<div class="labelModal hide">
+			<label class="checkbox addedCalendars" style="text-shadow: none">
+				<input type="checkbox" />
+				&nbsp;<span class="label" style="text-shadow: none"></span>
+				&nbsp;<i class="icon-pencil editCalendarColor cursorPointer actionImage" title="{vtranslate('LBL_EDIT_COLOR',$MODULE)}"></i>
+				&nbsp;<i class="icon-trash cursorPointer actionImage deleteCalendarView" title="{vtranslate('LBL_DELETE_CALENDAR',$MODULE)}"></i>
+			</label>
+		</div>
+		
+		{foreach item=VIEWINFO from=$VIEWTYPES['visible']}
+			<label class="checkbox addedCalendars">
+				<input type="checkbox" data-calendar-sourcekey="{$VIEWINFO['fieldname']}" data-calendar-feed="{$VIEWINFO['module']}" data-calendar-feed-color="{$VIEWINFO['color']}" 
+					   data-calendar-fieldname="{$VIEWINFO['fieldname']}" data-calendar-fieldlabel="{vtranslate($VIEWINFO['fieldlabel'], $VIEWINFO['module'])}"> 
+				&nbsp;<span class="label" style="text-shadow: none; background-color: {$VIEWINFO['color']};">{vtranslate($VIEWINFO['fieldlabel'], $VIEWINFO['module'])}</span>
+				&nbsp;<i class="icon-pencil editCalendarColor cursorPointer actionImage" title="{vtranslate('LBL_EDIT_COLOR',$MODULE)}"></i>
+				&nbsp;<i class="icon-trash cursorPointer actionImage deleteCalendarView" title="{vtranslate('LBL_DELETE_CALENDAR',$MODULE)}"></i>
+			</label>
+		{/foreach}
+		{assign var=INVISIBLE_CALENDAR_VIEWS_EXISTS value='false'}
+		{if $VIEWTYPES['invisible']}
+			{assign var=INVISIBLE_CALENDAR_VIEWS_EXISTS value='true'}
+		{/if}
+		<input type="hidden" class="invisibleCalendarViews" value="{$INVISIBLE_CALENDAR_VIEWS_EXISTS}" />
 	</div>
 </div>
 {/strip}

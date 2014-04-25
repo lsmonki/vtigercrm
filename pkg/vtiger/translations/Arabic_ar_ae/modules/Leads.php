@@ -66,7 +66,6 @@ $languageStrings = array(
 
 	//Leads Custom Field Mapping
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'تعديل خريطة الحقول',
-	'LBL_WEBFORMS' => 'اعداد نموذج الويب',
 	'LBL_LEAD_SOURCE' => 'مصدر الزبون المحتمل'
 );
 $jsLanguageStrings = array(

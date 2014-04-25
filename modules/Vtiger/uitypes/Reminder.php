@@ -32,8 +32,18 @@ class Vtiger_Reminder_UIType extends Vtiger_Date_UIType {
 	 * @return <Object>
 	 */
 	public function getDisplayValue($value) {
+        $reminder_value = '';
         $reminder_time = $this->getEditViewDisplayValue($value);
-		$reminder_value = $reminder_time[0].' '.vtranslate('LBL_DAYS').' '.$reminder_time[1].' '.vtranslate('LBL_HOURS').' '.$reminder_time[2].' '.vtranslate('LBL_MINUTES');
+		if(!empty($reminder_time[0])){
+			$reminder_value = $reminder_time[0].' '.vtranslate('LBL_DAYS');
+		}
+		if(!empty($reminder_time[1])){
+			$reminder_value = $reminder_value.' '.$reminder_time[1].' '.vtranslate('LBL_HOURS');
+		}
+		if(!empty($reminder_time[2])){
+			$reminder_value = $reminder_value.' '.$reminder_time[2].' '.vtranslate('LBL_MINUTES');
+		}
+		
 		return $reminder_value;
 	}
     

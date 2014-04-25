@@ -16,50 +16,52 @@
 		</div>
 		<hr>
 		<div class="contents row-fluid">
+			<br>
 			<form id="pickListDependencyForm" class="form-horizontal">
 				{if !empty($MAPPED_VALUES)}
 					<input type="hidden" class="editDependency" value="true"/>
 				{/if}
 				<div class="row-fluid">
-					<div class="control-group">
+					<div class="control-group span5">
 						<label class="muted control-label">{vtranslate('LBL_SELECT_MODULE', $QUALIFIED_MODULE)}</label>
 						<div class="controls">
-							<span class="row-fluid">
-								<select name="sourceModule" class="select2 span3">
+							<select name="sourceModule" class="select2 span4 marginLeftZero">
 									{foreach item=MODULE_MODEL from=$PICKLIST_MODULES_LIST}
 										{assign var=MODULE_NAME value=$MODULE_MODEL->get('name')}
-										<option value="{$MODULE_NAME}" {if $MODULE_NAME eq $SELECTED_MODULE} selected {/if}>{vtranslate($MODULE_MODEL->get('label'), $MODULE_MODEL->get('label'))}</option>
+										<option value="{$MODULE_NAME}" {if $MODULE_NAME eq $SELECTED_MODULE} selected {/if}>
+											{if $MODULE_MODEL->get('label') eq 'Calendar'}
+												{vtranslate('LBL_TASK', $MODULE_MODEL->get('label'))}
+											{else}
+												{vtranslate($MODULE_MODEL->get('label'), $MODULE_MODEL->get('label'))}
+											{/if}
+										</option>
 									{/foreach}
 								</select>
-							</span>
 						</div>
 					</div>
+					<div class="span5">&nbsp;</div>
 				</div>
 				<div class="row-fluid">
-					<div class="span4 control-group">
+					<div class="span5 control-group">
 						<label class="muted control-label">{vtranslate('LBL_SOURCE_FIELD', $QUALIFIED_MODULE)}</label>
 						<div class="controls">
-							<span class="row-fluid">
 								<select id="sourceField" name="sourceField" class="select2 row-fluid" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
 									<option value=''></option>
 									{foreach key=FIELD_NAME item=FIELD_LABEL from=$PICKLIST_FIELDS}
 										<option value="{$FIELD_NAME}" {if $RECORD_MODEL->get('sourcefield') eq $FIELD_NAME} selected {/if}>{vtranslate($FIELD_LABEL, $SELECTED_MODULE)}</option>
 									{/foreach}
 								</select>
-							</span>
 						</div>
 					</div>
-					<div class="span4 control-group marginLeftZero">
+					<div class="span5 control-group marginLeftZero">
 						<label class="muted control-label">{vtranslate('LBL_TARGET_FIELD', $QUALIFIED_MODULE)}</label>
 						<div class="controls">
-							<span class="row-fluid">
 								<select id="targetField" name="targetField" class="select2 row-fluid" data-placeholder="{vtranslate('LBL_SELECT_FIELD', $QUALIFIED_MODULE)}">
 									<option value=''></option>
 									{foreach key=FIELD_NAME item=FIELD_LABEL from=$PICKLIST_FIELDS}
 										<option value="{$FIELD_NAME}" {if $RECORD_MODEL->get('targetfield') eq $FIELD_NAME} selected {/if}>{vtranslate($FIELD_LABEL, $SELECTED_MODULE)}</option>
 									{/foreach}
 								</select>
-							</span>
 						</div>
 					</div>
 				</div>

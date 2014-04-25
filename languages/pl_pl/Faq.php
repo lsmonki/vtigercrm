@@ -15,7 +15,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie instrukcji',
 	
 	//Blocks
-	'LBL_FAQ_INFORMATION' => 'Informacje podstawowe',
+	'LBL_FAQ_INFORMATION' => 'FAQ Informacje',
 	'LBL_COMMENT_INFORMATION' =>  'Komentarze',
 	
 	//Fields

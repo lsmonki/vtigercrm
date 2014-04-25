@@ -415,6 +415,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'days','vtiger_troubletickets',1,'1','days','Days',1,2,'',100,10,25,1,'I~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,'',100,9,25,2,'DT~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,'',100,12,25,2,'DT~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'from_portal','vtiger_troubletickets',1,'56','from_portal','From Portal',1,0,'',100,13,25,3,'C~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'modifiedby','vtiger_crmentity',1,'52','modifiedby','Last Modified By',1,0,'',100,16,25,3,'V~O',3,null,'BAS',0)");
 
 		$this->db->query("insert into vtiger_field values (13," . $this->db->getUniqueID("vtiger_field") . ",'title','vtiger_troubletickets',1,'22','ticket_title','Title',1,0,'',100,1,25,1,'V~M',0,1,'BAS',1)");
@@ -2548,11 +2549,20 @@ Should any need arise,please do give us a call.';
 		$count = count($icons);
 		//insert settings fields
 		for ($i = 0, $seq = 1; $i < $count; $i++, $seq++) {
-			if ($i == 7 || $i == 11 || $i == 14) {
+			if ($i == 8 || $i == 12 || $i == 18) {
 				$seq = 1;
 			}
 			$adb->query("insert into vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) values (" . $adb->getUniqueID('vtiger_settings_field') . ", " . getSettingsBlockId($name_blocks[$names[$i]]) . ", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
+
+		// for Workflow in settings page of every module
+		$module_manager_id = getSettingsBlockId('LBL_MODULE_MANAGER');
+		$result = $adb->pquery("SELECT max(sequence) AS maxseq FROM vtiger_settings_field WHERE blockid = ?", array($module_manager_id));
+		$maxseq = $adb->query_result($result, 0, 'maxseq');
+		if ($maxseq < 0 || $maxseq == NULL) {
+			$maxseq = 1;
+		}
+		$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)", array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
 
 		//hide the system details tab for now
 		$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");

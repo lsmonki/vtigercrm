@@ -8,8 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Task'                     , 
-	'LBL_ADD_TASK'                 => 'Add Task'                    , 
+	'SINGLE_Calendar'              => 'Da fare'                     , 
+	'LBL_ADD_TASK'                 => 'Add Da fare'                    , 
 	'LBL_ADD_EVENT'                => 'Aggiungi Evento'             , 
 	'LBL_RECORDS_LIST'             => 'Vista per Lista'             , 
 	'LBL_EVENTS'                   => 'Eventi'                      , 
@@ -21,8 +21,9 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
-	'LBL_EVENT_OR_TASK'            => 'Evento / Task'                ,
-	'LBL_TASK_INFORMATION'         => 'Informazione Compito'        , 
+	'LBL_EVENT_OR_TASK'            => 'Evento / Da fare'                ,
+	'LBL_TASK_INFORMATION'         => 'Da fare Informazione'        , 
+    'LBL_EVENT_INFORMATION'        => 'Dettagli evento'             ,
 	'Subject'                      => 'Soggetto'                    , 
 	'Start Date & Time'            => 'Orario e data inizio'        , 
 	'Activity Type'                => 'Tipo Attivit&agrave;'        , 
@@ -35,7 +36,7 @@ $languageStrings = array(
 	'LBL_ADDED_CALENDARS'          => 'Added Calendars'             , // TODO: Review
 	'Call'                         => 'Chiamata'                    , 
 	'Meeting'                      => 'Riunione'                    , 
-	'Task'                         => 'Task'                        , // TODO: Review
+	'Task'                         => 'Da fare'                        , // TODO: Review
 	'Planned'                      => 'Pianificato'                 , 
 	'Completed'                    => 'Completato'                  , 
 	'Pending Input'                => 'In Attesa di Input'          , 
@@ -44,7 +45,8 @@ $languageStrings = array(
 	'Medium'                       => 'Medio'                       , 
 	'LBL_CHANGE_OWNER'             => 'Cambia Proprietario'         , 
 	'LBL_EVENT'                    => 'Evento'                      , 
-	'LBL_TASK'                     => 'Compito'                     , 
+	'LBL_TASK'                     => 'Da fare'                     , 
+	'LBL_TASKS'						=> 'Da fare',
 	'LBL_CALENDAR_VIEW'            => 'Calendar View'               , 
 	'LBL_SHARED_CALENDAR'          => 'Shared Calendar'             , // TODO: Review
 	'LBL_DAY0'                     => 'Sunday'                      , // TODO: Review
@@ -62,14 +64,22 @@ $languageStrings = array(
 	'Weekly'                       => 'Week(s)'                     , // TODO: Review
 	'Monthly'                      => 'Month(s)'                    , // TODO: Review
 	'Yearly'                       => 'Year'                        , // TODO: Review
+        'LBL_DEFAULT_STATUS_TYPE'      => 'Predefinito Stato e tipo'    ,
+        'LBL_STATUS'                   => 'Stato'                       ,
+        'LBL_TYPE'                     => 'Tipo'                        ,
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Modifica colore',
+	'LBL_ADD_CALENDAR_VIEW' => 'Aggiungi Calendar View',
+	'LBL_SELECT_USER_CALENDAR' => 'Selezionare Calendario utente',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Selezionare Calendario Colore',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Editing Calendar View',
+	'LBL_DELETE_CALENDAR' => 'Elimina Calendario',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Selezionare il tipo di attività',
+	'Tasks' => 'Compiti',
 );
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK'           => 'Add Event / Task'            , 
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', // TODO: Review
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
+	'LBL_ADD_EVENT_TASK'           => 'Add Event / Da fare'            , 
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Da fare is successfully added to your Calendar', // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
         'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Non possiamo essere ritenuti Per Futuro',
 	
@@ -122,5 +132,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dec',
 	
 	'LBL_ALL_DAY' => 'All-Day',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Vista calendario colore aggiornato con successo',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Sei sicuro di voler eliminare questo punto di vista Calendar?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Calendar View aggiunto con successo',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Calendario Vista eliminata correttamente',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'No Calendar View per aggiungere',
+	'JS_EDIT_CALENDAR' => 'Modifica Calendario',
 );

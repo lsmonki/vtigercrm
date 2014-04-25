@@ -9,9 +9,9 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Calendar' => 'Task',
+	'SINGLE_Calendar' => 'To Do',
 	'SINGLE_Events' => 'Event',
-	'LBL_ADD_TASK' => 'Add Task',
+	'LBL_ADD_TASK' => 'Add To Do',
 	'LBL_ADD_EVENT' => 'Add Event',
 	'LBL_RECORDS_LIST' => 'Calendar List',
 	'LBL_EVENTS' => 'Events',
@@ -23,10 +23,13 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS' => 'Other Events',
 	'LBL_MINUTES' => 'Minutes',
 	'LBL_SELECT_USERS' => 'Select Users',
-	'LBL_EVENT_OR_TASK' => 'Event / Task',
-
+	'LBL_EVENT_OR_TASK' => 'Event / To Do',
+        'LBL_DEFAULT_STATUS_TYPE' => 'Default Status & Type',
+        'LBL_STATUS' => 'Status',
+        'LBL_TYPE' => 'Type',
 	// Blocks
-	'LBL_TASK_INFORMATION' => 'Task Details',
+	'LBL_TASK_INFORMATION' => 'To Do Details',
+    'LBL_EVENT_INFORMATION'=> 'Event Details',
 
 	//Fields
 	'Subject' => 'Subject',
@@ -46,7 +49,7 @@ $languageStrings = array(
 	//Activity Type picklist values
 	'Call' => 'Call',
 	'Meeting' => 'Meeting',
-	'Task' => 'Task',
+	'Task' => 'To Do',
 
 	//Status picklist values
 	'Planned' => 'Planned',
@@ -61,8 +64,8 @@ $languageStrings = array(
 	'LBL_CHANGE_OWNER' => 'Change Owner',
 
 	'LBL_EVENT' => 'Event',
-	'LBL_TASK' => 'Task',
-	'LBL_TASKS' => 'Tasks',
+	'LBL_TASK' => 'To Do',
+	'LBL_TASKS' => 'To Do',
 
 	'LBL_RECORDS_LIST' => 'List View',
 	'LBL_CALENDAR_VIEW' => 'My Calendar',
@@ -98,19 +101,24 @@ $languageStrings = array(
 	
 	'ICAL_FORMAT' => 'iCal Format',
 	'LBL_LAST_IMPORT_UNDONE'=>'Your Last Import Was Undone',
-	'LBL_UNDO_LAST_IMPORT' => 'Undo Last Import'
-
+	'LBL_UNDO_LAST_IMPORT' => 'Undo Last Import',
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Edit Color',
+	'LBL_ADD_CALENDAR_VIEW' => 'Add Calendar View',
+	'LBL_SELECT_USER_CALENDAR' => 'Select User Calendar',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Select Calendar Color',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Editing Calendar View',
+	'LBL_DELETE_CALENDAR' => 'Delete Calendar',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Select Activity Type',
+	'Tasks' => 'To Do',
 );
 
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK' => 'Add Event/Task',
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar',
-    'LBL_SYNC_BUTTON' => 'Synchronize Now',
-    'LBL_SYNCRONIZING' => 'Synchronizing....',
-    'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
-    'LBL_FIELD_MAPPING' => 'Field Mapping',
-    'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
-    'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
+	'LBL_ADD_EVENT_TASK' => 'Add Event/To Do',
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'To Do is successfully added to your Calendar',
+        'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
+        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',
@@ -161,5 +169,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dec',
 	
 	'LBL_ALL_DAY' => 'All-Day',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Calendar view color updated successfully',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Are you sure you want to delete this Calendar view ?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Calendar View added successfully',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Calendar View deleted successfully',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'No Calendar View to add',
+	'JS_EDIT_CALENDAR' => 'Edit Calendar',
 );

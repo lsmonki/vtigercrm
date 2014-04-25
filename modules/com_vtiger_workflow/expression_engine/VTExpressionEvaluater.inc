@@ -15,7 +15,12 @@ function __vt_add($arr){
 	if(sizeof($arr)==1){
 		return $arr[0];
 	}else{
-		return $arr[0]+$arr[1];
+        if(strlen(substr(strrchr($arr[0], "."), 1))>strlen(substr(strrchr($arr[1], "."), 1))){
+            $maxDigit = strlen(substr(strrchr($arr[0], "."), 1));
+        } else {
+            $maxDigit = strlen(substr(strrchr($arr[1], "."), 1));
+        }
+		return bcadd($arr[0], $arr[1] , $maxDigit);
 	}
 }
 
@@ -23,7 +28,12 @@ function __vt_sub($arr){
 	if(sizeof($arr)==1){
 		return -$arr[0];
 	}else{
-		return $arr[0]-$arr[1];
+        if(strlen(substr(strrchr($arr[0], "."), 1))>strlen(substr(strrchr($arr[1], "."), 1))){
+            $maxDigit = strlen(substr(strrchr($arr[0], "."), 1));
+        } else {
+            $maxDigit = strlen(substr(strrchr($arr[1], "."), 1));
+        }
+		return bcsub($arr[0], $arr[1], $maxDigit);
 	}
 }
 
@@ -79,13 +89,8 @@ function __vt_time_diff($arr) {
 
 		// Added as we need to compare with the values based on the user date format and timezone
 		global $default_timezone;
-		$admin = Users::getActiveAdminUser();
-		$adminTimeZone = $admin->time_zone;
-		@date_default_timezone_set($adminTimeZone);
 
         $time_operand1 = date('Y-m-d H:i:s'); // Current time
-
-		@date_default_timezone_set($default_timezone);
 
         $time_operand2 = $arr[0];
     }
@@ -158,6 +163,30 @@ function __vt_get_date($arr) {
 	}
 }
 
+function __vt_add_time($arr) {
+	if(count($arr) > 1) {
+		$baseTime = $arr[0];
+		$minutes = $arr[1];
+	} else {
+		$baseTime = date('H:i:s');
+		$minutes = $arr[0];
+	}
+	$endTime = strtotime("+$minutes minutes", strtotime($baseTime));
+	return date('H:i:s',$endTime);
+}
+
+function __vt_sub_time($arr) {
+	if(count($arr) > 1) {
+		$baseTime = $arr[0];
+		$minutes = $arr[1];
+	} else {
+		$baseTime = date('H:i:s');
+		$minutes = $arr[0];
+	}
+	$endTime = strtotime("-$minutes minutes", strtotime($baseTime));
+	return date('H:i:s',$endTime);
+}
+
 /** END * */
 class VTFieldExpressionEvaluater{
 	function __construct($expr){
@@ -179,7 +208,9 @@ class VTFieldExpressionEvaluater{
  	            'time_diffdays' => '__vt_time_diffdays',
 				'add_days' => '__vt_add_days',
 				'sub_days' => '__vt_sub_days',
-				'get_date' => '__vt_get_date'
+				'get_date' => '__vt_get_date',
+				'add_time' => '__vt_add_time',
+				'sub_time' => '__vt_sub_time'
 		);
 
 		$this->operations = array_merge($this->functions, $this->operators);

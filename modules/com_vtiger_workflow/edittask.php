@@ -41,7 +41,7 @@ require_once("VTWorkflowUtils.php");
 			$workflowId=$task->workflowId;
 		}else{
 			$workflowId = $request["workflow_id"];
-			$taskClass = $request["task_type"];
+			$taskClass = vtlib_purifyForSql($request["task_type"]);
 			$task = $tm->createTask($taskClass, $workflowId);
 		}
 
@@ -61,10 +61,10 @@ require_once("VTWorkflowUtils.php");
 
 
 		$smarty->assign("workflow", $workflow);
-		$smarty->assign("returnUrl", $request["return_url"]);
+		$smarty->assign("returnUrl", vtlib_purify($request["return_url"]));
 		$smarty->assign("task", $task);
 		$smarty->assign("taskType", $taskClass);
-		$smarty->assign("saveType", $request['save_type']);
+		$smarty->assign("saveType", vtlib_purify($request['save_type']));
 
 		$taskTypeInstance = VTTaskType::getInstanceFromTaskType($taskClass);
 		$taskTemplateClass = $tm->retrieveTemplatePath($module->name, $taskTypeInstance);

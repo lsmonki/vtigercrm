@@ -48,7 +48,8 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Picklist Dependency Setup'   , 
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Set up dependency between picklist values in each module', 
 	'LBL_MENU_EDITOR'              => 'Menu Editor'                 , 
-	'LBL_MENU_DESC'                => 'Customize Menu Sequence'     , 
+	'LBL_MENU_DESC'                => 'Customize Menu Sequence'     ,
+	'LBL_MENU_EDITOR_MESSAGE'		=>'Numarul real de elemente de meniu afi?ate depind de dimensiunea ecranului ?i s-ar putea sa fie mai mica decât elementele selectate.',
 	'EMAILTEMPLATES'               => 'Modele de email-uri'         , 
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Administreaza modele pentru modul Email', 
 	'LBL_COMPANY_DETAILS'          => 'Detalii Companie'            , 
@@ -61,7 +62,6 @@ $languageStrings = array(
 	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Configureaza detaliile serverului plecare a emailurilor', 
 	'INVENTORYTERMSANDCONDITIONS'  => 'Inventar : Termeni & Conditii', 
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Specifica termeni si conditii pentru oferte, comenzi, si facturi', 
-        'LBL_ANNOUNCEMENT'             => 'anunÈ›'                ,
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Administreaza anunturile mari ale companiei', 
 	'LBL_CURRENCY_SETTINGS'        => 'Monede'                      , 
 	'LBL_CURRENCY_DESCRIPTION'     => 'Administreaza monede internationale si rate schimb', 
@@ -121,11 +121,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER'          => 'Outgoing Server'             , // TODO: Review
 	'LBL_OUTGOING_SERVER_DESC'     => 'Configure your Outgoing Mail Server details', // TODO: Review
 	'LBL_DEFAULT'                  => 'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.', // TODO: Review
-	'LBL_OPTIONS1'                 => 'Send emails from your mail server<br>
-					- Enter the SMTP account details (Server Name, User Name, Password) for the same account as entered in the FROM email address.', // TODO: Review
-	'LBL_OPTIONS2'                 => 'Add od1.vtiger.com server as a authorized sender for your domain.<br>
-					- If you prefer to retain the vtiger server as the outgoing server, we recommend that you configure your domain\'s SPF record to include the vtiger server as a valid sender for your domain.
-					  For additonal instruction on setting up SPF record, please email od-support@vtiger.com .', // TODO: Review
+	'LBL_OPTIONS1'                 => '',
+	'LBL_OPTIONS2'                 =>"",
 	'LBL_MAIL_SERVER_SMTP'         => 'Mail Server Settings (SMTP)' , // TODO: Review
 	'LBL_OUTGOING_SERVER_FROM_FIELD' => 'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.', // TODO: Review
 	'LBL_TESTMAILSTATUS'           => 'Test Mail Status : '         , // TODO: Review

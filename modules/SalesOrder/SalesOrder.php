@@ -20,14 +20,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
-require_once('user_privileges/default_module_view.php');
-
-// Account is used to store vtiger_account information.
 class SalesOrder extends CRMEntity {
 	var $log;
 	var $db;
@@ -109,7 +101,7 @@ class SalesOrder extends CRMEntity {
 
 	// For workflows update field tasks is deleted all the lineitems.
 	var $isLineItemUpdate = true;
-	
+
 	/** Constructor Function for SalesOrder class
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of SalesOrder class.
@@ -256,6 +248,9 @@ class SalesOrder extends CRMEntity {
 			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid
 			left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid
 			inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid
+            LEFT JOIN vtiger_invoicecf ON vtiger_invoicecf.invoiceid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_invoicebillads ON vtiger_invoicebillads.invoicebilladdressid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_invoiceshipads ON vtiger_invoiceshipads.invoiceshipaddressid = vtiger_invoice.invoiceid
 			left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 			left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 			where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
@@ -333,17 +328,17 @@ class SalesOrder extends CRMEntity {
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
 		$matrix = $queryPlanner->newDependencyMatrix();
-		$matrix->setDependency('vtiger_crmentitySalesOrder', array('vtiger_usersSalesOrder', 'vtiger_groupsSalesOrder', 'vtiger_lastModifiedBySalesOrder'));		
+		$matrix->setDependency('vtiger_crmentitySalesOrder', array('vtiger_usersSalesOrder', 'vtiger_groupsSalesOrder', 'vtiger_lastModifiedBySalesOrder'));
 		$matrix->setDependency('vtiger_inventoryproductrelSalesOrder', array('vtiger_productsSalesOrder', 'vtiger_serviceSalesOrder'));
 		$matrix->setDependency('vtiger_salesorder',array('vtiger_crmentitySalesOrder', "vtiger_currency_info$secmodule",
-				'vtiger_salesordercf', 'vtiger_potentialRelSalesOrder', 'vtiger_sobillads','vtiger_soshipads', 
+				'vtiger_salesordercf', 'vtiger_potentialRelSalesOrder', 'vtiger_sobillads','vtiger_soshipads',
 				'vtiger_inventoryproductrelSalesOrder', 'vtiger_contactdetailsSalesOrder', 'vtiger_accountSalesOrder',
 				'vtiger_invoice_recurring_info','vtiger_quotesSalesOrder'));
-		
+
 		if (!$queryPlanner->requireTable('vtiger_salesorder', $matrix)) {
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_salesorder","salesorderid", $queryPlanner);
 		if ($queryPlanner->requireTable("vtiger_crmentitySalesOrder",$matrix)){
 			$query .= " left join vtiger_crmentity as vtiger_crmentitySalesOrder on vtiger_crmentitySalesOrder.crmid=vtiger_salesorder.salesorderid and vtiger_crmentitySalesOrder.deleted=0";
@@ -362,6 +357,14 @@ class SalesOrder extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_inventoryproductrelSalesOrder", $matrix)){
 			$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelSalesOrder on vtiger_salesorder.salesorderid = vtiger_inventoryproductrelSalesOrder.id";
+            // To Eliminate duplicates in reports
+            if(($module == 'Products' || $module == 'Services') && $secmodule == "SalesOrder"){
+                if($module == 'Products'){
+                    $query .= " and vtiger_inventoryproductrelSalesOrder.productid = vtiger_products.productid ";    
+                }else if($module == 'Services'){
+                    $query .= " and vtiger_inventoryproductrelSalesOrder.productid = vtiger_service.serviceid "; 
+                }
+            }
 		}
 		if ($queryPlanner->requireTable("vtiger_productsSalesOrder")){
 			$query .= " left join vtiger_products as vtiger_productsSalesOrder on vtiger_productsSalesOrder.productid = vtiger_inventoryproductrelSalesOrder.productid";
@@ -392,6 +395,9 @@ class SalesOrder extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedBySalesOrder")){
 			$query .= " left join vtiger_users as vtiger_lastModifiedBySalesOrder on vtiger_lastModifiedBySalesOrder.id = vtiger_crmentitySalesOrder.modifiedby ";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbySalesOrder")){
+			$query .= " left join vtiger_users as vtiger_createdbySalesOrder on vtiger_createdbySalesOrder.id = vtiger_crmentitySalesOrder.smcreatorid ";
 		}
 		return $query;
 	}
@@ -523,6 +529,81 @@ class SalesOrder extends CRMEntity {
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
 	}
+
+    /**
+	 * Function which will give the basic query to find duplicates
+	 * @param <String> $module
+	 * @param <String> $tableColumns
+	 * @param <String> $selectedColumns
+	 * @param <Boolean> $ignoreEmpty
+	 * @return string
+	 */
+	// Note : remove getDuplicatesQuery API once vtiger5 code is removed
+    function getQueryForDuplicates($module, $tableColumns, $selectedColumns = '', $ignoreEmpty = false) {
+		if(is_array($tableColumns)) {
+			$tableColumnsString = implode(',', $tableColumns);
+		}
+        $selectClause = "SELECT " . $this->table_name . "." . $this->table_index . " AS recordid," . $tableColumnsString;
+
+        // Select Custom Field Table Columns if present
+        if (isset($this->customFieldTable))
+            $query .= ", " . $this->customFieldTable[0] . ".* ";
+
+        $fromClause = " FROM $this->table_name";
+
+        $fromClause .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index";
+
+		if($this->tab_name) {
+			foreach($this->tab_name as $tableName) {
+				if($tableName != 'vtiger_crmentity' && $tableName != $this->table_name && $tableName != 'vtiger_inventoryproductrel') {
+                    if($tableName == 'vtiger_invoice_recurring_info') {
+						$fromClause .= " LEFT JOIN " . $tableName . " ON " . $tableName . '.' . $this->tab_name_index[$tableName] .
+							" = $this->table_name.$this->table_index";
+					}elseif($this->tab_name_index[$tableName]) {
+						$fromClause .= " INNER JOIN " . $tableName . " ON " . $tableName . '.' . $this->tab_name_index[$tableName] .
+							" = $this->table_name.$this->table_index";
+					}
+				}
+			}
+		}
+        $fromClause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+
+        $whereClause = " WHERE vtiger_crmentity.deleted = 0";
+        $whereClause .= $this->getListViewSecurityParameter($module);
+
+		if($ignoreEmpty) {
+			foreach($tableColumns as $tableColumn){
+				$whereClause .= " AND ($tableColumn IS NOT NULL AND $tableColumn != '') ";
+			}
+		}
+
+        if (isset($selectedColumns) && trim($selectedColumns) != '') {
+            $sub_query = "SELECT $selectedColumns FROM $this->table_name AS t " .
+                    " INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t." . $this->table_index;
+            // Consider custom table join as well.
+            if (isset($this->customFieldTable)) {
+                $sub_query .= " LEFT JOIN " . $this->customFieldTable[0] . " tcf ON tcf." . $this->customFieldTable[1] . " = t.$this->table_index";
+            }
+            $sub_query .= " WHERE crm.deleted=0 GROUP BY $selectedColumns HAVING COUNT(*)>1";
+        } else {
+            $sub_query = "SELECT $tableColumnsString $fromClause $whereClause GROUP BY $tableColumnsString HAVING COUNT(*)>1";
+        }
+
+		$i = 1;
+		foreach($tableColumns as $tableColumn){
+			$tableInfo = explode('.', $tableColumn);
+			$duplicateCheckClause .= " ifnull($tableColumn,'null') = ifnull(temp.$tableInfo[1],'null')";
+			if (count($tableColumns) != $i++) $duplicateCheckClause .= " AND ";
+		}
+
+        $query = $selectClause . $fromClause .
+                " LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name . "." . $this->table_index .
+                " INNER JOIN (" . $sub_query . ") AS temp ON " . $duplicateCheckClause .
+                $whereClause .
+                " ORDER BY $tableColumnsString," . $this->table_name . "." . $this->table_index . " ASC";
+        return $query;
+    }
 
 }
 

@@ -38,7 +38,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	public function getCalendarViewUrl() {
 		return 'index.php?module='.$this->get('name').'&view='.$this->getCalendarViewName();
 	}
-	
+
 	/**
 	 * Function to check whether the module is summary view supported
 	 * @return <Boolean> - true/false
@@ -290,6 +290,62 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	}
 
 	/**
+	* To get the lists of sharedids and colors
+	* @param $id --  user id
+	* @returns <Array> $sharedUsers
+	*/
+	public static function getSharedUsersInfoOfCurrentUser($id){
+		$db = PearDatabase::getInstance();
+
+		$query = "SELECT shareduserid,color,visible FROM vtiger_shareduserinfo where userid = ?";
+        $result = $db->pquery($query, array($id));
+        $rows = $db->num_rows($result);
+
+		$sharedUsers = Array();
+        for($i=0; $i<$rows; $i++){
+			$sharedUserId = $db->query_result($result,$i,'shareduserid');
+			$color = $db->query_result($result,$i,'color');
+			$visible = $db->query_result($result,$i,'visible');
+			$sharedUsers[$sharedUserId] = array('visible' => $visible , 'color' => $color);
+        }
+
+		return $sharedUsers;
+	}
+
+	/**
+	* To get the lists of sharedids and colors
+	* @param $id --  user id
+	* @returns <Array> $sharedUsers
+	*/
+	public static function getCalendarViewTypes($id){
+		$db = PearDatabase::getInstance();
+
+		$query = "SELECT * FROM vtiger_calendar_user_activitytypes 
+			INNER JOIN vtiger_calendar_default_activitytypes on vtiger_calendar_default_activitytypes.id=vtiger_calendar_user_activitytypes.defaultid 
+			WHERE vtiger_calendar_user_activitytypes.userid=?";
+        $result = $db->pquery($query, array($id));
+        $rows = $db->num_rows($result);
+
+		$calendarViewTypes = Array();
+        for($i=0; $i<$rows; $i++){
+			$activityTypes = $db->query_result_rowdata($result, $i);
+			$moduleInstance = Vtiger_Module::getInstance($activityTypes['module']);
+			$fieldInstance = Vtiger_Field::getInstance($activityTypes['fieldname'], $moduleInstance);
+			if($fieldInstance) {
+				$fieldLabel = $fieldInstance->label;
+			} else {
+				$fieldLabel = $activityTypes['fieldname'];
+			}
+			if($activityTypes['visible'] == '1') {
+				$calendarViewTypes['visible'][] = array('module'=>$activityTypes['module'], 'fieldname'=>$activityTypes['fieldname'], 'fieldlabel'=>$fieldLabel, 'visible' => $activityTypes['visible'] , 'color' => $activityTypes['color']);
+			} else {
+				$calendarViewTypes['invisible'][] = array('module'=>$activityTypes['module'], 'fieldname'=>$activityTypes['fieldname'], 'fieldlabel'=>$fieldLabel, 'visible' => $activityTypes['visible'] , 'color' => $activityTypes['color']);
+			}
+        }
+		return $calendarViewTypes;
+	}
+
+	/**
 	 *  Function returns the url for Shared Calendar view
 	 * @return <String>
 	 */
@@ -315,7 +371,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	public function insertSharedUsers($currentUserId, $sharedIds, $sharedType = FALSE){
 		$db = PearDatabase::getInstance();
 		foreach ($sharedIds as $sharedId) {
-			if($sharedId != $currentUserId && $sharedId != 1) {
+			if($sharedId != $currentUserId) {
 				$sql = "INSERT INTO vtiger_sharedcalendar VALUES (?,?)";
 				$db->pquery($sql, array($currentUserId, $sharedId));
 			}
@@ -388,12 +444,14 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 			$currentTime = time();
 			$date = date('Y-m-d', strtotime("+$activityReminder seconds", $currentTime));
 			$time = date('H:i',   strtotime("+$activityReminder seconds", $currentTime));
-			$reminderActivitiesResult = "SELECT reminderid, recordid, semodule, date_start, time_start FROM vtiger_activity_reminder_popup
-								INNER JOIN vtiger_crmentity WHERE vtiger_activity_reminder_popup.status = 0
-								AND vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid
+			$reminderActivitiesResult = "SELECT reminderid, recordid FROM vtiger_activity_reminder_popup
+            					INNER JOIN vtiger_activity on vtiger_activity.activityid = vtiger_activity_reminder_popup.recordid
+								INNER JOIN vtiger_crmentity ON vtiger_activity_reminder_popup.recordid = vtiger_crmentity.crmid
+								WHERE vtiger_activity_reminder_popup.status = 0
 								AND vtiger_crmentity.smownerid = ? AND vtiger_crmentity.deleted = 0
 								AND ((DATE_FORMAT(vtiger_activity_reminder_popup.date_start,'%Y-%m-%d') <= ?)
-								AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= ?))";
+								AND (TIME_FORMAT(vtiger_activity_reminder_popup.time_start,'%H:%i') <= ?))
+                                                                AND vtiger_activity.eventstatus <> 'Held' LIMIT 20";
 			$result = $db->pquery($reminderActivitiesResult, array($currentUserModel->getId(), $date, $time));
 			$rows = $db->num_rows($result);
 			for($i=0; $i<$rows; $i++) {
@@ -455,7 +513,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 		}
 		return $settingLinks;
 	}
-	
+
 	/**
 	 * Function to get orderby sql from orderby field
 	 */

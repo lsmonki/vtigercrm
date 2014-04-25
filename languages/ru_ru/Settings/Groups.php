@@ -8,17 +8,17 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transfer ownership'          , // TODO: Review
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Передача права собственности'          , 
 	'SINGLE_Groups'                => 'Группа'                , // KEY 5.x: LBL_GROUP
-	'LBL_TO_OTHER_GROUP'           => 'To Other Group '             , // TODO: Review
+	'LBL_TO_OTHER_GROUP'           => 'Для другой группы'             , 
 	'LBL_ADD_RECORD'               => 'Добавить Группу', // KEY 5.x: LBL_ADD_GROUP_BUTTON
 	'LBL_GROUP_NAME'               => 'Название Группы', 
-	'LBL_GROUP_MEMBERS'            => 'Group Members'               , // TODO: Review
-	'LBL_ADD_USERS_ROLES'          => 'Add Users, Roles...'         , // TODO: Review
-	'LBL_ROLEANDSUBORDINATE'       => 'Role and Subordinates'       , // TODO: Review
-	'RoleAndSubordinates'          => 'Role and Subordinates'       , // TODO: Review
+	'LBL_GROUP_MEMBERS'            => 'Участники группы'               , 
+	'LBL_ADD_USERS_ROLES'          => 'Добавить пользователей, ролей ...'         , 
+	'LBL_ROLEANDSUBORDINATE'       => 'Роль и Подчиненные'       , 
+	'RoleAndSubordinates'          => 'Роль и Подчиненные'       , 
 );
 $jsLanguageStrings = array(
-	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
-	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully'  , // TODO: Review
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Пожалуйста, выберите по крайней мере одного члена для группы', 
+	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Группа успешно удален'  , 
 );

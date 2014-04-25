@@ -65,6 +65,9 @@ $languageStrings = array(
 	'TextArea' => 'Text Area',
 	'Skype'=>'Skype',
 	'Time'=>'Time',
+	
+	//Translation for module
+	'Calendar' => 'هل ل',
 );
 
 $jsLanguageStrings = array(

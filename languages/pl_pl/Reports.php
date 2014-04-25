@@ -30,6 +30,8 @@ $languageStrings = array(
 	'LBL_DUPLICATES_EXIST' => 'Taka nazwa już istnieje',
 	'LBL_FOLDERS_LIST' => 'Lista folderów',
 	'LBL_DENIED_REPORTS' => 'Brak dostępu do Raportów',
+	'LBL_NO_OF_RECORDS' => 'Wszystkich wpisów',
+    'LBL_MORE_RECORDS_TXT'=>'Tylko 1000 rekordy zostały przedstawione poniżej. Proszę wyeksportować, aby zobaczyć wszystkie rekordy',
 	//ListView Actions
 	'LBL_ADD_RECORD' => 'Dodaj Raport',
 	'LBL_ADD_FOLDER' => 'Dodaj Folder',
@@ -76,7 +78,7 @@ $languageStrings = array(
 	'LBL_FIELD_NAMES' => 'Nazwy pól',
 	'LBL_REPORT_CSV' => 'Eksportuj do pliku CSV',
 	'LBL_VIEW_DETAILS' => 'Wyświetl szczegóły',
-	
+
 	//List View Headers
 	'Report Name' => 'Nazwa raportu',
 
@@ -134,7 +136,7 @@ $languageStrings = array(
 	'Emails sent to Organizations' => 'Wiadomości mail wysłane do Kontrahentów',
 	'Emails sent to Leads' => 'Wiadomości mail wysłane do Potencjalnych Klientów',
 	'Emails sent to Vendors' => 'Wiadomości mail wysłane do Dostawców',
-	
+
 	'LBL_PRINT_REPORT' => 'Wydruk z raportu',
 	'LBL_RECORDS' => 'rekordów',
 );

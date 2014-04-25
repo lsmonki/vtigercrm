@@ -82,9 +82,18 @@ $languageStrings = array(
 	'LBL_EXAMPLE_FIELD_NAME' => 'Field',
 	'LBL_NOTIFY_OWNER' => 'notify_owner',
 	'LBL_ANNUAL_REVENUE' => 'annual_revenue',
-	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end"
-
+	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",
+	'LBL_FROM' => 'من',
+	'Optional' => 'اختياري',
+	'LBL_ADD_TASK' => 'مهمة',
+    'Portal Pdf Url' => 'البوابة رابط قوات الدفاع الشعبي',
+    'LBL_ADD_TEMPLATE'  => 'إضافة قالب',
+    'LBL_LINEITEM_BLOCK_GROUP' => 'كتلة لينيتيمس للمجموعة الضريبية',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'كتلة لينيتيمس للضرائب الفردية',
 	
+	
+	//Translation for module
+	'Calendar' => 'هل ل',
 );
 
 $jsLanguageStrings = array(

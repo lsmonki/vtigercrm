@@ -40,7 +40,9 @@
 							<option></option>
 							{foreach item=PROVIDER_MODEL from=$PROVIDERS}
 								{assign var=PROVIDER_NAME value=$PROVIDER_MODEL->getName()}
-								<option value="{$PROVIDER_NAME}" {if $FIELD_VALUE eq $PROVIDER_NAME} selected {/if} data-provider-fields='{ZEND_JSON::encode($PROVIDER_MODEL->getRequiredParams())}'>{vtranslate($PROVIDER_NAME, $QUALIFIED_MODULE_NAME)}</option>
+								<option value="{$PROVIDER_NAME}" {if $FIELD_VALUE eq $PROVIDER_NAME} selected {/if}> 
+                                    {vtranslate($PROVIDER_NAME, $QUALIFIED_MODULE_NAME)} 
+                                </option> 
 							{/foreach}
 						</select>
 					{else if $FIELD_TYPE == 'radio'}
@@ -54,6 +56,12 @@
 				</div>
 			</div>
 			{/foreach}
+            {foreach key=PROVIDER_NAME item=PROVIDER_MODEL from=$PROVIDERS_FIELD_MODELS} 
+                    <div id="{$PROVIDER_NAME}_container" class="providerFields {if $PROVIDER_NAME neq $RECORD_MODEL->get('providertype')} hide {/if}"> 
+                            {assign var=TEMPLATE_NAME value=Settings_SMSNotifier_ProviderField_Model::getEditFieldTemplateName($PROVIDER_NAME)} 
+                            {include file=$TEMPLATE_NAME|@vtemplate_path:$QUALIFIED_MODULE_NAME} 
+                    </div> 
+            {/foreach}
 		</div>
 		{include file='ModalFooter.tpl'|@vtemplate_path:$MODULE}
 	</form>

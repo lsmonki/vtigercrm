@@ -29,9 +29,9 @@
 					</ul>
 				</span>
 				{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
-					<span class="btn-group">
+						<span class="btn-group">
 						<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0}onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
-					</span>
+						</span>
 				{/foreach}
 			</span>
 			<span class="foldersContainer btn-toolbar span4">{include file='ListViewFolders.tpl'|@vtemplate_path:$MODULE}</span>

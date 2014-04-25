@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class Vtiger_MiniList_Dashboard extends Vtiger_IndexAjax_View {
-	
+
 	public function process(Vtiger_Request $request, $widget=NULL) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$viewer = $this->getViewer($request);
@@ -21,12 +21,12 @@ class Vtiger_MiniList_Dashboard extends Vtiger_IndexAjax_View {
 		} else {
 			$widgetId = $request->get('widgetid');
 		}
-		
+
 		$widget = Vtiger_Widget_Model::getInstanceWithWidgetId($widgetId, $currentUser->getId());
-		
+
 		$minilistWidgetModel = new Vtiger_MiniList_Model();
 		$minilistWidgetModel->setWidgetModel($widget);
-		
+
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('MINILIST_WIDGET_MODEL', $minilistWidgetModel);
@@ -37,9 +37,9 @@ class Vtiger_MiniList_Dashboard extends Vtiger_IndexAjax_View {
 			$viewer->view('dashboards/MiniListContents.tpl', $moduleName);
 		} else {
 			$widget->set('title', $minilistWidgetModel->getTitle());
-		
+
 			$viewer->view('dashboards/MiniList.tpl', $moduleName);
 		}
-		
+
 	}
 }

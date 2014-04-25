@@ -88,4 +88,5 @@ $languageStrings = array(
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'Add to PriceBooks',
 	'LBL_CONVERSION_RATE' => 'Conversion Rate',
+    'LBL_PRODUCTSMOD_DISABLED' => 'Enable Products Module to view Products',
 );

@@ -24,11 +24,22 @@
 		<input type="hidden" name="selected_sort_fields" id="selected_sort_fields" value="" />
 		<input type="hidden" name="calculation_fields" id="calculation_fields" value="" />
 		<input type="hidden" name="isDuplicate" value="{$IS_DUPLICATE}" />
+
+		<input type="hidden" name="enable_schedule" value="{$REPORT_MODEL->get('enable_schedule')}">
+		<input type="hidden" name="schtime" value="{$REPORT_MODEL->get('schtime')}">
+		<input type="hidden" name="schdate" value="{$REPORT_MODEL->get('schdate')}">
+		<input type="hidden" name="schdayoftheweek" value={ZEND_JSON::encode($REPORT_MODEL->get('schdayoftheweek'))}>
+		<input type="hidden" name="schdayofthemonth" value={ZEND_JSON::encode($REPORT_MODEL->get('schdayofthemonth'))}>
+		<input type="hidden" name="schannualdates" value={ZEND_JSON::encode($REPORT_MODEL->get('schannualdates'))}>
+		<input type="hidden" name="recipients" value={ZEND_JSON::encode($REPORT_MODEL->get('recipients'))}>
+        <input type="hidden" name="specificemails" value={ZEND_JSON::encode($REPORT_MODEL->get('specificemails'))}>
+		<input type="hidden" name="schtypeid" value="{$REPORT_MODEL->get('schtypeid')}">
+
 		<input type="hidden" class="step" value="2" />
 		<div class="well padding1per contentsBackground">
-			<div class="row-fluid block">
-				<div class="row span"><strong>{vtranslate('LBL_SELECT_COLUMNS',$MODULE)}({vtranslate('LBL_MAX',$MODULE)} 25)</strong></div>
-				<div class="row-fluid row span">
+			<div class="row-fluid block padding1per">
+				<div class="row-fluid padding1per"><strong>{vtranslate('LBL_SELECT_COLUMNS',$MODULE)}({vtranslate('LBL_MAX',$MODULE)} 25)</strong></div>
+				<div class="row-fluid padding1per">
 					<select data-placeholder="{vtranslate('LBL_ADD_MORE_COLUMNS',$MODULE)}" id="reportsColumnsList" class="select2-container span11 columns" multiple="">
 						{foreach key=PRIMARY_MODULE_NAME item=PRIMARY_MODULE from=$PRIMARY_MODULE_FIELDS}
 							{foreach key=BLOCK_LABEL item=BLOCK from=$PRIMARY_MODULE}
@@ -51,18 +62,18 @@
 					</select>
 				</div>
 			</div>
-			<div class="row-fluid block">
-				<div class="row-fluid row span">
+			<div class="row-fluid block padding1per">
+				<div class="row-fluid padding1per">
 					<span class="span6">
 						<strong>{vtranslate('LBL_GROUP_BY',$MODULE)}</strong>
-					</span>	
+					</span>
 					<span class="span6">
 						<strong>{vtranslate('LBL_SORT_ORDER',$MODULE)}</strong>
 					</span>
 				</div>
-				{assign var=ROW_VAL value=1}	
+				{assign var=ROW_VAL value=1}
 				{foreach key=SELECTED_SORT_FIELD_KEY item=SELECTED_SORT_FIELD_VALUE from=$SELECTED_SORT_FIELDS}
-					<div class="row-fluid row span sortFieldRow">
+					<div class="row-fluid padding1per sortFieldRow">
 						{include file='RelatedFields.tpl'|@vtemplate_path:$MODULE ROW_VAL=$ROW_VAL}
 						{assign var=ROW_VAL value=($ROW_VAL+1)}
 					</div>
@@ -70,16 +81,16 @@
 				{assign var=SELECTED_SORT_FEILDS_ARRAY value=$SELECTED_SORT_FIELDS}
 				{assign var=SELECTED_SORT_FIELDS_COUNT value=count($SELECTED_SORT_FEILDS_ARRAY)}
 				{while $SELECTED_SORT_FIELDS_COUNT lt 3 }
-					<div class="row-fluid row span sortFieldRow">
+					<div class="row-fluid padding1per sortFieldRow">
 						{include file='RelatedFields.tpl'|@vtemplate_path:$MODULE ROW_VAL=$ROW_VAL}
 						{assign var=ROW_VAL value=($ROW_VAL+1)}
 						{assign var=SELECTED_SORT_FIELDS_COUNT value=($SELECTED_SORT_FIELDS_COUNT+1)}
 					</div>
 				{/while}
 			</div>
-			<div class="row-fluid block">
-				<div class="row span"><strong>{vtranslate('LBL_CALCULATIONS',$MODULE)}</strong></div>
-				<div class="span11">
+			<div class="row-fluid block padding1per">
+				<div class="padding1per"><strong>{vtranslate('LBL_CALCULATIONS',$MODULE)}</strong></div>
+				<div class="padding1per">
 					<table class="table table-bordered CalculationFields" width="100%">
 						<thead>
 							<tr class="calculationHeaders">
@@ -100,24 +111,26 @@
 								{assign var=fieldNameArray value=array_slice($FIELDNAME_EXPLODE, 1)}
 								{assign var=fieldName value=implode('_',$fieldNameArray)}
 								<tr class="calculationFieldRow">
-									<td>{vtranslate($CALCULATION_FIELDS_MODULE_LABEL,$MODULE)}-{vtranslate($CALCULATION_FIELD,$MODULE)}</td>
+									<td>{vtranslate($CALCULATION_FIELDS_MODULE_LABEL,$MODULE)}-{vtranslate($CALCULATION_FIELD,$CALCULATION_FIELDS_MODULE_LABEL)}</td>
 									{foreach item=FIELD_OPERATION_VALUE from=$FIELD_OPERATION_VALUES}
 										{assign var=FIELD_CALCULATION_VALUE value="cb:$tableName:$columnName:$fieldName"|cat:'_'|cat:$FIELD_OPERATION_VALUE}
 										<td width="15%">
 											<input class="calculationType" type="checkbox" value="{$FIELD_CALCULATION_VALUE}" {if !empty($SELECTED_CALCULATION_FIELDS) && in_array($FIELD_CALCULATION_VALUE,$SELECTED_CALCULATION_FIELDS)} checked=""{/if} />
 										</td>
-									{/foreach}	
+									{/foreach}
 								</tr>
-							{/foreach}	
+							{/foreach}
 						{/foreach}
 					</table>
 				</div>
 			</div>
-		</div>	
+		</div>
 		<div class="pull-right block">
 			<button type="button" class="btn btn-danger backStep"><strong>{vtranslate('LBL_BACK',$MODULE)}</strong></button>&nbsp;&nbsp;
 			<button type="submit" class="btn btn-success nextStep"><strong>{vtranslate('LBL_NEXT',$MODULE)}</strong></button>&nbsp;&nbsp;
 			<a class="cancelLink" onclick="window.history.back()">{vtranslate('LBL_CANCEL',$MODULE)}</a>
-		</div>				
+		<br>
+		</div>
+		<br><br>
 	</form>
-{/strip}	
+{/strip}

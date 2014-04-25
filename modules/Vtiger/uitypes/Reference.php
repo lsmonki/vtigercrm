@@ -74,5 +74,14 @@ class Vtiger_Reference_UIType extends Vtiger_Base_UIType {
 		}
 		return '';
 	}
+    
+    public function getListSearchTemplateName() {
+        $fieldModel = $this->get('field');
+        $fieldName = $fieldModel->getName();
+        if($fieldName == 'modifiedby'){
+            return 'uitypes/OwnerFieldSearchView.tpl';
+        }
+        return parent::getListSearchTemplateName();
+    }
 
 }

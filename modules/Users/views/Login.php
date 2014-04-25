@@ -35,10 +35,5 @@ class Users_Login_View extends Vtiger_View_Controller {
 		
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->view('Login.tpl', 'Users');
-	}
-	
-	function postProcess(Vtiger_Request $request) {
-		$viewer = $this->getViewer($request);
-		$viewer->view('IndexPostProcess.tpl');
-	}
+}
 }

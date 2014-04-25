@@ -33,7 +33,9 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 
 			$db->pquery('DELETE FROM vtiger_report WHERE reportid = ?', array($reportId));
 
-			$db->pquery('DELETE FROM vtiger_scheduled_reports WHERE reportid = ?', array($reportId));
+			$db->pquery('DELETE FROM vtiger_schedulereports WHERE reportid = ?', array($reportId));
+
+            $db->pquery('DELETE FROM vtiger_reporttype WHERE reportid = ?', array($reportId));
 
 			$result = $db->pquery('SELECT * FROM vtiger_homereportchart WHERE reportid = ?',array($reportId));
 			$numOfRows = $db->num_rows($result);
@@ -115,4 +117,12 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 	function getAddFolderUrl() {
 		return 'index.php?module='.$this->get('name').'&view=EditFolder';
 	}
+    
+    /**
+     * Function to check if the extension module is permitted for utility action
+     * @return <boolean> true
+     */
+    public function isUtilityActionEnabled() {
+        return true;
+    }
 }

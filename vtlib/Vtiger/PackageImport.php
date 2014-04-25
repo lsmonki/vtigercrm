@@ -273,7 +273,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				Array(
 					// Include only file/folders that need to be extracted
 					'include' => Array('templates', "modules/$module", 'cron', 'languages',
-						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
+						'settings/actions', 'settings/views', 'settings/models', 'settings/templates',
+						"$module.png"),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
 				),
 				// What files needs to be renamed?
@@ -288,10 +289,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'settings/models' => "modules/Settings/$module/models",
 
 					// Settings templates folder
-					'settings/templates' => "layouts/vlayout/modules/Settings/$module"
+					'settings/templates' => "layouts/vlayout/modules/Settings/$module",
+					//module images
+					'images' => "layouts/vlayout/skins/images/$module",
 				)
 			);
-			
+
 			if($unzip->checkFileExistsInRootFolder("$module.png")) {
 				$unzip->unzip("$module.png", "layouts/vlayout/skins/images/$module.png");
 			}

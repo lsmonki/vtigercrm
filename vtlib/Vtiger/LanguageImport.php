@@ -121,7 +121,7 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 						$vtiger6format = true;
 						$dounzip = true;
 					}
-				}
+				} 
 
 				if($dounzip) {
 					// vtiger6 format

@@ -120,13 +120,24 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
             $queryGenerator->addCondition($folderKey,$folderValue,'e');
         }
 
+        $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
+
 		$searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
 		$operator = $this->get('operator');
 		if(!empty($searchKey)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
-
+        
         $orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 
@@ -147,7 +158,12 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
                 //$queryGenerator->whereFields[] = $orderByFieldName;
             }
         }
-
+		if (!empty($orderBy) && $orderBy === 'smownerid') { 
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+			if ($fieldModel->getFieldDataType() == 'owner') { 
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+			} 
+		} 
 		$listQuery = $this->getQuery();
 
 		$sourceModule = $this->get('src_module');
@@ -189,6 +205,10 @@ class Documents_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
+        if(empty($viewid)){
+            $viewid = $pagingModel->get('viewid');
+        }
+        $_SESSION['lvs'][$moduleName][$viewid]['start'] = $pagingModel->get('page');
 		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
 
 		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);

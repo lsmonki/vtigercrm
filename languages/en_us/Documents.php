@@ -65,7 +65,6 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'Exceeded maximum upload size',
 	'JS_NEW_FOLDER' => 'New Folder',
 	'JS_MOVE_DOCUMENTS' => 'Move Documents',
 	//Move documents confirmation message

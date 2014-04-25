@@ -15,15 +15,12 @@
 	</div>
 	<hr>
 
-	<div class="contents row-fluid">
-		<div class="span11 padding10">
-			<textarea class="input-xxlarge announcementContent textarea-autosize" rows="3" placeholder="{vtranslate('LBL_ENTER_ANNOUNCEMENT_HERE', $QUALIFIED_MODULE)}" >{$ANNOUNCEMENT->get('announcement')}</textarea>
-		</div>
-		<div class="row-fluid">
-			<div class="span11 padding1per">
-				<button class="btn btn-success pull-right saveAnnouncement hide"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
-			</div>
-		</div>
-	</div>
+    <div class="contents row-fluid">
+        <textarea class="announcementContent textarea-autosize boxSizingBorderBox" rows="3" placeholder="{vtranslate('LBL_ENTER_ANNOUNCEMENT_HERE', $QUALIFIED_MODULE)}" style="width:100%">{$ANNOUNCEMENT->get('announcement')}</textarea>
+        <div class="row-fluid textAlignCenter">
+			<br>
+            <button class="btn btn-success saveAnnouncement hide"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
+        </div>
+    </div>
 </div>
 {/strip}

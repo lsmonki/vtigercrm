@@ -44,9 +44,13 @@
 								</button>
 								<ul class="dropdown-menu pull-right">
 									{foreach item=DETAIL_VIEW_LINK from=$DETAILVIEW_LINKS['DETAILVIEW']}
+									{if $DETAIL_VIEW_LINK->getLabel() eq ""} 
+										<li class="divider"></li>	
+									{else}
 									<li id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
 										<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
 									</li>
+									{/if}
 									{/foreach}
 								</ul>
 							</span>
@@ -76,7 +80,7 @@
 			{/if}
 		</div>
 		<div class="detailViewInfo row-fluid">
-			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if} details">
+			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if} {if !empty($DETAILVIEW_LINKS['DETAILVIEWTAB']) || !empty($DETAILVIEW_LINKS['DETAILVIEWRELATED']) } details {/if}">
 				<form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
 					<div class="contents">
 {/strip}

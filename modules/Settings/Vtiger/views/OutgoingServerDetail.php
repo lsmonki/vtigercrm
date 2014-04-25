@@ -17,6 +17,7 @@ class Settings_Vtiger_OutgoingServerDetail_View extends Settings_Vtiger_Index_Vi
         
         $viewer->assign('MODEL',$systemDetailsModel);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedName);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
         $viewer->view('OutgoingServerDetail.tpl',$qualifiedName);
     }
 	

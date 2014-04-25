@@ -15,10 +15,12 @@ class ModComments_DetailAjax_View extends Vtiger_IndexAjax_View {
 		$moduleName = $request->getModule();
 		$recordModel = ModComments_Record_Model::getInstanceById($record);
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+        $modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
 		
 		$viewer = $this->getViewer($request);
 		$viewer->assign('CURRENTUSER', $currentUserModel);
 		$viewer->assign('COMMENT', $recordModel);
+        $viewer->assign('COMMENTS_MODULE_MODEL', $modCommentsModel);
 		echo $viewer->view('Comment.tpl', $moduleName, true);
 	}
 }

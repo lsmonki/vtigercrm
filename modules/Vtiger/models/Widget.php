@@ -167,9 +167,14 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 			$db->pquery('INSERT INTO vtiger_module_dashboard_widgets(linkid, userid, filterid, title, data) VALUES(?,?,?,?,?)',
 					array($this->get('linkid'), $this->get('userid'), $this->get('filterid'), $this->get('title'), Zend_Json::encode($this->get('data'))));
 			$this->set('id', $db->getLastInsertID());
-		} else {
-			$this->set('id', $db->query_result($result, 0, 'id'));
+		} else if($this->has('data')){
+			$db->pquery('INSERT INTO vtiger_module_dashboard_widgets(linkid, userid, filterid, title, data) VALUES(?,?,?,?,?)',
+					array($this->get('linkid'), $this->get('userid'), $this->get('filterid'), $this->get('title'), Zend_Json::encode($this->get('data'))));
+			$this->set('id', $db->getLastInsertID());
 		}
+        else {
+            $this->set('id', $db->query_result($result, 0, 'id'));
+        }
 	}
 
 	/**

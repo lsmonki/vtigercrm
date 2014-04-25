@@ -28,7 +28,13 @@ class Contacts_Edit_View extends Vtiger_Edit_View {
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
 
 		$salutationFieldModel = Vtiger_Field_Model::getInstance('salutationtype', $recordModel->getModule());
-		$salutationFieldModel->set('fieldvalue', $recordModel->get('salutationtype'));
+                //Fix for opensource ticket (http://redmine.vtiger.in/issues/20423)
+		if(!empty($request->get('salutationtype'))){ 
+                    $salutationFieldModel->set('fieldvalue', $request->get('salutationtype')); 
+                } 
+                else{ 
+                    $salutationFieldModel->set('fieldvalue', $recordModel->get('salutationtype')); 
+                } 
 		$viewer->assign('SALUTATION_FIELD_MODEL', $salutationFieldModel);
 
 		parent::process($request);

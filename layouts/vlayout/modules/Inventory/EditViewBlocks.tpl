@@ -28,16 +28,20 @@
 		<div class="contentHeader row-fluid">
 		{assign var=SINGLE_MODULE_NAME value='SINGLE_'|cat:$MODULE}
 		{if $RECORD_ID neq ''}
-			<h3 title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</h3>
-            <hr>
+            <div class="span6">
+                <h3 title="{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} {$RECORD_STRUCTURE_MODEL->getRecordName()}">{vtranslate('LBL_EDITING', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)} - {$RECORD_STRUCTURE_MODEL->getRecordName()}</h3>
+            </div>
         {else}
-			<h3>{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</h3>
-            <hr>
+            <div class="span6">
+                <h3>{vtranslate('LBL_CREATING_NEW', $MODULE)} {vtranslate($SINGLE_MODULE_NAME, $MODULE)}</h3>
+            </div>
 		{/if}
-			<span class="pull-right">
-				<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
-				<a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
-			</span>
+            <div class="span6">
+                <div class="pull-right">
+                    <button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $MODULE)}</strong></button>
+                    <a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+                </div>
+            </div>
 		</div>
 		{foreach key=BLOCK_LABEL item=BLOCK_FIELDS from=$RECORD_STRUCTURE name="EditViewBlockLevelLoop"}
 			{if $BLOCK_FIELDS|@count lte 0}{continue}{/if}
@@ -165,6 +169,10 @@
 					<td class="{$WIDTHTYPE}"></td><td class="{$WIDTHTYPE}"></td>
 				{/if}
 			{/foreach}
+			{* adding additional column for odd number of fields in a block *}
+			{if $BLOCK_FIELDS|@end eq true and $BLOCK_FIELDS|@count neq 1 and $COUNTER eq 1}
+				<td class="fieldLabel {$WIDTHTYPE}"></td><td class="{$WIDTHTYPE}"></td>
+			{/if}
 			</tr>
 			</table>
 			<br>

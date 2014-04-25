@@ -501,8 +501,8 @@ class Settings_Profiles_Record_Model extends Settings_Vtiger_Record_Model {
 		$actionPermissions = array();
 		$actionPermissions = $permissions['actions'];
 		$actionEnabled = false;
-		if($moduleModel->isEntityModule()) {
-			if($actionPermissions) {
+		if($moduleModel->isEntityModule() || $moduleModel->isUtilityActionEnabled()) {
+			if($actionPermissions || $moduleModel->isUtilityActionEnabled()) {
 				$actionIdsList = Vtiger_Action_Model::$standardActions;
 				unset($actionIdsList[3]);
 				$availableActionIds = array_keys($actionIdsList);

@@ -228,4 +228,54 @@
 		    </span>
 		</td>
 	    </tr>
+		{if $MODULE_NAME eq 'Invoice' or $MODULE_NAME eq 'PurchaseOrder'}
+        <tr>
+            <td width="83%">
+                {if $MODULE_NAME eq 'Invoice'}
+                    <span class="pull-right">
+                        <b>{vtranslate('LBL_RECEIVED',$MODULE_NAME)}</b>
+                    </span>
+                {else}
+                    <span class="pull-right">
+                        <b>{vtranslate('LBL_PAID',$MODULE_NAME)}</b>
+                    </span>
+                {/if}
+            </td>
+
+            <td>
+                {if $MODULE_NAME eq 'Invoice'}
+                    <span class="pull-right">
+                        {if $RECORD->getDisplayValue('received')}
+							{$RECORD->getDisplayValue('received')}
+                        {else}
+                            0.00
+                        {/if}
+                    </span>
+                {else}
+                    <span class="pull-right">
+                        {if $RECORD->getDisplayValue('paid')}
+							{$RECORD->getDisplayValue('paid')}
+                        {else}
+                            0.00
+                        {/if}
+                    </span>
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <td width="83%">
+                <span class="pull-right">
+                    <b>{vtranslate('LBL_BALANCE',$MODULE_NAME)}</b>
+                </span>
+            </td>
+            <td>
+                <span class="pull-right">
+                    {if $RECORD->getDisplayValue('balance')}
+						{$RECORD->getDisplayValue('balance')}
+                    {else}0.00
+                    {/if}
+                </span>
+            </td>
+        </tr>
+        {/if}
 	</table>

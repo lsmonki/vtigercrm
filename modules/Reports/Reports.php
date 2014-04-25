@@ -152,7 +152,7 @@ class Reports extends CRMEntity{
 				// Update subordinate user information for re-use
 				VTCacheUtils::updateReport_SubordinateUsers($reportid, $subordinate_users);
 
-				$result = $adb->pquery($ssql, $params);
+                                $result = $adb->pquery($ssql, $params);
 				if($result && $adb->num_rows($result)) {
 					$reportmodulesrow = $adb->fetch_array($result);
 
@@ -183,7 +183,7 @@ class Reports extends CRMEntity{
 			} else {
 				if($_REQUEST['mode'] != 'ajax')
 				{
-					include('modules/Vtiger/header.php');
+//					include('modules/Vtiger/header.php');
 				}
 				echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 				echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
@@ -232,7 +232,7 @@ class Reports extends CRMEntity{
 		global $adb, $current_user, $old_related_modules;
 
 		$restricted_modules = array('Events','Webmails');
-		$restricted_blocks = array('LBL_IMAGE_INFORMATION','LBL_COMMENTS','LBL_COMMENT_INFORMATION');
+		$restricted_blocks = array('LBL_COMMENTS','LBL_COMMENT_INFORMATION');
 
 		$this->module_id = array();
 		$this->module_list = array();
@@ -507,7 +507,7 @@ class Reports extends CRMEntity{
 			if ($orderBy) {
 				$sql .= " ORDER BY $orderBy $sortBy";
 			}
-			$sql .= " LIMIT $startIndex, $pageLimit";
+			$sql .= " LIMIT $startIndex,".($pageLimit+1);
 		}
 		$query = $adb->pquery("select userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'",array());
 		$subordinate_users = Array();
@@ -529,6 +529,7 @@ class Reports extends CRMEntity{
 				$report_details ['state'] = $report["state"];
 				$report_details ['description'] = $report["description"];
 				$report_details ['reportname'] = $report["reportname"];
+                $report_details ['reporttype'] = $report["reporttype"];
 				$report_details ['sharingtype'] = $report["sharingtype"];
 				if($is_admin==true || in_array($report["owner"],$subordinate_users) || $report["owner"]==$current_user->id)
 					$report_details ['editable'] = 'true';
@@ -575,7 +576,7 @@ class Reports extends CRMEntity{
 		foreach($this->module_list[$module] as $key=>$value) {
 			$temp = $allColumnsListByBlocks[$key];
 			$this->fixGetColumnsListbyBlockForInventory($module, $key, $temp);
-					
+
 			if (!empty($ret_module_list[$module][$value])) {
 				if (!empty($temp)) {
 					$ret_module_list[$module][$value] = array_merge($ret_module_list[$module][$value], $temp);
@@ -672,13 +673,13 @@ class Reports extends CRMEntity{
 	 */
 
 	function getColumnsListbyBlock($module,$block,$group_res_by_block=false)
-	{	
+	{
 		global $adb;
 		global $log;
 		global $current_user;
 
 		if(is_string($block)) $block = explode(",", $block);
-		$skipTalbes = array('vtiger_emaildetails','vtiger_attachments');  
+		$skipTalbes = array('vtiger_emaildetails','vtiger_attachments');
 
 		$tabid = getTabid($module);
 		if ($module == 'Calendar') {
@@ -729,7 +730,7 @@ class Reports extends CRMEntity{
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
 			$blockid = $adb->query_result($result, $i, "block");
-			
+
 			//Here we Changing the displaytype of the field. So that its criteria will be displayed correctly in Reports Advance Filter.
 			$fieldtypeofdata=ChangeTypeOfData_Filter($fieldtablename,$fieldcolname,$fieldtypeofdata);
 
@@ -759,7 +760,7 @@ class Reports extends CRMEntity{
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			$optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;
-			
+
 			$adv_rel_field_tod_value = '$'.$module.'#'.$fieldname.'$'."::".getTranslatedString($module,$module)." ".getTranslatedString($fieldlabel,$module);
 			if (!is_array($this->adv_rel_fields[$fieldtypeofdata]) ||
 					!in_array($adv_rel_field_tod_value, $this->adv_rel_fields[$fieldtypeofdata])) {
@@ -767,7 +768,7 @@ class Reports extends CRMEntity{
 			}
 			//added to escape attachments fields in Reports as we have multiple attachments
             if($module == 'HelpDesk' && $fieldname =='filename') continue;
-			
+
 			if (is_string($block) || $group_res_by_block == false) {
 				$module_columnlist[$optionvalue] = $fieldlabel;
 			} else {
@@ -779,10 +780,10 @@ class Reports extends CRMEntity{
 		}
 		return $module_columnlist;
 	}
-	
+
 	function fixGetColumnsListbyBlockForInventory($module, $blockid, &$module_columnlist) {
 		global $log;
-		
+
 		$blockname = getBlockName($blockid);
 		if($blockname == 'LBL_RELATED_PRODUCTS' && ($module=='PurchaseOrder' || $module=='SalesOrder' || $module=='Quotes' || $module=='Invoice')){
 			$fieldtablename = 'vtiger_inventoryproductrel';
@@ -1404,7 +1405,7 @@ function getEscapedColumns($selectedfields)
 			while($relcriteriarow = $adb->fetch_array($result)) {
 				$columnIndex = $relcriteriarow["columnindex"];
 				$criteria = array();
-				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"]);
+				$criteria['columnname'] = $relcriteriarow["columnname"];
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = $relcriteriarow["value"];
 				$col = explode(":",$relcriteriarow["columnname"]);
@@ -1444,7 +1445,7 @@ function getEscapedColumns($selectedfields)
 					}
 					$advfilterval = implode(",",$val);
 				}
-				
+
 				//In vtiger6 report filter conditions, if the value has "(double quotes) then it is failed.
 				$criteria['value'] = Vtiger_Util_Helper::toSafeHTML(decode_html($advfilterval));
 				$criteria['column_condition'] = $relcriteriarow["column_condition"];

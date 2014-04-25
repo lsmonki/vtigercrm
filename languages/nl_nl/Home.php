@@ -21,4 +21,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'Mijn recente FAQs'           , 
 	'UA'                           => 'Nieuwe Afspraken'            , 
 	'PA'                           => 'Afwachtende Afspraken'       , 
+        'Home'                         => 'Huis'                        ,
 );

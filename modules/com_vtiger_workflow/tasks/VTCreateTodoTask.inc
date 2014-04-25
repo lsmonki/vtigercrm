@@ -50,12 +50,15 @@ class VTCreateTodoTask extends VTTask{
 		}
 		$time = explode(' ',$baseDate);
 		if(count($time) < 2) {
-			$time[] = date('H:i');
+            $timeWithSec = Vtiger_Time_UIType::getTimeValueWithSeconds($this->time);
+            $dbInsertDateTime = DateTimeField::convertToDBTimeZone($baseDate.' '.$timeWithSec);
+            $time = $dbInsertDateTime->format('H:i:s');
+		} else {
+			$time = $time[1];
 		}
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
-		$date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*($this->directions=='Before'?-1:1));
-
+        $date = strftime('%Y-%m-%d', $baseDate+$this->days*24*60*60*(strtolower($this->direction)=='before'?-1:1));
 		// Added to check if the user/group is active
 		if(!empty($this->assigned_user_id)) {
 			$userExists = $adb->pquery('SELECT 1 FROM vtiger_users WHERE id = ? AND status = ?', array($this->assigned_user_id, 'Active'));
@@ -78,12 +81,12 @@ class VTCreateTodoTask extends VTTask{
 			'taskpriority'=>$this->priority,
 			'taskstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
-			'time_start'=> $time[1],
+			'time_start'=> $time,
 			'sendnotification'=>($this->sendNotification!='' && $this->sendNotification!='N')?
 					true: false,
 			'date_start'=>$date,
 			'due_date'=>$date,
-			'visibility'=>'all',
+			'visibility'=>'Private',
 			'eventstatus'=>''
 		);
 		$moduleName = $entityData->getModuleName();
@@ -111,7 +114,7 @@ class VTCreateTodoTask extends VTTask{
 		$entityIdDetails = vtws_getIdComponents($id);
 
 		relateEntities(CRMEntity::getInstance($moduleName), $moduleName, $entityIdDetails[1], 'Calendar', $todoIdDetails[1]);
-		
+
 		global $current_user;
 		$current_user = $this->originalUser;
 	}

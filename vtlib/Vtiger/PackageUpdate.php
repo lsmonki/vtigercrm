@@ -50,7 +50,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
                     Array(// Templates folder to be renamed while copying
 						'templates' => "layouts/vlayout/modules/$module",
 
-						// Cron folder
+					// Cron folder
 						'cron' => "cron/modules/$module",
 
 						// Settings folder
@@ -60,8 +60,8 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 
 						// Settings templates folder
 						'settings/templates' => "layouts/vlayout/modules/Settings/$module"
-				)
-			);
+                    )   
+            );
 
             // If data is not yet available
             if(empty($this->_modulexml)) {

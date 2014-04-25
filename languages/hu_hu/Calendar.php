@@ -8,8 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Feladat'                     , 
-	'LBL_ADD_TASK'                 => 'Feladat hozzáadása'        , 
+	'SINGLE_Calendar'              => 'To Do'                     , 
+	'LBL_ADD_TASK'                 => 'Add To Do'        , 
 	'LBL_ADD_EVENT'                => 'Esemény hozzáadása'       , 
 	'LBL_RECORDS_LIST'             => 'Lista nézet'                , 
 	'LBL_EVENTS'                   => 'Események'                  , 
@@ -21,8 +21,9 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
-	'LBL_EVENT_OR_TASK'            => 'Esemény / Feladat'                ,
-	'LBL_TASK_INFORMATION'         => 'Feladatok'                   , 
+	'LBL_EVENT_OR_TASK'            => 'Esemény / To Do'                ,
+	'LBL_TASK_INFORMATION'         => 'To Do információ'                   , 
+    'LBL_EVENT_INFORMATION'        => 'esemény részletei'           ,
 	'Subject'                      => 'Tárgy'                      , 
 	'Start Date & Time'            => 'Kezdés dátuma és ideje'   , 
 	'Activity Type'                => 'Aktivitás típus'           , 
@@ -35,7 +36,7 @@ $languageStrings = array(
 	'LBL_ADDED_CALENDARS'          => 'Added Calendars'             , // TODO: Review
 	'Call'                         => 'Hívás'                     , 
 	'Meeting'                      => 'Találkozó'                 , 
-	'Task'                         => 'Task'                        , // TODO: Review
+	'Task'                         => 'To Do'                        , // TODO: Review
 	'Planned'                      => 'Tervezett'                   , 
 	'Completed'                    => 'Kész'                       , 
 	'Pending Input'                => 'Információra várva'       , 
@@ -44,7 +45,8 @@ $languageStrings = array(
 	'Medium'                       => 'Közepes'                    , 
 	'LBL_CHANGE_OWNER'             => 'Tulajdonos módosítása'    , 
 	'LBL_EVENT'                    => 'Esemény'                    , 
-	'LBL_TASK'                     => 'Feladat'                     , 
+	'LBL_TASK'                     => 'To Do'                     , 
+	'LBL_TASKS' => 'To Do',
 	'LBL_CALENDAR_VIEW'            => 'Naptár nézet'              , 
 	'LBL_SHARED_CALENDAR'          => 'Shared Calendar'             , // TODO: Review
 	'LBL_DAY0'                     => 'Sunday'                      , // TODO: Review
@@ -62,9 +64,21 @@ $languageStrings = array(
 	'Weekly'                       => 'Week(s)'                     , // TODO: Review
 	'Monthly'                      => 'Month(s)'                    , // TODO: Review
 	'Yearly'                       => 'Year'                        , // TODO: Review
+        'LBL_DEFAULT_STATUS_TYPE'      => 'Alapértelmezett Status & Type',
+        'LBL_STATUS'                   => '�?llapot'                      ,
+        'LBL_TYPE'                     => 'Type',
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Szín szerkesztése',
+	'LBL_ADD_CALENDAR_VIEW' => 'Add Calendar View',
+	'LBL_SELECT_USER_CALENDAR' => 'Válassza ki a felhasználó naptár',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Válassza a Naptár Color',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Szerkesztése Calendar View',
+	'LBL_DELETE_CALENDAR' => 'Törlés naptár',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Válassza ki a tevékenység típusa',
+	'Tasks' => 'Teendők',
 );
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK'           => 'Esemény / Feladat hozzáadása', 
+	'LBL_ADD_EVENT_TASK'           => 'Esemény / To Do', 
 	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', // TODO: Review
 	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
 	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
@@ -122,5 +136,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dec',
 	
 	'LBL_ALL_DAY' => 'All-Day',
+	
+	'Mobile Call' => 'Mobil hívás',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Naptár színes sikeresen frissítve',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Biztos benne, hogy törli ezt a Naptár nézet?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Naptár nézet sikeresen hozzáadva',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Naptár nézet sikeresen törölve',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Nem naptár nézet, hogy adjunk',
+	'JS_EDIT_CALENDAR' => 'Szerkesztés naptár',
 );

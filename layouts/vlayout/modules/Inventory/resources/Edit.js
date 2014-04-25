@@ -32,6 +32,8 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	//will be having class which is used to identify the rows
 	rowClass : 'lineItemRow',
+    
+    prevSelectedCurrencyConversionRate : false,
 
 	//Will have the mapping of address fields based on the modules
 	addressFieldsMapping : {'Contacts' :
@@ -81,7 +83,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 								'ship_country' : 'country'
 								}
 							},
-							
+
 	//Address field mapping between modules specific for billing and shipping
 	addressFieldsMappingBetweenModules:{
 								'AccountsBillMap' : {
@@ -116,9 +118,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 									'ship_code' : 'otherzip',
 									'ship_country' : 'othercountry'
 									}
-		
+
 	},
-							
+
 	//Address field mapping within module
 	addressFieldsMappingInModule : {
 										'bill_street':'ship_street',
@@ -243,8 +245,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	},
 
 	setListPriceValue : function(lineItemRow, listPriceValue) {
-		var listPrice = parseFloat(listPriceValue).toFixed(2);
-		lineItemRow.find('.listPrice').val(listPrice)
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
+		var listPrice = parseFloat(listPriceValue).toFixed(numberOfDecimal);
+		lineItemRow.find('.listPrice').val(listPrice);
 		return this;
 	},
 
@@ -378,7 +381,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	getFinalDiscountTotal : function() {
 		return parseFloat(jQuery('#discountTotal_final').text());
 	},
-	
+
 	setGroupTaxTotal : function(groupTaxTotalValue) {
 		jQuery('#tax_final').text(groupTaxTotalValue);
 	},
@@ -393,12 +396,13 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 
 	setShippingAndHandlingTaxTotal : function() {
 		var shippingTotal = jQuery('.shippingTaxTotal');
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var shippingFinalTaxTotal = 0;
 		jQuery.each(shippingTotal,function(index,domElement){
 			var totalVal = parseFloat(jQuery(domElement).val());
 			shippingFinalTaxTotal += totalVal;
 		});
-		shippingFinalTaxTotal = shippingFinalTaxTotal.toFixed(2);
+		shippingFinalTaxTotal = shippingFinalTaxTotal.toFixed(numberOfDecimal);
 		jQuery('#shipping_handling_tax').text(shippingFinalTaxTotal);
 		return this;
 	},
@@ -512,7 +516,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
     getTaxDiv: function(taxObj,parentRow){
 		var rowNumber = jQuery('input.rowNumber',parentRow).val();
 		var loopIterator = 1;
-		var taxDiv = '<div class="taxUI hide" id="tax_div'+rowNumber+'">'+
+		var taxDiv = '<div class="taxUI validCheck hide" id="tax_div'+rowNumber+'">'+
 			'<table width="100%" border="0" cellpadding="5" cellspacing="0" class="table table-nobordered popupTable" id="tax_table'+rowNumber+'">'+
 			   '<tr>'+
 					'<th id="tax_div_title'+rowNumber+'" align="left" ><b>Set Tax for :</b></th>'+
@@ -524,7 +528,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				   var taxInfo = taxObj[taxName]
 				   taxDiv += '<tr>'+
 					'<td>'+
-					'<input type="text" name="'+taxName+'_percentage'+rowNumber+'" id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.percentage+'" class="smallInputBox taxPercentage">&nbsp;%'+
+					'<input type="text" name="'+taxName+'_percentage'+rowNumber+'" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" id="'+taxName+'_percentage'+rowNumber+'" value="'+taxInfo.percentage+'" class="smallInputBox taxPercentage">&nbsp;%'+
 					'</td>'+
 					'<td><div class="textOverflowEllipsis">'+taxInfo.label+'</div></td> '+
 					'<td>'+
@@ -585,6 +589,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var recordData = responseData[id];
 			var selectedName = recordData.name;
 			var unitPrice = recordData.listprice;
+            var listPriceValues = recordData.listpricevalues;
 			var taxes = recordData.taxes;
 			if(referenceModule == 'Products') {
 				parentRow.data('quantity-in-stock',recordData.quantityInStock);
@@ -595,6 +600,13 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			lineItemNameElment.val(selectedName);
 			lineItemNameElment.attr('disabled', 'disabled');
 			jQuery('input.listPrice',parentRow).val(unitPrice);
+			var currencyId = jQuery("#currency_id").val();
+            var listPriceValuesJson  = JSON.stringify(listPriceValues);
+            if(typeof listPriceValues[currencyId]!= 'undefined') {
+            	this.setListPriceValue(parentRow, listPriceValues[currencyId]);
+                this.lineItemRowCalculations(parentRow);
+        	}
+            jQuery('input.listPrice',parentRow).attr('list-info',listPriceValuesJson);
 			jQuery('textarea.lineItemCommentBox',parentRow).val(description);
 			var taxUI = this.getTaxDiv(taxes,parentRow);
 			jQuery('.taxDivContainer',parentRow).html(taxUI);
@@ -721,6 +733,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		if(discountValue == ""){
 			discountValue = 0;
 		}
+		if(isNaN(discountValue) ||  discountValue < 0){
+           discountValue = 0;
+		}
 		if(discountType == Inventory_Edit_Js.percentageDiscountType){
 				rowPercentageField.removeClass('hide').focus();
 				//since it is percentage
@@ -738,10 +753,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	 * @params : lineItemRow - element which will represent lineItemRow
 	 */
 	calculateTotalAfterDiscount: function(lineItemRow) {
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var productTotal = this.getLineItemTotal(lineItemRow);
 		var discountTotal = this.getDiscountTotal(lineItemRow);
 		var totalAfterDiscount = productTotal - discountTotal;
-		totalAfterDiscount = totalAfterDiscount.toFixed(2);
+		totalAfterDiscount = totalAfterDiscount.toFixed(numberOfDecimal);
 		this.setTotalAfterDiscount(lineItemRow,totalAfterDiscount);
     },
 
@@ -749,6 +765,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	 * Function which will calculate tax for the line item total after discount
 	 */
 	calculateTaxForLineItem : function(lineItemRow) {
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var totalAfterDiscount = this.getTotalAfterDiscount(lineItemRow);
 		var taxPercentages = jQuery('.taxPercentage',lineItemRow);
 		//intially make the tax as zero
@@ -760,13 +777,17 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			if(individualTaxPercentage == ""){
 				individualTaxPercentage = "0.00";
 			}
-			var individualTaxPercentage = parseFloat(individualTaxPercentage);
-			var individualTaxTotal = (individualTaxPercentage * totalAfterDiscount)/100;
-			individualTaxTotal = individualTaxTotal.toFixed(2);
+             if(isNaN(individualTaxPercentage)){
+                var individualTaxTotal = "0.00";
+            } else {
+                var individualTaxPercentage = parseFloat(individualTaxPercentage);
+                var individualTaxTotal = Math.abs(individualTaxPercentage * totalAfterDiscount)/100;
+                individualTaxTotal = individualTaxTotal.toFixed(numberOfDecimal);
+            }
 			jQuery('.taxTotal',individualTaxRow).val(individualTaxTotal);
 			taxTotal += parseFloat(individualTaxTotal);
 		});
-		taxTotal = parseFloat(taxTotal.toFixed(2));
+		taxTotal = parseFloat(taxTotal.toFixed(numberOfDecimal));
 		this.setLineItemTaxTotal(lineItemRow, taxTotal);
 	},
 
@@ -774,13 +795,14 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	 * Function which will calculate net price for the line item
 	 */
 	calculateLineItemNetPrice : function(lineItemRow) {
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var totalAfterDiscount = this.getTotalAfterDiscount(lineItemRow);
 		var netPrice = parseFloat(totalAfterDiscount);
 		if(this.isIndividualTaxMode()) {
 			var productTaxTotal = this.getLineItemTaxTotal(lineItemRow);
 			netPrice +=  parseFloat(productTaxTotal)
 		}
-		netPrice = netPrice.toFixed(2);
+		netPrice = netPrice.toFixed(numberOfDecimal);
 		this.setLineItemNetPrice(lineItemRow,netPrice);
 	},
 
@@ -799,15 +821,17 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	},
 
 	calculateFinalDiscount : function() {
+        var thisInstance = this;
 		var discountContainer = jQuery('#finalDiscountUI');
 		var element = discountContainer.find('input.finalDiscounts').filter(':checked');
 		var discountType = element.data('discountType');
 		var discountRow = element.closest('tr');
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 
 		jQuery('#discount_type_final').val(discountType);
 		var rowPercentageField = discountContainer.find('input.discount_percentage_final');
 		var rowAmountField = discountContainer.find('input.discount_amount_final');
-
+        
 		//intially making percentage and amount discount fields as hidden
 		rowPercentageField.addClass('hide');
 		rowAmountField.addClass('hide');
@@ -816,37 +840,51 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		if(discountValue == ""){
 			discountValue = 0;
 		}
-		if(discountType == Inventory_Edit_Js.percentageDiscountType){
-				rowPercentageField.removeClass('hide').focus();
-				//since it is percentage
-				var productTotal = this.getNetTotal();
-				discountValue = (productTotal * discountValue)/100;
-		}else if(discountType == Inventory_Edit_Js.directAmountDiscountType){
-				rowAmountField.removeClass('hide').focus();
+		if(isNaN(discountValue) ||  discountValue < 0){
+           discountValue = 0;
 		}
-		discountValue = parseFloat(discountValue).toFixed(2);
+		if(discountType == Inventory_Edit_Js.percentageDiscountType){
+            rowPercentageField.removeClass('hide').focus();
+            //since it is percentage
+            var productTotal = this.getNetTotal();
+            discountValue = (productTotal * discountValue)/100;
+		}else if(discountType == Inventory_Edit_Js.directAmountDiscountType){
+            if(thisInstance.prevSelectedCurrencyConversionRate){
+                var conversionRate = jQuery('#conversion_rate').val();
+                conversionRate = conversionRate / thisInstance.prevSelectedCurrencyConversionRate;  
+                discountValue = discountValue * conversionRate;
+                discountRow.find('.discountVal').val(discountValue);
+            }
+            rowAmountField.removeClass('hide').focus();
+		}
+		discountValue = parseFloat(discountValue).toFixed(numberOfDecimal);
 		this.setFinalDiscountTotal(discountValue);
 		this.calculatePreTaxTotal();
     },
-	
+
 	calculateGroupTax : function() {
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var netTotal = this.getNetTotal();
 		var finalDiscountValue = this.getFinalDiscountTotal();
 		var amount = netTotal - finalDiscountValue;
-		amount = parseFloat(amount).toFixed(2);
+		amount = parseFloat(amount).toFixed(numberOfDecimal);
 		var groupTaxContainer = jQuery('#group_tax_div');
 		var groupTaxTotal = 0;
 		groupTaxContainer.find('.groupTaxPercentage').each(function(index,domElement){
 			var groupTaxPercentageElement = jQuery(domElement);
 			var groupTaxRow = groupTaxPercentageElement.closest('tr');
-			var groupTaxValue = (amount * groupTaxPercentageElement.val())/100;
-			groupTaxValue = parseFloat(groupTaxValue).toFixed(2);
+            if(isNaN(groupTaxPercentageElement.val())){
+                var groupTaxValue = "0.00";
+            } else {
+                var groupTaxValue = Math.abs(amount * groupTaxPercentageElement.val())/100;
+            }
+			groupTaxValue = parseFloat(groupTaxValue).toFixed(numberOfDecimal);
 			groupTaxRow.find('.groupTaxTotal').val(groupTaxValue);
 			groupTaxTotal += parseFloat(groupTaxValue);
 		});
 		this.setGroupTaxTotal(groupTaxTotal);
 	},
-	
+
 	calculateShippingAndHandlingTaxCharges : function() {
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingTaxDiv = jQuery('#shipping_handling_div');
@@ -856,34 +894,40 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var currentTaxPer = jQuery(domElement);
 			var currentParentRow = currentTaxPer.closest('tr');
 			var currentTaxPerValue = currentTaxPer.val();
+            var currentTaxTotal = "0.00";
 			if(currentTaxPerValue == ""){
 				currentTaxPerValue = "0.00";
 			}
-			currentTaxPerValue = parseFloat(currentTaxPerValue);
-			var currentTaxTotal = (currentTaxPerValue * shippingHandlingCharge)/100;
+             if(isNaN(currentTaxPerValue)){
+                var currentTaxTotal = "0.00";
+            } else {
+				currentTaxPerValue = parseFloat(currentTaxPerValue);
+                var currentTaxTotal = Math.abs(currentTaxPerValue * shippingHandlingCharge)/100;
+            }
 			jQuery('.shippingTaxTotal',currentParentRow).val(currentTaxTotal);
 		});
 	},
 
 	calculateGrandTotal : function(){
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var netTotal = this.getNetTotal();
 		var discountTotal = this.getFinalDiscountTotal();
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var shippingHandlingTax = this.getShippingAndHandlingTaxTotal();
 		var adjustment = this.getAdjustmentValue();
 		var grandTotal = parseFloat(netTotal) - parseFloat(discountTotal) + parseFloat(shippingHandlingCharge) + parseFloat(shippingHandlingTax);
-		
+
 		if(this.isGroupTaxMode()){
 			grandTotal +=  this.getGroupTaxTotal();
 		}
-		
+
 		if(this.isAdjustMentAddType()) {
 			grandTotal +=  parseFloat(adjustment);
 		}else if(this.isAdjustMentDeductType()) {
 			grandTotal -=  parseFloat(adjustment);
 		}
-		
-		grandTotal = grandTotal.toFixed(2);
+
+		grandTotal = grandTotal.toFixed(numberOfDecimal);
 		this.setGrandTotal(grandTotal);
 	},
 
@@ -915,7 +959,20 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 	registerLineItemActionSaveEvent : function(){
 		var editForm =  this.getForm();
 		editForm.on('click','button[name="lineItemActionSave"]',function(){
-			jQuery('.closeDiv').trigger('click');
+            var match = true;
+            var formError = jQuery('#EditView').data('jqv').InvalidFields;
+            var closestDiv = jQuery('button[name="lineItemActionSave"]').closest('.validCheck').find('input[data-validation-engine]').not('.hide');
+            jQuery(closestDiv).each(function(key,value){
+                if(jQuery.inArray(value,formError) != -1){
+                    match = false;
+                }
+            });
+            if(!match){
+                editForm.removeData('submit');
+                return false;
+            } else {
+				jQuery('.closeDiv').trigger('click');
+            }
 		});
 	},
 
@@ -1032,7 +1089,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		//this.calculateShippingAndHandlingTaxCharges();
 		this.calculateGrandTotal();
 	},
-	
+
 	/**
 	 * Function which will handle the actions that need to be preformed once the qty is changed like below
 	 *  - calculate line item total -> discount and tax -> net price of line item -> grand total
@@ -1220,7 +1277,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			var lineItemRow = thisInstance.getClosestLineItemRow(element);
 			thisInstance.calculateTaxForLineItem(lineItemRow);
 		});
-		
+
 		lineItemTable.on('click','.taxSave',function(e){
 			var element = jQuery(e.currentTarget);
 			var lineItemRow = thisInstance.getClosestLineItemRow(element);
@@ -1292,26 +1349,72 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var thisInstance = this;
 		jQuery('#currency_id').change(function(e){
 			var element = jQuery(e.currentTarget);
+			var currencyId = element.val();
 			var conversionRateElem = jQuery('#conversion_rate');
 			var prevSelectedCurrencyConversionRate = conversionRateElem.val();
+            thisInstance.prevSelectedCurrencyConversionRate = prevSelectedCurrencyConversionRate;
 			var optionsSelected = element.find('option:selected');
 			var conversionRate = optionsSelected.data('conversionRate');
 			conversionRateElem.val(conversionRate);
 			conversionRate = parseFloat(conversionRate)/ parseFloat(prevSelectedCurrencyConversionRate);
+            thisInstance.LineItemDirectDiscountCal(conversionRate);
 			var lineItemTable = thisInstance.getLineItemContentsContainer();
 			lineItemTable.find('tr.'+thisInstance.rowClass).each(function(index,domElement){
-				var lineItemRow = jQuery(domElement);
-				var listPriceVal = thisInstance.getListPriceValue(lineItemRow);
-				var convertedListPrice = listPriceVal * conversionRate;
-				thisInstance.setListPriceValue(lineItemRow, convertedListPrice);
-				thisInstance.lineItemRowCalculations(lineItemRow);
+			var lineItemRow = jQuery(domElement);
+            var listPriceElement = jQuery(lineItemRow).find('[name^=listPrice]');
+            var listPriceValues = JSON.parse(listPriceElement.attr('list-info'));
+            if(typeof listPriceValues[currencyId]!= 'undefined') {
+            	thisInstance.setListPriceValue(lineItemRow, listPriceValues[currencyId]);
+                thisInstance.lineItemRowCalculations(lineItemRow);
+            } else {
+                var listPriceVal = thisInstance.getListPriceValue(lineItemRow);
+                var convertedListPrice = listPriceVal * conversionRate;
+                thisInstance.setListPriceValue(lineItemRow, convertedListPrice);
+                thisInstance.lineItemRowCalculations(lineItemRow);
+            }
 
 			});
+            thisInstance.AdjustmentShippingResultCalculation(conversionRate);
 			thisInstance.lineItemToTalResultCalculations();
 			jQuery('#prev_selected_currency_id').val(optionsSelected.val())
 		});
 	 },
+     
+     AdjustmentShippingResultCalculation: function(conversionRate){
+         //Adjustment
+         var thisInstance = this;
+         var adjustmentElement = thisInstance.getAdjustmentTextElement();
+         var newAdjustment = jQuery(adjustmentElement).val() * conversionRate;
+         jQuery(adjustmentElement).val(newAdjustment);
+         
+         //Shipping & handling 
+         var shippingHandlingElement = thisInstance.getShippingAndHandlingControlElement();
+         var resultVal = jQuery(shippingHandlingElement).val() * conversionRate;
+         jQuery(shippingHandlingElement).val(resultVal);
+         jQuery(shippingHandlingElement).trigger('focusout');
+    }, 
+    
+    LineItemDirectDiscountCal: function(conversionRate){
+         //LineItems Discount Calculations for direct Price reduction
+        var thisInstance = this;
 
+        var lineItemRows = jQuery('.lineItemRow');
+        jQuery(lineItemRows).each(function(index) {
+            var lineItemRow = jQuery(lineItemRows[index]);
+            var discountContianer = lineItemRow.find('div.discountUI');
+            var element = discountContianer.find('input.discounts').filter(':checked');
+            var discountRow = element.closest('tr');
+            var discountType = element.data('discountType');
+            var discountValue = discountRow.find('.discountVal').val();
+            if((discountType == Inventory_Edit_Js.directAmountDiscountType) ){
+                var newdiscountValue = conversionRate * discountValue;
+                discountRow.find('.discountVal').val(newdiscountValue);
+                jQuery(element).closest('tr').find('.discountVal').val(newdiscountValue);
+                thisInstance.setDiscountTotal(lineItemRow,newdiscountValue);
+            }
+        });
+    },
+     
     lineItemActions: function() {
 		var lineItemTable = this.getLineItemContentsContainer();
 
@@ -1513,7 +1616,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var sourceModule = data['source_module'];
 		var noAddress = true;
 		var errorMsg;
-		
+
 		thisInstance.getRecordDetails(data).then(
 			function(data){
 				var response = data['result'];
@@ -1532,7 +1635,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 							errorMsg = 'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS';
 						}
 						Vtiger_Helper_Js.showPnotify(app.vtranslate(errorMsg));
-					} else{	
+					} else{
 						thisInstance.mapAddressDetails(addressMap, result, container);
 					}
 				} else{
@@ -1668,11 +1771,11 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		var lineItemTable = this.getLineItemContentsContainer();
 		lineItemTable.find('.deleteRow').hide();
 	},
-	
+
 	/**
 	 * Function to swap array
 	 * @param Array that need to be swapped
-	 */ 
+	 */
 	swapObject : function(objectToSwap){
 		var swappedArray = {};
 		var newKey,newValue;
@@ -1683,7 +1786,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		}
 		return swappedArray;
 	},
-	
+
 	/**
 	 * Function to copy address between fields
 	 * @param strings which accepts value as either odd or even
@@ -1708,7 +1811,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			toElement.val(fromElement.val());
 		}
 	},
-	
+
 	/**
 	 * Function to register event for copying addresses
 	 */
@@ -1784,7 +1887,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			thisInstance.copyAddress(swapMode);
 		})
 	},
-	
+
 	/**
 	 * Function to toggle shipping and billing address according to layout
 	 */
@@ -1820,7 +1923,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				})
 			}
 		},
-	
+
 	/**
 	 * Function to check for relation operation
 	 * if relation exist calculation should happen by default
@@ -1832,9 +1935,9 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 			jQuery('.qty').trigger('focusout');
 		}
 	},
-	
+
 	//Related to preTaxTotal Field
-	
+
 	/**
 	 * Function to set the pre tax total
 	 */
@@ -1842,33 +1945,34 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		jQuery('#preTaxTotal').text(preTaxTotalValue);
 		return this;
 	},
-	
+
 	/**
 	 * Function to get the pre tax total
 	 */
 	getPreTaxTotal : function() {
 		return parseFloat(jQuery('#preTaxTotal').text());
 	},
-	
+
 	/**
 	 * Function to calculate the preTaxTotal value
 	 */
 	calculatePreTaxTotal : function() {
+        var numberOfDecimal = parseInt(jQuery('.numberOfCurrencyDecimal').val());
 		var netTotal = this.getNetTotal();
 		var shippingHandlingCharge = this.getShippingAndHandling();
 		var finalDiscountValue = this.getFinalDiscountTotal();
 		var preTaxTotal = netTotal+shippingHandlingCharge-finalDiscountValue;
-		var preTaxTotalValue = parseFloat(preTaxTotal).toFixed(2);
+		var preTaxTotalValue = parseFloat(preTaxTotal).toFixed(numberOfDecimal);
 		this.setPreTaxTotal(preTaxTotalValue);
 	},
-	
+
 	/**
 	 * Function to save the pre tax total value
 	 */
 	savePreTaxTotalValue : function() {
 		jQuery('#pre_tax_total').val(this.getPreTaxTotal());
 	},
-	
+
 	/**
 	 * Function which will register all the events
 	 */
@@ -1876,7 +1980,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this._super(container);
 		this.registerReferenceSelectionEvent(container);
 	},
-	
+    
     registerEvents: function(){
 		this._super();
 		this.registerAddingNewProductsAndServices();

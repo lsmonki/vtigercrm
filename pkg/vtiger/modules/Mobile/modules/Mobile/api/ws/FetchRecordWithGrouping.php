@@ -146,8 +146,10 @@ class Mobile_WS_FetchRecordWithGrouping extends Mobile_WS_FetchRecord {
 					} else if($field['uitype'] == '117') {
 						$field['type']['defaultValue'] = $field['value'];
 					}
-					// END
-					
+               		// Special case handling to pull configured Terms & Conditions given through webservices.
+					else if($field['name'] == 'terms_conditions' && in_array($module, array('Quotes','Invoice', 'SalesOrder', 'PurchaseOrder'))){ 
+   						$field['type']['defaultValue'] = $field['value']; 
+                    }
 					$fields[] = $field;
 				}
 			}

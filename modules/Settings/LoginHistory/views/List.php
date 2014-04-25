@@ -15,6 +15,7 @@ class Settings_LoginHistory_List_View extends Settings_Vtiger_List_View {
 		$loginHistoryRecordModel = new  Settings_LoginHistory_Record_Model();
 		$usersList = $loginHistoryRecordModel->getAccessibleUsers();
 		$viewer->assign('USERSLIST',$usersList);
+        $viewer->assign('SELECTED_USER',$request->get('user_name'));
 		parent::preProcess($request, false);
 	}
 }

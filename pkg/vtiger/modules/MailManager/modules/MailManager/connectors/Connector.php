@@ -2,12 +2,11 @@
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
+ * The Original Code is: vtiger CRM Open source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-
 
 vimport ('~modules/MailManager/models/Message.php');
 
@@ -15,27 +14,27 @@ class MailManager_Connector_Connector {
 
 	/*
 	 * Cache interval time
-	 */
+	*/
 	static $DB_CACHE_CLEAR_INTERVAL = "-1 day"; // strtotime
 
 	/*
 	 * Mail Box URL
-	 */
-	protected $mBoxUrl;
+	*/
+	public $mBoxUrl;
 
 	/*
 	 * Mail Box connection instance
-	 */
-	protected $mBox;
+	*/
+	public $mBox;
 
 	/*
 	 * Last imap error
-	 */
+	*/
 	protected $mError;
 
 	/*
 	 * Mail Box folders
-	 */
+	*/
 	protected $mFolders = false;
 
 	/**
@@ -45,7 +44,7 @@ class MailManager_Connector_Connector {
 
 	/*
 	 * Base URL of the Mail Box excluding folder name
-	 */
+	*/
 	protected $mBoxBaseUrl;
 
 
@@ -55,16 +54,15 @@ class MailManager_Connector_Connector {
 	 * $param $folder String optional - mail box folder name
 	 * @returns MailManager_Connector Object
 	 */
-	static function connectorWithModel($model, $folder='') {
-
+	public static function connectorWithModel($model, $folder='') {
 		$port = 143; // IMAP
 		if (strcasecmp($model->protocol(), 'pop') === 0) $port = 110; // NOT IMPLEMENTED
 		else if (strcasecmp($model->ssltype(), 'ssl') === 0) $port = 993; // IMAP SSL
 
 		$url = sprintf('{%s:%s/%s/%s/%s}%s', $model->server(), $port, $model->protocol(),
-			$model->ssltype(), $model->certvalidate(), $folder);
+				$model->ssltype(), $model->certvalidate(), $folder);
 		$baseUrl = sprintf('{%s:%s/%s/%s/%s}', $model->server(), $port, $model->protocol(),
-			$model->ssltype(), $model->certvalidate());
+				$model->ssltype(), $model->certvalidate());
 		return new self($url, $model->username(), $model->password(), $baseUrl);
 	}
 
@@ -77,7 +75,7 @@ class MailManager_Connector_Connector {
 	 * @param $baseUrl Optional - url of the mailserver excluding folder name.
 	 *	This is used to fetch the folders of the mail box
 	 */
-	function __construct($url, $username, $password, $baseUrl=false) {
+	public function __construct($url, $username, $password, $baseUrl=false) {
 		$boxUrl = $this->convertCharacterEncoding(html_entity_decode($url),'UTF7-IMAP','UTF-8'); //handle both utf8 characters and html entities
 		$this->mBoxUrl = $boxUrl;
 		$this->mBoxBaseUrl = $baseUrl; // Used for folder List
@@ -89,7 +87,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Closes the connection
 	 */
-	function __destruct() {
+	public function __destruct() {
 		$this->close();
 	}
 
@@ -97,7 +95,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Closes the imap connection
 	 */
-	function close() {
+	public function close() {
 		if (!empty($this->mBox)) {
 
 			if ($this->mModified) imap_close($this->mBox, CL_EXPUNGE);
@@ -111,7 +109,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Checks for the connection
 	 */
-	function isConnected() {
+	public function isConnected() {
 		return !empty($this->mBox);
 	}
 
@@ -119,7 +117,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Returns the last imap error
 	 */
-	function isError() {
+	public function isError() {
 		$errors = imap_errors();
 		if($errors !== false) {
 			$this->mError = implode(', ',$errors);
@@ -134,7 +132,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Checks if the error exists
 	 */
-	function hasError() {
+	public function hasError() {
 		return !empty($this->mError);
 	}
 
@@ -142,7 +140,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Returns the error
 	 */
-	function lastError() {
+	public function lastError() {
 		return $this->mError;
 	}
 
@@ -151,7 +149,7 @@ class MailManager_Connector_Connector {
 	 * Reads mail box folders
 	 * @param string $ref Optional -
 	 */
-	function folders($ref="{folder}") {
+	public function folders($ref="{folder}") {
 		if ($this->mFolders) return $this->mFolders;
 
 		$result = imap_getmailboxes($this->mBox, $ref, "*");
@@ -172,7 +170,7 @@ class MailManager_Connector_Connector {
 	 * Used to update the folders optionus
 	 * @param imap_stats flag $options
 	 */
-	function updateFolders($options=SA_UNSEEN) {
+	public function updateFolders($options=SA_UNSEEN) {
 		$this->folders(); // Initializes the folder Instance
 		foreach($this->mFolders as $folder) {
 			$this->updateFolder($folder, $options);
@@ -185,7 +183,7 @@ class MailManager_Connector_Connector {
 	 * @param MailManager_Model_Folder $folder - folder instance
 	 * @param $options imap_status flags like SA_UNSEEN, SA_MESSAGES etc
 	 */
-	function updateFolder($folder, $options) {
+	public function updateFolder($folder, $options) {
 		$mailbox = $this->convertCharacterEncoding($folder->name($this->mBoxUrl), "UTF7-IMAP","ISO_8859-1"); //Encode folder name
 		$result = @imap_status($this->mBox, $mailbox, $options);
 		if ($result) {
@@ -199,8 +197,8 @@ class MailManager_Connector_Connector {
 	 * Returns MailManager_Model_Folder Instance
 	 * @param String $name - folder name
 	 */
-	function folderInstance($name) {
-		vimport('~~modules/MailManager/models/Folder.php');
+	public function folderInstance($name) {
+		vimport('modules/MailManager/models/Folder.php');
 		return new MailManager_Folder_Model($name);
 	}
 
@@ -211,7 +209,7 @@ class MailManager_Connector_Connector {
 	 * @param Integer $start  - Page number
 	 * @param Integer $maxLimit - Number of mails
 	 */
-	function folderMails($folder, $start, $maxLimit) {
+	public function folderMails($folder, $start, $maxLimit) {
 		$folderCheck = @imap_check($this->mBox);
 		if ($folderCheck->Nmsgs) {
 
@@ -237,7 +235,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Return the cache interval
 	 */
-	function clearDBCacheInterval() {
+	public function clearDBCacheInterval() {
 		// TODO Provide configuration option.
 		if (self::$DB_CACHE_CLEAR_INTERVAL) {
 			return strtotime(self::$DB_CACHE_CLEAR_INTERVAL);
@@ -249,7 +247,7 @@ class MailManager_Connector_Connector {
 	/**
 	 * Clears the cache data
 	 */
-	function clearDBCache() {
+	public function clearDBCache() {
 		// Trigger purne any older mail saved in DB first
 		$interval = $this->clearDBCacheInterval();
 
@@ -274,10 +272,10 @@ class MailManager_Connector_Connector {
 	 * Function which deletes the mails
 	 * @param String $msgno - List of message number seperated by commas.
 	 */
-	function deleteMail($msgno){
+	public function deleteMail($msgno) {
 		$msgno = trim($msgno,',');
 		$msgno = explode(',',$msgno);
-		for($i = 0;$i<count($msgno);$i++){
+		for($i = 0;$i<count($msgno);$i++) {
 			@imap_delete($this->mBox, $msgno[$i]);
 		}
 		imap_expunge($this->mBox);
@@ -289,11 +287,11 @@ class MailManager_Connector_Connector {
 	 * @param String $msgno - List of message number separated by commas
 	 * @param String $folderName - folder name
 	 */
-	function moveMail($msgno, $folderName){
+	public function moveMail($msgno, $folderName) {
 		$msgno = trim($msgno,',');
 		$msgno = explode(',',$msgno);
 		$folder = $this->convertCharacterEncoding(html_entity_decode($folderName),'UTF7-IMAP','UTF-8'); //handle both utf8 characters and html entities
-		for($i = 0;$i<count($msgno);$i++){
+		for($i = 0;$i<count($msgno);$i++) {
 			@imap_mail_move($this->mBox, $msgno[$i], $folder);
 		}
 		@imap_expunge($this->mBox);
@@ -305,7 +303,7 @@ class MailManager_Connector_Connector {
 	 * @param String $msgno - Message number
 	 * @return MailManager_Model_Message
 	 */
-	function openMail($msgno) {
+	public function openMail($msgno) {
 		$this->clearDBCache();
 		return new MailManager_Message_Model($this->mBox, $msgno, true);
 	}
@@ -315,7 +313,7 @@ class MailManager_Connector_Connector {
 	 * Marks the mail as Unread
 	 * @param <String> $msgno - Message Number
 	 */
-	function markMailUnread($msgno) {
+	public function markMailUnread($msgno) {
 		imap_clearflag_full( $this->mBox, $msgno, '\\Seen');
 		$this->mModified = true;
 	}
@@ -325,7 +323,7 @@ class MailManager_Connector_Connector {
 	 * Marks the mail as Read
 	 * @param String $msgno - Message Number
 	 */
-	function markMailRead($msgno) {
+	public function markMailRead($msgno) {
 		imap_setflag_full($this->mBox, $msgno, '\\Seen');
 		$this->mModified = true;
 	}
@@ -338,7 +336,7 @@ class MailManager_Connector_Connector {
 	 * @param Integer $start - Page number
 	 * @param Integer $maxLimit - Number of mails
 	 */
-	function searchMails($query, $folder, $start, $maxLimit) {
+	public function searchMails($query, $folder, $start, $maxLimit) {
 		$nos = imap_search($this->mBox, $query);
 
 		if (!empty($nos)) {
@@ -371,7 +369,7 @@ class MailManager_Connector_Connector {
 	 * Returns list of Folder for the Mail Box
 	 * @return Array folder list
 	 */
-	function getFolderList() {
+	public function getFolderList() {
 		if(!empty($this->mBoxBaseUrl)) {
 			$list = @imap_list($this->mBox, $this->mBoxBaseUrl, '*');
 			if (is_array($list)) {
@@ -384,7 +382,7 @@ class MailManager_Connector_Connector {
 		return $folderList;
 	}
 
-	 function convertCharacterEncoding($value, $toCharset, $fromCharset) {
+	public function convertCharacterEncoding($value, $toCharset, $fromCharset) {
 		if (function_exists('mb_convert_encoding')) {
 			$value = mb_convert_encoding($value, $toCharset, $fromCharset);
 		} else {

@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="detailViewInfo row-fluid">
+        <div class="detailViewInfo userPreferences row-fluid">
             <div class="details span12">
                 <form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
                     <div class="contents">

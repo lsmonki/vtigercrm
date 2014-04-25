@@ -104,21 +104,7 @@ class Vtiger_Theme extends Vtiger_Viewer {
      * @return <Array>
      */
     public static function getAllSkins(){
-        $skinsList = array();
-		$themeDir = self::getBaseThemePath();
-        if ($dir = @opendir($themeDir)) {
-            while (($skinName = readdir($dir)) !== false) {
-               if ($skinName != ".." && $skinName != "." && $skinName != "CVS" && $skinName != "images" && $skinName != "vgray" ) {
-                   if(is_dir($themeDir."/".$skinName)) {
-                       if(!($skinName[0] == '.'))
-                            $skinsList[$skinName] = $skinName;
-                   }
-               }
-           }
-           closedir($dir);
-        }
-        ksort($skinsList);
-        return $skinsList;
+        return Vtiger_Util_Helper::getAllSkins();
     }
 
 	/**

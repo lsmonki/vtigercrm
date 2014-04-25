@@ -22,7 +22,7 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 	public function preProcess (Vtiger_Request $request, $display=true) {
 		parent::preProcess($request, false);
 
-		$viewer = $this->getViewer($request);
+                $viewer = $this->getViewer($request);
 
 		$moduleName = $request->getModule();
 		if(!empty($moduleName)) {

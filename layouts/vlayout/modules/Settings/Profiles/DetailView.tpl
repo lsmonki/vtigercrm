@@ -12,17 +12,20 @@
 {strip}
 <div class="container-fluid">
 	<br>
-	<h3>{vtranslate('LBL_PROFILE_VIEW', $QUALIFIED_MODULE)}</h3>
-	<button class="btn pull-right" type="button" onclick='window.location.href="{$RECORD_MODEL->getEditViewUrl()}"'>{vtranslate('LBL_EDIT',$QUALIFIED_MODULE)}</button>
+	<div class="row-fluid">
+		<div class="span10"><h3>{vtranslate('LBL_PROFILE_VIEW', $QUALIFIED_MODULE)}</h3></div>
+		<div class="span2">
+			<button class="btn pull-right" type="button" onclick='window.location.href="{$RECORD_MODEL->getEditViewUrl()}"'>{vtranslate('LBL_EDIT',$QUALIFIED_MODULE)}</button>
+		</div>
+	</div>
 	<div class="clearfix"></div>
 	<hr>
 	<div class="profileDetailView">
-
 		<div class="row-fluid">
 			<div class="row-fluid">
 				<label class="fieldLabel span2 muted"><span class="redColor">*</span>{vtranslate('LBL_PROFILE_NAME', $QUALIFIED_MODULE)}: </label>
 				<span class="fieldValue span6" name="profilename" id="profilename" value="{$RECORD_MODEL->getName()}"><strong>{$RECORD_MODEL->getName()}</strong></span>
-			</div><br>
+			</div>
             <div class="row-fluid">
 				<label class="fieldLabel span2 muted">{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}:</strong></label>
 				<span class="fieldValue span8" name="description" id="description"><strong>{$RECORD_MODEL->getDescription()}</strong></span>
@@ -90,7 +93,7 @@
 									</td>
 								{/foreach}
 								<td style="border-left: 1px solid #DDD !important;">
-									{if $PROFILE_MODULE->getFields()}
+									{if $PROFILE_MODULE->getFields() || $PROFILE_MODULE->isUtilityActionEnabled()}
 										<div class="row-fluid">
 											<span class="span4">&nbsp;</span>
 											<span class="span4"><button type="button" data-handlerfor="fields" data-togglehandler="{$TABID}-fields" class="btn btn-mini" style="padding-right: 20px; padding-left: 20px;">
@@ -198,5 +201,6 @@
 			</div>
 		</div>
 	</div>
+	<br>
 </div>
 {/strip}

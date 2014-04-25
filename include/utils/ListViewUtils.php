@@ -493,7 +493,7 @@ function getListQuery($module, $where = '') {
 				 	FROM vtiger_users
 				 	INNER JOIN vtiger_user2role ON vtiger_users.id = vtiger_user2role.userid
 				 	INNER JOIN vtiger_role ON vtiger_user2role.roleid = vtiger_role.roleid
-					WHERE deleted=0 " . $where;
+					WHERE deleted=0 AND status <> 'Inactive'" . $where;
 			break;
 		default:
 			// vtlib customization: Include the module file
@@ -816,6 +816,19 @@ function counterValue() {
 	static $counter = 0;
 	$counter = $counter + 1;
 	return $counter;
+}
+
+function getUsersPasswordInfo(){
+	global $adb;
+	$sql = "SELECT user_name, user_hash FROM vtiger_users WHERE deleted=?";
+	$result = $adb->pquery($sql, array(0));
+	$usersList = array();
+	for ($i=0; $i<$adb->num_rows($result); $i++) {
+		$userList['name'] = $adb->query_result($result, $i, "user_name");
+		$userList['hash'] = $adb->query_result($result, $i, "user_hash");
+		$usersList[] = $userList;
+	}
+	return $usersList;
 }
 
 ?>

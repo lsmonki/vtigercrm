@@ -42,4 +42,3 @@ class Emails_TrackAccess_Action extends Vtiger_Action_Controller {
 
 $track = new Emails_TrackAccess_Action();
 $track->process(new Vtiger_Request($_REQUEST));
-?>

@@ -31,6 +31,11 @@ $languageStrings = array(
 	'LBL_TASKS_DUE' => 'مهام مستحقة',
 	'LBL_TASKS_COMPLETED' => 'مهام مكتملة',
 	'LBL_PEOPLE' => 'الاشخاص',
+    'LBL_TASKS_HIGH' => 'عالية الأولوية',
+    'LBL_TASKS_NORMAL' => 'الأولوية العادية',
+    'LBL_TASKS_LOW' => 'منخفض الأولوية',
+    'LBL_TASKS_OTHER' => 'الأولويات الأخرى',
+    'LBL_SELECT_PROGRESS' => 'حدد التقدم',
 
 	//Related List
 	'LBL_CHARTS' => 'الرسوم البيانية',
@@ -44,4 +49,26 @@ $languageStrings = array(
 	
 	//Summary View Widgets
 	'LBL_DOWNLOAD_FILE' => 'تحميل الملف',
+    'LBL_MILESTONES_LIST'=> 'قائمة المعالم'   ,
+	
+	//picklist values
+	'prospecting' => 'تنقيب',
+    'in progress' => 'في التقدم',
+    'initiated' => 'بدأت',
+	'waiting for feedback' => 'في انتظار ردود الفعل',
+    'on hold' => 'على عقد',
+    'archived' => 'أرشفة',
+    'completed' => 'الانتهاء',
+    'delivered' => 'تسليم',
+	'administrative' => 'إداري',
+    'operative' => 'المنطوق',
+    'other' => 'آخر',
+    'low' => 'منخفض',
+    'normal' => 'طبيعي',
+    'high' => 'ارتفاع',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'حدد الحالة',
+    'JS_LBL_SELECT_PROGRESS' => 'حدد التقدم',
 );

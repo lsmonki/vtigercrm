@@ -26,8 +26,8 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	}
 
 	public function process(Vtiger_Request $request) {
-		
-		$mode = $request->get('mode');
+
+                $mode = $request->get('mode');
 		if (!empty($mode)) {
 			$this->invokeExposedMethod($mode, $request);
 			return;
@@ -35,7 +35,7 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		
 		$recordModel = $this->saveRecord($request);
 
-		$fieldModelList = $recordModel->getModule()->getFields();
+                $fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
 			$fieldValue = $displayValue = Vtiger_Util_Helper::toSafeHTML($recordModel->get($fieldName));
@@ -100,4 +100,4 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		}
 		$response->emit();
 	}
-}
+        }

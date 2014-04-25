@@ -15,22 +15,22 @@
 	<head>
 		<title>Vtiger</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		
+
 		<link REL="SHORTCUT ICON" HREF="layouts/vlayout/skins/images/favicon.ico">
 		<link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="resources/styles.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="libraries/jquery/select2/select2.css" />
 		<link rel="stylesheet" href="libraries/jquery/posabsolute-jQuery-Validation-Engine/css/validationEngine.jquery.css" />
-		
+
 		<script type="text/javascript" src="libraries/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-tooltip.js"></script>
 		<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>
-		
+
 		<script type="text/javascript">{literal}
-			jQuery(function(){ 
-				jQuery('select').select2({blurOnChange:true}); 
+			jQuery(function(){
+				jQuery('select').select2({blurOnChange:true});
 				jQuery('[rel="tooltip"]').tooltip();
 				jQuery('form').validationEngine({
 					prettySelect: true,
@@ -55,7 +55,7 @@
 		{/literal}</style>
 	</head>
 	<body>
-		
+
 		<div class="container">
 			<div class="modal-backdrop"></div>
 			<form class="form" method="POST" action="index.php?module=Users&action=UserSetupSave">
@@ -454,9 +454,9 @@
 						<button class="btn btn-success" type="submit">{vtranslate('LBL_GET_STARTED', $MODULE)}</button>
 					</div>
 				</div>
-			</form>						
+			</form>
 		</div>
-		
+
 	</body>
 </html>
 {/strip}

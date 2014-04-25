@@ -39,9 +39,8 @@ class Products_MassSave_Action extends Vtiger_MassSave_Action {
 				// and this will force the date fields to be saved in user format. If the user format
 				// is other than y-m-d then it fails. We need to review the above process API changes
 				// which was added to fix unit price issue where it was getting changed when mass edited.
-				if($fieldDataType == 'date') {
-					$uiTypeModel = $fieldModel->getUITypeModel();
-					$model->set($fieldName, $uiTypeModel->getDBInsertValue($model->get($fieldName)));
+				if($fieldDataType == 'date' || ($fieldDataType == 'currency') && $uiType != '72') {
+					$model->set($fieldName, $fieldModel->getUITypeModel()->getDBInsertValue($model->get($fieldName)));
 				}
 			}
 		}

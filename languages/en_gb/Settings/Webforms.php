@@ -15,6 +15,7 @@ $languageStrings = array(
 	'Module'                       => 'Module'                      , // TODO: Review
 	'Return Url'                   => 'Return Url'                  , // TODO: Review
 	'Post Url'                     => 'Post Url'                    , // TODO: Review
+    'Captcha Enabled'              => 'Captcha Enabled'             ,
 	'SINGLE_Webforms'              => 'Webform'                     , // TODO: Review
 	'LBL_SHOW_FORM'                => 'Show Form'                   , // TODO: Review
 	'LBL_DUPLICATES_EXIST'         => 'Webform Name already exists' , // TODO: Review
@@ -30,9 +31,19 @@ $languageStrings = array(
 	'LBL_EMBED_THE_FOLLOWING_FORM_IN_YOUR_WEBSITE' => 'Embed the following form in your website', // TODO: Review
 	'LBL_SELECT_VALUE'             => 'Select Value'                , // TODO: Review
 	'LBL_LABEL'                    => 'label'                       , // TODO: Review
+	'LBL_SAVE_FIELDS_ORDER' => 'Save fields order', 
+	'LBL_HIDDEN' => 'Hidden',
+	'LBL_ENABLE_TARGET_MODULES_FOR_WEBFORM' => 'Enable Target modules for webform',
+	'LBL_ASSIGN_USERS' => 'User Assignment',
+    'LBL_ASSIGN_ROUND_ROBIN' => 'Assign Users In Round Robin',
+    'LBL_ROUNDROBIN_USERS_LIST' => 'Round Robin Users List',
 );
 $jsLanguageStrings = array(
 	'JS_WEBFORM_DELETED_SUCCESSFULLY' => 'Webform deleted successfully', // TODO: Review
 	'JS_LOADING_TARGET_MODULE_FIELDS' => 'Loadding Target Module Fields', // TODO: Review
 	'JS_SELECT_VALUE'              => 'Select Vlaue'                , // TODO: Review
+	'JS_MANDATORY_FIELDS_WITHOUT_OVERRIDE_VALUE_CANT_BE_HIDDEN' => 'Mandatory Fields without override values cant be hidden',
+	'JS_REFERENCE_FIELDS_CANT_BE_MANDATORY_WITHOUT_OVERRIDE_VALUE' => 'Reference fields cant be mandatory without override value',
+	'JS_TYPE_TO_SEARCH' => 'Type to search',
+	"JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS" => 'Webform with this name already exists',
 );

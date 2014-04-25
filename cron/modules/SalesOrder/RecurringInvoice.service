@@ -35,6 +35,10 @@ for($i=0; $i<$no_of_salesorder;$i++) {
 	if ($last_recurring_date == NULL  || $last_recurring_date == '' || $last_recurring_date == '0000-00-00') {
 		$last_recurring_date = $start_period;
 	}
+    $currentDate = date('Y-m-d');
+    if(strtotime($last_recurring_date) < strtotime($currentDate)){
+        $last_recurring_date = $currentDate;
+    }
 	$currentRecurringDate = $last_recurring_date;
 
 	if(strtotime($currentRecurringDate) > strtotime($end_period)) {
@@ -50,17 +54,19 @@ for($i=0; $i<$no_of_salesorder;$i++) {
 		default			:	$period = '';
 	}
 
-	if (strtotime($currentRecurringDate) <= strtotime(date('Y-m-d'))) {
+	if (strtotime($currentRecurringDate) <= strtotime($currentDate)) {
 		list($y, $m, $d) = explode('-', $last_recurring_date);
 		$nextRecurringDate = date('Y-m-d', strtotime($period, mktime(0, 0, 0, $m, $d, $y)));
 	} else {
 		$nextRecurringDate = $currentRecurringDate;
 	}
-
-	if(strtotime($nextRecurringDate) == strtotime(date('Y-m-d'))) {
+    if(strtotime($currentRecurringDate) == strtotime($currentDate)) {
 		createInvoice($salesorder_id);
-		$adb->pquery('UPDATE vtiger_invoice_recurring_info SET last_recurring_date = ? WHERE salesorderid = ?', array($nextRecurringDate, $salesorder_id));
+		
 	}
+    if(strtotime($nextRecurringDate) != strtotime($last_recurring_date)){
+        $adb->pquery('UPDATE vtiger_invoice_recurring_info SET last_recurring_date = ? WHERE salesorderid = ?', array($nextRecurringDate, $salesorder_id));
+    }
 }
 
 /* Function to create a new Invoice using the given Sales Order id */
@@ -75,15 +81,18 @@ function createInvoice($salesorder_id) {
 
 	// Payment duration in days
 	$payment_duration_values = Array(
+        'net 01 day' => '1',
+        'net 05 days' => '5',
+        'net 07 days' => '7',
+        'net 10 days' => '10',
+        'net 15 days' => '15',
 		'net 30 days' => '30',
 		'net 45 days' => '45',
 		'net 60 days' => '60'
 	);
 
 	if(!$current_user) {
-		$current_user = new Users();
-		$current_user->id = 1;
-		$current_user = $current_user->retrieve_entity_info($current_user->id, "Users");
+		$current_user = Users::getActiveAdminUser();
 	}
 	$so_focus = new SalesOrder();
 	$so_focus->id = $salesorder_id;
@@ -95,7 +104,7 @@ function createInvoice($salesorder_id) {
 	$focus = new Invoice();
 	// This will only fill in the basic columns from SO to Invoice and also Update the SO id in new Invoice
 	$focus = getConvertSoToInvoice($focus,$so_focus,$salesorder_id);
-
+    
 	// Pick up the Payment due date based on the Configuration in SO
 	$payment_duration = $so_focus->column_fields['payment_duration'];
 	$due_duration = $payment_duration_values[trim(strtolower($payment_duration))];

@@ -118,7 +118,31 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 
 		return $links;
 	}
-
+    
+    /**
+	 * Function to get the list view header
+	 * @return <Array> - List of Vtiger_Field_Model instances
+	 */
+	public function getListViewHeaders() {
+        $listViewContoller = $this->get('listview_controller');
+        $module = $this->getModule();
+        $moduleName = $module->get('name');
+		$headerFieldModels = array();
+		$headerFields = $listViewContoller->getListViewHeaderFields();
+		foreach($headerFields as $fieldName => $webserviceField) {
+			if($webserviceField && !in_array($webserviceField->getPresence(), array(0,2))) continue;
+            $fieldInstance = Vtiger_Field_Model::getInstance($fieldName,$module);
+            if(!$fieldInstance) {
+                if($moduleName == 'Calendar') {
+                    $eventmodule = Vtiger_Module_Model::getInstance('Events');
+                    $fieldInstance = Vtiger_Field_Model::getInstance($fieldName,$eventmodule);
+                }
+            }
+			$headerFieldModels[$fieldName] = $fieldInstance;
+		}
+		return $headerFieldModels;
+	}
+    
     /**
 	 * Function to get the list view entries
 	 * @param Vtiger_Paging_Model $pagingModel
@@ -130,9 +154,23 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		$moduleName = $this->getModule()->get('name');
 		$moduleFocus = CRMEntity::getInstance($moduleName);
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		
 		$queryGenerator = $this->get('query_generator');
 		$listViewContoller = $this->get('listview_controller');
+		$listViewFields = array('visibility','assigned_user_id');
+		$queryGenerator->setFields(array_unique(array_merge($queryGenerator->getFields(), $listViewFields)));
+		
+        $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
 
 		$searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
@@ -140,7 +178,7 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		if(!empty($searchKey)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
-
+        
         $orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 
@@ -161,7 +199,12 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
                 //$queryGenerator->whereFields[] = $orderByFieldName;
             }
         }
-
+		if (!empty($orderBy) && $orderBy === 'smownerid') { 
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+			if ($fieldModel->getFieldDataType() == 'owner') { 
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+			} 
+		}
         //To combine date and time fields for sorting
         if($orderBy == 'date_start') {
             $orderBy = "str_to_date(concat(date_start,time_start),'%Y-%m-%d %H:%i:%s')";
@@ -170,7 +213,7 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
         }
 
 		$listQuery = $this->getQuery();
-
+		
 		$sourceModule = $this->get('src_module');
 		if(!empty($sourceModule)) {
 			if(method_exists($moduleModel, 'getQueryByModuleField')) {
@@ -212,6 +255,10 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
+        if(empty($viewid)){
+            $viewid = $pagingModel->get('viewid');
+        }
+        $_SESSION['lvs'][$moduleName][$viewid]['start'] = $pagingModel->get('page');
 		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
 
 		$listQueryWithNoLimit = $listQuery;
@@ -230,10 +277,34 @@ class Calendar_ListView_Model extends Vtiger_ListView_Model {
 		}else{
 			$pagingModel->set('nextPageExists', false);
 		}
-
+		
+		$groupsIds = Vtiger_Util_Helper::getGroupsIdsForUsers($currentUser->getId());
 		$index = 0;
 		foreach($listViewEntries as $recordId => $record) {
 			$rawData = $db->query_result_rowdata($listResult, $index++);
+			$visibleFields = array('activitytype','date_start','due_date','assigned_user_id','visibility','smownerid');
+			$ownerId = $rawData['smownerid'];
+			$visibility = true;
+			if(in_array($ownerId, $groupsIds)) {
+				$visibility = false;
+			} else if($ownerId == $currentUser->getId()){
+				$visibility = false;
+			}
+			
+			if(!$currentUser->isAdminUser() && $rawData['activitytype'] != 'Task' && $rawData['visibility'] == 'Private' && $ownerId && $visibility) {
+				foreach($record as $data => $value) {
+					if(in_array($data, $visibleFields) != -1) {
+						unset($rawData[$data]);
+						unset($record[$data]);
+					}
+				}
+				$record['subject'] = vtranslate('Busy','Events').'*';
+			}
+			if($record['activitytype'] == 'Task') {
+				unset($record['visibility']);
+				unset($rawData['visibility']);
+			}
+			
 			$record['id'] = $recordId;
 			$listViewRecordModels[$recordId] = $moduleModel->getRecordFromArray($record, $rawData);
 		}

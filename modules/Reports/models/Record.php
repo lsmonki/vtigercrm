@@ -272,7 +272,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		for($i=0; $i<$db->num_rows($result); $i++) {
 			$column = $db->query_result($result, $i, 'columnname');
 			$order = $db->query_result($result, $i, 'sortorder');
-			$sortColumns[$column] = $order;
+			$sortColumns[decode_html($column)] = $order;
 		}
 		return $sortColumns;
 	}
@@ -339,7 +339,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 					array($reportId, 0, 0));
 
 			$reportParams = array($reportId, $this->get('folderid'), $this->get('reportname'), $this->get('description'),
-					'summary', $reportId, 'CUSTOM', $currentUser->id, 'Public');
+					$this->get('reporttype', 'tabular'), $reportId, 'CUSTOM', $currentUser->id, 'Public');
 			$db->pquery('INSERT INTO vtiger_report(reportid, folderid, reportname, description,
 								reporttype, queryid, state, owner, sharingtype) VALUES(?,?,?,?,?,?,?,?,?)', $reportParams);
 
@@ -399,19 +399,21 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 		$sortFields = $this->get('sortFields');
 
-		$i = 0;
-		foreach($sortFields as $fieldInfo) {
-			$db->pquery('INSERT INTO vtiger_reportsortcol(sortcolid, reportid, columnname, sortorder) VALUES (?,?,?,?)',
-					array($i, $this->getId(), $fieldInfo[0], $fieldInfo[1]));
-			if(CustomReportUtils::IsDateField($fieldInfo[0])) {
-                if(empty($fieldInfo[2])){
-                    $fieldInfo[2] = 'None';
+        if(!empty($sortFields)){
+            $i = 0;
+            foreach($sortFields as $fieldInfo) {
+                $db->pquery('INSERT INTO vtiger_reportsortcol(sortcolid, reportid, columnname, sortorder) VALUES (?,?,?,?)',
+                        array($i, $this->getId(), $fieldInfo[0], $fieldInfo[1]));
+                if(IsDateField($fieldInfo[0])) {
+                    if(empty($fieldInfo[2])){
+                        $fieldInfo[2] = 'None';
+                    }
+                    $db->pquery("INSERT INTO vtiger_reportgroupbycolumn(reportid, sortid, sortcolname, dategroupbycriteria)
+                        VALUES(?,?,?,?)", array($this->getId(), $i, $fieldInfo[0], $fieldInfo[2]));
                 }
-				$db->pquery("INSERT INTO vtiger_reportgroupbycolumn(reportid, sortid, sortcolname, dategroupbycriteria)
-					VALUES(?,?,?,?)", array($this->getId(), $i, $fieldInfo[0], $fieldInfo[2]));
-			}
-			$i++;
-		}
+                $i++;
+            }
+        }
 	}
 
 	/**
@@ -462,12 +464,14 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 		$selectedFields = $this->get('selectedFields');
 
-		for($i=0 ;$i<count($selectedFields);$i++) {
-			if(!empty($selectedFields[$i])) {
-				$db->pquery("INSERT INTO vtiger_selectcolumn(queryid, columnindex, columnname) VALUES (?,?,?)",
-						array($this->getId(), $i, decode_html($selectedFields[$i])));
-			}
-		}
+        if(!empty($selectedFields)){
+           for($i=0 ;$i<count($selectedFields);$i++) {
+                if(!empty($selectedFields[$i])) {
+                    $db->pquery("INSERT INTO vtiger_selectcolumn(queryid, columnindex, columnname) VALUES (?,?,?)",
+                            array($this->getId(), $i, decode_html($selectedFields[$i])));
+                }
+            }
+        }
 	}
 
 	/**
@@ -509,7 +513,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 					}
 
 					if($fieldType == 'currency') {
-						if($field->getUIType() == '71') {
+						if($field->getUIType() == '72') {
+                            // Some of the currency fields like Unit Price, Totoal , Sub-total - doesn't need currency conversion during save
 							$advFilterValue = Vtiger_Currency_UIType::convertToDBFormat($advFilterValue, null, true);
 						} else {
 							$advFilterValue = Vtiger_Currency_UIType::convertToDBFormat($advFilterValue);
@@ -526,7 +531,15 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 								if($columnInfo[4] == 'D') {
 									$val[$i] = DateTimeField::convertToDBFormat(trim($tempVal[$i]));
 								} elseif($columnInfo[4] == 'DT') {
-									$val[$i] = $date->getDBInsertDateTimeValue();
+                                    /**
+                                     * While generating query to retrieve report, for date time fields we are only taking
+                                     * date field and appending '00:00:00' for correct results depending on time zone.
+                                     * If you save the time also here by converting to db format, while showing in edit
+                                     * view it was changing the date selected.
+                                     */
+                                    $values = explode(' ', $tempVal[$i]);
+                                    $date = new DateTimeField($values[0]);
+									$val[$i] = $date->getDBInsertDateValue();
 								} else {
 									$val[$i] = $date->getDBInsertTimeValue();
 								}
@@ -591,6 +604,18 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		return $sql;
 	}
 
+    /**
+	 * Function returns sql for count query which don't need any fields
+	 * @param <String> $query (with all columns)
+	 * @return <String> $query (by removing all columns)
+	 */
+    function generateCountQuery($query){
+        $from = explode(' from ' , $query);
+        //If we select the same field in select and grouping/soring then it will include order by and query failure will happen
+        $fromAndWhereQuery = explode(' order by ', $from[1]);
+        $sql = "SELECT count(*) AS count FROM ".$fromAndWhereQuery[0];
+        return $sql;
+    }
 	/**
 	 * Function returns report's data
 	 * @param <Vtiger_Paging_Model> $pagingModel
@@ -603,6 +628,18 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		return $data;
 	}
 
+    function getReportsCount($query = null){
+        if($query == null)
+            $query = $this->get('recordCountQuery');
+        global $adb;
+        $count = 0;
+        $result = $adb->query($query, array());
+        if($adb->num_rows($result) > 0 ){
+            $count = $adb->query_result($result, 0, 'count');
+        }
+        return $count;
+    }
+
 	function getReportCalulationData($filterQuery = false) {
 		$reportRun = ReportRun::getInstance($this->getId());
 		$data = $reportRun->GenerateReport('TOTALXLS', $filterQuery, true);
@@ -613,12 +650,13 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 */
 	function getReportXLS() {
 		$reportRun = ReportRun::getInstance($this->getId());
+        $advanceFilterSql = $this->getAdvancedFilterSQL();
 		$rootDirectory = vglobal('root_directory');
 		$tmpDir = vglobal('tmp_dir');
 
 		$tempFileName = tempnam($rootDirectory.$tmpDir, 'xls');
-		$fileName = $this->getName().'.xls';
-		$reportRun->writeReportToExcelFile($tempFileName, false);
+		$fileName = decode_html($this->getName()).'.xls';
+		$reportRun->writeReportToExcelFile($tempFileName, $advanceFilterSql);
 
 		if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			header('Pragma: public');
@@ -639,12 +677,13 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 */
 	function getReportCSV() {
 		$reportRun = ReportRun::getInstance($this->getId());
+        $advanceFilterSql = $this->getAdvancedFilterSQL();
 		$rootDirectory = vglobal('root_directory');
 		$tmpDir = vglobal('tmp_dir');
 
 		$tempFileName = tempnam($rootDirectory.$tmpDir, 'csv');
-		$reportRun->writeReportToCSVFile($tempFileName, false);
-		$fileName = $this->getName().'.csv';
+		$reportRun->writeReportToCSVFile($tempFileName, $advanceFilterSql);
+		$fileName = decode_html($this->getName()).'.csv';
 
 		if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')) {
 			header('Pragma: public');
@@ -665,9 +704,10 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 */
 	function getReportPrint() {
 		$reportRun = ReportRun::getInstance($this->getId());
+        $advanceFilterSql = $this->getAdvancedFilterSQL();
 		$data = array();
-		$data['data'] = $reportRun->GenerateReport('PRINT', false);
-		$data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', false);
+		$data['data'] = $reportRun->GenerateReport('PRINT', $advanceFilterSql);
+		$data['total'] = $reportRun->GenerateReport('PRINT_TOTAL', $advanceFilterSql);
 		return $data;
 	}
 
@@ -704,6 +744,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			if (!empty ($blocks)) {
 				foreach ($blocks as $fieldType => $fieldName) {
 					$fieldDetails = explode(':', $fieldType);
+                    if($fieldName == 'Send Reminder' && $primaryModule == 'Calendar') continue;
 					if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
 						$calculationFields[$fieldType] = $fieldName;
 					}
@@ -734,6 +775,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 					if (!empty ($blocks)) {
 						foreach ($blocks as $fieldType => $fieldName) {
 							$fieldDetails = explode(':', $fieldType);
+                            if($fieldName == 'Send Reminder' && $secondaryModule == 'Calendar') continue;
 							if ($fieldDetails[4] === "I" || $fieldDetails[4] === "N" || $fieldDetails[4] === "NN") {
 								$calculationFields[$fieldType] = $fieldName;
 							}
@@ -838,23 +880,25 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 		$advancedFilterCriteria = array();
 		$advancedFilterCriteriaGroup = array();
-		foreach($advancedFilter as $groupIndex => $groupInfo) {
-			$groupColumns = $groupInfo['columns'];
-			$groupCondition = $groupInfo['condition'];
+		if(is_array($advancedFilter)) {
+			foreach($advancedFilter as $groupIndex => $groupInfo) {
+				$groupColumns = $groupInfo['columns'];
+				$groupCondition = $groupInfo['condition'];
 
-			if (empty ($groupColumns)) {
-				unset($advancedFilter[1]['condition']);
-			} else {
-				if(!empty($groupCondition)){
-					$advancedFilterCriteriaGroup[$groupIndex] = array('groupcondition'=>$groupCondition);
+				if (empty ($groupColumns)) {
+					unset($advancedFilter[1]['condition']);
+				} else {
+					if(!empty($groupCondition)){
+						$advancedFilterCriteriaGroup[$groupIndex] = array('groupcondition'=>$groupCondition);
+					}
 				}
-			}
 
-			foreach($groupColumns as $groupColumn){
-				$groupColumn['groupid'] = $groupIndex;
-				$groupColumn['columncondition'] = $groupColumn['column_condition'];
-				unset($groupColumn['column_condition']);
-				$advancedFilterCriteria[] = $groupColumn;
+				foreach($groupColumns as $groupColumn){
+					$groupColumn['groupid'] = $groupIndex;
+					$groupColumn['columncondition'] = $groupColumn['column_condition'];
+					unset($groupColumn['column_condition']);
+					$advancedFilterCriteria[] = $groupColumn;
+				}
 			}
 		}
 
@@ -926,4 +970,67 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		}
 		return true;
 	}
+
+	public function getScheduledReport(){
+		return Reports_ScheduleReports_Model::getInstanceById($this->getId());
+	}
+
+    public function getRecordsListFromRequest(Vtiger_Request $request) {
+        $folderId = $request->get('viewname');
+        $module = $request->get('module');
+        $selectedIds = $request->get('selected_ids');
+        $excludedIds = $request->get('excluded_ids');
+
+        if(!empty($selectedIds) && $selectedIds != 'all') {
+            if(!empty($selectedIds) && count($selectedIds) > 0) {
+                return $selectedIds;
+            }
+        }
+
+        $reportFolderModel = Reports_Folder_Model::getInstance();
+        $reportFolderModel->set('folderid', $folderId);
+        if($reportFolderModel) {
+            return $reportFolderModel->getRecordIds($excludedIds,$module);
+        }
+    }
+
+    function getModuleCalculationFieldsForReport(){
+        $aggregateFunctions = $this->getAggregateFunctions();
+		$moduleFields = array();
+		$primaryModuleFields = $this->getPrimaryModuleCalculationFields();
+		$secondaryModuleFields = $this->getSecondaryModuleCalculationFields();
+		$moduleFields = array_merge($primaryModuleFields, $secondaryModuleFields);
+		foreach ($moduleFields as $moduleName => $fieldList) {
+			$fields = array();
+			if(!empty($fieldList)){
+				foreach ($fieldList as $column => $label) {
+					foreach ($aggregateFunctions as $function) {
+						$fLabel = vtranslate($label, $moduleName).' ('.vtranslate('LBL_'.$function, 'Reports').')';
+						$fColumn = $column.':'.$function;
+						$fields[$fColumn] = $fLabel;
+					}
+				}
+			}
+			$moduleFields[$moduleName] = $fields;
+		}
+		return $moduleFields;
+    }
+
+    function getAggregateFunctions(){
+        $functions = array('SUM','AVG','MIN','MAX');
+        return $functions;
+    }
+
+    function getReportTypeInfo() {
+		$db = PearDatabase::getInstance();
+
+		$result = $db->pquery("SELECT data FROM vtiger_reporttype WHERE reportid = ?", array($this->getId()));
+
+		$dataFields = '';
+		if($db->num_rows($result) > 0) {
+			$dataFields = $db->query_result($result, 0, 'data');
+		}
+		return $dataFields;
+	}
+
 }

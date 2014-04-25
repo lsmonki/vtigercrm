@@ -19,14 +19,13 @@ jQuery.Class('Vtiger_Widget_Js',{
 		var widgetClassName = widgetName.toCamelCase();
 		var moduleClass = window[moduleName+"_"+widgetClassName+"_Widget_Js"];
 		var fallbackClass = window["Vtiger_"+widgetClassName+"_Widget_Js"];
-		
+
 		var basicClass = Vtiger_Widget_Js;
 		if(typeof moduleClass != 'undefined') {
 			var instance = new moduleClass(container);
 		}else if(typeof fallbackClass != 'undefined') {
 			var instance = new fallbackClass(container);
-		}
-		else{
+		} else {
 			var instance = new basicClass(container);
 		}
 		return instance;
@@ -255,20 +254,20 @@ jQuery.Class('Vtiger_Widget_Js',{
 });
 
 Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
-	
+
 	postLoadWidget: function() {
 		this._super();
-		
+
 		var widgetContent = jQuery('.dashboardWidgetContent', this.getContainer());
 		widgetContent.css({height: widgetContent.height()-40});
 		this.registerLoadMore();
 	},
-	
+
 	postRefreshWidget: function() {
 		this._super();
 		this.registerLoadMore();
 	},
-	
+
 	registerLoadMore: function() {
 		var thisInstance  = this;
 		var parent = thisInstance.getContainer();
@@ -291,7 +290,7 @@ Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
 					params.data[filterName] = filterValue;
 				});
 			}
-		
+
 			var filterData = thisInstance.getFilterData();
 			if(! jQuery.isEmptyObject(filterData)) {
 				if(typeof params == 'string') {
@@ -299,10 +298,10 @@ Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
 				}
 				params.data = jQuery.extend(params.data, thisInstance.getFilterData())
 			}
-			
+
 			// Next page.
 			params.data['page'] = loadMoreHandler.data('nextpage');
-			
+
 			var refreshContainer = parent.find('.refresh');
 			refreshContainer.progressIndicator({
 				'smallLoadingImage' : true
@@ -316,7 +315,7 @@ Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
 			});
 		});
 	}
-	
+
 });
 
 
@@ -336,8 +335,9 @@ Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
 				renderer:jQuery.jqplot.FunnelRenderer,
 				rendererOptions:{
 					sectionMargin: 12,
-					widthRatio: 0.3,
+					widthRatio: 0.1,
 					showDataLabels:true,
+					dataLabelThreshold: 0,
 					dataLabels: 'value'
 				}
 			},
@@ -369,7 +369,7 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
 	/**
 	 * Function which will give chart related Data
 	 */
-	getChartRelatedData : function() {
+	generateData : function() {
 		var container = this.getContainer();
 		var jData = container.find('.widgetData').val();
 		var data = JSON.parse(jData);
@@ -379,13 +379,13 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
 			var rowData = [row.last_name, parseFloat(row.amount), row.id];
 			chartData.push(rowData);
 		}
-		return chartData;
+		return {'chartData':chartData};
 	},
-	
+
 	loadChart : function() {
-		var chartData = this.getChartRelatedData();
-		
-		this.getPlotContainer(false).jqplot([chartData], {
+		var chartData = this.generateData();
+
+		this.getPlotContainer(false).jqplot([chartData['chartData']], {
 			seriesDefaults:{
 				renderer:jQuery.jqplot.PieRenderer,
 				rendererOptions: {
@@ -396,7 +396,8 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
 			legend: {
 				show: true,
 				location: 'e'
-			}
+			},
+			title : chartData['title']
 		});
 	},
 
@@ -413,7 +414,7 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
 
 Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
 
-	loadChart : function() {
+	generateChartData : function() {
 		var container = this.getContainer();
 		var jData = container.find('.widgetData').val();
 		var data = JSON.parse(jData);
@@ -429,37 +430,62 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
 				yMaxValue = parseInt(row[0]);
 			}
 		}
-		yMaxValue = yMaxValue + 2;
-		this.getPlotContainer(false).jqplot([chartData], {
+        // yMaxValue Should be 25% more than Maximum Value
+		yMaxValue = yMaxValue + 2 + (yMaxValue/100)*25;
+		return {'chartData':[chartData], 'yMaxValue':yMaxValue, 'labels':xLabels};
+	},
+
+	loadChart : function() {
+		var data = this.generateChartData();
+
+		this.getPlotContainer(false).jqplot(data['chartData'] , {
+			title: data['title'],
+			animate: !$.jqplot.use_excanvas,
 			seriesDefaults:{
 				renderer:jQuery.jqplot.BarRenderer,
 				rendererOptions: {
 					showDataLabels: true,
 					dataLabels: 'value',
-					varyBarColor : true
+					barDirection : 'vertical'
 				},
-				pointLabels: {show: true}
+				pointLabels: {show: true,edgeTolerance: -15}
 			},
 			 axes: {
 				xaxis: {
 					  tickRenderer: jQuery.jqplot.CanvasAxisTickRenderer,
 					  renderer: jQuery.jqplot.CategoryAxisRenderer,
-					  ticks: xLabels,
+					  ticks: data['labels'],
 					  tickOptions: {
 						angle: -45
 					  }
 				},
 				yaxis: {
 					min:0,
-					max: yMaxValue,
-					 tickOptions: {
+					max: data['yMaxValue'],
+					tickOptions: {
 						formatString: '%d'
 					},
 					pad : 1.2
 				}
-			}
+			},
+			legend: {
+                show		: (data['data_labels']) ? true:false,
+                location	: 'e',
+                placement	: 'outside',
+				showLabels	: (data['data_labels']) ? true:false,
+				showSwatch	: (data['data_labels']) ? true:false,
+				labels		: data['data_labels']
+            }
 		});
+//		this.getPlotContainer(false).on('jqPlotDataClick', function(){
+//			console.log('here');
+//		});
+//		jQuery.jqplot.eventListenerHooks.push(['jqPlotDataClick', myClickHandler]);
 	}
+
+//	registerSectionClick : function() {
+//		this.getPlotContainer(false);
+//	}
 });
 
 Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
@@ -481,7 +507,7 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 				stages.push(data[i].sales_stage);
 			}
 		}
-		
+
 		for(j in stages) {
 			var salesStageCount = new Array();
 			for(i in users) {
@@ -510,7 +536,7 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 		var ticks = chartRelatedData.ticks;
 		var labels = chartRelatedData.labels;
 
-this.getPlotContainer(false).jqplot( chartData, {
+		this.getPlotContainer(false).jqplot( chartData, {
 			stackSeries: true,
 			captureRightClick: true,
 			seriesDefaults:{
@@ -521,8 +547,8 @@ this.getPlotContainer(false).jqplot( chartData, {
 					// Highlight bars when mouse button pressed.
 					// Disables default highlighting on mouse over.
 					highlightMouseDown: true
-				},
-				pointLabels: {show: true}
+			},
+				pointLabels: {show: true,hideZeros: true}
 			},
 			axes: {
 				xaxis: {
@@ -555,9 +581,10 @@ this.getPlotContainer(false).jqplot( chartData, {
 
 // NOTE Widget-class name camel-case convention
 Vtiger_Widget_Js('Vtiger_Minilist_Widget_Js', {}, {
-	
+
 	postLoadWidget: function() {
 		app.hideModalWindow();
+        this.restrictContentDrag();
 	}
 });
 
@@ -568,21 +595,21 @@ Vtiger_Widget_Js('Vtiger_Tagcloud_Widget_Js',{},{
 		this.registerTagCloud();
 		this.registerTagClickEvent();
 	},
-	
+
 	registerTagCloud : function() {
 		jQuery('#tagCloud').find('a').tagcloud({
 			size: {
-			  start: parseInt('12'), 
-			  end: parseInt('30'), 
+			  start: parseInt('12'),
+			  end: parseInt('30'),
 			  unit: 'px'
-			}, 
+			},
 			color: {
-			  start: "#0266c9", 
+			  start: "#0266c9",
 			  end: "#759dc4"
 			}
 		});
 	},
-	
+
 	registerChangeEventForModulesList : function() {
 		jQuery('#tagSearchModulesList').on('change',function(e) {
 			var modulesSelectElement = jQuery(e.currentTarget);
@@ -591,11 +618,11 @@ Vtiger_Widget_Js('Vtiger_Tagcloud_Widget_Js',{},{
 			} else{
 				jQuery('[name="tagSearchModuleResults"]').removeClass('hide');
 				var selectedOptionValue = modulesSelectElement.val();
-				jQuery('[name="tagSearchModuleResults"]').filter(':not(#'+selectedOptionValue+')').addClass('hide');        
+				jQuery('[name="tagSearchModuleResults"]').filter(':not(#'+selectedOptionValue+')').addClass('hide');
 			}
 		});
 	},
-	
+
 	registerTagClickEvent : function(){
 		var thisInstance = this;
 		var container = this.getContainer();
@@ -617,7 +644,7 @@ Vtiger_Widget_Js('Vtiger_Tagcloud_Widget_Js',{},{
 					app.showModalWindow(params);
 					thisInstance.registerChangeEventForModulesList();
 				}
-			)			
+			)
 		});
 	},
 
@@ -629,14 +656,14 @@ Vtiger_Widget_Js('Vtiger_Tagcloud_Widget_Js',{},{
 
 /* Notebook Widget */
 Vtiger_Widget_Js('Vtiger_Notebook_Widget_Js', {
-	
+
 }, {
-	
+
 	// Override widget specific functions.
 	postLoadWidget: function() {
 		this.reinitNotebookView();
 	},
-	
+
 	reinitNotebookView: function() {
 		var self = this;
 		app.showScrollBar(jQuery('.dashboard_notebookWidget_viewarea', this.container), {'height':'200px'});
@@ -647,20 +674,20 @@ Vtiger_Widget_Js('Vtiger_Notebook_Widget_Js', {
 			self.saveNotebookContent();
 		});
 	},
-	
+
 	editNotebookContent: function() {
 		jQuery('.dashboard_notebookWidget_text', this.container).show();
 		jQuery('.dashboard_notebookWidget_view', this.container).hide();
 	},
-	
+
 	saveNotebookContent: function() {
 		var self = this;
 		var refreshContainer = this.container.find('.refresh');
 		var textarea = jQuery('.dashboard_notebookWidget_textarea', this.container);
-		
+
 		var url = this.container.data('url');
 		var params = url + '&content=true&mode=save&contents=' + encodeURIComponent(textarea.val());
-		
+
 		refreshContainer.progressIndicator({
 			'smallLoadingImage' : true
 		});

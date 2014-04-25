@@ -74,6 +74,17 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'À partir de',
+	'Optional' => 'Optionnel',
+	'LBL_ADD_TASK' => 'Add Tâche',
+    'Portal Pdf Url' =>'Portail Client lien PDF',
+	'LBL_ADD_TEMPLATE' => 'Ajouter un modèle',
+	'LBL_LINEITEM_BLOCK_GROUP' => 'Bloc LineItems pour groupe fiscal',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'Bloc LineItems pour impôts des particuliers',
+	
+	
+	//Translation for module
+	'Calendar' => 'Pour faire',
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

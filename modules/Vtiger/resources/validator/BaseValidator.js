@@ -7,7 +7,9 @@
  * All Rights Reserved.
  *************************************************************************************/
 jQuery.Class("Vtiger_Base_Validator_Js",{
-
+	
+	moduleName : false,
+	
 	/**
 	 *Function which invokes field validation
 	 *@param accepts field element as parameter
@@ -51,7 +53,11 @@ jQuery.Class("Vtiger_Base_Validator_Js",{
 			fieldInfo = JSON.parse(fieldInfo);
 		}
 		var dataValidator = "validator";
-		var module = app.getModuleName();
+		var moduleEle = field.closest('form').find('[name="module"]');
+		if(Vtiger_Base_Validator_Js.moduleName == false && moduleEle.length > 0) {
+			Vtiger_Base_Validator_Js.moduleName = moduleEle.val();
+		}
+		
 		var fieldInstance = Vtiger_Field_Js.getInstance(fieldInfo);
 		var validatorsOfType = Vtiger_Base_Validator_Js.getValidatorsFromFieldType(fieldInstance);
 		for(var key in validatorsOfType){
@@ -116,7 +122,16 @@ jQuery.Class("Vtiger_Base_Validator_Js",{
 	 * @return module specific validator className
 	 */
 	getClassName: function(validatorName){
-		var moduleName = app.getModuleName();
+		if(Vtiger_Base_Validator_Js.moduleName != false) {
+			var moduleName = Vtiger_Base_Validator_Js.moduleName;
+		} else {
+			var moduleName = app.getModuleName();
+		}
+		
+		if(moduleName == 'Events') {
+			moduleName = 'Calendar';
+		}
+		
 		return moduleName+"_"+validatorName+"_Validator_Js";
 	},
 

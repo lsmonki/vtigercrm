@@ -186,7 +186,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	global $adb;
 	$adb->println("Inside the function setMailerProperties");
 	if($module == "Support" || $logo ==1)
-		$mail->AddEmbeddedImage('themes/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
+		$mail->AddEmbeddedImage('layouts/vlayout/skins/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
 
 	$mail->Subject = $subject;
 	//Added back as we have changed php mailer library, older library was using html_entity_decode before sending mail
@@ -281,18 +281,22 @@ function setMailServerProperties($mail)
 	{
 		$smtp_auth = $_REQUEST['smtp_auth'];
 		if($smtp_auth == 'on')
-			$smtp_auth = 'true';
+			$smtp_auth = true;
 	}
 	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['smtp_auth'])))
 	{
 		//added to avoid issue while editing the values in the outgoing mail server.
-		$smtp_auth = 'false';
+		$smtp_auth = false;
 	}
-	else
+	else{
 		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
+        if($smtp_auth == "1" || $smtp_auth == "true"){
+            $smtp_auth = true;
+        }
+    }
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
-	if($smtp_auth == "true"){
+	if($smtp_auth){
 		$mail->SMTPAuth = true;	// turn on SMTP authentication
 	}
     $mail->Host = $server;		// specify main and backup server

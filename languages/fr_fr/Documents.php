@@ -47,7 +47,6 @@ $languageStrings = array(
 	'LBL_FILE_NOT_AVAILABLE'       => 'This Document is not available for Download', 
 );
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Exceeded maximum upload size', 
 	'JS_NEW_FOLDER'                => 'New Folder'                  , 
 	'JS_MOVE_DOCUMENTS'            => 'Move Documents'              , 
 	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Are you sure you want to move the file(s) to', 

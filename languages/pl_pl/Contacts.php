@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie kontaktu',
 
 	// Blocks
-	'LBL_CONTACT_INFORMATION' => 'Informacje podstawowe',
+	'LBL_CONTACT_INFORMATION' => 'Podstawowe informacje',
 	'LBL_CUSTOMER_PORTAL_INFORMATION' => 'Dostęp do portalu Klienta',
 	'LBL_IMAGE_INFORMATION' => 'Informacje dotyczące zdjęcia',
 
@@ -45,6 +45,8 @@ $languageStrings = array(
 	'Other Country' => 'Adres dodatkowy - kraj',
 	'Other Po Box' => 'Adres dodatkowy - skrytka pocztowa',
 	'Contact Image' => 'Zdjęcie kontaktu',
+    'Support Start Date' => 'Wsparcie Początek',
+    'Support End Date' => 'Data zakończenia wsparcia',
 	
 	//Added for Picklist Values
 	'Mr.'=>'Pan',

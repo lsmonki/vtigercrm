@@ -49,6 +49,8 @@ $languageStrings = array(
 	'Other Phone' => 'هاتف ثاني',
 	'Email' => 'البريد الالكتروني',
 	'Secondary Email' => 'بريد الكتروني ثاني',
+    'Support Start Date' => 'الدعم تاريخ بدء',
+    'Support End Date' => 'تاريخ الإنتهاء الدعم',
 	
 	//Added for Picklist Values
 	'Mr.'=>'السيد',

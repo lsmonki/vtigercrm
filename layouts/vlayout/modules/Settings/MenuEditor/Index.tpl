@@ -33,12 +33,22 @@
 								{foreach key=MODULE_NAME item=MODULE_MODEL from=$MODULES_LIST}
 									{assign var=TABID value=$MODULE_MODEL->getId()}
 									<option value="{$TABID}" {if in_array($TABID, $SELECTED_MODULE_IDS)} selected {/if}>
-										{vtranslate($MODULE_NAME, $MODULE_NAME)}</option>
+										{vtranslate($MODULE_NAME)}</option>
 								{/foreach}
 							</optgroup>
 						{/foreach}
 					</select>
 				</div>
+			<div class="row-fluid paddingTop20">
+				<div class="notification span12">
+					<div class="alert alert-info">
+						<div class="padding1per"><i class="icon-info-sign" style="margin-top:2px"></i>
+							<span style="margin-left: 2%">{vtranslate('LBL_MENU_EDITOR_MESSAGE', $QUALIFIED_MODULE)}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+					
                 <div class="row-fluid paddingTop20">
                     <div class=" span6">
                         <button class="btn btn-success hide pull-right" type="submit" name="saveMenusList">

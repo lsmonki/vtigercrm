@@ -641,7 +641,7 @@ $languageStrings = array(
 	'LBL_BLANK' => '-Puste-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM honest Open Source',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
 
 	//Translations used in inventory modules for copy address
 	'SINGLE_Accounts' => 'Kontrahent',

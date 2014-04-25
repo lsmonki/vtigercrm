@@ -30,20 +30,17 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 
     getPopUpParams : function(container) {
         var params = this._super(container);
+		var sourceFieldElement = jQuery('input[class="sourceField"]',container);
 
-        var sourceFieldElement = jQuery('input[class="sourceField"]',container);
-        
-        if(!this.isEvents() || (sourceFieldElement.attr('name') != 'contact_id')) {
-            return params;
-        }
-
-        var form = this.getForm();
-        var parentIdElement  = form.find('[name="parent_id"]');
-        if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
-            var closestContainer = parentIdElement.closest('td');
-            params['related_parent_id'] = parentIdElement.val();
-            params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
-        }
+		if(sourceFieldElement.attr('name') == 'contact_id') {
+			var form = this.getForm();
+			var parentIdElement  = form.find('[name="parent_id"]');
+			if(parentIdElement.length > 0 && parentIdElement.val().length > 0) {
+				var closestContainer = parentIdElement.closest('td');
+				params['related_parent_id'] = parentIdElement.val();
+				params['related_parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
+			}
+		}
         return params;
     },
 
@@ -168,13 +165,20 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 
     referenceCreateHandler : function(container) {
         var thisInstance = this;
+		var form = thisInstance.getForm();
+		var mode = jQuery(form).find('[name="module"]').val();
         if(container.find('.sourceField').attr('name') != 'contact_id'){
-            this._super();
+            this._super(container);
+			return;
         }
          var postQuickCreateSave  = function(data) {
             var params = {};
             params.name = data.result._recordLabel;
             params.id = data.result._recordId;
+			if(mode == "Calendar"){
+				thisInstance.setReferenceFieldValue(container, params);
+				return;
+			}
             thisInstance.addNewContactToRelatedList({'data':[params]});
         }
 
@@ -208,6 +212,9 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
             if(endDateElement.data('userChangedTime') == true) {
                 return;
             }
+            if(jQuery('[name="userChangedEndDateTime"]').val() == '1') {
+                return;
+            }
 			
 			var startDate = dateStartElement.val();
 			var strtTime = strtTimeElement.val();
@@ -221,26 +228,24 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 			var timeFormat = endTimeElement.data('format');
 			var date = Vtiger_Helper_Js.getDateInstance(dateTime,dateFormat);
 
-                        if(date){
-                            var endDateInstance = Date.parse(date);
-                            if(container.find('[name="activitytype"]').val() == 'Call'){
-                                    var defaulCallDuration = container.find('[name="defaultCallDuration"]').val();
-                                    endDateInstance.addMinutes(defaulCallDuration);
-                            } else {
-                                    var defaultOtherEventDuration = container.find('[name="defaultOtherEventDuration"]').val();
-                                    endDateInstance.addMinutes(defaultOtherEventDuration);
-                            }
-                            var endDateString = app.getDateInVtigerFormat(dateFormat,endDateInstance);
-                            if(timeFormat == 24){
-                                    var defaultTimeFormat = 'HH:mm';
-                            } else {
-                                    defaultTimeFormat = 'hh:mm tt';
-                            }
-                            var endTimeString = endDateInstance.toString(defaultTimeFormat);
+			var endDateInstance = Date.parse(date);
+			if(container.find('[name="activitytype"]').val() == 'Call'){
+				var defaulCallDuration = container.find('[name="defaultCallDuration"]').val();
+				endDateInstance.addMinutes(defaulCallDuration);
+			} else {
+				var defaultOtherEventDuration = container.find('[name="defaultOtherEventDuration"]').val();
+				endDateInstance.addMinutes(defaultOtherEventDuration);
+			}
+			var endDateString = app.getDateInVtigerFormat(dateFormat,endDateInstance);
+			if(timeFormat == 24){
+				var defaultTimeFormat = 'HH:mm';
+			} else {
+				defaultTimeFormat = 'hh:mm tt';
+			}
+			var endTimeString = endDateInstance.toString(defaultTimeFormat);
 
-                            endDateElement.val(endDateString);
-                            endTimeElement.val(endTimeString);
-                        }
+			endDateElement.val(endDateString);
+			endTimeElement.val(endTimeString);
 		});
         
         container.find('[name="date_start"]').on('change',function(e) {
@@ -295,6 +300,7 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 				return;
 			}
             var timeDateElement = timeElement.closest('td.fieldValue').find('[name="due_date"]');
+            jQuery('[name="userChangedEndDateTime"]').val('1');
             timeDateElement.data('userChangedTime',true);
         });
         
@@ -304,6 +310,7 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
             if(result != true){
 				return;
 			}
+            jQuery('[name="userChangedEndDateTime"]').val('1');
             dueDateElement.data('userChangedTime',true);
         });
     },
@@ -344,13 +351,24 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
 
     registerRelatedContactSpecificEvents : function() {
         var thisInstance = this;
+		var form = this.getForm();
+		
+		form.find('[name="contact_id"]').on(Vtiger_Edit_Js.preReferencePopUpOpenEvent,function(e){
+            var form = thisInstance.getForm();
+            var parentIdElement  = form.find('[name="parent_id"]');
+            var container = parentIdElement.closest('td');
+            var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',container).val();
+            
+            if(popupReferenceModule == 'Leads' && parentIdElement.val().length > 0) {
+                e.preventDefault();
+                Vtiger_Helper_Js.showPnotify(app.vtranslate('LBL_CANT_SELECT_CONTACT_FROM_LEADS'));
+            }
+        })
         //If module is not events then we dont have to register events
         if(!this.isEvents()) {
             return;
         }
-        var thisInstance = this;
-        var form = this.getForm();
-         this.getRelatedContactElement().select2({
+        this.getRelatedContactElement().select2({
              minimumInputLength: 3,
              ajax : {
                 'url' : 'index.php?module=Contacts&action=BasicAjax&search_module=Contacts',
@@ -381,32 +399,43 @@ Vtiger_Edit_Js("Calendar_Edit_Js",{
              },
              multiple : true
         });
-
+		
         //To add multiple selected contact from popup
         form.find('[name="contact_id"]').on(Vtiger_Edit_Js.refrenceMultiSelectionEvent,function(e,result){
             thisInstance.addNewContactToRelatedList(result);
         });
         
-        form.find('[name="contact_id"]').on(Vtiger_Edit_Js.preReferencePopUpOpenEvent,function(e){
-            var form = thisInstance.getForm();
-            var parentIdElement  = form.find('[name="parent_id"]');
-            var container = parentIdElement.closest('td');
-            var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',container).val();
-            
-            if(popupReferenceModule == 'Leads' && parentIdElement.val().length > 0) {
-                e.preventDefault();
-                Vtiger_Helper_Js.showPnotify(app.vtranslate('LBL_CANT_SELECT_CONTACT_FROM_LEADS'));
-            }
-        })
-
         this.fillRelatedContacts();
     },
+	
+	/**
+	 * Function to get reference search params
+	 */
+	getReferenceSearchParams : function(element){
+		var tdElement = jQuery(element).closest('td');
+		var contactField = tdElement.find('[name="contact_id"]');
+		var params = {};
+		if(contactField.length > 0){
+			var form = this.getForm();
+			var parentIdElement  = form.find('[name="parent_id"]');
+			if(parentIdElement.val().length > 0) {
+			   var closestContainer = parentIdElement.closest('td');
+			   params['parent_id'] = parentIdElement.val();
+			   params['parent_module'] = closestContainer.find('[name="popupReferenceModule"]').val();
+			}
+		}
+		var searchModule = this.getReferencedModuleName(tdElement);
+		params.search_module = searchModule;
+		return params;
+	},
 
 	registerBasicEvents : function(container) {
 		this._super(container);
 		this.registerActivityTypeChangeEvent(container);
 		this.registerTimeStartChangeEvent(container);
         this.registerEndDateTimeChangeLogger(container);
+        //Required to set the end time based on the default ActivityType selected
+        container.find('[name="activitytype"]').trigger('change');
 	},
 	
 	registerEvents : function(){

@@ -18,6 +18,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
     const REFERENCE_TYPE = 'reference';
 	const OWNER_TYPE = 'owner';
+	const CURRENCY_LIST = 'currencyList';
 
     const QUICKCREATE_MANDATORY = 0;
     const QUICKCREATE_NOT_ENABLED = 1;
@@ -159,6 +160,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
 				$fieldDataType = 'picklist';
 			} else if($uiType == '55' && $this->getName() === 'firstname') {
 				$fieldDataType = 'salutation';
+            } else if($uiType == '54') {
+                $fieldDataType = 'multiowner';
 			} else {
 				$webserviceField = $this->getWebserviceFieldObject();
 				$fieldDataType = $webserviceField->getFieldDataType();
@@ -226,7 +229,7 @@ class Vtiger_Field_Model extends Vtiger_Field {
 
         if($fieldDataType == 'picklist' || $fieldDataType == 'multipicklist') {
             $currentUser = Users_Record_Model::getCurrentUserModel();
-            if($this->isRoleBased() && !$currentUser->isAdminUser()) {
+            if($this->isRoleBased()) {
                 $userModel = Users_Record_Model::getCurrentUserModel();
                 $picklistValues = Vtiger_Util_Helper::getRoleBasedPicklistValues($this->getName(), $userModel->get('roleid'));
             }else{
@@ -474,12 +477,13 @@ class Vtiger_Field_Model extends Vtiger_Field {
 		$this->fieldInfo['name'] = $this->get('name');
 		$this->fieldInfo['label'] = vtranslate($this->get('label'), $this->getModuleName());
 
-
-        if($fieldDataType == 'picklist' || $fieldDataType == 'multipicklist') {
+        if($fieldDataType == 'picklist' || $fieldDataType == 'multipicklist' || $fieldDataType == 'multiowner') {
             $pickListValues = $this->getPicklistValues();
             if(!empty($pickListValues)) {
                 $this->fieldInfo['picklistvalues'] = $pickListValues;
-            }
+            } else {
+				$this->fieldInfo['picklistvalues'] = array();
+			}
         }
 
 		if($this->getFieldDataType() == 'date' || $this->getFieldDataType() == 'datetime'){
@@ -495,6 +499,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
 		if($this->getFieldDataType() == 'currency') {
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$this->fieldInfo['currency_symbol'] = $currentUser->get('currency_symbol');
+			$this->fieldInfo['decimal_seperator'] = $currentUser->get('currency_decimal_separator');
+			$this->fieldInfo['group_seperator'] = $currentUser->get('currency_grouping_separator');
 		}
 
 		if($this->getFieldDataType() == 'owner') {
@@ -519,23 +525,37 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 */
 	protected static function getDateForStdFilterBytype($type) {
 		$today = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d"), date("Y")));
+        $todayName =  date('l', strtotime( $today));
+
 		$tomorrow = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + 1, date("Y")));
 		$yesterday = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 1, date("Y")));
 
 		$currentmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
 		$currentmonth1 = date("Y-m-t");
 		$lastmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, "01", date("Y")));
-		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$lastmonth1 = date("Y-m-t", strtotime($lastmonth0));
 		$nextmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
-		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$nextmonth1 = date("Y-m-t", strtotime($nextmonth0));
 
-		$lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
+          // (Last Week) If Today is "Sunday" then "-2 week Sunday" will give before last week Sunday date
+        if($todayName == "Sunday")
+            $lastweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
+        else
+            $lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
 		$lastweek1 = date("Y-m-d", strtotime("-1 week Saturday"));
 
-		$thisweek0 = date("Y-m-d", strtotime("-1 week Sunday"));
+        // (This Week) If Today is "Sunday" then "-1 week Sunday" will give last week Sunday date
+        if($todayName == "Sunday")
+            $thisweek0 = date("Y-m-d",strtotime("-0 week Sunday"));
+        else
+            $thisweek0 = date("Y-m-d", strtotime("-1 week Sunday"));
 		$thisweek1 = date("Y-m-d", strtotime("this Saturday"));
 
-		$nextweek0 = date("Y-m-d", strtotime("this Sunday"));
+         // (Next Week) If Today is "Sunday" then "this Sunday" will give Today's date
+		if($todayName == "Sunday")
+            $nextweek0 = date("Y-m-d",strtotime("+1 week Sunday"));
+        else
+            $nextweek0 = date("Y-m-d", strtotime("this Sunday"));
 		$nextweek1 = date("Y-m-d", strtotime("+1 week Saturday"));
 
 		$next7days = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + 6, date("Y")));
@@ -730,7 +750,8 @@ class Vtiger_Field_Model extends Vtiger_Field {
 			'b' => 'LBL_BEFORE',
 			'a' => 'LBL_AFTER',
 			'bw' => 'LBL_BETWEEN',
-			'y' => 'LBL_IS_EMPTY'
+			'y' => 'LBL_IS_EMPTY',
+            'ny'=> 'LBL_IS_NOT_EMPTY'
 		);
 	}
 
@@ -741,15 +762,15 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 */
 	public static function getAdvancedFilterOpsByFieldType() {
 		return array(
-			'V' => array('e','n','s','ew','c','k','y'),
-			'N' => array('e','n','l','g','m','h', 'y'),
-			'T' => array('e','n','l','g','m','h','bw','b','a','y'),
-			'I' => array('e','n','l','g','m','h','y'),
-			'C' => array('e','n','y'),
-			'D' => array('e','n','bw','b','a','y'),
-			'DT' => array('e','n','bw','b','a','y'),
-			'NN' => array('e','n','l','g','m','h','y'),
-			'E' => array('e','n','s','ew','c','k','y')
+			'V' => array('e','n','s','ew','c','k','y','ny'),
+			'N' => array('e','n','l','g','m','h', 'y','ny'),
+			'T' => array('e','n','l','g','m','h','bw','b','a','y','ny'),
+			'I' => array('e','n','l','g','m','h','y','ny'),
+			'C' => array('e','n','y','ny'),
+			'D' => array('e','n','bw','b','a','y','ny'),
+			'DT' => array('e','n','bw','b','a','y','ny'),
+			'NN' => array('e','n','l','g','m','h','y','ny'),
+			'E' => array('e','n','s','ew','c','k','y','ny')
 		);
 	}
 
@@ -901,12 +922,16 @@ class Vtiger_Field_Model extends Vtiger_Field {
 							  array_push($validator, $funcName);
 								break;
             //SalesOrder field sepecial validators
-            case 'end_period' : $funcName = array('name' => 'greaterThanDependentField',
-									'params' => array('start_period'));
-								array_push($validator, $funcName);
-								break;
-             case 'start_period' : $funcName = array('name' => 'lessThanDependentField',
-									'params' => array('end_period'));
+            case 'end_period' : $funcName1 = array('name' => 'greaterThanDependentField',
+													'params' => array('start_period'));
+												array_push($validator, $funcName1);
+								$funcName2 = array('name' => 'lessThanDependentField',
+													'params' => array('duedate'));
+												array_push($validator, $funcName2);
+
+		   case 'start_period' :
+								$funcName = array('name' => 'lessThanDependentField',
+													'params' => array('end_period'));
 								array_push($validator, $funcName);
 								break;
 		}

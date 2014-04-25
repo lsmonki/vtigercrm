@@ -72,4 +72,5 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Cahier à spiral'            , 
 	'Sq Ft'                        => 'm²'                         , 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
+    'LBL_PRODUCTSMOD_DISABLED' => 'Activer Module Produits pour voir les produits',
 );

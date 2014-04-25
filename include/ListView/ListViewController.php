@@ -107,8 +107,8 @@ class ListViewController {
 
 	public function getListViewHeaderFields() {
 		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
-		$moduleFields = $meta->getModuleFields();
-		$fields = $this->queryGenerator->getFields();
+		$moduleFields = $this->queryGenerator->getModuleFields();
+		$fields = $this->queryGenerator->getFields(); 
 		$headerFields = array();
 		foreach($fields as $fieldName) {
 			if(array_key_exists($fieldName, $moduleFields)) {
@@ -125,7 +125,7 @@ class ListViewController {
 		$fields = $this->queryGenerator->getFields();
 		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
 
-		$moduleFields = $meta->getModuleFields();
+		$moduleFields = $this->queryGenerator->getModuleFields();
 		$accessibleFieldList = array_keys($moduleFields);
 		$listViewFields = array_intersect($fields, $accessibleFieldList);
 
@@ -300,8 +300,12 @@ class ListViewController {
 						$value = '';
 					}
 				} elseif($field->getFieldDataType() == 'time') {
-					if(!empty($value))
-						$value = Vtiger_Time_UIType::getTimeValueInAMorPM($value);
+					if(!empty($value)){
+						$userModel = Users_Privileges_Model::getCurrentUserModel();
+						if($userModel->get('hour_format') == '12'){
+							$value = Vtiger_Time_UIType::getTimeValueInAMorPM($value);
+						}
+					}
 				} elseif($field->getFieldDataType() == 'currency') {
 					if($value != '') {
 						if($field->getUIType() == 72) {
@@ -335,7 +339,7 @@ class ListViewController {
 					if($current_user->internal_mailer == 1){
 						//check added for email link in user detailview
 						$value = "<a class='emailField' onclick=\"Vtiger_Helper_Js.getInternalMailer($recordId,".
-						"'$fieldName');\">".textlength_check($value)."</a>";
+						"'$fieldName','$module');\">".textlength_check($value)."</a>";
 					} else {
 						$value = '<a class="emailField" href="mailto:'.$rawValue.'">'.textlength_check($value).'</a>';
 					}

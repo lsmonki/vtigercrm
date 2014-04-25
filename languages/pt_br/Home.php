@@ -20,5 +20,6 @@ $languageStrings = array(
 	'OLTPO'                        => 'Principais Pedidos Compras'  , 
 	'LTFAQ'                        => 'Minhas FAQs Recentes'        , 
 	'UA'                           => 'Eventos Programados'         , 
-	'PA'                           => 'Eventos Pendentes'           , 
+	'PA'                           => 'Eventos Pendentes'           ,
+        'Home'                         => 'Casa'                        ,
 );

@@ -30,7 +30,7 @@ class Reports_MassDelete_Action extends Vtiger_Mass_Action {
 
 	public function process(Vtiger_Request $request) {
 		$parentModule = 'Reports';
-		$recordIds = $this->getRecordsListFromRequest($request);
+		$recordIds = Reports_Record_Model::getRecordsListFromRequest($request);
 
 		$reportsDeleteDenied = array();
 		foreach($recordIds as $recordId) {

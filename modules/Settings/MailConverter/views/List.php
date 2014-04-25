@@ -12,20 +12,33 @@ class Settings_MailConverter_List_View extends Settings_Vtiger_Index_View {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
+		$scannerId = $request->get('record');
+		if ($scannerId == '')
+		    $scannerId = Settings_MailConverter_Module_Model::getDefaultId();
 		$qualifiedModuleName = $request->getModule(false);
-        $listViewModel = Settings_Vtiger_ListView_Model::getInstance($qualifiedModuleName);
+		$listViewModel = Settings_Vtiger_ListView_Model::getInstance($qualifiedModuleName);
+		$recordExists = Settings_MailConverter_Module_Model::MailBoxExists();
+		$recordModel = Settings_MailConverter_Record_Model::getAll();
 		$viewer = $this->getViewer($request);
         
 		$viewer->assign('LISTVIEW_LINKS', $listViewModel->getListViewLinks());
 		$viewer->assign("MODULE_MODEL", Settings_Vtiger_Module_Model::getInstance($qualifiedModuleName));
-		$viewer->assign("RECORD_MODELS", Settings_MailConverter_Record_Model::getAll());
-
+		$viewer->assign("MAILBOXES", Settings_MailConverter_Module_Model::getMailboxes());
+	
 		$viewer->assign("MODULE_NAME", $moduleName);
 		$viewer->assign("QUALIFIED_MODULE_NAME", $qualifiedModuleName);
-        $viewer->assign('CRON_RECORD_MODEL', Settings_CronTasks_Record_Model::getInstanceByName('MailScanner'));
-
-		$viewer->view("ListView.tpl", $qualifiedModuleName);
-	}
+		$viewer->assign('CRON_RECORD_MODEL', Settings_CronTasks_Record_Model::getInstanceByName('MailScanner'));
+		$viewer->assign('RECORD_EXISTS', $recordExists);
+	
+		if ($scannerId) {
+		    $viewer->assign('SCANNER_ID', $scannerId);
+		    $viewer->assign("RECORD", $recordModel[$scannerId]);
+		    $viewer->assign('SCANNER_MODEL', Settings_MailConverter_Record_Model::getInstanceById($scannerId));
+		    $viewer->assign('RULE_MODELS_LIST', Settings_MailConverter_RuleRecord_Model::getAll($scannerId));
+		    $viewer->assign('FOLDERS_SCANNED', Settings_MailConverter_Module_Model::getScannedFolders($scannerId));
+		}
+		$viewer->view("RulesList.tpl", $qualifiedModuleName);
+    }
     
     /**
 	 * Function to get the list of Script models to be included

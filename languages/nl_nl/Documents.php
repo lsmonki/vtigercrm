@@ -47,7 +47,6 @@ $languageStrings = array(
 	'LBL_FILE_NOT_AVAILABLE'       => 'Dit document is niet beschikbaar voor download', 
 );
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Maximale uploadgrotte overschreden', 
 	'JS_NEW_FOLDER'                => 'Nieuwe map'                  , 
 	'JS_MOVE_DOCUMENTS'            => 'Verplaats documenten'        , 
 	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Weet u zeker dat u de/het bestand(en) wilt verplaatsen naar', 

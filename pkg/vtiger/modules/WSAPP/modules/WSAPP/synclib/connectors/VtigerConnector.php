@@ -54,7 +54,12 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector {
 	}
 
 	public function getSyncState() {
-		$result = $this->db->pquery("SELECT * FROM vtiger_wsapp_sync_state WHERE name=? and userid=?", array($this->getName(), $this->getSynchronizeController()->user->id));
+		$result = null;
+		if($this->getSynchronizeController()->getSyncType() == "app"){
+			$result = $this->db->pquery("SELECT * FROM vtiger_wsapp_sync_state WHERE name=?", array($this->getName()));
+		} else {
+			$result = $this->db->pquery("SELECT * FROM vtiger_wsapp_sync_state WHERE name=? and userid=?", array($this->getName(), $this->getSynchronizeController()->user->id));//$this->getSYnchronizeController()->getSyncType();
+		}
 		if ($this->db->num_rows($result) <= 0) {
 			return $this->intialSync();
 		}
@@ -89,8 +94,15 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector {
 		$query = 'INSERT INTO vtiger_wsapp_sync_state(stateencodedvalues,name,userid) VALUES (?,?,?)';
 		$parameters = array($encodedValues, $this->getName(), $this->getSynchronizeController()->user->id);
 		if ($this->isSyncStateExists()) {
-			$query = 'UPDATE vtiger_wsapp_sync_state SET stateencodedvalues=? where name=? and userid=?';
-			$parameters = array($encodedValues, $this->getName(), $this->getSynchronizeController()->user->id);
+			$query		= '';
+			$parameters = array();
+			if($this->getSynchronizeController()->getSyncType() == "app"){
+				$query = 'UPDATE vtiger_wsapp_sync_state SET stateencodedvalues=? where name=?';
+				$parameters = array($encodedValues, $this->getName());
+			}else {
+				$query = 'UPDATE vtiger_wsapp_sync_state SET stateencodedvalues=? where name=? and userid=?';
+				$parameters = array($encodedValues, $this->getName(), $this->getSynchronizeController()->user->id);
+			}
 		}
 		$result = $this->db->pquery($query, $parameters);
 		if ($result) {
@@ -100,7 +112,12 @@ class WSAPP_VtigerConnector extends WSAPP_BaseConnector {
 	}
 
 	function isSyncStateExists() {
-		$result = $this->db->pquery('SELECT 1 FROM vtiger_wsapp_sync_state where name=? and userid=?', array($this->getName(), $this->getSynchronizeController()->user->id));
+		$result = null;
+		if($this->getSynchronizeController()->getSyncType() == "app"){
+			$result = $this->db->pquery('SELECT 1 FROM vtiger_wsapp_sync_state where name=?', array($this->getName()));
+		} else {
+			$result = $this->db->pquery('SELECT 1 FROM vtiger_wsapp_sync_state where name=? and userid=?', array($this->getName(), $this->getSynchronizeController()->user->id));
+		}
 		return ($this->db->num_rows($result) > 0) ? true : false;
 	}
 

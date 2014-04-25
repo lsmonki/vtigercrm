@@ -12,8 +12,6 @@
 
 
 {* <script> resources below *}
-	<script type="text/javascript" src="libraries/html5shim/html5.js"></script>
-
 	<script type="text/javascript" src="libraries/jquery/jquery.blockUI.js"></script>
 	<script type="text/javascript" src="libraries/jquery/chosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
@@ -45,6 +43,7 @@
 	<script type="text/javascript" src="libraries/jquery/datepicker/js/datepicker.js"></script>
 	<script type="text/javascript" src="libraries/jquery/dangrossman-bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript" src="libraries/jquery/jquery.ba-outside-events.min.js"></script>
+	<script type="text/javascript" src="libraries/jquery/jquery.placeholder.js"></script>
 
 	{foreach key=index item=jsModel from=$SCRIPTS}
 		<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}?&v={$VTIGER_VERSION}"></script>

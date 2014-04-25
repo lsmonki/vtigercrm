@@ -69,10 +69,10 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$this->initTax($lineItem, $parent);
 		$this->_create($elementType, $lineItem);
 	}
-	
+
 	/**
 	 * Function gives all the line items related to inventory records
-	 * @param $parentId - record id or array of the inventory record id's 
+	 * @param $parentId - record id or array of the inventory record id's
 	 * @return <Array> - list of line items
 	 * @throws WebServiceException - Database error
 	 */
@@ -138,7 +138,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		}
 		return $createdElement;
 	}
-	
+
 	private function appendTaxInfo($element) {
 		$meta = $this->getMeta();
 		$moduleFields = $meta->getModuleFields();
@@ -172,7 +172,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		}
 		return $element;
 	}
-	
+
 	private function updateTaxes($createdElement){
 		if(count($this->taxList) > 0 ) {
 			$id = vtws_getIdComponents($createdElement['id']);
@@ -257,7 +257,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$parentTypeHandler = vtws_getModuleHandlerFromId($parentId, $this->user);
 		$parentTypeMeta = $parentTypeHandler->getMeta();
 		$parentType = $parentTypeMeta->getEntityName();
-		
+
 		$parentObject = CRMEntity::getInstance($parentType);
 		$parentObject->id = $pId;
 		$lineItemList = $this->getAllLineItemForParent($pId);
@@ -300,7 +300,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$parent = $this->getParentById($element['parent_id']);
 		return $this->resetTaxInfo($element, $parent);
 	}
-	
+
 	public function update($element) {
 		$parentId = vtws_getIdComponents($element['parent_id']);
 		$parentId = $parentId[1];
@@ -391,7 +391,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$this->updateInventoryStock($element, $parent);
 		return $result;
 	}
-	
+
 	private function resetCacheForParent($parentId){
 		self::$lineItemCache[$parentId] = null;
 	}
@@ -430,10 +430,11 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 			$discount = ($parent['hdnDiscountPercent']/100 * $parent['hdnSubTotal']);
 		}
 		$parent['pre_tax_total'] = $total = $parent['hdnSubTotal'] - $discount + $parent['hdnS_H_Amount'];
+		$taxTotal = $parent['hdnSubTotal'] - $discount;
 		if(strcasecmp($parent['hdnTaxType'], $this->Individual) !==0){
 			$this->initTax($createdElement, $parent);
 			foreach ($this->taxList as $taxInfo) {
-				$taxAmount += ($taxInfo['percentage'])/100*$total;
+				$taxAmount += ($taxInfo['percentage'])/100*$taxTotal;
 			}
 		}
 		$shippingTax = getAllTaxes('all', 'sh','edit',$parentId);
@@ -454,7 +455,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		$parentInstance->tab_name_index[$parentInstance->table_name].'=?';
 		$params = array($parent['hdnSubTotal'],$parent['hdnGrandTotal'],$parent['pre_tax_total'],$parentId);
 		$transactionSuccessful = vtws_runQueryAsTransaction($sql,$params,$result);
-        self::$parentCache[$parent['id']] = $parent; 
+        self::$parentCache[$parent['id']] = $parent;
 		if(!$transactionSuccessful){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 				"Database error while performing required operation");
@@ -534,7 +535,7 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 	function setCache($parentId,  $updatedList) {
 		self::$lineItemCache[$parentId] = $updatedList;
 	}
-	
+
 	public function __create($elementType,$element){
 		$element['id'] = $element['parent_id'];
 		unset($element['parent_id']);
@@ -548,6 +549,15 @@ class VtigerLineItemOperation  extends VtigerActorOperation {
 		}
 		return $this->element;
 	}
-	
+
+	public function describe($elementType) {
+		$describe = parent::describe($elementType);
+		foreach ($describe['fields'] as $key => $list){
+			if($list["name"] == 'description'){
+				unset($describe['fields'][$key]);
+			}
+		}
+		return $describe;
+	}
 }
 ?>

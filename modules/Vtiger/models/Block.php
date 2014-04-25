@@ -17,19 +17,19 @@ class Vtiger_Block_Model extends Vtiger_Block {
 		if(empty($this->fields)) {
 			$moduleFields = Vtiger_Field_Model::getAllForModule($this->module);
             $this->fields = array();
-
-            // if block does not contains any fields
+            
+            // if block does not contains any fields 
             if(!is_array($moduleFields[$this->id])){
                 $moduleFields[$this->id] = array();
             }
-
+            
 			foreach($moduleFields[$this->id] as $field){
                     $this->fields[$field->get('name')] = $field;
 			}
 		}
 		return $this->fields;
 	}
-
+    
     public function setFields($fieldModelList) {
         $this->fields = $fieldModelList;
         return $this;
@@ -45,21 +45,21 @@ class Vtiger_Block_Model extends Vtiger_Block {
 			return $this->$propertyName;
 		}
 	}
-
+    
     public function set($propertyName, $value) {
         if(property_exists($this,$propertyName)){
             $this->$propertyName = $value;
         }
         return $this;
     }
-
+    
     public function isCustomized() {
         return ($this->iscustom != 0) ? true : false;
     }
-
+    
     public function __update() {
         $db = PearDatabase::getInstance();
-
+        
         $query = 'UPDATE vtiger_blocks SET blocklabel=?,display_status=? WHERE blockid=?';
         $params = array($this->label, $this->display_status, $this->id);
         $db->pquery($query, $params);
@@ -75,7 +75,7 @@ class Vtiger_Block_Model extends Vtiger_Block {
         }
         return false;
     }
-
+    
     /**
      * Function to get the in active fields for the block
      * @param type $raw - true to send field in model format or false to send in array format
@@ -105,7 +105,7 @@ class Vtiger_Block_Model extends Vtiger_Block {
 	 */
 	public static function getAllForModule($moduleModel) {
 		$blockObjects = Vtiger_Cache::get('ModuleBlock',$moduleModel->getName());
-
+        
         if(!$blockObjects){
             $blockObjects = parent::getAllForModule($moduleModel);
             Vtiger_Cache::set('ModuleBlock',$moduleModel->getName(),$blockObjects);
@@ -119,7 +119,7 @@ class Vtiger_Block_Model extends Vtiger_Block {
 		}
 		return $blockModelList;
 	}
-
+	
 	public static function getInstance($value, $moduleInstance = false) {
 		$blockInstance = parent::getInstance($value, $moduleInstance);
 		$blockModel = self::getInstanceFromBlockObject($blockInstance);
@@ -140,7 +140,7 @@ class Vtiger_Block_Model extends Vtiger_Block {
 		}
 		return $blockModel;
 	}
-
+    
     public static function updateSequenceNumber($sequenceList) {
         $db = PearDatabase::getInstance();
         $query = 'UPDATE vtiger_blocks SET sequence = CASE blockid ';
@@ -151,24 +151,24 @@ class Vtiger_Block_Model extends Vtiger_Block {
         $query .= ' WHERE blockid IN ('.generateQuestionMarks($sequenceList).')';
         $db->pquery($query, array_keys($sequenceList));
     }
-
+    
     public static function checkFieldsExists($blockId) {
         $db = PearDatabase::getInstance();
         $query = 'SELECT 1 FROM vtiger_field WHERE block=?';
         $result = $db->pquery($query, array($blockId));
         return ($db->num_rows($result) > 0) ? true : false;
     }
-
+	
 	/**
 	 * Function to push all blocks down after sequence number
-	 * @param type $fromSequence
+	 * @param type $fromSequence 
 	 */
 	public static function pushDown($fromSequence, $sourceModuleTabId) {
 		$db = PearDatabase::getInstance();
 		$query = 'UPDATE vtiger_blocks SET sequence=sequence+1 WHERE sequence > ? and tabid=?';
 		$result = $db->pquery($query, array($fromSequence,$sourceModuleTabId));
 	}
-
+    
     public static function getAllBlockSequenceList($moduleTabId) {
         $db = PearDatabase::getInstance();
         $query = 'SELECT blockid,sequence FROM vtiger_blocks where tabid=?';
@@ -197,5 +197,5 @@ class Vtiger_Block_Model extends Vtiger_Block {
 		}
 		return false;
 	}
-
+	
 }

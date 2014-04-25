@@ -57,7 +57,7 @@ function getCurrencyName($currencyid, $show_symbol = true) {
 
 function getTabid($module) {
 	return Vtiger_Functions::getModuleId($module);
-}
+	}
 
 function getFieldid($tabid, $fieldname, $onlyactive = true) {
 	return Vtiger_Functions::getModuleFieldId($tabid, $fieldname, $onlyactive);
@@ -129,7 +129,7 @@ function getUserFullName($userid) {
 
 function getParentName($parent_id) {
 	return Vtiger_Functions::getCRMRecordLabel($parent_id);
-}
+	}
 
 function getValidDisplayDate($cur_date_val) {
 	return Vtiger_Functions::currentUserDisplayDate($cur_date_val);
@@ -209,7 +209,7 @@ function create_parenttab_data_file() {
 	return Vtiger_Deprecated::createModuleGroupMetaFile();
 }
 
-function getEntityName($module, $ids_list, $compute=false) {
+function getEntityName($module, $ids_list, $compute=true) {
 	if ($compute) {
 		return Vtiger_Functions::computeCRMRecordLabels($module, $ids_list);
 	} else {
@@ -292,7 +292,7 @@ function getTranslatedString($str, $module = 'Vtiger') {
  */
 function getTranslatedCurrencyString($str) {
 	return Vtiger_Deprecated::getTranslatedCurrencyString($str);
-}
+	}
 
 function getTicketComments($ticketid) {
 	return Vtiger_Functions::getTicketComments($ticketid);
@@ -483,7 +483,7 @@ function getSqlForNameInDisplayFormat($input, $module, $glue = ' ') {
 
 function getModuleSequenceNumber($module, $recordId) {
 	return Vtiger_Deprecated::getModuleSequenceNumber($module, $recordId);
-}
+	}
 
 function getInvoiceStatus($invoiceId) {
 	return Vtiger_Functions::getInvoiceStatus($invoiceId);

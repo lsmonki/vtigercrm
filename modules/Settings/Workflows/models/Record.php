@@ -172,7 +172,7 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 		$workflowModel->setModule($wf->moduleName);
 		return $workflowModel;
 	}
-    
+
 	function executionConditionAsLabel($executionCondition=null){
 		if($executionCondition == null) {
 			$executionCondition = $this->get('execution_condition');
@@ -186,12 +186,12 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
      * @return <Integer> count of acive workflows
      */
     public static function getActiveCount() {
-        
+
         $db = PearDatabase::getInstance();
         vimport('~~/modules/com_vtiger_workflow/VTTaskManager.inc');
         $taskManager = new VTTaskManager($db);
         $taskList = $taskManager->getTasks();
-        
+
         $examinedIdList = array();
         foreach($taskList as $taskDetails) {
             $workFlowId = $taskDetails->workflowId;
@@ -258,12 +258,12 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 	function transformAdvanceFilterToWorkFlowFilter() {
 		$conditions = $this->get('conditions');
 		$wfCondition = array();
-		
+
 		if(!empty($conditions)) {
 			foreach($conditions as $index => $condition) {
 				$columns = $condition['columns'];
 				if($index == '1' && empty($columns)) {
-					$wfCondition[] = array('fieldname'=>'', 'operation'=>'', 'value'=>'', 'valuetype'=>'', 
+					$wfCondition[] = array('fieldname'=>'', 'operation'=>'', 'value'=>'', 'valuetype'=>'',
 						'joincondition'=>'', 'groupid'=>'0');
 				}
 				if(!empty($columns) && is_array($columns)) {
@@ -277,7 +277,7 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 		$this->set('conditions', $wfCondition);
 	}
-	
+
 
 	/**
 	 * Function returns all the related modules for workflows create entity task
@@ -286,16 +286,16 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 	public function getDependentModules() {
 		$db = PearDatabase::getInstance();
 		$moduleName = $this->getModule()->getName();
-		
+
 		$result = $db->pquery("SELECT fieldname, tabid, typeofdata, vtiger_ws_referencetype.type as reference_module FROM vtiger_field
 								INNER JOIN vtiger_ws_fieldtype ON vtiger_field.uitype = vtiger_ws_fieldtype.uitype
 								INNER JOIN vtiger_ws_referencetype ON vtiger_ws_fieldtype.fieldtypeid = vtiger_ws_referencetype.fieldtypeid
 							UNION
 							SELECT fieldname, tabid, typeofdata, relmodule as reference_module FROM vtiger_field
 								INNER JOIN vtiger_fieldmodulerel ON vtiger_field.fieldid = vtiger_fieldmodulerel.fieldid", array());
-    
+
 		$noOfFields = $db->num_rows($result);
-		
+
 		$dependentFields = array();
 		// List of modules which will not be supported by 'Create Entity' workflow task
 		$filterModules = array('Invoice', 'Quotes', 'SalesOrder', 'PurchaseOrder', 'Emails', 'Calendar', 'Events', 'Accounts');
@@ -310,7 +310,7 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 				continue;
 			if ($referenceModule == $moduleName && $tabModuleName != $moduleName) {
 				if(!vtlib_isModuleActive($tabModuleName))continue;
-				$dependentFields[$tabModuleName] = array('fieldname' => $fieldName, 'modulelabel' => getTranslatedString($tabModuleName, $tabModuleName));            
+				$dependentFields[$tabModuleName] = array('fieldname' => $fieldName, 'modulelabel' => getTranslatedString($tabModuleName, $tabModuleName));
 			} else {
 				$dataTypeInfo = explode('~', $typeOfData);
 				if ($dataTypeInfo[1] == 'M') { // If the current reference field is mandatory

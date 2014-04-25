@@ -22,14 +22,7 @@ class Inventory_DetailView_Model extends Vtiger_DetailView_Model {
 		$moduleName = $recordModel->getmoduleName();
 
 		if(Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $recordModel->getId())) {
-			$detailViewLinks = array(
-					'linklabel' => vtranslate('LBL_EXPORT_TO_PDF', $moduleName),
-					'linkurl' => $recordModel->getExportPDFURL(),
-					'linkicon' => ''
-			);
-			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($detailViewLinks);
-
-            $sendEmailLink = array(
+			$sendEmailLink = array(
                 'linklabel' => vtranslate('LBL_SEND_MAIL_PDF', $moduleName),
                 'linkurl' => 'javascript:Inventory_Detail_Js.sendEmailPDFClickHandler(\''.$recordModel->getSendEmailPDFUrl().'\')',
                 'linkicon' => ''

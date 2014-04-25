@@ -38,6 +38,9 @@ $languageStrings = array(
 	'LBL_SELECTED_VALUES' => 'Selected Values',
     'NO_PICKLIST_FIELDS'=> 'do not have any picklist fields',
 	'LBL_NON_EDITABLE_PICKLIST_VALUES' => 'Non Editable Values',
+	
+	//Translation for module
+	'Calendar' => 'To Do',
 );
 $jsLanguageStrings = array(
 	//PickList 

@@ -6,6 +6,7 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
+*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
@@ -295,13 +296,13 @@ function isPermitted($module,$actionname,$record_id='')
 	$tabid = getTabid($module);
 	$actionid=getActionid($actionname);
 	$checkModule = $module;
-	
+
 	if($checkModule == 'Events'){
 		$checkModule = 'Calendar';
 	}
-	
+
 	if(vtlib_isModuleActive($checkModule)){
-	
+
 		//Checking whether the user is admin
 		if($is_admin)
 		{
@@ -417,6 +418,9 @@ function isPermitted($module,$actionname,$record_id='')
 				if(in_array($recOwnId,$userids))
 				{
 					$permission='yes';
+					if($module == 'Calendar') {
+						$permission = isCalendarPermittedBySharing($record_id);
+					}
 					$log->debug("Exiting isPermitted method ...");
 					return $permission;
 				}
@@ -874,7 +878,7 @@ $log->debug("Entering getProfileTabsPermission(".$profileid.") method ...");
   $sql = "select * from vtiger_profile2tab where profileid=?" ;
   $result = $adb->pquery($sql, array($profileid));
   $num_rows = $adb->num_rows($result);
-  
+
   $copy = array();
   for($i=0; $i<$num_rows; $i++)
   {
@@ -1547,7 +1551,7 @@ function getCombinedUserActionPermissions($userId)
 					if($per == 1)
 					{
 						$now_permission = $tempActionPerrArr[$tabId][$actionid];
-						if($now_permission == 0)
+						if($now_permission == 0 && $now_permission != "")
 						{
 							$actionPerrArr[$tabId][$actionid]=$now_permission;
 						}
@@ -2222,15 +2226,28 @@ function getSharingModuleList($eliminateModules=false)
 
 function isCalendarPermittedBySharing($recordId)
 {
-	global $adb;
-	global $current_user;
+	global $adb, $current_user;
 	$permission = 'no';
-	$query = "select * from vtiger_sharedcalendar where userid in(select smownerid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where activityid=? and visibility='Public' and smownerid !=0) and sharedid=?";
-	$result=$adb->pquery($query, array($recordId, $current_user->id));
-	if($adb->num_rows($result) >0)
-	{
-		$permission = 'yes';
+	$query = "SELECT vtiger_sharedcalendar.sharedid, vtiger_users.calendarsharedtype FROM vtiger_sharedcalendar RIGHT JOIN vtiger_users ON vtiger_sharedcalendar.userid=vtiger_users.id and status='Active'
+				WHERE vtiger_users.id IN(SELECT smownerid FROM vtiger_activity INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_activity.activityid
+								WHERE activityid=? AND visibility='Public' AND smownerid !=0)";
+	$result=$adb->pquery($query, array($recordId));
+
+	for($i=0; $i< $adb->num_rows($result); $i++ ) {
+		$sharedDetails = $adb->fetch_row($result,$i);
+		$sharedType = $sharedDetails['calendarsharedtype'];
+		if($sharedType == 'public') {
+			$permission = 'yes';
+			break;
+		} else if($sharedType == 'private') {
+			$permission = 'no';
+			break;
+		} else if($current_user->id == $sharedDetails['sharedid']) {
+			$permission = 'yes';
+			break;
+		}
 	}
+
 	return $permission;
 }
 

@@ -47,7 +47,6 @@ $languageStrings = array(
 	'LBL_FILE_NOT_AVAILABLE'       => 'Ez a Dokumentum nem tölthető le.', 
 );
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE'   => 'Túllépte a maximális feltölthető méretet', 
 	'JS_NEW_FOLDER'                => 'Új Mappa'                   , 
 	'JS_MOVE_DOCUMENTS'            => 'Dokumentumok áthelyezése'  , 
 	'JS_ARE_YOU_SURE_YOU_WANT_TO_MOVE_DOCUMENTS_TO' => 'Biztos vagy abban, hogy ez(eke)t a fájl(oka)t át akarod helyezni ide:', 

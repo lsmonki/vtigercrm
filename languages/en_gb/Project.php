@@ -33,4 +33,31 @@ $languageStrings = array(
 	'LBL_TICKET_PRIORITY'          => 'Priority'                    , // TODO: Review
 	'LBL_MORE'                     => 'more'                        , // TODO: Review
 	'LBL_DOWNLOAD_FILE'            => 'Download File'               , // TODO: Review
+    'LBL_MILESTONES_LIST'          => 'Milestones List'             ,
+    'LBL_TASKS_HIGH'               => 'High Priority'               ,
+    'LBL_TASKS_NORMAL'             => 'Normal Priority'             ,
+    'LBL_TASKS_LOW'                => 'Low Priority'                ,
+    'LBL_TASKS_OTHER'              => 'Other Priorities'            ,
+    'LBL_SELECT_PROGRESS'          => 'Select Progress'             ,
+	
+	//picklist values
+	'prospecting' => 'Prospecting',
+    'in progress' => 'In Progress',
+    'initiated' => 'Initiated',
+	'waiting for feedback' => 'Waiting for Feedback',
+    'on hold' => 'On Hold',
+    'archived' => 'Archived',
+    'completed' => 'Completed',
+    'delivered' => 'Delivered',
+	'administrative' => 'Administrative',
+    'operative' => 'Operative',
+    'other' => 'Other',
+    'low' => 'Low',
+    'normal' => 'Normal',
+    'high' => 'High',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Select Status',
+    'JS_LBL_SELECT_PROGRESS' => 'Select Progress',
 );

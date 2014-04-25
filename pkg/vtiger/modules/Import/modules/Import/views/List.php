@@ -29,7 +29,7 @@ class Import_List_View extends Vtiger_Popup_View{
             $companyLogo = $companyDetails->getLogo();
             $viewer->assign('COMPANY_LOGO',$companyLogo);
 
-            $viewer->view('PopupContents.tpl', $moduleName);
+            $viewer->view('Popup.tpl', $moduleName);
         }
 	}
 	

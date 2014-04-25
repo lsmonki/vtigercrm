@@ -46,6 +46,19 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 							$fieldInfo['workflow_valuetype'] = $fieldValueType;
 							$fieldModel->setFieldInfo($fieldInfo);
 						}
+
+						switch($fieldModel->getFieldDataType()) {
+							case 'date'		:	if (($moduleName === 'Events' && in_array($fieldName, array('date_start', 'due_date'))) ||
+													($moduleName === 'Calendar' && $fieldName === 'date_start')) {
+													$fieldName = $fieldName .' ($(general : (__VtigerMeta__) usertimezone))';
+												} else {
+													$fieldName = $fieldName .' ($_DATE_FORMAT_)';
+												}
+												break;
+							case 'datetime'	:	$fieldName = $fieldName .' ($(general : (__VtigerMeta__) usertimezone))';	break;
+							default			:	$fieldName;
+						}
+
 						// This will be used during editing task like email, sms etc
 						$fieldModel->set('workflow_columnname', $fieldName)->set('workflow_columnlabel', vtranslate($fieldModel->get('label'), $moduleModel->getName()));
 						// This is used to identify the field belongs to source module of workflow
@@ -61,6 +74,11 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 
 			$labelName = vtranslate($moduleModel->getSingularLabelKey(), $moduleModel->getName()). ' ' .vtranslate('LBL_COMMENTS', $moduleModel->getName());
 			foreach ($commentFieldModelsList as $commentFieldName => $commentFieldModel) {
+				switch($commentFieldModel->getFieldDataType()) {
+						case 'date'		:	$commentFieldName = $commentFieldName .' ($_DATE_FORMAT_)';		break;
+						case 'datetime'	:	$commentFieldName = $commentFieldName .' ($(general : (__VtigerMeta__) usertimezone)_)';	break;
+						default			:	$commentFieldName;
+				}
 				$commentFieldModel->set('workflow_columnname', $commentFieldName)
 								  ->set('workflow_columnlabel', vtranslate($commentFieldModel->get('label'), $moduleModel->getName()))
 								  ->set('workflow_sourcemodule_field', true);
@@ -85,7 +103,20 @@ class Settings_Workflows_EditTaskRecordStructure_Model extends Settings_Workflow
 							if($fieldModel->isViewable()) {
 								$name = "($parentFieldName : ($refModule) $fieldName)";
 								$label = vtranslate($field->get('label'), $baseModuleModel->getName()).' : ('.vtranslate($refModule, $refModule).') '.vtranslate($fieldModel->get('label'), $refModule);
-								$fieldModel->set('workflow_columnname', $name)->set('workflow_columnlabel', $label);
+
+								switch($fieldModel->getFieldDataType()) {
+									case 'date'		:	if (($moduleName === 'Events' && in_array($fieldName, array('date_start', 'due_date'))) ||
+															($moduleName === 'Calendar' && $fieldName === 'date_start')) {
+															$workflowColumnName = $name .' ($(general : (__VtigerMeta__) usertimezone))';
+														} else {
+															$workflowColumnName = $name .' ($_DATE_FORMAT_)';
+														}
+														break;
+									case 'datetime'	:	$workflowColumnName = $name .' ($(general : (__VtigerMeta__) usertimezone))';	break;
+									default			:	$workflowColumnName = $name;
+								}
+
+								$fieldModel->set('workflow_columnname', $workflowColumnName)->set('workflow_columnlabel', $label);
 								if(!empty($recordId)) {
 									$fieldValueType = $recordModel->getFieldFilterValueType($name);
 									$fieldInfo = $fieldModel->getFieldInfo();

@@ -69,7 +69,6 @@ class EmailTemplates_Detail_View extends Vtiger_Index_View {
 
 		$jsFileNames = array(
 			'modules.Vtiger.resources.Detail',
-			'modules.Vtiger.resources.RelatedList',
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);

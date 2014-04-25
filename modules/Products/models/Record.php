@@ -38,6 +38,20 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		}
 		return $taxes;
 	}
+        
+    /**
+	 * Function to get values of more currencies listprice
+	 * @return <Array> of listprice values
+	 */
+	static function getListPriceValues($id) {
+    	$db = PearDatabase::getInstance();            
+        $listPrice = $db->pquery('SELECT * FROM vtiger_productcurrencyrel WHERE productid	= ?', array($id)); 
+        $listpriceValues = array();
+        for($i=0; $i<$db->num_rows($listPrice); $i++) {
+        	$listpriceValues[$db->query_result($listPrice, $i, 'currencyid')] = $db->query_result($listPrice, $i, 'actual_price');
+        }
+        return $listpriceValues;
+	}
 
 	/**
 	 * Function to get subproducts for this record
@@ -119,7 +133,7 @@ class Products_Record_Model extends Vtiger_Record_Model {
 
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$convertedPriceDetails = $this->getModule()->getPricesForProducts($currentUserModel->get('currency_id'), array($productId));
-		$productDetails[1]['listPrice1'] = number_format((int)$convertedPriceDetails[$productId], $currentUserModel->get('no_of_currency_decimals'),'.','');
+		$productDetails[1]['listPrice1'] = number_format($convertedPriceDetails[$productId], $currentUserModel->get('no_of_currency_decimals'),'.','');
 
 		$totalAfterDiscount = $productDetails[1]['totalAfterDiscount1'];
 		$productTaxes = $productDetails[1]['taxes'];
@@ -145,7 +159,7 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		for ($i=1; $i<=count($productDetails); $i++) {
 			$productId = $productDetails[$i]['hdnProductId'.$i];
 			$productPrices = $this->getModule()->getPricesForProducts($currentUser->get('currency_id'), array($productId), $this->getModuleName());
-			$productDetails[$i]['listPrice'.$i] = number_format((int)$productPrices[$productId], $currentUser->get('no_of_currency_decimals'),'.','');
+			$productDetails[$i]['listPrice'.$i] = number_format($productPrices[$productId], $currentUser->get('no_of_currency_decimals'),'.','');
 		}
 		return $productDetails;
 	}
@@ -364,5 +378,25 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		$result = $db->pquery('SELECT discontinued FROM vtiger_products WHERE productid = ?',array($recordId));
 		$activeStatus = $db->query_result($result, 'discontinued');
 		return $activeStatus;
+	}
+	
+	/**
+	 * Function updates ListPrice for Product/Service-PriceBook relation
+	 * @param <Integer> $relatedRecordId - PriceBook Id
+	 * @param <Integer> $price - listprice
+	 * @param <Integer> $currencyId - currencyId
+	 */
+	function updateListPrice($relatedRecordId, $price, $currencyId) {
+		$db = PearDatabase::getInstance();
+
+		$result = $db->pquery('SELECT * FROM vtiger_pricebookproductrel WHERE pricebookid = ? AND productid = ?',
+				array($relatedRecordId, $this->getId()));
+		if($db->num_rows($result)) {
+			 $db->pquery('UPDATE vtiger_pricebookproductrel SET listprice = ? WHERE pricebookid = ? AND productid = ?',
+					 array($price, $relatedRecordId, $this->getId()));
+		} else {
+			$db->pquery('INSERT INTO vtiger_pricebookproductrel (pricebookid,productid,listprice,usedcurrency) values(?,?,?,?)',
+					array($relatedRecordId, $this->getId(), $price, $currencyId));
+		}
 	}
 }

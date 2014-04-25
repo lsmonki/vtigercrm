@@ -84,13 +84,10 @@ Settings_Vtiger_List_Js("Settings_SMSNotifier_List_Js",{
 		var contents = form.find('.configContent');
 		form.find('.providerType').change(function(e) {
 			var currentTarget = jQuery(e.currentTarget);
-			var selectedProvider = currentTarget.find('option:selected');
-			var fieldDetails = selectedProvider.data('providerFields');
-			jQuery.each(fieldDetails, function(index, field) {
-				var newFieldEle = jQuery('<div class="control-group"><span class="control-label"><strong>'+field+'</strong></span><div class="controls">\n\
-					<input type="text" name="'+field+'" class="span3" value="" /></div></div>');
-				contents.append(newFieldEle);
-			})
+			var selectedProviderName = currentTarget.val(); 
+            jQuery('.providerFields',form).addClass('hide'); 
+            jQuery('#'+selectedProviderName+'_container').removeClass('hide'); 
+
 		})
 	},
 	

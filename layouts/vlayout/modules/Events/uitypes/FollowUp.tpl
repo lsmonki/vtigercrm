@@ -19,18 +19,20 @@
 {else}
 	{assign var=COUNTER value=$COUNTER+1}
 {/if}
+{assign var=FOLLOW_UP_LABEL value={vtranslate('LBL_HOLD_FOLLOWUP_ON',$MODULE)}}
 <td class="fieldLabel">
 	<label class="muted pull-right marginRight10px">
 		<input name="followup" type="checkbox" class="alignTop" {if $FOLLOW_UP_STATUS} checked{/if}/>
-		{vtranslate('LBL_HOLD_FOLLOWUP_ON',$MODULE)}
+		{$FOLLOW_UP_LABEL}
 	</label>	
 </td>
+{$FIELD_INFO['label'] = {$FOLLOW_UP_LABEL}}
 <td class="fieldValue">
 	<div>
 		<div class="input-append row-fluid">
 			<div class="span10 row-fluid date">
-				<input name="followup_date_start" type="text" class="span9 dateField" data-date-format="{$dateFormat}" type="text"  
-					   value="{if !empty($FOLLOW_UP_DATE)}{$FOLLOW_UP_DATE}{else}{$currentDate}{/if}" />
+				<input name="followup_date_start" type="text" class="span9 dateField" data-date-format="{$dateFormat}" type="text"  data-fieldinfo= '{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($FIELD_INFO))}'
+					   value="{if !empty($FOLLOW_UP_DATE)}{$FOLLOW_UP_DATE}{else}{$currentDate}{/if}" data-validation-engine="validate[funcCall[Vtiger_greaterThanDependentField_Validator_Js.invokeValidation]]" />
 				<span class="add-on"><i class="icon-calendar"></i></span>
 			</div>	
 		</div>		

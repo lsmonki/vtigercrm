@@ -35,7 +35,7 @@
 				</tr>
 			</tbody>
 		</table>
-
+						
 		<div id="settings_details" {if $SERVERNAME neq ''} style="display:block;" {else} style="display:none;"{/if}>
 		<table class="table table-bordered blockContainer showInlineTable">
 			<tbody>
@@ -70,7 +70,7 @@
             </tr>
 			</tbody>
         </table>
-
+        
         <div id="additional_settings" {if $SERVERNAME eq 'other'} style="display:block;"{else} style="display:none;" {/if}>
 		<table class="table table-bordered blockContainer showInlineTable">
 			<tr>
@@ -78,6 +78,7 @@
 					<label class="muted pull-right marginRight10px">{vtranslate('LBL_Protocol',$MODULE)}</label>
 				</td>
 				<td class="fieldValue narrowWidthType" nowrap style="width: 70%;">{$MAILBOX->protocol()}
+					{var_dump($MAILBOX->protocol())}
 					<input type="radio" name="_mbox_protocol" value="IMAP2" {if strcasecmp($MAILBOX->protocol(), 'imap2')===0}checked=true{/if}> {vtranslate('LBL_Imap2',$MODULE)}
 					<input type="radio" name="_mbox_protocol" value="IMAP4" {if strcasecmp($MAILBOX->protocol(), 'imap4')===0}checked=true{/if}> {vtranslate('LBL_Imap4',$MODULE)}
 				</td>

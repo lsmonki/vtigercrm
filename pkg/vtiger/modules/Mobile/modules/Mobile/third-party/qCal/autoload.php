@@ -8,7 +8,10 @@
 require_once 'qCal/Loader.php';
 function qCal_Autoloader($name) {
 
-	qCal_Loader::loadClass($name);
+    // Try to load only concerned class...
+    if (strpos($name, 'qCal') === 0) {
+        qCal_Loader::loadClass($name);
+    }
 
 }
 

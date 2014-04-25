@@ -625,6 +625,7 @@ class Vtiger_Functions {
 			}
 			if (!empty($_REQUEST['calendar_repeat_limit_date'])) {
 				$endDate = $_REQUEST['calendar_repeat_limit_date'];
+                $recurring_data['recurringenddate'] = $endDate;
 			} elseif (isset($_REQUEST['due_date']) && $_REQUEST['due_date'] != null) {
 				$endDate = $_REQUEST['due_date'];
 			}
@@ -880,4 +881,20 @@ class Vtiger_Functions {
 
 		return $query;
 	}
+
+    /** Function to get unitprice for a given product id
+    * @param $productid -- product id :: Type integer
+    * @returns $up -- up :: Type string
+    */
+    static function getUnitPrice($productid, $module='Products') {
+        $adb = PearDatabase::getInstance();
+        if($module == 'Services') {
+            $query = "select unit_price from vtiger_service where serviceid=?";
+        } else {
+            $query = "select unit_price from vtiger_products where productid=?";
+        }
+        $result = $adb->pquery($query, array($productid));
+        $unitpice = $adb->query_result($result,0,'unit_price');
+        return $unitpice;
+    }
 }

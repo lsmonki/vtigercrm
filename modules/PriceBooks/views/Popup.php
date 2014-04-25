@@ -70,9 +70,22 @@ class PriceBooks_Popup_View extends Vtiger_Popup_View {
 		if(!$this->listViewHeaders){
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
+		//Added to support List Price
+		$field = new Vtiger_Field_Model();
+		$field->set('name', 'listprice');
+		$field->set('column', 'listprice');
+		$field->set('label', 'List Price');
+
+		$this->listViewHeaders['listprice'] = $field;
+		
 		if(!$this->listViewEntries){
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
 		}
+		
+		foreach ($this->listViewEntries as $recordId => $recordModel) {
+			$recordModel->set('listprice', $recordModel->getProductsListPrice($sourceRecord));
+		}
+		
 		$noOfEntries = count($this->listViewEntries);
 
 		if(empty($sortOrder)) {
@@ -99,6 +112,7 @@ class PriceBooks_Popup_View extends Vtiger_Popup_View {
 		$viewer->assign('NEXT_SORT_ORDER',$nextSortOrder);
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('GETURL', $getUrl);
+		$viewer->assign('CURRENCY_ID', $currencyId);
 
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
 		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());

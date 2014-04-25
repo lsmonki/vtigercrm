@@ -91,8 +91,8 @@ class Vtiger_Block {
 		$this->id = $this->__getUniqueId();
 		if(!$this->sequence) $this->sequence = $this->__getNextSequence();
 
-		$adb->pquery("INSERT INTO vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view,iscustom) 
-			VALUES(?,?,?,?,?,?,?,?,?,?)", Array($this->id, $this->module->id, $this->label,$this->sequence, 
+		$adb->pquery("INSERT INTO vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view,iscustom)
+			VALUES(?,?,?,?,?,?,?,?,?,?)", Array($this->id, $this->module->id, $this->label,$this->sequence,
 			$this->showtitle, $this->visible,$this->increateview, $this->ineditview, $this->indetailview, $this->iscustom));
 		self::log("Creating Block $this->label ... DONE");
 		self::log("Module language entry for $this->label ... CHECK");

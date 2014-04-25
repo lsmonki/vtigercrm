@@ -36,9 +36,12 @@ function service_MailScanner_performScanNow($scannerinfo, $debug) {
 		/** Start the scanning. */
 		$scanner = new Vtiger_MailScanner($scannerinfo);
 		$scanner->debug = $debug;
-		$scanner->performScanNow();
+		$status = $scanner->performScanNow();
 		
-		echo "\nScanning " . $scannerinfo->server . " completed\n";
+                if($status && is_bool($status))
+                    echo "\nScanning " . $scannerinfo->server . " completed\n";
+                else
+                    echo "\nScanning Failed. Error ".$status."\n";
 		
 	} else {
 		echo "Failed! [{$scannerinfo->scannername}] is not enabled for scanning!";

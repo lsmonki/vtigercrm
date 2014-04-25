@@ -30,12 +30,14 @@ class Settings_MailConverter_SaveMailBox_Action extends Settings_Vtiger_Index_Ac
 
 		$response = new Vtiger_Response();
 		if ($status) {
-            $result = array('message'=> vtranslate('LBL_SAVED_SUCCESSFULLY', $qualifiedModuleName));
-            $result['id'] = $recordModel->getId();
+			$result = array('message' => vtranslate('LBL_SAVED_SUCCESSFULLY', $qualifiedModuleName));
+			$result['id'] = $recordModel->getId();
+			$result['listViewUrl'] = $recordModel->getListUrl();
 			$response->setResult($result);
 		} else {
 			$response->setError(vtranslate('LBL_CONNECTION_TO_MAILBOX_FAILED', $qualifiedModuleName));
 		}
 		$response->emit();
 	}
+
 }

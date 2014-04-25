@@ -33,7 +33,7 @@ $languageStrings = array(
 	'Mailing State'                => 'İl'                         , 
 	'Mailing Zip'                  => 'Posta Kodu'                  , 
 	'Mailing Country'              => 'Ülke'                       , 
-	'Mailing Po Box'               => 'Mailing P.O. Box'            , 
+	'Mailing Po Box'               => 'Po Box Posta'            , 
 	'Other Street'                 => 'Diğer Sokak/ Cad'           , 
 	'Other City'                   => 'Diğer ilçe'                , 
 	'Other State'                  => 'Diğer il'                   , 
@@ -48,10 +48,8 @@ $languageStrings = array(
 	'Prof.'                        => 'Prof.'                       , 
 	'User List'                    => 'Kullanıcı Listesi'         , 
 	'Contact Id' => 'İlgili Kişi Id',
+    'Support Start Date'           => 'Destek Başlangıç ​​Tarihi',
+    'Support End Date'             => 'Destek Bitiş Tarihi',
 );
 $jsLanguageStrings = array(
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 );

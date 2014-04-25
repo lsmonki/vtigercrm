@@ -8,11 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , 
-	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , 
-	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , 
-	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , 
-	'Project Milestone Name'       => 'Project Milestone Name'      , 
-	'Milestone Date'               => 'Milestone Date'              , 
-	'Project Milestone No'         => 'Project Milestone Number'    , 
+	'SINGLE_ProjectMilestone'	=>	"Projekt Milestone",
+	'LBL_ADD_RECORD'	=>	"Projekt hinzufügen Milestone",
+	'LBL_RECORDS_LIST'	=>	"Projekt Milestones Liste",
+	'LBL_PROJECTS_LIST'	=>	"Projekte Liste",
+	'LBL_TASKS_LIST'	=>	"Aufgabenliste",
+	'LBL_MILESTONES_LIST'	=>	"Meilensteine ​​Liste",
+	'LBL_PROJECT_MILESTONE_INFORMATION'	=>	"Projekt Milestone Einzelheiten",
+	'Project Milestone Name'	=>	"Projekt Milestone Namen",
+	'Milestone Date'	=>	"Milestone Datum",
+	'Project Milestone No'	=>	"Projekt Milestone Nummer",
+	//picklist values
+	'administrative' => 'Administrativ',
+    'operative' => 'Operativ',
+    'other' => 'Andere',
 );

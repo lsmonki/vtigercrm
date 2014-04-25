@@ -55,6 +55,7 @@ class CRMEntity {
 			require_once("modules/$module/$modName.php");
 		}
 		$focus = new $modName();
+		$focus->moduleName = $module;
 		return $focus;
 	}
 
@@ -260,6 +261,9 @@ class CRMEntity {
 				}
 			}
 			$adb->pquery($sql, $params);
+            $this->column_fields['modifiedtime'] =  $adb->formatDate($date_var,true);
+            $this->column_fields['modifiedby'] = $current_user->id;
+            
 		} else {
 			//if this is the create mode and the group allocation is chosen, then do the following
 			$current_id = $adb->getUniqueID("vtiger_crmentity");
@@ -284,7 +288,12 @@ class CRMEntity {
 			$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,modifiedby,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?)";
 			$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $current_user->id, $created_date_var, $modified_date_var);
 			$adb->pquery($sql, $params);
-			$this->id = $current_id;
+            
+            $this->column_fields['createdtime'] = $created_date_var;
+            $this->column_fields['modifiedtime'] = $modified_date_var;
+			$this->column_fields['modifiedby'] = $current_user->id;
+            //$this->column_fields['created_user_id'] = $current_user->id;
+            $this->id = $current_id;
 		}
 	}
 
@@ -2102,7 +2111,7 @@ class CRMEntity {
 		$secQuery = "select $table_name.* from $table_name inner join vtiger_crmentity on " .
 				"vtiger_crmentity.crmid=$table_name.$column_name and vtiger_crmentity.deleted=0";
 
-		$secQueryTempTableQuery = $queryPlanner->registerTempTable($secQuery, array($column_name, $fields[1]));
+		$secQueryTempTableQuery = $queryPlanner->registerTempTable($secQuery, array($column_name, $fields[1], $prifieldname));
 
 		$query = '';
 		if ($pritablename == 'vtiger_crmentityrel') {
@@ -2114,17 +2123,43 @@ class CRMEntity {
 			$instance = self::getInstance($module);
 			$sectableindex = $instance->tab_name_index[$sectablename];
 			$condition = "$table_name.$column_name=$tmpname.$secfieldname";
-			$query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname)";
+            if($pritablename == 'vtiger_seactivityrel') {
+                if($module == "Emails" || $secmodule == "Emails"){
+                    $tmpModule = "Emails";
+                }else{
+                    $tmpModule = "Calendar";
+                }
+                $query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname
+                    AND $tmpname.activityid IN (SELECT crmid FROM vtiger_crmentity WHERE setype='$tmpModule' AND deleted = 0))";
+            } else if($pritablename == 'vtiger_senotesrel') {
+                    $query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname
+                    AND $tmpname.notesid IN (SELECT crmid FROM vtiger_crmentity WHERE setype='Documents' AND deleted = 0))";
+            } else if($pritablename == 'vtiger_inventoryproductrel' && ($module =="Products" || $module =="Services") && ($secmodule == "Invoice" || $secmodule == "SalesOrder" || $secmodule == "PurchaseOrder" || $secmodule == "Quotes")) {
+                /** In vtiger_inventoryproductrel table, we'll have same product related to quotes/invoice/salesorder/purchaseorder
+                 *  we need to check whether the product joining is related to secondary module selected or not to eliminate duplicates
+                 */
+                $query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname AND $tmpname.id in 
+                        (select crmid from vtiger_crmentity where setype='$secmodule' and deleted=0))";
+            } else {
+                $query = " left join $pritablename as $tmpname ON ($sectablename.$sectableindex=$tmpname.$prifieldname)";
+            }
 			if($secmodule == 'Calendar'){
 				$condition .= " AND $table_name.activitytype != 'Emails'";
 			}else if($secmodule == 'Leads'){
 				$condition .= " AND $table_name.converted = 0";
 			}
 
-		}
+        }else if($module == "Contacts" && $secmodule == "Potentials"){
+            // To get all the Contacts from vtiger_contpotentialrel table
+            $condition .= " OR $table_name.potentialid = vtiger_contpotentialrel.potentialid";
+            $query .= " left join vtiger_contpotentialrel on  vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid";
+        }else if($module == "Potentials" && $secmodule == "Contacts"){
+            // To get all the Potentials from vtiger_contpotentialrel table
+            $condition .= " OR $table_name.contactid = vtiger_contpotentialrel.contactid";
+            $query .= " left join vtiger_contpotentialrel on vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid";
+        }
 
 		$query .= " left join $secQueryTempTableQuery as $table_name on {$condition}";
-
 		return $query;
 	}
 
@@ -2251,7 +2286,7 @@ class CRMEntity {
 	}
 
 	/** END * */
-	function buildSearchQueryForFieldTypes($uitypes, $value) {
+	function buildSearchQueryForFieldTypes($uitypes, $value=false) {
 		global $adb;
 
 		if (!is_array($uitypes))
@@ -2293,7 +2328,7 @@ class CRMEntity {
 			$query .= " INNER JOIN $tablename
 						on $this->table_name.$this->table_index = $tablename." . $this->tab_name_index[$tablename];
 		}
-		if (!empty($lookupcolumns)) {
+		if (!empty($lookupcolumns) && $value !== false) {
 			$query .=" WHERE ";
 			$i = 0;
 			$columnCount = count($lookupcolumns);
@@ -2429,9 +2464,15 @@ class CRMEntity {
 				$tableName .= '_t' . $tabId;
 			}
 			$this->setupTemporaryTable($tableName, $sharedTabId, $user, $current_user_parent_role_seq, $current_user_groups);
-			$query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
-					"vtiger_crmentity$scope.smownerid ";
-		}
+            // for secondary module we should join the records even if record is not there(primary module without related record)
+                if($scope == ''){
+                    $query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
+                            "vtiger_crmentity$scope.smownerid ";
+                }else{
+                    $query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
+                            "vtiger_crmentity$scope.smownerid OR vtiger_crmentity$scope.smownerid IS NULL";
+                }
+            }
 		return $query;
 	}
 
@@ -2529,7 +2570,7 @@ class CRMEntity {
 	 * Function to Listview buttons
 	 * return array  $list_buttons - for module (eg: 'Accounts')
 	 */
-	function getListButtons($app_strings) {
+	function getListButtons($app_strings,$mod_strings = false) {
 		$list_buttons = Array();
 
 		if (isPermitted($currentModule, 'Delete', '') == 'yes')
@@ -2559,6 +2600,7 @@ class CRMEntity {
 			ModTracker::unLinkRelation($module, $crmid, $with_module, $with_crmid);
 		}
 	}
+
 	/**
 	 * Function which will give the basic query to find duplicates
 	 * @param <String> $module
@@ -2583,7 +2625,7 @@ class CRMEntity {
 
 		if($this->tab_name) {
 			foreach($this->tab_name as $tableName) {
-				if($tableName != 'vtiger_crmentity' && $tableName != $this->table_name) {
+				if($tableName != 'vtiger_crmentity' && $tableName != $this->table_name && $tableName != 'vtiger_inventoryproductrel') {
 					if($this->tab_name_index[$tableName]) {
 						$fromClause .= " INNER JOIN " . $tableName . " ON " . $tableName . '.' . $this->tab_name_index[$tableName] .
 							" = $this->table_name.$this->table_index";

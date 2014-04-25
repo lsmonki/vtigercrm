@@ -42,13 +42,14 @@ class Settings_PickListDependency_Module_Model extends Settings_Vtiger_Module_Mo
 	public static function getPicklistSupportedModules() {
 		$adb = PearDatabase::getInstance();
 
-		$query = 'SELECT distinct vtiger_field.tabid, vtiger_tab.tablabel, vtiger_tab.name as tabname FROM vtiger_field
+		$query = "SELECT distinct vtiger_field.tabid, vtiger_tab.tablabel, vtiger_tab.name as tabname FROM vtiger_field
 						INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_field.tabid
-						WHERE uitype IN (15,16)
+						WHERE uitype IN ('15','16')
 						AND vtiger_field.tabid != 29
 						AND vtiger_field.displaytype = 1
-						AND vtiger_field.presence in (0,2)
-					GROUP BY vtiger_field.tabid HAVING count(*) > 1';
+						AND vtiger_field.presence in ('0','2')
+						AND vtiger_field.block != 'NULL'
+					GROUP BY vtiger_field.tabid HAVING count(*) > 1";
 		// END
 		$result = $adb->pquery($query, array());
 		while($row = $adb->fetch_array($result)) {

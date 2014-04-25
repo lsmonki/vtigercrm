@@ -12,7 +12,7 @@ header('Content-Type: text/html;charset=utf-8');
 chdir (dirname(__FILE__) . '/../../');
 
 /**
- * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode. 
+ * URL Verfication - Required to overcome Apache mis-configuration and leading to shared setup mode.
  */
 require_once 'config.php';
 if (file_exists('config_override.php')) {
@@ -30,27 +30,26 @@ include_once dirname(__FILE__) . '/api/ws/Controller.php';
 include_once dirname(__FILE__) . '/Mobile.php';
 include_once dirname(__FILE__) . '/ui/Viewer.php';
 include_once dirname(__FILE__) . '/ui/models/Module.php'; // Required for auto de-serializatio of session data
-
-include_once 'includes/main/WebUI.php';
+require_once 'includes/main/WebUI.php';
 
 class Mobile_Index_Controller {
-	
+
 	static $opControllers = array(
 		'logout'                  => array('file' => '/ui/Logout.php', 'class' => 'Mobile_UI_Logout'),
 		'login'                   => array('file' => '/ui/Login.php', 'class' => 'Mobile_UI_Login'),
 		'loginAndFetchModules'    => array('file' => '/ui/LoginAndFetchModules.php', 'class' => 'Mobile_UI_LoginAndFetchModules'),
 		'listModuleRecords'       => array('file' => '/ui/ListModuleRecords.php', 'class' => 'Mobile_UI_ListModuleRecords'),
 		'fetchRecordWithGrouping' => array('file' => '/ui/FetchRecordWithGrouping.php', 'class' => 'Mobile_UI_FetchRecordWithGrouping'),
-	
+
 		'searchConfig'            => array('file' => '/ui/SearchConfig.php', 'class' => 'Mobile_UI_SearchConfig' )
 	);
-	
+
 	static function process(Mobile_API_Request $request) {
 		$operation = $request->getOperation();
 		$sessionid = HTTP_Session::detectId(); //$request->getSession();
-		
+
 		if (empty($operation)) $operation = 'login';
-		
+
 		$response = false;
 		if(isset(self::$opControllers[$operation])) {
 			$operationFile = self::$opControllers[$operation]['file'];
@@ -70,12 +69,12 @@ class Mobile_Index_Controller {
 				// By-pass login
 				$operationSession = true;
 			}
-			
+
 			if($operationSession === false) {
 				$response = new Mobile_API_Response();
 				$response->setError(1501, 'Login required');
 			} else {
-				
+
 				try {
 					$response = $operationController->process($request);
 				} catch(Exception $e) {
@@ -83,14 +82,14 @@ class Mobile_Index_Controller {
 					$response->setError($e->getCode(), $e->getMessage());
 				}
 			}
-			
+
 		} else {
 			$response = new Mobile_API_Response();
 			$response->setError(1404, 'Operation not found: ' . $operation);
 		}
-		
+
 		if($response !== false) {
-			
+
 			if ($response->hasError()) {
 				include_once dirname(__FILE__) . '/ui/Error.php';
 				$errorController = new Mobile_UI_Error();
@@ -100,7 +99,7 @@ class Mobile_Index_Controller {
 				echo $response->emitHTML();
 			}
 		}
-	}	
+	}
 }
 
 /** Take care of stripping the slashes */

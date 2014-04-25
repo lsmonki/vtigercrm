@@ -192,6 +192,7 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 
 		$jsScriptInstances = array();
 		foreach($jsFileNames as $jsFileName) {
+			// TODO Handle absolute inclusions (~/...) like in checkAndConvertCssStyles
 			$jsScript = new Vtiger_JsScript_Model();
 
 			// external javascript source file handling
@@ -205,10 +206,13 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 			if(file_exists($completeFilePath)) {
 				if (strpos($jsFileName, '~') === 0) {
 					$filePath = ltrim(ltrim($jsFileName, '~'), '/');
+					// if ~~ (reference is outside vtiger6 folder)
+					if (substr_count($jsFileName, "~") == 2) {
+						$filePath = "../" . $filePath;
+					}
 				} else {
 					$filePath = str_replace('.','/', $jsFileName) . '.'.$fileExtension;
 				}
-
 				$jsScriptInstances[$jsFileName] = $jsScript->set('src', $filePath);
 			} else {
 				$fallBackFilePath = Vtiger_Loader::resolveNameToPath(Vtiger_JavaScript::getBaseJavaScriptPath().'/'.$jsFileName, 'js');
@@ -244,10 +248,15 @@ abstract class Vtiger_View_Controller extends Vtiger_Action_Controller {
 			if(file_exists($completeFilePath)) {
 				if (strpos($cssFileName, '~') === 0) {
 					$filePath = ltrim(ltrim($cssFileName, '~'), '/');
+					// if ~~ (reference is outside vtiger6 folder)
+					if (substr_count($cssFileName, "~") == 2) {
+						$filePath = "../" . $filePath;
+					}
 				} else {
 					$filePath = str_replace('.','/', $cssFileName) . '.'.$fileExtension;
 					$filePath = Vtiger_Theme::getStylePath($filePath);
 				}
+
 				$cssStyleInstances[] = $cssScriptModel->set('href', $filePath);
 			}
 		}

@@ -41,7 +41,13 @@ class OutlookVtigerCRMHandler extends vtigerCRMHandler{
                             if($recordInfo[$referenceFieldName]!=NULL){
                                 $element['accountname'] = $recordInfo[$referenceFieldName];
                                 $element['assigned_user_id'] = vtws_getWebserviceEntityId('Users', $user->id);
-                                $result = vtws_create('Accounts', $element, $user);
+                                $element['module'] = "Accounts";
+                                $createRecord= array($element);
+                                $createRecord = $this->fillNonExistingMandatoryPicklistValues($createRecord);
+                                $createRecord = $this->fillMandatoryFields($createRecord, $user);
+                                foreach ($createRecord as $key => $record) {
+                                	vtws_create($record['module'], $record, $user);
+                                }
                                 $entityNameIds = wsapp_getRecordEntityNameIds(array_values($recordReferenceFieldNames), $referenceModuleDetails, $user);
                                 $recordInfo[$referenceFieldName] = $entityNameIds[$recordInfo[$referenceFieldName]];;
                             }

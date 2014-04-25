@@ -11,8 +11,10 @@ Vtiger_List_Js("Documents_List_Js", {
 
 	triggerAddFolder : function(url) {
 		var params = url;
+		var progressIndicatorElement = jQuery.progressIndicator();
 		AppConnector.request(params).then(
 			function(data) {
+				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 				var callBackFunction = function(data){
 					jQuery('#addDocumentsFolder').validationEngine({
 						// to prevent the page reload after the validation has completed
@@ -70,7 +72,7 @@ Vtiger_List_Js("Documents_List_Js", {
 				"excluded_ids" : excludedIds,
 				"viewname" : cvId
 			};
-            
+
             var searchValue = listInstance.getAlphabetSearchValue();
 
             if(searchValue.length > 0) {
@@ -83,8 +85,10 @@ Vtiger_List_Js("Documents_List_Js", {
 				"url":url,
 				"data" : postData
 			};
+			var progressIndicatorElement = jQuery.progressIndicator();
 			AppConnector.request(params).then(
 				function(data) {
+					progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 					var callBackFunction = function(data){
 
 						listInstance.moveDocuments().then(function(data){
@@ -188,7 +192,7 @@ Vtiger_List_Js("Documents_List_Js", {
 		jQuery.extend(params,customParams);
 		return params;
 	},
-	
+
 	registerDeleteFilterClickEvent: function(){
 		var thisInstance = this;
 		var listViewFilterBlock = this.getFilterBlock();
@@ -238,9 +242,9 @@ Vtiger_List_Js("Documents_List_Js", {
 					);
 				}
 			});
-		}	
+		}
 	},
-	
+
 	performFilterImageActions : function(liElement) {
 		jQuery('.filterActionImages').clone(true,true).removeClass('filterActionImages').addClass('filterActionImgs').appendTo(liElement.find('.select2-result-label')).show();
 		var currentOptionElement = this.getSelectOptionFromChosenOption(liElement);
@@ -272,7 +276,7 @@ Vtiger_List_Js("Documents_List_Js", {
 });
 
 Vtiger_Base_Validator_Js("Vtiger_FolderName_Validator_Js",{
-	
+
 	/**
 	 *Function which invokes field validation
 	 *@param accepts field element as parameter
@@ -286,7 +290,7 @@ Vtiger_Base_Validator_Js("Vtiger_FolderName_Validator_Js",{
 			return instance.getError();
 		}
 	}
-	
+
 },{
 	/**
 	 * Function to validate the field label
@@ -297,7 +301,7 @@ Vtiger_Base_Validator_Js("Vtiger_FolderName_Validator_Js",{
 		var fieldValue = this.getFieldValue();
 		return this.validateValue(fieldValue);
 	},
-	
+
 	validateValue : function(fieldValue){
 		var specialChars = /[&\<\>\:\'\"\,\_]/ ;
 
@@ -305,7 +309,7 @@ Vtiger_Base_Validator_Js("Vtiger_FolderName_Validator_Js",{
 			var errorInfo = app.vtranslate('JS_SPECIAL_CHARACTERS')+" & < > ' \" : , _ "+app.vtranslate('JS_NOT_ALLOWED');
 			this.setError(errorInfo);
 			return false;
-		} 
+		}
         return true;
 	}
 });

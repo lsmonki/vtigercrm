@@ -34,7 +34,7 @@
                 <div class="span4">
                     <div class="row-fluid pull-right detailViewButtoncontainer">
 						<div class="btn-toolbar pull-right">
-
+                           							
 							{foreach item=DETAIL_VIEW_BASIC_LINK from=$DETAILVIEW_LINKS['DETAILVIEWBASIC']}
 								<div class="btn-group">
 								<button class="btn"
@@ -47,7 +47,7 @@
 								</button>
 								</div>
 							{/foreach}
-
+							
 							{if $DETAILVIEW_LINKS['DETAILVIEW']|@count gt 0}
 								<span class="btn-group">
 									<button class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);">
@@ -61,7 +61,7 @@
 													<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
 												</li>
 												{/if}
-											{else}
+											{else}	
 												<li id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
 													<a href={$DETAIL_VIEW_LINK->getUrl()} >{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
 												</li>
@@ -70,13 +70,13 @@
 									</ul>
 								</span>
 							{/if}
-
+							
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="detailViewInfo row-fluid">
+        <div class="detailViewInfo userPreferences row-fluid">
             <div class="details span12">
                 <form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
                     <div class="contents">

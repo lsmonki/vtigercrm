@@ -19,7 +19,7 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 	var $name = 'Workflows';
 
 	static $metaVariables = array(
-		'Current Date' => '(general : (__VtigerMeta__) date)',
+		'Current Date' => '(general : (__VtigerMeta__) date) ($_DATE_FORMAT_)',
 		'Current Time' => '(general : (__VtigerMeta__) time)',
 		'System Timezone' => '(general : (__VtigerMeta__) dbtimezone)',
 		'User Timezone' => '(general : (__VtigerMeta__) usertimezone)',
