@@ -78,7 +78,7 @@ class ModComments extends ModCommentsCore {
 			$modCommentsModule = Vtiger_Module::getInstance('ModComments');
 			$modCommentsModule->addLink('HEADERSCRIPT', 'ModCommentsCommonHeaderScript', 'modules/ModComments/ModCommentsCommon.js');
 			$modCommentsRelatedToField = Vtiger_Field::getInstance('related_to', $modCommentsModule);
-			$modCommentsRelatedToField->setRelatedModules($commentWidgetModules);
+			if ($modCommentsRelatedToField) $modCommentsRelatedToField->setRelatedModules($commentWidgetModules);
 		}
 	}
 
