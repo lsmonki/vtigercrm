@@ -764,12 +764,12 @@ class Install_InitSchema_Model {
 		$adminPassword = $_SESSION['config_file_info']['password'];
 		$userDateFormat = $_SESSION['config_file_info']['dateformat'];
 		$userTimeZone = $_SESSION['config_file_info']['timezone'];
-                //Fix for opensource ticket (http://redmine.vtiger.in/issues/20553)
-                $userFirstName = $_SESSION['config_file_info']['firstname']; 
-                $userLastName = $_SESSION['config_file_info']['lastname']; 
+		//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7974
+        $userFirstName = $_SESSION['config_file_info']['firstname']; 
+        $userLastName = $_SESSION['config_file_info']['lastname']; 
         // create default admin user
     	$user = CRMEntity::getInstance('Users');
-         //Fix for opensource ticket (http://redmine.vtiger.in/issues/20553)
+		//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7974
         $user->column_fields["first_name"] = $userFirstName; 
  	$user->column_fields["last_name"] = $userLastName; 
         //Ends

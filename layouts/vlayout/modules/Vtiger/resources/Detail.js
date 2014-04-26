@@ -1141,7 +1141,7 @@ jQuery.Class("Vtiger_Detail_Js", {
                         // Indicate the page content change
                         app.notifyPostAjaxReady();
                         //Copy Address Event for Quick edit 
-                        //Fix for opensource ticket (http://redmine.vtiger.in/issues/20396)
+                        //Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7854
                         thisInstance.copyMailingAddress();
                     }
             );
@@ -1185,7 +1185,7 @@ jQuery.Class("Vtiger_Detail_Js", {
         });
     },
     
-     //Fix for opensource ticket (http://redmine.vtiger.in/issues/20396)
+     //Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7854
     copyMailingAddress: function() {
         if (app.getModuleName() == "Contacts" || app.getModuleName() == "Accounts") {
             var editInstance = Vtiger_Edit_Js.getInstanceByModuleName(app.getModuleName());
@@ -1610,7 +1610,7 @@ jQuery.Class("Vtiger_Detail_Js", {
         Vtiger_Helper_Js.showHorizontalTopScrollBar();
         this.registerUrlFieldClickEvent();
         //Copy Address Event for Quick edit 
-        //Fix for opensource ticket (http://redmine.vtiger.in/issues/20396)
+        //Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7854
         thisInstance.copyMailingAddress(); 
         var detailViewContainer = jQuery('div.detailViewContainer');
         if (detailViewContainer.length <= 0) {

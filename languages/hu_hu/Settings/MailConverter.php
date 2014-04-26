@@ -47,7 +47,7 @@ $languageStrings = array(
     'LBL_RULES_SEQUENCE_INFO_IS_EMPTY'   =>   "Szabályok sorrend info üres",
     'LBL_SEQUENCE_UPDATED_SUCCESSFULLY'   =>   "Sequence sikeresen frissítve",
     'LBL_SCANNED_SUCCESSFULLY'   =>   "Beolvasott sikeresen",
-    //Fix for opensourece ticket http://redmine.vtiger.in/issues/20889
+    
     'Scanner Name'                 => 'Scanner név'               , // TODO: Review
     'Server'                       => 'Server Name'             , // TODO: Review
     'Protocol'                     => 'Protokoll'                 , // TODO: Review

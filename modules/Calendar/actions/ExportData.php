@@ -97,7 +97,6 @@ class Calendar_ExportData_Action extends Vtiger_ExportData_Action {
 				foreach($temp as $fieldName => $access) {
                     /* Priority property of ical is Integer
                      * http://kigkonsult.se/iCalcreator/docs/using.html#PRIORITY
-                     * Fix for issue http://redmine.vtiger.in/issues/17532
                      */
                     if($fieldName == 'priority'){
                         $priorityMap = array('High'=>'1','Medium'=>'2','Low'=>'3');

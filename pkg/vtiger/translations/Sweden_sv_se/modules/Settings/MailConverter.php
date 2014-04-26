@@ -33,7 +33,7 @@ $languageStrings = array(
     'LBL_SEQUENCE_UPDATED_SUCCESSFULLY' => 'Sekvens uppdaterad framgångsrikt',
     'LBL_SCANNED_SUCCESSFULLY' => 'Genomsökt framgångsrikt',
     //Field Names
-    //Fix for opensourece ticket http://redmine.vtiger.in/issues/20889
+    
     'Scanner Name' => 'Scanner Namn',
     'Server' => 'Servernamn',
     'Protocol' => 'Protokoll',

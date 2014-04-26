@@ -47,7 +47,7 @@ $languageStrings = array(
     'LBL_RULES_SEQUENCE_INFO_IS_EMPTY'   =>   "Regole informazioni sequenza è vuota",
     'LBL_SEQUENCE_UPDATED_SUCCESSFULLY'   =>   "Sequenza aggiornato con successo",
     'LBL_SCANNED_SUCCESSFULLY'   =>   "Acquisita correttamente",
-    //Fix for opensourece ticket http://redmine.vtiger.in/issues/20889
+    
     'Scanner Name'                 => 'Nome dello scanner'          , // TODO: Review
     'Server'                       => 'Nome del server'             , // TODO: Review
     'Protocol'                     => 'Protocollo'                  , // TODO: Review

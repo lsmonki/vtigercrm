@@ -51,7 +51,7 @@ $languageStrings = array(
 	'LBL_SCANNED_SUCCESSFULLY' => 'Scanned successfully',
 
 	//Field Names
-        //Fix for opensourece ticket http://redmine.vtiger.in/issues/20889
+        
 	'Scanner Name'                 => 'Scanner Name'                , 
 	'Server'                       => 'Server Name'                 , 
 	'Protocol'                     => 'Protocol'                    , 

@@ -48,7 +48,7 @@ $languageStrings = array(
     'LBL_RULES_SEQUENCE_INFO_IS_EMPTY' => "Kuralları dizi bilgi boş",
     'LBL_SEQUENCE_UPDATED_SUCCESSFULLY' => "Dizi başarıyla güncellendi",
     'LBL_SCANNED_SUCCESSFULLY' => "Başarıyla taranmış",
-    //Fix for opensourece ticket http://redmine.vtiger.in/issues/20889
+    
     'Scanner Name' => 'Tarayıcı Adı',
     'Server' => 'Sunucu Adı',
     'Protocol' => 'Protokol',
