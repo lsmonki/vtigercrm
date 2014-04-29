@@ -87,7 +87,11 @@ class Google_Contacts_Model extends WSAPP_SyncRecordModel {
         if (!empty($arr)) {
             $addresses = array();
             foreach ($arr as $i => $address) {
-                array_push($addresses, $address->getValue());
+                $addresses['street']=$address->getStreet()->text; 
+                $addresses['city']=$address->getCity()->text; 
+                $addresses['zip']=$address->getPostcode()->text; 
+                $addresses['state']=$address->getRegion()->text; 
+                $addresses['country']=$address->getCountry()->text; 
             }
             return $addresses;
         }

@@ -56,7 +56,12 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
                     $entity['account_id'] = $accountName;
                 
                 $addresses = $googleRecord->getAddresses();
-                $entity['mailingstreet'] = $addresses[0];
+                $entity['mailingstreet'] = $addresses['street']; 
+                $entity['mailingpobox']=$addresses['pobox']; 
+                $entity['mailingcity']=$addresses['city']; 
+                $entity['mailingzip']=$addresses['zip']; 
+                $entity['mailingstate']=$addresses['state']; 
+                $entity['mailingcountry']=$addresses['country']; 
 
                 if (empty($entity['lastname'])) {
                     if (!empty($entity['firstname'])) {
@@ -198,23 +203,43 @@ Class Google_Contacts_Connector extends WSAPP_TargetConnector {
             } else {
                 $entry = $gdataContact->newContactEntry();
             }
-            $oldFullName = $entry->name->fullName->text;
-            if(!empty($oldFullName)) {
-            	$newFullName = str_replace($entry->name->givenName->text, $vtContact->get('firstname'), $oldFullName);
-            	$newFullName = str_replace($entry->name->familyName->text, $vtContact->get('lastname'), $newFullName);
-            	$entry->name->fullName->text = $newFullName;
-            } else {
+            $oldFullName = $entry->name->fullName->text; 
+            if(!empty($oldFullName)){ 
+                $newFullName = str_replace($entry->name->givenName->text,$vtContact->get('firstname'),$oldFullName); 
+                $newFullName = str_replace($entry->name->familyName->text, $vtContact->get('lastname'), $newFullName); 
+            } 
+            else{ 
                 $entry->name = $gdataContact->newName($vtContact->get('firstname') . " " . $vtContact->get('lastname'));
             }
             
             $primaryEmail = $gdataContact->newEmail($vtContact->get('email'));
             $addressArray = array();
-            $mailingstreet = $vtContact->get('mailingstreet');
-            if (!empty($mailingstreet)) {
-                $postalAddress = $gdataContact->newStructuredPostalAddress("Postal Address");
-                $postalAddress->street = $gdataContact->newStreet(implode(' ', array($vtContact->get('mailingstreet'), $vtContact->get('mailingcity'), $vtContact->get('mailingstate'), $vtContact->get('mailingcountry'))));
-                $addressArray[] = $postalAddress;
-            }
+            $mailingstreet = $vtContact->get('mailingstreet'); 
+            $mailingpobox = $vtContact->get('mailingpobox'); 
+            $mailingzip = $vtContact->get('mailingzip'); 
+            $mailingcity = $vtContact->get('mailingcity'); 
+            $mailingstate = $vtContact->get('mailingstate'); 
+            $mailingcountry = $vtContact->get('mailingcountry'); 
+            $postalAddress = $gdataContact->newStructuredPostalAddress("Postal Address"); 
+            if (!empty($mailingstreet)){ 
+                    $postalAddress->street=$gdataContact->newStreet($mailingstreet); 
+            } 
+            if(!empty($mailingpobox)){ 
+                    $postalAddress->pobox=$gdataContact->newPobox($mailingpobox); 
+            } 
+            if(!empty($mailingzip)){ 
+                $postalAddress->postcode=$gdataContact->newPostcode($mailingzip); 
+            } 
+            if(!empty($mailingcity)){ 
+                    $postalAddress->city=$gdataContact->newCity($mailingcity); 
+            } 
+            if(!empty($mailingstate)){ 
+                    $postalAddress->region=$gdataContact->newRegion($mailingstate); 
+            } 
+            if(!empty($mailingcountry)){ 
+                    $postalAddress->country=$gdataContact->newCountry($mailingcountry); 
+            } 
+                     $addressArray[] = $postalAddress; 
 
             $phoneArray = array();
             $phone = $vtContact->get('mobile');
