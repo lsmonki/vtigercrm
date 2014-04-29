@@ -100,29 +100,6 @@ if($adb->num_rows($result) <= 0){
 //73 ends
 
 //74 starts
-$usersInstance = Vtiger_Module::getInstance('Users');
-$blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $usersInstance);
-$usersRowHeightField = Vtiger_Field::getInstance('rowheight', $usersInstance);
-
-if (!$usersRowHeightField) {
-    $field = new Vtiger_Field();
-    $field->name = 'rowheight';
-    $field->label = 'Row Height';
-    $field->table = 'vtiger_users';
-    $field->uitype = 16;
-    $field->typeofdata = 'V~O';
-    $field->readonly = 1;
-    $field->displaytype = 1;
-    $field->masseditable = 1;
-    $field->quickcreate = 1;
-    $field->columntype = 'VARCHAR(10)';
-    $field->defaultvalue = 'medium';
-    $blockInstance->addField($field);
-
-    $field->setPicklistValues(array('wide', 'medium', 'narrow'));
-    echo '<br> Rowheight Field added in Users Module';
-}
-
 $moduleName = 'HelpDesk';
 
 //Start: Moving Entity methods of Comments to Workflows
