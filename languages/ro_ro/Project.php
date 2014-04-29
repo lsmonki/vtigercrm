@@ -34,11 +34,11 @@ $languageStrings = array(
 	'LBL_MORE'	=>	"mai mult",
 	'LBL_MILESTONES_LIST'	=>	"Lista Repere",
 	'LBL_DOWNLOAD_FILE'	=>	"Descărcare fișier",
-    'LBL_TASKS_HIGH' => 'Prioritate',
-    'LBL_TASKS_NORMAL' => 'Prioritate normală',
-    'LBL_TASKS_LOW' => 'Prioritate scăzută',
-    'LBL_TASKS_OTHER' => 'Alte priorități',
-    'LBL_SELECT_PROGRESS' => 'Selectați Progress',
+        'LBL_TASKS_HIGH' => 'Prioritate',
+        'LBL_TASKS_NORMAL' => 'Prioritate normală',
+        'LBL_TASKS_LOW' => 'Prioritate scăzută',
+        'LBL_TASKS_OTHER' => 'Alte priorități',
+        'LBL_SELECT_PROGRESS' => 'Selectați Progress',
 	
 	//picklist values
 	'prospecting' => 'Prospectarea',

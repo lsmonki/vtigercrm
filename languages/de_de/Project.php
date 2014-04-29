@@ -34,11 +34,11 @@ $languageStrings = array(
 	'LBL_MORE'	=>	"mehr",
 	'LBL_MILESTONES_LIST'	=>	"Meilensteine ​​Liste",
 	'LBL_DOWNLOAD_FILE'	=>	"Datei herunterladen",
-    'LBL_TASKS_HIGH' => 'Hohe Priorität',
-    'LBL_TASKS_NORMAL' => 'Normale Priorität',
-    'LBL_TASKS_LOW' => 'Niedrige Priorität',
-    'LBL_TASKS_OTHER' => 'Andere Prioritäten',
-    'LBL_SELECT_PROGRESS' => 'Wählen Fortschritt',
+        'LBL_TASKS_HIGH' => 'Hohe Priorität',
+        'LBL_TASKS_NORMAL' => 'Normale Priorität',
+        'LBL_TASKS_LOW' => 'Niedrige Priorität',
+        'LBL_TASKS_OTHER' => 'Andere Prioritäten',
+        'LBL_SELECT_PROGRESS' => 'Wählen Fortschritt',
 	
 	//picklist values
 	'prospecting' => 'Prospektion',
