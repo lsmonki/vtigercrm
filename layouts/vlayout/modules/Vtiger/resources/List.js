@@ -1206,10 +1206,16 @@ jQuery.Class("Vtiger_List_Js",{
 			jQuery('#totalPageCount').text("");
 			thisInstance.getListViewRecords(urlParams).then (function(){
 				thisInstance.updatePagination();
+                                //Fix for empty Recycle bin
+                                thisInstance.filterLoadPostOperation(); 
             });
 		});
 	},
 
+        //Fix for empty Recycle bin
+        filterLoadPostOperation : function(){ 
+            return true;   
+        },
 	/*
 	 * Function to register the click event for list view main check box.
 	 */
