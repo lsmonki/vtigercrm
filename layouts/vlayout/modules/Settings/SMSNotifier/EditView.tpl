@@ -36,7 +36,7 @@
 					{assign var=FIELD_TYPE value=$FIELD_MODEL->getFieldDataType()}
 					{assign var=FIELD_VALUE value=$RECORD_MODEL->get($FIELD_NAME)}
 					{if $FIELD_TYPE == 'picklist'}
-						<select class="select2 span3 marginLeftZero providerType" name="{$FIELD_NAME}" placeholder="{vtranslate('LBL_SELECT_ONE', $QUALIFIED_MODULE_NAME)}">
+						<select class="chzn-select providerType" name="{$FIELD_NAME}" data-validation-engine="validate[ required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]">
 							<option></option>
 							{foreach item=PROVIDER_MODEL from=$PROVIDERS}
 								{assign var=PROVIDER_NAME value=$PROVIDER_MODEL->getName()}
