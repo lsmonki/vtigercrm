@@ -87,6 +87,10 @@ class Vtiger_FieldBasic {
             Vtiger_Utils::AddColumn('vtiger_field', 'helpinfo', ' TEXT');
             self::$__cacheSchemaChanges['vtiger_field.helpinfo'] = true;
         }
+        if (empty(self::$__cacheSchemaChanges['vtiger_field.summaryfield'])) {
+            Vtiger_Utils::AddColumn('vtiger_field', 'summaryfield', ' INT(10) NOT NULL DEFAULT 0');
+            self::$__cacheSchemaChanges['vtiger_field.summaryfield'] = 0;
+        }
     }
 
     /**
