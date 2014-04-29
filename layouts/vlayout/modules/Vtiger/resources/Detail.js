@@ -1080,6 +1080,12 @@ jQuery.Class("Vtiger_Detail_Js", {
                     detailViewElement.removeClass('hide');
                     currentTarget.show();
                 } else {
+                    var errorExists = fieldElement.validationEngine('validate'); 
+                    //To handle status field validation 
+                    if(errorExists) { 
+                            Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);  
+                            return;  
+                    } 
                     var activityDiv = currentDiv.closest('.activityEntries');
                     var activityId = activityDiv.find('.activityId').val();
                     var moduleName = activityDiv.find('.activityModule').val();
