@@ -8,7 +8,9 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Settings'                     => 'ConfiguraÃ§Ãµes'             , 
+        'LBL_INTEGRATION' => 'Integração',
+        'LBL_PBXMANAGER' => 'PBXManager',
+	'Settings'                     => 'Configurações'             , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review
 	'LBL_ACTIVE_USERS'             => 'Users'                       , // TODO: Review

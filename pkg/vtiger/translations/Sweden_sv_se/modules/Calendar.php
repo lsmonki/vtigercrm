@@ -51,6 +51,8 @@ $languageStrings = array(
 
 	//Status picklist values
 	'Planned' => 'Planerad',
+        'Held'  =>  'Held',
+        'Not Held'  => 'Inte Held',
 	'Completed' => 'Komplett',
 	'Pending Input' => 'Pågående Inmatning',
 	'Not Started' => 'Ej Påbörjad',

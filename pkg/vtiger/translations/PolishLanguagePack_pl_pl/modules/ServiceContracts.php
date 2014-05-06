@@ -10,22 +10,22 @@
  * *********************************************************************************** */
 $languageStrings = array(
 	// Basic Strings
-	'ServiceContracts' => 'Umowy',
-	'Service Contracts' => 'Umowy',
-	'SINGLE_ServiceContracts' => 'Umowa',
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'ServiceContracts' => 'Umowy serwisowe',
+	'SINGLE_ServiceContracts' => 'Umowa serwisowa',
+	'LBL_ADD_RECORD' => 'Dodaj umowę serwisową',
+	'LBL_RECORDS_LIST' => 'Lista umów serwisowych',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie umowy serwisowej',
 	// Blocks
-	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szczegóły umowy',
+	'LBL_SERVICE_CONTRACT_INFORMATION' => 'Szczegóły umowy serwisowej',
 	
 	//Field Labels
-	'Contract No' => 'Numer',
+	'Contract No' => 'Numer umowy serwisowej',
 	'Start Date' => 'Data rozpoczęcia',
 	'End Date' => 'Data zakończenia',
-	'Tracking Unit' => 'Rodzaj jednostek',
-	'Total Units' => 'Wszystkich jednostek',
-	'Used Units' => 'Zużytych jednostek',
-	'Progress'=> 'Postęp',
-	'Planned Duration' => 'Planowany czas trwania (w dniach)',
-	'Actual Duration' => 'Aktualny czas trwania (w dniach)',
+	'Tracking Unit' => 'Rodzaj jednostki rozliczenia',
+	'Total Units' => 'Do wykorzystania jednostek',
+	'Used Units' => 'Wykorzystane jednostki',
+	'Progress'=> 'W realizacji',
+	'Planned Duration' => 'Czas obowiązywania umowy (w dniach)',
+	'Actual Duration' => 'Rzeczywisty czas obowiązywania umowy (w dniach)',
 );

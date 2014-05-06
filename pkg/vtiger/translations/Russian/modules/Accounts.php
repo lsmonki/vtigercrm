@@ -10,7 +10,7 @@
 $languageStrings = array(
 	'Accounts'                     => 'Контрагенты'      , 
 	'SINGLE_Accounts'              => 'Контрагент'        , 
-	'LBL_ADD_RECORD'               => 'Add Organization'            , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить организацию',
 	'LBL_RECORDS_LIST'             => 'Список Контрагентов', // KEY 5.x: LBL_LIST_FORM_TITLE
 	'LBL_ACCOUNT_INFORMATION'      => 'Информация о Контрагенте', 
 	'LBL_SHOW_ACCOUNT_HIERARCHY'   => 'Иерархия Контрагента', 
@@ -34,13 +34,13 @@ $languageStrings = array(
 	'Reseller'                     => 'Посредник'          , 
 	'LBL_START_DATE'               => 'Дата начала'       , 
 	'LBL_END_DATE'                 => 'Дата окончания' , 
-	'LBL_DUPLICATES_EXIST'         => 'Organization Name already exists', // TODO: Review
-	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
-	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
+	'LBL_DUPLICATES_EXIST'         => 'Название организации уже существует',
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Копировать Адрес доставки'       ,
+	'LBL_COPY_BILLING_ADDRESS'     => 'Копировать Адрес для выставления счета'        ,
 );
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', // TODO: Review
-	'LBL_DELETE_CONFIRMATION'      => 'Deleting this Organization will remove its related Opportunities & Quotes. Are you sure you want to delete this Organization?', // TODO: Review
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Deleting this Organization(s) will remove its related Opportunities & Quotes. Are you sure you want to delete the selected records?', // TODO: Review
-	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Organization Name already Exists.Do you want to create a duplicate record?', // TODO: Review
+	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Вы уверены, что хотите удалить?',
+	'LBL_DELETE_CONFIRMATION'      => 'Удаление этой Организации будет удалить связанные с ним возможности & Котировки. Вы уверены, что хотите удалить эту Организацию?',
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Удаление этого организация (организации) снимет свои возможности, связанные с & Котировки. Вы уверены, что хотите удалить выбранные записи?',
+	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Название организации уже Exists.Do вы хотите создать дубликат записи?',
 );

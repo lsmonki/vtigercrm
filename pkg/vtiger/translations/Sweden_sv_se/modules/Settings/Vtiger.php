@@ -8,6 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integration',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	// Basic Strings
 	'Settings' => 'Inställningar',
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Sök Inställningar',

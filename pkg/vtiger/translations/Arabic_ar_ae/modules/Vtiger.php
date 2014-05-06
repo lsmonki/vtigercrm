@@ -951,5 +951,13 @@ $jsLanguageStrings = array(
     'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'يسمح أقصى 160 حرفا للرسالة نصية',
     'JS_VIEWNAME_ALERT' => 'والحد الأقصى المسموح به 40 حرفا لاسم مرشح',
     'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'تجاوز الحد الأقصى لحجم التحميل',
-	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'لا يمكن عقد لمستقبل',
+    'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'لا يمكن عقد لمستقبل',
+    
+    // Specific starts - For PBXManager
+    'JS_PBX_CALL_FROM' => 'استدعاء من',
+    'JS_PBX_INCOMING_CALL' => 'مكالمة واردة',
+    'JS_PBX_OUTGOING_SUCCESS'=>'التقاط المتلقي التمديد لطلب الرقم',
+    'JS_PBX_OUTGOING_FAILURE'=>'استدعاء فشل',
+    'JS_PBX_FILL_ALL_FIELDS'=>'يرجى ملء جميع الحقول',
+    // ends
 );

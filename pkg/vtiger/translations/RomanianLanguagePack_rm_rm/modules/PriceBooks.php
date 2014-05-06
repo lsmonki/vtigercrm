@@ -16,4 +16,7 @@ $languageStrings = array(
 	'LBL_EDIT_LIST_PRICE'          => 'Edit List Price'             , 
 	'Price Book Name'              => 'Nume lista preturi'          , 
 	'PriceBook No'                 => 'ID Lista Preturi'            , 
+	
+	'LBL_UNIT_PRICE' => 'Pret unitate',
+	'LBL_ADD_TO' => 'Adăuga la',
 );

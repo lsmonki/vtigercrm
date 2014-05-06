@@ -16,6 +16,8 @@
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integración',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Configuración',
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Configuración Búsqueda',
 	'LBL_SUMMARY' => 'Resumen',
@@ -25,11 +27,7 @@ $languageStrings = array(
 	'LBL_SETTINGS_SHORTCUTS' => 'Configuración Acceso Rápido',
 	'LBL_UNPIN' => 'Desprender',
 	'LBL_PIN' => 'Fijar',
-        
-        //For PhoneCalls
-        'LBL_INTEGRATION'            =>            'Integration',
-        'LBL_PHONE_CALLS'            =>            'Telefonanrufe',
-    
+
 	// Blocks
 	'LBL_STUDIO'                   => 'Diseñador',
 	'LBL_COMMUNICATION_TEMPLATES'  => 'Plantillas',

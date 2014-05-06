@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integration',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Settings'                    , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review
@@ -49,6 +51,7 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Setup dependency between Picklist values in each module', 
 	'LBL_MENU_EDITOR'              => 'Menu editor'                 , 
 	'LBL_MENU_DESC'                => 'Customise Menu sequence'     , 
+	'LBL_MENU_EDITOR_MESSAGE'		=> 'The actual number of menu items displayed will depend on the screen size and might be less than selected items.',
 	'EMAILTEMPLATES'               => 'Email Templates'             , 
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Manage templates for Email module', 
 	'LBL_COMPANY_DETAILS'          => 'Company Details'             , 
@@ -109,7 +112,7 @@ $languageStrings = array(
 	'LBL_TERMS_AND_CONDITIONS'     => 'Terms & Conditions'          , // TODO: Review
 	'LBL_SPECIFY_TERMS_AND_CONDITIONS' => 'Specify Terms & Conditions here', // TODO: Review
 	'LBL_ANNOUNCEMENTS'            => 'Announcements'               , // TODO: Review
-	'LBL_ENTER_ANNOUNCEMENT_HERE'  => 'Enter Announcement Here'     , // TODO: Review
+	'LBL_ENTER_ANNOUNCEMENT_HERE'  => 'Enter announcement here'     , // TODO: Review
 	'LBL_ANNOUNCEMENT_DESC'        => 'Change the text that appears in the announcement display on top of each page', // TODO: Review
 	'LBL_RESET_TO_DEFAULT'         => 'Reset to Default'            , // TODO: Review
 	'LBL_SERVER_NAME'              => 'Server Name'                 , // TODO: Review
@@ -120,11 +123,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER'          => 'Outgoing Server'             , // TODO: Review
 	'LBL_OUTGOING_SERVER_DESC'     => 'Configure your Outgoing Mail Server details', // TODO: Review
 	'LBL_DEFAULT'                  => 'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.', // TODO: Review
-	'LBL_OPTIONS1'                 => 'Send emails from your mail server<br>
-					- Enter the SMTP account details (Server Name, User Name, Password) for the same account as entered in the FROM email address.', // TODO: Review
-	'LBL_OPTIONS2'                 => 'Add od1.vtiger.com server as a authorized sender for your domain.<br>
-					- If you prefer to retain the vtiger server as the outgoing server, we recommend that you configure your domain\'s SPF record to include the vtiger server as a valid sender for your domain.
-					  For additonal instruction on setting up SPF record, please email od-support@vtiger.com .', // TODO: Review
+	'LBL_OPTIONS1'                 => '',
+	'LBL_OPTIONS2'                 => "",
 	'LBL_MAIL_SERVER_SMTP'         => 'Mail Server Settings (SMTP)' , // TODO: Review
 	'LBL_OUTGOING_SERVER_FROM_FIELD' => 'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.', // TODO: Review
 	'LBL_TESTMAILSTATUS'           => 'Test Mail Status : '         , // TODO: Review

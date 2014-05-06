@@ -44,11 +44,10 @@ $languageStrings = array(
 	'LBL_PROFILES' => 'Perfiles',
 	'LBL_CHOOSE_PROFILES' => 'Selecciona Perfiles',
 
-	'LBL_VIEW_ALL' => 'Ver Todos',
-	'LBL_EDIT_ALL' => 'Editar Todos',
-	'LBL_VIEW_ALL_DESC' => 'Puede ver toda la información del módulo',
-	'LBL_EDIT_ALL_DESC' => 'Puede edtar toda la información del módulo',
-	'LBL_DUPLICATES_EXIST' => 'Existen Perfiles Duplicados',
+    'LBL_VIEW_ALL' => 'Ver Todos',
+    'LBL_EDIT_ALL' => 'Editar Todos',
+    'LBL_VIEW_ALL_DESC' => 'Puede ver toda la información del módulo',
+    'LBL_EDIT_ALL_DESC' => 'Puede edtar toda la información del módulo'
 
 );
 

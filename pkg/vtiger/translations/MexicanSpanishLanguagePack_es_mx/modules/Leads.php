@@ -12,7 +12,7 @@ $languageStrings = array(
 	'SINGLE_Leads'                 => 'Prospecto'                   , 
 	'LBL_RECORDS_LIST'             => 'Lista de prospectos'         , 
 	'LBL_ADD_RECORD'               => 'Agregar prospecto'           , 
-	'LBL_LEAD_INFORMATION'         => 'Infomación del Prospecto'   , 
+	'LBL_LEAD_INFORMATION'         => 'Información del Prospecto'   , 
 	'Lead No'                      => 'Núm. Prospecto'             , 
 	'Company'                      => 'Empresa'                     , 
 	'Designation'                  => 'Puesto'                      , 
@@ -47,7 +47,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Algún campo obligatorio está vacío', 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vinculación de Campos Personalizados', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Editar mapeo de campos'      , 
-	'LBL_WEBFORMS'                 => 'Configurar formularios Web'  , 
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecciona un contacto para proceder', 

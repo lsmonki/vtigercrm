@@ -63,7 +63,22 @@ class Reports_Save_Action extends Vtiger_Save_Action {
 
         $reportModel->save();
 
-        $loadUrl = $reportModel->getDetailViewUrl();
-        header("Location: $loadUrl");
-    }
+		//Scheduled Reports
+        $scheduleReportModel = new Reports_ScheduleReports_Model();
+        $scheduleReportModel->set('scheduleid', $request->get('schtypeid'));
+        $scheduleReportModel->set('schtime', $request->get('schtime'));
+        $scheduleReportModel->set('schdate', $request->get('schdate'));
+        $scheduleReportModel->set('schdayoftheweek', $request->get('schdayoftheweek'));
+        $scheduleReportModel->set('schdayofthemonth', $request->get('schdayofthemonth'));
+        $scheduleReportModel->set('schannualdates', $request->get('schannualdates'));
+        $scheduleReportModel->set('reportid', $reportModel->getId());
+        $scheduleReportModel->set('recipients', $request->get('recipients'));
+        $scheduleReportModel->set('isReportScheduled', $request->get('enable_schedule'));
+        $scheduleReportModel->set('specificemails', $request->get('specificemails'));
+        $scheduleReportModel->saveScheduleReport();
+		//END
+
+		$loadUrl = $reportModel->getDetailViewUrl();
+		header("Location: $loadUrl");
+	}
 }

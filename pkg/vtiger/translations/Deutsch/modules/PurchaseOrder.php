@@ -23,4 +23,6 @@ $languageStrings = array(
 	'LBL_PAID'                     => 'Paid'                        , 
 	'LBL_BALANCE'                  => 'Balance'                     , 
 	'Received Shipment'            => 'Lieferung empfangen'         , 
+        'LBL_LIST_PRICE'               => 'Listenpreis',
+        'List Price'                   => 'Listenpreis',
 );

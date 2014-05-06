@@ -169,4 +169,44 @@ $languageStrings = array(
 	'Summary'                      => 'Summary'                     , // TODO: Review
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Felhasználó sikeresen törölve',
+    'LBL_ACTIVE_USERS' => 'Aktív felhasználók',
+    'LBL_INACTIVE_USERS' => 'Inaktív felhasználók',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Felhasználó törlése Véglegesen',
+    'LBL_RESTORE' => 'Visszaad',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Felhasználó restaurált sikeresen',
+		'LBL_ALMOST_THERE'	=>	'Már majdnem ott vagyunk!',
+	'LBL_ABOUT_ME'		=>	'About Me',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Megígérjük, hogy ez magán)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Minden mező kitöltése kötelező)',
+	'LBL_GET_STARTED'	=> 'Az első lépések',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Az Telefonszám',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Honnan jöttél?',
+	'LBL_SELECT_COUNTRY'	=> 'Ország kiválasztása',
+	'LBL_COMPANY_SIZE'		=> 'Vállalati méret',
+	'LBL_JOB_TITLE'			=> 'Job Title',
+	'LBL_DEPARTMENT'		=> 'Osztály',
+	'LBL_BASE_CURRENCY'		=> 'Az alap pénzneme',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Választás alap pénzneme',
+	'LBL_OPERATING_CURRENCY'	=> 'Bázisdeviza nem módosítható később. Válassza ki az operációs valuta',
+	'LBL_LANGUAGE' => 'Nyelv',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Válassza ki a nyelvet',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Válasszon időzónát',
+	'LBL_DATE_FORMAT'		=> 'Dátum formátum',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Válassza a Date Format',
+	'LBL_PHONE'	=> 'Telefon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

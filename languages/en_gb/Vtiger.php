@@ -715,4 +715,12 @@ $jsLanguageStrings = array(
 	'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Call From',
+	'JS_PBX_INCOMING_CALL' => 'Incoming Call',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Pick up the extension receiver to dial the number',
+	'JS_PBX_OUTGOING_FAILURE'=>'Call Failed',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Please fill all the fields',
+	// ends
 );

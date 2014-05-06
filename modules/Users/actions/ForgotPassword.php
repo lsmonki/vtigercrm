@@ -17,6 +17,7 @@ include_once 'includes/runtime/Viewer.php';
 include_once "includes/http/Request.php";
 include_once "include/Webservices/Custom/ChangePassword.php";
 include_once "include/Webservices/Utils.php";
+include_once 'includes/main/WebUI.php'; 
 
 class Users_ForgotPassword_Action {
 

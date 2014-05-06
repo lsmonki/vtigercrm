@@ -18,6 +18,9 @@ $languageStrings = array(
 	'LBL_SETTINGS_SHORTCUTS' => 'Settings Shortcuts',
 	'LBL_UNPIN' => 'Unpin',
 	'LBL_PIN' => 'pin',
+    
+        'LBL_INTEGRATION' => 'Integration',
+        'LBL_PBXMANAGER' => 'PBXManager',
 
 	// Blocks
 	'LBL_STUDIO' => 'Studio',

@@ -40,7 +40,9 @@ $languageStrings = array(
 	'Meeting' => 'Spotkanie',
 
 	//Status picklist values
-	'Planned' => 'Planowane',
+	'Planned' => 'Planowany',
+        'Held'    => 'Held',
+        'Not Held'=> 'Nie Held',
 	'Completed' => 'Zakończone',
 	'Pending Input' => 'W realizacji',
 	'Not Started' => 'Nierozpoczęte',

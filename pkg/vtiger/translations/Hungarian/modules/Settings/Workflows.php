@@ -74,6 +74,16 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => '-Tól',
+	'Optional' => 'Választható',
+	'LBL_ADD_TASK' => 'Add Feladat',
+    'Portal Pdf Url' =>'Portal Pdf kapcsolat',
+    'LBL_ADD_TEMPLATE' => 'Add Sablon',
+    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems blokk Group adó',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems blokk egyes adó-',
+	
+	//Translation for module
+	'Calendar' => 'To Do',
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

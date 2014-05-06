@@ -43,9 +43,9 @@ if (isset($_REQUEST['user_name']) && isset($_REQUEST['emailId'])) {
                             <br><br> 
                             This request was made on ' . date("Y-m-d H:i:s") . ' and will expire in next 24 hours.<br><br> 
 		            Regards,<br> 
-		            VtigerCRM Open source Support Team.<br>' .
+		            VtigerCRM Open source Support Team.<br>' ;
                 $mail = new PHPMailer();
-        setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $contents, 'support@vtiger.com', $username, $email);
+        setMailerProperties($mail, 'Request : ForgotPassword - vtigercrm', $content, 'support@vtiger.com', $username, $email);
         $status = MailSend($mail);
         if ($status === 1)
             header('Location:  index.php?modules=Users&view=Login&status=1');

@@ -10,8 +10,8 @@
 $languageStrings = array(
 	'SINGLE_SalesOrder'            => 'Заказ на Продажу', 
 	'LBL_EXPORT_TO_PDF'            => 'Экспорт в PDF'       , 
-	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
-	'LBL_ADD_RECORD'               => 'Add Sales Order'             , // TODO: Review
+	'LBL_SEND_MAIL_PDF'            => 'Отправить на e-mail с PDF'         , 
+	'LBL_ADD_RECORD'               => 'Добавить заказа клиента'             , 
 	'LBL_RECORDS_LIST'             => 'Список Заказов' , // KEY 5.x: LBL_LIST_SO_FORM_TITLE
 	'LBL_SO_INFORMATION'           => 'Заказ на Продажу', 
 	'SalesOrder No'                => 'Заказ №'              , 

@@ -710,7 +710,11 @@ $jsLanguageStrings = array(
 	'JS_INFORMATION' => 'Informacja',
 	 'SINGLE_Vendors' => 'Dostawca',
 	
-	//Feedback on removing old version
-	'JS_PLEASE_GIVE_YOUR_FEEDBACK' => 'Wypełnij swoją opinię',
-	
+	// Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'zadzwonić z',
+	'JS_PBX_INCOMING_CALL' => 'Połączenie przychodzące zadzwonić',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Podnieś słuchawkę wewnętrzny, aby wybrać numer',
+	'JS_PBX_OUTGOING_FAILURE'=>'Połączenie nie powiodło się',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Proszę wypełnić wszystkie pola',
+	// ends	
 	);

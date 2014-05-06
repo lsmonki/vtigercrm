@@ -30,7 +30,7 @@ class Vtiger_ShortURL_Helper {
         if (!isset($options['onetime']))
             $options['onetime'] = 0;
         $uid = self::generate($options);
-        return "$site_URL/shorturl.php?id=" . $uid;
+        return rtrim($site_URL, '/') . "/shorturl.php?id=" . $uid;
     }
 
     static function generate(array $options) {

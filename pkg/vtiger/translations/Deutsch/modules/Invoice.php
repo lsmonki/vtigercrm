@@ -27,4 +27,7 @@ $languageStrings = array(
 	'Paid'                         => 'bezahlt'                     , 
 	'AutoCreated'                  => 'automatisch erzeugt'         , 
 	'Cancel'                       => 'Abbrechen'                   , 
+	'LBL_NOT_A_BUNDLE' => 'Nicht ein Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Unter Produkte',
+	'LBL_ACTION'	=> 'Aktion',
 );

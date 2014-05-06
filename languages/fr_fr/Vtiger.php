@@ -710,5 +710,12 @@ $jsLanguageStrings = array(
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
-
-    );
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Appel De',
+	'JS_PBX_INCOMING_CALL' => 'Appel entrant',
+	'JS_PBX_OUTGOING_SUCCESS'=>"Décrochez le combiné d'extension pour composer le numéro",
+	'JS_PBX_OUTGOING_FAILURE'=>"Échec de l'appel",
+	'JS_PBX_FILL_ALL_FIELDS'=>"S'il vous plaît remplir tous les champs",
+	// ends
+);

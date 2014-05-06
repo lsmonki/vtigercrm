@@ -710,5 +710,12 @@ $jsLanguageStrings = array(
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
-	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
+    
+    // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Suna la',
+	'JS_PBX_INCOMING_CALL' => 'Apel de intrare',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Ridica receptorul de extensie pentru a apela numărul',
+	'JS_PBX_OUTGOING_FAILURE'=>'Suna a eșuat',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Vă rugăm să completați toate câmpurile',
+	// ends
 );

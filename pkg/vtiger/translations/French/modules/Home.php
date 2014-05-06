@@ -6,16 +6,13 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013   
  ************************************************************************************/
 $languageStrings = array(
 	'ALVT'                         => 'Top Comptes'                 , 
 	'PLVT'                         => 'Top Affaires'                , 
 	'QLTQ'                         => 'Top Devis'                   , 
 	'CVLVT'                        => 'Indicateurs Clé'            , 
-	'HLT'                          => 'Top Tickets'         , 
+	'HLT'                          => 'Top Support Tickets'         , 
 	'GRT'                          => 'Mes assignations de groupe'  , 
 	'OLTSO'                        => 'Top Bons de commande'        , 
 	'ILTI'                         => 'Top Factures'                , 
@@ -24,4 +21,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'Mes FAQ récentes'           , 
 	'UA'                           => 'Activités à venir'         , 
 	'PA'                           => 'En attente'                  , 
+        'Home'                         => 'Accueil'                     ,
 );

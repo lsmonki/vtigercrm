@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integrazione',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Impostazioni'                , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review
@@ -49,6 +51,7 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Set up dependency between picklist values in each module', 
 	'LBL_MENU_EDITOR'              => 'Menu Editor'                 , 
 	'LBL_MENU_DESC'                => 'Customize Menu Sequence'     , 
+	'LBL_MENU_EDITOR_MESSAGE'		=>'Il numero effettivo di voci di menu visualizzate dipenderà dalla dimensione dello schermo e può essere inferiore a elementi selezionati.',
 	'EMAILTEMPLATES'               => 'Template Email'              , 
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Gestisce i template per il modulo Email', 
 	'LBL_COMPANY_DETAILS'          => 'Dettagli Societ&agrave;'     , 
@@ -65,7 +68,7 @@ $languageStrings = array(
 	'LBL_CURRENCY_SETTINGS'        => 'Valute'                      , 
 	'LBL_CURRENCY_DESCRIPTION'     => 'Gestisce le valute internazionali e il tasso di conversione', 
 	'LBL_CUSTOMIZE_MODENT_NUMBER'  => 'Personalizza la numerazione dei record', 
-	'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION' => 'Personalizzazione della numerazione delle entità', 
+	'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION' => 'Personalizzazione della numerazione delle entitÃ ', 
 	'LBL_MAIL_SCANNER'             => 'Mail Scanner'                , 
 	'LBL_MAIL_SCANNER_DESCRIPTION' => 'Configura mailbox per scansionare', 
 	'LBL_LIST_WORKFLOWS'           => 'Workflow'                    , 
@@ -120,11 +123,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER'          => 'Outgoing Server'             , // TODO: Review
 	'LBL_OUTGOING_SERVER_DESC'     => 'Configure your Outgoing Mail Server details', // TODO: Review
 	'LBL_DEFAULT'                  => 'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.', // TODO: Review
-	'LBL_OPTIONS1'                 => 'Send emails from your mail server<br>
-					- Enter the SMTP account details (Server Name, User Name, Password) for the same account as entered in the FROM email address.', // TODO: Review
-	'LBL_OPTIONS2'                 => 'Add od1.vtiger.com server as a authorized sender for your domain.<br>
-					- If you prefer to retain the vtiger server as the outgoing server, we recommend that you configure your domain\'s SPF record to include the vtiger server as a valid sender for your domain.
-					  For additonal instruction on setting up SPF record, please email od-support@vtiger.com .', // TODO: Review
+	'LBL_OPTIONS1'                 => '',
+	'LBL_OPTIONS2'                 =>"",
 	'LBL_MAIL_SERVER_SMTP'         => 'Mail Server Settings (SMTP)' , // TODO: Review
 	'LBL_OUTGOING_SERVER_FROM_FIELD' => 'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.', // TODO: Review
 	'LBL_TESTMAILSTATUS'           => 'Test Mail Status : '         , // TODO: Review

@@ -6,25 +6,22 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013  
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_PurchaseOrder'         => 'Commande fournisseur'        , 
+	'SINGLE_PurchaseOrder'         => 'Cammande fournisseur'        , 
 	'LBL_EXPORT_TO_PDF'            => 'Export PDF'                  , 
-	'LBL_SEND_MAIL_PDF'            => 'Envoi PDF par Email'         , 
-	'LBL_ADD_RECORD'               => 'Ajouter Commande fournisseur'          , 
-	'LBL_RECORDS_LIST'             => 'Liste des Commandes fournisseur'                       , 
-	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copier l\'adresse de livraison'       , 
-	'LBL_COPY_BILLING_ADDRESS'     => 'Copier l\'adresse de facturation'        , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , 
+	'LBL_RECORDS_LIST'             => 'Liste'                       , 
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
 	'LBL_PO_INFORMATION'           => 'Détail commande'            , 
 	'PurchaseOrder No'             => 'Commande N°'                , 
 	'Requisition No'               => 'Ref demande'                 , 
 	'Tracking Number'              => 'Ref de suivi'                , 
 	'Sales Commission'             => 'Commission'                  , 
-	'LBL_PAID'                     => 'Soldé'                        , 
-	'LBL_BALANCE'                  => 'Balance'                     , 
+	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
+	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Reçu'                       , 
 	
 	//Translations used for Export to Pdf
@@ -42,4 +39,6 @@ $languageStrings = array(
 	'Tax' => 'Taxe',
 	'Contact Name' => 'Nom contact',
 	'Grand Total:' => 'Total:',
+        'LBL_LIST_PRICE'               => 'Prix',
+        'List Price'                   => 'Prix',
 );

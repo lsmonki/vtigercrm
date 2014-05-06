@@ -33,4 +33,31 @@ $languageStrings = array(
 	'LBL_TICKET_PRIORITY'          => 'Priority'                    , // TODO: Review
 	'LBL_MORE'                     => 'more'                        , // TODO: Review
 	'LBL_DOWNLOAD_FILE'            => 'Download File'               , // TODO: Review
+    'LBL_MILESTONES_LIST'          => 'Mérföldkövek listája'        ,
+    'LBL_TASKS_HIGH'               => 'Magas prioritás'             ,
+    'LBL_TASKS_NORMAL'             => 'Normál prioritású'           ,
+    'LBL_TASKS_LOW'                => 'Alacsony prioritás'          ,
+    'LBL_TASKS_OTHER'              => 'Más prioritásokat'           ,
+    'LBL_SELECT_PROGRESS'          => 'Válassza ki a Haladás'       ,
+	
+	//picklist values
+	'prospecting' => 'Érdeklődőszerzés',
+    'in progress' => 'Folyamatban',
+    'initiated' => 'Kezdeményezett',
+	'waiting for feedback' => 'Várakozás Visszajelzés',
+    'on hold' => 'On Hold',
+    'archived' => 'Archivált',
+    'completed' => 'Befejezték',
+    'delivered' => 'Szállított',
+	'administrative' => 'Adminisztratív',
+    'operative' => 'Működő',
+    'other' => 'Más',
+    'low' => 'Alacsony',
+    'normal' => 'Normál',
+    'high' => 'Nagy',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Válassza ki a Status',
+    'JS_LBL_SELECT_PROGRESS' => 'Válassza ki a Haladás',
 );

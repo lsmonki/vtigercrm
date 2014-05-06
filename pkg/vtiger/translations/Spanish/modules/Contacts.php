@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-10-05
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -47,10 +47,6 @@ $languageStrings = array(
 	'Other Country'                => 'País (Envío)',
 	'Other Po Box'                 => 'Apdo de Correos (Envío)',
 	'Contact Image'                => 'Imagen del Contacto',
-	'Secondary Email' => 'Email (Alternativo)',
-	'Other Phone' => 'Teléfono (Alternativo)',
-	'Email' => 'Email',
-	'Contact Id' => 'ID Contacto',
 	'Mr.'                          => 'Sr.',
 	'Ms.'                          => 'Sra.',
 	'Mrs.'                         => 'Srta.',
@@ -59,11 +55,10 @@ $languageStrings = array(
 	'User List'                    => 'Lista de Usuarios',
 	'LBL_COPY_OTHER_ADDRESS' => 'Copiar Dirección Alternativa',
 	'LBL_COPY_MAILING_ADDRESS' => 'Copiar Dirección Envío',
+	'Contact Id' => 'Contacto Id',
+    'Support Start Date'           => 'Support Start Date',
+    'Support End Date'             => 'Support End Date',
 );
 
 $jsLanguageStrings = array(
-	'LBL_SYNC_BUTTON' => 'Sincronizar Ahora',
-	'LBL_SYNCRONIZING' => 'Sincronizando....',
-	'LBL_NOT_SYNCRONIZED' => 'No se ha sincronizado todavía',
-	'LBL_FIELD_MAPPING' => 'Vinculación Campos'
 );

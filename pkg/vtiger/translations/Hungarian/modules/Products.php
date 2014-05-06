@@ -72,4 +72,5 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Spirál fűzés'             , 
 	'Sq Ft'                        => 'm2'                          , 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
+    'LBL_PRODUCTSMOD_DISABLED' => 'Teszi lehetővé a termékek modul termékek megtekintése',
 );

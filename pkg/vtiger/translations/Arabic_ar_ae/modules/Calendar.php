@@ -51,6 +51,8 @@ $languageStrings = array(
 
 	//Status picklist values
 	'Planned' => 'مخطط',
+         'Held'   => 'عقد',
+         'Not Held' => 'لا تعقد',
 	'Completed' => 'مكتمل',
 	'Pending Input' => 'في انتظار ادخال',
 	'Not Started' => 'لم يبدء',

@@ -722,13 +722,13 @@ $jsLanguageStrings = array(
 	//Feedback on removing old version
 	'JS_PLEASE_GIVE_YOUR_FEEDBACK' => 'Пожалуйста заполните Обратная связь',
     
-        //For PhoneCalls
-        'JS_PBX_CALL_FROM' => 'Звонков из',
-        'JS_PBX_INCOMING_CALL' => 'Входящий вызов',
-        'JS_PBX_OUTGOING_SUCCESS' => 'Подняв трубку на дополнительном приемнике, чтобы набрать номер',
-        'JS_PBX_OUTGOING_FAILURE' => 'Сбой вызова',
-        'JS_PBX_FILL_ALL_FIELDS' => 'Пожалуйста, заполните все поля',
-     'JS_NO_EDIT_PERMISSION' => 'Ð£ Ð²Ð°Ñ ÐœÐµÑ Ð¿ÑÐ°Ð² ÐœÐ° Ð²ÑÐ¿ÐŸÐ»ÐœÐµÐœÐžÐµ ÑÑÐŸÐ¹ ÑÐŸÐ±ÑÑÐžÐž', 
+    // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Позвоните С',
+	'JS_PBX_INCOMING_CALL' => 'Входящий вызов',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Поднимите трубку удлинитель, чтобы набрать номер',
+	'JS_PBX_OUTGOING_FAILURE'=>'Позвоните удалось',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Пожалуйста, заполните все поля',
+	// ends
     
         //Google Synchronization
         'SYNC_REMOVED_SUCCESSFULLY' => 'Синхронизации Google успешно удален.',

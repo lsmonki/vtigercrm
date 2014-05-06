@@ -711,5 +711,13 @@ $jsLanguageStrings = array(
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Hív-ból',
+	'JS_PBX_INCOMING_CALL' => 'Bejövő hívás',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Vedd fel a kiterjesztés vevő tárcsázza a számot',
+	'JS_PBX_OUTGOING_FAILURE'=>'Hívjon sikerült',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Kérjük, töltse ki az összes mezőt',
+	// ends
 
 );

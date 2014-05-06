@@ -319,7 +319,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		self::preModuleInitialize2();
 
 		$presence = array(0, 2);
-		$restrictedModules = array('Webmails', 'SMSNotifier', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'PBXManager', 'vtmessages', 'vttwitter');
+		$restrictedModules = array('Webmails', 'SMSNotifier', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'vtmessages', 'vttwitter');
 
 		$query = 'SELECT name FROM vtiger_tab WHERE
 						presence IN ('. generateQuestionMarks($presence) .')

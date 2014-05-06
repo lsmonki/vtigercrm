@@ -708,5 +708,12 @@ $jsLanguageStrings = array(
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
-	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'chamar de',
+	'JS_PBX_INCOMING_CALL' => 'Chamada recebida',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Pegue o aparelho de extensão para discar o número',
+	'JS_PBX_OUTGOING_FAILURE'=>'Ligação Perdida',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Por favor, preencha todos os campos',
+	// ends
 );

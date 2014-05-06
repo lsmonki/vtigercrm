@@ -16,4 +16,7 @@ $languageStrings = array(
 	'LBL_EDIT_LIST_PRICE'          => 'Csomagár lista szerkesztése', 
 	'Price Book Name'              => 'Csomagár megnevezése'      , 
 	'PriceBook No'                 => 'Csomagár No.'               , 
+	
+	'LBL_UNIT_PRICE' => 'Egységár',
+	'LBL_ADD_TO' => 'Hozzáad a',
 );

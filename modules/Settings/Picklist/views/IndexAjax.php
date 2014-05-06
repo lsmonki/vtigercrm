@@ -18,7 +18,7 @@ class Settings_Picklist_IndexAjax_View extends Settings_Vtiger_IndexAjax_View {
         $this->exposeMethod('getPickListDetailsForModule');
         $this->exposeMethod('getPickListValueForField');
         $this->exposeMethod('getPickListValueByRole');
-		$this->exposeMethod('showAssignValueToRoleView');
+        $this->exposeMethod('showAssignValueToRoleView');
     }
 
     public function process(Vtiger_Request $request) {
@@ -65,7 +65,9 @@ class Settings_Picklist_IndexAjax_View extends Settings_Vtiger_IndexAjax_View {
 		}
 
 		// merge the non-editable picklist value also with editable values, so that deleted value can be replaced with either of them.
-		$selectedFieldEditablePickListValues = array_merge($selectedFieldEditablePickListValues, $selectedFieldNonEditablePickListValues);
+                if(!empty($selectedFieldNonEditablePickListValues)){
+                    $selectedFieldEditablePickListValues = array_merge($selectedFieldEditablePickListValues, $selectedFieldNonEditablePickListValues);
+                }
 
         $qualifiedName = $request->getModule(false);
         $viewer = $this->getViewer($request);

@@ -8,10 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-        //For PhoneCalls
-        'LBL_INTEGRATION'            =>            'Интеграция',
-        'LBL_PHONE_CALLS'            =>            'Телефонные звонки',
-    
+        'LBL_INTEGRATION' => 'Интеграция',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Настройки'          , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Параметры поиска'             , 
 	'LBL_SUMMARY'                  => 'Итог'                    , 

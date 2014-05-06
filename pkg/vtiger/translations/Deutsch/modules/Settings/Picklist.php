@@ -37,6 +37,9 @@ $languageStrings = array(
 	'LBL_ASSIGN_VALUES_TO_ROLES'   => 'Assign Values to Roles'      , 
 	'LBL_SELECTED_VALUES'          => 'Selected Values'             , 
 	'NO_PICKLIST_FIELDS'           => 'do not have any picklist fields', 
+	
+	//Translation for module
+	'Calendar' => 'To Do',
 );
 $jsLanguageStrings = array(
 	'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Item Renamed Successfully'   , 

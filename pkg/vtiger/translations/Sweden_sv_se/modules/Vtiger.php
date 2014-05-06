@@ -983,4 +983,12 @@ $jsLanguageStrings = array(
     'JS_VIEWNAME_ALERT' => 'Max 40 tecken är tillåtna för filternamn',
     'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'Överskred max uppladdningsstorlek',
 	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Kan inte hållas för Future',
+    
+    // Specific starts - For PBXManager
+    'JS_PBX_CALL_FROM' => 'Ringa från',
+    'JS_PBX_INCOMING_CALL' => 'Inkommande samtal',
+    'JS_PBX_OUTGOING_SUCCESS'=>'Plocka upp förlängnings mottagaren för att slå numret',
+    'JS_PBX_OUTGOING_FAILURE'=>'Samtal misslyckades',
+    'JS_PBX_FILL_ALL_FIELDS'=>'Vänligen fyll i alla fält',
+    // ends
 );

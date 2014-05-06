@@ -709,4 +709,12 @@ $jsLanguageStrings = array(
 	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The "new password" and "confirm password" values do not match.',
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Anruf von',
+	'JS_PBX_INCOMING_CALL' => 'Eingehenden Anruf',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Nimm den Erweiterung Hörer, die Nummer wählen',
+	'JS_PBX_OUTGOING_FAILURE'=>'Anruf fehlgeschlagen',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Bitte füllen Sie alle Felder',
+	// ends
 );

@@ -17,7 +17,7 @@ class Vtiger_Phone_UIType extends Vtiger_Base_UIType {
 	public function getTemplateName() {
 		return 'uitypes/Phone.tpl';
 	}
-
+        
         /**
 	 * Function to get the Detailview template name for the current UI Type Object 
          * Added for PhoneCalls module
@@ -26,5 +26,4 @@ class Vtiger_Phone_UIType extends Vtiger_Base_UIType {
 	public function getDetailViewTemplateName() {
 		return 'uitypes/PhoneDetailView.tpl';
 	}
-
 }

@@ -677,23 +677,6 @@ var app = {
 
 
 	initGuiders: function (list) {
-		if (list) {
-			for (var index=0, len=list.length; index < len; ++index) {
-				var guiderData = list[index];
-				guiderData['id'] = ""+index;
-				guiderData['overlay'] = true;
-				guiderData['highlight'] = true;
-				guiderData['xButton'] = true;
-				if (index < len-1) {
-					guiderData['buttons'] = [{name: 'Next'}];
-					guiderData['next'] = ""+(index+1);
-
-				}
-				guiders.createGuider(guiderData);
-			}
-			// TODO auto-trigger the guider.
-			guiders.show('0');
-		}
 	},
 
 	showScrollBar : function(element, options) {

@@ -11,14 +11,14 @@
 -->*}
 
 {* To check current user has permission to make outbound call. If so, make all the detail view phone fields as links to call *}
-{assign var=MODULE value='PhoneCalls'}
+{assign var=MODULE value='PBXManager'}
 {assign var=MODULEMODEL value=Vtiger_Module_Model::getInstance($MODULE)}
 {if $MODULEMODEL}
-    {assign var=PERMISSION value=PhoneCalls_Connector_Model::checkPermissionForOutgoingCall()}
+    {assign var=PERMISSION value=PBXManager_Server_Model::checkPermissionForOutgoingCall()}
     {if $PERMISSION}
         {assign var=PHONE_FIELD_VALUE value=$FIELD_MODEL->get('fieldvalue')}
         {assign var=PHONE_NUMBER value=$PHONE_FIELD_VALUE|regex_replace:"/[-()\s]/":""}
-        <a class="phoneField" data-value="{$PHONE_NUMBER}" record="{$RECORD->getId()}" onclick="Vtiger_PhoneCalls_Js.registerPBXOutboundCall('{$PHONE_NUMBER}',{$RECORD->getId()})">{$FIELD_MODEL->get('fieldvalue')}</a>
+        <a class="phoneField" data-value="{$PHONE_NUMBER}" record="{$RECORD->getId()}" onclick="Vtiger_PBXManager_Js.registerPBXOutboundCall('{$PHONE_NUMBER}',{$RECORD->getId()})">{$FIELD_MODEL->get('fieldvalue')}</a>
     {else}
         {$FIELD_MODEL->getDisplayValue($FIELD_MODEL->get('fieldvalue'), $RECORD->getId(), $RECORD)}
     {/if}

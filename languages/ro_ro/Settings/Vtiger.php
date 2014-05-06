@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
+    'LBL_INTEGRATION' => 'Integrare',
+    'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Setari'                      , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review

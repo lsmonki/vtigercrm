@@ -12,10 +12,12 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-26
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integración',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Configuración',
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Configuración Búsqueda',
 	'LBL_SUMMARY' => 'Resumen',
@@ -29,12 +31,12 @@ $languageStrings = array(
 	// Blocks
 	'LBL_STUDIO'                   => 'Diseñador',
 	'LBL_COMMUNICATION_TEMPLATES'  => 'Plantillas',
-	'LBL_USER_MANAGEMENT'          => 'Usuarios y Acceso',
+	'LBL_USER_MANAGEMENT'          => 'Administración Usuarios y Acceso',
 	'LBL_ACCESS_MANAGEMENT'        => 'Administración Acceso',
 	'LBL_MODULE_MANAGER'           => 'Administración Módulos',
 	'LBL_NOTIFICATIONS'            => 'Notificaciones',
 	'LBL_EXTERNAL_SERVER_SETTINGS' => 'Configuración Servidor Externo',
-	'LBL_OTHER_SETTINGS'           => 'Otras Configuraciones Adicional',
+	'LBL_OTHER_SETTINGS'           => 'Configuración Adicional',
 	'LBL_EXTENSIONS_PLACE' => 'Tienda Extensiones',
 	'LBL_EXTENSIONS' => 'Extensiones',
 
@@ -64,6 +66,7 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Establece Dependencias entre los elementos de las listas desplegables en cada módulo',
 	'LBL_MENU_EDITOR'              => 'Editor de Menú',
 	'LBL_MENU_DESC'                => 'Personalizar secuencia de menú',
+	'LBL_MENU_EDITOR_MESSAGE'		=>'El número real de elementos de menú que aparecen dependerá del tamaño de la pantalla y podría ser inferior a los elementos seleccionados.',
 
 	'EMAILTEMPLATES'               => 'Plantillas de Email',
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Administrar Plantillas de Email',
@@ -77,6 +80,7 @@ $languageStrings = array(
 	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Editar la configuración del servidor de correo saliente',
 	'INVENTORYTERMSANDCONDITIONS'  => 'Inventario: Condiciones Generales',
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Gestionar los textos de las condiciones generales en presupuesto, orden de venta y facturas.',
+    'LBL_ANNOUNCEMENT'             => 'Anuncio',
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Configurar Anuncio Empresarial',
 	'LBL_CURRENCY_SETTINGS'        => 'Monedas',
 	'LBL_CURRENCY_DESCRIPTION'     => 'Gestionar monedas y valores de cambio monetario',
@@ -86,7 +90,6 @@ $languageStrings = array(
 	'LBL_MAIL_SCANNER_DESCRIPTION' => 'Configura el buzón para clasificación',
 	'LBL_LIST_WORKFLOWS'           => 'Flujos de Trabajo',
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Crear y editar flujos de trabajo',
-	'LBL_SELECT_DATE' => 'Selecciona fechas',
 	'Configuration Editor'         => 'Editor de Configuración',
 	'Update configuration file of the application' => 'Actualizar el fichero de configuración de la aplicación.',
 	'LBL_CUSTOMER_PORTAL'          => 'Portal del Cliente',
@@ -148,11 +151,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER' => 'Servidor de Correo Saliente',
 	'LBL_OUTGOING_SERVER_DESC' => 'Configurar Servidor de Correo Saliente',
 	'LBL_DEFAULT'=>'Por defecto, el servidor de correo saliente SMTP es od1.vtiger.com. Para evitar problemas, recomendamos que utilices una de estas opciones.',
-	'LBL_OPTIONS1'=>'Enviar emails desde tu servidor de correo<br>
-     				- Introducir la configuración (Servidor, Usuario, Contraseña) de la misma cuenta de correo utilizada en la cuenta de respuesta.',
-	'LBL_OPTIONS2'=>"Añadir el servidor od1.vtiger.com como dominio autorizado desde tu dominio.<br>
-     				- Si prefieres mantener el servidor saliente de vtiger, recomendamos que configures el registro SPF de tu dominio para incluir el servidor de vtiger como servidor autorizado.
-     				  Para obtener instrucciones adicionales sobre cómo definir un registro SPF, contact con od-support@vtiger.com .",
+	'LBL_OPTIONS1'=>'',
+	'LBL_OPTIONS2'=>"",
 	'LBL_MAIL_SERVER_SMTP'=>'Servidor de Correo (SMTP)',
 	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTA: Si el campo "Email de" se deja en blanco se utilizará la cuenta de correo del usuario.',
 	'LBL_TESTMAILSTATUS'=>'Estado del Correo de Verificación : ',
@@ -220,25 +220,16 @@ $languageStrings = array(
     'LBL_LAST_SCAN_AT' => 'Ultima revisión @ ',
     'LBL_TIME_TAKEN' => ' tiempo invertido ',
     'LBL_SHORT_SECONDS' => 'seg',
-
-	//Email Templates
-	'EmailTemplate' => 'Plantilla de Email',
-	'LBL_TEMPLATE_NAME' => 'Nombre Plantilla',
-	'LBL_DESCRIPTION' => 'Descripción',
-	'LBL_SUBJECT' => 'Asunto',
-
+	
 	//User Login History
-	'LoginHistory' => 'Histórico de Acceso de Usuario',
-	'LBL_LOGIN_HISTORY_DETAILS' => 'Histórico de Acceso',
-	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Detalles del Histórico de Acceso',
-	'LBL_USER_NAME'=> 'Nombre Usuario',
-	'LBL_USER_IP_ADDRESS'=> 'Dirección IP Usuario',
-	'LBL_LOGIN_TIME' => 'Hora de Conexión',
-	'LBL_LOGGED_OUT_TIME' => 'Hora de Desconexión',
-	'LBL_STATUS' => 'Estado',
-	'LBL_LOGIN_HISTORY_DETAILS' => 'Histórico de Accesos',
-	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Muestra el Histórico de Accesos de todos los Usuarios',
-	'LBL_CONFIG_EDITOR_DESCRIPTION' => 'Editar las variables de Configuración del Sistema',
+	'LoginHistory' => 'User Login History',
+	'LBL_LOGIN_HISTORY_DETAILS' => 'Login History',
+	'LBL_LOGIN_HISTORY_DESCRIPTION' => 'Login History Details',
+	'LBL_USER_NAME'=> 'User Name',
+	'LBL_USER_IP_ADDRESS'=> 'User IP Address', 
+	'LBL_LOGIN_TIME' => 'Sign-in Time',
+	'LBL_LOGGED_OUT_TIME' => 'Sign-out Time', 
+	'LBL_STATUS' => 'Status'
 );
 
 $jsLanguageStrings = array(
@@ -253,12 +244,10 @@ $jsLanguageStrings = array(
 	'JS_PLEASE_ENTER_NUMBER_IN_RANGE_1TO5' => 'Introduce un valor entre 1-5',
 	'JS_PLEASE_ENTER_NUMBER_IN_RANGE_1TO100' => 'Introduce un valor entre 1-100',
 	'JS_RECORD_NUMBERING_SAVED_SUCCESSFULLY_FOR' => 'Se ha guardado la numeración de registro para',
-	'LBL_PREFIX_IN_USE' => 'Prefijo en uso',
 	'JS_RECORD_NUMBERING_UPDATED_SUCCESSFULLY_FOR' => 'Se ha actualizado la numeración de registro para',
 	'JS_SEQUENCE_NUMBER_MESSAGE' => 'La secuencia de numeración debe ser igual o superior a',
 	'LBL_WRONG_IMAGE_TYPE' => 'tipo de imagen no soportado',
 	'LBL_MAXIMUM_SIZE_EXCEEDS' => 'El tamaño máximo permitido es de 1MB',
 	'LBL_NO_LOGO_SELECTED' => 'No se ha seleccionado ningún logo',
 	'JS_CONFIGURATION_DETAILS_SAVED' => 'Se ha guardado la información de configuración',
-	'JS_TERMS_AND_CONDITIONS_SAVED' => 'Se han guardado las Condiciones Generaless',
 );

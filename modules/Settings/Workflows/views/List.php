@@ -11,7 +11,6 @@
 class Settings_Workflows_List_View extends Settings_Vtiger_List_View {
 
     public function preProcess(Vtiger_Request $request, $display = true) {
-        print_r('entered here');
         $viewer = $this->getViewer($request);
         $viewer->assign('SUPPORTED_MODULE_MODELS', Settings_Workflows_Module_Model::getSupportedModules());
         $viewer->assign('CRON_RECORD_MODEL', Settings_CronTasks_Record_Model::getInstanceByName('Workflow'));

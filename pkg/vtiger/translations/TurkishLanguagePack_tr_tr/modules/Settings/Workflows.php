@@ -74,6 +74,16 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'Itibaren',
+	'Optional' => 'Isteğe bağlı',
+	'LBL_ADD_TASK' => 'Add Görev',
+    'Portal Pdf Url' =>'Müşteri Portalı Pdf bağlantı',
+    'LBL_ADD_TEMPLATE' => 'Şablon ekle',
+    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloğu için Grup Taxt',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloğu için bireysel vergi',
+	
+	//Translation for module
+	'Calendar'						=> 'Yapılacak'						,
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

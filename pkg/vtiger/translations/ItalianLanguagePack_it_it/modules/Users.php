@@ -169,4 +169,44 @@ $languageStrings = array(
 	'Summary'                      => 'Summary'                     , // TODO: Review
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Utente cancellato con successo',
+    'LBL_ACTIVE_USERS' => 'Utenti attivi',
+    'LBL_INACTIVE_USERS' => 'Gli utenti inattivi',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Elimina utente in modo permanente',
+    'LBL_RESTORE' => 'Ripristinare',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Utente ripristinato con successo',
+	'LBL_ALMOST_THERE'	=>	'Ci siamo quasi!',
+	'LBL_ABOUT_ME'		=>	'Il mio profilo',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Ci impegniamo a mantenere questo privato)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Tutti i campi sottostanti sono obbligatori)',
+	'LBL_GET_STARTED'	=> 'Per Iniziare',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Il tuo numero di Contatto',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Di dove sei?',
+	'LBL_SELECT_COUNTRY'	=> 'Seleziona un Paese',
+	'LBL_COMPANY_SIZE'		=> 'Dimensioni della società',
+	'LBL_JOB_TITLE'			=> 'Professione',
+	'LBL_DEPARTMENT'		=> 'Dipartimento',
+	'LBL_BASE_CURRENCY'		=> 'Valuta di Base',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Scegliere Valuta di Base',
+	'LBL_OPERATING_CURRENCY'	=> 'Valuta di riferimento non può essere modificato successivamente. Seleziona la tua valuta operativo',
+	'LBL_LANGUAGE' => 'Lingua',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Scegli la lingua',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Scegli Fuso orario',
+	'LBL_DATE_FORMAT'		=> 'Data Format',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Scegli la Data Format',
+	'LBL_PHONE'	=> 'Telefono',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

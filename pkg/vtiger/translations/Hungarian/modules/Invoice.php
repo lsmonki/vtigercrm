@@ -27,4 +27,7 @@ $languageStrings = array(
 	'Paid'                         => 'Fizetett'                    , 
 	'AutoCreated'                  => 'Automatikusan létrehozva'   , 
 	'Cancel'                       => 'Visszavon'                   , 
+	'LBL_NOT_A_BUNDLE' => 'Nem Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Sub termékek',
+	'LBL_ACTION'	=> 'Akció',
 );

@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-27
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -61,6 +61,7 @@ $languageStrings = array(
 	'LBL_PROFILE_TO_BE_DELETED'    => 'Perfil a Borrar',
 	'INTERNAL_MAIL_COMPOSER'       => 'Cliente de Email Interno',
 	'Asterisk Extension'           => 'Extensión Asterisk',
+	'Reminder Interval'            => 'Intervalo de Recordatorio',
 	'Webservice Access Key'        => 'Clave de acceso',
 	'Language'                     => 'Idioma',
 	'Theme'                        => 'Apariencia',
@@ -84,17 +85,6 @@ $languageStrings = array(
 	'LBL_CHANGE_PASSWORD' => 'Cambiar Contraseña',
 	'LBL_NEW_PASSWORD' => 'Nueva Contraseña',
 	'LBL_CONFIRM_PASSWORD' => 'Confirmar Contraseña',
-
-	//Login strings
-	'LBL_TO_CRM' => 'Acceder a Vtiger CRM',
-	'LBL_INVALID_USER_OR_PASSWORD' => 'Nombre de usuario o contraseña inválido.',
-	'LBL_INVALID_USER_OR_EMAIL' => 'Nombre de usuario o email inválido.',
-	'LBL_EMAIL_SEND' => 'Hemos enviado un email para recuperar tu contraseña.',
-	'ForgotPassword' => 'Recuperar Contraseña',
-	'LBL_CONNECT_WITH_US' => 'Conectar con nosotros',
-	'LBL_GET_MORE' => 'Obtén más de Vtiger',
-	'LBL_TRANSFER_RECORDS_TO_USER' => 'Transferir registros al usuario',
-	'LBL_USER_TO_BE_DELETED' => 'Usuario a eliminar',
 
 	'Kwajalein'                    => '(UTC-12:00) International Date Line West',
 	'Pacific/Midway'               => '(UTC-11:00) Coordinated Universal Time-11',
@@ -193,6 +183,32 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland',
 	'Asia/Magadan'                 => '(UTC+12:00) Magadan',
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa',
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Usuario eliminado correctamente',
+    'LBL_ACTIVE_USERS' => 'Usuarios Activos',
+    'LBL_INACTIVE_USERS' => 'Los usuarios inactivos',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Eliminar usuario de forma permanente',
+    'LBL_RESTORE' => 'Restaurar',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Usuario restaurado con éxito',
+	'LBL_ALMOST_THERE'	=>	'Casi allí!',
+	'LBL_ABOUT_ME'		=>	'Acerca de mí',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Nos comprometemos a mantener esta privada)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Todos los campos siguientes son obligatorios)',
+	'LBL_GET_STARTED'	=> 'Comenzar',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Su número de contacto',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'¿De dónde eres?',
+	'LBL_SELECT_COUNTRY'	=> 'Seleccionar país',
+	'LBL_COMPANY_SIZE'		=> 'Tamaño de empresa',
+	'LBL_JOB_TITLE'			=> 'Título del trabajo',
+	'LBL_DEPARTMENT'		=> 'Departamento',
+	'LBL_BASE_CURRENCY'		=> 'Moneda de Cuenta',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Elegir Divisa Base',
+	'LBL_OPERATING_CURRENCY'	=> 'Divisa de referencia no puede ser modificado posteriormente. Seleccione su moneda de operación',
+	'LBL_LANGUAGE' => 'Idioma',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Escoge tu Idioma',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Elija Zona Horaria',
+	'LBL_DATE_FORMAT'		=> 'Formato de la fecha',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Seleccione Formato de fecha',
+	'LBL_PHONE'	=> 'Teléfono',
 );
 
 $jsLanguageStrings = array(

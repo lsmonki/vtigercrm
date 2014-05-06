@@ -703,5 +703,11 @@ $jsLanguageStrings = array(
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
 	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
     
-    
+    // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'bellen vanaf',
+	'JS_PBX_INCOMING_CALL' => 'Inkomend gesprek',
+	'JS_PBX_OUTGOING_SUCCESS'=>'De ontvanger uitbreiding halen om het nummer te bellen',
+	'JS_PBX_OUTGOING_FAILURE'=>'Bel mislukt',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Gelieve alle velden in te vullen',
+	// ends
 );

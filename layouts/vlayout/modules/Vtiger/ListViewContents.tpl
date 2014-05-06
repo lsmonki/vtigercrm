@@ -104,14 +104,14 @@
 						{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 					{/if}
                                 {else if $LISTVIEW_HEADER->get('uitype') eq '11'}
-                                        {assign var=MODULE value='PhoneCalls'}
-                                        {assign var=MODULEMODEL value=Vtiger_Module_Model::getInstance($MODULE)}
+                                        {assign var=PBXMANAGER_MODULE value='PBXManager'}
+                                        {assign var=MODULEMODEL value=Vtiger_Module_Model::getInstance($PBXMANAGER_MODULE)}
                                         {if $MODULEMODEL}
-                                            {assign var=PERMISSION value=PhoneCalls_Connector_Model::checkPermissionForOutgoingCall()}
+                                            {assign var=PERMISSION value=PBXManager_Server_Model::checkPermissionForOutgoingCall()}
                                             {if $PERMISSION}
                                                 {assign var=PHONE_FIELD_VALUE value=$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
                                                 {assign var=PHONE_NUMBER value=$PHONE_FIELD_VALUE|regex_replace:"/[-()\s]/":""}
-                                                <a class="phoneField" data-value="{$PHONE_NUMBER}" record="{$LISTVIEW_ENTRY->getId()}" onclick="Vtiger_PhoneCalls_Js.registerPBXOutboundCall('{$PHONE_NUMBER}',{$LISTVIEW_ENTRY->getId()})">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
+                                                <a class="phoneField" data-value="{$PHONE_NUMBER}" record="{$LISTVIEW_ENTRY->getId()}" onclick="Vtiger_PBXManager_Js.registerPBXOutboundCall('{$PHONE_NUMBER}',{$LISTVIEW_ENTRY->getId()})">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
                                             {else}
                                                 {$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
                                             {/if}

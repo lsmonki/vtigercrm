@@ -8,7 +8,9 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Settings'                     => 'BeÃ¡llÃ­tÃ¡sok'              , 
+        'LBL_INTEGRATION' => 'Integráció',
+        'LBL_PBXMANAGER' => 'PBXManager',
+	'Settings'                     => 'Beállítások'              , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review
 	'LBL_ACTIVE_USERS'             => 'Users'                       , // TODO: Review

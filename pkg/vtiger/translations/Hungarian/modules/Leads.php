@@ -47,7 +47,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Néhány a kötelező mezők közül üres', 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vevőjelöltek - Egyedi mezők leképezése', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Mező leképezés szerkesztése', 
-	'LBL_WEBFORMS'                 => 'Webes űrlap beállítása'  , 
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Válassz Kapcsolatot a művelethez', 
