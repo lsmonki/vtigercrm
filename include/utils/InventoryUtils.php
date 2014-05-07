@@ -516,11 +516,11 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	//Added to get the convertid
 	if(isset($_REQUEST['convert_from']) && $_REQUEST['convert_from'] !='')
 	{
-		$id=$_REQUEST['return_id'];
+		$id=vtlib_purify($_REQUEST['return_id']); 
 	}
 	else if(isset($_REQUEST['duplicate_from']) && $_REQUEST['duplicate_from'] !='')
 	{
-		$id=$_REQUEST['duplicate_from'];
+		$id=vtlib_purify($_REQUEST['duplicate_from']); 
 	}
 
 	$ext_prod_arr = Array();
@@ -552,17 +552,19 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 		if($_REQUEST["deleted".$i] == 1)
 			continue;
 
-	    $prod_id = $_REQUEST['hdnProductId'.$i];
+	    $prod_id = vtlib_purify($_REQUEST['hdnProductId'.$i]); 
 		if(isset($_REQUEST['productDescription'.$i]))
-			$description = $_REQUEST['productDescription'.$i];
+			$description = vtlib_purify($_REQUEST['productDescription'.$i]); 
 		/*else{
 			$desc_duery = "select vtiger_crmentity.description AS product_description from vtiger_crmentity where vtiger_crmentity.crmid=?";
 			$desc_res = $adb->pquery($desc_duery,array($prod_id));
 			$description = $adb->query_result($desc_res,0,"product_description");
 		}	*/
-        $qty = $_REQUEST['qty'.$i];
-        $listprice = $_REQUEST['listPrice'.$i];
-		$comment = $_REQUEST['comment'.$i];
+        $qty = vtlib_purify($_REQUEST['qty'.$i]); 
+        $listprice = vtlib_purify($_REQUEST['listPrice'.$i]); 
+        $comment = vtlib_purify($_REQUEST['comment'.$i]); 
+        $purchaseCost = vtlib_purify($_REQUEST['purchaseCost'.$i]); 
+        $margin = vtlib_purify($_REQUEST['margin'.$i]); 
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
 		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
@@ -625,10 +627,9 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 			for($tax_count=0;$tax_count<count($all_available_taxes);$tax_count++)
 			{
 				$tax_name = $all_available_taxes[$tax_count]['taxname'];
-				$tax_val = $all_available_taxes[$tax_count]['percentage'];
 				$request_tax_name = $tax_name."_group_percentage";
 				if(isset($_REQUEST[$request_tax_name]))
-					$tax_val =$_REQUEST[$request_tax_name];
+					$tax_val =vtlib_purify($_REQUEST[$request_tax_name]); 
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams,$tax_val);
 			}
@@ -644,7 +645,7 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 				$request_tax_name = $tax_name."_percentage".$i;
 
 				$updatequery .= " $tax_name = ?,";
-				array_push($updateparams, $_REQUEST[$request_tax_name]);
+				array_push($updateparams, vtlib_purify($_REQUEST[$request_tax_name]));
 			}
 			$updatequery = trim($updatequery,',')." where id=? and productid=? and lineitem_id = ?";
 			array_push($updateparams, $focus->id,$prod_id, $lineitem_id);
@@ -670,30 +671,36 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 	//for discount percentage or discount amount
 	if($_REQUEST['discount_type_final'] == 'percentage')
 	{
-		$updatequery .= " discount_percent=?,";
-		array_push($updateparams, $_REQUEST['discount_percentage_final']);
+		$updatequery .= " discount_percent=?,discount_amount=?,"; 
+                array_push($updateparams, vtlib_purify($_REQUEST['discount_percentage_final'])); 
+                array_push($updateparams,null); 
 	}
 	elseif($_REQUEST['discount_type_final'] == 'amount')
 	{
-		$discount_amount_final = $_REQUEST['discount_amount_final'];
-		$updatequery .= " discount_amount=?,";
+		$discount_amount_final = vtlib_purify($_REQUEST['discount_amount_final']); 
+                $updatequery .= " discount_amount=?,discount_percent=?,"; 
 		array_push($updateparams, $discount_amount_final);
-	}
-
-	$shipping_handling_charge = $_REQUEST['shipping_handling_charge'];
-	$updatequery .= " s_h_amount=?,";
+                array_push($updateparams,null); 
+        } 
+        elseif($_REQUEST['discount_type_final']=='zero'){ 
+            $updatequery.="discount_amount=?,discount_percent=?,"; 
+            array_push($updateparams,null); 
+            array_push($updateparams,null); 
+        } 
+        $shipping_handling_charge = vtlib_purify($_REQUEST['shipping_handling_charge']); 
+        $updatequery .= " s_h_amount=?,";  
 	array_push($updateparams, $shipping_handling_charge);
 
 	//if the user gave - sign in adjustment then add with the value
 	$adjustmentType = '';
 	if($_REQUEST['adjustmentType'] == '-')
-		$adjustmentType = $_REQUEST['adjustmentType'];
+		$adjustmentType = vtlib_purify($_REQUEST['adjustmentType']); 
 
-	$adjustment = $_REQUEST['adjustment'];
+	$adjustment = vtlib_purify($_REQUEST['adjustment']); 
 	$updatequery .= " adjustment=?,";
 	array_push($updateparams, $adjustmentType.$adjustment);
 
-	$total = $_REQUEST['total'];
+	$total = vtlib_purify($_REQUEST['total']); 
 	$updatequery .= " total=?,";
 	array_push($updateparams, $total);
 
@@ -708,10 +715,10 @@ function saveInventoryProductDetails(&$focus, $module, $update_prod_stock='false
 		$tax_name = $sh_tax_details[$i]['taxname']."_sh_percent";
 		if($_REQUEST[$tax_name] != '')
 		{
-			$sh_tax_pecent = $sh_tax_pecent + $_REQUEST[$tax_name];
+			$sh_tax_pecent = $sh_tax_pecent + vtlib_purify($_REQUEST[$tax_name]); 
 			$sh_query_fields .= $sh_tax_details[$i]['taxname'].",";
 			$sh_query_values .= "?,";
-			array_push($sh_query_params, $_REQUEST[$tax_name]);
+			array_push($sh_query_params, vtlib_purify($_REQUEST[$tax_name])); 
 		}
 	}
 	$sh_query_fields = trim($sh_query_fields,',');
