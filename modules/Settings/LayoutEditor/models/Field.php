@@ -61,6 +61,9 @@ class Settings_LayoutEditor_Field_Model extends Vtiger_Field_Model {
         if($this->getFieldDataType() == 'picklist' || $this->getFieldDataType() == 'multipicklist') {
             $deltablequery = 'drop table vtiger_'.$adb->sql_escape_string($columnname);
             $adb->pquery($deltablequery, array());
+            //To Delete Sequence Table 
+            $deltableseqquery = 'drop table vtiger_'.$adb->sql_escape_string($columnname).'_seq'; 
+            $adb->pquery($deltableseqquery, array()); 
             $adb->pquery("delete from  vtiger_picklist_dependency where sourcefield=? or targetfield=?", array($columnname,$columnname));
         }
     }
