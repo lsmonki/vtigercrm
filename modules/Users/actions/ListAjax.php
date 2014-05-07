@@ -11,7 +11,6 @@
 class Users_ListAjax_Action extends Vtiger_BasicAjax_Action{
 	function __construct() {
 		parent::__construct();
-		$this->exposeMethod('signInAsUser');
 	}
 
 	function preProcess(Vtiger_Request $request) {

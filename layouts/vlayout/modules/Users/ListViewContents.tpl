@@ -116,9 +116,6 @@
                                                                 <a onclick="Settings_Users_List_Js.restoreUser({$LISTVIEW_ENTRY->getId()}, event);"><i title="{vtranslate('LBL_RESTORE', $MODULE)}" class="icon-refresh alignMiddle"></i></a>&nbsp;
                                                                 <a onclick="Settings_Users_List_Js.deleteUserPermanently({$LISTVIEW_ENTRY->getId()}, event);"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
                                                             {/if}
-                                                           {if $LISTVIEW_ENTRY->get('status') eq 'Active'}
-                                                                <a id="{$MODULE}_LISTVIEW_ROW_{$LISTVIEW_ENTRY->getId()}_LOGIN" class="signInAsUser" ><i title="{vtranslate('LBL_LOGIN_AS', $MODULE)} {$LISTVIEW_ENTRY->get('first_name')} {$LISTVIEW_ENTRY->get('last_name')}" class="icon-user alignMiddle"></i></a> 
-                                                           {/if}
 							{/if}
 						</span>
 					</div>

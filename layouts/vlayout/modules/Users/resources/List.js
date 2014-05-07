@@ -77,27 +77,6 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 			}
 		);
 	},
-	
-	triggerLogin : function(recordId){
-		var params = {
-			'module': app.getModuleName(),
-			'action' : "ListAjax",
-			'mode' : 'signInAsUser',
-			'userid' : recordId
-		}
-		var message = app.vtranslate('LBL_SIGN_IN_AS_USER');
-		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
-			AppConnector.request(params).then(
-				function(data){
-					if(data.success){
-						window.location.href=data.result;
-					}
-				});
-			},
-			function(error, err){
-			}
-		);
-	},
                 
         /*
          *Function to delete a user permanently
@@ -231,20 +210,6 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 			e.stopPropagation();
 		});
 	},
-	
-	/*
-	 * Function to register the sign in as event
-	 */
-	registerSignInAsUserClickEvent: function(){
-		var listViewContentDiv = this.getListViewContentContainer();
-		listViewContentDiv.on('click','.signInAsUser',function(e){
-			var elem = jQuery(e.currentTarget);
-			var rowElement = elem.closest('tr');
-			var recordId = rowElement.data('id');
-			Settings_Users_List_Js.triggerLogin(recordId);
-			e.stopPropagation();
-		});
-	},
         
         /*
          *Function to filter Active and Inactive users from Users List View
@@ -282,10 +247,9 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 	registerEvents : function() {
 		this._super();
 		this.registerEventForAlphabetSearch();
-        this.registerEmailFieldClickEvent();
+                this.registerEmailFieldClickEvent();
 		this.registerUrlFieldClickEvent();
-		this.registerSignInAsUserClickEvent();
 		this.registerDeleteRecordClickEvent();
-        this.usersFilter();
+                this.usersFilter();
 	}
 });
