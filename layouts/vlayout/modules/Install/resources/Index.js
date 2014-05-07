@@ -98,13 +98,33 @@ jQuery.Class('Install_Index_Js', {}, {
 			var password = jQuery('#passwordError');
 			if(password.html() != '') error = true;
 
+                        var emailField = jQuery('input[name="admin_email"]'); 
+                        var regex = /^[_/a-zA-Z0-9*]+([!"#$%&'()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
+                        if(!regex.test(emailField.val()) && emailField.val()!=''){ 
+                            var invalidEmailAddress=true; 
+                            emailField.addClass('error').focus();  
+                            error = true; 
+                         }else{ 
+                             emailField.removeClass('error'); 
+                         } 
+                         
 			if(error) {
-				var content = '<div class="span12">'+
+                            var content;
+				if(invalidEmailAddress){ 
+                                    content = '<div class="span12">'+ 
+                                                                            '<div class="alert alert-error">'+ 
+                                                                                    '<button class="close" data-dismiss="alert" type="button">x</button>'+ 
+                                                                                    'Warning! Invalid email address.'+ 
+                                                                            '</div>'+ 
+                                                                    '</div>'; 
+                                }else{ 
+                                    content = '<div class="span12">'+ 
 									'<div class="alert alert-error">'+
 										'<button class="close" data-dismiss="alert" type="button">x</button>'+
 										'Warning! Required fields missing values.'+
 									'</div>'+
 								'</div>';
+                                }
 				jQuery('#errorMessage').html(content).show();
 			} else {
 				jQuery('form[name="step4"]').submit();
