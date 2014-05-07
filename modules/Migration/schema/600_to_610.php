@@ -1165,7 +1165,7 @@ if($adb->num_rows($result) <= 0) {
 }
 // To update the Campaign related status value in database as in language file
 $updateQuery = "update vtiger_campaignrelstatus set campaignrelstatus=? where campaignrelstatus=?";
-Migration_Index_View::ExecuteQuery($updateQuery,array('Contacted - Unsuccessful' , 'Contected - Unsuccessful'));
+Migration_Index_View::ExecuteQuery($updateQuery,array('Contacted - Unsuccessful' , 'Contacted - Unsuccessful'));
 echo 'Campaign related status value is updated';
 //92 ends
 
