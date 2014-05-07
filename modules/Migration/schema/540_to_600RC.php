@@ -1896,18 +1896,21 @@ if (!$usersRowHeightField) {
 
 $moduleInstance = Vtiger_Module::getInstance('HelpDesk');
 $block = Vtiger_Block::getInstance('LBL_TICKET_INFORMATION', $moduleInstance);
+$fromPortal = Vtiger_Field_Model::getInstance('from_portal', $moduleInstance);
 
-$field = new Vtiger_Field();
-$field->name = 'from_portal';
-$field->label = 'From Portal';
-$field->table ='vtiger_ticketcf';
-$field->column = 'from_portal';
-$field->columntype = 'varchar(3)';
-$field->typeofdata = 'C~O';
-$field->uitype = 56;
-$field->displaytype = 3;
-$field->presence = 0;
-$block->addField($field);
+if(!$fromPortal){
+    $field = new Vtiger_Field();
+    $field->name = 'from_portal';
+    $field->label = 'From Portal';
+    $field->table ='vtiger_ticketcf';
+    $field->column = 'from_portal';
+    $field->columntype = 'varchar(3)';
+    $field->typeofdata = 'C~O';
+    $field->uitype = 56;
+    $field->displaytype = 3;
+    $field->presence = 0;
+    $block->addField($field);
+}
 
 //Start: Customer - Feature #10254 Configuring all Email notifications including Ticket notifications
 $moduleName = 'HelpDesk';
