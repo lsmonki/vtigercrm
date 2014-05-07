@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Обработчики'      , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Создавайте и редактируйте Обработчики для vtiger', 
 	'Configuration Editor'         => 'Редактор Конфигурации', 
-	'Update configuration file of the application' => 'Обновите файл конфигурации приложения', 
 	'LBL_CUSTOMER_PORTAL'          => 'Клиентский Портал', 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Разрешает Вам Настроить Плагин Клиентского Портала', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Дизайн и Изменение разметки в каждом из модулей', 

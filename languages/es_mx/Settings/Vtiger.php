@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Flujos de trabajo'           , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Crear/Editar flujos de trabajo en vtiger CRM', 
 	'Configuration Editor'         => 'Editor de Configuración'    , 
-	'Update configuration file of the application' => 'Actualizar archivo de configuración', 
 	'LBL_CUSTOMER_PORTAL'          => 'Portal de Cliente'           , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Permite Configurar la Extensión Portal del Cliente', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review

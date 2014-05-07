@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Workflow'                    , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Crea e modifica i workflow per vtiger', 
 	'Configuration Editor'         => 'Configuration Editor'        , 
-	'Update configuration file of the application' => 'Update application configuration file', 
 	'LBL_CUSTOMER_PORTAL'          => 'Portale Clienti'             , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Permette di configurare il plugin Portale Clienti', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review

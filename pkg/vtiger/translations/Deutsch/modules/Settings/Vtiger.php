@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Liste der Workflows'         , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Anzeige und Gestaltung von Workflows für das CRM', 
 	'Configuration Editor'         => 'Konfiguration Editor'        , 
-	'Update configuration file of the application' => 'Update application configuration file', 
 	'LBL_CUSTOMER_PORTAL'          => 'Kundenportal'                , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Gestattet das Kundenportal zu konfigurieren', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', 

@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Automatikus Munkafolyamatok' , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Automatikus Munkafolyamat létrehozás és szerkesztés vtiger-hez', 
 	'Configuration Editor'         => 'Konfiguráció Szerkesztő'  , 
-	'Update configuration file of the application' => 'A vtiger CRM konfigurációs beállításainak szerkesztése', 
 	'LBL_CUSTOMER_PORTAL'          => 'Ügyfélszolgálati Portal'  , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Ügyfélszolgálati Portál Plugin beállítás engedélyezve', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review

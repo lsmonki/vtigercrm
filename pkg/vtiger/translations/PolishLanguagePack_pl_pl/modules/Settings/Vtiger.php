@@ -116,7 +116,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Twórz i zarządzają przepływem pracy',
 	
 	'Configuration Editor' => 'Konfiguracja globalna',
-	'Update configuration file of the application' => 'Aktualizuj konfiguracje w pliku config.inc.php.',
 	
 	'LBL_CUSTOMER_PORTAL' => 'Portal Klienta',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Konfiguruj komponent Portalu Klienta.',

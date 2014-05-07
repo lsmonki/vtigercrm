@@ -102,7 +102,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Skapa och redigera arbetsflöden',
 
 	'Configuration Editor' => 'konfiguratorredigeraren',
-	'Update configuration file of the application' => 'Uppdatering konfigurationsfil av programmet',
 
 	'LBL_CUSTOMER_PORTAL' => 'Kundportal',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Låter dig ställa anpassad Pluginportal',

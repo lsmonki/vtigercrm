@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'İşakışları'             , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'vtiger için İşAkışlarını yarat veya düzenle', 
 	'Configuration Editor'         => 'Configuration Editor'        , 
-	'Update configuration file of the application' => 'Update application configuration file', 
 	'LBL_CUSTOMER_PORTAL'          => 'Kullanıcı Portali'         , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Kullanıcı Portali Eklentisini ayarlamınızı sağlar', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review

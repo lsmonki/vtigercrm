@@ -106,7 +106,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Create and edit workflows',
 
 	'Configuration Editor' => 'Configuration Editor',
-	'Update configuration file of the application' => 'Update configuration file of the application',
 
 	'LBL_CUSTOMER_PORTAL' => 'Customer Portal',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Allows you to Configure Customer Portal Plugin',

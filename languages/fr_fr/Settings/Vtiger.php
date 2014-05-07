@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Liste des gestionnaires de flux', 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Lister les gestionnaires de flux définis pour Vtiger', 
 	'Configuration Editor'         => 'Editeur de configuration '   , 
-	'Update configuration file of the application' => 'Update application configuration file', 
 	'LBL_CUSTOMER_PORTAL'          => 'Portail client'              , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Autorisez-vous à configurer le portail client', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review

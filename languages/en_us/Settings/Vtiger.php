@@ -104,7 +104,6 @@ $languageStrings = array(
     'LBL_SELECT_DATE' => 'Select dates',
 
 	'Configuration Editor' => 'Configuration Editor',
-	'Update configuration file of the application' => 'Update configuration file of the application',
 
 	'LBL_CUSTOMER_PORTAL' => 'Customer Portal',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Allows you to Configure Customer Portal Plugin',

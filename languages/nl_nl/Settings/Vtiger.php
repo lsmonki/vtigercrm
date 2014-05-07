@@ -74,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Werkstromen'                 , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Maak en bewerk de CRM workflows', 
 	'Configuration Editor'         => 'Configuratie bewerker'       , 
-	'Update configuration file of the application' => 'Bewerk de configuratie van deze toepassing.', 
 	'LBL_CUSTOMER_PORTAL'          => 'Klant Portaal'               , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Configureer Klant Portaal Plugin', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review
