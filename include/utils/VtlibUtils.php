@@ -111,7 +111,8 @@ function vtlib_isModuleActive($module) {
 	}
 
 	$active = false;
-	if($presence == 0) $active = true;
+	//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7991
+        if($presence === 0 || $presence==='0') $active = true; 
 
 	return $active;
 }
