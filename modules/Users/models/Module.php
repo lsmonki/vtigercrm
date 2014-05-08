@@ -87,7 +87,7 @@ class Users_Module_Model extends Vtiger_Module_Model {
 	 * Function to delete a given record model of the current module
 	 * @param Vtiger_Record_Model $recordModel
 	 */
-	public function deleteRecord(Vtiger_Record_Model $recordModel) {
+	public function deleteRecord($recordModel) {
 		$db = PearDatabase::getInstance();
 		$moduleName = $this->get('name');
 		$date_var = date('Y-m-d H:i:s');

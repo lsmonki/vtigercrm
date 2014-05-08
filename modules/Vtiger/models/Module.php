@@ -139,7 +139,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * Function to save a given record model of the current module
 	 * @param Vtiger_Record_Model $recordModel
 	 */
-	public function saveRecord(Vtiger_Record_Model $recordModel) {
+	public function saveRecord($recordModel) {
 		$moduleName = $this->get('name');
 		$focus = CRMEntity::getInstance($moduleName);
 		$fields = $focus->column_fields;
@@ -161,7 +161,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * Function to delete a given record model of the current module
 	 * @param Vtiger_Record_Model $recordModel
 	 */
-	public function deleteRecord(Vtiger_Record_Model $recordModel) {
+	public function deleteRecord($recordModel) {
 		$moduleName = $this->get('name');
 		$focus = CRMEntity::getInstance($moduleName);
 		$focus->trash($moduleName, $recordModel->getId());
@@ -349,7 +349,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * Function that returns all the fields for the module
 	 * @return <Array of Vtiger_Field_Model> - list of field models
 	 */
-	public function getFields() {
+	public function getFields($blockInstance=false) {
 		if(empty($this->fields)){
 			$moduleBlockFields = Vtiger_Field_Model::getAllForModule($this);
             $this->fields = array();
@@ -865,7 +865,7 @@ class Vtiger_Module_Model extends Vtiger_Module {
 	 * @param <String> $where
 	 * @return <String> export query
 	 */
-	public function getExportQuery($where) {
+	public function getExportQuery($focus, $where) {
 		$focus = CRMEntity::getInstance($this->getName());
 		$query = $focus->create_export_query($where);
 		return $query;

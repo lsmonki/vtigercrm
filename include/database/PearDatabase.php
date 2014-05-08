@@ -822,7 +822,7 @@ class PearDatabase{
 	 */
     function PearDatabase($dbtype='',$host='',$dbname='',$username='',$passwd='') {
 		global $currentModule;
-		$this->log =& LoggerManager::getLogger('PearDatabase_'. $currentModule);
+		$this->log = LoggerManager::getLogger('PearDatabase_'. $currentModule);
 		$this->resetSettings($dbtype,$host,$dbname,$username,$passwd);
 
 		// Initialize performance parameters

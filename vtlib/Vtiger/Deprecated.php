@@ -580,7 +580,7 @@ class Vtiger_Deprecated {
 		return $result;
 	}
 
-	function return_app_list_strings_language($language, $module='Vtiger') {
+	static function return_app_list_strings_language($language, $module='Vtiger') {
 		$strings = Vtiger_Language_Handler::getModuleStringsFromFile($language, $module);
 		return $strings['languageStrings'];
 	}

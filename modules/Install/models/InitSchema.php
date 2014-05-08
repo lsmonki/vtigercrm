@@ -58,7 +58,7 @@ class Install_InitSchema_Model {
 	 * Function upgrades the schema with changes post 540 version
 	 */
 	public static function upgrade() {
-		$migrateVersions = Migration_Module_Model::getInstance()->getAllowedMigrationVersions();
+		$migrateVersions = Migration_Module_Model::getInstance('')->getAllowedMigrationVersions();
 
 		define('VTIGER_UPGRADE', true);
 		$oldVersion = null;

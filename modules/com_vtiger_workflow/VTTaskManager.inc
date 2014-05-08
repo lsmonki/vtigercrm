@@ -160,7 +160,7 @@
 			return array();
 		}
 
-		public function getContents($entity) {
+		public function getContents($entity, $entityCache=false) {
 			return $this->contents;
 		}
 

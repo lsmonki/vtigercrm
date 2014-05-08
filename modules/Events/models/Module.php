@@ -25,7 +25,7 @@ class Events_Module_Model extends Calendar_Module_Model {
 	 * Function to save a given record model of the current module
 	 * @param Vtiger_Record_Model $recordModel
 	 */
-	public function saveRecord(Vtiger_Record_Model $recordModel) {
+	public function saveRecord($recordModel) {
         $recordModel = parent::saveRecord($recordModel);
         
         //code added to send mail to the vtiger_invitees

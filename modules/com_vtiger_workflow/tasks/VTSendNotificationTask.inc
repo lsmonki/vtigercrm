@@ -81,7 +81,7 @@ class VTSendNotificationTask extends VTEmailTask {
 	 * @param <Object> $entity
 	 * @return <Array> contents
 	 */
-	public function getContents($entity) {
+	public function getContents($entity, $entityCache=false) {
 		if (!$this->contents) {
 			$util = new VTWorkflowUtils();
 			$admin = $util->adminUser();

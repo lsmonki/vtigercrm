@@ -178,7 +178,7 @@ class Calendar_Module_Model extends Vtiger_Module_Model {
 	 * Function to get export query
 	 * @return <String> query;
 	 */
-	public function getExportQuery() {
+	public function getExportQuery($focus = '', $where = '') {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$userId = $currentUserModel->getId();
 		$query = "SELECT vtiger_activity.*, vtiger_crmentity.description, vtiger_activity_reminder.reminder_time FROM vtiger_activity
