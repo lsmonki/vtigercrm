@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once dirname(__FILE__) . '/SMSNotifierBase.php';
-include_once dirname(__FILE__) . '/models/SMSProvider.php';
 include_once 'include/Zend/Json.php';
 
 class SMSNotifier extends SMSNotifierBase {
