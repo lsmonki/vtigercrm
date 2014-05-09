@@ -19,6 +19,7 @@ $languageStrings = array(
 	'LBL_NEW' => 'Nuevo',
 	'LBL_WORKFLOW' => 'Flujo de Trabajo',
 	'LBL_CREATING_WORKFLOW' => 'Creando Flujo de Trabajo',
+	'LBL_EDITING_WORKFLOW' => 'Editando Flujo de Trabajo',
 	'LBL_NEXT' => 'Siguiente',
 
 	//Edit view
@@ -33,7 +34,7 @@ $languageStrings = array(
 	'SCHEDULE_WORKFLOW' => 'Programa Flujo de Trabajo',
 	'ADD_CONDITIONS' => 'Añadir Condición',
 	'ADD_TASKS' => 'Añadir Tarea',
-	
+
 	//Step2 edit view
 	'LBL_EXPRESSION' => 'Expresión',
 	'LBL_FIELD_NAME' => 'Campo',
@@ -90,14 +91,14 @@ $languageStrings = array(
 	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",
 	'LBL_FROM' => 'De',
 	'Optional' => 'Opcional',
-	'LBL_ADD_TASK' => 'Add Tarea',
-    'Portal Pdf Url' =>'Portal del Cliente Pdf Url',
-    'LBL_ADD_TEMPLATE' => 'Añadir plantilla',
-    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloque de grupo impuesto',
-    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloque de impuesto Individual',
-	
+	'LBL_ADD_TASK' => 'Añadir Tarea',
+        'Portal Pdf Url' =>'URL del PDF para el Portal del Cliente',
+        'LBL_ADD_TEMPLATE' => 'Añadir plantilla',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'Impuesto de Grupo',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'Impuesto Individual',
+	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",	
 	//Translation for module
-	'Calendar' => 'Para hacer',
+	'Calendar' => 'Calendario',
 );
 
 $jsLanguageStrings = array(

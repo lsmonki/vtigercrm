@@ -29,5 +29,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'FAQs Recientes',
 	'UA'                           => 'Próximas Actividades',
 	'PA'                           => 'Actividades Pendientes',
-        'Home'                         => 'Inicio'                      ,
+	'Home'                         => 'Inicio',
 );

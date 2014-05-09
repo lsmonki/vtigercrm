@@ -8,17 +8,17 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
-	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
-	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
-	
+	'LBL_ADD_RECORD' => 'Añadir Plantilla Email',
+	'SINGLE_EmailTemplates' => 'Plantilla Email',
+	'LBL_EMAIL_TEMPLATES'=> 'Plantillas de Email',
+	'LBL_EMAIL_TEMPLATE' => 'Plantilla Email',
+
+	'LBL_TEMPLATE_NAME' => 'Nombre Plantilla',
+	'LBL_DESCRIPTION' => 'Descripción',
+	'LBL_SUBJECT' => 'Asunto',
+	'LBL_GENERAL_FIELDS' => 'Campos Generales',
+	'LBL_SELECT_FIELD_TYPE' => 'Selecciona Tipo de Campo',
+
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Administrar plantillas de E-Mail',
+
 );
