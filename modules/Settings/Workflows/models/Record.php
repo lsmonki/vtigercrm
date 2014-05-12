@@ -93,6 +93,14 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 		$wf->moduleName = $this->get('module_name');
 		$wf->executionCondition = $this->get('execution_condition');
 		$wf->filtersavedinnew = $this->get('filtersavedinnew');
+		$wf->schtypeid = $this->get('schtypeid');
+		$wf->schtime = $this->get('schtime');
+		$wf->schdayofmonth = $this->get('schdayofmonth');
+		$wf->schdayofweek = $this->get('schdayofweek');
+		$wf->schmonth = $this->get('schmonth');
+		$wf->schmonth = $this->get('schmonth');
+		$wf->schannualdates = $this->get('schannualdates');
+		$wf->nexttrigger_time = $this->get('nexttrigger_time');
 		$wm->save($wf);
 
 		$this->set('workflow_id', $wf->id);
@@ -177,7 +185,7 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 		if($executionCondition == null) {
 			$executionCondition = $this->get('execution_condition');
 		}
-		$arr = array('ON_FIRST_SAVE', 'ONCE', 'ON_EVERY_SAVE', 'ON_MODIFY', '', '', 'MANUAL');
+		$arr = array('ON_FIRST_SAVE', 'ONCE', 'ON_EVERY_SAVE', 'ON_MODIFY', '', 'ON_SCHEDULE', 'MANUAL');
 		return $arr[$executionCondition-1];
 	}
 
@@ -347,5 +355,11 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 			}
 		}
 		return false;
+	}
+	public function updateNextTriggerTime() {
+		$db = PearDatabase::getInstance();
+		$wm = new VTWorkflowManager($db);
+		$wf = $this->getWorkflowObject();
+		$wm->updateNexTriggerTime($wf);
 	}
 }

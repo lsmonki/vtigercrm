@@ -49,7 +49,7 @@
 				    <div class="span2 rightAligned"><strong>{vtranslate('LBL_MATCH',$QUALIFIED_MODULE)}</strong></div>
 				    <div class="span10"><small>{if $RULE_MODEL->get('matchusing') eq 'AND'}{vtranslate('LBL_ALL_CONDITIONS',$QUALIFIED_MODULE)}{else}{vtranslate('LBL_ANY_CONDITIONS',$QUALIFIED_MODULE)}{/if}</small></div>
 				</div>
-				{assign var=ASSIGNED_TO_RULES_ARRAY value=array('CREATE_HelpDesk_FROM', 'UPDATE_HelpDesk_SUBJECT', 'CREATE_Leads_SUBJECT', 'CREATE_Contacts_SUBJECT', 'CREATE_Accounts_SUBJECT')}
+				{assign var=ASSIGNED_TO_RULES_ARRAY value=array('CREATE_HelpDesk_FROM', 'CREATE_Leads_SUBJECT', 'CREATE_Contacts_SUBJECT', 'CREATE_Accounts_SUBJECT')}
 				{if in_array($RULE_MODEL->get('action'), $ASSIGNED_TO_RULES_ARRAY)}
 				    <div class="span12 row-fluid">
 					<div class="span2 rightAligned"><strong>{vtranslate('Assigned To')}</strong></div>

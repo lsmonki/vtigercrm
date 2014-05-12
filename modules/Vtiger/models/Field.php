@@ -186,12 +186,21 @@ class Vtiger_Field_Model extends Vtiger_Field {
 	 */
 	public function isNameField() {
 		$nameFieldObject = Vtiger_Cache::get('EntityField',$this->getModuleName());
-		if($nameFieldObject) {
+        if(!$nameFieldObject){
+            $moduleModel = $this->getModule();
+            if(!empty($moduleModel)) {
+                $moduleEntityNameFields = $moduleModel->getNameFields();
+            }else{
+                $moduleEntityNameFields = array();
+            }
+
+        }else{
 			$moduleEntityNameFields = explode(',', $nameFieldObject->fieldname);
-			if(in_array($this->get('name'), $moduleEntityNameFields)) {
-				return true;
-			}
-		}
+        }
+
+        if(in_array($this->get('name'), $moduleEntityNameFields)) {
+            return true;
+        }
 		return false;
 	}
 

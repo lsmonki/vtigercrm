@@ -93,10 +93,11 @@
 			return $this->getTasksForResult($result);
 		}
 
+
 		/**
 		 *
 		 */
-	public function unserializeTask($str) {
+		public function unserializeTask($str){
 			$this->requireTask(self::taskName($str));
 			return unserialize($str);
 

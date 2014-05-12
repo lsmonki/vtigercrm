@@ -62,7 +62,7 @@
 						<input name="_mbox_pwd" id="_mbox_pwd" value="{$MAILBOX->password()}" type="password" class="detailedViewTextBox" onblur="this.className='detailedViewTextBox'" onfocus="this.className='detailedViewTextBoxOn'" placeholder="{vtranslate('LBL_Account_Password',$MODULE)}">
 					</td>
 				</tr>
-				<tr class="additional_settings" {if $SERVERNAME eq 'other'} style="display:block;"{else} style="display:none;" {/if}>
+				<tr class="additional_settings" {if $SERVERNAME neq 'other'} style="display:none;" {/if}>
 					<td class="fieldLabel" nowrap>
 						<label class="muted pull-right marginRight10px">{vtranslate('LBL_Protocol',$MODULE)}</label>
 					</td>
@@ -71,7 +71,7 @@
 						<input type="radio" name="_mbox_protocol" value="IMAP4" {if strcasecmp($MAILBOX->protocol(), 'imap4')===0}checked=true{/if}> {vtranslate('LBL_Imap4',$MODULE)}
 					</td>
 				</tr>
-				<tr class="additional_settings" {if $SERVERNAME eq 'other'} style="display:block;"{else} style="display:none;" {/if}>
+				<tr class="additional_settings" {if $SERVERNAME neq 'other'} style="display:none;" {/if}>
 					<td class="fieldLabel" nowrap>
 						<label class="muted pull-right marginRight10px">{vtranslate('LBL_SSL_Options',$MODULE)}</label>
 					</td>
@@ -81,7 +81,7 @@
 						<input type="radio" name="_mbox_ssltype" value="ssl" {if strcasecmp($MAILBOX->ssltype(), 'ssl')===0}checked=true{/if}> {vtranslate('LBL_SSL',$MODULE)}
 					</td>
 				</tr>
-				<tr class="additional_settings" {if $SERVERNAME eq 'other'} style="display:block;"{else} style="display:none;" {/if}>
+				<tr class="additional_settings" {if $SERVERNAME neq 'other'} style="display:none;" {/if}>
 					<td class="fieldLabel" nowrap>
 						<label class="muted pull-right marginRight10px">{vtranslate('LBL_Certificate_Validations',$MODULE)}</label>
 					</td>
@@ -115,6 +115,7 @@
 							{/foreach}
 						</select>
 						<span class="mm_blur"> {vtranslate('LBL_CHOOSE_FOLDER',$MODULE)}</span>
+                    </td>
 					<td class="fieldValue narrowWidthType selectFolderDesc alert alert-info {if $MAILBOX->folder() neq ''}hide{/if}" nowrap style="width: 70%;">
 						{vtranslate('LBL_CHOOSE_FOLDER_DESC',$MODULE)}
 					</td>

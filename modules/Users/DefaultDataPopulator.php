@@ -2555,7 +2555,7 @@ Should any need arise,please do give us a call.';
 		}
 
 		// for Workflow in settings page of every module
-		$module_manager_id = getSettingsBlockId('LBL_MODULE_MANAGER');
+		$module_manager_id = getSettingsBlockId('LBL_OTHER_SETTINGS');
 		$result = $adb->pquery("SELECT max(sequence) AS maxseq FROM vtiger_settings_field WHERE blockid = ?", array($module_manager_id));
 		$maxseq = $adb->query_result($result, 0, 'maxseq');
 		if ($maxseq < 0 || $maxseq == NULL) {

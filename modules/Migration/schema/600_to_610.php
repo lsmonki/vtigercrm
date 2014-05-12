@@ -36,6 +36,27 @@ if(defined('INSTALLATION_MODE')) {
 
 global $adb;
 
+//70 starts
+//Addition of columns to support scheduled reports
+$schtypeidSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schtypeid INT(10)";
+Migration_Index_View::ExecuteQuery($schtypeidSql,array());
+
+$schtimeSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schtime TIME";
+Migration_Index_View::ExecuteQuery($schtimeSql,array());
+
+$schdayofmonthSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schdayofmonth VARCHAR(100)";
+Migration_Index_View::ExecuteQuery($schdayofmonthSql,array());
+
+$schdayofweekSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schdayofweek VARCHAR(100)";
+Migration_Index_View::ExecuteQuery($schdayofweekSql,array());
+
+$schannualdatesSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schannualdates VARCHAR(100)";
+Migration_Index_View::ExecuteQuery($schannualdatesSql,array());
+
+$nextTriggerTimeSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN nexttrigger_time DATETIME";
+Migration_Index_View::ExecuteQuery($nextTriggerTimeSql,array());
+//70 ends
+
 //73 starts
 $query = 'SELECT 1 FROM vtiger_currencies WHERE currency_name=?';
 $result = $adb->pquery($query, array('Sudanese Pound'));

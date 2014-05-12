@@ -407,6 +407,7 @@
 									<select name="currency_name" id="currency_name" placeholder="{vtranslate('LBL_BASE_CURRENCY', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_BASE_CURRENCY', $MODULE)}" class="validate[required]" style="width:250px;">
 										<option value=""></option>
 										{foreach key=header item=currency from=$CURRENCIES}
+										<!--Open source fix to select user preferred currency during installation -->
 											<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('currency_name')}selected{/if}>{$header|@getTranslatedCurrencyString}({$currency.1})</option> 
 										{/foreach}
 									</select>

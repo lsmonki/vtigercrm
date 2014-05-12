@@ -359,13 +359,17 @@ class Vtiger_Functions {
 				$columnString = count($columns) < 2? $columns[0] :
 					sprintf("concat(%s)", implode(",' ',", $columns));
 
-				$sql = sprintf('SELECT %s AS label, %s AS id FROM %s WHERE %s IN (%s)',
-						$columnString, $idcolumn, $table, $idcolumn, generateQuestionMarks($ids));
+                $sql = sprintf('SELECT '. implode(',',$columns).', %s AS id FROM %s WHERE %s IN (%s)',
+						 $idcolumn, $table, $idcolumn, generateQuestionMarks($ids));
 
 				$result = $adb->pquery($sql, $ids);
 
 				while ($row = $adb->fetch_array($result)) {
-					$entityDisplay[$row['id']] = $row['label'];
+                    $labelValues = array();
+                    foreach($columns as $columnName) {
+                        $labelValues[] = $row[$columnName];
+                    }
+					$entityDisplay[$row['id']] = implode(' ',$labelValues);
 				}
 			}
 

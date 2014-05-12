@@ -55,7 +55,7 @@ class Mobile_API_Controller {
 
 		'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),
 		'history'                    => array('file' => '/api/ws/History.php', 'class' => 'Mobile_WS_History'),
-        'taxByType'                  => array('file'=>'/api/ws/TaxByType.php','class'=>'Mobile_WS_TaxByType')
+        'taxByType'                  => array('file'=>'/api/ws/TaxByType.php','class'=>'Mobile_WS_TaxByType'),
 	);
 
 	static function process(Mobile_API_Request $request) {

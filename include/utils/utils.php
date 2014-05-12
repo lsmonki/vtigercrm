@@ -876,6 +876,189 @@ function getParentRecordOwner($tabid,$parModId,$record_id)
 	return $parentRecOwner;
         }
 
+/** Function to get potential related accounts
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
+function getPotentialsRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getPotentialsRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+	$query="select related_to from vtiger_potential where potentialid=?";
+	$result=$adb->pquery($query, array($record_id));
+	$accountid=$adb->query_result($result,0,'related_to');
+	$log->debug("Exiting getPotentialsRelatedAccounts method ...");
+	return $accountid;
+}
+
+/** Function to get email related accounts
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+function getEmailsRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getEmailsRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+	$query = "select vtiger_seactivityrel.crmid from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid where vtiger_crmentity.setype='Accounts' and activityid=?";
+	$result = $adb->pquery($query, array($record_id));
+	$accountid=$adb->query_result($result,0,'crmid');
+	$log->debug("Exiting getEmailsRelatedAccounts method ...");
+	return $accountid;
+}
+/** Function to get email related Leads
+  * @param $record_id -- record id :: Type integer
+  * @returns $leadid -- leadid:: Type integer
+  */
+
+function getEmailsRelatedLeads($record_id)
+{
+	global $log;
+	$log->debug("Entering getEmailsRelatedLeads(".$record_id.") method ...");
+	global $adb;
+	$query = "select vtiger_seactivityrel.crmid from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid where vtiger_crmentity.setype='Leads' and activityid=?";
+	$result = $adb->pquery($query, array($record_id));
+	$leadid=$adb->query_result($result,0,'crmid');
+	$log->debug("Exiting getEmailsRelatedLeads method ...");
+	return $leadid;
+}
+
+/** Function to get HelpDesk related Accounts
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
+function getHelpDeskRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getHelpDeskRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+        $query="select parent_id from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.parent_id where ticketid=? and vtiger_crmentity.setype='Accounts'";
+        $result=$adb->pquery($query, array($record_id));
+        $accountid=$adb->query_result($result,0,'parent_id');
+	$log->debug("Exiting getHelpDeskRelatedAccounts method ...");
+        return $accountid;
+}
+
+/** Function to get Quotes related Accounts
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
+function getQuotesRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getQuotesRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+        $query="select accountid from vtiger_quotes where quoteid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getQuotesRelatedAccounts method ...");
+        return $accountid;
+}
+
+/** Function to get Quotes related Potentials
+  * @param $record_id -- record id :: Type integer
+  * @returns $potid -- potid:: Type integer
+  */
+
+function getQuotesRelatedPotentials($record_id)
+{
+	global $log;
+	$log->debug("Entering getQuotesRelatedPotentials(".$record_id.") method ...");
+	global $adb;
+        $query="select potentialid from vtiger_quotes where quoteid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $potid=$adb->query_result($result,0,'potentialid');
+	$log->debug("Exiting getQuotesRelatedPotentials method ...");
+        return $potid;
+}
+
+/** Function to get Quotes related Potentials
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
+function getSalesOrderRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+        $query="select accountid from vtiger_salesorder where salesorderid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getSalesOrderRelatedAccounts method ...");
+        return $accountid;
+}
+
+/** Function to get SalesOrder related Potentials
+  * @param $record_id -- record id :: Type integer
+  * @returns $potid -- potid:: Type integer
+  */
+
+function getSalesOrderRelatedPotentials($record_id)
+{
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedPotentials(".$record_id.") method ...");
+	global $adb;
+        $query="select potentialid from vtiger_salesorder where salesorderid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $potid=$adb->query_result($result,0,'potentialid');
+	$log->debug("Exiting getSalesOrderRelatedPotentials method ...");
+        return $potid;
+}
+/** Function to get SalesOrder related Quotes
+  * @param $record_id -- record id :: Type integer
+  * @returns $qtid -- qtid:: Type integer
+  */
+
+function getSalesOrderRelatedQuotes($record_id)
+{
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedQuotes(".$record_id.") method ...");
+	global $adb;
+        $query="select quoteid from vtiger_salesorder where salesorderid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $qtid=$adb->query_result($result,0,'quoteid');
+	$log->debug("Exiting getSalesOrderRelatedQuotes method ...");
+        return $qtid;
+}
+
+/** Function to get Invoice related Accounts
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
+function getInvoiceRelatedAccounts($record_id)
+{
+	global $log;
+	$log->debug("Entering getInvoiceRelatedAccounts(".$record_id.") method ...");
+	global $adb;
+        $query="select accountid from vtiger_invoice where invoiceid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getInvoiceRelatedAccounts method ...");
+        return $accountid;
+}
+/** Function to get Invoice related SalesOrder
+  * @param $record_id -- record id :: Type integer
+  * @returns $soid -- soid:: Type integer
+  */
+
+function getInvoiceRelatedSalesOrder($record_id)
+{
+	global $log;
+	$log->debug("Entering getInvoiceRelatedSalesOrder(".$record_id.") method ...");
+	global $adb;
+        $query="select salesorderid from vtiger_invoice where invoiceid=?";
+        $result=$adb->pquery($query, array($record_id));
+        $soid=$adb->query_result($result,0,'salesorderid');
+	$log->debug("Exiting getInvoiceRelatedSalesOrder method ...");
+        return $soid;
+}
+
 /**
 * the function is like unescape in javascript
 * added by dingjianting on 2006-10-1 for picklist editor
@@ -1728,28 +1911,36 @@ function validateEmailId($string){
     return true;
 }
 
-/** Function to get the difference between 2 datetime strings or millisecond values */
-function dateDiff($d1, $d2){
-	$d1 = (is_string($d1) ? strtotime($d1) : $d1);
-	$d2 = (is_string($d2) ? strtotime($d2) : $d2);
+/**
+* Function to get the approximate difference between two date time values as string
+*/
+function dateDiffAsString($d1, $d2) {
+	global $currentModule;
 
-	$diffSecs = abs($d1 - $d2);
-	$baseYear = min(date("Y", $d1), date("Y", $d2));
-	$diff = mktime(0, 0, $diffSecs, 1, 1, $baseYear);
-	return array(
-		"years" => date("Y", $diff) - $baseYear,
-		"months_total" => (date("Y", $diff) - $baseYear) * 12 + date("n", $diff) - 1,
-		"months" => date("n", $diff) - 1,
-		"days_total" => floor($diffSecs / (3600 * 24)),
-		"days" => date("j", $diff) - 1,
-		"hours_total" => floor($diffSecs / 3600),
-		"hours" => date("G", $diff),
-		"minutes_total" => floor($diffSecs / 60),
-		"minutes" => (int) date("i", $diff),
-		"seconds_total" => $diffSecs,
-		"seconds" => (int) date("s", $diff)
-	);
-}
+	$dateDiff = dateDiff($d1, $d2);
+
+	$years = $dateDiff['years'];
+	$months = $dateDiff['months'];
+	$days = $dateDiff['days'];
+	$hours = $dateDiff['hours'];
+	$minutes = $dateDiff['minutes'];
+	$seconds = $dateDiff['seconds'];
+
+	if($years > 0) {
+		$diffString = "$years ".getTranslatedString('LBL_YEARS',$currentModule);
+	} elseif($months > 0) {
+		$diffString = "$months ".getTranslatedString('LBL_MONTHS',$currentModule);
+	} elseif($days > 0) {
+		$diffString = "$days ".getTranslatedString('LBL_DAYS',$currentModule);
+	} elseif($hours > 0) {
+		$diffString = "$hours ".getTranslatedString('LBL_HOURS',$currentModule);
+	} elseif($minutes > 0) {
+		$diffString = "$minutes ".getTranslatedString('LBL_MINUTES',$currentModule);
+				} else {
+		$diffString = "$seconds ".getTranslatedString('LBL_SECONDS',$currentModule);
+				}
+	return $diffString;
+			}
 
 function getMinimumCronFrequency() {
 	global $MINIMUM_CRON_FREQUENCY;
@@ -1992,6 +2183,28 @@ function getCampaignLeadIds($id) {
 	return $result;
 }
 
+/** Function to get the difference between 2 datetime strings or millisecond values */
+function dateDiff($d1, $d2){
+	$d1 = (is_string($d1) ? strtotime($d1) : $d1);
+	$d2 = (is_string($d2) ? strtotime($d2) : $d2);
+
+	$diffSecs = abs($d1 - $d2);
+	$baseYear = min(date("Y", $d1), date("Y", $d2));
+	$diff = mktime(0, 0, $diffSecs, 1, 1, $baseYear);
+	return array(
+		"years" => date("Y", $diff) - $baseYear,
+		"months_total" => (date("Y", $diff) - $baseYear) * 12 + date("n", $diff) - 1,
+		"months" => date("n", $diff) - 1,
+		"days_total" => floor($diffSecs / (3600 * 24)),
+		"days" => date("j", $diff) - 1,
+		"hours_total" => floor($diffSecs / 3600),
+		"hours" => date("G", $diff),
+		"minutes_total" => floor($diffSecs / 60),
+		"minutes" => (int) date("i", $diff),
+		"seconds_total" => $diffSecs,
+		"seconds" => (int) date("s", $diff)
+	);
+}
 
 function getExportRecordIds($moduleName, $viewid, $input) {
 	global $adb, $current_user, $list_max_entries_per_page;

@@ -201,10 +201,19 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		}
 
 		$documentsList = $this->getRelatedDocuments();
-		$count = count($documentsList);
 
-		for($i=0; $i<$count; $i++) {
-			$attachmentsList[] = $documentsList[$i];
+        //Attachments are getting duplicated when forwarding a mail in Mail Manager.
+		if($documentsList) {
+			foreach ($documentsList as $document) {
+				$flag = false;
+				foreach ($attachmentsList as $attachment) {
+					if($attachment['fileid'] == $document['fileid']) {
+						$flag = true;
+						break;
+					}
+				}
+				if(!$flag) $attachmentsList[] = $document;
+			}
 		}
 
 		return $attachmentsList;

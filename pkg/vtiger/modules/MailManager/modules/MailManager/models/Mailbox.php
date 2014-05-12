@@ -145,9 +145,10 @@ class MailManager_Mailbox_Model {
 		}
 	}
 
-	public static function activeInstance() {
+	public static function activeInstance($currentUserModel = false) {
 		$db = PearDatabase::getInstance();
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+        if(!$currentUserModel)
+            $currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$instance = new MailManager_Mailbox_Model();
 
 		$result = $db->pquery("SELECT * FROM vtiger_mail_accounts WHERE user_id=? AND status=1 AND set_default=0", array($currentUserModel->getId()));

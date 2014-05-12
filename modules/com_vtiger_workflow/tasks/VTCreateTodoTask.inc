@@ -71,6 +71,11 @@ class VTCreateTodoTask extends VTTask{
 					$assignedGroupId = vtws_getWebserviceEntityId('Groups', $this->assigned_user_id);
 					$userId = $assignedGroupId;
 				}
+                else{ 
+                    if($this->assigned_user_id == 'copyParentOwner'){ 
+                        $userId = $entityData->get('assigned_user_id'); 
+                    } 
+                }
 			}
 		}
 

@@ -36,7 +36,7 @@
 }
 body {
   width: 100%;
-  font-family: 'Open Sans', 'Lucida Grande', Verdana, Tahoma, Arial, sans-serif;
+  font-family: 'Open Sans', 'Lucida Grande', Verdana, Tahoma, Arial, sans-serif !important;
   font-size: 12px !important;
   background: #ffffff;
   color: #2b2b2b;
@@ -2349,6 +2349,16 @@ th.htColHeader,
   box-sizing: border-box;
   word-wrap: break-word;
   min-height: 400px;
+}
+#open_email_con .detailViewTitle {
+  padding: 0;
+}
+#open_email_con .detailViewTitle .detailViewPagingButton {
+  margin-top: 0;
+  padding-right: 0;
+}
+#foldersList .nav-list {
+  padding-right: 0;
 }
 .massEditTable th + th,
 .massEditTable td + td,

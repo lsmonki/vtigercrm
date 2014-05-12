@@ -47,7 +47,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 		$appUniqueKey = vglobal('application_unique_key');
 		$vtigerCurrentVersion = vglobal('vtiger_current_version');
 		$site_URL = vglobal('site_URL');
-		
+
 		$userModel = Users_Record_Model::getCurrentUserModel();
 		$userEmail = $userModel->get('email1');
 

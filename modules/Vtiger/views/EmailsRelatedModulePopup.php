@@ -40,12 +40,12 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
 		$currencyId = $request->get('currency_id');
-                $selectedFields=$request->get('selectedFields'); 
-                if(!empty($selectedFields)){
-                    foreach($selectedFields as $key=>$value){  
-                        $selectFields[$value]=$value;  
-                    }  
-                }
+        $selectedFields=$request->get('selectedFields'); 
+        if(!empty($selectedFields)){
+            foreach($selectedFields as $key=>$value){  
+                $selectFields[$value]=$value;  
+            }  
+        }
 		$view = $request->get('view');
 
 		//To handle special operation when selecting record from Popup

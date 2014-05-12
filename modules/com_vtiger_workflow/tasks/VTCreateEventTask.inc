@@ -93,7 +93,7 @@ class VTCreateEventTask extends VTTask{
 		//Setting visibility value
 		$assignedTo = explode('x', $userId);
 		$sharedType = Calendar_Module_Model::getSharedType($assignedTo[1]);
-		if($sharedType == 'selectedusers') {
+		if($sharedType == 'selectedusers' || empty($sharedType)) {
 			$sharedType = 'public';
 		}
 		$fields['visibility'] = ucfirst($sharedType);

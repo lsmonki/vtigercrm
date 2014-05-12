@@ -321,6 +321,25 @@ Vtiger_Widget_Js('Vtiger_History_Widget_Js', {}, {
 
 Vtiger_Widget_Js('Vtiger_Funnel_Widget_Js',{},{
 
+        postLoadWidget: function() {
+                        this._super();
+                var thisInstance = this;
+
+                        this.getContainer().on('jqplotDataClick', function(ev, gridpos, datapos, neighbor, plot) {
+                    var jData = thisInstance.getContainer().find('.widgetData').val();
+                                var data = JSON.parse(jData);
+                                var linkUrl = data[datapos][3];
+                                if(linkUrl) window.location.href = linkUrl;
+                        });
+
+                        this.getContainer().on("jqplotDataHighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+                                $('.jqplot-event-canvas').css( 'cursor', 'pointer' );
+                        });
+                        this.getContainer().on("jqplotDataUnhighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+                                $('.jqplot-event-canvas').css( 'cursor', 'auto' );
+                        });
+            },
+
 	loadChart : function() {
 		var container = this.getContainer();
 		var data = container.find('.widgetData').val();
@@ -381,6 +400,25 @@ Vtiger_Widget_Js('Vtiger_Pie_Widget_Js',{},{
 		}
 		return {'chartData':chartData};
 	},
+    
+    postLoadWidget: function() {
+		this._super();
+        var thisInstance = this;
+
+		this.getContainer().on('jqplotDataClick', function(ev, gridpos, datapos, neighbor, plot) {
+            var jData = thisInstance.getContainer().find('.widgetData').val();
+			var data = JSON.parse(jData);
+			var linkUrl = data[datapos]['links'];
+			if(linkUrl) window.location.href = linkUrl;
+		});
+
+		this.getContainer().on("jqplotDataHighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'pointer' );
+		});
+		this.getContainer().on("jqplotDataUnhighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'auto' );
+		});
+    },
 
 	loadChart : function() {
 		var chartData = this.generateData();
@@ -434,11 +472,30 @@ Vtiger_Widget_Js('Vtiger_Barchat_Widget_Js',{},{
 		yMaxValue = yMaxValue + 2 + (yMaxValue/100)*25;
 		return {'chartData':[chartData], 'yMaxValue':yMaxValue, 'labels':xLabels};
 	},
+    
+     postLoadWidget: function() {
+		this._super();
+        var thisInstance = this;
+
+		this.getContainer().on('jqplotDataClick', function(ev, gridpos, datapos, neighbor, plot) {
+            var jData = thisInstance.getContainer().find('.widgetData').val();
+			var data = JSON.parse(jData);
+			var linkUrl = data[datapos]['links'];
+			if(linkUrl) window.location.href = linkUrl;
+		});
+
+		this.getContainer().on("jqplotDataHighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'pointer' );
+		});
+		this.getContainer().on("jqplotDataUnhighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'auto' );
+		});
+    },
 
 	loadChart : function() {
 		var data = this.generateChartData();
 
-		this.getPlotContainer(false).jqplot(data['chartData'] , {
+                this.getPlotContainer(false).jqplot(data['chartData'] , {
 			title: data['title'],
 			animate: !$.jqplot.use_excanvas,
 			seriesDefaults:{
@@ -529,7 +586,7 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 			'labels' : stages
 		}
 	},
-
+    
 	loadChart : function(){
 		var chartRelatedData = this.getCharRelatedData();
 		var chartData = chartRelatedData.data;
@@ -546,7 +603,8 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 					barMargin: 10,
 					// Highlight bars when mouse button pressed.
 					// Disables default highlighting on mouse over.
-					highlightMouseDown: true
+					highlightMouseDown: true,
+                    highlightMouseOver : true
 			},
 				pointLabels: {show: true,hideZeros: true}
 			},
@@ -575,7 +633,27 @@ Vtiger_Widget_Js('Vtiger_MultiBarchat_Widget_Js',{
 				labels:labels
 			}
 	  });
-	}
+	},
+    
+     postLoadWidget: function() {
+		this._super();
+        var thisInstance = this;
+
+		this.getContainer().on('jqplotDataClick', function(ev, gridpos, datapos, neighbor) {
+            var chartRelatedData = thisInstance.getCharRelatedData();
+            var allLinks = chartRelatedData.links;
+            if(allLinks)
+                var linkUrl = allLinks[gridpos][datapos];
+			if(linkUrl) window.location.href = linkUrl;
+		});
+
+		this.getContainer().on("jqplotDataMouseOver", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'pointer' );
+		});
+		this.getContainer().on("jqplotDataUnhighlight", function(evt, seriesIndex, pointIndex, neighbor) {
+			$('.jqplot-event-canvas').css( 'cursor', 'auto' );
+		});
+    }
 
 });
 

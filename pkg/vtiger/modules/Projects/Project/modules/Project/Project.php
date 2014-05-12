@@ -557,7 +557,7 @@ class Project extends CRMEntity {
 		global $log, $currentModule;
 
 		if($return_module == 'Accounts') {
-			$focus = new $return_module;
+			$focus = CRMEntity::getInstance($return_module);
 			$entityIds = $focus->getRelatedContactsIds($return_id);
 			array_push($entityIds, $return_id);
 			$entityIds = implode(',', $entityIds);
@@ -586,7 +586,7 @@ class Project extends CRMEntity {
 			$this->db->pquery($updateQuery, $updateParams);
 		}
 	}
-    
+
     /**
 	 * Move the related records of the specified list of id's to the given record.
 	 * @param String This module name

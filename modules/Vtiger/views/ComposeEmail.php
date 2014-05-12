@@ -104,10 +104,25 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		if(empty($bccMailInfo)){
 			$bccMailInfo = array();
 		}
-		
+
+		$sourceRecordId = $request->get('record');
+		if ($sourceRecordId) {
+			$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecordId);
+			if ($sourceRecordModel->get('email_flag') === 'SAVED') {
+				$selectIds = explode('|', $sourceRecordModel->get('parent_id'));
+			}
+		}
 		foreach($selectIds as $id) {
 			if ($id) {
-				if($fieldModule) {
+				$parentIdComponents = explode('@', $id);
+				if (count($parentIdComponents) > 1) {
+					$id = $parentIdComponents[0];
+					if ($parentIdComponents[1] === '-1') {
+						$recordModel = Users_Record_Model::getInstanceById($id, 'Users');
+					} else {
+						$recordModel = Vtiger_Record_Model::getInstanceById($id);
+					}
+				} else if($fieldModule) {
 					$recordModel = Vtiger_Record_Model::getInstanceById($id, $fieldModule);
 				} else {
 					$recordModel = Vtiger_Record_Model::getInstanceById($id);
@@ -134,7 +149,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$documentsModel = Vtiger_Module_Model::getInstance('Documents');
 		$documentsURL = $documentsModel->getInternalDocumentsURL();
 
-		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplates');
+		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplate');
 		$emailTemplateListURL = $emailTemplateModuleModel->getListViewUrl();
 		
 		$viewer->assign('DOCUMENTS_URL', $documentsURL);
@@ -303,7 +318,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$viewer = $this->getViewer($request);
 
 		if(!$this->record){
-		$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 		$recordModel = $this->record->getRecord();
 
@@ -320,14 +335,18 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
             }
             $parentIdComponents = explode('@',$parentFieldId);
             $parentId = $parentIdComponents[0];
-			$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId);
+			if ($parentIdComponents[1] === '-1') {
+				$parentRecordModel = Users_Record_Model::getInstanceById($parentId, 'Users');
+			} else {
+				$parentRecordModel = Vtiger_Record_Model::getInstanceById($parentId);
+			}
 			$emailFields = array_keys($parentRecordModel->getModule()->getFieldsByType('email'));
 			foreach ($emailFields as $emailField) {
 				$emailValue = $parentRecordModel->get($emailField);
 				if (in_array($emailValue, $TO)) {
 					//expecting parent ids and to will be same order
 					$toMailInfo[$parentId][] = $emailValue;
-					$toMailNamesList[$parentId][] = array('label' => Vtiger_Util_Helper::getRecordName($parentId), 'value' => $emailValue);
+					$toMailNamesList[$parentId][] = array('label' => $parentRecordModel->getName(), 'value' => $emailValue);
 				}
 			}
         }

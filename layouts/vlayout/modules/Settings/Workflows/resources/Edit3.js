@@ -388,7 +388,12 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 		jQuery('#task-fieldnames,#task_timefields,#task-templates').change(function(e){
 			var textarea = CKEDITOR.instances.content;
 			var value = jQuery(e.currentTarget).val();
-			textarea.insertHtml(value);
+			if(textarea != undefined) {
+				textarea.insertHtml(value);
+			} else if(jQuery('textarea[name="content"]')) {
+				var textArea = jQuery('textarea[name="content"]');
+				textArea.insertAtCaret(value);
+			}
 		});
 	},
 	
@@ -420,7 +425,7 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 		});
 		this.getPopUp(jQuery('#saveTask'));
 	},
-	
+        
 	registerAddFieldEvent : function() {
 		jQuery('#addFieldBtn').on('click',function(e) {
 			var newAddFieldContainer = jQuery('.basicAddFieldContainer').clone(true,true).removeClass('basicAddFieldContainer hide').addClass('conditionRow');
@@ -725,5 +730,33 @@ Settings_Workflows_Edit_Js("Settings_Workflows_Edit3_Js",{},{
 		this.registerEditTaskEvent();
 		this.registerTaskStatusChangeEvent();
 		this.registerTaskDeleteEvent();
+	}
+});
+
+//http://stackoverflow.com/questions/946534/insert-text-into-textarea-with-jquery
+jQuery.fn.extend({
+	insertAtCaret: function(myValue) {
+		return this.each(function(i) {
+			if (document.selection) {
+				//For browsers like Internet Explorer
+				this.focus();
+				var sel = document.selection.createRange();
+				sel.text = myValue;
+				this.focus();
+			} else if (this.selectionStart || this.selectionStart == '0') {
+				//For browsers like Firefox and Webkit based
+				var startPos = this.selectionStart;
+				var endPos = this.selectionEnd;
+				var scrollTop = this.scrollTop;
+				this.value = this.value.substring(0, startPos)+myValue+this.value.substring(endPos,this.value.length);
+				this.focus();
+				this.selectionStart = startPos + myValue.length;
+				this.selectionEnd = startPos + myValue.length;
+				this.scrollTop = scrollTop;
+			} else {
+				this.value += myValue;
+				this.focus();
+			}
+		});
 	}
 });

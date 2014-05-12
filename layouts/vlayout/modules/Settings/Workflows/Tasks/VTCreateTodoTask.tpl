@@ -53,6 +53,9 @@
 							{/foreach}
 						</optgroup>
 					{/foreach}
+                    <optgroup label="{vtranslate('LBL_SPECIAL_OPTIONS')}">
+                            <option value="copyParentOwner" {if $TASK_OBJECT->assigned_user_id eq 'copyParentOwner'} selected="" {/if}>{vtranslate('LBL_PARENT_OWNER')}</option>
+                    </optgroup>
 				</select>
 			</span>
 		</div>

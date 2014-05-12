@@ -78,10 +78,10 @@
 				{if $LISTVIEW_HEADER@last}
 				</td><td nowrap class="{$WIDTHTYPE}">
 				<div class="pull-right actions">
-					<!--span class="actionImages">
-						<a><i title="{vtranslate('LBL_RESTORE', $MODULE)}" class="icon-refresh alignMiddle"></i></a>&nbsp;
+					<span class="actionImages">
+						<a class="restoreRecordButton"><i title="{vtranslate('LBL_RESTORE', $MODULE)}" class="icon-refresh alignMiddle"></i></a>&nbsp;
 						<a class="deleteRecordButton"><i title="{vtranslate('LBL_DELETE', $MODULE)}" class="icon-trash alignMiddle"></i></a>
-					</span-->
+					</span>
 				</div>
 				</td>
 				{/if}

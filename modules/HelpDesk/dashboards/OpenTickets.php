@@ -9,21 +9,13 @@
  *************************************************************************************/
 
 class HelpDesk_OpenTickets_Dashboard extends Vtiger_IndexAjax_View {
-
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-
-		$jsFileNames = array(
-			'~/libraries/jquery/jqplot/plugins/jqplot.pieRenderer.min.js',
-		);
-
-		$headerScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		return $headerScriptInstances;
-	}
+    
+    function getSearchParams($value) {
+        $listSearchParams = array();
+        $conditions = array(array('ticketstatus','e','Open'),array('assigned_user_id','e',$value));
+        $listSearchParams[] = $conditions;
+        return '&search_params='. json_encode($listSearchParams);
+    }
 
 	public function process(Vtiger_Request $request) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
@@ -34,15 +26,18 @@ class HelpDesk_OpenTickets_Dashboard extends Vtiger_IndexAjax_View {
 
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$data = $moduleModel->getOpenTickets();
+        $listViewUrl = $moduleModel->getListViewUrl();
+        for($i = 0;$i<count($data);$i++){
+            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][name]);
+        }
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('DATA', $data);
-
+        
 		//Include special script and css needed for this widget
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('CURRENTUSER', $currentUser);
 
 		$content = $request->get('content');

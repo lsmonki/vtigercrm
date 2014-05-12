@@ -168,6 +168,11 @@ class Vtiger_MailScannerAction {
 			$fromemail = $mailrecord->_from[0];
 
 			$linkfocus = $mailscanner->GetTicketRecord($usesubject, $fromemail);
+            
+            $commentedBy = $mailscanner->LookupContact($fromemail);
+            if(!$commentedBy) {
+                $commentedBy = $mailscanner->LookupAccount($fromemail);
+            }
 
 			// If matching ticket is found, update comment, attach email
 			if($linkfocus) {
@@ -175,7 +180,12 @@ class Vtiger_MailScannerAction {
 				$commentFocus->column_fields['commentcontent'] = $mailrecord->getBodyText();
 				$commentFocus->column_fields['related_to'] = $linkfocus->id;
 				$commentFocus->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
-				$commentFocus->column_fields['userid'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+                if($commentedBy) {
+                    $commentFocus->column_fields['customer'] = $commentedBy;
+                    $commentFocus->column_fields['from_mailconverter'] = 1;
+                } else {
+                    $commentFocus->column_fields['userid'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+                }
 				$commentFocus->saveentity('ModComments');
 
 				// Set the ticket status to Open if its Closed

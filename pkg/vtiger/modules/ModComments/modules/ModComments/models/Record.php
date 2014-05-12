@@ -41,14 +41,17 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$commentor = $this->getCommentedByModel();
 		if($commentor) {
 			$customer = $this->get('customer');
-			if (!empty($customer)) {
-                $recordModel = Contacts_Record_Model::getInstanceById($customer);
+            $isMailConverterType = $this->get('from_mailconverter');
+			if (!empty($customer) && $isMailConverterType != 1) {
+                $recordModel = Vtiger_Record_Model::getInstanceById($customer);
                 $imageDetails = $recordModel->getImageDetails();
                 if(!empty($imageDetails)) {
                     return $imageDetails[0]['path'].'_'.$imageDetails[0]['name'];
                 } else
                     return vimage_path('CustomerPortal.png');
-			} else {
+			} else if($isMailConverterType == 1) {
+                return vimage_path('MailConverterComment.png');
+            } else {
 				$imagePath = $commentor->getImageDetails();
 				if (!empty($imagePath[0]['name'])) {
 					return $imagePath[0]['path'] . '_' . $imagePath[0]['name'];
@@ -155,7 +158,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$listView = Vtiger_ListView_Model::getInstance('ModComments');
 		$queryGenerator = $listView->get('query_generator');
 		$queryGenerator->setFields(array('parent_comments', 'createdtime', 'modifiedtime', 'related_to',
-									'assigned_user_id', 'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid'));
+									'assigned_user_id', 'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid', 'from_mailconverter'));
 
 		$query = $queryGenerator->getQuery();
 		$query = $query ." AND related_to = ? ORDER BY vtiger_crmentity.createdtime DESC

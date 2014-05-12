@@ -9,23 +9,17 @@
  *************************************************************************************/
 
 class Leads_LeadsByIndustry_Dashboard extends Vtiger_IndexAjax_View {
-
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-
-		$jsFileNames = array(
-			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js'
-		);
-
-		$headerScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		return $headerScriptInstances;
-	}
+    
+    function getSearchParams($value,$assignedto,$dates) {
+        $listSearchParams = array();
+        $conditions = array(array('industry','e',$value));
+        if($assignedto != '') array_push($conditions,array('assigned_user_id','e',getUserFullName($assignedto)));
+        if(!empty($dates)){
+            array_push($conditions,array('createdtime','bw',$dates['start'].' 00:00:00,'.$dates['end'].' 23:59:59'));
+        }
+        $listSearchParams[] = $conditions;
+        return '&search_params='. json_encode($listSearchParams);
+    }
 
 	public function process(Vtiger_Request $request) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
@@ -45,11 +39,14 @@ class Leads_LeadsByIndustry_Dashboard extends Vtiger_IndexAjax_View {
 		
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$data = $moduleModel->getLeadsByIndustry($request->get('smownerid'),$dates);
+        $listViewUrl = $moduleModel->getListViewUrl();
+        for($i = 0;$i<count($data);$i++){
+            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][1],$request->get('smownerid'),$dates);
+        }
 
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 
 		//Include special script and css needed for this widget
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);

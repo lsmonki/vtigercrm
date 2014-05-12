@@ -22,6 +22,20 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return parent::get($key);
 	}
+    
+    /**
+     * Sets the value of the key . First it will check whether specified key is a property if not it
+     * will set from normal set from base class
+     * @param <string> $key - property or key name
+     * @param <string> $value
+     */
+    public function set($key, $value) {
+        if(property_exists($this, $key)) {
+            $this->$key = $value;
+        }
+        parent::set($key, $value);
+        return $this;
+    }
 
 	/**
 	 * Function to get the Detail View url for the record
@@ -110,16 +124,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 
 		$this->saveTagCloud();
 	}
-	
-	public function saveUserPreferences($userPreferenceData){
-		$db = PearDatabase::getInstance();
-		$updateQuery = 'UPDATE vtiger_users SET '. ( implode('=?,', array_keys($userPreferenceData)). '=?') . ' WHERE id = ?';
-		$updateQueryParams = array_values($userPreferenceData);
-		$updateQueryParams[] = $this->getId();
-		$db->pquery($updateQuery, $updateQueryParams);
-		require_once('modules/Users/CreateUserPrivilegeFile.php');
-		createUserPrivilegesfile($this->getId());
-	}
+
 
 	/**
 	 * Function to get all the Home Page components list

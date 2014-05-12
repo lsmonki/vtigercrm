@@ -36,26 +36,31 @@
 						stages.push(data[i].sales_stage);
 					}
 				}
-					
+				var allLinks = new Array();
 				for(j in stages) {
 					var salesStageCount = new Array();
+                    var links = new Array();
 					for(i in users) {
 						var salesCount = 0;
 						for(var k in data) {
 							var userData = data[k];
 							if(userData.sales_stage == stages[j] && userData.last_name == users[i]) {
 								salesCount = parseInt(userData.amount);
+                                link = userData.links
 								break;
 							}
 						}
+                        links.push(link);
 						salesStageCount.push(salesCount);
 					}
+                    allLinks.push(links);
 					count.push(salesStageCount);
 				}
 				return {
 					'data' : count,
 					'ticks' : users,
-					'labels' : stages
+					'labels' : stages,
+                    'links' : allLinks
 				}
 			}
 		});

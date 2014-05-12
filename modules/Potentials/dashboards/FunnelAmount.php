@@ -9,22 +9,6 @@
  *************************************************************************************/
 
 class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
-
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-
-		$jsFileNames = array(
-			'~/libraries/jquery/jqplot/plugins/jqplot.barRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.pointLabels.min.js'
-		);
-		$headerScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		return $headerScriptInstances;
-	}
 	
 	/**
 	 * Retrieves css styles that need to loaded in the page
@@ -38,6 +22,13 @@ class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
 		$headerCssScriptInstances = $this->checkAndConvertCssStyles($cssFileNames);
 		return $headerCssScriptInstances;
 	}
+    
+    function getSearchParams($stage) {
+        $listSearchParams = array();
+        $conditions = array(array("sales_stage","e",$stage));
+        $listSearchParams[] = $conditions;
+        return '&search_params='. json_encode($listSearchParams);
+    }
 
 	public function process(Vtiger_Request $request) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
@@ -48,14 +39,17 @@ class Potentials_FunnelAmount_Dashboard extends Vtiger_IndexAjax_View {
 		
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$data = $moduleModel->getPotentialTotalAmountBySalesStage();
-
+        $listViewUrl = $moduleModel->getListViewUrl();
+        for($i = 0;$i<count($data);$i++){
+            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][1]);
+        }
+        
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 
 		$viewer->assign('WIDGET', $widget);
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('DATA', $data);
 
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
 		$viewer->assign('CURRENTUSER', $currentUser);
 

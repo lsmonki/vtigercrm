@@ -51,7 +51,7 @@ jQuery.Class('Settings_Module_Import_Js', {
 	 */
 	registerEventForStep1 : function(){
 		var detailContentsHolder = jQuery('.contentsDiv');
-		app.showScrollBar(jQuery('.extensionDescription'), {'height':'150px','width':'100%'});
+		app.showScrollBar(jQuery('.extensionDescription'), {'height':'120px','width':'100%','railVisible': true});
 		this.registerEventsForImportModuleStep1(detailContentsHolder);
 	},
     

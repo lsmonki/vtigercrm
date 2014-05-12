@@ -83,7 +83,7 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$sharedType = Calendar_Module_Model::getSharedType($currentUserModel->id);
 		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructure);
 		
-                $hourFormatFeildModel = $recordStructure['LBL_CALENDAR_SETTINGS']['hour_format'];
+        $hourFormatFeildModel = $recordStructure['LBL_CALENDAR_SETTINGS']['hour_format'];
         
 		$viewer->assign('CURRENTUSER_MODEL',$currentUserModel);
 		$viewer->assign('SHAREDUSERS', $sharedUsers);
@@ -93,7 +93,7 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$viewer->assign('MODULE',$module);
 		$viewer->assign('RECORD', $currentUserModel->id);
 		$viewer->assign('SHAREDTYPE', $sharedType);
-                $viewer->assign('HOUR_FORMAT_VALUE', $hourFormatFeildModel->get('fieldvalue'));
+        $viewer->assign('HOUR_FORMAT_VALUE', $hourFormatFeildModel->get('fieldvalue'));
 		
 		$viewer->view('CalendarSettings.tpl', $request->getModule());
 	}

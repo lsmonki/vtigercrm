@@ -89,7 +89,7 @@ class VTSimpleTemplate{
                                     $parts[] = $this->transformToUserFormat($referenceModule, $fieldname, $data[$fieldname]);
                                 }
                             }
-                            $result = implode(",", $parts);
+                            $result = implode(", ", $parts);
 
                         } elseif($entity->getModuleName()===$referenceModule){
                             $data = $entity->getData();
@@ -307,7 +307,13 @@ class VTSimpleTemplate{
                                             }
                                         }
                                     }
-
+									break;
+			case 'double'		:   if ($moduleName === 'HelpDesk' && in_array($fieldName, array('days', 'hours'))) {
+										$fieldValue = decimalFormat($fieldValue);
+									} else {
+										$fieldValue;
+									}
+									break;
 			default				:	$fieldValue;
 
 		}

@@ -61,6 +61,3 @@
     <br />
 {/if}
 </div>
-{if $ACTIVITIES|@count eq 10}
-	<div><a href="#" class="pull-right" name="history_more" data-url="{$WIDGET->getUrl()}&page={$PAGING->getNextPage()}">{vtranslate('LBL_MORE')}...</a></div>
-{/if}

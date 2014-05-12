@@ -114,7 +114,7 @@
 				<span class="row-fluid">
 					<span class="span2">{vtranslate('LBL_SUBJECT',$MODULE)}<span class="redColor">*</span></span>
 					<span class="span9">
-                        <input data-validation-engine='validate[required]' class="row-fluid" type="text" name="subject" value="{$SUBJECT}" id="subject"/>
+                        <input data-validation-engine='validate[required]' class="row-fluid" type="text" name="subject" value="{$SUBJECT}" id="subject" spellcheck="true"/>
                     </span>
 				</span>
 			</span>

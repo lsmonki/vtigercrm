@@ -104,7 +104,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT
 					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
- 		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode,
+ 		            case when vtiger_products.productid != '' then vtiger_products.product_no else vtiger_service.service_no end as productcode,
 					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,
  		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
  		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
@@ -363,6 +363,7 @@ function getAssociatedProducts($module,$focus,$seid='')
     $product_Detail[1]['final_details']['discount_percentage_final'] = 0;
 	$product_Detail[1]['final_details']['discount_amount_final'] = $discount_amount_final;
 
+	//fix for opensource issue not saving invoice data properly
 	if(!empty($focus->column_fields['hdnDiscountPercent']))
 	{
 		$finalDiscount = ($subTotal*$discountPercent/100);
@@ -372,6 +373,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:visible"';
 		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:hidden"';
 	}
+	//fix for opensource issue not saving invoice data properly
 	elseif(!empty($focus->column_fields['hdnDiscountAmount']))
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];

@@ -76,7 +76,7 @@
 		</div>
 	    </div>	
 	{/foreach}
-	<div style="" id="assignedToBlock">
+	<div style="" id="assignedToBlock" {if $RECORD_MODEL->get('action') eq 'UPDATE_HelpDesk_SUBJECT'}class="hide"{/if}>
 	    <div class="control-label">
 		<label>
 		    {vtranslate('Assigned To')}

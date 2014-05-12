@@ -249,7 +249,7 @@ class Vtiger_MailScanner {
 			return $this->_cachedContactIds[$email];
 		}
 		$contactid = false;
-		$contactres = $adb->pquery("SELECT contactid, deleted FROM vtiger_contactdetails inner join vtiger_crmentity on crmid=contactid WHERE setype=? and email=?", Array('Contacts', $email));
+		$contactres = $adb->pquery("SELECT contactid FROM vtiger_contactdetails INNER JOIN vtiger_crmentity ON crmid = contactid WHERE setype = ? AND email = ? AND deleted = ?", array('Contacts', $email, 0));
 		if($adb->num_rows($contactres)) {
 			$deleted = $adb->query_result($contactres, 0, 'deleted');
 			if ($deleted != 1) {
@@ -275,7 +275,7 @@ class Vtiger_MailScanner {
 			return $this->_cachedLeadIds[$email];
 		}
 		$leadid = false;
-		$leadres = $adb->pquery("SELECT leadid, deleted FROM vtiger_leaddetails inner join vtiger_crmentity on crmid=leadid WHERE setype=? and email=? and converted=0", Array('Leads', $email));
+		$leadres = $adb->pquery("SELECT leadid FROM vtiger_leaddetails INNER JOIN vtiger_crmentity ON crmid = leadid WHERE setype=? AND email = ? AND converted = ? AND deleted = ?", array('Leads', $email, 0, 0));
 		if ($adb->num_rows($leadres)) {
 			$deleted = $adb->query_result($leadres, 0, 'deleted');
 			if ($deleted != 1) {
@@ -302,7 +302,7 @@ class Vtiger_MailScanner {
 		}
 
 		$accountid = false;
-		$accountres = $adb->pquery("SELECT accountid, deleted FROM vtiger_account inner join vtiger_crmentity on crmid=accountid WHERE setype=? and (email1=? OR email2=?)", Array('Accounts', $email, $email));
+		$accountres = $adb->pquery("SELECT accountid FROM vtiger_account INNER JOIN vtiger_crmentity ON crmid = accountid WHERE setype=? AND (email1 = ? OR email2 = ?) AND deleted = ?", Array('Accounts', $email, $email, 0));
 		if($adb->num_rows($accountres)) {
 			$deleted = $adb->query_result($accountres, 0, 'deleted');
 			if ($deleted != 1) {

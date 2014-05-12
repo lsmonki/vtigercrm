@@ -566,12 +566,16 @@ jQuery.Class("Calendar_CalendarView_Js",{
 	},
 
 	changeCalendarSharingType : function(data) {
+        var selectedUsersContainer = app.getSelect2ElementFromSelect(jQuery('#selectedUsers',data));
+        if(jQuery('#selectedUsers').is(':checked')){
+            selectedUsersContainer.attr('style','display:block;width:90%;');
+        }
 		jQuery('[name="sharedtype"]').on('change',function(e) {
 			var sharingType = jQuery(e.currentTarget).data('sharingtype');
-			var selectedUsersContainer = app.getSelect2ElementFromSelect(jQuery('#selectedUsers',data));
 
 			if(sharingType == 'selectedusers') {
 				selectedUsersContainer.show();
+                selectedUsersContainer.attr('style','display:block;width:90%;');
 			} else {
 				selectedUsersContainer.hide();
 			}

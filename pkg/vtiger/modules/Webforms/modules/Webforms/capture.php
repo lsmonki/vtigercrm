@@ -17,11 +17,16 @@ include_once 'include/Webservices/Create.php';
 include_once 'modules/Webforms/model/WebformsModel.php';
 include_once 'modules/Webforms/model/WebformsFieldModel.php';
 include_once 'include/QueryGenerator/QueryGenerator.php';
+include_once 'includes/runtime/EntryPoint.php';
 include_once 'includes/main/WebUI.php';
 
 class Webform_Capture {
 	
 	function captureNow($request) {
+		$currentLanguage = Vtiger_Language_Handler::getLanguage();
+		$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage);
+		vglobal('app_strings', $moduleLanguageStrings['languageStrings']);
+		
 		$returnURL = false;
 		try {
 			if(!vtlib_isModuleActive('Webforms')) throw new Exception('webforms is not active');
@@ -70,8 +75,8 @@ class Webform_Capture {
                 $ownerType = vtws_getOwnerType($ownerId);
                 $parameters['assigned_user_id'] = vtws_getWebserviceEntityId($ownerType, $ownerId);
             }
-			// Create the record
 			
+			// Create the record
 			$record=vtws_create($webform->getTargetModule(), $parameters, $user);
 			
 			$this->sendResponse($returnURL, 'ok');

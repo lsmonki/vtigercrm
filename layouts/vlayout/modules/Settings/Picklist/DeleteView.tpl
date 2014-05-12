@@ -41,6 +41,11 @@
 								<option value="{$PICKLIST_VALUE_KEY}">{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
 							{/if}
 						{/foreach}
+						{foreach from=$SELECTED_PICKLISTFIELD_NON_EDITABLE_VALUES key=PICKLIST_VALUE_KEY item=PICKLIST_VALUE}
+							{if !(in_array($PICKLIST_VALUE, $FIELD_VALUES))}
+								<option value="{$PICKLIST_VALUE_KEY}">{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
+							{/if}
+						{/foreach}
 					</select>
 				</div>
 				{if $SELECTED_PICKLISTFIELD_NON_EDITABLE_VALUES}
