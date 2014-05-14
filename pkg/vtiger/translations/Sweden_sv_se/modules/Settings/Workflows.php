@@ -22,6 +22,7 @@ $languageStrings = array(
 	'ONCE' => 'Fram till första gången villkoret är sant',
 	'ON_EVERY_SAVE' => 'Varje gång posten sparas',
 	'ON_MODIFY' => ' gång en post ändras',
+        'ON_SCHEDULE' => 'Tidtabell',
 	'MANUAL' => 'System',
 	'SCHEDULE_WORKFLOW' => 'Schemalägg Arbetsflöde',
 	'ADD_CONDITIONS' => 'Lägg till Villkor',
@@ -82,9 +83,32 @@ $languageStrings = array(
 	'LBL_EXAMPLE_FIELD_NAME' => 'Fält',
 	'LBL_NOTIFY_OWNER' => 'notifierings_ägare',
 	'LBL_ANNUAL_REVENUE' => 'årlig_inkomst',
-	'LBL_EXPRESSION_EXAMPLE2' => "Om E-postland == 'Indien' och sedan concat (förnamn, '', efternamn) annars concat (efternamn, '', förnamn) slut"
-
+	'LBL_EXPRESSION_EXAMPLE2' => "Om E-postland == 'Indien' och sedan concat (förnamn, '', efternamn) annars concat (efternamn, '', förnamn) slut",
+        'LBL_FROM' => 'Från',
+	'Optional' => 'Valfritt',
+	'LBL_ADD_TASK' => 'Lägg till uppgift',
+        'Portal Pdf Url' =>'Portal Pdf webbadress',
+        'LBL_ADD_TEMPLATE' => 'Lägg Mall',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'Radposter Block For Group Tax',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'Radposter Block For Individual skatt',
+        'LBL_RUN_WORKFLOW' => 'Kör Workflow',
+	'LBL_AT_TIME' => 'Vid Tid',
+	'LBL_HOURLY' => 'Varje timme',
 	
+	'LBL_DAILY' => 'Dagligen',
+	'LBL_WEEKLY' => 'Varje vecka',
+	'LBL_ON_THESE_DAYS' => 'På dessa dagar',
+	'LBL_MONTHLY_BY_DATE' => 'Månadsvis efter Datum',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Månadsvis av Weekday',
+	'LBL_YEARLY' => 'Årlig',
+	'LBL_SPECIFIC_DATE' => 'På Specifik datum',
+	'LBL_CHOOSE_DATE' => 'Välj datum',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Välj månad och datum',
+	'LBL_SELECTED_DATES' => 'Valda datum',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Högsta gräns överskridits',
+	'LBL_NEXT_TRIGGER_TIME' => 'Nästa trigger tid på',
+	'LBL_MESSAGE' => 'Meddelande',
+
 );
 
 $jsLanguageStrings = array(

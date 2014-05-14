@@ -36,27 +36,6 @@ if(defined('INSTALLATION_MODE')) {
 
 global $adb;
 
-//70 starts
-//Addition of columns to support scheduled reports
-$schtypeidSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schtypeid INT(10)";
-Migration_Index_View::ExecuteQuery($schtypeidSql,array());
-
-$schtimeSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schtime TIME";
-Migration_Index_View::ExecuteQuery($schtimeSql,array());
-
-$schdayofmonthSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schdayofmonth VARCHAR(100)";
-Migration_Index_View::ExecuteQuery($schdayofmonthSql,array());
-
-$schdayofweekSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schdayofweek VARCHAR(100)";
-Migration_Index_View::ExecuteQuery($schdayofweekSql,array());
-
-$schannualdatesSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN schannualdates VARCHAR(100)";
-Migration_Index_View::ExecuteQuery($schannualdatesSql,array());
-
-$nextTriggerTimeSql = "ALTER TABLE com_vtiger_workflows ADD COLUMN nexttrigger_time DATETIME";
-Migration_Index_View::ExecuteQuery($nextTriggerTimeSql,array());
-//70 ends
-
 //73 starts
 $query = 'SELECT 1 FROM vtiger_currencies WHERE currency_name=?';
 $result = $adb->pquery($query, array('Sudanese Pound'));
@@ -996,8 +975,6 @@ $module = Vtiger_Module_Model::getInstance('Reports');
 $module->enableTools(Array('Print', 'Export'));
 echo "<br> enabled Print and export";
 
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms ADD captcha INT(1) NOT NULL DEFAULT 0',array());
-
 //94 ends
 
 //95 starts
@@ -1103,13 +1080,6 @@ if ($adb->num_rows($result) <= 0) {
 }
 
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET quickcreate = ? WHERE tabid = 8 AND (fieldname = ? OR fieldname = ?);", array(0,"filename","filelocationtype"));
-
-/*Distribute leads equally using roundrobin (webforms)*/
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms ADD roundrobin INT(1) NOT NULL DEFAULT 0',array());
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms ADD roundrobin_userid VARCHAR(256)',array());
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_webforms ADD roundrobin_logic INT NOT NULL DEFAULT 0',array());
-echo '<br> Added Roundrobin fields for webforms';
-
 
 //95 ends
 

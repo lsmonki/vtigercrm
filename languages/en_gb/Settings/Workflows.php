@@ -77,10 +77,10 @@ $languageStrings = array(
 	'LBL_FROM' => 'From',
 	'Optional' => 'Optional',
 	'LBL_ADD_TASK' => 'Add Task',
-    'Portal Pdf Url' =>'Portal Pdf Url',
-    'LBL_ADD_TEMPLATE' => 'Add Template'                            ,
-    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems Block For Group Tax'   ,
-    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems Block For Individual Tax',
+        'Portal Pdf Url' =>'Portal Pdf Url',
+        'LBL_ADD_TEMPLATE' => 'Add Template'                            ,
+        'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems Block For Group Tax'   ,
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems Block For Individual Tax',
 	
 	
 	//Translation for module
