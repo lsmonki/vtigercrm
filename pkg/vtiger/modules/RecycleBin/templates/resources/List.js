@@ -104,99 +104,19 @@ Vtiger_List_Js("RecycleBin_List_Js", {
         }
     }
 
-}, {
+}, { 
     
-    //Fix for empty Recycle bin
-    //Change Button State ("Enable or Dissable") 
-    filterLoadPostOperation: function() {
-         if(parseInt(jQuery('#noOfEntries').val()) == 0){ 
-            jQuery(".clearRecycleBin").attr('disabled','disabled'); 
-        }else{ 
-                jQuery(".clearRecycleBin").removeAttr('disabled'); 
-        }
-   },
-    getDefaultParams: function() {
-        var pageNumber = jQuery('#pageNumber').val();
-        var module = app.getModuleName();
-        var parent = app.getParentModuleName();
-        var cvId = this.getCurrentCvId();
-        var orderBy = jQuery('#orderBy').val();
-        var sortOrder = jQuery("#sortOrder").val();
-        var params = {
-            'module': module,
-            'parent': parent,
-            'page': pageNumber,
-            'view': "List",
-            'orderby': orderBy,
-            'sortorder': sortOrder,
-            'sourceModule': jQuery('#customFilter').val()
-        }
-        return params;
-    },
-    /*
-     * Function to perform the operations after the Empty RecycleBin
-     */
-    recycleBinActionPostOperations: function(data) {
-        jQuery('#recordsCount').val('');
-        jQuery('#totalPageCount').text('');
-        var thisInstance = this;
-        var cvId = this.getCurrentCvId();
-        if (data.success) {
-            var module = app.getModuleName();
-            var params = thisInstance.getDefaultParams();
-            AppConnector.request(params).then(
-                    function(data) {
-                        app.hideModalWindow();
-                        var listViewContainer = thisInstance.getListViewContentContainer();
-                        listViewContainer.html(data);
-                        jQuery('#deSelectAllMsg').trigger('click');
-                        thisInstance.filterLoadPostOperation(); 
-                        thisInstance.calculatePages().then(function() {
-                            thisInstance.updatePagination();
-                        });
-                    });
-        } else {
-            app.hideModalWindow();
-            var params = {
-                title: app.vtranslate('JS_LBL_PERMISSION'),
-                text: data.error.message
+    
+        //Fix for empty Recycle bin
+        //Change Button State ("Enable or Dissable") 
+        filterLoadPostOperation: function() {
+             if(parseInt(jQuery('#deletedRecordsTotalCount').val()) == 0){ 
+                jQuery(".clearRecycleBin").attr('disabled','disabled'); 
+            }else{ 
+                    jQuery(".clearRecycleBin").removeAttr('disabled'); 
             }
-            Vtiger_Helper_Js.showPnotify(params);
-        }
-    },
-    getRecordsCount: function() {
-        var aDeferred = jQuery.Deferred();
-        var recordCountVal = jQuery("#recordsCount").val();
-        if (recordCountVal != '') {
-            aDeferred.resolve(recordCountVal);
-        } else {
-            var count = '';
-            var module = app.getModuleName();
-            var sourceModule = jQuery('#customFilter').val();
-            var postData = {
-                "module": module,
-                "sourceModule": sourceModule,
-                "view": "ListAjax",
-                "mode": "getRecordsCount"
-            }
-
-            AppConnector.request(postData).then(
-                    function(data) {
-                        var response = JSON.parse(data);
-                        jQuery("#recordsCount").val(response['result']['count']);
-                        count = response['result']['count'];
-                        aDeferred.resolve(count);
-                    },
-                    function(error, err) {
-
-                    }
-                );
-            },
-            function(error, err){
-            });
-	}
-	
-},{ 
+       },
+       
 	getDefaultParams : function() {
 		var pageNumber = jQuery('#pageNumber').val();
 		var module = app.getModuleName();

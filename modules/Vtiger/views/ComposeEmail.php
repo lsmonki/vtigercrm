@@ -149,7 +149,8 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 		$documentsModel = Vtiger_Module_Model::getInstance('Documents');
 		$documentsURL = $documentsModel->getInternalDocumentsURL();
 
-		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplate');
+		$emailTemplateModuleModel = Settings_Vtiger_Module_Model::getInstance('Settings:EmailTemplates');
+                
 		$emailTemplateListURL = $emailTemplateModuleModel->getListViewUrl();
 		
 		$viewer->assign('DOCUMENTS_URL', $documentsURL);
@@ -196,6 +197,7 @@ class Vtiger_ComposeEmail_View extends Vtiger_Footer_View {
 	}
 
 	public function process(Vtiger_Request $request) {
+            ini_set('error_reporting', '6135');
 		$mode = $request->getMode();
 		if(!empty($mode)) {
 			echo $this->invokeExposedMethod($mode, $request);
