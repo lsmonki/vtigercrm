@@ -134,6 +134,7 @@ class RecycleBin_List_View extends Vtiger_Index_View {
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('MODULE_LIST', $moduleModel->getAllModuleList());
 		$viewer->assign('SOURCE_MODULE',$sourceModule);
+                $viewer->assign('DELETED_RECORDS_TOTAL_COUNT', $moduleModel->getDeletedRecordsTotalCount()); 
 		
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			if(!$this->listViewCount){
