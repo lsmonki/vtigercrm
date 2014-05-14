@@ -90,7 +90,6 @@ $languageStrings = array(
 	'Last Modified By' => 'Ostatnio zmodyfikowane przez',
 	'Created Time' => 'Czas utworzenia',
 	'Modified Time' => 'Czas modyfikacji',
-	'Description' => 'Opis',
 	'Assigned To'=>'Przydzielone do',
 
 	//Loading Labels
