@@ -101,9 +101,15 @@
                             {elseif $RELATED_HEADERNAME eq 'access_count'}
                                 {$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
                             {elseif $RELATED_HEADERNAME eq 'date_start'}
-                                {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+                                {if $RELATED_RECORD->isSentMail()} 
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} 
+                                 {else}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-info">Draft</span> 
+                                 {/if} 
                             {else if $RELATED_HEADERNAME eq 'time_start'}
-                                {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+                                {if $RELATED_RECORD->isSentMail()} 
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}   
+                                 {else}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--- 
+                                 {/if}
                             {elseif $RELATED_HEADERNAME eq 'parent_id'}
                                 {assign var=REFERENCE_RECORD value=$RELATED_RECORD->get($RELATED_HEADERNAME)}
                                 {assign var=RECORD_MODULE_MODEL value=$RELATED_RECORD->getModule()}
