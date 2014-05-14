@@ -279,9 +279,9 @@ class PBXManager extends CRMEntity {
         $moduleInstance = $module->getInstance('PBXManager');
         
         //To add actionname as ReceiveIncomingcalls
-        $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) FROM vtiger_actionmapping',array());
+        $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) AS actionid FROM vtiger_actionmapping',array());
         if($adb->num_rows($maxActionIdresult)) {
-            $actionId = $adb->query_result($maxActionIdresult, 0);
+            $actionId = $adb->query_result($maxActionIdresult, 0, 'actionid');
         }
         $adb->pquery('INSERT INTO vtiger_actionmapping
                      (actionid, actionname, securitycheck) VALUES(?,?,?)',array($actionId,'ReceiveIncomingCalls',0));
@@ -289,9 +289,9 @@ class PBXManager extends CRMEntity {
         $log->fatal('ReceiveIncomingcalls ActionName Added');
         
         //To add actionname as MakeOutgoingCalls
-        $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) FROM vtiger_actionmapping',array());
+        $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) AS actionid FROM vtiger_actionmapping',array());
         if($adb->num_rows($maxActionIdresult)) {
-            $actionId = $adb->query_result($maxActionIdresult, 0);
+            $actionId = $adb->query_result($maxActionIdresult, 0, 'actionid');
         }
         $adb->pquery('INSERT INTO vtiger_actionmapping
                      (actionid, actionname, securitycheck) VALUES(?,?,?)',array($actionId,'MakeOutgoingCalls',0));

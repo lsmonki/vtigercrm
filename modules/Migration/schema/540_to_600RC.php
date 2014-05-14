@@ -1266,8 +1266,6 @@ if(!defined('INSTALLATION_MODE')) {
 	Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_salutationtype ADD COLUMN sortorderid INT(1)', array());
 }
 
-Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_field ADD COLUMN summaryfield int(1) DEFAULT 0', array());
-
 $summaryFields = array(
 	'Accounts'	=> array('assigned_user_id', 'email1', 'phone', 'bill_city', 'bill_country', 'website'),
 	'Contacts'	=> array('assigned_user_id', 'email', 'phone', 'mailingcity', 'mailingcountry'),
