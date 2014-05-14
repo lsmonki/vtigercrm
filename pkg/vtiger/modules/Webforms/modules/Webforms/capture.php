@@ -17,7 +17,6 @@ include_once 'include/Webservices/Create.php';
 include_once 'modules/Webforms/model/WebformsModel.php';
 include_once 'modules/Webforms/model/WebformsFieldModel.php';
 include_once 'include/QueryGenerator/QueryGenerator.php';
-include_once 'includes/runtime/EntryPoint.php';
 include_once 'includes/main/WebUI.php';
 
 class Webform_Capture {
