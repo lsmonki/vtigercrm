@@ -272,7 +272,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			$unzip->unzipAllEx( ".",
 				Array(
 					// Include only file/folders that need to be extracted
-					'include' => Array('templates', "modules/$module", 'cron', 'languages',
+					'include' => Array('templates', "modules/$module", 'cron', 'languages', 'settings', 
 						'settings/actions', 'settings/views', 'settings/models', 'settings/templates',
 						"$module.png"),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
@@ -292,6 +292,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'settings/templates' => "layouts/vlayout/modules/Settings/$module",
 					//module images
 					'images' => "layouts/vlayout/skins/images/$module",
+                                        'settings' => "modules/Settings",
 				)
 			);
 

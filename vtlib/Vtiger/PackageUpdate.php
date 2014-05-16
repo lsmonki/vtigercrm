@@ -42,7 +42,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
             // Unzip selectively
             $unzip->unzipAllEx( ".",
                     Array(
-                    'include' => Array('templates', "modules/$module", 'cron', 'languages',
+                    'include' => Array('templates', "modules/$module", 'cron', 'languages', 'settings',
 						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
 					// DEFAULT: excludes all not in include
                     ),
@@ -59,7 +59,8 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 						'settings/models' => "modules/Settings/$module/models",
 
 						// Settings templates folder
-						'settings/templates' => "layouts/vlayout/modules/Settings/$module"
+						'settings/templates' => "layouts/vlayout/modules/Settings/$module",
+                                                'settings' => "modules/Settings",
                     )   
             );
 
