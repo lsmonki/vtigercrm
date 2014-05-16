@@ -109,7 +109,7 @@ Vtiger_List_Js("RecycleBin_List_Js", {
     
         //Fix for empty Recycle bin
         //Change Button State ("Enable or Dissable") 
-        filterLoadPostOperation: function() {
+       ListViewPostOperation: function() {
              if(parseInt(jQuery('#deletedRecordsTotalCount').val()) == 0){ 
                 jQuery(".clearRecycleBin").attr('disabled','disabled'); 
             }else{ 
@@ -152,6 +152,7 @@ Vtiger_List_Js("RecycleBin_List_Js", {
 					var listViewContainer = thisInstance.getListViewContentContainer();
 					listViewContainer.html(data);
 					jQuery('#deSelectAllMsg').trigger('click');
+                                        thisInstance.ListViewPostOperation();
 					thisInstance.calculatePages().then(function(){
 						thisInstance.updatePagination();					
 					});
