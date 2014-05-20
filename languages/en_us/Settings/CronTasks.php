@@ -8,20 +8,16 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'CronTasks' => 'Scheduler',
-
-	//Basic Field Names
-	'Id' => 'Id',
 	'Cron Job' => 'Cron Job',
+	'CronTasks' => 'Scheduler',
 	'Frequency' => 'Frequency',
-	'Status' => 'Status',
-	'Last Start' => 'Last scan started',
+	'Id' => 'Id',
 	'Last End' => 'Last scan ended',
-	'Sequence' => 'Sequence',
-
-	//Actions
-	'LBL_COMPLETED' => 'Completed',
-	'LBL_RUNNING' => 'Running',
+	'Last Start' => 'Last scan started',
 	'LBL_ACTIVE' => 'Active',
+	'LBL_COMPLETED' => 'Completed',
 	'LBL_INACTIVE' => 'In Active',
+	'LBL_RUNNING' => 'Running',
+	'Sequence' => 'Sequence',
+	'Status' => 'Status',
 );

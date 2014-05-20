@@ -8,67 +8,52 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'Leads' => 'Leads',
-	'SINGLE_Leads' => 'Lead',
-	'LBL_RECORDS_LIST' => 'Leads List',
-	'LBL_ADD_RECORD' => 'Add Lead',
-
-	// Blocks
-	'LBL_LEAD_INFORMATION' => 'Lead Details',
-
-	//Field Labels
-	'Lead No' => 'Lead Number',
-	'Company' => 'Company',
-	'Designation' => 'Designation',
-	'Website' => 'Website',
-	'Industry' => 'Industry',
-	'Lead Status' => 'Lead Status',
-	'No Of Employees' => 'Number of Employees',
-	'Phone' => 'Primary Phone',
-	'Secondary Email' => 'Secondary Email',
-	'Email' => 'Primary Email',
-
-	//Added for Existing Picklist Entries
-
-	'--None--'=>'--None--',
-	'Mr.'=>'Mr.',
-	'Ms.'=>'Ms.',
-	'Mrs.'=>'Mrs.',
-	'Dr.'=>'Dr.',
-	'Prof.'=>'Prof.',
-
-	//Lead Status Picklist values
 	'Attempted to Contact'=>'Attempted to Contact',
-	'Cold'=>'Cold',
-	'Contact in Future'=>'Contact in Future',
-	'Contacted'=>'Contacted',
-	'Hot'=>'Hot',
-	'Junk Lead'=>'Junk Lead',
-	'Lost Lead'=>'Lost Lead',
-	'Not Contacted'=>'Not Contacted',
-	'Pre Qualified'=>'Pre Qualified',
-	'Qualified'=>'Qualified',
-	'Warm'=>'Warm',
-
-	// Mass Action
-	'LBL_CONVERT_LEAD' => 'Convert Lead',
-
-	//Convert Lead
-	'LBL_TRANSFER_RELATED_RECORD' => 'Transfer related record to',
-	'LBL_CONVERT_LEAD_ERROR' => 'You have to enable either Organization or Contact to convert the Lead',
-	'LBL_CONVERT_LEAD_ERROR_TITLE' => 'Modules Disabled',
 	'CANNOT_CONVERT' => 'Cannot Convert',
-	'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Possible reasons include:',
-	'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'Leads Field Mapping is incomplete(Settings > Module Manager > Leads > Leads Field Mapping)',
-	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Mandatory fields are empty',
-	'LBL_LEADS_FIELD_MAPPING' => 'Leads Field Mapping',
-
-	//Leads Custom Field Mapping
+	'Cold'=>'Cold',
+	'Company' => 'Company',
+	'Contacted'=>'Contacted',
+	'Contact in Future'=>'Contact in Future',
+	'Designation' => 'Designation',
+	'Dr.'=>'Dr.',
+	'Email' => 'Primary Email',
+	'Hot'=>'Hot',
+	'Industry' => 'Industry',
+	'Junk Lead'=>'Junk Lead',
+	'LBL_ADD_RECORD' => 'Add Lead',
+	'LBL_CONVERT_LEAD' => 'Convert Lead',
+	'LBL_CONVERT_LEAD_ERROR_TITLE' => 'Modules Disabled',
+	'LBL_CONVERT_LEAD_ERROR' => 'You have to enable either Organization or Contact to convert the Lead',
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'Edit Field Mapping',
+	'LBL_FOLLOWING_ARE_POSSIBLE_REASONS' => 'Possible reasons include:',
+	'LBL_LEAD_INFORMATION' => 'Lead Details',
+	'LBL_LEADS_FIELD_MAPPING_INCOMPLETE' => 'Leads Field Mapping is incomplete(Settings > Module Manager > Leads > Leads Field Mapping)',
+	'LBL_LEADS_FIELD_MAPPING' => 'Leads Field Mapping',
+	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Mandatory fields are empty',
+	'LBL_RECORDS_LIST' => 'Leads List',
+	'LBL_TRANSFER_RELATED_RECORD' => 'Transfer related record to',
+	'Lead No' => 'Lead Number',
+	'Leads' => 'Leads',
+	'Lead Status' => 'Lead Status',
+	'Lost Lead'=>'Lost Lead',
+	'Mr.'=>'Mr.',
+	'Mrs.'=>'Mrs.',
+	'Ms.'=>'Ms.',
+	'--None--'=>'--None--',
+	'No Of Employees' => 'Number of Employees',
+	'Not Contacted'=>'Not Contacted',
+	'Phone' => 'Primary Phone',
+	'Pre Qualified'=>'Pre Qualified',
+	'Prof.'=>'Prof.',
+	'Qualified'=>'Qualified',
+	'Secondary Email' => 'Secondary Email',
+	'SINGLE_Leads' => 'Lead',
+	'Warm'=>'Warm',
+	'Website' => 'Website',
 );
+
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS' => 'Select Contacts to proceed',
+	'JS_SELECT_ORGANIZATION_OR_CONTACT_TO_CONVERT_LEAD' => 'Conversion requires selection of Contact or Organization',
 	'JS_SELECT_ORGANIZATION' => 'Select Organization to proceed',
-	'JS_SELECT_ORGANIZATION_OR_CONTACT_TO_CONVERT_LEAD' => 'Conversion requires selection of Contact or Organization'
 );
