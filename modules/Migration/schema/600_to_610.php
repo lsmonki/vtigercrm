@@ -1122,7 +1122,7 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET quickcreate = ? WHER
     echo '<br>selected folder field added in mailmanager.<br>';
     
 //97 ends
-
+    
 //Migrating PBXManager 5.4.0 to 6.x
 if(!defined('INSTALLATION_MODE')) {
     $moduleInstance = Vtiger_Module_Model::getInstance('PBXManager');
@@ -1455,4 +1455,10 @@ if(!defined('INSTALLATION_MODE')) {
 }
 //PBXManager porting ends.
 
-
+//Making document module fields masseditable
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"notes_title")); 
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"assigned_user_id")); 
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"notecontent")); 
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"fileversion")); 
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"filestatus")); 
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"folderid")); 
