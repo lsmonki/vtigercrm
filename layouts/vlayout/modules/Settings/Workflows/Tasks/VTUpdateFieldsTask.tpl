@@ -25,7 +25,7 @@
 					<select name="fieldname" class="chzn-select" style="min-width: 250px" data-placeholder="{vtranslate('LBL_SELECT_FIELD',$QUALIFIED_MODULE)}">
 						<option></option>
 						{foreach from=$MODULE_MODEL->getFields() item=FIELD_MODEL}
-                            {if !$FIELD_MODEL->isEditable() or $FIELD_MODEL->getFieldDataType() eq 'reference'}
+                            {if !$FIELD_MODEL->isEditable() or $FIELD_MODEL->getFieldDataType() eq 'reference' or ($MODULE_MODEL->get('name')=="Documents" and in_array($FIELD_MODEL->get('name'),$RESTRICTFIELDS))} 
                                 {continue}
                             {/if}
 							{assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}
@@ -56,7 +56,7 @@
 				<select name="fieldname" data-placeholder="{vtranslate('LBL_SELECT_FIELD',$QUALIFIED_MODULE)}" style="min-width: 250px">
 					<option></option>
 					{foreach from=$MODULE_MODEL->getFields() item=FIELD_MODEL}
-                        {if !$FIELD_MODEL->isEditable() or $FIELD_MODEL->getFieldDataType() eq 'reference'}
+                        {if !$FIELD_MODEL->isEditable() or $FIELD_MODEL->getFieldDataType() eq 'reference' or ($MODULE_MODEL->get('name')=="Documents" and in_array($FIELD_MODEL->get('name'),$RESTRICTFIELDS))}
                             {continue}
                         {/if}
 						{assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}

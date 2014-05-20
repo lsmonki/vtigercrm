@@ -15,7 +15,7 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 	 * @return boolean
 	 */
 	public function isWorkflowSupported() {
-		return false;
+		return true;
 	}
 
 	/**

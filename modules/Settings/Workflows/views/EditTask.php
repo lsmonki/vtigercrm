@@ -70,6 +70,12 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 				$taskObject->field_value_mapping = Zend_Json::encode($fieldMapping);
 			}
 		}
+                 if ($taskType === 'VTUpdateFieldsTask') { 
+                    if($moduleModel->getName() =="Documents"){ 
+                        $restrictFields=array('folderid','filename','filelocationtype'); 
+                        $viewer->assign('RESTRICTFIELDS',$restrictFields); 
+                    } 
+                } 
 		
 		$viewer->assign('SOURCE_MODULE',$moduleModel->getName());
 		$viewer->assign('MODULE_MODEL', $moduleModel);
