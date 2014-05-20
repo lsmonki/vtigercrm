@@ -331,18 +331,21 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 	public function processFormData($mail) {
 		$subject = $mail->subject();
 		$from = $mail->from();
+                $body= strip_tags($mail->body()); 
 
 		if(!empty($from)) $mail_fromAddress = implode(',', $from);
 		if(!empty($mail_fromAddress)) $name = explode('@', $mail_fromAddress);
 		if(!empty($name[1])) $companyName = explode('.', $name[1]);
 
-		$defaultFieldValueMap =  array( 'lastname'	=>	$name[0],
-				'email'			=>	$mail_fromAddress,
-				'email1'		=>	$mail_fromAddress,
+		$defaultFieldValueMap =  array( 
+                                'lastname'	=> $name[0],
+				'email'         => $mail_fromAddress,
+				'email1'	=> $mail_fromAddress,
 				'accountname'	=> $companyName[0],
-				'company'		=> $companyName[0],
+				'company'	=> $companyName[0],
 				'ticket_title'	=> $subject,
-				'subject'		=> $subject,
+				'subject'	=> $subject,
+                                'description'   => $body, 
 		);
 		return $defaultFieldValueMap;
 	}
