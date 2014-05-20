@@ -8,20 +8,13 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'SINGLE_ModComments' => 'Comment',
-	'LBL_RECORDS_LIST' => 'Comments List',
-
-	// Blocks
-	'LBL_MODCOMMENTS_INFORMATION' => 'Comments',
-	'LBL_OTHER_INFORMATION' => 'Other Information',
-
-	'LBL_ADDING_COMMENT' => 'Adding Comment',
-	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Enter comments here',
-	
-	//Field Labels
 	'Comment' => 'Comment',
 	'Creator' => 'Creator',
+	'LBL_ADDING_COMMENT' => 'Adding Comment',
+	'LBL_MODCOMMENTS_INFORMATION' => 'Comments',
+	'LBL_OTHER_INFORMATION' => 'Other Information',
+	'LBL_RECORDS_LIST' => 'Comments List',
+	'LBL_WRITE_YOUR_COMMENT_HERE' => 'Enter comments here',
 	'Related To Comments' => 'Related To',
-	
+	'SINGLE_ModComments' => 'Comment',
 );

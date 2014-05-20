@@ -8,31 +8,32 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-    $languageStrings = array(
-        'Map' => 'Map',
-        'EXTENTIONNAME' => 'Google',
-        'LBL_UPDATES_CRM' => 'Updates in CRM',
-        'LBL_UPDATES_GOOGLE' => 'Updates in Google',
-        'LBL_UPDATED' => 'Updated',
-        'LBL_ADDED' => 'Added',
-        'LBL_DELETED' => 'Deleted',
-        'LBL_SYNCRONIZED' => 'Synchronized',
-        'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
-        'LBL_SYNC_BUTTON' => 'Synchronize Now',
-        'LBL_REMOVE_SYNC' => 'Remove Sync',
-        'LBL_MORE_VTIGER' => 'There are more records to be synchronized in vtiger',
-        'LBL_MORE_GOOGLE' => 'There are more records to be synchronized in Google',
-        'Contact Name'=>'Contact Name',
-        'Email'=>'Email',
-        'Mobile Phone'=>'Mobile Phone',
-        'Address' => 'Address',
-        'Event Title'=>'Event Title',
-        'Start Date'=>'Start Date',
-        'Until Date'=>'Until Date',
-        'Description'=>'Description'
-    );
-    $jsLanguageStrings = array(
-        'LBL_SYNC_BUTTON' => 'Synchronize Now',
-        'LBL_SYNCRONIZING' => 'Synchronizing....',
-        'LBL_NOT_SYNCRONIZE' => 'You have not synchronized yet'
-    );
+$languageStrings = array(
+	'Address' => 'Address',
+	'Contact Name'=>'Contact Name',
+	'Description'=>'Description',
+	'Email'=>'Email',
+	'Event Title'=>'Event Title',
+	'EXTENTIONNAME' => 'Google',
+	'LBL_ADDED' => 'Added',
+	'LBL_DELETED' => 'Deleted',
+	'LBL_MORE_GOOGLE' => 'There are more records to be synchronized in Google',
+	'LBL_MORE_VTIGER' => 'There are more records to be synchronized in vtiger',
+	'LBL_NOT_SYNCRONIZED' => 'You have not synchronized yet',
+	'LBL_REMOVE_SYNC' => 'Remove Sync',
+	'LBL_SYNC_BUTTON' => 'Synchronize Now',
+	'LBL_SYNCRONIZED' => 'Synchronized',
+	'LBL_UPDATED' => 'Updated',
+	'LBL_UPDATES_CRM' => 'Updates in CRM',
+	'LBL_UPDATES_GOOGLE' => 'Updates in Google',
+	'Map' => 'Map',
+	'Mobile Phone'=>'Mobile Phone',
+	'Start Date'=>'Start Date',
+	'Until Date'=>'Until Date',
+);
+
+$jsLanguageStrings = array(
+	'LBL_NOT_SYNCRONIZE' => 'You have not synchronized yet',
+	'LBL_SYNC_BUTTON' => 'Synchronize Now',
+	'LBL_SYNCRONIZING' => 'Synchronizing....',
+);

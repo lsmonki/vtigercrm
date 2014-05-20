@@ -8,46 +8,35 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'SINGLE_Project' => 'Project',
-	'LBL_ADD_RECORD' => 'Add Project',
-	'LBL_RECORDS_LIST' => 'Projects List',
-
-	// Blocks
-	'LBL_PROJECT_INFORMATION' => 'Project Details',
-
-	//Field Labels
-	'Project Name' => 'Project Name',
-	'Start Date' => 'Start Date',
-	'Target End Date' => 'Target End Date',
 	'Actual End Date' => 'Actual End Date',
-	'Project No' => 'Project Number',
-	'Target Budget' => 'Target Budget',
-	'Project Url' => 'Project Url',
-	'Progress' => 'Progress',
-        'LBL_MILESTONES_LIST'          => 'Milestones List'             , 
-        'LBL_TASKS_HIGH'               => 'High Priority'               , 
-        'LBL_TASKS_NORMAL'             => 'Normal Priority'             , 
-        'LBL_TASKS_LOW'                => 'Low Priority'                , 
-        'LBL_TASKS_OTHER'              => 'Other Priorities'            , 
-        'LBL_SELECT_PROGRESS'          => 'Select Progress'             , 
-
-	//Summary Information
-	'LBL_TASKS_OPEN' => 'Tasks Open',
-	'LBL_TASKS_DUE' => 'Tasks Due',
-	'LBL_TASKS_COMPLETED' => 'Tasks Completed',
-	'LBL_PEOPLE' => 'People',
-
-	//Related List
+	'LBL_ADD_RECORD' => 'Add Project',
 	'LBL_CHARTS' => 'Charts',
-	'LBL_TASKS_LIST' => 'Tasks List',
+	'LBL_DOWNLOAD_FILE' => 'Download File',
+	'LBL_MILESTONES_LIST'          => 'Milestones List'             , 
 	'LBL_MILESTONES' => 'Milestones',
-	'LBL_TASKS' => 'Tasks',
+	'LBL_MORE' => 'more',
+	'LBL_PEOPLE' => 'People',
+	'LBL_PROJECT_INFORMATION' => 'Project Details',
+	'LBL_RECORDS_LIST' => 'Projects List',
+	'LBL_SELECT_PROGRESS'          => 'Select Progress'             , 
 	'LBL_STATUS_IS' => 'Status is',
 	'LBL_STATUS' => 'Status',
+	'LBL_TASKS_COMPLETED' => 'Tasks Completed',
+	'LBL_TASKS_DUE' => 'Tasks Due',
+	'LBL_TASKS_HIGH'               => 'High Priority'               , 
+	'LBL_TASKS_LIST' => 'Tasks List',
+	'LBL_TASKS_LOW'                => 'Low Priority'                , 
+	'LBL_TASKS_NORMAL'             => 'Normal Priority'             , 
+	'LBL_TASKS_OPEN' => 'Tasks Open',
+	'LBL_TASKS_OTHER'              => 'Other Priorities'            , 
+	'LBL_TASKS' => 'Tasks',
 	'LBL_TICKET_PRIORITY' => 'Priority',
-	'LBL_MORE' => 'more',
-	
-	//Summary View Widgets
-	'LBL_DOWNLOAD_FILE' => 'Download File',
+	'Progress' => 'Progress',
+	'Project Name' => 'Project Name',
+	'Project No' => 'Project Number',
+	'Project Url' => 'Project Url',
+	'SINGLE_Project' => 'Project',
+	'Start Date' => 'Start Date',
+	'Target Budget' => 'Target Budget',
+	'Target End Date' => 'Target End Date',
 );
