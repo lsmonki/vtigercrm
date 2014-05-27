@@ -1205,10 +1205,16 @@ jQuery.Class("Vtiger_List_Js",{
 			//Make total number of pages as empty
 			jQuery('#totalPageCount').text("");
 			thisInstance.getListViewRecords(urlParams).then (function(){
+                                thisInstance.ListViewPostOperation();
 				thisInstance.updatePagination();
             });
 		});
 	},
+        
+         //Fix for empty Recycle bin 
+        ListViewPostOperation : function(){  
+            return true;    
+        },
 
 	/*
 	 * Function to register the click event for list view main check box.
