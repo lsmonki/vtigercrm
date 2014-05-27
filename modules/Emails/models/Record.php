@@ -23,8 +23,11 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 	 * Function to save an Email
 	 */
 	public function save() {
-		$this->set('date_start', date('Y-m-d'));
-		$this->set('time_start', date('H:i'));
+            //Opensource fix for MailManager data mail attachment
+		if($this->get('email_flag')!="MailManager"){ 
+                    $this->set('date_start', date('Y-m-d')); 
+                    $this->set('time_start', date('H:i')); 
+                }
 		$this->set('activitytype', 'Emails');
 
 		//$currentUserModel = Users_Record_Model::getCurrentUserModel();
@@ -432,6 +435,24 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		return false;
 	}
 
+        //Opensource fix for data updation for mail attached from mailmanager
+        public function isFromMailManager(){ 
+            if(!array_key_exists('email_flag', $this->getData())){ 
+                    $db = PearDatabase::getInstance(); 
+                    $query = 'SELECT email_flag FROM vtiger_emaildetails WHERE emailid=?'; 
+                    $result = $db->pquery($query,array($this->getId())); 
+                    if($db->num_rows($result)>0) { 
+                            $this->set('email_flag',$db->query_result($result,0,'email_flag')); 
+                    } else { 
+                            //If not row exits then make it as false 
+                            return false; 
+                    } 
+            } 
+            if($this->get('email_flag') == "MailManager"){ 
+                    return true; 
+            } 
+            return false; 
+        } 
 	function getEntityType($id) {
 		$db = PearDatabase::getInstance();
 		$moduleModel = $this->getModule();

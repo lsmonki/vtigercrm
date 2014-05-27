@@ -42,7 +42,9 @@ class MailManager_Relate_Action extends Vtiger_MailScannerAction {
 
 		$recordModel->set('description', $mailrecord->getBodyHTML());
 		$recordModel->set('assigned_user_id', $currentUserModel->get('id'));
-		$recordModel->set('date_start', date('Y-m-d', $mailrecord->_date));
+                //Opensource fix mailmanager related data
+		$recordModel->set('date_start', date('Y-m-d',$mailrecord->_date)); 
+                $recordModel->set('time_start', date('H:i',$mailrecord->_date)); 
 		$recordModel->set('email_flag', 'MailManager');
 
 		$from = $mailrecord->_from[0];

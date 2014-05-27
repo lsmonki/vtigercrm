@@ -103,12 +103,15 @@
                             {elseif $RELATED_HEADERNAME eq 'date_start'}
                                 {if $RELATED_RECORD->isSentMail()} 
                                     {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} 
-                                 {else}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-info">Draft</span> 
-                                 {/if} 
+                                {elseif $RELATED_RECORD->isFromMailManager()} 
+                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE->get('name'))}</span>  
+                                {else} 
+                                    <span class="label label-info">{vtranslate('LBL_DRAFT',$RELATED_MODULE->get('name'))}</span>  
+                                {/if}   
                             {else if $RELATED_HEADERNAME eq 'time_start'}
                                 {if $RELATED_RECORD->isSentMail()} 
                                     {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}   
-                                 {else}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--- 
+                                 {else}--- 
                                  {/if}
                             {elseif $RELATED_HEADERNAME eq 'parent_id'}
                                 {assign var=REFERENCE_RECORD value=$RELATED_RECORD->get($RELATED_HEADERNAME)}
