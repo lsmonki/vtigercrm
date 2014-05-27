@@ -18,7 +18,6 @@ $languageStrings = array(
 	'LBL_IMPORTED_MODULE' => ' module was imported successfully.',
 	'LBL__IMPORTING_MODULE' => 'Importing Module',
 	'LBL_IMPORT_MODULE' => 'Import Module',
-	'LBL_IMPORT_MODULE' => 'Install From Vtiger',
 	'LBL_IMPORT_ZIP' => 'Install From File',
 	'LBL_INSTALLATION' => 'Installation',
 	'LBL_INSTALLATION_LOG' => 'Installation Log',
