@@ -1722,7 +1722,7 @@ function com_vtGetModules($adb) {
 		from vtiger_field
 		inner join vtiger_tab
 			on vtiger_field.tabid=vtiger_tab.tabid
-		where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.presence = 0 and vtiger_tab.isentitytype=1";
+		where vtiger_field.tabid not in(9,10,16,15,29) and vtiger_tab.presence = 0 and vtiger_tab.isentitytype=1";
 	$it = new SqlResultIterator($adb, $adb->query($sql));
 	$modules = array();
 	foreach($it as $row) {

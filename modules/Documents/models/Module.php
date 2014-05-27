@@ -131,8 +131,17 @@ class Documents_Module_Model extends Vtiger_Module_Model {
         
         
 		$layoutEditorImagePath = Vtiger_Theme::getImagePath('LayoutEditor.gif');
+                $editWorkflowsImagePath = Vtiger_Theme::getImagePath('EditWorkflows.png'); 
 		$settingsLinks = array();
 
+                if(VTWorkflowUtils::checkModuleWorkflow($this->getName())) { 
+                    $settingsLinks[] = array( 
+                                        'linktype' => 'LISTVIEWSETTING', 
+                                        'linklabel' => 'LBL_EDIT_WORKFLOWS', 
+                                        'linkurl' => 'index.php?parent=Settings&module=Workflows&view=List&sourceModule='.$this->getName(), 
+                                        'linkicon' => $editWorkflowsImagePath 
+                    ); 
+                } 
 		$settingsLinks[] = array(
 					'linktype' => 'LISTVIEWSETTING',
 					'linklabel' => 'LBL_EDIT_FIELDS',
