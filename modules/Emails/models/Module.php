@@ -93,11 +93,14 @@ class Emails_Module_Model extends Vtiger_Module_Model{
 				$listFields = $searchFields;
 				$listFields[] = 'id';
 				$queryGenerator->setFields($listFields);
-
+                                
+                                //Opensource fix for showing up deleted records on email search
+                                $queryGenerator->startGroup(""); 
 				foreach ($searchFields as $key => $emailField) {
 					$queryGenerator->addCondition($emailField, trim($searchValue), 'c', 'OR');
 				}
 
+                                $queryGenerator->endGroup(); 
 				$result = $db->pquery($queryGenerator->getQuery(), array());
 				$numOfRows = $db->num_rows($result);
 
