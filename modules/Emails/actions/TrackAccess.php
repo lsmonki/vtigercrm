@@ -13,7 +13,8 @@ header('Expires: 0');
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 header('Cache-Control: private', false);
 
-ini_set('include_path', '../../../');
+//Opensource fix for tracking email access count
+chdir('../../../');
 
 require_once 'includes/Loader.php';
 require_once 'include/utils/utils.php';
