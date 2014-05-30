@@ -1858,9 +1858,9 @@ Should any need arise,please do give us a call.';
 
 		//Insert into vtiger_organizationdetails vtiger_table
 		$organizationId = $this->db->getUniqueID('vtiger_organizationdetails');
-		$this->db->query("insert into vtiger_organizationdetails(organization_id,organizationname,address,city,state,country,code,phone,fax,website,logoname)
+		$this->db->query("insert into vtiger_organizationdetails(organization_id,organizationname,address,city,state,country,code,phone,fax,website,logoname,vatid)
 								values ($organizationId,'vtiger','95, 12th Main Road, 3rd Block, Rajajinagar','Bangalore',
-										'Karnataka','India','560010','+91 9243602352','+91 9243602352','www.vtiger.com','vtiger-crm-logo.png')");
+										'Karnataka','India','560010','+91 9243602352','+91 9243602352','www.vtiger.com','vtiger-crm-logo.png','1234-5678-9012')");
 
 
 		$this->db->query("insert into vtiger_actionmapping values(0,'Save',0)");

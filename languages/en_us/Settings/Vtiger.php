@@ -192,6 +192,7 @@ $languageStrings = array(
 	'VTLIB_LBL_MODULE_MANAGER' => 'Module Manager',
 	'Webforms' => 'Webforms',
 	'website' => 'Website',
+        'vatid'=>'VAT ID', 
 );
 
 $jsLanguageStrings = array(
