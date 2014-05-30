@@ -90,12 +90,12 @@
                 {include file="LineItemsContent.tpl"|@vtemplate_path:'Inventory' row_no=$row_no data=$data}
             </tr>
         {/foreach}
-        {if count($RELATED_PRODUCTS) eq 0}
+        {if count($RELATED_PRODUCTS) eq 0 and ($PRODUCT_ACTIVE eq 'true' or $SERVICE_ACTIVE eq 'true')} 
             <tr id="row1" class="lineItemRow">
                 {include file="LineItemsContent.tpl"|@vtemplate_path:'Inventory' row_no=1 data=[]}
             </tr>
-        {/if}
-
+        {/if} 
+ 		         
     </table>
 
 

@@ -1571,7 +1571,20 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 				Vtiger_Helper_Js.showPnotify(params);
 				editViewForm.removeData('submit');
 				return false;
-			}
+			}else if(jQuery('.lineItemRow').length<=0){ 
+                            var isAlertAlreadyShown = jQuery('.ui-pnotify').length; 
+                            e.preventDefault(); 
+                            msg = app.vtranslate('JS_PLEASE_ENABLE_PRODUCT_OR_SERVICE_MODULE'); 
+                            params = { 
+                                text : msg, 
+                                type: 'error' 
+                            } 
+                            if(isAlertAlreadyShown <= 0) { 
+                                Vtiger_Helper_Js.showPnotify(params); 
+                            } 
+                            editViewForm.removeData('submit'); 
+                            return false;                             
+                    } 
 			thisInstance.updateLineItemElementByOrder();
 			var lineItemTable = thisInstance.getLineItemContentsContainer();
 			jQuery('.discountSave',lineItemTable).trigger('click');
