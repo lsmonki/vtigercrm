@@ -69,5 +69,7 @@ $languageStrings = array(
 	'LBL_DETAILS' => 'Uppgifter',
 	'skipped' => 'Hoppa över Poster',
 	'failed' => 'Misslyckade Poster',
-	
+        'Skip'    =>'SKIP',
+        'Overwrite' =>'Skriv över',
+        'Merge'    =>'Sammanfoga',
 );

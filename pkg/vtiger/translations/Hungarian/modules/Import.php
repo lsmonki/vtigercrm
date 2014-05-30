@@ -68,4 +68,7 @@ $languageStrings = array(
 	'LBL_UNDO_RESULT'              => 'Utolsó importálás visszavonása'       ,
 	'LBL_VIEW_LAST_IMPORTED_RECORDS' => 'Utoljára importált rekordok'        ,
 	'skipped'                      => 'Kihagyott rekordok'                   ,
+        'Skip'=>'Ugrás',
+        'Overwrite'=>'Felülírása',
+        'Merge'=>'Körlevél',
 );
