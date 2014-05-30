@@ -103,14 +103,6 @@ class Users_Module_Model extends Vtiger_Module_Model {
 		return 'index.php?module='.$this->get('name').'&parent=Settings&view='.$this->getListViewName();
 	}
 
-	public function saveUserPreferences($userPreferenceData){
-		$db = PearDatabase::getInstance();
-		$updateQuery = 'UPDATE vtiger_users SET '. ( implode('=?,', array_keys($userPreferenceData)). '=?') . ' WHERE id = ?';
-		$updateQueryParams = array_values($userPreferenceData);
-		$updateQueryParams[] = $this->getId();
-		$db->pquery($updateQuery, $updateQueryParams);
-	}
-
 	/**
     * Function to update Base Currency of Product
     * @param- $_REQUEST array
