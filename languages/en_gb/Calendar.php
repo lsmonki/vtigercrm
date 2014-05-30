@@ -70,10 +70,10 @@ $languageStrings = array(
         'LBL_STATUS'                   => 'Status'                      ,
         'LBL_TYPE'                     => 'Type',
 	//Fixing colors for Shared Calendar and My Calendar
-	'LBL_EDIT_COLOR' => 'Edit Color',
+	'LBL_EDIT_COLOR' => 'Edit Colour',
 	'LBL_ADD_CALENDAR_VIEW' => 'Add Calendar',
 	'LBL_SELECT_USER_CALENDAR' => 'Select User Calendar',
-	'LBL_SELECT_CALENDAR_COLOR' => 'Select Calendar Color',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Select Calendar Colour',
 	'LBL_EDITING_CALENDAR_VIEW' => 'Editing User Calendar',
 	'LBL_DELETE_CALENDAR' => 'Delete Calendar',
 	'LBL_SELECT_ACTIVITY_TYPE' => 'Select Activity Type',
@@ -82,9 +82,9 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'LBL_ADD_EVENT_TASK'           => 'Add Event / To Do'            , 
 	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', // TODO: Review
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
+	'LBL_SYNC_BUTTON'              => 'Synchronise Now'             , // TODO: Review
+	'LBL_SYNCRONIZING'             => 'Synchronising....'           , // TODO: Review
+	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronised yet', // TODO: Review
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
         'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
@@ -137,13 +137,13 @@ $jsLanguageStrings = array(
 	'LBL_NOV' => 'Nov',
 	'LBL_DEC' => 'Dec',
 	
-	'LBL_ALL_DAY' => 'All-Day',
+	'LBL_ALL_DAY' => 'All Day',
 	
 	'Mobile Call' => 'Mobile Call',
 	//End
 	
 	//Fixing colors for Shared Calendar and My Calendar
-	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'User calendar color updated successfully',
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'User calendar colour updated successfully',
 	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Are you sure you want to delete this user Calendar?',
 	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'User calendar added successfully',
 	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'User calendar deleted successfully',

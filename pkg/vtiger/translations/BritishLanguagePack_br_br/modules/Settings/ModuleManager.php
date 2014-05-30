@@ -9,7 +9,7 @@
  ************************************************************************************/
 $languageStrings = array(
 	'LBL_IMPORT_MODULE'            => 'Import Module'               , // TODO: Review
-	'LBL_VTIGER_EXTENSION_STORE'   => 'Vtiger Extension Store'      , // TODO: Review
+	'LBL_VTIGER_EXTENSION_STORE'   => 'vtiger CRM Extension Store'      , // TODO: Review
 	'LBL_PUBLISHER'                => 'Publisher'                   , // TODO: Review
 	'LBL_LICENSE'                  => 'License'                     , // TODO: Review
 	'LBL_PUBLISHED_ON'             => 'Published on'                , // TODO: Review
@@ -20,11 +20,11 @@ $languageStrings = array(
 	'LBL_ACCEPT_AND_INSTALL'       => 'Accept and Install'          , // TODO: Review
 	'LBL_ALREADY_EXISTS'           => 'Already Exists'              , // TODO: Review
 	'LBL_OK'                       => 'OK'                          , // TODO: Review
-	'LBL_EXTENSION_NOT_COMPATABLE' => 'Extension is not Vtiger Compatable', // TODO: Review
+	'LBL_EXTENSION_NOT_COMPATABLE' => 'Extension is not vtiger CRM compatible', // TODO: Review
 	'LBL_INVALID_FILE'             => 'Invalid File'                , // TODO: Review
 	'LBL_NO_LICENSE_PROVIDED'      => 'No License Provided'         , // TODO: Review
 	'LBL_INSTALLATION'             => 'Installation'                , // TODO: Review
 	'LBL_FAILED'                   => 'Failed'                      , // TODO: Review
-	'LBL_SUCCESSFULL'              => 'Successfull'                 , // TODO: Review
+	'LBL_SUCCESSFULL'              => 'Successful'                 , // TODO: Review
 	'LBL_INSTALLATION_LOG'         => 'Installation Log'            , // TODO: Review
 );

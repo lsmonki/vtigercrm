@@ -1462,3 +1462,6 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHE
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"fileversion")); 
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"filestatus")); 
 Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHERE tabid = 8 AND fieldname = ?;", array(1,"folderid")); 
+
+//Add Vat ID to Company Details 
+Migration_Index_View::ExecuteQuery("Alter table vtiger_organizationdetails Add vatid varchar(100)");  

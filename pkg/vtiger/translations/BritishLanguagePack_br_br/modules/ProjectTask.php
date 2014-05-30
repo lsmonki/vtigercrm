@@ -8,14 +8,16 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Project Task'                , 
-	'LBL_ADD_RECORD'               => 'Add Project Task'            , 
-	'LBL_RECORDS_LIST'             => 'Project Task List'           , 
-	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Information'    , 
-	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
-	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
-    'LBL_MILESTONES_LIST'          => 'Milestones List'             ,
-	
+	'// Basic Strings
+	'SINGLE_ProjectTask' => 'Project Task',
+	'LBL_ADD_RECORD' => 'Add Project Task',
+	'LBL_RECORDS_LIST' => 'Project Task List',
+
+	// Blocks
+	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details',
+	'LBL_PROJECTS_LIST' => 'Projects List',
+	'LBL_TASKS_LIST' => 'Tasks List',
+
 	//Field Labels
 	'Project Task Name' => 'Project Task Name',
     'Project Task No' => 'Project Task No',

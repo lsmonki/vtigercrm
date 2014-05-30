@@ -9,20 +9,20 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-    'LBL_RSS_FEED_SOURCES' => 'Rss Feed Sources',
+    'LBL_RSS_FEED_SOURCES' => 'RSS Feed Sources',
     'LBL_ADD_FEED_SOURCE' => 'Add Feed Source',
     'LBL_FEEDS_LIST_FROM' => 'Feeds List From',
     'LBL_SET_AS_DEFAULT' => 'Set As Default',
     'LBL_SENDER' => 'Sender',
     'LBL_FEED_SOURCE' => 'Feed Source',
     'LBL_ENTER_FEED_SOURCE' => 'Enter Feed Source',  
-    'SINGLE_Rss' => 'Rss Feed',
+    'SINGLE_Rss' => 'RSS Feed',
 );
 
 $jsLanguageStrings = array(
-	'JS_RSS_SUCCESSFULLY_SAVED' => 'Rss Successfully saved',
-    'JS_INVALID_RSS_URL' => 'Invalid Rss Url',
-    'JS_RSS_MADE_AS_DEFAULT' => 'Rss Made as Default',
+	'JS_RSS_SUCCESSFULLY_SAVED' => 'RSS Successfully saved',
+    'JS_INVALID_RSS_URL' => 'Invalid RSS URL',
+    'JS_RSS_MADE_AS_DEFAULT' => 'RSS Made as Default',
     
 );
 

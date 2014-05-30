@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_VTIGER_MIGRATION' => 'Welcome to Vtiger Migration',
+	'LBL_VTIGER_MIGRATION' => 'Welcome to vtiger CRM Migration',
 	'LBL_MIGRATION_COMPLETED' => 'Migration Completed',
 	'LBL_MIGRATION_WIZARD' => 'Migration Wizard',
 	'LBL_PRIDE_BEING_ASSOCIATED' => 'We take pride in being associated with you.',
@@ -22,5 +22,5 @@ $languageStrings = array(
 	'LBL_RELEASE_NOTES' => 'To know what is new in this version, please read <a href="#" target="_blank">Release Notes</a> <br>',
 	'LBL_WAIT' => 'Please wait ...',
 	'LBL_INPROGRESS' => 'Migration in progress',
-	'LBL_DATABASE_CHANGE_LOG' => 'Migration : Database Changes Log',
+	'LBL_DATABASE_CHANGE_LOG' => 'Migration : Database Change Log',
 );

@@ -7,16 +7,22 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-$languageStrings = array(
-	'RecycleBin'                   => 'Recycle Bin'                 , // TODO: Review
-	'LBL_SELECT_MODULE'            => 'Select Module'               , // TODO: Review
-	'LBL_EMPTY_RECYCLEBIN'         => 'Empty Recycle Bin'           , // TODO: Review
-	'LBL_RESTORE'                  => 'Restore'                     , // TODO: Review
-	'LBL_NO_PERMITTED_MODULES'     => 'No permitted modules available', // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Recycle Bin List'            , // TODO: Review
-	'LBL_NO_RECORDS_FOUND'         => 'No records found to Restore in module', // TODO: Review
+
+$languageStrings = Array(
+	'RecycleBin' => 'Recycle Bin',
+	'LBL_SELECT_MODULE' => 'Select Module',
+	'LBL_EMPTY_RECYCLEBIN' => 'Empty Recycle Bin',
+	'LBL_RESTORE' => 'Restore',
+	'LBL_NO_PERMITTED_MODULES' => 'No permitted Modules available',
+	'LBL_RECORDS_LIST' => 'Recycle Bin List',
+	'LBL_NO_RECORDS_FOUND' => 'No records found to restore in Module',
 );
+
 $jsLanguageStrings = array(
-	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Are you sure you want to permanently remove all the deleted records from your database?', // TODO: Review
-	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => 'Are you sure you want to restore the records?', // TODO: Review
+	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Are you sure you want to permanently remove all the deleted records from your database?',
+	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => 'Are you sure you want to restore the records?',
+	'JS_RESTORING_RECORDS' => 'Restoring records',
 );
+
+
+?>

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <module>
   <type>language</type>
-  <name>BritishEnglish</name>
+  <name>British English</name>
   <label>British English</label>
   <prefix>en_gb</prefix>
-  <version>5.4.0</version>
+  <version>1.0.0</version>
 	<dependencies>
-		<vtiger_version>6.0.0rc</vtiger_version>
+		<vtiger_version>6.1.0</vtiger_version>
 		<vtiger_max_version>6.*</vtiger_max_version>
 	</dependencies>
   <license>
@@ -20,7 +20,7 @@
   * All Rights Reserved.
  ********************************************************************************
  *  Language     : British English
- *  Version      : 5.4.0
+ *  Version      : 1.0.0
  *  Author       : Alan Lord. Libertus Solutions - http://www.libertus.co.uk
  ********************************************************************************
 ]]></inline>

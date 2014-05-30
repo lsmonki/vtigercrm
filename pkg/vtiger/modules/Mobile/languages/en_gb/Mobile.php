@@ -7,9 +7,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-$languageStrings = array(
-	'EmailTemplate'                => 'Email Template'              , // TODO: Review
-	'LBL_TEMPLATE_NAME'            => 'Template Name'               , 
-	'LBL_DESCRIPTION'              => 'Description'                 , 
-	'LBL_SUBJECT'                  => 'Subject'                     , // TODO: Review
+$mod_strings = Array (
+'Mobile' => 'Mobile',
+
 );
+
+?>

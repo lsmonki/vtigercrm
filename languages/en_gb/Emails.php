@@ -36,5 +36,5 @@ $languageStrings = array(
 	'LBL_OWNER'                    => 'Owner'                       , // TODO: Review
 	'Date & Time Sent'             => 'Date Sent'                   , // TODO: Review
     'Time Start'                   => 'Time Sent'                   ,
-    'LBL_EMAIL_INFORMATION' => 'Email Information',
+    'LBL_EMAIL_INFORMATION'        => 'Email Information',
 );
