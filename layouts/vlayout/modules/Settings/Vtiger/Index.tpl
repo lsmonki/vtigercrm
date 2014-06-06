@@ -36,10 +36,17 @@
 		<br><br>
 		<h3>{vtranslate('LBL_SETTINGS_SHORTCUTS',$MODULE)}</h3>
 		<hr>
-		<div id="settingsShortCutsContainer" class="row-fluid"/>
+		{assign var=SPAN_COUNT value=1} 
+                <div class="row-fluid"> 
+                    <div class="span1">&nbsp;</div> 
+                    <div id="settingsShortCutsContainer" class="span11"> 
+                        <div  class="row-fluid"> 
 		{foreach item=SETTINGS_SHORTCUT from=$SETTINGS_SHORTCUTS name=shortcuts}
 			{include file='SettingsShortCut.tpl'|@vtemplate_path:$MODULE}
+                        {if $SPAN_COUNT==3}</div>{$SPAN_COUNT=1}{if not $smarty.foreach.shortcuts.last}<div class="row-fluid">{/if}{continue}{/if} 
+                            {$SPAN_COUNT=$SPAN_COUNT+1} 
 		{/foreach}
-
-	</div>
+                    </div> 
+                    </div>
+                 </div> 
 {/strip}

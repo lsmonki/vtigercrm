@@ -25,9 +25,9 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 	registerDeleteShortCutEvent : function(shortCutBlock) {
 		var thisInstance = this;
 		if(typeof shortCutBlock == 'undefined') {
-			var shortCutBlock = jQuery('.moduleBlock')
+			var shortCutBlock = jQuery('div#settingsShortCutsContainer')
 		}
-		shortCutBlock.find('.unpin').on('click',function(e) {
+		shortCutBlock.on('click','.unpin',function(e) {
 			var actionEle = jQuery(e.currentTarget);
 			var closestBlock = actionEle.closest('.moduleBlock');
 			var fieldId = actionEle.data('id');
@@ -55,6 +55,7 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 						animation: 'show',
 						type: 'info'
 					};
+                                        thisInstance.registerReAlign();
 					Vtiger_Helper_Js.showPnotify(params);
 				}
 			});
@@ -93,8 +94,17 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 							'view' : 'IndexAjax'
 						}
 						AppConnector.request(params).then(function(data){
-							var shortCutsMainContainer = jQuery('#settingsShortCutsContainer');
-							var newBlock = jQuery(data).appendTo(shortCutsMainContainer);
+							var shortCutsMainContainer = jQuery('#settingsShortCutsContainer'); 
+                                                        var existingDivBlock=jQuery('#settingsShortCutsContainer div.row-fluid:last'); 
+                                                        var count=jQuery('#settingsShortCutsContainer div.row-fluid:last').children("span").length; 
+                                                        if(count==3){ 
+
+                                                            var newBlock =jQuery('#settingsShortCutsContainer').append('<div class="row-fluid">'+data); 
+                                                        } 
+                                                        else{ 
+                                                            var newBlock = jQuery(data).appendTo(existingDivBlock); 
+                                                        } 
+
 							thisInstance.registerSettingShortCutAlignmentEvent();
 							progressIndicatorElement.progressIndicator({
 								'mode' : 'hide'
@@ -103,7 +113,6 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 								text: app.vtranslate('JS_SUCCESSFULLY_PINNED')
 							};
 							Settings_Vtiger_Index_Js.showMessage(params);
-							thisInstance.registerDeleteShortCutEvent(newBlock);
 						});
 					} else {
 						var imagePath = shortCutActionEle.data('pinimageurl');
@@ -120,6 +129,7 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 							animation: 'show',
 							type: 'info'
 						};
+                                                thisInstance.registerReAlign(); 
 						Vtiger_Helper_Js.showPnotify(params);
 					}
 				}
@@ -188,6 +198,22 @@ jQuery.Class("Settings_Vtiger_Index_Js",{
 			}
 		});
 	},
+        
+        registerReAlign : function() 
+        { 
+
+            var params = { 
+                    'mode'  : 'realignSettingsShortCutBlock', 
+                    'module'  : 'Vtiger', 
+                    'parent' : 'Settings', 
+                    'view' : 'IndexAjax' 
+            } 
+
+            AppConnector.request(params).then(function(data){ 
+                jQuery('#settingsShortCutsContainer').html(data); 
+
+            }); 
+        }, 
 
 	registerEvents: function() {
 		this.registerSettingsShortcutClickEvent();

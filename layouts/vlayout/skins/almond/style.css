@@ -1728,7 +1728,6 @@ th.htColHeader,
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   word-wrap: break-word;
-  min-height: 350px;
   padding: 1% 3%;
 }
 #settingsShortCutsContainer .moduleBlock {
