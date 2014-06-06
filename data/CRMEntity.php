@@ -677,7 +677,14 @@ class CRMEntity {
 		}
 
 		// Lookup module field cache
-		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+		if($module == 'Calendar' || $module == 'Events') { 
+                    getColumnFields('Calendar'); 
+                    $cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events'); 
+                    $cachedCalendarFields = VTCacheUtils::lookupFieldInfo_Module('Calendar'); 
+                    $cachedModuleFields = array_merge($cachedEventsFields, $cachedCalendarFields); 
+                } else { 
+                    $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module); 
+                } 
 		if ($cachedModuleFields === false) {
 			// Pull fields and cache for further use
 			$tabid = getTabid($module);
