@@ -90,12 +90,12 @@
                 {include file="LineItemsContent.tpl"|@vtemplate_path:'Inventory' row_no=$row_no data=$data}
             </tr>
         {/foreach}
-        {if count($RELATED_PRODUCTS) eq 0 and ($PRODUCT_ACTIVE eq 'true' or $SERVICE_ACTIVE eq 'true')} 
+        {if count($RELATED_PRODUCTS) eq 0}
             <tr id="row1" class="lineItemRow">
                 {include file="LineItemsContent.tpl"|@vtemplate_path:'Inventory' row_no=1 data=[]}
             </tr>
-        {/if} 
- 		         
+        {/if}
+
     </table>
 
 
@@ -263,7 +263,7 @@
                         <tbody>
                             {foreach item=tax_detail name=sh_loop key=loop_count from=$SHIPPING_TAXES}
                                 <tr>
-									<td><div class="textOverflowEllipsis">{$tax_detail.taxlabel}</div></td>
+									<td><div class="textOverflowEllipsis">{vtranslate($tax_detail.taxlabel,$MODULE)}</div></td>
                                     <td>
                                         <input type="text" data-validation-engine="validate[funcCall[Vtiger_PositiveNumber_Validator_Js.invokeValidation]]" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" class="smallInputBox shippingTaxPercentage" />&nbsp;%
                                     </td>

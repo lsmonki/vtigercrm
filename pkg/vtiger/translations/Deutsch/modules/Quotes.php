@@ -20,4 +20,8 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Bestandsmanager'             , 
 	'Accepted'                     => 'akzeptiert'                  , 
 	'Rejected'                     => 'abgelehnt'                   , 
+        //Taxes 
+        'VAT'                          => 'Mehrwertsteuer', 
+        'Service'                      => 'Service', 
+        'Sales'                        => 'Vertrieb'
 );

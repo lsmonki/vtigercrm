@@ -23,6 +23,11 @@ $languageStrings = array(
 	'Rejected'                     => 'Elutasított'                  , 
 	'SINGLE_Quotes'                => 'Ajánlat'                      , 
 	'Valid Till'                   => 'Érvényes eddig: '             , 
+
+	//Taxes 
+    'VAT'      => 'Áfa', 
+    'Service'  => 'Szolgáltatás', 
+    'Sales'    => 'Sales'
 );
 
 $jsLanguageStrings = array(

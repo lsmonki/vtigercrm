@@ -687,4 +687,7 @@ $jsLanguageStrings = array(
 	'JS_DUPLIACATE_ENTRIES_FOUND_FOR_THE_VALUE' => 'Duplicate entries found for the value', // TODO: Review
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
+  
+        //No Tax exist 
+        'JS_LBL_NO_TAXES'=>'Geen belastingen', 
 );

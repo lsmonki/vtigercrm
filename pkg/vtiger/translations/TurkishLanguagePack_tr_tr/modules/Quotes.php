@@ -20,4 +20,9 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Stok Yöneticisi'            , 
 	'Accepted'                     => 'Kabul Edildi'                , 
 	'Rejected'                     => 'İptal'                      , 
+    
+        //Taxes 
+        'VAT'      => 'KDV', 
+        'Service'  => 'Hizmet', 
+        'Sales'    => 'Satış'
 );

@@ -718,4 +718,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>"Échec de l'appel",
 	'JS_PBX_FILL_ALL_FIELDS'=>"S'il vous plaît remplir tous les champs",
 	// ends
+        
+        //No Tax exist 
+        'JS_LBL_NO_TAXES'=>'Pas de taxes', 
 );

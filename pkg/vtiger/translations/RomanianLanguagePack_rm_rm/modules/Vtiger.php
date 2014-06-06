@@ -757,4 +757,7 @@ $jsLanguageStrings = array(
     'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Максимальные 160 символов разрешено для текстового сообщения',
     'JS_VIEWNAME_ALERT' => 'Максимум 40 символов разрешены для имени фильтра',
 	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Не может нести за будущее',
+    
+    //No Tax exist 
+    'JS_LBL_NO_TAXES'=>'Niciun Impozite', 
 );

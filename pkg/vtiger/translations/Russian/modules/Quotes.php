@@ -20,4 +20,9 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Ответственный за склад', 
 	'Accepted'                     => 'Принято'              , 
 	'Rejected'                     => 'Отклонено'          , 
+    
+    //Taxes 
+    'VAT'      => 'НДС', 
+    'Service'  => 'Служба', 
+    'Sales'    => 'Реализация'
 );

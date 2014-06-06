@@ -34,6 +34,11 @@ $languageStrings = array(
 	'LBL_THIS' => 'Den här',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'tas bort från systemet. Vänligen ta bort eller ersätta detta objekt',
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Denna artikel tas bort från systemet, vänligen ta bort artikel',
+    
+         //Taxes 
+        'VAT'=>'MOMS', 
+        'Service'=>'Tjänsten', 
+        'Sales'=>'Försäljning'
 
 );
 

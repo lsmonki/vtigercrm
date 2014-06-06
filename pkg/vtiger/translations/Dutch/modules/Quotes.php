@@ -20,4 +20,9 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Voorraad manager'            , 
 	'Accepted'                     => 'Geaccepteerd'                , 
 	'Rejected'                     => 'Geweigerd'                   , 
+    
+        //Taxes 
+        'VAT'                          => 'BTW', 
+        'Service'                      => 'Service', 
+        'Sales'                        => 'Sales'
 );

@@ -716,4 +716,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Çağrı Başarısız',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Tüm alanları doldurunuz',
 	// ends
+        
+        //No Tax exist 
+        'JS_LBL_NO_TAXES'=>'Hayır Vergiler', 
 );

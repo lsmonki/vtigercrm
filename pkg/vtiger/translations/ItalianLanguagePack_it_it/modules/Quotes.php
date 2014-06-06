@@ -20,4 +20,9 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Responsabile inventario'     , 
 	'Accepted'                     => 'Accettato'                   , 
 	'Rejected'                     => 'Rifiutato'                   , 
+    
+        //Taxes 
+        'VAT'      => 'IVA', 
+        'Service'  => 'Servizio', 
+        'Sales'    => 'Vendite'
 );

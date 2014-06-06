@@ -990,4 +990,7 @@ $jsLanguageStrings = array(
     'JS_PBX_OUTGOING_FAILURE'=>'Samtal misslyckades',
     'JS_PBX_FILL_ALL_FIELDS'=>'Vänligen fyll i alla fält',
     // ends
+     
+    //No Tax exist 
+    'JS_LBL_NO_TAXES'=>'Inga skatter', 
 );

@@ -32,6 +32,11 @@ $languageStrings = array(
 	'LBL_THIS' => 'Este',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ha sido eliminado de la aplicación. Por favor, elimina o sustituye este artículo.',
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Este artículo ha sido eliminado de la aplicación. Por favor, elimina o sustituye este artículo.',
+    
+        //Taxes 
+        'VAT'      => 'IVA', 
+        'Service'  => 'Servicio', 
+        'Sales'    => 'Venta'
 
 );
 
