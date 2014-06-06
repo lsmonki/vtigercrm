@@ -221,11 +221,18 @@ jQuery.Class("Vtiger_List_Js",{
 						}
 					});
 					AppConnector.request(deleteURL).then(
-						function() {
+						function(data){ 
 							progressIndicatorElement.progressIndicator({
 								'mode' : 'hide'
-							})
-							listInstance.postMassDeleteRecords();
+							});
+							listInstance.postMassDeleteRecords(); 
+                                                        if(data.error){ 
+                                                            var  params = { 
+                                                                text  : app.vtranslate(data.error.message), 
+                                                                title : app.vtranslate('JS_LBL_PERMISSION') 
+                                                            } 
+                                                            Vtiger_Helper_Js.showPnotify(params); 
+                                                        } 
 						}
 					);
 				},
