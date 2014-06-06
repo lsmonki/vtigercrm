@@ -572,12 +572,12 @@ class CustomView extends CRMEntity {
 
 		$lastmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, "01", date("Y")));
 		$lastMonthStartDateTime = new DateTimeField($lastmonth0 . ' ' . date('H:i:s'));
-		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$lastmonth1 = date("Y-m-t", strtotime("last day of previous month"));
 		$lastMonthEndDateTime = new DateTimeField($lastmonth1 . ' ' . date('H:i:s'));
 
 		$nextmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
 		$nextMonthStartDateTime = new DateTimeField($nextmonth0 . ' ' . date('H:i:s'));
-		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$nextmonth1 = date("Y-m-t", strtotime("last day of next month"));
 		$nextMonthEndDateTime = new DateTimeField($nextmonth1 . ' ' . date('H:i:s'));
 
 		$lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
@@ -1528,9 +1528,9 @@ class CustomView extends CRMEntity {
 		$currentmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
 		$currentmonth1 = date("Y-m-t");
 		$lastmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, "01", date("Y")));
-		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$lastmonth1 = date("Y-m-t", strtotime("last day of previous month")); 
 		$nextmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
-		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$nextmonth1 = date("Y-m-t", strtotime("last day of next month"));
 
         // (Last Week) If Today is "Sunday" then "-2 week Sunday" will give before last week Sunday date
         if($todayName == "Sunday")
