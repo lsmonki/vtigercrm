@@ -12,7 +12,8 @@
 {strip}
     <div class="relatedContainer">
         <input type="hidden" name="currentPageNum" value="{$PAGING->getCurrentPage()}" />
-        <input type="hidden" name="relatedModuleName" class="relatedModuleName" value="{$RELATED_MODULE->get('name')}" />
+        {assign var="RELATED_MODULE_NAME" value=$RELATED_MODULE->get('name')} 
+        <input type="hidden" name="relatedModuleName" class="relatedModuleName" value="{$RELATED_MODULE_NAME}" /> 
         <input type="hidden" value="{$ORDER_BY}" id="orderBy">
         <input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
         <input type="hidden" value="{$RELATED_ENTIRES_COUNT}" id="noOfEntries">
@@ -39,7 +40,7 @@
 <div class="span6">
     <div class="pull-right">
         <span class="pageNumbers">
-            <span class="pageNumbersText">{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{else}<span>&nbsp;</span>{/if}</span>
+            <span class="pageNumbersText">{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE_NAME)} {$PAGING->getRecordEndRange()}{else}<span>&nbsp;</span>{/if}</span>
             <span class="icon-refresh pull-right totalNumberOfRecords cursorPointer{if empty($RELATED_RECORDS)} hide{/if}"></span>
         </span>
         <span class="btn-group">
@@ -81,9 +82,9 @@
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
 							<th class="{$WIDTHTYPE}">
                             {if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists'}
-                                <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
+                                <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE_NAME)}</a>
                             {else}
-                                <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label')|html_entity_decode, $RELATED_MODULE->get('name'))}
+                                <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label')|html_entity_decode, $RELATED_MODULE_NAME)}
                                     &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE}">{/if}
                                 </a>
                             {/if}
@@ -104,9 +105,9 @@
                                 {if $RELATED_RECORD->isSentMail()} 
                                     {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} 
                                 {elseif $RELATED_RECORD->isFromMailManager()} 
-                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE->get('name'))}</span>  
+                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE_NAME)}</span>  
                                 {else} 
-                                    <span class="label label-info">{vtranslate('LBL_DRAFT',$RELATED_MODULE->get('name'))}</span>  
+                                    <span class="label label-info">{vtranslate('LBL_DRAFT',$RELATED_MODULE_NAME)}</span>  
                                 {/if}   
                             {else if $RELATED_HEADERNAME eq 'time_start'}
                                 {if $RELATED_RECORD->isSentMail()} 
