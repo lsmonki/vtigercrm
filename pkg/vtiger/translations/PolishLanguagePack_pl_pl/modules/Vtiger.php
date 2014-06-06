@@ -540,6 +540,7 @@ $languageStrings = array(
 	'First Name' => 'Imię',
 
 	'High' => 'Wysoki',
+        'Medium'=>'Normalny', 
 	'Low' => 'Niski',
 
 	'In Progress' => 'W realizacji',
@@ -729,4 +730,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Połączenie nie powiodło się',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Proszę wypełnić wszystkie pola',
 	// ends	
+    
+        //No Tax exist 
+        'JS_LBL_NO_TAXES'=>'Brak Podatki', 
 	);
