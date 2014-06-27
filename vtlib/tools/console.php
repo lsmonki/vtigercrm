@@ -10,6 +10,7 @@
 
 chdir(dirname(__FILE__) . '/../..');
 include_once 'vtlib/Vtiger/Module.php';
+include_once 'vtlib/Vtiger/Package.php';
 include_once 'includes/main/WebUI.php';
 
 include_once 'include/Webservices/Utils.php';
@@ -21,27 +22,62 @@ class Vtiger_Tools_Console_Controller {
 	const PROMPT_ALPHANUMERIC = 4;
 	const PROMPT_NAME     = 5;
 	const PROMPT_LABEL    = 6;
+	const PROMPT_PATH     = 7;
+	
+	protected $interactive = true;
+	protected $arguments   = array();
 
 	protected function __construct() { }
+	
+	public function setArguments($args, $interactive) {
+		$this->arguments   = $args;
+		$this->interactive = $interactive;
+		return $this;
+	}
 
 	protected function handle() {
+		global $argv;
+		$this->arguments = $argv;
+		
+		// Discard the script name.
+		array_shift($this->arguments);
+		
+		if ($this->arguments) {
+			$this->arguments = explode('=', $this->arguments[0]);
+			$this->interactive = false;
+		}
+
 		$this->welcome();
-		$this->options();
+		$this->options();	
 	}
 
 	protected function welcome() {
-		echo "Welcome to Vtiger CRM Creator.\n";
-		echo "This tool will enable you to get started with developing extensions with ease.\n";
-		echo "Have a good time. Press CTRL+C to \"quit\".\n";
+		if ($this->interactive) {
+			echo "Welcome to Vtiger CRM Creator.\n";
+			echo "This tool will enable you to get started with developing extensions with ease.\n";
+			echo "Have a good time. Press CTRL+C to \"quit\".\n";
+		}
 	}
 
 	protected function options() {
-		echo "Choose the options below:\n";
-		echo "1. Create New Module.\n";
-		echo "2. Create New Layout.\n";
-		echo "3. Create New Language Pack.\n";
-		echo "4. Create Test Language Pack.\n";
-		$option = $this->prompt("Enter your choice: ", self::PROMPT_NUMERIC);
+		if ($this->interactive) {
+			echo "Choose the options below:\n";
+			echo "1. Create New Module.\n";
+			echo "2. Create New Layout.\n";
+			echo "3. Create New Language Pack.\n";
+			echo "4. Create Test Language Pack.\n";
+			echo "5. Import Module.\n";
+			echo "6. Update Module.\n";
+			echo "7. Remove Module.\n";
+			$option = $this->prompt("Enter your choice: ", self::PROMPT_NUMERIC);
+		} else {
+			$option = array_shift($this->arguments);
+			switch ($option) {
+				case '--import': $option = 5; break;
+				case '--update': $option = 6; break;
+				case '--remove': $option = 7; break;
+			}
+		}
 
 		try {
 			switch (intval($option)) {
@@ -49,6 +85,9 @@ class Vtiger_Tools_Console_Controller {
 				case 2: $this->handleCreateLayout(); break;
 				case 3: $this->handleCreateLanguage(); break;
 				case 4: $this->handleCreateTestLanguage(); break;
+				case 5: $this->handleImportModule(); break;
+				case 6: $this->handleUpdateModule(); break;
+				case 7: $this->handleRemoveModule(); break;
 			}
 		} catch (Exception $e) {
 			echo "ERROR: " .$e->getMessage() . "\n";
@@ -88,6 +127,10 @@ class Vtiger_Tools_Console_Controller {
 							return $value;
 						}
 						break;
+					case self::PROMPT_PATH:
+						if (!preg_match("/^[a-zA-Z0-9_:+.-\/\\\\]+$/", $value)) {
+							return $value;
+						}
 					default:
 						return $value;
 				}
@@ -115,22 +158,37 @@ class Vtiger_Tools_Console_Controller {
 	// Option Handlers
 	protected function handleCreateModule() {
 		$controller = new Vtiger_Tools_Console_ModuleController();
-		$controller->handle();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
 	}
 
 	protected function handleCreateLanguage() {
 		$controller = new Vtiger_Tools_Console_LanguageController();
-		$controller->handle();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
 	}
 
 	protected function handleCreateTestLanguage() {
 		$controller = new Vtiger_Tools_Console_TestLanguageController();
-		$controller->handle();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
 	}
 
 	protected function handleCreateLayout() {
 		$controller = new Vtiger_Tools_Console_LayoutController();
-		$controller->handle();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
+	}
+	
+	protected function handleImportModule() {
+		$controller = new Vtiger_Tools_Console_ImportController();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
+	}
+	
+	protected function handleUpdateModule() {
+		$controller = new Vtiger_Tools_Console_UpdateController();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
+	}
+	
+	protected function handleRemoveModule() {
+		$controller = new Vtiger_Tools_Console_RemoveController();
+		$controller->setArguments($this->arguments, $this->interactive)->handle();
 	}
 
 	// Static
@@ -436,6 +494,108 @@ class Vtiger_Tools_Console_TestLanguageController extends Vtiger_Tools_Console_L
 		echo "Deploying ...";
 		$this->deploy($languageInformation);
 		echo "DONE.\n";
+	}
+}
+
+class Vtiger_Tools_Console_ImportController extends Vtiger_Tools_Console_Controller {
+	
+	public function handle() {
+		if ($this->interactive) {
+			echo ">>> IMPORT MODULE <<<\n";
+			do {
+				$path = $this->prompt("Enter package path: ", self::PROMPT_PATH);
+				if (file_exists($path)) {
+					break;
+				}
+				echo "ERROR: " . $path . " - file not found, try another.\n";
+			} while (true);
+		} else {
+			$path = array_shift($this->arguments);
+		}
+		
+		if (file_exists($path)) {
+			$package = new Vtiger_Package();
+			$module  = $package->getModuleNameFromZip($path);
+			
+			$moduleInstance = Vtiger_Module::getInstance($module);
+			if ($moduleInstance) {
+				echo "ERROR: Module $module already exists!\n";
+			} else {
+				echo "Importing ...";
+				$package->import($path);
+				echo "DONE.\n";
+			}			
+			
+		} else {
+			throw new Exception("Package file $path not found.");
+		}
+		
+	}
+}
+
+class Vtiger_Tools_Console_UpdateController extends Vtiger_Tools_Console_Controller {
+	
+	public function handle() {
+		if ($this->interactive) {
+			echo ">>> UPDATE MODULE <<<\n";
+			do {
+				$path = $this->prompt("Enter package path: ", self::PROMPT_PATH);
+				if (file_exists($path)) {
+					break;
+				}
+				echo "ERROR: " . $path . " - file not found, try another.\n";
+			} while (true);
+		} else {
+			$path = array_shift($this->arguments);
+		}
+		
+		if (file_exists($path)) {
+			$package = new Vtiger_Package();
+			$module  = $package->getModuleNameFromZip($path);
+			
+			$moduleInstance = Vtiger_Module::getInstance($module);
+			if (!$moduleInstance) {
+				echo "ERROR: Module $module not found!\n";
+			} else {
+				echo "Updating ...";
+				$package->update($moduleInstance, $path);
+				echo "DONE.\n";
+			}			
+			
+		} else {
+			throw new Exception("Package file $path not found.");
+		}
+		
+	}
+}
+
+class Vtiger_Tools_Console_RemoveController extends Vtiger_Tools_Console_Controller {
+	
+	public function handle() {
+		if ($this->interactive) {
+			echo ">>> REMOVE MODULE <<<\n";
+			do {
+				$module = $this->prompt("Enter module name: ", self::PROMPT_NAME);
+				$moduleInstance = Vtiger_Module::getInstance($module);
+				if (!$moduleInstance) {
+					echo "ERROR: Module $module not found, try another.\n";
+				} else {
+					echo "Removing ...";
+					$moduleInstance->delete();
+					echo "DONE.\n";
+				}
+			} while (true);
+		} else {
+			$module = array_shift($this->arguments);
+			$moduleInstance = Vtiger_Module::getInstance($module);
+			if (!$moduleInstance) {
+				echo "ERROR: Module $module not found!\n";
+			} else {
+				echo "Removing ...";
+				$moduleInstance->delete();
+				echo "DONE.\n";
+			}			
+		}
 	}
 }
 
