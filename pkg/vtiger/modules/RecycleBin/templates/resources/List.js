@@ -102,7 +102,107 @@ Vtiger_List_Js("RecycleBin_List_Js", {
         } else {
             listInstance.noRecordSelectedAlert();
         }
-    }
+    },
+    
+    /**
+     * Function to convert id into json string
+     * @param <integer> id
+     * @return <string> json string
+     */
+    convertToJsonString : function(id) {
+        var jsonObject = [];
+        jsonObject.push(id);
+        return JSON.stringify(jsonObject);
+    },
+
+       
+    /**
+     * Function to delete a record
+     */
+    deleteRecord : function(recordId) {
+        var recordId = RecycleBin_List_Js.convertToJsonString(recordId);
+		var listInstance = Vtiger_List_Js.getInstance();
+		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
+        var sourceModule = jQuery('#customFilter').val();
+        var cvId = listInstance.getCurrentCvId();
+		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+			function(e) {
+				var module = app.getModuleName();
+				var postData = {
+					"module": module,
+                    "viewname": cvId,
+                    "selected_ids": recordId,
+					"action": "RecycleBinAjax",
+					"sourceModule": sourceModule,
+                    "mode": "deleteRecords"
+				}
+				var deleteMessage = app.vtranslate('JS_RECORD_GETTING_DELETED');
+				var progressIndicatorElement = jQuery.progressIndicator({
+					'message' : deleteMessage,
+					'position' : 'html',
+					'blockInfo' : {
+						'enabled' : true
+					}
+				});
+				AppConnector.request(postData).then(
+                    function(data) {
+                        if(data){
+                            progressIndicatorElement.progressIndicator({
+                                'mode' : 'hide'
+                            })
+                            var instance = new RecycleBin_List_Js();
+                            instance.recycleBinActionPostOperations(data);
+                        }
+                    }
+                );
+            },
+            function(error, err){
+            });
+	},
+    
+    /**
+    * Function to restore a record
+    */
+    restoreRecord : function(recordId){
+        var recordId = RecycleBin_List_Js.convertToJsonString(recordId);
+		var listInstance = Vtiger_List_Js.getInstance();
+        var sourceModule = jQuery('#customFilter').val();
+        var cvId = listInstance.getCurrentCvId();
+        var message = app.vtranslate('JS_LBL_RESTORE_RECORD_CONFIRMATION');
+        Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+            function(e) {
+                var module = app.getModuleName();
+                var postData = {
+                    "module": module,
+                    "action": "RecycleBinAjax",
+                    "viewname": cvId,
+                    "selected_ids": recordId,
+                    "mode": "restoreRecords",
+                    "sourceModule": sourceModule
+                }
+                var restoreMessage = app.vtranslate('JS_RESTORING_RECORD');
+                var progressIndicatorElement = jQuery.progressIndicator({
+                    'message' : restoreMessage,
+                    'position' : 'html',
+                    'blockInfo' : {
+                        'enabled' : true
+                    }
+                });
+                AppConnector.request(postData).then(
+                    function(data) {
+                        if(data){
+                            progressIndicatorElement.progressIndicator({
+                                'mode' : 'hide'
+                            })
+                            var instance = new RecycleBin_List_Js();
+                            instance.recycleBinActionPostOperations(data);
+                        }
+                    }
+                );
+            },
+            function(error, err){
+            });
+	}
 
 }, { 
     
