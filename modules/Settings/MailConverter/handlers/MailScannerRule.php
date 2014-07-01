@@ -262,7 +262,7 @@ class Vtiger_MailScannerRule {
     function find($subrule, $condition, $input, $searchfor) {
         if (!$input)
             return false;
-            $input = decode_html($input);
+            $input = trim(preg_replace("/\r/", '', decode_html($input))); 
             $searchfor = decode_html($searchfor);
         $matchfound = false;
         $matches = false;
