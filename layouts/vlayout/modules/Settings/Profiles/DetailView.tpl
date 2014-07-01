@@ -186,7 +186,7 @@
 										{assign var="index" value=($smarty.foreach.actions.index+1) % 3}
 										{assign var="colspan" value=4-$index}
 										colspan="{$colspan}"
-									{/if}><img class="alignMiddle" src="{if $RECORD_MODEL->hasModuleActionPermission($PROFILE_MODULE, $ACTION_ID)}{$ENABLE_IMAGE_PATH}{else}{$DISABLE_IMAGE_PATH}{/if}" />&nbsp;&nbsp;{$ACTION_MODEL->getName()}</td>
+									{/if}><img class="alignMiddle" src="{if $RECORD_MODEL->hasModuleActionPermission($PROFILE_MODULE, $ACTION_ID)}{$ENABLE_IMAGE_PATH}{else}{$DISABLE_IMAGE_PATH}{/if}" />&nbsp;&nbsp;{vtranslate($ACTION_MODEL->getName(),$QUALIFIED_MODULE)}</td>
 									{if $smarty.foreach.actions.last OR ($smarty.foreach.actions.index+1) % 3 == 0}
 										</div>
 									{/if}

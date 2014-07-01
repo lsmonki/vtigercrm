@@ -1142,17 +1142,23 @@ jQuery.Class("Vtiger_Detail_Js",{
 				var ajaxEditNewValue = fieldElement.find('option:selected').text();
 
 				if(previousValue == ajaxEditNewValue) {
-                    editElement.addClass('hide');
-                    detailViewElement.removeClass('hide');
+                                        editElement.addClass('hide');
+                                        detailViewElement.removeClass('hide');
 					currentTarget.show();
-                } else {
+                                } else {
+                                        var errorExists = fieldElement.validationEngine('validate');  
+                                        //If validation fails  
+                                        if(errorExists) {  
+                                                Vtiger_Helper_Js.addClickOutSideEvent(currentDiv, callbackFunction);   
+                                                                return;   
+                                        }
 					var activityDiv = currentDiv.closest('.activityEntries');
 					var activityId = activityDiv.find('.activityId').val();
 					var moduleName = activityDiv.find('.activityModule').val();
 					var activityType = activityDiv.find('.activityType').val();
 
 					currentDiv.progressIndicator();
-                    editElement.addClass('hide');
+                                        editElement.addClass('hide');
 					var params = {
 						action : 'SaveAjax',
 						record : activityId,

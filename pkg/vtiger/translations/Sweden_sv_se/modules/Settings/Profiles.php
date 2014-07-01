@@ -37,11 +37,20 @@ $languageStrings = array(
 	'LBL_PROFILES' => 'Profiler',
 	'LBL_CHOOSE_PROFILES' => 'Välj Profiler',
     
-    'LBL_VIEW_ALL' => 'Granska Alla',
-    'LBL_EDIT_ALL' => 'Redigera Alla',
-    'LBL_VIEW_ALL_DESC' => 'Kan visa alla moduler uppgifter',
-    'LBL_EDIT_ALL_DESC' => 'Kan redigera alla moduler uppgifter',
+        'LBL_VIEW_ALL' => 'Granska Alla',
+        'LBL_EDIT_ALL' => 'Redigera Alla',
+        'LBL_VIEW_ALL_DESC' => 'Kan visa alla moduler uppgifter',
+        'LBL_EDIT_ALL_DESC' => 'Kan redigera alla moduler uppgifter',
 	'LBL_DUPLICATES_EXIST' => 'Dubbletter av Profil Existerar',
+    
+        'Import' => 'Import',
+        'Export' => 'Export',
+	'Merge'  => 'Merge',
+        'ConvertLead' => 'Konvertera Bly',
+        'DuplicatesHandling' => 'Dubbletter Handling',
+        'ReceiveIncomingCalls' => 'Ta emot inkommande samtal',
+        'MakeOutgoingCalls' => 'Gör Utgående samtal',
+        'Print' => 'Tryckt',
 	
 );
 

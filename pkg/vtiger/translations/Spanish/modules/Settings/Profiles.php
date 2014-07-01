@@ -47,8 +47,17 @@ $languageStrings = array(
 	'LBL_VIEW_ALL' => 'Ver Todos',
 	'LBL_EDIT_ALL' => 'Editar Todos',
 	'LBL_VIEW_ALL_DESC' => 'Puede ver toda la información del módulo',
-    'LBL_EDIT_ALL_DESC' => 'Puede edtar toda la información del módulo',
+        'LBL_EDIT_ALL_DESC' => 'Puede edtar toda la información del módulo',
 	'LBL_DUPLICATES_EXIST' => 'Existen Perfiles Duplicados',
+    
+        'Import' => 'Importación',
+        'Export' => 'Exportación',
+	'Merge'  => 'Fundirse',
+        'ConvertLead' => 'Convertir plomo',
+        'DuplicatesHandling' => 'Duplicados de manipulación',
+        'ReceiveIncomingCalls' => 'Recibir llamadas entrantes',
+        'MakeOutgoingCalls' => 'Hacer Llamadas salientes',
+        'Print' => 'Impresión',
 );
 
 $jsLanguageStrings = array(

@@ -16,6 +16,7 @@ $languageStrings = array(
 	'LBL_PRIVACY_POLICY' => 'Polityka prywatności (EN)',
 
 	// Common Actions
+    'LBL_SELECT_OPTION'=>'Wybierz opcję',
 	'LBL_SELECT_ALL' => 'Zaznacz wszystkie rekordy',
 	'LBL_CREATING_NEW' => 'Tworzenie nowych',
 	'LBL_EDITING' => 'Edytowanie',

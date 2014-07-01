@@ -50,6 +50,7 @@ class Mobile_WS_Login extends Mobile_WS_Controller {
 				'user_tz' => $current_user->time_zone,
 				'session'=> $sessionid,
 				'vtiger_version' => Mobile_WS_Utils::getVtigerVersion(),
+                                'date_format' => $current_user->date_format, 
 				'mobile_module_version' => Mobile_WS_Utils::getVersion()
 			);
 			$response->setResult($result);

@@ -30,6 +30,7 @@ $languageStrings = array(
 	'Purchase Order'=>'Inköpsorder',
 	'Vendor Terms'=>'Leverantör Villkor',
 	'Pending'=>'Pågående',
+    'Recurring Invoive Information'=>'Återkommande Fakturainformation',
 	'Enable Recurring' => 'Aktivera Återkommande',
 	'Frequency' => 'Frekvens',
 	'Start Period' => 'Startperiod',
@@ -44,6 +45,13 @@ $languageStrings = array(
 	'Sent'=>'Skickat',
 	'Credit Invoice'=>'Kreditfaktura',
 	'Paid'=>'Betald',
+    'Daily'=>'Dagligen',
+    'Monthly'=>'Månadsvis',
+    'Quarterly'=>'Kvartalsvis',
+    'Yearly'=>'Årlig',
+    'Net 30 days'=>'Netto 30 dagar',
+    'Net 45 days'=>'Netto 45 dagar',
+    'Net 60 days'=>'Netto 60 dagar',
 	
 	//Translation for product not found
 	'LBL_THIS' => 'Den här',

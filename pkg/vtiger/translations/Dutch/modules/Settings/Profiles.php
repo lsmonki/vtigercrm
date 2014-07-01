@@ -33,6 +33,15 @@ $languageStrings = array(
 	'LBL_TRANSFER_ROLES_TO_PROFILE' => 'Transfer roles to profile'   , // TODO: Review
 	'LBL_PROFILES'                 => 'Profiles'                    , // TODO: Review
 	'LBL_CHOOSE_PROFILES'          => 'Choose Profiles'             , // TODO: Review
+    
+        'Import' => 'Import',
+        'Export' => 'Export',
+	'Merge'  => 'Samensmelten',
+        'ConvertLead' => 'Converteren Lead',
+        'DuplicatesHandling' => 'Duplicaten Handling',
+        'ReceiveIncomingCalls' => 'Ontvangen Inkomende gesprekken',
+        'MakeOutgoingCalls' => 'Maak Uitgaande oproepen',
+        'Print' => 'Afdrukken',
 );
 $jsLanguageStrings = array(
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Profile deleted successfully', // TODO: Review

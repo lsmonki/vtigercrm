@@ -19,6 +19,7 @@ $languageStrings = array(
 
 	// Blocks
 	'LBL_SO_INFORMATION' => 'تفاصيل طلب المبيعات',
+        'Recurring Invoive Information'=>'المتكررة معلومات الفاتورة',
 
 	//Field labels
 	'SalesOrder No'=>'رقم طلب المبيعات',
@@ -44,6 +45,13 @@ $languageStrings = array(
 	'Sent'=>'ارسل',
 	'Credit Invoice'=>'فاتورة دائن',
 	'Paid'=>'مدفوع',
+    'Daily'=>'يوميا',
+    'Monthly'=>'شهريا',
+    'Quarterly'=>'فصلي',
+    'Yearly'=>'سنويا',
+    'Net 30 days'=>'صافي 30 يوما',
+    'Net 45 days'=>'صافي 45 يوما',
+    'Net 60 days'=>'صافي 60 يوما',
 	
 	//Translation for product not found
 	'LBL_THIS' => 'هذا',

@@ -38,6 +38,15 @@ $languageStrings = array(
 	'LBL_WRITE' => 'Write',
 	'Profiles' => 'Profiles',
 	'SINGLE_Profiles' => 'Profile',
+    
+        'Import' => 'Import',
+        'Export' => 'Export',
+	'Merge'  => 'Merge',
+        'ConvertLead' => 'ConvertLead',
+        'DuplicatesHandling' => 'DuplicatesHandling',
+        'ReceiveIncomingCalls' => 'ReceiveIncomingCalls',
+        'MakeOutgoingCalls' => 'MakeOutgoingCalls',
+        'Print' => 'Print',
 );
 
 $jsLanguageStrings = array(

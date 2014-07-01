@@ -11,6 +11,7 @@ $languageStrings = array(
 	'AutoCreated'                  => 'Automatikusan létrehozva'    ,
 	'Credit Invoice'               => 'Átutalásos díjbekérő'        ,
 	'Customer No'                  => 'Ügyfél száma'                ,
+    'Recurring Invoive Information'=>'Ismétlődő Számlázási információ',
 	'Enable Recurring'             => 'Díjbekérő-ismétlődés engedélyezve',
 	'End Period'                   => 'Utolsó Díjbekérő'            ,
 	'Frequency'                    => 'Gyakoriság'                  ,
@@ -37,6 +38,13 @@ $languageStrings = array(
 	'Sub Total'                    => 'Részösszeg'                  ,
 	'Tracking Number'              => 'Nyomkövető szám'             ,
 	'Vendor Terms'                 => 'Szállítói határidők'         ,
+    'Daily'=>'Napi',
+    'Monthly'=>'Havi',
+    'Quarterly'=>'Negyedévi',
+    'Yearly'=>'Évi',
+    'Net 30 days'=>'Net 30 nap',
+    'Net 45 days'=>'Net 45 nap',
+    'Net 60 days'=>'Net 60 nap', 
 );
 
 $jsLanguageStrings = array(
