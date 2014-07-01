@@ -100,7 +100,14 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linklabel' => 'LBL_CRM_SETTINGS',
 						'linkurl' => '?module=Vtiger&parent=Settings&view=Index',
 						'linkicon' => '',
-					)
+					),
+                                        array(), // separator 
+                                        array ( 
+                                                'linktype' => 'HEADERLINK', 
+                                                'linklabel' => 'LBL_MANAGE_USERS', 
+                                                'linkurl' => '?module=Users&parent=Settings&view=List', 
+                                                'linkicon' => '', 
+                                       ),
 				)
 			);
 			array_push($headerLinks, $crmSettingsLink);
