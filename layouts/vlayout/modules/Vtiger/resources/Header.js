@@ -385,7 +385,7 @@ jQuery.Class("Vtiger_Header_Js", {
     },
 
 	adjustContentHeight: function(){
-		if(app.getViewName() === 'Detail' || app.getViewName() === 'Calendar'){
+		if(app.getViewName() === 'Detail' || app.getViewName() === 'Calendar' || app.getViewName() === 'ExtensionImport'){
 			if(jQuery('div.detailViewInfo > .related').outerHeight() > jQuery('div.detailViewInfo > div.details ').outerHeight()){
 				jQuery('div.detailViewInfo > div.details').css('min-height',jQuery('.detailViewInfo > .related').outerHeight());
 			}

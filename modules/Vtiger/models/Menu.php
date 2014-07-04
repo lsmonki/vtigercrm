@@ -21,7 +21,7 @@ class Vtiger_Menu_Model extends Vtiger_Module_Model {
     public static function getAll($sequenced = false) {
         $currentUser = Users_Record_Model::getCurrentUserModel();
         $userPrivModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-        $restrictedModulesList = array('Emails', 'ProjectMilestone', 'ProjectTask', 'ModComments',
+        $restrictedModulesList = array('Emails', 'ProjectMilestone', 'ProjectTask', 'ModComments', 'ExtensionStore',
 										'Integration', 'Dashboard', 'Home', 'vtmessages', 'vttwitter');
 
 		

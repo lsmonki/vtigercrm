@@ -207,10 +207,11 @@ body{
 .login-container{
     min-width: 960px;
 }
+/*
 .navbar{
     bottom: 0 !important;
     min-width: 980px;
-}
+}*/
 
 .logo{
     margin-top: 15px;
@@ -277,6 +278,9 @@ body{
 .slide{
     padding: 2%;
     min-width: 550px;
+    min-height: 200px;
+    text-align: center;
+    vertical-align: middle;
     width: 550px\9;
 }
 .slide img{

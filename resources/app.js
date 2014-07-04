@@ -730,7 +730,7 @@ var app = {
 	 */
 	setContentsHeight : function() {
 		var borderTopWidth = parseInt(jQuery(".mainContainer").css('margin-top'))+21; // (footer height 21px)
-		jQuery('.bodyContents').css('min-height',(jQuery(document).innerHeight()-borderTopWidth));
+		jQuery('.bodyContents').css('min-height',(jQuery(window).innerHeight()-borderTopWidth));
 	},
 
 	/**

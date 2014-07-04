@@ -18,10 +18,9 @@
 		<!-- for Login page we are added -->
 		<link href="libraries/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="libraries/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-		<link href="libraries/bootstrap/css/jquery.bxslider.css" rel="stylesheet" />
+		<link href="libraries/bootstrap/css/jqueryBxslider.css" rel="stylesheet" />
 		<script src="libraries/jquery/jquery.min.js"></script>
-		<script src="libraries/jquery/boxslider/jquery.bxslider.js"></script>
-		<script src="libraries/jquery/boxslider/jquery.bxslider.min.js"></script>
+		<script src="libraries/jquery/boxslider/jqueryBxslider.js"></script>
 		<script src="libraries/jquery/boxslider/respond.min.js"></script>
 		<script>
 			jQuery(document).ready(function(){

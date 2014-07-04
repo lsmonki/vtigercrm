@@ -112,6 +112,15 @@ jQuery.Class('Settings_Module_Manager_Js', {
 			}
 			
 		});
+                
+        container.on('click','[name="installExtensionLoader"]',function(){
+            console.log('install extension loader');
+             var message = app.vtranslate('JS_PHP_EXTENSION_LOADER_NOT_INSTALLED')+ '<a onclick=window.open("http://community.vtiger.com/help/vtigercrm/php/extension-loader.html")>'+ app.vtranslate("JS_CLICK_HERE") +'</a>'+ app.vtranslate('JS_FOR_INSTALLATION') ;
+             Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+                function(e) {
+
+                });
+        });           
 	}
 });
 

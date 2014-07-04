@@ -29,6 +29,7 @@ if(defined('VTIGER_UPGRADE')) {
 	updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
         updateVtlibModule("Sweden_sv_se","packages/vtiger/optional/Sweden_sv_se.zip");
 	updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
+        installVtlibModule('ExtensionStore', 'packages/vtiger/mprotected/ExtensionStore-protected.zip');
 }
 if(defined('INSTALLATION_MODE')) {
 		// Set of task to be taken care while specifically in installation mode.

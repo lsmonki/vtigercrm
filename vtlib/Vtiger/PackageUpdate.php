@@ -42,7 +42,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
             // Unzip selectively
             $unzip->unzipAllEx( ".",
                     Array(
-                    'include' => Array('templates', "modules/$module", 'cron', 'languages', 'settings',
+                    'include' => Array('templates', "modules/$module", 'cron', 'languages',
 						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
 					// DEFAULT: excludes all not in include
                     ),

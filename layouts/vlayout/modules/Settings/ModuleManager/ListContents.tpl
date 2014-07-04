@@ -16,9 +16,15 @@
 			<div class="span6">
 				<span class="btn-toolbar pull-right margin0px">
 					<span class="btn-group">
+                                            {if $EXTENSION_LOADER}
 						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_USER_MODULE_URL}"'>
-							<strong>{vtranslate('LBL_IMPORT_ZIP', $QUALIFIED_MODULE)}</strong>
+							<strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
 						</button>
+                                            {else}
+                                                <div class="alert alert-danger cursorPointer" name="installExtensionLoader">
+                                                    <strong>{vtranslate('LBL_PHP_EXTENSION_LOADER_IS_NOT_AVAIABLE', $QUALIFIED_MODULE)}</strong>
+                                                </div>
+                                            {/if}
 					</span>
 				</span>
 			</div>

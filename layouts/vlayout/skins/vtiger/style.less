@@ -1865,11 +1865,15 @@ th.htColHeader, .handsontable thead th{
 		margin-top: 2%;
 		.contentsBackground;
 		border: 1px solid @lightColorBorder;
-		padding: 15px 20px;
+		padding: 10px;
+                min-height: 230px;
 		.slimScrollDiv{
 			padding-right: 10px;
 		}
 	}
+        .extension_contents:hover {
+            border-radius: 4px;
+        }
 	.extension_header .font-x-x-large{
 		font-size: 1.5em;
 		padding-left:3px;
@@ -1882,6 +1886,16 @@ th.htColHeader, .handsontable thead th{
 	.extensionInfo{
 		padding-top: 5%;
 	}
+        .thumbnailImage {
+            height: 130px;
+            width: 130px;
+            float: right;
+        }
+}
+
+.extensionWidgetContainer:hover{
+    background: #fafafa;
+    box-shadow: 1px 1px 14px 0px #ccc;
 }
 //Module Manager - general class to apply opacity to actions
 .opacity .actions{
