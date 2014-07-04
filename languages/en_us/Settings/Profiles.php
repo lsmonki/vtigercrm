@@ -42,10 +42,10 @@ $languageStrings = array(
         'Import' => 'Import',
         'Export' => 'Export',
 	'Merge'  => 'Merge',
-        'ConvertLead' => 'ConvertLead',
-        'DuplicatesHandling' => 'DuplicatesHandling',
-        'ReceiveIncomingCalls' => 'ReceiveIncomingCalls',
-        'MakeOutgoingCalls' => 'MakeOutgoingCalls',
+        'ConvertLead' => 'Convert Lead',
+        'DuplicatesHandling' => 'Duplicates Handling',
+        'ReceiveIncomingCalls' => 'Receive Incoming Calls',
+        'MakeOutgoingCalls' => 'Make Outgoing Calls',
         'Print' => 'Print',
 );
 
