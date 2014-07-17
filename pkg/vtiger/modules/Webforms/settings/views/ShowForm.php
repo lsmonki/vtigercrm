@@ -37,6 +37,15 @@ Class Settings_Webforms_ShowForm_View extends Settings_Vtiger_IndexAjax_View {
 				}
 			}
 		}
+                
+                $isSiteUrlAppended = substr(vglobal('site_URL'), -1);
+                if($isSiteUrlAppended == '/'){
+                    $action_path = vglobal('site_URL').'modules/Webforms/capture.php';
+                    $captchaPath = vglobal('site_URL').'modules/Settings/Webforms/actions/CheckCaptcha.php';
+                } else {
+                    $action_path = vglobal('site_URL').'/modules/Webforms/capture.php';
+                    $captchaPath = vglobal('site_URL').'/modules/Settings/Webforms/actions/CheckCaptcha.php';
+                }
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_ID', $recordId);
@@ -44,8 +53,8 @@ Class Settings_Webforms_ShowForm_View extends Settings_Vtiger_IndexAjax_View {
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 		$viewer->assign('SELECTED_FIELD_MODELS_LIST', $selectedFieldsList);
-		$viewer->assign('ACTION_PATH', vglobal('site_URL').'modules/Webforms/capture.php');
-                $viewer->assign('CAPTCHA_PATH', vglobal('site_URL').'modules/Settings/Webforms/actions/CheckCaptcha.php');
+                $viewer->assign('ACTION_PATH', $action_path);
+                $viewer->assign('CAPTCHA_PATH', $captchaPath);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 
 		$viewer->view('ShowForm.tpl', $qualifiedModuleName);

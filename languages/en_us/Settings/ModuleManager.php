@@ -42,11 +42,20 @@ $languageStrings = array(
 	'LBL_IMPORTED_MODULE' => ' module was imported successfully.',
 	'LBL__IMPORTING_MODULE' => 'Importing Module',
         'LBL_EXTENSION_STORE' => 'Extension Store',
+        'LBL_ACCEPT_WITH_THE_DISCLAIMER' => 'I accept with disclaimer and would like to proceed',
+        'LBL_INSTALL_FROM_ZIP' => 'Install from Zip',
 	
 	'LBL_UPDATE_MODULE_FROM_FILE' => 'Update Module From File',
 	'LBL_UPDATED_MODULE' => ' module was updated successfully.',
 	'LBL__UPDATING_MODULE' => 'Updating Module',
         'LBL_PHP_EXTENSION_LOADER_IS_NOT_AVAIABLE' => 'Please install extension loader',
+        'LBL_IMPORT_MODULE_FROM_ZIP' => 'Import Module from Zip',
+        'LBL_UPDATE_NOW' => 'Update Now',
+        'LBL_IMPORT_NOW' => 'Import Now',
+        'LBL_OK' => 'Ok',
+        'LBL_DISCLAIMER_FOR_IMPORT_FROM_ZIP' => '<b>Disclaimer - Custom Files could put your CRM at risk</b> <br>  
+                                                 This functionality has been made available for Developers to test new modules.
+                                                    If you are installing from a file provided 3rd party, please proceed only if you trust the publisher. Custom Modules could include security vulnerabilities and overwrite system files putting your CRM at risk. The module you are about to install has not been reviewed by Vtiger.',
     
 );
 $jsLanguageStrings = array(
@@ -56,4 +65,8 @@ $jsLanguageStrings = array(
   'JS_PHP_EXTENSION_LOADER_NOT_INSTALLED' => 'Php extension loader not installed ',
   'JS_CLICK_HERE' => 'Click here ',
   'JS_FOR_INSTALLATION' => 'for installation',
+  'JS_IMPORT_SUCCESSFULL' => 'Import Successfull',
+  'JS_IMPORTED_MODULE' => ' module was imported successfully.',
+  'JS_UPDATE_SUCCESSFULL' => 'Update Successfull',
+  'JS_UPDATED_MODULE' => 'module was updated successfully',
 );

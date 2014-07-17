@@ -81,9 +81,8 @@ $languageStrings = array(
 	'Update History' => 'Histórico Atualização', 
 	'Urgent' => 'Urgente' ,
 	'Wait For Response'=> 'Aguarda Resposta', 
-);
 
-	//this label for customerportal.
+        //this label for customerportal.
 	'LBL_STATUS_CLOSED' => 'Closed',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you have to change in customerportal language file also.
 	'LBL_STATUS_UPDATE' => 'Status do Ticket foi atualizado como',
 	'LBL_COULDNOT_CLOSED' => 'O Ticket não pode ser',

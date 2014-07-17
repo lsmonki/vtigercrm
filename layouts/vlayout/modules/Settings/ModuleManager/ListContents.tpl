@@ -14,16 +14,16 @@
 		<div class="widget_header row-fluid">
 			<div class="span6"><h3>{vtranslate('LBL_MODULE_MANAGER', $QUALIFIED_MODULE)}</h3></div>
 			<div class="span6">
-				<span class="btn-toolbar pull-right margin0px">
+				<span class="btn-toolbar pull-right">
 					<span class="btn-group">
                                             {if $EXTENSION_LOADER}
 						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_USER_MODULE_URL}"'>
 							<strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
 						</button>
                                             {else}
-                                                <div class="alert alert-danger cursorPointer" name="installExtensionLoader">
+                                                <a class='alert alert-danger' onclick=window.open("http://community.vtiger.com/help/vtigercrm/php/extension-loader.html")>
                                                     <strong>{vtranslate('LBL_PHP_EXTENSION_LOADER_IS_NOT_AVAIABLE', $QUALIFIED_MODULE)}</strong>
-                                                </div>
+                                                </a>
                                             {/if}
 					</span>
 				</span>
@@ -85,5 +85,8 @@
 				</tr>
 			</table>
 		</div>
+                <div class="row-fluid" style="padding: 20px 0px;">
+                    <a href="{$IMPORT_USER_MODULE_FROM_FILE_URL}">{vtranslate('LBL_INSTALL_FROM_ZIP', $QUALIFIED_MODULE)}</a>
+                </div>
 	</div>
 {/strip}

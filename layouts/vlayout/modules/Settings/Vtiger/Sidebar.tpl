@@ -40,4 +40,9 @@
 		</div>
 	{/foreach}
 </div>
+{if function_exists('_vtextnld')}
+    <div class="row-fluid">
+        <button type="button" class="row-fluid extensionStorebtn" onclick='window.location.href="index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=step1"'>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</button>
+    </div>
+{/if}
 {/strip}

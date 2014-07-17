@@ -1,4 +1,4 @@
-<?php
+ <?php
 /*+***********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -178,6 +178,7 @@ $languageStrings = array(
 	'LBL_WORKFLOW_LIST' => 'Workflow List',
 	'LBL_WORKFLOWS_ACTIVE' => 'Workflows',
 	'LBL_WORLD_CLOCK_DISPLAY' => 'World Clock Display',
+        'LBL_EXTENSION_STORE' => 'Extension Store',
 	'LoginHistory' => 'User Login History',
 	'logoname' => 'Company Logo',
 	'ModTracker' => 'Mod Tracker',

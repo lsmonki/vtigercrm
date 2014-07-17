@@ -35,7 +35,7 @@ class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
      * Function to get the url of new module import 
      */
     public static function getUserModuleFileImportUrl() {
-            return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=importUserModuleStep1';
+            return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport&mode=importUserModuleStep1'; 
     }
 	
 	/**

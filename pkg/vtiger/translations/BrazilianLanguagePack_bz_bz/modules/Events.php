@@ -12,7 +12,7 @@
 
 $languageStrings = array(
 	'Activity Type'=> 'Tipo Atividade', 
-	'Busy' => 'Ocupado'
+	'Busy' => 'Ocupado',
 	'Call' => 'Chamada' , 
 	'Daily'=>'Dia(s)',
 	'End Date & Time'=> 'Data & Hora Final' , 

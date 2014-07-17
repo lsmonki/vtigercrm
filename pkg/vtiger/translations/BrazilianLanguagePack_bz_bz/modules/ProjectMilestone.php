@@ -8,7 +8,7 @@
  * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 19/02/2013 - www.ttcasolucoes.com.br
  ************************************************************************************/
 $languageStrings = array(
-	 LBL_ADD_RECORD' => 'Adicionar Milestone Projeto' ,
+	 'LBL_ADD_RECORD' => 'Adicionar Milestone Projeto' ,
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Detalhes Milestone Projeto',
 	'LBL_RECORDS_LIST' => 'Lista Milestones Projeto' ,
 	'Milestone Date' => 'Data Milestone', 
