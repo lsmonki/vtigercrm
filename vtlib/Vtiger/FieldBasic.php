@@ -284,6 +284,16 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Array($this->getModuleId(),
         $adb->pquery('UPDATE vtiger_field SET masseditable=? WHERE fieldid=?', Array($value, $this->id));
         self::log("Updated masseditable information of $this->name ... DONE");
     }
+    
+    /** 
+     * Set Summaryfield information for this instance. 
+     * @param Integer Summaryfield value 
+     */ 
+    function setSummaryField($value) { 
+        global $adb; 
+        $adb->pquery('UPDATE vtiger_field SET summaryfield=? WHERE fieldid=?', Array($value, $this->id)); 
+        self::log("Updated summaryfield information of $this->name ... DONE"); 
+    } 
 
     /**
      * Helper function to log messages
@@ -294,7 +304,5 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Array($this->getModuleId(),
     static function log($message, $delim = true) {
         Vtiger_Utils::Log($message, $delim);
     }
-
 }
-
 ?>

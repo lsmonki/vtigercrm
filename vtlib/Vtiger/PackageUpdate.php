@@ -287,6 +287,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 
         if(!empty($fieldnode->helpinfo)) $fieldInstance->setHelpInfo($fieldnode->helpinfo);
         if(!empty($fieldnode->masseditable)) $fieldInstance->setMassEditable($fieldnode->masseditable);
+        if(!empty($fieldnode->summaryfield)) $fieldInstance->setSummaryField($fieldnode->summaryfield); 
     }
 
     /**
@@ -311,6 +312,8 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
      */
     function update_CustomView($modulenode, $moduleInstance, $customviewnode, $filterInstance) {
         // TODO Handle filter property update
+        $filterInstance->delete(); 
+        $filterInstance = $this->import_CustomView($modulenode, $moduleInstance, $customviewnode); 
     }
 
     /**

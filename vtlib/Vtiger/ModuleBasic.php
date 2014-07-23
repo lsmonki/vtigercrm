@@ -299,9 +299,16 @@ class Vtiger_ModuleBasic {
 			if(!$this->entityidcolumn)$this->entityidcolumn= $this->basetableid;
 		}
 		if($this->entityidfield && $this->entityidcolumn) {
-			$adb->pquery("INSERT INTO vtiger_entityname(tabid, modulename, tablename, fieldname, entityidfield, entityidcolumn) VALUES(?,?,?,?,?,?)",
-				Array($this->id, $this->name, $fieldInstance->table, $fieldInstance->name, $this->entityidfield, $this->entityidcolumn));
-			self::log("Setting entity identifier ... DONE");
+                         $result=$adb->pquery("SELECT tabid FROM vtiger_entityname WHERE tablename=? AND tabid=?",array($fieldInstance->table,$this->id)); 
+                        if($adb->num_rows($result)==0){
+                            $adb->pquery("INSERT INTO vtiger_entityname(tabid, modulename, tablename, fieldname, entityidfield, entityidcolumn) VALUES(?,?,?,?,?,?)",
+                                    Array($this->id, $this->name, $fieldInstance->table, $fieldInstance->name, $this->entityidfield, $this->entityidcolumn));
+                            self::log("Setting entity identifier ... DONE");
+                        }else{ 
+                            $adb->pquery("UPDATE vtiger_entityname SET fieldname=?,entityidfield=?,entityidcolumn=? WHERE tablename=? AND tabid=?", 
+                               array($fieldInstance->name,$this->entityidfield,$this->entityidcolumn,$fieldInstance->table,$this->id)); 
+                           self::log("Updating entity identifier ... DONE"); 
+                        } 
 		}
 	}
 
