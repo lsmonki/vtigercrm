@@ -6,8 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *********************************************************************************/
-if (!defined('VTIGER_UPGRADE')) die('Invalid entry point');
+ * ******************************************************************************* */
+if (!defined('VTIGER_UPGRADE'))
+    die('Invalid entry point');
+chdir(dirname(__FILE__) . '/../../../');
+include_once 'modules/com_vtiger_workflow/VTTaskManager.inc';
+include_once 'include/utils/utils.php';
 
 if(defined('VTIGER_UPGRADE')) {
         //Collating all module package updates here
@@ -1127,310 +1131,206 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET quickcreate = ? WHER
 //Migrating PBXManager 5.4.0 to 6.x
 if(!defined('INSTALLATION_MODE')) {
     $moduleInstance = Vtiger_Module_Model::getInstance('PBXManager');
-    $blockInstance = Vtiger_Block::getInstance('LBL_CALL_INFORMATION',$moduleInstance);
+    if(!$moduleInstance){ 
+       echo '<br>Installing PBX Manager starts<br>'; 
+       installVtlibModule('PBXManager', 'packages/vtiger/mandatory/PBXManager.zip'); 
+    }else{ 
+        $result = $adb->pquery('SELECT server, port FROM vtiger_asterisk', array());
+        $server = $adb->query_result($result, 0, 'server');
 
-    $callStatusField = Vtiger_Field::getInstance('callstatus', $moduleInstance);
-    if(!$callStatusField){
-            $field = new Vtiger_Field();
-            $field->name = 'callstatus';
-            $field->label = 'Call Status';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'VARCHAR(20)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-    }
-    
-    $directionField = Vtiger_Field::getInstance('direction', $moduleInstance);
-    if(!$directionField){
-            $field = new Vtiger_Field();
-            $field->name = 'direction';
-            $field->label = 'Direction';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'VARCHAR(10)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-    }
+        $qualifiedModuleName = 'PBXManager';
+        $recordModel = Settings_PBXManager_Record_Model::getCleanInstance();
+        $recordModel->set('gateway', $qualifiedModuleName);
 
-    $startTimeField = Vtiger_Field::getInstance('starttime', $moduleInstance);
-    if(!$startTimeField){
-            $field = new Vtiger_Field();
-            $field->name = 'starttime';
-            $field->label = 'Start Time';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 70;
-            $field->typeofdata = 'DT~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'datetime';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-    }
-
-     $endTimeField = Vtiger_Field::getInstance('endtime', $moduleInstance);
-     if(!$endTimeField){
-            $field = new Vtiger_Field();
-            $field->name = 'endtime';
-            $field->label = 'End Time';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 70;
-            $field->typeofdata = 'DT~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'datetime';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-    }
-
-    $totalDuration = Vtiger_Field::getInstance('totalduration', $moduleInstance);
-     if(!$totalDuration){
-            $field = new Vtiger_Field();
-            $field->name = 'totalduration';
-            $field->label = 'Total Duration';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-
-     $billDuration = Vtiger_Field::getInstance('billduration', $moduleInstance);
-     if(!$billDuration){
-            $field = new Vtiger_Field();
-            $field->name = 'billduration';
-            $field->label = 'Bill Duration';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-
-     $recordingurl = Vtiger_Field::getInstance('recordingurl', $moduleInstance);
-     if(!$recordingurl){
-            $field = new Vtiger_Field();
-            $field->name = 'recordingurl';
-            $field->label = 'Recording URL';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 17;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(200)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-
-     $sourceuuid = Vtiger_Field::getInstance('sourceuuid', $moduleInstance);
-     if(!$sourceuuid){
-            $field = new Vtiger_Field();
-            $field->name = 'sourceuuid';
-            $field->label = 'Source UUID';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-     
-     $gateway = Vtiger_Field::getInstance('gateway', $moduleInstance);
-     if(!$gateway){
-            $field = new Vtiger_Field();
-            $field->name = 'gateway';
-            $field->label = 'Gateway';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(20)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-     
-     $customer = Vtiger_Field::getInstance('customer', $moduleInstance);
-     if(!$customer){
-            $field = new Vtiger_Field();
-            $field->name = 'customer';
-            $field->label = 'Customer';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 10;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-     
-     $userField = Vtiger_Field::getInstance('user', $moduleInstance);
-     if(!$userField){
-            $field = new Vtiger_Field();
-            $field->name = 'user';
-            $field->label = 'User';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 52;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-
-     $customerNumber = Vtiger_Field::getInstance('customernumber', $moduleInstance);
-     if(!$customerNumber){
-            $field = new Vtiger_Field();
-            $field->name = 'customernumber';
-            $field->label = 'Customer Number';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 11;
-            $field->typeofdata = 'V~M';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-     
-     $customerType = Vtiger_Field::getInstance('customertype', $moduleInstance);
-     if(!$customerType){
-            $field = new Vtiger_Field();
-            $field->name = 'customertype';
-            $field->label = 'Customer Type';
-            $field->table = 'vtiger_pbxmanager';
-            $field->uitype = 1;
-            $field->typeofdata = 'V~O';
-            $field->readonly = 1;
-            $field->displaytype = 1;
-            $field->masseditable = 1;
-            $field->quickcreate = 1;
-            $field->columntype = 'varchar(100)';
-            $field->defaultvalue = '';
-            $blockInstance->addField($field);
-     }
-
-	 $adb->pquery('ALTER TABLE vtiger_pbxmanager ADD PRIMARY KEY (pbxmanagerid)',array());
-     $adb->pquery('ALTER TABLE vtiger_pbxmanager ADD KEY (sourceuuid)',array());
-     $result = $adb->pquery('SELECT server, port FROM vtiger_asterisk',array());
-     $server = $adb->query_result($result, 0, 'server');
-
-     $qualifiedModuleName = 'PBXManager';
-     $recordModel = Settings_PBXManager_Record_Model::getCleanInstance();
-     $recordModel->set('gateway',$qualifiedModuleName);
-
-     $connector = new PBXManager_PBXManager_Connector;
-     foreach ($connector->getSettingsParameters() as $field => $type) {
-		$fieldValue = "";
-        if($field == "webappurl"){
-        	$fieldValue = "http://".$server.":";
+        $connector = new PBXManager_PBXManager_Connector;
+        foreach ($connector->getSettingsParameters() as $field => $type) {
+            $fieldValue = "";
+            if ($field == "webappurl") {
+                $fieldValue = "http://" . $server . ":";
+            }
+            if ($field == "vtigersecretkey") {
+                $fieldValue = uniqid(rand());
+            }
+            $recordModel->set($field, $fieldValue);
         }
-        if($field == "vtigersecretkey"){
-            $fieldValue = uniqid(rand());
-        }
-        $recordModel->set($field, $fieldValue);
-     }
-     $recordModel->save();
+        $recordModel->save();
 
-     $modules = array('Contacts', 'Accounts', 'Leads');
-     $recordModel = new PBXManager_Record_Model;
+        $modules = array('Contacts', 'Accounts', 'Leads');
+        $recordModel = new PBXManager_Record_Model;
 
-     foreach($modules as $module) {
-     	$moduleInstance = CRMEntity::getInstance($module);
+        foreach ($modules as $module) {
+            $moduleInstance = CRMEntity::getInstance($module);
 
-        $query = $moduleInstance->buildSearchQueryForFieldTypes(array('11'));
-        $result = $adb->pquery($query, array());
-        $rows = $adb->num_rows($result);
+            $query = $moduleInstance->buildSearchQueryForFieldTypes(array('11'));
+            $result = $adb->pquery($query, array());
+            $rows = $adb->num_rows($result);
 
-        for($i=0;$i<$rows;$i++) {
-            $row = $adb->query_result_rowdata($result, $i);
-            $crmid = $row['id'];
-            $values['crmid'] = $crmid;
-            $values['setype'] = $module;
-            foreach($row as $name => $value) {
-                if($name != 'name' && !empty($value) && $name != 'id' && !is_numeric($name) ) {
-                    $values[$name] = $value;
-                    $recordModel->receivePhoneLookUpRecord($name, $values, true);
+            for ($i = 0; $i < $rows; $i++) {
+                $row = $adb->query_result_rowdata($result, $i);
+                $crmid = $row['id'];
+                $values['crmid'] = $crmid;
+                $values['setype'] = $module;
+                foreach ($row as $name => $value) {
+                    if ($name != 'name' && !empty($value) && $name != 'id' && !is_numeric($name)) {
+                        $values[$name] = $value;
+                        $recordModel->receivePhoneLookUpRecord($name, $values, true);
+                    }
                 }
             }
-        }
-    }
+            //Data migrate from old columns to new columns in vtiger_pbxmanager 
+            $query = 'SELECT pbxmanagerid, callfrom, callto, timeofcall, status FROM vtiger_pbxmanager';
+            $result = $adb->pquery($query, array());
+            $params = array();
+            $rowCount = $adb->num_rows($result);
+            for ($i = 0; $i < $rowCount; $i++) {
+                $pbxmanagerid = $adb->query_result($result, 0, 'pbxmanagerid');
+                $callfrom = $adb->query_result($result, 0, 'callfrom');
+                $callto = $adb->query_result($result, 0, 'callto');
+                $timeofcall = $adb->query_result($result, 0, 'timeofcall');
+                $status = $adb->query_result($result, 0, 'status');
+                $customer = PBXManager_Record_Model::lookUpRelatedWithNumber($callfrom);
+                $userIdQuery = $adb->pquery('SELECT userid FROM vtiger_asteriskextensions WHERE asterisk_extension = ?', array($callto));
+                $user = $adb->query_result($userIdQuery, 0, 'userid');
+                if ($status == 'outgoing') {
+                    $callstatus = 'outbound';
+                } else if ($status == 'incoming') {
+                    $callstatus = 'inbound';
+                }
+                //Update query 
+                $adb->pquery('UPDATE vtiger_pbxmanager SET customer = ? AND user = ? AND totalduration = ? AND callstatus = ? WHERE pbxmanagerid = ?', array($customer, $user, $timeofcall, $callstatus, $pbxmanagerid));
+            }
 
-    //Data migrate from old columns to new columns in vtiger_pbxmanager
-    $query = 'SELECT pbxmanagerid, callfrom, callto, timeofcall, status FROM vtiger_pbxmanager';
-    $result = $adb->pquery($query,array());
-    $params = array();
-    $rowCount =  $adb->num_rows($result);
-    for($i=0; $i<$rowCount; $i++) {
-    	$pbxmanagerid = $adb->query_result($result, 0, 'pbxmanagerid');
-        $callfrom = $adb->query_result($result, 0, 'callfrom');
-        $callto = $adb->query_result($result, 0, 'callto');
-        $timeofcall = $adb->query_result($result, 0, 'timeofcall');
-        $status = $adb->query_result($result, 0, 'status');
-        $customer = PBXManager_Record_Model::lookUpRelatedWithNumber($callfrom);
-        $userIdQuery = $adb->pquery('SELECT userid FROM vtiger_asteriskextensions WHERE asterisk_extension = ?',array($callto)); 
-        $user = $adb->query_result($userIdQuery,0,'userid');
-        if($status == 'outgoing'){
-        	$callstatus = 'outbound';
-        } else if($status == 'incoming'){
-            $callstatus = 'inbound';
-        }
-        //Update query
-        $adb->pquery('UPDATE vtiger_pbxmanager SET customer = ? AND user = ? AND totalduration = ? AND callstatus = ? WHERE pbxmanagerid = ?',array($customer, $user, $timeofcall, $callstatus, $pbxmanagerid));
-    }
+            //Adding PBXManager PostUpdate API's 
+            //Add user extension field 
 
-    //Adding column phone_crm_extension for vtiger_users table
-    $pbxManagerInstance = new PBXManager();
-    $pbxManagerInstance->addUserExtensionField();
-    //Query to fetch asterisk extension
-    $extensionResult = $adb->pquery('SELECT userid, asterisk_extension FROM vtiger_asteriskextensions',array());
-    for($i=0; $i<$adb->num_rows($extensionResult); $i++) {
-            $userId = $adb->query_result($extensionResult, 0, 'userid');
-            $extensionNumber = $adb->query_result($extensionResult, 0, 'asterisk_extension');
-            $adb->pquery('UPDATE vtiger_users SET phone_crm_extension = ? WHERE id = ?',array($extensionNumber, $userId));
-    }
-    
-    //Related functionality api is called
+            $module = Vtiger_Module::getInstance('Users');
+            if ($module) {
+                $module->initTables();
+                $blockInstance = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $module);
+                if ($blockInstance) {
+                    $fieldInstance = new Vtiger_Field();
+                    $fieldInstance->name = 'phone_crm_extension';
+                    $fieldInstance->label = 'CRM Phone Extension';
+                    $fieldInstance->uitype = 11;
+                    $fieldInstance->typeofdata = 'V~O';
+                    $blockInstance->addField($fieldInstance);
+                }
+            }
+            echo '<br>Added PBXManager User extension field.<br>';
+            //Query to fetch asterisk extension 
+            $extensionResult = $adb->pquery('SELECT userid, asterisk_extension FROM vtiger_asteriskextensions', array());
+            for ($i = 0; $i < $adb->num_rows($extensionResult); $i++) {
+                $userId = $adb->query_result($extensionResult, 0, 'userid');
+                $extensionNumber = $adb->query_result($extensionResult, 0, 'asterisk_extension');
+                $adb->pquery('UPDATE vtiger_users SET phone_crm_extension = ? WHERE id = ?', array($extensionNumber, $userId));
+            }
+            //Add PBXManager Links 
+
+            $handlerInfo = array('path' => 'modules/PBXManager/PBXManager.php',
+                'class' => 'PBXManager',
+                'method' => 'checkLinkPermission');
+            $headerScriptLinkType = 'HEADERSCRIPT';
+            $incomingLinkLabel = 'Incoming Calls';
+            Vtiger_Link::addLink(0, $headerScriptLinkType, $incominglinkLabel, 'modules/PBXManager/resources/PBXManagerJS.js', '', '', $handlerInfo);
+            echo '<br>Added PBXManager links<br>';
+
+            //Add settings links 
+
+            $adb = PearDatabase::getInstance();
+            $integrationBlock = $adb->pquery('SELECT * FROM vtiger_settings_blocks WHERE label=?', array('LBL_INTEGRATION'));
+            $integrationBlockCount = $adb->num_rows($integrationBlock);
+
+            // To add Block 
+            if ($integrationBlockCount > 0) {
+                $blockid = $adb->query_result($integrationBlock, 0, 'blockid');
+            } else {
+                $blockid = $adb->getUniqueID('vtiger_settings_blocks');
+                $sequenceResult = $adb->pquery("SELECT max(sequence) as sequence FROM vtiger_settings_blocks", array());
+                if ($adb->num_rows($sequenceResult)) {
+                    $sequence = $adb->query_result($sequenceResult, 0, 'sequence');
+                }
+                $adb->pquery("INSERT INTO vtiger_settings_blocks(blockid, label, sequence) VALUES(?,?,?)", array($blockid, 'LBL_INTEGRATION', ++$sequence));
+            }
+
+            // To add a Field 
+            $fieldid = $adb->getUniqueID('vtiger_settings_field');
+            $adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence, active) 
+                        VALUES(?,?,?,?,?,?,?,?)", array($fieldid, $blockid, 'LBL_PBXMANAGER', '', 'PBXManager module Configuration', 'index.php?module=PBXManager&parent=Settings&view=Index', 2, 0));
+
+            echo '<br>Added PBXManager settings links<br>';
+
+            //Add module related dependencies 
+
+            $pbxmanager = Vtiger_Module::getInstance('PBXManager');
+            $dependentModules = array('Contacts', 'Leads', 'Accounts');
+            foreach ($dependentModules as $module) {
+                $moduleInstance = Vtiger_Module::getInstance($module);
+                $moduleInstance->setRelatedList($pbxmanager, "PBXManager", array(), 'get_dependents_list');
+            }
+
+            echo '<br>Added PBXManager related list<br>';
+
+            //Add action mapping 
+
+            $adb = PearDatabase::getInstance();
+            $module = new Vtiger_Module();
+            $moduleInstance = $module->getInstance('PBXManager');
+
+            //To add actionname as ReceiveIncomingcalls 
+            $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) AS actionid FROM vtiger_actionmapping', array());
+            if ($adb->num_rows($maxActionIdresult)) {
+                $actionId = $adb->query_result($maxActionIdresult, 0, 'actionid');
+            }
+            $adb->pquery('INSERT INTO vtiger_actionmapping 
+                                 (actionid, actionname, securitycheck) VALUES(?,?,?)', array($actionId, 'ReceiveIncomingCalls', 0));
+            $moduleInstance->enableTools('ReceiveIncomingcalls');
+
+            //To add actionname as MakeOutgoingCalls 
+            $maxActionIdresult = $adb->pquery('SELECT max(actionid+1) AS actionid FROM vtiger_actionmapping', array());
+            if ($adb->num_rows($maxActionIdresult)) {
+                $actionId = $adb->query_result($maxActionIdresult, 0, 'actionid');
+            }
+            $adb->pquery('INSERT INTO vtiger_actionmapping 
+                                 (actionid, actionname, securitycheck) VALUES(?,?,?)', array($actionId, 'MakeOutgoingCalls', 0));
+            $moduleInstance->enableTools('MakeOutgoingCalls');
+
+            echo '<br>Added PBXManager action mapping<br>';
+
+            //Add lookup events 
+
+            $adb = PearDatabase::getInstance();
+            $EventManager = new VTEventsManager($adb);
+            $createEvent = 'vtiger.entity.aftersave';
+            $deleteEVent = 'vtiger.entity.afterdelete';
+            $restoreEvent = 'vtiger.entity.afterrestore';
+            $batchSaveEvent = 'vtiger.batchevent.save';
+            $batchDeleteEvent = 'vtiger.batchevent.delete';
+            $handler_path = 'modules/PBXManager/PBXManagerHandler.php';
+            $className = 'PBXManagerHandler';
+            $batchEventClassName = 'PBXManagerBatchHandler';
+            $EventManager->registerHandler($createEvent, $handler_path, $className, '', '["VTEntityDelta"]');
+            $EventManager->registerHandler($deleteEVent, $handler_path, $className);
+            $EventManager->registerHandler($restoreEvent, $handler_path, $className);
+            $EventManager->registerHandler($batchSaveEvent, $handler_path, $batchEventClassName);
+            $EventManager->registerHandler($batchDeleteEvent, $handler_path, $batchEventClassName);
+
+            echo 'Added PBXManager lookup events';
+
+            //Existing Asterisk extension block removed from vtiger_users if exist 
+            $moduleInstance = Vtiger_Module_Model::getInstance('Users');
+            $fieldInstance = $moduleInstance->getField('asterisk_extension');
+
+            if (!empty($fieldInstance)) {
+                $blockId = $fieldInstance->getBlockId();
+                $fieldInstance->delete();
+            }
+
+            $fieldInstance = $moduleInstance->getField('use_asterisk');
+            if (!empty($fieldInstance)) {
+                $fieldInstance->delete();
+            }
+
+            //Related functionality api is called
     $pbxManagerInstance->addLinksForPBXManager();
     $pbxManagerInstance->registerLookupEvents();
     $pbxManagerInstance->addSettingsLinks();
@@ -1450,9 +1350,8 @@ if(!defined('INSTALLATION_MODE')) {
     if(!empty($fieldInstance)){
     	$fieldInstance->delete();
     }
-
-	$blockInstance = Vtiger_Block_Model::getInstance($blockId, $moduleInstance);
-    if ($blockInstance) $blockInstance->delete();
+}
+}
 }
 //PBXManager porting ends.
 
@@ -1466,3 +1365,9 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHE
 
 //Add Vat ID to Company Details 
 Vtiger_Utils::AddColumn('vtiger_organizationdetails', 'vatid', 'VARCHAR(100)');
+
+//Add Column trail for vtiger_tab table if not exists
+$result = $adb->pquery("SELECT column_name FROM INFORMATION_SCHEMA.columns WHERE table_name = ? AND column_name = ?",array("vtiger_tab", "trail"));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE vtiger_tab ADD trail INT(2) NOT NULL DEFAULT 0",array());
+}
