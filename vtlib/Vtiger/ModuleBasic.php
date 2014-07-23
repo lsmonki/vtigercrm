@@ -37,6 +37,7 @@ class Vtiger_ModuleBasic {
 	var $tabsequence = false;
 	var $parent = false;
 	var $customized = 0;
+    var $trail = 0;
 
 	var $isentitytype = true; // Real module or an extension?
 
@@ -77,6 +78,7 @@ class Vtiger_ModuleBasic {
 		$this->tabsequence = $valuemap['tabsequence'];
 		$this->parent = $valuemap['parent'];
 		$this->customized = $valuemap['customized'];
+                $this->trail = $valuemap['trail'];
 
 		$this->isentitytype = $valuemap['isentitytype'];
 

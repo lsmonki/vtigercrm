@@ -326,7 +326,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				Array(
 					// Include only file/folders that need to be extracted
 					'include' => Array('templates', "modules/$module", 'cron', 'languages',
-						'settings/actions', 'settings/views', 'settings/models', 'settings/templates', 'settings/connectors',
+						'settings/actions', 'settings/views', 'settings/models', 'settings/templates', 'settings/connectors', 'settings/libraries',
 						"$module.png"),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
 				),
@@ -341,6 +341,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'settings/views' => "modules/Settings/$module/views",
 					'settings/models' => "modules/Settings/$module/models",
                                         'settings/connectors' => "modules/Settings/$module/connectors",
+                                        'settings/libraries' => "modules/Settings/$module/libraries",
 					// Settings templates folder
 					'settings/templates' => "layouts/vlayout/modules/Settings/$module",
                                         //module images

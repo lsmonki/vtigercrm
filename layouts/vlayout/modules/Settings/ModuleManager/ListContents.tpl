@@ -16,15 +16,9 @@
 			<div class="span6">
 				<span class="btn-toolbar pull-right">
 					<span class="btn-group">
-                                            {if $EXTENSION_LOADER}
-						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_USER_MODULE_URL}"'>
-							<strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
-						</button>
-                                            {else}
-                                                <a class='alert alert-danger' onclick=window.open("http://community.vtiger.com/help/vtigercrm/php/extension-loader.html")>
-                                                    <strong>{vtranslate('LBL_PHP_EXTENSION_LOADER_IS_NOT_AVAIABLE', $QUALIFIED_MODULE)}</strong>
-                                                </a>
-                                            {/if}
+                                            <button class="btn" type="button" onclick='window.location.href="{if $EXTENSION_LOADER}{$IMPORT_EXTENSION_STORE_URL}{else}{$IMPORT_MODULEMANAGER_EXTENSION_STORE_URL}{/if}"'>
+                                                    <strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
+                                            </button>
 					</span>
 				</span>
 			</div>

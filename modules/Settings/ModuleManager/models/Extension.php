@@ -13,7 +13,7 @@ vimport('~~/vtlib/Vtiger/Package.php');
 
 class Settings_ModuleManager_Extension_Model extends Vtiger_Base_Model {
 
-	STATIC $EXTENSION_LOOKUP_URL = false;
+	STATIC $EXTENSION_LOOKUP_URL = 'https://marketplace.vtiger.com/api';
 
 	var $fileName;
 
@@ -135,26 +135,6 @@ class Settings_ModuleManager_Extension_Model extends Vtiger_Base_Model {
 	}
 
 	/**
-	 * Function to store the details of tracking
-	 * @return <boolean> true/false
-	 */
-	public function installTrackDetails() {
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-
-		$client = new Vtiger_Net_Client(self::getExtensionsManagerUrl() . '/api.php');
-		$client->setHeaders(array('Referer' => vglobal('site_URL')));
-
-		$params['operation'] = 'extensionTrack';
-		$params['extensionid'] = $this->getId();
-		$params['email'] = $currentUserModel->get('email1');
-		$params['lname'] = $currentUserModel->get('last_name');
-		$params['fname'] = $currentUserModel->get('first_name');
-
-		$client->doGet($params);
-		return true;
-	}
-
-	/**
 	 * Function to get instance by using XML node
 	 * @param <XML DOM> $extensionXMLNode
 	 * @return <Settings_ModuleManager_Extension_Model> $extensionModel
@@ -212,28 +192,78 @@ class Settings_ModuleManager_Extension_Model extends Vtiger_Base_Model {
 		}
 		return false;
 	}
+        
+        /**
+	 * Function to get instance by using XML node
+	 * @param <XML DOM> $extensionXMLNode
+	 * @return <Settings_ExtensionStore_Extension_Model> $extensionModel
+	 */
+	public static function getInstanceFromArray($listing) {
+		$extensionModel = new self();
+		
+		foreach ($listing as $key => $value) {
+			switch ($key) {
+                        case 'name'    :   $key = 'label'; break;
+                        case 'identifier': $key = 'name'; break;
+			case 'version' :   $key = 'pkgVersion'; break;
+			case 'minrange':   $key = 'vtigerVersion'; break;
+			case 'maxrange':   $key = 'vtigerMaxVersion'; break;
+			case 'CustomerId': $key = 'publisher'; break;
+			case 'price':      $value = $value ? $value : 'Free'; break;
+			case 'approvedon': $key = 'pubDate'; break;
+			case 'ListingFileId': 
+				if ($value) {
+					$key = 'downloadURL'; 
+					$value = self::$EXTENSION_LOOKUP_URL . '/customer/listingfiles?id='.$value;
+				}
+				break;
+                        case 'thumbnail': 
+                               if ($value) {
+                                   $key = 'thumbnailURL';
+                                   $value = str_replace('api', "_listingimages/$value", self::$EXTENSION_LOOKUP_URL);
+                               }
+                               break;
+                        }
+			$extensionModel->set($key, $value);
+		}
+
+		$label = $extensionModel->get('label');
+		if (!$label) {
+                    $extensionModel->set('label', $extensionModel->getName());
+		}
+		return $extensionModel;
+	}
 
 	/**
 	 * Function to get all availible extensions
 	 * @param <Object> $xmlContent
 	 * @return <Array> list of extensions <Settings_ModuleManager_Extension_Model>
 	 */
-	public static function getAll() {
-		$extensionModelsList = array();
-		$extensionLookUpUrl = self::getExtensionsLookUpUrl();
-		if ($extensionLookUpUrl) {
-			$clientModel = new Vtiger_Net_Client($extensionLookUpUrl);
-			$xmlContent = $clientModel->doGet();
-
-			if (!$extensionModelsList && $xmlContent && !stripos($xmlContent, "<?xml")) {
-				$extensionsXML = simplexml_load_string($xmlContent);
-				foreach ($extensionsXML->extension as $extensionXMLNode) {
-					$extensionModelsList[(string)($extensionXMLNode->id)] = self::getInstanceFromXMLNodeObject($extensionXMLNode);
-				}
-			}
-		}
-		return $extensionModelsList;
-	}
+	public static function getAll($id=null) {
+            $extensionModelsList = array();
+            $q = $id ? array('id' => $id) : null;
+            $q ? array('q' => Zend_Json::encode($q)) : null;
+            $extensionLookUpUrl = self::getExtensionsLookUpUrl().'/app/listings';
+            if ($extensionLookUpUrl) {
+                    $clientModel = new Vtiger_Net_Client($extensionLookUpUrl);
+                    $content = $clientModel->doGet($q);
+                    $json = Zend_Json::decode($content);
+                    if ($json) {
+                            if ($json['success']) {
+                                    $result = $json['result'];
+                            } else {
+                                    // TODO: Propogate back failure
+                            }
+                    }
+                    if ($result) {
+                            if (!is_array($result)) $result = array($result);
+                            foreach ($result as $listing) {
+                                    $extensionModelsList[(string)$listing['id']] = self::getInstanceFromArray($listing);
+                            }
+                    }
+            }
+            return $extensionModelsList;
+    }
 
 	/**
 	 * Function to download the file of this instance
@@ -251,5 +281,36 @@ class Settings_ModuleManager_Extension_Model extends Vtiger_Base_Model {
 			return true;
 		}
 		return false;
+	}
+        
+        /**
+	 * Function to get extensions based on search
+	 * @param <String> search term
+	 * @return <Array> list of extensions <Settings_ExtensionStore_Extension_Model>
+	 */
+	public static function getSearchedExtensions($searchTerm=null) {
+            $extensionModelsList = array();
+            $searchExtensionUrl = self::getExtensionsLookUpUrl().'/app/searchlistings';
+            $param = array('term' => $searchTerm);
+
+            if ($searchExtensionUrl) {
+                    $clientModel = new Vtiger_Net_Client($searchExtensionUrl);
+                    $content = $clientModel->doGet(array('q' => Zend_Json::encode($param)));
+                    $json = Zend_Json::decode($content);
+                    if ($json) {
+                            if ($json['success']) {
+                                    $result = $json['result'];
+                            } else {
+                                    // TODO: Propogate back failure
+                            }
+                    }
+                    if ($result) {
+                            if (!is_array($result)) $result = array($result);
+                            foreach ($result as $listing) {
+                                    $extensionModelsList[(string)$listing['id']] = self::getInstanceFromArray($listing);
+                            }
+                    }
+            }
+            return $extensionModelsList;
 	}
 }
