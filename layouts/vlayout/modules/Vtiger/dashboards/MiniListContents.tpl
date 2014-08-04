@@ -25,7 +25,7 @@
 	{foreach item=RECORD from=$MINILIST_WIDGET_RECORDS}
 	<div class="row-fluid" style="padding:5px">
 		{foreach item=FIELD from=$MINILIST_WIDGET_MODEL->getHeaders() name="minilistWidgetModelRowHeaders"}
-			<div class="span{$SPANSIZE} textOverflowEllipsis" title="{$RECORD->get($FIELD->get('name'))}">
+			<div class="span{$SPANSIZE} textOverflowEllipsis" title="{strip_tags($RECORD->get($FIELD->get('name')))}">
 				{if $smarty.foreach.minilistWidgetModelRowHeaders.last}
 					<a href="{$RECORD->getDetailViewUrl()}" class="pull-right"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS',$MODULE_NAME)}" class="icon-th-list alignMiddle"></i></a>
 				{/if}
