@@ -499,8 +499,16 @@ class QueryGenerator {
 			}
 			if($field->getFieldDataType() == 'reference') {
 				$moduleList = $this->referenceFieldInfoList[$fieldName];
-				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
-				foreach($moduleList as $module) {
+				// This is special condition as the data is not stored in the base table, 
+                                // If empty search is performed on this field then it fails to retrieve any information. 
+                                if ($fieldName == 'parent_id' && $field->getTableName() == 'vtiger_seactivityrel') {
+                                    $tableJoinMapping[$field->getTableName()] = 'LEFT JOIN';
+                                } else if ($fieldName == 'contact_id' && $field->getTableName() == 'vtiger_cntactivityrel') {
+                                    $tableJoinMapping[$field->getTableName()] = "LEFT JOIN";
+                                } else {
+                                    $tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
+                                }
+                foreach($moduleList as $module) {
 					$meta = $this->getMeta($module);
 					$nameFields = $this->moduleNameFields[$module];
 					$nameFieldList = explode(',',$nameFields);

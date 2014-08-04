@@ -33,7 +33,6 @@ if(defined('VTIGER_UPGRADE')) {
 	updateVtlibModule('SMSNotifier', "packages/vtiger/optional/SMSNotifier.zip");
         updateVtlibModule("Sweden_sv_se","packages/vtiger/optional/Sweden_sv_se.zip");
 	updateVtlibModule("Webforms","packages/vtiger/optional/Webforms.zip");
-        installVtlibModule('ExtensionStore', 'packages/vtiger/mprotected/ExtensionStore-protected.zip');
 }
 if(defined('INSTALLATION_MODE')) {
 		// Set of task to be taken care while specifically in installation mode.
@@ -41,6 +40,31 @@ if(defined('INSTALLATION_MODE')) {
 
 global $adb;
 
+ 
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('schtypeid'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD schtypeid INT(10)", array());
+}
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('schtime'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD schtime TIME", array());
+}
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('schdayofmonth'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD schdayofmonth VARCHAR(100)", array());
+}
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('schdayofweek'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD schdayofweek VARCHAR(100)", array());
+}
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('schannualdates'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD schannualdates VARCHAR(100)", array());
+}
+$result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('nexttrigger_time'));
+if (!($adb->num_rows($result))) {
+    $adb->pquery("ALTER TABLE com_vtiger_workflows ADD nexttrigger_time DATETIME", array());
+}
 //73 starts
 $query = 'SELECT 1 FROM vtiger_currencies WHERE currency_name=?';
 $result = $adb->pquery($query, array('Sudanese Pound'));
@@ -1177,6 +1201,7 @@ if(!defined('INSTALLATION_MODE')) {
                     }
                 }
             }
+        }
             //Data migrate from old columns to new columns in vtiger_pbxmanager 
             $query = 'SELECT pbxmanagerid, callfrom, callto, timeofcall, status FROM vtiger_pbxmanager';
             $result = $adb->pquery($query, array());
@@ -1329,30 +1354,16 @@ if(!defined('INSTALLATION_MODE')) {
             if (!empty($fieldInstance)) {
                 $fieldInstance->delete();
             }
-
-            //Related functionality api is called
-    $pbxManagerInstance->addLinksForPBXManager();
-    $pbxManagerInstance->registerLookupEvents();
-    $pbxManagerInstance->addSettingsLinks();
-    $pbxManagerInstance->addActionMapping();
-    $pbxManagerInstance->setModuleRelatedDependencies();
-
-    //Existing Asterisk extension block removed from vtiger_users if exist
-    $moduleInstance = Vtiger_Module_Model::getInstance('Users');
-    $fieldInstance = $moduleInstance->getField('asterisk_extension');
-
-    if(!empty($fieldInstance)){
-    	$blockId = $fieldInstance->getBlockId();
-    	$fieldInstance->delete();
-	}
-
-    $fieldInstance = $moduleInstance->getField('use_asterisk');
-    if(!empty($fieldInstance)){
-    	$fieldInstance->delete();
     }
 }
-}
-}
+
+//Hiding previous PBXManager fields. 
+$tabId = getTabid('PBXManager');
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET presence=? WHERE tabid=? AND fieldname=?;", array(1, $tabId, "callfrom"));
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET presence=? WHERE tabid=? AND fieldname=?;", array(1, $tabId, "callto"));
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET presence=? WHERE tabid=? AND fieldname=?;", array(1, $tabId, "timeofcall"));
+Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET presence=? WHERE tabid=? AND fieldname=?;", array(1, $tabId, "status"));
+echo '<br>Hiding previous PBXManager fields done.<br>'; 
 //PBXManager porting ends.
 
 //Making document module fields masseditable
@@ -1367,7 +1378,7 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHE
 Vtiger_Utils::AddColumn('vtiger_organizationdetails', 'vatid', 'VARCHAR(100)');
 
 //Add Column trail for vtiger_tab table if not exists
-$result = $adb->pquery("SELECT column_name FROM INFORMATION_SCHEMA.columns WHERE table_name = ? AND column_name = ?",array("vtiger_tab", "trail"));
+$result = $adb->pquery("SELECT trail FROM vtiger_tab",array());
 if (!($adb->num_rows($result))) {
     $adb->pquery("ALTER TABLE vtiger_tab ADD trail INT(2) NOT NULL DEFAULT 0",array());
 }
