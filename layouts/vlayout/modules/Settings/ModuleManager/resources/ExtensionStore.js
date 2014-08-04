@@ -116,6 +116,21 @@ jQuery.Class('Settings_ModuleManager_ExtensionStore_Js', {
                     thisInstance.registerEventsForImportModuleStep2(detailContentsHolder);
             });
         });
+        
+         jQuery(container).on('click','#installLoader', function(e){
+             console.log('install loader click');
+             var extensionLoaderModal = jQuery(container).find('.extensionLoader').clone(true, true);
+             extensionLoaderModal.removeClass('hide');
+             
+             var callBackFunction = function(data) {
+                 
+             };
+             app.showModalWindow(extensionLoaderModal,function(data) {
+                if(typeof callBackFunction == 'function') {
+                    callBackFunction(data);
+                }
+            }, {'width':'1000px'});
+         });
    },
    
    /**

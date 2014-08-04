@@ -20,8 +20,7 @@ Class Settings_ModuleManager_List_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('RESTRICTED_MODULES_LIST', Settings_ModuleManager_Module_Model::getActionsRestrictedModulesList());
 		$viewer->assign('IMPORT_MODULE_URL', Settings_ModuleManager_Module_Model::getNewModuleImportUrl());
                 $viewer->assign('IMPORT_EXTENSION_STORE_URL', Settings_ModuleManager_Module_Model::getExtensionStoreUrl());
-		$viewer->assign('IMPORT_MODULEMANAGER_EXTENSION_STORE_URL', Settings_ModuleManager_Module_Model::getModuleManagerExtensionStoreUrl());
-                $viewer->assign('IMPORT_USER_MODULE_FROM_FILE_URL', Settings_ModuleManager_Module_Model::getUserModuleFileImportUrl());
+		$viewer->assign('IMPORT_USER_MODULE_FROM_FILE_URL', Settings_ModuleManager_Module_Model::getUserModuleFileImportUrl());
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 

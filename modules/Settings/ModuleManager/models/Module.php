@@ -24,18 +24,12 @@ class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
 		return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport';
     }
 	
-    /**
-     * Function to get the url of new module import 
-     */
-    public static function getModuleManagerExtensionStoreUrl() {
-            return 'index.php?module=ModuleManager&parent=Settings&view=ExtensionStore';
-    }
     
     /**
      * Function to get the url of Extension store
      */
     public static function getExtensionStoreUrl() {
-        return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=step1';
+        return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=index';
     }
 
     /**

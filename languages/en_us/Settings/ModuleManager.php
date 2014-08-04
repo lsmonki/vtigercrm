@@ -56,43 +56,6 @@ $languageStrings = array(
         'LBL_DISCLAIMER_FOR_IMPORT_FROM_ZIP' => '<b>Disclaimer - Custom Files could put your CRM at risk</b> <br>  
                                                  This functionality has been made available for Developers to test new modules.
                                                     If you are installing from a file provided 3rd party, please proceed only if you trust the publisher. Custom Modules could include security vulnerabilities and overwrite system files putting your CRM at risk. The module you are about to install has not been reviewed by Vtiger.',
-    
-        
-        //Extension Store translations
-        'LBL_VTIGER_EXTENSION_STORE' => 'Vtiger Extension Store',
-        'LBL_SEARCH_FOR_AN_EXTENSION'  => 'Search for an extension..',
-        'LBL_DOWNLOADS' => 'Downloads',
-        'LBL_NO_EXTENSIONS_FOUND' => 'No Extensions Found',
-        'LBL_REGISTER_NOW' => 'Register Now',	
-        'LBL_RATINGS' => 'Ratings',
-        'LBL_DESCRIPTION' => 'Description',
-        'LBL_AUTHOR_INFORMATION' => 'Author Information',
-        'LBL_AUTHOR_NAME' => 'Author Name',
-        'LBL_PHONE' => 'Phone',
-        'LBL_EMAIL' => 'Email',
-        'LBL_SCREEN_SHOTS' => 'Screenshots',
-        'LBL_CUSTOMER_RATINGS' => 'Customer Ratings',
-        'LBL_CUSTOMER_REVIEWS' => 'Customer Reviews',
-        'LBL_WRITE_A_REVIEW' => 'Write a Review',
-        'LBL_CUSTOMER_REVIEW' => 'Customer Review',
-        'LBL_REVIEW' => 'Review',
-        'LBL_CUSTOMERS_REVIEWED' => 'Customers Reviewed',
-        'LBL_SINGLE_CUSTOMER_REVIEWED' => 'Single Customer Reviewed',
-        'LBL_INSTALLATION_FAILED' => 'Installation Failed',
-        'LBL_SUCCESSFULL_INSTALLATION' => 'Successfull Installation',
-        'LBL_MORE_DETAILS' => 'More Details',
-        'LBL_INSTALLED' => 'Installed',
-        'Install' => 'Install',
-        'Upgrade' => 'Upgrade',
-        'LBL_RATE_IT' => 'Rate it.',
-        'LBL_UNINSTALL' => 'UnInstall',
-        'LBL_LAUNCH' => 'Launch',
-    
-        'email' => 'Email',
-        'company' => 'Company',
-        'Phone' => 'Phone',
-        'Website' => 'Website',
-    
 );
 $jsLanguageStrings = array(
   'JS_ON' => 'on',

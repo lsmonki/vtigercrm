@@ -21,8 +21,8 @@ class Migration_Module_Model extends Vtiger_Module_Model {
 		return $currentVersion;
 	}
 	
-	public static function getInstance($value) {
-		return new self($value);
+	public static function getInstance() {
+		return new self();
 	}
 	
 	public function getAllowedMigrationVersions(){

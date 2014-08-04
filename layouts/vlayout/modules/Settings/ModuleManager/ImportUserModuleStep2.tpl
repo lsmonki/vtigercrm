@@ -67,7 +67,7 @@
                                                         <div class="span12">
                                                             <div style="background: #eee;padding: 20px;box-sizing: border-box;height: 150px;overflow-y: scroll;">
                                                                 <p>
-                                                                    {$MODULEIMPORT_LICENSE}
+                                                                    {$MODULEIMPORT_LICENSE|nl2br}
                                                                 </p>
                                                             </div>
                                                         </div>

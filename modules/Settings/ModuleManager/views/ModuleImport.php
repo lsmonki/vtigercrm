@@ -83,7 +83,7 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 			} else {
 				
 				// We need these information to push for Update if module is detected to be present.
-				$moduleLicence = $package->getLicense();
+				$moduleLicence = vtlib_purify($package->getLicense());
 				
 				$viewer->assign("MODULEIMPORT_FILE", $uploadFile);
 				$viewer->assign("MODULEIMPORT_TYPE", $package->type());

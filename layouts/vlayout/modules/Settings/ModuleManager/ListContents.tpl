@@ -16,7 +16,7 @@
 			<div class="span6">
 				<span class="btn-toolbar pull-right">
 					<span class="btn-group">
-                                            <button class="btn" type="button" onclick='window.location.href="{if $EXTENSION_LOADER}{$IMPORT_EXTENSION_STORE_URL}{else}{$IMPORT_MODULEMANAGER_EXTENSION_STORE_URL}{/if}"'>
+                                            <button class="btn" type="button" onclick='window.location.href="{$IMPORT_EXTENSION_STORE_URL}"'>
                                                     <strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
                                             </button>
 					</span>
