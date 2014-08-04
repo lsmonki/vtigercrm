@@ -24,7 +24,8 @@ $languageStrings = array(
     'LBL_HIDDEN' => '(REJTETT)', 
   
     // Fields
-    'Total Duration' => 'Időtartam (perc)',
+    'Total Duration' => 'IdÅ‘tartam (mp)',
+    'Bill Duration'  => 'Bill IdÅ‘tartam (mp)',
     'Recording URL' => 'Felvétel',
     
     'SINGLE_PBXManager' => 'Call Record' ,

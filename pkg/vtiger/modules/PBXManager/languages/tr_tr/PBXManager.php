@@ -24,7 +24,8 @@ $languageStrings = array(
     'LBL_HIDDEN' => '(GİZLİ)', 
   
     // Fields
-    'Total Duration' => 'Süresi (dk)',
+    'Total Duration'  => 'SÃ¼resi (sn)',
+    'Bill Duration'   => 'Bill SÃ¼re (sn)',
     'Recording URL' => 'Kayıt',
     
     'SINGLE_PBXManager' => 'Call Record' ,

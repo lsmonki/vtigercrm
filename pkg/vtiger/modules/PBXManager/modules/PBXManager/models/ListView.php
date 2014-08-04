@@ -167,16 +167,13 @@ class PBXManager_ListView_Model extends Vtiger_ListView_Model {
             //To Replace RecordingUrl by Icon
             $recordingUrl = explode('>', $listViewEntries[$recordId]['recordingurl']);
             $url = explode('<', $recordingUrl[1]);
-            if ($url[0] != '') {
+            if ($url[0] != '' && $listViewEntries[$recordId]['callstatus'] == 'completed') {
                 $listViewEntries[$recordId]['recordingurl'] = $recordingUrl[0] . '>' . '<i class="icon-volume-up"></i>' . '</a>';
             } else {
                 $listViewEntries[$recordId]['recordingurl'] = '';
             }
 
-            //Convert Duration to minutes
-            $minutes = ceil($listViewEntries[$recordId]['totalduration'] / 60);
-            $listViewEntries[$recordId]['totalduration'] = $minutes;
-
+            
             if ($listViewEntries[$recordId]['direction'] == 'outbound') {
                 if ($listViewEntries[$recordId]['callstatus'] == 'ringing' || $listViewEntries[$recordId]['callstatus'] == 'in-progress') {
                     $listViewEntries[$recordId]['callstatus'] = '<span class="label label-info"><i class="icon-arrow-up icon-white">

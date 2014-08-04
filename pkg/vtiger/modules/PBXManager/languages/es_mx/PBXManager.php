@@ -24,7 +24,8 @@ $languageStrings = array(
     'LBL_HIDDEN' => '(Oculto)', 
   
     // Fields
-    'Total Duration' => 'Duración (min)',
+    'Total Duration' => 'Duración (seg)',
+    'Bill Duration'  => 'Bill Duración (seg)',
     'Recording URL' => 'Grabación',
     
     'SINGLE_PBXManager' => 'Call Record' ,

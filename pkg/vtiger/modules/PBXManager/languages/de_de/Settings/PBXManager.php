@@ -21,7 +21,8 @@ $languageStrings = array(
     
     'webappurl'=>'Vtiger Asterisk App URL',
     'vtigersecretkey'=>'Vtiger Secret Key',
-    'context'=>'Context',
+    'outboundcontext' => 'Outbound-Kontext',
+    'outboundtrunk' => 'Outbound-Trunk',
     
 );
 

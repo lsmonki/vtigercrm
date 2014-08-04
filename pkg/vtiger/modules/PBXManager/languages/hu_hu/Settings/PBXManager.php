@@ -21,7 +21,8 @@ $languageStrings = array(
     
     'webappurl'             => 'Vtiger Asterisk alkalmazás URL',
     'vtigersecretkey'       => 'Vtiger biztonsági kulcs',
-    'context'               => 'Context',
+    'outboundcontext' => 'A kimenÅ‘ Context',
+    'outboundtrunk' => 'A kimenÅ‘ Trunk',
     
 );
 

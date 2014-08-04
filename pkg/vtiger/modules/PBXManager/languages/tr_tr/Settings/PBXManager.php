@@ -21,7 +21,8 @@ $languageStrings = array(
     
     'webappurl'=>'Vtiger yıldız Web URL',
     'vtigersecretkey'=>'Vtiger Gizli Anahtar',
-    'context'=>'Bağlam',
+    'outboundcontext' => 'Giden BaÄŸlam',
+    'outboundtrunk' => 'Giden Trunk',
     
 );
 

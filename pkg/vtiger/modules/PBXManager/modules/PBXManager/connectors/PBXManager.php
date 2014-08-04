@@ -14,11 +14,11 @@ require_once 'vtlib/Vtiger/Net/Client.php';
 
 class PBXManager_PBXManager_Connector {
 
-    private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text', 'context' => 'text', 'vtigersecretkey' => 'text');
+    private static $SETTINGS_REQUIRED_PARAMETERS = array('webappurl' => 'text','outboundcontext' => 'text', 'outboundtrunk' => 'text' , 'vtigersecretkey' => 'text');
     private static $RINGING_CALL_PARAMETERS = array('From' => 'callerIdNumber', 'SourceUUID' => 'callUUID', 'Direction' => 'Direction');
     private static $NUMBERS = array();
     private $webappurl;
-    private $context;
+    private $outboundcontext, $outboundtrunk;
     private $vtigersecretkey;
     const RINGING_TYPE = 'ringing';
     const ANSWERED_TYPE = 'answered';
@@ -49,8 +49,12 @@ class PBXManager_PBXManager_Connector {
         return $this->webappurl;
     }
 
-    public function getContext() {
-        return $this->context;
+    public function getOutboundContext() { 
+        return $this->outboundcontext; 
+    } 
+
+    public function getOutboundTrunk() { 
+        return $this->outboundtrunk; 
     }
     
     public function getVtigerSecretKey() {
@@ -72,7 +76,8 @@ class PBXManager_PBXManager_Connector {
      */
     public function setServerParameters($serverModel) {
         $this->webappurl = $serverModel->get('webappurl');
-        $this->context = $serverModel->get('context');
+        $this->outboundcontext = $serverModel->get('outboundcontext'); 
+        $this->outboundtrunk = $serverModel->get('outboundtrunk'); 
         $this->vtigersecretkey = $serverModel->get('vtigersecretkey');
     }
 
@@ -201,7 +206,7 @@ class PBXManager_PBXManager_Connector {
         // To add customer and user information in params
         $params['Customer'] = $customerInfo['id'];
         $params['CustomerType'] = $customerInfo['setype'];
-        $params['User'] = $userInfo['userId'];
+        $params['User'] = $userInfo['id']; 
 
         if ($details->get('from')) {
             $params['CustomerNumber'] = $details->get('from');
@@ -278,6 +283,7 @@ class PBXManager_PBXManager_Connector {
         $response = '<?xml version="1.0" encoding="utf-8"?>';
         $response .= '<Response><Dial><Authentication>';
         $response .= 'Success</Authentication>';
+        $numberLength = strlen($to);
         
         if(preg_match("/sip/", $to) || preg_match("/@/", $to)) {
             $to = trim($to, "/sip:/");
@@ -287,6 +293,7 @@ class PBXManager_PBXManager_Connector {
         }else {
             $response .= '<Number>SIP/';
             $response .= $to;
+            if($numberLength > 5) $response .= '@'.  $this->getOutboundTrunk(); 
             $response .= '</Number>';
         }
         
@@ -304,7 +311,7 @@ class PBXManager_PBXManager_Connector {
         $extension = $user->phone_crm_extension;
 
         $webappurl = $this->getServer();
-        $context = $this->getContext();
+        $context = $this->getOutboundContext(); 
         $vtigerSecretKey = $this->getVtigerSecretKey();
 
         $serviceURL  =  $webappurl;
@@ -316,6 +323,7 @@ class PBXManager_PBXManager_Connector {
 
         $httpClient = new Vtiger_Net_Client($serviceURL);
         $response = $httpClient->doPost(array());
+        $response = trim($response); 
 
         if ($response == "Error" || $response == "" || $response == null
             || $response == "Authentication Failure" ) {

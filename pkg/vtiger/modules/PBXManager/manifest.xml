@@ -4,6 +4,7 @@
 <name>PBXManager</name>
 <label>PBXManager</label>
 <parent>Tools</parent>
+<version>2.1</version>
 <dependencies>
 <vtiger_version>6.0.0</vtiger_version>
 <vtiger_max_version>6.*</vtiger_max_version>
@@ -17,8 +18,8 @@
   `callstatus` varchar(20) DEFAULT NULL,
   `starttime` datetime DEFAULT NULL,
   `endtime` datetime DEFAULT NULL,
-  `totalduration` varchar(100) DEFAULT NULL,
-  `billduration` varchar(100) DEFAULT NULL,
+  `totalduration` int(11) DEFAULT NULL,
+  `billduration` int(11) DEFAULT NULL,
   `recordingurl` varchar(200) DEFAULT NULL,
   `sourceuuid` varchar(100) DEFAULT NULL,
   `gateway` varchar(20) DEFAULT NULL,
@@ -69,6 +70,7 @@
 <fieldname>direction</fieldname>
 <uitype>1</uitype>
 <columnname>direction</columnname>
+<columntype>VARCHAR(10)</columntype> 
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Direction</fieldlabel>
@@ -89,6 +91,7 @@
 <fieldname>callstatus</fieldname>
 <uitype>1</uitype>
 <columnname>callstatus</columnname>
+<columntype>VARCHAR(20)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Call Status</fieldlabel>
@@ -104,11 +107,13 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+<summaryfield>1</summaryfield>
 </field>
 <field>
 <fieldname>starttime</fieldname>
 <uitype>70</uitype>
 <columnname>starttime</columnname>
+<columntype>DATETIME</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Start Time</fieldlabel>
@@ -124,11 +129,13 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+<summaryfield>1</summaryfield> 
 </field>
 <field>
 <fieldname>endtime</fieldname>
 <uitype>70</uitype>
 <columnname>endtime</columnname>
+<columntype>DATETIME</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>End Time</fieldlabel>
@@ -147,8 +154,9 @@
 </field>
 <field>
 <fieldname>totalduration</fieldname>
-<uitype>1</uitype>
+<uitype>7</uitype>
 <columnname>totalduration</columnname>
+<columntype>INT(11)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Total Duration</fieldlabel>
@@ -157,7 +165,7 @@
 <defaultvalue></defaultvalue>
 <sequence>10</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
+<typeofdata>I~O</typeofdata>
 <quickcreate>1</quickcreate>
 <quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
@@ -167,8 +175,9 @@
 </field>
 <field>
 <fieldname>billduration</fieldname>
-<uitype>1</uitype>
+<uitype>7</uitype>
 <columnname>billduration</columnname>
+<columntype>INT(11)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Bill Duration</fieldlabel>
@@ -177,7 +186,7 @@
 <defaultvalue></defaultvalue>
 <sequence>11</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
+<typeofdata>I~O</typeofdata>
 <quickcreate>1</quickcreate>
 <quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
@@ -189,6 +198,7 @@
 <fieldname>recordingurl</fieldname>
 <uitype>17</uitype>
 <columnname>recordingurl</columnname>
+<columntype>VARCHAR(200)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Recording URL</fieldlabel>
@@ -204,11 +214,13 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+<summaryfield>1</summaryfield>
 </field>
 <field>
 <fieldname>sourceuuid</fieldname>
 <uitype>1</uitype>
 <columnname>sourceuuid</columnname>
+<columntype>VARCHAR(100)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Source UUID</fieldlabel>
@@ -229,6 +241,7 @@
 <fieldname>gateway</fieldname>
 <uitype>1</uitype>
 <columnname>gateway</columnname>
+<columntype>VARCHAR(20)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Gateway</fieldlabel>
@@ -249,6 +262,7 @@
 <fieldname>customer</fieldname>
 <uitype>10</uitype>
 <columnname>customer</columnname>
+<columntype>VARCHAR(100)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Customer</fieldlabel>
@@ -264,6 +278,7 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+<summaryfield>1</summaryfield>
 <relatedmodules>
 <relatedmodule>Leads</relatedmodule>
 <relatedmodule>Contacts</relatedmodule>
@@ -274,6 +289,7 @@
 <fieldname>user</fieldname>
 <uitype>52</uitype>
 <columnname>user</columnname>
+<columntype>VARCHAR(100)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>User</fieldlabel>
@@ -289,11 +305,13 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+<summaryfield>1</summaryfield>
 </field>
 <field>
 <fieldname>customernumber</fieldname>
 <uitype>11</uitype>
 <columnname>customernumber</columnname>
+<columntype>VARCHAR(100)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Customer Number</fieldlabel>
@@ -318,6 +336,7 @@
 <fieldname>customertype</fieldname>
 <uitype>1</uitype>
 <columnname>customertype</columnname>
+<columntype>VARCHAR(100)</columntype>
 <tablename>vtiger_pbxmanager</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Customer Type</fieldlabel>
@@ -338,6 +357,7 @@
 <fieldname>assigned_user_id</fieldname>
 <uitype>53</uitype>
 <columnname>smownerid</columnname>
+<columntype>INT(19)</columntype>
 <tablename>vtiger_crmentity</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Assigned To</fieldlabel>
@@ -358,6 +378,7 @@
 <fieldname>CreatedTime</fieldname>
 <uitype>70</uitype>
 <columnname>createdtime</columnname>
+<columntype>DATETIME</columntype>
 <tablename>vtiger_crmentity</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Created Time</fieldlabel>
@@ -378,6 +399,7 @@
 <fieldname>ModifiedTime</fieldname>
 <uitype>70</uitype>
 <columnname>modifiedtime</columnname>
+<columntype>DATETIME</columntype>
 <tablename>vtiger_crmentity</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Modified Time</fieldlabel>

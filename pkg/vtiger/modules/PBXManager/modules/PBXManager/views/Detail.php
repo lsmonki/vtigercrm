@@ -29,10 +29,9 @@ class PBXManager_Detail_View extends Vtiger_Detail_View{
 		}
 		$recordModel = $this->record->getRecord();
         
-        // To convert total duration from seconds to minutes
-        if($recordModel->get('totalduration')){
-            $totalDuration = ceil($recordModel->get('totalduration')/60);
-            $recordModel->set('totalduration',$totalDuration);
+       // To show recording link only if callstatus is 'completed' 
+        if($recordModel->get('callstatus') != 'completed') { 
+            $recordModel->set('recordingurl', ''); 
         }
         return parent::preProcess($request, true);
 	}
