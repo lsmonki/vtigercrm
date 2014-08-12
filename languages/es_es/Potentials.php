@@ -49,4 +49,5 @@ $languageStrings = array(
 	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Fecha estimada de cierre',
 	'LBL_RELATED_CONTACTS' => 'Contactos Relacionados',
 	'LBL_RELATED_PRODUCTS' => 'Productos Relacionados',
+        'Potentials Won'               =>'Potenciales Ganados',
 );

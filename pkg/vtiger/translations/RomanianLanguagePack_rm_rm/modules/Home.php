@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Activitati viitoare'         , 
 	'PA'                           => 'Activitati in asteptare'     , 
         'Home'                         => 'Index'                       ,
+        'Key Metrics'                  => 'Metrics cheie',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

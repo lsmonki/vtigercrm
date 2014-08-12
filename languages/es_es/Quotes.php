@@ -28,4 +28,5 @@ $languageStrings = array(
 	'Accepted'                     => 'Aceptado',
 	'Rejected'                     => 'Rechazado',
 	'LBL_SEND_MAIL_PDF' => 'Enviar Email con PDF',
+        'Open Quotes'                  => 'Abrir Cotizaciones',
 );

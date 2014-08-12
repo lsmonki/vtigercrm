@@ -194,6 +194,8 @@ $languageStrings = array(
 	'Webforms' => 'Webforms',
 	'website' => 'Website',
         'vatid'=>'VAT ID', 
+        //Exchange Connector
+        'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
 );
 
 $jsLanguageStrings = array(

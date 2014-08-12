@@ -44,6 +44,7 @@ $languageStrings = array(
 	'Investor'=>'مستثمر',
 	'Press'=>'ضغط',
 	'Prospect'=>'احتمال',
+        'Prospect Accounts'=>'حسابات احتمال',
 	'Reseller'=>'بائع تجزئة',
 	'LBL_START_DATE' => 'تاريخ البدء',
 	'LBL_END_DATE' => 'تاريخ الانتهاء',

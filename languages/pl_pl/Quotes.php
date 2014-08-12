@@ -29,5 +29,6 @@ $languageStrings = array(
 
 	'Accepted'=>'Zaakceptowana',
 	'Rejected'=>'Odrzucona',
+        'Open Quotes'=>'Otwarte Cytaty',
 
 );

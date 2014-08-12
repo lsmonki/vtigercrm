@@ -23,6 +23,7 @@ $languageStrings = array(
 	'Rejected'                     => 'Elutasított'                  , 
 	'SINGLE_Quotes'                => 'Ajánlat'                      , 
 	'Valid Till'                   => 'Érvényes eddig: '             , 
+	'Open Quotes'                  => 'Nyitott idézetek',
 
 	//Taxes 
     'VAT'      => 'Áfa', 

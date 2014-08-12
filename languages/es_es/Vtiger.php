@@ -567,6 +567,7 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Añadir Bcc',
 	'LBL_MAX_UPLOAD_SIZE' => 'Tamaño máximo de subida es',
 	'LBL_EXCEEDED' => 'Excedido',
+        'LBL_MERGE'    => 'Fundirse',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Fecha válida',

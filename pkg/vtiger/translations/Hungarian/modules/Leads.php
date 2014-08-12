@@ -18,6 +18,7 @@ $languageStrings = array(
 	'Dr.'                          => 'Dr.'                         ,
 	'Email'                        => 'E-mail, elsődleges'          ,
 	'Hot'                          => 'Forró'                       ,
+        'Hot Leads'                    => 'Hot vezet',
 	'Industry'                     => 'Iparág'                      ,
 	'Junk Lead'                    => 'Alkalmatlan Vevőjelölt'      ,
 	'LBL_ADD_RECORD'               => 'Vevőjelölt hozzáadása'       ,

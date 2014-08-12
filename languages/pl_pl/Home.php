@@ -23,4 +23,6 @@ $languageStrings = array(
 	'UA' => 'Nadchodzące wydarzenia',
 	'PA' => 'Oczekujące wydarzenia',
 	'Home' => 'Pulpit',
+        'Key Metrics'                  => 'kluczowych wskaźników',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

@@ -344,7 +344,7 @@ $languageStrings = array(
 	'Leads by Source'              => 'Leads per Source'            , 
 	'Leads by Industry'            => 'Leads per Industrie'         , 
 	'Tickets by Status'            => 'Tickets by Status'           , // TODO: Review
-	'Open Tickets'                 => 'Open Tickets'                , // TODO: Review
+	'Open Tickets'                 => 'Open Kaarten'                , // TODO: Review
 	'LBL_EXPORT_ALL_DATA'          => 'Exporteer alle gegevens'     , 
 	'LBL_EXPORT_DATA_IN_CURRENT_PAGE' => 'Exporteer gegevens in huidige pagina', 
 	'LBL_EXPORT_SELECTED_RECORDS'  => 'Exporteer Geselecteerde Records', 
@@ -553,6 +553,7 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+        'LBL_MERGE'                    => 'Samensmelten',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'geldige Date',

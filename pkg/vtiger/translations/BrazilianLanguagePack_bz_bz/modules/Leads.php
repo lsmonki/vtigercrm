@@ -18,6 +18,7 @@ $languageStrings = array(
 	'Dr.'=> 'Dr.', 
 	'Email' => 'E-mail',
 	'Hot'=> 'Quente', 
+ 	'Hot Leads'                    => 'Leads quentes',
 	'Industry' => 'Atividade' , 
 	'Junk Lead'=> 'Descartado', 
 	'LBL_ADD_RECORD' => 'Adicionar Lead',

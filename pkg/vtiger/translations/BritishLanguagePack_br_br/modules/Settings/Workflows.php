@@ -11,6 +11,7 @@ $languageStrings = array(
 	'LBL_NEW'                      => 'New'                         , // TODO: Review
 	'LBL_WORKFLOW'                 => 'Workflow'                    , // TODO: Review
 	'LBL_CREATING_WORKFLOW'        => 'Creating WorkFlow'           , // TODO: Review
+	'LBL_EDITING_WORKFLOW'         => 'Editing Workflow'            ,
 	'LBL_NEXT'                     => 'Next'                        , // TODO: Review
 	'LBL_STEP_1'                   => 'Step 1'                      , // TODO: Review
 	'LBL_ENTER_BASIC_DETAILS_OF_THE_WORKFLOW' => 'Enter basic details of the Workflow', // TODO: Review

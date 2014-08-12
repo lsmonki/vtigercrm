@@ -43,4 +43,5 @@ $languageStrings = array(
 	'Top Potentials' => 'Principais Oportunidades' ,
 	'Total Revenue'=> 'Receita por Vendedor',
 	'Value Proposition'=> 'Proposta Valor', 
+	'Potentials Won'               => 'Potenciais Ganhou',
 );

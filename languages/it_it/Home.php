@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Prossimi Eventi'             , 
 	'PA'                           => 'Eventi Pendenti'             , 
         'Home'                         => 'Domestico'                         ,
+        'Key Metrics'                  => 'Metriche chiave',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

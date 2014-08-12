@@ -553,6 +553,7 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+        'LBL_MERGE'                    => 'Merge',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Valid Date',

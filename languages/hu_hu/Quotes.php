@@ -22,7 +22,8 @@ $languageStrings = array(
 	'Quote Stage'                  => 'Ajánlati fázis'               , 
 	'Rejected'                     => 'Elutasított'                  , 
 	'SINGLE_Quotes'                => 'Ajánlat'                      , 
-	'Valid Till'                   => 'Érvényes eddig: '             , 
+	'Valid Till'                   => 'Érvényes eddig: '             ,
+        'Open Quotes'                  => 'Nyitott idézetek',
 );
 
 $jsLanguageStrings = array(

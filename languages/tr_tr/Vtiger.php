@@ -344,7 +344,7 @@ $languageStrings = array(
 	'Leads by Source'              => 'Leads by Source'             , 
 	'Leads by Industry'            => 'Leads by Industry'           , 
 	'Tickets by Status'            => 'Tickets by Status'           , // TODO: Review
-	'Open Tickets'                 => 'Open Tickets'                , // TODO: Review
+	'Open Tickets'                 => 'Açık Biletleri'                , // TODO: Review
 	'LBL_EXPORT_ALL_DATA'          => 'Tüm Verileri İhraç et'    , 
 	'LBL_EXPORT_DATA_IN_CURRENT_PAGE' => 'Bu sayfadaki verileri İhraç et', 
 	'LBL_EXPORT_SELECTED_RECORDS'  => 'Export Selected Records'     , 
@@ -553,6 +553,7 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+        'LBL_MERGE'                    => 'birleştirmek',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'geçerli tarihi',

@@ -43,4 +43,5 @@ $languageStrings = array(
 	'Top Potentials'               => 'Legfontosabb Lehetőségek'  ,
 	'Total Revenue'                => 'Bevétel értékesítők szerint',
 	'Value Proposition'            => 'Érték hozzárendelés'       ,
+        'Potentials Won'               => 'Lehetőségei Nyert',
 );

@@ -28,6 +28,7 @@ $languageStrings = array(
 	'Accepted'                     => 'Aceptado',
 	'Rejected'                     => 'Rechazado',
 	'LBL_SEND_MAIL_PDF' => 'Enviar Email con PDF',
+       'Open Quotes'                  => 'Abrir Cotizaciones',
 	//Translation for product not found
 	'LBL_THIS' => 'Este',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ha sido eliminado de la aplicación. Por favor, elimina o sustituye este artículo.',

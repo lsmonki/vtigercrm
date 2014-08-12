@@ -36,6 +36,7 @@ $languageStrings = array(
 	'Phone'                        => 'Telefon'                     ,
 	'Press'                        => 'Sajtó'            			,
 	'Prospect'                     => 'Vevőjelölt'     				,
+        'Prospect Accounts'            => 'Prospect számlák',
 	'Reseller'                     => 'Viszonteladó'       			,
 	'SIC Code'                     => 'TEÁOR'              			,
 	'SINGLE_Accounts'              => 'Cég'              			,

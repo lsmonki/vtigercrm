@@ -20,6 +20,7 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Encargado del Inventario'    , 
 	'Accepted'                     => 'Aceptado'                    , 
 	'Rejected'                     => 'Rechazado'                   , 
+	'Open Quotes'                  => 'Abrir Cotizaciones',
     
         //Taxes 
         'VAT'      => 'IVA', 

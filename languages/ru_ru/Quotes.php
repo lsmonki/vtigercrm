@@ -19,5 +19,6 @@ $languageStrings = array(
 	'Valid Till'                   => 'Действительно до', 
 	'Inventory Manager'            => 'Ответственный за склад', 
 	'Accepted'                     => 'Принято'              , 
-	'Rejected'                     => 'Отклонено'          , 
+	'Rejected'                     => 'Отклонено'          ,
+        'Open Quotes'                  => 'Открытые Цитаты',
 );

@@ -12,7 +12,7 @@ $languageStrings = array(
 	'PLVT'                         => 'Top Affaires'                , 
 	'QLTQ'                         => 'Top Devis'                   , 
 	'CVLVT'                        => 'Indicateurs Clé'            , 
-	'HLT'                          => 'Top Support Tickets'         , 
+	'HLT'                          => 'Top tickets de support'         , 
 	'GRT'                          => 'Mes assignations de groupe'  , 
 	'OLTSO'                        => 'Top Bons de commande'        , 
 	'ILTI'                         => 'Top Factures'                , 
@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Activités à venir'         , 
 	'PA'                           => 'En attente'                  , 
         'Home'                         => 'Accueil'                     ,
+        'Key Metrics'                  => 'Indicateurs Clés',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

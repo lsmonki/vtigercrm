@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Nieuwe Afspraken'            , 
 	'PA'                           => 'Afwachtende Afspraken'       , 
         'Home'                         => 'Huis'                        ,
+        'Key Metrics'                  => 'Key Metrics',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

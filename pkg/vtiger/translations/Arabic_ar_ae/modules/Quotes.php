@@ -38,7 +38,8 @@ $languageStrings = array(
         //Taxes 
         'VAT'=>'ضريبة', 
         'Service'=>'خدمة', 
-        'Sales'=>'مبيعات'
+        'Sales'=>'مبيعات',
+        'Open Quotes'=>'ونقلت مفتوحة',
 
 );
 

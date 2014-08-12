@@ -344,7 +344,7 @@ $languageStrings = array(
 	'Leads by Source'              => 'Leads by Source'             , 
 	'Leads by Industry'            => 'Leads by Industry'           , 
 	'Tickets by Status'            => 'Tickets by Status'           , // TODO: Review
-	'Open Tickets'                 => 'Open Tickets'                , // TODO: Review
+	'Open Tickets'                 => 'Biglietti Aperto'                , // TODO: Review
 	'LBL_EXPORT_ALL_DATA'          => 'Export di tutti i dati'      , 
 	'LBL_EXPORT_DATA_IN_CURRENT_PAGE' => 'Export dei dati della pagina corrente', 
 	'LBL_EXPORT_SELECTED_RECORDS'  => 'Export Selected Records'     , 
@@ -553,6 +553,7 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
+        'LBL_MERGE'                    => 'Unire',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Data valida',

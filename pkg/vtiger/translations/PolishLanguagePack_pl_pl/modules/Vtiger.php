@@ -637,6 +637,8 @@ $languageStrings = array(
     'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Maksymalnie 160 znaków są dozwolone dla wiadomości tekstowej',
     'LBL_HIDE_COMPLETED_EVENTS' => 'Ukryj Wykonane Wydarzenia Kalendarium',
     'LBL_SETUP_WEBFORMS' => 'Konfiguracja formularzy WWW',
+    
+    'LBL_MERGE'                    => 'Łączyć',
 	
 );
 

@@ -55,4 +55,5 @@ $languageStrings = array(
 	'Web Site'=>'Website',
 	'Word of mouth'=>'Boca-boca',
 	'Other'=>'Outro',
+        'Potentials Won'               => 'Potenciais Ganhou',
 );

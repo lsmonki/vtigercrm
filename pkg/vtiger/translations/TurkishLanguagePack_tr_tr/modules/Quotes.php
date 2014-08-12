@@ -19,7 +19,8 @@ $languageStrings = array(
 	'Valid Till'                   => 'Geçerlilik Tarihi'          , 
 	'Inventory Manager'            => 'Stok Yöneticisi'            , 
 	'Accepted'                     => 'Kabul Edildi'                , 
-	'Rejected'                     => 'İptal'                      , 
+	'Rejected'                     => 'İptal'                      ,
+	 'Open Quotes'                  =>'Açık Kurları', 
     
         //Taxes 
         'VAT'      => 'KDV', 

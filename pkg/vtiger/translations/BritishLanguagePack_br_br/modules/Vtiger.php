@@ -243,7 +243,8 @@ $languageStrings = array(
 	'LBL_ALL'                      => 'All'                         , 
 	'LBL_UPDATED'                  => 'Updated'                     , 
 	'LBL_FROM'                     => 'from'                        , 
-	'LBL_TO'                       => 'to'                          , 
+	'LBL_TO'                       => 'to'                          ,
+        'LBL_to'                       => 'to'                       ,
 	'LBL_ON'                       => 'on'                          , 
 	'LBL_OF'                       => 'of'                          , 
 	'LBL_BY'                       => 'By '                         , 
@@ -553,7 +554,7 @@ $languageStrings = array(
 	'LBL_ADD_BCC'                  => 'Add Bcc'                     , // TODO: Review
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
-	
+	'LBL_MERGE'                    => 'Merge',
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Valid Date',
 	'Phone: ' => 'Phone: ',

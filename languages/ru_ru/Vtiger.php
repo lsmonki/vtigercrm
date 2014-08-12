@@ -606,7 +606,9 @@ $languageStrings = array(
     'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Максимальные 160 символов разрешено для текстового сообщения',
     'LBL_MARK_AS_HELD' => 'Марк как предназначенные',
     'LBL_HIDE_COMPLETED_EVENTS' => 'Скрыть Завершенные Календарь событий',
-    'LBL_SETUP_WEBFORMS'                 => 'Настройка WebForms'              , 
+    'LBL_SETUP_WEBFORMS'                 => 'Настройка WebForms'              ,
+    
+    'LBL_MERGE'                    => 'Слияние',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Пожалуйста, настроить параметры исходящей сервера на странице настроек', 

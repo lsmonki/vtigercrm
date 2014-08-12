@@ -54,4 +54,5 @@ $languageStrings = array(
 	//widgets headers
 	'LBL_RELATED_CONTACTS' => 'جهات الاتصال المتعلقة',
 	'LBL_RELATED_PRODUCTS' => 'المنتجات المتعلقة',
+        'Potentials Won'               => 'إمكانات فاز',
 );

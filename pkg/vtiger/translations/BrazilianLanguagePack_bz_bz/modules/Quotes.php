@@ -23,6 +23,7 @@ $languageStrings = array(
 	'Rejected' => 'Rejeitada',
 	'SINGLE_Quotes'=> 'Cotação' ,
 	'Valid Till' => 'Válida até', 
+	 'Open Quotes'                  => 'Abertas Cotações',
 );
 
 $jsLanguageStrings = array(

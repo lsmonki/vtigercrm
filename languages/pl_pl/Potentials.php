@@ -50,5 +50,6 @@ $languageStrings = array(
 	'--None--'=>'-- Brak --',
 	'Existing Business'=>'Dla istniejącego klienta',
 	'New Business'=>'Dla nowego klienta',
-	'LBL_EXPECTED_CLOSE_DATE_ON' => 'Oczekuje się, że zakończy się'
+	'LBL_EXPECTED_CLOSE_DATE_ON' => 'Oczekuje się, że zakończy się',
+        'Potentials Won'               => 'Potencjały Wygrane',
 );

@@ -40,5 +40,6 @@ $languageStrings = array(
 	'New Business'                 => 'Новый Бизнес'     , 
 	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Ожидается, будет завершена на'        , 
 	'LBL_RELATED_CONTACTS'         => 'Связанные Контакты'            , 
-	'LBL_RELATED_PRODUCTS'         => 'Похожие продукты'            , 
+	'LBL_RELATED_PRODUCTS'         => 'Похожие продукты'            ,
+        'Potentials Won'               => 'Потенциалы Выигранные',
 );

@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Ближайшие События', // KEY 5.x: LBL_UPCOMING_EVENTS
 	'PA'                           => 'События в процессе', // KEY 5.x: LBL_PENDING_EVENTS
         'Home'                         => 'Главная',
+        'Key Metrics'                  => 'Ключевых показателей',
+	'Tag Cloud'                    => 'Облако тегов',
 );

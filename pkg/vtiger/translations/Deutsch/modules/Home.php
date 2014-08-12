@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'aktuelle Aktivitäten'       , 
 	'PA'                           => 'unerledigte Aktivitäten'    , 
         'Home'                         => 'Startseite'                  ,
+	'Key Metrics'                  => 'Key Metrics',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

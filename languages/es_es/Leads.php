@@ -39,6 +39,7 @@ $languageStrings = array(
 	'Contact in Future'            => 'Contactar más adelante',
 	'Contacted'                    => 'Contactado',
 	'Hot'                          => 'Caliente',
+        'Hot Leads'                    => 'Leads calientes',
 	'Junk Lead'                    => 'Pre-Contacto Basura',
 	'Lost Lead'                    => 'Pre-Contacto Fallido',
 	'Not Contacted'                => 'No Contactado',

@@ -35,6 +35,7 @@ $languageStrings = array(
 	'Phone' => 'Telefone',
 	'Press'=> 'Imprensa', 
 	'Prospect' => 'Prospect', 
+	'Prospect Accounts'            => 'Contas Prospect',
 	'Reseller' => 'Revendedor',
 	'SIC Code' => 'Cod CNAE', 
 	'SINGLE_Accounts' => 'Organização' ,

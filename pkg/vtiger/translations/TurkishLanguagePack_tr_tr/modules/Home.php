@@ -22,4 +22,6 @@ $languageStrings = array(
 	'UA'                           => 'Gelecek İşler'             , 
 	'PA'                           => 'Bekleyen İşler'            , 
         'Home'                         => 'Ana Sayfa'                 ,
+        'Key Metrics'                  => 'Anahtar Ölçütleri',
+	'Tag Cloud'                    => 'Etiket Bulutu',
 );
