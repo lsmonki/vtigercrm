@@ -198,7 +198,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
-                <field name="trail" type="I"  size="2">
+                <field name="trial" type="I"  size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -6912,7 +6912,7 @@
                 <field name="userid" type="I" size="19" />
                 <field name="color" type="C" size="50" />
                 <field name="visible" type="I" size="19" >
-                    <default value="0" />
+                    <default value="1" />
                 </field>
 
 		<opt platform="mysql">Engine=InnoDB</opt>
