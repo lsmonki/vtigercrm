@@ -2284,7 +2284,7 @@ Should any need arise,please do give us a call.';
 			foreach ($uitypes as $uitype) {
 				$result = $this->db->pquery("insert into vtiger_ws_fieldtype(uitype,fieldtype) values(?,?)", array($uitype, $type));
 				if (!is_object($result)) {
-					"Query for fieldtype details($uitype:uitype,$type:fieldtype)";
+					echo "Query for fieldtype details($uitype:uitype,$type:fieldtype)";
 				}
 			}
 		}
