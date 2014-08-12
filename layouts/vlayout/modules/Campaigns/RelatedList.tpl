@@ -114,11 +114,11 @@
         <table class="table table-bordered listViewEntriesTable">
             <thead>
                 <tr class="listViewHeaders">
-                    <th width="4%" class="{$WIDTHTYPE}">
+                    <th width="4%">
                         <input type="checkbox" id="listViewEntriesMainCheckBox"/>
                     </th>
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-                        <th nowrap class="{$WIDTHTYPE}">
+                        <th nowrap>
                             {if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
                                 <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
                             {elseif $HEADER_FIELD->get('column') eq 'time_start'}
@@ -129,7 +129,7 @@
                             {/if}
                         </th>
                     {/foreach}
-                    <th nowrap colspan="2" class="{$WIDTHTYPE}">
+                    <th nowrap colspan="2">
                         <a href="javascript:void(0);" class="noSorting">{vtranslate('Status', $RELATED_MODULE->get('name'))}</a>
                     </th>
                 </tr>

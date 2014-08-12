@@ -81,7 +81,7 @@
             <thead>
                 <tr class="listViewHeaders">
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-                        <th {if $HEADER_FIELD@last} colspan="2" {/if} nowrap class="{$WIDTHTYPE}">
+                        <th {if $HEADER_FIELD@last} colspan="2" {/if} nowrap>
                             {if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
                                 <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
                             {elseif $HEADER_FIELD->get('column') eq 'time_start'}

@@ -897,8 +897,11 @@ hr {
   margin-top: 3px;
 }
 .gridster ul li.dashboardWidget .dashboardWidgetContent {
-  padding: 20px 10px;
+  padding: 10px 0;
   line-height: 20px;
+}
+.gridster ul li.dashboardWidget .dashboardWidgetContent .dashboard_notebookWidget_viewarea { 
+  height: 200px; 
 }
 .gridster ul li.dashboardWidget .widgeticons {
   min-width: 50px;
@@ -1426,6 +1429,7 @@ td.fieldValue .input-append {
   vertical-align: middle;
   cursor: pointer;
   overflow: visible;
+  padding:5px;
 }
 .listViewEntriesTable td.listViewEntryValue:hover .actionImages,
 .listViewEntries td:hover .actionImages,
@@ -1728,7 +1732,6 @@ th.htColHeader,
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   word-wrap: break-word;
-  min-height: 350px;
   padding: 1% 3%;
 }
 #settingsShortCutsContainer .moduleBlock {
@@ -3238,4 +3241,55 @@ background-position: 0 -13px;
     width: 65%;
     -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
     transition: width 1s;
+}
+.banner-container{
+    border-bottom: 1px solid #FFFFFF;
+    box-shadow: 0 1px 3px 0 #888888;
+    box-sizing: border-box;
+}
+
+.banner{
+    margin: 0px 90px;
+}
+
+.bx-wrapper{
+    margin: 0 auto 35px !important;
+    padding-top: 17px !important;
+}
+.bx-wrapper li a{
+    display: block;
+}
+.bx-wrapper a img{
+    height: 150px;
+    width: 1500px;
+    margin: 0 auto;
+}
+
+.wide, 
+.table td.wide, 
+.listViewEntries td.wide, 
+td.listViewEntryValue.wide { 
+     padding: 8px!important; 
+} 
+.medium, 
+.table td.medium, 
+.listViewEntries td.medium, 
+td.listViewEntryValue.medium { 
+    padding: 5px 6px!important; 
+} 
+.narrow, 
+.table td.narrow, 
+.listViewEntries td.narrow, 
+td.listViewEntryValue.narrow { 
+    padding: 2px 4px!important; 
+} 
+.table thead th.narrow { 
+    vertical-align: middle; 
+} 
+td.listViewEntryValue .row-fluid input { 
+    padding: 0; 
+    margin-bottom: 0; 
+} 
+.listViewContentDiv { 
+    position: relative; 
 }

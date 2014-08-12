@@ -783,7 +783,7 @@ hr{
 				}
 			}
 		.dashboardWidgetContent{
-			padding: 20px 10px;
+			padding: 10px 0;
 			line-height: 20px;
 		}
 		.widgeticons {
@@ -1315,6 +1315,7 @@ td.fieldValue input, td.fieldValue .input-append{
 	vertical-align: middle;
 	cursor: pointer;
 	overflow: visible;
+        padding:5px;
 	&:hover{
 		.actionImages, .actions{
 			.fullOpacity;
@@ -3127,3 +3128,32 @@ textarea{
     color: red;
     text-align: center;
 }
+
+.wide, 
+.table td.wide, 
+.listViewEntries td.wide, 
+td.listViewEntryValue.wide { 
+     padding: 8px!important; 
+} 
+.medium, 
+.table td.medium, 
+.listViewEntries td.medium, 
+td.listViewEntryValue.medium { 
+    padding: 5px 6px!important; 
+} 
+.narrow, 
+.table td.narrow, 
+.listViewEntries td.narrow, 
+td.listViewEntryValue.narrow { 
+    padding: 2px 4px!important; 
+} 
+.table thead th.narrow { 
+    vertical-align: middle; 
+} 
+td.listViewEntryValue .row-fluid input { 
+    padding: 0; 
+    margin-bottom: 0; 
+} 
+.listViewContentDiv { 
+    position: relative; 
+} 

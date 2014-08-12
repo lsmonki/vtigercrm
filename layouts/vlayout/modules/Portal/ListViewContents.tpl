@@ -61,20 +61,20 @@
                     <table class="table table-bordered listViewEntriesTable">
                         <thead>
                             <tr class="listViewHeaders">
-                                <th width="5%" class="{$WIDTHTYPE}">
+                                <th width="5%">
                                     <input type="checkbox" id="listViewEntriesMainCheckBox" />
                                 </th>
-                                <th nowrap class="{$WIDTHTYPE}">
+                                <th nowrap>
                                     <a href="javascript:void(0);" id="portalname" class="portalListViewHeader" 
                                        data-nextsortorderval="{if $COLUMN_NAME eq 'portalname'}{$NEXT_SORT_ORDER}{else}ASC{/if}">{vtranslate('LBL_BOOKMARK_NAME', $MODULE)}
                                         &nbsp;&nbsp;{if $COLUMN_NAME eq 'portalname'}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
                                 </th>
-                                <th nowrap class="{$WIDTHTYPE}">
+                                <th nowrap>
                                     <a href="javascript:void(0);" id="portalurl" class="portalListViewHeader"
                                        data-nextsortorderval="{if $COLUMN_NAME eq 'portalurl'}{$NEXT_SORT_ORDER}{else}ASC{/if}">{vtranslate('LBL_BOOKMARK_URL', $MODULE)}
                                         &nbsp;&nbsp;{if $COLUMN_NAME eq 'portalurl'}<img class="{$SORT_IMAGE} icon-white">{/if}</a></a>
                                 </th>
-                                <th nowrap class="{$WIDTHTYPE}">
+                                <th nowrap>
                                     <a href="javascript:void(0);" id="createdtime" class="portalListViewHeader"
                                        data-nextsortorderval="{if $COLUMN_NAME eq 'createdtime'}{$NEXT_SORT_ORDER}{else}ASC{/if}">{vtranslate('LBL_CREATED_ON', $MODULE)}
                                         &nbsp;&nbsp;{if $COLUMN_NAME eq 'createdtime'}<img class="{$SORT_IMAGE} icon-white">{/if}</a></a>
