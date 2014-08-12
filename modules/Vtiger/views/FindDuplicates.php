@@ -110,7 +110,7 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$pagingModel->calculatePageRange($dummyListEntries);
 
 		$viewer->assign('IGNORE_EMPTY', $ignoreEmpty);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT', $rowCount);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT', $rowCount);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('PAGING_MODEL', $pagingModel);

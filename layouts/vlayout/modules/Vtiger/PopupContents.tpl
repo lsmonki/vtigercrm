@@ -12,7 +12,7 @@
 {strip}
 <input type='hidden' id='pageNumber' value="{$PAGE_NUMBER}">
 <input type='hidden' id='pageLimit' value="{$PAGING_MODEL->getPageLimit()}">
-<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTIRES_COUNT}">
+<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTRIES_COUNT}">
 <input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
@@ -80,7 +80,7 @@
 </div>
 
 	<!--added this div for Temporarily -->
-{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 	<div class="row-fluid">
 		<div class="emptyRecordsDiv">{vtranslate('LBL_NO', $MODULE)} {vtranslate($RELATED_MODULE, $RELATED_MODULE)} {vtranslate('LBL_FOUND', $MODULE)}.</div>
 	</div>

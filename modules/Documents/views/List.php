@@ -127,7 +127,7 @@ class Documents_List_View extends Vtiger_List_View {
 		$viewer->assign('COLUMN_NAME',$orderBy);
 		$viewer->assign('FOLDER_NAME',$request->get('folder_value'));
 
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 

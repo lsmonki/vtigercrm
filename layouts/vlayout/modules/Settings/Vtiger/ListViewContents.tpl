@@ -20,7 +20,7 @@
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 <input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
 <input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
-<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
+<input type="hidden" value="{$LISTVIEW_ENTRIES_COUNT}" id="noOfEntries">
 
 <div class="listViewEntriesDiv" style='overflow-x:auto;'>
 	<span class="listViewLoadingImageBlock hide modal" id="loadingListViewModal">
@@ -82,7 +82,7 @@
 	</table>
 
 	<!--added this div for Temporarily -->
-	{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+	{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 	<table class="emptyRecordsDiv">
 		<tbody>
 			<tr>

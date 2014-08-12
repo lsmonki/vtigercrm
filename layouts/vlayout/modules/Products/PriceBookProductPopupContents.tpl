@@ -66,13 +66,13 @@
 		</table>
 	</div>
 	<!--added this div for Temporarily -->
-	{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+	{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 		<div class="row-fluid">
 			<div class="emptyRecordsDiv">{vtranslate('LBL_NO', $MODULE_NAME)} {vtranslate($MODULE_NAME, $MODULE_NAME)} {vtranslate('LBL_FOUND', $MODULE_NAME)}.</div>
 		</div>
 	{/if}
 </div>
-{if $LISTVIEW_ENTIRES_COUNT neq '0'}
+{if $LISTVIEW_ENTRIES_COUNT neq '0'}
     <div class="clearfix form-actions" style="border: 1px solid #DDDDDD;">
 	<a class="cancelLink pull-right">{vtranslate('LBL_CANCEL', $MODULE)}</a>
 	<button class="btn addButton select pull-right"><i class="icon-plus"></i>&nbsp;<strong>{vtranslate('LBL_ADD_TO_PRICEBOOKS',$MODULE)}</strong></button>

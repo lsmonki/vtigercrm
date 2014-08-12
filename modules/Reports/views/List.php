@@ -75,7 +75,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$viewer->assign('VIEWNAME',$folderId);
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
 		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			if(!$this->listViewCount){
@@ -155,7 +155,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$noOfEntries = count($this->listViewEntries);
 
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('MODULE_MODEL', $moduleModel);
