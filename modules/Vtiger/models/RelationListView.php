@@ -373,7 +373,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				if(in_array($relatedModuleName, $refredModulesOfReferenceField)){
 					$relationModelClassName = Vtiger_Loader::getComponentClassName('Model', 'Relation', $parentModuleModel->getName());
 					$relationModel = new $relationModelClassName();
-					$relationModel->setParetModuleModel($parentModuleModel)->setRelationModuleModel($relatedModuleModel);
+					$relationModel->setParentModuleModel($parentModuleModel)->setRelationModuleModel($relatedModuleModel);
 					$parentModuleModel->set('directRelatedFieldName',$fieldModel->get('column'));
 				}
 			}
