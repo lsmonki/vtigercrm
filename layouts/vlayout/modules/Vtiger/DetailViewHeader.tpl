@@ -82,5 +82,8 @@
 		<div class="detailViewInfo row-fluid">
 			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if} {if !empty($DETAILVIEW_LINKS['DETAILVIEWTAB']) || !empty($DETAILVIEW_LINKS['DETAILVIEWRELATED']) } details {/if}">
 				<form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
+                                    {if !empty($PICKLIST_DEPENDENCY_DATASOURCE)} 
+                                        <input type="hidden" name="picklistDependency" value="{Vtiger_Util_Helper::toSafeHTML($PICKLIST_DEPENDENCY_DATASOURCE)}"> 
+                                    {/if} 
 					<div class="contents">
 {/strip}

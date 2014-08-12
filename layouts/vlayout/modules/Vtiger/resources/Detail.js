@@ -200,9 +200,11 @@ jQuery.Class("Vtiger_Detail_Js",{
 	}
 
 },{
-
+        targetPicklistChange : false,  
+ 	targetPicklist : false,
 	detailViewContentHolder : false,
 	detailViewForm : false,
+        detailViewDetailsTabLabel : 'LBL_RECORD_DETAILS',
 	detailViewSummaryTabLabel : 'LBL_RECORD_SUMMARY',
 	detailViewRecentCommentsTabLabel : 'ModComments',
 	detailViewRecentActivitiesTabLabel : 'Activities',
@@ -954,7 +956,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 
 
 
-
+                fieldElement.validationEngine('hide');
                 //Before saving ajax edit values we need to check if the value is changed then only we have to save
                 if(previousValue == ajaxEditNewValue) {
                     editElement.addClass('hide');
@@ -996,9 +998,20 @@ jQuery.Class("Vtiger_Detail_Js",{
                         detailViewValue.removeClass('hide');
 						actionElement.show();
                         detailViewValue.html(postSaveRecordDetails[fieldName].display_value);
-						fieldElement.trigger(thisInstance.fieldUpdatedEvent,{'old':previousValue,'new':fieldValue});
-						fieldnameElement.data('prevValue', ajaxEditNewValue);
-					},
+                        fieldElement.trigger(thisInstance.fieldUpdatedEvent,{'old':previousValue,'new':fieldValue});
+                        fieldnameElement.data('prevValue', ajaxEditNewValue);
+                        fieldElement.data('selectedValue', ajaxEditNewValue); 
+                        //After saving source field value, If Target field value need to change by user, show the edit view of target field. 
+                        if(thisInstance.targetPicklistChange) { 
+                                if(jQuery('.summaryView', thisInstance.getForm()).length > 0) { 
+                                        thisInstance.targetPicklist.find('.summaryViewEdit').trigger('click'); 
+                                } else { 
+                                        thisInstance.targetPicklist.trigger('click'); 
+                                } 
+                                thisInstance.targetPicklistChange = false; 
+                                thisInstance.targetPicklist = false; 
+                        } 
+                        },
                         function(error){
                             //TODO : Handle error
                             currentTdElement.progressIndicator({'mode':'hide'});
@@ -1209,6 +1222,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 					element.progressIndicator({'mode' : 'hide'});
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.loadWidgets();
+                                        thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm());
 
 					// Indicate the page content change
 					app.notifyPostAjaxReady();
@@ -1575,7 +1589,10 @@ jQuery.Class("Vtiger_Detail_Js",{
 					if(tabElement.data('linkKey') == thisInstance.detailViewSummaryTabLabel) {
 						thisInstance.loadWidgets();
 						thisInstance.registerSummaryViewContainerEvents(detailContentsHolder);
-					}
+                                                thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm());
+					}else if(tabElement.data('linkKey') == thisInstance.detailViewDetailsTabLabel){ 
+                                                thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm()); 
+                                        } 
 
 					// Let listeners know about page state change.
 					app.notifyPostAjaxReady();
@@ -1587,6 +1604,91 @@ jQuery.Class("Vtiger_Detail_Js",{
 			);
 		});
 	},
+        
+    /** 
+     * Function to register event for setting up picklistdependency 
+     * for a module if exist on change of picklist value 
+     */
+    registerEventForPicklistDependencySetup: function(container) {
+        var thisInstance = this;
+        var picklistDependcyElemnt = jQuery('[name="picklistDependency"]', container);
+        if (picklistDependcyElemnt.length <= 0) {
+            return;
+        }
+        var picklistDependencyMapping = JSON.parse(picklistDependcyElemnt.val());
+        var sourcePicklists = Object.keys(picklistDependencyMapping);
+        if (sourcePicklists.length <= 0) {
+            return;
+        }
+
+        var sourcePickListNames = "";
+        for (var i = 0; i < sourcePicklists.length; i++) {
+            sourcePickListNames += '[name="' + sourcePicklists[i] + '"],';
+        }
+        var sourcePickListElements = container.find(sourcePickListNames);
+        sourcePickListElements.on('change', function(e) {
+            var currentElement = jQuery(e.currentTarget);
+            var sourcePicklistname = currentElement.attr('name');
+
+            var configuredDependencyObject = picklistDependencyMapping[sourcePicklistname];
+            var selectedValue = currentElement.val();
+            var targetObjectForSelectedSourceValue = configuredDependencyObject[selectedValue];
+            var picklistmap = configuredDependencyObject["__DEFAULT__"];
+
+            if (typeof targetObjectForSelectedSourceValue == 'undefined') {
+                targetObjectForSelectedSourceValue = picklistmap;
+            }
+            jQuery.each(picklistmap, function(targetPickListName, targetPickListValues) {
+                var targetPickListMap = targetObjectForSelectedSourceValue[targetPickListName];
+                if (typeof targetPickListMap == "undefined") {
+                    targetPickListMap = targetPickListValues;
+                }
+                var targetPickList = jQuery('[name="' + targetPickListName + '"]', container);
+                if (targetPickList.length <= 0) {
+                    return;
+                }
+
+                //On change of SourceField value, If TargetField value is not there in mapping, make user to select the new target value also. 
+                var selectedValue = targetPickList.data('selectedValue');
+                if (jQuery.inArray(selectedValue, targetPickListMap) == -1) {
+                    thisInstance.targetPicklistChange = true;
+                    thisInstance.targetPicklist = targetPickList.closest('td');
+                } else {
+                    thisInstance.targetPicklistChange = false;
+                    thisInstance.targetPicklist = false;
+                }
+
+                var listOfAvailableOptions = targetPickList.data('availableOptions');
+                if (typeof listOfAvailableOptions == "undefined") {
+                    listOfAvailableOptions = jQuery('option', targetPickList);
+                    targetPickList.data('available-options', listOfAvailableOptions);
+                }
+
+                var targetOptions = new jQuery();
+                var optionSelector = [];
+                optionSelector.push('');
+                for (var i = 0; i < targetPickListMap.length; i++) {
+                    optionSelector.push(targetPickListMap[i]);
+                }
+
+                jQuery.each(listOfAvailableOptions, function(i, e) {
+                    var picklistValue = jQuery(e).val();
+                    if (jQuery.inArray(picklistValue, optionSelector) != -1) {
+                        targetOptions = targetOptions.add(jQuery(e));
+                    }
+                })
+                var targetPickListSelectedValue = '';
+                targetPickListSelectedValue = targetOptions.filter('[selected]').val();
+                if (targetPickListMap.length == 1) {
+                    targetPickListSelectedValue = targetPickListMap[0]; // to automatically select picklist if only one picklistmap is present. 
+                }
+                targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
+            })
+
+        });
+        //To Trigger the change on load 
+        sourcePickListElements.trigger('change');
+    },
 	
 	/**
 	 * Function to get child comments
@@ -1703,6 +1805,7 @@ jQuery.Class("Vtiger_Detail_Js",{
 		
 		//register all the events for summary view container
 		this.registerSummaryViewContainerEvents(detailContentsHolder);
+                thisInstance.registerEventForPicklistDependencySetup(thisInstance.getForm()); 
 
 		detailContentsHolder.on('click', '#detailViewNextRecordButton', function(e){
 			var selectedTabElement = thisInstance.getSelectedTab();
