@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 
-require_once('Smarty_setup.php');
 require_once('config.php');
 require_once('vtlib/Vtiger/Cron.php');
 require_once('config.inc.php');

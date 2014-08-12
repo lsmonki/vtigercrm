@@ -66,7 +66,6 @@ function deleteOldInfo($fieldid, $view=1){
  * @return string $data - the formatted quickview data
  */
 function getDetailViewForTooltip($fieldid, $checkedFields){
-	require_once('Smarty_setup.php');
 	global $app_strings;
 	$labels = array();
 	if(!empty($checkedFields)){

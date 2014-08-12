@@ -12,7 +12,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('Smarty_setup.php');
 
 global $app_strings;
 global $app_list_strings;
