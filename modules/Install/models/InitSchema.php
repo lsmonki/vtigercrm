@@ -1037,13 +1037,13 @@ class Install_InitSchema_Model {
 		$conpuWorkFlow->defaultworkflow = 1;
 		$vtcWorkFlow->save($conpuWorkFlow);
 		$id1=$conpuWorkFlow->id;
-                
-                $taskManager = new VTTaskManager($adb); 
-                $task = $taskManager->createTask('VTEntityMethodTask', $id1); 
-                $task->active = true; 
-                $task->summary = 'Email Customer Portal Login Details'; 
-                $task->methodName = "SendPortalLoginDetails"; 
-                $taskManager->saveTask($task); 
+
+                $taskManager = new VTTaskManager($adb);
+                $task = $taskManager->createTask('VTEntityMethodTask', $id1);
+		$task->active = true;
+		$task->summary = 'Email Customer Portal Login Details';
+		$task->methodName = "SendPortalLoginDetails";
+		$taskManager->saveTask($task);
 		// Creating Workflow for Potentials
 
 		$vtcWorkFlow = new VTWorkflowManager($adb);
@@ -1081,22 +1081,22 @@ class Install_InitSchema_Model {
 		$contactWorkFlow->defaultworkflow = 1;
 		$workflowManager->save($contactWorkFlow);
 
-		$tm = new VTTaskManager($adb); 
-                $task = $tm->createTask('VTEmailTask',$contactWorkFlow->id); 
+		$tm = new VTTaskManager($adb);
+		$task = $tm->createTask('VTEmailTask',$contactWorkFlow->id);
 
-                $task->active=true; 
-                $task->recepient = "\$(assigned_user_id : (Users) email1)"; 
-                $task->subject = "Regarding Contact Assignment"; 
-                $task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>". 
-                                "Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'. 
-                                "Lead Source:".'<b>$leadsource</b><br>'. 
-                                "Department:".'<b>$department</b><br>'. 
-                                "Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " . 
-                                "EmailID :-".'$email<br>'."<br>Thank You<br>Admin"; 
+		$task->active=true;
+		$task->recepient = "\$(assigned_user_id : (Users) email1)";
+		$task->subject = "Regarding Contact Assignment";
+		$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+				"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+				"Lead Source:".'<b>$leadsource</b><br>'.
+				"Department:".'<b>$department</b><br>'.
+				"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
+				"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
 
-                $task->summary="An contact has been created "; 
-                $tm->saveTask($task); 
-                $adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1)); 
+		$task->summary="An contact has been created ";
+		$tm->saveTask($task);
+		$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
                 
 		// Trouble Tickets workflow on creation from Customer Portal
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
