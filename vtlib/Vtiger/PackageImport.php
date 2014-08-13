@@ -669,7 +669,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			}
 			$fieldInstance->setRelatedModules($relatedmodules);
 		}
-
+                
+                // Set summary field if marked in xml
+                if(!empty($fieldnode->summaryfield)) {
+                    $fieldInstance->setSummaryField($fieldnode->summaryfield);
+                }
+                
 		$this->__AddModuleFieldToCache($moduleInstance, $fieldnode->fieldname, $fieldInstance);
 		return $fieldInstance;
 	}
