@@ -679,6 +679,8 @@ class Vtiger_Util_Helper {
 				case 'character_set_database' : $db_character_set = $arr['value']; break;
 				case 'collation_database'     : $db_collation_type = $arr['value']; break;
 			}
+			// If we have all the required information break the loop. 
+			if($db_character_set != null && $db_collation_type != null) break;
 		}
 		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
 	}
