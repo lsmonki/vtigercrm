@@ -41,6 +41,6 @@
 	{/foreach}
 </div>
 <div class="row-fluid">
-    <button type="button" class="row-fluid extensionStorebtn" onclick='window.location.href="index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=index"'>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</button>
+    <button type="button" class="row-fluid extensionStorebtn" onclick='window.location.href="index.php?module=ExtensionStore&parent=Settings&view=ExtensionStore"'>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</button>
 </div>
 {/strip}

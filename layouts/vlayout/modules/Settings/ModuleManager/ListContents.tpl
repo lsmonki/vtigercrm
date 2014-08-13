@@ -16,7 +16,7 @@
 			<div class="span6">
 				<span class="btn-toolbar pull-right">
 					<span class="btn-group">
-                                            <button class="btn" type="button" onclick='window.location.href="{$IMPORT_EXTENSION_STORE_URL}"'>
+                                            <button class="btn" type="button" onclick='window.location.href="index.php?module=ExtensionStore&parent=Settings&view=ExtensionStore"'>
                                                     <strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
                                             </button>
 					</span>
