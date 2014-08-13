@@ -158,19 +158,13 @@ class Vtiger_MailRecord {
 		if(is_null($words)) $words = array();
 		$returnvalue = $input;
 		
-		if(preg_match_all('/=\?([^\?]+)\?([^\?]+)\?([^\?]+)\?=/', $input, $matches)) {
-			$totalmatches = count($matches[0]);
-			
-			for($index = 0; $index < $totalmatches; ++$index) {
-				$charset = $matches[1][$index];
-				$encoding= strtoupper($matches[2][$index]); // B - base64 or Q - quoted printable
-				$data    = $matches[3][$index];
-				
-				if($encoding == 'B') {
-					$decodevalue = base64_decode($data);
-				} else if($encoding == 'Q') {
-					$decodevalue = quoted_printable_decode($data);
-				}
+		preg_match_all('/=\?([^\?]+)\?([^\?]+)\?([^\?]+)\?=/', $input, $matches);
+                array_filter($matches);
+                if(count($matches[0])>0){
+                $decodedArray=  imap_mime_header_decode($input);
+                foreach($decodedArray as $part=>$prop){
+                            $decodevalue=$prop->text;
+                            $charset=$prop->charset;
 				$value = self::__convert_encoding($decodevalue, $targetEncoding, $charset);				
 				array_push($words, $value);				
 			}
