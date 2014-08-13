@@ -1618,13 +1618,21 @@ function relateEntities($focus, $sourceModule, $sourceRecordId, $destinationModu
 	}
 }
 
+/**
+ * Track install/update vtlib module in current run.
+ */
+$_installOrUpdateVtlibModule = array();
+
 /* Function to install Vtlib Compliant modules
  * @param - $packagename - Name of the module
  * @param - $packagepath - Complete path to the zip file of the Module
   */
 function installVtlibModule($packagename, $packagepath, $customized=false) {
-	global $log, $Vtiger_Utils_Log;
+	global $log, $Vtiger_Utils_Log, $_installOrUpdateVtlibModule;
 	if(!file_exists($packagepath)) return;
+
+	if (isset($_installOrUpdateVtlibModule[$packagename.$packagepath])) return;
+	$_installOrUpdateVtlibModule[$packagename.$packagepath] = 'install';
 
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
@@ -1670,8 +1678,11 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
  * @param - $packagepath - Complete path to the zip file of the Module
  */
 function updateVtlibModule($module, $packagepath) {
-	global $log;
+	global $log, $_installOrUpdateVtlibModule;
 	if(!file_exists($packagepath)) return;
+
+	if (isset($_installOrUpdateVtlibModule[$module.$packagepath])) return;
+	$_installOrUpdateVtlibModule[$module.$packagepath] = 'update';
 
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
