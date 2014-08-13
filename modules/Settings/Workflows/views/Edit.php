@@ -190,4 +190,16 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
+        
+          
+        function getHeaderCss(Vtiger_Request $request) { 
+                $headerCssInstances = parent::getHeaderCss($request); 
+                $moduleName = $request->getModule(); 
+                $cssFileNames = array( 
+                        '~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.css', 
+                ); 
+                $cssInstances = $this->checkAndConvertCssStyles($cssFileNames); 
+                $headerCssInstances = array_merge($cssInstances, $headerCssInstances); 
+                return $headerCssInstances; 
+        } 
 }
