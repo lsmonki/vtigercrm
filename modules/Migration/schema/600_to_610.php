@@ -1379,8 +1379,8 @@ Migration_Index_View::ExecuteQuery("UPDATE vtiger_field SET masseditable = ? WHE
 //Add Vat ID to Company Details 
 Vtiger_Utils::AddColumn('vtiger_organizationdetails', 'vatid', 'VARCHAR(100)');
 
-//Add Column trail for vtiger_tab table if not exists
-$result = $adb->pquery("SELECT trail FROM vtiger_tab",array());
+//Add Column trial for vtiger_tab table if not exists
+$result = $adb->pquery("SELECT trial FROM vtiger_tab",array());
 if (!($adb->num_rows($result))) {
-    $adb->pquery("ALTER TABLE vtiger_tab ADD trail INT(2) NOT NULL DEFAULT 0",array());
+    $adb->pquery("ALTER TABLE vtiger_tab ADD trial INT(1) NOT NULL DEFAULT 0",array());
 }
