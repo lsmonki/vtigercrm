@@ -37,7 +37,7 @@ class Vtiger_ModuleBasic {
 	var $tabsequence = false;
 	var $parent = false;
 	var $customized = 0;
-    var $trail = 0;
+        var $trial = 0;
 
 	var $isentitytype = true; // Real module or an extension?
 
@@ -78,7 +78,7 @@ class Vtiger_ModuleBasic {
 		$this->tabsequence = $valuemap['tabsequence'];
 		$this->parent = $valuemap['parent'];
 		$this->customized = $valuemap['customized'];
-                $this->trail = $valuemap['trail'];
+                $this->trial = $valuemap['trial'];
 
 		$this->isentitytype = $valuemap['isentitytype'];
 
@@ -186,6 +186,14 @@ class Vtiger_ModuleBasic {
 		if($this->isentitytype) {
 			Vtiger_Access::initSharing($this);
 		}
+                
+                $moduleInstance=  Vtiger_Module::getInstance($this->name);                
+                $parentTab=$this->parent;
+                
+                if(!empty($parentTab)){
+                        $menuInstance = Vtiger_Menu::getInstance($parentTab);
+			$menuInstance->addModule($moduleInstance);
+                }
 
 		self::log("Creating Module $this->name ... DONE");
 	}
