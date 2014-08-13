@@ -66,7 +66,7 @@ abstract class Mobile_WS_AlertModel {
 	
 	// Function provided to enable sub-classes to over-ride in case required 
 	protected function countQuery() {
-		return mkCountQuery($this->query());
+		return Vtiger_Functions::mkCountQuery($this->query());
 	}
 	
 	static function models() {

@@ -21,7 +21,7 @@ class Mobile_WS_AlertModel_NewTicketOfMine extends Mobile_WS_AlertModel_PendingT
 	
 	function query() {
 		$sql = parent::query();
-		$sql .= " ORDER BY crmid DESC LIMIT 1";
+		$sql .= " ORDER BY crmid DESC";
 		return $sql;
 	}
 	
