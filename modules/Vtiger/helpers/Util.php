@@ -679,10 +679,6 @@ class Vtiger_Util_Helper {
 				case 'character_set_database' : $db_character_set = $arr['value']; break;
 				case 'collation_database'     : $db_collation_type = $arr['value']; break;
 			}
-
-			foreach($activityIds as $activityId=>$color) {
-				$db->pquery('INSERT INTO vtiger_calendar_user_activitytypes (id, defaultid, userid, color) VALUES (?,?,?,?)', array($db->getUniqueID('vtiger_calendar_user_activitytypes'), $activityId, $userId, $color));
-			}
 		}
 		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
 	}
