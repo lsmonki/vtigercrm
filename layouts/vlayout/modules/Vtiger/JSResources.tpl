@@ -46,7 +46,7 @@
 	<script type="text/javascript" src="libraries/jquery/jquery.placeholder.js"></script>
 
 	{foreach key=index item=jsModel from=$SCRIPTS}
-            <script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
+            <script type="{$jsModel->getType()}" src="{vresource_url($jsModel->getSrc())}"></script>
 	{/foreach}
 
 	<!-- Added in the end since it should be after less file loaded -->

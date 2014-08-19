@@ -199,3 +199,14 @@ function vtemplate_path($templateName, $moduleName='') {
 	$args = func_get_args();
 	return call_user_func_array(array($viewerInstance, 'getTemplatePath'), $args);
 }
+
+/**
+ * Generated cache friendly resource URL linked with version of Vtiger
+ */
+function vresource_url($url) {
+    global $vtiger_current_version;
+    if (stripos($url, '://') === false) {
+        $url = $url .'?v='.$vtiger_current_version;
+    }
+    return $url;
+}
