@@ -65,11 +65,16 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	public function getRecordModelFromRequest(Vtiger_Request $request) {
 		$recordModel = parent::getRecordModelFromRequest($request);
 		$fieldName = $request->get('field');
-
-		if ($fieldName === 'is_admin' && !$request->get('value')) {
+                $currentUserModel=  Users_Record_Model::getCurrentUserModel();
+		if ($fieldName === 'is_admin' && (!$currentUserModel->isAdminUser()||!$request->get('value'))) {
 			$recordModel->set($fieldName, 'off');
+                        $recordModel->set('is_owner',0);
 		}
-		return $recordModel;
+                else if($fieldName === 'is_admin' && $currentUserModel->isAdminUser()){
+                    $recordModel->set($fieldName, 'on');
+                    $recordModel->set('is_owner',1);
+                }       
+                return $recordModel;
 	}
 	
 		

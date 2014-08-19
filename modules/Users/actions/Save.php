@@ -28,7 +28,7 @@ class Users_Save_Action extends Vtiger_Save_Action {
 	protected function getRecordModelFromRequest(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
-
+                $currentUserModel=  Users_Record_Model::getCurrentUserModel();
 		if(!empty($recordId)) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 			$modelData = $recordModel->getData();
@@ -49,10 +49,19 @@ class Users_Save_Action extends Vtiger_Save_Action {
 				continue;
 			}
 			$fieldValue = $request->get($fieldName, null);
-			if ($fieldName === 'is_admin' && !$fieldValue) {
-				$fieldValue = 'off';
-			}
-			if($fieldValue !== null) {
+
+			if ($fieldName === 'is_admin') {
+                            if (!$currentUserModel->isAdminUser() && (!$fieldValue)) {
+                                $fieldValue = 'off';
+                            } else if ($currentUserModel->isAdminUser() && ($fieldValue || $fieldValue === 'on')) {
+                                $fieldValue = 'on';
+                                $recordModel->set('is_owner', 1);
+                            } else {
+                                $fieldValue = 'off';
+                                $recordModel->set('is_owner', 0);
+                            }
+                        }
+            if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
 					$fieldValue = trim($fieldValue);
 				}

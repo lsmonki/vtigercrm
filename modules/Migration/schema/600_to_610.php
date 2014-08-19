@@ -1383,3 +1383,77 @@ $result = $adb->pquery("SELECT trial FROM vtiger_tab",array());
 if (!($adb->num_rows($result))) {
     $adb->pquery("ALTER TABLE vtiger_tab ADD trial INT(1) NOT NULL DEFAULT 0",array());
 }
+
+//For contacts the fieldname is contact_id
+$contactsRelatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
+$contactsResult = $adb->pquery($contactsRelatedToQuery, array($tabId, 'contact_id'));
+$contactsFieldId = $adb->query_result($contactsResult,0, 'fieldid');
+$insertContactsQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
+$module = 'Contacts';
+$adb->pquery($insertContactsQuery, array($contactsFieldId, $module, $relModule, NULL, NULL));
+
+##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
+
+
+//Adding is_owner to existing vtiger users
+
+$usersModuleInstance = Vtiger_Module::getInstance('Users');
+$usersBlockInstance = Vtiger_Block::getInstance('LBL_USERLOGIN_ROLE', $usersModuleInstance);
+
+$usersFieldInstance = Vtiger_Field::getInstance('is_owner', $usersModuleInstance);
+if (!$usersFieldInstance) {
+    $field = new Vtiger_Field();
+    $field->name = 'is_owner';
+    $field->label = 'Account Owner';
+    $field->column = 'is_owner';
+    $field->table = 'vtiger_users';
+    $field->uitype = 1;
+    $field->typeofdata = 'V~O';
+    $field->readonly = '0';
+    $field->displaytype = '5';
+    $field->masseditable = '0';
+    $field->quickcreate = '0';
+    $field->columntype = 'VARCHAR(5)';
+    $field->defaultvalue = 0;
+    $usersBlockInstance->addField($field);
+    echo '<br> Added isOwner field in Users';
+}
+
+//Setting up is_owner for every admin user of CRM
+$adb = PearDatabase::getInstance();
+$idResult = $adb->pquery('SELECT id FROM vtiger_users WHERE is_admin = ? AND status=?', array('on', 'Active'));
+if ($adb->num_rows($idResult) > 0) {
+    for($i = 0;$i<=$adb->num_rows($idResult);$i++) {
+        $userid = $adb->query_result($idResult, $i, 'id');
+        $adb->pquery('UPDATE vtiger_users SET is_owner=? WHERE id=?', array(1, $userid));
+        echo '<br>Account Owner Informnation saved in vtiger';
+        //Recreate user prvileges
+        createUserPrivilegesfile($userId);
+        echo '<br>User previleges file recreated aftter adding is_owner field';
+    } 
+}else {
+        echo '<br>Account Owner was not existed in this database';
+    }
+
+##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
+//Avoid premature deletion of activity related records
+$moduleArray = array('Accounts', 'Leads', 'HelpDesk', 'Campaigns', 'Potentials', 'PurchaseOrder', 'SalesOrder', 'Quotes', 'Invoice');
+$relatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
+$calendarInstance = Vtiger_Module::getInstance('Calendar');
+$tabId = $calendarInstance->getId();
+$result = $adb->pquery($relatedToQuery, array($tabId, 'parent_id'));
+$fieldId = $adb->query_result($result,0, 'fieldid');
+$insertQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
+$relModule = 'Calendar';
+foreach ($moduleArray as $module) {
+    $adb->pquery($insertQuery, array($fieldId, $module, $relModule, NULL, NULL));
+}
+//For contacts the fieldname is contact_id
+$contactsRelatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
+$contactsResult = $adb->pquery($contactsRelatedToQuery, array($tabId, 'contact_id'));
+$contactsFieldId = $adb->query_result($contactsResult,0, 'fieldid');
+$insertContactsQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
+$module = 'Contacts';
+$adb->pquery($insertContactsQuery, array($contactsFieldId, $module, $relModule, NULL, NULL));
+
+##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
