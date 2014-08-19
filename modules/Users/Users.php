@@ -504,7 +504,8 @@ class Users extends CRMEntity {
         }
 
         if (!is_admin($current_user)) {
-            $this->db->startTransaction();
+              #commenting this as the the transaction is already started in vtws_changepassword
+//            $this->db->startTransaction();
             if(!$this->verifyPassword($user_password)) {
                 $this->log->warn("Incorrect old password for $usr_name");
                 $this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
@@ -528,7 +529,8 @@ class Users extends CRMEntity {
 
         $query = "UPDATE $this->table_name SET user_password=?, confirm_password=?, user_hash=?, ".
                 "crypt_type=? where id=?";
-        $this->db->startTransaction();
+          #commenting this as the the transaction is already started in vtws_changepassword
+//        $this->db->startTransaction();
         $this->db->pquery($query, array($encrypted_new_password, $encrypted_new_password,
                 $user_hash, $crypt_type, $this->id));
         if($this->db->hasFailedTransaction()) {

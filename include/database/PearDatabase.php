@@ -661,6 +661,8 @@ class PearDatabase{
 	    switch ($this->dbType) {
 		    case 'mysql':
 			    return 'concat('.implode(',',$list).')';
+                    case 'mysqli':
+                            return 'concat('.implode(',',$list).')';
 		    case 'pgsql':
 			    return '('.implode('||',$list).')';
 		    default:
@@ -869,7 +871,10 @@ class PearDatabase{
 		if(isset($this->database)){
 	    	if($this->dbType == "mysql"){
 			mysql_close($this->database);
-	    } else {
+	    }else if($this->dbType=="mysqli"){
+                mysqli_close($this->database);
+            } 
+            else {
 			$this->database->disconnect();
 	    }
 	    unset($this->database);
@@ -1000,8 +1005,9 @@ class PearDatabase{
 	//To get a function name with respect to the database type which escapes strings in given text
 	function sql_escape_string($str)
 	{
-		if($this->isMySql())
-			$result_data = mysql_real_escape_string($str);
+		if($this->isMySql()){
+			$result_data = ($this->dbType=='mysqli')?mysqli_real_escape_string($this->database->_connectionID,$str):mysql_real_escape_string($str);
+                }
 		elseif($this->isPostgres())
 			$result_data = pg_escape_string($str);
 		return $result_data;

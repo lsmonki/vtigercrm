@@ -98,6 +98,12 @@ class ADODB_mysqli extends ADOConnection {
 		}
 
 		#if (!empty($this->port)) $argHostname .= ":".$this->port;
+                #Vtiger bug fix to handle port specification in the port name
+                if (stripos($argHostname, ':') !== false) {
+                    $argHostname = explode(':', $argHostname);
+                    if (count($argHostname) > 1) $this->port = array_pop($argHostname);
+                    $argHostname = array_shift($argHostname);
+                }
 		$ok = mysqli_real_connect($this->_connectionID,
  				    $argHostname,
  				    $argUsername,

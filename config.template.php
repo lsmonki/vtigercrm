@@ -14,8 +14,8 @@
 ********************************************************************************/
 
 // Adjust error_reporting favourable to deployment.
-error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED); // PRODUCTION
-//ini_set('display_errors','on'); error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);   // DEBUGGING
+version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT); // PRODUCTION
+//ini_set('display_errors','on'); version_copare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);   // DEBUGGING
 
 
 include('vtigerversion.php');
