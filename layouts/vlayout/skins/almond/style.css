@@ -2039,17 +2039,16 @@ th.htColHeader,
   background-color: #ffffff;
   border: 1px solid #dddddd;
   min-height: 200px;
-  padding: 2%;
-}
-.extensionWidgetContainer:hover{
-    background: #fafafa;
-    box-shadow: 1px 1px 14px 0px #ccc;
+  padding: 2%; 
+  background: #fafafa;
+  box-shadow: 0px 0px 10px -4px #777;
 }
 .extensionWidgetContainer .extension_contents {
   margin-top: 2%;
   background: #ffffff;
   padding: 10px;
-  min-height: 230px;
+  box-sizing: border-box;
+  max-height: 160px;
 }
 .extension_contents:hover {
     border-radius: 4px;
@@ -2067,7 +2066,25 @@ th.htColHeader,
   line-height: 20px;
 }
 .extensionWidgetContainer .extensionInfo {
-  padding-top: 5%;
+  padding-top: 5px;
+}
+.extensionWidgetContainer .extensionInfo .rating, .extensionDetails .rating{
+    vertical-align: middle;
+    margin-top: 2px;
+    display: inline-block;
+}
+.extensionDetails .authorInfo{
+    margin : 3px 0;
+}
+.extensionDetails .extensionDetailActions{
+    padding: 15px 0;
+}
+.extensionWidgetContainer .tab-pane .bx-wrapper .imageSlider{
+    margin: 0;
+}
+.sliderImage{
+    width: 90%;
+    height: 360px;
 }
 .thumbnailImage {
     height: 130px;
@@ -3244,7 +3261,6 @@ background-position: 0 -13px;
 }
 .banner-container{
     border-bottom: 1px solid #FFFFFF;
-    box-shadow: 0 1px 3px 0 #888888;
     box-sizing: border-box;
 }
 

@@ -65,15 +65,8 @@
                             </button>
                             {/if}
                     </span>
-                    <span class="btn-group">
-                        <button class="btn addButton togglePromotion up">
-                             <span id="hide" class="icon icon-chevron-up"></span>
-                             <span id="show" class="icon icon-chevron-down hide"></span>
-                        </button>
-                    </span>
                 </div>
               </div>
          </div>
     </div>
-    <div class="marketPlaceBanner"></div>
 </div>

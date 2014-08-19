@@ -628,6 +628,10 @@ $languageStrings = array(
 	'Web Site' => 'Web Site',
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
+    
+        //Promotion translations
+        'LBL_HIDE_PROMOTION' => 'Hide Promotion',
+        'LBL_SHOW_PROMOTION' => 'Show Promotion',
 );
 
 $jsLanguageStrings = array(
@@ -756,4 +760,8 @@ $jsLanguageStrings = array(
 	'SHOULD_BE_LESS_THAN_TODAY' => 'Must occur before today',
 	'SINGLE_Accounts' => 'Organization',
 	'SINGLE_Contacts' => 'Contact',
+    
+        //Promotion translations
+        'JS_HIDE_PROMOTION' => 'Hide Promotion',
+        'JS_SHOW_PROMOTION' => 'Show Promotion',
 );
