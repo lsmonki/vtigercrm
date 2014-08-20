@@ -18,12 +18,19 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	}
 
 	public function checkPermission(Vtiger_Request $request) {
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+            $currentUserModel = Users_Record_Model::getCurrentUserModel();
 
-		if(!$currentUserModel->isAdminUser()) {
-			throw new AppException('LBL_PERMISSION_DENIED', 'Vtiger');
-		}
-	}
+            $userId = $request->get('userid');
+            if (!$currentUserModel->isAdminUser()) {
+                $mode = $request->getMode();
+                if ($mode == 'savePassword' && (isset($userId) && $currentUserModel->getId() != $userId)) {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED', 'Vtiger'));
+                }
+                 else if ($mode != 'savePassword' && ($currentUserModel->getId() != $request->get('record'))) {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED', 'Vtiger'));
+                }
+            }
+    }
 
 	public function process(Vtiger_Request $request) {
 
