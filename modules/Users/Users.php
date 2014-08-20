@@ -1780,7 +1780,7 @@ class Users_CRMSetup {
 			if (!$moduleExists) {
 				$parentName = $adb->query_result($result, $i, 'parent');
 
-				if ($parentName) {
+				if ($parentName && ($parentName != 'Settings')) {
 					if (array_key_exists($parentName, $packagesList)) {
 						$packagesList[$parentName]['modules'][$moduleName] = $adb->query_result($result, $i, 'tablabel');
 					} else {

@@ -1384,6 +1384,19 @@ if (!($adb->num_rows($result))) {
     $adb->pquery("ALTER TABLE vtiger_tab ADD trial INT(1) NOT NULL DEFAULT 0",array());
 }
 
+##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
+//Avoid premature deletion of activity related records
+$moduleArray = array('Accounts', 'Leads', 'HelpDesk', 'Campaigns', 'Potentials', 'PurchaseOrder', 'SalesOrder', 'Quotes', 'Invoice');
+$relatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
+$calendarInstance = Vtiger_Module::getInstance('Calendar');
+$tabId = $calendarInstance->getId();
+$result = $adb->pquery($relatedToQuery, array($tabId, 'parent_id'));
+$fieldId = $adb->query_result($result,0, 'fieldid');
+$insertQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
+$relModule = 'Calendar';
+foreach ($moduleArray as $module) {
+    $adb->pquery($insertQuery, array($fieldId, $module, $relModule, NULL, NULL));
+}
 //For contacts the fieldname is contact_id
 $contactsRelatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
 $contactsResult = $adb->pquery($contactsRelatedToQuery, array($tabId, 'contact_id'));
@@ -1434,26 +1447,3 @@ if ($adb->num_rows($idResult) > 0) {
 }else {
         echo '<br>Account Owner was not existed in this database';
     }
-
-##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
-//Avoid premature deletion of activity related records
-$moduleArray = array('Accounts', 'Leads', 'HelpDesk', 'Campaigns', 'Potentials', 'PurchaseOrder', 'SalesOrder', 'Quotes', 'Invoice');
-$relatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
-$calendarInstance = Vtiger_Module::getInstance('Calendar');
-$tabId = $calendarInstance->getId();
-$result = $adb->pquery($relatedToQuery, array($tabId, 'parent_id'));
-$fieldId = $adb->query_result($result,0, 'fieldid');
-$insertQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
-$relModule = 'Calendar';
-foreach ($moduleArray as $module) {
-    $adb->pquery($insertQuery, array($fieldId, $module, $relModule, NULL, NULL));
-}
-//For contacts the fieldname is contact_id
-$contactsRelatedToQuery = "SELECT fieldid FROM vtiger_field WHERE tabid=? AND fieldname=?";
-$contactsResult = $adb->pquery($contactsRelatedToQuery, array($tabId, 'contact_id'));
-$contactsFieldId = $adb->query_result($contactsResult,0, 'fieldid');
-$insertContactsQuery = "INSERT INTO vtiger_fieldmodulerel (fieldid,module,relmodule,status,sequence) VALUES(?,?,?,?,?)";
-$module = 'Contacts';
-$adb->pquery($insertContactsQuery, array($contactsFieldId, $module, $relModule, NULL, NULL));
-
-##--http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7635--##
