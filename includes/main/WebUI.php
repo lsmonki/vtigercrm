@@ -167,7 +167,7 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 				}
 
 				// Every settings page handler should implement this method
-				if(stripos($qualifiedModuleName, 'Settings') === 0) {
+				if(stripos($qualifiedModuleName, 'Settings') === 0 || ($module=='Users')) {
 					$handler->checkPermission($request);
 				}
 

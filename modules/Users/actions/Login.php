@@ -13,6 +13,11 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 	function loginRequired() {
 		return false;
 	}
+        
+        
+        function checkPermission(Vtiger_Request $request) {  
+               return true;  
+        } 
 
 	function process(Vtiger_Request $request) {
 		$username = $request->get('username');
