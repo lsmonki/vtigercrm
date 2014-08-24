@@ -870,9 +870,9 @@ class PearDatabase{
 		$this->println("ADODB disconnect");
 		if(isset($this->database)){
 	    	if($this->dbType == "mysql"){
-			mysql_close($this->database);
+			mysql_close($this->database->_connectionID);
 	    }else if($this->dbType=="mysqli"){
-                mysqli_close($this->database);
+                mysqli_close($this->database->_connectionID);
             } 
             else {
 			$this->database->disconnect();
