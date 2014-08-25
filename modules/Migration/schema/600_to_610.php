@@ -66,6 +66,13 @@ $result = $adb->pquery("show columns from com_vtiger_workflows like ?", array('n
 if (!($adb->num_rows($result))) {
     $adb->pquery("ALTER TABLE com_vtiger_workflows ADD nexttrigger_time DATETIME", array());
 }
+
+Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_faqcf ( 
+                                faqid int(19), 
+                                PRIMARY KEY (faqid), 
+                                CONSTRAINT fk_1_vtiger_faqcf FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE 
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8", array()); 
+
 //73 starts
 $query = 'SELECT 1 FROM vtiger_currencies WHERE currency_name=?';
 $result = $adb->pquery($query, array('Sudanese Pound'));
