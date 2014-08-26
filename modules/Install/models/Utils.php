@@ -80,8 +80,6 @@ class Install_Utils_Model {
 		}
 		if (ini_get('error_reporting') != $errorReportingValue)
 			$directiveValues['error_reporting'] = 'NOT RECOMMENDED';
-		if (ini_get('allow_call_time_pass_reference') != '1' || stripos(ini_get('allow_call_time_pass_reference'), 'Off') > -1)
-			$directiveValues['allow_call_time_pass_reference'] = 'Off';
 		if (ini_get('log_errors') == '1' || stripos(ini_get('log_errors'), 'On') > -1)
 			$directiveValues['log_errors'] = 'On';
 		if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off') > -1)
@@ -103,7 +101,6 @@ class Install_Utils_Model {
 		'max_execution_time' => '600',
 		'memory_limit' => '32',
 		'error_reporting' => 'E_WARNING & ~E_NOTICE',
-		'allow_call_time_pass_reference' => 'On',
 		'log_errors' => 'Off',
 		'short_open_tag' => 'On'
 	);
