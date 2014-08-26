@@ -27,8 +27,22 @@ class Reports_ListView_Model extends Vtiger_ListView_Model {
 							'linktype' => 'LISTVIEWBASIC',
 							'linklabel' => 'LBL_ADD_RECORD',
 							'linkurl' => $this->getCreateRecordUrl(),
-							'linkicon' => ''
+							'linkicon' => '',
+							'childlinks' => array(
+								array (
+									'linktype' => 'LISTVIEWBASIC',
+									'linklabel' => 'LBL_DETAIL_REPORT',
+									'linkurl' => $this->getCreateRecordUrl(),
+									'linkicon' => '',
 								),
+								array (
+									'linktype' => 'LISTVIEWBASIC',
+									'linklabel' => 'LBL_CHARTS',
+									'linkurl' => 'javascript:Reports_List_Js.addReport("index.php?module='.$this->getModule()->get('name').'&view=ChartEdit")',
+									'linkicon' => '',
+								)
+							)
+					),
 					array(
 							'linktype' => 'LISTVIEWBASIC',
 							'linklabel' => 'LBL_ADD_FOLDER',

@@ -39,7 +39,7 @@ Class Reports_Edit_View extends Vtiger_Edit_View {
 		parent::preProcess($request);
 		$viewer = $this->getViewer($request);
 		$record = $request->get('record');
-                $moduleName = $request->getModule();
+        $moduleName = $request->getModule();
 		$reportModel = Reports_Record_Model::getCleanInstance($record);
 		$primaryModule = $reportModel->getPrimaryModule();
 		$primaryModuleModel = Vtiger_Module_Model::getInstance($primaryModule);

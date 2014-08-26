@@ -29,9 +29,26 @@
 					</ul>
 				</span>
 				{foreach item=LISTVIEW_BASICACTION from=$LISTVIEW_LINKS['LISTVIEWBASIC']}
+					{if $LISTVIEW_BASICACTION->getLabel() eq 'LBL_ADD_RECORD'}
+						{assign var="childLinks" value=$LISTVIEW_BASICACTION->getChildLinks()}
 						<span class="btn-group">
-						<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0}onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
+							<button class="btn dropdown-toggle addButton" data-toggle="dropdown" id="{$MODULE}_listView_basicAction_Add">
+								<i class="icon-plus"></i>&nbsp;
+								<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong>&nbsp;
+								<i class="caret icon-white"></i></button>
+							<ul class="dropdown-menu">
+								{foreach item="childLink" from=$childLinks}
+									<li id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($childLink->getLabel())}">
+										<a href="javascript:void(0);" onclick='{$childLink->getUrl()|substr:strlen("javascript:")};'>{vtranslate($childLink->getLabel(), $MODULE)}</a>
+									</li>
+								{/foreach}
+							</ul>
 						</span>
+					{else}
+						<span class="btn-group">
+							<button id="{$MODULE}_listView_basicAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($LISTVIEW_BASICACTION->getLabel())}" class="btn addButton" {if stripos($LISTVIEW_BASICACTION->getUrl(), 'javascript:')===0}onclick='{$LISTVIEW_BASICACTION->getUrl()|substr:strlen("javascript:")};'{else} onclick='window.location.href="{$LISTVIEW_BASICACTION->getUrl()}"'{/if}><i class="icon-plus"></i>&nbsp;<strong>{vtranslate($LISTVIEW_BASICACTION->getLabel(), $MODULE)}</strong></button>
+						</span>
+					{/if}
 				{/foreach}
 			</span>
 			<span class="foldersContainer btn-toolbar span4">{include file='ListViewFolders.tpl'|@vtemplate_path:$MODULE}</span>

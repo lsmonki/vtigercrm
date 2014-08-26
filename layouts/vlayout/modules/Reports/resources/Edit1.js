@@ -164,7 +164,7 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 			function(data, err){
 				progressIndicatorElement.progressIndicator({
 					'mode' : 'hide'
-				})
+				});
 				params = {
 					title: app.vtranslate('JS_DUPLICATE_RECORD'),
 					text: data['message']
@@ -190,7 +190,6 @@ Reports_Edit_Js("Reports_Edit1_Js",{},{
 	registerEventForScheduledReprots : function() {
 		var thisInstance = this;
 		jQuery('input[name="enable_schedule"]').on('click', function(e) {
-                        console.log('selected schedule workflows');
 			var element = jQuery(e.currentTarget);
 			var scheduleBoxContainer = jQuery('#scheduleBox');
 			if(element.is(':checked')) {

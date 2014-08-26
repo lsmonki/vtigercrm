@@ -9,7 +9,7 @@
  * *********************************************************************************** */
 vimport('~~/modules/Reports/Reports.php');
 vimport('~~/modules/Reports/ReportRun.php');
-vimport('~~/modules/Reports/CustomReportUtils.php');
+require_once('modules/Reports/ReportUtils.php');
 require_once('Report.php');
 
 class Reports_Record_Model extends Vtiger_Record_Model {
@@ -44,6 +44,51 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 	 */
 	function delete() {
 		return $this->getModule()->deleteRecord($this);
+	}
+
+	/**
+	 * Function to get the detail view url
+	 * @return <String>
+	 */
+	function getDetailViewUrl() {
+		$module = $this->getModule();
+        $reporttype = $this->get('reporttype');
+        if($reporttype == 'chart'){
+            $view = 'ChartDetail';
+        } else {
+            $view = $module->getDetailViewName();
+        }
+		return 'index.php?module='.$this->getModuleName().'&view='.$view.'&record='.$this->getId();
+	}
+
+	/**
+	 * Function to get the edit view url
+	 * @return <String>
+	 */
+	function getEditViewUrl() {
+		$module = $this->getModule();
+        $reporttype = $this->get('reporttype');
+        if($reporttype == 'chart'){
+            $view = 'ChartEdit';
+        } else {
+            $view = $module->getEditViewName();
+        }
+		return 'index.php?module='.$this->getModuleName().'&view='.$view.'&record='.$this->getId();
+	}
+
+	/**
+	 * Funtion to get Duplicate Record Url
+	 * @return <String>
+	 */
+	public function getDuplicateRecordUrl() {
+		$module = $this->getModule();
+        $reporttype = $this->get('reporttype');
+        if($reporttype == 'chart'){
+            $view = 'ChartEdit';
+        } else {
+            $view = $module->getEditViewName();
+        }
+		return 'index.php?module='.$this->getModuleName().'&view='.$view.'&record='.$this->getId().'&isDuplicate=true';
 	}
 
 	/**
@@ -348,7 +393,6 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$db->pquery('INSERT INTO vtiger_reportmodules(reportmodulesid, primarymodule, secondarymodules) VALUES(?,?,?)',
 					array($reportId, $this->getPrimaryModule(), $secondaryModule));
 
-
 			$this->saveSelectedFields();
 
 			$this->saveSortFields();
@@ -358,6 +402,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 			$this->saveStandardFilter();
 
 			$this->saveAdvancedFilters();
+
+            $this->saveReportType();
 
 			$this->saveSharingInformation();
 		} else {
@@ -374,7 +420,7 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 					array($this->getPrimaryModule(), $this->getSecondaryModules(), $reportId));
 
 			$db->pquery('UPDATE vtiger_report SET reportname = ?, description = ?, reporttype = ?, folderid = ? WHERE
-				reportid = ?', array($this->get('reportname'), $this->get('description'), 'summary', $this->get('folderid'), $reportId));
+				reportid = ?', array($this->get('reportname'), $this->get('description'), $this->get('reporttype'), $this->get('folderid'), $reportId));
 
 
 			$db->pquery('DELETE FROM vtiger_reportsortcol WHERE reportid = ?', array($reportId));
@@ -386,6 +432,8 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 
 			$db->pquery('DELETE FROM vtiger_reportdatefilter WHERE datefilterid = ?', array($reportId));
 			$this->saveStandardFilter();
+
+			$this->saveReportType();
 
 			$this->saveAdvancedFilters();
 		}
@@ -1021,6 +1069,19 @@ class Reports_Record_Model extends Vtiger_Record_Model {
         return $functions;
     }
 
+    /**
+     * Function to save reprot tyep data
+     */
+    function saveReportType(){
+        $db = PearDatabase::getInstance();
+		$data = $this->get('reporttypedata');
+        if(!empty($data)){
+            $db->pquery('DELETE FROM vtiger_reporttype WHERE reportid = ?', array($this->getId()));
+            $db->pquery("INSERT INTO vtiger_reporttype(reportid, data) VALUES (?,?)",
+            array($this->getId(), $data));
+        }
+    }
+
     function getReportTypeInfo() {
 		$db = PearDatabase::getInstance();
 
@@ -1033,4 +1094,67 @@ class Reports_Record_Model extends Vtiger_Record_Model {
 		return $dataFields;
 	}
 
+	/**
+	 * Function is used in Charts to remove fields like email, phone, descriptions etc
+	 * as these fields are not generally used for grouping records
+	 * @return $fields - array of report field columns
+	 */
+	function getPrimaryModuleFieldsForAdvancedReporting() {
+		$fields = $this->getPrimaryModuleFields();
+		$primaryModule = $this->getPrimaryModule();
+		$primaryModuleModel = Vtiger_Module_Model::getInstance($primaryModule);
+		$primaryModuleFieldInstances = $primaryModuleModel->getFields();
+
+		if(is_array($fields)) foreach($fields as $module => $blocks) {
+			if(is_array($blocks)) foreach($blocks as $blockLabel => $blockFields) {
+				if(is_array($blockFields)) foreach($blockFields as $reportFieldInfo => $fieldLabel) {
+					$fieldInfo = explode(':',$reportFieldInfo);
+
+					$fieldInstance = $primaryModuleFieldInstances[$fieldInfo[3]];
+					if(empty($fieldInstance) || $fieldInfo[0] == 'vtiger_inventoryproductrel' || $fieldInstance->getFieldDataType() == 'email'
+							|| $fieldInstance->getFieldDataType() == 'phone' || $fieldInstance->getFieldDataType() == 'image'
+							|| $fieldInstance->get('uitype') == '4') {
+						unset($fields[$module][$blockLabel][$reportFieldInfo]);
+					}
+				}
+			}
+		}
+		return $fields;
+	}
+
+	/**
+	 * Function is used in Charts to remove fields like email, phone, descriptions etc
+	 * as these fields are not generally used for grouping records
+	 * @return $fields - array of report field columns
+	 */
+	function getSecondaryModuleFieldsForAdvancedReporting() {
+		$fields = $this->getSecondaryModuleFields();
+		$secondaryModules = $this->getSecondaryModules();
+
+		$secondaryModules = @explode(':', $secondaryModules);
+		if(is_array($secondaryModules)) {
+			$secondaryModuleFieldInstances = array();
+			foreach($secondaryModules as $secondaryModule) {
+				if(!empty($secondaryModule)) {
+					$secondaryModuleModel = Vtiger_Module_Model::getInstance($secondaryModule);
+					$secondaryModuleFieldInstances[$secondaryModule] = $secondaryModuleModel->getFields();
+				}
+			}
+		}
+		if(is_array($fields)) foreach($fields as $module => $blocks) {
+			if(is_array($blocks)) foreach($blocks as $blockLabel => $blockFields) {
+				if(is_array($blockFields)) foreach($blockFields as $reportFieldInfo => $fieldLabel) {
+					$fieldInfo = explode(':',$reportFieldInfo);
+					$fieldInstance = $secondaryModuleFieldInstances[$module][$fieldInfo[3]];
+					if(empty($fieldInstance) || $fieldInfo[0] == 'vtiger_inventoryproductrel'
+							|| $fieldInstance->getFieldDataType() == 'email' || $fieldInstance->getFieldDataType() == 'phone'
+								|| $fieldInstance->getFieldDataType() == 'image' || $fieldInstance->get('uitype') == '4') {
+						unset($fields[$module][$blockLabel][$reportFieldInfo]);
+					}
+				}
+			}
+		}
+
+		return $fields;
+	}
 }

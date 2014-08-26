@@ -73,6 +73,8 @@ Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_faqcf (
                                 CONSTRAINT fk_1_vtiger_faqcf FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE 
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8", array()); 
 
+echo "FAQ cf created";
+
 //73 starts
 $query = 'SELECT 1 FROM vtiger_currencies WHERE currency_name=?';
 $result = $adb->pquery($query, array('Sudanese Pound'));
@@ -1454,3 +1456,11 @@ if ($adb->num_rows($idResult) > 0) {
 }else {
         echo '<br>Account Owner was not existed in this database';
     }
+    
+//Reports Chart Supported
+Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reporttype(
+                        reportid INT(10),
+                        data text,
+						PRIMARY KEY (`reportid`),
+						CONSTRAINT `fk_1_vtiger_reporttype` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE)
+                        ENGINE=InnoDB DEFAULT CHARSET=utf8;", array()); 

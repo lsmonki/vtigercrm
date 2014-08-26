@@ -137,6 +137,33 @@ $languageStrings = array(
 	'Tickets related to Products'=>'Tickets related to Products',
 	'Tickets that are Open'=>'Open Tickets',
 	'Vendors Email Report'=>'Vendors Email Report',
+
+	//charts labels
+	'LBL_SELECT_CHART_TYPE' => 'Select chart type',
+	'LBL_CLICK_THROUGH_NOT_AVAILABLE' => 'Click through not available as you have selected more than one module',
+	'LBL_TOTAL_SUM_OF' => 'Total Sum of %s',
+	'LBL_AVG_OF' => 'Average of %s',
+	'LBL_MIN_OF' => 'Minimum of %s',
+	'LBL_MAX_OF' => 'Maximum of %s',
+	'LBL_RECORD_COUNT' => 'Record Count',
+	'LBL_PIE_CHART' => 'Pie Chart',
+	'LBL_VERTICAL_BAR_CHART' => 'Vertical Bar Chart',
+	'LBL_HORIZONTAL_BAR_CHART' => 'Horizontal Bar Chart',
+	'LBL_LINE_CHART' => 'Line Chart',
+	'LBL_SELECT_CHART' => 'Select Chart',
+	'LBL_CREATING_CHART_REPORT' => 'Creating Chart Report',
+	'LBL_EDITING_CHART_REPORT' => 'Editing Chart Report',
+	'LBL_GENERATE_CHART' => 'Generate Chart',
+	'LBL_SELECT_GROUP_BY_FIELD' => 'Select Groupby Field',
+	'LBL_SELECT_DATA_FIELD' => 'Select Data Fields',
+	'LBL_MODIFY_CONDITION' => 'Modify Conditions',
+	'LBL_PLEASE_SELECT_ATLEAST_ONE_GROUP_FIELD_AND_DATA_FIELD' => 'Please select at least one Groupby field and one Data field.',
+	'LBL_FOR_BAR_GRAPH_AND_LINE_GRAPH_SELECT_3_MAX_DATA_FIELDS' => 'For Bar and Line graph, you can select maximum of 3 Data fields.',
+	'LBL_DETAIL_REPORT' => 'Detail Report',
+	'LBL_CHARTS' => 'Charts',
+    //Schedule Reports - Mail Content
+    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'This is an auto-generated email sent on behalf of a scheduled report.',
+
 );
 
 $jsLanguageStrings = array(

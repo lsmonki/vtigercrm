@@ -3929,6 +3929,19 @@
 		</data>
 	</table>
 
+        <table name="vtiger_reporttype">
+            <field name="reportid" type="I" size="10">
+                    <key />
+            </field>
+            <field name="data" type="X" />
+        </table>
+        <table name="vtiger_reporttype" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_reporttype FOREIGN KEY (reportid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
+		<opt>Engine=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+        
 	<table name="vtiger_usageunit">
 		<field name="usageunitid" type="I" size="19">
 			<key />
