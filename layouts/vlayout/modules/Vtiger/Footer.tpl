@@ -22,7 +22,7 @@
 		</div>
 		{/if}
 
-		{if !$MAIN_PRODUCT_WHITELABEL}
+		{if !$MAIN_PRODUCT_WHITELABEL && isset($CURRENT_USER_MODEL)}
 		<footer class="noprint">
                     <div class="vtFooter">
 			<p>
