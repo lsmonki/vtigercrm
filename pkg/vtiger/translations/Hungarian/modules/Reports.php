@@ -142,4 +142,5 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Korlátozás: A tételsor mezői (Lista ár,Kedvezmény és Mennyiség) csak akkor használhatók,ha egyéb számítási mezők nem lettek kiválasztva.',
 	'JS_DUPLICATE_RECORD'          => 'Duplikált jelentés'            ,
+        'JS_NO_CHART_DATA_AVAILABLE' => 'Adat nem áll rendelkezésre, kérjük, ellenőrizze a kiválasztott mező',
 );

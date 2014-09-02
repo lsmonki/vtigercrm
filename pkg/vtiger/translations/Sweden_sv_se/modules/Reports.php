@@ -157,7 +157,7 @@ $languageStrings = array(
 	'LBL_YEARLY'	=>	'Årlig',
 	'LBL_SPECIFIC_DATE'	=>	'På Specifik datum',
 	'LBL_CHOOSE_DATE'	=>	'Välj datum',
-	'LBL_ON_THESE_DAYS'	=>	'På dessa dagar',
+	'LBL_ON_THESE_DAYS'	=>	'På dessData not available, please check the selected fieldsa dagar',
 	'LBL_SELECT_MONTH_AND_DAY'	=>	'Välj månad och datum',
 	'LBL_SELECTED_DATES'	=>	'Valda datum',
 	'LBL_EXCEEDING_MAXIMUM_LIMIT'	=>	'Högsta gräns överskridits',
@@ -212,4 +212,5 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD' => 'Duplicera Rapport',
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Begränsning: Artikeln fält (Listpris, Rabatt & Kvantitet) kan endast användas när andra beräkningsfält inte är valda.',
+        'JS_NO_CHART_DATA_AVAILABLE' => 'Uppgifter saknas, kontrollera de markerade fälten',
 );

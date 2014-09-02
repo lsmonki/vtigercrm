@@ -142,4 +142,5 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitação: os campos do Item da linha (Lista de Preço, Desconto & Quantidade) somente podem ser utilizados quando outros campos de cálculo não forem selecionados.',
 	'JS_DUPLICATE_RECORD' => 'Duplicar Relatório',
+        'JS_NO_CHART_DATA_AVAILABLE' => 'Dados não disponíveis, por favor, verifique os campos selecionados',
 );

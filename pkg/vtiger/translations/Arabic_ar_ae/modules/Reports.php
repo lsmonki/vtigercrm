@@ -213,4 +213,5 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_DUPLICATE_RECORD' => 'كرر التقرير',
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
+        'JS_NO_CHART_DATA_AVAILABLE' => 'البيانات غير متوفرة، يرجى التحقق من الحقول المحددة',
 );
