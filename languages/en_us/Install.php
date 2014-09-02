@@ -67,4 +67,5 @@ $languageStrings = array(
 	'MSG_LIST_REASONS' => 'This may be due to the following reasons',
         'LBL_MYSQLI_CONNECT_SUPPORT'=>'mysqli support',
         'LBL_OPEN_SSL'=>'openssl support',
+        'LBL_CURL'=>'cURL support',
 );

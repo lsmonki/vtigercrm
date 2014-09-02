@@ -133,6 +133,7 @@ class Install_Utils_Model {
                     $preInstallConfig['LBL_MYSQLI_CONNECT_SUPPORT'] = array(extension_loaded('mysqli'), true, extension_loaded('mysqli'));
                 }
                 $preInstallConfig['LBL_OPEN_SSL'] = array(extension_loaded('openssl'), true, extension_loaded('openssl'));
+                $preInstallConfig['LBL_CURL'] = array(extension_loaded('curl'), true, extension_loaded('curl'));
                 $gnInstalled = false;
 		if(!function_exists('gd_info')) {
 			eval(self::$gdInfoAlternate);
