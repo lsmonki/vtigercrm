@@ -11,7 +11,7 @@
 class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
 
     public static function getNonVisibleModulesList() {
-        return array('ModTracker','Portal','Webmails','Users','Mobile','Integration','WSAPP',
+        return array('ModTracker','Webmails','Users','Mobile','Integration','WSAPP',
                      'ConfigEditor','FieldFormulas','VtigerBackup','CronTasks','Import' ,'Tooltip',
                     'CustomerPortal', 'Home', 'ExtensionStore');
     }
