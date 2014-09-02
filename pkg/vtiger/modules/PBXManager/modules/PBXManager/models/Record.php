@@ -34,11 +34,36 @@ class PBXManager_Record_Model extends Vtiger_Record_Model{
             $record = new self();
             $record->setData($rowData);
             $recordModels[] = $record;
+            
+            //To check if the call status is 'ringing' for >5min
+            $starttime = strtotime($rowData['starttime']);
+            $currenttime = strtotime(Date('y-m-d H:i:s'));
+            $timeDiff = $currenttime - $starttime;
+            if($timeDiff > 300 && $rowData['callstatus'] == 'ringing') {
+                $recordIds[] = $rowData['crmid'];
+            }
+            //END
         }    
+        
+        if(count($recordIds)) $this->updateCallStatus($recordIds);
+        
         return $recordModels;
     }
     
     /**
+     * To update call status from 'ringing' to 'no-response', if status not updated 
+     * for more than 5 minutes
+     * @param type $recordIds
+     */
+    public function updateCallStatus($recordIds) {
+        $db = PearDatabase::getInstance();
+        $query = "UPDATE ".self::moduletableName." SET callstatus='no-response' 
+                  WHERE pbxmanagerid IN (".generateQuestionMarks($recordIds).") 
+                  AND callstatus='ringing'";
+        $db->pquery($query, $recordIds);
+    }
+
+        /**
      * Function to save PBXManager record with array of params
      * @param <array> $values
      * return <string> $recordid
