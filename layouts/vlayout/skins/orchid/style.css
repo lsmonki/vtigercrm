@@ -3279,8 +3279,8 @@ background-position: 0 -13px;
     display: block;
 }
 .bx-wrapper a img{
-    height: 150px;
-    width: 1500px;
+    height: 100px;
+    width: auto;
     margin: 0 auto;
 }
 
