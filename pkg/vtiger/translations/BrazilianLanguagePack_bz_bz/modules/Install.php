@@ -6,7 +6,7 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger. All Rights Reserved.
- * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 28/11/2013 - www.ttcasolucoes.com.br
+ * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 22/08/2014 - www.ttcasolucoes.com.br
  * *********************************************************************************** */
 
 $languageStrings = array(
@@ -65,4 +65,6 @@ $languageStrings = array(
 	'MSG_DB_ROOT_USER_NOT_AUTHORIZED' => 'Mensagem: O Usuário Root da Base de Dados não tem permissão para Criar base de dados ou o nome da Base de Dados possui caracteres especiais. Tente mudar as configurações da Base de Dados',
 	'MSG_DB_USER_NOT_AUTHORIZED' => 'o usuário da base de dados não tem acesso para conectar à base de dados a partir do host',
 	'MSG_LIST_REASONS' => 'Isto pode ser devido às seguintes razões',
+	        'LBL_MYSQLI_CONNECT_SUPPORT'=>'Suporte Mysqli',
+        'LBL_OPEN_SSL'=>'Suporte Openssl',
 );

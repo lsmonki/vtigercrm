@@ -35,7 +35,7 @@ $languageStrings = array(
 	'LBL_ADD_RECORD' => 'Adicionar Relatório',
 	'LBL_ALL_REPORTS' => 'Todos os Relatórios',
 	'LBL_ASCENDING' => 'Ascendente',
-	'LBL_AT_TIME' => 'No Tempo',
+	'LBL_AT_TIME' => 'Hora',
 	'LBL_AVERAGE' => 'Média',
 	'LBL_AVG' => 'MED' ,
 	'LBL_CALCULATION_CONVERSION_MESSAGE' => 'Os cálculos são baseados na moeda padrão do seu CRM',
@@ -68,7 +68,7 @@ $languageStrings = array(
 	'LBL_MAX' => 'Max',
 	'LBL_MIN' => 'MIN' ,
 	'LBL_MONTHLY_BY_DATE' => 'Mensal por Data',
-        'LBL_MORE_RECORDS_TXT'=>'Somente 1.000 registros são exibidos abaixo. Por favor, exporte para visualizar todos os Registros',
+    'LBL_MORE_RECORDS_TXT'=>'Somente 1.000 registros são exibidos abaixo. Por favor, exporte para visualizar todos os Registros',
 	'LBL_MOVE_REPORT' => 'Mover Relatórios' ,
 	'LBL_NEXT' => 'Próximo',
 	'LBL_NEXT_TRIGGER_TIME' => 'Próxima gatilho iniciado',
@@ -137,10 +137,37 @@ $languageStrings = array(
 	'Tickets related to Products'=> 'Chamados relacionados aos Produtos', 
 	'Tickets that are Open'=> 'Chamados Abertos', 
 	'Vendors Email Report' => 'Relatório Emails Fornecedores',
+
+	//charts labels
+	'LBL_SELECT_CHART_TYPE' => 'Selecionar tipo de Gráfico',
+	'LBL_CLICK_THROUGH_NOT_AVAILABLE' => 'Clique não disponível pois você seleciou mais de um módulo',
+	'LBL_TOTAL_SUM_OF' => 'Soma Total de %s',
+	'LBL_AVG_OF' => 'Média de %s',
+	'LBL_MIN_OF' => 'Mínimo de %s',
+	'LBL_MAX_OF' => 'Máximo de %s',
+	'LBL_RECORD_COUNT' => 'Contar Registros',
+	'LBL_PIE_CHART' => 'Gráfico de Pizza',
+	'LBL_VERTICAL_BAR_CHART' => 'Gráfico de Barras Vertical',
+	'LBL_HORIZONTAL_BAR_CHART' => 'Gráfico de Barras Horizontal',
+	'LBL_LINE_CHART' => 'Gráfico de Linha',
+	'LBL_SELECT_CHART' => 'Selecionar Gráfico',
+	'LBL_CREATING_CHART_REPORT' => 'Criando Gráfico de Relatório',
+	'LBL_EDITING_CHART_REPORT' => 'Editando Gráfico de Relatório',
+	'LBL_GENERATE_CHART' => 'Gerar Gráfico',
+	'LBL_SELECT_GROUP_BY_FIELD' => 'Selecionar Grupo de Campo',
+	'LBL_SELECT_DATA_FIELD' => 'Selecionar Campo de Dados',
+	'LBL_MODIFY_CONDITION' => 'Modificar Condições',
+	'LBL_PLEASE_SELECT_ATLEAST_ONE_GROUP_FIELD_AND_DATA_FIELD' => 'Por favor, selecione pelo menos um Grupo de Campos e um campo de Dados.',
+	'LBL_FOR_BAR_GRAPH_AND_LINE_GRAPH_SELECT_3_MAX_DATA_FIELDS' => 'Para gráficos de Barras e Linha você pode selecionar no máximo de campos de Dados.',
+	'LBL_DETAIL_REPORT' => 'Detalhes do Relatório',
+	'LBL_CHARTS' => 'Gráficos',
+    //Schedule Reports - Mail Content
+    'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'Este é um email gerado automaticamente e enviado em função de um relatório agendado.',
+	
 );
 
 $jsLanguageStrings = array(
 	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitação: os campos do Item da linha (Lista de Preço, Desconto & Quantidade) somente podem ser utilizados quando outros campos de cálculo não forem selecionados.',
 	'JS_DUPLICATE_RECORD' => 'Duplicar Relatório',
-        'JS_NO_CHART_DATA_AVAILABLE' => 'Dados não disponíveis, por favor, verifique os campos selecionados',
+    'JS_NO_CHART_DATA_AVAILABLE' => 'Dados não disponíveis, por favor, verifique os campos selecionados',
 );

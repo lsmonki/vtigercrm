@@ -36,7 +36,6 @@ $languageStrings = array(
 	'LBL_VERSION_NOT_SUPPORTED' => 'Module version is not compatible with vtiger version',
 	'LBL_FINISH' => 'Finish',
 	'LBL_IMPORT_ZIP' => 'Install From File',
-	'LBL_IMPORT_MODULE' => 'Install From Vtiger',
 	'LBL_NOT_FOUND' => "Sorry, no extensions are currently available for the current version of your CRM",
 	'LBL_INVALID_IMPORT_TRY_AGAIN' => ' provided for module import! Try Again.',
 	'LBL_IMPORTED_MODULE' => ' module was imported successfully.',
@@ -52,7 +51,6 @@ $languageStrings = array(
         'LBL_IMPORT_MODULE_FROM_ZIP' => 'Import Module from Zip',
         'LBL_UPDATE_NOW' => 'Update Now',
         'LBL_IMPORT_NOW' => 'Import Now',
-        'LBL_OK' => 'Ok',
         'LBL_DISCLAIMER_FOR_IMPORT_FROM_ZIP' => '<b>Disclaimer - Custom Files could put your CRM at risk</b> <br>  
                                                  This functionality has been made available for Developers to test new modules.
                                                     If you are installing from a file provided 3rd party, please proceed only if you trust the publisher. Custom Modules could include security vulnerabilities and overwrite system files putting your CRM at risk. The module you are about to install has not been reviewed by Vtiger.',

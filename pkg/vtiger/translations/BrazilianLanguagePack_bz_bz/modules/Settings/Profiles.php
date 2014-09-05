@@ -5,7 +5,7 @@
  * The Original Code is:vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger. All Rights Reserved.
- * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 20/06/2014 - www.ttcasolucoes.com.br
+ * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 04/07/2014 - www.ttcasolucoes.com.br
  ************************************************************************************/
 $languageStrings = array(
 	'LBL_ADD_RECORD' => 'Adicionar Perfil',
@@ -38,15 +38,15 @@ $languageStrings = array(
 	'LBL_WRITE' => 'Escrita',
 	'Profiles' => 'Perfis',
 	'SINGLE_Profiles' => 'Perfil',
-    
-        'Import' => 'Importação',
-        'Export' => 'Exportação',
-	'Merge'  => 'Fundir',
-        'ConvertLead' => 'Converter chumbo',
-        'DuplicatesHandling' => 'Duplicatas Manuseio',
-        'ReceiveIncomingCalls' => 'Receber chamadas recebidas',
-        'MakeOutgoingCalls' => 'Fazer chamadas',
-        'Print' => 'Impressão',
+   
+        'Import' => 'Importar',
+        'Export' => 'Exportar',
+	'Merge'  => 'Mesclar',
+        'ConvertLead' => 'Converter Lead',
+        'DuplicatesHandling' => 'Manipular Duplicados',
+        'ReceiveIncomingCalls' => 'Receber Chamadas',
+        'MakeOutgoingCalls' => 'Realizar Chamadas',
+        'Print' => 'Imprimir',
 );
 
 $jsLanguageStrings = array(

@@ -86,6 +86,14 @@ $languageStrings = array(
 	'Task' => 'Tarefa',
 	'Weekly'=>'Semana(s)',
 	'Yearly'=>'Ano',
+    // Missing Fields
+    'Selected Users'=>'Selecionar Usuários',
+    'Starting Day of the week'=>'Inicio Dia Semana',
+    'Day starts at'=>'Dia começa as',
+    'Date Format'=>'Formato Data',
+    'Calendar Hour Format'=>'Formato Hora',
+    'Time Zone'=>'Fuso Horário',
+    'Default Activity View'=>'Padrão Visualização Atividade',
 );
 
 $jsLanguageStrings = array(

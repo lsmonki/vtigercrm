@@ -1293,19 +1293,19 @@ if(!defined('INSTALLATION_MODE')) {
             }
         }
             //Data migrate from old columns to new columns in vtiger_pbxmanager 
-            $query = 'SELECT pbxmanagerid, callfrom, callto, timeofcall, status FROM vtiger_pbxmanager';
+            $query = 'SELECT * FROM vtiger_pbxmanager';
             $result = $adb->pquery($query, array());
             $params = array();
             $rowCount = $adb->num_rows($result);
             for ($i = 0; $i < $rowCount; $i++) {
-                $pbxmanagerid = $adb->query_result($result, 0, 'pbxmanagerid');
-                $callfrom = $adb->query_result($result, 0, 'callfrom');
-                $callto = $adb->query_result($result, 0, 'callto');
-                $timeofcall = $adb->query_result($result, 0, 'timeofcall');
-                $status = $adb->query_result($result, 0, 'status');
+                $pbxmanagerid = $adb->query_result($result, $i, 'pbxmanagerid');
+                $callfrom = $adb->query_result($result, $i, 'callfrom');
+                $callto = $adb->query_result($result, $i, 'callto');
+                $timeofcall = $adb->query_result($result, $i, 'timeofcall');
+                $status = $adb->query_result($result, $i, 'status');
                 $customer = PBXManager_Record_Model::lookUpRelatedWithNumber($callfrom);
                 $userIdQuery = $adb->pquery('SELECT userid FROM vtiger_asteriskextensions WHERE asterisk_extension = ?', array($callto));
-                $user = $adb->query_result($userIdQuery, 0, 'userid');
+                $user = $adb->query_result($userIdQuery, $i, 'userid');
                 if ($status == 'outgoing') {
                     $callstatus = 'outbound';
                 } else if ($status == 'incoming') {

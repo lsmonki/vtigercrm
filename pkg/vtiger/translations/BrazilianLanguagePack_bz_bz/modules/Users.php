@@ -246,7 +246,7 @@ $languageStrings = array(
         'narrow'=>'estreita',
         'Reminder Interval'=>'Intervalo Lembrete',
 	'Starting Day of the week'=>'Dia de Início da Semana',
-	'Default Activity View'=>'Visualizar Atividade Padrão',
+	'Default Activity View'=>'Visualização Padrão da Atividade',
 	'Today'=>'Hoje',
 	'Date Format'=>'Formato Data',
 	'Calendar Hour Format'=>'Formato Hora Agenda',
@@ -254,6 +254,14 @@ $languageStrings = array(
 	'Time Zone'=>'Fuso Horário',
 	'Selected Users'=>'Usuários Selecionados',
 	'Private'=>'Particular',
+    'Default Event Status'=>'Status Padrão do Evento',
+    'Default Activity Type'=>'Tipo Padrão da Atividade',
+    'Planned'=>'Planejado',
+    'Not Held'=>'Não Realizado',
+    'Held'=>'Realizado',
+    'Meeting'=>'Reunião',
+    'Call'=>'Chamada',
+
 
 );
 

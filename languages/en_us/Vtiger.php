@@ -764,4 +764,7 @@ $jsLanguageStrings = array(
         //Promotion translations
         'JS_HIDE_PROMOTION' => 'Hide Promotion',
         'JS_SHOW_PROMOTION' => 'Show Promotion',
+    
+        //Inventory module Translations
+        'JS_PLEASE_ENABLE_PRODUCT_OR_SERVICE_MODULE'=>'Please Enable Product or Service Module',
 );

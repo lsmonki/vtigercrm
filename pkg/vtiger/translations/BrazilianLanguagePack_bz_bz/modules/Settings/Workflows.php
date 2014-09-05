@@ -5,7 +5,7 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger. All Rights Reserved.
- * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 20/06/2014 - www.ttcasolucoes.com.br
+ * Contributor(s): Valmir C. Trindade - Translate to Brazilian Portuguese - 22/08/2014 - www.ttcasolucoes.com.br
  *************************************************************************************/
 $languageStrings = array(
 	'ADD_CONDITIONS' => 'Adicionar Condições',
@@ -76,6 +76,23 @@ $languageStrings = array(
 	'ON_FIRST_SAVE' => 'Somente a primeira vez em que for salvo',
 	'ON_MODIFY' => 'Todas as vezes que o registro for modificado',
 	'SCHEDULE_WORKFLOW' => 'Agendar Workflow',
+    'ON_SCHEDULE'=>'Agendar',
+    'LBL_RUN_WORKFLOW' => 'Executar Workflow',
+	'LBL_AT_TIME'=>'Na Hora',
+	'LBL_HOURLY'=>'A cada hora',
+	'LBL_DAILY'=>'Diariamente',
+	'LBL_WEEKLY'=>'Semanalmente',
+	'LBL_ON_THESE_DAYS'=>'Nos Dias',
+	'LBL_MONTHLY_BY_DATE'=>'Mensalmente por Data',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Mensalmente por dia da Semana',
+	'LBL_YEARLY'=>'Anualmente',
+	'LBL_SPECIFIC_DATE'=>'Data Específica',
+	'LBL_CHOOSE_DATE'=>'Escolher data',
+	'LBL_SELECT_MONTH_AND_DAY'=>'Selecione Mês e Dia',
+	'LBL_SELECTED_DATES'=>'Datas selecionadas',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Limite máximo excedido',
+	'LBL_NEXT_TRIGGER_TIME'=>'Hora Próxima Disparo',
+	'LBL_MESSAGE' => 'Mensagem',
 
         //Missing Fields
         'Create Entity'=>'Criar Entidade',
@@ -88,7 +105,6 @@ $languageStrings = array(
         'SMS Task'=>'Tarefa SMS', 
         'Summary'=>'Descrição',
         'Update Fields'=>'Atualizar Campos',
-
 );
 
 $jsLanguageStrings = array(

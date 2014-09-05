@@ -36,4 +36,5 @@ $languageStrings = array(
     'Recording URL' => 'Recording',
     
     'SINGLE_PBXManager' => 'Call Record' ,
+
 );

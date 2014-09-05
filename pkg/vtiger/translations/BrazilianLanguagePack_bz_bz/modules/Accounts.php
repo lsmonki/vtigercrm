@@ -35,13 +35,12 @@ $languageStrings = array(
 	'Phone' => 'Telefone',
 	'Press'=> 'Imprensa', 
 	'Prospect' => 'Prospect', 
-	'Prospect Accounts'            => 'Contas Prospect',
+	'Prospect Accounts' => 'Contas Prospect',
 	'Reseller' => 'Revendedor',
 	'SIC Code' => 'Cod CNAE', 
 	'SINGLE_Accounts' => 'Organização' ,
 	'Ticker Symbol'=> 'Cod. Bolsa', 
 	'Website'=> 'Website' , 
-
 	//Missing Fields in Right Bar | Valmir C Trindade
 	'Sales Order'=>'Pedido Vendas',
 	'Activities'=>'Atividades',

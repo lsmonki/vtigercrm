@@ -160,6 +160,7 @@ $languageStrings = array(
 	'LBL_PLEASE_SELECT_ATLEAST_ONE_GROUP_FIELD_AND_DATA_FIELD' => 'Please select at least one Groupby field and one Data field.',
 	'LBL_FOR_BAR_GRAPH_AND_LINE_GRAPH_SELECT_3_MAX_DATA_FIELDS' => 'For Bar and Line graph, you can select maximum of 3 Data fields.',
 	'LBL_DETAIL_REPORT' => 'Detail Report',
+	'LBL_PIVOT_REPORT' => 'Pivot Report',
 	'LBL_CHARTS' => 'Charts',
     //Schedule Reports - Mail Content
     'LBL_AUTO_GENERATED_REPORT_EMAIL' => 'This is an auto-generated email sent on behalf of a scheduled report.',
@@ -167,6 +168,7 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
 	'JS_DUPLICATE_RECORD' => 'Duplicate Report',
+	'JS_CALCULATION_LINE_ITEM_FIELDS_SELECTION_LIMITATION' => 'Limitation: Line Item fields(List Price, Discount & Quantity) can only be used when other calculation fields are not selected.',
+	'JS_NO_CHART_DATA_AVAILABLE' => 'Data not available, please check the selected fields',
 );

@@ -22,6 +22,6 @@ $languageStrings = array(
 	'PLVT' => 'Principais Oportunidades',
 	'QLTQ' => 'Principais Cotações',
 	'UA' => 'Atividades Programadas',
-	 'Key Metrics'                  => 'Principais Métricas',
-	'Tag Cloud'                    => 'Tag Cloud',
+	'Key Metrics' => 'Principais Métricas',
+	'Tag Cloud' => 'Tag Cloud',
 );

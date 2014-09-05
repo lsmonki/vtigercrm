@@ -38,6 +38,8 @@ Class Settings_Webforms_ShowForm_View extends Settings_Vtiger_IndexAjax_View {
 				}
 			}
 		}
+        $action_path = vglobal('site_URL').'modules/Webforms/capture.php';
+        $captchaPath = vglobal('site_URL').'modules/Settings/Webforms/actions/CheckCaptcha.php';
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_ID', $recordId);
 		$viewer->assign('RECORD_MODEL', $recordModel);

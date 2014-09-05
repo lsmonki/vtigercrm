@@ -556,7 +556,7 @@ $languageStrings = array(
 	'ProjectMilestone'             => 'Projekt Mérföldkövek'        ,
 	'Projects'                     => 'Projektek'                   ,
 	'ProjectTask'                  => 'Projekt Feladatok'           ,
-	'Public Relations'             => 'Public Relations'            ,
+	'Public Relations'             => 'Közönségkapcsolatok'         ,
 	'Public'                       => 'Nyilvános'                   ,
 	'Purchase Order'               => 'Beszerzések'                 ,
 	'PurchaseOrder'                => 'Beszerzések'                 ,
@@ -805,8 +805,7 @@ $jsLanguageStrings = array(
 	'SHOULD_BE_LESS_THAN_TODAY'    => 'Ennek a mai nap előttinek kell lennie',
 	'SINGLE_Accounts'              => 'Szervezet'                   ,
 	'SINGLE_Contacts'              => 'Kapcsolat'                   ,
-
-	//No Tax exist 
-    'JS_LBL_NO_TAXES'=>'No adók', 
-
+    'JS_LBL_NO_TAXES'              => 'Nincsenek adók'    ,
+    'JS_HIDE_PROMOTION' 		   => 'Reklám elrejtése'  ,
+    'JS_SHOW_PROMOTION'            => 'Reklám mutatása'   ,
 );
