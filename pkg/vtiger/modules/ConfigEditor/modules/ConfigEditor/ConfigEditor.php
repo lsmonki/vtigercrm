@@ -35,7 +35,7 @@ class ConfigEditor {
 			return;
 		}
 		
-		$displayLabel = 'Configuration Editor';
+		$displayLabel = 'LBL_CONFIG_EDITOR';
 		
 		global $adb;
 		if ($registerLink) {
