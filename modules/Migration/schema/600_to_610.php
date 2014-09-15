@@ -653,7 +653,7 @@ Migration_Index_View::ExecuteQuery($sql,array());
 //79 starts
 Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_shareduserinfo
 						(userid INT(19) NOT NULL default 0, shareduserid INT(19) NOT NULL default 0,
-						color VARCHAR(50), visible INT(19) default 1);");
+						color VARCHAR(50), visible INT(19) default 1);", array());
 
 Migration_Index_View::ExecuteQuery('ALTER TABLE vtiger_mailscanner_rules ADD assigned_to INT(10), ADD cc VARCHAR(255), ADD bcc VARCHAR(255)', array());
 $assignedToId = Users::getActiveAdminId();
