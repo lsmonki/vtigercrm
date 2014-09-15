@@ -1282,10 +1282,14 @@ if(!defined('INSTALLATION_MODE')) {
             for ($i = 0; $i < $rows; $i++) {
                 $row = $adb->query_result_rowdata($result, $i);
                 $crmid = $row['id'];
-                $values['crmid'] = $crmid;
-                $values['setype'] = $module;
+                
                 foreach ($row as $name => $value) {
-                    if ($name != 'name' && !empty($value) && $name != 'id' && !is_numeric($name)) {
+                    $values = array();
+                    $values['crmid'] = $crmid;
+                    $values['setype'] = $module;
+                    
+                    if ($name != 'name' && !empty($value) && $name != 'id' && !is_numeric($name)
+                        && $name != 'firstname' && $name != 'lastname') {
                         $values[$name] = $value;
                         $recordModel->receivePhoneLookUpRecord($name, $values, true);
                     }
