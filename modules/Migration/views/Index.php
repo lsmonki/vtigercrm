@@ -115,6 +115,7 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		}
 
 		//update vtiger version in db
+                $moduleModel = Migration_Module_Model::getInstance();
 		$moduleModel->updateVtigerVersion();
 		// To carry out all the necessary actions after migration
 		$moduleModel->postMigrateActivities();

@@ -2447,3 +2447,7 @@ $module->addLink('DETAILVIEWSIDEBARWIDGET', 'Google Map', 'module=Google&view=Ma
 Migration_Index_View::ExecuteQuery('DELETE FROM vtiger_settings_field WHERE name=?', array('LBL_BACKUP_SERVER_SETTINGS'));
 
 // Changes ends as on 2013.11.29
+
+//Configuration Editor fix
+$sql = "UPDATE vtiger_settings_field SET name = ? WHERE name = ?";
+Migration_Index_View::ExecuteQuery($sql,array('LBL_CONFIG_EDITOR', 'Configuration Editor'));
