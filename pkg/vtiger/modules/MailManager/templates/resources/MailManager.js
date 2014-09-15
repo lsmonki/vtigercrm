@@ -346,9 +346,8 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=settings&_operationarg=detail",
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=settings&_operationarg=detail").then(function(response) { 
+                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -1998,7 +1997,8 @@ if (typeof(MailManager) == 'undefined') {
 				imageEle.attr('src', imagePath);
 
 				if(MailManager_QuickCreate_Js.foldersClicked == false) {
-					jQuery.post(MailManager._baseurl() + "_operation=folder&_operationarg=getFoldersList", function(response) {
+                                    AppConnector.request(MailManager._baseurl() + "_operation=folder&_operationarg=getFoldersList").then(function(response) { 
+                                                response = JSON.parse(response);
 						jQuery('#folders').append(response.result);
 						progressElement.progressIndicator({'mode':'hide'});
 						MailManager_QuickCreate_Js.foldersClicked = true;
