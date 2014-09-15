@@ -122,10 +122,9 @@ if (typeof(MailManager) == 'undefined') {
 						'enabled' : true
 					}
 				});
-				jQuery.post(MailManager._baseurl() + "_operation=mainui",
-					function(response){
+				AppConnector.request(MailManager._baseurl() + "_operation=mainui").then(function(response) { 
 						//var response = MailManager.removeHidElement(transport.responseText);
-						//response = JSON.parse(response);
+						response = JSON.parse(response);
 						MailManager._mainui_callback(response);
 						progressIndicatorElement.progressIndicator({
 							'mode' : 'hide'

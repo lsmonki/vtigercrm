@@ -53,4 +53,8 @@ class Vtiger_ProcessDuplicates_Action extends Vtiger_Action_Controller {
 		$response->setResult(true);
 		$response->emit();
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

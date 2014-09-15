@@ -44,4 +44,8 @@ class Vtiger_ShowWidget_View extends Vtiger_IndexAjax_View {
 		$response->setResult(array('success'=>false,'message'=>  vtranslate('NO_DATA')));
 		$response->emit();
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

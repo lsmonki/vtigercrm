@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <form class="form-horizontal popupSearchContainer">
+    <form class="form-horizontal popupSearchContainer" method="POST">
         <div class="control-group margin0px">
             <span class="paddingLeft10px"><strong>{vtranslate('LBL_SEARCH_FOR')}</strong></span>
             <span class="paddingLeft10px"></span>

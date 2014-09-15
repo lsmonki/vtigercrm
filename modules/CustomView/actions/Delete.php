@@ -19,4 +19,8 @@ class CustomView_Delete_Action extends Vtiger_Action_Controller {
 		$listViewUrl = $moduleModel->getListViewUrl();
 		header("Location: $listViewUrl");
 	}
+    
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
+    }
 }

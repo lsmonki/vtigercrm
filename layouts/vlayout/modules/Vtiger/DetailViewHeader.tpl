@@ -77,6 +77,6 @@
 		</div>
 		<div class="detailViewInfo row-fluid">
 			<div class="{if $NO_PAGINATION} span12 {else} span10 {/if} details">
-				<form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}'>
+				<form id="detailView" data-name-fields='{ZEND_JSON::encode($MODULE_MODEL->getNameFields())}' method="POST">
 					<div class="contents">
 {/strip}

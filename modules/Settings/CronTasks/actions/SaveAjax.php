@@ -39,5 +39,8 @@ class Settings_CronTasks_SaveAjax_Action extends Settings_Vtiger_Index_Action {
 		$response->setResult(array(true));
 		$response->emit();
 	}
-
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        }
 }

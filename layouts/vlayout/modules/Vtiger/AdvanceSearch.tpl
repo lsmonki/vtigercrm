@@ -29,7 +29,7 @@
 				</span>
 			</div>
 			<div class="filterElements">
-				<form name="advanceFilterForm">
+				<form name="advanceFilterForm" method="POST">
 					{if $SOURCE_MODULE eq 'Home'}
 						<div class="textAlignCenter marginBottom10px well contentsBackground">{vtranslate('LBL_PLEASE_SELECT_MODULE',$MODULE)}</div>
 					{else}

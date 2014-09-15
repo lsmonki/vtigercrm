@@ -11,7 +11,7 @@
 {strip}
 <div class="container-fluid">
 	<div class="contents row-fluid">
-		<form id="OutgoingServerForm" class="form-horizontal" data-detail-url="{$MODEL->getDetailViewUrl()}">
+		<form id="OutgoingServerForm" class="form-horizontal" data-detail-url="{$MODEL->getDetailViewUrl()}" method="POST">
 			<div class="widget_header row-fluid">
 				<div class="span8"><h3>{vtranslate('LBL_OUTGOING_SERVER', $QUALIFIED_MODULE)}</h3>&nbsp;{vtranslate('LBL_OUTGOING_SERVER_DESC', $QUALIFIED_MODULE)}</div>
 				<div class="span4 btn-toolbar"><div class="pull-right">

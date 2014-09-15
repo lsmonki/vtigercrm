@@ -87,6 +87,9 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 
 	function process (Vtiger_Request $request) {
 		Vtiger_Session::init();
+		
+		// Better place this here as session get initiated
+		require_once 'libraries/csrf-magic/csrf-magic.php';
 
 		// TODO - Get rid of global variable $current_user
 		// common utils api called, depend on this variable right now
@@ -152,9 +155,13 @@ class Vtiger_WebUI extends Vtiger_EntryPoint {
 			}
 			$handlerClass = Vtiger_Loader::getComponentClassName($componentType, $componentName, $qualifiedModuleName);
 			$handler = new $handlerClass();
-
-			if ($handler) {
-				vglobal('currentModule', $module);
+            
+            if ($handler) {
+                vglobal('currentModule', $module);
+                
+                // Ensure handler validates the request
+                $handler->validateRequest($request);
+                
 				if ($handler->loginRequired()) {
 					$this->checkLogin ($request);
 				}

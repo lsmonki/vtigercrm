@@ -16,7 +16,7 @@
 		</div>
 		<hr>
 		<div class="contents row-fluid">
-			<form id="pickListDependencyForm" class="form-horizontal">
+			<form id="pickListDependencyForm" class="form-horizontal" method="POST">
 				{if !empty($MAPPED_VALUES)}
 					<input type="hidden" class="editDependency" value="true"/>
 				{/if}

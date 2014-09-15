@@ -21,7 +21,8 @@ abstract class Vtiger_Controller {
 
 	abstract function getViewer(Vtiger_Request $request);
 	abstract function process (Vtiger_Request $request);
-
+	
+	function validateRequest(Vtiger_Request $request) {}
 	function preProcess(Vtiger_Request $request) {}
 	function postProcess(Vtiger_Request $request) {}
 
@@ -76,6 +77,10 @@ abstract class Vtiger_Action_Controller extends Vtiger_Controller {
 
 	function getViewer(Vtiger_Request $request) {
 		throw new AppException ('Action - implement getViewer - JSONViewer');
+	}
+	
+	function validateRequest(Vtiger_Request $request) {
+		return $request->validateReadAccess();
 	}
 
 	function preProcess(Vtiger_Request $request) {

@@ -15,7 +15,7 @@
             <button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
 			<h3 id="massEditHeader">{vtranslate('LBL_ADD', $MODULE)} {vtranslate('LBL_NOTEPAD', $MODULE)}</h3>
 		</div>
-		<form class="form-horizontal">
+		<form class="form-horizontal" method="POST">
 			 <div class="control-group margin0px padding1per">
 				<label class="control-label">{vtranslate('LBL_NOTEPAD_NAME', $MODULE)}<span class="redColor">*</span> </label>
 				<div class="controls">

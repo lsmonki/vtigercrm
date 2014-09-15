@@ -377,5 +377,9 @@ class MailManager_Relation_View extends MailManager_Abstract_View {
 		}
 		return $results;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateWriteAccess(); 
+        }
 }
 ?>

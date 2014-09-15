@@ -93,4 +93,8 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        } 
 }

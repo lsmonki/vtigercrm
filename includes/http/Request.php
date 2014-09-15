@@ -185,4 +185,39 @@ class Vtiger_Request {
 		}
 		return false;
 	}
+
+	/**
+	 * Validating incoming request.
+	 */	
+	function validateReadAccess() {
+		$this->validateReferer();
+		// TODO validateIP restriction?
+		return true;
+	}
+	
+	function validateWriteAccess($skipRequestTypeCheck = false) {
+        if(!$skipRequestTypeCheck) {
+            if ($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exception('Invalid request');
+        }
+		$this->validateReadAccess();
+		$this->validateCSRF();
+		return true;
+	}
+
+	protected function validateReferer() {
+		// Referer check if present - to over come 
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			global $site_URL;
+			if ((stripos($_SERVER['HTTP_REFERER'], $site_URL) !== 0) && ($this->get('module') != 'Install')) {
+				throw new Exception('Illegal request');
+			}
+		}
+		return true;
+	}
+	
+	protected function validateCSRF() {
+		if (!csrf_check(false)) {
+			throw new Exception('Unsupported request');
+		}
+	}
 }

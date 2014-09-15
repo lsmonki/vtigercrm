@@ -39,7 +39,7 @@
 				</span>
 			</div>
 		</div>
-		<form class="form-horizontal emailPreview">
+		<form class="form-horizontal emailPreview" method="POST">
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">

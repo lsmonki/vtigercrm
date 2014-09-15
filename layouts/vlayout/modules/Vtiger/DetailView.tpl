@@ -59,7 +59,7 @@
 		</div>
 		<div class="detailViewInfo row-fluid">
 			<div class="span10 details">
-				<form id="detailView">
+				<form id="detailView" method="POST">
 					<div class="contents">
 						{$CONTENTS}
 					</div>

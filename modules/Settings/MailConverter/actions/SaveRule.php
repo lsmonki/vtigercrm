@@ -45,4 +45,8 @@ class Settings_MailConverter_SaveRule_Action extends Settings_Vtiger_Index_Actio
 		$response->setResult(array('message' => vtranslate('LBL_SAVED_SUCCESSFULLY', $qualifiedModuleName),'id' => $ruleId));
 		$response->emit();
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        }
 }

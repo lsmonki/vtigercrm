@@ -28,7 +28,7 @@
 					<i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
 				</a>
 				<div class="basicFieldOperations pull-right hide" style="width : 250px;">
-					<form class="form-horizontal fieldDetailsForm">
+					<form class="form-horizontal fieldDetailsForm" method="POST">
 						<div class="modal-header"><strong>{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}</strong></div>
 						<div class="contentsBackground" style="padding-bottom: 5px;">
 						<span><label class="checkbox" style="padding-left: 25px; padding-top: 5px;"><input type="hidden" name="mandatory" value="O" />

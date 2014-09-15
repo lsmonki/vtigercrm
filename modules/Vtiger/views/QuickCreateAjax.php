@@ -65,4 +65,8 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
 		return $jsScriptInstances;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

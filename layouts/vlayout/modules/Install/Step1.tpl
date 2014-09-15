@@ -24,7 +24,7 @@
 		</div>
 		<hr>
 
-		<form class="form-horizontal" name="step1" method="get" action="index.php">
+		<form class="form-horizontal" name="step1" method="post" action="index.php">
 			<input type=hidden name="module" value="Install" />
 			<input type=hidden name="view" value="Index" />
 			<input type=hidden name="mode" value="Step2" />
