@@ -1544,3 +1544,7 @@ Migration_Index_View::ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reporttype
 						PRIMARY KEY (`reportid`),
 						CONSTRAINT `fk_1_vtiger_reporttype` FOREIGN KEY (`reportid`) REFERENCES `vtiger_report` (`reportid`) ON DELETE CASCADE)
                         ENGINE=InnoDB DEFAULT CHARSET=utf8;", array()); 
+
+//Configuration Editor fix
+$sql = "UPDATE vtiger_settings_field SET name = ? WHERE name = ?";
+Migration_Index_View::ExecuteQuery($sql,array('LBL_CONFIG_EDITOR', 'Configuration Editor'));
