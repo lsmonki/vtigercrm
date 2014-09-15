@@ -72,7 +72,6 @@ if(isset($_REQUEST['PHPSESSID']))
 if(isset($_REQUEST['view'])) {
     //setcookie("view",$_REQUEST['view']);
     $view = $_REQUEST["view"];
-    session_register("view");
 }
 	
 
@@ -95,6 +94,7 @@ insert_charset_header();
 // Create or reestablish the current session
 session_start();
 
+
 if (!is_file('config.inc.php')) {
 	header("Location: install.php");
 	exit();
@@ -111,6 +111,9 @@ if (is_file('config_override.php'))
 {
 	require_once('config_override.php');
 }
+
+// Good place to include protection here as session would have been started by now.
+include_once 'include/csrf-protect.php';
 
 /**
  * Check for vtiger installed version and codebase
@@ -744,6 +747,7 @@ else if(!vtlib_isModuleActive($currentModule)) {
 // END
 else
 {
+	requestValidate($module, $action);
 	include($currentModuleFile);
 }
 

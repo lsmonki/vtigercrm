@@ -603,7 +603,7 @@ function alphabetic(module,url,dataid)
 	<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
-	        <form name="change_ownerform_name">
+	        <form name="change_ownerform_name" method="post">
 		        <input type = "radio" id= "user_checkbox" name = "user_lead_owner"  {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup();{/if}  checked>{$APP.LBL_USER}&nbsp;
 			{if $CHANGE_GROUP_OWNER neq ''}
 			<input type = "radio" id = "group_checkbox" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
