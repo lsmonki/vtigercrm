@@ -113,5 +113,9 @@ class MailManager_Folder_View extends MailManager_Abstract_View {
 		$options = array('SUBJECT'=>'SUBJECT','TO'=>'TO','BODY'=>'BODY','BCC'=>'BCC','CC'=>'CC','FROM'=>'FROM','DATE'=>'ON');
 		return $options;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateWriteAccess(); 
+        } 
 }
 ?>

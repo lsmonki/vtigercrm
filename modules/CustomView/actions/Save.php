@@ -63,4 +63,8 @@ class CustomView_Save_Action extends Vtiger_Action_Controller {
 
 		return $customViewModel->setData($customViewData);
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

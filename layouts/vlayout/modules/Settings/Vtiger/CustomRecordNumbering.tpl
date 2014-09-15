@@ -10,7 +10,7 @@
 -->*}
 {strip}
 <div class="container-fluid">
-    <form id="EditView">
+    <form id="EditView" method="POST">
         <div class="row-fluid">
             <span class="widget_header row-fluid">
                 <div class="row-fluid"><h3>{vtranslate('LBL_CUSTOMIZE_RECORD_NUMBERING', $QUALIFIED_MODULE)}</h3></div>

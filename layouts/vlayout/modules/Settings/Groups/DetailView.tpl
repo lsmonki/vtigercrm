@@ -12,7 +12,7 @@
 {strip}
     <div class="detailViewInfo" style="box-shadow:0;margin-top: 0;min-height:500px;">
 		<div class="">
-			<form id="detailView" class="form-horizontal" style="padding-top: 20px;">
+			<form id="detailView" class="form-horizontal" style="padding-top: 20px;" method="POST">
 				<div class="row-fluid">
 					<h3 class="span6 settingsHeader">
 						{$RECORD_MODEL->get('groupname')}

@@ -16,7 +16,7 @@
 	</div>
 	<hr>
     <div class="contents row-fluid">
-        <form id="customerPortalForm" class="form-horizontal">
+        <form id="customerPortalForm" class="form-horizontal"  method="POST">
             <div class="row-fluid">
                 <div class="span6">
                     <input type="hidden" name="portalModulesInfo" value="" />

@@ -41,4 +41,8 @@ abstract class Vtiger_Mass_Action extends Vtiger_Action_Controller {
 			return $customViewModel->getRecordIds($excludedIds,$module);
 		}
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

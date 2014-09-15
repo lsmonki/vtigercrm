@@ -181,4 +181,8 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 		}
 		return false;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        }
 }

@@ -104,4 +104,8 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 		}
 		$viewer->view('ImportUserModuleStep2.tpl', $qualifiedModuleName);
 	}
+
+	public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        }
 }

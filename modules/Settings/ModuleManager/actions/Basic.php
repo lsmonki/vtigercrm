@@ -91,4 +91,8 @@ class Settings_ModuleManager_Basic_Action extends Settings_Vtiger_IndexAjax_View
         $response->setResult($result);
         $response->emit();
     }
+
+	 public function validateRequest(Vtiger_Request $request) { 
+        $request->validateWriteAccess(); 
+    } 
 }

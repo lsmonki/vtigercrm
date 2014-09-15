@@ -30,7 +30,7 @@
         <div  class="row-fluid">
             <div class="span1">&nbsp;</div>
             <div class="span10">
-                <form class="form-horizontal" id="importUserModule" name="importUserModule" action='index.php' method=POST enctype="multipart/form-data">
+                <form class="form-horizontal" id="importUserModule" name="importUserModule" action='index.php' method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="module" value="ModuleManager" />
                     <input type="hidden" name="moduleAction" value="Import"/>
                     <input type="hidden" name="parent" value="Settings" />

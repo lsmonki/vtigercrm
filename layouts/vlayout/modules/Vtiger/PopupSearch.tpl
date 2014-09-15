@@ -34,7 +34,7 @@
 			{/if}
 		</div>
         <div class="span6">
-            <form class="form-horizontal popupSearchContainer" onsubmit="return false;">
+            <form class="form-horizontal popupSearchContainer" onsubmit="return false;" method="POST">
                 <div class="control-group margin0px">
                     <input class="span2" type="text" placeholder="{vtranslate('LBL_TYPE_SEARCH')}" id="searchvalue"/>&nbsp;&nbsp;
                     <span><strong>{vtranslate('LBL_IN')}</strong></span>&nbsp;

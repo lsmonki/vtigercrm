@@ -37,4 +37,8 @@ class Settings_Vtiger_Basic_Action extends Settings_Vtiger_IndexAjax_View {
 	$response->setResult(array('SUCCESS'=>'OK'));
 	$response->emit();
     }
+    
+    public function validateRequest(Vtiger_Request $request) { 
+        $request->validateWriteAccess(); 
+    } 
 }

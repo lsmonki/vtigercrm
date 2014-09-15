@@ -52,5 +52,8 @@ class Settings_Webforms_Save_Action extends Settings_Vtiger_Index_Action {
 
 
 	}
-
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

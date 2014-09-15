@@ -121,7 +121,7 @@
                                                                         <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
                                                                     </a>
                                                                     <div class="basicFieldOperations pull-right hide" style="width : 250px;">
-                                                                        <form class="form-horizontal fieldDetailsForm">
+                                                                        <form class="form-horizontal fieldDetailsForm" method="POST">
                                                                             <div class="modal-header contentsBackground">
                                                                                 <strong>{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}</strong>
                                                                                 <div class="pull-right"><a href="javascript:void(0)" class='cancel'>X</a></div>
@@ -285,7 +285,7 @@
                                         <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
                                     </a>
                                     <div class="basicFieldOperations pull-right hide" style="width : 250px;">
-                                        <form class="form-horizontal fieldDetailsForm">
+                                        <form class="form-horizontal fieldDetailsForm" method="POST">
                                             <div class="modal-header contentsBackground">
                                                 <strong>{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}</strong>
                                                 <div class="pull-right"><a href="javascript:void(0)" class="cancel">X</a></div>
@@ -482,7 +482,7 @@
                             <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
                         </a>
                         <div class="basicFieldOperations hide pull-right" style="width: 250px;">
-                            <form class="form-horizontal fieldDetailsForm">
+                            <form class="form-horizontal fieldDetailsForm" method="POST">
                                 <div class="modal-header contentsBackground">
                                 </div>
                                 <div style="padding-bottom: 5px;">
@@ -545,7 +545,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_ADD_CUSTOM_BLOCK', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal addCustomBlockForm">
+    <form class="form-horizontal addCustomBlockForm" method="POST">
         <div class="modal-body">
             <div class="control-group">
                 <span class="control-label">
@@ -580,7 +580,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_CREATE_CUSTOM_FIELD', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal createCustomFieldForm">
+    <form class="form-horizontal createCustomFieldForm" method="POST">
         <div class="modal-body">
             <div class="control-group">
                 <span class="control-label">
@@ -662,7 +662,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_INACTIVE_FIELDS', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal inactiveFieldsForm">
+    <form class="form-horizontal inactiveFieldsForm" method="POST">
         <div class="modal-body">
             <div class="row-fluid inActiveList"></div>
         </div>

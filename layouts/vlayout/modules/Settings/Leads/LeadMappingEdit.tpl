@@ -10,7 +10,7 @@
 -->*}
 {strip}
 	<div class="container-fluid">
-		<form id="leadsMapping">
+		<form id="leadsMapping" method="POST">
 			<div class="row-fluid settingsHeader padding1per">
 				<span class="span8">
 					<span class="font-x-x-large">{vtranslate('LBL_CONVERT_LEAD_FIELD_MAPPING', $QUALIFIED_MODULE)}</span>

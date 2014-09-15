@@ -79,4 +79,8 @@ class Settings_Roles_Save_Action extends Vtiger_Action_Controller {
 		$redirectUrl = $moduleModel->getDefaultUrl();
 		header("Location: $redirectUrl");
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

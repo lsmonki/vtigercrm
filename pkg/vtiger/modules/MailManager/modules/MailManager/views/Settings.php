@@ -87,5 +87,9 @@ class MailManager_Settings_View extends MailManager_MainUI_View {
 
 		return $response;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateWriteAccess(); 
+        } 
 }
 ?>

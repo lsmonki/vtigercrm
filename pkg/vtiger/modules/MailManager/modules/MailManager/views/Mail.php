@@ -318,5 +318,9 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 		}
 		return $response;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateWriteAccess(); 
+        } 
 }
 ?>

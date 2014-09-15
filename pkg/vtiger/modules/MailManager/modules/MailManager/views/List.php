@@ -43,13 +43,19 @@ class MailManager_List_View extends MailManager_Abstract_View {
 		}
 		$operation = $request->getOperation();
 		$controllerInfo = self::$controllers[$operation];
+		// TODO Handle case when controller information is not available
+		//$controllerFile = dirname(__FILE__) . '/' . $controllerInfo['file'];
+		//checkFileAccessForInclusion($controllerFile);
+		//include_once $controllerFile;
 		$controller = new $controllerInfo['class'];
 
 		// Making sure to close the open connection
 		if ($controller) $controller->closeConnector();
-		$response = $controller->process($request);
-		if ($response) $response->emit();
-
+		if($controller->validateRequest($request)) { 
+                    $response = $controller->process($request); 
+                    if ($response) $response->emit(); 
+	        } 
+		
 		unset($request);
 		unset($response);
 	}

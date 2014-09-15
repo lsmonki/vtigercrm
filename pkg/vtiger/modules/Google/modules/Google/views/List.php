@@ -189,5 +189,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         
     }
 
+    public function validateRequest(Vtiger_Request $request) { 
+        $request->validateReadAccess(); 
+    } 
 }
 

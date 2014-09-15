@@ -261,4 +261,8 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		}
         return array();
 	}
+    
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
+    }
 }
