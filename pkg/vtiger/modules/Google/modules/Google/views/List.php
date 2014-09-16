@@ -190,7 +190,9 @@ class Google_List_View extends Vtiger_PopupAjax_View {
     }
 
     public function validateRequest(Vtiger_Request $request) { 
-        $request->validateReadAccess(); 
+        // NOTE: This is also entry point for google oauth callback so referer check ould fail
+        // skippping it
+        //$request->validateReadAccess(); 
     } 
 }
 

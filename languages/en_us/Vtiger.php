@@ -767,4 +767,6 @@ $jsLanguageStrings = array(
     
         //Inventory module Translations
         'JS_PLEASE_ENABLE_PRODUCT_OR_SERVICE_MODULE'=>'Please Enable Product or Service Module',
+        'LBL_SYNC_BUTTON' => 'Syncronize',
+        'LBL_SYNCRONIZING' => 'Syncronizing',
 );
