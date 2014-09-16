@@ -15,22 +15,22 @@
 	<head>
 		<title>Vtiger</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		
+
 		<link REL="SHORTCUT ICON" HREF="layouts/vlayout/skins/images/favicon.ico">
 		<link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="resources/styles.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="libraries/jquery/select2/select2.css" />
 		<link rel="stylesheet" href="libraries/jquery/posabsolute-jQuery-Validation-Engine/css/validationEngine.jquery.css" />
-		
+
 		<script type="text/javascript" src="libraries/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="libraries/bootstrap/js/bootstrap-tooltip.js"></script>
 		<script type="text/javascript" src="libraries/jquery/select2/select2.min.js"></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine.js" ></script>
 		<script type="text/javascript" src="libraries/jquery/posabsolute-jQuery-Validation-Engine/js/jquery.validationEngine-en.js" ></script>
-		
+
 		<script type="text/javascript">{literal}
-			jQuery(function(){ 
-				jQuery('select').select2({blurOnChange:true}); 
+			jQuery(function(){
+				jQuery('select').select2({blurOnChange:true});
 				jQuery('[rel="tooltip"]').tooltip();
 				jQuery('form').validationEngine({
 					prettySelect: true,
@@ -55,24 +55,24 @@
 		{/literal}</style>
 	</head>
 	<body>
-		
+
 		<div class="container">
 			<div class="modal-backdrop"></div>
 			<form class="form" method="POST" action="index.php?module=Users&action=UserSetupSave">
 				<div class="modal" {if false && $IS_FIRST_USER}style="width: 700px;"{/if}> {* FirstUser information gather - paused *}
 					<div class="modal-header">
-						<h3>Almost there!</h3>
+						<h3>{vtranslate('LBL_ALMOST_THERE', $MODULE)}</h3>
 					</div>
 					<div class="modal-body">
 						<div class="row">
 							{if false && $IS_FIRST_USER} {* FirstUser information gather - paused *}
 							<div class="span4">
-								<label class="control-label"><strong>About Me</strong> <span class="muted">(We promise to keep this private)</span></label>
+								<label class="control-label"><strong>{vtranslate('LBL_ABOUT_ME', $MODULE)}</strong> <span class="muted">{vtranslate('LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE', $MODULE)}</span></label>
 								<div class="controls">
-									<input type="text" name="about[phone]" id="phone" placeholder="Phone" rel="tooltip" title="Your Contact Number" style="width:250px;">
+									<input type="text" name="about[phone]" id="phone" placeholder="{vtranslate('LBL_PHONE', $MODULE)}" rel="tooltip" title="{vtranslate('LBL_YOUR_CONTACT_NUMBER', $MODULE)}" style="width:250px;">
 								</div>
 								<div class="controls">
-									<select name="about[country]" id="country" placeholder="Select Country" rel="tooltip" title="Where are you from?" style="width:250px;">
+									<select name="about[country]" id="country" placeholder="{vtranslate('LBL_SELECT_COUNTRY', $MODULE)}" rel="tooltip" title="{vtranslate('LBL_WHERE_ARE_YOU_FROM', $MODULE)}" style="width:250px;">
 										<option value=""></option><!-- to allow select2 pick placeholder -->
 										<option value="Prefer Not to Disclose">Prefer Not to Disclose</option>
 										<option value="United States">United States</option>
@@ -345,7 +345,7 @@
 									<div style="padding-top:10px;"></div>
 								</div>
 								<div class="controls">
-									<select name="about[company_size]" id="company_size" placeholder="Company Size" style="width:250px;">
+									<select name="about[company_size]" id="company_size" placeholder="{vtranslate('LBL_COMPANY_SIZE', $MODULE)}" style="width:250px;">
 										<option value=""></option><!-- to allow select2 pick placeholder -->
 										<option value="Prefer Not to Disclose">Prefer Not to Disclose</option>
 										<option value="1">1</option>
@@ -362,7 +362,7 @@
 									<div style="padding-top:10px;"></div>
 								</div>
 								<div class="controls">
-									<select name="about[company_job]" id="company_job" placeholder="Job Title" style="width:250px;">
+									<select name="about[company_job]" id="company_job" placeholder="{vtranslate('LBL_JOB_TITLE', $MODULE)}" style="width:250px;">
 										<option value=""></option><!-- to allow select2 pick placeholder -->
 										<option value="Prefer Not to Disclose">Prefer Not to Disclose</option>
 										<option value="CEO/President">CEO/President</option>
@@ -379,7 +379,7 @@
 									<div style="padding-top:10px;"></div>
 								</div>
 								<div class="controls">
-									<select name="about[department]" id="department" placeholder="Department" style="width:250px;">
+									<select name="about[department]" id="department" placeholder="{vtranslate('LBL_DEPARTMENT', $MODULE)}" style="width:250px;">
 										<option value=""></option><!-- to allow select2 pick placeholder -->
 										<option value="Prefer Not to Disclose">Prefer Not to Disclose</option>
 										<option value="Administration">Administration</option>
@@ -400,59 +400,47 @@
 							{/if}
 
 							<div class="span4">
-								<label class="control-label"><strong>Preferences</strong> <span class="muted">(All fields below are required)</label>
+								<label class="control-label"><strong>Preferences</strong> <span class="muted">{vtranslate('LBL_ALL_FIELDS_BELOW_ARE_REQUIRED', $MODULE)}</label>
 
 								{if $IS_FIRST_USER}
 								<div class="controls" id="currency_name_controls">
-									<select name="currency_name" id="currency_name" placeholder="Base Currency" data-errormessage="Choose Base Currency" class="validate[required]" style="width:250px;">
+									<select name="currency_name" id="currency_name" placeholder="{vtranslate('LBL_BASE_CURRENCY', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_BASE_CURRENCY', $MODULE)}" class="validate[required]" style="width:250px;">
 										<option value=""></option>
 										{foreach key=header item=currency from=$CURRENCIES}
-											{if $header eq 'USA, Dollars'}
-												<option value="{$header}" selected>{$header|@getTranslatedCurrencyString}({$currency.1})</option>
-											{else}
-												<option value="{$header}">{$header|@getTranslatedCurrencyString}({$currency.1})</option>
-											{/if}
+										<!--Open source fix to select user preferred currency during installation -->
+											<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('currency_name')}selected{/if}>{$header|@getTranslatedCurrencyString}({$currency.1})</option> 
 										{/foreach}
 									</select>
 									&nbsp;
-									<span rel="tooltip" title="Base currency cannot be modified later. Select your operating currency" id="currency_name_tooltip" class="icon-info-sign"></span>
+									<span rel="tooltip" title="{vtranslate('LBL_OPERATING_CURRENCY', $MODULE)}" id="currency_name_tooltip" class="icon-info-sign"></span>
 									<div style="padding-top:10px;"></div>
 								</div>
 								{/if}
 
 								<div class="controls">
-									<select name="lang_name" id="lang_name" style="width:250px;" placeholder="Language" data-errormessage="Choose Language" class="validate[required]">
+									<select name="lang_name" id="lang_name" style="width:250px;" placeholder="{vtranslate('LBL_LANGUAGE', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_LANGUAGE', $MODULE)}" class="validate[required]">
 										<option value=""></option>
 										{foreach key=header item=language from=$LANGUAGES}
-											{if $language eq 'US English'}
-												<option value="{$header}" selected>{$language|@getTranslatedString:$MODULE}</option>
-											{else}
-												<option value="{$header}">{$language|@getTranslatedString:$MODULE}</option>
-											{/if}
+												<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('language')}selected{/if}>{$language|@getTranslatedString:$MODULE}</option>
 										{/foreach}
 									</select>
 									<div style="padding-top:10px;"></div>
 								</div>
 								<div class="controls">
-									<select name="time_zone" id="time_zone" style="width:250px;" placeholder="Choose Timezone" data-errormessage="Choose Timezone" class="validate[required]">
+									<select name="time_zone" id="time_zone" style="width:250px;" placeholder="{vtranslate('LBL_CHOOSE_TIMEZONE', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_TIMEZONE', $MODULE)}" class="validate[required]">
 										<option value=""></option>
 										{foreach key=header item=time_zone from=$TIME_ZONES}
-											<option value="{$header}">{$time_zone|@getTranslatedString:$MODULE}</option>
-											{if $time_zone eq 'UTC'}
-												<option value="{$header}" selected>{$time_zone|@getTranslatedString:$MODULE}</option>
-											{else}
-												<option value="{$header}">{$time_zone|@getTranslatedString:$MODULE}</option>
-											{/if}
+												<option value="{$header}" {if $header eq $CURRENT_USER_MODEL->get('time_zone')}selected{/if}>{$time_zone|@getTranslatedString:$MODULE}</option>
 										{/foreach}
 									</select>
 									<div style="padding-top:10px;"></div>
 								</div>
 								<div class="controls">
-									<select name="date_format" id="date_format" style="width:250px;" placeholder="Date Format" data-errormessage="Choose Date Format" class="validate[required]">
+									<select name="date_format" id="date_format" style="width:250px;" placeholder="{vtranslate('LBL_DATE_FORMAT', $MODULE)}" data-errormessage="{vtranslate('LBL_CHOOSE_DATE_FORMAT', $MODULE)}" class="validate[required]">
 										<option value=""></option>
-										<option value="dd-mm-yyyy">dd-mm-yyyy</option>
-										<option value="mm-dd-yyyy" selected>mm-dd-yyyy</option>
-										<option value="yyyy-mm-dd">yyyy-mm-dd</option>
+										<option value="dd-mm-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "dd-mm-yyyy"} selected{/if}>dd-mm-yyyy</option>
+										<option value="mm-dd-yyyy" {if $CURRENT_USER_MODEL->get('date_format') eq "mm-dd-yyyy"} selected{/if}>mm-dd-yyyy</option>
+										<option value="yyyy-mm-dd" {if $CURRENT_USER_MODEL->get('date_format') eq "yyyy-mm-dd"} selected{/if}>yyyy-mm-dd</option>
 									</select>
 									<div style="padding-top:10px;"></div>
 								</div>
@@ -460,12 +448,12 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-success" type="submit">Get Started</button>
+						<button class="btn btn-success" type="submit">{vtranslate('LBL_GET_STARTED', $MODULE)}</button>
 					</div>
 				</div>
-			</form>						
+			</form>
 		</div>
-		
+
 	</body>
 </html>
 {/strip}

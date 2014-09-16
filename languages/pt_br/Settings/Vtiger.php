@@ -8,6 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integração',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Configurações'             , 
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Search Settings'             , // TODO: Review
 	'LBL_SUMMARY'                  => 'Summary'                     , // TODO: Review
@@ -48,7 +50,8 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_SETUP' => 'Configuração Dependência Lista Opções', 
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Configuração Dependência entre valores Lista Opções em cada módulo', 
 	'LBL_MENU_EDITOR'              => 'Editor de Menu'              , 
-	'LBL_MENU_DESC'                => 'Customizar sequência do Menu', 
+	'LBL_MENU_DESC'                => 'Customizar sequência do Menu',
+	'LBL_MENU_EDITOR_MESSAGE'		=>'O número real de itens de menu apresentados dependerá do tamanho da tela e pode ser menor do que os itens selecionados.',
 	'EMAILTEMPLATES'               => 'Modelos E-mail'              , 
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Administrar modelos para Módulo de E-Mail', 
 	'LBL_COMPANY_DETAILS'          => 'Detalhes da Empresa'         , 
@@ -71,7 +74,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS'           => 'Workflows'                   , 
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Criar e Editar Workflows para o vtiger', 
 	'Configuration Editor'         => 'Editor Configuração'       , 
-	'Update configuration file of the application' => 'Update application configuration file', 
 	'LBL_CUSTOMER_PORTAL'          => 'Portal do Cliente'           , 
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Permite Configurar o Plugin do Portal do Cliente', 
 	'LBL_LAYOUT_EDITOR_DESCRIPTION' => 'Designing and Modifying the layout in each of the modules', // TODO: Review
@@ -120,11 +122,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER'          => 'Outgoing Server'             , // TODO: Review
 	'LBL_OUTGOING_SERVER_DESC'     => 'Configure your Outgoing Mail Server details', // TODO: Review
 	'LBL_DEFAULT'                  => 'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.', // TODO: Review
-	'LBL_OPTIONS1'                 => 'Send emails from your mail server<br>
-					- Enter the SMTP account details (Server Name, User Name, Password) for the same account as entered in the FROM email address.', // TODO: Review
-	'LBL_OPTIONS2'                 => 'Add od1.vtiger.com server as a authorized sender for your domain.<br>
-					- If you prefer to retain the vtiger server as the outgoing server, we recommend that you configure your domain\'s SPF record to include the vtiger server as a valid sender for your domain.
-					  For additonal instruction on setting up SPF record, please email od-support@vtiger.com .', // TODO: Review
+	'LBL_OPTIONS1'                 => '',
+	'LBL_OPTIONS2'                 =>"",
 	'LBL_MAIL_SERVER_SMTP'         => 'Mail Server Settings (SMTP)' , // TODO: Review
 	'LBL_OUTGOING_SERVER_FROM_FIELD' => 'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.', // TODO: Review
 	'LBL_TESTMAILSTATUS'           => 'Test Mail Status : '         , // TODO: Review

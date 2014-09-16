@@ -305,6 +305,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 						};
 						Vtiger_Helper_Js.showMessage(params);
 						e.preventDefault();
+						return false;
 					}
 					var jumptoPageParams = {
 						'page' : jumpToPage
@@ -329,7 +330,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	/**
 	 * Function to add related record for the module
 	 */
-	addRelatedRecord : function(element){
+	addRelatedRecord : function(element , callback){
 		var aDeferred = jQuery.Deferred();
 		var thisInstance = this;
 		var	referenceModuleName = this.relatedModulename;
@@ -379,7 +380,9 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 					jQuery('<input type="hidden" name="'+queryParamComponents[0]+'" value="'+queryParamComponents[1]+'" />').appendTo(data);
 				}
 			}
-
+                        if(typeof callback !== 'undefined') {
+                            callback();
+                        }
 		}
 		var postQuickCreateSave  = function(data) {
 			thisInstance.loadRelatedList().then(
@@ -415,6 +418,7 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 	},
 	
 	getRelatedPageCount : function(){
+		var aDeferred = jQuery.Deferred();
 		var params = {};
 		params['action'] = "RelationAjax";
 		params['module'] = this.parentModuleName;
@@ -424,46 +428,128 @@ jQuery.Class("Vtiger_RelatedList_Js",{},{
 		params['mode'] = "getRelatedListPageCount"
 		
 		var element = jQuery('#totalPageCount');
+		var totalCountElem = jQuery('#totalCount');
 		var totalPageNumber = element.text();
 		if(totalPageNumber == ""){
 			element.progressIndicator({});
 			AppConnector.request(params).then(
 				function(data) {
 					var pageCount = data['result']['page'];
+					var numberOfRecords = data['result']['numberOfRecords'];
+					totalCountElem.val(numberOfRecords);
 					element.text(pageCount);
 					element.progressIndicator({'mode': 'hide'});
+					aDeferred.resolve();
 				},
 				function(error,err){
 
 				}
 			);
+		}else{
+			aDeferred.resolve();
 		}
-	},
-	
-	/**
-	 * Function to get total records count in related list
-	 */
-	totalRecordsCount : function(){
-		var aDeferred = jQuery.Deferred();
-		var thisInstance = this;
-			var params = {};
-			params['action'] = "RelationAjax";
-			params['module'] = thisInstance.parentModuleName;
-			params['record'] = thisInstance.getParentId(),
-			params['relatedModule'] = thisInstance.relatedModulename,
-			params['tab_label'] = thisInstance.selectedRelatedTabElement.data('label-key');
-			params['mode'] = "getRelatedListPageCount"
-
-			AppConnector.request(params).then(
-				function(data) {
-					var totalNumberOfRecords = data['result']['numberOfRecords'];
-					aDeferred.resolve(totalNumberOfRecords);
-			},
-			function(error,err){
-
-			});
 		return aDeferred.promise();
 	},
+    
+    addFollowupEvent : function(e){
+            var elem = jQuery(e.currentTarget);
+			var recordId = elem.closest('tr').data('id');
+            
+            var url = 'index.php?module=Calendar&view=QuickCreateFollowupAjax&record='+recordId;
+            var progressIndicatorInstance = jQuery.progressIndicator({});
+            AppConnector.request(url).then(
+				function(data){
+					if(data){
+                        progressIndicatorInstance.hide();
+                        app.showModalWindow(data, function(data){
+                         var createFollowupForm = data.find('form.followupCreateView');
+                         createFollowupForm.validationEngine(app.validationEngineOptions);
+                         app.registerEventForTimeFields(createFollowupForm);
+                         //Form submit
+                         createFollowupForm.submit(function(event){
+                             var createButton = jQuery(this).find('button.btn-success');
+                             createButton.attr('disabled','disabled');
+                             progressIndicatorInstance = jQuery.progressIndicator({});
+                             event.preventDefault();
+                             var result = createFollowupForm.validationEngine('validate');
+                             if(!result){
+                                 createButton.removeAttr('disabled');
+                                 progressIndicatorInstance.hide();
+                                 return false;
+                             }
+                             var moduleName = jQuery(this).find("[name='module']").val();
+                             var recordId = jQuery(this).find("[name='record']").val();
+                             var followupStartDate = jQuery(this).find("[name='followup_date_start']").val();
+                             var followupStartTime = jQuery(this).find("[name='followup_time_start']").val();
+                             var action = jQuery(this).find("[name='action']").val();
+                             var mode = jQuery(this).find("[name='mode']").val();
+                             var defaultCallDuration = jQuery(this).find("[name='defaultCallDuration']").val();
+                             var defaultOtherEventDuration = jQuery(this).find("[name='defaultOtherEventDuration']").val();
+                             var params = {
+                                            module : moduleName,
+                                            action : action,
+                                            mode : mode,
+                                            record : recordId,
+                                            followup_date_start : followupStartDate,
+                                            followup_time_start : followupStartTime,
+                                            defaultCallDuration : defaultCallDuration,
+                                            defaultOtherEventDuration : defaultOtherEventDuration
+                                        }
+                                        AppConnector.request(params).then(function(data){
+                                            app.hideModalWindow();
+                                            progressIndicatorInstance.hide();
+                                            if(data['result'].created){
+                                                //Update related listview and pagination
+                                                Vtiger_Detail_Js.reloadRelatedList();
+                                            }
+                                        });
+                         });
+                    });
+                    }
+                    else{
+                        progressIndicatorInstance.hide();
+                        Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_EDIT_PERMISSION',"Calendar"));
+                    }
+				});
+    },
+    
+    markAsCompleted : function(e){
+        var elem = jQuery(e.currentTarget);
+        var recordId = elem.closest('tr').data('id');
+        var message = app.vtranslate('JS_CONFIRM_MARK_AS_HELD');
+            Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+			function(e) {
+                var params = {
+                                module : "Calendar",
+                                action : "SaveFollowupAjax",
+                                mode : "markAsHeldCompleted",
+                                record : recordId
+                            }
+                            AppConnector.request(params).then(function(data){
+                                if(data['error']){
+                                    var param = {text:app.vtranslate('JS_PERMISSION_DENIED')};
+                                    Vtiger_Helper_Js.showPnotify(param);
+                                }
+                                else if(data['result'].valid && data['result'].markedascompleted){
+                                    //Update related listview and pagination
+                                    Vtiger_Detail_Js.reloadRelatedList();
+                                    if(data['result'].activitytype == 'Task')
+                                        var param = {text:app.vtranslate('JS_TODO_MARKED_AS_COMPLETED')};
+                                    else
+                                        var param = {text:app.vtranslate('JS_EVENT_MARKED_AS_HELD')};
+                                    Vtiger_Helper_Js.showMessage(param);
+                                }
+                                else{
+                                    var param = {text:app.vtranslate('JS_FUTURE_EVENT_CANNOT_BE_MARKED_AS_HELD')};
+                                    Vtiger_Helper_Js.showPnotify(param);
+                                }
+                            });
+            },
+            function(error, err){
+                return false;
+			});
+    },
+
 	init : function(parentId, parentModule, selectedRelatedTabElement, relatedModuleName){
 		this.selectedRelatedTabElement = selectedRelatedTabElement,
 		this.parentRecordId = parentId;

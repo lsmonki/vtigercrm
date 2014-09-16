@@ -8,11 +8,18 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectMilestone'      => 'Project Milestone'           , 
-	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , 
-	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , 
-	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , 
-	'Project Milestone Name'       => 'Project Milestone Name'      , 
-	'Milestone Date'               => 'Milestone Date'              , 
-	'Project Milestone No'         => 'Project Milestone Number'    , 
+	'SINGLE_ProjectMilestone'	=>	"Proje Milestone",
+	'LBL_ADD_RECORD'	=>	"Proje Milestone ekle",
+	'LBL_RECORDS_LIST'	=>	"Proje Aşamaları Listesi",
+	'LBL_PROJECTS_LIST'	=>	"Projeler Listesi",
+	'LBL_TASKS_LIST'	=>	"Görevler Listesi",
+	'LBL_MILESTONES_LIST'	=>	"Kilometre Taşları Listesi",
+	'LBL_PROJECT_MILESTONE_INFORMATION'	=>	"Proje Milestone Detayları",
+	'Project Milestone Name'	=>	"Proje Milestone Adı",
+	'Milestone Date'	=>	"Milestone Tarihi",
+	'Project Milestone No'	=>	"Proje Milestone sayısı",
+	//picklist values
+	'administrative' => 'Idari',
+    'operative' => 'Faal',
+    'other' => 'Diğer',
 );

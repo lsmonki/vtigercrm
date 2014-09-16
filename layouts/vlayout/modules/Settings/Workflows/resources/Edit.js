@@ -241,7 +241,9 @@ Settings_Vtiger_Edit_Js("Settings_Workflows_Edit_Js",{
             var fieldValueElement = fieldUiHolder.find('.getPopupUi');
             if(valueType != 'rawtext'){
                 fieldValueElement.removeAttr('data-validation-engine');
+                fieldValueElement.removeClass('validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
             }else{
+                fieldValueElement.addClass('validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
                 fieldValueElement.attr('data-validation-engine','validate[funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
             }
 			var fieldType = data.find('.fieldValue').filter(':visible').attr('type');

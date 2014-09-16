@@ -106,9 +106,6 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 			var parentElem = thisInstance.getCurrentElem(e).closest('tr');
 			var unitPriceFieldData = thisInstance.getUnitPrice().data();
 			var unitPrice = thisInstance.getDataBaseFormatUnitPrice();
-			var groupSeperator = unitPriceFieldData.groupSeperator;
-			var re = new RegExp(groupSeperator, 'g');
-			unitPrice = unitPrice.replace(re, '');
 			var conversionRate = jQuery('.conversionRate',parentElem).val();
 			var price = parseFloat(unitPrice) * parseFloat(conversionRate);
 			var userPreferredDecimalPlaces = unitPriceFieldData.numberOfDecimalPlaces;
@@ -129,7 +126,10 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				unitPrice = 0;
 			}else{
 				var fieldData = field.data();
-				var strippedValue = unitPrice.replace(fieldData.groupSeperator, '');
+				//As replace is doing replace of single occurence and using regex 
+				//replace has a problem with meta characters  like (.,$),so using split and join
+				var strippedValue = unitPrice.split(fieldData.groupSeperator);
+				strippedValue = strippedValue.join("");
 				strippedValue = strippedValue.replace(fieldData.decimalSeperator, '.');
 				unitPrice = strippedValue;
 			}
@@ -171,9 +171,6 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 				var conversionRate = jQuery('.conversionRate',parentRow).val();
 				var unitPriceFieldData = thisInstance.getUnitPrice().data();
 				var unitPrice = thisInstance.getDataBaseFormatUnitPrice();
-				var groupSeperator = unitPriceFieldData.groupSeperator;
-				var re = new RegExp(groupSeperator, 'g');
-				unitPrice = unitPrice.replace(re, '');
 				var price = parseFloat(unitPrice)*parseFloat(conversionRate);
 				jQuery('input',parentRow).attr('disabled', true).removeAttr('disabled');
 				jQuery('button.currencyReset', parentRow).attr('disabled', true).removeAttr('disabled');
@@ -262,11 +259,17 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 						thisInstance.registerEventForEnableCurrency().registerEventForEnableBaseCurrency()
 											.registerEventForResetCurrency().triggerForBaseCurrencyCalc();
 					}
+                    var moreCurrenciesContainer = jQuery('#moreCurrenciesContainer').find('.multiCurrencyEditUI');
 					var contentInsideForm = moreCurrenciesUi.find('.multiCurrencyContainer').html();
 					moreCurrenciesUi.find('.multiCurrencyContainer').remove();
 					var form = '<form id="currencyContainer"></form>'
 					jQuery(form).insertAfter(moreCurrenciesUi.find('.modal-header'));
 					moreCurrenciesUi.find('form').html(contentInsideForm);
+                    moreCurrenciesContainer.find('input[name^=curname]').each(function(index,element){
+                    	var dataValue = jQuery(element).val();
+                        var dataId = jQuery(element).attr('id');
+                        moreCurrenciesUi.find('#'+dataId).val(dataValue);
+                    });
 
 					var modalWindowParams = {
 						data : moreCurrenciesUi,
@@ -288,9 +291,11 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 		jQuery.each(baseCurrency,function(key,val){
 			if(jQuery(val).is(':checked')){
 				var baseCurrencyRow = jQuery(val).closest('tr');
-				baseCurrencyRow.find('.currencyReset').trigger('click');
-			}else{
-                var baseCurrencyRow = jQuery(val).closest('tr');
+                if(parseFloat(baseCurrencyRow.find('.convertedPrice').val()) == 0.00) {
+                	baseCurrencyRow.find('.currencyReset').trigger('click');
+                }
+			} else {
+				var baseCurrencyRow = jQuery(val).closest('tr');
                 baseCurrencyRow.find('.convertedPrice').val('');
             }
 		})
@@ -384,6 +389,11 @@ Vtiger_Edit_Js("Products_Edit_Js",{
 		var savedValuesOfMultiCurrency = modalContainer.find('.currencyContent').html();
 		var moreCurrenciesContainer = jQuery('#moreCurrenciesContainer');
 		moreCurrenciesContainer.find('.currencyContent').html(savedValuesOfMultiCurrency);
+        modalContainer.find('input[name^=curname]').each(function(index,element){
+        	var dataValue = jQuery(element).val();
+            var dataId = jQuery(element).attr('id');
+            moreCurrenciesContainer.find('.currencyContent').find('#'+dataId).val(dataValue);
+        });
 		app.hideModalWindow();
 	},
 	

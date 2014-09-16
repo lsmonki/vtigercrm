@@ -29,4 +29,7 @@ $languageStrings = array(
 	'LTFAQ'                        => 'FAQs Recientes',
 	'UA'                           => 'Próximas Actividades',
 	'PA'                           => 'Actividades Pendientes',
+        'Home'                         => 'Inicio',
+        'Key Metrics'                  => 'Las métricas clave',
+	'Tag Cloud'                    => 'Nube de etiquetas',
 );

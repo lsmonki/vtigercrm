@@ -84,5 +84,4 @@ class ModTracker_Field_Model extends Vtiger_Record_Model {
 	public function getModuleName() {
 		return $this->getParent()->getParent()->getModule()->getName();
 	}
-
 }

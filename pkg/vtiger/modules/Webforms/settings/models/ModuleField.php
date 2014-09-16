@@ -34,7 +34,8 @@ class Settings_Webforms_ModuleField_Model extends Vtiger_Field_Model {
 			'name' => $this->getFieldName(),
 			'label' => vtranslate($this->get('label'), $this->getModuleName()),
 			'defaultValue' => $this->getEditViewDisplayValue($this->getDefaultFieldValue()),
-			'customField' => Settings_Webforms_Record_Model::isCustomField($this->get('name'))
+			'customField' => Settings_Webforms_Record_Model::isCustomField($this->get('name')),
+			'specialValidator' => $this->getValidator()
 		);
 
 		$pickListValues = $this->getPicklistValues();
@@ -50,6 +51,8 @@ class Settings_Webforms_ModuleField_Model extends Vtiger_Field_Model {
 		if($this->getFieldDataType() == 'currency') {
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$fieldInfo['currency_symbol'] = $currentUser->get('currency_symbol');
+			$fieldInfo['decimalSeperator'] = $currentUser->get('currency_decimal_separator');
+			$fieldInfo['groupSeperator'] = $currentUser->get('currency_grouping_separator');
 		}
 
 		if($this->getFieldDataType() == 'owner') {
@@ -59,6 +62,11 @@ class Settings_Webforms_ModuleField_Model extends Vtiger_Field_Model {
 			$pickListValues[vtranslate('LBL_USERS', $this->getModuleName())] = $userList;
 			$pickListValues[vtranslate('LBL_GROUPS', $this->getModuleName())] = $groupList;
 			$fieldInfo['picklistvalues'] = $pickListValues;
+		}
+		
+		if($this->getFieldDataType() == 'reference') {
+			$referenceList = $this->getReferenceList();
+			$fieldInfo['referencemodules']= $referenceList;
 		}
 
 		return $fieldInfo;

@@ -30,8 +30,8 @@ class Settings_MailConverter_EditRule_View extends Settings_Vtiger_IndexAjax_Vie
 		} else {
 			$recordModel = Settings_MailConverter_RuleRecord_Model::getCleanInstance($scannerId);
 		}
-		
-
+	
+		$assignedTo = Settings_MailConverter_RuleRecord_Model::getAssignedTo($scannerId, $recordId);
 		$viewer = $this->getViewer($request);
 
 		$viewer->assign('RECORD_ID', $recordId);
@@ -47,7 +47,9 @@ class Settings_MailConverter_EditRule_View extends Settings_Vtiger_IndexAjax_Vie
 
 		$viewer->assign('MODULE_NAME', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-
+		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
+		$viewer->assign('ASSIGNED_USER', $assignedTo[0]);
+	
 		$viewer->view('RuleEditView.tpl', $qualifiedModuleName);
 	}
 }

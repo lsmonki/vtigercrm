@@ -14,9 +14,9 @@
 	<div class="row-fluid">
 		<div class="span2">&nbsp;</div>
 		<div class="span3" style="overflow: hidden">
-			<div id="assignToRolepickListValuesTable" class="row-fluid fontBold textAlignCenter" style="border: 1px solid grey;">
+			<div id="assignToRolepickListValuesTable" class="row-fluid fontBold textAlignCenter">
 				{foreach key=PICKLIST_KEY item=PICKLIST_VALUE from=$ALL_PICKLIST_VALUES}
-					<div data-value="{$PICKLIST_VALUE}" style="border-bottom: 1px solid grey;padding: 4%;overflow: hidden;text-overflow: ellipsis;" class="cursorPointer assignToRolePickListValue {if in_array($PICKLIST_VALUE,$ROLE_PICKLIST_VALUES)}selectedCell{else}unselectedCell{/if}">
+					<div data-value="{$PICKLIST_VALUE}" data-id="{$PICKLIST_KEY}" style="border: 1px solid #adadad;padding: 4%;overflow: hidden;text-overflow: ellipsis;" class="cursorPointer assignToRolePickListValue {if in_array($PICKLIST_VALUE,$ROLE_PICKLIST_VALUES)}selectedCell{else}unselectedCell{/if}">
 						{if in_array($PICKLIST_VALUE,$ROLE_PICKLIST_VALUES)}<i class="icon-ok pull-left"></i>{/if}{vtranslate($PICKLIST_VALUE,$SELECTED_MODULE_NAME)}
 					</div>
 				{/foreach}

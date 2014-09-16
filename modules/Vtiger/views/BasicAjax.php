@@ -40,7 +40,7 @@ class Vtiger_BasicAjax_View extends Vtiger_Basic_View {
 	 */
 	function showAdvancedSearch(Vtiger_Request $request) {
 		//Modules for which search is excluded
-		$excludedModuleForSearch = array('Vtiger');
+		$excludedModuleForSearch = array('Vtiger', 'Reports');
 
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();

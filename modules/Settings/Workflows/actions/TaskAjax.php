@@ -87,7 +87,7 @@ class Settings_Workflows_TaskAjax_Action extends Settings_Vtiger_IndexAjax_View 
 
 			$fieldNames = $taskObject->getFieldNames();
 			foreach($fieldNames as $fieldName){
-				if($fieldName == 'field_value_mapping') {
+				if($fieldName == 'field_value_mapping' || $fieldName == 'content') {
 					$taskObject->$fieldName = $request->getRaw($fieldName);
 				} else {
 					$taskObject->$fieldName = $request->get($fieldName);
@@ -124,4 +124,8 @@ class Settings_Workflows_TaskAjax_Action extends Settings_Vtiger_IndexAjax_View 
 			$response->emit();
 		}
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

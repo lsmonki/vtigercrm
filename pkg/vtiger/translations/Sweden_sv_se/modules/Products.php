@@ -88,4 +88,5 @@ $languageStrings = array(
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'Lägg till Prisguide',
 	'LBL_CONVERSION_RATE' => 'Omvandlingshastighet',
+    'LBL_PRODUCTSMOD_DISABLED' => 'Aktivera Produkter Module för att visa produkter',
 );

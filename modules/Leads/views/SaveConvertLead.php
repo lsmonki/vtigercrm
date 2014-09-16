@@ -103,4 +103,8 @@ class Leads_SaveConvertLead_View extends Vtiger_View_Controller {
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->view('ConvertLeadError.tpl', $moduleName);
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        }
 }

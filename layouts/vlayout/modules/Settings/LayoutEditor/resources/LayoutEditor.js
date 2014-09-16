@@ -630,7 +630,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var fieldContainer = fieldCopy.find('div.marginLeftZero.border1px');
 		fieldContainer.addClass('opacity editFields').attr('data-field-id', result['id']).attr('data-block-id', result['blockid']);
 		fieldContainer.find('.deleteCustomField, .saveFieldDetails').attr('data-field-id', result['id']);
-		fieldContainer.find('.fieldLabel').text(result['label']);
+		fieldContainer.find('.fieldLabel').html(result['label']);
 		if(!result['customField']){
 			fieldContainer.find('.deleteCustomField').remove();
 		}
@@ -656,7 +656,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 	setFieldDetails : function(result, form) {
 		var thisInstance = this;
 		//add field label to the field details
-		form.find('.modal-header').html(jQuery('<strong>'+result['label']+'</strong>'));
+		form.find('.modal-header').html(jQuery('<strong>'+result['label']+'</strong><div class="pull-right"><a href="javascript:void(0)" class="cancel">X</a></div>'));
 
 		var defaultValueUi = form.find('.defaultValueUi');
 		if(result['mandatory']) {
@@ -679,6 +679,12 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		}
 		if(result['masseditable']) {
 			form.find('[name="masseditable"]').filter(':checkbox').attr('checked', true);
+		}
+		if(result['isMassEditDisabled']) {
+			form.find('[name="masseditable"]').filter(':checkbox').attr('readonly', 'readonly').addClass('optionDisabled');
+		}
+		if(result['isDefaultValueDisabled']) {
+			form.find('[name="defaultvalue"]').filter(':checkbox').attr('readonly', 'readonly').addClass('optionDisabled');
 		}
 		if(result['defaultvalue']) {
 			form.find('[name="defaultvalue"]').filter(':checkbox').attr('checked', true);
@@ -1007,7 +1013,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 
 		AppConnector.request(params).then(
 			function(data) {
-				for(index in data.result) {
+				for(var index in data.result) {
 					thisInstance.showCustomField(data.result[index]);
 				}
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
@@ -1244,6 +1250,8 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 		var aDeferred = jQuery.Deferred();
 		var form = currentTarget.closest('form.fieldDetailsForm');
 		var fieldId = currentTarget.data('fieldId');
+                var defaultValueField = form.find('[name=fieldDefaultValue]');
+                var defaultValue = defaultValueField.val();
 		var progressIndicatorElement = jQuery.progressIndicator({
 			'position' : 'html',
 			'blockInfo' : {
@@ -1265,6 +1273,9 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 				var params = {};
 				params['text'] = app.vtranslate('JS_FIELD_DETAILS_SAVED');
 				Settings_Vtiger_Index_Js.showMessage(params);
+                                if(defaultValueField.prop("tagName") == 'TEXTAREA') {
+                                        defaultValueField.text(defaultValue);
+                                }
 				aDeferred.resolve(data);
 			},
 			function(error) {
@@ -1423,7 +1434,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 			e.stopPropagation();
 		});
 	},
-
+        
 	registerEditFieldDetailsClick : function(contents) {
 		var thisInstance = this;
 		if(typeof contents == 'undefined') {
@@ -1505,6 +1516,10 @@ jQuery.Class('Settings_LayoutEditor_Js', {
                 jQuery('body').off('click.dropdown.data-api.layouteditor');
 			}
 			thisInstance.addClickOutSideEvent(dropDown, callbackFunction);
+            
+            jQuery('.cancel').click(function(){
+                callbackFunction();
+            });
 			jQuery('body').on('click.dropdown.data-api.layouteditor',function(e){
                 var target = jQuery(e.target);
                 //user clicked on time picker
@@ -1566,7 +1581,7 @@ jQuery.Class('Settings_LayoutEditor_Js', {
 	addClickOutSideEvent : function(element, callbackFunction) {
 		element.one('clickoutside',callbackFunction);
 	},
-
+    
 	/**
 	 * register events for layout editor
 	 */

@@ -69,5 +69,7 @@ $languageStrings = array(
 	'LBL_DETAILS' => 'التفاصيل',
 	'skipped' => 'تخطى السجلات',
 	'failed' => 'فشل السجلات',
-	
+	'Skip'=>'تخطي',
+        'Overwrite'=>'الكتابة فوق',
+        'Merge'=>'دمج',
 );

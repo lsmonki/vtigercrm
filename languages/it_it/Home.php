@@ -21,4 +21,7 @@ $languageStrings = array(
 	'LTFAQ'                        => 'Mie FAQ recenti'             , 
 	'UA'                           => 'Prossimi Eventi'             , 
 	'PA'                           => 'Eventi Pendenti'             , 
+        'Home'                         => 'Domestico'                         ,
+        'Key Metrics'                  => 'Metriche chiave',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

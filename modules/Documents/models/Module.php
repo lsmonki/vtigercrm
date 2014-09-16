@@ -15,7 +15,7 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 	 * @return boolean
 	 */
 	public function isWorkflowSupported() {
-		return false;
+		return true;
 	}
 
 	/**
@@ -78,27 +78,23 @@ class Documents_Module_Model extends Vtiger_Module_Model {
 	 * Funtion that returns fields that will be showed in the record selection popup
 	 * @return <Array of fields>
 	 */
-	public function getPopupFields() {
-		$currentUserModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		$popupFileds = parent::getPopupFields();
-
-		foreach ($popupFileds as $fieldLabel => $fieldName) {
-			if ($fieldName === 'folderid' || $fieldName === 'modifiedtime') {
-				unset($popupFileds[$fieldLabel]);
-			}
+	public function getPopupViewFieldsList() { 
+		$popupFileds = $this->getSummaryViewFieldsList();
+		foreach ($popupFileds as $fieldName => $fieldModel) { 
+			if ($fieldName === 'folderid' || $fieldName === 'modifiedtime') { 
+						unset($popupFileds[$fieldName]); 
+			}	
 		}
-
-		$reqPopUpFields = array('File Status' => 'filestatus',
-								'File Size' => 'filesize',
-								'File Location Type' => 'filelocationtype');
-
+		$reqPopUpFields = array('File Status' => 'filestatus', 
+								'File Size' => 'filesize', 
+								'File Location Type' => 'filelocationtype'); 
 		foreach ($reqPopUpFields as $fieldLabel => $fieldName) {
-            $fieldModel = Vtiger_Field_Model::getInstance($fieldName,$this);
-			if ($fieldModel->getPermissions('readwrite')) {
-				$popupFileds[$fieldLabel] = $fieldName;
+			$fieldModel = Vtiger_Field_Model::getInstance($fieldName,$this); 
+			if ($fieldModel->getPermissions('readwrite')) { 
+				$popupFileds[$fieldName] = $fieldModel; 
 			}
 		}
-		return $popupFileds;
+		return array_keys($popupFileds); 
 	}
 
 	/**
@@ -135,8 +131,17 @@ class Documents_Module_Model extends Vtiger_Module_Model {
         
         
 		$layoutEditorImagePath = Vtiger_Theme::getImagePath('LayoutEditor.gif');
+                $editWorkflowsImagePath = Vtiger_Theme::getImagePath('EditWorkflows.png'); 
 		$settingsLinks = array();
 
+                if(VTWorkflowUtils::checkModuleWorkflow($this->getName())) { 
+                    $settingsLinks[] = array( 
+                                        'linktype' => 'LISTVIEWSETTING', 
+                                        'linklabel' => 'LBL_EDIT_WORKFLOWS', 
+                                        'linkurl' => 'index.php?parent=Settings&module=Workflows&view=List&sourceModule='.$this->getName(), 
+                                        'linkicon' => $editWorkflowsImagePath 
+                    ); 
+                } 
 		$settingsLinks[] = array(
 					'linktype' => 'LISTVIEWSETTING',
 					'linklabel' => 'LBL_EDIT_FIELDS',

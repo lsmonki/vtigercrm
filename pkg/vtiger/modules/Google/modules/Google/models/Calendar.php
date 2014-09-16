@@ -190,6 +190,21 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
         $title = $this->data['entity']->title->text;
         return empty($title) ? null : $title;
     }
+    
+    /**
+     * function to get Visibility of google calendar event
+     * @return <string> visibility of google event (Private or Public)
+     * @return <null> if google event visibility is default
+     */
+    function getVisibility() {
+        $visibility = $this->data['entity']->getVisibility()->getValue();
+        if(strpos($visibility, 'private') !== false)
+                return 'Private';
+        else if(strpos($visibility, 'public') !== false)
+                return 'Public';
+        else
+                return null;
+    }
 
     /**
      * return discription of Google Record

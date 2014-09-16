@@ -17,7 +17,16 @@ class Settings_Webforms_Module_Model extends Settings_Vtiger_Module_Model {
 	var $name = 'Webforms';
 
 	public static function getSupportedModulesList() {
-		return array('Leads' => vtranslate('Leads', 'Leads'));
+		$webformModules = array('Contacts','Accounts','Leads','Potentials','HelpDesk');
+		$sourceModule = array();
+		foreach ($webformModules as $key => $moduleName) {
+			$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+			$presenceValues = array(0,2);
+			if(in_array($moduleModel->presence, $presenceValues)){
+				$sourceModule[$moduleName] = vtranslate($moduleName, $moduleName);
+			}
+		}
+		return $sourceModule;
 	}
 
 	/**

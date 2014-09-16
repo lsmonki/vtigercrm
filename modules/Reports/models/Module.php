@@ -14,7 +14,7 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 	 * Function deletes report
 	 * @param Reports_Record_Model $reportModel
 	 */
-	function deleteRecord(Reports_Record_Model $reportModel) {
+	function deleteRecord($reportModel) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$subOrdinateUsers = $currentUser->getSubordinateUsers();
 
@@ -33,7 +33,9 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 
 			$db->pquery('DELETE FROM vtiger_report WHERE reportid = ?', array($reportId));
 
-			$db->pquery('DELETE FROM vtiger_scheduled_reports WHERE reportid = ?', array($reportId));
+			$db->pquery('DELETE FROM vtiger_schedulereports WHERE reportid = ?', array($reportId));
+
+            $db->pquery('DELETE FROM vtiger_reporttype WHERE reportid = ?', array($reportId));
 
 			$result = $db->pquery('SELECT * FROM vtiger_homereportchart WHERE reportid = ?',array($reportId));
 			$numOfRows = $db->num_rows($result);
@@ -53,7 +55,7 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 	 * Function returns quick links for the module
 	 * @return <Array of Vtiger_Link_Model>
 	 */
-	function getSideBarLinks() {
+	function getSideBarLinks($linkParams = '') {
 		$quickLinks = array(
 			array(
 				'linktype' => 'SIDEBARLINK',
@@ -115,4 +117,12 @@ class Reports_Module_Model extends Vtiger_Module_Model {
 	function getAddFolderUrl() {
 		return 'index.php?module='.$this->get('name').'&view=EditFolder';
 	}
+    
+    /**
+     * Function to check if the extension module is permitted for utility action
+     * @return <boolean> true
+     */
+    public function isUtilityActionEnabled() {
+        return true;
+    }
 }

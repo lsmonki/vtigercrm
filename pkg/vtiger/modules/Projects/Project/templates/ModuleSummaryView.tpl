@@ -12,26 +12,27 @@
 {strip}
 	<div class="recordDetails">
 		<div>
-			<label>
-				<strong>{vtranslate('LBL_RECORD_SUMMARY',$MODULE_NAME)}</strong>
-			</label>
+			<h4> {vtranslate('LBL_RECORD_SUMMARY',$MODULE_NAME)}	</h4>
+			<hr>
 		</div>
-		<div class="row-fluid textAlignCenter roundedCorners">
-			{foreach key=FIELD_NAME item=FIELD_VALUE from=$SUMMARY_INFORMATION}
-				<span class="shade7 well squeezedWell marginLeftZero span" style='width:100px'>
-					<div>
-						<label class="font-x-small">
-							{vtranslate($FIELD_NAME,$MODULE_NAME)}
-						</label>
-					</div>
-					<div>
-						<label class="font-x-x-large">
-							{$FIELD_VALUE}
-						</label>
-					</div>
-				</span>
-			{/foreach}
-		</div>
+        {foreach item=SUMMARY_CATEGORY from=$SUMMARY_INFORMATION}
+            <div class="row-fluid textAlignCenter roundedCorners">
+                {foreach key=FIELD_NAME item=FIELD_VALUE from=$SUMMARY_CATEGORY}
+                    <span class="well squeezedWell span3">
+                        <div>
+                            <label class="font-x-small">
+                                {vtranslate($FIELD_NAME,$MODULE_NAME)}
+                            </label>
+                        </div>
+                        <div>
+                            <label class="font-x-x-large">
+                                {if !empty($FIELD_VALUE)}{$FIELD_VALUE}{else}0{/if}
+                            </label>
+                        </div>
+                    </span>
+                {/foreach}
+            </div>
+        {/foreach}
 		{include file='SummaryViewContents.tpl'|@vtemplate_path}
 	</div>
 {/strip}

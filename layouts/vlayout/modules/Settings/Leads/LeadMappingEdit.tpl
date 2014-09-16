@@ -10,7 +10,7 @@
 -->*}
 {strip}
 	<div class="container-fluid">
-		<form id="leadsMapping">
+		<form id="leadsMapping" method="POST">
 			<div class="row-fluid settingsHeader padding1per">
 				<span class="span8">
 					<span class="font-x-x-large">{vtranslate('LBL_CONVERT_LEAD_FIELD_MAPPING', $QUALIFIED_MODULE)}</span>
@@ -167,7 +167,7 @@
 			<div class="row-fluid">
 				<span class="span4">
 					<button id="addMapping" class="btn addButton" type="button">
-						<i class="icon-plus icon-white"></i>&nbsp;<strong>{vtranslate('LBL_ADD_MAPPING', $QUALIFIED_MODULE)}</strong>
+						<i class="icon-plus"></i>&nbsp;<strong>{vtranslate('LBL_ADD_MAPPING', $QUALIFIED_MODULE)}</strong>
 					</button>
 				</span>
 				<span class="span8">

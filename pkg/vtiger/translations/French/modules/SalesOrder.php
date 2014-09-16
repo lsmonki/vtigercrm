@@ -6,18 +6,15 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013    
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_SalesOrder'            => 'Commande client'             , 
+	'SINGLE_SalesOrder'            => 'Bon de commande'             , 
 	'LBL_EXPORT_TO_PDF'            => 'Export PDF'                  , 
-	'LBL_SEND_MAIL_PDF'            => 'Envoi PDF par Email'         , 
-	'LBL_ADD_RECORD'               => 'Ajouter Commande client'             , 
-	'LBL_RECORDS_LIST'             => 'Liste des Commande client'                       , 
-	'LBL_SO_INFORMATION'           => 'Détail Commande client'     , 
-	'SalesOrder No'                => 'Commande client N°'         , 
+	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Add Sales Order'             , 
+	'LBL_RECORDS_LIST'             => 'Liste'                       , 
+	'LBL_SO_INFORMATION'           => 'Détail bon de commande'     , 
+	'SalesOrder No'                => 'Bon de commande N°'         , 
 	'Quote Name'                   => 'Devis'                       , 
 	'Customer No'                  => 'Ref client'                  , 
 	'Requisition No'               => 'Ref demande'                 , 
@@ -25,7 +22,8 @@ $languageStrings = array(
 	'Sales Commission'             => 'Commission'                  , 
 	'Purchase Order'               => 'Commande fournisseur'        , 
 	'Vendor Terms'                 => 'Conditions fournisseur'      , 
-	'Pending'                      => 'En attente'                  , 
+	'Pending'                      => 'En attente'                  ,
+    'Recurring Invoive Information'=>'Information sur la facturation récurrente',
 	'Enable Recurring'             => 'Activer la récurrence'      , 
 	'Frequency'                    => 'Fréquence'                  , 
 	'Start Period'                 => 'Début'                      , 
@@ -36,7 +34,14 @@ $languageStrings = array(
 	'AutoCreated'                  => 'Crée automatiquement'       , 
 	'Sent'                         => 'Envoyé'                     , 
 	'Credit Invoice'               => 'Facture au Crédit'          , 
-	'Paid'                         => 'Soldé'                      , 
+	'Paid'                         => 'Soldé'                      ,
+    'Daily'=>'Quotidien',
+    'Monthly'=>'Mensuel',
+    'Quarterly'=>'Trimestriel',
+    'Yearly'=>'Annuel',
+    'Net 30 days'=>'Net 30 jours',
+    'Net 45 days'=>'Net 45 jours',
+    'Net 60 days'=>'Net 60 jours', 
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Date de validité',

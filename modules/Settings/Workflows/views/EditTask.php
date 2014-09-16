@@ -70,6 +70,12 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 				$taskObject->field_value_mapping = Zend_Json::encode($fieldMapping);
 			}
 		}
+                 if ($taskType === 'VTUpdateFieldsTask') { 
+                    if($moduleModel->getName() =="Documents"){ 
+                        $restrictFields=array('folderid','filename','filelocationtype'); 
+                        $viewer->assign('RESTRICTFIELDS',$restrictFields); 
+                    } 
+                } 
 		
 		$viewer->assign('SOURCE_MODULE',$moduleModel->getName());
 		$viewer->assign('MODULE_MODEL', $moduleModel);
@@ -80,7 +86,26 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('TASK_TYPES', $taskTypes);
 		$viewer->assign('TASK_MODEL', $taskModel);
 		$viewer->assign('CURRENTDATE', date('Y-n-j'));
-		$viewer->assign('META_VARIABLES', Settings_Workflows_Module_Model::getMetaVariables());
+        $metaVariables = Settings_Workflows_Module_Model::getMetaVariables();
+        if($moduleModel->getName() == 'Invoice' || $moduleModel->getName() == 'Quotes') {
+            $metaVariables['Portal Pdf Url'] = '(general : (__VtigerMeta__) portalpdfurl)';
+        }
+        
+        // Adding option Line Item block for Individual tax mode
+        $individualTaxBlockLabel = vtranslate("LBL_LINEITEM_BLOCK_GROUP", $qualifiedModuleName);
+        $individualTaxBlockValue = $viewer->view('LineItemsGroupTemplate.tpl', $qualifiedModuleName, $fetch = true);
+
+        // Adding option Line Item block for group tax mode
+        $groupTaxBlockLabel = vtranslate("LBL_LINEITEM_BLOCK_INDIVIDUAL", $qualifiedModuleName);
+        $groupTaxBlockValue = $viewer->view('LineItemsIndividualTemplate.tpl', $qualifiedModuleName, $fetch = true);
+
+        $templateVariables = array(
+            $individualTaxBlockValue => $individualTaxBlockLabel,
+            $groupTaxBlockValue => $groupTaxBlockLabel
+                );
+        
+		$viewer->assign('META_VARIABLES', $metaVariables);
+        $viewer->assign('TEMPLATE_VARIABLES', $templateVariables);
 		$viewer->assign('TASK_OBJECT', $taskObject);
 		$viewer->assign('FIELD_EXPRESSIONS', Settings_Workflows_Module_Model::getExpressions());
 		$repeat_date = $taskModel->getTaskObject()->calendar_repeat_limit_date;
@@ -91,7 +116,7 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		
 		$userModel = Users_Record_Model::getCurrentUserModel();
 		$viewer->assign('dateFormat',$userModel->get('date_format'));
-
+        $viewer->assign('timeFormat', $userModel->get('hour_format'));
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
 
@@ -127,6 +152,11 @@ class Settings_Workflows_EditTask_View extends Settings_Vtiger_Index_View {
 		}
 
 		$structure = $recordStructureInstance->getStructure();
+        // for inventory modules we shouldn't show item detail fields
+        if($taskType == "VTEmailTask" && in_array($workflowModel->getModule()->name, getInventoryModules())){
+            $itemsBlock = "LBL_ITEM_DETAILS";
+            unset($structure[$itemsBlock]);
+        }
 		foreach($structure as $fields) {
 			foreach($fields as $field) {
 				$allFieldoptions .= '<option value="$'.$field->get('workflow_columnname').'">'.

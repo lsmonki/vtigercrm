@@ -70,7 +70,7 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 	 * @params: delete record url.
 	 */
     triggerDeleteUser : function(deleteUserUrl) {
-		var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
+		var message = app.vtranslate('LBL_DELETE_USER_CONFIRMATION');
 		Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(function(data) {
 				AppConnector.request(deleteUserUrl).then(
 				function(data){
@@ -113,7 +113,7 @@ Vtiger_Detail_Js("Users_Detail_Js",{
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
-					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.message));
+					Vtiger_Helper_Js.showPnotify(app.vtranslate(data.result.status.message));
 					var url = data.result.listViewUrl;
 					window.location.href=url;
 				}

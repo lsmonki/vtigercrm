@@ -10,7 +10,7 @@
 ********************************************************************************/
 -->*}
 {strip}
-<div id="toggleButton" class="toggleButton" title="Left Panel Show/Hide"> 
+<div id="toggleButton" class="toggleButton" title="{vtranslate('LBL_LEFT_PANEL_SHOW_HIDE', 'Vtiger')}">
 	<i id="tButtonImage" class="{if $LEFTPANELHIDE neq '1'}icon-chevron-right {else} icon-chevron-left{/if}"></i>
 </div>&nbsp
     <div style="padding-left: 15px;">
@@ -25,6 +25,8 @@
             <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
             <input type="hidden" name="operator" value="{$OPERATOR}" />
             <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
+            <input type="hidden" name="search_params" value='{ZEND_JSON::encode($SEARCH_PARAMS)}' />
+            
             <div class="row-fluid">
                 <div class="span">&nbsp;</div>
                 <div class="span8">
@@ -51,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                    <br> 
+                    <br>
                     <div class="textAlignCenter">
                         <button class="btn btn-success" type="submit"><strong>{vtranslate($MODULE, $MODULE)}&nbsp;{vtranslate($SOURCE_MODULE, $MODULE)}</strong></button>
                         <a class="cancelLink" type="reset" onclick='window.history.back()'>{vtranslate('LBL_CANCEL', $MODULE)}</a>

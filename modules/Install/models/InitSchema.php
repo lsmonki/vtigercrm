@@ -58,7 +58,7 @@ class Install_InitSchema_Model {
 	 * Function upgrades the schema with changes post 540 version
 	 */
 	public static function upgrade() {
-		$migrateVersions = Migration_Module_Model::getInstance()->getAllowedMigrationVersions();
+		$migrateVersions = Migration_Module_Model::getInstance('')->getAllowedMigrationVersions();
 
 		define('VTIGER_UPGRADE', true);
 		$oldVersion = null;
@@ -764,9 +764,15 @@ class Install_InitSchema_Model {
 		$adminPassword = $_SESSION['config_file_info']['password'];
 		$userDateFormat = $_SESSION['config_file_info']['dateformat'];
 		$userTimeZone = $_SESSION['config_file_info']['timezone'];
+		//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7974
+        $userFirstName = $_SESSION['config_file_info']['firstname']; 
+        $userLastName = $_SESSION['config_file_info']['lastname']; 
         // create default admin user
     	$user = CRMEntity::getInstance('Users');
-        $user->column_fields["last_name"] = 'Administrator';
+		//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7974
+        $user->column_fields["first_name"] = $userFirstName; 
+ 	$user->column_fields["last_name"] = $userLastName; 
+        //Ends
         $user->column_fields["user_name"] = 'admin';
         $user->column_fields["status"] = 'Active';
         $user->column_fields["is_admin"] = 'on';
@@ -874,7 +880,7 @@ class Install_InitSchema_Model {
 	/**
 	 * Function registers all the event handlers
 	 */
-	function registerEvents($adb) {
+	static function registerEvents($adb) {
 		vimport('~~include/events/include.inc');
 		$em = new VTEventsManager($adb);
 
@@ -902,7 +908,7 @@ class Install_InitSchema_Model {
 	 * Function registers all the work flow custom entity methods
 	 * @param <PearDatabase> $adb
 	 */
-	function registerEntityMethods($adb) {
+	static function registerEntityMethods($adb) {
 		vimport("~~modules/com_vtiger_workflow/include.inc");
 		vimport("~~modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 		vimport("~~modules/com_vtiger_workflow/VTEntityMethodManager.inc");
@@ -932,7 +938,7 @@ class Install_InitSchema_Model {
 	 * Function adds default system workflows
 	 * @param <PearDatabase> $adb
 	 */
-	function populateDefaultWorkflows($adb) {
+	static function populateDefaultWorkflows($adb) {
 		vimport("~~modules/com_vtiger_workflow/include.inc");
 		vimport("~~modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 		vimport("~~modules/com_vtiger_workflow/VTEntityMethodManager.inc");
@@ -1032,24 +1038,12 @@ class Install_InitSchema_Model {
 		$vtcWorkFlow->save($conpuWorkFlow);
 		$id1=$conpuWorkFlow->id;
 
-		$tm = new VTTaskManager($adb);
-		$task = $tm->createTask('VTEmailTask',$conpuWorkFlow->id);
-
-		$task->active=true;
-		$task->methodName = "NotifyOwner";
-		$task->recepient = "\$(assigned_user_id : (Users) email1)";
-		$task->subject = "Regarding Contact Assignment";
-		$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
-				"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
-				"Lead Source:".'<b>$leadsource</b><br>'.
-				"Department:".'<b>$department</b><br>'.
-				"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
-				"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
-
-		$task->summary="An contact has been created ";
-		$tm->saveTask($task);
-		$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
-
+                $taskManager = new VTTaskManager($adb);
+                $task = $taskManager->createTask('VTEntityMethodTask', $id1);
+		$task->active = true;
+		$task->summary = 'Email Customer Portal Login Details';
+		$task->methodName = "SendPortalLoginDetails";
+		$taskManager->saveTask($task);
 		// Creating Workflow for Potentials
 
 		$vtcWorkFlow = new VTWorkflowManager($adb);
@@ -1087,12 +1081,23 @@ class Install_InitSchema_Model {
 		$contactWorkFlow->defaultworkflow = 1;
 		$workflowManager->save($contactWorkFlow);
 
-		$task = $taskManager->createTask('VTEntityMethodTask', $contactWorkFlow->id);
-		$task->active = true;
-		$task->summary = 'Email Customer Portal Login Details';
-		$task->methodName = "SendPortalLoginDetails";
-		$taskManager->saveTask($task);
+		$tm = new VTTaskManager($adb);
+		$task = $tm->createTask('VTEmailTask',$contactWorkFlow->id);
 
+		$task->active=true;
+		$task->recepient = "\$(assigned_user_id : (Users) email1)";
+		$task->subject = "Regarding Contact Assignment";
+		$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+				"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+				"Lead Source:".'<b>$leadsource</b><br>'.
+				"Department:".'<b>$department</b><br>'.
+				"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
+				"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
+
+		$task->summary="An contact has been created ";
+		$tm->saveTask($task);
+		$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+                
 		// Trouble Tickets workflow on creation from Customer Portal
 		$helpDeskWorkflow = $workflowManager->newWorkFlow("HelpDesk");
 		$helpDeskWorkflow->test = '[{"fieldname":"from_portal","operation":"is","value":"true:boolean"}]';

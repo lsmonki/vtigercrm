@@ -46,6 +46,9 @@ $languageStrings = array(
 	'LBL_DUPLICATE_FIELD_EXISTS'   => 'Duplicate Field Exists'      , // TODO: Review
 	'LBL_WRONG_FIELD_TYPE'         => 'Wrong Field Type'            , // TODO: Review
 	'LBL_ROLE_BASED_PICKLIST'      => 'Role Based Picklist'         , // TODO: Review
+	
+	//Translation for module
+	'Calendar'					   => 'Te doen'						,
 );
 $jsLanguageStrings = array(
 	'JS_BLOCK_VISIBILITY_SHOW'     => 'Block show enabled'          , // TODO: Review

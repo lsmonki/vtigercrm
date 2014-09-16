@@ -33,7 +33,7 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 	function getName() {
 		return $this->get('foldername');
 	}
-
+    
 	/**
 	 * Function returns the instance of Folder model
 	 * @return <Reports_Folder_Model>
@@ -295,8 +295,22 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 		$db = PearDatabase::getInstance();
 		$params = array();
 		
+        // To get the report ids which are permitted for the user
+            $query = "SELECT reportmodulesid, primarymodule from vtiger_reportmodules";
+            $result = $db->pquery($query, array());
+            $noOfRows = $db->num_rows($result);
+            $allowedReportIds = array();
+            for($i=0;$i<$noOfRows;$i++){
+                $primaryModule = $db->query_result($result,$i,'primarymodule');
+                $reportid = $db->query_result($result,$i,'reportmodulesid');
+                if(isPermitted($primaryModule,'index') == "yes"){
+                    $allowedReportIds[] = $reportid;
+                }
+            }
+        //End
 		$sql = "SELECT count(*) AS count FROM vtiger_report
-				INNER JOIN vtiger_reportfolder ON vtiger_reportfolder.folderid = vtiger_report.folderid";
+				INNER JOIN vtiger_reportfolder ON vtiger_reportfolder.folderid = vtiger_report.folderid AND 
+                vtiger_report.reportid in (".implode(',',$allowedReportIds).")";
 		$fldrId = $this->getId();
 		if($fldrId == 'All') {
 			$fldrId = false;
@@ -350,5 +364,44 @@ class Reports_Folder_Model extends Vtiger_Base_Model {
 			}
 		}
 		return $allReportModels;
+	}
+    
+     /**
+	 * Function which provides the records for the current view
+	 * @param <Boolean> $skipRecords - List of the RecordIds to be skipped
+	 * @return <Array> List of RecordsIds
+	 */
+	public function getRecordIds($skipRecords=false, $module) {
+		$db = PearDatabase::getInstance();
+        $baseTableName = "vtiger_report";
+        $baseTableId = "reportid";
+		$folderId = $this->getId();
+		$listQuery = $this->getListViewQuery($folderId);
+
+		if($skipRecords && !empty($skipRecords) && is_array($skipRecords) && count($skipRecords) > 0) {
+			$listQuery .= ' AND '.$baseTableName.'.'.$baseTableId.' NOT IN ('. implode(',', $skipRecords) .')';
+		}
+		$result = $db->query($listQuery);
+		$noOfRecords = $db->num_rows($result);
+		$recordIds = array();
+		for($i=0; $i<$noOfRecords; ++$i) {
+			$recordIds[] = $db->query_result($result, $i, $baseTableId);
+		}
+		return $recordIds;
+	}
+    
+    /**
+	 * Function returns Report Models for the folder
+	 * @return <Reports_Record_Model>
+	 */
+	function getListViewQuery($folderId) {
+        $sql = "select vtiger_report.*, vtiger_reportmodules.*, vtiger_reportfolder.folderid from vtiger_report 
+                inner join vtiger_reportfolder on vtiger_reportfolder.folderid = vtiger_report.folderid 
+                inner join vtiger_reportmodules on vtiger_reportmodules.reportmodulesid = vtiger_report.reportid ";
+        
+        if($folderId != "All") {
+                $sql = $sql." where vtiger_reportfolder.folderid = ".$folderId;
+        }        
+        return $sql;
 	}
 }

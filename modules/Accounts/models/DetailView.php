@@ -67,7 +67,7 @@ class Accounts_DetailView_Model extends Vtiger_DetailView_Model {
 		}
 
 		$SMSNotifierModuleModel = Vtiger_Module_Model::getInstance('SMSNotifier');
-		if($currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
+		if(!empty($SMSNotifierModuleModel) && $currentUserModel->hasModulePermission($SMSNotifierModuleModel->getId())) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'LBL_SEND_SMS',

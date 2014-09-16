@@ -19,6 +19,7 @@ $languageStrings = array(
 	'ONCE'                         => 'Until the first time the condition is true', // TODO: Review
 	'ON_EVERY_SAVE'                => 'Every time the record is saved', // TODO: Review
 	'ON_MODIFY'                    => 'Every time a record is modified', // TODO: Review
+        'ON_SCHEDULE'                  => 'Program',
 	'MANUAL'                       => 'System'                      , // TODO: Review
 	'SCHEDULE_WORKFLOW'            => 'Schedule Workflow'           , // TODO: Review
 	'ADD_CONDITIONS'               => 'Add Conditions'              , // TODO: Review
@@ -74,6 +75,33 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'Din',
+	'Optional' => 'Facultativ',
+	'LBL_ADD_TASK' => 'Add Sarcină',
+        'Portal Pdf Url' =>'Portal pentru clienți link Pdf',
+        'LBL_ADD_TEMPLATE' => 'Adauga şablon',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloc pentru grup fiscal',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloc de impozitare individuale',
+        'LBL_RUN_WORKFLOW' => 'Run flux de lucru',
+	'LBL_AT_TIME' => 'La Ora',
+	'LBL_HOURLY' => 'Oră',
+	
+	'LBL_DAILY' => 'Zilnic',
+	'LBL_WEEKLY' => 'Săptămânal',
+	'LBL_ON_THESE_DAYS' => 'Pe aceste zile',
+	'LBL_MONTHLY_BY_DATE' => 'Lunar de Date',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Lunar de Weekday',
+	'LBL_YEARLY' => 'Anual',
+	'LBL_SPECIFIC_DATE' => 'Pe specific Data',
+	'LBL_CHOOSE_DATE' => 'Alege Data',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Selectați Luna și data',
+	'LBL_SELECTED_DATES' => 'Selectate Perioada',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Limita maximă depășită',
+	'LBL_NEXT_TRIGGER_TIME' => 'Timp de declanșare viitoare pe',
+	'LBL_MESSAGE' => 'Mesaj',
+	
+	//Translation for module
+	'Calendar'					   =>'Pentru a face'						,
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

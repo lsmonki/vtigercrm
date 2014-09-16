@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-27
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -61,6 +61,7 @@ $languageStrings = array(
 	'LBL_PROFILE_TO_BE_DELETED'    => 'Perfil a Borrar',
 	'INTERNAL_MAIL_COMPOSER'       => 'Cliente de Email Interno',
 	'Asterisk Extension'           => 'Extensión Asterisk',
+	'Reminder Interval'            => 'Intervalo de Recordatorio',
 	'Webservice Access Key'        => 'Clave de acceso',
 	'Language'                     => 'Idioma',
 	'Theme'                        => 'Apariencia',
@@ -193,6 +194,32 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland',
 	'Asia/Magadan'                 => '(UTC+12:00) Magadan',
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa',
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Usuario eliminado correctamente',
+        'LBL_ACTIVE_USERS' => 'Usuarios Activos',
+        'LBL_INACTIVE_USERS' => 'Los usuarios inactivos',
+        'LBL_DELETE_USER_PERMANENTLY' => 'Eliminar usuario de forma permanente',
+        'LBL_RESTORE' => 'Restaurar',
+        'LBL_USER_RESTORED_SUCCESSFULLY' => 'Usuario restaurado con éxito',
+	'LBL_ALMOST_THERE'	=>	'Casi terminado!',
+	'LBL_ABOUT_ME'		=>	'Acerca de mí',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Nos comprometemos a mantener esta información privada)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Todos los campos siguientes son obligatorios)',
+	'LBL_GET_STARTED'	=> 'Empezar',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Tu número de contacto',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'¿De dónde eres?',
+	'LBL_SELECT_COUNTRY'	=> 'Seleccionar país',
+	'LBL_COMPANY_SIZE'		=> 'Tamaño de empresa',
+	'LBL_JOB_TITLE'			=> 'Cargo de trabajo',
+	'LBL_DEPARTMENT'		=> 'Departamento',
+	'LBL_BASE_CURRENCY'		=> 'Moneda Utilizada',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Elegir Moneda Base',
+	'LBL_OPERATING_CURRENCY'	=> 'La moneda base no puede ser modificado posteriormente. Selecciona tu moneda de operación',
+	'LBL_LANGUAGE' => 'Idioma',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Elige tu Idioma',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Elige Zona Horaria',
+	'LBL_DATE_FORMAT'		=> 'Formato de la fecha',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Selecciona Formato de fecha',
+	'LBL_PHONE'	=> 'Teléfono',
 );
 
 $jsLanguageStrings = array(

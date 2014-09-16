@@ -8,8 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Taak'                        , 
-	'LBL_ADD_TASK'                 => 'Taak toevoegen'              , 
+	'SINGLE_Calendar'              => 'Te doen'                        , 
+	'LBL_ADD_TASK'                 => 'Te doen toevoegen'              , 
 	'LBL_ADD_EVENT'                => 'Afspraken toevoegen'         , 
 	'LBL_RECORDS_LIST'             => 'Bekijk lijst'                , 
 	'LBL_EVENTS'                   => 'Afspraken'                   , 
@@ -21,8 +21,9 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
-	'LBL_EVENT_OR_TASK'            => 'Evenement / Taak'                ,
-	'LBL_TASK_INFORMATION'         => 'Taak informatie'             , 
+	'LBL_EVENT_OR_TASK'            => 'Evenement / Te doen'                ,
+	'LBL_TASK_INFORMATION'         => 'Te doen informatie'             , 
+    'LBL_EVENT_INFORMATION'        => 'event Details'               ,
 	'Subject'                      => 'Onderwerp'                   , 
 	'Start Date & Time'            => 'Startdatum & tijd'           , 
 	'Activity Type'                => 'Activiteit type'             , 
@@ -35,8 +36,10 @@ $languageStrings = array(
 	'LBL_ADDED_CALENDARS'          => 'Added Calendars'             , // TODO: Review
 	'Call'                         => 'Bel'                         , 
 	'Meeting'                      => 'Vergadering'                 , 
-	'Task'                         => 'Task'                        , // TODO: Review
+	'Task'                         => 'Te doen'                        , // TODO: Review
 	'Planned'                      => 'Gepland'                     , 
+        'Held'                             => 'Held',
+        'Not Held'                      => 'Niet Held',
 	'Completed'                    => 'Gereed'                      , 
 	'Pending Input'                => 'Wacht op informatie'         , 
 	'Not Started'                  => 'Niet gestart'                , 
@@ -44,7 +47,8 @@ $languageStrings = array(
 	'Medium'                       => 'Medium'                      , 
 	'LBL_CHANGE_OWNER'             => 'Wijzig eigenaar'             , 
 	'LBL_EVENT'                    => 'Afspraak'                    , 
-	'LBL_TASK'                     => 'Taken'                       , 
+	'LBL_TASK'                     => 'Te doen'                       , 
+	'LBL_TASKS'						=> 'Te doen',
 	'LBL_CALENDAR_VIEW'            => 'Kalenderoverzicht'           , 
 	'LBL_SHARED_CALENDAR'          => 'Shared Calendar'             , // TODO: Review
 	'LBL_DAY0'                     => 'Sunday'                      , // TODO: Review
@@ -62,14 +66,22 @@ $languageStrings = array(
 	'Weekly'                       => 'Week(s)'                     , // TODO: Review
 	'Monthly'                      => 'Month(s)'                    , // TODO: Review
 	'Yearly'                       => 'Year'                        , // TODO: Review
+        'LBL_DEFAULT_STATUS_TYPE'      => 'Standaard Status & Type'     ,
+        'LBL_STATUS'                   => 'Toestand'                    ,
+        'LBL_TYPE'                     => 'Type'                        ,
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Kleur bewerken',
+	'LBL_ADD_CALENDAR_VIEW' => 'Voeg Kalender',
+	'LBL_SELECT_USER_CALENDAR' => 'Selecteer Gebruikers Kalender',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Selecteer Agenda Kleur',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Bewerken Kalender',
+	'LBL_DELETE_CALENDAR' => 'Verwijderen Kalender',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Selecteer Activiteit Type',
+	'Tasks' => 'Acties',
 );
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK'           => 'Voeg Event / Taak toe'       , 
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', // TODO: Review
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
+	'LBL_ADD_EVENT_TASK'           => 'Voeg Event / Te doen'       , 
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Te doen is successfully added to your Calendar', // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
         'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Kan niet worden gesteld voor de toekomst',
 	
@@ -122,5 +134,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dec',
 	
 	'LBL_ALL_DAY' => 'All-Day',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Kalenderweergave kleur succesvol bijgewerkt',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Weet u zeker dat u dit wilt Calendar view verwijderen?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Kalender View toegevoegd',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Kalender Bekijk succesvol verwijderd',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Geen Kalender View toe te voegen',
+	'JS_EDIT_CALENDAR' => 'Kalender bewerken',
 );

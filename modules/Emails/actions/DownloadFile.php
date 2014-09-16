@@ -31,7 +31,7 @@ class Emails_DownloadFile_Action extends Vtiger_Action_Controller {
             $fileType = $row["type"];
             $name = $row["name"];
             $filepath = $row["path"];
-            $name = html_entity_decode($name, ENT_QUOTES, $default_charset);
+            $name = decode_html($name);
             $saved_filename = $attachmentId."_".$name;
             $disk_file_size = filesize($filepath.$saved_filename);
             $filesize = $disk_file_size + ($disk_file_size % 1024);

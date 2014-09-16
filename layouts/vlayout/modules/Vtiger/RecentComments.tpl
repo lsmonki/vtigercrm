@@ -14,21 +14,23 @@
 {* Change to this also refer: AddCommentForm.tpl *}
 {assign var="COMMENT_TEXTAREA_DEFAULT_ROWS" value="2"}
 
-<div class="commentContainer">
+<div class="commentContainer recentComments">
 	<div class="commentTitle row-fluid">
-		<div class="addCommentBlock">
-			<div>
-				<textarea name="commentcontent" class="commentcontent"  placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}"></textarea>
+		{if $COMMENTS_MODULE_MODEL->isPermitted('EditView')}
+			<div class="addCommentBlock">
+				<div>
+					<textarea name="commentcontent" class="commentcontent"  placeholder="{vtranslate('LBL_ADD_YOUR_COMMENT_HERE', $MODULE_NAME)}" rows="{$COMMENT_TEXTAREA_DEFAULT_ROWS}"></textarea>
+				</div>
+				<div class="pull-right">
+					<button class="btn btn-success detailViewSaveComment" type="button" data-mode="add"><strong>{vtranslate('LBL_POST', $MODULE_NAME)}</strong></button>
+				</div>
 			</div>
-			<div class="pull-right">
-				<button class="btn btn-success detailViewSaveComment" type="button" data-mode="add"><strong>{vtranslate('LBL_POST', $MODULE_NAME)}</strong></button>
-			</div>
-		</div>
+		{/if}
 	</div>
+	<hr><br>
 	<div class="commentsBody">
 		{if !empty($COMMENTS)}
 			{foreach key=index item=COMMENT from=$COMMENTS}
-				<hr>
 				<div class="commentDetails">
 					<div class="commentDiv">
 						<div class="singleComment">
@@ -46,7 +48,7 @@
 											<div class="inner">
 												<span class="commentorName"><strong>{$COMMENTOR->getName()}</strong></span>
 												<span class="pull-right">
-													<p class="muted"><em>{vtranslate('LBL_COMMENTED',$MODULE_NAME)}</em>&nbsp;<small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getCommentedTime())}">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getCommentedTime())}</small></p>
+													<p class="muted"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getCommentedTime())}">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getCommentedTime())}</small></p>
 												</span>
 												<div class="clearfix"></div>
 											</div>
@@ -58,41 +60,47 @@
 								</div>
 							</div>
 							<div class="row-fluid commentActionsContainer">
-								<div class="row-fluid">
-									<div class="pull-right commentActions">
-										<span>
-											<a class="cursorPointer replyComment feedback">
-												<i class="icon-share-alt"></i>{vtranslate('LBL_REPLY',$MODULE_NAME)}
-											</a>
-											{if $CURRENTUSER->getId() eq $COMMENT->get('userid')}
-												&nbsp;<span>|</span>&nbsp;
-												<a class="cursorPointer editComment feedback">
-													{vtranslate('LBL_EDIT',$MODULE_NAME)}
-												</a>
-											{/if}
-										</span>
-										<span>
-											{if $PARENT_COMMENT_MODEL neq false or $CHILD_COMMENTS_MODEL neq null}
-												&nbsp;<span>|</span>&nbsp;
-												<a href="javascript:void(0);" class="cursorPointer detailViewThread">{vtranslate('LBL_VIEW_THREAD',$MODULE_NAME)}</a>
-											{/if}
-										</span>
-									</div>
-								</div>
+								
 								{assign var="REASON_TO_EDIT" value=$COMMENT->get('reasontoedit')}
-								<div class="row-fluid"  name="editStatus">
-									<hr style="border-color: gray;border-style: dashed;">
-									<div class="row-fluid pushUpandDown2per">
+								<div class="row-fluid editStatus"  name="editStatus">
 										<span class="span6{if empty($REASON_TO_EDIT)} hide{/if}">
-											[ {vtranslate('LBL_EDIT_REASON',$MODULE_NAME)} ] : <span  name="editReason" class="textOverflowEllipsis">{nl2br($REASON_TO_EDIT)}</span>
+												<p class="muted">
+													<small>
+													[ {vtranslate('LBL_EDIT_REASON',$MODULE_NAME)} ] :
+													<span  name="editReason" class="textOverflowEllipsis">{nl2br($REASON_TO_EDIT)}</span>
+													</small>
+												</p>
 										</span>
 										{if $COMMENT->getCommentedTime() neq $COMMENT->getModifiedTime()}
 											<span class="{if empty($REASON_TO_EDIT)}row-fluid{else} span6{/if}">
-												<span class="pull-right">
-													<p class="muted"><em>{vtranslate('LBL_MODIFIED',$MODULE_NAME)}</em>&nbsp;<small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getModifiedTime())}" class="commentModifiedTime">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getModifiedTime())}</small></p>
-												</span>
+												<p class="muted pull-right">
+													<small><em>{vtranslate('LBL_MODIFIED',$MODULE_NAME)}</em></small>&nbsp;
+													<small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($COMMENT->getModifiedTime())}" class="commentModifiedTime">{Vtiger_Util_Helper::formatDateDiffInStrings($COMMENT->getModifiedTime())}</small>
+												</p>
 											</span>
 										{/if}
+								</div>
+								<div class="row-fluid">
+									<div class="pull-right commentActions">
+										{if $COMMENTS_MODULE_MODEL->isPermitted('EditView')}
+											<span>
+												<a class="cursorPointer replyComment feedback">
+													<i class="icon-share-alt"></i>{vtranslate('LBL_REPLY',$MODULE_NAME)}
+												</a>
+												{if $CURRENTUSER->getId() eq $COMMENT->get('userid')}
+													&nbsp;<span>|</span>&nbsp;
+													<a class="cursorPointer editComment feedback">
+														{vtranslate('LBL_EDIT',$MODULE_NAME)}
+													</a>
+												{/if}
+											</span>
+										{/if}
+										<span>
+											{if $PARENT_COMMENT_MODEL neq false or $CHILD_COMMENTS_MODEL neq null}
+												{if $COMMENTS_MODULE_MODEL->isPermitted('EditView')}&nbsp;<span>|</span>&nbsp;{/if}
+												<a href="javascript:void(0);" class="cursorPointer detailViewThread">{vtranslate('LBL_VIEW_THREAD',$MODULE_NAME)}</a>
+											{/if}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -127,7 +135,7 @@
 		<div class="row-fluid">
 			<span class="span1">&nbsp;</span>
 			<div class="span11">
-				<input type="text" name="reasonToEdit" placeholder="{vtranslate('LBL_REASON_FOR_CHANGING_COMMENT', $MODULE_NAME)}" class="input-block-level commentcontenthidden"/>
+				<input type="text" name="reasonToEdit" placeholder="{vtranslate('LBL_REASON_FOR_CHANGING_COMMENT', $MODULE_NAME)}" class="input-block-level"/>
 			</div>
 		</div>
 		<div class="row-fluid">

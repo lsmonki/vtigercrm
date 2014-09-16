@@ -7,9 +7,23 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
+ini_set("auto_detect_line_endings", true);
 
 class Import_CSVReader_Reader extends Import_FileReader_Reader {
-
+    
+    public function arrayCombine($key, $value) { 
+        $combine = array(); 
+        $dup = array(); 
+        for($i=0;$i<count($key);$i++) { 
+            if(array_key_exists($key[$i], $combine)){ 
+                if(!$dup[$key[$i]]) $dup[$key[$i]] = 1;
+                $key[$i] = $key[$i]."(".++$dup[$key[$i]].")";
+            } 
+            $combine[$key[$i]] = $value[$i]; 
+        } 
+        return $combine; 
+    }
+    
 	public function getFirstRowData($hasHeader=true) {
 		global $default_charset;
 
@@ -43,7 +57,7 @@ class Import_CSVReader_Reader extends Import_FileReader_Reader {
 			} elseif($noOfHeaders < $noOfFirstRowData) {
 				$firstRowData = array_slice($firstRowData, 0, count($headers), true);
 			}
-			$rowData = array_combine($headers, $firstRowData);
+			$rowData = $this->arrayCombine($headers, $firstRowData);
 		} else {
 			$rowData = $firstRowData;
 		}

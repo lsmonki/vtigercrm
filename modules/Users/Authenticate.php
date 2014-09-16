@@ -35,6 +35,8 @@ $user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
 
+$successURL = 'index.php';
+
 if($focus->is_authenticated()) {
 	session_regenerate_id();
 	//Inserting entries for audit trail during login
@@ -72,12 +74,15 @@ if($focus->is_authenticated()) {
 	$_SESSION['AUTHUSERID'] = $focus->id;
 	$_SESSION['app_unique_key'] = $application_unique_key;
 
-	//Enabled session variable for KCFINDER 
- 	$_SESSION['KCFINDER'] = array(); 
- 	$_SESSION['KCFINDER']['disabled'] = false; 
- 	$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
- 	$_SESSION['KCFINDER']['uploadDir'] = "test/upload";
-	
+	global $upload_badext;
+	//Enabled session variable for KCFINDER
+	$_SESSION['KCFINDER'] = array();
+	$_SESSION['KCFINDER']['disabled'] = false;
+	$_SESSION['KCFINDER']['uploadURL'] = "test/upload";
+	$_SESSION['KCFINDER']['uploadDir'] = "/test/upload";
+	$deniedExts = implode(" ", $upload_badext);
+	$_SESSION['KCFINDER']['deniedExts'] = $deniedExts;
+
 	// store the user's theme in the session
 	if(!empty($focus->column_fields["theme"])) {
 		$authenticated_user_theme = $focus->column_fields["theme"];
@@ -116,11 +121,28 @@ if($focus->is_authenticated()) {
 	if (file_exists($tmp_file_name)) {
 		unlink($tmp_file_name);
 	}
-	$arr = $_SESSION['lastpage'];
-	if(isset($_SESSION['lastpage'])) {
-		header("Location: index.php?".$arr);
+
+	$userSetupStatus = Users_CRMSetup::getUserSetupStatus($focus->id);
+	if ($userSetupStatus) {
+		$user = $focus->retrieve_entity_info($focus->id, 'Users');
+		$isFirstUser = Users_CRMSetup::isFirstUser($user);
+		if($isFirstUser) {
+			header('Location: index.php?module=Users&action=SystemSetup');
+		} else {
+			$arr = $_SESSION['lastpage'];
+			if(isset($_SESSION['lastpage'])) {
+				header("Location: $successURL".$arr);
+			} else {
+				header("Location: $successURL");
+			}
+		}
 	} else {
-		header("Location: index.php");
+		$arr = $_SESSION['lastpage'];
+		if(isset($_SESSION['lastpage'])) {
+			header("Location: $successURL".$arr);
+		} else {
+			header("Location: $successURL");
+		}
 	}
 } else {
 	$sql = 'select user_name, id, crypt_type from vtiger_users where user_name=?';

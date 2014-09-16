@@ -14,6 +14,6 @@
 {include file="BasicHeader.tpl"|vtemplate_path:$MODULE}
 <div class="bodyContents">
 	<div class="mainContainer row-fluid">
-		<div class="contentsDiv span12 marginLeftZero">
+		<div class="contentsDiv span12 marginLeftZero dashboardContainer">
 			{include file="dashboards/DashBoardHeader.tpl"|vtemplate_path:$MODULE_NAME DASHBOARDHEADER_TITLE=vtranslate($MODULE, $MODULE)}
 {/strip}

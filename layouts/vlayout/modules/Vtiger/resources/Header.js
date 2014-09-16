@@ -86,7 +86,7 @@ jQuery.Class("Vtiger_Header_Js", {
      */
     alignContentsContainer: function(topValue,speed, effect) {
         if (typeof topValue == 'undefined') {
-            topValue = '69px';
+            topValue = '90px';
         }
         var contentsContainer = this.getContentsContainer();
         contentsContainer.animate({'margin-top': topValue}, speed, effect);
@@ -137,7 +137,7 @@ jQuery.Class("Vtiger_Header_Js", {
 //            jQuery('#announcement').show();
 //            announcementBtn.attr('src', app.vimage_path('btnAnnounce.png'));
 //            thisInstance.alignContentsContainer('92px',0,'linear');
-//        } 
+//        }
     },
     registerAnnouncement: function() {
         var thisInstance = this;
@@ -148,7 +148,7 @@ jQuery.Class("Vtiger_Header_Js", {
             var displayStatus = jQuery('#announcement').css('display');
             if (displayStatus == 'none') {
                 jQuery('#announcement').show();
-                thisInstance.alignContentsContainer('92px',200,'linear');
+                thisInstance.alignContentsContainer('114px',200,'linear');
                 announcementBtn.attr('src', app.vimage_path('btnAnnounce.png'));
 
                 // Turn-on always
@@ -156,7 +156,7 @@ jQuery.Class("Vtiger_Header_Js", {
                     app.cacheSet(announcementTurnOffKey, false);
                 }
             } else {
-                thisInstance.alignContentsContainer('69px',200,'linear');
+                thisInstance.alignContentsContainer('90px',200,'linear');
                 jQuery('#announcement').hide();
                 announcementBtn.attr('src', app.vimage_path('btnAnnounceOff.png'));
 
@@ -267,9 +267,22 @@ jQuery.Class("Vtiger_Header_Js", {
                     'module': module
                 });
                 if (!(recordPreSaveEvent.isDefaultPrevented())) {
-                    thisInstance.quickCreateSave(form).then(
+                    var targetInstance = thisInstance;
+                    var moduleInstance = Vtiger_Edit_Js.getInstanceByModuleName(module);
+                    if(typeof(moduleInstance.quickCreateSave) === 'function'){
+                        targetInstance = moduleInstance;
+                    }
+                    
+                    targetInstance.quickCreateSave(form).then(
                             function(data) {
                                 app.hideModalWindow();
+                                //fix for Refresh list view after Quick create 
+                                var parentModule=app.getModuleName(); 
+                                var viewname=app.getViewName(); 
+                                if((module == parentModule) && (viewname=="List")){ 
+                                    var listinstance = new Vtiger_List_Js(); 
+                                    listinstance.getListViewRecords();      
+                                } 
                                 submitSuccessCallbackFunction(data);
                                 var registeredCallBackList = thisInstance.quickCreateCallBacks;
                                 for (var index = 0; index < registeredCallBackList.length; index++) {
@@ -336,12 +349,12 @@ jQuery.Class("Vtiger_Header_Js", {
 
             quickCreateTabOnHide(previousTab);
             quickCreateTabOnShow(currentTab);
-            
+
             //while switching tabs we have to clear the invalid fields list
             form.data('jqv').InvalidFields = [];
 
         });
-		
+
         //To show aleady non active element , this we are doing so that on load we can remove name attributes for other fields
         quickCreateTabOnHide(tabElements.closest('li').filter(':not(.active)').find('a'));
     },
@@ -370,8 +383,32 @@ jQuery.Class("Vtiger_Header_Js", {
             });
         });
     },
+
+	adjustContentHeight: function(){
+		if(app.getViewName() === 'Detail' || app.getViewName() === 'Calendar' || app.getViewName() === 'ExtensionImport'){
+			if(jQuery('div.detailViewInfo > .related').outerHeight() > jQuery('div.detailViewInfo > div.details ').outerHeight()){
+				jQuery('div.detailViewInfo > div.details').css('min-height',jQuery('.detailViewInfo > .related').outerHeight());
+			}
+			bodyHeight = jQuery('div.detailViewContainer').outerHeight();
+		}else{
+			bodyHeight = jQuery(".bodyContents").outerHeight();
+		}
+		jQuery(".mainContainer").css('min-height', bodyHeight);
+		jQuery(".mainContainer > .span2 ").css('min-height', bodyHeight);
+		jQuery(".contentsDiv").css('min-height', bodyHeight);
+	},
+
     registerEvents: function() {
         var thisInstance = this;
+
+		//Show Alert if user is on a unsupported browser (IE7, IE8, ..etc)
+		if(jQuery.browser.msie && jQuery.browser.version < 9.0) {
+			if(app.getCookie('oldbrowser') != 'true') {
+				app.setCookie("oldbrowser",true, 365);
+				window.location.href = 'layouts/vlayout/modules/Vtiger/browsercompatibility/Browser_compatibility.html';
+			}
+		}
+
         jQuery('#globalSearch').click(function() {
             var advanceSearchInstance = new Vtiger_AdvanceSearch_Js();
             advanceSearchInstance.initiateSearch().then(function() {
@@ -405,7 +442,7 @@ jQuery.Class("Vtiger_Header_Js", {
         });
 
         thisInstance.basicSearch();
-        jQuery('#quickCreateModules').on("click", ".quickCreateModule", function(e, params) {
+        jQuery('#quickCreateModules,#compactquickCreate').on("click", ".quickCreateModule", function(e, params) {
             if (typeof params == 'undefined') {
                 params = {};
             }
@@ -428,11 +465,16 @@ jQuery.Class("Vtiger_Header_Js", {
             });
 
         });
-        jQuery('#basicSearchModulesList_chzn').find('.chzn-results').slimScroll({
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
+			jQuery('#basicSearchModulesList_chzn').find('.chzn-results').css({'max-height':'350px','overflow-y':'scroll'});
+		}
+		else{
+			app.showScrollBar(jQuery('#basicSearchModulesList_chzn').find('.chzn-results'),
+			{
             height: '450px',
             railVisible: true,
             alwaysVisible: true,
-            size: '6px',
+            size: '6px'
         });
 
 
@@ -442,10 +484,15 @@ jQuery.Class("Vtiger_Header_Js", {
             $('.headerLinksContainer').css('margin-right', '8px');
         }
 
-        // setting sidebar Height wrt Content
-        var contentsHeight = jQuery('.contentsDiv').outerHeight();
-        jQuery(".mainContainer > .span2").css('height', contentsHeight);
+		// setting sidebar Height wrt Content
+		$(document).ajaxComplete(function() {
+			 Vtiger_Header_Js.getInstance().adjustContentHeight();
+		});
+		$(document).load(function() {
+			 Vtiger_Header_Js.getInstance().adjustContentHeight();
+		});
     }
+}
 });
 jQuery(document).ready(function() {
 

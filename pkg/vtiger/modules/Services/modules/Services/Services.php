@@ -7,9 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/CRMEntity.php');
-require_once('data/Tracker.php');
-
 class Services extends CRMEntity {
 	var $db, $log; // Used in class functions of CRMEntity
 
@@ -483,6 +480,12 @@ class Services extends CRMEntity {
 				ON vtiger_potential.potentialid = vtiger_quotes.potentialid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+            LEFT JOIN vtiger_quotescf
+                ON vtiger_quotescf.quoteid = vtiger_quotes.quoteid
+			LEFT JOIN vtiger_quotesbillads
+				ON vtiger_quotesbillads.quotebilladdressid = vtiger_quotes.quoteid
+			LEFT JOIN vtiger_quotesshipads
+				ON vtiger_quotesshipads.quoteshipaddressid = vtiger_quotes.quoteid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
@@ -550,6 +553,12 @@ class Services extends CRMEntity {
 				ON vtiger_service.serviceid = vtiger_inventoryproductrel.productid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+            LEFT JOIN vtiger_purchaseordercf
+                ON vtiger_purchaseordercf.purchaseorderid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_pobillads
+				ON vtiger_pobillads.pobilladdressid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_poshipads
+				ON vtiger_poshipads.poshipaddressid = vtiger_purchaseorder.purchaseorderid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
@@ -617,8 +626,16 @@ class Services extends CRMEntity {
 				ON vtiger_service.serviceid = vtiger_inventoryproductrel.productid
 			LEFT OUTER JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_salesorder.accountid
+            LEFT JOIN vtiger_invoice_recurring_info
+                ON vtiger_invoice_recurring_info.start_period = vtiger_salesorder.salesorderid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+            LEFT JOIN vtiger_salesordercf
+                ON vtiger_salesordercf.salesorderid = vtiger_salesorder.salesorderid
+			LEFT JOIN vtiger_sobillads
+				ON vtiger_sobillads.sobilladdressid = vtiger_salesorder.salesorderid
+			LEFT JOIN vtiger_soshipads
+				ON vtiger_soshipads.soshipaddressid = vtiger_salesorder.salesorderid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
@@ -686,6 +703,12 @@ class Services extends CRMEntity {
 				ON vtiger_inventoryproductrel.id = vtiger_invoice.invoiceid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+            LEFT JOIN vtiger_invoicecf
+                ON vtiger_invoicecf.invoiceid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_invoicebillads
+				ON vtiger_invoicebillads.invoicebilladdressid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_invoiceshipads
+				ON vtiger_invoiceshipads.invoiceshipaddressid = vtiger_invoice.invoiceid
 			LEFT JOIN vtiger_users
 				ON  vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
@@ -722,7 +745,7 @@ class Services extends CRMEntity {
 		$button = '';
 		if($actions) {
 			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
-			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes' && isPermitted($currentModule,'EditView',$id) == 'yes') {
+			if(in_array('SELECT', $actions) && isPermitted($related_module,1, '') == 'yes' && isPermitted($currentModule,'EditView',$id) == 'yes') {
 				$button .= "<input title='".getTranslatedString('LBL_ADD_TO'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
 					" onclick='this.form.action.value=\"AddServiceToPriceBooks\";this.form.module.value=\"$currentModule\"' type='submit' name='button'" .
 					" value='". getTranslatedString('LBL_ADD_TO'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
@@ -737,6 +760,8 @@ class Services extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid
 			INNER JOIN vtiger_pricebookproductrel
 				ON vtiger_pricebookproductrel.pricebookid = vtiger_pricebook.pricebookid
+			INNER JOIN vtiger_pricebookcf
+				ON vtiger_pricebookcf.pricebookid = vtiger_pricebook.pricebookid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_pricebookproductrel.productid = ".$id;
 		$log->debug("Exiting get_product_pricebooks method ...");
@@ -778,7 +803,7 @@ class Services extends CRMEntity {
 		$computeCount = $_REQUEST['withCount'];
 		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
 				((boolean) $computeCount) == true){
-			$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+			$noofrows = $adb->query_result($adb->query(Vtiger_Functions::mkCountQuery($query)),0,'count');
 		}else{
 			$noofrows = null;
 		}
@@ -908,7 +933,7 @@ class Services extends CRMEntity {
 	 */
 	function generateReportsQuery($module,$queryPlanner){
 	   	global $current_user;
-		
+
 			$matrix = $queryPlanner->newDependencyMatrix();
 			$matrix->setDependency('vtiger_seproductsrel',array('vtiger_crmentityRelServices','vtiger_accountRelServices','vtiger_leaddetailsRelServices','vtiger_servicecf','vtiger_potentialRelServices'));
 			$query = "from vtiger_service
@@ -976,10 +1001,10 @@ class Services extends CRMEntity {
 			(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
 			WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
 			ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
-			) AS actual_unit_price FROM vtiger_service 
+			) AS actual_unit_price FROM vtiger_service
             LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
             LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
-			AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . ") 
+			AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . ")
             AS innerService ON innerService.serviceid = vtiger_service.serviceid";
 		}
 		if ($queryPlanner->requireTable("vtiger_crmentityServices",$matrix)){
@@ -996,6 +1021,9 @@ class Services extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByServices")){
 		    $query .= " left join vtiger_users as vtiger_lastModifiedByServices on vtiger_lastModifiedByServices.id = vtiger_crmentityServices.modifiedby ";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbyServices")){
+			$query .= " left join vtiger_users as vtiger_createdbyServices on vtiger_createdbyServices.id = vtiger_crmentityServices.smcreatorid ";
 		}
 		return $query;
 	}
@@ -1085,9 +1113,11 @@ class Services extends CRMEntity {
 	/** Function to unlink an entity with given Id from another entity */
 	function unlinkRelationship($id, $return_module, $return_id) {
 		global $log, $currentModule;
-
+		$log->fatal('id:--'.$id);
+		$log->fatal('return_module:--'.$return_module);
+		$log->fatal('return_id:---'.$return_id);
 		if($return_module == 'Accounts') {
-			$focus = new $return_module;
+			$focus = CRMEntity::getInstance($return_module);
 			$entityIds = $focus->getRelatedContactsIds($return_id);
 			array_push($entityIds, $return_id);
 			$entityIds = implode(',', $entityIds);
@@ -1099,6 +1129,68 @@ class Services extends CRMEntity {
 
 		$query = 'DELETE FROM vtiger_crmentityrel WHERE (relcrmid='.$id.' AND module IN ('.$return_modules.') AND crmid IN ('.$entityIds.')) OR (crmid='.$id.' AND relmodule IN ('.$return_modules.') AND relcrmid IN ('.$entityIds.'))';
 		$this->db->pquery($query, array());
+	}
+
+	/**
+	* Function to get Product's related Products
+	* @param  integer   $id      - productid
+	* returns related Products record in array format
+	*/
+	function get_services($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
+		$log->debug("Entering get_products(".$id.") method ...");
+		$this_module = $currentModule;
+
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);
+		$singular_modname = vtlib_toSingular($related_module);
+
+		$parenttab = getParentTab();
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+
+		$button = '';
+
+		if($actions && $this->ismember_check() === 0) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input type='hidden' name='createmode' id='createmode' value='link' />".
+					"<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\";' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
+
+		$query = "SELECT vtiger_service.serviceid, vtiger_service.servicename,
+			vtiger_service.service_no, vtiger_service.commissionrate,
+			vtiger_service.service_usageunit, vtiger_service.unit_price,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			FROM vtiger_service
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_service.serviceid
+			INNER JOIN vtiger_servicecf
+				ON vtiger_service.serviceid = vtiger_servicecf.serviceid
+			LEFT JOIN vtiger_crmentityrel ON vtiger_crmentityrel.relcrmid = vtiger_service.serviceid AND vtiger_crmentityrel.module='Services'
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id ";
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+
+		$log->debug("Exiting get_products method ...");
+		return $return_value;
 	}
 }
 ?>

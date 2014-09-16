@@ -9,11 +9,11 @@
  ************************************************************************************/
 
 class Users_UserSetup_View extends Vtiger_Index_View {
-	
+
 	public function preProcess(Vtiger_Request $request) {
 		return true;
 	}
-	
+
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$userName = $request->get('user_name');
@@ -33,7 +33,7 @@ class Users_UserSetup_View extends Vtiger_Index_View {
 				$viewer->assign('IS_FIRST_USER', $isFirstUser);
 				$viewer->assign('CURRENCIES', $currenciesList);
 			}
-
+			$viewer->assign('CURRENT_USER_MODEL',$userModel);
 			$viewer->assign('MODULE', $moduleName);
 			$viewer->assign('USER_NAME', $userName);
 			$viewer->assign('TIME_ZONES', $userModuleModel->getTimeZonesList());
@@ -44,9 +44,9 @@ class Users_UserSetup_View extends Vtiger_Index_View {
 			header("Location: index.php");
 		}
 	}
-	
+
 	function postProcess(Vtiger_Request $request) {
 		return true;
 	}
-	
+
 }

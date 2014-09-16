@@ -28,7 +28,8 @@ Vtiger_Detail_Js("Project_Detail_Js",{},{
 	*/
 	registerStatusChangeEventForWidget : function(){
 		var thisInstance = this;
-		jQuery('[name="ticketstatus"],[name="projecttaskstatus"]').on('change',function(e){
+		jQuery('[name="ticketstatus"],[name="projecttaskstatus"],[name="projecttaskprogress"]').on('change',function(e){
+            var picklistName = this.name;
 			var statusCondition = {};
 			var params = {};
 			var currentElement = jQuery(e.currentTarget);
@@ -41,8 +42,12 @@ Vtiger_Detail_Js("Project_Detail_Js",{},{
 			if(selectedStatus != "Select Status" && referenceModuleName == "HelpDesk"){
 				statusCondition['vtiger_troubletickets.status'] = selectedStatus;
 				params['whereCondition'] = statusCondition;
-			} else if(selectedStatus != "Select Status" && referenceModuleName == "ProjectTask"){
+			} else if(selectedStatus != app.vtranslate('JS_LBL_SELECT_STATUS') && referenceModuleName == "ProjectTask" && picklistName == 'projecttaskstatus'){
 				statusCondition['vtiger_projecttask.projecttaskstatus'] = selectedStatus;
+				params['whereCondition'] = statusCondition;
+			}
+            else if(selectedStatus != app.vtranslate('JS_LBL_SELECT_PROGRESS') && referenceModuleName == "ProjectTask" && picklistName == 'projecttaskprogress'){
+				statusCondition['vtiger_projecttask.projecttaskprogress'] = selectedStatus;
 				params['whereCondition'] = statusCondition;
 			}
 			

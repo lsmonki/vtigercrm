@@ -2,29 +2,28 @@
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
+ * The Original Code is: vtiger CRM Open source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
 
-class MailManager_Folder_Model{
+class MailManager_Folder_Model {
+
 	protected $mName;
 	protected $mCount;
 	protected $mUnreadCount;
-	
 	protected $mMails;
-	
 	protected $mPageCurrent;
 	protected $mPageStart;
 	protected $mPageEnd;
 	protected $mPageLimit;
-	
-	function __construct($name='') {
+
+	public function __construct($name='') {
 		$this->setName($name);
 	}
-	
-	function name($prefix='') {
+
+	public function name($prefix='') {
 		$endswith = false;
 		if (!empty($prefix)) {
 			$endswith = (strrpos($prefix, $this->mName) === strlen($prefix)-strlen($this->mName));
@@ -35,36 +34,36 @@ class MailManager_Folder_Model{
 			return $prefix.$this->mName;
 		}
 	}
-	
-	function setName($name) {
+
+	public function setName($name) {
 		$this->mName = $name;
 	}
-	
-	function mails() {
+
+	public function mails() {
 		return $this->mMails;
 	}
-	
-	function setMails($mails) {
+
+	public function setMails($mails) {
 		$this->mMails = $mails;
 	}
-	
-	function setPaging($start, $end, $limit, $total, $current) {
+
+	public function setPaging($start, $end, $limit, $total, $current) {
 		$this->mPageStart = intval($start);
 		$this->mPageEnd = intval($end);
 		$this->mPageLimit = intval($limit);
 		$this->mCount = intval($total);
 		$this->mPageCurrent = intval($current);
 	}
-	
-	function pageStart() {
+
+	public function pageStart() {
 		return $this->mPageStart;
 	}
-	
-	function pageEnd() {
+
+	public function pageEnd() {
 		return $this->mPageEnd;
 	}
-	
-	function pageInfo() {
+
+	public function pageInfo() {
 		$offset = 0;
 		if($this->mPageCurrent != 0) {	// this is needed as set the start correctly
 			$offset = 1;
@@ -77,32 +76,32 @@ class MailManager_Folder_Model{
 		$t = $this->mCount;
 		return sprintf("%s - %s of %s", $s, $e, $t);
 	}
-	
-	function pageCurrent($offset=0) {
+
+	public function pageCurrent($offset=0) {
 		return $this->mPageCurrent + $offset;
 	}
-	
-	function hasNextPage() {
+
+	public function hasNextPage() {
 		return ($this->mPageStart > 1);
 	}
-	
-	function hasPrevPage() {
+
+	public function hasPrevPage() {
 		return ($this->mPageStart != $this->mPageEnd) && ($this->mPageEnd < $this->mCount);
 	}
-	
-	function count() {
+
+	public function count() {
 		return $this->mCount;
 	}
-	
-	function setCount($count) {
+
+	public function setCount($count) {
 		$this->mCount = $count;
 	}
-	
-	function unreadCount() {
+
+	public function unreadCount() {
 		return $this->mUnreadCount;
 	}
-	
-	function setUnreadCount($unreadCount) {
+
+	public function setUnreadCount($unreadCount) {
 		$this->mUnreadCount = $unreadCount;
 	}
 }

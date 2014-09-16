@@ -37,4 +37,8 @@ class Settings_Profiles_Save_Action extends Vtiger_Action_Controller {
 		$redirectUrl = $recordModel->getDetailViewUrl();
 		header("Location: $redirectUrl");
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        }
 }

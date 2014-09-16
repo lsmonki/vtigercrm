@@ -32,7 +32,6 @@ class Vtiger_TooltipView_Model extends Vtiger_DetailRecordStructure_Model {
 	 * Function to get list of tooltip enabled field model.
 	 * @return <Vtiger_Field_Model>
 	 */
-
 	public function getFields() {
 		return $this->fields;
 	}
@@ -62,6 +61,7 @@ class Vtiger_TooltipView_Model extends Vtiger_DetailRecordStructure_Model {
 		// Retrieves only required fields of the record with permission check.
 		try {
 			$data = array_shift(vtws_query($q, Users_Record_Model::getCurrentUserModel()));
+
 			if ($data) {
 				// De-transform the webservice ID to CRM ID.
 				foreach ($data as $key => $value) {

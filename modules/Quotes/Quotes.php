@@ -20,14 +20,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('include/RelatedListView.php');
-require_once('user_privileges/default_module_view.php');
-
-// Account is used to store vtiger_account information.
 class Quotes extends CRMEntity {
 	var $log;
 	var $db;
@@ -106,10 +98,10 @@ class Quotes extends CRMEntity {
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'subject';
-	
+
 	// For workflows update field tasks is deleted all the lineitems.
 	var $isLineItemUpdate = true;
-	
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Quotes() {
@@ -163,6 +155,10 @@ class Quotes extends CRMEntity {
 		left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid
 		left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid
 		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
+        LEFT JOIN vtiger_salesordercf ON vtiger_salesordercf.salesorderid = vtiger_salesorder.salesorderid
+        LEFT JOIN vtiger_invoice_recurring_info ON vtiger_invoice_recurring_info.start_period = vtiger_salesorder.salesorderid
+		LEFT JOIN vtiger_sobillads ON vtiger_sobillads.sobilladdressid = vtiger_salesorder.salesorderid
+		LEFT JOIN vtiger_soshipads ON vtiger_soshipads.soshipaddressid = vtiger_salesorder.salesorderid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		where vtiger_crmentity.deleted=0 and vtiger_salesorder.quoteid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
@@ -352,17 +348,17 @@ class Quotes extends CRMEntity {
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
 		$matrix = $queryPlanner->newDependencyMatrix();
-		$matrix->setDependency('vtiger_crmentityQuotes', array('vtiger_usersQuotes', 'vtiger_groupsQuotes', 'vtiger_lastModifiedByQuotes'));		
+		$matrix->setDependency('vtiger_crmentityQuotes', array('vtiger_usersQuotes', 'vtiger_groupsQuotes', 'vtiger_lastModifiedByQuotes'));
 		$matrix->setDependency('vtiger_inventoryproductrelQuotes', array('vtiger_productsQuotes', 'vtiger_serviceQuotes'));
 		$matrix->setDependency('vtiger_quotes',array('vtiger_crmentityQuotes', "vtiger_currency_info$secmodule",
-				'vtiger_quotescf', 'vtiger_potentialRelQuotes', 'vtiger_quotesbillads','vtiger_quotesshipads', 
+				'vtiger_quotescf', 'vtiger_potentialRelQuotes', 'vtiger_quotesbillads','vtiger_quotesshipads',
 				'vtiger_inventoryproductrelQuotes', 'vtiger_contactdetailsQuotes', 'vtiger_accountQuotes',
 				'vtiger_invoice_recurring_info','vtiger_quotesQuotes','vtiger_usersRel1'));
-		
+
 		if (!$queryPlanner->requireTable('vtiger_quotes', $matrix)) {
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_quotes","quoteid", $queryPlanner);
 		if ($queryPlanner->requireTable("vtiger_crmentityQuotes", $matrix)){
 			$query .= " left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid and vtiger_crmentityQuotes.deleted=0";
@@ -381,6 +377,14 @@ class Quotes extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_inventoryproductrelQuotes",$matrix)){
 			$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelQuotes on vtiger_quotes.quoteid = vtiger_inventoryproductrelQuotes.id";
+            // To Eliminate duplicates in reports
+            if(($module == 'Products' || $module == 'Services') && $secmodule == "Quotes"){
+                if($module == 'Products'){
+                    $query .= " and vtiger_inventoryproductrelQuotes.productid = vtiger_products.productid ";    
+                }else if($module== 'Services'){
+                    $query .= " and vtiger_inventoryproductrelQuotes.productid = vtiger_service.serviceid ";
+                }
+            }
 		}
 		if ($queryPlanner->requireTable("vtiger_productsQuotes")){
 			$query .= " left join vtiger_products as vtiger_productsQuotes on vtiger_productsQuotes.productid = vtiger_inventoryproductrelQuotes.productid";
@@ -408,6 +412,9 @@ class Quotes extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByQuotes")){
 			$query .= " left join vtiger_users as vtiger_lastModifiedByQuotes on vtiger_lastModifiedByQuotes.id = vtiger_crmentityQuotes.modifiedby ";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbyQuotes")){
+			$query .= " left join vtiger_users as vtiger_createdbyQuotes on vtiger_createdbyQuotes.id = vtiger_crmentityQuotes.smcreatorid ";
 		}
 		return $query;
 	}

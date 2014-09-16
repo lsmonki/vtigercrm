@@ -8,29 +8,56 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Project'               => 'Project'                     , 
-	'LBL_ADD_RECORD'               => 'Add Project'                 , 
-	'LBL_RECORDS_LIST'             => 'Projects List'               , 
-	'LBL_PROJECT_INFORMATION'      => 'Project Deatails'            , 
-	'Project Name'                 => 'Project Name'                , 
-	'Start Date'                   => 'Data inceput'                , 
-	'Target End Date'              => 'Target End Date'             , 
-	'Actual End Date'              => 'Actual End Date'             , 
-	'Project No'                   => 'Project Number'              , 
-	'Target Budget'                => 'Target Budget'               , 
-	'Project Url'                  => 'Project Url'                 , 
-	'Progress'                     => 'Progress'                    , 
-	'LBL_TASKS_OPEN'               => 'Tasks Open'                  , 
-	'LBL_TASKS_DUE'                => 'Tasks Due'                   , 
-	'LBL_TASKS_COMPLETED'          => 'Tasks Completed'             , 
-	'LBL_PEOPLE'                   => 'People'                      , 
-	'LBL_CHARTS'                   => 'Charts'                      , 
-	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
-	'LBL_MILESTONES'               => 'Milestones'                  , // TODO: Review
-	'LBL_TASKS'                    => 'Tasks'                       , // TODO: Review
-	'LBL_STATUS_IS'                => 'Status is'                   , // TODO: Review
-	'LBL_STATUS'                   => 'Status'                      , // TODO: Review
-	'LBL_TICKET_PRIORITY'          => 'Priority'                    , // TODO: Review
-	'LBL_MORE'                     => 'more'                        , // TODO: Review
-	'LBL_DOWNLOAD_FILE'            => 'Download File'               , // TODO: Review
+	'SINGLE_Project'	=>	"Proiect",
+	'LBL_ADD_RECORD'	=>	"Adauga proiectului",
+	'LBL_RECORDS_LIST'	=>	"Lista proiectelor",
+	'LBL_PROJECT_INFORMATION'	=>	"Detalii proiect",
+	'Project Name'	=>	"Denumirea proiectului",
+	'Start Date'	=>	"Data de începere",
+	'Target End Date'	=>	"Target Data de încheiere",
+	'Actual End Date'	=>	"Reală Data de încheiere",
+	'Project No'	=>	"Numărul proiectului",
+	'Target Budget'	=>	"Bugetul țintă",
+	'Project Url'	=>	"Url-ul proiectului",
+	'Progress'	=>	"Progres",
+	'LBL_TASKS_OPEN'	=>	"Sarcini Deschideți",
+	'LBL_TASKS_DUE'	=>	"Sarcini Datorită",
+	'LBL_TASKS_COMPLETED'	=>	"Sarcinile finalizate",
+	'LBL_PEOPLE'	=>	"Oameni",
+	'LBL_CHARTS'	=>	"Grafice",
+	'LBL_TASKS_LIST'	=>	"Lista de sarcini",
+	'LBL_MILESTONES'	=>	"Repere",
+	'LBL_TASKS'	=>	"Sarcini",
+	'LBL_STATUS_IS'	=>	"Starea este",
+	'LBL_STATUS'	=>	"Starea",
+	'LBL_TICKET_PRIORITY'	=>	"Prioritate",
+	'LBL_MORE'	=>	"mai mult",
+	'LBL_MILESTONES_LIST'	=>	"Lista Repere",
+	'LBL_DOWNLOAD_FILE'	=>	"Descărcare fișier",
+        'LBL_TASKS_HIGH' => 'Prioritate',
+        'LBL_TASKS_NORMAL' => 'Prioritate normală',
+        'LBL_TASKS_LOW' => 'Prioritate scăzută',
+        'LBL_TASKS_OTHER' => 'Alte priorități',
+        'LBL_SELECT_PROGRESS' => 'Selectați Progress',
+	
+	//picklist values
+	'prospecting' => 'Prospectarea',
+    'in progress' => 'În progres',
+    'initiated' => 'Inițiat',
+	'waiting for feedback' => 'Așteptare pentru feedback',
+    'on hold' => 'În așteptare',
+    'archived' => 'Arhivate',
+    'completed' => 'Terminat',
+    'delivered' => 'Livrate',
+	'administrative' => 'Administrativ',
+    'operative' => 'Operativ',
+    'other' => 'Alte',
+    'low' => 'Scăzut',
+    'normal' => 'Normal',
+    'high' => 'Mare',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Selectați Stare',
+    'JS_LBL_SELECT_PROGRESS' => 'Selectați Progress',
 );

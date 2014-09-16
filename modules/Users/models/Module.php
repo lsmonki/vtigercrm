@@ -19,7 +19,10 @@ class Users_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getQueryByModuleField($sourceModule, $field, $record, $listQuery) {
 		if($sourceModule == 'Users' && $field == 'reports_to_id') {
-			$overRideQuery = $listQuery. " AND vtiger_users.id != ". $record;
+			$overRideQuery = $listQuery;
+			if(!empty($record)){
+				$overRideQuery = $overRideQuery. " AND vtiger_users.id != ". $record;
+			}
 			return $overRideQuery;
 		}
 	}
@@ -52,9 +55,9 @@ class Users_Module_Model extends Vtiger_Module_Model {
 			return $matchingRecords;
 		}
 	}
-	
+
 	/**
-	 * Function returns the default column for Alphabetic search 
+	 * Function returns the default column for Alphabetic search
 	 * @return <String> columnname
 	 */
 	public function getAlphabetSearchField(){
@@ -71,7 +74,7 @@ class Users_Module_Model extends Vtiger_Module_Model {
 
 	public function checkDuplicateUser($userName){
 		$db = PearDatabase::getInstance();
-		
+
 		$query = 'SELECT user_name FROM vtiger_users WHERE user_name = ?';
 		$result = $db->pquery($query, array($userName));
 		if($db->num_rows($result) > 0){
@@ -79,19 +82,19 @@ class Users_Module_Model extends Vtiger_Module_Model {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Function to delete a given record model of the current module
 	 * @param Vtiger_Record_Model $recordModel
 	 */
-	public function deleteRecord(Vtiger_Record_Model $recordModel) {
+	public function deleteRecord($recordModel) {
 		$db = PearDatabase::getInstance();
 		$moduleName = $this->get('name');
 		$date_var = date('Y-m-d H:i:s');
         $query = "UPDATE vtiger_users SET status=?, date_modified=?, modified_user_id=? WHERE id=?";
         $db->pquery($query, array('Inactive', $adb->formatDate($date_var, true), $recordModel->getId(), $recordModel->getId()), true,"Error marking record deleted: ");
 	}
-	
+
 	/**
 	 * Function to get the url for list view of the module
 	 * @return <string> - url
@@ -99,7 +102,7 @@ class Users_Module_Model extends Vtiger_Module_Model {
 	public function getListViewUrl() {
 		return 'index.php?module='.$this->get('name').'&parent=Settings&view='.$this->getListViewName();
 	}
-	
+
 	/**
     * Function to update Base Currency of Product
     * @param- $_REQUEST array
@@ -117,10 +120,10 @@ class Users_Module_Model extends Vtiger_Module_Model {
 		$query = 'UPDATE vtiger_currency_info SET currency_name = ?, currency_code = ?, currency_symbol = ? WHERE id = ?';
 		$params = array($currencyName, $currency_code, $currency_symbol, '1');
 		$db->pquery($query, $params);
-		
+
 		$this->updateConfigFile($currencyName);
 	}
-	
+
 	/**
     * Function to update Config file
     * @param- $_REQUEST array
@@ -136,7 +139,7 @@ class Users_Module_Model extends Vtiger_Module_Model {
 			file_put_contents($filename, $contents);
 		}
    }
-   
+
    /**
 	 * Function to get user setup status
 	 * @return-is First User or not
@@ -148,43 +151,43 @@ class Users_Module_Model extends Vtiger_Module_Model {
 		$insertQuery = 'INSERT INTO vtiger_crmsetup (userid, setup_status) VALUES (?, ?)';
 		$db->pquery($insertQuery, array($userId, '1'));
 	}
-	
+
 	/**
 	 * Function to store the login history
 	 * @param type $username
 	 */
 	public function saveLoginHistory($username){
 		$adb = PearDatabase::getInstance();
-		
+
 		$userIPAddress = $_SERVER['REMOTE_ADDR'];
 		$loginTime = date("Y-m-d H:i:s");
-		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values (?,?,?,?,?)";
+		$query = "INSERT INTO vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) VALUES (?,?,?,?,?)";
 		$params = array($username, $userIPAddress, '0000-00-00 00:00:00',  $loginTime, 'Signed in');
 		$adb->pquery($query, $params);
 	}
-	
+
 	/**
 	 * Function to store the logout history
 	 * @param type $username
 	 */
 	public function saveLogoutHistory(){
 		$adb = PearDatabase::getInstance();
-		
+
 		$userRecordModel = Users_Record_Model::getCurrentUserModel();
 		$userIPAddress = $_SERVER['REMOTE_ADDR'];
 		$outtime = date("Y-m-d H:i:s");
-		
-		$loginIdQuery = "SELECT max(login_id) AS login_id from vtiger_loginhistory where user_name=? and user_ip=?";
+
+		$loginIdQuery = "SELECT MAX(login_id) AS login_id FROM vtiger_loginhistory WHERE user_name=? AND user_ip=?";
 		$result = $adb->pquery($loginIdQuery, array($userRecordModel->get('user_name'), $userIPAddress));
 		$loginid = $adb->query_result($result,0,"login_id");
-		
+
 		if (!empty($loginid)){
-			$query = "Update vtiger_loginhistory set logout_time =?, status=? where login_id = ?";
+			$query = "UPDATE vtiger_loginhistory SET logout_time =?, status=? WHERE login_id = ?";
 			$result = $adb->pquery($query, array($outtime, 'Signed off', $loginid));
 		}
 	}
-	
-	/**
+
+        /**
 	 * Function to save packages info
 	 * @param <type> $packagesList
 	 */
@@ -205,10 +208,10 @@ class Users_Module_Model extends Vtiger_Module_Model {
 		} else {
 			$updateQuery = 'UPDATE vtiger_tab SET presence = 0 WHERE presence != 2';
 		}
-		
+
 		$adb->pquery($updateQuery, $disabledModulesList);
 	}
-	
+
 	/**
 	* @return an array with the list of currencies which are available in source
 	*/

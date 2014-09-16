@@ -12,7 +12,8 @@
 {strip}
     <div class="relatedContainer">
         <input type="hidden" name="currentPageNum" value="{$PAGING->getCurrentPage()}" />
-        <input type="hidden" name="relatedModuleName" class="relatedModuleName" value="{$RELATED_MODULE->get('name')}" />
+        {assign var="RELATED_MODULE_NAME" value=$RELATED_MODULE->get('name')} 
+        <input type="hidden" name="relatedModuleName" class="relatedModuleName" value="{$RELATED_MODULE_NAME}" /> 
         <input type="hidden" value="{$ORDER_BY}" id="orderBy">
         <input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
         <input type="hidden" value="{$RELATED_ENTIRES_COUNT}" id="noOfEntries">
@@ -20,7 +21,7 @@
         <input type='hidden' value="{$TOTAL_ENTRIES}" id='totalCount'>
         <div class="relatedHeader ">
             <div class="btn-toolbar row-fluid">
-                <div class="span8">
+                <div class="span6">
 
                     {foreach item=RELATED_LINK from=$RELATED_LIST_LINKS['LISTVIEWBASIC']}
                         <div class="btn-group">
@@ -36,15 +37,13 @@
 {/foreach}
 &nbsp;
 </div>
-<div class="span4">
-    <span class="row-fluid">
-        <span class="span7 pushDown">
-            <span class="pull-right pageNumbers alignTop" data-placement="bottom" data-original-title="" style="margin-top: -5px">
-            {if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{/if}
+<div class="span6">
+    <div class="pull-right">
+        <span class="pageNumbers">
+            <span class="pageNumbersText">{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE_NAME)} {$PAGING->getRecordEndRange()}{else}<span>&nbsp;</span>{/if}</span>
+            <span class="icon-refresh pull-right totalNumberOfRecords cursorPointer{if empty($RELATED_RECORDS)} hide{/if}"></span>
         </span>
-    </span>
-    <span class="span5 pull-right">
-        <span class="btn-group pull-right">
+        <span class="btn-group">
             <button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
             <button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
                 <i class="vtGlyph vticon-pageJump" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}"></i>
@@ -65,8 +64,7 @@
             </ul>
             <button class="btn" id="relatedListNextPageButton" {if (!$PAGING->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
         </span>
-    </span>
-</span>
+    </div>
 </div>
 </div>
 </div>
@@ -84,11 +82,10 @@
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
 							<th class="{$WIDTHTYPE}">
                             {if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists'}
-                                <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
-                            {elseif $HEADER_FIELD->get('column') eq 'time_start'}
+                                <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE_NAME)}</a>
                             {else}
-                                <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label')|html_entity_decode, $RELATED_MODULE->get('name'))}
-                                    &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}
+                                <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label')|html_entity_decode, $RELATED_MODULE_NAME)}
+                                    &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE}">{/if}
                                 </a>
                             {/if}
                         </th>
@@ -105,8 +102,18 @@
                             {elseif $RELATED_HEADERNAME eq 'access_count'}
                                 {$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
                             {elseif $RELATED_HEADERNAME eq 'date_start'}
-                                {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} {$RELATED_RECORD->getDisplayValue('time_start')}
-                            {elseif $RELATED_HEADERNAME eq 'time_start'}
+                                {if $RELATED_RECORD->isSentMail()} 
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} 
+                                {elseif $RELATED_RECORD->isFromMailManager()} 
+                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE_NAME)}</span>  
+                                {else} 
+                                    <span class="label label-info">{vtranslate('LBL_DRAFT',$RELATED_MODULE_NAME)}</span>  
+                                {/if}   
+                            {else if $RELATED_HEADERNAME eq 'time_start'}
+                                {if $RELATED_RECORD->isSentMail()} 
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}   
+                                 {else}--- 
+                                 {/if}
                             {elseif $RELATED_HEADERNAME eq 'parent_id'}
                                 {assign var=REFERENCE_RECORD value=$RELATED_RECORD->get($RELATED_HEADERNAME)}
                                 {assign var=RECORD_MODULE_MODEL value=$RELATED_RECORD->getModule()}

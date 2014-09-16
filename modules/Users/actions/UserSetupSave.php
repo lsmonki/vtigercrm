@@ -15,15 +15,13 @@ class Users_UserSetupSave_Action extends Users_Save_Action {
 		$userModuleModel = Users_Module_Model::getInstance($moduleName);
 		$userRecordModel = Users_Record_Model::getCurrentUserModel();
 		
-		//Handling the user preferences
-		$userPreferenceData = array();
-		$userPreferenceData['language'] = $request->get('lang_name');
-		$userPreferenceData['time_zone'] = $request->get('time_zone');
-		$userPreferenceData['date_format'] = $request->get('date_format');
-		if (!empty($userPreferenceData)) {
-			$userRecordModel->saveUserPreferences($userPreferenceData);
-		}
-		//End
+		//Handling the user preferences 
+                $userRecordModel->set('mode','edit'); 
+                $userRecordModel->set('language', $request->get('lang_name')); 
+                $userRecordModel->set('time_zone', $request->get('time_zone')); 
+                $userRecordModel->set('date_format', $request->get('date_format')); 
+                $userRecordModel->save(); 
+                //End 
 		
 		//Handling the System Setup
 		$currencyName = $request->get('currency_name');

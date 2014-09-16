@@ -8,6 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integracja',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	// Basic Strings
 	'Settings' => 'Ustawienia',
 
@@ -67,6 +69,7 @@ $languageStrings = array(
 	
 	'LBL_MENU_EDITOR' => 'Konfiguracja Menu',
 	'LBL_MENU_DESC' => 'Konfiguracja widoczności pozycji menu',
+	'LBL_MENU_EDITOR_MESSAGE' => 'Rzeczywista liczba punktów menu wyświetlanych będzie zależeć od wielkości ekranu i może być mniejsza niż wybranych pozycjach.',
 	
 	'NOTIFICATIONSCHEDULERS' => 'Harmonogram powiadomień',
 	'LBL_NOTIF_SCHED_DESCRIPTION' => 'Zarządzaj powiadomieniami',
@@ -113,7 +116,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Twórz i zarządzają przepływem pracy',
 	
 	'Configuration Editor' => 'Konfiguracja globalna',
-	'Update configuration file of the application' => 'Aktualizuj konfiguracje w pliku config.inc.php.',
 	
 	'LBL_CUSTOMER_PORTAL' => 'Portal Klienta',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Konfiguruj komponent Portalu Klienta.',
@@ -126,4 +128,21 @@ $languageStrings = array(
 	
 	'Webforms' => 'Formularze WWW',
 	'Allows you to manage Webforms' => 'Zarządzaj formularzami WWW',
+	
+	//Outgoing Server
+	'LBL_RESET_TO_DEFAULT' => 'Reset to Default',
+	'LBL_SERVER_NAME' => 'Server Name',
+	'LBL_USER_NAME' => 'User Name',
+	'LBL_PASSWORD' => 'Password',
+	'LBL_FROM_EMAIL' => 'From Email',
+	'LBL_REQUIRES_AUTHENTICATION' => 'Requires Authentication',
+	'LBL_OUTGOING_SERVER' => 'Outgoing Server',
+	'LBL_OUTGOING_SERVER_DESC' => 'Configure your Outgoing Mail Server details',
+	'LBL_DEFAULT'=>'By default, SMTP account settings for the outgoing server are configured to od1.vtiger.com mail server. To avoid outgoing emails getting filtered out by spam filters on your recipient ISP mail server, we recommend you implement one of the following.',
+	'LBL_OPTIONS1'=>'',
+	'LBL_OPTIONS2'=>"",
+	'LBL_MAIL_SERVER_SMTP'=>'Mail Server Settings (SMTP)',
+	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.',
+	'LBL_TESTMAILSTATUS'=>'Test Mail Status : ',
+	'LBL_MAILSENDERROR'=>'Mail could not be sent to the admin user. Please check the admin emailid/Server settings',
 );

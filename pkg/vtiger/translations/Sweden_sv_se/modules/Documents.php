@@ -65,7 +65,6 @@ $languageStrings = array(
 );
 
 $jsLanguageStrings = array(
-	'JS_EXCEEDS_MAX_UPLOAD_SIZE' => 'Överskridit maximal uppladdning storlek',
 	'JS_NEW_FOLDER' => 'Ny Mapp',
 	'JS_MOVE_DOCUMENTS' => 'Flytta Dokument',
 	//Move documents confirmation message

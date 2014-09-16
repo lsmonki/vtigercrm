@@ -23,4 +23,6 @@ $languageStrings = array(
 	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
 	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Goederen ontvangen'          , 
+        'LBL_LIST_PRICE'               => 'Adviesprijs',
+        'List Price'                   => 'Adviesprijs',
 );

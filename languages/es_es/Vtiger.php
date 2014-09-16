@@ -49,7 +49,7 @@ $languageStrings = array(
 	'LBL_NO'                       => 'No',
 	'LBL_SHOW_COMPLETE_DETAILS' => 'Detalles Completos',
 	'LBL_MASS_EDITING'             => 'Edición Masiva',
-	'LBL_DESELECT_ALL_RECORDS'     => 'Desmarcar Todos',
+	'LBL_DESELECT_ALL_RECORDS'     => 'Anular selección',
 	'LBL_QUICK_CREATE'             => 'Creación Rápida',
 	'LBL_SEND_EMAIL'               => 'Enviar Email',
 	'LBL_ALL_EMAILS'               => 'Todas las cuentas de email',
@@ -62,7 +62,7 @@ $languageStrings = array(
 	'LBL_ADD_NOTE'                 => 'Añadir Documento',
 	'LBL_CREATE_NEW'               => 'Crear Nuevo',
 	'LBL_ADD_EVENT'                => 'Añadir Evento',
-	'LBL_ADD_TASK'                 => 'Añadir Tarea',
+	'LBL_ADD_TASK'                 => 'Añadir Para hacer',
 	'LBL_MARKETING_AND_SALES'      => 'MARKETING & COMERCIAL',
 	'LBL_TOOLS_HEADER'             => 'HERRAMIENTAS',
 	'LBL_SUPPORT'                  => 'SOPORTE',
@@ -77,6 +77,7 @@ $languageStrings = array(
 	'LBL_HELP'                     => 'Ayuda',
 	'LBL_DOCUMENTATION' => 'Documentación',
 	'LBL_FEEDBACK'                 => 'Cuéntanos',
+	'LBL_CHAT_SUPPORT'             => 'Chat de Ayuda',
 	'LBL_CRM_SETTINGS'             => 'Configuración CRM',
 	'LBL_ANNOUNCEMENT'             => 'Anuncio',
 	'LBL_CALENDAR'                 => 'Calendario',
@@ -132,6 +133,7 @@ $languageStrings = array(
 	'PurchaseOrder'                => 'Ordenes de Compra',
 	'SalesOrder'                   => 'Ordenes de Venta',
 	'Invoice'                      => 'Facturas',
+    'Portal'                       => 'Nuestros Sitios',
 	'LBL_ADD_RECORD'               => 'Añadir Registro',
 	'LBL_RECENTLY_MODIFIED'        => 'Modificado Recientemente',
 	'LBL_RECORDS_LIST'             => 'Lista de Registros',
@@ -158,6 +160,7 @@ $languageStrings = array(
 	'LBL_BEFORE'                   => 'antes',
 	'LBL_AFTER'                    => 'después',
 	'LBL_BETWEEN'                  => 'entre',
+    'LBL_IS_NOT_EMPTY'             => 'no está vacío',
 	'LBL_SEARCH'                   => 'Buscar',
 	'LBL_SEARCH_IN'                => 'Buscar En',
 	'LBL_ADD_CONDITION'            => 'Añadir Condición',
@@ -414,6 +417,7 @@ $languageStrings = array(
 	'Secondary Email'              => 'Email Particular',
 	'Other Email'                  => 'Email Alternativo',
 	'Email Opt Out'                => 'No Enviar Email',
+    'Is Converted From Lead'       => 'Se convierte de plomo',
 	'Expected Close Date'          => 'Fecha Estimada de Cierre',
 	'Fax'                          => 'Fax',
 	'Last Name'                    => 'Apellido',
@@ -467,7 +471,7 @@ $languageStrings = array(
 	'Support Expiry Date'          => 'Fecha de fin de soporte',
 	'Sales Start Date'             => 'Fecha de salida al mercado',
 	'Sales End Date'               => 'Fecha de retirada del mercado',
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM - CRM de Código Abierto',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
 	'LBL_VIDEO_TUTORIAL' => 'Video Tutorial',
 	'LBL_ON_DEMAND_ADMIN' => 'Añadir / Eliminar Usuarios',
 	'LBL_GUIDER' => 'Ayudante',
@@ -503,7 +507,7 @@ $languageStrings = array(
 	'Apparel'=>'Ropa/Lenceria',
 	'Banking'=>'Banca',
 	'Biotechnology'=>'Biotecnología',
-	'LBL_SELECT_STATUS' => 'Selecciona Estado',
+	'LBL_SELECT_STATUS' => 'Seleccionar Estado',
 	'SINGLE_Accounts' => 'Cuenta',
 	'SINGLE_Contacts' => 'Contacto',
 	'LBL_Sun' => 'Dom',
@@ -563,6 +567,7 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Añadir Bcc',
 	'LBL_MAX_UPLOAD_SIZE' => 'Tamaño máximo de subida es',
 	'LBL_EXCEEDED' => 'Excedido',
+        'LBL_MERGE'    => 'Fundirse',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Fecha válida',
@@ -610,6 +615,14 @@ $languageStrings = array(
 	'All Comments' => 'Todos los comentarios',
 	'LBL_CUSTOMIZE_MAIN_MENU' => 'Personalizar Menú Principal',//TODO REVIEW
 	
+    
+    //Products Popup View
+    'NOT_A_BUNDLE' => 'No es un paquete',
+    'LBL_MARK_AS_HELD' => 'Marcar como mantenidos',
+    'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Máximo 160 caracteres están permitidos para el mensaje de texto',
+    'LBL_HIDE_COMPLETED_EVENTS' => 'Ocultar completadas Calendario de Eventos',
+    
+    'LBL_SETUP_WEBFORMS'                 => 'Crear Formulario Web',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Por favor, configura el servidor de correo saliente en la sección de configuración',
@@ -675,12 +688,12 @@ $jsLanguageStrings = array(
 	'JS_INVALID_PAGE_NUMBER' => 'Número de Página Inválida',
 	'INVALID_NUMBER' => 'Número Inválido',
 	'JS_SHOULD_BE_LESS_THAN_OR_EQUAL_TO' => 'Debe ser menor o igual a',
+    'JS_CURRENT_DATE' => 'Fecha actual',
 	'JS_PERCENTAGE_VALUE_SHOULD_BE_LESS_THAN_100' => 'El porcentaje debe ser inferior a 100',
 	'JS_ACCEPT_ONLY_NUMBER' => 'Acepta solo números',
 	'JS_THIS_FILE_HAS_ALREADY_BEEN_SELECTED' => 'Ya se ha seleccionado este Fichero',
 	'JS_MAX_FILE_UPLOAD_EXCEEDS' => 'carga de ficheros máxima excedido',
 	'JS_THIS_DOCUMENT_HAS_ALREADY_BEEN_SELECTED' => 'Este Documento ya está adjunto',
-	'JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO' => 'Debe ser mayor o igual a',
 
 	//Roles
 	'JS_ERROR' => 'Error',
@@ -703,6 +716,7 @@ $jsLanguageStrings = array(
 	'JS_END_DATE_TIME' => 'Fecha y Hora de Fin',
 	'JS_POSTPONE' => 'Posponer',
 	'JS_MESSAGE' => 'Mensaje',
+	'JS_MASS_EDIT_LIMIT'	       => 'Operación Editar Misa se puede hacer en 500 o menos registros a la vez',
 	'JS_NO_VIEW_PERMISSION_AFTER_SAVE' => 'No tendrás permiso para ver este expediente después de guardar. ¿Quieres continuar?',
 
 	//Settings page translations
@@ -733,4 +747,13 @@ $jsLanguageStrings = array(
 	'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
 	'JS_USER_EXISTS' => 'User Already Exists',//TODO Review
 	'JS_REENTER_PASSWORDS' => 'Renter Passwords',//TODO Review
+	'LBL_SIGN_IN_AS_USER'=>'Logging in as another user will terminate the current session. Are you sure want to continue?',
+    
+        // Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Llamar desde',
+	'JS_PBX_INCOMING_CALL' => 'Llamada entrante',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Levante el receptor extensión para marcar el número',
+	'JS_PBX_OUTGOING_FAILURE'=>'Llamada fallida',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Por favor rellene todos los campos',
+	// ends
 );

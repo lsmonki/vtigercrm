@@ -16,15 +16,15 @@
 	</div>
 	<hr>
 	<div class="row-fluid">
-		<span class="span6 btn-toolbar">
+		<span class="span8 btn-toolbar">
 				<select class="chzn-select" id="usersFilter" >
 					<option value="">{vtranslate('LBL_ALL', $QUALIFIED_MODULE)}</option>
 					{foreach item=USERNAME key=USER from=$USERSLIST}
-						<option value="{$USER}">{$USERNAME}</option>
+						<option value="{$USER}" name="{$USERNAME}" {if $USERNAME eq $SELECTED_USER} selected {/if}>{$USERNAME}</option>
 					{/foreach}
 				</select>
 		</span>
-		<span class="span6 btn-toolbar">
+		<span class="span4 btn-toolbar">
 			{include file='ListViewActions.tpl'|@vtemplate_path:$QUALIFIED_MODULE}
 		</span>
 	</div>

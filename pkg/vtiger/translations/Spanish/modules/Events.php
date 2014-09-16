@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -43,6 +43,7 @@ $languageStrings = array(
 	'LBL_HOURS'                    => 'Horas',
 	'LBL_CALENDAR_VIEW'            => 'Vista de Calendario',
 	'LBL_HOLD_FOLLOWUP_ON' => 'Mantener seguimiento el',
+	'LBL_CREATE_FOLLOWUP_EVENT'    => 'Crear Evento de Seguimiento',
 	'LBL_RELATED_TO' => 'Relacionado con',
 	'LBL_DAYS_TYPE' => 'Día(s)',
 	'LBL_WEEKS_TYPE' => 'Semana(s)',

@@ -16,7 +16,7 @@ class Vtiger_Delete_Action extends Vtiger_Action_Controller {
 
 		$currentUserPrivilegesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		if(!$currentUserPrivilegesModel->isPermitted($moduleName, 'Delete', $record)) {
-			throw new AppException('LBL_PERMISSION_DENIED');
+			throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));
 		}
 	}
 
@@ -39,4 +39,8 @@ class Vtiger_Delete_Action extends Vtiger_Action_Controller {
 			header("Location: $listViewUrl");
 		}
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

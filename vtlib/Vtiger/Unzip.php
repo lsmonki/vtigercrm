@@ -42,7 +42,7 @@ class Vtiger_Unzip extends dUnzip2 {
 	 * @access private
 	 */
 	Function unzipAllEx($targetDir=false, $includeExclude=false, $renamePaths=false, $ignoreFiles=false,
-		$baseDir="", $applyChmod=0777){
+		$baseDir="", $applyChmod=0755){
 
 		// We want to always maintain the structure
 		$maintainStructure = true;
@@ -114,6 +114,7 @@ class Vtiger_Unzip extends dUnzip2 {
 			if(substr($fileName, -1, 1) == "/")
 				continue;
 
+			if (substr($fileName, -3) == '.sh') $applyChmod = 0775; // Script executable.
 			$this->unzip($fileName, "$targetDir/$dirname/".basename($fileName), $applyChmod);
 		}
 	}

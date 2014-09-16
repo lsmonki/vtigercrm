@@ -90,7 +90,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 						</div>
 						<div class="span8">
 							<?php $currentVersion = explode('.', $vtiger_current_version);
-							if($currentVersion[0] >= 5 && $currentVersion[1] >= 4){?>
+							if($currentVersion[0] >= 6 && $currentVersion[1] >= 0){?>
 							<div>
 								<h3> Welcome to Vtiger Migration </h3>
 								<?php

@@ -65,7 +65,7 @@ $languageStrings = array(
 	'LBL_INVALID_FILE'             => 'Invalid File'                , // TODO: Review
 	'LBL_NO_ROWS_FOUND'            => 'No rows found'               , // TODO: Review
 	'LBL_SCHEDULED_IMPORT_DETAILS' => 'Your import has been scheduled and will start within 15 minutes. You will receive an email after import is completed.  <br> <br>
-										Please make sure that the Outgoing server and your email address is configured to receive email notification', // TODO: Review
+										Please make sure that the Outgoing server and your email address are configured to receive email notifications', // TODO: Review
 	'LBL_DETAILS'                  => 'Details'                     , // TODO: Review
 	'skipped'                      => 'Skipped Records'             , // TODO: Review
 	'failed'                       => 'Failed Records'              , // TODO: Review

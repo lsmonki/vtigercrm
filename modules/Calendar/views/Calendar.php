@@ -28,7 +28,8 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$headerScriptInstances = parent::getHeaderScripts($request);
 		$jsFileNames = array(
 			"modules.Calendar.resources.CalendarView",
-			"~/libraries/fullcalendar/fullcalendar.js"
+			"~/libraries/fullcalendar/fullcalendar.js",
+			"~/libraries/jquery/colorpicker/js/colorpicker.js"
 		);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
@@ -42,7 +43,8 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 
 		$cssFileNames = array(
 			'~/libraries/fullcalendar/fullcalendar.css',
-			'~/libraries/fullcalendar/fullcalendar-bootstrap.css'
+			'~/libraries/fullcalendar/fullcalendar-bootstrap.css',
+			'~/libraries/jquery/colorpicker/css/colorpicker.css'
 		);
 		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
 		$headerCssInstances = array_merge($headerCssInstances, $cssInstances);
@@ -81,6 +83,8 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$sharedType = Calendar_Module_Model::getSharedType($currentUserModel->id);
 		$dayStartPicklistValues = Users_Record_Model::getDayStartsPicklistValues($recordStructure);
 		
+        $hourFormatFeildModel = $recordStructure['LBL_CALENDAR_SETTINGS']['hour_format'];
+        
 		$viewer->assign('CURRENTUSER_MODEL',$currentUserModel);
 		$viewer->assign('SHAREDUSERS', $sharedUsers);
 		$viewer->assign("DAY_STARTS", Zend_Json::encode($dayStartPicklistValues));
@@ -89,6 +93,7 @@ class Calendar_Calendar_View extends Vtiger_Index_View {
 		$viewer->assign('MODULE',$module);
 		$viewer->assign('RECORD', $currentUserModel->id);
 		$viewer->assign('SHAREDTYPE', $sharedType);
+        $viewer->assign('HOUR_FORMAT_VALUE', $hourFormatFeildModel->get('fieldvalue'));
 		
 		$viewer->view('CalendarSettings.tpl', $request->getModule());
 	}

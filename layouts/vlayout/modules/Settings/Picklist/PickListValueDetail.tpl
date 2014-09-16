@@ -15,10 +15,11 @@
 	{if $SELECTED_PICKLIST_FIELDMODEL->isRoleBased()}<li id="assignedToRoleTab"><a href="#AssignedToRoleLayout" data-toggle="tab"><strong>{vtranslate('LBL_VALUES_ASSIGNED_TO_A_ROLE',$QUALIFIED_MODULE)}</strong></a></li>{/if}
 </ul>
 <div class="tab-content layoutContent padding20 themeTableColor overflowVisible">
+	<br>
 	<div class="tab-pane active" id="allValuesLayout">	
 		<div class="row-fluid">
 			<div class="span5 marginLeftZero textOverflowEllipsis">
-				<table id="pickListValuesTable" class="table table-bordered table-condensed table-striped" style="table-layout: fixed">
+				<table id="pickListValuesTable" class="table table-bordered" style="table-layout: fixed">
 					<thead>
 						<tr class="listViewHeaders"><th>{vtranslate($SELECTED_PICKLIST_FIELDMODEL->get('label'),$SELECTED_MODULE_NAME)}&nbsp;{vtranslate('LBL_ITEMS',$QUALIFIED_MODULE)}</th></tr>
 					</thead>
@@ -26,7 +27,7 @@
 					<input type="hidden" id="dragImagePath" value="{vimage_path('drag.png')}" />
 					{assign var=PICKLIST_VALUES value=$SELECTED_PICKLISTFIELD_ALL_VALUES}
 					{foreach key=PICKLIST_KEY item=PICKLIST_VALUE from=$PICKLIST_VALUES}
-						<tr class="pickListValue cursorPointer" data-key="{Vtiger_Util_Helper::toSafeHTML($PICKLIST_VALUE)}">
+						<tr class="pickListValue" data-key-id="{$PICKLIST_KEY}" data-key="{Vtiger_Util_Helper::toSafeHTML($PICKLIST_VALUE)}">
 							<td class="textOverflowEllipsis"><img class="alignMiddle" src="{vimage_path('drag.png')}"/>&nbsp;&nbsp;{vtranslate($PICKLIST_VALUE,$SELECTED_MODULE_NAME)}</td>
 						</tr>
 					{/foreach}
@@ -55,10 +56,11 @@
 			{include file="CreateView.tpl"|@vtemplate_path:$QUALIFIED_MODULE}
 		</div>
 	</div>
+	<br>
 	{if $SELECTED_PICKLIST_FIELDMODEL->isRoleBased()}
 		<div class="tab-pane" id="AssignedToRoleLayout">
 			<div class="row-fluid">
-				<div class="span2" style="margin-top: 5px">{vtranslate('LBL_ROLE_NAME',$QUALIFIED_MODULE)}</div>
+				<div class="span2 textAlignRight" style="margin-top: 5px">{vtranslate('LBL_ROLE_NAME',$QUALIFIED_MODULE)}</div>
 				<div class="span7">
 					<select id="rolesList" class="select2" name="rolesSelected" style="min-width: 220px" data-placeholder="{vtranslate('LBL_CHOOSE_ROLES',$QUALIFIED_MODULE)}">
 						{foreach from=$ROLES_LIST item=ROLE}

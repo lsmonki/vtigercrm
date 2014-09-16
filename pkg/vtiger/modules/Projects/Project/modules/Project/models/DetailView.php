@@ -11,30 +11,6 @@
 class Project_DetailView_Model extends Vtiger_DetailView_Model {
 
 	/**
-	 * Function to get the detail view related links
-	 * @return <array> - list of links parameters
-	 */
-	public function getDetailViewRelatedLinks() {
-		$recordModel = $this->getRecord();
-		$moduleName = $recordModel->getModuleName();
-		$relatedLinks = array(array(
-				'linktype' => 'DETAILVIEWTAB',
-				'linklabel' => vtranslate('SINGLE_'.$moduleName, $moduleName).' '. vtranslate('LBL_SUMMARY', $moduleName),
-				'linkKey' => 'LBL_RECORD_SUMMARY',
-				'linkurl' => $recordModel->getDetailViewUrl().'&mode=showDetailViewByMode&requestMode=summary',
-				'linkicon' => ''
-		));
-
-		$relatedLinksFromParent = parent::getDetailViewRelatedLinks();
-
-		foreach ($relatedLinksFromParent as $link) {
-			array_push($relatedLinks, $link);
-		}
-
-		return $relatedLinks;
-	}
-
-	/**
 	 * Function to get the detail view widgets
 	 * @return <Array> - List of widgets , where each widget is an Vtiger_Link_Model
 	 */

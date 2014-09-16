@@ -31,6 +31,7 @@ jQuery.Class("Contact",{
                                 listInstance.getListViewRecords();
                                }
                                jQuery('#firsttime').val('no');
+                               jQuery('#removeSyncBlock').show();
                            }
                            );
                      }
@@ -46,6 +47,18 @@ jQuery.Class("Contact",{
                 } else {
                     AppConnector.request(url).then(
 						function(data) {
+                            var response;
+                            try {
+                                response = JSON.parse(data);
+                            } catch (e) {
+                                
+                            }
+                            if(response && response.error.code == '401') {
+                                jQuery('#firsttime').val('yes');
+                                jQuery('#removeSyncBlock').hide();
+                                jQuery('#sync_button').click();
+                                
+                            } else {
                             jQuery('#sync_button b').text(app.vtranslate('LBL_SYNC_BUTTON'));
                             jQuery('#sync_button').removeAttr("disabled");
                             jQuery('#sync_details').html(data);
@@ -54,8 +67,25 @@ jQuery.Class("Contact",{
                                 listInstance.getListViewRecords()
                             }
                         }
-                        );
+                    });
                 }
+                
+            });
+            jQuery('#remove_sync').on('click',function(){
+                var url = jQuery('#remove_sync').data('url');
+                AppConnector.request(url).then(
+						function(data) {
+                            jQuery('#firsttime').val('yes');
+                            jQuery('#removeSyncBlock').hide();
+                            var params = {
+                                title : app.vtranslate('JS_MESSAGE'),
+                                text: app.vtranslate('SYNC_REMOVED_SUCCESSFULLY'),
+                                animation: 'show',
+                                type: 'info'
+                            };
+                            Vtiger_Helper_Js.showPnotify(params);
+                        }
+                        );
                 
             });
         }
@@ -63,7 +93,13 @@ jQuery.Class("Contact",{
 		jQuery('#popid').popover({
 			'html':true,
 			'content': data,
-			'title':'Field Mapping'
+			'title':app.vtranslate('FIELD_MAPPING')
+		});
+        
+        jQuery('#removePop').popover({
+			'html':true,
+			'content': app.vtranslate('REMOVE_SYNCHRONIZATION_MESSAGE'),
+			'title': app.vtranslate('REMOVE_SYNCHRONIZATION')
 		});
 		
     },

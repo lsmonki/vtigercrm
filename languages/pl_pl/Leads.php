@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie Potencjalnego Klienta',
 
 	// Blocks
-	'LBL_LEAD_INFORMATION' => 'Informacje podstawowe',
+	'LBL_LEAD_INFORMATION' => 'Szczegóły ołowiu',
 
 	//Field Labels
 	'Lead No' => 'Numer Potencjalnego Klienta',
@@ -42,6 +42,7 @@ $languageStrings = array(
 	'Contact in Future'=>'Kontakt w przyszłości',
 	'Contacted'=>'Nawiązano kontakt',
 	'Hot'=>'Zainteresowany',
+        'Hot Leads'=>'Gorące przewody',
 	'Junk Lead'=>'Nowy',
 	'Lost Lead'=>'Utracony',
 	'Not Contacted'=>'Brak kontaktu',
@@ -64,7 +65,6 @@ $languageStrings = array(
 
 	//Leads Custom Field Mapping
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'Edytuj mapowanie pól',
-	'LBL_WEBFORMS' => 'Konfiguracja formularzy WWW',
 	'LBL_LEAD_SOURCE' => 'Źródło pozyskania'
 );
 $jsLanguageStrings = array(

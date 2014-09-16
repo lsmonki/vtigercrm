@@ -30,7 +30,7 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 
 		$startIndex = $pagingModel->getStartIndex();
 		$pageLimit = $pagingModel->getPageLimit();
-
+                
 		$listQuery = "SELECT * FROM vtiger_modtracker_basic WHERE crmid = ? ".
 						" ORDER BY changedon DESC LIMIT $startIndex, $pageLimit";
 
@@ -131,5 +131,11 @@ class ModTracker_Record_Model extends Vtiger_Record_Model {
 			$relationInstance->setData($row)->setParent($this);
 		}
 		return $relationInstance;
+	}
+        
+	public function getTotalRecordCount($recordId) {
+    	$db = PearDatabase::getInstance();
+        $result = $db->pquery("SELECT COUNT(*) AS count FROM vtiger_modtracker_basic WHERE crmid = ?", array($recordId));
+        return $db->query_result($result, 0, 'count');
 	}
 }

@@ -6,12 +6,9 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013 
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Ajouter un untilisateur'                    , 
+	'LBL_ADD_RECORD'               => 'Add User'                    , // TODO: Review
 	'LBL_MY_PREFERENCES'           => 'Mes préférences'           , 
 	'LBL_MORE_INFORMATION'         => 'Informations complémentaires', 
 	'LBL_USERLOGIN_ROLE'           => 'Informations'                , 
@@ -19,9 +16,9 @@ $languageStrings = array(
 	'LBL_CURRENCY_CONFIGURATION'   => 'Configuration des devises et monnaies', 
 	'LBL_ADDRESS_INFORMATION'      => 'Information adresse'         , 
 	'LBL_USER_ADV_OPTIONS'         => 'Options avancées de l\'utilisateur', 
-	'Asterisk Configuration'       => 'Configuration Asterisk'      , 
+	'Asterisk Configuration'       => 'Asterisk Configuration'      , 
 	'LBL_HOME_PAGE_COMPONENTS'     => 'Composition de ma page'      , 
-	'LBL_TAG_CLOUD_DISPLAY'        => 'Affichage du Tag Cloud'           ,
+	'LBL_TAG_CLOUD_DISPLAY'        => 'Tag Cloud Display'           , // TODO: Review
 	'Role'                         => 'Rôle'                       , 
 	'Admin'                        => 'Admin'                       , 
 	'User Name'                    => 'Nom utilisateur'             , 
@@ -30,7 +27,7 @@ $languageStrings = array(
 	'Title'                        => 'Fonction'                    , 
 	'Office Phone'                 => 'Téléphone (bureau)'        , 
 	'Department'                   => 'Département'                , 
-	'Reports To'                   => 'Supérieur hiérarchique'   , 
+	'Reports To'                   => ' Supérieur hiérarchique'   , 
 	'Yahoo id'                     => 'Yahoo ID'                    , 
 	'Home Phone'                   => 'Téléphone (domicile)'      , 
 	'User Image'                   => 'Image/Photo'                 , 
@@ -57,7 +54,7 @@ $languageStrings = array(
 	'LBL_PROFILE_TO_BE_DELETED'    => 'Transferer rôles vers profil', 
 	'INTERNAL_MAIL_COMPOSER'       => 'Composeur interne d\'email'  , 
 	'Asterisk Extension'           => 'Extension Asterisk'          , 
-	'Receive Incoming Calls'      => 'Recevoir les appels entrants'      , 
+	' Receive Incoming Calls'      => 'Receive Incoming Calls'      , // TODO: Review
 	'Reminder Interval'            => 'Délai de rappel'            , 
 	'Webservice Access Key'        => 'Clé d\'accès personnelle au webservice', 
 	'Language'                     => 'Langue :'                    , 
@@ -67,11 +64,11 @@ $languageStrings = array(
 	'Digit Grouping Pattern'       => 'Patterne de groupe'          , 
 	'Digit Grouping Separator'     => 'Séparateur de groupe'       , 
 	'Symbol Placement'             => 'Position du symbole monétaire', 
-	'Number Of Currency Decimals'  => 'Nombre de décimales monétaire' , 
-	'Truncate Trailing Zeros'      => 'Tronquer les zeros inutiles'     , 
-	'Default Call Duration'        => 'Durée par défaut d\'un appel (En minutes)', 
-	'Other Event Duration'         => 'Durée par défaut des autres activités (En minutes)' , 
-	'Calendar Hour Format'         => 'Format d\'heure du calendrier'        , 
+	'Number Of Currency Decimals'  => 'Number Of Currency Decimals' , 
+	'Truncate Trailing Zeros'      => 'Truncate Trailing Zeros'     , 
+	'Default Call Duration'        => 'Default Call Duration (Mins)', // TODO: Review
+	'Other Event Duration'         => 'Other Event Duration (Mins)' , // TODO: Review
+	'Calendar Hour Format'         => 'Calendar Hour Format'        , // TODO: Review
 	'Kwajalein'                    => '(UTC-12:00) International Date Line West', 
 	'Pacific/Midway'               => '(UTC-11:00) Coordinated Universal Time-11', 
 	'Pacific/Samoa'                => '(UTC-11:00) Samoa'           , 
@@ -169,63 +166,47 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland'        , 
 	'Asia/Magadan'                 => '(UTC+12:00) Magadan'         , 
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa'       , 
-	'Summary'                      => 'Résumé'                     , 
-	'Detail'                       => 'Détail'                      , 
-	'LBL_USER_LIST_DETAILS'        => 'Détails'                     , 
+	'Summary'                      => 'Summary'                     , // TODO: Review
+	'Detail'                       => 'Detail'                      , // TODO: Review
+	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
 	'LBL_USER_DELETED_SUCCESSFULLY' => 'Utilisateur supprimé avec succès',
-
-	'LBL_OLD_PASSWORD' => 'Ancien mot de passe',
-	'LBL_CHANGE_PASSWORD' => 'Modifier le mot de passe',
-	'LBL_NEW_PASSWORD' => 'Nouveau mot de passe',
-	'LBL_CONFIRM_PASSWORD' => 'Confirmer le mot de passe',
-	
-	//Login strings
-	'LBL_TO_CRM' => 'Connexion à Vtiger CRM',
-	'LBL_INVALID_USER_OR_PASSWORD' => 'Nom d\'utilisateur ou mot de passe invalide.',
-	'LBL_INVALID_USER_OR_EMAIL' => 'Nom d\'utilisateur ou email invalide.',
-	'LBL_EMAIL_SEND' => 'We have sent you email to reset your password.',
-	'ForgotPassword' => 'Mot de passe perdu',
-	'LBL_CONNECT_WITH_US' => 'Rester connecté avec nous',
-	'LBL_GET_MORE' => 'En savoir plus sur Vtiger',
-	
-	'LBL_TRANSFER_RECORDS_TO_USER' => ' Transférer les enregistrements à l\'utilisateur ',
-	'LBL_USER_TO_BE_DELETED' => 'Utilisateur à supprimer',    
-	
-	// Traductions manquantes 
-	'Starting Day of the week' => 'Jour de début de semaine' ,
-	'Today' => 'Aujourd\'hui',
-	'1 Hour' => '1 heure',
-	'1 Day' => '1 jour',
-	'Last 2 Days' => 'Les 2 derniers jours',
-	'Last Week' => 'La semaine passée',
-	'This Week' => 'Cette semaine',
-	'This Month' => 'Ce mois',
-	'This Year' => 'Cette année',
-	'Day starts at' => 'La journée commence à',
-	'Default Record View' => 'Affichage fiche par défaut',
-	'Left Panel Hide' => 'Masquer la colonne de gauche',
-	'Row Height' => 'Hauteur de lignes',
-	'wide' => 'large',
-	'medium' => 'medium',
-	'narrow' => 'étroit',
-		'Sunday' => 'Dimanche',	
-		'Monday' => 'Lundi',
-		'Tuesday' => 'Mardi',
-		'Wednesday' => 'Mercredi',
-		'Thursday' => 'Jeudi',
-		'Friday' => 'Vendredi',
-		'Saturday' => 'Samedi',
-
-	
+    'LBL_ACTIVE_USERS' => 'Les utilisateurs actifs',
+    'LBL_INACTIVE_USERS' => 'Les utilisateurs inactifs',
+    'LBL_DELETE_USER_PERMANENTLY' => "Supprimer l'utilisateur de façon permanente",
+    'LBL_RESTORE' => 'Restaurer',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Utilisateur restauré avec succès',
+	'LBL_ALMOST_THERE'	=>	'On y est presque!',
+	'LBL_ABOUT_ME'		=>	'À propos de moi',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Nous promettons de garder ce privé)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Tous les champs ci-dessous sont obligatoires)',
+	'LBL_GET_STARTED'	=> 'Démarrer',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Votre numéro de contact',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Où êtes-vous?',
+	'LBL_SELECT_COUNTRY'	=> 'Sélectionnez un pays',
+	'LBL_COMPANY_SIZE'		=> 'Taille de lentreprise',
+	'LBL_JOB_TITLE'			=> 'Titre du poste',
+	'LBL_DEPARTMENT'		=> 'Département',
+	'LBL_BASE_CURRENCY'		=> 'Devise de base',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Choisissez Devise de base',
+	'LBL_OPERATING_CURRENCY'	=> 'Devise de référence ne peut pas être modifié ultérieurement. Choisissez votre monnaie de fonctionnement',
+	'LBL_LANGUAGE' => 'Langue',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Choisissez la langue',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Choisissez Fuseau horaire',
+	'LBL_DATE_FORMAT'		=> 'Format de la date',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Choisissez Format de date',
+	'LBL_PHONE'	=> 'Téléphone',
 );
 
 $jsLanguageStrings = array(
-	'JS_ENTER_OLD_PASSWORD'=>'Saisir l\'ancien mot de passe.',
-	'JS_ENTER_NEW_PASSWORD'=>'Saisir le nouveau mot de passe.',
-	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Confirmer le mot de passe.',
-	'JS_REENTER_PASSWORDS'=>'Saisir à nouveaux les mots de passe. Le "nouveau" mot de passe et le mot de passe "confirmé" sont différents.',
-	'JS_INVALID_PASSWORD'=>'Specifier un nom d\'utilisatuer valide et un mot de passe.',
-	'JS_PASSWORD_CHANGE_FAILED_1'=>'Le changement du mot de passe pour ',
-	'JS_PASSWORD_CHANGE_FAILED_2'=>' a généré une erreur. Le nouveau mot de passe doit être initialisé.',
-	'JS_PASSWORD_INCORRECT_OLD'=>'Ancien mot de passe incorrect. Saisir à nouveau.',
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

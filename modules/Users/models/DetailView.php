@@ -21,7 +21,8 @@ class Users_DetailView_Model extends Vtiger_DetailView_Model {
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$recordModel = $this->getRecord();
 		$recordId = $recordModel->getId();
-		if (($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $recordId)) {
+
+		if (($currentUserModel->isAdminUser() == true || $currentUserModel->get('id') == $recordId) && $recordModel->get('status') == 'Active' ) {
 			$recordModel = $this->getRecord();
 
 			$detailViewLinks = array(
@@ -43,7 +44,6 @@ class Users_DetailView_Model extends Vtiger_DetailView_Model {
 				$linkModelList['DETAILVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($detailViewLink);
 			}
 			
-
 			$detailViewPreferenceLinks = array(
 				array(
 					'linktype' => 'DETAILVIEWPREFERENCE',

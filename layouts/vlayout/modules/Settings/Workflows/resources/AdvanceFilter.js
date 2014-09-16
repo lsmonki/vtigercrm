@@ -49,6 +49,54 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
 	},
 
 	/**
+	 * Function to load condition list for the selected field
+     * (overrrided to remove "has changed" condition for related record fields in workflows)
+	 * @params : fieldSelect - select element which will represents field list
+	 * @return : select element which will represent the condition element
+	 */
+	loadConditions : function(fieldSelect) {
+		var row = fieldSelect.closest('div.conditionRow');
+		var conditionSelectElement = row.find('select[name="comparator"]');
+		var conditionSelected = conditionSelectElement.val();
+		var fieldSelected = fieldSelect.find('option:selected');
+        var fieldLabel = fieldSelected.val();
+        var match = fieldLabel.match(/\((\w+)\) (\w+)/);
+        var fieldSpecificType = this.getFieldSpecificType(fieldSelected)
+		var conditionList = this.getConditionListFromType(fieldSpecificType);
+		//for none in field name
+		if(typeof conditionList == 'undefined') {
+			conditionList = {};
+			conditionList['none'] = 'None';
+		}
+
+		var options = '';
+		for(var key in conditionList) {
+			//IE Browser consider the prototype properties also, it should consider has own properties only.
+			if(conditionList.hasOwnProperty(key)) {
+				var conditionValue = conditionList[key];
+				var conditionLabel = this.getConditionLabel(conditionValue);
+                if(match != null){
+                    if(conditionValue != 'has changed'){
+                        options += '<option value="'+conditionValue+'"';
+                        if(conditionValue == conditionSelected){
+                            options += ' selected="selected" ';
+                        }
+                        options += '>'+conditionLabel+'</option>';
+                    }
+                }else{
+                    options += '<option value="'+conditionValue+'"';
+                    if(conditionValue == conditionSelected){
+                        options += ' selected="selected" ';
+                    }
+                    options += '>'+conditionLabel+'</option>';
+                }
+			}
+		}
+		conditionSelectElement.empty().html(options).trigger("liszt:updated");
+		return conditionSelectElement;
+	},
+
+	/**
 	 * Function to retrieve the values of the filter
 	 * @return : object
 	 */
@@ -81,16 +129,7 @@ Vtiger_AdvanceFilter_Js('Workflows_AdvanceFilter_Js',{},{
 				var fieldDataInfo = fieldSelectElement.find('option:selected').data('fieldinfo');
 				var fieldType = fieldDataInfo.type;
 				var rowValues = {};
-				if(fieldType == 'owner'){
-					for(var key in fieldList) {
-						var field = fieldList[key];
-						if(field == 'value' && valueSelectElement.is('select')){
-							rowValues[field] = valueSelectElement.find('option:selected').text();
-						} else {
-							rowValues[field] = jQuery('[name="'+field+'"]', rowElement).val();
-						}
-					}
-				} else if (fieldType == 'picklist' || fieldType == 'multipicklist') {
+				if (fieldType == 'picklist' || fieldType == 'multipicklist') {
 					for(var key in fieldList) {
 						var field = fieldList[key];
 						if(field == 'value' && valueSelectElement.is('input')) {
@@ -291,6 +330,7 @@ Vtiger_Date_Field_Js('Workflows_Datetime_Field_Js',{},{
 		}
 		return false;
 	}
+
 });
 
 Vtiger_Currency_Field_Js('Workflows_Currency_Field_Js',{},{
@@ -384,4 +424,31 @@ Vtiger_Owner_Field_Js('Workflows_Owner_Field_Js',{},{
 		this.addValidationToElement(selectContainer);
 		return selectContainer;
 	}
+});
+
+Vtiger_Picklist_Field_Js('Workflows_Picklist_Field_Js',{},{
+
+        getUi : function(){
+                var selectedOption = app.htmlDecode(this.getValue());
+                var pickListValues = this.getPickListValues();
+                var tagsArray = new Array();
+                jQuery.map( pickListValues, function(val, i) {
+                        tagsArray.push(val);
+                });
+                var pickListValuesArrayFlip = {};
+                for(var key in pickListValues){
+                        var pickListValue = pickListValues[key];
+                        pickListValuesArrayFlip[pickListValue] = key;
+                }
+                var html = '<input type="hidden" class="row-fluid select2" name="'+ this.getName() +'">';
+                var selectContainer = jQuery(html).val(selectedOption);
+                selectContainer.data('tags', tagsArray).data('picklistvalues', pickListValuesArrayFlip);
+                this.addValidationToElement(selectContainer);
+                var fieldsSelect2 = app.showSelect2ElementView(selectContainer, {
+                        placeholder: app.vtranslate('JS_PLEASE_SELECT_ATLEAST_ONE_OPTION'),
+                        closeOnSelect: true,
+                        maximumSelectionSize: 1
+                });
+                return selectContainer;
+        }
 });

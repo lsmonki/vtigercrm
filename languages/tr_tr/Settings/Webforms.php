@@ -15,6 +15,7 @@ $languageStrings = array(
 	'Module'                       => 'Module'                      , // TODO: Review
 	'Return Url'                   => 'Return Url'                  , // TODO: Review
 	'Post Url'                     => 'Post Url'                    , // TODO: Review
+    'Captcha Enabled'              => 'Captcha etkin'               ,
 	'SINGLE_Webforms'              => 'Webform'                     , // TODO: Review
 	'LBL_SHOW_FORM'                => 'Show Form'                   , // TODO: Review
 	'LBL_DUPLICATES_EXIST'         => 'Webform Name already exists' , // TODO: Review
@@ -30,9 +31,19 @@ $languageStrings = array(
 	'LBL_EMBED_THE_FOLLOWING_FORM_IN_YOUR_WEBSITE' => 'Embed the following form in your website', // TODO: Review
 	'LBL_SELECT_VALUE'             => 'Select Value'                , // TODO: Review
 	'LBL_LABEL'                    => 'label'                       , // TODO: Review
+	'LBL_SAVE_FIELDS_ORDER' => 'Kaydet alanlar sipariş', 
+	'LBL_HIDDEN' => 'Gizli',
+	'LBL_ENABLE_TARGET_MODULES_FOR_WEBFORM' => 'Webform için hedef modülleri etkinleştirme',
+	'LBL_ASSIGN_USERS' => 'Kullanıcı Atama',
+    'LBL_ASSIGN_ROUND_ROBIN' => 'Round Robin yılında Kullanıcılar atama',
+    'LBL_ROUNDROBIN_USERS_LIST' => 'Round Robin Kullanıcılar Listesi',
 );
 $jsLanguageStrings = array(
 	'JS_WEBFORM_DELETED_SUCCESSFULLY' => 'Webform deleted successfully', // TODO: Review
 	'JS_LOADING_TARGET_MODULE_FIELDS' => 'Loadding Target Module Fields', // TODO: Review
 	'JS_SELECT_VALUE'              => 'Select Vlaue'                , // TODO: Review
+	'JS_MANDATORY_FIELDS_WITHOUT_OVERRIDE_VALUE_CANT_BE_HIDDEN' => 'Yüzdesel değerler olmadan zorunlu alanlar gizli cant',
+	'JS_REFERENCE_FIELDS_CANT_BE_MANDATORY_WITHOUT_OVERRIDE_VALUE' => 'Referans alanlar geçersiz kılma değeri olmayan zorunlu olamaz',
+	'JS_TYPE_TO_SEARCH' => 'Aramak için yazın',
+	"JS_WEBFORM_WITH_THIS_NAME_ALREADY_EXISTS" => 'Bu adla Webform zaten var',
 );

@@ -24,4 +24,7 @@ $languageStrings = array(
 	'LBL_EDIT_LIST_PRICE'          => 'Editar Tarifa',
 	'Price Book Name'              => 'Nombre Tarifa',
 	'PriceBook No'                 => 'Número Tarifa',
+	
+	'LBL_UNIT_PRICE' => 'Precio unitario',
+	'LBL_ADD_TO' => 'Añadir a',
 );

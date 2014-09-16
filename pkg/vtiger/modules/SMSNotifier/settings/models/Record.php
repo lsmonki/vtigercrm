@@ -112,14 +112,6 @@ class Settings_SMSNotifier_Record_Model extends Settings_Vtiger_Record_Model {
 	 */
 	public function getEditableFields() {
 		$editableFieldsList = $this->getModule()->getEditableFields();
-		$id = $this->getId();
-		if ($id) {
-			$parameters = Zend_Json::decode(decode_html($this->get('parameters')));
-			foreach ($parameters as $fieldName => $fieldValue) {
-				$fieldInfo = array('name' => $fieldName, 'label' => $fieldName, 'type' => 'text');
-				$editableFieldsList[$fieldName] = Settings_SMSNotifier_Field_Model::getInstanceByRow($fieldInfo);
-			}
-		}
 		return $editableFieldsList;
 	}
 
@@ -128,19 +120,6 @@ class Settings_SMSNotifier_Record_Model extends Settings_Vtiger_Record_Model {
 	 */
 	public function save() {
 		$db = PearDatabase::getInstance();
-
-		$parameters = '';
-		$selectedProvider = $this->get('providertype');
-		$allProviders = $this->getModule()->getAllProviders();
-		foreach ($allProviders as $provider) {
-			if ($provider->getName() === $selectedProvider) {
-				foreach ($provider->getRequiredParams() as $key) {
-					$parameters[$key] = $this->get($key);
-				}
-				$this->set('parameters', Zend_Json::encode($parameters));
-				break;
-			}
-		}
 
 		$params = array($this->get('providertype'), $this->get('isactive'), $this->get('username'), $this->get('password'), $this->get('parameters'));
 		$id = $this->getId();

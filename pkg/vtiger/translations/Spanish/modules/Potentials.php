@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-26
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-10-05
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -51,4 +51,5 @@ $languageStrings = array(
 	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Fecha estimada de cierre',
 	'LBL_RELATED_CONTACTS' => 'Contactos Relacionados',
 	'LBL_RELATED_PRODUCTS' => 'Productos Relacionados',
+        'Potentials Won'               =>'Potenciales Ganados',
 );

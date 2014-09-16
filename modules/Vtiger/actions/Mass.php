@@ -36,7 +36,13 @@ abstract class Vtiger_Mass_Action extends Vtiger_Action_Controller {
                 $customViewModel->set('search_key', $searchKey);
                 $customViewModel->set('search_value', $searchValue);
             }
+
+            $customViewModel->set('search_params',$request->get('search_params'));
 			return $customViewModel->getRecordIds($excludedIds,$module);
 		}
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

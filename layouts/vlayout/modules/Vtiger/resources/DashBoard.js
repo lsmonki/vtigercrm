@@ -94,7 +94,8 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 
 			form.submit(function(e){
 				e.preventDefault();
-
+                //To disable savebutton after one submit to prevent multiple submits
+                jQuery("[name='saveButton']").attr('disabled','disabled');
 				var selectedModule = moduleNameSelect2.val();
 				var selectedFilterId= filteridSelect2.val();
 				var selectedFields = fieldsSelect2.val();
@@ -123,6 +124,7 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 			var height = element.data('height');
 			Vtiger_DashBoard_Js.gridster.add_widget(widgetContainer, width, height);
 			Vtiger_DashBoard_Js.currentInstance.loadWidget(widgetContainer);
+            app.hideModalWindow();
 		}
 	},
 
@@ -151,6 +153,8 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 			var params = app.validationEngineOptions;
 			params.onValidationComplete = function(form, valid){
 				if(valid) {
+                    //To prevent multiple click on save
+                    jQuery("[name='saveButton']").attr('disabled','disabled');
 					var notePadName = form.find('[name="notePadName"]').val();
 					var notePadContent = form.find('[name="notePadContent"]').val();
 					var linkId = element.data('linkid');
@@ -324,6 +328,10 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 	removeWidget : function() {
 		this.getContainer().on('click', 'li a[name="dclose"]', function(e) {
 			var element = $(e.currentTarget);
+            var listItem = jQuery(element).parents('li');
+            var width = listItem.attr('data-sizex');
+            var height = listItem.attr('data-sizey');
+            
 			var url = element.data('url');
 			var parent = element.closest('.dashboardWidgetHeader').parent();
 			var widgetName = parent.data('name');
@@ -342,8 +350,7 @@ jQuery.Class("Vtiger_DashBoard_Js", {
 									});
 									if (jQuery.inArray(widgetName, nonReversableWidgets) == -1) {
 										var data = '<li><a onclick="Vtiger_DashBoard_Js.addWidget(this, \''+response.result.url+'\')" href="javascript:void(0);"';
-										data += ' data-linkid='+response.result.linkid+' data-name='+response.result.name+'>'+response.result.title+'</a></li>';
-										
+										data += 'data-width='+width+' data-height='+height+ ' data-linkid='+response.result.linkid+' data-name='+response.result.name+'>'+response.result.title+'</a></li>';
 										var divider = jQuery('.widgetsList .divider');
 										if(divider.length) {
 											jQuery(data).insertBefore(divider);

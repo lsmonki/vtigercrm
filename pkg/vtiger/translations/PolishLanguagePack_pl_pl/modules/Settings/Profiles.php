@@ -37,13 +37,21 @@ $languageStrings = array(
 	'LBL_PROFILES' => 'Profile',
 	'LBL_CHOOSE_PROFILES' => 'Wybierz profil',
     
-    'LBL_VIEW_ALL' => 'Włącz wszystkie moduły do podglądu',
-    'LBL_EDIT_ALL' => 'Włącz wszystkie moduły do edycji',
-    'LBL_VIEW_ALL_DESC' => 'Po zaznaczeniu tej opcji, wszystkie moduły będą miały zaznaczoną opcję: Przeglądanie',
-    'LBL_EDIT_ALL_DESC' => 'Po zaznaczeniu tej opcji, wszystkie moduły będą miały zaznaczoną opcję: Tworzenie/Edycja',
-    'LBL_DUPLICATES_EXIST' => 'Duplikuj istniejący profil',
-   
-	
+        'LBL_VIEW_ALL' => 'Włącz wszystkie moduły do podglądu',
+        'LBL_EDIT_ALL' => 'Włącz wszystkie moduły do edycji',
+        'LBL_VIEW_ALL_DESC' => 'Po zaznaczeniu tej opcji, wszystkie moduły będą miały zaznaczoną opcję: Przeglądanie',
+        'LBL_EDIT_ALL_DESC' => 'Po zaznaczeniu tej opcji, wszystkie moduły będą miały zaznaczoną opcję: Tworzenie/Edycja',
+        'LBL_DUPLICATES_EXIST' => 'Duplikuj istniejący profil',
+    
+        'Import' => 'Import',
+        'Export' => 'Eksport',
+	'Merge'  => 'Łączyć',
+        'ConvertLead' => 'Konwersja Lead',
+        'DuplicatesHandling' => 'Przeładunek duplikaty',
+        'ReceiveIncomingCalls' => 'Odbierać połączenia przychodzące',
+        'MakeOutgoingCalls' => 'Wykonywać połączenia wychodzące',
+        'Print' => 'Druk',
+
 );
 
 $jsLanguageStrings = array(

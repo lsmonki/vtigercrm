@@ -44,6 +44,7 @@ $languageStrings = array(
 	'Contact in Future'=>'الاتصال بالمستقبل',
 	'Contacted'=>'متصل',
 	'Hot'=>'نشيط',
+        'Hot Leads'                    => 'العروض الساخنة',
 	'Junk Lead'=>'سلة محذوفات',
 	'Lost Lead'=>'ضائع',
 	'Not Contacted'=>'لم يتم التواصل معه',
@@ -66,7 +67,6 @@ $languageStrings = array(
 
 	//Leads Custom Field Mapping
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'تعديل خريطة الحقول',
-	'LBL_WEBFORMS' => 'اعداد نموذج الويب',
 	'LBL_LEAD_SOURCE' => 'مصدر الزبون المحتمل'
 );
 $jsLanguageStrings = array(

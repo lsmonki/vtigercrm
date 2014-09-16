@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-10-05
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -39,13 +39,13 @@ $languageStrings = array(
 	'Mailing State'                => 'Provincia (Factura)',
 	'Mailing Zip'                  => 'Código Postal (Factura)',
 	'Mailing Country'              => 'País (Factura)',
-	'Mailing PO Box'               => 'Apdo de Correos (Factura)',
+	'Mailing Po Box'               => 'Apdo de Correos (Factura)',
 	'Other Street'                 => 'Dirección (Envío)',
 	'Other City'                   => 'Población (Envío)',
 	'Other State'                  => 'Provincia (Envío)',
 	'Other Zip'                    => 'Código Postal (Envío)',
 	'Other Country'                => 'País (Envío)',
-	'Other PO Box'                 => 'Apdo de Correos (Envío)',
+	'Other Po Box'                 => 'Apdo de Correos (Envío)',
 	'Contact Image'                => 'Imagen del Contacto',
 	'Secondary Email' => 'Email (Alternativo)',
 	'Other Phone' => 'Teléfono (Alternativo)',
@@ -59,6 +59,9 @@ $languageStrings = array(
 	'User List'                    => 'Lista de Usuarios',
 	'LBL_COPY_OTHER_ADDRESS' => 'Copiar Dirección Alternativa',
 	'LBL_COPY_MAILING_ADDRESS' => 'Copiar Dirección Envío',
+	'Contact Id' => 'ID Contacto',
+	'Support Start Date'           => 'Fecha Inicio Soporte',
+	'Support End Date'             => 'Fecha Fin Soporte',
 );
 
 $jsLanguageStrings = array(

@@ -11,19 +11,23 @@
 -->*}
 {strip}
 	<span class="span2">
-		{foreach key=ITER item=IMAGE_INFO from=$RECORD->getImageDetails()}
+        {assign var=IMAGE_DETAILS value=$RECORD->getImageDetails()}
+		{foreach key=ITER item=IMAGE_INFO from=$IMAGE_DETAILS}
 			{if !empty($IMAGE_INFO.path)}
 				<img src="{$IMAGE_INFO.path}_{$IMAGE_INFO.orgname}" alt="{$IMAGE_INFO.orgname}" title="{$IMAGE_INFO.orgname}" width="65" height="80" align="left"><br>
 			{else}
 				<img src="{vimage_path('summary_Contact.png')}" class="summaryImg"/>
 			{/if}
 		{/foreach}
+        {if empty($IMAGE_DETAILS)}
+            <img src="{vimage_path('summary_Contact.png')}" class="summaryImg"/>
+        {/if}
 	</span>
 	<span class="span8 margin0px">
 		<span class="row-fluid">
 			<h4 class="recordLabel pushDown" title="{$RECORD->getDisplayValue('salutationtype')}&nbsp;{$RECORD->getName()}"> &nbsp;
 				{if $RECORD->getDisplayValue('salutationtype')}
-                    <span class="salutation">{$RECORD->getDisplayValue('salutationtype')}</span> 
+                    <span class="salutation">{$RECORD->getDisplayValue('salutationtype')}</span>&nbsp;
                 {/if}
                 {assign var=COUNTER value=0}
                 {foreach item=NAME_FIELD from=$MODULE_MODEL->getNameFields()}

@@ -21,7 +21,8 @@ Settings_Vtiger_List_Js("Settings_LoginHistory_List_Js",{},{
 				parent : app.getParentModuleName(),
 				'search_key' : 'user_name',
 				'search_value' : jQuery(e.currentTarget).val(),
-				'page' : 1
+				'page' : 1,
+                'user_name' :this.options[this.selectedIndex].getAttribute("name")
 			}
 			//Make total number of pages as empty
 			jQuery('#totalPageCount').text("");
@@ -42,7 +43,7 @@ Settings_Vtiger_List_Js("Settings_LoginHistory_List_Js",{},{
 			'parent' : parent,
 			'page' : pageNumber,
 			'view' : "List",
-			'userName' : jQuery('#usersFilter').val(),
+			'user_name' : jQuery('select[id=usersFilter] option:selected').attr('name'),
 			'search_key' : 'user_name',
 			'search_value' : jQuery('#usersFilter').val()
 		}
@@ -71,6 +72,5 @@ Settings_Vtiger_List_Js("Settings_LoginHistory_List_Js",{},{
 		this.registerFilterChangeEvent();
 		this.registerPageNavigationEvents();
 		this.registerEventForTotalRecordsCount();
-		jQuery('.pageNumbers').tooltip();
 	}
 });

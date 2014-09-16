@@ -109,7 +109,7 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 		$viewer->assign('SETTINGS_MENUS', $menuModels);
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-        $viewer->assign('LOAD_OLD', Settings_Vtiger_Index_View::$loadOlderSettingUi);
+                $viewer->assign('LOAD_OLD', Settings_Vtiger_Index_View::$loadOlderSettingUi);
 		$viewer->view('SettingsMenuStart.tpl', $qualifiedModuleName);
 	}
 
@@ -181,4 +181,8 @@ class Settings_Vtiger_Index_View extends Vtiger_Basic_View {
 		}
 		return false;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        }
 }

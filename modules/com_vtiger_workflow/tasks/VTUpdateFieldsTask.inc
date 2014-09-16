@@ -55,18 +55,30 @@ class VTUpdateFieldsTask extends VTTask {
 				$fieldValue = trim($fieldInfo['value']);
 
 				$fieldInstance = $moduleFields[$fieldName];
-				
+
 				if ($fieldValueType == 'fieldname') {
 					$fieldDataType = $fieldInstance->getFieldDataType();
 					$fieldValue = $focus->column_fields[$fieldValue];
+                    $fieldValueInDB = $fieldValue;
 					if($fieldDataType == 'date') {
 						//Convert the DB Date Time Format to User Date Time Format
 						$dateTime = new DateTimeField($fieldValue);
 						$fieldValue = $dateTime->getDisplayDateTimeValue();
-						
+
 						$date = explode(' ', $fieldValue);
 						$fieldValue = $date[0];
 					}
+                    //for Product Unit Price value converted with based product currency
+                    if($fieldDataType == 'currency' && $fieldName == 'unit_price') {
+                        $fieldValue = $this->calculateProductUnitPrice($fieldValue);
+                    }
+                    // for calendar time_start field db value will be in UTC format, we should convert to user format
+                    if(trim($fieldInfo['value']) == 'time_start' && $moduleName == 'Calendar' && $fieldDataType == 'time'){
+                        $date = new DateTime();
+                        $dateTime = new DateTimeField($date->format('Y-m-d').' '. $fieldValue);
+                        $fieldValue = $dateTime->getDisplayTime();
+                    }
+                    // End
 				} elseif ($fieldValueType == 'expression') {
 					require_once 'modules/com_vtiger_workflow/expression_engine/include.inc';
 
@@ -74,7 +86,13 @@ class VTUpdateFieldsTask extends VTTask {
 					$expression = $parser->expression();
 					$exprEvaluater = new VTFieldExpressionEvaluater($expression);
 					$fieldValue = $exprEvaluater->evaluate($entity);
-					$fieldValue = $this->convertValueToUserFormat($fieldInstance, $fieldValue);
+                    $fieldValueInDB = $fieldValue;
+                    //for Product Unit Price value converted with based product currency
+                    if($fieldInstance && $fieldInstance->getFieldDataType() == 'currency' && $fieldName == 'unit_price') {
+                        $fieldValue = $this->calculateProductUnitPrice($fieldValue);
+                    }else{
+						$fieldValue = $this->convertValueToUserFormat($fieldInstance, $fieldValue);
+                    }
 				} else {
 					if (preg_match('/([^:]+):boolean$/', $fieldValue, $match)) {
 						$fieldValue = $match[1];
@@ -84,11 +102,16 @@ class VTUpdateFieldsTask extends VTTask {
 							$fieldValue = '0';
 						}
 					}
+                    //for Product Unit Price value converted with based product currency
+                    if($fieldInstance && $fieldInstance->getFieldDataType() == 'currency' && $fieldName == 'unit_price') {
+                        $fieldValue = $this->calculateProductUnitPrice($fieldValue);
+                    }
+                    $fieldValueInDB = $fieldValue;
 				}
 
-				if ($fieldInstance->getFieldDataType() === 'owner') {
+				if ($fieldInstance && $fieldInstance->getFieldDataType() === 'owner') {
                     if(!is_numeric($fieldValue)){
-                        //If name is given 
+                        //If name is given
                         $userId = getUserId_Ol($fieldValue);
                         $groupId = getGrpId($fieldValue);
 
@@ -97,10 +120,23 @@ class VTUpdateFieldsTask extends VTTask {
                         } else {
                             $fieldValue = ($userId == 0) ? $groupId : $userId;
                         }
-                    }
+
+						if($userId == 0) {
+							$webserviceObject = VtigerWebserviceObject::fromName($adb,'Groups');
+							$fieldValueInDB = vtws_getId($webserviceObject->getEntityId(),$fieldValue);
+						} else {
+							$webserviceObject = VtigerWebserviceObject::fromName($adb,'Users');
+							$fieldValueInDB = vtws_getId($webserviceObject->getEntityId(),$fieldValue);
+						}
+                    } else {
+						$ownerType = vtws_getOwnerType($fieldValue);
+						$webserviceObject = VtigerWebserviceObject::fromName($adb,$ownerType);
+						$fieldValueInDB = vtws_getId($webserviceObject->getEntityId(),$fieldValue);
+					}
 				}
 
 				$focus->column_fields[$fieldName] = $fieldValue;
+                $entity->data[$fieldName] = $fieldValueInDB;
 			}
 
 			foreach ($focus->column_fields as $fieldName => $fieldValue) {
@@ -116,10 +152,10 @@ class VTUpdateFieldsTask extends VTTask {
 			// format, CRMEntity.php line 474 has the login to check wheather to convert to database format
 			$actionName = $_REQUEST['action'];
 			$_REQUEST['action'] = '';
-			
+
 			// For workflows update field tasks is deleted all the lineitems.
 			$focus->isLineItemUpdate = false;
-			
+
 			$focus->saveentity($moduleName);
 
 			// Reverting back the action name as there can be some dependencies on this.
@@ -152,6 +188,25 @@ class VTUpdateFieldsTask extends VTTask {
 		}
 		return $fieldValue;
 	}
+
+    /**
+     * Function to calculate Product Unit Price.
+     * Product Unit Price value converted with based product currency
+     * @param type $fieldValue
+     */
+    public function calculateProductUnitPrice($fieldValue) {
+        $currency_details = getAllCurrencies('all');
+        for($i=0;$i<count($currency_details);$i++)  {
+            $curid = $currency_details[$i]['curid'];
+            $cur_checkname = 'cur_' . $curid . '_check';
+            $cur_valuename = 'curname' . $curid;
+            if($cur_valuename == $_REQUEST['base_currency'] && ($_REQUEST[$cur_checkname] == 'on' || $_REQUEST[$cur_checkname] == 1)) {
+                $fieldValue = $fieldValue * $currency_details[$i]['conversionrate'];
+                $_REQUEST[$cur_valuename] = $fieldValue;
+            }
+        }
+        return $fieldValue;
+    }
 
 }
 

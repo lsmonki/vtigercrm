@@ -9,10 +9,17 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ProjectMilestone'      => 'Контрольная Точка', 
-	'LBL_ADD_RECORD'               => 'Add Project Milestone'       , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Project Milestones List'     , // TODO: Review
-	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details'   , // TODO: Review
-	'Project Milestone Name'       => 'Project Milestone Name'      , // TODO: Review
-	'Milestone Date'               => 'Milestone Date'              , // TODO: Review
-	'Project Milestone No'         => 'Project Milestone Number'    , // TODO: Review
+	'LBL_ADD_RECORD'	=>	"Добавить проект Milestone",
+	'LBL_RECORDS_LIST'	=>	"Список Этапы проекта",
+	'LBL_PROJECTS_LIST'	=>	"Список проектов",
+	'LBL_TASKS_LIST'	=>	"Список задач",
+	'LBL_MILESTONES_LIST'	=>	"Вехи Список",
+	'LBL_PROJECT_MILESTONE_INFORMATION'	=>	"Подробности проекта Milestone",
+	'Project Milestone Name'	=>	"Название проекта Milestone",
+	'Milestone Date'	=>	"Дата Milestone",
+	'Project Milestone No'	=>	"Номер проекта Milestone",
+	//picklist values
+	'administrative' => 'Административный',
+    'operative' => 'Оперативный',
+    'other' => 'Другой',
 );

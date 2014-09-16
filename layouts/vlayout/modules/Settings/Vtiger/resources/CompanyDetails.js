@@ -13,6 +13,7 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 		jQuery('#updateCompanyDetails').on('click',function(e){
 			jQuery('#CompanyDetailsContainer').addClass('hide');
 			jQuery('#updateCompanyDetailsForm').removeClass('hide');
+            jQuery('#updateCompanyDetails').addClass('hide');
 		});
 	},
 	
@@ -31,6 +32,7 @@ jQuery.Class("Settings_Vtiger_CompanyDetails_Js",{},{
 		jQuery('.cancelLink').on('click',function() {
 			jQuery('#CompanyDetailsContainer').removeClass('hide');
 			jQuery('#updateCompanyDetailsForm').addClass('hide');
+            jQuery('#updateCompanyDetails').removeClass('hide');
 		});
 	},
 	

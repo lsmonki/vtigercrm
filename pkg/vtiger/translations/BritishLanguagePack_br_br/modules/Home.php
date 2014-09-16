@@ -21,4 +21,5 @@ $languageStrings = array(
 	'LTFAQ'                        => 'My Recent FAQs'              , 
 	'UA'                           => 'Upcoming Activities'         , 
 	'PA'                           => 'Pending Activities'          , 
+    'Home'                         => 'Home'                        ,  
 );

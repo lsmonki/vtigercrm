@@ -36,7 +36,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 			$filename = $filename;
 		}
 
-		return file_exists($filename);
+        return file_exists($filename);
 	}
 
 	/**
@@ -47,7 +47,7 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 		$appUniqueKey = vglobal('application_unique_key');
 		$vtigerCurrentVersion = vglobal('vtiger_current_version');
 		$site_URL = vglobal('site_URL');
-		
+
 		$userModel = Users_Record_Model::getCurrentUserModel();
 		$userEmail = $userModel->get('email1');
 
@@ -100,7 +100,14 @@ abstract class Vtiger_Header_View extends Vtiger_View_Controller {
 						'linklabel' => 'LBL_CRM_SETTINGS',
 						'linkurl' => '?module=Vtiger&parent=Settings&view=Index',
 						'linkicon' => '',
-					)
+					),
+                                        array(), // separator 
+                                        array ( 
+                                                'linktype' => 'HEADERLINK', 
+                                                'linklabel' => 'LBL_MANAGE_USERS', 
+                                                'linkurl' => '?module=Users&parent=Settings&view=List', 
+                                                'linkicon' => '', 
+                                       ),
 				)
 			);
 			array_push($headerLinks, $crmSettingsLink);

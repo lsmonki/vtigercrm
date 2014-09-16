@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie kontaktu',
 
 	// Blocks
-	'LBL_CONTACT_INFORMATION' => 'Informacje podstawowe',
+	'LBL_CONTACT_INFORMATION' => 'Podstawowe informacje',
 	'LBL_CUSTOMER_PORTAL_INFORMATION' => 'Dostęp do portalu Klienta',
 	'LBL_IMAGE_INFORMATION' => 'Informacje dotyczące zdjęcia',
 
@@ -37,14 +37,16 @@ $languageStrings = array(
 	'Mailing State' => 'Dane adresowe - województwo',
 	'Mailing Zip' => 'Dane adresowe - kod pocztowy',
 	'Mailing Country' => 'Dane adresowe - kraj',
-	'Mailing PO Box' => 'Dane adresowe - skrytka pocztowa',
+	'Mailing Po Box' => 'Dane adresowe - skrytka pocztowa',
 	'Other Street' => 'Adres dodatkowy - ulica',
 	'Other City' => 'Adres dodatkowy - miasto',
 	'Other State' => 'Adres dodatkowy - województwo',
 	'Other Zip' => 'Adres dodatkowy - kod pocztowy',
 	'Other Country' => 'Adres dodatkowy - kraj',
-	'Other PO Box' => 'Adres dodatkowy - skrytka pocztowa',
+	'Other Po Box' => 'Adres dodatkowy - skrytka pocztowa',
 	'Contact Image' => 'Zdjęcie kontaktu',
+    'Support Start Date' => 'Wsparcie Początek',
+    'Support End Date' => 'Data zakończenia wsparcia',
 	
 	//Added for Picklist Values
 	'Mr.'=>'Pan',

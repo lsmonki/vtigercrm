@@ -15,14 +15,14 @@ class Vtiger_Viewer extends SmartyBC {
 	const DEFAULTLAYOUT = 'vlayout';
 	const DEFAULTTHEME  = 'softed';
 	static $currentLayout;
-
+	
 	// Turn-it on to analyze the data pushed to templates for the request.
 	protected static $debugViewer = false;
-
+	
 	/**
 	 * log message into the file if in debug mode.
 	 * @param type $message
-	 * @param type $delimiter
+	 * @param type $delimiter 
 	 */
 	protected function log($message, $delimiter="\n") {
 		static $file = null;
@@ -58,14 +58,14 @@ class Vtiger_Viewer extends SmartyBC {
 			mkdir($compileDir, 0777, true);
 		}
 		$this->setTemplateDir(array($templatesDir));
-		$this->setCompileDir($compileDir);
+		$this->setCompileDir($compileDir);		
 
 		// FOR SECURITY
 		// Escape all {$variable} to overcome XSS
 		// We need to use {$variable nofilter} to overcome double escaping
 		// TODO: Until we review the use disabled.
 		//$this->registerFilter('variable', array($this, 'safeHtmlFilter'));
-
+		
 		// FOR DEBUGGING: We need to have this only once.
 		static $debugViewerURI = false;
 		if (self::$debugViewer && $debugViewerURI === false) {
@@ -75,11 +75,11 @@ class Vtiger_Viewer extends SmartyBC {
 			} else {
 				$debugViewerURI = $_SERVER['REQUEST_URI'];
 			}
-
+			
 			$this->log("URI: $debugViewerURI, TYPE: " . $_SERVER['REQUEST_METHOD']);
 		}
 	}
-
+	
 	function safeHtmlFilter($content, $smarty) {
 		//return htmlspecialchars($content,ENT_QUOTES,UTF-8);
 		// NOTE: to_html is being used as data-extraction depends on this
@@ -139,7 +139,7 @@ class Vtiger_Viewer extends SmartyBC {
 			return "modules/Vtiger/$templateName";
 		}
 	}
-
+	
 	/**
 	 * Function to display/fetch the smarty file contents
 	 * @param <String> $templateName
@@ -150,7 +150,7 @@ class Vtiger_Viewer extends SmartyBC {
 	public function view($templateName, $moduleName='', $fetch=false) {
 		$templatePath = $this->getTemplatePath($templateName, $moduleName);
 		$templateFound = $this->templateExists($templatePath);
-
+		
 		// Logging
 		if (self::$debugViewer) {
 			$templatePathToLog = $templatePath;
@@ -169,7 +169,7 @@ class Vtiger_Viewer extends SmartyBC {
 			}
 		}
 		// END
-
+		
 		if ($templateFound) {
 			if($fetch) {
 				return $this->fetch($templatePath);
@@ -178,7 +178,7 @@ class Vtiger_Viewer extends SmartyBC {
 			}
 			return true;
 		}
-
+		
 		return false;
 	}
 
@@ -198,4 +198,15 @@ function vtemplate_path($templateName, $moduleName='') {
 	$viewerInstance = Vtiger_Viewer::getInstance();
 	$args = func_get_args();
 	return call_user_func_array(array($viewerInstance, 'getTemplatePath'), $args);
+}
+
+/**
+ * Generated cache friendly resource URL linked with version of Vtiger
+ */
+function vresource_url($url) {
+    global $vtiger_current_version;
+    if (stripos($url, '://') === false) {
+        $url = $url .'?v='.$vtiger_current_version;
+    }
+    return $url;
 }

@@ -21,7 +21,7 @@
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 <input type='hidden' value="{$PAGE_NUMBER}" id='pageNumber'>
 <input type='hidden' value="{$PAGING_MODEL->getPageLimit()}" id='pageLimit'>
-<input type="hidden" value="{$LISTVIEW_ENTIRES_COUNT}" id="noOfEntries">
+<input type="hidden" value="{$LISTVIEW_ENTRIES_COUNT}" id="noOfEntries">
 
 {assign var = ALPHABETS_LABEL value = vtranslate('LBL_ALPHABETS', 'Vtiger')}
 {assign var = ALPHABETS value = ','|explode:$ALPHABETS_LABEL}
@@ -60,17 +60,32 @@
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
-				<th width="5%" class="{$WIDTHTYPE}">
+				<th width="5%">
 					<input type="checkbox" id="listViewEntriesMainCheckBox" />
 				</th>
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-				<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if} class="{$WIDTHTYPE}">
+				<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if}>
 					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
 						&nbsp;&nbsp;{if $COLUMN_NAME eq $LISTVIEW_HEADER->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
 				</th>
 				{/foreach}
 			</tr>
 		</thead>
+        {if $MODULE_MODEL->isQuickSearchEnabled()}
+        <tr>
+            <td></td>
+			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
+             <td>
+                 {assign var=FIELD_UI_TYPE_MODEL value=$LISTVIEW_HEADER->getUITypeModel()}
+                {include file=vtemplate_path($FIELD_UI_TYPE_MODEL->getListSearchTemplateName(),$MODULE_NAME)
+                    FIELD_MODEL= $LISTVIEW_HEADER SEARCH_INFO=$SEARCH_DETAILS[$LISTVIEW_HEADER->getName()] USER_MODEL=$CURRENT_USER_MODEL}
+             </td>
+			{/foreach}
+			<td>
+				<button class="btn" data-trigger="listSearch">{vtranslate('LBL_SEARCH', $MODULE )}</button>
+			</td>
+        </tr>
+        {/if}
 		{foreach item=LISTVIEW_ENTRY from=$LISTVIEW_ENTRIES name=listview}
 		<tr class="listViewEntries" data-id='{$LISTVIEW_ENTRY->getId()}' data-recordUrl='{$LISTVIEW_ENTRY->getDetailViewUrl()}' id="{$MODULE}_listView_row_{$smarty.foreach.listview.index+1}">
             <td  width="5%" class="{$WIDTHTYPE}">
@@ -78,8 +93,8 @@
 			</td>
 			{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 			{assign var=LISTVIEW_HEADERNAME value=$LISTVIEW_HEADER->get('name')}
-			<td class="listViewEntryValue {$WIDTHTYPE}" data-field-type="{$LISTVIEW_HEADER->getFieldDataType()}" data-field-name="{$LISTVIEW_HEADER->getFieldName()}" nowrap>
-				{if $LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4'}
+			<td class="listViewEntryValue {$WIDTHTYPE}" data-field-type="{$LISTVIEW_HEADER->getFieldDataType()}" nowrap>
+				{if ($LISTVIEW_HEADER->isNameField() eq true or $LISTVIEW_HEADER->get('uitype') eq '4') and $MODULE_MODEL->isListViewNameFieldNavigationEnabled() eq true }
 					<a href="{$LISTVIEW_ENTRY->getDetailViewUrl()}">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
 				{else if $LISTVIEW_HEADER->get('uitype') eq '72'}
 					{assign var=CURRENCY_SYMBOL_PLACEMENT value={$CURRENT_USER_MODEL->get('currency_symbol_placement')}}
@@ -88,8 +103,27 @@
 					{else}
 						{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 					{/if}
+                                {else if $LISTVIEW_HEADER->get('uitype') eq '11'}
+                                        {assign var=PBXMANAGER_MODULE value='PBXManager'}
+                                        {assign var=MODULEMODEL value=Vtiger_Module_Model::getInstance($PBXMANAGER_MODULE)}
+                                        {if $MODULEMODEL}
+                                            {assign var=PERMISSION value=PBXManager_Server_Model::checkPermissionForOutgoingCall()}
+                                            {if $PERMISSION}
+                                                {assign var=PHONE_FIELD_VALUE value=$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                                                {assign var=PHONE_NUMBER value=$PHONE_FIELD_VALUE|regex_replace:"/[-()\s]/":""}
+                                                <a class="phoneField" data-value="{$PHONE_NUMBER}" record="{$LISTVIEW_ENTRY->getId()}" onclick="Vtiger_PBXManager_Js.registerPBXOutboundCall('{$PHONE_NUMBER}',{$LISTVIEW_ENTRY->getId()})">{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}</a>
+                                            {else}
+                                                {$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                                            {/if}
+                                        {else}
+                                            {$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                                        {/if}
 				{else}
-					{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                    {if $LISTVIEW_HEADER->getFieldDataType() eq 'double'}
+                        {decimalFormat($LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME))}
+                    {else}
+                        {$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
+                    {/if}
 				{/if}
 				{if $LISTVIEW_HEADER@last}
 				</td><td nowrap class="{$WIDTHTYPE}">
@@ -112,7 +146,7 @@
 	</table>
 
 <!--added this div for Temporarily -->
-{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 	<table class="emptyRecordsDiv">
 		<tbody>
 			<tr>

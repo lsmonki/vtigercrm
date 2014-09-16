@@ -36,6 +36,15 @@
                                     </select>
                                 </td>
                             </tr>
+                            {if !$PERMANENT}
+                                <tr>
+                                    <td colspan="2" style="padding-left: 20px;">
+                                        <label class='checkbox'>
+                                            <input type="checkbox" class="checkbox" name="deleteUserPermanent" value="1" >&nbsp;{vtranslate('LBL_DELETE_USER_PERMANENTLY',$MODULE)} 
+                                        </label>
+                                    </td>
+                                </tr>
+                            {/if}
                         </table>
                     </div>
                 </div>

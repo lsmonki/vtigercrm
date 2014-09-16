@@ -35,14 +35,14 @@ class Vtiger_Cache_Connector {
 	public function has($namespace, $key) {
 		return $this->get($namespace, $key) !== false;
 	}
-
+    
     public function flush(){
-        $this->connection->flush();
+        $this->connection->flush(); 
 
-        $time = time()+1; //one second future
-        while(time() < $time) {
-            //sleep
-        }
+        $time = time()+1; //one second future 
+        while(time() < $time) { 
+            //sleep 
+        } 
     }
 
     public static function getInstance() {

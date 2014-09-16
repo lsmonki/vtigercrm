@@ -112,4 +112,8 @@ class Vtiger_RelationAjax_Action extends Vtiger_Action_Controller {
 		$response->setResult($result);
 		$response->emit();
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

@@ -26,5 +26,9 @@ class Vtiger_Picklist_UIType extends Vtiger_Base_UIType {
 	public function getDisplayValue($value) {
 		return Vtiger_Language_Handler::getTranslatedString($value, $this->get('field')->getModuleName());
 	}
+    
+    public function getListSearchTemplateName() {
+        return 'uitypes/PickListFieldSearchView.tpl';
+    }
 
 }

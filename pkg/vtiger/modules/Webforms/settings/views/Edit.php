@@ -26,26 +26,33 @@ Class Settings_Webforms_Edit_View extends Settings_Vtiger_Index_View {
 		$qualifiedModuleName = $request->getModule(false);
 		$mode = '';
 		$selectedFieldsList = $allFieldsList = array();
+		$viewer = $this->getViewer($request);
+		$supportedModules = Settings_Webforms_Module_Model::getSupportedModulesList();
 
 		if ($recordId) {
 			$recordModel = Settings_Webforms_Record_Model::getInstanceById($recordId, $qualifiedModuleName);
 			$selectedFieldsList = $recordModel->getSelectedFieldsList();
 			
-			$allFieldsList = $recordModel->getAllFieldsList();
 			$sourceModule = $recordModel->get('targetmodule');
 			$mode = 'edit';
 		} else {
 			$recordModel = Settings_Webforms_Record_Model::getCleanInstance($qualifiedModuleName);
 			$sourceModule = $request->get('sourceModule');
 			if (!$sourceModule) {
-				$sourceModule = reset(array_keys(Settings_Webforms_Module_Model::getSupportedModulesList()));
+				$sourceModule = reset(array_keys($supportedModules));
 			}
-			$allFieldsList = $recordModel->getAllFieldsList($sourceModule);
+            $recordModel->set('targetmodule',$sourceModule);
+		}
+		if(!$supportedModules[$sourceModule]){
+			$message = vtranslate('LBL_ENABLE_TARGET_MODULES_FOR_WEBFORM',$qualifiedModuleName);
+			$viewer->assign('MESSAGE', $message);
+			$viewer->view('OperationNotPermitted.tpl', 'Vtiger');
+			return false;
 		}
 
+		$allFieldsList = $recordModel->getAllFieldsList($sourceModule);
 		$recordStructure = Vtiger_RecordStructure_Model::getInstanceFromRecordModel($recordModel, Vtiger_RecordStructure_Model::RECORD_STRUCTURE_MODE_EDIT);
 
-		$viewer = $this->getViewer($request);
 		$viewer->assign('MODE', $mode);
 		$viewer->assign('RECORD_ID', $recordId);
 		$viewer->assign('RECORD_MODEL', $recordModel);

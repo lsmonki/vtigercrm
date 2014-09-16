@@ -116,7 +116,8 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 			);
 		}
 
-		if($moduleModel->isCommentEnabled()) {
+		$modCommentsModel = Vtiger_Module_Model::getInstance('ModComments');
+		if($moduleModel->isCommentEnabled() && $modCommentsModel->isPermitted('EditView')) {
 			$massActionLinks[] = array(
 				'linktype' => 'LISTVIEWMASSACTION',
 				'linklabel' => 'LBL_ADD_COMMENT',
@@ -163,6 +164,16 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$queryGenerator = $this->get('query_generator');
 		$listViewContoller = $this->get('listview_controller');
 
+         $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
+
 		$searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
 		$operator = $this->get('operator');
@@ -170,6 +181,7 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
 
+        
         $orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 
@@ -212,24 +224,38 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
                 foreach($referenceModules as $referenceModuleName) {
                     $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
                     $referenceNameFields = $referenceModuleModel->getNameFields();
+
                     $columnList = array();
                     foreach($referenceNameFields as $nameField) {
                         $fieldModel = $referenceModuleModel->getField($nameField);
                         $columnList[] = $fieldModel->get('table').$orderByFieldModel->getName().'.'.$fieldModel->get('column');
                     }
                     if(count($columnList) > 1) {
-                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users').' '.$sortOrder;
+                        $referenceNameFieldOrderBy[] = getSqlForNameInDisplayFormat(array('first_name'=>$columnList[0],'last_name'=>$columnList[1]),'Users', '').' '.$sortOrder;
                     } else {
                         $referenceNameFieldOrderBy[] = implode('', $columnList).' '.$sortOrder ;
                     }
                 }
                 $listQuery .= ' ORDER BY '. implode(',',$referenceNameFieldOrderBy);
-            }else{
+            }
+            else if (!empty($orderBy) && $orderBy === 'smownerid') { 
+                $fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+                if ($fieldModel->getFieldDataType() == 'owner') { 
+                    $orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+                } 
+                $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
+            }
+            else{
                 $listQuery .= ' ORDER BY '. $orderBy . ' ' .$sortOrder;
             }
 		}
 
 		$viewid = ListViewSession::getCurrentView($moduleName);
+		if(empty($viewid)) {
+            $viewid = $pagingModel->get('viewid');
+		}
+        $_SESSION['lvs'][$moduleName][$viewid]['start'] = $pagingModel->get('page');
+
 		ListViewSession::setSessionQuery($moduleName, $listQuery, $viewid);
 
 		$listQuery .= " LIMIT $startIndex,".($pageLimit+1);
@@ -267,12 +293,28 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 
 		$queryGenerator = $this->get('query_generator');
 
+        
+        $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        
+        $glue = "";
+        if(count($queryGenerator->getWhereFields()) > 0 && (count($searchParams)) > 0) {
+            $glue = QueryGenerator::$AND;
+        }
+        $queryGenerator->parseAdvFilterList($searchParams, $glue);
+        
         $searchKey = $this->get('search_key');
 		$searchValue = $this->get('search_value');
 		$operator = $this->get('operator');
 		if(!empty($searchKey)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
+        $moduleName = $this->getModule()->get('name');
+        $moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+        
+        
 
 		$listQuery = $this->getQuery();
 
@@ -361,8 +403,9 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$moduleModel = Vtiger_Module_Model::getInstance($value);
 
 		$queryGenerator = new QueryGenerator($moduleModel->get('name'), $currentUser);
-
-        $listFields = $moduleModel->getPopupFields();
+		
+		$listFields = $moduleModel->getPopupViewFieldsList();
+        
         $listFields[] = 'id';
         $queryGenerator->setFields($listFields);
 
@@ -443,7 +486,9 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 	public function extendPopupFields($fieldsList) {
 		$moduleModel = $this->get('module');
 		$queryGenerator = $this->get('query_generator');
-		$listFields = $moduleModel->getPopupFields();
+
+		$listFields = $moduleModel->getPopupViewFieldsList();
+		
 		$listFields[] = 'id';
 		$listFields = array_merge($listFields, $fieldsList);
 		$queryGenerator->setFields($listFields);

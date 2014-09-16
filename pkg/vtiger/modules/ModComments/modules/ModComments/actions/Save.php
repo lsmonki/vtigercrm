@@ -17,12 +17,16 @@ class ModComments_Save_Action extends Vtiger_Save_Action {
 		$request->set('assigned_user_id', $currentUserModel->getId());
 		$request->set('userid', $currentUserModel->getId());
 		
-		$this->saveRecord($request);
+		$recordModel = $this->saveRecord($request);
+		$responseFieldsToSent = array('reasontoedit','commentcontent');
+		$fieldModelList = $recordModel->getModule()->getFields();
+		foreach ($responseFieldsToSent as $fieldName) {
+            $fieldModel = $fieldModelList[$fieldName];
+            $fieldValue = $recordModel->get($fieldName);
+			$result[$fieldName] = $fieldModel->getDisplayValue(Vtiger_Util_Helper::toSafeHTML($fieldValue));
+		}
 
-		$recordModel = ModComments_Record_Model::getInstanceById($recordId);
 		$result['success'] = true;
-		$result['reasontoedit'] = $recordModel->get('reasontoedit');
-		$result['commentcontent'] = $recordModel->get('commentcontent');
 		$result['modifiedtime'] = Vtiger_Util_Helper::formatDateDiffInStrings($recordModel->get('modifiedtime'));
 		$result['modifiedtimetitle'] = Vtiger_Util_Helper::formatDateTimeIntoDayString($recordModel->get('modifiedtime'));
 
@@ -31,4 +35,40 @@ class ModComments_Save_Action extends Vtiger_Save_Action {
 		$response->setResult($result);
 		$response->emit();
 	}
+	
+	/**
+	 * Function to save record
+	 * @param <Vtiger_Request> $request - values of the record
+	 * @return <RecordModel> - record Model of saved record
+	 */
+	public function saveRecord($request) {
+		$recordModel = $this->getRecordModelFromRequest($request);
+		$recordModel->save();
+		if($request->get('relationOperation')) {
+			$parentModuleName = $request->get('sourceModule');
+			$parentModuleModel = Vtiger_Module_Model::getInstance($parentModuleName);
+			$parentRecordId = $request->get('sourceRecord');
+			$relatedModule = $recordModel->getModule();
+			$relatedRecordId = $recordModel->getId();
+
+			$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relatedModule);
+			$relationModel->addRelation($parentRecordId, $relatedRecordId);
+		}
+		return $recordModel;
+	}
+	
+	/**
+	 * Function to get the record model based on the request parameters
+	 * @param Vtiger_Request $request
+	 * @return Vtiger_Record_Model or Module specific Record Model instance
+	 */
+	protected function getRecordModelFromRequest(Vtiger_Request $request) {
+		$recordModel = parent::getRecordModelFromRequest($request);
+		
+		$recordModel->set('commentcontent', $request->getRaw('commentcontent'));
+		$recordModel->set('reasontoedit', $request->getRaw('reasontoedit'));
+
+		return $recordModel;
+	}
+	
 }

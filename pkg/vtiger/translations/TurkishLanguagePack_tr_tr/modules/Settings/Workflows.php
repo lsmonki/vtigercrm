@@ -19,6 +19,7 @@ $languageStrings = array(
 	'ONCE'                         => 'Until the first time the condition is true', // TODO: Review
 	'ON_EVERY_SAVE'                => 'Every time the record is saved', // TODO: Review
 	'ON_MODIFY'                    => 'Every time a record is modified', // TODO: Review
+        'ON_SCHEDULE'                  => 'Program',
 	'MANUAL'                       => 'System'                      , // TODO: Review
 	'SCHEDULE_WORKFLOW'            => 'Schedule Workflow'           , // TODO: Review
 	'ADD_CONDITIONS'               => 'Add Conditions'              , // TODO: Review
@@ -74,6 +75,33 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'Itibaren',
+	'Optional' => 'Isteğe bağlı',
+	'LBL_ADD_TASK' => 'Add Görev',
+        'Portal Pdf Url' =>'Müşteri Portalı Pdf bağlantı',
+        'LBL_ADD_TEMPLATE' => 'Şablon ekle',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloğu için Grup Taxt',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloğu için bireysel vergi',
+        'LBL_RUN_WORKFLOW' => 'Run Akışı',
+	'LBL_AT_TIME' => 'Zamanda',
+	'LBL_HOURLY' => 'Saatlik',
+	
+	'LBL_DAILY' => 'Günlük',
+	'LBL_WEEKLY' => 'Haftalık',
+	'LBL_ON_THESE_DAYS' => 'Bu günlerde',
+	'LBL_MONTHLY_BY_DATE' => 'Tarih Aylık',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Hafta içi tarafından aylık',
+	'LBL_YEARLY' => 'Yıllık',
+	'LBL_SPECIFIC_DATE' => 'Belirli Date',
+	'LBL_CHOOSE_DATE' => 'Tarih seçin',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Ay Seçin ve Tarih',
+	'LBL_SELECTED_DATES' => 'Seçilen Tarihler',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Maksimum sınırı aşıldı',
+	'LBL_NEXT_TRIGGER_TIME' => 'Sonraki tetik Zaman',
+	'LBL_MESSAGE' => 'Mesaj',
+	
+	//Translation for module
+	'Calendar'						=> 'Yapılacak'						,
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

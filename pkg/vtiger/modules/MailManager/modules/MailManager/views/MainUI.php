@@ -2,29 +2,26 @@
 /*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.1
  * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
+ * The Original Code is: vtiger CRM Open source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
 
-/**
- * Class which controls the MailManager User Interface
- */
 class MailManager_MainUI_View extends MailManager_Abstract_View {
 
     /**
      * Process the request for displaying UI
-     * @global String $currentModule
+     * @global String $moduleName
      * @param Vtiger_Request $request
      * @return MailManager_Response
      */
-	function process(Vtiger_Request $request) {
-		global $currentModule;
+	public function process(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
 		$response = new Vtiger_Response();
 		$viewer = $this->getViewer($request);
 		if($this->getOperationArg($request) == "_quicklinks") {
-			$content = $viewer->view('MainuiQuickLinks.tpl', 'MailManager', true);
+			$content = $viewer->view('MainuiQuickLinks.tpl', $moduleName, true);
 			$response->setResult( array('ui' => $content));
 			return $response;
 		} else {
@@ -40,11 +37,15 @@ class MailManager_MainUI_View extends MailManager_Abstract_View {
 				}
 				$this->closeConnector();
 			}
-			$viewer->assign('MODULE', $currentModule);
-			$content = $viewer->view('Mainui.tpl', 'MailManager', true);
+			$viewer->assign('MODULE', $moduleName);
+			$content = $viewer->view('Mainui.tpl', $moduleName, true);
 			$response->setResult( array('mailbox' => $this->hasMailboxModel(), 'ui' => $content));
 			return $response;
 		}
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateReadAccess(); 
+        } 
 }
 ?>

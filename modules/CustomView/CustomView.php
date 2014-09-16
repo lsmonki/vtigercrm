@@ -8,12 +8,7 @@
  * All Rights Reserved.
  * ****************************************************************************** */
 
-global $calpath;
-global $app_strings, $mod_strings;
-global $app_list_strings;
-global $theme;
-$theme_path = "themes/" . $theme . "/";
-$image_path = $theme_path . "images/";
+require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once 'include/Webservices/Utils.php';
 
@@ -577,12 +572,12 @@ class CustomView extends CRMEntity {
 
 		$lastmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, "01", date("Y")));
 		$lastMonthStartDateTime = new DateTimeField($lastmonth0 . ' ' . date('H:i:s'));
-		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$lastmonth1 = date("Y-m-t", strtotime("last day of previous month"));
 		$lastMonthEndDateTime = new DateTimeField($lastmonth1 . ' ' . date('H:i:s'));
 
 		$nextmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
 		$nextMonthStartDateTime = new DateTimeField($nextmonth0 . ' ' . date('H:i:s'));
-		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$nextmonth1 = date("Y-m-t", strtotime("last day of next month"));
 		$nextMonthEndDateTime = new DateTimeField($nextmonth1 . ' ' . date('H:i:s'));
 
 		$lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
@@ -914,6 +909,13 @@ class CustomView extends CRMEntity {
 					$val = Array();
 					for ($x = 0; $x < count($temp_val); $x++) {
 						if ($col[4] == 'D') {
+                            /** while inserting in db for due_date it was taking date and time values also as it is
+                             * date time field. We only need to take date from that value
+                             */
+                            if($col[0] == "vtiger_activity" && $col[1] == "due_date" ){
+                                $values = explode(' ', $temp_val[$x]);
+                                $temp_val[$x] = $values[0];
+                            }
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDate();
 						} elseif ($col[4] == 'DT') {
@@ -1518,23 +1520,37 @@ class CustomView extends CRMEntity {
 	function getDateforStdFilterBytype($type) {
 		$thisyear = date("Y");
 		$today = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d"), date("Y")));
+        $todayName =  date('l', strtotime( $today));
+
 		$tomorrow = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + 1, date("Y")));
 		$yesterday = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 1, date("Y")));
 
 		$currentmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m"), "01", date("Y")));
 		$currentmonth1 = date("Y-m-t");
 		$lastmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, "01", date("Y")));
-		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$lastmonth1 = date("Y-m-t", strtotime("last day of previous month")); 
 		$nextmonth0 = date("Y-m-d", mktime(0, 0, 0, date("m") + 1, "01", date("Y")));
-		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$nextmonth1 = date("Y-m-t", strtotime("last day of next month"));
 
-		$lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
+        // (Last Week) If Today is "Sunday" then "-2 week Sunday" will give before last week Sunday date
+        if($todayName == "Sunday")
+            $lastweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
+        else
+    		$lastweek0 = date("Y-m-d", strtotime("-2 week Sunday"));
 		$lastweek1 = date("Y-m-d", strtotime("-1 week Saturday"));
 
-		$thisweek0 = date("Y-m-d", strtotime("-1 week Sunday"));
+        // (This Week) If Today is "Sunday" then "-1 week Sunday" will give last week Sunday date
+        if($todayName == "Sunday")
+            $thisweek0 = date("Y-m-d",strtotime("-0 week Sunday"));
+        else
+            $thisweek0 = date("Y-m-d", strtotime("-1 week Sunday"));
 		$thisweek1 = date("Y-m-d", strtotime("this Saturday"));
 
-		$nextweek0 = date("Y-m-d", strtotime("this Sunday"));
+        // (Next Week) If Today is "Sunday" then "this Sunday" will give Today's date
+		if($todayName == "Sunday")
+            $nextweek0 = date("Y-m-d",strtotime("+1 week Sunday"));
+        else
+            $nextweek0 = date("Y-m-d", strtotime("this Sunday"));
 		$nextweek1 = date("Y-m-d", strtotime("+1 week Saturday"));
 
 		$next7days = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + 6, date("Y")));
@@ -1798,9 +1814,7 @@ class CustomView extends CRMEntity {
 
 		// Tabid mapped to the list of block labels to be skipped for that tab.
 		$skipBlocksList = array(
-			getTabid('Contacts') => array('LBL_IMAGE_INFORMATION'),
 			getTabid('HelpDesk') => array('LBL_COMMENTS'),
-			getTabid('Products') => array('LBL_IMAGE_INFORMATION'),
 			getTabid('Faq') => array('LBL_COMMENT_INFORMATION'),
 			getTabid('Quotes') => array('LBL_RELATED_PRODUCTS'),
 			getTabid('PurchaseOrder') => array('LBL_RELATED_PRODUCTS'),

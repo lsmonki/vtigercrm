@@ -38,7 +38,7 @@
                         {if $RELATION_FIELD} data-name="{$RELATION_FIELD->getName()}" {/if}
                 {if $IS_SEND_EMAIL_BUTTON eq true}	onclick="{$RELATED_LINK->getUrl()}" {else} data-url="{$RELATED_LINK->getUrl()}"{/if}
                 {if ($IS_SELECT_BUTTON eq false) and ($IS_SEND_EMAIL_BUTTON eq false)}
-                    name="addButton"><i class="icon-plus icon-white"></i>
+                    name="addButton"><i class="icon-plus"></i>
                 {else}
                     > {* closing the button tag *}
                 {/if}&nbsp;<strong>{$RELATED_LINK->getLabel()}</strong>
@@ -67,14 +67,12 @@
     </span>
 </div>
 <div class="span3">
-    <span class="row-fluid">
-        <span class="span5 pushDown">
-            <span class="pull-right pageNumbers alignTop" data-placement="bottom" data-original-title="" style="margin-top: -5px">
-            {if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{/if}
+    <div class="pull-right">
+        <span class="pageNumbers">
+            <span class="pageNumbersText">{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{else}<span>&nbsp;</span>{/if}</span>
+            <span class="icon-refresh cursorPointer totalNumberOfRecords{if empty($RELATED_RECORDS)} hide{/if}"></span>
         </span>
-    </span>
-    <span class="span7 pull-right">
-        <span class="btn-group pull-right">
+        <span class="btn-group">
             <button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled {/if} type="button"><span class="icon-chevron-left"></span></button>
             <button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}>
                 <i class="vtGlyph vticon-pageJump" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}"></i>
@@ -95,12 +93,11 @@
             </ul>
             <button class="btn" id="relatedListNextPageButton" {if (!$PAGING->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled {/if} type="button"><span class="icon-chevron-right"></span></button>
         </span>
-    </span>
-					</span>
-				</div>
-			</div>
-		</div>
-		<div id="selectAllMsgDiv" class="alert-block msgDiv">
+    </div>
+</div>
+</div>
+</div>
+<div id="selectAllMsgDiv" class="alert-block msgDiv">
     <strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($RELATED_MODULE->get('name'))}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>
 </div>
 <div id="deSelectAllMsgDiv" class="alert-block msgDiv">
@@ -113,38 +110,38 @@
 </div>
 <div class="relatedContents contents-bottomscroll">
     <div class="bottomscroll-div">
-			{assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
+        {assign var=WIDTHTYPE value=$USER_MODEL->get('rowheight')}
         <table class="table table-bordered listViewEntriesTable">
             <thead>
                 <tr class="listViewHeaders">
-						<th width="4%" class="{$WIDTHTYPE}">
+                    <th width="4%">
                         <input type="checkbox" id="listViewEntriesMainCheckBox"/>
                     </th>
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-							<th nowrap class="{$WIDTHTYPE}">
+                        <th nowrap>
                             {if $HEADER_FIELD->get('column') eq 'access_count' or $HEADER_FIELD->get('column') eq 'idlists' }
                                 <a href="javascript:void(0);" class="noSorting">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}</a>
                             {elseif $HEADER_FIELD->get('column') eq 'time_start'}
                             {else}
                                 <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('column')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
-                                    &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE} icon-white">{/if}
+                                    &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('column')}<img class="{$SORT_IMAGE}">{/if}
                                 </a>
                             {/if}
                         </th>
                     {/foreach}
-						<th nowrap colspan="2" class="{$WIDTHTYPE}">
+                    <th nowrap colspan="2">
                         <a href="javascript:void(0);" class="noSorting">{vtranslate('Status', $RELATED_MODULE->get('name'))}</a>
                     </th>
                 </tr>
             </thead>
             {foreach item=RELATED_RECORD from=$RELATED_RECORDS}
                 <tr class="listViewEntries" data-id='{$RELATED_RECORD->getId()}' data-recordUrl='{$RELATED_RECORD->getDetailViewUrl()}'>
-						<td width="4%" class="{$WIDTHTYPE}">
+                    <td width="4%" class="{$WIDTHTYPE}">
                         <input type="checkbox" value="{$RELATED_RECORD->getId()}" class="listViewEntriesCheckBox"/>
                     </td>
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
                         {assign var=RELATED_HEADERNAME value=$HEADER_FIELD->get('name')}
-							<td nowrap class="{$WIDTHTYPE}">
+                        <td nowrap class="{$WIDTHTYPE}">
                             {if $HEADER_FIELD->isNameField() eq true or $HEADER_FIELD->get('uitype') eq '4'}
                                 <a href="{$RELATED_RECORD->getDetailViewUrl()}">{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
                             {elseif $RELATED_HEADERNAME eq 'access_count'}
@@ -155,20 +152,20 @@
                             {/if}
                         </td>
                     {/foreach}
-						<td nowrap class="{$WIDTHTYPE}">
+                    <td nowrap class="{$WIDTHTYPE}">
                         <span class="currentStatus btn-group">
-                            <span class="statusValue dropdown-toggle" data-toggle="dropdown">{$RELATED_RECORD->get('status')}</span>
+                            <span class="statusValue dropdown-toggle" data-toggle="dropdown">{vtranslate($RELATED_RECORD->get('status'),$MODULE)}</span>
                             <i title="{vtranslate('LBL_EDIT', $MODULE)}" class="icon-arrow-down alignMiddle editRelatedStatus"></i>
                             <ul class="dropdown-menu pull-right" style="margin-right: -28px">
                                 {foreach key=STATUS_ID item=STATUS from=$STATUS_VALUES}
-                                    <li id="{$STATUS_ID}" data-status="{$STATUS}">
-                                        <a>{$STATUS}</a>
+                                    <li id="{$STATUS_ID}" data-status="{vtranslate($STATUS, $MODULE)}">
+                                        <a>{vtranslate($STATUS, $MODULE)}</a>
                                     </li>
                                 {/foreach}
                             </ul>
                         </span>
                     </td>
-						<td nowrap class="{$WIDTHTYPE}">
+                    <td nowrap class="{$WIDTHTYPE}">
                         <div class="pull-right actions">
                             <span class="actionImages">
                                 <a href="{$RELATED_RECORD->getFullDetailViewUrl()}"><i title="{vtranslate('LBL_SHOW_COMPLETE_DETAILS', $MODULE)}" class="icon-th-list alignMiddle"></i></a>&nbsp;

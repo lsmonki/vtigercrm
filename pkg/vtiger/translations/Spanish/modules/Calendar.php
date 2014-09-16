@@ -12,11 +12,11 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Tarea',
+	'SINGLE_Calendar'              => 'calendario',
 	'SINGLE_Events' => 'Evento',
 	'LBL_ADD_TASK'                 => 'Añadir Tarea',
 	'LBL_ADD_EVENT'                => 'Añadir Evento',
@@ -24,6 +24,7 @@ $languageStrings = array(
 	'LBL_EVENTS'                   => 'Eventos',
 	'LBL_TODOS'                    => 'Tareas',
 	'LBL_TASK_INFORMATION'         => 'Detalle Tarea',
+	'LBL_EVENT_INFORMATION'       => 'Detalles del evento',
 	'Subject'                      => 'Asunto',
 	'Start Date & Time'            => 'Fecha y Hora Inicio',
 	'Activity Type'                => 'Tipo Actividad',
@@ -36,6 +37,8 @@ $languageStrings = array(
 	'Call'                         => 'Llamada',
 	'Meeting'                      => 'Reunión',
 	'Planned'                      => 'Planeado',
+        'Held'                         =>   'Celebrada',
+        'Not Held'                     =>   'No Celebrada',
 	'Completed'                    => 'Completado',
 	'Pending Input'                => 'Esperando',
 	'Not Started'                  => 'No Iniciada',
@@ -72,7 +75,19 @@ $languageStrings = array(
 	'Weekly' => 'Semana(s)',
 	'Monthly' => 'Mes(es)',
 	'Yearly' => 'Año',
-	//Import and Export Labels
+	'LBL_DEFAULT_STATUS_TYPE' => 'Tipo de Estado por Defecto',
+	'LBL_STATUS' => 'Estado',
+	'LBL_TYPE' => 'Tipo',
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Editar color',
+	'LBL_ADD_CALENDAR_VIEW' => 'Añadir Vista de Calendario',
+	'LBL_SELECT_USER_CALENDAR' => 'Selecciona Calendario de Usuario',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Selecciona Color de Calendario',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Edición de Vista de Calendario',
+	'LBL_DELETE_CALENDAR' => 'Eliminar Calendario',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Seleccionar el tipo de actividad',
+	'Tasks' => 'Tareas',
+//Import and Export Labels
 	'LBL_IMPORT_RECORDS' => 'Importar Registros',
 	'LBL_RESULT' => 'Resultado',
 	'LBL_FINISH' => 'Terminar',
@@ -84,7 +99,6 @@ $languageStrings = array(
 	'ICAL_FORMAT' => 'Formato iCal',
 	'LBL_LAST_IMPORT_UNDONE'=>'Se ha desecho la última importación',
 	'LBL_UNDO_LAST_IMPORT' => 'Deshacer Ultima Importación'
-
 );
 $jsLanguageStrings = array(
 	'LBL_ADD_EVENT_TASK'           => 'Añadir Evento / Tarea' ,
@@ -145,6 +159,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dic',
 
 	'LBL_ALL_DAY' => 'Todo el Día',
+
+	'Mobile Call' => 'Llamada Móvil',
 	//End
 
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Color de Calendario actualizado correctamente',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => '¿Estás seguro que quieres eliminar esta vista de Calendario?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Vista de Calendario añadido correctamente',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Vista de Calendario eliminado correctamente',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'No hay Vistas de Calendario para añadir',
+	'JS_EDIT_CALENDAR' => 'Editar Calendario',
 );

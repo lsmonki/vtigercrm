@@ -30,5 +30,5 @@ class EmailTemplates_Save_Action extends Vtiger_Save_Action {
 		$loadUrl = $recordModel->getDetailViewUrl();
 		header("Location: $loadUrl");
 	}
-	
+    
 }

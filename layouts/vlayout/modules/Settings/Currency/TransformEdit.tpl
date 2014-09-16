@@ -16,7 +16,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3>{vtranslate('LBL_TRANSFER_CURRENCY', $QUALIFIED_MODULE)}</h3>
         </div>
-        <form id="transformCurrency" class="form-horizontal">
+        <form id="transformCurrency" class="form-horizontal" method="POST">
             <input type="hidden" name="record" value="{$CURRENCY_ID}" />
             <div class="modal-body">
                 <div class="row-fluid">

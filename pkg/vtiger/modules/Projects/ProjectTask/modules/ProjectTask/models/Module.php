@@ -28,6 +28,12 @@ class ProjectTask_Module_Model extends Vtiger_Module_Model {
 				'linkurl' => $this->getListViewUrl(),
 				'linkicon' => '',
 			),
+            array(
+				'linktype' => 'SIDEBARLINK',
+				'linklabel' => 'LBL_MILESTONES_LIST',
+				'linkurl' => $this->getMilestonesListUrl(),
+				'linkicon' => '',
+			),
 		);
 		foreach($quickLinks as $quickLink) {
 			$links['SIDEBARLINK'][] = Vtiger_Link_Model::getInstanceFromValues($quickLink);
@@ -39,6 +45,18 @@ class ProjectTask_Module_Model extends Vtiger_Module_Model {
 	public function getProjectsListUrl() {
 		$taskModel = Vtiger_Module_Model::getInstance('Project');
 		return $taskModel->getListViewUrl();
+	}
+	
+    public function getMilestonesListUrl() {
+    $milestoneModel = Vtiger_Module_Model::getInstance('ProjectMilestone');
+    return $milestoneModel->getListViewUrl();
+}
+	/**
+	 * Function to check whether the module is summary view supported
+	 * @return <Boolean> - true/false
+	 */
+	public function isSummaryViewSupported() {
+		return false;
 	}
 
 }

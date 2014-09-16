@@ -19,6 +19,7 @@ $languageStrings = array(
 	'LBL_EVENTS' => 'Händelser',
 	'LBL_TODOS' => 'Att göra',
 	'LBL_HOLD_FOLLOWUP_ON' => 'Håll uppföljning på',
+    'LBL_CREATE_FOLLOWUP_EVENT'    => 'Skapa Följ upp Händelse',
 	
 	// Blocks
 	'LBL_EVENT_INFORMATION' => 'Händelseuppgifter',
@@ -83,7 +84,7 @@ $languageStrings = array(
 	'Monthly'=>'Månad(s)',
 	'Yearly'=>'År',
 	
-	'LBL_REPEATEVENT' => 'Upprepa en gång i varje',
+	'LBL_REPEATEVENT' => 'En gång i varje',
 	'LBL_UNTIL' => 'tills',
 	'LBL_DAY_OF_THE_MONTH' => 'dagen i månaden',
 	'LBL_ON' => 'på',

@@ -142,7 +142,6 @@ function getToolTipText($view,$fieldname,$module,$value){
  * @param $format - the format in which tooltip has to be formatted; default value will be each entry in single line
  */
 function getToolTip($text,$format = "default"){
-	require_once('Smarty_setup.php');
 	$smarty = new vtigerCRM_Smarty;
 	$tip = "";
 	if(trim(implode('', $text)) == ''){

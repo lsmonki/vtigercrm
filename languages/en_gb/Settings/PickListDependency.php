@@ -26,8 +26,8 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Are you sure you want to delete this picklist dependency?', // TODO: Review
 	'JS_DEPENDENCY_DELETED_SUEESSFULLY' => 'Dependency deleted successfully', // TODO: Review
-	'JS_PICKLIST_DEPENDENCY_SAVED' => 'Picklist Dependency Saved'   , // TODO: Review
-	'JS_DEPENDENCY_ATLEAST_ONE_VALUE' => 'You need to select atleast one value for', // TODO: Review
+	'JS_PICKLIST_DEPENDENCY_SAVED' => 'Picklist Dependency saved'   , // TODO: Review
+	'JS_DEPENDENCY_ATLEAST_ONE_VALUE' => 'You need to select at least one value for', // TODO: Review
 	'JS_SOURCE_AND_TARGET_FIELDS_SHOULD_NOT_BE_SAME' => 'Source field and Target field should not be same', // TODO: Review
 	'JS_SELECT_SOME_VALUE'         => 'Select some value'           , // TODO: Review
 );

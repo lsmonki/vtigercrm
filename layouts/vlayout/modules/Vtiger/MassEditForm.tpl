@@ -30,6 +30,7 @@
         <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
         <input type="hidden" name="operator" value="{$OPERATOR}" />
         <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
+        <input type="hidden" name="search_params" value='{ZEND_JSON::encode($SEARCH_PARAMS)}' />
         
         <input type="hidden" id="massEditFieldsNameList" data-value='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($MASS_EDIT_FIELD_DETAILS))}' />
 		<div name='massEditContent'>

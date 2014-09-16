@@ -8,19 +8,19 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP' => 'Transfer ownership',
-	'SINGLE_Groups' => 'Group',
-	'LBL_TO_OTHER_GROUP' => 'To Other Group ',
 	'LBL_ADD_RECORD' => 'Add Group',
-	'LBL_GROUP_NAME' => 'Group Name',
-	'LBL_GROUP_MEMBERS' => 'Group Members',
 	'LBL_ADD_USERS_ROLES' => 'Add Users, Roles...',
-	'LBL_ROLEANDSUBORDINATE' => 'Role and Subordinates',
-	'RoleAndSubordinates' => 'Role and Subordinates',
 	'LBL_DUPLICATES_EXIST' => 'Group Name already Exists',
+	'LBL_GROUP_MEMBERS' => 'Group Members',
+	'LBL_GROUP_NAME' => 'Group Name',
+	'LBL_ROLEANDSUBORDINATE' => 'Role and Subordinates',
+	'LBL_TO_OTHER_GROUP' => 'To Other Group ',
+	'LBL_TRANSFORM_OWNERSHIP' => 'Transfer ownership',
+	'RoleAndSubordinates' => 'Role and Subordinates',
+	'SINGLE_Groups' => 'Group',
 );
+
 $jsLanguageStrings = array(
 	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group',
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully',
 );
-

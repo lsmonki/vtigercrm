@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-    <form class="form-horizontal" id="mailBoxEditView">
+    <form class="form-horizontal" id="mailBoxEditView" method="POST">
     <div class="modelContainer">
         <div class="modal-header">
             <button data-dismiss="modal" type="button" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>

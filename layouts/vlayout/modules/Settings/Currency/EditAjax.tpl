@@ -24,7 +24,7 @@
                 <h3>{vtranslate('LBL_ADD_NEW_CURRENCY', $QUALIFIED_MODULE)}</h3>
             {/if}
         </div>
-        <form id="editCurrency" class="form-horizontal">
+        <form id="editCurrency" class="form-horizontal" method="POST">
             <input type="hidden" name="record" value="{$CURRENCY_ID}" />
             <div class="modal-body">
                 <div class="row-fluid">

@@ -12,7 +12,7 @@
 {strip}
 <div class="recordNamesList">
 	<div class="row-fluid">
-		<div class="span10">
+		<div class="">
 			<ul class="nav nav-list">
 				{foreach item=recordsModel from=$RECORDS}
 				<li>

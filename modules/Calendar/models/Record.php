@@ -66,6 +66,10 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 			$recurringData['recurringcheck'] = 'Yes';
 			$recurringData['repeat_frequency'] = $recurringObject->getRecurringFrequency();
 			$recurringData['eventrecurringtype'] = $recurringObject->getRecurringType();
+			$recurringEndDate = $recurringObject->getRecurringEndDate(); 
+			if(!empty($recurringEndDate)){ 
+				$recurringData['recurringenddate'] = $recurringEndDate->get_formatted_date(); 
+			} 
 			$recurringInfo = $recurringObject->getUserRecurringInfo();
 
 			if ($recurringObject->getRecurringType() == 'Weekly') {
@@ -103,9 +107,13 @@ class Calendar_Record_Model extends Vtiger_Record_Model {
 		$recurringObject = $this->getRecurringObject();
 		if ($recurringObject) {
 			$recurringInfoDisplayData = $recurringObject->getDisplayRecurringInfo();
+			$recurringEndDate = $recurringObject->getRecurringEndDate(); 
 		} else {
 			$recurringInfoDisplayData['recurringcheck'] = vtranslate('LBL_NO', $currentModule);
 			$recurringInfoDisplayData['repeat_str'] = '';
+		}
+		if(!empty($recurringEndDate)){ 
+			$recurringInfoDisplayData['recurringenddate'] = $recurringEndDate->get_formatted_date(); 
 		}
 
 		return $recurringInfoDisplayData;

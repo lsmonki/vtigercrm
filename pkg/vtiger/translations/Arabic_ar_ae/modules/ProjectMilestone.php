@@ -12,6 +12,9 @@ $languageStrings = array(
 	'SINGLE_ProjectMilestone' => 'احداث المشروع',
 	'LBL_ADD_RECORD' => 'اضافة حدث للمشروع',
 	'LBL_RECORDS_LIST' => 'قائمة احداث المشاريع',
+    'LBL_PROJECTS_LIST' => 'قائمة المشاريع',
+	'LBL_TASKS_LIST' => 'قائمة المهام', 
+    'LBL_MILESTONES_LIST' => 'قائمة المعالم',
 
 	// Blocks
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'تفاصيل احداث المشروع',
@@ -20,5 +23,9 @@ $languageStrings = array(
 	'Project Milestone Name' => 'اسم حدث المشروع',
 	'Milestone Date' => 'تاريخ حدث المشروع',
 	'Project Milestone No' => 'رقم حدث المشروع',
+	//picklist values
+	'administrative' => 'إداري',
+    'operative' => 'المنطوق',
+    'other' => 'آخر',
 	
 );

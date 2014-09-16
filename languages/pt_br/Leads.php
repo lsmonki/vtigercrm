@@ -30,7 +30,8 @@ $languageStrings = array(
 	'Cold'                         => 'Frio'                        , 
 	'Contact in Future'            => 'Contactar no Futuro'         , 
 	'Contacted'                    => 'Contactado'                  , 
-	'Hot'                          => 'Quente'                      , 
+	'Hot'                          => 'Quente'                      ,
+        'Hot Leads'                    => 'Leads quentes',
 	'Junk Lead'                    => 'Descartado'                  , 
 	'Lost Lead'                    => 'Perdido'                     , 
 	'Not Contacted'                => 'Não Contactado'             , 
@@ -47,7 +48,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Alguns dos valores dos campos obrigatórios estão vazios', 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Mapeamento Campos Customizados do Lead', 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
-	'LBL_WEBFORMS'                 => 'Setup Webfroms'              , 
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

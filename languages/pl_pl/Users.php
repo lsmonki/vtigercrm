@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'LBL_ADD_RECORD' => 'Dodaj użytkownika',
 
 	//MyPreference Blocks
 	'LBL_MY_PREFERENCES'  =>  'Moje ustawienia',
@@ -19,6 +20,7 @@ $languageStrings = array(
 	'LBL_USER_ADV_OPTIONS' => 'Opcje zaawansowane użytkownika',
 	'Asterisk Configuration'  =>  'Konfiguracja centrali telefonicznej Asterisk',
 	'LBL_HOME_PAGE_COMPONENTS' => 'Komponenty strony głównej',
+	'LBL_TAG_CLOUD_DISPLAY' => 'Wyświetlanie chmury tagów',
 
 	//MyPreference Fields
 	'Role' => 'Role',
@@ -68,6 +70,10 @@ $languageStrings = array(
 	'Symbol Placement'  =>  'Miejsce symbolu waluty',
 	'Number Of Currency Decimals'  =>  'Liczba miejsc po przecinku dla walut',
 	'Truncate Trailing Zeros'  =>   'Obcinanie końcowych zer',
+	'Default Call Duration' => 'Domyślny czas trwania połączeń (minuty)',
+	'Other Event Duration' => 'Pozostały czas zdarzenia (minuty)',
+	'Calendar Hour Format' => 'Godzinowy format kalendarza',
+	'Tag Cloud' => 'Chmura tagów',
 
 	//Time zones-Dont change any value
     'Kwajalein'  =>  '(UTC-12:00) International Date Line West',
@@ -167,4 +173,71 @@ $languageStrings = array(
     'Pacific/Auckland'  =>  '(UTC+12:00) Auckland',
     'Asia/Magadan'  =>  '(UTC+12:00) Magadan',
     'Pacific/Tongatapu'  =>  '(UTC+13:00) Nukualofa',
+    
+    'LBL_ACTIVE_USERS' => 'Aktywnych użytkowników',
+    'LBL_INACTIVE_USERS' => 'Nieaktywnych użytkowników',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Usuń użytkownika na stałe',
+    'LBL_RESTORE' => 'Przywracać',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Użytkownik odtworzone',
+	'Summary' => 'Podsumowanie',
+	'Detail' => 'Szczegóły',
+	'LBL_USER_LIST_DETAILS' => 'Szczegóły',
+	
+	'LBL_OLD_PASSWORD' => 'Stare hasło',
+	'LBL_CHANGE_PASSWORD' => 'Zmień hasło',
+	'LBL_NEW_PASSWORD' => 'Nowe hasło',
+	'LBL_CONFIRM_PASSWORD' => 'Potwierdź hasło',
+	
+	//Login strings
+	'LBL_TO_CRM' => 'Zaloguj do Vtiger CRM',
+	'LBL_INVALID_USER_OR_PASSWORD' => 'Niepoprawna nazwa użytkownika lub hasło.',
+	'LBL_INVALID_USER_OR_EMAIL' => 'Niepoprawna nazwa uzytkownika lub hasło.',
+	'LBL_EMAIL_SEND' => 'Wysłaliśmy Ci email potrzebny do zresetowania hasła.',
+	'ForgotPassword' => 'Zapomniane hasło',
+	'LBL_CONNECT_WITH_US' => 'Połącz z nami',
+	'LBL_GET_MORE' => 'Wykorzystaj lepiej Vtiger',
+	
+	'LBL_TRANSFER_RECORDS_TO_USER' => 'Przenieś rekordy na użytkownika',
+	'LBL_USER_TO_BE_DELETED' => 'Użytkownik do usunięcia',
+	'Starting Day of the week' => 'Tydzień rozpoczyna od dnia',
+	'Default Record View' => 'Domyślny widok rekordu',
+	'Row Height' => 'Wysokość wiersza',
+	'Left Panel Hide' => 'Ukryj lewy panel',
+	'Medium' => 'Średni',
+	'Wide' => 'Szeroki',
+	'Narrow' => 'Wąski',
+	'LBL_ALMOST_THERE'	=>	'Prawie tam!',
+	'LBL_ABOUT_ME'		=>	'O mnie',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Obiecujemy, aby utrzymać ten prywatny)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Wymagane są wszystkie pola poniżej)',
+	'LBL_GET_STARTED'	=> 'Pierwsze kroki',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Twój numer kontaktowy',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Gdzie jesteś?',
+	'LBL_SELECT_COUNTRY'	=> 'Wybierz Kraj',
+	'LBL_COMPANY_SIZE'		=> 'Wielkość firmy',
+	'LBL_JOB_TITLE'			=> 'Zawód',
+	'LBL_DEPARTMENT'		=> 'Dział',
+	'LBL_BASE_CURRENCY'		=> 'Waluta bazowa',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Wybierz walutę podstawowego',
+	'LBL_OPERATING_CURRENCY'	=> 'Waluta bazowa nie można później modyfikować. Wybierz walutę operacyjny',
+	'LBL_LANGUAGE' => 'Język',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Wybierz język',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Wybierz czasową',
+	'LBL_DATE_FORMAT'		=> 'Format daty',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Wybierz format daty',
+	'LBL_PHONE'	=> 'Telefon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Wpisz swoje stare hasło.',
+	'JS_ENTER_NEW_PASSWORD'=>'Wpisz nowe hasło.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Wpisz potwierdzenie nowego hasła.',
+	'JS_REENTER_PASSWORDS'=>'Wpisz hasła ponownie.  Nowe hasło i potwierdzenie hasła nie są identyczne.',
+	'JS_INVALID_PASSWORD'=>'Musisz podać poprawną nazwę uzytkownika i hasło.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'Nie udało się zmienic hasła dla ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' niepowodzenie. Nowe hasło musi zostać ustawione.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Podano niepoprawne stare hasło. Wpisz ponownie.',
 );

@@ -33,7 +33,7 @@
 						<option></option>
 						<optgroup>
 							{foreach from=$MODULE_FIELDS item=MODULE_FIELD}
-								<option value="{$MODULE_FIELD->getName()}">{vtranslate($MODULE_FIELD->get('label'),$QUALIFIED_MODULE)}</option>
+								<option value="{$MODULE_FIELD->getName()}">{vtranslate($MODULE_FIELD->get('label'),$MODULE_MODEL->get('name'))}</option>
 							{/foreach}
 						</optgroup>
 					</select>
@@ -67,7 +67,7 @@
 			<textarea data-textarea="true" class="fieldValue row-fluid hide"></textarea>
 		</div><br>
 		<div id="rawtext_help" class="alert alert-info helpmessagebox hide">
-			<p><h5>{vtranslate('LBL_EXAMPLE_RAWTEXT',$QUALIFIED_MODULE)}</h5></p>
+			<p><h5>{vtranslate('LBL_RAW_TEXT',$QUALIFIED_MODULE)}</h5></p>
 			<p>2000</p>
 			<p>{vtranslate('LBL_VTIGER',$QUALIFIED_MODULE)}</p>
 		</div>

@@ -16,7 +16,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie Produktu',
 
 	// Blocks
-	'LBL_PRODUCT_INFORMATION' => 'Informacje podstawowe',
+	'LBL_PRODUCT_INFORMATION' => 'Szczegóły produktu',
 	'LBL_IMAGE_INFORMATION' => 'Informacje dotyczące zdjęcia',
 	'LBL_STOCK_INFORMATION' => 'Informacje magazynowe',
 	
@@ -88,4 +88,5 @@ $languageStrings = array(
 	'Sq Ft'=>'m²',
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'Dodaj do Cenników',
+    'LBL_PRODUCTSMOD_DISABLED' => 'Włącz Produkty modułu aby zobaczyć produkty',
 );

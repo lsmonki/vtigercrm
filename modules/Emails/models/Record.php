@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class Emails_Record_Model extends Vtiger_Record_Model {
-	
+
 	/**
 	 * Function to get the Detail View url for the record
 	 * @return <String> - Record Detail View Url
@@ -18,13 +18,16 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		list($parentId, $status) = explode('@', reset(array_filter(explode('|', $this->get('parent_id')))));
 		return 'Javascript:Vtiger_Index_Js.showEmailPreview("'.$this->getId().'","'.$parentId.'")';
 	}
-	
+
 	/**
 	 * Function to save an Email
 	 */
 	public function save() {
-		$this->set('date_start', date('Y-m-d'));
-		$this->set('time_start', date('H:i'));
+            //Opensource fix for MailManager data mail attachment
+		if($this->get('email_flag')!="MailManager"){ 
+                    $this->set('date_start', date('Y-m-d')); 
+                    $this->set('time_start', date('H:i')); 
+                }
 		$this->set('activitytype', 'Emails');
 
 		//$currentUserModel = Users_Record_Model::getCurrentUserModel();
@@ -53,42 +56,69 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 
 		// To eliminate the empty value of an array
 		$toEmailInfo = array_filter($this->get('toemailinfo'));
+        $toMailNamesList = array_filter($this->get('toMailNamesList'));
+        foreach($toMailNamesList as $id => $emailData){
+            foreach($emailData as $key => $email){
+                if($toEmailInfo[$id]){
+                    array_push($toEmailInfo[$id], $email['value']);
+                }
+            }
+        }
+        $emailsInfo = array();
+		foreach ($toEmailInfo as $id => $emails) {
+            foreach($emails as $key => $value){
+                array_push($emailsInfo, $value);
+            }
+		}
+
+        $toFieldData = array_diff(explode(',', $this->get('saved_toid')), $emailsInfo);
+		$toEmailsData = array();
+		$i = 1;
+		foreach ($toFieldData as $value) {
+			$toEmailInfo['to'.$i++] = array($value);
+		}
 		$attachments = $this->getAttachmentDetails();
 		$status = false;
-		
+
 		// Merge Users module merge tags based on current user.
 		$mergedDescription = getMergedDescription($this->get('description'), $currentUserModel->getId(), 'Users');
 
 		foreach($toEmailInfo as $id => $emails) {
-			$parentModule = $this->getEntityType($id);
 			$mailer->reinitialize();
 			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
-			
 			$old_mod_strings = vglobal('mod_strings');
+			$description = $this->get('description');
+
+			$parentModule = $this->getEntityType($id);
+			if ($parentModule) {
 			$currentLanguage = Vtiger_Language_Handler::getLanguage();
 			$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage,$parentModule);
 			vglobal('mod_strings', $moduleLanguageStrings['languageStrings']);
-			
+
 			if ($parentModule != 'Users') {
 				// Apply merge for non-Users module merge tags.
 				$description = getMergedDescription($mergedDescription, $id, $parentModule);
 			} else {
 				// Re-merge the description for user tags based on actual user.
-				$description = getMergedDescription($this->get('description'), $id, 'Users');
+					$description = getMergedDescription($description, $id, 'Users');
+					vglobal('mod_strings', $old_mod_strings);
+				}
 			}
-			vglobal('mod_strings', $old_mod_strings);
-			
+
 			if (strpos($description, '$logo$')) {
 				$description = str_replace('$logo$',"<img src='cid:logo' />", $description);
 				$logo = true;
 			}
 
 			foreach($emails as $email) {
-				$mailer->Body = $this->getTrackImageDetails($id, $this->isEmailTrackEnabled());
+				$mailer->Body = '';
+				if ($parentModule) {
+					$mailer->Body = $this->getTrackImageDetails($id, $this->isEmailTrackEnabled());
+				}
 				$mailer->Body .= $description;
 				$mailer->Signature = str_replace(array('\r\n', '\n'),'<br>',$currentUserModel->get('signature'));
 				if($mailer->Signature != '') {
-					$mailer->Body.= decode_html($mailer->Signature);
+					$mailer->Body.= '<br><br>'.decode_html($mailer->Signature);
 				}
 				$mailer->Subject = $this->get('subject');
 				$mailer->AddAddress($email);
@@ -104,7 +134,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				}
 				if ($logo) {
 					//While sending email template and which has '$logo$' then it should replace with company logo
-					$mailer->AddEmbeddedImage(vimage_path('logo_mail.jpg'), 'logo', 'logo.jpg', 'base64', 'image/jpg');
+					$mailer->AddEmbeddedImage(dirname(__FILE__).'/../../../layouts/vlayout/skins/images/logo_mail.jpg', 'logo', 'logo.jpg', 'base64', 'image/jpg');
 				}
 
 				$ccs = array_filter(explode(',',$this->get('ccmail')));
@@ -120,7 +150,15 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 			$status = $mailer->Send(true);
 			if(!$status) {
 				$status = $mailer->getError();
-			}
+			} else {
+                $mailString=$mailer->getMailString();
+                $mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+                $folderName = $mailBoxModel->folder();
+                if(!empty($folderName) && !empty($mailString)) {
+                    $connector = MailManager_Connector_Connector::connectorWithModel($mailBoxModel, '');
+                    imap_append($connector->mBox, $connector->mBoxUrl.$folderName, $mailString, "\\Seen");
+                }
+            }
 		}
 		return $status;
 	}
@@ -166,10 +204,19 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		}
 
 		$documentsList = $this->getRelatedDocuments();
-		$count = count($documentsList);
 
-		for($i=0; $i<$count; $i++) {
-			$attachmentsList[] = $documentsList[$i];
+        //Attachments are getting duplicated when forwarding a mail in Mail Manager.
+		if($documentsList) {
+			foreach ($documentsList as $document) {
+				$flag = false;
+				foreach ($attachmentsList as $attachment) {
+					if($attachment['fileid'] == $document['fileid']) {
+						$flag = true;
+						break;
+					}
+				}
+				if(!$flag) $attachmentsList[] = $document;
+			}
 		}
 
 		return $attachmentsList;
@@ -388,6 +435,24 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 		return false;
 	}
 
+        //Opensource fix for data updation for mail attached from mailmanager
+        public function isFromMailManager(){ 
+            if(!array_key_exists('email_flag', $this->getData())){ 
+                    $db = PearDatabase::getInstance(); 
+                    $query = 'SELECT email_flag FROM vtiger_emaildetails WHERE emailid=?'; 
+                    $result = $db->pquery($query,array($this->getId())); 
+                    if($db->num_rows($result)>0) { 
+                            $this->set('email_flag',$db->query_result($result,0,'email_flag')); 
+                    } else { 
+                            //If not row exits then make it as false 
+                            return false; 
+                    } 
+            } 
+            if($this->get('email_flag') == "MailManager"){ 
+                    return true; 
+            } 
+            return false; 
+        } 
 	function getEntityType($id) {
 		$db = PearDatabase::getInstance();
 		$moduleModel = $this->getModule();

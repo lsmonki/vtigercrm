@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
-	
+
 	/**
 	 * Static Function to get the Instance of Vtiger ListView model for a given module and custom view
 	 * @param <String> $moduleName - Module Name
@@ -22,16 +22,18 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
 
 		$modelClassName = Vtiger_Loader::getComponentClassName('Model', 'ListView', $moduleName);
 		$instance = new $modelClassName();
-		
+
 		$sourceModuleModel = Vtiger_Module_Model::getInstance($sourceModule);
 		$queryGenerator = new QueryGenerator($sourceModuleModel->get('name'), $currentUser);
-		$queryGenerator->initForDefaultCustomView();
-		
+		$cvidObj = CustomView_Record_Model::getAllFilterByModule($sourceModuleModel->get('name')); 
+        $cvid = $cvidObj->getId('cvid'); 
+        $queryGenerator->initForCustomViewById($cvid);
+
 		$controller = new ListViewController($db, $currentUser, $queryGenerator);
 
 		return $instance->set('module', $sourceModuleModel)->set('query_generator', $queryGenerator)->set('listview_controller', $controller);
 	}
-	
+
 	/**
 	 * Function to get the list view entries
 	 * @param Vtiger_Paging_Model $pagingModel
@@ -45,7 +47,7 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
 
 		$queryGenerator = $this->get('query_generator');
 		$listViewContoller = $this->get('listview_controller');
-        
+
         $orderBy = $this->getForSql('orderby');
 		$sortOrder = $this->getForSql('sortorder');
 
@@ -53,13 +55,19 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
             $columnFieldMapping = $moduleModel->getColumnFieldMapping();
             $orderByFieldName = $columnFieldMapping[$orderBy];
             $orderByFieldModel = $moduleModel->getField($orderByFieldName);
-            if($orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
+            if($orderByFieldModel && $orderByFieldModel->getFieldDataType() == Vtiger_Field_Model::REFERENCE_TYPE){
                 //IF it is reference add it in the where fields so that from clause will be having join of the table
                 $queryGenerator = $this->get('query_generator');
                 $queryGenerator->addWhereField($orderByFieldName);
             }
         }
-        
+		if (!empty($orderBy) && $orderBy === 'smownerid') {
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel);
+			if ($fieldModel->getFieldDataType() == 'owner') {
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)';
+			}
+		}
+
 		$listQuery = $this->getQuery();
 		$listQuery = preg_replace("/vtiger_crmentity.deleted\s*=\s*0/i", 'vtiger_crmentity.deleted = 1', $listQuery);
 
@@ -67,13 +75,13 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		if(!empty($orderBy)) {
-            if($orderByFieldModel->isReferenceField()){
+            if($orderByFieldModel && $orderByFieldModel->isReferenceField()){
                 $referenceModules = $orderByFieldModel->getReferenceList();
                 $referenceNameFieldOrderBy = array();
                 foreach($referenceModules as $referenceModuleName) {
                     $referenceModuleModel = Vtiger_Module_Model::getInstance($referenceModuleName);
                     $referenceNameFields = $referenceModuleModel->getNameFields();
-                    
+
                     $columnList = array();
                     foreach($referenceNameFields as $nameField) {
                         $fieldModel = $referenceModuleModel->getField($nameField);
@@ -112,7 +120,7 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
 		}
 		return $listViewRecordModels;
 	}
-	
+
 	/**
 	 * Function to get the list view entries
 	 * @param Vtiger_Paging_Model $pagingModel
@@ -144,5 +152,5 @@ class RecycleBin_ListView_Model extends Vtiger_ListView_Model {
 		$listViewCount = $db->query_result($listResult, 0, 'count');
 		return $listViewCount;
 	}
-	
+
 }

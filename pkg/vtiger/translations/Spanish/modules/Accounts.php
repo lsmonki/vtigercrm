@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-07-14
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -42,9 +42,10 @@ $languageStrings = array(
 	'Investor'                     => 'Inversor',
 	'Press'                        => 'Prensa',
 	'Prospect'                     => 'Prospecto',
+        'Prospect Accounts'            => 'Cuentas Prospect',
 	'Reseller'                     => 'Revendedor',
-	'LBL_START_DATE'               => 'Inicio',
-	'LBL_END_DATE'                 => 'Vencimiento',
+	'LBL_START_DATE'               => 'Fecha de inicio',
+	'LBL_END_DATE'                 => 'Fecha de finalización',
 	'LBL_DUPLICATES_EXIST'         => 'Una cuenta con este nombre ya existe',
 	'LBL_COPY_SHIPPING_ADDRESS' => 'Copiar Dirección Envío',
 	'LBL_COPY_BILLING_ADDRESS' => 'Copiar Dirección Facturación',

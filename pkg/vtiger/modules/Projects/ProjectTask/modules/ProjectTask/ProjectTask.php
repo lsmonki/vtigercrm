@@ -7,9 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/CRMEntity.php');
-require_once('data/Tracker.php');
-
 class ProjectTask extends CRMEntity {
     var $db, $log; // Used in class functions of CRMEntity
 
@@ -387,7 +384,7 @@ class ProjectTask extends CRMEntity {
 			}
         }
     }
-	
+
 	/**
 	 * Function to check the module active and user action permissions before showing as link in other modules
 	 * like in more actions of detail view(Projects).
@@ -399,7 +396,7 @@ class ProjectTask extends CRMEntity {
 		}
 		return false;
 	}
-	
+
     /**
      * Handle saving related module information.
      * NOTE: This function has been added to CRMEntity (base class).

@@ -83,7 +83,7 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 			} else {
 				
 				// We need these information to push for Update if module is detected to be present.
-				$moduleLicence = $package->getLicense();
+				$moduleLicence = vtlib_purify($package->getLicense());
 				
 				$viewer->assign("MODULEIMPORT_FILE", $uploadFile);
 				$viewer->assign("MODULEIMPORT_TYPE", $package->type());
@@ -104,59 +104,8 @@ class Settings_ModuleManager_ModuleImport_View extends Settings_Vtiger_Index_Vie
 		}
 		$viewer->view('ImportUserModuleStep2.tpl', $qualifiedModuleName);
 	}
-	
-	public function importUserModuleStep3(Vtiger_Request $request){
-		$viewer = $this->getViewer($request);
-		$qualifiedModuleName = $request->getModule(false);
-		$importModuleName = $request->get('module_import_name');
-		$uploadFile = $request->get('module_import_file');
-		$uploadDir = Settings_ModuleManager_Extension_Model::getUploadDirectory();
-		$uploadFileName = "$uploadDir/$uploadFile";
-		checkFileAccess($uploadFileName);
-		
-		$importType = $request->get('module_import_type');
-		if(strtolower($importType) == 'language') {
-			$package = new Vtiger_Language();
-		} else {
-			$package = new Vtiger_Package();
-		}
 
-		$package->import($uploadFileName);
-		checkFileAccessForDeletion($uploadFileName);
-		unlink($uploadFileName);
-		
-		$viewer->assign("IMPORT_MODULE_NAME", $importModuleName);
-		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-		$viewer->view('ImportUserModuleStep3.tpl', $qualifiedModuleName);
-	}
-	
-	public function updateUserModuleStep3(Vtiger_Request $request){
-		$viewer = $this->getViewer($request);
-		$qualifiedModuleName = $request->getModule(false);
-		$importModuleName = $request->get('module_import_name');
-		$uploadFile = $request->get('module_import_file');
-		$uploadDir = Settings_ModuleManager_Extension_Model::getUploadDirectory();
-		$uploadFileName = "$uploadDir/$uploadFile";
-		checkFileAccess($uploadFileName);
-		
-		$importType = $request->get('module_import_type');
-		if(strtolower($importType) == 'language') {
-			$package = new Vtiger_Language();
-		} else {
-			$package = new Vtiger_Package();
-		}
-
-		if (strtolower($importType) == 'language') {
-			$package->import($uploadFileName);
-		} else {
-			$package->update(Vtiger_Module::getInstance($importModuleName), $uploadFileName);
-		}
-		
-		checkFileAccessForDeletion($uploadFileName);
-		unlink($uploadFileName);
-		
-		$viewer->assign("UPDATE_MODULE_NAME", $importModuleName);
-		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
-		$viewer->view('UpdateUserModuleStep3.tpl', $qualifiedModuleName);
-	}
+	public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        }
 }

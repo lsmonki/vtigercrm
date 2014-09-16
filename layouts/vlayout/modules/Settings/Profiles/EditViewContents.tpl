@@ -14,22 +14,23 @@
 		<script type="{$jsModel->getType()}" src="{$jsModel->getSrc()}"></script>
 	{/foreach}
 	<div class="row-fluid padding1per">
-		<span class="span3"><h4>{vtranslate('LBL_COPY_PRIVILEGES_FROM',"Settings:Roles")}</h4></span>
-		<span class="span5">
+		<span class="span2"><h4>{vtranslate('LBL_COPY_PRIVILEGES_FROM',"Settings:Roles")}</h4></span>
+		<span class="span6">
 			<select class="select2" id="directProfilePriviligesSelect" style="min-width : 200px" data-placeholder="{vtranslate('LBL_CHOOSE_PROFILES',$QUALIFIED_MODULE)}">
 				<option></option>
 				{foreach from=$ALL_PROFILES item=PROFILE}
 					{if $PROFILE->isDirectlyRelated() eq false}
 						<option value="{$PROFILE->getId()}" {if $RECORD_ID eq $PROFILE->getId()} selected="" {/if} >{$PROFILE->getName()}</option>
-					{/if}	
+					{/if}
 				{/foreach}
 			</select>
 		</span>
 	</div>
+	<br>
     <div class="summaryWidgetContainer">
         <label class="checkbox">
             <input type="hidden" name="viewall" value="0" />
-            <input type="checkbox" name="viewall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} /> 
+            <input type="checkbox" name="viewall" {if $RECORD_MODEL->hasGlobalReadPermission()}checked="true"{/if} />
             {vtranslate('LBL_VIEW_ALL',$QUALIFIED_MODULE)}
             <span style="margin-left:25px">
                 <i class="icon-info-sign"></i>
@@ -46,7 +47,7 @@
             </span>
         </label>
     </div>
-	<table class="table table-striped table-bordered profilesEditView">
+	<table class="table table-bordered profilesEditView">
 		<thead>
 			<tr class="blockHeader">
 				<th width="30%" style="border-left: 1px solid #DDD !important;">
@@ -107,24 +108,26 @@
 									<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}{if $MODULE_NAME eq 'Calendar'} {vtranslate('LBL_OF', $MODULE_NAME)} {vtranslate('LBL_TASKS', $MODULE_NAME)}{/if}</strong></label>
 									<div class="pull-right">
 										<span class="mini-slider-control ui-slider" data-value="0">
-											<a style="margin-top: 5px" class="ui-slider-handle"></a>
+											<a style="margin-top: 3px" class="ui-slider-handle"></a>
 										</span>
-										<span style="margin-left:15px;">{vtranslate('LBL_INIVISIBLE',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
+										<span style="margin: 0 20px;">{vtranslate('LBL_INIVISIBLE',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 										<span class="mini-slider-control ui-slider" data-value="1">
-											<a style="margin-top: 5px" class="ui-slider-handle"></a>
+											<a style="margin-top: 3px" class="ui-slider-handle"></a>
 										</span>
-										<span style="margin-left:15px;">{vtranslate('LBL_READ_ONLY',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
+										<span style="margin: 0 20px;">{vtranslate('LBL_READ_ONLY',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 										<span class="mini-slider-control ui-slider" data-value="2">
-											<a style="margin-top: 5px" class="ui-slider-handle"></a>
+											<a style="margin-top: 3px" class="ui-slider-handle"></a>
 										</span>
-										<span style="margin-left:15px;">{vtranslate('LBL_WRITE',$QUALIFIED_MODULE)}</span>
+										<span style="margin: 0 20px;">{vtranslate('LBL_WRITE',$QUALIFIED_MODULE)}</span>
 									</div>
 									<div class="clearfix"></div>
 								</div>
-								<table class="table table-bordered table-striped">
+								<table class="table table-bordered">
+                                    {assign var=COUNTER value=0}
 									{foreach from=$PROFILE_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
+                                        {if $FIELD_MODEL->isActiveField()}
 										{assign var="FIELD_ID" value=$FIELD_MODEL->getId()}
-										{if $smarty.foreach.fields.index % 3 == 0}
+										{if $COUNTER % 3 == 0}
 											<tr>
 											{/if}
 											<td style="border-left: 1px solid #DDD !important;">
@@ -135,18 +138,22 @@
 												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
 											</div>
 										</td>
-										{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}
+										{if $smarty.foreach.fields.last OR ($COUNTER+1) % 3 == 0}
 										</tr>
 									{/if}
+                                        {assign var=COUNTER value=$COUNTER+1}
+                                        {/if}
 								{/foreach}
 							</table>
 							{if $MODULE_NAME eq 'Calendar'}
 								{assign var=EVENT_MODULE value=$PROFILE_MODULES[16]}
+                                {assign var=COUNTER value=0}
 								<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS', $QUALIFIED_MODULE)} {vtranslate('LBL_OF', $EVENT_MODULE->getName())} {vtranslate('LBL_EVENTS', $EVENT_MODULE->getName())}</strong></label>
-								<table class="table table-bordered table-striped">
+								<table class="table table-bordered">
 									{foreach from=$EVENT_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
+                                        {if $FIELD_MODEL->isActiveField()}
 										{assign var="FIELD_ID" value=$FIELD_MODEL->getId()}
-										{if $smarty.foreach.fields.index % 3 == 0}
+										{if $COUNTER % 3 == 0}
 										<tr>
 										{/if}
 										<td style="border-left: 1px solid #DDD !important;">
@@ -157,9 +164,11 @@
 												{if $FIELD_MODEL->isMandatory()}<span class="redColor">*</span>{/if} {vtranslate($FIELD_MODEL->get('label'), $MODULE_NAME)}
 											</div>
 										</td>
-										{if $smarty.foreach.fields.last OR ($smarty.foreach.fields.index+1) % 3 == 0}
+										{if $smarty.foreach.fields.last OR ($COUNTER+1) % 3 == 0}
 										</tr>
 										{/if}
+                                        {assign var=COUNTER value=$COUNTER+1}
+                                        {/if}
 									{/foreach}
 								</table>
 							{/if}
@@ -173,14 +182,14 @@
 				<td colspan="6" class="row-fluid" style="padding-left: 5%;padding-right: 5%;background-image: none !important;">
 					<div class="row-fluid hide" data-togglecontent="{$TABID}-fields">
 						<div class="span12"><label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_TOOLS',$QUALIFIED_MODULE)}</strong></label></div>
-						<table class="table table-bordered table-striped">
+						<table class="table table-bordered">
 							{assign var=UTILITY_ACTION_COUNT value=0}
 							{assign var="ALL_UTILITY_ACTIONS_ARRAY" value=array()}
 							{foreach from=$ALL_UTILITY_ACTIONS item=ACTION_MODEL}
 								{if $ACTION_MODEL->isModuleEnabled($PROFILE_MODULE)}
 									{assign var="testArray" array_push($ALL_UTILITY_ACTIONS_ARRAY,$ACTION_MODEL)}
 								{/if}
-							{/foreach}	
+							{/foreach}
 							{foreach from=$ALL_UTILITY_ACTIONS_ARRAY item=ACTION_MODEL name="actions"}
 								{if $smarty.foreach.actions.index % 3 == 0}
 									<tr>
@@ -191,7 +200,7 @@
 										{assign var="colspan" value=4-$index}
 										colspan="{$colspan}"
 										{else}
-											style="border-right: 1px solid #DDD !important;" 	
+											style="border-right: 1px solid #DDD !important;"
 											{/if}>
 												<input type="checkbox" class="alignTop" {if empty($RECORD_ID)} checked="true" {/if} name="permissions[{$TABID}][actions][{$ACTIONID}]" {if $RECORD_MODEL->hasModuleActionPermission($PROFILE_MODULE, $ACTIONID)}checked="true"{/if}> {$ACTION_MODEL->getName()}</td>
 												{if $smarty.foreach.actions.last OR ($smarty.foreach.actions.index+1) % 3 == 0}

@@ -32,9 +32,7 @@ class Google_Contacts_Model extends WSAPP_SyncRecordModel {
      * @return <string> $first name
      */
     function getFirstName() {
-        $name = $this->data['entity']->getName();
-        $arr = explode(' ', trim($name), -1);
-        $fname = implode($arr);
+        $fname = $this->data['entity']->name->givenName->text;
         return $fname;
     }
 
@@ -43,9 +41,7 @@ class Google_Contacts_Model extends WSAPP_SyncRecordModel {
      * @return <string> Last name
      */
     function getLastName() {
-        $name = $this->data['entity']->getName();
-        $arr = explode(' ', trim($name));
-        $lname = $arr[count($arr) - 1];
+        $lname = $this->data['entity']->name->familyName->text;
         return $lname;
     }
 
@@ -91,11 +87,24 @@ class Google_Contacts_Model extends WSAPP_SyncRecordModel {
         if (!empty($arr)) {
             $addresses = array();
             foreach ($arr as $i => $address) {
-                array_push($addresses, $address->getValue());
+                $addresses['street']=$address->getStreet()->text; 
+                $addresses['city']=$address->getCity()->text; 
+                $addresses['zip']=$address->getPostcode()->text; 
+                $addresses['state']=$address->getRegion()->text; 
+                $addresses['country']=$address->getCountry()->text; 
             }
             return $addresses;
         }
         return null;
+    }
+    
+    function getTitle() {
+        return $this->data['entity']->organization->orgTitle->text;
+    }
+    
+    function getAccountName() {
+        $orgName = $this->data['entity']->organization->orgName->text;
+        return $orgName;
     }
 
     /**

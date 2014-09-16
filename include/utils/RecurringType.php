@@ -25,6 +25,7 @@ class RecurringType {
 	var $rptmonth_daytype;
 	var $recurringdates = array();
 	var $reminder;
+	var $recurringenddate; 
 
 	/**
 	 * Constructor for class RecurringType
@@ -36,6 +37,7 @@ class RecurringType {
 		$st_time = explode(":", $repeat_arr["starttime"]);
 		$end_date = explode("-", $repeat_arr["enddate"]);
 		$end_time = explode(":", $repeat_arr['endtime']);
+		$recurringenddate = explode("-", $repeat_arr["recurringenddate"]); 
 
 		$start_date = Array(
 			'day' => $st_date[2],
@@ -51,8 +53,14 @@ class RecurringType {
 			'hour' => $end_time[0],
 			'min' => $end_time[1]
 		);
+		$recurringenddate = Array( 
+			'day' => $recurringenddate[2], 
+			'month' => $recurringenddate[1], 
+			'year' => $recurringenddate[0], 
+		); 
 		$this->startdate = new vt_DateTime($start_date, true);
 		$this->enddate = new vt_DateTime($end_date, true);
+		$this->recurringenddate = new vt_DateTime($recurringenddate, true); 
 
 		$this->recur_type = $repeat_arr['type'];
 		$this->recur_freq = $repeat_arr['repeat_frequency'];
@@ -77,6 +85,10 @@ class RecurringType {
 		$endDateObj = DateTimeField::convertToDBTimeZone($requestArray["enddate"] . ' ' . $requestArray['endtime']);
 		$requestArray['enddate'] = $endDate = $endDateObj->format('Y-m-d');
 		$requestArray['endtime'] = $endTime = $endDateObj->format('H:i');
+		if(!empty($requestArray["recurringenddate"])){ 
+			$reccurringDateObj = DateTimeField::convertToDBTimeZone($requestArray["recurringenddate"] . ' ' . $requestArray['endtime']); 
+			$requestArray['recurringenddate'] = $reccurringDateObj->format('Y-m-d'); 
+		} 
 
 		if ($requestArray['sun_flag']) {
 			$requestArray['dayofweek_to_repeat'][] = 0;
@@ -162,6 +174,7 @@ class RecurringType {
 
 		$repeatInfo['type'] = $resultRow['recurringtype'];
 		$repeatInfo['repeat_frequency'] = $resultRow['recurringfreq'];
+		$repeatInfo['recurringenddate'] = $resultRow['recurringenddate']; 
 
 		$recurringInfoString = $resultRow['recurringinfo'];
 		$recurringInfo = explode('::', $recurringInfoString);
@@ -193,6 +206,9 @@ class RecurringType {
 	function getRecurringFrequency() {
 		return $this->recur_freq;
 	}
+	function getRecurringEndDate() { 
+		return $this->recurringenddate; 
+	} 
 
 	function getDBRecurringInfoString() {
 		$recurringType = $this->getRecurringType();
@@ -279,7 +295,7 @@ class RecurringType {
 			for ($i = 0; $i < $noOfDays; ++$i) {
 				$translatedRepeatDays[] = getTranslatedString('LBL_DAY' . $recurringInfo['dayofweek_to_repeat'][$i], $currentModule);
 			}
-			$displayRecurringData['repeat_str'] = implode(',', $translatedRepeatDays);
+			$displayRecurringData['repeat_str'] = getTranslatedString('On', $currentModule).' '.implode(',', $translatedRepeatDays);
 		} elseif ($this->getRecurringType() == 'Monthly') {
 
 			$translatedRepeatDays = array();
@@ -294,7 +310,7 @@ class RecurringType {
 				$displayRecurringData['repeatMonth_day'] = $recurringInfo['dayofweek_to_repeat'][0];
 				$translatedRepeatDay = getTranslatedString('LBL_DAY' . $recurringInfo['dayofweek_to_repeat'][0], $currentModule);
 
-				$displayRecurringData['repeat_str'] = getTranslatedString('on', $currentModule)
+				$displayRecurringData['repeat_str'] = getTranslatedString('On', $currentModule)
 						. ' ' . getTranslatedString($recurringInfo['repeatmonth_daytype'], $currentModule)
 						. ' ' . $translatedRepeatDay;
 			}

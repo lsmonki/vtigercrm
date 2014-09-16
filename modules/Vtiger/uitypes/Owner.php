@@ -28,6 +28,10 @@ class Vtiger_Owner_UIType extends Vtiger_Base_UIType {
 			$userModel = Users_Record_Model::getCleanInstance('Users');
 			$userModel->set('id', $value);
 			$detailViewUrl = $userModel->getDetailViewUrl();
+            $currentUser = Users_Record_Model::getCurrentUserModel();
+            if(!$currentUser->isAdminUser()){
+                return getOwnerName($value);
+            }
 		} else {
             $currentUser = Users_Record_Model::getCurrentUserModel();
             if(!$currentUser->isAdminUser()){
@@ -63,4 +67,8 @@ class Vtiger_Owner_UIType extends Vtiger_Base_UIType {
 		}
 		return 'Group';
 	}
+    
+    public function getListSearchTemplateName() {
+        return 'uitypes/OwnerFieldSearchView.tpl';
+    }
 }

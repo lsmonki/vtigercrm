@@ -37,4 +37,7 @@ class Settings_Webforms_Delete_Action extends Settings_Vtiger_Index_Action {
 		return $response;
 	}
 
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

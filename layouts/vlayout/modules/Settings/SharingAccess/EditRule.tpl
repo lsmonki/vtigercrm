@@ -20,7 +20,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3>{vtranslate('LBL_ADD_CUSTOM_RULE_TO', $QUALIFIED_MODULE)}&nbsp;{vtranslate($MODULE_MODEL->get('name'), $MODULE)}</h3>
         </div>
-        <form id="editCustomRule" class="form-horizontal">
+        <form id="editCustomRule" class="form-horizontal" method="POST">
             <input type="hidden" name="for_module" value="{$MODULE_MODEL->get('name')}" />
             <input type="hidden" name="record" value="{$RULE_ID}" />
             <div class="modal-body">

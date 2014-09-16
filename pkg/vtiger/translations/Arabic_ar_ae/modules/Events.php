@@ -19,6 +19,7 @@ $languageStrings = array(
 	'LBL_EVENTS' => 'الاحداث',
 	'LBL_TODOS' => 'للعمل',
 	'LBL_HOLD_FOLLOWUP_ON' => 'استمرار المتابعة في',
+    'LBL_CREATE_FOLLOWUP_EVENT'    => 'خلق متابعة الحدث',
 	
 	// Blocks
 	'LBL_EVENT_INFORMATION' => 'تفاصيل الحدث',
@@ -83,7 +84,7 @@ $languageStrings = array(
 	'Monthly'=>'شهر',
 	'Yearly'=>'سنة',
 	
-	'LBL_REPEATEVENT' => 'كرر مرة واحدة كل',
+	'LBL_REPEATEVENT' => 'مرة واحدة في كل',
 	'LBL_UNTIL' => 'حتى',
 	'LBL_DAY_OF_THE_MONTH' => 'يوم من الشهر',
 	'LBL_ON' => 'on',

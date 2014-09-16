@@ -11,7 +11,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2013-05-10
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  *************************************************************************************/
 $languageStrings = array(
@@ -71,6 +71,8 @@ $languageStrings = array(
 	'TextArea' => 'Area de Texto',
 	'Skype'=>'Skype',
 	'Time'=>'Hora',
+	//Translation for module
+	'Calendar' => 'Calendario',
 );
 
 $jsLanguageStrings = array(

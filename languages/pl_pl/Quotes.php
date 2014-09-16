@@ -18,7 +18,7 @@ $languageStrings = array(
 	'LBL_RECORD_SUMMARY' => 'Podsumowanie Oferty',
 
 	// Blocks
-	'LBL_QUOTE_INFORMATION' => 'Informacje podstawowe',
+	'LBL_QUOTE_INFORMATION' => 'Cytat deatils',
 	
 	//Field Labels
 	'Quote No'=>'Numer oferty',
@@ -29,5 +29,6 @@ $languageStrings = array(
 
 	'Accepted'=>'Zaakceptowana',
 	'Rejected'=>'Odrzucona',
+        'Open Quotes'=>'Otwarte Cytaty',
 
 );

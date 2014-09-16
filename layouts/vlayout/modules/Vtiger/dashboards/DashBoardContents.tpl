@@ -11,7 +11,7 @@
 -->*}
 {strip}
 
-<div class="gridster span" style="width: 98%;">
+<div class="gridster">
 	<ul>
 	{assign var=COLUMNS value=2}
 	{assign var=ROW value=1}

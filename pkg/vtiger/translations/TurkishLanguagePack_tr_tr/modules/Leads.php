@@ -30,7 +30,8 @@ $languageStrings = array(
 	'Cold'                         => 'Soğuk'                      , 
 	'Contact in Future'            => 'Gelecekte Ara'               , 
 	'Contacted'                    => 'Arandı'                     , 
-	'Hot'                          => 'Sıcak'                      , 
+	'Hot'                          => 'Sıcak'                      ,
+        'Hot Leads'                    => 'Sıcak İlanlar',
 	'Junk Lead'                    => 'Kötü Kaynak'               , 
 	'Lost Lead'                    => 'Kaybedilmiş Kaynak'         , 
 	'Not Contacted'                => 'İrtibatageçilemedi'        , 
@@ -47,7 +48,6 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Mandatory fields are empty'  , 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Leads Field Mapping'         , 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
-	'LBL_WEBFORMS'                 => 'Setup Webfroms'              , 
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

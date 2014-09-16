@@ -110,7 +110,7 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$pagingModel->calculatePageRange($dummyListEntries);
 
 		$viewer->assign('IGNORE_EMPTY', $ignoreEmpty);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT', $rowCount);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT', $rowCount);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('PAGING_MODEL', $pagingModel);
@@ -130,6 +130,12 @@ class Vtiger_FindDuplicates_View extends Vtiger_List_View {
 		$moduleName = $request->getModule();
 		$duplicateSearchFields = $request->get('fields');
 		$dataModelInstance = Vtiger_FindDuplicate_Model::getInstance($moduleName);
+
+		$ignoreEmpty = $request->get('ignoreEmpty');
+		$ignoreEmptyValue = false;
+		if($ignoreEmpty == 'on' || $ignoreEmpty == 'true' || $ignoreEmpty == '1') $ignoreEmptyValue = true;
+		$dataModelInstance->set('ignoreEmpty', $ignoreEmptyValue);
+
 		$dataModelInstance->set('fields', $duplicateSearchFields);
 		$count = $dataModelInstance->getRecordCount();
 

@@ -86,7 +86,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Are we trying to import language package?
+	 * Are we trying to import layout package?
 	 */
 	function isLanguageType($zipfile =null) {
 		if(!empty($zipfile)) {
@@ -99,6 +99,46 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if($packagetype) {
 			$lcasetype = strtolower($packagetype);
 			if($lcasetype == 'language') return true;
+		}
+                if($packagetype) {
+			$lcasetype = strtolower($packagetype);
+			if($lcasetype == 'layout') return true;
+		}
+		return false;
+	}
+        
+        /**
+	 * Are we trying to import extension package?
+	 */
+	function isExtensionType($zipfile =null) {
+		if(!empty($zipfile)) {
+			if(!$this->checkZip($zipfile)) {
+				return false;
+			}
+		}
+		$packagetype = $this->type();
+
+                if($packagetype) {
+			$lcasetype = strtolower($packagetype);
+			if($lcasetype == 'extension') return true;
+		}
+		return false;
+	}
+        
+        /**
+	 * Are we trying to import language package?
+	 */
+	function isLayoutType($zipfile =null) {
+		if(!empty($zipfile)) {
+			if(!$this->checkZip($zipfile)) {
+				return false;
+			}
+		}
+		$packagetype = $this->type();
+
+                if($packagetype) {
+			$lcasetype = strtolower($packagetype);
+			if($lcasetype == 'layout') return true;
 		}
 		return false;
 	}
@@ -145,12 +185,13 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 		$manifestxml_found = false;
 		$languagefile_found = false;
+                $layoutfile_found = false;
 		$vtigerversion_found = false;
 
 		$modulename = null;
 		$language_modulename = null;
 
-		foreach($filelist as $filename=>$fileinfo) {
+                foreach($filelist as $filename=>$fileinfo) {
 			$matches = Array();
 			preg_match('/manifest.xml/', $filename, $matches);
 			if(count($matches)) {
@@ -170,7 +211,13 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				if($this->isLanguageType()) {
 					$languagefile_found = true; // No need to search for module language file.
 					break;
-				} else {
+				}else if($this->isLayoutType()){
+                                    $layoutfile_found = true; // No need to search for module language file.
+                                    break;
+                                }else if($this->isExtensionType()){
+                                    $extensionfile_found = true; // No need to search for module language file.
+                                    break;
+                                }else {
 					continue;
 				}
 			}
@@ -185,7 +232,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			if(count($matches)) { $language_modulename = $matches[1]; }
 		}
 
-		// Verify module language file.
+                // Verify module language file.
 		if(!empty($language_modulename) && $language_modulename == $modulename) {
 			$languagefile_found = true;
 		}
@@ -203,6 +250,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if($manifestxml_found && $languagefile_found && $vtigerversion_found)
 			$validzip = true;
 
+                if($manifestxml_found && $layoutfile_found && $vtigerversion_found)
+			$validzip = true;
+                
+                if($manifestxml_found && $extensionfile_found && $vtigerversion_found)
+			$validzip = true;
+                
 		if($validzip) {
 			if(!empty($this->_modulexml->license)) {
 				if(!empty($this->_modulexml->license->inline)) {
@@ -231,7 +284,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function getModuleNameFromZip($zipfile) {
 		if(!$this->checkZip($zipfile)) return null;
 
-		return (string)$this->_modulexml->name;
+                return (string)$this->_modulexml->name;
 	}
 
 	/**
@@ -273,7 +326,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				Array(
 					// Include only file/folders that need to be extracted
 					'include' => Array('templates', "modules/$module", 'cron', 'languages',
-						'settings/actions', 'settings/views', 'settings/models', 'settings/templates'),
+						'settings/actions', 'settings/views', 'settings/models', 'settings/templates', 'settings/connectors', 'settings/libraries',
+						"$module.png"),
 					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
 				),
 				// What files needs to be renamed?
@@ -286,12 +340,16 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					'settings/actions' => "modules/Settings/$module/actions",
 					'settings/views' => "modules/Settings/$module/views",
 					'settings/models' => "modules/Settings/$module/models",
-
+                                        'settings/connectors' => "modules/Settings/$module/connectors",
+                                        'settings/libraries' => "modules/Settings/$module/libraries",
 					// Settings templates folder
-					'settings/templates' => "layouts/vlayout/modules/Settings/$module"
+					'settings/templates' => "layouts/vlayout/modules/Settings/$module",
+                                        //module images
+					'images' => "layouts/vlayout/skins/images/$module",
+                                        'settings' => "modules/Settings",
 				)
 			);
-			
+
 			if($unzip->checkFileExistsInRootFolder("$module.png")) {
 				$unzip->unzip("$module.png", "layouts/vlayout/skins/images/$module.png");
 			}
@@ -327,7 +385,40 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function getVersion() {
 		return $this->_modulexml->version;
 	}
+        
+        /**
+	 * Get package author name
+	 * @access private
+	 */
+	function getAuthorName() {
+		return $this->_modulexml->authorname;
+	}
 
+        /**
+	 * Get package author phone number
+	 * @access private
+	 */
+	function getAuthorPhone() {
+		return $this->_modulexml->authorphone;
+	}
+        
+        /**
+	 * Get package author phone email
+	 * @access private
+	 */
+	function getAuthorEmail() {
+		return $this->_modulexml->authoremail;
+	}
+        
+        /**
+	 * Get package author phone email
+	 * @access private
+	 */
+	function getDescription() {
+		return $this->_modulexml->description;
+	}
+        
+        
 	/**
 	 * Import Module from zip file
 	 * @param String Zip file name
@@ -435,7 +526,13 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		/**
 		 * Record the changes in schema file
 		 */
-		$schemafile = fopen("modules/$modulenode->name/schema.xml", 'w');
+                
+        if(file_exists("modules/$modulenode->name")){
+            $fileToOpen = "modules/$modulenode->name/schema.xml";
+        } else if(file_exists("modules/Settings/$modulenode->name")){
+            $fileToOpen = "modules/Settings/$modulenode->name/schema.xml";
+        }
+		$schemafile = fopen($fileToOpen, 'w');
 		if($schemafile) {
 			fwrite($schemafile, "<?xml version='1.0'?>\n");
 			fwrite($schemafile, "<schema>\n");
@@ -572,7 +669,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			}
 			$fieldInstance->setRelatedModules($relatedmodules);
 		}
-
+                
+                // Set summary field if marked in xml
+                if(!empty($fieldnode->summaryfield)) {
+                    $fieldInstance->setSummaryField($fieldnode->summaryfield);
+                }
+                
 		$this->__AddModuleFieldToCache($moduleInstance, $fieldnode->fieldname, $fieldInstance);
 		return $fieldInstance;
 	}
@@ -748,8 +850,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(empty($modulenode->crons) || empty($modulenode->crons->cron)) return;
 		foreach ($modulenode->crons->cron as $cronTask){
 			if(empty($cronTask->status)){
-				$cronTask->status=Vtiger_Cron::$STATUS_ENABLED;
-			}
+                            $cronTask->status = Vtiger_Cron::$STATUS_DISABLED;
+                        } else {
+                            $cronTask->status = Vtiger_Cron::$STATUS_ENABLED;
+                        } 
 			if((empty($cronTask->sequence))){
 				$cronTask->sequence=Vtiger_Cron::nextSequence();
 			}

@@ -72,4 +72,5 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Encuadernado Espiral'        , 
 	'Sq Ft'                        => 'm&sup2;'                     , 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
+    'LBL_PRODUCTSMOD_DISABLED' => 'Habilitar Productos Módulo para ver Productos',
 );

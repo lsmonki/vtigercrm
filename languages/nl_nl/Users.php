@@ -170,4 +170,43 @@ $languageStrings = array(
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
 	'LBL_USER_DELETED_SUCCESSFULLY' => 'Gebruiker succesvol verwijderd',
+    'LBL_ACTIVE_USERS' => 'Actieve gebruikers',
+    'LBL_INACTIVE_USERS' => 'Inactieve gebruikers',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Gebruiker verwijderen permanent',
+    'LBL_RESTORE' => 'Herstellen',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'De gebruiker is succesvol hersteld',
+	'LBL_ALMOST_THERE'	=>	'We zijn er bijna!',
+	'LBL_ABOUT_ME'		=>	'Over mij',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(We beloven om deze prive te houden)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Alle onderstaande velden zijn verplicht)',
+	'LBL_GET_STARTED'	=> 'Aan de slag',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Uw contactpersoon Nummer',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Waar kom je vandaan?',
+	'LBL_SELECT_COUNTRY'	=> 'Kies een land',
+	'LBL_COMPANY_SIZE'		=> 'Bedrijfsgrootte',
+	'LBL_JOB_TITLE'			=> 'Vacature titel',
+	'LBL_DEPARTMENT'		=> 'Afdeling',
+	'LBL_BASE_CURRENCY'		=> 'Basisvaluta',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Kies basisvaluta',
+	'LBL_OPERATING_CURRENCY'	=> 'Basisvaluta kan later niet worden gewijzigd. Selecteer uw besturingssysteem valuta',
+	'LBL_LANGUAGE' => 'Taal',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Kies Taal',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Kies Tijdzone',
+	'LBL_DATE_FORMAT'		=> 'Date Format',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Kies datumnotatie',
+	'LBL_PHONE'	=> 'Telefoon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

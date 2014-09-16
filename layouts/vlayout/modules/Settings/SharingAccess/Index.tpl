@@ -28,7 +28,15 @@
 				<hr>
 			</div>
 			
-			<table class="table table-bordered table-condensed equalSplit sharingAccessDetails">
+			<table class="table table-bordered table-condensed sharingAccessDetails">
+				<colgroup>
+					<col width="20%">
+					<col width="15%">
+					<col width="15%">
+					<col width="20%">
+					<col width="10%">
+					<col width="20%">
+				</colgroup>
 				<thead>
 					<tr class="blockHeader">
 						<th>
@@ -46,17 +54,17 @@
 				<tbody>
 					<tr data-module-name="Calendar">
 						<td>{'SINGLE_Calendar'|vtranslate:'Calendar'}</td>
-						<td class="row-fluid">
-							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
+						<td class="">
+							<div><input type="radio" disabled="disabled" /></div>
 						</td>
-						<td class="row-fluid">
-							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
+						<td class="">
+							<div><input type="radio" disabled="disabled" /></div>
 						</td>
-						<td class="row-fluid">
-							<div><input type="radio" style="margin-left: 25%" disabled="disabled" /></div>
+						<td class="">
+							<div><input type="radio" disabled="disabled" /></div>
 						</td>
-						<td class="row-fluid">
-							<div><input type="radio" style="margin-left: 25%" checked="true" disabled="disabled" /></div>
+						<td class="">
+							<div><input type="radio" checked="true" disabled="disabled" /></div>
 						</td>
 						<td>
 							<div class="row-fluid">
@@ -64,7 +72,6 @@
 								<div class="span6">
 									<button type="button" class="btn btn-mini vtButton arrowDown row-fluid" disabled="disabled" ><img src="layouts/vlayout/skins/images/Arrow-down.png"></img></button>
 								</div>
-								<div class="span3">&nbsp;</div>
 							</div>
 						</td>
 					</tr>
@@ -78,9 +85,9 @@
 							{/if}
 						</td>
 						{foreach from=$ALL_ACTIONS key=ACTION_ID item=ACTION_MODEL}
-						<td class="row-fluid">
+						<td class="">
 							{if $ACTION_MODEL->isModuleEnabled($MODULE_MODEL)}
-								<div><input style="margin-left: 25%" type="radio" name="permissions[{$TABID}]" data-action-state="{$ACTION_MODEL->getName()}" value="{$ACTION_ID}"{if $MODULE_MODEL->getPermissionValue() eq $ACTION_ID}checked="true"{/if}></div>
+								<div><input type="radio" name="permissions[{$TABID}]" data-action-state="{$ACTION_MODEL->getName()}" value="{$ACTION_ID}"{if $MODULE_MODEL->getPermissionValue() eq $ACTION_ID}checked="true"{/if}></div>
 							{/if}
 						</td>
 						{/foreach}
@@ -91,7 +98,6 @@
 									<button type="button" class="btn btn-mini vtButton arrowDown row-fluid" data-handlerfor="fields" data-togglehandler="{$TABID}-rules"><img src="layouts/vlayout/skins/images/Arrow-down.png"></img></button>
 									<button type="button" class="btn btn-mini vtButton arrowUp row-fluid hide" data-handlerfor="fields" data-togglehandler="{$TABID}-rules"><img src="layouts/vlayout/skins/images/Arrow-up.png"></img></button>
 								</div>
-								<div class="span3">&nbsp;</div>
 							</div>
 						</td>
 					</tr>

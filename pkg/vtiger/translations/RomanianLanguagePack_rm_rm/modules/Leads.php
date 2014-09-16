@@ -30,7 +30,8 @@ $languageStrings = array(
 	'Cold'                         => 'Rece'                        , 
 	'Contact in Future'            => 'Contact de viitor'           , 
 	'Contacted'                    => 'Contactat'                   , 
-	'Hot'                          => 'Fierbinte'                   , 
+	'Hot'                          => 'Fierbinte'                   ,
+        'Hot Leads'                    => 'Oportunitati Hot',
 	'Junk Lead'                    => 'Prospectare Junk'            , 
 	'Lost Lead'                    => 'Prospectare pierduta'        , 
 	'Not Contacted'                => 'N-a fost contactat'          , 
@@ -47,7 +48,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Mandatory fields are empty'  , 
 	'LBL_LEADS_FIELD_MAPPING'      => 'Leads Field Mapping'         , 
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Edit Field Mapping'          , 
-	'LBL_WEBFORMS'                 => 'Setup Webfroms'              , 
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Select Contacts to proceed'  , 

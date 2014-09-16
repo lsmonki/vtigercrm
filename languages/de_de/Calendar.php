@@ -8,8 +8,8 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_Calendar'              => 'Aufgabe'                     , 
-	'LBL_ADD_TASK'                 => 'Add Task'                    , 
+	'SINGLE_Calendar'              => 'To Do'                     , 
+	'LBL_ADD_TASK'                 => 'Add To Do'                    , 
 	'LBL_ADD_EVENT'                => 'erstelle Ereignis'           , 
 	'LBL_RECORDS_LIST'             => 'Listenansicht'               , 
 	'LBL_EVENTS'                   => 'Ereignisse'                  , 
@@ -22,7 +22,8 @@ $languageStrings = array(
 	'LBL_MINUTES'                  => 'Minutes'                     , 
 	'LBL_SELECT_USERS'             => 'Select Users'                , 
 	'LBL_EVENT_OR_TASK'            => 'Termin / Aufgabe'                ,
-	'LBL_TASK_INFORMATION'         => 'Aufgabeninformation'         , 
+	'LBL_TASK_INFORMATION'         => 'To Do Informationen'         , 
+    'LBL_EVENT_INFORMATION'        => 'Weitere Informationen zur Veranstaltung'               ,
 	'Subject'                      => 'Betreff'                     , 
 	'Start Date & Time'            => 'Termin beginnt'              , 
 	'Activity Type'                => 'Aktivitätentyp'             , 
@@ -37,6 +38,8 @@ $languageStrings = array(
 	'Meeting'                      => 'Meeting'                     , 
 	'Task'                         => 'Task'                        , 
 	'Planned'                      => 'geplant'                     , 
+        'Held'                         => 'Besitz',
+        'Not Held'                     => 'Nicht gehaltene',
 	'Completed'                    => 'abgeschlossen'               , 
 	'Pending Input'                => 'erwarte Zuarbeit'            , 
 	'Not Started'                  => 'nicht begonnen'              , 
@@ -44,7 +47,8 @@ $languageStrings = array(
 	'Medium'                       => 'mittel'                      , 
 	'LBL_CHANGE_OWNER'             => 'Besitzer wechseln'           , 
 	'LBL_EVENT'                    => 'Ereignis'                    , 
-	'LBL_TASK'                     => 'Aufgabe'                     , 
+	'LBL_TASK'                     => 'To Do'                     , 
+	'LBL_TASKS'						=> 'To Do',
 	'LBL_CALENDAR_VIEW'            => 'Calendar View'               , 
 	'LBL_SHARED_CALENDAR'          => 'Shared Calendar'             , 
 	'LBL_DAY0'                     => 'Sunday'                      , 
@@ -62,16 +66,24 @@ $languageStrings = array(
 	'Weekly'                       => 'Week(s)'                     , 
 	'Monthly'                      => 'Month(s)'                    , 
 	'Yearly'                       => 'Year'                        , 
+        'LBL_DEFAULT_STATUS_TYPE'      => 'Standard Status & Type'      ,
+        'LBL_STATUS'                   => 'Status'                      ,
+        'LBL_TYPE'                     => 'Typ',
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Farbe bearbeiten',
+	'LBL_ADD_CALENDAR_VIEW' => 'In Kalenderansicht',
+	'LBL_SELECT_USER_CALENDAR' => 'Wählen Sie User Kalender',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Wählen Sie Kalender Farbe',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Bearbeiten von Kalender-Ansicht',
+	'LBL_DELETE_CALENDAR' => 'Löschen Kalender',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Wählen Aktivitätstyp',
+	'Tasks' => 'Aufgaben',
 );
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK'           => 'Add Event / Task'            , 
+	'LBL_ADD_EVENT_TASK'           => 'Add Event / To Do'            , 
 	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', 
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , 
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , 
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', 
-	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , 
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads',
-        'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Kann nicht For Future gehalten zu werden',
+    'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Kann nicht For Future gehalten zu werden',
 	
 	//Calendar view label translation
 	'LBL_MONTH' => 'Month',
@@ -122,5 +134,15 @@ $jsLanguageStrings = array(
 	'LBL_DEC' => 'Dec',
 	
 	'LBL_ALL_DAY' => 'All-Day',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Farbe Kalenderansicht erfolgreich aktualisiert',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Sind Sie sicher, dass Sie diese Ansicht Kalender löschen?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Kalenderansicht erfolgreich hinzugefügt',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Kalenderansicht erfolgreich gelöscht',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Kein Kalender-Ansicht hinzufügen',
+	'JS_EDIT_CALENDAR' => 'Kalender bearbeiten',
 );

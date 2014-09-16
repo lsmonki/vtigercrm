@@ -69,6 +69,10 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 			$viewer->assign('ALPHABET_VALUE',$searchValue);
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
+        $searchParams = $request->get('search_params');
+        if(!empty($searchParams)) {
+            $viewer->assign('SEARCH_PARAMS',$searchParams);
+        }
 
 		echo $viewer->view('MassEditForm.tpl',$moduleName,true);
 	}
@@ -100,6 +104,11 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 			$viewer->assign('ALPHABET_VALUE',$searchValue);
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
+
+        $searchParams = $request->get('search_params');
+        if(!empty($searchParams)) {
+            $viewer->assign('SEARCH_PARAMS',$searchParams);
+        }
 
 		echo $viewer->view('AddCommentForm.tpl',$moduleName,true);
 	}
@@ -206,6 +215,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 
 		$viewer = $this->getViewer($request);
 		$viewer->assign('MODULE', $moduleName);
+        $viewer->assign('SOURCE_MODULE',$sourceModule);
 		$viewer->assign('VIEWNAME', $cvId);
 		$viewer->assign('SELECTED_IDS', $selectedIds);
 		$viewer->assign('EXCLUDED_IDS', $excludedIds);
@@ -220,6 +230,18 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 			$viewer->assign('ALPHABET_VALUE',$searchValue);
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
+        
+        $searchParams = $request->get('search_params');
+        if(!empty($searchParams)) {
+            $viewer->assign('SEARCH_PARAMS',$searchParams);
+        }
+
+		$to = $request->get('to');
+		if (!$to) {
+			$to = array();
+		}
+		$viewer->assign('TO', $to);
+
 		$parentModule = $request->get('sourceModule');
 		$parentRecord = $request->get('sourceRecord');
 		if (!empty($parentModule)) {
@@ -252,7 +274,6 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$user = Users_Record_Model::getCurrentUserModel();
         $moduleModel = Vtiger_Module_Model::getInstance($sourceModule);
         $phoneFields = $moduleModel->getFieldsByType('phone');
-
 		$viewer = $this->getViewer($request);
 		
 		if(count($selectedIds) == 1){
@@ -277,6 +298,11 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
             $viewer->assign('SEARCH_KEY',$searchKey);
 		}
 
+        $searchParams = $request->get('search_params');
+        if(!empty($searchParams)) {
+            $viewer->assign('SEARCH_PARAMS',$searchParams);
+        }
+        
 		echo $viewer->view('SendSMSForm.tpl', $moduleName, true);
 	}
 
@@ -285,11 +311,13 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 	 * @param Vtiger_Request $request
 	 * @return integer
 	 */
-	function getRecordsListFromRequest(Vtiger_Request $request) {
+	function getRecordsListFromRequest(Vtiger_Request $request, $module = false) {
 		$cvId = $request->get('viewname');
 		$selectedIds = $request->get('selected_ids');
 		$excludedIds = $request->get('excluded_ids');
-
+        if(empty($module)) {
+            $module = $request->getModule();
+        }
 		if(!empty($selectedIds) && $selectedIds != 'all') {
 			if(!empty($selectedIds) && count($selectedIds) > 0) {
 				return $selectedIds;
@@ -300,7 +328,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 		$sourceModule = $request->get('sourceModule');
 		if ($sourceRecord && $sourceModule) {
 			$sourceRecordModel = Vtiger_Record_Model::getInstanceById($sourceRecord, $sourceModule);
-			return $sourceRecordModel->getSelectedIdsList($request->getModule(), $excludedIds);
+			return $sourceRecordModel->getSelectedIdsList($module, $excludedIds);
 		}
 
 		$customViewModel = CustomView_Record_Model::getInstanceById($cvId);
@@ -313,7 +341,8 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 				$customViewModel->set('search_key', $searchKey);
 				$customViewModel->set('search_value', $searchValue);
 			}
-			return $customViewModel->getRecordIds($excludedIds,$request->getModule());
+            $customViewModel->set('search_params', $request->get('search_params'));
+			return $customViewModel->getRecordIds($excludedIds,$module);
 		}
 	}
 
@@ -356,6 +385,7 @@ class Vtiger_MassActionAjax_View extends Vtiger_IndexAjax_View {
 	function transferOwnership(Vtiger_Request $request){
 		$module = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($module);
+
 		$relatedModules = $moduleModel->getRelations();
 		//User doesn't have the permission to edit related module,
 		//then don't show that module in related module list.

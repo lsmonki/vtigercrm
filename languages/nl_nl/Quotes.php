@@ -19,5 +19,6 @@ $languageStrings = array(
 	'Valid Till'                   => 'Geldig tot'                  , 
 	'Inventory Manager'            => 'Voorraad manager'            , 
 	'Accepted'                     => 'Geaccepteerd'                , 
-	'Rejected'                     => 'Geweigerd'                   , 
+	'Rejected'                     => 'Geweigerd'                   ,
+        'Open Quotes'                  => 'Open Quotes',
 );

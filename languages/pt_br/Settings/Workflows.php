@@ -76,6 +76,14 @@ $languageStrings = array(
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
 	'LBL_FROM' => 'De',
 	'Optional' => 'Opcional',
+	'LBL_ADD_TASK' => 'Add Tarefa',
+    'Portal Pdf Url' =>'Portal do Cliente ligação Pdf',
+    'LBL_ADD_TEMPLATE' => 'Adicionar modelo',
+    'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems bloco para o imposto de Grupo',
+    'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloco de imposto Individual',
+	
+	//Translation for module
+	'Calendar'					  => 'Que fazer'					,
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

@@ -23,6 +23,7 @@ $languageStrings = array(
 	'ONCE' => 'Tylko raz, gdy warunki zostaną spełnione',
 	'ON_EVERY_SAVE' => 'Za każdym razem, gdy rekord jest zapisywany',
 	'ON_MODIFY' => 'Za każdym razem, gdy rekord jest modyfikowany',
+        'ON_SCHEDULE' => 'Harmonogram',
 	'MANUAL' => 'Określone przez system',
 	'SCHEDULE_WORKFLOW' => 'Harmonogram obiegu informacji',
 	'ADD_CONDITIONS' => 'Dodaj warunek',
@@ -83,7 +84,32 @@ $languageStrings = array(
 	'LBL_EXAMPLE_FIELD_NAME' => 'Pole',
 	'LBL_NOTIFY_OWNER' => 'notify_owner',
 	'LBL_ANNUAL_REVENUE' => 'annual_revenue',
-	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end"
+	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",
+        'LBL_FROM' => 'Z',
+	'Optional' => 'Fakultatywny',
+	'LBL_ADD_TASK' => 'Dodaj zadanie',
+        'Portal Pdf Url' =>'Portal Pdf WWW',
+        'LBL_ADD_TEMPLATE' => 'Dodaj szablon',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'LineItems Zablokuj podatku grupy',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'LineItems bloku dla poszczególnych podatku',
+        'LBL_RUN_WORKFLOW' => 'Uruchom Workflow',
+	'LBL_AT_TIME' => 'Na czas',
+	'LBL_HOURLY' => 'Po godzinach',
+	
+	'LBL_DAILY' => 'Codziennie',
+	'LBL_WEEKLY' => 'Tygodniowy',
+	'LBL_ON_THESE_DAYS' => 'W tych dniach',
+	'LBL_MONTHLY_BY_DATE' => 'Miesięcznie przez Data',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Miesiąc przez dzień roboczy',
+	'LBL_YEARLY' => 'Rocznie',
+	'LBL_SPECIFIC_DATE' => 'Na określoną datę',
+	'LBL_CHOOSE_DATE' => 'Wybierz datę',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Wybierz miesiąc i dzień',
+	'LBL_SELECTED_DATES' => 'Wybranych terminach',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Maksymalny limit przekroczony',
+	'LBL_NEXT_TRIGGER_TIME' => 'Następnym razem, wyzwalanie',
+	'LBL_MESSAGE' => 'Wiadomość',
+	
 
 	
 );

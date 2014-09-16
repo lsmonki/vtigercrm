@@ -9,6 +9,13 @@
  ************************************************************************************/
 
 class Users_SystemSetupSave_Action extends Users_Save_Action {
+    
+        function checkPermission(Vtiger_Request $request) {
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		if(!$currentUser->isAdminUser() && !$currentUser->isAccountOwner()) {
+			throw new AppException(vtranslate('LBL_PERMISSION_DENIED', 'Vtiger'));
+		}
+	}
 	
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();

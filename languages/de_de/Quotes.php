@@ -19,5 +19,6 @@ $languageStrings = array(
 	'Valid Till'                   => 'Ablauf Bindefrist'           , 
 	'Inventory Manager'            => 'Bestandsmanager'             , 
 	'Accepted'                     => 'akzeptiert'                  , 
-	'Rejected'                     => 'abgelehnt'                   , 
+	'Rejected'                     => 'abgelehnt'                   ,
+        'Open Quotes'                  => 'Offene Zitate',
 );

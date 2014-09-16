@@ -10,32 +10,31 @@
 // Switch the working directory to base
 chdir(dirname(__FILE__) . '/../..');
 
-require_once 'config.php';
-if (file_exists('config_override.php')) {
-    include_once 'config_override.php';
-}
-
-include_once 'includes/main/WebUI.php';
-
+include_once 'include/Zend/Json.php';
+include_once 'vtlib/Vtiger/Module.php';
+include_once 'include/utils/VtlibUtils.php';
 include_once 'include/Webservices/Create.php';
 include_once 'modules/Webforms/model/WebformsModel.php';
 include_once 'modules/Webforms/model/WebformsFieldModel.php';
+include_once 'include/QueryGenerator/QueryGenerator.php';
+include_once 'includes/main/WebUI.php';
 
 class Webform_Capture {
 	
 	function captureNow($request) {
+		$currentLanguage = Vtiger_Language_Handler::getLanguage();
+		$moduleLanguageStrings = Vtiger_Language_Handler::getModuleStringsFromFile($currentLanguage);
+		vglobal('app_strings', $moduleLanguageStrings['languageStrings']);
+		
 		$returnURL = false;
 		try {
-			
-			foreach ($request as $key=>$value) {
-				$request[utf8_decode($key)] = $value;
-			}
 			if(!vtlib_isModuleActive('Webforms')) throw new Exception('webforms is not active');
 			
 			$webform = Webforms_Model::retrieveWithPublicId(vtlib_purify($request['publicid']));
 			if (empty($webform)) throw new Exception("Webform not found.");
 			
 			$returnURL = $webform->getReturnUrl();
+            $roundrobin = $webform->getRoundrobin();
 
 			// Retrieve user information
 			$user = CRMEntity::getInstance('Users');
@@ -49,7 +48,7 @@ class Webform_Capture {
 				if($webformField->getDefaultValue()!=null){
 					$parameters[$webformField->getFieldName()] = decode_html($webformField->getDefaultValue());
 				}else{
-					$webformNeutralizedField = html_entity_decode($webformField->getNeutralizedField());
+					$webformNeutralizedField = html_entity_decode($webformField->getNeutralizedField(),ENT_COMPAT,"UTF-8");
 					if(is_array(vtlib_purify($request[$webformNeutralizedField]))){
 						$fieldData=implode(" |##| ",vtlib_purify($request[$webformNeutralizedField]));
 					}
@@ -61,13 +60,22 @@ class Webform_Capture {
 					$parameters[$webformField->getFieldName()] = stripslashes($fieldData);
 				}
 				if($webformField->getRequired()){
-					if(empty($parameters[$webformField->getFieldName()]))  throw new Exception("Required fields not filled");
+					if(!isset($parameters[$webformField->getFieldName()]))  throw new Exception("Required fields not filled");
 				}
 			}
 
-			$parameters['assigned_user_id'] = vtws_getWebserviceEntityId('Users', $webform->getOwnerId());
-			// Create the record
+			if($roundrobin){
+                $ownerId = $webform->getRoundrobinOwnerId();
+                $ownerType = vtws_getOwnerType($ownerId);
+                $parameters['assigned_user_id'] = vtws_getWebserviceEntityId($ownerType, $ownerId);
+            }
+            else{
+                $ownerId = $webform->getOwnerId();
+                $ownerType = vtws_getOwnerType($ownerId);
+                $parameters['assigned_user_id'] = vtws_getWebserviceEntityId($ownerType, $ownerId);
+            }
 			
+			// Create the record
 			$record=vtws_create($webform->getTargetModule(), $parameters, $user);
 			
 			$this->sendResponse($returnURL, 'ok');

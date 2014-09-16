@@ -29,5 +29,7 @@ $languageStrings = array(
 	//Added for existing Picklist Entries
 
 	'Received Shipment'=>'Przyjęty Transport',
+        'LBL_LIST_PRICE'               => 'Cennik',
+        'List Price'                   => 'Cennik',
 
 );

@@ -63,7 +63,12 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 	 */
 	public function getDefaultUrl() {
 		$moduleModel = $this->getModule();
-		return 'index.php?module='. $moduleModel->getName() .'&parent='. $moduleModel->getParentName() .'&record='. $this->getId();
+		return 'index.php?module=' . $moduleModel->getName() . '&parent=' . $moduleModel->getParentName() . '&record=' . $this->getId();
+	}
+
+	public function getListUrl() {
+		$moduleModel = $this->getModule();
+		return 'index.php?module=' . $moduleModel->getName() . '&parent=' . $moduleModel->getParentName() . '&view=List';
 	}
 
 	/**
@@ -84,15 +89,14 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 		return $url;
 	}
 
-
 	/**
 	 * Function to get Editview url
 	 * @return <String> Url
 	 */
 	public function getEditViewUrl() {
-		return $this->getDefaultUrl(). '&view=Edit';
+		return $this->getDefaultUrl() . '&create=existing&view=Edit';
 	}
-	
+
 	public function  getCreateRuleRecordUrl() {
 		$moduleModel = $this->getModule();
 		$url = 'index.php?module='. $moduleModel->getName() .'&parent=Settings&scannerId='.$this->getId().'&view=EditRule';
@@ -115,24 +119,24 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 	public function getRecordLinks() {
 		$qualifiedModuleName = $this->getModule()->getName(true);
 		$recordLinks = array(
-				array(
-						'linktype' => 'LISTVIEW',
-						'linklabel' => vtranslate('LBL_RULES_LIST', $qualifiedModuleName),
-						'linkurl' => $this->getRulesListUrl(),
-						'linkicon' => ''
-				),
-				array(
-						'linktype' => 'LISTVIEW',
-						'linklabel' => vtranslate('LBL_EDIT', $qualifiedModuleName). ' ' .vtranslate('MAILBOX', $qualifiedModuleName),
-						'linkurl' => 'javascript:Settings_MailConverter_List_Js.triggerEdit("'.$this->getEditViewUrl().'")',
-						'linkicon' => 'icon-pencil'
-				),
-				array(
-						'linktype' => 'LISTVIEW',
-						'linklabel' => vtranslate('LBL_DELETE', $qualifiedModuleName). ' ' .vtranslate('MAILBOX', $qualifiedModuleName),
-						'linkurl' => 'javascript:Settings_MailConverter_List_Js.triggerDelete("'.$this->getDeleteUrl().'")',
-						'linkicon' => 'icon-trash'
-				)
+			array(
+				'linktype' => 'LISTVIEW',
+				'linklabel' => vtranslate('LBL_EDIT', $qualifiedModuleName) . ' ' . vtranslate('MAILBOX', $qualifiedModuleName),
+				'linkurl' => "javascript:window.location.href = '" . $this->getEditViewUrl() . "&mode=step1'",
+				'linkicon' => 'icon-pencil'
+			),
+			array(
+				'linktype' => 'LISTVIEW',
+				'linklabel' => vtranslate('LBL_SELECT_FOLDERS', $qualifiedModuleName),
+				'linkurl' => "javascript:window.location.href = '" . $this->getEditViewUrl() . "&mode=step2'",
+				'linkicon' => 'icon-pencil'
+			),
+			array(
+				'linktype' => 'LISTVIEW',
+				'linklabel' => vtranslate('LBL_DELETE', $qualifiedModuleName) . ' ' . vtranslate('MAILBOX', $qualifiedModuleName),
+				'linkurl' => 'javascript:Settings_MailConverter_List_Js.triggerDelete("' . $this->getDeleteUrl() . '")',
+				'linkicon' => 'icon-trash'
+			)
 		);
 
 		$links = array();
@@ -151,7 +155,7 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 
 		return $links;
 	}
-    
+
     /**
 	 * Encrypt/Decrypt input.
 	 * @access private
@@ -183,11 +187,10 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 		foreach ($fieldsList as $fieldName => $fieldModel) {
 			$scannerLatestInfo->$fieldName = $this->get($fieldName);
 		}
-        $scannerId = $this->getId();
-        if(!empty($scannerId)) {
-            $scannerLatestInfo->scannerid = $this->getId();
-        }
-
+		$scannerId = $this->getId();
+		if (!empty($scannerId)) {
+			$scannerLatestInfo->scannerid = $this->getId();
+		}
 		//Checking Scanner Name
 		$scannerName = $this->getName();
 		if($scannerName && !validateAlphanumericInput($scannerName)) {
@@ -230,13 +233,6 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 				$rescanFolder = true;
 			}
 			$scannerOldInfo->updateAllFolderRescan($rescanFolder);
-
-			// Update lastscan on all the available folders.
-			if($mailServerChanged && $mailBox) {
-                //only for inbox
-				$folders = array('INBOX');
-				foreach($folders as $folder) $scannerOldInfo->updateLastscan($folder);
-			}
 		}
 		return $isConnected;
 	}
@@ -250,18 +246,11 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 		if ($isValid) {
 			vimport('~~modules/Settings/MailConverter/handlers/MailScannerInfo.php');
 			vimport('~~modules/Settings/MailConverter/handlers/MailScanner.php');
-            $scannerInfo = new Vtiger_MailScannerInfo($this->getName());
-            $folders = $scannerInfo->getFolderInfo();
-            //dont ignore inbox folder
-            unset($folders['INBOX']);
-            
-            $ignoredFolders = array_keys($folders);
-            
-            /** Start the scanning. */
+			$scannerInfo = new Vtiger_MailScannerInfo($this->getName());
+			/** Start the scanning. */
 			$scanner = new Vtiger_MailScanner($scannerInfo);
-            $scanner->_generalIgnoreFolders = $ignoredFolders;
-			$scanner->performScanNow();
-			return true;
+			$status = $scanner->performScanNow();
+			return $status;
 		}
 		return false;
 	}
@@ -372,7 +361,7 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 		}
 		return $recordModelsList;
 	}
-    
+
 	public static function getCount() {
 		$db = PearDatabase::getInstance();
 		$moduleModel = Settings_Vtiger_Module_Model::getInstance('Settings:MailConverter');
@@ -381,28 +370,24 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
 		$numOfRows = $db->num_rows($result);
 		return $numOfRows;
 	}
-	
+
 	public function getDetailViewFields() {
         $detailViewIgnoredFields = array('scannername');
         $module = $this->getModule();
         $fields = $module->getFields();
         foreach($detailViewIgnoredFields as $ignoreFieldName) {
             unset($fields[$ignoreFieldName]);
-        } 
+        }
         return $fields;
         return array_diff($fields,$detailViewIgnoredFields);
-        
+
     }
-    
-    public function isFieldEditable($fieldModel) {
-        $recordId = $this->getId();
-        if($fieldModel->getName() == 'scannername' && !empty($recordId)) {
-            return false;
-        }
-        return $fieldModel->isEditable();
-    }
-    
-    public function getDisplayValue($fieldName) {
+
+	public function isFieldEditable($fieldModel) {
+		return $fieldModel->isEditable();
+	}
+
+	public function getDisplayValue($fieldName) {
         $value = $this->get($fieldName);
         if($fieldName == 'isvalid') {
             if($value == 1){
@@ -410,7 +395,7 @@ class Settings_MailConverter_Record_Model extends Settings_Vtiger_Record_Model {
             }
             return 'Disabled';
         }
-        else if($fieldName == 'timezone') {
+        else if($fieldName == 'time_zone') {
             return Settings_MailConverter_Field_Model::$timeZonePickListValues[$value];
         }
         return $value;

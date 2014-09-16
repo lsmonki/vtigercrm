@@ -14,5 +14,7 @@
 <div class="targetFieldsTableContainer">
 	{include file="FieldsEditView.tpl"|@vtemplate_path:$QUALIFIED_MODULE}
 </div>
+<br>	
 {include file="EditViewActions.tpl"|@vtemplate_path:Vtiger}
+<div class="row-fluid" style="margin-bottom:150px;"></div>
 {/strip}

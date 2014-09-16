@@ -9,59 +9,67 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Project' => 'Projekty',
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'SINGLE_Project' => 'Projekt',
+	'LBL_ADD_RECORD' => 'Dodaj Projekt',
+	'LBL_RECORDS_LIST' => 'Lista Projektów',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie Projektu',
+    'LBL_MILESTONES_LIST'=>'Lista Milestones',
 
 	// Blocks
-	'LBL_PROJECT_INFORMATION' => 'Sczegóły projektu',
-
+	'LBL_PROJECT_INFORMATION' => 'Szczegóły projektu',
+	
 	//Field Labels
-	'Project Name' => 'Nazwa projektu',
-	'Start Date' => 'Czas rozpoczęcia',
-	'Target End Date' => 'Planowany czas zakończenia',
-	'Actual End Date' => 'Rzeczywista data zakończenia',
+	'Project Name' => 'Nazwa Projektu',
+    'Start Date' => 'Data rozpoczęcia',
+    'Target End Date' => 'Planowana data zakończenia',
+    'Actual End Date' => 'Rzeczywista data zakończenia',
 	'Project No' => 'Numer projektu',
 	'Target Budget' => 'Szacowany budżet',
-	'Project Url' => 'Adres projektu',
-	'Progress' => 'W realizacji',
+	'Project Url' => 'Adres URL do projektu',
+	'Progress' => 'Realizacja',
 
 	//Summary Information
-	'LBL_TASKS_OPEN' => 'Zadania otwarte',
-	'LBL_TASKS_DUE' => 'Zadania po terminie',
-	'LBL_TASKS_COMPLETED' => 'Zadania wykonane',
-	'LBL_PEOPLE' => 'Ludzie',
+	'LBL_TASKS_OPEN' => 'Otwarte zadania',
+	'LBL_TASKS_DUE' => 'Zadania nie zamknięte',
+	'LBL_TASKS_COMPLETED' => 'Zadania zakończone',
+	'LBL_PEOPLE' => 'Ilość uczestników',
+    'LBL_TASKS_HIGH' => 'O wysokim priorytecie',
+    'LBL_TASKS_NORMAL' => 'Normalny Priorytet',
+    'LBL_TASKS_LOW' => 'Niski priorytet',
+    'LBL_TASKS_OTHER' => 'Inne priorytety',
+    'LBL_SELECT_PROGRESS' => 'Wybierz Progress',
 
 	//Related List
 	'LBL_CHARTS' => 'Wykresy',
-	'LBL_TASKS_LIST' => 'Lista zadań',
-	'LBL_MILESTONES' => 'Lista etapów',
-	'LBL_TASKS' => 'Zadania',
-	'LBL_STATUS_IS' => 'Status jest',
-	'LBL_STATUS' => 'Status',
-	'LBL_TICKET_PRIORITY' => 'Priorytet',
-	'LBL_MORE' => 'więcej',
 	
-	//Summary View Widgets
-	'LBL_DOWNLOAD_FILE' => 'Pobierz plik',
+	'LBL_TASKS_LIST'	=>	"Lista zadań",
+	'LBL_MILESTONES'	=>	"Kamienie milowe",
+	'LBL_TASKS'	=>	"Zadania",
+	'LBL_STATUS_IS'	=>	"Status jest",
+	'LBL_STATUS'	=>	"Status",
+	'LBL_TICKET_PRIORITY'	=>	"Priorytet",
+	'LBL_MORE'	=>	"więcej",
+	'LBL_MILESTONES_LIST'	=>	"Lista kamieni milowych",
+	'LBL_DOWNLOAD_FILE'	=>	"Pobierz plik",
 	
-	//Opensaas
-	'low' => 'Niski',
-	'high' => 'Wysoki',
-	'normal' => 'Normalny',
-	'description' => 'Opis',
-    'administrative' => 'Wewnętrzny',
-    'operative' => 'Zewnętrzny',
-    'other' => 'Wspólny',
-    'prospecting' => 'Planowany',
-    'in progress' => 'W realizacji',
-    'initiated' => 'Rozpoczęty',
-    'on hold' => 'Wstrzymany',
-    'archived' => 'Zarchiwizowany',
+	//picklist values
+	'prospecting' => 'Poszukiwania',
+    'in progress' => 'W toku',
+    'initiated' => 'Zapoczątkowany',
+	'waiting for feedback' => 'Czekam na Komentarze',
+    'on hold' => 'Podpięcie',
+    'archived' => 'W archiwum',
     'completed' => 'Zakończony',
-    'delivered' => 'Wysłany',
-    'waiting for feedback' => 'Oczekuje na odpowiedź',
-    'Related to'  => 'Powiązane z',
-    'Add Project Task'  => 'Dodaj zadanie do projektu',
-    
+    'delivered' => 'Dostarczone',
+	'administrative' => 'Administracyjny',
+    'operative' => 'Operacyjny',
+    'other' => 'Inny',
+    'low' => 'Niski',
+    'normal' => 'Normalny',
+    'high' => 'Wysoki',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Wybierz status',
+    'JS_LBL_SELECT_PROGRESS' => 'Wybierz Progress',
 );

@@ -28,6 +28,10 @@ class Google_MapAjax_Action extends Vtiger_BasicAjax_Action {
         $address = Google_Map_Helper::getLocation($request);
         return empty($address) ? "" : array("address" => join(",", $address));
     }
+    
+    public function validateRequest(Vtiger_Request $request) { 
+        $request->validateReadAccess(); 
+    } 
 
 }
 

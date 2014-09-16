@@ -11,9 +11,9 @@
 class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
 
     public static function getNonVisibleModulesList() {
-        return array('ModTracker','Portal','Webmails','Users','Mobile','Integration','WSAPP',
-                     'ConfigEditor','FieldFormulas','VtigerBackup','CronTasks','Import','PBXManager','Tooltip',
-                    'CustomerPortal', 'Home');
+        return array('ModTracker','Webmails','Users','Mobile','Integration','WSAPP',
+                     'ConfigEditor','FieldFormulas','VtigerBackup','CronTasks','Import' ,'Tooltip',
+                    'CustomerPortal', 'Home', 'ExtensionStore');
     }
 
 
@@ -21,15 +21,23 @@ class Settings_ModuleManager_Module_Model extends Vtiger_Module_Model {
      * Function to get the url of new module import
      */
     public static function getNewModuleImportUrl() {
-		return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport';
+		return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport';
     }
 	
-	 /**
+    
+    /**
+     * Function to get the url of Extension store
+     */
+    public static function getExtensionStoreUrl() {
+        return 'index.php?module=ExtensionStore&parent=Settings&view=ExtensionImport&mode=index';
+    }
+
+    /**
      * Function to get the url of new module import 
      */
-    public static function getUserModuleImportUrl() {
-		return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport&mode=importUserModuleStep1';
-	}
+    public static function getUserModuleFileImportUrl() {
+            return 'index.php?module=ModuleManager&parent=Settings&view=ModuleImport&mode=importUserModuleStep1'; 
+    }
 	
 	/**
      * Function to disable a module 

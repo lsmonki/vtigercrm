@@ -25,6 +25,8 @@
         <input type="hidden" name="search_key" value= "{$SEARCH_KEY}" />
         <input type="hidden" name="operator" value="{$OPERATOR}" />
         <input type="hidden" name="search_value" value="{$ALPHABET_VALUE}" />
+        <input type="hidden" name="search_params" value='{ZEND_JSON::encode($SEARCH_PARAMS)}' />
+               
 		<div class="modal-body tabbable">
 			<div>
 				<span><strong>{vtranslate('LBL_STEP_1',$MODULE)}</strong></span>
@@ -48,7 +50,7 @@
 			<div>
 				<span><strong>{vtranslate('LBL_STEP_2',$MODULE)}</strong></span>
 				&nbsp;:&nbsp;
-				{vtranslate('LBL_TYPE_THE_MESSAGE',$MODULE)}
+				{vtranslate('LBL_TYPE_THE_MESSAGE',$MODULE)}&nbsp;(&nbsp;{vtranslate('LBL_SMS_MAX_CHARACTERS_ALLOWED',$MODULE)}&nbsp;)
 			</div>
 			<textarea class="input-xxlarge" name="message" id="message" placeholder="{vtranslate('LBL_WRITE_YOUR_MESSAGE_HERE', $MODULE)}"></textarea>
 		</div>

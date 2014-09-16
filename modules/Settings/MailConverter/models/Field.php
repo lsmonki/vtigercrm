@@ -57,11 +57,11 @@ class Settings_MailConverter_Field_Model extends Vtiger_Field_Model {
                 $pickListValues[$option] = vtranslate($option, 'Settings::MailConverter');
             }
         }else if ($fieldName == 'markas') {
-            $optionList = array('','SEEN');
+            $optionList = array('UNSEEN','SEEN');
             foreach($optionList as $option) {
 				$pickListValues[$option] = vtranslate($option, 'Settings::MailConverter');
             }
-        }else if ($fieldName == 'timezone') {
+        }else if ($fieldName == 'time_zone') {
             $pickListValues = self::$timeZonePickListValues;
             
         }

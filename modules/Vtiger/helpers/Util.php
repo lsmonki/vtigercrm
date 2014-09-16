@@ -240,7 +240,33 @@ class Vtiger_Util_Helper {
 		return $formatedDate;
 	}
 
-    /**
+	/**
+	 * Function to get picklist key for a picklist
+	 */
+	public static function getPickListId($fieldName){
+		$pickListIds = array('opportunity_type' => 'opptypeid',
+								'sales_stage'	=> 'sales_stage_id',
+								'rating'		=> 'rating_id',
+								'ticketpriorities'	=> 'ticketpriorities_id',
+								'ticketseverities'	=> 'ticketseverities_id',
+								'ticketstatus'		=> 'ticketstatus_id',
+								'ticketcategories'	=> 'ticketcategories_id',
+								'salutationtype'	=> 'salutationid',
+								'faqstatus'			=> 'faqstatus_id',
+								'faqcategories'		=> 'faqcategories_id',
+								'recurring_frequency'=> 'recurring_frequency_id',
+								'payment_duration'	=> 'payment_duration_id',
+								'language'			=> 'id',
+                                'recurringtype' => 'recurringeventid',
+                                'duration_minutes' => 'minutesid'
+							);
+		if(array_key_exists($fieldName, $pickListIds)){
+			return $pickListIds[$fieldName];
+		}
+		return $fieldName.'id';
+	}
+
+	/**
      * Function which will give the picklist values for a field
      * @param type $fieldName -- string
      * @return type -- array of values
@@ -252,18 +278,19 @@ class Vtiger_Util_Helper {
         }
         $db = PearDatabase::getInstance();
 
-        $query = 'SELECT '.$fieldName.' FROM vtiger_'.$fieldName.' order by sortorderid';
+		$primaryKey = Vtiger_Util_Helper::getPickListId($fieldName);
+        $query = 'SELECT '.$primaryKey.', '.$fieldName.' FROM vtiger_'.$fieldName.' order by sortorderid';
         $values = array();
         $result = $db->pquery($query, array());
         $num_rows = $db->num_rows($result);
         for($i=0; $i<$num_rows; $i++) {
 			//Need to decode the picklist values twice which are saved from old ui
-            $values[] = decode_html(decode_html($db->query_result($result,$i,$fieldName)));
+            $values[$db->query_result($result,$i,$primaryKey)] = decode_html(decode_html($db->query_result($result,$i,$fieldName)));
         }
         $cache->setPicklistValues($fieldName, $values);
         return $values;
     }
-	
+
 	/**
 	 * Function gets the CRM's base Currency information
 	 * @return Array
@@ -289,9 +316,11 @@ class Vtiger_Util_Helper {
                   WHERE roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortorderid";
         $result = $db->pquery($query, array($roleId));
         $picklistValues = Array();
-        while ($row = $db->fetch_array($result)) {
-			//Need to decode the picklist values twice which are saved from old ui
-		    $picklistValues[] = decode_html(decode_html($row[$fieldName]));
+        if($db->num_rows($result) > 0) {
+			while ($row = $db->fetch_array($result)) {
+				//Need to decode the picklist values twice which are saved from old ui
+				$picklistValues[] = decode_html(decode_html($row[$fieldName]));
+			}
         }
         return $picklistValues;
     }
@@ -330,7 +359,7 @@ class Vtiger_Util_Helper {
 	 * @return <Float> maximum upload size
 	 */
 	public static function getMaxUploadSize() {
-		return vglobal('upload_maxsize') / (1024 * 1024);
+		return ceil(vglobal('upload_maxsize') / (1024 * 1024)); 
 	}
 
 	/**
@@ -369,7 +398,7 @@ class Vtiger_Util_Helper {
 	public static function getDecodedValue($string) {
 		return html_entity_decode($string, ENT_COMPAT, 'UTF-8');
 	}
-	
+
 	public static function getActiveAdminCurrentDateTime() {
 		global $default_timezone;
 		$admin = Users::getActiveAdminUser();
@@ -399,8 +428,8 @@ class Vtiger_Util_Helper {
 		}
 		return $creatorId;
 	}
-    
-    
+
+
 	/**
 	 * Function to get the datetime value in user preferred hour format
 	 * @param <DateTime> $dateTime
@@ -409,6 +438,7 @@ class Vtiger_Util_Helper {
 	 */
 	public static function convertDateTimeIntoUsersDisplayFormat($dateTime, $userObject = null) {
         require_once 'includes/runtime/LanguageHandler.php';
+		require_once 'includes/runtime/Globals.php';
 		if ($userObject) {
 			$userModel = Users_Privileges_Model::getInstanceFromUserObject($userObject);
 		} else {
@@ -436,14 +466,12 @@ class Vtiger_Util_Helper {
 	 */
 	public static function convertTimeIntoUsersDisplayFormat($time, $userObject = null) {
         require_once 'includes/runtime/LanguageHandler.php';
+		require_once 'includes/runtime/Globals.php';
 		if ($userObject) {
 			$userModel = Users_Privileges_Model::getInstanceFromUserObject($userObject);
 		} else {
 			$userModel = Users_Privileges_Model::getCurrentUserModel();
 		}
-
-		$dateTimeField = new DateTimeField($time);
-		$time = $dateTimeField->getDisplayTime($userModel);
 
 		if($userModel->get('hour_format') == '12') {
 			$time = Vtiger_Time_UIType::getTimeValueInAMorPM($time);
@@ -451,31 +479,192 @@ class Vtiger_Util_Helper {
 
 		return $time;
 	}
-    
-    /*** 
-    * Function to get the label of the record 
-    * @param <Integer> $recordId - id of the record 
-    * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records  
-    */ 
-	    public static function getLabel($recordId , $ignoreDelete=true){ 
-	        $db = PearDatabase::getInstance(); 
-	        $query = 'SELECT label from vtiger_crmentity WHERE crmid=?'; 
-	        if($ignoreDelete) { 
-	            $query .= ' AND deleted=0'; 
-	        } 
-	        $result = $db->pquery($query,array($recordId)); 
-            $name = ''; 
-	        if($db->num_rows($result) > 0) { 
-	            $name = $db->query_result($result,0,'label'); 
-	        } 
-	        return $name; 
-    } 
+
+    /***
+    * Function to get the label of the record
+    * @param <Integer> $recordId - id of the record
+    * @param <Boolean> $ignoreDelete - false if you want to get label for deleted records
+    */
+	    public static function getLabel($recordId , $ignoreDelete=true){
+	        $db = PearDatabase::getInstance();
+	        $query = 'SELECT label from vtiger_crmentity WHERE crmid=?';
+	        if($ignoreDelete) {
+	            $query .= ' AND deleted=0';
+	        }
+	        $result = $db->pquery($query,array($recordId));
+            $name = '';
+	        if($db->num_rows($result) > 0) {
+	            $name = $db->query_result($result,0,'label');
+	        }
+	        return $name;
+    }
+
 	/**
-	 * Function checks if the database has utf8 support
-	 * @global type $db_type
-	 * @param type $conn
-	 * @return boolean
+	 * Function gets the CRM's base Currency information according to user preference
+	 * @return Array
 	 */
+	public static function getCurrentInfoOfUser() {
+		$db = PearDatabase::getInstance();
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+	    $result = $db->pquery('SELECT * FROM vtiger_currency_info WHERE id = ?', array($currentUser->get('currency_id')));
+		if($db->num_rows($result)) return $db->query_result_rowdata($result, 0);
+	}
+
+	public static function getGroupsIdsForUsers($userId) {
+        vimport('~~/include/utils/GetUserGroups.php');
+
+        $userGroupInstance = new GetUserGroups();
+        $userGroupInstance->getAllUserGroups($userId);
+        return $userGroupInstance->user_groups;
+    }
+
+    public static function transferListSearchParamsToFilterCondition($listSearchParams, $moduleModel) {
+        if(empty($listSearchParams)) {
+            $listSearchParams = array();
+        }
+        $advFilterConditionFormat = array();
+        $glueOrder = array('and','or');
+        $groupIterator = 0;
+        foreach($listSearchParams as $groupInfo){
+            if(empty($groupInfo)){
+                continue;
+            }
+            $groupConditionInfo = array();
+            $groupColumnsInfo = array();
+            $groupConditionGlue = $glueOrder[$groupIterator];
+            foreach($groupInfo as $fieldSearchInfo){
+                   $advFilterFieldInfoFormat = array();
+                   $fieldName = $fieldSearchInfo[0];
+                   $operator = $fieldSearchInfo[1];
+                   $fieldValue = $fieldSearchInfo[2];
+                   $fieldInfo = $moduleModel->getField($fieldName);
+
+                   //Request will be having in terms of AM and PM but the database will be having in 24 hr format so converting
+ 		            //Database format
+
+                    if($fieldInfo->getFieldDataType() == "time") {
+ 		                $fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+ 		            }
+
+                    if($fieldName == 'date_start' || $fieldName == 'due_date' || $fieldInfo->getFieldDataType() == "datetime" ) {
+	 	                $dateValues = explode(',', $fieldValue);
+	 	                //Indicate whether it is fist date in the between condition
+     	                $isFirstDate = true;
+	 	                foreach($dateValues as $key => $dateValue) {
+	 	                    $dateTimeCompoenents = explode(' ', $dateValue);
+	 	                    if(empty($dateTimeCompoenents[1])) {
+	 	                        if($isFirstDate)
+	 	                            $dateTimeCompoenents[1] = '00:00:00';
+	 	                        else
+	 	                            $dateTimeCompoenents[1] = '23:59:59';
+
+	 	                    }
+	 	                    $dateValue = implode(' ',$dateTimeCompoenents);
+	 	                    $dateValues[$key] = $dateValue;
+	 	                    $isFirstDate = false;
+                        }
+                        $fieldValue = implode(',',$dateValues);
+                    }
+
+                   $advFilterFieldInfoFormat['columnname'] = $fieldInfo->getCustomViewColumnName();
+                   $advFilterFieldInfoFormat['comparator'] = $operator;
+                   $advFilterFieldInfoFormat['value'] = $fieldValue;
+                   $advFilterFieldInfoFormat['column_condition'] = $groupConditionGlue;
+                   $groupColumnsInfo[] = $advFilterFieldInfoFormat;
+            }
+            $noOfConditions = count($groupColumnsInfo);
+            //to remove the last column condition
+            $groupColumnsInfo[$noOfConditions-1]['column_condition']  = '';
+            $groupConditionInfo['columns'] = $groupColumnsInfo;
+            $groupConditionInfo['condition'] = 'and';
+            $advFilterConditionFormat[] = $groupConditionInfo;
+            $groupIterator++;
+        }
+        //We aer removing last condition since this condition if there is next group and this is the last group
+        unset($advFilterConditionFormat[count($advFilterConditionFormat)-1]['condition']);
+        return $advFilterConditionFormat;
+
+    }
+
+	 /***
+    * Function to set the default calendar activity types for new user
+    * @param <Integer> $userId - id of the user
+    */
+	public static function setCalendarDefaultActivityTypesForUser($userId) {
+		$db = PearDatabase::getInstance();
+		$userEntries = $db->pquery('SELECT 1 FROM vtiger_calendar_user_activitytypes WHERE userid=?', array($userId));
+                $activityIds = array();
+		if($db->num_rows($userEntries) <= 0) {
+			$queryResult = $db->pquery('SELECT id, defaultcolor FROM vtiger_calendar_default_activitytypes', array());
+			$numRows = $db->num_rows($queryResult);
+			for ($i = 0; $i < $numRows; $i++) {
+				$row = $db->query_result_rowdata($queryResult, $i);
+				$activityIds[$row['id']] = $row['defaultcolor'];
+			}
+
+			foreach($activityIds as $activityId=>$color) {
+				$db->pquery('INSERT INTO vtiger_calendar_user_activitytypes (id, defaultid, userid, color) VALUES (?,?,?,?)', array($db->getUniqueID('vtiger_calendar_user_activitytypes'), $activityId, $userId, $color));
+			}
+		}
+
+	}
+
+    public static function getAllSkins(){
+        return array('alphagrey' => '#666666',	'softed'	=> '#1560BD',	'bluelagoon'=> '#204E81',
+					 'nature'	=> '#008D4C',	'woodspice' => '#C19803',	'orchid'	=> '#C65479',
+					 'firebrick'=> '#E51400',	'twilight'	=> '#404952',	'almond'	=> '#894400');
+    }
+
+    public static function isUserDeleted($userid) {
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery('SELECT deleted FROM vtiger_users WHERE id = ? AND (status=? OR deleted=?)', array($userid, 'Inactive', 1));
+        $count = $db->num_rows($result);
+        if($count > 0)
+            return true;
+
+        return false;
+    }
+
+	/*
+    * Function used to get default value based on data type
+    * @param $dataType - data type of field
+    * @return returns default value for data type if match case found
+    * else returns empty string
+    */
+   function getDefaultMandatoryValue($dataType) {
+       $value;
+       switch ($dataType) {
+           case 'date':
+                   $dateObject = new DateTime();
+                   $value = DateTimeField::convertToUserFormat($dateObject->format('Y-m-d'));
+               break;
+           case 'time' :
+               $value = '00:00:00';
+               break;
+           case 'boolean':
+               $value = false;
+               break;
+           case 'email':
+               $value = '??@??.??';
+               break;
+           case 'url':
+               $value = '???.??';
+               break;
+           case 'integer':
+               $value = 0;
+               break;
+           case 'double':
+               $value = 00.00;
+               break;
+           case 'currency':
+               $value = 0.00;
+               break;
+           default :
+               $value = '?????';
+               break;
+       }
+       return $value;
+   }
 	public static function checkDbUTF8Support($conn) {
 		global $db_type;
 		if($db_type == 'pgsql')
@@ -490,7 +679,7 @@ class Vtiger_Util_Helper {
 				case 'character_set_database' : $db_character_set = $arr['value']; break;
 				case 'collation_database'     : $db_collation_type = $arr['value']; break;
 			}
-			// If we have all the required information break the loop.
+			// If we have all the required information break the loop. 
 			if($db_character_set != null && $db_collation_type != null) break;
 		}
 		return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));

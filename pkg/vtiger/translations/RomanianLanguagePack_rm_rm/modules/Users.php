@@ -169,4 +169,44 @@ $languageStrings = array(
 	'Summary'                      => 'Summary'                     , // TODO: Review
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'LBL_USER_DELETED_SUCCESSFULLY' => 'Utilizator șters cu succes',
+    'LBL_ACTIVE_USERS' => 'Utilizatori activi',
+    'LBL_INACTIVE_USERS' => 'Utilizatorii inactivi',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Sterge utilizator permanent',
+    'LBL_RESTORE' => 'Restabili',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Utilizatorul restaurat cu succes',
+	'LBL_ALMOST_THERE'	=>	'Aproape acolo!',
+	'LBL_ABOUT_ME'		=>	'Despre mine',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Am promisiunea de a menține acest privat)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Toate campurile de mai jos sunt obligatorii)',
+	'LBL_GET_STARTED'	=> 'Începeți',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Numărul dvs. de contact',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'De unde ești?',
+	'LBL_SELECT_COUNTRY'	=> 'Selectați Țară',
+	'LBL_COMPANY_SIZE'		=> 'Dimensiuni companie',
+	'LBL_JOB_TITLE'			=> 'Denumirea postului',
+	'LBL_DEPARTMENT'		=> 'Departament',
+	'LBL_BASE_CURRENCY'		=> 'Moneda de bază',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Alegeți Moneda de bază',
+	'LBL_OPERATING_CURRENCY'	=> 'Valută de bază nu poate fi modificat ulterior. Selectați moneda dvs. de operare',
+	'LBL_LANGUAGE' => 'Limbă',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Alegeți limba',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Alegeți Timezone',
+	'LBL_DATE_FORMAT'		=> 'Format dată',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Alegeți Format dată',
+	'LBL_PHONE'	=> 'Telefon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

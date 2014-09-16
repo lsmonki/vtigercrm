@@ -38,7 +38,7 @@ if($activevalue[0] == 1)
 	//Delayed Tasks Notification
 
 	//get all those activities where the status is not completed even after the passing of 24 hours
-	$today = date("Ymd");
+	$today = date("Ymd"); 
 	$result = $adb->pquery("select vtiger_activity.status,vtiger_activity.activityid,subject,(vtiger_activity.date_start +1),vtiger_crmentity.smownerid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where vtiger_crmentity.deleted=0 and vtiger_activity.status <> 'Completed' and activitytype='Task' and ".$today." > (vtiger_activity.date_start+1)", array());
 
 	while ($myrow = $adb->fetch_array($result))

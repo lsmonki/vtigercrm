@@ -12,7 +12,7 @@
 class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 
 	/**
-	 * Function to get Alphabet Search Field
+	 * Function to get Alphabet Search Field 
 	 */
 	public function getAlphabetSearchField() {
 		return 'templatename';
@@ -31,7 +31,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * @param EmailtTemplates_Record_Model $recordModel
 	 * @return <integer> template id
 	 */
-	public function saveRecord(EmailTemplates_Record_Model $recordModel) {
+	public function saveRecord($recordModel) {
 		$db = PearDatabase::getInstance();
 		$templateid = $recordModel->getId();
 		if(empty($templateid)){
@@ -50,12 +50,12 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * Function to delete the email template
 	 * @param type $recordIds
 	 */
-	public function deleteRecord(EmailTemplates_Record_Model $recordModel) {
+	public function deleteRecord($recordModel) {
 		$recordId = $recordModel->getId();
 		$db = PearDatabase::getInstance();
 		$db->pquery('DELETE FROM vtiger_emailtemplates WHERE templateid = ? ', array($recordId));
 	}
-
+	
 	/**
 	 * Function to delete all the email templates
 	 * @param type $recordIds
@@ -96,7 +96,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 			$allOptions[vtranslate($module, $module)] = $allFields;
 			$allFields = "";
 		}
-
+		
 		$option = array('Current Date', '$custom-currentdate$');
 		$allFields[] = $option;
 		$option = array('Current Time', '$custom-currenttime$');
@@ -104,7 +104,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		$allOptions['generalFields'] = $allFields;
 		return $allOptions;
 	}
-
+	
 	/**
 	 * Function to get module fields
 	 * @param type $module
@@ -130,18 +130,18 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 				}
 			}
 			$returnData[] = array('module' => $module, 'fieldname' => $field->getFieldName(), 'columnname' => $field->getColumnName(), 'fieldlabel' => $field->getFieldLabelKey(), 'referencelist' => $referencelist);
-
+			
 		}
 		return $returnData;
 	}
-
+	
 	/**
 	 * Function to get related module fields
 	 * @param type $relModule
 	 * @param type $user
 	 * @return null
 	 */
-
+	
 	function getRelatedModuleFieldList($relModule, $user) {
 		$handler = vtws_getModuleHandlerFromName($relModule, $user);
 		$relMeta = $handler->getMeta();
@@ -171,8 +171,8 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getAllModuleList(){
 		$db = PearDatabase::getInstance();
-
-		$query = 'SELECT DISTINCT(name) AS modulename FROM vtiger_tab
+		
+		$query = 'SELECT DISTINCT(name) AS modulename FROM vtiger_tab 
 				  LEFT JOIN vtiger_field ON vtiger_field.tabid = vtiger_tab.tabid
 				  WHERE vtiger_field.uitype = ?';
 		$result = $db->pquery($query, array(13));
@@ -183,7 +183,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		return $moduleList;
 	}
-
+	
 	/**
 	 * Function to get the Quick Links for the module
 	 * @param <Array> $linkParams
@@ -206,10 +206,10 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		return $links;
 	}
-
+	
 	public function getRecordIds($skipRecords){
 		$db = PearDatabase::getInstance();
-
+		
 		$query = 'SELECT templateid FROM vtiger_emailtemplates WHERE templateid NOT IN ('.generateQuestionMarks($skipRecords).')';
 		$result = $db->pquery($query, $skipRecords);
 		$num_rows = $db->num_rows($result);
@@ -219,4 +219,11 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		return $recordIds;
 	}
+    
+    /**
+     * Funxtion to identify if the module supports quick search or not
+     */
+    public function isQuickSearchEnabled() {
+        return false;
+    }
 }

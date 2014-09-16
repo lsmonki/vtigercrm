@@ -12,16 +12,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('modules/Calendar/Activity.php');
-require_once('modules/Campaigns/Campaigns.php');
-require_once('modules/Documents/Documents.php');
-require_once('modules/Emails/Emails.php');
-require_once('include/utils/utils.php');
-require_once('user_privileges/default_module_view.php');
-
 class Leads extends CRMEntity {
 	var $log;
 	var $db;
@@ -326,7 +316,7 @@ class Leads extends CRMEntity {
 							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query ="select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name," .
 				" vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.semodule, vtiger_activity.activitytype," .
-				" vtiger_activity.date_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid," .
+				" vtiger_activity.date_start, vtiger_activity.time_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid," .
 				" vtiger_crmentity.smownerid,vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_seactivityrel.crmid as parent_id " .
 				" from vtiger_activity" .
 				" inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
@@ -521,9 +511,9 @@ class Leads extends CRMEntity {
 	 */
 	function generateReportsSecQuery($module,$secmodule, $queryPlanner) {
 		$matrix = $queryPlanner->newDependencyMatrix();
-		$matrix->setDependency('vtiger_leaddetails',array('vtiger_leadaddress','vtiger_leadsubdetails','vtiger_leadscf','vtiger_email_trackLeads'));
+		$matrix->setDependency('vtiger_leaddetails',array('vtiger_crmentityLeads', 'vtiger_leadaddress','vtiger_leadsubdetails','vtiger_leadscf','vtiger_email_trackLeads'));
 		$matrix->setDependency('vtiger_crmentityLeads',array('vtiger_groupsLeads','vtiger_usersLeads','vtiger_lastModifiedByLeads'));
-		
+
 		// TODO Support query planner
 		if (!$queryPlanner->requireTable("vtiger_leaddetails",$matrix)){
 			return '';
@@ -552,6 +542,9 @@ class Leads extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByLeads")){
 		    $query .= " left join vtiger_users as vtiger_lastModifiedByLeads on vtiger_lastModifiedByLeads.id = vtiger_crmentityLeads.modifiedby ";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbyLeads")){
+			$query .= " left join vtiger_users as vtiger_createdbyLeads on vtiger_createdbyLeads.id = vtiger_crmentityLeads.smcreatorid ";
 		}
 		return $query;
 	}
@@ -591,8 +584,8 @@ class Leads extends CRMEntity {
 			$this->db->pquery($sql, $params);
 		}
 	}
-	
-	function getListButtons($app_strings) {
+
+	function getListButtons($app_strings,$mod_strings = false) {
 		$list_buttons = Array();
 
 		if(isPermitted('Leads','Delete','') == 'yes') {
@@ -604,7 +597,7 @@ class Leads extends CRMEntity {
 		}
 		if(isPermitted('Emails','EditView','') == 'yes')
 			$list_buttons['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
-		
+
 		// end of mailer export
 		return $list_buttons;
 	}

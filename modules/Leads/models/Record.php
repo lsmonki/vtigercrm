@@ -110,7 +110,7 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 			$fieldModels = $moduleModel->getFields();
             $complusoryFields = array('firstname', 'email');
             foreach($fieldModels as $fieldName => $fieldModel) {
-                if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id') {
+                if($fieldModel->isMandatory() &&  $fieldName != 'assigned_user_id' && $fieldName != 'account_id') {
                     $keyIndex = array_search($fieldName,$complusoryFields);
                     if($keyIndex !== false) {
                         unset($complusoryFields[$keyIndex]);
@@ -275,5 +275,21 @@ class Leads_Record_Model extends Vtiger_Record_Model {
 		$calendarModuleModel = Vtiger_Module_Model::getInstance('Calendar');
 		return $calendarModuleModel->getCreateTaskRecordUrl().'&parent_id='.$this->getId();
 	}
+    
+    /**
+	 * Function to check whether the lead is converted or not
+	 * @return True if the Lead is Converted false otherwise.
+	 */
+    function isLeadConverted() {
+        $db = PearDatabase::getInstance();
+        $id = $this->getId();
+        $sql = "select converted from vtiger_leaddetails where converted = 1 and leadid=?";
+        $result = $db->pquery($sql,array($id));
+        $rowCount = $db->num_rows($result);
+        if($rowCount > 0){
+            return true;
+        }
+        return false;
+    }
 
 }

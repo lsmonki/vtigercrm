@@ -319,7 +319,7 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 		self::preModuleInitialize2();
 
 		$presence = array(0, 2);
-		$restrictedModules = array('Webmails', 'SMSNotifier', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'PBXManager', 'vtmessages', 'vttwitter');
+		$restrictedModules = array('Webmails', 'SMSNotifier', 'Emails', 'Integration', 'Dashboard', 'ModComments', 'vtmessages', 'vttwitter');
 
 		$query = 'SELECT name FROM vtiger_tab WHERE
 						presence IN ('. generateQuestionMarks($presence) .')
@@ -333,6 +333,11 @@ class Settings_LayoutEditor_Module_Model extends Vtiger_Module_Model {
 			$moduleName = $db->query_result($result, $i, 'name');
 			$modulesList[$moduleName] = $moduleName;
 		}
+		// If calendar is disabled we should not show events module too
+		// in layout editor
+        if(!array_key_exists('Calendar', $modulesList)) {
+            unset($modulesList['Events']);
+        }
 		return $modulesList;
 	}
 

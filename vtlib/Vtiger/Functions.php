@@ -347,7 +347,9 @@ class Vtiger_Functions {
 
 				if ($module == 'Groups') {
 					$metainfo = array('tablename' => 'vtiger_groups','entityidfield' => 'groupid','fieldname' => 'groupname');
-				} else {
+				} else if ($module == 'DocumentFolders') { 
+                                        $metainfo = array('tablename' => 'vtiger_attachmentsfolder','entityidfield' => 'folderid','fieldname' => 'foldername'); 
+                                } else {
 					$metainfo = self::getEntityModuleInfo($module);
 				}
 
@@ -359,13 +361,17 @@ class Vtiger_Functions {
 				$columnString = count($columns) < 2? $columns[0] :
 					sprintf("concat(%s)", implode(",' ',", $columns));
 
-				$sql = sprintf('SELECT %s AS label, %s AS id FROM %s WHERE %s IN (%s)',
-						$columnString, $idcolumn, $table, $idcolumn, generateQuestionMarks($ids));
+                $sql = sprintf('SELECT '. implode(',',$columns).', %s AS id FROM %s WHERE %s IN (%s)',
+						 $idcolumn, $table, $idcolumn, generateQuestionMarks($ids));
 
 				$result = $adb->pquery($sql, $ids);
 
 				while ($row = $adb->fetch_array($result)) {
-					$entityDisplay[$row['id']] = $row['label'];
+                    $labelValues = array();
+                    foreach($columns as $columnName) {
+                        $labelValues[] = $row[$columnName];
+                    }
+					$entityDisplay[$row['id']] = implode(' ',$labelValues);
 				}
 			}
 
@@ -625,6 +631,7 @@ class Vtiger_Functions {
 			}
 			if (!empty($_REQUEST['calendar_repeat_limit_date'])) {
 				$endDate = $_REQUEST['calendar_repeat_limit_date'];
+                $recurring_data['recurringenddate'] = $endDate;
 			} elseif (isset($_REQUEST['due_date']) && $_REQUEST['due_date'] != null) {
 				$endDate = $_REQUEST['due_date'];
 			}
@@ -880,4 +887,20 @@ class Vtiger_Functions {
 
 		return $query;
 	}
+
+    /** Function to get unitprice for a given product id
+    * @param $productid -- product id :: Type integer
+    * @returns $up -- up :: Type string
+    */
+    static function getUnitPrice($productid, $module='Products') {
+        $adb = PearDatabase::getInstance();
+        if($module == 'Services') {
+            $query = "select unit_price from vtiger_service where serviceid=?";
+        } else {
+            $query = "select unit_price from vtiger_products where productid=?";
+        }
+        $result = $adb->pquery($query, array($productid));
+        $unitpice = $adb->query_result($result,0,'unit_price');
+        return $unitpice;
+    }
 }

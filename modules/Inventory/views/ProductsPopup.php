@@ -86,14 +86,21 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
-
+        
+        $productModel = Vtiger_Module_Model::getInstance('Products');        
 		if(!$this->listViewHeaders) {
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
-		if(!$this->listViewEntries) {
+        
+		if(!$this->listViewEntries && $productModel->isActive()) {
 			$this->listViewEntries = $listViewModel->getListViewEntries($pagingModel);
 		}
 
+        if(!$productModel->isActive()){
+            $this->listViewEntries = array(); 
+            $viewer->assign('LBL_MODULE_DISABLED', true);
+        }
+        
 		foreach ($this->listViewEntries as $key => $listViewEntry) {
 			$productId = $listViewEntry->getId();
 			$subProducts = $listViewModel->getSubProducts($productId);
@@ -115,7 +122,7 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 			$sortImage = "upArrowSmall.png";
 		}
 		$viewer->assign('MODULE', $moduleName);
-
+        $viewer->assign('RELATED_MODULE', $moduleName); 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
 		$viewer->assign('SOURCE_RECORD', $sourceRecord);
@@ -136,7 +143,7 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
 
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		
@@ -157,7 +164,7 @@ class Inventory_ProductsPopup_View extends Vtiger_Popup_View {
 
 		$viewer->assign('MULTI_SELECT', $multiSelectMode);
 		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
-
+		$viewer->assign('TARGET_MODULE', $moduleName);
 		$viewer->assign('MODULE', $request->getModule());
 		$viewer->assign('GETURL', 'getTaxesURL');
 		$viewer->assign('VIEW', 'ProductsPopup');

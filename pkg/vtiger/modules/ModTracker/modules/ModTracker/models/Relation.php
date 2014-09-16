@@ -42,27 +42,4 @@ class ModTracker_Relation_Model extends Vtiger_Record_Model {
 		}
 		return false;
 	}
-
-	function getUnLinkedRecord() {
-		$targetId = $this->get('targetid');
-		$targetModule = $this->get('targetmodule');
-		$db = PearDatabase::getInstance();
-
-        $query = 'SELECT * FROM vtiger_crmentity WHERE crmid = ?';
-		$params = array($targetId);
-		$result = $db->pquery($query, $params);
-		$noOfRows = $db->num_rows($result);
-		$moduleModels = array();
-		if($noOfRows) {
-			if(!array_key_exists($targetModule, $moduleModels)) {
-				$moduleModel = Vtiger_Module_Model::getInstance($targetModule);
-			}
-			$row = $db->query_result_rowdata($result, 0);
-			$modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', $targetModule);
-			$recordInstance = new $modelClassName();
-			$recordInstance->setData($row)->setModuleFromInstance($moduleModel);
-			return $recordInstance;
-		}
-		return false;
-	}
 }

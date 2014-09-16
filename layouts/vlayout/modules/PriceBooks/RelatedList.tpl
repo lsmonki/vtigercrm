@@ -20,7 +20,7 @@
         <input type='hidden' value="{$TOTAL_ENTRIES}" id='totalCount'>
         <div class="relatedHeader ">
             <div class="btn-toolbar row-fluid">
-                <div class="span8">
+                <div class="span6">
 
                     {foreach item=RELATED_LINK from=$RELATED_LIST_LINKS['LISTVIEWBASIC']}
                         <div class="btn-group">
@@ -34,38 +34,38 @@
         {/foreach}
         &nbsp;
     </div>
-    <div class="span4">
-        <span class="row-fluid">
-            <span class="span7 pushDown">
-                <span class="pull-right pageNumbers alignTop" data-placement="bottom" data-original-title="" style="margin-top: -5px">
-                {if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{/if}
-            </span>
-        </span>
-
-        <div class="span5 btn-group pull-right">
-            <button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
-            <button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}">
-                <i class="vtGlyph vticon-pageJump" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}"></i>
-            </button>
-            <ul class="listViewBasicAction dropdown-menu" id="relatedListPageJumpDropDown">
-                <li>
-                    <span class="row-fluid">
-                        <span class="span3"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
-                        <span class="span4">
-                            <input type="text" id="pageToJump" class="listViewPagingInput" value="{$PAGING->getCurrentPage()}"/>
-                        </span>
-                        <span class="span2 textAlignCenter">
-                            {vtranslate('LBL_OF',$moduleName)}
-                        </span>
-                        <span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
+        <div class="span6">
+            <div class="pull-right">
+                <div class="pageNumbers">
+                    <span class="pageNumbersText">{if !empty($RELATED_RECORDS)} {$PAGING->getRecordStartRange()} {vtranslate('LBL_to', $RELATED_MODULE->get('name'))} {$PAGING->getRecordEndRange()}{else}<span>&nbsp;</span>{/if}</span>
+                    <span class="icon-refresh pull-right totalNumberOfRecords cursorPointer{if empty($RELATED_RECORDS)} hide{/if}"></span>
+                </div>
+                <div class="span4">
+                    <span class="btn-group pull-right">
+                        <button class="btn" id="relatedListPreviousPageButton" {if !$PAGING->isPrevPageExists()} disabled="disabled" {/if} type="button"><span class="icon-chevron-left"></span></button>
+                        <button class="btn dropdown-toggle" type="button" id="relatedListPageJump" data-toggle="dropdown" {if $PAGE_COUNT eq 1} disabled {/if}">
+                                <i class="vtGlyph vticon-pageJump" title="{vtranslate('LBL_LISTVIEW_PAGE_JUMP',$moduleName)}"></i>
+                        </button>
+                        <ul class="listViewBasicAction dropdown-menu" id="relatedListPageJumpDropDown">
+                            <li>
+                                <span class="row-fluid">
+                                    <span class="span3"><span class="pull-right">{vtranslate('LBL_PAGE',$moduleName)}</span></span>
+                                    <span class="span4">
+                                        <input type="text" id="pageToJump" class="listViewPagingInput" value="{$PAGING->getCurrentPage()}"/>
+                                    </span>
+                                    <span class="span2 textAlignCenter">
+                                        {vtranslate('LBL_OF',$moduleName)}
+                                    </span>
+                                    <span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
+                                </span>
+                            </li>
+                        </ul>
+                        <button class="btn" id="relatedListNextPageButton" {if (!$PAGING->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
                     </span>
-                </li>
-            </ul>
-            <button class="btn" id="relatedListNextPageButton" {if (!$PAGING->isNextPageExists()) or ($PAGE_COUNT eq 1)} disabled="disabled" {/if} type="button"><span class="icon-chevron-right"></span></button>
+                </div>
+            </div>
+            </span>
         </div>
-    </span>
-    </span>
-</div>
 </div>
 </div>
 <div class="contents-topscroll">
@@ -80,9 +80,9 @@
             <thead>
                 <tr class="listViewHeaders">
                     {foreach item=HEADER_FIELD from=$RELATED_HEADERS}
-							<th nowrap {if $HEADER_FIELD@last} colspan="2" {/if} class="{$WIDTHTYPE}">
+							<th nowrap {if $HEADER_FIELD@last} colspan="2" {/if}>
                             <a href="javascript:void(0);" class="relatedListHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-fieldname="{$HEADER_FIELD->get('name')}">{vtranslate($HEADER_FIELD->get('label'), $RELATED_MODULE->get('name'))}
-                                &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}<img class="{$SORT_IMAGE} icon-white">{/if}
+                                &nbsp;&nbsp;{if $COLUMN_NAME eq $HEADER_FIELD->get('name')}<img class="{$SORT_IMAGE}">{/if}
                             </a>
                         </th>
                     {/foreach}

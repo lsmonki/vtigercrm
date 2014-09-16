@@ -117,6 +117,8 @@ class VTJsonCondition {
 		$data = $entityData->getData();
 
 		$condition = $cond['operation'];
+		if(empty($condition)) return false;
+
 		$fieldValue = $data[$cond['fieldname']];
 		$value = trim(html_entity_decode($cond['value']));
 		$expressionType = $cond['valuetype'];
@@ -140,12 +142,12 @@ class VTJsonCondition {
 				$value = $exprEvaluater->evaluate($entityData);
 			}
 		}
-		
+
 		global $current_user;
 		$handler = vtws_getModuleHandlerFromName($entityData->getModuleName(), $current_user);
 		$moduleFields = $handler->getMeta()->getModuleFields();
 		$fieldInstance = $moduleFields[$cond['fieldname']];
-		
+
 		if($fieldInstance && $fieldInstance->getFieldDataType() == 'datetime') {
 			//Convert the DB Date Time Format to User Date Time Format
 			$date = new DateTimeField($fieldValue);
@@ -156,7 +158,27 @@ class VTJsonCondition {
 				$fieldValue = $fieldValueArray[0];
 			}
 		}
-		
+		//strtotime condition is added for days before, days after where we give integer values, so strtotime will return 0 for such cases.
+		if($fieldInstance && $fieldInstance->getFieldDataType() == 'date' && $condition != 'between' && strtotime($value)) {
+			//Convert User Date Format filter value to DB date format
+			$value = getValidDBInsertDateValue($value);
+		}
+
+		if($fieldInstance && $fieldInstance->getFieldDataType() == 'time') {
+			$value = $value.':00';	// time fields will not have seconds appended to it, so we are adding 
+		}
+        
+        if($fieldInstance && $fieldInstance->getFieldDataType() == 'owner' ) { 
+            if($condition == 'is' || $condition == 'is not') { 
+                //To avoid again checking whether it is user or not 
+                $idList = array();
+                $idList[] = vtws_getWebserviceEntityId('Users',$value); 
+                $idList[] = vtws_getWebserviceEntityId('Groups',$value);
+                $value = $idList;
+                $condition = ($condition == 'is') ? 'contains' : 'does not contain';
+            } 
+        }
+
 		switch ($condition) {
 			case "equal to":
 				return $fieldValue == $value;
@@ -193,9 +215,15 @@ class VTJsonCondition {
 					return $fieldValue != $value;
 				}
 			case "contains":
+                if(is_array($value)){ 
+                    return in_array($fieldValue, $value); 
+                }
 				return strpos($fieldValue, $value) !== FALSE;
 			case "does not contain":
 				if(empty($value)) unset($value);
+                if(is_array($value)){ 
+                    return !in_array($fieldValue, $value); 
+                } 
 				return strpos($fieldValue, $value) === FALSE;
 			case "starts with":
 				return $this->startsWith($fieldValue, $value);
@@ -203,6 +231,7 @@ class VTJsonCondition {
 				return $this->endsWith($fieldValue, $value);
 			case "matches":
 				return preg_match($value, $fieldValue);
+
 			case "has changed" :
 				$entityDelta = new VTEntityDelta();
 				$idParts = vtws_getIdComponents($entityData->getId());
@@ -226,8 +255,7 @@ class VTJsonCondition {
 				if(empty($fieldValue)) {
 					return false;
 				}
-				$dbValue = getValidDBInsertDateValue($value);
-				if($fieldValue < $dbValue) {
+				if($fieldValue < $value) {
 					return true;
 				}
 				return false;
@@ -235,8 +263,7 @@ class VTJsonCondition {
 				if(empty($fieldValue)) {
 					return false;
 				}
-				$dbValue = getValidDBInsertDateValue($value);
-				if($fieldValue > $dbValue) {
+				if($fieldValue > $value) {
 					return true;
 				}
 				return false;

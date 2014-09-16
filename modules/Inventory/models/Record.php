@@ -170,8 +170,8 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
     public function getSendEmailPDFUrl() {
         return 'module='.$this->getModuleName().'&view=SendEmail&mode=composeMailData&record='.$this->getId();
     }
-
-	/**
+    
+    /**
 	 * Function to get this record and details as PDF
 	 */
 	public function getPDF() {

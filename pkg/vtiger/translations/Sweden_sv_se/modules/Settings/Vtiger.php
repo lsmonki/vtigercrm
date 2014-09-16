@@ -8,6 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+        'LBL_INTEGRATION' => 'Integration',
+        'LBL_PBXMANAGER' => 'PBXManager',
 	// Basic Strings
 	'Settings' => 'Inställningar',
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Sök Inställningar',
@@ -84,6 +86,7 @@ $languageStrings = array(
 	'INVENTORYTERMSANDCONDITIONS' => 'Inventering: Villkor',
 	'LBL_INV_TANDC_DESCRIPTION' => 'Lägg villkoren för offerter, fakturor och kundorder',
 
+        'LBL_ANNOUNCEMENT' => 'Tillkännagivande',
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Hantera hela företagets tillkännagivanden',
 
 	'LBL_CURRENCY_SETTINGS' => 'Valutor',
@@ -99,7 +102,6 @@ $languageStrings = array(
 	'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Skapa och redigera arbetsflöden',
 
 	'Configuration Editor' => 'konfiguratorredigeraren',
-	'Update configuration file of the application' => 'Uppdatering konfigurationsfil av programmet',
 
 	'LBL_CUSTOMER_PORTAL' => 'Kundportal',
 	'PORTAL_EXTENSION_DESCRIPTION' => 'Låter dig ställa anpassad Pluginportal',
@@ -163,11 +165,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER' => 'Utgående Server',
 	'LBL_OUTGOING_SERVER_DESC' => 'Konfigurera dina utgående serverinställningar',
 	'LBL_DEFAULT'=>'Som förvalt är SMTP kontoinställningar för utgående server konfigurerad att od1.vtiger.com postserver. För att undvika att utgående e-post få filtreras bort av spamfilter på din mottagare ISP e-postserver, rekommenderar vi att du genomför ett av följande.',
-	'LBL_OPTIONS1'=>'Skicka e-post från e-postservern<br>
-					- Ange SMTP-kontouppgifter (Servernamn, Användarnamn, Lösneord) för samma konto som antecknats i från e-postadress.',
-	'LBL_OPTIONS2'=>"Ange od1.vtiger.com servern som en auktoriserad avsändare för din domän. <br>
-- Om du föredrar tills behålla vtiger server som utgående server, rekommenderar vi att du konfigurerar domänens SPF-posten tills inkluderar vtiger servern som en giltig avsändare för din domän.
-För ytterligar instruktioner om hur du konfigurerar SPF-post, skicka ett e-post od-support@vtiger.com.",
+	'LBL_OPTIONS1'=>'',
+	'LBL_OPTIONS2'=>"",
 	'LBL_MAIL_SERVER_SMTP'=>'E-postserverinställningar (SMTP)',
 	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'OBS: Om "Från E-post" fältet är satt till tomt har Användare E-post-adress kommer att plockas upp.',
 	'LBL_TESTMAILSTATUS'=>'Testa E-poststatus : ',

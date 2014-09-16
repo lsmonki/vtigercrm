@@ -184,7 +184,10 @@ class vtigerCRMHandler extends SyncHandler {
                 $entityNameIds = wsapp_getRecordEntityNameIds(array_values($recordReferenceFieldNames), $referenceModuleDetails, $user);
                 foreach ($records as $index => $recordInfo) {
                     if(array_key_exists($referenceFieldName, $recordInfo)){
-                        if (!empty($entityNameIds[$recordInfo[$referenceFieldName]])) {
+                        $array = explode('x',$record[$referenceFieldName]); 
+                        if(is_numeric($array[0]) && is_numeric($array[1])){ 
+                            $recordInfo[$referenceFieldName] = $recordInfo[$referenceFieldName]; 
+                        }elseif (!empty($entityNameIds[$recordInfo[$referenceFieldName]])) {
                             $recordInfo[$referenceFieldName] = $entityNameIds[$recordInfo[$referenceFieldName]];
                         } else {
                             $recordInfo[$referenceFieldName] = "";

@@ -142,8 +142,8 @@ class Vtiger_PDF_Generator {
 		
 		// ContentViewer
 		$this->contentFrame = new Vtiger_PDF_Frame();
-		$this->contentFrame->x = $pdf->GetX();
-		$this->contentFrame->y = $pdf->GetY();
+		$this->contentFrame->x = $pdf->GetX();    
+                $this->contentFrame->y = $pdf->GetY()+10.0;
 		
 		$this->contentFrame->h = $totalHeightContent;
 		$this->contentFrame->w = $this->totalWidth;

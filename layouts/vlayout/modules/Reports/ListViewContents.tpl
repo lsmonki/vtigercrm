@@ -14,11 +14,11 @@
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
 <input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
-<input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTIRES_COUNT}" />
+<input type="hidden" id="numberOfEntries" value= "{$LISTVIEW_ENTRIES_COUNT}" />
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
 <input type='hidden' id='pageNumber' value="{$PAGE_NUMBER}" >
 <input type='hidden' id='pageLimit' value="{$PAGING_MODEL->getPageLimit()}">
-<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTIRES_COUNT}">
+<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTRIES_COUNT}">
 
 <div id="selectAllMsgDiv" class="alert-block msgDiv">
 	<strong><a id="selectAllMsg">{vtranslate('LBL_SELECT_ALL',$MODULE)}&nbsp;{vtranslate($MODULE ,$MODULE)}&nbsp;(<span id="totalRecordsCount"></span>)</a></strong>
@@ -41,9 +41,9 @@
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
-				<th class="{$WIDTHTYPE}"><input type="checkbox" id="listViewEntriesMainCheckBox"></th>
+				<th><input type="checkbox" id="listViewEntriesMainCheckBox"></th>
 				{foreach key=LISTVIEW_HEADER_KEY item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
-					<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if} class="{$WIDTHTYPE}">
+					<th nowrap {if $LISTVIEW_HEADER@last} colspan="2" {/if}>
 						<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $COLUMN_NAME eq $LISTVIEW_HEADER_KEY}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER_KEY}">{vtranslate($LISTVIEW_HEADERS[$LISTVIEW_HEADER_KEY],$MODULE)}
 						&nbsp;&nbsp;{if $COLUMN_NAME eq $LISTVIEW_HEADER_KEY}<img class="{$SORT_IMAGE} icon-white">{/if}</a>
 					</th>
@@ -75,7 +75,7 @@
 	</table>
 
 <!--added this div for Temporarily -->
-{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 	<table class="emptyRecordsDiv">
 		<tbody>
 			<tr>
@@ -87,6 +87,10 @@
 		</tbody>
 	</table>
 {/if}
+</div>
+</div>
+
+</div>
 </div>
 </div>
 {/strip}

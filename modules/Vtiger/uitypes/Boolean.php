@@ -29,5 +29,9 @@ class Vtiger_Boolean_UIType extends Vtiger_Base_UIType {
 		}
 		return Vtiger_Language_Handler::getTranslatedString('LBL_NO', $this->get('field')->getModuleName());
 	}
+    
+     public function getListSearchTemplateName() {
+        return 'uitypes/BooleanFieldSearchView.tpl';
+    }
 
 }

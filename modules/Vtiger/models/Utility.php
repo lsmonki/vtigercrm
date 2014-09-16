@@ -20,7 +20,8 @@ class Vtiger_Utility_Model extends Vtiger_Action_Model {
 	public function isModuleEnabled($module) {
 		$db = PearDatabase::getInstance();
 		if(!$module->isEntityModule()) {
-			return false;
+            if(!$module->isUtilityActionEnabled())
+                return false;
 		}
 		$tabId = $module->getId();
 		$sql = 'SELECT 1 FROM vtiger_profile2utility WHERE tabid = ? AND activityid = ? LIMIT 1';

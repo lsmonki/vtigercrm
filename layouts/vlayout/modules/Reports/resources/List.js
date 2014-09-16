@@ -17,8 +17,10 @@ Vtiger_List_Js("Reports_List_Js",{
 
 	triggerAddFolder : function(url) {
 		var params = url;
+		var progressIndicatorElement = jQuery.progressIndicator();
 		AppConnector.request(params).then(
 			function(data) {
+				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 				var callBackFunction = function(data){
 					jQuery('#addFolder').validationEngine({
 						// to prevent the page reload after the validation has completed
@@ -66,7 +68,7 @@ Vtiger_List_Js("Reports_List_Js",{
 			var selectedIds = listInstance.readSelectedIds(true);
 			var excludedIds = listInstance.readExcludedIds(true);
 			var cvId = listInstance.getCurrentCvId();
-			
+
 			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
 			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 				function(e) {
@@ -115,8 +117,10 @@ Vtiger_List_Js("Reports_List_Js",{
 				"url":url,
 				"data" : postData
 			};
+			var progressIndicatorElement = jQuery.progressIndicator();
 			AppConnector.request(params).then(
 				function(data) {
+					progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 					var callBackFunction = function(data){
 						var reportsListInstance = new Reports_List_Js();
 

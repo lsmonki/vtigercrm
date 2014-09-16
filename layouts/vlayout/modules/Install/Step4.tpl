@@ -36,7 +36,8 @@
 						</thead>
 						<tbody>
 							<tr><td>{vtranslate('LBL_DATABASE_TYPE', 'Install')}<span class="no">*</span></td>
-								<td>{vtranslate('MySQL', 'Install')}<input type="hidden" value="mysql" name="db_type"></td>
+								<td>{vtranslate('MySQL', 'Install')}{if function_exists('mysqli_connect')}<input type="hidden" value="mysqli" name="db_type">{else}
+                                                                    <input type="hidden" value="mysql" name="db_type">{/if}</td>
 							</tr>
 							<tr><td>{vtranslate('LBL_HOST_NAME', 'Install')}<span class="no">*</span></td>
 								<td><input type="text" value="{$DB_HOSTNAME}" name="db_hostname"></td>

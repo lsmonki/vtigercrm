@@ -415,7 +415,9 @@ class Vtiger_PackageExport {
 			if(isset($fieldresultrow['masseditable'])) {
 				$this->outputNode($fieldresultrow['masseditable'], 'masseditable');
 			}
-
+                        if(isset($fieldresultrow['summaryfield'])){
+                            $this->outputNode($fieldresultrow['summaryfield'],'summaryfield');
+                        }
 			// Export Entity Identifier Information
 			if($fieldname == $entity_fieldname) {
 				$this->openNode('entityidentifier');

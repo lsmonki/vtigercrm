@@ -20,15 +20,21 @@ class Vtiger_SummaryRecordStructure_Model extends Vtiger_DetailRecordStructure_M
 	public function getStructure() {
 		$summaryFieldsList = $this->getModule()->getSummaryViewFieldsList();
         $recordModel = $this->getRecord();
-        $summaryFieldModelsList['SUMMARY_FIELDS'] = array();
+        $blockSeqSortSummaryFields = array();
 			if ($summaryFieldsList) {
 			foreach ($summaryFieldsList as $fieldName => $fieldModel) {
                 if($fieldModel->isViewableInDetailView()) {
                     $fieldModel->set('fieldvalue', $recordModel->get($fieldName));
-                    $summaryFieldModelsList['SUMMARY_FIELDS'][$fieldName] = $fieldModel;
+                    $blockSequence = $fieldModel->block->sequence;
+                    $blockSeqSortSummaryFields[$blockSequence]['SUMMARY_FIELDS'][$fieldName] = $fieldModel;
 						}
 					}
 				}
+        $summaryFieldModelsList = array();
+        ksort($blockSeqSortSummaryFields);
+        foreach($blockSeqSortSummaryFields as $blockSequence => $summaryFields){
+            $summaryFieldModelsList = array_merge_recursive($summaryFieldModelsList , $summaryFields);
+        }
 		return $summaryFieldModelsList;
 	}
 }

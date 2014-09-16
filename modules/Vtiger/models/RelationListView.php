@@ -12,6 +12,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 
 	protected $relationModel = false;
 	protected $parentRecordModel = false;
+	protected $relatedModuleModel = false;
 
 	public function setRelationModel($relation){
 		$this->relationModel = $relation;
@@ -29,6 +30,15 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 
 	public function getParentRecordModel(){
 		return $this->parentRecordModel;
+	}
+
+	public function setRelatedModuleModel($relatedModuleModel){
+		$this->relatedModuleModel = $relatedModuleModel;
+		return $this;
+	}
+	
+	public function getRelatedModuleModel(){
+		return $this->relatedModuleModel;
 	}
 
 	public function getCreateViewUrl(){
@@ -169,10 +179,24 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$db = PearDatabase::getInstance();
 		$parentModule = $this->getParentRecordModel()->getModule();
 		$relationModule = $this->getRelationModel()->getRelationModuleModel();
+		$relationModuleName = $relationModule->get('name');
 		$relatedColumnFields = $relationModule->getConfigureRelatedListFields();
 		if(count($relatedColumnFields) <= 0){
 			$relatedColumnFields = $relationModule->getRelatedListFields();
 		}
+		
+		if($relationModuleName == 'Calendar') {
+			//Adding visibility in the related list, showing records based on the visibility
+			$relatedColumnFields['visibility'] = 'visibility';
+		}
+		
+		if($relationModuleName == 'PriceBooks') {
+			//Adding fields in the related list
+			$relatedColumnFields['unit_price'] = 'unit_price';
+			$relatedColumnFields['listprice'] = 'listprice';
+			$relatedColumnFields['currency_id'] = 'currency_id';
+		}
+		
 		$query = $this->getRelationQuery();
 
 		if ($this->get('whereCondition')) {
@@ -199,7 +223,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
                 $query = $selectAndFromClause.' WHERE '.$whereCondition;
                 $query .= ' ORDER BY '.$qualifiedOrderBy.'.label '.$sortOrder;
             } elseif($orderByFieldModuleModel && $orderByFieldModuleModel->isOwnerField()) {
-				 $query .= ' ORDER BY CONCAT(vtiger_users.first_name, " ", vtiger_users.last_name) '.$sortOrder;
+				 $query .= ' ORDER BY COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname) '.$sortOrder;
 			} else{
                 // Qualify the the column name with table to remove ambugity
                 $qualifiedOrderBy = $orderBy;
@@ -209,12 +233,13 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 				}
                 $query = "$query ORDER BY $qualifiedOrderBy $sortOrder";
 				}
-			}
+		}
 
 		$limitQuery = $query .' LIMIT '.$startIndex.','.$pageLimit;
 		$result = $db->pquery($limitQuery, array());
 		$relatedRecordList = array();
-
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$groupsIds = Vtiger_Util_Helper::getGroupsIdsForUsers($currentUser->getId());
 		for($i=0; $i< $db->num_rows($result); $i++ ) {
 			$row = $db->fetch_row($result,$i);
 			$newRow = array();
@@ -224,7 +249,30 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
                 }
             }
 			//To show the value of "Assigned to"
+			$ownerId = $row['smownerid'];
 			$newRow['assigned_user_id'] = $row['smownerid'];
+			if($relationModuleName == 'Calendar') {
+				$visibleFields = array('activitytype','date_start','time_start','due_date','time_end','assigned_user_id','visibility','smownerid','parent_id');
+				$visibility = true;
+				if(in_array($ownerId, $groupsIds)) {
+					$visibility = false;
+				} else if($ownerId == $currentUser->getId()){
+					$visibility = false;
+				}
+				if(!$currentUser->isAdminUser() && $newRow['activitytype'] != 'Task' && $newRow['visibility'] == 'Private' && $ownerId && $visibility) {
+					foreach($newRow as $data => $value) {
+						if(in_array($data, $visibleFields) != -1) {
+							unset($newRow[$data]);
+						}
+					}
+					$newRow['subject'] = vtranslate('Busy','Events').'*';
+				}
+				if($newRow['activitytype'] == 'Task') {
+					unset($newRow['visibility']);
+				}
+				
+			}
+			
 			$record = Vtiger_Record_Model::getCleanInstance($relationModule->get('name'));
             $record->setData($newRow)->setModuleFromInstance($relationModule);
             $record->setId($row['crmid']);
@@ -268,8 +316,39 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 	 */
 	public function getRelationQuery() {
 		$relationModel = $this->getRelationModel();
-		$recordModel = $this->getParentRecordModel();
-		$query = $relationModel->getQuery($recordModel);
+
+		if(!empty($relationModel) && $relationModel->get('name') != NULL){
+			$recordModel = $this->getParentRecordModel();
+			$query = $relationModel->getQuery($recordModel);
+			return $query;
+		}
+		$relatedModuleModel = $this->getRelatedModuleModel(); 
+        $relatedModuleName = $relatedModuleModel->getName(); 
+		
+		$relatedModuleBaseTable = $relatedModuleModel->basetable;
+		$relatedModuleEntityIdField = $relatedModuleModel->basetableid;
+		
+		$parentModuleModel = $relationModel->getParentModuleModel();
+		$parentModuleBaseTable = $parentModuleModel->basetable;
+		$parentModuleEntityIdField = $parentModuleModel->basetableid;
+		$parentRecordId = $this->getParentRecordModel()->getId();
+		$parentModuleDirectRelatedField = $parentModuleModel->get('directRelatedFieldName');
+		
+		$relatedModuleFields = array_keys($this->getHeaders());
+		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+		$queryGenerator = new QueryGenerator($relatedModuleName, $currentUserModel);
+		$queryGenerator->setFields($relatedModuleFields);
+		
+		$query = $queryGenerator->getQuery();
+		
+		$queryComponents = spliti(' FROM ', $query);
+		$query = $queryComponents[0].' ,vtiger_crmentity.crmid FROM '.$queryComponents[1];
+		
+		$whereSplitQueryComponents = spliti(' WHERE ', $query);
+		$joinQuery = ' INNER JOIN '.$parentModuleBaseTable.' ON '.$parentModuleBaseTable.'.'.$parentModuleDirectRelatedField." = ".$relatedModuleBaseTable.'.'.$relatedModuleEntityIdField;
+		
+		$query = "$whereSplitQueryComponents[0] $joinQuery WHERE $parentModuleBaseTable.$parentModuleEntityIdField = $parentRecordId AND $whereSplitQueryComponents[1]";
+		
 		return $query;
 	}
 
@@ -279,13 +358,33 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$instance = new $className();
 
 		$parentModuleModel = $parentRecordModel->getModule();
-		$relationModuleModel = Vtiger_Module_Model::getInstance($relationModuleName);
-
-		$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relationModuleModel, $label);
-		$instance->setRelationModel($relationModel)->setParentRecordModel($parentRecordModel);
+		$relatedModuleModel = Vtiger_Module_Model::getInstance($relationModuleName);
+		$instance->setRelatedModuleModel($relatedModuleModel);
+		
+		$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relatedModuleModel, $label);
+		$instance->setParentRecordModel($parentRecordModel);
+		
+		if(!$relationModel){
+			$relatedModuleName = $relatedModuleModel->getName();
+			$parentModuleModel = $instance->getParentRecordModel()->getModule();
+			$referenceFieldOfParentModule = $parentModuleModel->getFieldsByType('reference');
+			foreach ($referenceFieldOfParentModule as $fieldName=>$fieldModel) {
+				$refredModulesOfReferenceField = $fieldModel->getReferenceList();
+				if(in_array($relatedModuleName, $refredModulesOfReferenceField)){
+					$relationModelClassName = Vtiger_Loader::getComponentClassName('Model', 'Relation', $parentModuleModel->getName());
+					$relationModel = new $relationModelClassName();
+					$relationModel->setParentModuleModel($parentModuleModel)->setRelationModuleModel($relatedModuleModel);
+					$parentModuleModel->set('directRelatedFieldName',$fieldModel->get('column'));
+				}
+			}
+		}
+		if(!$relationModel){
+			$relationModel = false;
+		}
+		$instance->setRelationModel($relationModel);
 		return $instance;
 	}
-
+	
 	/**
 	 * Function to get Total number of record in this relation
 	 * @return <Integer>
@@ -293,15 +392,20 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 	public function getRelatedEntriesCount() {
 		$db = PearDatabase::getInstance();
 		$relationQuery = $this->getRelationQuery();
-		$position = stripos($relationQuery, ' from ');
+		$relationQuery = ereg_replace("[ \t\n\r]+", " ", $relationQuery);
+		$position = stripos($relationQuery,' from ');
 		if ($position) {
-			$split = spliti(' from ', $relationQuery);
+			$split = spliti(' FROM ', $relationQuery);
 			$splitCount = count($split);
-			$relationQuery = 'SELECT count(*) AS count ';
+			$relationQuery = 'SELECT COUNT(DISTINCT vtiger_crmentity.crmid) AS count'; 
 			for ($i=1; $i<$splitCount; $i++) {
 				$relationQuery = $relationQuery. ' FROM ' .$split[$i];
 			}
 		}
+        if(strpos($relationQuery,' GROUP BY ') !== false){
+            $parts = explode(' GROUP BY ',$relationQuery);
+            $relationQuery = $parts[0];
+        }
 		$result = $db->pquery($relationQuery, array());
 		return $db->query_result($result, 0, 'count');
 	}
@@ -337,5 +441,34 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		}
 		return $updatedQuery;
 	}
+    
+    public function getCurrencySymbol($recordId, $fieldModel) {
+        $db = PearDatabase::getInstance(); 
+        $moduleName = $fieldModel->getModuleName();
+        $fieldName = $fieldModel->get('name');
+        $tableName = $fieldModel->get('table');
+        $columnName = $fieldModel->get('column');
+        
+        if(($fieldName == 'currency_id') && ($moduleName == 'Products' || $moduleName == 'Services')) {
+            $query = "SELECT currency_symbol FROM vtiger_currency_info WHERE id = ("; 
+            if($moduleName == 'Products') 
+                $query .= "SELECT currency_id FROM vtiger_products WHERE productid = ?)"; 
+            else if($moduleName == 'Services')
+                $query .= "SELECT currency_id FROM vtiger_service WHERE serviceid = ?)"; 
+
+            $result = $db->pquery($query, array($recordId)); 
+            return $db->query_result($result, 0, 'currency_symbol');    
+        } else if(($tableName == 'vtiger_invoice' || $tableName == 'vtiger_quotes' || $tableName == 'vtiger_purchaseorder' || $tableName == 'vtiger_salesorder') &&
+                    ($columnName == 'total' || $columnName == 'subtotal' || $columnName == 'discount_amount' || $columnName == 's_h_amount' || $columnName == 'paid' ||
+                        $columnName == 'balance' || $columnName == 'received' || $columnName == 'listprice' || $columnName == 'adjustment' || $columnName == 'pre_tax_total')) {
+            $focus = CRMEntity::getInstance($moduleName);
+            $query = "SELECT currency_symbol FROM vtiger_currency_info WHERE id = ( SELECT currency_id FROM ".$tableName." WHERE ".$focus->table_index." = ? )";
+            $result = $db->pquery($query, array($recordId)); 
+            return $db->query_result($result, 0, 'currency_symbol');
+        } else {
+            $fieldInfo = $fieldModel->getFieldInfo();
+            return $fieldInfo['currency_symbol'];
+        }         
+    }
 
 }

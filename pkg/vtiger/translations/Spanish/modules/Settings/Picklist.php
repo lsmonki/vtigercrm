@@ -11,7 +11,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2013-05-10
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-10
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  *************************************************************************************/
 $languageStrings = array(
@@ -44,7 +44,9 @@ $languageStrings = array(
 	'LBL_ASSIGN_VALUES_TO_ROLES' => 'Asignar Valores a Roles',
 	'LBL_SELECTED_VALUES' => 'Valores Seleccionados',
 	'NO_PICKLIST_FIELDS'=> 'no tiene campos de tipo lista desplegable',
-	'LBL_NON_EDITABLE_PICKLIST_VALUES' => 'Valores No Editables',
+        'LBL_NON_EDITABLE_PICKLIST_VALUES' => 'Valores No Editables',
+	//Translation for module
+	'Calendar' => 'Calendario',
 );
 $jsLanguageStrings = array(
 	//PickList 

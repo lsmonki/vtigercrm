@@ -20,15 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-require_once('data/CRMEntity.php');
-require_once('modules/Contacts/Contacts.php');
-require_once('modules/Accounts/Accounts.php');
-require_once('modules/Potentials/Potentials.php');
-require_once('modules/Users/Users.php');
-
 // Email is used to store customer information.
 class Emails extends CRMEntity {
 
@@ -50,6 +41,7 @@ class Emails extends CRMEntity {
 		'Subject' => Array('activity' => 'subject'),
 		'Related to' => Array('seactivityrel' => 'parent_id'),
 		'Date Sent' => Array('activity' => 'date_start'),
+        'Time Sent' => Array('activity' => 'time_start'),
 		'Assigned To' => Array('crmentity', 'smownerid'),
 		'Access Count' => Array('email_track', 'access_count')
 	);
@@ -57,6 +49,7 @@ class Emails extends CRMEntity {
 		'Subject' => 'subject',
 		'Related to' => 'parent_id',
 		'Date Sent' => 'date_start',
+        'Time Sent' => 'time_start',
 		'Assigned To' => 'assigned_user_id',
 		'Access Count' => 'access_count'
 	);
@@ -65,7 +58,7 @@ class Emails extends CRMEntity {
 	var $sortby_fields = Array('subject', 'date_start', 'saved_toid');
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'date_start';
-	var $default_sort_order = 'ASC';
+	var $default_sort_order = 'DESC';
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
 	var $mandatory_fields = Array('subject', 'assigned_user_id');
@@ -505,7 +498,26 @@ class Emails extends CRMEntity {
 	}
 
 	public function getNonAdminAccessControlQuery($module, $user, $scope='') {
-		return " and vtiger_crmentity$scope.smownerid=$user->id ";
+        require('user_privileges/user_privileges_' . $user->id . '.php');
+		require('user_privileges/sharing_privileges_' . $user->id . '.php');
+		$query = ' ';
+		$tabId = getTabid($module);
+		if ($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2]
+				== 1 && $defaultOrgSharingPermission[$tabId] == 3) {
+			$tableName = 'vt_tmp_u' . $user->id;
+			$sharingRuleInfoVariable = $module . '_share_read_permission';
+			$sharingRuleInfo = $sharingRuleInfoVariable;
+			$sharedTabId = null;
+			if (!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 ||
+					count($sharingRuleInfo['GROUP']) > 0)) {
+				$tableName = $tableName . '_t' . $tabId;
+				$sharedTabId = $tabId;
+			}
+			$this->setupTemporaryTable($tableName, $sharedTabId, $user, $current_user_parent_role_seq, $current_user_groups);
+			$query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = " .
+					"vtiger_crmentity$scope.smownerid ";
+		}
+        return $query;
 	}
 
 	protected function setupTemporaryTable($tableName, $tabId, $user, $parentRole, $userGroups) {
@@ -567,6 +579,9 @@ class Emails extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable("vtiger_lastModifiedByEmails")){
 		    $query .= " LEFT JOIN vtiger_users AS vtiger_lastModifiedByEmails ON vtiger_lastModifiedByEmails.id = vtiger_crmentityEmails.modifiedby and vtiger_seactivityreltmpEmails.activityid = vtiger_activity.activityid";
+		}
+        if ($queryPlanner->requireTable("vtiger_createdbyEmails")){
+			$query .= " left join vtiger_users as vtiger_createdbyEmails on vtiger_createdbyEmails.id = vtiger_crmentityEmails.smcreatorid and vtiger_seactivityreltmpEmails.activityid = vtiger_activity.activityid";
 		}
 		if ($queryPlanner->requireTable("vtiger_email_track")){
 		    $query .= " LEFT JOIN vtiger_email_track ON vtiger_email_track.mailid = vtiger_activity.activityid and vtiger_email_track.crmid = ".$focus->table_name.".".$focus->table_index;

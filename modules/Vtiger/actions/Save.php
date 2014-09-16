@@ -53,6 +53,12 @@ class Vtiger_Save_Action extends Vtiger_Action_Controller {
 			$relationModel = Vtiger_Relation_Model::getInstance($parentModuleModel, $relatedModule);
 			$relationModel->addRelation($parentRecordId, $relatedRecordId);
 		}
+        if($request->get('imgDeleted')) {
+            $imageIds = $request->get('imageid');
+            foreach($imageIds as $imageId) {
+                $status = $recordModel->deleteImage($imageId);
+            }
+        }
 		return $recordModel;
 	}
 
@@ -95,4 +101,8 @@ class Vtiger_Save_Action extends Vtiger_Action_Controller {
 		}
 		return $recordModel;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            return $request->validateWriteAccess(); 
+        } 
 }

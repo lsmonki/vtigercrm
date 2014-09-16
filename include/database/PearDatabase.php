@@ -115,7 +115,7 @@ class PearDatabase{
     function println($msg)
     {
 		require_once('include/logging.php');
-		$log1 =& LoggerManager::getLogger('VT');
+		$log1 = LoggerManager::getLogger('VT');
 		if(is_array($msg)) {
 		    $log1->info("PearDatabse ->".print_r($msg,true));
 		} else {
@@ -354,9 +354,9 @@ class PearDatabase{
 
 		if($this->avoidPreparedSql || empty($params)) {
 			$sql = $this->convert2Sql($sql, $params);
-			$result = &$this->database->Execute($sql);
+			$result = $this->database->Execute($sql);
 		} else {
-			$result = &$this->database->Execute($sql, $params);
+			$result = $this->database->Execute($sql, $params);
 		}
 		$sql_end_time = microtime(true);
 		$this->logSqlTiming($sql_start_time, $sql_end_time, $sql, $params);
@@ -661,6 +661,8 @@ class PearDatabase{
 	    switch ($this->dbType) {
 		    case 'mysql':
 			    return 'concat('.implode(',',$list).')';
+                    case 'mysqli':
+                            return 'concat('.implode(',',$list).')';
 		    case 'pgsql':
 			    return '('.implode('||',$list).')';
 		    default:
@@ -822,7 +824,7 @@ class PearDatabase{
 	 */
     function PearDatabase($dbtype='',$host='',$dbname='',$username='',$passwd='') {
 		global $currentModule;
-		$this->log =& LoggerManager::getLogger('PearDatabase_'. $currentModule);
+		$this->log = LoggerManager::getLogger('PearDatabase_'. $currentModule);
 		$this->resetSettings($dbtype,$host,$dbname,$username,$passwd);
 
 		// Initialize performance parameters
@@ -868,8 +870,11 @@ class PearDatabase{
 		$this->println("ADODB disconnect");
 		if(isset($this->database)){
 	    	if($this->dbType == "mysql"){
-			mysql_close($this->database);
-	    } else {
+			mysql_close($this->database->_connectionID);
+	    }else if($this->dbType=="mysqli"){
+                mysqli_close($this->database->_connectionID);
+            } 
+            else {
 			$this->database->disconnect();
 	    }
 	    unset($this->database);
@@ -1000,8 +1005,9 @@ class PearDatabase{
 	//To get a function name with respect to the database type which escapes strings in given text
 	function sql_escape_string($str)
 	{
-		if($this->isMySql())
-			$result_data = mysql_real_escape_string($str);
+		if($this->isMySql()){
+			$result_data = ($this->dbType=='mysqli')?mysqli_real_escape_string($this->database->_connectionID,$str):mysql_real_escape_string($str);
+                }
 		elseif($this->isPostgres())
 			$result_data = pg_escape_string($str);
 		return $result_data;

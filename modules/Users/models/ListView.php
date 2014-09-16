@@ -47,27 +47,27 @@ class Users_ListView_Model extends Vtiger_ListView_Model {
 	 * Functions returns the query
 	 * @return string
 	 */
-	public function getQuery() {
-		$listQuery = parent::getQuery();
+    public function getQuery() {
+            $listQuery = parent::getQuery();
         //remove the status active condition since in users list view we need to consider inactive users as well
         $listQueryComponents = explode(" WHERE vtiger_users.status='Active' AND",$listQuery);
-        $listQuery = implode(' WHERE ', $listQueryComponents);
-		return $listQuery;
-	}
+                $listQuery = implode(' WHERE ', $listQueryComponents);
+            return $listQuery;
+    }
 
 	/**
 	 * Function to get the list view entries
-	 * @param Vtiger_Paging_Model $pagingModel
+	 * @param Vtiger_Paging_Model $pagingModel, $status (Active or Inactive User). Default false
 	 * @return <Array> - Associative array of record id mapped to Vtiger_Record_Model instance.
 	 */
 	public function getListViewEntries($pagingModel) {
 		$queryGenerator = $this->get('query_generator');
-
+                
 		// Added as Users module do not have custom filters and id column is added by querygenerator.
 		$fields = $queryGenerator->getFields();
 		$fields[] = 'id';
 		$queryGenerator->setFields($fields);
-
+		
 		return parent::getListViewEntries($pagingModel);
 	}
 }

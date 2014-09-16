@@ -35,4 +35,7 @@ $languageStrings = array(
 	'LBL_SEND_MAIL_PDF' => 'Enviar Email con PDF',
 	'LBL_RECEIVED' => 'Recibido',
 	'LBL_BALANCE' => 'Balance',
+	'LBL_NOT_A_BUNDLE' => 'No es un Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Sub Productos',
+	'LBL_ACTION'	=> 'Acción',
 );

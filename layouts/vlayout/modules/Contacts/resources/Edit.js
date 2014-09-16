@@ -83,6 +83,9 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	 */
 	mapAddressDetails : function(addressDetails, result, container) {
 		for(var key in addressDetails) {
+            if(container.find('[name="'+key+'"]').length == 0) {
+                var create = container.append("<input type='hidden' name='"+key+"'>");
+            }
 			container.find('[name="'+key+'"]').val(result[addressDetails[key]]);
 			container.find('[name="'+key+'"]').trigger('change');
 		}

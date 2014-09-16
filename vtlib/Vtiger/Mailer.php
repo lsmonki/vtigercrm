@@ -119,7 +119,8 @@ class Vtiger_Mailer extends PHPMailer {
 		if(empty($fromname)) $fromname = $fromemail;
 
 		$this->From = $fromemail;
-		$this->FromName = $fromname;
+		//fix for (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/8001)
+                $this->FromName = decode_html($fromname); 
 		$this->AddReplyTo($replyto);
 	}
 
@@ -213,6 +214,14 @@ class Vtiger_Mailer extends PHPMailer {
 			}
 		}
 	}
+
+    /**
+     * Function to prepares email as string
+     * @return type
+     */
+    public function getMailString() {
+        return $this->MIMEHeader.$this->MIMEBody;
+    }
 
 	/**
 	 * Dispatch (send) email that was queued.

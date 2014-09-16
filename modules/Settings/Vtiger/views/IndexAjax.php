@@ -12,6 +12,7 @@ class Settings_Vtiger_IndexAjax_View extends Settings_Vtiger_Index_View {
 	function __construct() {
 		parent::__construct();
 		$this->exposeMethod('getSettingsShortCutBlock');
+                $this->exposeMethod('realignSettingsShortCutBlock');
 	}
 	
 	public function preProcess (Vtiger_Request $request) {
@@ -39,5 +40,14 @@ class Settings_Vtiger_IndexAjax_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('SETTINGS_SHORTCUT',$pinnedSettingsShortcuts[$fieldid]);
 		$viewer->assign('MODULE',$qualifiedModuleName);
 		$viewer->view('SettingsShortCut.tpl', $qualifiedModuleName);
+	}
+        
+        public function realignSettingsShortCutBlock(Vtiger_Request $request){
+		$viewer = $this->getViewer($request);
+		$qualifiedModuleName = $request->getModule(false);
+		$pinnedSettingsShortcuts = Settings_Vtiger_MenuItem_Model::getPinnedItems();
+		$viewer->assign('SETTINGS_SHORTCUT',$pinnedSettingsShortcuts);
+		$viewer->assign('MODULE',$qualifiedModuleName);
+		$viewer->view('ReAlignSettingsShortCut.tpl', $qualifiedModuleName);
 	}
 }

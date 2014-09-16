@@ -271,7 +271,7 @@ class Vtiger_Link_Model extends Vtiger_Link {
 				$linkModels[$linkType][] = self::getInstanceFromLinkObject($linkObject);
 			}
 		}
-        
+
         if (!is_array($type)) {
 			$type = array($type);
 		}
@@ -280,8 +280,15 @@ class Vtiger_Link_Model extends Vtiger_Link {
 		foreach ($diffTypes as $linkType) {
 			$linkModels[$linkType] = array();
 		}
-        
+
 		return $linkModels;
 	}
 
+	/**
+	* Function to get the relatedModuleName
+	* @return <String>
+	*/
+	public function getRelatedModuleName() {
+		return $this->relatedModuleName;
+	}
 }

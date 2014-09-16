@@ -11,58 +11,47 @@ $languageStrings = array(
 	// Basic Strings
 	'Accounts' => 'Kontrahenci',
 	'SINGLE_Accounts' => 'Kontrahent',
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'LBL_ADD_RECORD' => 'Dodaj Kontrahenta',
+	'LBL_RECORDS_LIST' => 'Lista Kontrahentów',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie Kontrahenta',
 
 	// Blocks
-	'LBL_ACCOUNT_INFORMATION' => 'Informacje podstawowe o firmie',
+	'LBL_ACCOUNT_INFORMATION' => 'Szczegóły Kontrahenta',
 
 	// Mass Action
-	'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Hierarchia',
+	'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Hierarchia Kontrahenta',
 
 	//Field Labels
 	'industry' => 'Branża',
-	'Account Name' => 'Nazwa kontrahenta',
+	'Account Name' => 'Nazwa Kontrahenta',
 	'Account No' => 'Numer Kontrahenta',
-	'Website' => 'Strona internetowa',
+	'Website' => 'Strona WWW',
 	'Ticker Symbol' => 'Symbol giełdowy',
-	'Member Of' => 'Kontrahent nadrzędny',
+	'Member Of' => 'Powiązany z',
 	'Employees' => 'Liczba pracowników',
-	'Ownership' => 'Forma prawna kontrahenta',
+	'Ownership' => 'Właściciel',
 	'SIC Code' => 'Numer EKD',
-	'Other Email' => 'Mail dodatkowy',
-	'Other Phone' => 'Telefon dodatkowy',
-	'Phone' => 'Telefon do firmy',
-	'Email' => 'Mail do firmy',
+	'Other Email' => 'Drugi mail',
 	
 	//Added for existing picklist entries
-	
-	'Analyst'=>'Firma analityczna',
-	'Competitor'=>'Firma konkurencyjna',
+
+	'Analyst'=>'Analityk',
+	'Competitor'=>'Konkurencja',
 	'Customer'=>'Klient',
-	'Integrator'=>'Firma zależna',
+	'Integrator'=>'Integrator',
 	'Investor'=>'Inwestor',
-	'Press'=>'Prasa',
-	'Prospect'=>'Potencjalny klient',
-	'Reseller'=>'Sprzedawca',
+	'Press'=>'Media',
+	'Prospect'=>'Potencjalny Klient',
+        'Prospect Accounts'            => 'Konta Prospect',
+	'Reseller'=>'Partner',
 	'LBL_START_DATE' => 'Data rozpoczęcia',
 	'LBL_END_DATE' => 'Data zakończenia',
 	
 	//Duplication error message
-	'LBL_DUPLICATES_EXIST' => 'Taka nazwa firmy już istnieje',
-	'LBL_COPY_SHIPPING_ADDRESS' => 'Kopiuj adres dostawy',
-	'LBL_COPY_BILLING_ADDRESS' => 'Kopiuj adres korespondencji',
-	
-	//OpenSaaS
-	'LBL_CREATING_NEW' => 'Nowy',
-	'Fax' => 'Faks do firmy',
-
-	
+	'LBL_DUPLICATES_EXIST' => 'Taka nazwa Kontrahenta już istnieje!',
 );
 
 $jsLanguageStrings = array(
-	'LBL_RELATED_RECORD_DELETE_CONFIRMATION' => 'Czy jesteś pewien że chcesz usunąć rekordy?',
-	'LBL_DELETE_CONFIRMATION' => 'Usunięcie tego Kontrahenta usunie również przypisane szanse sprzedaży oraz Oferty. Czy jesteś pewnien, że chcesz usunąć tego Kontrahenta?',
-	'LBL_MASS_DELETE_CONFIRMATION' => 'Usunięcie tych Kontrahentów usunie również przypisane szanse sprzedaży oraz Oferty. Czy jesteś pewnien, że chcesz usunąć tych Kontrahentów?',
-	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Taki kontrahent istnieje. Czy chcesz utworzyć duplikat?'
+	'LBL_DELETE_CONFIRMATION' => 'Usunięcie Kontrahenta spowoduje usunięcie powiązanych z nim Szans Sprzedaży i Ofert, czy na pewno chcesz to zrobić?',
+	'LBL_MASS_DELETE_CONFIRMATION' => 'Usunięcie Kontrahentów spowoduje usunięcie powiązanych z nimi Szans Sprzedaży i Ofert, czy na pewno chcesz to zrobić?',
 );

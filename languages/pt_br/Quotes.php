@@ -19,5 +19,6 @@ $languageStrings = array(
 	'Valid Till'                   => 'Válido até'                , 
 	'Inventory Manager'            => 'Almoxarife'                  , 
 	'Accepted'                     => 'Aceita'                      , 
-	'Rejected'                     => 'Rejeitada'                   , 
+	'Rejected'                     => 'Rejeitada'                   ,
+        'Open Quotes'                  => 'Abertas Cotações',
 );

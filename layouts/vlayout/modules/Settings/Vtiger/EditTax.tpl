@@ -24,7 +24,7 @@
 				<h3>{vtranslate('LBL_ADD_NEW_TAX', $QUALIFIED_MODULE)}</h3>
 			{/if}
 		</div>
-		<form id="editTax" class="form-horizontal">
+		<form id="editTax" class="form-horizontal" method="POST">
 			<input type="hidden" name="taxid" value="{$TAX_ID}" />
 			<input type="hidden" name="type" value="{$TAX_TYPE}" />
 			<div class="modal-body">

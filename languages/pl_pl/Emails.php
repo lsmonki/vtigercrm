@@ -22,5 +22,6 @@ $languageStrings = array(
    	'LBL_ADD_BCC' => 'Dodaj do UDW',
 	'LBL_MAX_UPLOAD_SIZE' => 'Maksymalny rozmiar załącznika ',
 	'LBL_EXCEEDED' => 'przekroczony',
-	
+    'LBL_EMAIL_INFORMATION' => 'Informacje o e-mail',
+
 );

@@ -18,12 +18,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 	//Event that will triggered before saving the record
 	recordPreSave : 'Vtiger.Record.PreSave',
 
-    refrenceMultiSelectionEvent : 'Vtiger.MultiReference.Selection',
+	refrenceMultiSelectionEvent : 'Vtiger.MultiReference.Selection',
 
-    preReferencePopUpOpenEvent : 'Vtiger.Referece.Popup.Pre',
+	preReferencePopUpOpenEvent : 'Vtiger.Referece.Popup.Pre',
 
 	editInstance : false,
 
+    postReferenceSelectionEvent: 'Vtiger.PostReference.Selection',
+    
 	/**
 	 * Function to get Instance by name
 	 * @params moduleName:-- Name of the module to create instance
@@ -80,22 +82,22 @@ jQuery.Class("Vtiger_Edit_Js",{
 		return this;
 	},
 
-    getPopUpParams : function(container) {
-        var params = {};
-        var sourceModule = app.getModuleName();
+	getPopUpParams : function(container) {
+		var params = {};
+		var sourceModule = app.getModuleName();
 		var popupReferenceModule = jQuery('input[name="popupReferenceModule"]',container).val();
-        var sourceFieldElement = jQuery('input[class="sourceField"]',container);
+		var sourceFieldElement = jQuery('input[class="sourceField"]',container);
 		var sourceField = sourceFieldElement.attr('name');
 		var sourceRecordElement = jQuery('input[name="record"]');
 		var sourceRecordId = '';
 		if(sourceRecordElement.length > 0) {
-            sourceRecordId = sourceRecordElement.val();
-        }
+			sourceRecordId = sourceRecordElement.val();
+		}
 
-        var isMultiple = false;
-        if(sourceFieldElement.data('multiple') == true){
-            isMultiple = true;
-        }
+		var isMultiple = false;
+		if(sourceFieldElement.data('multiple') == true){
+			isMultiple = true;
+		}
 
 		var params = {
 			'module' : popupReferenceModule,
@@ -104,52 +106,53 @@ jQuery.Class("Vtiger_Edit_Js",{
 			'src_record' : sourceRecordId
 		}
 
-        if(isMultiple) {
-            params.multi_select = true ;
-        }
-        return params;
-    },
+		if(isMultiple) {
+			params.multi_select = true ;
+		}
+		return params;
+	},
 
 
 	openPopUp : function(e){
 		var thisInstance = this;
 		var parentElem = jQuery(e.target).closest('td');
 
-        var params = this.getPopUpParams(parentElem);
+		var params = this.getPopUpParams(parentElem);
 
-        var isMultiple = false;
-        if(params.multi_select) {
-            isMultiple = true;
-        }
+		var isMultiple = false;
+		if(params.multi_select) {
+			isMultiple = true;
+		}
 
-        var sourceFieldElement = jQuery('input[class="sourceField"]',parentElem);
+		var sourceFieldElement = jQuery('input[class="sourceField"]',parentElem);
 
-        var prePopupOpenEvent = jQuery.Event(Vtiger_Edit_Js.preReferencePopUpOpenEvent);
-        sourceFieldElement.trigger(prePopupOpenEvent);
+		var prePopupOpenEvent = jQuery.Event(Vtiger_Edit_Js.preReferencePopUpOpenEvent);
+		sourceFieldElement.trigger(prePopupOpenEvent);
 
-        if(prePopupOpenEvent.isDefaultPrevented()) {
-            return ;
-        }
+		if(prePopupOpenEvent.isDefaultPrevented()) {
+			return ;
+		}
 
 		var popupInstance =Vtiger_Popup_Js.getInstance();
 		popupInstance.show(params,function(data){
-				var responseData = JSON.parse(data);
-                var dataList = new Array();
-				for(var id in responseData){
-					var data = {
-						'name' : responseData[id].name,
-						'id' : id
-					}
-                    dataList.push(data);
-                    if(!isMultiple) {
-                        thisInstance.setReferenceFieldValue(parentElem, data);
-                    }
+			var responseData = JSON.parse(data);
+			var dataList = new Array();
+			for(var id in responseData){
+				var data = {
+					'name' : responseData[id].name,
+					'id' : id
 				}
+				dataList.push(data);
+				if(!isMultiple) {
+					thisInstance.setReferenceFieldValue(parentElem, data);
+				}
+			}
 
-                if(isMultiple) {
+			if(isMultiple) {
                     sourceFieldElement.trigger(Vtiger_Edit_Js.refrenceMultiSelectionEvent,{'data':dataList});
-                }
-			});
+			}
+                sourceFieldElement.trigger(Vtiger_Edit_Js.postReferenceSelectionEvent,{'data':responseData});
+		});
 	},
 
 	setReferenceFieldValue : function(container, params) {
@@ -179,7 +182,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 
 	referenceModulePopupRegisterEvent : function(container){
 		var thisInstance = this;
-		container.find('.relatedPopup').on("click",function(e){
+		container.on("click",'.relatedPopup',function(e){
 			thisInstance.openPopUp(e);
 		});
 		container.find('.referenceModulesList').chosen().change(function(e){
@@ -219,10 +222,21 @@ jQuery.Class("Vtiger_Edit_Js",{
 				//TODO : Handle error
 				aDeferred.reject();
 			}
-		)
+			)
 		return aDeferred.promise();
 	},
 
+	/**
+	 * Function to get reference search params
+	 */
+	getReferenceSearchParams : function(element){
+		var tdElement = jQuery(element).closest('td');
+		var params = {};
+		var searchModule = this.getReferencedModuleName(tdElement);
+		params.search_module = searchModule;
+		return params;
+	},
+	
 	/**
 	 * Function which will handle the reference auto complete event registrations
 	 * @params - container <jQuery> - element in which auto complete fields needs to be searched
@@ -235,16 +249,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 				//element will be array of dom elements
 				//here this refers to auto complete instance
 				var inputElement = jQuery(this.element[0]);
-				var tdElement = inputElement.closest('td');
 				var searchValue = request.term;
-				var params = {};
-				var searchModule = thisInstance.getReferencedModuleName(tdElement);
-				params.search_module = searchModule
+				var params = thisInstance.getReferenceSearchParams(inputElement);
 				params.search_value = searchValue;
 				thisInstance.searchModuleNames(params).then(function(data){
 					var reponseDataList = new Array();
 					var serverDataFormat = data.result
 					if(serverDataFormat.length <= 0) {
+						jQuery(inputElement).val('');
 						serverDataFormat = new Array({
 							'label' : app.vtranslate('JS_NO_RESULTS_FOUND'),
 							'type'  : 'no results'
@@ -266,7 +278,12 @@ jQuery.Class("Vtiger_Edit_Js",{
 				selectedItemData.name = selectedItemData.value;
 				var element = jQuery(this);
 				var tdElement = element.closest('td');
-				thisInstance.setReferenceFieldValue(tdElement, selectedItemData)
+				thisInstance.setReferenceFieldValue(tdElement, selectedItemData);
+                
+                var sourceField = tdElement.find('input[class="sourceField"]').attr('name');
+                var fieldElement = tdElement.find('input[name="'+sourceField+'"]');
+
+                fieldElement.trigger(Vtiger_Edit_Js.postReferenceSelectionEvent,{'data':selectedItemData});
 			},
 			'change' : function(event, ui) {
 				var element = jQuery(this);
@@ -307,11 +324,11 @@ jQuery.Class("Vtiger_Edit_Js",{
 	 */
 	registerPreventingEnterSubmitEvent : function(container) {
 		container.on('keypress', function(e){
-            //Stop the submit when enter is pressed in the form
-            var currentElement = jQuery(e.target);
-            if(e.which == 13 && (!currentElement.is('textarea'))) {
-                e. preventDefault();
-            }
+			//Stop the submit when enter is pressed in the form
+			var currentElement = jQuery(e.target);
+			if(e.which == 13 && (!currentElement.is('textarea'))) {
+				e. preventDefault();
+			}
 		})
 	},
 
@@ -333,7 +350,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 			function(error){
 				aDeferred.reject();
 			}
-		)
+			)
 		return aDeferred.promise();
 	},
 
@@ -341,23 +358,23 @@ jQuery.Class("Vtiger_Edit_Js",{
 	registerTimeFields : function(container) {
 		app.registerEventForTimeFields(container);
 	},
-
-    referenceCreateHandler : function(container) {
-        var thisInstance = this;
-        var postQuickCreateSave  = function(data) {
-            var params = {};
-            params.name = data.result._recordLabel;
-            params.id = data.result._recordId;
+	
+	referenceCreateHandler : function(container) {
+		var thisInstance = this;
+		var postQuickCreateSave  = function(data) {
+			var params = {};
+			params.name = data.result._recordLabel;
+			params.id = data.result._recordId;
             thisInstance.setReferenceFieldValue(container, params);
-        }
+		}
 
-        var referenceModuleName = this.getReferencedModuleName(container);
-        var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
-        if(quickCreateNode.length <= 0) {
-            Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
-        }
+		var referenceModuleName = this.getReferencedModuleName(container);
+		var quickCreateNode = jQuery('#quickCreateModules').find('[data-name="'+ referenceModuleName +'"]');
+		if(quickCreateNode.length <= 0) {
+			Vtiger_Helper_Js.showPnotify(app.vtranslate('JS_NO_CREATE_OR_NOT_QUICK_CREATE_ENABLED'))
+		}
         quickCreateNode.trigger('click',{'callbackFunction':postQuickCreateSave});
-    },
+	},
 
 	/**
 	 * Function which will register event for create of reference record
@@ -365,7 +382,7 @@ jQuery.Class("Vtiger_Edit_Js",{
 	 */
 	registerReferenceCreate : function(container) {
 		var thisInstance = this;
-		container.find('.createReferenceRecord').on('click', function(e){
+		container.on('click','.createReferenceRecord', function(e){
 			var element = jQuery(e.currentTarget);
 			var controlElementTd = element.closest('td');
 
@@ -378,6 +395,11 @@ jQuery.Class("Vtiger_Edit_Js",{
 	 */
 	registerEventStatusChangeEvent : function(container){
 		var followupContainer = container.find('.followUpContainer');
+		//if default value is set to Held then display follow up container
+		var defaultStatus = container.find('select[name="eventstatus"]').val();
+		if(defaultStatus == 'Held'){
+			followupContainer.show();
+		}
 		container.find('select[name="eventstatus"]').on('change',function(e){
 			var selectedOption = jQuery(e.currentTarget).val();
 			if(selectedOption == 'Held'){
@@ -416,30 +438,25 @@ jQuery.Class("Vtiger_Edit_Js",{
 			var imageUploadElement = parentTd.find('[name="imagename[]"]');
 			var fieldInfo = imageUploadElement.data('fieldinfo');
 			var mandatoryStatus = fieldInfo.mandatory;
-			var imageData = element.closest('div').find('img').data();
-			var params = {
-				'module' : app.getModuleName(),
-				'action' : 'DeleteImage', 
-				'imageid' : imageData.imageId,
-				'record' : recordId
-
+			var imageId = element.closest('div').find('img').data().imageId;
+			element.closest('div').remove();
+			var exisitingImages = parentTd.find('[name="existingImages"]');
+			if(exisitingImages.length < 1 && mandatoryStatus){
+				formElement.validationEngine('detach');
+				imageUploadElement.attr('data-validation-engine','validate[required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
+				formElement.validationEngine('attach');
 			}
-			AppConnector.request(params).then(
-				function(data){
-					if(data.success ==  true){
-						element.closest('div').remove();
-						var exisitingImages = parentTd.find('[name="existingImages"]');
-						if(exisitingImages.length < 1 && mandatoryStatus){
-							formElement.validationEngine('detach');
-							imageUploadElement.attr('data-validation-engine','validate[required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]');
-							formElement.validationEngine('attach');
-						}
-					}
-				},
-				function(error){
-					//TODO : Handle error
-				}
-			)
+            
+			if(formElement.find('[name=imageid]').length != 0) {
+				var imageIdValue = JSON.parse(formElement.find('[name=imageid]').val());
+				imageIdValue.push(imageId);
+				formElement.find('[name=imageid]').val(JSON.stringify(imageIdValue));
+			} else {
+				var imageIdJson = [];
+				imageIdJson.push(imageId);
+				formElement.append('<input type="hidden" name="imgDeleted" value="true" />');
+				formElement.append('<input type="hidden" name="imageid" value="'+JSON.stringify(imageIdJson)+'" />');
+			}
 		});
 	},
 
@@ -455,7 +472,6 @@ jQuery.Class("Vtiger_Edit_Js",{
 		var editViewForm = this.getForm();
 
 		editViewForm.submit(function(e){
-
 			//Form should submit only once for multiple clicks also
 			if(typeof editViewForm.data('submit') != "undefined") {
 				return false;
@@ -464,14 +480,14 @@ jQuery.Class("Vtiger_Edit_Js",{
 				if(editViewForm.validationEngine('validate')) {
 					//Once the form is submiting add data attribute to that form element
 					editViewForm.data('submit', 'true');
-						//on submit form trigger the recordPreSave event
-						var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+					//on submit form trigger the recordPreSave event
+					var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
 						editViewForm.trigger(recordPreSaveEvent, {'value' : 'edit'});
-						if(recordPreSaveEvent.isDefaultPrevented()) {
-							//If duplicate record validation fails, form should submit again
-							editViewForm.removeData('submit');
-							e.preventDefault();
-						}
+					if(recordPreSaveEvent.isDefaultPrevented()) {
+						//If duplicate record validation fails, form should submit again
+						editViewForm.removeData('submit');
+						e.preventDefault();
+					}
 				} else {
 					//If validation fails, form should submit again
 					editViewForm.removeData('submit');
@@ -498,16 +514,16 @@ jQuery.Class("Vtiger_Edit_Js",{
 					if(recordAccess == false) {
 						var message = app.vtranslate('JS_NO_VIEW_PERMISSION_AFTER_SAVE');
 						Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
-						function(e) {
-							assignedToSelectElement.data('recordaccessconfirmation',true);
-							assignedToSelectElement.removeData('recordaccessconfirmationprogress');
-							form.append('<input type="hidden" name="returnToList" value="true" />');
-							form.submit();
-						},
-						function(error, err){
-							assignedToSelectElement.removeData('recordaccessconfirmationprogress');
-							e.preventDefault();
-						});
+							function(e) {
+								assignedToSelectElement.data('recordaccessconfirmation',true);
+								assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+								form.append('<input type="hidden" name="returnToList" value="true" />');
+								form.submit();
+							},
+							function(error, err){
+								assignedToSelectElement.removeData('recordaccessconfirmationprogress');
+								e.preventDefault();
+							});
 						assignedToSelectElement.data('recordaccessconfirmationprogress',true);
 					} else {
 						return true;
@@ -523,10 +539,10 @@ jQuery.Class("Vtiger_Edit_Js",{
 	 * for a module if exist on change of picklist value
 	 */
 	registerEventForPicklistDependencySetup : function(container){
-        var picklistDependcyElemnt = jQuery('[name="picklistDependency"]',container);
-        if(picklistDependcyElemnt.length <= 0) {
-            return;
-        }
+		var picklistDependcyElemnt = jQuery('[name="picklistDependency"]',container);
+		if(picklistDependcyElemnt.length <= 0) {
+			return;
+		}
 		var picklistDependencyMapping = JSON.parse(picklistDependcyElemnt.val());
 
 		var sourcePicklists = Object.keys(picklistDependencyMapping);
@@ -568,13 +584,19 @@ jQuery.Class("Vtiger_Edit_Js",{
 					targetPickList.data('available-options', listOfAvailableOptions);
 				}
 
-				var optionSelector = '';
-				optionSelector += '[value=""],';
+				var targetOptions = new jQuery();
+				var optionSelector = [];
+				optionSelector.push('');
 				for(var i=0; i<targetPickListMap.length; i++){
-					optionSelector += '[value="'+targetPickListMap[i]+'"],';
+					optionSelector.push(targetPickListMap[i]);
 				}
-				var targetOptions = listOfAvailableOptions.filter(optionSelector);
-				//Before updating the list, selected option should be updated
+				
+				jQuery.each(listOfAvailableOptions, function(i,e) {
+					var picklistValue = jQuery(e).val();
+					if(jQuery.inArray(picklistValue, optionSelector) != -1) {
+						targetOptions = targetOptions.add(jQuery(e));
+					}
+				})
 				var targetPickListSelectedValue = '';
 				var targetPickListSelectedValue = targetOptions.filter('[selected]').val();
 				targetPickList.html(targetOptions).val(targetPickListSelectedValue).trigger("liszt:updated");
@@ -584,6 +606,15 @@ jQuery.Class("Vtiger_Edit_Js",{
 		//To Trigger the change on load
 		sourcePickListElements.trigger('change');
 	},
+    
+	 registerLeavePageWithoutSubmit : function(form){
+        InitialFormData = form.serialize();
+        window.onbeforeunload = function(e){
+            if (InitialFormData != form.serialize() && form.data('submit') != "true") {
+                return app.vtranslate("JS_CHANGES_WILL_BE_LOST");
+            }
+        };
+    },
 
 	registerEvents: function(){
 		var editViewForm = this.getForm();
@@ -595,11 +626,36 @@ jQuery.Class("Vtiger_Edit_Js",{
 		this.registerBasicEvents(this.getForm());
 		this.registerEventForImageDelete();
 		this.registerSubmitEvent();
+		this.registerLeavePageWithoutSubmit(editViewForm);
 
 		app.registerEventForDatePickerFields('#EditView');
-		editViewForm.validationEngine(app.validationEngineOptions);
+		
+		var params = app.validationEngineOptions;
+		params.onValidationComplete = function(element,valid){
+			if(valid){
+				var ckEditorSource = editViewForm.find('.ckEditorSource');
+				if(ckEditorSource.length > 0){
+					var ckEditorSourceId = ckEditorSource.attr('id');
+					var fieldInfo = ckEditorSource.data('fieldinfo');
+					var isMandatory = fieldInfo.mandatory;
+					var CKEditorInstance = CKEDITOR.instances;
+					var ckEditorValue = jQuery.trim(CKEditorInstance[ckEditorSourceId].document.getBody().getText());
+					if(isMandatory && (ckEditorValue.length === 0)){
+						var ckEditorId = 'cke_'+ckEditorSourceId;
+						var message = app.vtranslate('JS_REQUIRED_FIELD');
+						jQuery('#'+ckEditorId).validationEngine('showPrompt', message , 'error','topLeft',true);
+						return false;
+					}else{
+						return valid;
+					}
+				}
+				return valid;
+			}
+			return valid
+		}
+		editViewForm.validationEngine(params);
 
 		this.registerReferenceCreate(editViewForm);
-		//this.triggerDisplayTypeEvent();
+	//this.triggerDisplayTypeEvent();
 	}
 });

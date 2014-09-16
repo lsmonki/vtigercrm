@@ -46,7 +46,7 @@ $languageStrings = array(
 	'LBL_YES' => 'Tak',
 	'LBL_NO' => 'Nie',
     'LBL_MASS_EDITING' => 'Edycja masowa',
-	'LBL_DESELECT_ALL_RECORDS' => 'Odznacz wszystkie rekordy',
+	'LBL_DESELECT_ALL_RECORDS' => 'Odznacz wszystko',
 	'LBL_QUICK_CREATE' => 'Szybkie tworzenie',
 	'LBL_SEND_EMAIL' => 'Wyślij maila',
 	//SEND EMAIL translations
@@ -61,7 +61,7 @@ $languageStrings = array(
 	'LBL_ADD_NOTE' => 'Dodaj dokument',
 	'LBL_CREATE_NEW' => 'Utwórz nowy',
     'LBL_ADD_EVENT' => 'Dodaj wydarzenie',
-    'LBL_ADD_TASK' => 'Dodaj zadanie',
+    'LBL_ADD_TASK' => 'Dodaj do zrobienia',
 	'LBL_MARKETING_AND_SALES' => 'Marketing i Sprzedaż',
 	'LBL_TOOLS_HEADER' => 'Narzędzia',
 	'LBL_SUPPORT' => 'Pomoc',
@@ -77,6 +77,7 @@ $languageStrings = array(
 	'LBL_SIGN_OUT' => 'Wyloguj',
 	'LBL_HELP' => 'Pomoc (EN)',
 	'LBL_FEEDBACK' => 'Informacja do producenta',
+	'LBL_CHAT_SUPPORT'=>'Język Wsparcie',
 	'LBL_CRM_SETTINGS' => 'Konfiguracja systemu',
 	'LBL_ON_DEMAND_ADMIN' => 'Dodaj/Usuń użytkowników',
 	'LBL_ANNOUNCEMENT' => 'Ogłoszenie',
@@ -150,6 +151,7 @@ $languageStrings = array(
 	'PurchaseOrder'=>'Zamówienia do Dostawców',
 	'SalesOrder'=>'Zamówienia od Klientów',
 	'Invoice'=>'Faktury',
+    'Portal' => 'Nasze strony',
 
 
 	//Basic String Translation
@@ -183,6 +185,7 @@ $languageStrings = array(
 	'LBL_BEFORE' => 'przed',
 	'LBL_AFTER' => 'po',
 	'LBL_BETWEEN' => 'pomiędzy',
+    'LBL_IS_NOT_EMPTY'=> 'nie jest pusty',
 	'LBL_SEARCH' => 'Szukaj',
 	'LBL_SEARCH_IN' => 'szukaj w',
 	'LBL_ADD_CONDITION' => 'Dodaj warunek',
@@ -288,7 +291,7 @@ $languageStrings = array(
 	'LBL_SECOND' => 'sekunda',
 	'LBL_SECONDS' => 'sekundy',
 	'LBL_JUSTNOW' => 'teraz',
-	'LBL_CUSTOM_INFORMATION' => 'Informacje podstawowe',
+	'LBL_CUSTOM_INFORMATION' => 'Informacje custom',
 	'LBL_NO_RECENT_UPDATES' => 'Brak aktualizacji',
 	'LBL_NO_DATA' => 'No Data',
 	'LBL_NO_RECENT_UPDATES' => 'Brak aktualizacji',
@@ -312,7 +315,7 @@ $languageStrings = array(
 	// Basic Strings- custom view
 	'LBL_VIEW_NAME' => 'Nazwa filtru',
 	'LBL_CREATE_VIEW' => 'Utwórz nowy filtr',
-	'LBL_BASIC_DETAILS' => 'Informacje podstawowe',
+	'LBL_BASIC_DETAILS' => 'Podstawowe informacje',
 	'LBL_CHOOSE_COLUMNS' => 'Wybierz kolumny i kolejność',
 	'LBL_MAX_NUMBER_FILTER_COLUMNS' => 'Maksymalnie 7',
 	'LBL_FILTER_ON_DATE' => 'Filtrowanie według daty',
@@ -355,7 +358,6 @@ $languageStrings = array(
 	'LBL_NEXT_120_DAYS' => 'Następne 120 dni',
 
 	//advanced Filter Options
-	'LBL_NONE' => 'BRAK',
 	'LBL_EQUALS' => 'równe',
 	'LBL_NOT_EQUAL_TO' => 'nie równe',
 	'LBL_STARTS_WITH' => 'zaczyna się od',
@@ -405,6 +407,8 @@ $languageStrings = array(
 	'LBL_CUSTOM_VIEW_NAME_DUPLICATES_EXIST' => 'filtr już istnieje',
 
 	'LBL_ADD_MANAGE_MODULES' => 'Dodaj / Zarządzaj modułami',
+    
+    'LBL_SELECT_STATUS' => 'Wybierz status',
 
 	// Added Common Keys for all modules
 	'Account Name' => 'Nazwa Kontrahenta',
@@ -493,6 +497,7 @@ $languageStrings = array(
 	'Shipping Country' => 'Kraj dostawy',
 	'Shipping Po Box' => 'Skrytka pocztowa dostawy',
 	'Country' => 'Kraj',
+	'Description' => 'Opis',
 
 	'Created'=>'Utworzona',
 	'Approved'=>'Zaakceptowana',
@@ -513,6 +518,7 @@ $languageStrings = array(
 	'Secondary Email' => 'Mail dodatkowy',
 	'Other Email' => 'Inny email',
 	'Email Opt Out' => 'Czy wyłączyć system powiadomień?',
+    'Is Converted From Lead' => 'Jest przekształcany z ołowiu'  , 
 
 	'Expected Close Date' => 'Planowana data zakończenia',
 
@@ -590,10 +596,36 @@ $languageStrings = array(
 	'Sales End Date'=>'Data zakończenia sprzedaży',
 
 	//Dashboard list of widgets translation
-	'Open Tickets' => 'Otwarte zgłoszenia',
+	'Open Ticktes' => 'Otwarte zgłoszenia',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Honest Open Source',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'Dostosuj menu główne',//TODO REVIEW
+
+	//Comments Field Labels for Workflow
+	'Comment' => 'Komentarz',
+	'Last Comment' => 'Ostatni komentarz',
+	'Last 5 Comments' => 'Ostatnie 5 komentarzy',
+	'All Comments' => 'Wszystkie komentarze',
+	
+	//Feedback on removing old version
+	'LBL_OLD_VERSION_REMOVED_SOON' => 'Ważna uwaga na stary wygląd',
+	'LBL_FEEDBACK_ON_REMOVING_OLD_VERSION' => 'Jesteśmy szczęśliwi mogąc dzielić się, że stary wygląd będzie dostępny dopiero w lutym 2014 roku. Dodaliśmy następujące funkcje do nowego wyglądu niedawno <br><br> 1. Raporty Pivot Łódź <br>2. Wykresy niestandardowe Tanie <br>3. Szybkie wyszukiwanie na listach <br><br> Jeśli masz pomysły na nowy wygląd, proszę podzielić się z nami poniżej.',
+	'LBL_FEEDBACK_PLACEHOLDER' => 'Podziel się propozycje tutaj ..',
+	'LBL_SUBMIT_FEEDBACK' => 'Prześlij opinię',
+	'LBL_DONT_SHOW_AGAIN' => 'Nie pokazuj tego ponownie',
+	'LBL_CONTINUE_TO_OLD_LOOK' => 'Dalej stary wygląd',
+	
+    
+    //Products Popup View
+    'NOT_A_BUNDLE' => 'Nie wiązka',
+    'LBL_MARK_AS_HELD' => 'Oznacz jako przeznaczone',
+    'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Maksymalnie 160 znaków są dozwolone dla wiadomości tekstowej',
+    'LBL_HIDE_COMPLETED_EVENTS' => 'Ukryj Wykonane Wydarzenia Kalendarium',
+    'LBL_SETUP_WEBFORMS' => 'Konfiguracja formularzy WWW',
+    
+    'LBL_MERGE'                    => 'Łączyć',
+	
 );
 
 $jsLanguageStrings = array(
@@ -607,7 +639,8 @@ $jsLanguageStrings = array(
 	'JS_PHONE_NUMBER_LENGTH_EXCEEDED' => 'numer telefonu ma za dużo znaków',
 	'JS_ACCEPT_POSITIVE_NUMBER' => 'przyjmuje tylko wartości dodatnie',
 	'JS_VALUE_SHOULD_BE_GREATER_THAN_ZERO' => 'wartość ta powinna być większa niż zero',
-
+    'JS_MASS_EDIT_LIMIT' => 'Masa Edycja operacja może być wykonane na 500 lub mniej w czasie zapisy',
+	
 
 	'INVALID_NUMBER_OF' => 'niepoprawny numer',
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Czy na pewno chcesz usunąć rekordy?',
@@ -633,6 +666,7 @@ $jsLanguageStrings = array(
 	'JS_SHOULD_BE_LESS_THAN_CURRENT_DATE' => 'powinna być mniejsza niż bieżąca data',
 	'JS_SHOULD_BE_GREATER_THAN_CURRENT_DATE' => 'powinna być większa niż bieżąca data',
 	'JS_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO' => 'powinna być większa lub równa',
+    'JS_CURRENT_DATE' => 'Aktualna Data',
 
 
 	//Roles
@@ -676,4 +710,13 @@ $jsLanguageStrings = array(
 	'PM' => 'PM',
  	'JS_ERROR' => 'Błąd',
 	'JS_INFORMATION' => 'Informacja',
-);
+	 'SINGLE_Vendors' => 'Dostawca',
+	
+	// Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'zadzwonić z',
+	'JS_PBX_INCOMING_CALL' => 'Połączenie przychodzące zadzwonić',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Podnieś słuchawkę wewnętrzny, aby wybrać numer',
+	'JS_PBX_OUTGOING_FAILURE'=>'Połączenie nie powiodło się',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Proszę wypełnić wszystkie pola',
+	// ends	
+	);

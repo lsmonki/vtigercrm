@@ -41,7 +41,12 @@ class Reports_List_View extends Vtiger_Index_View {
 		if(empty($folderId) || $folderId == 'undefined'){
 			$folderId = 'All';
 		}
+                $sortBy = $request->get('sortorder'); 
+                $orderBy=$request->get('orderby'); 
+                
 		$listViewModel->set('folderid', $folderId);
+                $listViewModel->set('orderby',$orderBy); 
+	        $listViewModel->set('sortorder',$sortBy); 
 
 		$linkModels = $listViewModel->getListViewLinks();
 		$pageNumber = $request->get('page');
@@ -69,7 +74,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$viewer->assign('VIEWNAME',$folderId);
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
 		$viewer->assign('LISTVIEW_MASSACTIONS', $listViewMassActionModels);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 
 		if (PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false)) {
 			if(!$this->listViewCount){
@@ -149,7 +154,7 @@ class Reports_List_View extends Vtiger_Index_View {
 		$noOfEntries = count($this->listViewEntries);
 
   		$viewer->assign('PAGE_NUMBER',$pageNumber);
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		$viewer->assign('MODULE_MODEL', $moduleModel);
@@ -179,6 +184,14 @@ class Reports_List_View extends Vtiger_Index_View {
 
 		$viewer->view('ListViewContents.tpl', $moduleName);
 	}
+
+    function postProcess(Vtiger_Request $request) {
+        $viewer = $this->getViewer ($request);
+		$moduleName = $request->getModule();
+
+		$viewer->view('ListViewPostProcess.tpl', $moduleName);
+		parent::postProcess($request);
+    }
 
 	/**
 	 * Function to get the list of Script models to be included

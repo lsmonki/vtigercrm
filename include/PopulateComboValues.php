@@ -15,7 +15,7 @@ require_once('include/ComboStrings.php');
 require_once('include/ComboUtil.php');
 /**
  *  Class which handles the population of the combo values
- *
+ * 
  *
  */
 class PopulateComboValues
@@ -23,10 +23,10 @@ class PopulateComboValues
 	var $app_list_strings;
 
 
-	/**
+	/** 
 	 * To populate the default combo values for the combo vtiger_tables
 	 * @param $values -- values:: Type string array
-	 * @param $tableName -- tablename:: Type string
+	 * @param $tableName -- tablename:: Type string 
 	 */
 	function insertComboValues($values, $tableName,$picklistid)
 	{
@@ -64,21 +64,21 @@ class PopulateComboValues
 
 			$i++;
 		}
-
+	
 
 		$log->debug("Exiting insertComboValues method ...");
 	}
 
 
-	/**
+	/** 
 	 * To populate the combo vtiger_tables at startup time
 	 */
 
-	function create_tables ()
+	function create_tables () 
 	{
 		global $log;
 		$log->debug("Entering create_tables () method ...");
-
+				
 		global $app_list_strings,$adb;
 		global $combo_strings;
 		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15') OR fieldname = 'salutationtype' and vtiger_field.presence in (0,2)");
@@ -93,7 +93,7 @@ class PopulateComboValues
 
 			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab,$picklistid);
 		}
-
+		
 		//we have to decide what are all the picklist and picklist values are non editable
 		//presence = 0 means you cannot edit the picklist value
 		//presence = 1 means you can edit the picklist value
@@ -120,7 +120,7 @@ class PopulateComboValues
 	{
 		global $log;
 		$log->debug("Entering create_nonpicklist_tables () method ...");
-
+				
 		global $app_list_strings,$adb;
 		global $combo_strings;
 		// uitype -> 16 - Non standard picklist, 115 - User status, 83 - Tax Class

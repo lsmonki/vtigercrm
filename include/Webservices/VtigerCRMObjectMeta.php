@@ -417,10 +417,6 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$referenceArray = array();
 		$knownFieldArray = array();
 		for($i=0; $i<$noofrows; $i++){
-			$fieldname = $adb->query_result($result,$i,"fieldname");
-			if(strcasecmp($fieldname,'imagename')===0){
-				continue;
-			}
 			$webserviceField = WebserviceField::fromQueryResult($adb,$result,$i);
 			$this->moduleFields[$webserviceField->getFieldName()] = $webserviceField;
 		}

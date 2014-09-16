@@ -34,7 +34,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 	 * @param <Vtiger_Module_Model> $moduleModel
 	 * @return Vtiger_Relation_Model
 	 */
-	public function setParetModuleModel($moduleModel){
+	public function setParentModuleModel($moduleModel){
 		$this->parentModule = $moduleModel;
 		return $this;
 	}
@@ -182,7 +182,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 			$row = $db->query_result_rowdata($result, 0);
 			$relationModelClassName = Vtiger_Loader::getComponentClassName('Model', 'Relation', $parentModuleModel->get('name'));
 			$relationModel = new $relationModelClassName();
-			$relationModel->setData($row)->setParetModuleModel($parentModuleModel)->setRelationModuleModel($relatedModuleModel);
+			$relationModel->setData($row)->setParentModuleModel($parentModuleModel)->setRelationModuleModel($relatedModuleModel);
 			return $relationModel;
 		}
 		return false;
@@ -216,7 +216,7 @@ class Vtiger_Relation_Model extends Vtiger_Base_Model{
 				continue;
 			}
 			$relationModel = new $relationModelClassName();
-			$relationModel->setData($row)->setParetModuleModel($parentModuleModel)->set('relatedModuleName',$row['modulename']);
+			$relationModel->setData($row)->setParentModuleModel($parentModuleModel)->set('relatedModuleName',$row['modulename']);
 			$relationModels[] = $relationModel;
 		}
 		return $relationModels;

@@ -31,7 +31,7 @@
 					<select class="chzn-select" name="oldValue">
 						<optgroup>
 							{foreach from=$PICKLIST_VALUES key=PICKLIST_VALUE_KEY item=PICKLIST_VALUE}
-								<option {if $FIELD_VALUE eq $PICKLIST_VALUE} selected="" {/if}value="{Vtiger_Util_Helper::toSafeHTML($PICKLIST_VALUE)}">{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
+								<option {if $FIELD_VALUE eq $PICKLIST_VALUE} selected="" {/if}value="{Vtiger_Util_Helper::toSafeHTML($PICKLIST_VALUE)}" data-id={$PICKLIST_VALUE_KEY}>{vtranslate($PICKLIST_VALUE,$SOURCE_MODULE)}</option>
 							{/foreach}	
 						</optgroup>
 					</select>	

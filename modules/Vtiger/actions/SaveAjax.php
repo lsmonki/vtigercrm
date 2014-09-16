@@ -61,7 +61,14 @@ class Vtiger_SaveAjax_Action extends Vtiger_Save_Action {
 
 			$fieldModelList = $recordModel->getModule()->getFields();
 			foreach ($fieldModelList as $fieldName => $fieldModel) {
-				$fieldValue = $fieldModel->getUITypeModel()->getUserRequestValue($recordModel->get($fieldName));
+                //For not converting craetedtime and modified time to user format
+                $uiType = $fieldModel->get('uitype');
+                if ($uiType == 70) {
+                    $fieldValue = $recordModel->get($fieldName);
+                } else {
+                    $fieldValue = $fieldModel->getUITypeModel()->getUserRequestValue($recordModel->get($fieldName));
+                }
+				
 
 				if ($fieldName === $request->get('field')) {
 					$fieldValue = $request->get('value');

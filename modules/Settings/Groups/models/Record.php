@@ -239,6 +239,15 @@ class Settings_Groups_Record_Model extends Settings_Vtiger_Record_Model {
 			$params = array($transferGroupId, 'userid', $groupId);
 			$db->pquery($query, $params);
 		}
+		
+		//update workflow tasks Assigned User from Deleted Group to Transfer Owner
+		$newOwnerModel = $this->getInstance($transferGroupId);
+		if(!$newOwnerModel){
+			$newOwnerModel = Users_Record_Model::getInstanceById($transferGroupId, 'Users');
+		}
+		$ownerModel = $this->getInstance($groupId);
+		vtws_transferOwnershipForWorkflowTasks($ownerModel, $newOwnerModel);
+        vtws_updateWebformsRoundrobinUsersLists($groupId, $transferGroupId);
 	}
 
 	/**

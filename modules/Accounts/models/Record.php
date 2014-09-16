@@ -58,7 +58,7 @@ class Accounts_Record_Model extends Vtiger_Record_Model {
 		$db = PearDatabase::getInstance();
 
 		$query = "SELECT 1 FROM vtiger_crmentity WHERE setype = ? AND label = ? AND deleted = 0";
-		$params = array($this->getModule()->getName(), decode_html($this->getName()));
+                $params = array($this->getModule()->getName(), decode_html($this->getName())); 
 
 		$record = $this->getId();
 		if ($record) {

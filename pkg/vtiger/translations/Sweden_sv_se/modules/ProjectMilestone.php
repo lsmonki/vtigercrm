@@ -12,6 +12,9 @@ $languageStrings = array(
 	'SINGLE_ProjectMilestone' => 'Projektmilstolpe',
 	'LBL_ADD_RECORD' => 'Lägg till Projektmilstolpe',
 	'LBL_RECORDS_LIST' => 'Projektmilstolpslista',
+    'LBL_PROJECTS_LIST' => 'Projekt Lista',
+	'LBL_TASKS_LIST' => 'Uppgifter Lista', 
+    'LBL_MILESTONES_LIST' => 'Milstolpar Lista',
 
 	// Blocks
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Projektmilstolpsuppgifter',
@@ -20,5 +23,9 @@ $languageStrings = array(
 	'Project Milestone Name' => 'Projektmilstolpsnamn',
 	'Milestone Date' => 'Milstolpsdatum',
 	'Project Milestone No' => 'Projektmilstolpsnummer',
+	//picklist values
+	'administrative' => 'Administrativ',
+    'operative' => 'Operative',
+    'other' => 'Annat',
 	
 );

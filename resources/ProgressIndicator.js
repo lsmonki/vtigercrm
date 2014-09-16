@@ -32,9 +32,8 @@
 	this.blockCss = {
 		'border':		'',
 		'backgroundColor':'',
-		'background-clip': 'padding-box',
-		'border-radius': '6px 6px 6px 6px',
-		'box-shadow': '0 3px 7px rgba(0, 0, 0, 0.3)'
+		'background-clip': 'border-box',
+		'border-radius': '2px'
 	}
 
 	this.showTopCSS ={
@@ -73,7 +72,7 @@
 	
 	this.getImagePath = function() {
 		if(this.options.smallLoadingImage == true && typeof this.options.smallLoadingImage != 'undefined' ) {
-			return app.vimage_path('loadingSmall.gif');
+			return app.vimage_path('loading.gif');
 		} else {
 			return app.vimage_path('loading.gif');
 		}

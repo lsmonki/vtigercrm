@@ -7,15 +7,15 @@
  * All Rights Reserved.
  *************************************************************************************/
 Vtiger_Edit_Js("Reports_Edit_Js",{
-	
+
 	instance : {}
-	
+
 },{
-	
+
 	currentInstance : false,
-	
+
 	reportsContainer : false,
-	
+
 	init : function() {
 		var statusToProceed = this.proceedRegisterEvents();
 		if(!statusToProceed){
@@ -40,8 +40,8 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 		this.reportsContainer = element;
 		return this;
 	},
-	
-	
+
+
 	/*
 	 * Function to return the instance based on the step of the report
 	 */
@@ -49,21 +49,22 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 		if(step in Reports_Edit_Js.instance ){
 			return Reports_Edit_Js.instance[step];
 		} else {
-			var moduleClassName = 'Reports_Edit'+step+'_Js' ;
+            var view = app.getViewName();
+			var moduleClassName = app.getModuleName()+"_"+view+step+"_Js";
 			Reports_Edit_Js.instance[step] =  new window[moduleClassName]();
 			return Reports_Edit_Js.instance[step]
 		}
 	},
-	
+
 	/*
-	 * Function to get the value of the step 
+	 * Function to get the value of the step
 	 * returns 1 or 2 or 3
 	 */
 	getStepValue : function(){
-		var container = this.currentInstance.getContainer(); 
+		var container = this.currentInstance.getContainer();
 		return jQuery('.step',container).val();
 	},
-	
+
 	/*
 	 * Function to initiate the step 1 instance
 	 */
@@ -89,15 +90,15 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 		var currentInstance = this.getInstance(stepVal);
 		this.currentInstance = currentInstance;
 	},
-	
+
 	/*
 	 * Function to activate the header based on the class
 	 * @params class name
 	 */
 	activateHeader : function(step) {
-		var headersContainer = jQuery('#reportBreadCrumbs');
+		var headersContainer = jQuery('.crumbs');
 		headersContainer.find('.active').removeClass('active');
-		jQuery('.'+step,headersContainer).addClass('active');
+		jQuery('#'+step,headersContainer).addClass('active');
 	},
 	/*
 	 * Function to register the click event for next button
@@ -111,24 +112,23 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 				if(jQuery.isFunction(thisInstance.currentInstance.isFormValidate)){
 					var specialValidation =  thisInstance.currentInstance.isFormValidate();
 				}
-				if ( form.validationEngine('validate') && specialValidation) {
-						thisInstance.currentInstance.submit().then(function(data){
-							thisInstance.getContainer().append(data);
-							var stepVal = thisInstance.getStepValue();
-							var nextStepVal = parseInt(stepVal) + 1;
-							thisInstance.initiateStep(nextStepVal);
-							thisInstance.currentInstance.initialize();
-							var container = thisInstance.currentInstance.getContainer();
-							thisInstance.registerFormSubmitEvent(container);
-							thisInstance.currentInstance.registerEvents();
-						});
-
+				if (form.validationEngine('validate') && specialValidation) {
+					thisInstance.currentInstance.submit().then(function(data){
+						thisInstance.getContainer().append(data);
+						var stepVal = thisInstance.getStepValue();
+						var nextStepVal = parseInt(stepVal) + 1;
+						thisInstance.initiateStep(nextStepVal);
+						thisInstance.currentInstance.initialize();
+						var container = thisInstance.currentInstance.getContainer();
+						thisInstance.registerFormSubmitEvent(container);
+						thisInstance.currentInstance.registerEvents();
+					});
 				}
 				e.preventDefault();
-			})		
+			})
 		}
 	},
-	
+
 	back : function(){
 		var step = this.getStepValue();
 		var prevStep = parseInt(step) - 1;
@@ -138,9 +138,9 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 		this.initiateStep(prevStep);
 		this.currentInstance.getContainer().show();
 	},
-	
+
 	/*
-	 * Function to register the click event for back step 
+	 * Function to register the click event for back step
 	 */
 	registerBackStepClickEvent : function(){
 		var thisInstance = this;
@@ -149,7 +149,7 @@ Vtiger_Edit_Js("Reports_Edit_Js",{
 			thisInstance.back();
 		});
 	},
-	
+
 	registerEvents : function(){
 		var statusToProceed = this.proceedRegisterEvents();
 		if(!statusToProceed){

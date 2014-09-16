@@ -8,9 +8,9 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_TRANSFORM_OWNERSHIP'      => 'Transfer ownership'          , 
+	'LBL_TRANSFORM_OWNERSHIP'      => 'Transfer Ownership'          , 
 	'SINGLE_Groups'                => 'Group'                       , // TODO: Review
-	'LBL_TO_OTHER_GROUP'           => 'To Other Group '             , 
+	'LBL_TO_OTHER_GROUP'           => 'To other Group '             , 
 	'LBL_ADD_RECORD'               => 'Add Group'                   , // TODO: Review
 	'LBL_GROUP_NAME'               => 'Group Name'                  , // TODO: Review
 	'LBL_GROUP_MEMBERS'            => 'Group Members'               , // TODO: Review
@@ -19,6 +19,6 @@ $languageStrings = array(
 	'RoleAndSubordinates'          => 'Role and Subordinates'       , // TODO: Review
 );
 $jsLanguageStrings = array(
-	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group', // TODO: Review
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select at least one member for a Group', // TODO: Review
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully'  , // TODO: Review
 );

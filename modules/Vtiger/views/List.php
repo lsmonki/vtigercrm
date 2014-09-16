@@ -45,7 +45,6 @@ class Vtiger_List_View extends Vtiger_Index_View {
 	}
 
 	function preProcessTplName(Vtiger_Request $request) {
-
 		return 'ListViewPreProcess.tpl';
 	}
 
@@ -65,7 +64,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$moduleName = $request->getModule();
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$this->viewName = $request->get('viewname');
-		
+
 		$this->initializeListViewContents($request, $viewer);
 		$viewer->assign('VIEW', $request->get('view'));
 		$viewer->assign('MODULE_MODEL', $moduleModel);
@@ -126,12 +125,14 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		}
 
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
+		$currentUser = Users_Record_Model::getCurrentUserModel();
 
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'), 'CVID'=>$cvId);
 		$linkModels = $listViewModel->getListViewMassActions($linkParams);
 
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $pageNumber);
+		$pagingModel->set('viewid', $request->get('viewname'));
 
 		if(!empty($orderBy)) {
 			$listViewModel->set('orderby', $orderBy);
@@ -150,6 +151,25 @@ class Vtiger_List_View extends Vtiger_Index_View {
 			$listViewModel->set('search_key', $searchKey);
 			$listViewModel->set('search_value', $searchValue);
 		}
+
+        $searchParmams = $request->get('search_params');
+        if(empty($searchParmams)) {
+            $searchParmams = array();
+        }
+        $transformedSearchParams = $this->transferListSearchParamsToFilterCondition($searchParmams, $listViewModel->getModule());
+        $listViewModel->set('search_params',$transformedSearchParams);
+
+
+        //To make smarty to get the details easily accesible
+        foreach($searchParmams as $fieldListGroup){
+            foreach($fieldListGroup as $fieldSearchInfo){
+                $fieldSearchInfo['searchValue'] = $fieldSearchInfo[2];
+                $fieldSearchInfo['fieldName'] = $fieldName = $fieldSearchInfo[0];
+                $searchParmams[$fieldName] = $fieldSearchInfo;
+			}
+		}
+
+
 		if(!$this->listViewHeaders){
 			$this->listViewHeaders = $listViewModel->getListViewHeaders();
 		}
@@ -176,7 +196,7 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
 
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 
@@ -194,9 +214,11 @@ class Vtiger_List_View extends Vtiger_Index_View {
 			$viewer->assign('PAGE_COUNT', $pageCount);
 			$viewer->assign('LISTVIEW_COUNT', $totalCount);
 		}
-
+		$viewer->assign('LIST_VIEW_MODEL', $listViewModel);
+		$viewer->assign('GROUPS_IDS', Vtiger_Util_Helper::getGroupsIdsForUsers($currentUser->getId()));
 		$viewer->assign('IS_MODULE_EDITABLE', $listViewModel->getModule()->isPermitted('EditView'));
 		$viewer->assign('IS_MODULE_DELETABLE', $listViewModel->getModule()->isPermitted('Delete'));
+        $viewer->assign('SEARCH_DETAILS', $searchParmams);
 	}
 
 	/**
@@ -234,6 +256,10 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$searchValue = $request->get('search_value');
 
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
+
+        $searchParmams = $request->get('search_params');
+        $listViewModel->set('search_params',$this->transferListSearchParamsToFilterCondition($searchParmams, $listViewModel->getModule()));
+
 		$listViewModel->set('search_key', $searchKey);
 		$listViewModel->set('search_value', $searchValue);
 		$listViewModel->set('operator', $request->get('operator'));
@@ -265,4 +291,9 @@ class Vtiger_List_View extends Vtiger_Index_View {
 		$response->setResult($result);
 		$response->emit();
 	}
+
+
+    public function transferListSearchParamsToFilterCondition($listSearchParams, $moduleModel) {
+        return Vtiger_Util_Helper::transferListSearchParamsToFilterCondition($listSearchParams, $moduleModel);
+    }
 }

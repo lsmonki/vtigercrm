@@ -129,6 +129,7 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 
 		$recordModel->set('description', $request->get('description'));
 		$recordModel->set('subject', $request->get('subject'));
+        $recordModel->set('toMailNamesList',$request->get('toMailNamesList'));
 		$recordModel->set('saved_toid', $to);
 		$recordModel->set('ccmail', $request->get('cc'));
 		$recordModel->set('bccmail', $request->get('bcc'));
@@ -260,4 +261,8 @@ class Emails_MassSaveAjax_View extends Vtiger_Footer_View {
 		}
         return array();
 	}
+    
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
+    }
 }

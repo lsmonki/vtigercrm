@@ -39,7 +39,7 @@
 				</span>
 			</div>
 		</div>
-		<form class="form-horizontal emailPreview">
+		<form class="form-horizontal emailPreview" method="POST">
 			<div class="row-fluid padding-bottom1per">
 				<span class="span12 row-fluid">
 					<span class="span2">
@@ -56,6 +56,9 @@
 						<span class="pull-right muted">{vtranslate('LBL_TO',$MODULE)}</span>
 					</span>
 					<span class="span9">
+                        {if empty($TO)}
+                            {assign var=TO value=array()}
+                        {/if}
 						{assign var=TO_EMAILS value=","|implode:$TO}
 						<span class="row-fluid">{$TO_EMAILS}</span>
 					</span>
@@ -109,14 +112,15 @@
 					<span class="span9">
 						<span class="row-fluid">
 							{foreach item=ATTACHMENT_DETAILS  from=$RECORD->getAttachmentDetails()}
-                                <a &nbsp;
-                                {if array_key_exists('docid',$ATTACHMENT_DETAILS)}
-                                    &nbsp; href="index.php?module=Documents&action=DownloadFile&record={$ATTACHMENT_DETAILS['docid']}
-                                            &fileid={$ATTACHMENT_DETAILS['fileid']}"
-                                {else}
-                                    &nbsp; href="index.php?module=Emails&action=DownloadFile&attachment_id={$ATTACHMENT_DETAILS['fileid']}"
+                                <a &nbsp; 
+                                    {if array_key_exists('docid',$ATTACHMENT_DETAILS)} 
+                                        &nbsp; href="index.php?module=Documents&action=DownloadFile&record={$ATTACHMENT_DETAILS['docid']} 
+                                                &fileid={$ATTACHMENT_DETAILS['fileid']}" 
+                                    {else} 
+                                        &nbsp; href="index.php?module=Emails&action=DownloadFile&attachment_id={$ATTACHMENT_DETAILS['fileid']}" 
                                 {/if}
-								>{$ATTACHMENT_DETAILS['attachment']}</a>&nbsp;&nbsp;
+                                
+                                        >{$ATTACHMENT_DETAILS['attachment']}</a>&nbsp;&nbsp; 
 							{/foreach}
 						</span>
 					</span>
@@ -144,11 +148,15 @@
 					<span class="muted">
 						{if $RECORD->get('email_flag') eq "SAVED"}
 							<small><em>{vtranslate('LBL_DRAFTED_ON',$MODULE)}</em></small>
-							<span><small><em>&nbsp;{$RECORD->getDisplayValue('createdtime')}</em></small></span>
+							<span><small><em>&nbsp;{Vtiger_Util_Helper::formatDateTimeIntoDayString($RECORD->get('createdtime'))}</em></small></span>
+                                                {elseif $RECORD->get('email_flag') eq "MailManager"} 
+                                                        <small><em>{vtranslate('LBL_MAIL_DATE',$MODULE)} : </em></small> 
+                                                        {assign var="MAIL_DATE" value=$RECORD->get('date_start')|@cat:' '|@cat:$RECORD->get('time_start')} 
+                                                        <span><small><em>&nbsp;{Vtiger_Util_Helper::formatDateTimeIntoDayString($MAIL_DATE)}</em></small></span> 
 						{else}
 							<small><em>{vtranslate('LBL_SENT_ON',$MODULE)}</em></small>
                             {assign var="SEND_TIME" value=$RECORD->get('date_start')|@cat:' '|@cat:$RECORD->get('time_start')}
-                            <span><small><em>&nbsp;{Vtiger_Datetime_UIType::getDateTimeValue($SEND_TIME)}</em></small></span>
+                            <span><small><em>&nbsp;{Vtiger_Util_Helper::formatDateTimeIntoDayString($SEND_TIME)}</em></small></span>
 						{/if}
 					</span>
 				</span>

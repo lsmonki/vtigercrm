@@ -22,4 +22,5 @@ $languageStrings = array(
 	'LTFAQ' => 'Mina Senaste FAQs',
 	'UA' => 'Kommande Aktiviteter',
 	'PA' => 'Pågående Aktiviteter',
+	'Home' => 'Hem',
 );

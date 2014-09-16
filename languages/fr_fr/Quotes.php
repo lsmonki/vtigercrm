@@ -20,6 +20,7 @@ $languageStrings = array(
 	'Inventory Manager'            => 'Responsable du stock'        , 
 	'Accepted'                     => 'Accepté'                    , 
 	'Rejected'                     => 'Rejeté'                     ,
+        'Open Quotes'                  => 'Cours ouverts',
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Date de validité',

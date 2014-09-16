@@ -12,9 +12,9 @@ Vtiger_Edit_Js("Documents_Edit_Js", {} ,{
 	INTERNAL_FILE_LOCATION_TYPE : 'I',
 	EXTERNAL_FILE_LOCATION_TYPE : 'E',
 
-	getMaxiumFileUploadingSize : function() {
+	getMaxiumFileUploadingSize : function(container) {
 		//TODO : get it from the server
-		return this.getForm().find('.maxUploadSize').data('value');
+		return container.find('.maxUploadSize').data('value');
 	},
 
 	isFileLocationInternalType : function(fileLocationElement) {
@@ -43,11 +43,11 @@ Vtiger_Edit_Js("Documents_Edit_Js", {} ,{
 
 	},
 
-	registerFileLocationTypeChangeEvent : function() {
+	registerFileLocationTypeChangeEvent : function(container) {
 		var thisInstance = this;
-		jQuery('select[name="filelocationtype"]', this.getForm()).on('change', function(e){
-			var fileLocationTypeElement = jQuery(e.currentTarget);
-			var fileNameElement = jQuery('[name="filename"]',thisInstance.getForm());
+		container.on('change', 'select[name="filelocationtype"]', function(e){
+            var fileLocationTypeElement = container.find('[name="filelocationtype"]');
+            var fileNameElement = container.find('[name="filename"]');
 			if(thisInstance.isFileLocationInternalType(fileLocationTypeElement)) {
 				var newFileNameElement = jQuery('<input type="file"/>');
 			}else{
@@ -84,17 +84,19 @@ Vtiger_Edit_Js("Documents_Edit_Js", {} ,{
 		});
 	},
 
-	registerFileChangeEvent : function() {
+	registerFileChangeEvent : function(container) {
 		var thisInstance = this;
-		this.getForm().on('change', 'input[name="filename"]', function(e){
-			var element = jQuery(e.currentTarget);
+		container.on('change', 'input[name="filename"]', function(e){
+            if(e.target.type == "text") return false;
+            file = e.target.files[0];
+			var element = container.find('[name="filename"]');
 			//ignore all other types than file 
 			if(element.attr('type') != 'file'){
 				return ;
 			}
 			var uploadFileSizeHolder = element.closest('.fileUploadContainer').find('.uploadedFileSize');
 			var fileSize = element.get(0).files[0].size;
-			var maxFileSize = thisInstance.getMaxiumFileUploadingSize();
+			var maxFileSize = thisInstance.getMaxiumFileUploadingSize(container);
 			if(fileSize > maxFileSize) {
 				alert(app.vtranslate('JS_EXCEEDS_MAX_UPLOAD_SIZE'));
 				element.val('');
@@ -112,16 +114,54 @@ Vtiger_Edit_Js("Documents_Edit_Js", {} ,{
 		var form = this.getForm();
 		var noteContentElement = form.find('[name="notecontent"]');
 		if(noteContentElement.length > 0){
+			noteContentElement.removeAttr('data-validation-engine').addClass('ckEditorSource');
 			var ckEditorInstance = new Vtiger_CkEditor_Js();
 			ckEditorInstance.loadCkEditor(noteContentElement);
 		}
 	},
+    
+    /**
+     * Function to save the quickcreate module
+     * @param accepts form element as parameter
+     * @return returns deferred promise
+     */
+    quickCreateSave: function(form) {
+        var thisInstance = this;
+        var aDeferred = jQuery.Deferred();
+                    //Using formData object to send data to server as a multipart/form-data form submit
+        var formData = new FormData(form[0]);
+        var fileLocationTypeElement = form.find('[name="filelocationtype"]');
+                    if(typeof file != "undefined" && thisInstance.isFileLocationInternalType(fileLocationTypeElement)){
+                        formData.append("filename", file);
+                        delete file;
+                    }
+                    if (formData) {
+                        var params = {
+                                        url: "index.php",
+                                        type: "POST",
+                                        data: formData,
+                                        processData: false,
+                                        contentType: false
+                                     };
+             AppConnector.request(params).then(
+             function(data){
+                 aDeferred.resolve(data);
+             },
+             function(textStatus, errorThrown){
+                 aDeferred.reject(textStatus, errorThrown);
+            });
+        }
+        return aDeferred.promise();
+    },
+    registerBasicEvents : function(container) {
+        this._super(container);
+        this.registerFileLocationTypeChangeEvent(container);
+		this.registerFileChangeEvent(container);
+    },
 
 	registerEvents : function() {
-		this._super();
-		this.registerFileLocationTypeChangeEvent();
-		this.registerFileChangeEvent();
 		this.registerEventForCkEditor();
+		this._super();
 	}
 });
 

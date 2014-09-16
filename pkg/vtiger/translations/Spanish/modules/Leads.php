@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-25
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-10-05
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -42,6 +42,7 @@ $languageStrings = array(
 	'Contact in Future'            => 'Contactar más adelante',
 	'Contacted'                    => 'Contactado',
 	'Hot'                          => 'Caliente',
+        'Hot Leads'                    => 'Leads calientes',
 	'Junk Lead'                    => 'Pre-Contacto Basura',
 	'Lost Lead'                    => 'Pre-Contacto Fallido',
 	'Not Contacted'                => 'No Contactado',

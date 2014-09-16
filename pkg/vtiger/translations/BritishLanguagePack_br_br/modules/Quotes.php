@@ -16,8 +16,12 @@ $languageStrings = array(
 	'LBL_QUOTE_INFORMATION'        => 'Quote Details'               , 
 	'Quote No'                     => 'Quote No.'                   , 
 	'Quote Stage'                  => 'Quote Stage'                 , 
-	'Valid Till'                   => 'Valid until'                 , 
+	'Valid Till'                   => 'Valid Until'                 , 
 	'Inventory Manager'            => 'Inventory Manager'           , 
 	'Accepted'                     => 'Accepted'                    , 
 	'Rejected'                     => 'Rejected'                    , 
+        //Taxes 
+        'VAT'                          => 'VAT', 
+        'Service'                      => 'Service', 
+        'Sales'                        => 'Sales'
 );

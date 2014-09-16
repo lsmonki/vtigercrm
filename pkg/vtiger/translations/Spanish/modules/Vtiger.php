@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-27
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -78,8 +78,8 @@ $languageStrings = array(
 	'LBL_HELP'                     => 'Ayuda',
 	'LBL_DOCUMENTATION' => 'Documentación',
 	'LBL_FEEDBACK'                 => 'Cuéntanos',
+	'LBL_CHAT_SUPPORT'             => 'Chat de Ayuda',
 	'LBL_CRM_SETTINGS'             => 'Configuración CRM',
-	'LBL_ON_DEMAND_ADMIN' => 'Añadir / Eliminar Usuarios',
 	'LBL_ANNOUNCEMENT'             => 'Anuncio',
 	'LBL_CALENDAR'                 => 'Calendario',
 	'LBL_POST'                     => 'Publicar',
@@ -101,7 +101,7 @@ $languageStrings = array(
 	'LBL_IN'                       => 'en',
 	'LBL_TYPE_SEARCH'              => 'Escribe aquí para buscar',
 	'LBL_SEARCH_BUTTON'            => 'Buscar',
-	'LBL_ADVANCE_SEARCH'           => 'Avanzada',
+	'LBL_ADVANCE_SEARCH'           => 'Búsqueda Avanzada',
 	'LBL_LOADING_PLEASE_WAIT'      => 'Cargando, Por favor espera.',
 	'LBL_PLEASE_SELECT_MODULE'     => 'Por favor, selecciona un módulo',
 	'LBL_USERS'                    => 'Usuarios',
@@ -136,6 +136,7 @@ $languageStrings = array(
 	'PurchaseOrder'                => 'Ordenes de Compra',
 	'SalesOrder'                   => 'Ordenes de Venta',
 	'Invoice'                      => 'Facturas',
+    'Portal'                       => 'Nuestros Sitios',
 	'LBL_ADD_RECORD'               => 'Añadir Registro',
 	'LBL_RECENTLY_MODIFIED'        => 'Modificado Recientemente',
 	'LBL_RECORDS_LIST'             => 'Lista de Registros',
@@ -163,6 +164,7 @@ $languageStrings = array(
 	'LBL_AFTER'                    => 'después',
 	'LBL_BETWEEN'                  => 'entre',
 	'LBL_IS_EMPTY'=> 'está vacío',
+    'LBL_IS_NOT_EMPTY'             => 'no está vacío',
 	'LBL_SEARCH'                   => 'Buscar',
 	'LBL_SEARCH_IN'                => 'Buscar En',
 	'LBL_ADD_CONDITION'            => 'Añadir Condición',
@@ -228,6 +230,7 @@ $languageStrings = array(
 	'LBL_ALL'                      => 'Todo',
 	'LBL_UPDATED'                  => 'actualizado',
 	'LBL_FROM'                     => 'de',
+	'LBL_TO'                       => 'a',
 	'LBL_ON'                       => 'en',
 	'LBL_OF'                       => 'de',
 	'LBL_BY'                       => 'por',
@@ -423,6 +426,7 @@ $languageStrings = array(
 	'Secondary Email'              => 'Email Alternativo',
 	'Other Email'                  => 'Otro Email',
 	'Email Opt Out'                => 'No Enviar Email',
+    'Is Converted From Lead'       => 'Convertido desde PreContacto',
 	'Expected Close Date'          => 'Fecha Estimada de Cierre',
 	'Fax'                          => 'Fax',
 	'Last Name'                    => 'Apellido',
@@ -476,6 +480,7 @@ $languageStrings = array(
 	'Support Expiry Date'          => 'Fecha de fin de soporte',
 	'Sales Start Date'             => 'Fecha de salida al mercado',
 	'Sales End Date'               => 'Fecha de retirada del mercado',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
 	'LBL_VIDEO_TUTORIAL' => 'Video Tutorial',
 	'LBL_GUIDER' => 'Ayudante',
 	'LBL_DISPLAY_TYPE' => 'Tipo Disposición',
@@ -488,6 +493,7 @@ $languageStrings = array(
 	'LBL_PROFILE_PASSWORD' => 'Perfil / Contraseña',
 	'LBL_SHOW_FULL_DETAILS' => 'Mostrar Datos Completos',
 	'LBL_ACTIVITIES' => 'Actividades',
+	'Activities'	 => 'Actividades',
 	'LBL_NO_PENDING_ACTIVITIES' => 'No hay actividades pendientes',
 	'LBL_SUMMARY' => 'Resumen',
 	'LBL_DETAILS' => 'Detalles',
@@ -520,7 +526,7 @@ $languageStrings = array(
 	'LBL_BLANK' => '-vacío-',
 
 	//PageTitle translations
-	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM - CRM de Código Abierto',
+	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM Open Source',
 	'SINGLE_Accounts' => 'Cuenta',
 	'SINGLE_Contacts' => 'Contacto',
 	'LBL_Sun' => 'Dom',
@@ -582,7 +588,7 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE' => 'Tamaño máximo de subida es',
 	'LBL_EXCEEDED' => 'Excedido',
 	'LBL_OPERATION_NOT_PERMITTED' => 'Operación no permitida',
-	'LBL_MERGE' => 'Combinar',
+	'LBL_MERGE' => 'Fundirse',
 	'LBL_MERGING_CRITERIA_SELECTION' => 'Criterios de Combinación',
 	'LBL_AVAILABLE_FIELDS' => 'Campos Disponibles',
 	'LBL_MERGE_RECORDS_DESCRIPTION' => 'El registro primario se mantendrá después de la fusión. Puedes seleccionar la columna que mantendrá los valores.
@@ -595,7 +601,9 @@ $languageStrings = array(
 	//sbproducts translation
 	'LBL_BACK_TO_PRODUCTS' => 'Volver a productos',
 	//Translations used for Export to Pdf
-	'Net Total' => 'Neto Total',
+	'Valid Date' => 'Válido Hasta',
+	'Phone: ' => 'Teléfono: ',
+	'Issued Date' => 'Fecha Emisión',
 	'Shipping & Handling Charges' => 'Gastos de Manipulación y Transporte',
 	'Shipping & Handling Tax:' => 'Impuestos de Manipulación y Transporte',
 	'Quantity'=>'Cantidad',
@@ -604,11 +612,13 @@ $languageStrings = array(
 	'Valid Date' => 'Válido Hasta',
 	'Phone: ' => 'Teléfono: ',
 	'Discount'=>'Descuento',
+	'Net Total' => 'Neto Total',
 	'Product Code'=>'Código Producto',
 	'Customer Name'=>'Nombre Cliente',
 	'Price'=>'Precio',
 	'Tax:' => 'Impuesto:',
 	'Contact Name' => 'Nombre Contacto',
+	'Grand Total:' => 'Total:',
 	'Fax: ' => 'Fax: ',
 	'Website: ' => 'Website: ',
 	'Tax' => 'Impuesto',
@@ -635,6 +645,7 @@ $languageStrings = array(
 	'LBL_SELECT_RELATED_MODULES' => 'Selecciona Módulos Relacionadoos',
 	'LBL_ASSIGNED_TO' => 'Asignado a',
 
+	'LBL_CUSTOMIZE_MAIN_MENU' => 'Personalizar Menú Principal',
 	//Report Detail View
 	'LBL_VIEW_DETAILS' => 'Ver Detalles',
 	//Comments Field Labels for Workflow
@@ -642,6 +653,14 @@ $languageStrings = array(
 	'Last Comment' => 'Ultimo Comentario',
 	'Last 5 Comments' => 'Ultimos 5 Comentarios',
 	'All Comments' => 'Todos los Comentarios',
+
+	//Products Popup View
+	'NOT_A_BUNDLE' => 'No es producto compuesto',
+	'LBL_MARK_AS_HELD' => 'Marcar como mantenida',
+	'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'Máximo 160 caracteres están permitidos para el mensaje de texto',
+	'LBL_HIDE_COMPLETED_EVENTS' => 'Ocultar Eventos completados en el Calendario',
+
+	'LBL_SETUP_WEBFORMS'                 => 'Crear Formulario Web',
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Por favor, configura el servidor de correo saliente en la sección de configuración',
@@ -708,6 +727,7 @@ $jsLanguageStrings = array(
 	'JS_INVALID_PAGE_NUMBER' => 'Número de Página Inválida',
 	'INVALID_NUMBER' => 'Número Inválido',
 	'JS_SHOULD_BE_LESS_THAN_OR_EQUAL_TO' => 'Debe ser menor o igual a',
+        'JS_CURRENT_DATE' => 'Fecha actual',
 	'JS_PERCENTAGE_VALUE_SHOULD_BE_LESS_THAN_100' => 'El porcentaje debe ser inferior a 100',
 	'JS_ACCEPT_ONLY_NUMBER' => 'Acepta solo números',
 	'JS_THIS_FILE_HAS_ALREADY_BEEN_SELECTED' => 'Ya se ha seleccionado este Fichero',
@@ -736,6 +756,7 @@ $jsLanguageStrings = array(
 	'JS_END_DATE_TIME' => 'Fecha y Hora de Fin',
 	'JS_POSTPONE' => 'Posponer',
 	'JS_MESSAGE' => 'Mensaje',
+	'JS_MASS_EDIT_LIMIT' => 'Operaciones de edición masiva se pueden hacer con 500 registros o menos a la vez',
 	'JS_NO_VIEW_PERMISSION_AFTER_SAVE' => 'No tendrás permiso para ver este expediente después de guardar. ¿Quieres continuar?',
 
 	//Settings page translations
@@ -767,18 +788,32 @@ $jsLanguageStrings = array(
 	'JS_TOTAL_RECORDS' => 'Total registros',
 	'JS_PAGE_NOT_EXIST' => 'Página no existe',
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'Estás en la página número',
-
 	//More currencies message
 	'JS_PLEASE_ENABLE_BASE_CURRENCY_FOR_PRODUCT' => 'Por favor, habilita la moneda base para el producto',
 	'JS_PLEASE_SELECT_BASE_CURRENCY_FOR_PRODUCT' => 'Por favor, selecciona la moneda base para el producto',
-
 	//Delete Records message
 	'JS_RECORDS_ARE_GETTING_DELETED' => 'Se están eliminando los registros',
 	'JS_RECORD_GETTING_DELETED' => 'Eliminando registro',
 	'JS_NO_RESULTS_FOUND' => 'No se han encontrado resultados',
 
-	'JS_RECORDS TRANSFERRED SUCCESSFULLY' => 'Se ha cambiado el propietario correctamente',
 
+	//User Password
+	'JS_PASSWORD_INCORRECT_OLD'=>'Contraseña actual incorrecta. Introduce de nuevo la información de las contraseñas.',
+	'JS_PASSWORD_CHANGED_SUCCESSFULLY' => 'Se ha cambiado la contraseña correctamente.',
+	'JS_REENTER_PASSWORDS'=>'Introduce las contraseñas de nuevo. La "nueva contraseña" y la "contraseña de confirmación" no coinciden.',
+	'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Se han transferido los registros correctamente.',
 	'JS_USER_EXISTS' => 'Usuario ya existe',
-	'JS_REENTER_PASSWORDS' => 'Introduce las contraseñas de nuevo',
+	'JS_REENTER_PASSWORDS' => 'Introduce de nuevo las contraseñas',
+	'LBL_SIGN_IN_AS_USER'=>'Acceder al sistema como otro usuario finalizará la sesión actual. ¿Seguro que quieres continuar?',
+
+	// Specific starts - For PBXManager
+	'JS_PBX_CALL_FROM' => 'Llamar desde',
+	'JS_PBX_INCOMING_CALL' => 'Llamada entrante',
+	'JS_PBX_OUTGOING_SUCCESS'=>'Levante el receptor para marcar el número',
+	'JS_PBX_OUTGOING_FAILURE'=>'Llamada fallida',
+	'JS_PBX_FILL_ALL_FIELDS'=>'Por favor rellene todos los campos',
+	// ends
+    
+        //No Tax exist 
+        'JS_LBL_NO_TAXES'=>'No Impuestos', 
 );

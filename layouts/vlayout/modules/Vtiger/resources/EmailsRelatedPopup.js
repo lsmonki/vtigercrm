@@ -32,6 +32,38 @@ Vtiger_Popup_Js("Vtiger_EmailsRelatedModule_Popup_Js",{},{
 		thisInstance.done(response, thisInstance.getEventName());
 		e.preventDefault();
 	},
+    
+    registerSelectButton : function(){
+		var popupPageContentsContainer = this.getPopupPageContainer();
+		var thisInstance = this;
+		popupPageContentsContainer.on('click','button.select', function(e){
+			var tableEntriesElement = popupPageContentsContainer.find('table');
+			var selectedRecordDetails = {};
+			jQuery('input.entryCheckBox', tableEntriesElement).each(function(index, checkBoxElement){
+				var checkBoxJqueryObject = jQuery(checkBoxElement)
+				if(! checkBoxJqueryObject.is(":checked")){
+					return true;
+				}
+				var row = checkBoxJqueryObject.closest('tr');
+				var id = row.data('id');
+                var name = row.data('name');
+                var emailField = jQuery(row).find('.emailField');
+                var emailValue = emailField.text();
+                if(emailValue == ''){
+                    var error = name+" "+app.vtranslate("JS_DO_NOT_HAVE_AN_EMAIL_ID");
+                    alert(error);
+                    e.preventDefault();
+                    return;
+                }
+				selectedRecordDetails[id] = {name : row.data('name'), 'email' : emailValue};
+			});
+			if(Object.keys(selectedRecordDetails).length <= 0) {
+				alert(app.vtranslate('JS_PLEASE_SELECT_ONE_RECORD'));
+			}else{
+                thisInstance.done(selectedRecordDetails, thisInstance.getEventName());
+			}
+		});
+	},
 	
 	registerEvents: function(){
 		this._super();

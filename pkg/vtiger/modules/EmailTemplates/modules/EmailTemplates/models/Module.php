@@ -31,7 +31,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * @param EmailtTemplates_Record_Model $recordModel
 	 * @return <integer> template id
 	 */
-	public function saveRecord(EmailTemplates_Record_Model $recordModel) {
+	public function saveRecord($recordModel) {
 		$db = PearDatabase::getInstance();
 		$templateid = $recordModel->getId();
 		if(empty($templateid)){
@@ -50,7 +50,7 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 * Function to delete the email template
 	 * @param type $recordIds
 	 */
-	public function deleteRecord(EmailTemplates_Record_Model $recordModel) {
+	public function deleteRecord($recordModel) {
 		$recordId = $recordModel->getId();
 		$db = PearDatabase::getInstance();
 		$db->pquery('DELETE FROM vtiger_emailtemplates WHERE templateid = ? ', array($recordId));
@@ -219,4 +219,11 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 		}
 		return $recordIds;
 	}
+    
+    /**
+     * Funxtion to identify if the module supports quick search or not
+     */
+    public function isQuickSearchEnabled() {
+        return false;
+    }
 }

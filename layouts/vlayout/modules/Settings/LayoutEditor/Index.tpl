@@ -41,7 +41,7 @@
                     {if $IS_SORTABLE}
                         <div class="btn-toolbar">
                             <button class="btn addButton addCustomBlock" type="button">
-                                <i class="icon-plus icon-white"></i>&nbsp;
+                                <i class="icon-plus"></i>&nbsp;
                                 <strong>{vtranslate('LBL_ADD_CUSTOM_BLOCK', $QUALIFIED_MODULE)}</strong>
                             </button>
                             <span class="pull-right">
@@ -121,9 +121,10 @@
                                                                         <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
                                                                     </a>
                                                                     <div class="basicFieldOperations pull-right hide" style="width : 250px;">
-                                                                        <form class="form-horizontal fieldDetailsForm">
+                                                                        <form class="form-horizontal fieldDetailsForm" method="POST">
                                                                             <div class="modal-header contentsBackground">
                                                                                 <strong>{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}</strong>
+                                                                                <div class="pull-right"><a href="javascript:void(0)" class='cancel'>X</a></div>
                                                                             </div>
                                                                             <div style="padding-bottom: 5px;">
                                                                                 <span>
@@ -223,9 +224,9 @@
                                                                        data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}' value="{$FIELD_MODEL->getEditViewDisplayValue($FIELD_MODEL->get('defaultvalue'))}"
                                                                        data-decimal-seperator='{$USER_MODEL->get('currency_decimal_separator')}' data-group-seperator='{$USER_MODEL->get('currency_grouping_separator')}' />
                                                             </div>
-																	{else if $FIELD_MODEL->getFieldName() eq "terms_conditions" && $FIELD_MODEL->get('uitype') == 19}
-																		{assign var=INVENTORY_TERMS_AND_CONDITIONS_MODEL value= Settings_Vtiger_MenuItem_Model::getInstance("INVENTORYTERMSANDCONDITIONS")}
-																		<a href="{$INVENTORY_TERMS_AND_CONDITIONS_MODEL->getUrl()}" target="_blank">{vtranslate('LBL_CLICK_HERE_TO_EDIT', $QUALIFIED_MODULE)}</a>
+                                                        {else if $FIELD_MODEL->getFieldName() eq "terms_conditions" && $FIELD_MODEL->get('uitype') == 19}
+                                                            {assign var=INVENTORY_TERMS_AND_CONDITIONS_MODEL value= Settings_Vtiger_MenuItem_Model::getInstance("INVENTORYTERMSANDCONDITIONS")}
+                                                            <a href="{$INVENTORY_TERMS_AND_CONDITIONS_MODEL->getUrl()}" target="_blank">{vtranslate('LBL_CLICK_HERE_TO_EDIT', $QUALIFIED_MODULE)}</a>
                                                         {else}
                                                             <input type="text" class="input-medium" data-validation-engine="validate[required,funcCall[Vtiger_Base_Validator_Js.invokeValidation]]" {if !$FIELD_MODEL->hasDefaultValue()} disabled="" {/if}  name="fieldDefaultValue" value="{$FIELD_MODEL->get('defaultvalue')}" data-fieldinfo='{ZEND_JSON::encode($FIELD_INFO)}'/>
                                                         {/if}
@@ -234,6 +235,7 @@
                                             </span></div>
                                         <div class="modal-footer" style="padding: 0px;">
                                             <span class="pull-right">
+                                                <div class="pull-right"><a href="javascript:void(0)" style="margin: 5px;color:#AA3434;margin-top:10px;" class='cancel'>{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a></div>
                                                 <button class="btn btn-success saveFieldDetails" data-field-id="{$FIELD_MODEL->get('id')}" type="submit" style="margin: 5px;">
                                                     <strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong>
                                                 </button>
@@ -253,9 +255,9 @@
             </div>
         </li>
     {/if}
-						{/foreach}
-						</ul>
-						<ul {if $SELECTED_MODULE_MODEL->isFieldsSortableAllowed($BLOCK_LABEL_KEY)}name="sortable2"{/if} class="connectedSortable span6" style="list-style-type: none; margin: 0; float: left;min-height: 1px;padding:2px;">
+{/foreach}
+</ul>
+<ul {if $SELECTED_MODULE_MODEL->isFieldsSortableAllowed($BLOCK_LABEL_KEY)}name="sortable2"{/if} class="connectedSortable span6" style="list-style-type: none; margin: 0; float: left;min-height: 1px;padding:2px;">
     {foreach item=FIELD_MODEL from=$FIELDS_LIST name=fieldlist1}
         {assign var=FIELD_INFO value=$FIELD_MODEL->getFieldInfo()}
         {if $smarty.foreach.fieldlist1.index % 2 neq 0}
@@ -283,9 +285,10 @@
                                         <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
                                     </a>
                                     <div class="basicFieldOperations pull-right hide" style="width : 250px;">
-                                        <form class="form-horizontal fieldDetailsForm">
+                                        <form class="form-horizontal fieldDetailsForm" method="POST">
                                             <div class="modal-header contentsBackground">
                                                 <strong>{vtranslate($FIELD_MODEL->get('label'), $SELECTED_MODULE_NAME)}</strong>
+                                                <div class="pull-right"><a href="javascript:void(0)" class="cancel">X</a></div>
                                             </div>
                                             <div style="padding-bottom: 5px;">
                                                 <span>
@@ -393,6 +396,7 @@
         </div>
         <div class="modal-footer" style="padding: 0px;">
             <span class="pull-right">
+                <div class="pull-right"><a href="javascript:void(0)" style="margin: 5px;color:#AA3434;margin-top:10px;" class="cancel">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a></div>
                 <button class="btn btn-success saveFieldDetails" data-field-id="{$FIELD_MODEL->get('id')}" type="submit" style="margin: 5px;">
                     <strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong>
                 </button>
@@ -464,75 +468,76 @@
     <div class="marginLeftZero border1px" data-field-id="" data-sequence="">
         <div class="row-fluid padding1per">
             <span class="span1">&nbsp;
-            {if $IS_SORTABLE}
-                <a>
-                    <img src="{vimage_path('drag.png')}" border="0" title="{vtranslate('LBL_DRAG',$QUALIFIED_MODULE)}"/>
-                </a>
-            {/if}
-        </span>
-        <div class="span11 marginLeftZero" style="word-wrap: break-word;">
-            <span class="fieldLabel"></span>
-            <span class="btn-group pull-right actions">
                 {if $IS_SORTABLE}
-                    <a href="javascript:void(0)" class="dropdown-toggle editFieldDetails" data-toggle="dropdown">
-                        <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
+                    <a>
+                        <img src="{vimage_path('drag.png')}" border="0" title="{vtranslate('LBL_DRAG',$QUALIFIED_MODULE)}"/>
                     </a>
-                    <div class="basicFieldOperations hide pull-right" style="width: 250px;">
-                        <form class="form-horizontal fieldDetailsForm">
-                            <div class="modal-header contentsBackground">
-                            </div>
-                            <div style="padding-bottom: 5px;">
-                                <span>
-                                    <input type="hidden" name="mandatory" value="O" />
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="mandatory" value="M" />&nbsp;{vtranslate('LBL_MANDATORY_FIELD', $QUALIFIED_MODULE)}
-                                    </label>
-                                </span>
-                                <span>
-                                    <input type="hidden" name="presence" value="1" />
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="presence" value="2" />&nbsp;{vtranslate('LBL_ACTIVE', $QUALIFIED_MODULE)}
-                                    </label>
-                                </span>
-                                <span>
-                                    <input type="hidden" name="quickcreate" value="1" />
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="quickcreate" value="2" />&nbsp;{vtranslate('LBL_QUICK_CREATE', $QUALIFIED_MODULE)}
-                                    </label>
-                                </span>
-                                <span>
-                                    <input type="hidden" name="summaryfield" value="0"/>
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="summaryfield" value="1" />&nbsp;{vtranslate('LBL_SUMMARY_FIELD', $QUALIFIED_MODULE)}
-                                    </label>
-                                </span>
-                                <span>
-                                    <input type="hidden" name="masseditable" value="2" />
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="masseditable" value="1" />&nbsp;{vtranslate('LBL_MASS_EDIT', $QUALIFIED_MODULE)}
-                                    </label>
-                                </span>
-                                <span>
-                                    <input type="hidden" name="defaultvalue" value="" />
-                                    <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
-                                        <input type="checkbox" name="defaultvalue" value="" />&nbsp;
-                                        {vtranslate('LBL_DEFAULT_VALUE', $QUALIFIED_MODULE)}</label>
-                                    <div class="padding1per defaultValueUi" style="padding : 0px 10px 0px 25px;"></div>
-                                </span>
-                            </div>
-                            <div class="modal-footer">
-                                <span class="pull-right">
-                                    <button class="btn btn-success saveFieldDetails" data-field-id="" type="submit"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
-                                </span>
-                            </div>
-                        </form>
-                    </div>
                 {/if}
-                <a href="javascript:void(0)" class="deleteCustomField" data-field-id=""><i class="icon-trash alignMiddle" title="{vtranslate('LBL_DELETE', $QUALIFIED_MODULE)}"></i></a>
             </span>
+            <div class="span11 marginLeftZero" style="word-wrap: break-word;">
+                <span class="fieldLabel"></span>
+                <span class="btn-group pull-right actions">
+                    {if $IS_SORTABLE}
+                        <a href="javascript:void(0)" class="dropdown-toggle editFieldDetails" data-toggle="dropdown">
+                            <i class="icon-pencil alignMiddle" title="{vtranslate('LBL_EDIT', $QUALIFIED_MODULE)}"></i>
+                        </a>
+                        <div class="basicFieldOperations hide pull-right" style="width: 250px;">
+                            <form class="form-horizontal fieldDetailsForm" method="POST">
+                                <div class="modal-header contentsBackground">
+                                </div>
+                                <div style="padding-bottom: 5px;">
+                                    <span>
+                                        <input type="hidden" name="mandatory" value="O" />
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="mandatory" value="M" />&nbsp;{vtranslate('LBL_MANDATORY_FIELD', $QUALIFIED_MODULE)}
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="hidden" name="presence" value="1" />
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="presence" value="2" />&nbsp;{vtranslate('LBL_ACTIVE', $QUALIFIED_MODULE)}
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="hidden" name="quickcreate" value="1" />
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="quickcreate" value="2" />&nbsp;{vtranslate('LBL_QUICK_CREATE', $QUALIFIED_MODULE)}
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="hidden" name="summaryfield" value="0"/>
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="summaryfield" value="1" />&nbsp;{vtranslate('LBL_SUMMARY_FIELD', $QUALIFIED_MODULE)}
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="hidden" name="masseditable" value="2" />
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="masseditable" value="1" />&nbsp;{vtranslate('LBL_MASS_EDIT', $QUALIFIED_MODULE)}
+                                        </label>
+                                    </span>
+                                    <span>
+                                        <input type="hidden" name="defaultvalue" value="" />
+                                        <label class="checkbox" style="padding-left: 25px; padding-top: 5px;">
+                                            <input type="checkbox" name="defaultvalue" value="" />&nbsp;
+                                            {vtranslate('LBL_DEFAULT_VALUE', $QUALIFIED_MODULE)}</label>
+                                        <div class="padding1per defaultValueUi" style="padding : 0px 10px 0px 25px;"></div>
+                                    </span>
+                                </div>
+                                <div class="modal-footer">
+                                    <span class="pull-right">
+                                        <div class="pull-right"><a href="javascript:void(0)" style="margin-top: 5px;margin-left: 10px;color:#AA3434;" class='cancel'>{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a></div>
+                                        <button class="btn btn-success saveFieldDetails" data-field-id="" type="submit"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    {/if}
+                    <a href="javascript:void(0)" class="deleteCustomField" data-field-id=""><i class="icon-trash alignMiddle" title="{vtranslate('LBL_DELETE', $QUALIFIED_MODULE)}"></i></a>
+                </span>
+            </div>
         </div>
     </div>
-</div>
 </li>
 
 <div class="modal addBlockModal hide">
@@ -540,7 +545,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_ADD_CUSTOM_BLOCK', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal addCustomBlockForm">
+    <form class="form-horizontal addCustomBlockForm" method="POST">
         <div class="modal-body">
             <div class="control-group">
                 <span class="control-label">
@@ -575,7 +580,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_CREATE_CUSTOM_FIELD', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal createCustomFieldForm">
+    <form class="form-horizontal createCustomFieldForm" method="POST">
         <div class="modal-body">
             <div class="control-group">
                 <span class="control-label">
@@ -641,7 +646,7 @@
                     &nbsp;
                 </span>
                 <div class="controls">
-                    <label class="checkbox">
+                    <label class="checkbox span3" style="margin-left: 0px;">
                         <input type="checkbox" class="checkbox" name="isRoleBasedPickList" value="1" >&nbsp;{vtranslate('LBL_ROLE_BASED_PICKLIST',$QUALIFIED_MODULE)}
                     </label>
                 </div>
@@ -657,7 +662,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>{vtranslate('LBL_INACTIVE_FIELDS', $QUALIFIED_MODULE)}</h3>
     </div>
-    <form class="form-horizontal inactiveFieldsForm">
+    <form class="form-horizontal inactiveFieldsForm" method="POST">
         <div class="modal-body">
             <div class="row-fluid inActiveList"></div>
         </div>

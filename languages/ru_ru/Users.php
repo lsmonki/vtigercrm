@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Add User'                    , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить пользователя'                    , 
 	'LBL_MY_PREFERENCES'           => 'Мои Настройки'   , 
 	'LBL_MORE_INFORMATION'         => 'Дополнительная Информации', 
 	'LBL_USERLOGIN_ROLE'           => 'Учетная Запись и Роль Пользователя', 
@@ -64,11 +64,11 @@ $languageStrings = array(
 	'Digit Grouping Pattern'       => 'Шаблон Группировки Разрядов', 
 	'Digit Grouping Separator'     => 'Разделитель Группировки Разрядов', 
 	'Symbol Placement'             => 'Расположение Символа', 
-	'Number Of Currency Decimals'  => 'Number Of Currency Decimals' , // TODO: Review
-	'Truncate Trailing Zeros'      => 'Truncate Trailing Zeros'     , // TODO: Review
-	'Default Call Duration'        => 'Default Call Duration (Mins)', // TODO: Review
-	'Other Event Duration'         => 'Other Event Duration (Mins)' , // TODO: Review
-	'Calendar Hour Format'         => 'Calendar Hour Format'        , // TODO: Review
+	'Number Of Currency Decimals'  => 'Количество валютной Десятичные' , 
+	'Truncate Trailing Zeros'      => 'Обрезать конечные нули'     , 
+	'Default Call Duration'        => 'По умолчанию Продолжительность вызова (Мин)', 
+	'Other Event Duration'         => 'Другое длительность события (Мин)' , 
+	'Calendar Hour Format'         => 'Календарь часовой формат'        , 
 	'Kwajalein'                    => '(UTC-12:00) International Date Line West', 
 	'Pacific/Midway'               => '(UTC-11:00) Coordinated Universal Time-11', 
 	'Pacific/Samoa'                => '(UTC-11:00) Samoa'           , 
@@ -166,8 +166,47 @@ $languageStrings = array(
 	'Pacific/Auckland'             => '(UTC+12:00) Auckland'        , 
 	'Asia/Magadan'                 => '(UTC+12:00) Магадан'  , 
 	'Pacific/Tongatapu'            => '(UTC+13:00) Nukualofa'       , 
-	'Summary'                      => 'Summary'                     , // TODO: Review
-	'Detail'                       => 'Detail'                      , // TODO: Review
-	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
+	'Summary'                      => 'Резюме'                     , 
+	'Detail'                       => 'Деталь'                      , 
+	'LBL_USER_LIST_DETAILS'        => 'Детали'                     , 
 	'LBL_USER_DELETED_SUCCESSFULLY' => 'Пользователь удален успешно',
+    'LBL_ACTIVE_USERS' => 'Активные пользователи',
+    'LBL_INACTIVE_USERS' => 'Неактивные пользователи',
+    'LBL_DELETE_USER_PERMANENTLY' => 'Удалить пользователя Постоянно',
+    'LBL_RESTORE' => 'Восстановление',
+    'LBL_USER_RESTORED_SUCCESSFULLY' => 'Пользователь успешно восстановлены',
+	'LBL_ALMOST_THERE'	=>	'Почти там!',
+	'LBL_ABOUT_ME'		=>	'Обо мне',
+	'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Мы обещаем сохранить этот частный)',
+	'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Все приведенные ниже поля обязательны для заполнения)',
+	'LBL_GET_STARTED'	=> 'Начать',
+	'LBL_YOUR_CONTACT_NUMBER' => 'Контактный телефон',
+	'LBL_WHERE_ARE_YOU_FROM' =>	'Откуда вы?',
+	'LBL_SELECT_COUNTRY'	=> 'Выберите страну',
+	'LBL_COMPANY_SIZE'		=> 'Размер компании',
+	'LBL_JOB_TITLE'			=> 'Профессия',
+	'LBL_DEPARTMENT'		=> 'Отдел',
+	'LBL_BASE_CURRENCY'		=> 'Базисная валюта',
+	'LBL_CHOOSE_BASE_CURRENCY'	=> 'Выберите базовую валюту',
+	'LBL_OPERATING_CURRENCY'	=> 'Базовая валюта не могут быть изменены позже. Выберите операционную валюту',
+	'LBL_LANGUAGE' => 'Язык',
+	'LBL_CHOOSE_LANGUAGE'	=> 'Выберите язык',
+	'LBL_CHOOSE_TIMEZONE'	=> 'Выберите часовой пояс',
+	'LBL_DATE_FORMAT'		=> 'Формат даты',
+	'LBL_CHOOSE_DATE_FORMAT'=> 'Выберите формат даты',
+	'LBL_PHONE'	=> 'Телефон',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

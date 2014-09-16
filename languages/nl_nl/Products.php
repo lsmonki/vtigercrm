@@ -72,4 +72,5 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Spiraal Map'                 , 
 	'Sq Ft'                        => 'Vierkante meter'             , 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
+    'LBL_PRODUCTSMOD_DISABLED'     => 'Enable Producten Module voor Producten bekijken',
 );

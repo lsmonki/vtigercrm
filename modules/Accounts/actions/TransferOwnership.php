@@ -60,5 +60,8 @@ class Accounts_TransferOwnership_Action extends Vtiger_Action_Controller {
 		}
         return array();
 	}
-	
+    
+    public function validateRequest(Vtiger_Request $request) {
+        $request->validateWriteAccess();
+    }
 }

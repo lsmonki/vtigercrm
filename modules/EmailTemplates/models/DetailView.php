@@ -58,6 +58,35 @@ class EmailTemplates_DetailView_Model extends Vtiger_DetailView_Model {
 	}
 	
 	/**
+	 * Function to get the Quick Links for the Detail view of the module
+	 * @param <Array> $linkParams
+	 * @return <Array> List of Vtiger_Link_Model instances
+	 */
+	public function getSideBarLinks($linkParams) {
+		$linkTypes = array('SIDEBARLINK', 'SIDEBARWIDGET');
+		$moduleLinks = $this->getModule()->getSideBarLinks($linkTypes);
+		
+		$listLinkTypes = array('DETAILVIEWSIDEBARLINK', 'DETAILVIEWSIDEBARWIDGET');
+		$listLinks = Vtiger_Link_Model::getAllByType($this->getModule()->getId(), $listLinkTypes);
+		
+		if($listLinks['DETAILVIEWSIDEBARLINK']) {
+			foreach($listLinks['DETAILVIEWSIDEBARLINK'] as $link) {
+				$link->linkurl = $link->linkurl.'&record='.$this->getRecord()->getId().'&source_module='.$this->getModule()->getName();
+				$moduleLinks['SIDEBARLINK'][] = $link;
+			}
+		}
+
+		if($listLinks['DETAILVIEWSIDEBARWIDGET']) {
+			foreach($listLinks['DETAILVIEWSIDEBARWIDGET'] as $link) {
+				$link->linkurl = $link->linkurl.'&record='.$this->getRecord()->getId().'&source_module='.$this->getModule()->getName();
+				$moduleLinks['SIDEBARWIDGET'][] = $link;
+			}
+		}
+		
+		return $moduleLinks;
+	}
+	
+	/**
 	 * Function to get the instance
 	 * @param <String> $moduleName - module name
 	 * @param <String> $recordId - record id

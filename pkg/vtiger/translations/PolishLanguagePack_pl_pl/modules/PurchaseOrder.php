@@ -9,38 +9,27 @@
  *************************************************************************************/
 $languageStrings = array(
 	//DetailView Actions
-	'SINGLE_PurchaseOrder' => 'Zamówienie do dostawcy',
-	'LBL_EXPORT_TO_PDF' => 'Generuj PDF',
-    'LBL_SEND_MAIL_PDF' => 'Wyślij mailem PDF',
+	'SINGLE_PurchaseOrder' => 'Zamówienie do Dostawcy',
+	'LBL_EXPORT_TO_PDF' => 'Eksport do PDF',
 
 	//Basic strings
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
-	'LBL_COPY_SHIPPING_ADDRESS' => 'Kopiuj adres dostawy',
-	'LBL_COPY_BILLING_ADDRESS' => 'Kopiuj adres rozliczeniowy',
+	'LBL_ADD_RECORD' => 'Dodaj Zamówienie do Dostawcy',
+	'LBL_RECORDS_LIST' => 'Lista Zamówień do Dostawców',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie Zamówienie do Dostawcy',
 
 	// Blocks
-	'LBL_PO_INFORMATION' => 'Szczegóły zamówienia od klienta',
-
+	'LBL_PO_INFORMATION' => 'Podstawowe informacje',
+	
 	//Field Labels
-	'PurchaseOrder No' => 'Numer',
-	'Requisition No' => 'Numer Zapotrzebowania',
-	'Tracking Number' => 'Numer listu przewozowego',
-	'Sales Commission' => 'Prowizja',
-    'LBL_PAID' => 'Zapłacone',
-    'LBL_BALANCE' => 'Saldo',
-
+	'PurchaseOrder No' => 'Numer Zamówienia do Dostawcy',
+	'Requisition No' => 'Nr Zamówienia klienta',
+	'Tracking Number' => 'Nr listu przewozowego',
+	'Sales Commission' => 'Prowizja od sprzedaży',
+	
 	//Added for existing Picklist Entries
 
-	'Received Shipment'=>'Dostarczone',
-	
-	//Translation for product not found
-	'LBL_THIS' => 'Ten',
-	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ten produkt/usługa został/a usunięta, spróbuj zastąpić ją innym produktem/usługą',
-	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Ta linia została usunięta w systemie, usuń ją z rekordu.',
+	'Received Shipment'=>'Przyjęty Transport',
+        'LBL_LIST_PRICE'               => 'Cennik',
+        'List Price'                   => 'Cennik',
 
-);
-
-$jsLanguageStrings = array(
-	'JS_PLEASE_REMOVE_LINE_ITEM_THAT_IS_DELETED' => 'Usuń linię, której produkt/usługa został/a usunięty/a z/w systemie.',
 );

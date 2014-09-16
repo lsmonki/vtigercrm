@@ -12,10 +12,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('user_privileges/default_module_view.php');
 
 class HelpDesk extends CRMEntity {
 	var $log;
@@ -303,8 +299,7 @@ class HelpDesk extends CRMEntity {
 						)
 		where $i=0,1,..n & key = ticketid, title, firstname, ..etc(range_fields) & val = value of the key from db retrieved row
 	**/
-	function process_list_query($query)
-	{
+	function process_list_query($query, $row_offset, $limit = -1, $max_per_page = -1) {
 		global $log;
 		$log->debug("Entering process_list_query(".$query.") method ...");
 
@@ -634,7 +629,9 @@ case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_gro
 		if ($queryplanner->requireTable("vtiger_lastModifiedByHelpDesk")){
 		    $query .=" left join vtiger_users as vtiger_lastModifiedByHelpDesk on vtiger_lastModifiedByHelpDesk.id = vtiger_crmentityHelpDesk.modifiedby ";
 		}
-
+        if ($queryplanner->requireTable("vtiger_createdbyHelpDesk")){
+			$query .= " left join vtiger_users as vtiger_createdbyHelpDesk on vtiger_createdbyHelpDesk.id = vtiger_crmentityHelpDesk.smcreatorid ";
+		}
 		return $query;
 	}
 

@@ -13,7 +13,7 @@
 <span class="customFilterMainSpan btn-group">
 	<select id="customFilter"  style="width:350px;">
 		<optgroup id="foldersBlock" label="{vtranslate('LBL_FOLDERS', $MODULE)}">
-			<option value="All">{vtranslate('LBL_ALL_REPORTS', $MODULE)}</option>
+			<option value="All" data-id="All">{vtranslate('LBL_ALL_REPORTS', $MODULE)}</option>
 			{foreach item=FOLDER from=$FOLDERS}
 				<option  data-editurl="{$FOLDER->getEditUrl()}" id="filterOptionId_{$FOLDER->getId()}" class="filterOptionId_{$FOLDER->getId()}" data-deletable="{$FOLDER->isDeletable()}" data-editable="{$FOLDER->isEditable()}" data-deleteurl="{$FOLDER->getDeleteUrl()}" value="{$FOLDER->getId()}" data-id="{$FOLDER->getId()}" {if $VIEWNAME eq $FOLDER->getId()}selected=""{/if}>{vtranslate($FOLDER->getName(), $MODULE)}</option>
 			{/foreach}

@@ -8,17 +8,12 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	
 	'Asterisk' => 'Asterisk',
-	'PBXManager' => 'PBX Manager',
-	'SINGLE_PBXManager' => 'PBX Manager',
-	
-	//Blocks
-	'LBL_CALL_INFORMATION' => 'Call Details',
-	
-	//Field Labels
 	'Call From'=>'Call From',
 	'Call To'=>'Call To',
-	'Time Of Call'=>'Time Of Call',
+	'LBL_CALL_INFORMATION' => 'Call Details',
 	'PBXManager ID'=>'PBX Manager ID',
+	'PBXManager' => 'PBX Manager',
+	'SINGLE_PBXManager' => 'PBX Manager',
+	'Time Of Call'=>'Time Of Call',
 );

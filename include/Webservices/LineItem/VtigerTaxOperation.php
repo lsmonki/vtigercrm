@@ -93,7 +93,7 @@ class VtigerTaxOperation  extends VtigerActorOperation {
 
 	private function getNewTaxName() {
 		$currentTaxName = $this->getCurrentTaxName();
-		
+
 		if(empty($currentTaxName)) {
 			return 'tax1';
 		}

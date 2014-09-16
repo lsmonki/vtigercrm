@@ -19,8 +19,15 @@ $languageStrings = array(
 	'SINGLE_ProjectMilestone'      => 'Hito',
 	'LBL_ADD_RECORD'               => 'Añadir Hito',
 	'LBL_RECORDS_LIST'             => 'Lista de Hitos',
+        'LBL_PROJECTS_LIST'            => 'Lista de Proyectos',
+	'LBL_TASKS_LIST'               => 'Lista de Actividades', 
+        'LBL_MILESTONES_LIST'          => 'Lista de Hitos',
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Detalles de Hito',
 	'Project Milestone Name'       => 'Nombre Hito',
 	'Milestone Date'               => 'Fecha Hito',
 	'Project Milestone No'         => 'Número Hito',
+	//picklist values
+	'administrative' => 'Administrativo',
+        'operative' => 'Operativo',
+        'other' => 'Otro',
 );

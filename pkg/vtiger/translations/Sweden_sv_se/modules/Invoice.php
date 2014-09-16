@@ -42,6 +42,9 @@ $languageStrings = array(
 	'LBL_THIS' => 'Den här',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'tas bort från systemet. Vänligen ta bort eller ersätta denna artikel',
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Denna artikel tas bort från systemet, vänligen ta bort denna artikel',
+	'LBL_NOT_A_BUNDLE' => 'Inte en Bundle',
+	'LBL_SUB_PRODUCTS'	=> 'Under produkter',
+	'LBL_ACTION'	=> 'Åtgärd',
 );
 
 $jsLanguageStrings = array(

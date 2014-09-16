@@ -13,17 +13,25 @@ class Users_DeleteAjax_Action extends Vtiger_Delete_Action {
 
 	public function process(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
-		$userId = vtws_getWebserviceEntityId($moduleName, $request->get('userid'));
-		$transformUserId = vtws_getWebserviceEntityId($moduleName, $request->get('transfer_user_id'));
+        $ownerId = $request->get('userid');
+        $newOwnerId = $request->get('transfer_user_id');
 
-		$userModel = Users_Record_Model::getCurrentUserModel();
-		$userModuleModel = Users_Module_Model::getInstance($moduleName);
-		
-		$result = vtws_deleteUser($userId, $transformUserId, $userModel);
-		$listViewUrl = $userModuleModel->getListViewUrl();
+        if($request->get('mode') == 'permanent') {
+            Users_Record_Model::deleteUserPermanently($ownerId, $newOwnerId);
+        } else {
+            $userId = vtws_getWebserviceEntityId($moduleName, $ownerId);
+            $transformUserId = vtws_getWebserviceEntityId($moduleName, $newOwnerId);
+
+            $userModel = Users_Record_Model::getCurrentUserModel();
+
+            vtws_deleteUser($userId, $transformUserId, $userModel);
+
+            if($request->get('permanent') == '1')
+                Users_Record_Model::deleteUserPermanently($ownerId, $newOwnerId);
+        }
 		
 		$response = new Vtiger_Response();
-		$response->setResult(array('message'=>vtranslate('LBL_USER_DELETED_SUCCESSFULLY', $moduleName), 'listViewUrl' => $listViewUrl));
+		$response->setResult(array('message'=>vtranslate('LBL_USER_DELETED_SUCCESSFULLY', $moduleName)));
 		$response->emit();
 	}
 }

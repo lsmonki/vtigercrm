@@ -48,6 +48,12 @@ class Settings_Workflows_ListView_Model extends Settings_Vtiger_ListView_Model {
 		$pageLimit = $pagingModel->getPageLimit();
 
 		$orderBy = $this->getForSql('orderby');
+		if (!empty($orderBy) && $orderBy === 'smownerid') { 
+			$fieldModel = Vtiger_Field_Model::getInstance('assigned_user_id', $moduleModel); 
+			if ($fieldModel->getFieldDataType() == 'owner') { 
+				$orderBy = 'COALESCE(CONCAT(vtiger_users.first_name,vtiger_users.last_name),vtiger_groups.groupname)'; 
+			} 
+		}
 		if(!empty($orderBy)) {
 			$listQuery .= ' ORDER BY '. $orderBy . ' ' .$this->getForSql('sortorder');
 		}
@@ -61,7 +67,16 @@ class Settings_Workflows_ListView_Model extends Settings_Vtiger_ListView_Model {
 		for($i=0; $i<$noOfRecords; ++$i) {
 			$row = $db->query_result_rowdata($listResult, $i);
 			$record = new $recordModelClass();
-			$row['module_name'] = vtranslate($row['module_name'], $row['module_name']);
+			$module_name = $row['module_name'];
+			
+			//To handle translation of calendar to To Do
+			if($module_name == 'Calendar'){
+				$module_name = vtranslate('LBL_TASK', $module_name);
+			}else{
+				$module_name = vtranslate($module_name, $module_name);
+			}
+			
+			$row['module_name'] = $module_name;
 			$row['execution_condition'] = vtranslate($record->executionConditionAsLabel($row['execution_condition']), 'Settings:Workflows');
 			$record->setData($row);
 			$listViewRecordModels[$record->getId()] = $record;

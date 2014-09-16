@@ -14,7 +14,7 @@ Class Settings_SharingAccess_Index_View extends Settings_Vtiger_Index_View {
 		$viewer = $this->getViewer ($request);
 		$moduleName = $request->getModule();
 		$qualifiedModuleName = $request->getModule(false);
-		
+
 		$viewer->assign('ALL_MODULES', Settings_SharingAccess_Module_Model::getAll(true));
 		$viewer->assign('ALL_ACTIONS', Settings_SharingAccess_Action_Model::getAll());
 		$viewer->assign('MODULE', $moduleName);

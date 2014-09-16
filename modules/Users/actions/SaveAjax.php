@@ -18,16 +18,23 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	}
 
 	public function checkPermission(Vtiger_Request $request) {
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
+            $currentUserModel = Users_Record_Model::getCurrentUserModel();
 
-		if(!$currentUserModel->isAdminUser()) {
-			throw new AppException('LBL_PERMISSION_DENIED', 'Vtiger');
-		}
-	}
+            $userId = $request->get('userid');
+            if (!$currentUserModel->isAdminUser()) {
+                $mode = $request->getMode();
+                if ($mode == 'savePassword' && (isset($userId) && $currentUserModel->getId() != $userId)) {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED', 'Vtiger'));
+                }
+                 else if ($mode != 'savePassword' && ($currentUserModel->getId() != $request->get('record'))) {
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED', 'Vtiger'));
+                }
+            }
+    }
 
 	public function process(Vtiger_Request $request) {
-		
-		$mode = $request->get('mode');
+
+                $mode = $request->get('mode');
 		if (!empty($mode)) {
 			$this->invokeExposedMethod($mode, $request);
 			return;
@@ -35,7 +42,7 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		
 		$recordModel = $this->saveRecord($request);
 
-		$fieldModelList = $recordModel->getModule()->getFields();
+                $fieldModelList = $recordModel->getModule()->getFields();
 		$result = array();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
 			$fieldValue = $displayValue = Vtiger_Util_Helper::toSafeHTML($recordModel->get($fieldName));
@@ -65,11 +72,16 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 	public function getRecordModelFromRequest(Vtiger_Request $request) {
 		$recordModel = parent::getRecordModelFromRequest($request);
 		$fieldName = $request->get('field');
-
-		if ($fieldName === 'is_admin' && !$request->get('value')) {
+                $currentUserModel=  Users_Record_Model::getCurrentUserModel();
+		if ($fieldName === 'is_admin' && (!$currentUserModel->isAdminUser()||!$request->get('value'))) {
 			$recordModel->set($fieldName, 'off');
+                        $recordModel->set('is_owner',0);
 		}
-		return $recordModel;
+                else if($fieldName === 'is_admin' && $currentUserModel->isAdminUser()){
+                    $recordModel->set($fieldName, 'on');
+                    $recordModel->set('is_owner',1);
+                }       
+                return $recordModel;
 	}
 	
 		
@@ -100,4 +112,4 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		}
 		$response->emit();
 	}
-}
+        }

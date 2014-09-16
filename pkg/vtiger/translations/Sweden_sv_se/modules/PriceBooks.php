@@ -21,4 +21,7 @@ $languageStrings = array(
 	//Field Labels
 	'Price Book Name' => 'Prisguidesnamn',
 	'PriceBook No' => 'Prisguidesnummer',
+	
+	'LBL_UNIT_PRICE' => 'JÄMFÖRPRIS',
+	'LBL_ADD_TO' => 'Lägg till',
 );

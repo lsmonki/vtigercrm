@@ -10,7 +10,7 @@
 -->*}
 {strip}
 <div class="container-fluid">
-    <form id="EditView">
+    <form id="EditView" method="POST">
         <div class="row-fluid">
             <span class="widget_header row-fluid">
                 <div class="row-fluid"><h3>{vtranslate('LBL_CUSTOMIZE_RECORD_NUMBERING', $QUALIFIED_MODULE)}</h3></div>
@@ -22,12 +22,13 @@
                 <table id="customRecordNumbering" class="table table-bordered">
                 {assign var=DEFAULT_MODULE_DATA value=$DEFAULT_MODULE_MODEL->getModuleCustomNumberingData()}
                 {assign var=DEFAULT_MODULE_NAME value=$DEFAULT_MODULE_MODEL->getName()}
+				{assign var=WIDTHTYPE value=$CURRENT_USER_MODEL->get('rowheight')}
                     <thead>
                         <tr>
-                            <th width="30%">
+                            <th width="30%" class="{$WIDTHTYPE}">
                                 <strong>{vtranslate('LBL_CUSTOMIZE_RECORD_NUMBERING', $QUALIFIED_MODULE)}</strong>
                             </th>
-                            <th width="70%">
+                            <th width="70%" class="{$WIDTHTYPE}" style="border-left: none">
                             <span class="pull-right">
                                 <button type="button" class="btn" name="updateRecordWithSequenceNumber"><b>{vtranslate('LBL_UPDATE_MISSING_RECORD_SEQUENCE', $QUALIFIED_MODULE)}</b></button>
                             </span>
@@ -37,10 +38,10 @@
 
                     <tbody>
                     <tr>
-                        <td class="fieldLabel">
+                        <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px"><b>{vtranslate('LBL_SELECT_MODULE', $QUALIFIED_MODULE)}</b></label>
                         </td>
-                        <td class="fieldValue">
+                        <td class="fieldValue {$WIDTHTYPE}" style="border-left: none">
                             <select class="chzn-select" name="sourceModule">
                                 {foreach key=index item=MODULE_MODEL from=$SUPPORTED_MODULES}
                                     {assign var=MODULE_NAME value=$MODULE_MODEL->get('name')}
@@ -52,20 +53,20 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="fieldLabel">
+                        <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px"><b>{vtranslate('LBL_USE_PREFIX', $QUALIFIED_MODULE)}</b></label>
                         </td>
-                        <td class="fieldValue">
+                        <td class="fieldValue {$WIDTHTYPE}" style="border-left: none">
                             <input type="text" value="{$DEFAULT_MODULE_DATA['prefix']}" data-old-prefix="{$DEFAULT_MODULE_DATA['prefix']}" name="prefix" data-validation-engine="validate[funcCall[Vtiger_AlphaNumeric_Validator_Js.invokeValidation]]"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="fieldLabel">
+                        <td class="{$WIDTHTYPE}">
                             <label class="pull-right marginRight10px">
                                 <b>{vtranslate('LBL_START_SEQUENCE', $QUALIFIED_MODULE)}</b><span class="redColor">*</span>
                             </label>
                         </td>
-                        <td class="fieldValue">
+                        <td class="fieldValue {$WIDTHTYPE}" style="border-left: none">
                             <input type="text" value="{$DEFAULT_MODULE_DATA['sequenceNumber']}"
                                    data-old-sequence-number="{$DEFAULT_MODULE_DATA['sequenceNumber']}" name="sequenceNumber"
                                    data-validation-engine="validate[required,funcCall[Vtiger_WholeNumber_Validator_Js.invokeValidation]]"/>
@@ -77,11 +78,11 @@
         </div>
         <br>
         <div class="row-fluid">
-            <div class="span12">
-                <span class="pull-right">
+            <div class="span12 pull-right">
+                <div class="pull-right">
                     <button class="btn btn-success saveButton" type="submit" disabled="disabled"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
                     <a class="cancelLink" type="reset" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
-                </span>
+                </div>
             </div>
         </div>
     </form>

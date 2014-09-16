@@ -44,7 +44,12 @@ var Vtiger_Index_Js = {
 		});
 	},
 
-	loadWidgets : function(widgetContainer) {
+	/**
+	 * Function is used to load the sidebar widgets
+	 * @param widgetContainer - widget container
+	 * @param open - widget should be open or closed
+	 */
+	loadWidgets : function(widgetContainer, open) {
 		var message = jQuery('.loadingWidgetMsg').html();
 
 		if(widgetContainer.html() != '') {
@@ -64,11 +69,14 @@ var Vtiger_Index_Js = {
 		}
 		AppConnector.request(listViewWidgetParams).then(
 			function(data){
-				widgetContainer.progressIndicator({'mode':'hide'});
-				var imageEle = widgetContainer.parent().find('.imageElement');
-				var imagePath = imageEle.data('downimage');
-				imageEle.attr('src',imagePath);
-				widgetContainer.css('height', 'auto');
+			if(typeof open == 'undefined') open = true;
+            	if(open){
+					widgetContainer.progressIndicator({'mode':'hide'});
+					var imageEle = widgetContainer.parent().find('.imageElement');
+					var imagePath = imageEle.data('downimage');
+					imageEle.attr('src',imagePath);
+					widgetContainer.css('height', 'auto');
+				}
 				widgetContainer.html(data);
 				var label = widgetContainer.closest('.quickWidget').find('.quickWidgetHeader').data('label');
 				jQuery('.bodyContents').trigger('Vtiger.Widget.Load.'+label,jQuery(widgetContainer));
@@ -95,6 +103,38 @@ var Vtiger_Index_Js = {
 
 		});
 
+	},
+
+	/**
+	 * Function to change user theme(colour)
+	 * @params : colour name
+	 */
+	changeSkin : function() {
+		jQuery('.themeElement').on('click', function(e) {
+			e.stopPropagation();
+			var currentElement = jQuery(e.currentTarget);
+			currentElement.closest('#themeContainer').hide();
+
+			var progressElement = jQuery('#progressDiv');
+			progressElement.progressIndicator();
+
+			var params = {
+				'module' : 'Users',
+				'action' : 'SaveAjax',
+				'record' : jQuery('#current_user_id').val(),
+				'field'	 : 'theme',
+				'value'	 : currentElement.data('skinName')
+			}
+			AppConnector.request(params).then(function(data) {
+				if(data.success && data.result) {
+					progressElement.progressIndicator({'mode':'hide'});
+					jQuery('.settingIcons').removeClass('open');
+					window.location.reload();
+				}
+			},
+			function(error,err){
+			});
+		})
 	},
 
 	/**
@@ -129,7 +169,7 @@ var Vtiger_Index_Js = {
 											height: '300px',
 											railVisible: true,
 											alwaysVisible: true,
-											size: '6px',
+											size: '6px'
 										});
 									}
 								},css);
@@ -218,13 +258,24 @@ var Vtiger_Index_Js = {
 			AppConnector.request(url);
 		});
 	},
-
+	registerResizeEvent: function(){
+		$(window).resize(function() {
+			if(this.resizeTO) clearTimeout(this.resizeTO);
+			this.resizeTO = setTimeout(function() {
+				$(this).trigger('resizeEnd');
+			}, 600);
+		});
+		$(window).bind('resizeEnd', function() {
+			Vtiger_Index_Js.adjustTopMenuBarItems();
+		});
+	},
 	/**
 	 * Function to make top-bar menu responsive.
 	 */
 	adjustTopMenuBarItems: function() {
-		var TOLERANT_MAX_GAP = 40; // px
-		var menuBarWrapper = jQuery('.nav.modulesList');
+		// Dedicated space for all dropdown text
+		var TOLERANT_MAX_GAP = 125; // px
+		var menuBarWrapper = ($(window).outerWidth() < 1161) ? jQuery('#mediumNav') : jQuery('#largeNav');
 		var topMenuBarWidth = menuBarWrapper.parent().outerWidth();
 		var optionalBarItems = jQuery('.opttabs', menuBarWrapper), optionalBarItemsCount = optionalBarItems.length;
 		var optionalBarItemIndex = optionalBarItemsCount;
@@ -236,15 +287,20 @@ var Vtiger_Index_Js = {
 		// Loop and enable hidden menu item until the tolerant width is reached.
 		var stopLoop = false;
 		do {
-			var lastOptTab = enableOptionalTopMenuItem();
-			if (lastOptTab == null || (topMenuBarWidth - menuBarWrapper.outerWidth()) > TOLERANT_MAX_GAP) {
-				if(lastOptTab) lastOptTab.hide();
+			if((topMenuBarWidth - menuBarWrapper.outerWidth()) < TOLERANT_MAX_GAP){
+				var lastOptTab = enableOptionalTopMenuItem();
+				if (lastOptTab == null || (topMenuBarWidth - menuBarWrapper.outerWidth()) > TOLERANT_MAX_GAP) {
+					if(lastOptTab) lastOptTab.hide();
+					stopLoop = true; break;
+				}
+			}else{
 				stopLoop = true; break;
 			}
 		} while (!stopLoop);
-
 		// Required to get the functionality of All drop-down working.
-		menuBarWrapper.parent().css({'overflow':'visible'});
+		jQuery(window).load(function(){
+			jQuery("#topMenus").css({'overflow':'visible'});
+		});
 	},
 
 	/**
@@ -283,12 +339,21 @@ var Vtiger_Index_Js = {
 			}
 		}
 
+		function get_popover_placement(el) {
+		  var width = window.innerWidth;
+		  var left_pos = jQuery(el).offset().left;
+		  if (width - left_pos > 400) return 'right';
+		  return 'left';
+		}
+
 		function showTooltip(el, data) {
+			var the_placement = get_popover_placement(el);
 			el.popover({
 				//title: '', - Is derived from the Anchor Element (el).
 				trigger: 'manual',
 				content: data,
 				animation: false,
+				placement:  the_placement,
 				template: '<div class="popover popover-tooltip"><div class="arrow"></div><div class="popover-inner"><button name="vtTooltipClose" class="close" style="color:white;opacity:1;font-weight:lighter;position:relative;top:3px;right:3px;">x</button><h3 class="popover-title"></h3><div class="popover-content"><div></div></div></div></div>'
 			});
 			lastPopovers.push(el.popover('show'));
@@ -354,7 +419,9 @@ var Vtiger_Index_Js = {
 		Vtiger_Index_Js.registerActivityReminder();
 		Vtiger_Index_Js.adjustTopMenuBarItems();
 		Vtiger_Index_Js.registerPostAjaxEvents();
+		Vtiger_Index_Js.changeSkin();
 		Vtiger_Index_Js.registerShowHideLeftPanelEvent();
+		Vtiger_Index_Js.registerResizeEvent();
 	},
 
 	registerPostAjaxEvents: function() {

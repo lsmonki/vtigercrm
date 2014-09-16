@@ -101,4 +101,8 @@ class Vtiger_Base_UIType extends Vtiger_Base_Model {
 	public function getRelatedListDisplayValue($value) {
 		return $this->getDisplayValue($value);
 	}
+    
+    public function getListSearchTemplateName() {
+        return 'uitypes/FieldSearchView.tpl';
+    }
 }

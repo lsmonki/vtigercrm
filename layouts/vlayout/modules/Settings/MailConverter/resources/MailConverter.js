@@ -16,6 +16,8 @@ jQuery.Class('Settings_MailConverter_Index_Js',{
 			var callBackFunction = function(data) {
 				var mcInstance = Settings_MailConverter_Index_Js.mailConverterInstance;
 				mcInstance.saveRuleEvent();
+				mcInstance.setAssignedTo();
+				jQuery("#actions").change();
 				jQuery('#ruleSave').validationEngine(app.validationEngineOptions);
 			}
 			app.showModalWindow(data,function(data){
@@ -142,6 +144,36 @@ jQuery.Class('Settings_MailConverter_Index_Js',{
 		});
 	},
 	
+	setAssignedTo : function() {
+		jQuery("#actions").change(function() {
+			var selectedAction = jQuery("#actions").val();
+			if(!(selectedAction=="CREATE_HelpDesk_FROM" || selectedAction=="CREATE_Leads_SUBJECT" || selectedAction=="CREATE_Contacts_SUBJECT" || selectedAction=="CREATE_Accounts_SUBJECT")) {
+				jQuery("#assignedTo").val("");
+				jQuery("#assignedToBlock").hide();
+			} else {
+				jQuery("#assignedToBlock").show();
+			}
+		});
+	},
+	
+	openMailBox : function() {
+		jQuery(".mailBoxDropdown").change(function() {
+			var id = jQuery(".mailBoxDropdown option:selected").val();
+			var path = "index.php?parent=" + app.getParentModuleName() + "&module=" + app.getModuleName() + "&view=List&record=" + id;
+			window.location.assign(path);
+		});
+	},
+	
+	disableFolderSelection : function() {
+		var checked = jQuery("input[type=checkbox][name=folders]:checked").length >= 2;     
+		jQuery("input[type=checkbox][name=folders]").not(":checked").attr("disabled", checked);
+	    
+		jQuery("input[type=checkbox][name=folders]").click(function() {
+			var checked = jQuery("input[type=checkbox][name=folders]:checked").length >= 2;     
+			jQuery("input[type=checkbox][name=folders]").not(":checked").attr("disabled", checked);
+		});
+	},
+	
 	getRule : function(params) {
          var progressIndicatorElement = jQuery.progressIndicator({ 
                 'position' : 'html',
@@ -172,6 +204,9 @@ jQuery.Class('Settings_MailConverter_Index_Js',{
 	
 	registerEvents : function() {
 		this.registerSortableEvent();
+		this.openMailBox();
+		this.setAssignedTo();
+		this.disableFolderSelection();
 	}
 });
 

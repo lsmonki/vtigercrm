@@ -7,7 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-error_reporting(E_ALL & ~E_NOTICE);
 
 chdir( dirname(__FILE__). '/../../');
 
@@ -201,18 +200,19 @@ class Mobile_ICAL {
 }
 
 // To make it easier for subscribing to Calendar via applications we support the
-// url format: http://localhost:81/modules/Mobile/ical.php/username@password
+
+// url format: http://localhost:81/modules/Mobile/ical.php/username@mail.com/password
 
 // Retrieve username and password from the URL
 $pathinfo = $_SERVER['PATH_INFO'];
-if(empty($pathinfo)) $pathinfo = "/ @ ";
+if(empty($pathinfo)) $pathinfo = "/";
 
 
 // Extract username and password
-$parts = explode('@', $pathinfo);
+$parts = explode('/', $pathinfo);
 $matches = array();
 $matches[2] = array_pop($parts);
-$matches[1] = ltrim(implode('@', $parts), '/');
+$matches[1] = array_pop($parts);
 
 // Process the request
 if (vtlib_isModuleActive('Mobile')) {

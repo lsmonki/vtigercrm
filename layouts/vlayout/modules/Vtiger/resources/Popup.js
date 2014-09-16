@@ -152,7 +152,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 
 		var urlString = (typeof urlOrParams == 'string')? urlOrParams : jQuery.param(urlOrParams);
 		var url = 'index.php?'+urlString;
-		var popupWinRef =  window.open(url, windowName ,'width=800,height=650,resizable=0,scrollbars=1');
+		var popupWinRef =  window.open(url, windowName ,'width=900,height=650,resizable=0,scrollbars=1');
 		if (typeof this.destroy == 'function') {
 			// To remove form elements that have created earlier
 			this.destroy();
@@ -202,8 +202,11 @@ jQuery.Class("Vtiger_Popup_Js",{
 			window = self;
 		}
 		window.close();
+        var data = JSON.stringify(result);
+        // Because if we have two dollars like this "$$" it's not working because it'll be like escape char(Email Templates)
+        data = data.replace(/\$\$/g,"$ $");
 
-		jQuery.triggerParentEvent(eventToTrigger, JSON.stringify(result));
+		jQuery.triggerParentEvent(eventToTrigger, data);
 
 	},
 
@@ -399,6 +402,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		Vtiger_BaseList_Js.getPageRecords(params).then(
 				function(data){
 					jQuery('#popupContents').html(data);
+					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -451,7 +455,6 @@ jQuery.Class("Vtiger_Popup_Js",{
 	/**
 	 * Function to handle search event
 	 */
-
 	searchHandler : function(){
 		var aDeferred = jQuery.Deferred();
 		var completeParams = this.getCompleteParams();
@@ -481,12 +484,27 @@ jQuery.Class("Vtiger_Popup_Js",{
 			});
 		});
 	},
+    /**
+	 * Function to register event for Searching on click of enter
+	 */
+	registerEventForEnter : function(){
+		var thisInstance = this;
+		jQuery('#searchvalue').keyup(function (e) {
+            if (e.keyCode == 13) {
+            jQuery('#popupSearchButton').trigger('click');
+            }
+		});
+	},
 
 	/**
 	 * Function to handle Sort
 	 */
 	sortHandler : function(headerElement){
 		var aDeferred = jQuery.Deferred();
+		//Listprice column should not be sorted so checking for class noSorting
+		if(headerElement.hasClass('noSorting')){
+			return;
+		}
 		var fieldName = headerElement.data('columnname');
 		var sortOrderVal = headerElement.data('nextsortorderval');
 		var sortingParams = {
@@ -600,7 +618,8 @@ jQuery.Class("Vtiger_Popup_Js",{
 			var element = jQuery('#totalPageCount');
 			var totalPageNumber = element.text();
 			if(totalPageNumber == ""){
-				var totalRecordCount = jQuery('#totalCount').val();
+				var totalRecordElement = jQuery('#totalCount');
+				var totalRecordCount = totalRecordElement.val();
 				if(totalRecordCount != '') {
 					var recordPerPage = jQuery('#pageLimit').val();
 					if(recordPerPage == '0') recordPerPage = 1;
@@ -615,6 +634,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 				thisInstance.getPageCount().then(function(data){
 					var pageCount = data['result']['page'];
 					element.text(pageCount);
+					totalRecordElement.val(data['result']['numberOfRecords']);
 					element.progressIndicator({'mode': 'hide'});
 			});
 		}
@@ -717,23 +737,38 @@ jQuery.Class("Vtiger_Popup_Js",{
 	 */
 	registerEventForTotalRecordsCount : function(){
 		var thisInstance = this;
-		jQuery('.pageNumbers').on('hover',function(e){
+		jQuery('.totalNumberOfRecords').on('click',function(e){
 			var element = jQuery(e.currentTarget);
+			element.addClass('hide');
+			element.parent().find('.pageNumbersText').progressIndicator({});
 			var totalRecordsElement = jQuery('#totalCount');
 			var totalNumberOfRecords = totalRecordsElement.val();
 			if(totalNumberOfRecords == '') {
 				thisInstance.getPageCount().then(function(data){
 					totalNumberOfRecords = data['result']['numberOfRecords'];
+					var numberOfPages = data['result']['page'];
 					totalRecordsElement.val(totalNumberOfRecords);
+					jQuery('#totalPageCount').text(numberOfPages);
+					thisInstance.showPagingInfo();
 				});
+			}else{
+				thisInstance.showPagingInfo();
 			}
-			if(totalNumberOfRecords != ''){
-				var titleWithRecords = app.vtranslate("JS_TOTAL_RECORDS")+" "+totalNumberOfRecords;
-				element.data('tooltip').options.title = titleWithRecords;
-			} else {
-				element.data('tooltip').options.title = "";
-			}
+			element.parent().find('.pageNumbersText').progressIndicator({'mode':'hide'});
 		})
+	},
+	
+	showPagingInfo : function(){
+		var totalNumberOfRecords = jQuery('#totalCount').val();
+		var pageNumberElement = jQuery('.pageNumbersText');
+		var pageRange = pageNumberElement.text();
+		var newPagingInfo = pageRange+" "+app.vtranslate('of')+" "+totalNumberOfRecords;
+		var listViewEntriesCount = parseInt(jQuery('#noOfEntries').val());
+		if(listViewEntriesCount != 0){
+			jQuery('.pageNumbersText').html(newPagingInfo);
+		} else {
+			jQuery('.pageNumbersText').html("");
+		}
 	},
 	
 	/**
@@ -749,6 +784,8 @@ jQuery.Class("Vtiger_Popup_Js",{
 		var pageEndRange = jQuery('#pageEndRange').val();
 		var pageJumpButton = jQuery('#listViewPageJump');
 		var pages = jQuery('#totalPageCount').text();
+		var totalNumberOfRecords = jQuery('.totalNumberOfRecords');
+		var pageNumbersTextElem = jQuery('.pageNumbersText');
 
 		if(pages == 1){
 			pageJumpButton.attr('disabled',"disabled");
@@ -770,9 +807,13 @@ jQuery.Class("Vtiger_Popup_Js",{
 		}
 		if(listViewEntriesCount != 0){
 			var pageNumberText = pageStartRange+" "+app.vtranslate('to')+" "+pageEndRange;
-			jQuery('.pageNumbers').html(pageNumberText);
+			pageNumbersTextElem.html(pageNumberText);
+			totalNumberOfRecords.removeClass('hide');
 		} else {
-			jQuery('.pageNumbers').html("");
+			pageNumbersTextElem.html("<span>&nbsp;</span>");
+			if(!totalNumberOfRecords.hasClass('hide')){
+				totalNumberOfRecords.addClass('hide');
+			}
 		}
 
 	},
@@ -786,6 +827,7 @@ jQuery.Class("Vtiger_Popup_Js",{
 		this.registerSelectButton();
 		this.registerEventForCheckboxChange();
 		this.registerEventForSearch();
+        this.registerEventForEnter();
 		this.registerEventForSort();
 		this.registerEventForListViewEntries();
 		//this.triggerDisplayTypeEvent();
@@ -793,7 +835,6 @@ jQuery.Class("Vtiger_Popup_Js",{
 		if(popupPageContainer.length > 0){
 			this.registerEventForTotalRecordsCount();
 			this.registerEventForPagination();
-			jQuery('.pageNumbers').tooltip();
 		}
 	}
 });
@@ -804,4 +845,5 @@ jQuery(document).ready(function() {
 	jQuery('#popupPageContainer').css('height',documentHeight);
 	popupInstance.setEventName(triggerEventName);
 	popupInstance.registerEvents();
+	Vtiger_Helper_Js.showHorizontalTopScrollBar();
 });

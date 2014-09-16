@@ -103,6 +103,12 @@ class Calendar_Save_Action extends Vtiger_Save_Action {
 		$fieldModelList = $moduleModel->getFields();
 		foreach ($fieldModelList as $fieldName => $fieldModel) {
 			$fieldValue = $request->get($fieldName, null);
+            // For custom time fields in Calendar, it was not converting to db insert format(sending as 10:00 AM/PM)
+            $fieldDataType = $fieldModel->getFieldDataType();
+            if($fieldDataType == 'time'){
+				$fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
+            }
+            // End
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
 					$fieldValue = trim($fieldValue);
@@ -140,7 +146,7 @@ class Calendar_Save_Action extends Vtiger_Save_Action {
 
 		//Due to dependencies on the older code
 		$setReminder = $request->get('set_reminder');
-		if($setReminder == 'on') {
+		if($setReminder) {
 			$_REQUEST['set_reminder'] = 'Yes';
 		} else {
 			$_REQUEST['set_reminder'] = 'No';

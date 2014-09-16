@@ -7,6 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
-require_once 'modules/Reports/ScheduledReports.php';
-VTScheduledReport::runScheduledReports($adb);
-?>
+
+vimport ('includes.runtime.Globals');
+require_once 'modules/Reports/models/ScheduleReports.php';
+Reports_ScheduleReports_Model::runScheduledReports();

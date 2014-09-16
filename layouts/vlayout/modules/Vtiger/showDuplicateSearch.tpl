@@ -15,7 +15,7 @@
         <button data-dismiss="modal" class="close" title="{vtranslate('LBL_CLOSE')}">&times;</button>
 		<h3>{vtranslate('LBL_MERGING_CRITERIA_SELECTION', $MODULE)}</h3>
 	</div>
-	<form class="form-horizontal" id="findDuplicate" action="index.php">
+	<form class="form-horizontal" id="findDuplicate" action="index.php" method="POST">
 		<input type='hidden' name='module' value='{$MODULE}' />
 		<input type='hidden' name='view' value='FindDuplicates' />
 		<br>
@@ -25,7 +25,7 @@
 			</span>
 			<div class="controls">
 				<div class="row-fluid">
-					<span class="span6">
+					<span class="span10" style="max-width: 200px;">
 						<select id="fieldList" class="select2 row-fluid" multiple="true" name="fields[]"
 							data-validation-engine="validate[required]">
 							{foreach from=$FIELDS item=FIELD}
@@ -39,6 +39,7 @@
 				<div class="row-fluid">
 					<label><input type="checkbox" name="ignoreEmpty" checked /><span class="alignMiddle">&nbsp;{vtranslate('LBL_IGNORE_EMPTY_VALUES', $MODULE)}</span></label
 				</div>
+				<br><br>
 			</div>
 		</div>
 		<div class="modal-footer">

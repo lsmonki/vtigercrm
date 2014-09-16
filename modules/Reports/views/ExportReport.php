@@ -52,6 +52,7 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 	function GetXLS(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
+        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
 		$reportModel->getReportXLS();
 	}
 
@@ -62,6 +63,7 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 	function GetCSV(Vtiger_Request $request) {
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
+        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
 		$reportModel->getReportCSV();
 	}
 
@@ -75,6 +77,7 @@ class Reports_ExportReport_View extends Vtiger_View_Controller {
 
 		$recordId = $request->get('record');
 		$reportModel = Reports_Record_Model::getInstanceById($recordId);
+        $reportModel->set('advancedFilter', $request->get('advanced_filter'));
 		$printData = $reportModel->getReportPrint();
 
 		$viewer->assign('REPORT_NAME', $reportModel->getName());

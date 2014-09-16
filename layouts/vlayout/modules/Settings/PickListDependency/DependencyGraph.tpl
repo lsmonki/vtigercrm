@@ -21,11 +21,12 @@
             </ul>
         </div>
     </div>
-    <div class="row-fluid padding-bottom1per">
+    <div class="row-fluid">
         <span class="btn-toolbar">
             <button class="btn sourceValues" type="button"><strong>{vtranslate('LBL_SELECT_SOURCE_VALUES', $QUALIFIED_MODULE)}</strong></button>
         </span>
     </div>
+	<br>
     {assign var=SELECTED_MODULE value=$RECORD_MODEL->get('sourceModule')}
     {assign var=SOURCE_FIELD value=$RECORD_MODEL->get('sourcefield')}
     {assign var=MAPPED_SOURCE_PICKLIST_VALUES value=array()}
@@ -36,22 +37,25 @@
     {/foreach}
     <input type="hidden" class="allSourceValues" value='{Vtiger_Util_Helper::toSafeHTML(ZEND_JSON::encode($SOURCE_PICKLIST_VALUES))}' />
 
-    <div class="row-fluid" style="text-align:center">
+    <div class="row-fluid depandencyTable">
         <div class="span2">
-            <table class="table-bordered table-condensed themeTableColor" width="98%">
+            <table class="table-condensed themeTableColor" width="100%">
                 <thead>
                     <tr class="blockHeader"><th>{$RECORD_MODEL->getSourceFieldLabel()}</th></tr>
                 </thead>
                 <tbody>
                     {foreach item=TARGET_VALUE from=$TARGET_PICKLIST_VALUES name=targetValuesLoop}
                         <tr>
-                            {if $smarty.foreach.targetValuesLoop.index eq 0}
-                                <td style="border: 1px solid white" class="tableHeading">
-                                    {$RECORD_MODEL->getTargetFieldLabel()}</td></tr>
-                                {else}
-                        <td style="border: 1px solid white">&nbsp;&nbsp;</td></tr>
-                    {/if}
-                {/foreach}
+                        {if $smarty.foreach.targetValuesLoop.index eq 0}
+                                <td class="tableHeading">
+                                    {$RECORD_MODEL->getTargetFieldLabel()}
+								</td>
+							</tr>
+                        {else}
+                        <td></td>
+						</tr>
+                        {/if}
+					{/foreach}
                 </tbody>
             </table>
         </div>
@@ -59,7 +63,7 @@
             <table class="table-bordered table-condensed themeTableColor pickListDependencyTable">
                 <thead><tr class="blockHeader">
                         {foreach item=SOURCE_PICKLIST_VALUE from=$SOURCE_PICKLIST_VALUES}
-                            <th data-source-value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)}" style="border: none;
+                            <th data-source-value="{Vtiger_Util_Helper::toSafeHTML($SOURCE_PICKLIST_VALUE)}" style="
                             {if !empty($MAPPED_VALUES) && !in_array($SOURCE_PICKLIST_VALUE, array_map('decode_html', $MAPPED_SOURCE_PICKLIST_VALUES))}display: none;{/if}">
                             {vtranslate($SOURCE_PICKLIST_VALUE, $SELECTED_MODULE)}</th>
                     {/foreach}</tr>
@@ -119,10 +123,11 @@
 </div>
 {include file='ModalFooter.tpl'|@vtemplate_path:'Vtiger'}
 </div>
-<div class="row-fluid padding1per">
-    <span class="btn-toolbar">
+<div class="padding1per">
+    <div class="btn-toolbar  pull-right">
         <button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE', $QUALIFIED_MODULE)}</strong></button>
         <a type="reset" class="cancelLink cancelDependency" title="{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a>
-    </span>
+    </div>
+	<br><br>
 </div>
 {/strip}

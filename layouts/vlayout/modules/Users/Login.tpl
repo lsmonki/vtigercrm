@@ -1,13 +1,13 @@
 {*<!--
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
 *
-********************************************************************************/
+ ********************************************************************************/
 -->*}
 {strip}
 <!DOCTYPE html>
@@ -18,10 +18,9 @@
 		<!-- for Login page we are added -->
 		<link href="libraries/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="libraries/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-		<link href="libraries/bootstrap/css/jquery.bxslider.css" rel="stylesheet" />
+		<link href="libraries/bootstrap/css/jqueryBxslider.css" rel="stylesheet" />
 		<script src="libraries/jquery/jquery.min.js"></script>
-		<script src="libraries/jquery/boxslider/jquery.bxslider.js"></script>
-		<script src="libraries/jquery/boxslider/jquery.bxslider.min.js"></script>
+		<script src="libraries/jquery/boxslider/jqueryBxslider.js"></script>
 		<script src="libraries/jquery/boxslider/respond.min.js"></script>
 		<script>
 			jQuery(document).ready(function(){
@@ -102,13 +101,13 @@
 										<div class="login-box" id="loginDiv">
 											<div class="">
 												<h3 class="login-header">Login to Vtiger CRM</h3>
-											</div>
+		</div>
 											<form class="form-horizontal login-form" style="margin:0;" action="index.php?module=Users&action=Login" method="POST">
-												{if isset($smarty.request.error)}
-													<div class="alert alert-error">
-														<p>Invalid username or password.</p>
-													</div>
-												{/if}
+			{if isset($smarty.request.error)}
+			<div class="alert alert-error">
+				<p>Invalid username or password.</p>
+			</div>
+			{/if}
 												{if isset($smarty.request.fpError)}
 													<div class="alert alert-error">
 														<p>Invalid Username or Email address.</p>
@@ -131,9 +130,9 @@
 													</div>
 												</div>
 
-												<div class="control-group">
+			<div class="control-group">
 													<label class="control-label" for="password"><b>Password</b></label>
-													<div class="controls">
+				<div class="controls">
 														<input type="password" id="password" name="password" placeholder="Password">
 													</div>
 												</div>
@@ -149,32 +148,32 @@
 											<div class="login-subscript">
 												<small> Powered by vtiger CRM {$CURRENT_VERSION}</small>
 											</div>
-										</div>
+				</div>
 										
 										<div class="login-box hide" id="forgotPasswordDiv">
 											<form class="form-horizontal login-form" style="margin:0;" action="forgotPassword.php" method="POST">
 												<div class="">
 													<h3 class="login-header">Forgot Password</h3>
-												</div>
-												<div class="control-group">
-													<label class="control-label" for="username"><b>User name</b></label>
-													<div class="controls">
-														<input type="text" id="username" name="username" placeholder="Username">
-													</div>
-												</div>
+			</div>
+			<div class="control-group">
+													<label class="control-label" for="user_name"><b>User name</b></label>
+				<div class="controls">
+														<input type="text" id="user_name" name="user_name" placeholder="Username">
+				</div>
+			</div>
 												<div class="control-group">
 													<label class="control-label" for="email"><b>Email</b></label>
 													<div class="controls">
-														<input type="text" id="email" name="email"  placeholder="Email">
+														<input type="text" id="emailId" name="emailId"  placeholder="Email">
 													</div>
-												</div>
+		</div>
 												<div class="control-group signin-button">
 													<div class="controls" id="backButton">
 														<input type="submit" class="btn btn-primary sbutton" value="Submit" name="retrievePassword">
 														&nbsp;&nbsp;&nbsp;<a>Back</a>
-													</div>
-												</div>
-											</form>
+		</div>
+	</div>
+</form>
 										</div>
 										
 									</div>
@@ -193,7 +192,7 @@
 							<div class="footer-content">
 								<small>&#169 2004-{date('Y')}&nbsp;
 									<a href="https://www.vtiger.com"> vtiger.com</a> | 
-									<a href="javascript:mypopup();">Read License</a> | 
+									<a href="https://www.vtiger.com/LICENSE.txt">Read License</a> | 
 									<a href="https://www.vtiger.com/products/crm/privacy_policy.html">Privacy Policy</a> </small>
 							</div>
 						</div>
@@ -202,7 +201,7 @@
 								<small>{vtranslate('LBL_CONNECT_WITH_US', $MODULE)}&nbsp;</small>
 								<a href="https://www.facebook.com/vtiger"><img src="layouts/vlayout/skins/images/facebook.png"></a>
 								&nbsp;<a href="https://twitter.com/vtigercrm"><img src="layouts/vlayout/skins/images/twitter.png"></a>
-								&nbsp;<a href="#"><img src="layouts/vlayout/skins/images/linkedin.png"></a>
+								&nbsp;<a href="https://www.linkedin.com/company/vtiger-systems-india-pvt-ltd"><img src="layouts/vlayout/skins/images/linkedin.png"></a>
 								&nbsp;<a href="http://www.youtube.com/user/vtigercrm"><img src="layouts/vlayout/skins/images/youtube.png"></a> 
 							</div>
 						</div>

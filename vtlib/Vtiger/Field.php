@@ -56,8 +56,8 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 			$adb->pquery("INSERT INTO vtiger_picklist (picklistid,name) VALUES(?,?)",Array($new_picklistid, $this->name));
 			self::log("Creating table $picklist_table ... DONE");
 		} else {
-			$new_picklistid = $adb->query_result(
-				$adb->pquery("SELECT picklistid FROM vtiger_picklist WHERE name=?", Array($this->name)), 0, 'picklistid');
+                        $picklistResult = $adb->pquery("SELECT picklistid FROM vtiger_picklist WHERE name=?", Array($this->name));
+			$new_picklistid = $adb->query_result($picklistResult, 0, 'picklistid');
 		}
 
 		$specialNameSpacedPicklists  = array(
@@ -82,10 +82,10 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
 			$new_id = $adb->getUniqueID($picklist_table);
             ++$sortid;
-            
+
 			$adb->pquery("INSERT INTO $picklist_table($picklist_idcol, $this->name, presence, picklist_valueid,sortorderid) VALUES(?,?,?,?,?)",
 				Array($new_id, $value, $presence, $new_picklistvalueid,$sortid));
-			
+
 
 			// Associate picklist values to all the role
 			$adb->pquery("INSERT INTO vtiger_role2picklist(roleid, picklistvalueid, picklistid, sortid) SELECT roleid,
@@ -102,10 +102,12 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	 */
 	function setNoRolePicklistValues($values) {
 		global $adb;
-
+        $pickListName_ids = array('recurring_frequency','payment_duration');
 		$picklist_table = 'vtiger_'.$this->name;
 		$picklist_idcol = $this->name.'id';
-
+        if(in_array($this->name, $pickListName_ids)){
+           $picklist_idcol =  $this->name.'_id';
+        }
 		if(!Vtiger_Utils::CheckTable($picklist_table)) {
 			Vtiger_Utils::CreateTable(
 				$picklist_table,
@@ -188,10 +190,10 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		$instance = false;
 		$data = Vtiger_Functions::getModuleFieldInfo($moduleInstance->id, $value);
 		if ($data) {
-			$instance = new self();
+            $instance = new self();
 			$instance->initialize($data, $moduleInstance);
-		}
-		return $instance;
+        }
+        return $instance;
 	}
 
 	/**

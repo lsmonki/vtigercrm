@@ -47,6 +47,7 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
                 $entity['activitytype'] = "Meeting";
                 $entity['description'] = $googleRecord->getDescription();
                 $entity['duration_hours'] = '00:00';
+                $entity['visibility'] = $googleRecord->getVisibility();
                 if (empty($entity['subject'])) {
                     $entity['subject'] = 'Google Event';
                 }
@@ -83,6 +84,7 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
         $query->setStartIndex(1);
         $query->setOrderBy('lastmodified');
         $query->setsortorder('ascending');
+        $query->setSingleEvents(true);
         if (Google_Utils_Helper::getSyncTime('Calendar')) {
             $query->setUpdatedMin(Google_Utils_Helper::getSyncTime('Calendar'));
         }
@@ -181,6 +183,10 @@ Class Google_Calendar_Connector extends WSAPP_TargetConnector {
 
             $newEntry->content = $gcalendar->newContent($vtEvent->get('description'));
             $newEntry->content->type = 'text';
+            if($vtEvent->get('visibility') == 'Private')
+                $newEntry->visibility = new Zend_Gdata_Extension_Visibility('http://schemas.google.com/g/2005#event.private');
+            else if($vtEvent->get('visibility') == 'Public')
+                $newEntry->visibility = new Zend_Gdata_Extension_Visibility('http://schemas.google.com/g/2005#event.public');
 
             $oldtz = date_default_timezone_get(); 
             date_default_timezone_set('GMT');

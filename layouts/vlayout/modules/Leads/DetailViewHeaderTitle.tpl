@@ -17,7 +17,7 @@
         <span class="row-fluid">
             <h4 class="recordLabel pushDown" title="{$RECORD->getDisplayValue('salutationtype')}&nbsp;{$RECORD->getName()}"> &nbsp;
                 {if $RECORD->getDisplayValue('salutationtype')}
-                    <span class="salutation">{$RECORD->getDisplayValue('salutationtype')}</span> 
+                    <span class="salutation">{$RECORD->getDisplayValue('salutationtype')}</span>&nbsp;
                 {/if}
                 {assign var=COUNTER value=0}
                 {foreach item=NAME_FIELD from=$MODULE_MODEL->getNameFields()}

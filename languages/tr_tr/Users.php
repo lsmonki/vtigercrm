@@ -170,4 +170,43 @@ $languageStrings = array(
 	'Detail'                       => 'Detail'                      , // TODO: Review
 	'LBL_USER_LIST_DETAILS'        => 'Details'                     , // TODO: Review
 	'LBL_USER_DELETED_SUCCESSFULLY' => 'Kullanıcı başarıyla silindi',
+        'LBL_ACTIVE_USERS' => 'Aktif Kullanıcılar',
+        'LBL_INACTIVE_USERS' => 'Etkin Kullanıcılar',
+        'LBL_DELETE_USER_PERMANENTLY' => 'Kalıcı Kullanıcıyı Sil',
+        'LBL_RESTORE' => 'Restore',
+        'LBL_USER_RESTORED_SUCCESSFULLY' => 'Kullanıcı başarıyla restore',
+		'LBL_ALMOST_THERE'	=>	'Neredeyse orada!',
+		'LBL_ABOUT_ME'		=>	'Hakkımda',
+		'LBL_WE_PROMISE_TO_KEEP_THIS_PRIVATE'	=>	'(Biz bu özel tutmak için söz veriyorum)',
+		'LBL_ALL_FIELDS_BELOW_ARE_REQUIRED'		=>	'(Altındaki tüm alanların doldurulması zorunludur)',
+		'LBL_GET_STARTED'	=> 'Başlayın',
+		'LBL_YOUR_CONTACT_NUMBER' => 'Sizin İletişim Numarası',
+		'LBL_WHERE_ARE_YOU_FROM' =>	'Eğer Nerelisin?',
+		'LBL_SELECT_COUNTRY'	=> 'Ülke Seçin',
+		'LBL_COMPANY_SIZE'		=> 'Şirket Büyüklüğü',
+		'LBL_JOB_TITLE'			=> 'Meslek',
+		'LBL_DEPARTMENT'		=> 'Bölüm',
+		'LBL_BASE_CURRENCY'		=> 'Baz Döviz',
+		'LBL_CHOOSE_BASE_CURRENCY'	=> 'Dövizi Seç',
+		'LBL_OPERATING_CURRENCY'	=> 'Baz para birimi daha sonra değiştirilemez. İşletim para seçin',
+		'LBL_LANGUAGE' => 'Dil',
+		'LBL_CHOOSE_LANGUAGE'	=> 'Dil Seçin',
+		'LBL_CHOOSE_TIMEZONE'	=> 'Dilimimi seçin',
+		'LBL_DATE_FORMAT'		=> 'Tarih Biçimi',
+		'LBL_CHOOSE_DATE_FORMAT'=> 'Tarih Biçimi seçin',
+		'LBL_PHONE'	=> 'Telefon',
+);
+
+$jsLanguageStrings = array(
+		
+	//Curency seperator validation messages
+	'JS_DECIMAL_SEPERATOR_AND_GROUPING_SEPERATOR_CANT_BE_SAME' => 'Decimal seperator and Grouping seperator cant be same',
+	'JS_ENTER_OLD_PASSWORD'=>'Please enter your old password.',
+	'JS_ENTER_NEW_PASSWORD'=>'Please enter your new password.',
+	'JS_ENTER_CONFIRMATION_PASSWORD'=>'Please enter your password confirmation.',
+	'JS_REENTER_PASSWORDS'=>'Please re-enter passwords.  The \"new password\" and \"confirm password\" values do not match.',
+	'JS_INVALID_PASSWORD'=>'You must specify a valid username and password.',
+	'JS_PASSWORD_CHANGE_FAILED_1'=>'User password change failed for ',
+	'JS_PASSWORD_CHANGE_FAILED_2'=>' failed.  The new password must be set.',
+	'JS_PASSWORD_INCORRECT_OLD'=>'Incorrect old password specified. Re-enter password information.',
 );

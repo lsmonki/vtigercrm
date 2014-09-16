@@ -100,7 +100,7 @@ class Users extends CRMEntity {
             'Role Name'=>Array('vtiger_user2role'=>'roleid'),
             'User Name'=>Array('vtiger_users'=>'user_name'),
 			'Status'=>Array('vtiger_users'=>'status'),
-            'Email'=>Array('vtiger_users'=>'email1'),
+			'Email'=>Array('vtiger_users'=>'email1'),
             'Email2'=>Array('vtiger_users'=>'email2'),
             'Admin'=>Array('vtiger_users'=>'is_admin'),
             'Phone'=>Array('vtiger_users'=>'phone_work')
@@ -130,7 +130,7 @@ class Users extends CRMEntity {
     var $new_schema = true;
 
     var $DEFAULT_PASSWORD_CRYPT_TYPE; //'BLOWFISH', /* before PHP5.3*/ MD5;
-    
+
     //Default Widgests
     var $default_widgets = array('PLVT', 'CVLVT', 'UA');
 
@@ -146,7 +146,7 @@ class Users extends CRMEntity {
         $this->DEFAULT_PASSWORD_CRYPT_TYPE = (version_compare(PHP_VERSION, '5.3.0') >= 0)?
                 'PHP5.3MD5': 'MD5';
         $this->column_fields = getColumnFields('Users');
-        $this->column_fields['ccurrency_name'] = '';
+        $this->column_fields['currency_name'] = '';
         $this->column_fields['currency_code'] = '';
         $this->column_fields['currency_symbol'] = '';
         $this->column_fields['conv_rate'] = '';
@@ -243,7 +243,7 @@ class Users extends CRMEntity {
         }
 
     }
-	
+
 	protected function get_user_hash($input) {
 		return strtolower(md5($input));
 	}
@@ -504,7 +504,8 @@ class Users extends CRMEntity {
         }
 
         if (!is_admin($current_user)) {
-            $this->db->startTransaction();
+              #commenting this as the the transaction is already started in vtws_changepassword
+//            $this->db->startTransaction();
             if(!$this->verifyPassword($user_password)) {
                 $this->log->warn("Incorrect old password for $usr_name");
                 $this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
@@ -528,7 +529,8 @@ class Users extends CRMEntity {
 
         $query = "UPDATE $this->table_name SET user_password=?, confirm_password=?, user_hash=?, ".
                 "crypt_type=? where id=?";
-        $this->db->startTransaction();
+          #commenting this as the the transaction is already started in vtws_changepassword
+//        $this->db->startTransaction();
         $this->db->pquery($query, array($encrypted_new_password, $encrypted_new_password,
                 $user_hash, $crypt_type, $this->id));
         if($this->db->hasFailedTransaction()) {
@@ -538,15 +540,16 @@ class Users extends CRMEntity {
             }
             return false;
         }
-		
+
 		// Fill up the post-save state of the instance.
 		if (empty($this->column_fields['user_hash'])) {
 			$this->column_fields['user_hash'] = $user_hash;
 		}
-		
+
 		$this->column_fields['user_password'] = $encrypted_new_password;
 		$this->column_fields['confirm_password'] = $encrypted_new_password;
 
+		$this->triggerAfterSaveEventHandlers();
         return true;
     }
 
@@ -708,39 +711,39 @@ class Users extends CRMEntity {
         if(empty($this->column_fields['date_format'])) {
             $this->column_fields['date_format'] = 'yyyy-mm-dd';
         }
-		
+
 		if(empty($this->column_fields['start_hour'])) {
             $this->column_fields['start_hour'] = '09:00';
         }
-		
+
 		if(empty($this->column_fields['dayoftheweek'])) {
             $this->column_fields['dayoftheweek'] = 'Sunday';
         }
-		
+
 		if(empty($this->column_fields['callduration'])) {
             $this->column_fields['callduration'] = 5;
         }
-		
+
 		if(empty($this->column_fields['othereventduration'])) {
             $this->column_fields['othereventduration'] = 5;
         }
-		
+
 		if(empty($this->column_fields['hour_format'])) {
             $this->column_fields['hour_format'] = 12;
         }
-		
+
 		if(empty($this->column_fields['activity_view'])) {
             $this->column_fields['activity_view'] = 'Today';
         }
-		
+
 		if(empty($this->column_fields['calendarsharedtype'])) {
             $this->column_fields['calendarsharedtype'] = 'public';
         }
-		
+
 		if(empty($this->column_fields['default_record_view'])) {
             $this->column_fields['default_record_view'] = 'Summary';
         }
-		
+
 		if(empty($this->column_fields['status'])) {
 			$this->column_fields['status'] = 'Active';
 		}
@@ -890,7 +893,7 @@ class Users extends CRMEntity {
                 $fldvalue = '';
             }
             if($uitype == 31) {
-                $themeList = get_themes();
+                $themeList = array_keys(Vtiger_Util_Helper::getAllSkins());
                 if(!in_array($fldvalue, $themeList) || $fldvalue == '') {
                     global $default_theme;
                     if(!empty($default_theme) && in_array($default_theme, $themeList)) {
@@ -952,7 +955,7 @@ class Users extends CRMEntity {
                 $qparams[]= $crypt_type;
             }
             // END
-			
+
 			if($table_name == 'vtiger_users' && strpos('user_hash', $column) === false) {
 				$column .= ', user_hash';
 				$qparams[] = $this->column_fields['user_hash'];
@@ -1156,6 +1159,10 @@ class Users extends CRMEntity {
         if(isset($this->column_fields['roleid'])) {
             updateUser2RoleMapping($this->column_fields['roleid'],$this->id);
         }
+
+		//After adding new user, set the default activity types for new user
+		Vtiger_Util_Helper::setCalendarDefaultActivityTypesForUser($this->id);
+
         require_once('modules/Users/CreateUserPrivilegeFile.php');
         createUserPrivilegesfile($this->id);
         createUserSharingPrivilegesfile($this->id);
@@ -1191,7 +1198,7 @@ class Users extends CRMEntity {
             }
         }else {
             for($i = 0;$i < count($this->homeorder_array);$i++) {
-              if(in_array($this->homeorder_array[$i], $this->default_widgets)){                
+              if(in_array($this->homeorder_array[$i], $this->default_widgets)){
                 $return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
               }else{
                   $return_array[$this->homeorder_array[$i]] = '';
@@ -1455,14 +1462,14 @@ class Users extends CRMEntity {
 
 	function transformOwnerShipAndDelete($userId,$transformToUserId){
 		$adb = PearDatabase::getInstance();
-		
+
 		$em = new VTEventsManager($adb);
 
         // Initialize Event trigger cache
 		$em->initTriggerCache();
 
 		$entityData  = VTEntityData::fromUserId($adb, $userId);
-		
+
 		//set transform user id
 		$entityData->set('transformtouserid',$transformToUserId);
 
@@ -1497,7 +1504,7 @@ class Users extends CRMEntity {
 		if($cache->getAdminUserId()){
 			return $cache->getAdminUserId();
 		} else {
-        $sql = "SELECT id FROM vtiger_users WHERE is_admin='On' and status='Active' limit 1";
+        $sql = "SELECT id FROM vtiger_users WHERE is_admin = 'on' AND status = 'Active' limit 1";
         $result = $adb->pquery($sql, array());
         $adminId = 1;
         $it = new SqlResultIterator($adb, $result);
@@ -1527,7 +1534,7 @@ class Users extends CRMEntity {
     public function setUserPreferences($requestArray) {
 		global $adb;
 		$updateData = array();
-		
+
 		if (isset($requestArray['about']['phone'])) $updateData['phone_mobile'] = vtlib_purify ($requestArray['about']['phone']);
 		if (isset($requestArray['about']['country'])) $updateData['address_country'] = vtlib_purify ($requestArray['about']['country']);
 		if (isset($requestArray['about']['company_job'])) $updateData['title'] = vtlib_purify ($requestArray['about']['company_job']);
@@ -1536,7 +1543,7 @@ class Users extends CRMEntity {
 		if (isset($requestArray['lang_name'])) $updateData['language'] = vtlib_purify ($requestArray['lang_name']);
 		if (isset($requestArray['time_zone'])) $updateData['time_zone']= vtlib_purify ($requestArray['time_zone']);
 		if (isset($requestArray['date_format'])) $updateData['date_format']= vtlib_purify ($requestArray['date_format']);
-		
+
 		if (!empty($updateData)) {
 			$updateQuery = 'UPDATE vtiger_users SET '. ( implode('=?,', array_keys($updateData)). '=?') . ' WHERE id = ?';
 			$updateQueryParams = array_values($updateData);
@@ -1544,7 +1551,7 @@ class Users extends CRMEntity {
 			$adb->pquery($updateQuery, $updateQueryParams);
 		}
 	}
-	
+
 	/**
 	 * Function to set the Company Logo
 	 * @param- $_REQUEST array
@@ -1616,6 +1623,25 @@ class Users extends CRMEntity {
 		   }
 	   }
    }
+
+   public function triggerAfterSaveEventHandlers() {
+	   global $adb;
+		require_once("include/events/include.inc");
+
+		//In Bulk mode stop triggering events
+		if(!self::isBulkSaveMode()) {
+			$em = new VTEventsManager($adb);
+			// Initialize Event trigger cache
+			$em->initTriggerCache();
+			$entityData = VTEntityData::fromCRMEntity($this);
+		}
+		//Event triggering code ends
+		if($em) {
+			//Event triggering code
+			$em->triggerEvent("vtiger.entity.aftersave", $entityData);
+			$em->triggerEvent("vtiger.entity.aftersave.final", $entityData);
+		}
+   }
 }
 
 class Users_CRMSetup {
@@ -1639,7 +1665,7 @@ class Users_CRMSetup {
 		}
 		return $isFirstUser;
 	}
-	
+
 	/**
 	 * Function to get user setup status
 	 * @return-is First User or not
@@ -1718,13 +1744,13 @@ class Users_CRMSetup {
 			'Inventory' => array(
 				'label' => 'Invoicing & Inventory Management',
 				'imageName' => 'Inventory.png',
-				'description' => 'Build a database of your products and services, maintain inventories, standard prices and prices books, and use these to create quotes, invoices, and sales orders. Additionally, send and collect payment requests online.',
+				'description' => 'Build a database of your products and services, maintain inventories, standard prices and prices books, and use these to create quotes, invoices, and sales orders.',
 				'modules' => array(
 					'Quotes' => 'Quotes',
 					'Invoice' => 'Invoice',
 					'SalesOrder' => 'Sales Order',
 					'PurchaseOrder' => 'Purchase Orders',
-					'PriceBooks' => 'Price Books'
+					'PriceBooks' => 'Price Books',
 				)),
 			'Project' => array(
 				'label' => 'Project Management',
@@ -1754,7 +1780,7 @@ class Users_CRMSetup {
 			if (!$moduleExists) {
 				$parentName = $adb->query_result($result, $i, 'parent');
 
-				if ($parentName) {
+				if ($parentName && ($parentName != 'Settings')) {
 					if (array_key_exists($parentName, $packagesList)) {
 						$packagesList[$parentName]['modules'][$moduleName] = $adb->query_result($result, $i, 'tablabel');
 					} else {
@@ -1766,6 +1792,5 @@ class Users_CRMSetup {
 		}
 		return $packagesList;
 	}
-
 }
 ?>

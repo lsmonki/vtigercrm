@@ -105,9 +105,10 @@ if (typeof(ImportJs) == 'undefined') {
 		uploadFileSize : function(elementId) {
 			var element = jQuery('#'+elementId);
 			var importMaxUploadSize = element.closest('td').data('importUploadSize');
+			var importMaxUploadSizeInMb = element.closest('td').data('importUploadSizeMb');
 			var uploadedFileSize = element.get(0).files[0].size;
 			if(uploadedFileSize > importMaxUploadSize){
-				var errorMessage = app.vtranslate('JS_UPLOADED_FILE_SIZE_EXCEEDS')+" "+"3 MB." + app.vtranslate('JS_PLEASE_SPLIT_FILE_AND_IMPORT_AGAIN');
+				var errorMessage = app.vtranslate('JS_UPLOADED_FILE_SIZE_EXCEEDS')+" "+importMaxUploadSizeInMb+ " MB." + app.vtranslate('JS_PLEASE_SPLIT_FILE_AND_IMPORT_AGAIN');
 				var params = {
 					text: errorMessage,
 					type: 'error'
@@ -240,6 +241,10 @@ if (typeof(ImportJs) == 'undefined') {
 			}
 
 			var mandatoryFields = JSON.parse(jQuery('#mandatory_fields').val());
+            var moduleName = app.getModuleName();
+            if(moduleName == 'PurchaseOrder' || moduleName == 'Invoice' || moduleName == 'Quotes' || moduleName == 'SalesOrder') {
+                    mandatoryFields.hdnTaxType = app.vtranslate('Tax Type'); 
+            }
 			var missingMandatoryFields = [];
 			for(var mandatoryFieldName in mandatoryFields) {
 				if(mandatoryFieldName in mappedFields) {

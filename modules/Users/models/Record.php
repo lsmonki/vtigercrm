@@ -22,6 +22,20 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return parent::get($key);
 	}
+    
+    /**
+     * Sets the value of the key . First it will check whether specified key is a property if not it
+     * will set from normal set from base class
+     * @param <string> $key - property or key name
+     * @param <string> $value
+     */
+    public function set($key, $value) {
+        if(property_exists($this, $key)) {
+            $this->$key = $value;
+        }
+        parent::set($key, $value);
+        return $this;
+    }
 
 	/**
 	 * Function to get the Detail View url for the record
@@ -110,16 +124,7 @@ class Users_Record_Model extends Vtiger_Record_Model {
 
 		$this->saveTagCloud();
 	}
-	
-	public function saveUserPreferences($userPreferenceData){
-		$db = PearDatabase::getInstance();
-		$updateQuery = 'UPDATE vtiger_users SET '. ( implode('=?,', array_keys($userPreferenceData)). '=?') . ' WHERE id = ?';
-		$updateQueryParams = array_values($userPreferenceData);
-		$updateQueryParams[] = $this->getId();
-		$db->pquery($updateQuery, $updateQueryParams);
-		require_once('modules/Users/CreateUserPrivilegeFile.php');
-		createUserPrivilegesfile($this->getId());
-	}
+
 
 	/**
 	 * Function to get all the Home Page components list
@@ -396,6 +401,11 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		foreach ($roles as $key => $role) {
 			$roleIds[] = $role->getId();
 		}
+        
+        if(empty($roleIds)) {
+            return array();
+        }
+        
 		$sql = 'SELECT userid FROM vtiger_user2role WHERE roleid IN ('.  generateQuestionMarks($roleIds).')';
 		$result = $db->pquery($sql, $roleIds);
 		$noOfUsers = $db->num_rows($result);
@@ -625,6 +635,16 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		$this->getModule()->deleteRecord($this);
 	}
 	
+        public function isAccountOwner() {
+		$db = PearDatabase::getInstance();
+		$query = 'SELECT is_owner FROM vtiger_users WHERE id = ?';
+		$isOwner = $db->query_result($db->pquery($query, array($this->getId())), 0, 'is_owner');
+		if($isOwner == 1) {
+			return true;
+		} 
+		return false;
+	}
+	
 	public function getActiveAdminUsers() {
 		$db = PearDatabase::getInstance();
 
@@ -657,4 +677,54 @@ class Users_Record_Model extends Vtiger_Record_Model {
 		}
 		return false;
     }
+	
+	/**
+	 * Function to get the user hash
+	 * @param type $userId
+	 * @return boolean
+	 */
+	public function getUserHash() {
+		$db = PearDatabase::getInstance();
+		$query = 'SELECT user_hash FROM vtiger_users WHERE id = ?';
+		$result = $db->pquery($query, array($this->getId()));
+		if($db->num_rows($result) > 0){
+			return $db->query_result($result, 0, 'user_hash');
+			
+		}
+        }
+        
+        /*
+         * Function to delete user permanemtly from CRM and
+         * assign all record which are assigned to that user
+         * and not transfered to other user to other user
+         * 
+         * @param User Ids of user to be deleted and user
+         * to whom records should be assigned
+         */
+        public function deleteUserPermanently($userId, $newOwnerId) {
+                $db = PearDatabase::getInstance();
+                
+                $sql = "UPDATE vtiger_crmentity SET smcreatorid=?,smownerid=? WHERE smcreatorid=? AND setype=?";
+                $db->pquery($sql, array($newOwnerId, $newOwnerId, $userId,'ModComments'));
+                
+                //update history details in vtiger_modtracker_basic 
+                $sql ="update vtiger_modtracker_basic set whodid=? where whodid=?"; 
+                $db->pquery($sql, array($newOwnerId, $userId)); 
+
+                //update comments details in vtiger_modcomments 
+                $sql ="update vtiger_modcomments set userid=? where userid=?"; 
+                $db->pquery($sql, array($newOwnerId, $userId));
+
+                $sql = "DELETE FROM vtiger_users WHERE id=?";
+                $db->pquery($sql, array($userId));
+                
+        }
+	
+	/**
+	 * Function to get the Display Name for the record
+	 * @return <String> - Entity Display Name for the record
+	 */
+	public function getDisplayName() {
+		return getFullNameFromArray($this->getModuleName(),$this->getData());
+	}
 }

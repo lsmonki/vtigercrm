@@ -6,17 +6,14 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013     
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_ModComments'           => 'Commentaire'                 , 
-	'LBL_RECORDS_LIST'             => 'Liste des commentaires'               , 
+	'LBL_RECORDS_LIST'             => 'Comments List'               , 
 	'LBL_MODCOMMENTS_INFORMATION'  => 'Information Commentaire'     , 
 	'LBL_OTHER_INFORMATION'        => 'Autres Informations'         , 
-	'LBL_ADDING_COMMENT'           => 'Ajouter Commentaire'              , 
-	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Saisir un commentaire ici'         , 
+	'LBL_ADDING_COMMENT'           => 'Adding Comment'              , 
+	'LBL_WRITE_YOUR_COMMENT_HERE'  => 'Enter comments here'         , 
 	'Comment'                      => 'Commentaire'                 , 
 	'Creator'                      => 'Créé par'                  , 
 	'Related To Comments'          => 'Commentaires liés'          , 

@@ -9,7 +9,7 @@
  ************************************************************************************/
 $languageStrings = array(
 	'SINGLE_Calendar'              => 'To Do'                       , 
-	'LBL_ADD_TASK'                 => 'Add Task'                    , 
+	'LBL_ADD_TASK'                 => 'Add To Do'                    , 
 	'LBL_ADD_EVENT'                => 'Add Event'                   , 
 	'LBL_RECORDS_LIST'             => 'List View'                   , 
 	'LBL_EVENTS'                   => 'Events'                      , 
@@ -21,8 +21,9 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS'             => 'Other Events'                , // TODO: Review
 	'LBL_MINUTES'                  => 'Minutes'                     , // TODO: Review
 	'LBL_SELECT_USERS'             => 'Select Users'                , // TODO: Review
-	'LBL_EVENT_OR_TASK'            => 'Event / Task'                ,
-	'LBL_TASK_INFORMATION'         => 'Task Information'            , 
+	'LBL_EVENT_OR_TASK'            => 'Event / To Do'                ,
+	'LBL_TASK_INFORMATION'         => 'To Do Information'            , 
+    'LBL_EVENT_INFORMATION'        => 'Event Details'               ,
 	'Subject'                      => 'Subject'                     , 
 	'Start Date & Time'            => 'Start Date & Time'           , 
 	'Activity Type'                => 'Activity Type'               , 
@@ -35,8 +36,10 @@ $languageStrings = array(
 	'LBL_ADDED_CALENDARS'          => 'Added Calendars'             , // TODO: Review
 	'Call'                         => 'Call'                        , 
 	'Meeting'                      => 'Meeting'                     , 
-	'Task'                         => 'Task'                        , // TODO: Review
+	'Task'                         => 'To Do'                        , // TODO: Review
 	'Planned'                      => 'Planned'                     , 
+        'Held'                         =>   'Held',
+        'Not Held'                     =>   'Not Held',
 	'Completed'                    => 'Completed'                   , 
 	'Pending Input'                => 'Pending Input'               , 
 	'Not Started'                  => 'Not Started'                 , 
@@ -44,7 +47,8 @@ $languageStrings = array(
 	'Medium'                       => 'Medium'                      , 
 	'LBL_CHANGE_OWNER'             => 'Change Owner'                , 
 	'LBL_EVENT'                    => 'Event'                       , 
-	'LBL_TASK'                     => 'Task'                        , 
+	'LBL_TASK'                     => 'To Do'                        , 
+	'LBL_TASKS'					   => 'To Do'						,
 	'LBL_CALENDAR_VIEW'            => 'Calendar View'               , 
 	'LBL_SHARED_CALENDAR'          => 'Shared Calendar'             , // TODO: Review
 	'LBL_DAY0'                     => 'Sunday'                      , // TODO: Review
@@ -62,13 +66,25 @@ $languageStrings = array(
 	'Weekly'                       => 'Week(s)'                     , // TODO: Review
 	'Monthly'                      => 'Month(s)'                    , // TODO: Review
 	'Yearly'                       => 'Year'                        , // TODO: Review
+        'LBL_DEFAULT_STATUS_TYPE'      => 'Default Status & Type'       ,
+        'LBL_STATUS'                   => 'Status'                      ,
+        'LBL_TYPE'                     => 'Type',
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Edit Colour',
+	'LBL_ADD_CALENDAR_VIEW' => 'Add Calendar',
+	'LBL_SELECT_USER_CALENDAR' => 'Select User Calendar',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Select Calendar Colour',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Editing User Calendar',
+	'LBL_DELETE_CALENDAR' => 'Delete Calendar',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Select Activity Type',
+	'Tasks' => 'To Do',
 );
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK'           => 'Add Event / Task'            , 
+	'LBL_ADD_EVENT_TASK'           => 'Add Event / To Do'            , 
 	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Task is successfully added to your Calendar', // TODO: Review
-	'LBL_SYNC_BUTTON'              => 'Synchronize Now'             , // TODO: Review
-	'LBL_SYNCRONIZING'             => 'Synchronizing....'           , // TODO: Review
-	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronized yet', // TODO: Review
+	'LBL_SYNC_BUTTON'              => 'Synchronise Now'             , // TODO: Review
+	'LBL_SYNCRONIZING'             => 'Synchronising....'           , // TODO: Review
+	'LBL_NOT_SYNCRONIZED'          => 'You have not synchronised yet', // TODO: Review
 	'LBL_FIELD_MAPPING'            => 'Field Mapping'               , // TODO: Review
 	'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Cannot select related Contacts for Leads', // TODO: Review
         'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Cannot Be Held For Future',
@@ -121,6 +137,16 @@ $jsLanguageStrings = array(
 	'LBL_NOV' => 'Nov',
 	'LBL_DEC' => 'Dec',
 	
-	'LBL_ALL_DAY' => 'All-Day',
+	'LBL_ALL_DAY' => 'All Day',
+	
+	'Mobile Call' => 'Mobile Call',
 	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'User calendar colour updated successfully',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Are you sure you want to delete this user Calendar?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'User calendar added successfully',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'User calendar deleted successfully',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'No Users Calendar to add',
+	'JS_EDIT_CALENDAR' => 'Edit Calendar',
 );

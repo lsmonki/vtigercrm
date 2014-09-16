@@ -29,4 +29,8 @@ class Vtiger_RemoveWidget_Action extends Vtiger_IndexAjax_View {
 		}
 		$response->emit();
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

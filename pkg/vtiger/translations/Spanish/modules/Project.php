@@ -41,4 +41,31 @@ $languageStrings = array(
 	'LBL_TICKET_PRIORITY' => 'Prioridad',
 	'LBL_MORE' => 'más',
 	'LBL_DOWNLOAD_FILE' => 'Descargar Fichero',
+        'LBL_MILESTONES_LIST'          => 'Lista de Hitos',
+    
+	'LBL_TASKS_HIGH'               => 'Alta Prioridad',
+        'LBL_TASKS_NORMAL'             => 'Prioridad Normal',
+        'LBL_TASKS_LOW'                => 'Prioridad Baja',
+        'LBL_TASKS_OTHER'              => 'Otras prioridades',
+        'LBL_SELECT_PROGRESS'          => 'Selecciona el Progreso',
+	//picklist values
+	'prospecting' => 'Prospección',
+        'in progress' => 'En curso',
+        'initiated' => 'Iniciado',
+	'waiting for feedback' => 'Esperando Información',
+        'on hold' => 'En espera',
+        'archived' => 'Archivado',
+        'completed' => 'Terminado',
+        'delivered' => 'Entregado',
+	'administrative' => 'Administrativo',
+        'operative' => 'Operativo',
+        'other' => 'Otro',
+        'low' => 'Bajo',
+        'normal' => 'Normal',
+        'high' => 'Alto',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Selecciona Estado',
+    'JS_LBL_SELECT_PROGRESS' => 'Selecciona el Progreso',
 );

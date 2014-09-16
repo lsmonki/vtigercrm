@@ -10,13 +10,13 @@
  ********************************************************************************/
 -->*}
 {strip}
-    <div class="detailViewInfo">
-		<div class="contents">
-			<form id="detailView" class="padding20 form-horizontal">
+    <div class="detailViewInfo" style="box-shadow:0;margin-top: 0;min-height:500px;">
+		<div class="">
+			<form id="detailView" class="form-horizontal" style="padding-top: 20px;" method="POST">
 				<div class="row-fluid">
-					<span class="span6 settingsHeader">
+					<h3 class="span6 settingsHeader">
 						{$RECORD_MODEL->get('groupname')}
-					</span>
+					</h3>
 					<span class="span6">
 						<span class="pull-right">
 							<button class="btn" onclick="window.location.href='{$RECORD_MODEL->getEditViewUrl()}'" type="button">

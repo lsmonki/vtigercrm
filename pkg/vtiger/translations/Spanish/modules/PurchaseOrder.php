@@ -12,7 +12,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-26
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-07-14
+ *  Last change  : 2013-05-03
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
@@ -31,6 +31,8 @@ $languageStrings = array(
 	'LBL_COPY_BILLING_ADDRESS' => 'Copiar Dirección Facturación',
 	'LBL_PAID' => 'Pagado',
 	'LBL_BALANCE' => 'Balance',
+	'LBL_LIST_PRICE'               => 'Precio Venta',
+	'List Price'                   => 'Precio Venta',
 	//Translation for product not found
 	'LBL_THIS' => 'Este',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ha sido eliminado de la aplicación. Por favor, elimina o sustituye este artículo.',

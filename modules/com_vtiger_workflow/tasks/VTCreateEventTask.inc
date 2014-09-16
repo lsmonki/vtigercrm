@@ -82,15 +82,22 @@ class VTCreateEventTask extends VTTask{
 			'taskpriority'=>$this->priority,
 			'eventstatus'=>$this->status,
 			'assigned_user_id'=>$userId,
-			'time_start'=>self::conv12to24hour($this->startTime),
+			'time_start'=>self::convertToDBFormat($this->startTime),
 			'date_start'=> $startDate,
-			'time_end'=>self::conv12to24hour($this->endTime),
+			'time_end'=>self::convertToDBFormat($this->endTime),
 			'due_date'=>$endDate,
-			'visibility'=>'Private',
 			'taskstatus'=>'',
 			'duration_hours'=>'0'
 		);
-
+		
+		//Setting visibility value
+		$assignedTo = explode('x', $userId);
+		$sharedType = Calendar_Module_Model::getSharedType($assignedTo[1]);
+		if($sharedType == 'selectedusers' || empty($sharedType)) {
+			$sharedType = 'public';
+		}
+		$fields['visibility'] = ucfirst($sharedType);
+		
 		$id = $entityData->getId();
 		if($moduleName=='Contacts'){
 			$fields['contact_id'] = $id;
@@ -203,10 +210,22 @@ class VTCreateEventTask extends VTTask{
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
 		$baseDate = strtotime($match[0]);
 		$date = strftime('%Y-%m-%d', $baseDate+$days*24*60*60*
-										 ($direction=='Before'?-1:1));
+										 (strtolower($direction)=='before'?-1:1));
 		return $date;
 	}
 
+    /**
+     * To convert time_start & time_end values to db format
+     * @param type $timeStr
+     * @return time
+     */
+    static function convertToDBFormat($timeStr){
+        $date = new DateTime();
+        $time = Vtiger_Time_UIType::getTimeValueWithSeconds($timeStr);
+        $dbInsertDateTime = DateTimeField::convertToDBTimeZone($date->format('Y-m-d').' '.$time);
+        return $dbInsertDateTime->format('H:i:s');
+    }
+    
 	static function conv12to24hour($timeStr){
 		$arr = array();
 		preg_match('/(\d{1,2}):(\d{1,2})(am|pm)/', $timeStr, $arr);

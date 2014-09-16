@@ -21,4 +21,7 @@ $languageStrings = array(
 	'LTFAQ'                        => 'meine Wissensbasis'          , 
 	'UA'                           => 'aktuelle Aktivitäten'       , 
 	'PA'                           => 'unerledigte Aktivitäten'    , 
+        'Home'                         => 'Startseite'                  ,
+	'Key Metrics'                  => 'Key Metrics',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

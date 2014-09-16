@@ -13,6 +13,11 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 	function loginRequired() {
 		return false;
 	}
+        
+        
+        function checkPermission(Vtiger_Request $request) {  
+               return true;  
+        } 
 
 	function process(Vtiger_Request $request) {
 		$username = $request->get('username');
@@ -35,7 +40,7 @@ class Users_Login_Action extends Vtiger_Action_Controller {
             		$_SESSION['KCFINDER'] = array(); 
             		$_SESSION['KCFINDER']['disabled'] = false; 
             		$_SESSION['KCFINDER']['uploadURL'] = "test/upload"; 
-            		$_SESSION['KCFINDER']['uploadDir'] = "test/upload";
+            		$_SESSION['KCFINDER']['uploadDir'] = "../test/upload";
 			$deniedExts = implode(" ", vglobal('upload_badext'));
 			$_SESSION['KCFINDER']['deniedExts'] = $deniedExts;
 			// End
@@ -51,6 +56,6 @@ class Users_Login_Action extends Vtiger_Action_Controller {
 			header ('Location: index.php?module=Users&parent=Settings&view=Login&error=1');
 			exit;
 		}
-
 	}
-}
+	
+		}

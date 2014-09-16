@@ -79,15 +79,14 @@ class Contacts_Record_Model extends Vtiger_Record_Model {
 			//decode_html - added to handle UTF-8 characters in file names
 			$imageOriginalName = decode_html($imageName);
 
-			//urlencode - added to handle special characters like #, %, etc.,
-			$imageName = urlencode($imageName);
-
-			$imageDetails[] = array(
-					'id' => $imageId,
-					'orgname' => $imageOriginalName,
-					'path' => $imagePath.$imageId,
-					'name' => $imageName
-			);
+			if(!empty($imageName)){
+				$imageDetails[] = array(
+						'id' => $imageId,
+						'orgname' => $imageOriginalName,
+						'path' => $imagePath.$imageId,
+						'name' => $imageName
+				);
+			}
 		}
 		return $imageDetails;
 	}

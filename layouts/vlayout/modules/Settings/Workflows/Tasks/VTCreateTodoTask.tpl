@@ -26,7 +26,7 @@
 				<select name="status" class="chzn-select">
 					{foreach  from=$STATUS_PICKLIST_VALUES item=STATUS_PICKLIST_VALUE key=STATUS_PICKLIST_KEY}
 						<option value="{$STATUS_PICKLIST_KEY}" {if $STATUS_PICKLIST_KEY eq $TASK_OBJECT->status} selected="" {/if}>{$STATUS_PICKLIST_VALUE}</option>
-					{/foreach}	
+					{/foreach}
 				</select>
 			</span>
 		</div>
@@ -37,23 +37,27 @@
 				<select name="priority" class="chzn-select">
 					{foreach  from=$PRIORITY_PICKLIST_VALUES item=PRIORITY_PICKLIST_VALUE key=PRIORITY_PICKLIST_KEY}
 						<option value="{$PRIORITY_PICKLIST_KEY}" {if $PRIORITY_PICKLIST_KEY eq $TASK_OBJECT->priority} selected="" {/if}>{$PRIORITY_PICKLIST_VALUE}</option>
-					{/foreach}	
-				</select>				
+					{/foreach}
+				</select>
 			</span>
 		</div>
 		<div class="row-fluid padding-bottom1per">
 			<span class="span2">{vtranslate('LBL_ASSIGNED_TO',$QUALIFIED_MODULE)}</span>
 			<span class="span5">
 				<select name="assigned_user_id" class="chzn-select">
+					<option value="">{vtranslate('LBL_SELECT_OPTION','Vtiger')}</option>
 					{foreach from=$ASSIGNED_TO key=LABEL item=ASSIGNED_USERS_LIST}
 						<optgroup label="{vtranslate($LABEL,$QUALIFIED_MODULE)}">
 							{foreach from=$ASSIGNED_USERS_LIST item=ASSIGNED_USER key=ASSIGNED_USER_KEY}
 								<option value="{$ASSIGNED_USER_KEY}" {if $ASSIGNED_USER_KEY eq $TASK_OBJECT->assigned_user_id} selected="" {/if}>{$ASSIGNED_USER}</option>
-							{/foreach}	
+							{/foreach}
 						</optgroup>
-					{/foreach}	
+					{/foreach}
+                    <optgroup label="{vtranslate('LBL_SPECIAL_OPTIONS')}">
+                            <option value="copyParentOwner" {if $TASK_OBJECT->assigned_user_id eq 'copyParentOwner'} selected="" {/if}>{vtranslate('LBL_PARENT_OWNER')}</option>
+                    </optgroup>
 				</select>
-			</span>	
+			</span>
 		</div>
 		<div class="row-fluid padding-bottom1per">
 			<span class="span2">{vtranslate('LBL_TIME',$QUALIFIED_MODULE)}</span>
@@ -98,4 +102,4 @@
 			</div>
 		</div>
 	</div>
-{/strip}	
+{/strip}

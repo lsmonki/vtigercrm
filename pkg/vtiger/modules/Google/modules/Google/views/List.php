@@ -21,6 +21,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         switch ($request->get('operation')) {
             case "sync" : $this->renderSyncUI($request);
                 break;
+            case "removeSync" : $this->removeSynchronization($request);
+                break;
             default: $this->renderWidgetUI($request);
                 break;
         }
@@ -57,7 +59,18 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         } else {
 
             if (!empty($sourceModule)) {
-                $records = $this->invokeExposedMethod($sourceModule);
+                try {
+                    $records = $this->invokeExposedMethod($sourceModule);
+                } catch (Zend_Gdata_App_HttpException $e) {
+                    $errorCode = $e->getResponse()->getStatus();
+                    if($errorCode == 401) {
+                        $this->removeSynchronization($request);
+                        $response = new Vtiger_Response();
+                        $response->setError(401);
+                        $response->emit();
+                        return false;
+                    }
+                }
             }
             $firstime = $oauth->hasStoredToken($sourceModule, false, true);
             $viewer->assign('MODULE_NAME', $request->getModule());
@@ -101,6 +114,15 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         $syncRecords['vtiger']['more'] = $controller->targetConnector->moreRecordsExits();
         $syncRecords['google']['more'] = $controller->sourceConnector->moreRecordsExits();
         return $syncRecords;
+    }
+    
+    /**
+     * Removes Synchronization
+     */
+    function removeSynchronization($request) {
+        $sourceModule = $request->get('sourcemodule');
+        $userModel = Users_Record_Model::getCurrentUserModel();
+        Google_Module_Model::removeSync($sourceModule, $userModel->getId());
     }
 
     /**
@@ -167,5 +189,10 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         
     }
 
+    public function validateRequest(Vtiger_Request $request) { 
+        // NOTE: This is also entry point for google oauth callback so referer check ould fail
+        // skippping it
+        //$request->validateReadAccess(); 
+    } 
 }
 

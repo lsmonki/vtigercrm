@@ -8,12 +8,15 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'SINGLE_ProjectTask'           => 'Project Task'                , 
-	'LBL_ADD_RECORD'               => 'Add Project Task'            , 
-	'LBL_RECORDS_LIST'             => 'Project Task List'           , 
-	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Information'    , 
-	'LBL_PROJECTS_LIST'            => 'Projects List'               , // TODO: Review
-	'LBL_TASKS_LIST'               => 'Tasks List'                  , // TODO: Review
+	// Basic Strings
+	'SINGLE_ProjectTask' => 'Project Task',
+	'LBL_ADD_RECORD' => 'Add Project Task',
+	'LBL_RECORDS_LIST' => 'Project Task List',
+
+	// Blocks
+	'LBL_PROJECT_TASK_INFORMATION' => 'Project Task Details',
+	'LBL_PROJECTS_LIST' => 'Projects List',
+	'LBL_TASKS_LIST' => 'Tasks List',
 	
 	//Field Labels
 	'Project Task Name' => 'Project Task Name',
@@ -27,12 +30,12 @@ $languageStrings = array(
     'Start Date'=>'Start Date',
     'End Date'=>'End Date',
     'Related To' => 'Related To',
-    'administrative' => 'administrative',
-    'operative' => 'operative',
-    'other' => 'other',
-    'low' => 'low',
-    'normal' => 'normal',
-    'high' => 'high',
+    'administrative' => 'Administrative',
+    'operative' => 'Operative',
+    'other' => 'Other',
+    'low' => 'Low',
+    'normal' => 'Normal',
+    'high' => 'High',
     'Created Time' => 'Created Time',
     'Modified Time' => 'Modified Time',
     'description' => 'Description',

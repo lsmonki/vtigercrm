@@ -12,6 +12,7 @@ $languageStrings = array(
 	'SINGLE_Project' => 'Projekt',
 	'LBL_ADD_RECORD' => 'Lägg till projekt',
 	'LBL_RECORDS_LIST' => 'Projektlista',
+    'LBL_MILESTONES_LIST'=>'Milstolpar Lista',
 
 	// Blocks
 	'LBL_PROJECT_INFORMATION' => 'Projektuppgifter',
@@ -31,6 +32,11 @@ $languageStrings = array(
 	'LBL_TASKS_DUE' => 'Uppgifter Förfaller',
 	'LBL_TASKS_COMPLETED' => 'Uppgifter Genomförd',
 	'LBL_PEOPLE' => 'Människor',
+    'LBL_TASKS_HIGH' => 'Hög prioritet',
+    'LBL_TASKS_NORMAL' => 'Normal prioritet',
+    'LBL_TASKS_LOW' => 'Låg prioritet',
+    'LBL_TASKS_OTHER' => 'Andra prioriteringar',
+    'LBL_SELECT_PROGRESS' => 'Välj Progress',
 
 	//Related List
 	'LBL_CHARTS' => 'Topplista',
@@ -44,4 +50,26 @@ $languageStrings = array(
 	
 	//Summary View Widgets
 	'LBL_DOWNLOAD_FILE' => 'Ladda ner fil',
+	'LBL_MILESTONES_LIST'	=>	"Milestones Lista",
+	
+	//picklist values
+	'prospecting' => 'Prospektering',
+    'in progress' => 'In Progress',
+    'initiated' => 'Initierat',
+	'waiting for feedback' => 'Väntar på återkoppling',
+    'on hold' => 'On Hold',
+    'archived' => 'Arkiverad',
+    'completed' => 'Avslutat',
+    'delivered' => 'Levereras',
+	'administrative' => 'Administrativ',
+    'operative' => 'Operative',
+    'other' => 'Annat',
+    'low' => 'Låg',
+    'normal' => 'Normal',
+    'high' => 'Hög',
+);
+
+$jsLanguageStrings = array(
+    'JS_LBL_SELECT_STATUS' => 'Välj Status',
+    'JS_LBL_SELECT_PROGRESS' => 'Välj Progress',
 );

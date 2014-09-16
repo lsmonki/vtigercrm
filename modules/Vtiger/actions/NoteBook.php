@@ -27,8 +27,8 @@ class Vtiger_NoteBook_Action extends Vtiger_Action_Controller {
 		
 		$userModel = Users_Record_Model::getCurrentUserModel();
 		$linkId = $request->get('linkId');
-		$noteBookName = $request->getRaw('notePadName');
-		$noteBookContent = $request->getRaw('notePadContent');
+		$noteBookName = $request->get('notePadName');
+		$noteBookContent = $request->get('notePadContent');
 		
 		$date_var = date("Y-m-d H:i:s");
 		$date = $adb->formatDate($date_var, true);
@@ -52,4 +52,8 @@ class Vtiger_NoteBook_Action extends Vtiger_Action_Controller {
 		$response->emit();
 		
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        }
 }

@@ -45,23 +45,138 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 	deleteUser: function (form){
 		var userid = form.find('[name="userid"]').val();
 		var transferUserId = form.find('[name="tranfer_owner_id"]').val();
+        var progressInstance = jQuery.progressIndicator({
+                'position' : 'html',
+                'blockInfo' : {
+                        'enabled' : true
+                }
+        });
 		var params = {
 			'module': app.getModuleName(),
 			'action' : "DeleteAjax",
 			'transfer_user_id' : transferUserId,
-			'userid' : userid
+			'userid' : userid,
+            'permanent' : jQuery('[name="deleteUserPermanent"]:checked', form).val()
 		}		
 		AppConnector.request(params).then(
 			function(data) {
 				if(data.success){
 					app.hideModalWindow();
-					Vtiger_Helper_Js.showPnotify(data.result.message);
-					var url = data.result.listViewUrl;
-					window.location.href=url;
+                                        progressInstance.progressIndicator({
+                                                'mode' : 'hide'
+                                        });
+                    params = {
+                        title : app.vtranslate('JS_MESSAGE'),
+                        text : data.result.message,
+                        animation: 'show',
+						type: 'error'
+                    };
+					Vtiger_Helper_Js.showPnotify(params);
+                    jQuery('[data-id='+userid+"]").hide();
 				}
 			}
 		);
-	}
+	},
+                
+        /*
+         *Function to delete a user permanently
+         *@param userId, event
+         */
+        deleteUserPermanently : function(userId, e) {
+                e.stopPropagation();
+                var message = app.vtranslate('LBL_DELETE_USER_PERMANENT_CONFIRMATION');
+                var deleteRecordActionUrl = 'index.php?module='+app.getModuleName()+'&parent='+app.getParentModuleName()+'&view=DeleteUser&mode=permanent&record='+userId;
+                Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
+                    function(data) {
+                        AppConnector.request(deleteRecordActionUrl).then(
+                        function(data) {
+                                if(data){
+                                    var callback = function(data) {
+                                        var params = app.validationEngineOptions;
+                                        params.onValidationComplete = function(form, valid){
+                                                if(valid){
+                                                        var progressInstance = jQuery.progressIndicator({
+                                                                'position' : 'html',
+                                                                'blockInfo' : {
+                                                                        'enabled' : true
+                                                                }
+                                                        });
+                                                        var params = {
+                                                                'module': app.getModuleName(),
+                                                                'action' : "DeleteAjax",
+                                                                'userid' : userId,
+                                                                'transfer_user_id' : form.find('[name="tranfer_owner_id"]').val(),
+                                                                'mode' : 'permanent'
+                                                        }
+                                                        app.hideModalWindow();
+                                                        AppConnector.request(params).then(
+                                                                function(response) {
+                                                                        if(response.success){
+                                                                                progressInstance.progressIndicator({
+                                                                                        'mode' : 'hide'
+                                                                                });
+                                                                                params = {
+                                                                                    title : app.vtranslate('JS_MESSAGE'),
+                                                                                    text : response.result.message,
+                                                                                    animation: 'show',
+                                                                                    type: 'error'
+                                                                                };
+                                                                                Vtiger_Helper_Js.showPnotify(params);
+                                                                                jQuery('[data-id='+userId+"]").hide();
+                                                                        }
+                                                                }
+                                                        );
+                                                }
+                                                return false;
+                                        }
+                                        jQuery('#deleteUser').validationEngine(app.validationEngineOptions);
+                                    }
+                                    app.showModalWindow(data, function(data){
+                                            if(typeof callback == 'function'){
+                                                    callback(data);
+                                            }
+                                    });
+                                }
+                        });
+                    }
+		);
+        },
+        
+        /*
+         *Function to restore Inactive User
+         *@param userId, event
+         */
+        restoreUser : function(userId, e) {
+                e.stopPropagation();
+                Vtiger_Helper_Js.showConfirmationBox({
+			'message' : app.vtranslate('LBL_RESTORE_CONFIRMATION')
+		}).then( function() {
+                        var progressInstance = jQuery.progressIndicator({
+                                'position' : 'html',
+                                'blockInfo' : {
+                                        'enabled' : true
+                                }
+                        });
+                        var params = {
+                                'module': app.getModuleName(),
+                                'action' : "SaveAjax",
+                                'userid' : userId,
+                                'mode' : 'restoreUser'
+                        }
+                        AppConnector.request(params).then(
+                                function(response) {
+                                        if(response.success){
+                                                progressInstance.progressIndicator({
+                                                        'mode' : 'hide'
+                                                });
+                                                Vtiger_Helper_Js.showPnotify(response.result.message);
+                                                var url = response.result.listViewUrl;
+                                                window.location.href=url;
+                                        }
+                                }
+                        );
+                });
+        }
 	
 },{
 
@@ -76,7 +191,9 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 			'module' : module,
 			'view' : "ListAjax",
 			'mode' : "getPageCount",
-			"viewname": cvId
+			'search_key' : 'status',
+            'operator' : 'e',
+            'search_value' : jQuery('#usersFilter').val()
 		}
 		return pageCountParams;
 	},
@@ -93,12 +210,46 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 			e.stopPropagation();
 		});
 	},
-	
+        
+        /*
+         *Function to filter Active and Inactive users from Users List View
+         */
+        usersFilter : function() {
+                var thisInstance = this;
+                jQuery('#usersFilter').change(function() {
+                        var progressInstance = jQuery.progressIndicator({
+                                'position' : 'html',
+                                'blockInfo' : {
+                                        'enabled' : true
+                                }
+                        });
+                        var params = {
+                            'module' : app.getModuleName(),
+                            'view' : 'List',
+                            'parent' : app.getParentModuleName(),
+                            'search_key' : 'status',
+                            'operator' : 'e',
+                            'search_value' : jQuery('#usersFilter').val()
+                        };
+                        AppConnector.request(params).then(
+                            function(data){
+                                        progressInstance.progressIndicator({
+                                                'mode' : 'hide'
+                                        });
+                                        jQuery('#listViewContents').html(data);
+                                        thisInstance.updatePagination();
+                            }
+                        );
+                });
+        },
+        
+        
 	registerEvents : function() {
 		this._super();
 		this.registerEventForAlphabetSearch();
-        this.registerEmailFieldClickEvent();
+                this.registerEmailFieldClickEvent();
 		this.registerUrlFieldClickEvent();
 		this.registerDeleteRecordClickEvent();
+                this.usersFilter();
 	}
 });

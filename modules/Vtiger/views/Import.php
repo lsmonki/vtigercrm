@@ -39,7 +39,7 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		global $VTIGER_BULK_SAVE_MODE;
 		$previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
 		$VTIGER_BULK_SAVE_MODE = true;
-		
+
 		$mode = $request->getMode();
 		if(!empty($mode)) {
 			// Added to check the status of import
@@ -85,7 +85,7 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 		$viewer->assign('SUPPORTED_FILE_ENCODING', Import_Utils_Helper::getSupportedFileEncoding());
 		$viewer->assign('SUPPORTED_DELIMITERS', Import_Utils_Helper::getSupportedDelimiters());
 		$viewer->assign('AUTO_MERGE_TYPES', Import_Utils_Helper::getAutoMergeTypes());
-
+		
 		//Duplicate records handling not supported for inventory moduels
 		$duplicateHandlingNotSupportedModules = getInventoryModules();
 		if(in_array($moduleName, $duplicateHandlingNotSupportedModules)){
@@ -172,7 +172,7 @@ class Vtiger_Import_View extends Vtiger_Index_View {
 			exit;
 		}
         $previousBulkSaveMode = $VTIGER_BULK_SAVE_MODE;
-        $VTIGER_BULK_SAVE_MODE = true;  
+        $VTIGER_BULK_SAVE_MODE = true;
 		$query = "SELECT recordid FROM $dbTableName WHERE status = ? AND recordid IS NOT NULL";
 		//For inventory modules
 		$inventoryModules = getInventoryModules();

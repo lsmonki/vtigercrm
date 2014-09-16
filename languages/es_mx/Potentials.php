@@ -41,4 +41,5 @@ $languageStrings = array(
 	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Fecha esperada de cierre'    , 
 	'LBL_RELATED_CONTACTS'         => 'Related Contacts'            , // TODO: Review
 	'LBL_RELATED_PRODUCTS'         => 'Related Products'            , // TODO: Review
+        'Potentials Won'               =>'Potenciales Ganados',
 );

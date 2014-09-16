@@ -109,14 +109,25 @@ class Vtiger_PDF_InventoryHeaderViewer extends Vtiger_PDF_HeaderViewer {
 					
 				$pdf->SetFont('freeserif', 'B');
 				$pdf->SetFillColor(205,201,201);
-				$pdf->MultiCell($headerColumnWidth-$offsetX, 7, $label, 1, 'L', 1, 1, $headerFrame->x+$headerColumnWidth*2.0+$offsetX,
-					$pdf->GetY()+$offsetY);
-					
-				$pdf->SetFont('freeserif', '');
-				$pdf->MultiCell($headerColumnWidth-$offsetX, 7, $value, 1, 'L', 0, 1, $headerFrame->x+$headerColumnWidth*2.0+$offsetX, 
+                                if($label=='Shipping Address'){ 
+                                    $width=$pdf->GetStringWidth($value); 
+                                    $height=$pdf->GetStringHeight($value,$width);
+                                    $pdf->MultiCell($headerColumnWidth-$offsetX, 7, $label, 1, 'L', 1, 1, $headerFrame->x+$headerColumnWidth*2.0+$offsetX,
+                                            $pdf->GetY()+$offsetY-$height-$offsetX-4.0); 
+
+                                    $pdf->SetFont('freeserif', '');
+                                    $pdf->MultiCell($headerColumnWidth-$offsetX, 7, $value, 1, 'L', 0, 1, $headerFrame->x+$headerColumnWidth*2.0+$offsetX, 
 					$pdf->GetY());
-				}
-			}
+				} else{ 
+                                    $pdf->MultiCell($headerColumnWidth-$offsetX, 7, $label, 1, 'L', 1, 1, $headerFrame->x+$headerColumnWidth, 
+                                            $pdf->GetY()+$offsetY); 
+
+                                    $pdf->SetFont('freeserif', ''); 
+                                    $pdf->MultiCell($headerColumnWidth-$offsetX, 7, $value, 1, 'L', 0, 1, $headerFrame->x+$headerColumnWidth,  
+                                            $pdf->GetY()); 
+                                    } 
+                                } 
+                            } 
 			$pdf->setFont('freeserif', '');
 
 			// Add the border cell at the end

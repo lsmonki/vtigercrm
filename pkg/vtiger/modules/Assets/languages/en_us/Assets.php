@@ -8,29 +8,22 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'Assets'        => 'Assets',
-	'SINGLE_Assets' => 'Asset',
-	'LBL_ADD_RECORD' => 'Add Asset',
-	'LBL_RECORDS_LIST' => 'Assets List',
-
-	// Blocks
-	'LBL_ASSET_INFORMATION' => 'Asset Details',
-
-	//Field Labels
+	'Asset Name' => 'Asset Name',
     'Asset No' => 'Asset No',
-	'Serial Number' => 'Serial Number',
-	'Date Sold' => 'Date Sold',
+	'Assets'        => 'Assets',
+	'Customer Name' => 'Customer Name',
 	'Date in Service' => 'Date in Service',
-	'Tag Number' => 'Tag Number',
+	'Date Sold' => 'Date Sold',
+	'In Service'=>'In Service',
 	'Invoice Name' => 'Invoice Name',
+	'LBL_ADD_RECORD' => 'Add Asset',
+	'LBL_ASSET_INFORMATION' => 'Asset Details',
+	'LBL_RECORDS_LIST' => 'Assets List',
+	'Notes' => 'Notes',
+	'Out-of-service'=>'Out-of-service',
+	'Serial Number' => 'Serial Number',
 	'Shipping Method' => 'Shipping Method',
 	'Shipping Tracking Number' => 'Shipping Tracking Number',
-	'Asset Name' => 'Asset Name',
-	'Customer Name' => 'Customer Name',
-	'Notes' => 'Notes',
-
-	/*picklist values*/
-	'In Service'=>'In Service',
-	'Out-of-service'=>'Out-of-service',
+	'SINGLE_Assets' => 'Asset',
+	'Tag Number' => 'Tag Number',
 );

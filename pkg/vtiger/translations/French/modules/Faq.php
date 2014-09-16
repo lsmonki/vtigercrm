@@ -6,15 +6,12 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013   
  ************************************************************************************/
 $languageStrings = array(
 	'Faq'                          => 'FAQ'                         , 
 	'SINGLE_Faq'                   => 'Faq'                         , 
-	'LBL_RECORDS_LIST'             => 'Liste des FAQs'                   , 
-	'LBL_ADD_RECORD'               => 'Ajouter FAQ'                     , 
+	'LBL_RECORDS_LIST'             => 'FAQs List'                   , 
+	'LBL_ADD_RECORD'               => 'Add FAQ'                     , 
 	'LBL_FAQ_INFORMATION'          => 'Information'                 , 
 	'LBL_COMMENT_INFORMATION'      => 'Commentaire'                 , 
 	'Question'                     => 'Question'                    , 
@@ -25,5 +22,5 @@ $languageStrings = array(
 	'Draft'                        => 'Brouillon'                   , 
 	'Published'                    => 'Publié'                     , 
 	'Obsolete'                     => 'Obsolète'                   , 
-	'LBL_SOLUTION'                 => 'Solution'                    , 
+	'LBL_SOLUTION'                 => 'SOLUTION'                    , 
 );

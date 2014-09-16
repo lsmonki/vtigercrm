@@ -21,17 +21,22 @@
 		 * @param $entityId The id of the entity to load.
 		 * @return The new entity data object.
 		 */
-		static function fromEntityId($adb, $entityId){
+		static function fromEntityId($adb, $entityId, $moduleName=''){
 			$obj = new VTEntityData();
 			$obj->entityId = $entityId;
-			$result = $adb->pquery("select setype from vtiger_crmentity where crmid=?", array($entityId));
-			$setype =  $adb->query_result($result,0,"setype");
+                         if(empty($moduleName)) {
+                            $result = $adb->pquery("select setype from vtiger_crmentity where crmid=?", array($entityId));
+                            $setype =  $adb->query_result($result,0,"setype");
 
-            if($setype == 'Calendar') {
-                $setype = vtws_getCalendarEntityType($entityId);
-            }
+                            if($setype == 'Calendar') {
+                                $setype = vtws_getCalendarEntityType($entityId);
+                            }
             
-			$obj->moduleName = $setype;
+                            $obj->moduleName = $setype;
+                           } else { 
+                                    $setype = $moduleName; 
+                                    $obj->moduleName = $setype; 
+                            } 
 			
 			require_once('data/CRMEntity.php');
 			$focus = CRMEntity::getInstance($setype);

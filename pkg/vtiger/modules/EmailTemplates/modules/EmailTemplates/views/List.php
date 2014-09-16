@@ -51,6 +51,14 @@ class EmailTemplates_List_View extends Vtiger_Index_View {
 	}
     
     
+    function postProcess(Vtiger_Request $request) {
+        $viewer = $this->getViewer ($request);
+		$moduleName = $request->getModule();
+
+		$viewer->view('ListViewPostProcess.tpl', $moduleName);
+		parent::postProcess($request);
+    }
+
     /*
 	 * Function to initialize the required data in smarty to display the List View Contents
 	 */
@@ -120,7 +128,7 @@ class EmailTemplates_List_View extends Vtiger_Index_View {
 		$viewer->assign('SORT_IMAGE',$sortImage);
 		$viewer->assign('COLUMN_NAME',$orderBy);
 
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 

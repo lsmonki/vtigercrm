@@ -20,12 +20,12 @@ var Vtiger_CustomView_Js = {
 	selectedColumnsList : false,
 
 	loadFilterView : function(url) {
-		jQuery('#loadingListViewModal').modal();
+		var progressIndicatorElement = jQuery.progressIndicator();
 		AppConnector.request(url).then(
 			function(data){
 				app.hideModalWindow();
 				var contents = jQuery(".contentsDiv").html(data);
-				jQuery('div.modal-backdrop').remove();
+				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
 				Vtiger_CustomView_Js.registerEvents();
 				Vtiger_CustomView_Js.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',contents));
 			},
@@ -230,6 +230,15 @@ var Vtiger_CustomView_Js = {
 			} else {
 				select2Element.validationEngine('hide');
 			}
+            if(jQuery('#viewname').val().length > 40) {
+                var params = {
+                    title : app.vtranslate('JS_MESSAGE'),
+                    text : app.vtranslate('JS_VIEWNAME_ALERT')
+                }
+                Vtiger_Helper_Js.showPnotify(params);
+                e.preventDefault();
+                return;
+            }
 
 			//Mandatory Fields selection validation
 			//Any one Mandatory Field should select while creating custom view.

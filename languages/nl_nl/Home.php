@@ -21,4 +21,7 @@ $languageStrings = array(
 	'LTFAQ'                        => 'Mijn recente FAQs'           , 
 	'UA'                           => 'Nieuwe Afspraken'            , 
 	'PA'                           => 'Afwachtende Afspraken'       , 
+        'Home'                         => 'Huis'                        ,
+        'Key Metrics'                  => 'Key Metrics',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

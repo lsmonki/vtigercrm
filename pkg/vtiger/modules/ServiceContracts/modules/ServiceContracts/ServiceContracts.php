@@ -7,9 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/CRMEntity.php');
-require_once('data/Tracker.php');
-
 class ServiceContracts extends CRMEntity {
 	var $db, $log; // Used in class functions of CRMEntity
 
@@ -222,6 +219,49 @@ class ServiceContracts extends CRMEntity {
 		return $sec_query;
 	}
 
+    /*
+	 * Function to get the secondary query part of a report
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule,$queryplanner) {
+
+		$matrix = $queryplanner->newDependencyMatrix();
+        $matrix->setDependency('vtiger_crmentityServiceContracts',array('vtiger_groupsServiceContracts','vtiger_usersServiceContracts'));
+		$matrix->setDependency('vtiger_servicecontracts',array('vtiger_servicecontractscf','vtiger_crmentityServiceContracts'));
+        if (!$queryplanner->requireTable('vtiger_servicecontracts', $matrix)) {
+			return '';
+		}
+
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_servicecontracts","servicecontractsid", $queryplanner);
+
+        if ($queryplanner->requireTable("vtiger_crmentityServiceContracts",$matrix)){
+			$query .= " left join vtiger_crmentity as vtiger_crmentityServiceContracts on vtiger_crmentityServiceContracts.crmid = vtiger_servicecontracts.servicecontractsid  and vtiger_crmentityServiceContracts.deleted=0";
+		}
+        if ($queryplanner->requireTable("vtiger_servicecontractscf")){
+		    $query .= " left join vtiger_servicecontractscf on vtiger_servicecontractscf.servicecontractsid = vtiger_servicecontracts.servicecontractsid";
+		}
+        if ($queryplanner->requireTable("vtiger_groupsServiceContracts")){
+			$query .= " left join vtiger_groups as vtiger_groupsServiceContracts on vtiger_groupsServiceContracts.groupid = vtiger_crmentityServiceContracts.smownerid";
+		}
+		if ($queryplanner->requireTable("vtiger_usersServiceContracts")){
+			$query .= " left join vtiger_users as vtiger_usersServiceContracts on vtiger_usersServiceContracts.id = vtiger_crmentityServiceContracts.smownerid";
+		}
+        if($queryplanner->requireTable("vtiger_contactdetailsRelServiceContracts")){
+            $query .= " left join vtiger_contactdetails as vtiger_contactdetailsRelServiceContracts on vtiger_contactdetailsRelServiceContracts.contactid = vtiger_servicecontracts.sc_related_to";
+        }
+        if($queryplanner->requireTable("vtiger_accountRelServiceContracts")){
+            $query .= " left join vtiger_account as vtiger_accountRelServiceContracts on vtiger_accountRelServiceContracts.accountid = vtiger_servicecontracts.sc_related_to";
+        }
+         if ($queryplanner->requireTable("vtiger_lastModifiedByServiceContracts")){
+			$query .= " left join vtiger_users as vtiger_lastModifiedByServiceContracts on vtiger_lastModifiedByServiceContracts.id = vtiger_crmentityServiceContracts.modifiedby ";
+		}
+        if ($queryplanner->requireTable("vtiger_createdbyServiceContracts")){
+			$query .= " left join vtiger_users as vtiger_createdbyServiceContracts on vtiger_createdbyServiceContracts.id = vtiger_crmentityServiceContracts.smcreatorid ";
+		}
+        return $query;
+	}
 	/**
 	 * Create query to export the records.
 	 */
@@ -560,7 +600,7 @@ class ServiceContracts extends CRMEntity {
 		global $log, $currentModule;
 
 		if($return_module == 'Accounts') {
-			$focus = new $return_module;
+			$focus = CRMEntity::getInstance($return_module);
 			$entityIds = $focus->getRelatedContactsIds($return_id);
 			array_push($entityIds, $return_id);
 			$entityIds = implode(',', $entityIds);

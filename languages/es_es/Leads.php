@@ -39,6 +39,7 @@ $languageStrings = array(
 	'Contact in Future'            => 'Contactar más adelante',
 	'Contacted'                    => 'Contactado',
 	'Hot'                          => 'Caliente',
+        'Hot Leads'                    => 'Leads calientes',
 	'Junk Lead'                    => 'Pre-Contacto Basura',
 	'Lost Lead'                    => 'Pre-Contacto Fallido',
 	'Not Contacted'                => 'No Contactado',
@@ -55,7 +56,7 @@ $languageStrings = array(
 	'LBL_MANDATORY_FIELDS_ARE_EMPTY' => 'Algún campo obligatorio está vacío',
 	'LBL_LEADS_FIELD_MAPPING'      => 'Vinculación de Campos',
 	'LBL_CUSTOM_FIELD_MAPPING'     => 'Editar Vinculación de Campos',
-	'LBL_WEBFORMS'                 => 'Crear Formulario Web',
+	
 );
 $jsLanguageStrings = array(
 	'JS_SELECT_CONTACTS'           => 'Selecciona Contactos para seguir',

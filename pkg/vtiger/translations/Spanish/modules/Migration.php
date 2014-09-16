@@ -5,16 +5,8 @@
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
- * Portions created by JPL TSolucio, S.L. are Copyright (C) jpl tsolucio.
  * All Rights Reserved.
- *************************************************************************************
- *  Language     : Español es_es
- *  Version      : 6.0.0
- *  Created Date : 2013-07-14
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-07-14
- *  Author       : JPL TSolucio, S. L. Joe Bordes
- ************************************************************************************/
+ *************************************************************************************/
 $languageStrings = array(
 	'LBL_VTIGER_MIGRATION' => 'Bienvenido a la Migración de Vtiger',
 	'LBL_MIGRATION_COMPLETED' => 'Migración Completada',

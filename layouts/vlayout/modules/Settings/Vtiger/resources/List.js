@@ -92,6 +92,5 @@ Vtiger_List_Js("Settings_Vtiger_List_Js",{
 		this.registerHeadersClickEvent();
 		this.registerPageNavigationEvents();
 		this.registerEventForTotalRecordsCount();
-		jQuery('.pageNumbers').tooltip();
 	}
 });

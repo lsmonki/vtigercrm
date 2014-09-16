@@ -161,7 +161,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 	 */
 	function output($request, $headers, $entries) {
 		$moduleName = $request->get('source_module');
-		$fileName = str_replace(' ','_',vtranslate($moduleName, $moduleName));    
+		$fileName = str_replace(' ','_',decode_html(vtranslate($moduleName, $moduleName)));
 		$exportType = $this->getExportContentType($request);
 
 		header("Content-Disposition:attachment;filename=$fileName.csv");
@@ -215,7 +215,7 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				unset($arr[$fieldName]);
 				continue;
 			}
-			$value = decode_html($value);
+			$value = trim(decode_html($value),"\"");
 			$uitype = $fieldInfo->get('uitype');
 			$fieldname = $fieldInfo->get('name');
 
@@ -223,14 +223,14 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
 				$this->fieldDataTypeCache[$fieldName] = $fieldInfo->getFieldDataType();
 			}
 			$type = $this->fieldDataTypeCache[$fieldName];
-			
+
 			if($fieldname != 'hdnTaxType' && ($uitype == 15 || $uitype == 16 || $uitype == 33)){
 				if(empty($this->picklistValues[$fieldname])){
 					$this->picklistValues[$fieldname] = $this->fieldArray[$fieldname]->getPicklistValues();
 				}
 				// If the value being exported is accessible to current user
 				// or the picklist is multiselect type.
-				if($uitype == 33 || $uitype == 16 || in_array($value,$this->picklistValues[$fieldname])){
+				if($uitype == 33 || $uitype == 16 || array_key_exists($value,$this->picklistValues[$fieldname])){
 					// NOTE: multipicklist (uitype=33) values will be concatenated with |# delim
 					$value = trim($value);
 				} else {
@@ -260,7 +260,9 @@ class Vtiger_ExportData_Action extends Vtiger_Mass_Action {
                 $value = CurrencyField::convertToUserFormat($value, null, true, true);
 			} elseif($uitype == 7 && $fieldInfo->get('typeofdata') == 'N~O' || $uitype == 9){
 				$value = decimalFormat($value);
-			}
+			} else if($type == 'date' || $type == 'datetime'){
+                $value = DateTimeField::convertToUserFormat($value);
+            }
 			if($moduleName == 'Documents' && $fieldname == 'description'){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);

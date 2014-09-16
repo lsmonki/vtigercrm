@@ -65,7 +65,6 @@ class Calendar_Import_View extends Vtiger_Import_View {
 	 * @param Vtiger_Request $request
 	 */
 	public function importResult(Vtiger_Request $request) {
-		global $root_directory;
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$userId = $currentUserModel->getId();
 		$moduleName = $request->getModule();
@@ -96,7 +95,7 @@ class Calendar_Import_View extends Vtiger_Import_View {
 			}
 
 			$ical = new iCal();
-			$icalActivities = $ical->iCalReader("IMPORT_".$userId, $root_directory);
+			$icalActivities = $ical->iCalReader("IMPORT_".$userId);
 			$noOfActivities = count($icalActivities);
 
 			for($i=0; $i<$noOfActivities; $i++) {
@@ -113,6 +112,12 @@ class Calendar_Import_View extends Vtiger_Import_View {
 				if (!array_key_exists('visibility', $activityFieldsList)) {
 					$activityFieldsList['visibility'] = ' ';
 				}
+                if(array_key_exists('taskpriority',$activityFieldsList)) {
+                    $priorityMap = array('0'=>'Medium','1'=>'High','2'=>'Medium','3'=>'Low');
+                    $priorityval = $activityFieldsList['taskpriority'];
+                    if(array_key_exists($priorityval,$priorityMap))
+                        $activityFieldsList['taskpriority'] = $priorityMap[$priorityval];
+                }
 
 				$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
 				$recordModel->setData($activityFieldsList);

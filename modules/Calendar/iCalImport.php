@@ -1,6 +1,5 @@
 <?php
 define('_BENNU_VERSION', '0.1');
-require_once('Smarty_setup.php');
 include('modules/Calendar/iCal/iCalendar_rfc2445.php');
 include('modules/Calendar/iCal/iCalendar_components.php');
 include('modules/Calendar/iCal/iCalendar_properties.php');

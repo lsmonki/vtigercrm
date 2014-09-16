@@ -21,12 +21,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('user_privileges/default_module_view.php');
-
-// Account is used to store vtiger_account information.
 class Invoice extends CRMEntity {
 	var $log;
 	var $db;
@@ -107,7 +101,7 @@ class Invoice extends CRMEntity {
 
 	// For workflows update field tasks is deleted all the lineitems.
 	var $isLineItemUpdate = true;
-	
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Invoice() {
@@ -135,10 +129,10 @@ class Invoice extends CRMEntity {
 		} else if(isset($_REQUEST)) {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW'
 					&& $_REQUEST['action'] != 'MassEditSave' && $_REQUEST['action'] != 'ProcessDuplicates'
-					&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false) {
+					&& $_REQUEST['action'] != 'SaveAjax' && $this->isLineItemUpdate != false && $_REQUEST['action'] != 'FROM_WS') {
 				//Based on the total Number of rows we will save the product relationship with this entity
 				saveInventoryProductDetails($this, 'Invoice');
-			} else if($_REQUEST['action'] == 'InvoiceAjax' || $_REQUEST['action'] == 'MassEditSave') {
+			} else if($_REQUEST['action'] == 'InvoiceAjax' || $_REQUEST['action'] == 'MassEditSave' || $_REQUEST['action'] == 'FROM_WS') {
 				$updateInventoryProductRel_deduct_stock = false;
 			}
 		}
@@ -171,7 +165,7 @@ class Invoice extends CRMEntity {
 		}
 		parent::trash($module, $recordId);
 	}
-	
+
 	/**	function used to get the name of the current object
 	 *	@return string $this->name - name of the current object
 	 */
@@ -341,7 +335,7 @@ class Invoice extends CRMEntity {
 	}
 
 	// Function to get column name - Overriding function of base class
-	function get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype) {
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype = '') {
 		if ($columname == 'salesorderid') {
 			if ($fldvalue == '') return null;
 		}
@@ -355,10 +349,10 @@ class Invoice extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule,$queryPlanner){
-		
+
 		// Define the dependency matrix ahead
 		$matrix = $queryPlanner->newDependencyMatrix();
-		$matrix->setDependency('vtiger_crmentityInvoice', array('vtiger_usersInvoice', 'vtiger_groupsInvoice', 'vtiger_lastModifiedByInvoice'));		
+		$matrix->setDependency('vtiger_crmentityInvoice', array('vtiger_usersInvoice', 'vtiger_groupsInvoice', 'vtiger_lastModifiedByInvoice'));
 		$matrix->setDependency('vtiger_inventoryproductrelInvoice', array('vtiger_productsInvoice', 'vtiger_serviceInvoice'));
 		$matrix->setDependency('vtiger_invoice',array('vtiger_crmentityInvoice', "vtiger_currency_info$secmodule",
 				'vtiger_invoicecf', 'vtiger_salesorderInvoice', 'vtiger_invoicebillads',
@@ -367,9 +361,9 @@ class Invoice extends CRMEntity {
 		if (!$queryPlanner->requireTable('vtiger_invoice', $matrix)) {
 			return '';
 		}
-		
+
 		$query = $this->getRelationQuery($module,$secmodule,"vtiger_invoice","invoiceid", $queryPlanner);
-		
+
 		if ($queryPlanner->requireTable('vtiger_crmentityInvoice', $matrix)) {
 			$query .= " left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid and vtiger_crmentityInvoice.deleted=0";
 		}
@@ -390,6 +384,14 @@ class Invoice extends CRMEntity {
 		}
 		if ($queryPlanner->requireTable('vtiger_inventoryproductrelInvoice', $matrix)) {
 			$query .= " left join vtiger_inventoryproductrel as vtiger_inventoryproductrelInvoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrelInvoice.id";
+            // To Eliminate duplicates in reports
+            if(($module == 'Products' || $module == 'Services') && $secmodule == "Invoice"){
+                if($module == 'Products'){
+                    $query .= " and vtiger_inventoryproductrelInvoice.productid = vtiger_products.productid ";    
+                }else if($module == 'Services'){
+                    $query .= " and vtiger_inventoryproductrelInvoice.productid = vtiger_service.serviceid "; 
+                }
+            }
 		}
 		if ($queryPlanner->requireTable('vtiger_productsInvoice')) {
 			$query .= " left join vtiger_products as vtiger_productsInvoice on vtiger_productsInvoice.productid = vtiger_inventoryproductrelInvoice.productid";
@@ -412,7 +414,9 @@ class Invoice extends CRMEntity {
 		if ($queryPlanner->requireTable('vtiger_lastModifiedByInvoice')) {
 			$query .= " left join vtiger_users as vtiger_lastModifiedByInvoice on vtiger_lastModifiedByInvoice.id = vtiger_crmentityInvoice.modifiedby ";
 		}
-		
+        if ($queryPlanner->requireTable("vtiger_createdbyInvoice")){
+			$query .= " left join vtiger_users as vtiger_createdbyInvoice on vtiger_createdbyInvoice.id = vtiger_crmentityInvoice.smcreatorid ";
+		}
 		return $query;
 	}
 

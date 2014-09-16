@@ -54,7 +54,7 @@ class Settings_PickListDependency_Record_Model extends Settings_Vtiger_Record_Mo
 
 		$query="select vtiger_field.fieldlabel,vtiger_field.fieldname FROM vtiger_field" .
 				" where displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','16') " .
-				" and vtiger_field.presence in (0,2)";
+				" and vtiger_field.presence in ('0','2') and vtiger_field.block != 'NULL'";
 
 		$result = $db->pquery($query, array($tabId));
 		$noofrows = $db->num_rows($result);

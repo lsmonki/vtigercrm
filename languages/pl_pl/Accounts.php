@@ -42,6 +42,7 @@ $languageStrings = array(
 	'Investor'=>'Inwestor',
 	'Press'=>'Media',
 	'Prospect'=>'Potencjalny Klient',
+        'Prospect Accounts'            => 'Konta Prospect',
 	'Reseller'=>'Partner',
 	'LBL_START_DATE' => 'Data rozpoczęcia',
 	'LBL_END_DATE' => 'Data zakończenia',

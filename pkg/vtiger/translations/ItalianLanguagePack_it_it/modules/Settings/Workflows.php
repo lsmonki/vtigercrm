@@ -19,6 +19,7 @@ $languageStrings = array(
 	'ONCE'                         => 'Until the first time the condition is true', // TODO: Review
 	'ON_EVERY_SAVE'                => 'Every time the record is saved', // TODO: Review
 	'ON_MODIFY'                    => 'Every time a record is modified', // TODO: Review
+        'ON_SCHEDULE'                  => 'Piano',
 	'MANUAL'                       => 'System'                      , // TODO: Review
 	'SCHEDULE_WORKFLOW'            => 'Schedule Workflow'           , // TODO: Review
 	'ADD_CONDITIONS'               => 'Add Conditions'              , // TODO: Review
@@ -74,6 +75,33 @@ $languageStrings = array(
 	'LBL_NOTIFY_OWNER'             => 'notify_owner'                , // TODO: Review
 	'LBL_ANNUAL_REVENUE'           => 'annual_revenue'              , // TODO: Review
 	'LBL_EXPRESSION_EXAMPLE2'      => 'if mailingcountry == \'India\' then concat(firstname,\' \',lastname) else concat(lastname,\' \',firstname) end', // TODO: Review
+	'LBL_FROM' => 'Da',
+	'Optional' => 'Opzionale',
+	'LBL_ADD_TASK' => 'Add Compito',	
+        'Portal Pdf Url' =>'Customer Portal collegamento Pdf',
+        'LBL_ADD_TEMPLATE' => 'Aggiungi modello',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'Blocco LineItems per IVA di gruppo',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'Blocco LineItems per fiscali',
+        'LBL_RUN_WORKFLOW' => 'Esegui Workflow',
+	'LBL_AT_TIME' => 'Al tempo',
+	'LBL_HOURLY' => 'Ogni ora',
+	
+	'LBL_DAILY' => 'Quotidiano',
+	'LBL_WEEKLY' => 'Settimanale',
+	'LBL_ON_THESE_DAYS' => 'In questi giorni',
+	'LBL_MONTHLY_BY_DATE' => 'Mensile per Data',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Mensile per giorno della settimana',
+	'LBL_YEARLY' => 'Annuale',
+	'LBL_SPECIFIC_DATE' => 'Su specifica Data',
+	'LBL_CHOOSE_DATE' => 'Scegli data',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Selezionare Mese e Data',
+	'LBL_SELECTED_DATES' => 'Date selezionate',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Limite massimo superato',
+	'LBL_NEXT_TRIGGER_TIME' => 'Tempo di trigger su Avanti',
+	'LBL_MESSAGE' => 'Messaggio',
+    
+	//Translation for module
+	'Calendar' => 'Da fare',
 );
 $jsLanguageStrings = array(
 	'JS_STATUS_CHANGED_SUCCESSFULLY' => 'Status changed Successfully' , // TODO: Review

@@ -13,8 +13,8 @@ $languageStrings = array(
 	'LBL_SEND_MAIL_PDF'            => 'Send Email with PDF'         , // TODO: Review
 	'LBL_ADD_RECORD'               => 'Add Purchase Order'          , 
 	'LBL_RECORDS_LIST'             => 'Purchase Order List'         , 
-	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Shipping Address'       , // TODO: Review
-	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Billing Address'        , // TODO: Review
+	'LBL_COPY_SHIPPING_ADDRESS'    => 'Copy Delivery Address'       , // TODO: Review
+	'LBL_COPY_BILLING_ADDRESS'     => 'Copy Invoice Address'        , // TODO: Review
 	'LBL_PO_INFORMATION'           => 'Purchase Order Information'  , 
 	'PurchaseOrder No'             => 'Purchase Order No.'          , 
 	'Requisition No'               => 'Requisition No.'             , 
@@ -23,4 +23,6 @@ $languageStrings = array(
 	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
 	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
 	'Received Shipment'            => 'Received Shipment'           , 
+        'LBL_LIST_PRICE'               => 'List Price',
+        'List Price'                   => 'List Price',
 );

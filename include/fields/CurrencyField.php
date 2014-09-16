@@ -415,8 +415,14 @@ class CurrencyField {
 			$user = $current_user;
 		}
 		if($user->truncate_trailing_zeros == true) {
-			$value = rtrim($value, '0');
-			$fld_value = explode($user->currency_decimal_separator, $value);
+            if(strpos($value, $user->currency_decimal_separator) != 0){
+                /**
+                 * We should trim extra zero's if only the value had decimal separator(Ex :- 1600.00)
+                 * else it'll change orginal value
+                 */
+                $value = rtrim($value, '0');
+            }
+			$fld_value = explode(decode_html($user->currency_decimal_separator), $value);
 			if(strlen($fld_value[1]) <= 1){
 				if(strlen($fld_value[1]) == 1)
 					return $value = $fld_value[0].$user->currency_decimal_separator.$fld_value[1].'0';

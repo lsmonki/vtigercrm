@@ -66,7 +66,6 @@ $languageStrings = array(
 
 	//Leads Custom Field Mapping
 	'LBL_CUSTOM_FIELD_MAPPING'=> 'Redigera Fält Mapping',
-	'LBL_WEBFORMS' => 'Ställ in Webbformulär',
 	'LBL_LEAD_SOURCE' => 'Lead Källa'
 );
 $jsLanguageStrings = array(

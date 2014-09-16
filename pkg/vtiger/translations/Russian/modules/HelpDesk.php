@@ -10,8 +10,8 @@
 $languageStrings = array(
 	'HelpDesk'                     => 'Заявки'                , 
 	'SINGLE_HelpDesk'              => 'Заявка'                , 
-	'LBL_ADD_RECORD'               => 'Add Ticket'                  , // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Ticket List'                 , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить Билет'                  , 
+	'LBL_RECORDS_LIST'             => 'Список по продаже билетов'                 , 
 	'LBL_TICKET_INFORMATION'       => 'Информация Заявки', 
 	'LBL_TICKET_RESOLUTION'        => 'Информация о решении', 
 	'Ticket No'                    => 'Заявка №'            , 
@@ -21,7 +21,7 @@ $languageStrings = array(
 	'Days'                         => 'Дней'                    , 
 	'Title'                        => 'Название'            , 
 	'Solution'                     => 'Решение'              , 
-	'From Portal'                  => 'From Portal'                 , // TODO: Review
+	'From Portal'                  => 'От Портал'                 , 
 	'Big Problem'                  => 'Большая Проблема', 
 	'Small Problem'                => 'Средняя Проблема', 
 	'Other Problem'                => 'Иная Проблема'   , 
@@ -37,7 +37,7 @@ $languageStrings = array(
 	'Closed'                       => 'Закрыто'              , 
 	'LBL_STATUS'                   => 'Статус'                , 
 	'LBL_SEVERITY'                 => 'Важность'            , // KEY 5.x: Severity
-	'LBL_CONVERT_FAQ'              => 'Convert to FAQ'              , // TODO: Review
+	'LBL_CONVERT_FAQ'              => 'Преобразовать в ЧаВо'              , 
 	'LBL_RELATED_TO'               => 'Связан с'             ,
 
 	//added to support i18n in ticket mails

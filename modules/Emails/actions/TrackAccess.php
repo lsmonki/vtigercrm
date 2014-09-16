@@ -13,7 +13,8 @@ header('Expires: 0');
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 header('Cache-Control: private', false);
 
-ini_set('include_path', '../../../');
+//Opensource fix for tracking email access count
+chdir('../../../');
 
 require_once 'includes/Loader.php';
 require_once 'include/utils/utils.php';
@@ -42,4 +43,3 @@ class Emails_TrackAccess_Action extends Vtiger_Action_Controller {
 
 $track = new Emails_TrackAccess_Action();
 $track->process(new Vtiger_Request($_REQUEST));
-?>

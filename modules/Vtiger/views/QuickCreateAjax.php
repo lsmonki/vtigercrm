@@ -48,7 +48,9 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		
 		$viewer->assign('SCRIPTS', $this->getHeaderScripts($request));
-
+        
+        $viewer->assign('MAX_UPLOAD_LIMIT_MB', Vtiger_Util_Helper::getMaxUploadSize());
+		$viewer->assign('MAX_UPLOAD_LIMIT', vglobal('upload_maxsize'));
 		echo $viewer->view('QuickCreate.tpl',$moduleName,true);
 
 	}
@@ -65,4 +67,8 @@ class Vtiger_QuickCreateAjax_View extends Vtiger_IndexAjax_View {
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
 		return $jsScriptInstances;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateWriteAccess(); 
+        } 
 }

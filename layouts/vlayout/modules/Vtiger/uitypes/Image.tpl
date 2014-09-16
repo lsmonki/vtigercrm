@@ -10,6 +10,9 @@
  ********************************************************************************/
 -->*}
 {strip}
+{if $MODULE_NAME eq 'Webforms'}
+	<input type="text" readonly="" />
+{else}
 {assign var="FIELD_INFO" value=Vtiger_Util_Helper::toSafeHTML(Zend_Json::encode($FIELD_MODEL->getFieldInfo()))}
 {assign var="SPECIAL_VALIDATOR" value=$FIELD_MODEL->getValidator()}
 	<input type="file" class="input-large {if $MODULE eq 'Products'}multi" maxlength="6"{else}"{/if} name="{$FIELD_MODEL->getFieldName()}[]" value="{$FIELD_MODEL->get('fieldvalue')}"
@@ -28,4 +31,5 @@
 			{/if}
 		</div>
 	{/foreach}
+{/if}
 {/strip}

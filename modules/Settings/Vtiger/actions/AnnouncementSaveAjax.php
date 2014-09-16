@@ -20,4 +20,8 @@ class Settings_Vtiger_AnnouncementSaveAjax_Action extends Settings_Vtiger_Basic_
         $responce->setResult(array('success'=>true));
         $responce->emit();
     }
+    
+    public function validateRequest(Vtiger_Request $request) { 
+        $request->validateWriteAccess(); 
+    } 
 }

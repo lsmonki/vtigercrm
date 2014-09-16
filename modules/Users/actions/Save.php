@@ -15,7 +15,8 @@ class Users_Save_Action extends Vtiger_Save_Action {
 		$record = $request->get('record');
 		$recordModel = Vtiger_Record_Model::getInstanceById($record, $moduleName);
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		if(!Users_Privileges_Model::isPermitted($moduleName, 'Save', $record) || $currentUserModel->get('id') != $recordModel->getId()) {
+		if(!Users_Privileges_Model::isPermitted($moduleName, 'Save', $record) || ($recordModel->isAccountOwner() && 
+							$currentUserModel->get('id') != $recordModel->getId() && !$currentUserModel->isAdminUser())) {
 			throw new AppException('LBL_PERMISSION_DENIED');
 		}
 	}
@@ -28,7 +29,7 @@ class Users_Save_Action extends Vtiger_Save_Action {
 	protected function getRecordModelFromRequest(Vtiger_Request $request) {
 		$moduleName = $request->getModule();
 		$recordId = $request->get('record');
-
+                $currentUserModel = Users_Record_Model::getCurrentUserModel();
 		if(!empty($recordId)) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleName);
 			$modelData = $recordModel->getData();
@@ -49,9 +50,18 @@ class Users_Save_Action extends Vtiger_Save_Action {
 				continue;
 			}
 			$fieldValue = $request->get($fieldName, null);
-			if ($fieldName === 'is_admin' && !$fieldValue) {
+
+			if ($fieldName === 'is_admin') {
+                            if (!$currentUserModel->isAdminUser() && (!$fieldValue)) {
 				$fieldValue = 'off';
-			}
+                            } else if ($currentUserModel->isAdminUser() && ($fieldValue || $fieldValue === 'on')) {
+                                $fieldValue = 'on';
+                                $recordModel->set('is_owner', 1);
+                            } else {
+                                $fieldValue = 'off';
+                                $recordModel->set('is_owner', 0);
+                            }
+                        }
 			if($fieldValue !== null) {
 				if(!is_array($fieldValue)) {
 					$fieldValue = trim($fieldValue);

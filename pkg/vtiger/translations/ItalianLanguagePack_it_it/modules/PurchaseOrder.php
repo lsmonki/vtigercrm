@@ -22,5 +22,7 @@ $languageStrings = array(
 	'Sales Commission'             => 'Commissioni Vendita'         , 
 	'LBL_PAID'                     => 'Paid'                        , // TODO: Review
 	'LBL_BALANCE'                  => 'Balance'                     , // TODO: Review
-	'Received Shipment'            => 'Spedizione Ricevuta'         , 
+	'Received Shipment'            => 'Spedizione Ricevuta'         ,
+        'LBL_LIST_PRICE'               => 'Prezzo di listino',
+        'List Price'                   => 'Prezzo di listino',
 );

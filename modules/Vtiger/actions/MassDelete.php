@@ -38,8 +38,14 @@ class Vtiger_MassDelete_Action extends Vtiger_Mass_Action {
 			if(Users_Privileges_Model::isPermitted($moduleName, 'Delete', $recordId)) {
 				$recordModel = Vtiger_Record_Model::getInstanceById($recordId, $moduleModel);
 				$recordModel->delete();
-			}
+			}else{ 
+                            $permission =   'No'; 
+                        } 
 		}
+                
+                if($permission==='No'){ 
+                    throw new AppException(vtranslate('LBL_PERMISSION_DENIED'));  
+                } 
 
 		$cvId = $request->get('viewname');
 		$response = new Vtiger_Response();

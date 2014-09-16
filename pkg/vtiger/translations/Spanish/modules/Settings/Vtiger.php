@@ -12,10 +12,12 @@
  *  Version      : 6.0.0
  *  Created Date : 2012-10-26
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-11-10
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
+	'LBL_INTEGRATION' => 'Integración',
+	'LBL_PBXMANAGER' => 'PBXManager',
 	'Settings'                     => 'Configuración',
 	'LBL_SEARCH_SETTINGS_PLACEHOLDER' => 'Configuración Búsqueda',
 	'LBL_SUMMARY' => 'Resumen',
@@ -34,7 +36,7 @@ $languageStrings = array(
 	'LBL_MODULE_MANAGER'           => 'Administración Módulos',
 	'LBL_NOTIFICATIONS'            => 'Notificaciones',
 	'LBL_EXTERNAL_SERVER_SETTINGS' => 'Configuración Servidor Externo',
-	'LBL_OTHER_SETTINGS'           => 'Otras Configuraciones Adicional',
+	'LBL_OTHER_SETTINGS'           => 'Configuración Adicional',
 	'LBL_EXTENSIONS_PLACE' => 'Tienda Extensiones',
 	'LBL_EXTENSIONS' => 'Extensiones',
 
@@ -64,6 +66,7 @@ $languageStrings = array(
 	'LBL_PICKLIST_DEPENDENCY_DESCRIPTION' => 'Establece Dependencias entre los elementos de las listas desplegables en cada módulo',
 	'LBL_MENU_EDITOR'              => 'Editor de Menú',
 	'LBL_MENU_DESC'                => 'Personalizar secuencia de menú',
+	'LBL_MENU_EDITOR_MESSAGE'		=>'El número real de elementos de menú que aparecen dependerá del tamaño de la pantalla y podría ser inferior a los elementos seleccionados.',
 
 	'EMAILTEMPLATES'               => 'Plantillas de Email',
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION' => 'Administrar Plantillas de Email',
@@ -77,6 +80,7 @@ $languageStrings = array(
 	'LBL_MAIL_SERVER_DESCRIPTION'  => 'Editar la configuración del servidor de correo saliente',
 	'INVENTORYTERMSANDCONDITIONS'  => 'Inventario: Condiciones Generales',
 	'LBL_INV_TANDC_DESCRIPTION'    => 'Gestionar los textos de las condiciones generales en presupuesto, orden de venta y facturas.',
+    'LBL_ANNOUNCEMENT'             => 'Anuncio',
 	'LBL_ANNOUNCEMENT_DESCRIPTION' => 'Configurar Anuncio Empresarial',
 	'LBL_CURRENCY_SETTINGS'        => 'Monedas',
 	'LBL_CURRENCY_DESCRIPTION'     => 'Gestionar monedas y valores de cambio monetario',
@@ -148,11 +152,8 @@ $languageStrings = array(
 	'LBL_OUTGOING_SERVER' => 'Servidor de Correo Saliente',
 	'LBL_OUTGOING_SERVER_DESC' => 'Configurar Servidor de Correo Saliente',
 	'LBL_DEFAULT'=>'Por defecto, el servidor de correo saliente SMTP es od1.vtiger.com. Para evitar problemas, recomendamos que utilices una de estas opciones.',
-	'LBL_OPTIONS1'=>'Enviar emails desde tu servidor de correo<br>
-     				- Introducir la configuración (Servidor, Usuario, Contraseña) de la misma cuenta de correo utilizada en la cuenta de respuesta.',
-	'LBL_OPTIONS2'=>"Añadir el servidor od1.vtiger.com como dominio autorizado desde tu dominio.<br>
-     				- Si prefieres mantener el servidor saliente de vtiger, recomendamos que configures el registro SPF de tu dominio para incluir el servidor de vtiger como servidor autorizado.
-     				  Para obtener instrucciones adicionales sobre cómo definir un registro SPF, contact con od-support@vtiger.com .",
+	'LBL_OPTIONS1'=>'',
+	'LBL_OPTIONS2'=>"",
 	'LBL_MAIL_SERVER_SMTP'=>'Servidor de Correo (SMTP)',
 	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTA: Si el campo "Email de" se deja en blanco se utilizará la cuenta de correo del usuario.',
 	'LBL_TESTMAILSTATUS'=>'Estado del Correo de Verificación : ',
@@ -213,13 +214,13 @@ $languageStrings = array(
     'LBL_ACTIVE' => 'Activo',
     'LBL_INACTIVE' => 'Inactivo',
 
-    //show last scan in workflows and mailconverter
-    'LBL_DISABLED' => 'Deshabilitado',
-    'LBL_RUNNING' => 'En ejecución',
-    'LBL_LAST_SCAN_TIMED_OUT' => 'Tiempo agotado en última revisión',
-    'LBL_LAST_SCAN_AT' => 'Ultima revisión @ ',
-    'LBL_TIME_TAKEN' => ' tiempo invertido ',
-    'LBL_SHORT_SECONDS' => 'seg',
+        //show last scan in workflows and mailconverter
+        'LBL_DISABLED' => 'Deshabilitado',
+        'LBL_RUNNING' => 'En ejecución',
+        'LBL_LAST_SCAN_TIMED_OUT' => 'Tiempo agotado en última revisión',
+        'LBL_LAST_SCAN_AT' => 'Ultima revisión @ ',
+        'LBL_TIME_TAKEN' => ' tiempo invertido ',
+        'LBL_SHORT_SECONDS' => 'seg',
 
 	//Email Templates
 	'EmailTemplate' => 'Plantilla de Email',

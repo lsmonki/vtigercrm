@@ -48,6 +48,12 @@ class Zend_Gdata_Contacts_ListEntry extends Zend_Gdata_Entry
 	protected $_notes = null;
 	protected $_organization = null;
 	protected $_phones = null;
+        protected $_pobox=null; 
+        protected $_country=null; 
+        protected $_postcode=null; 
+        protected $_city=null; 
+        protected $_region=null; 
+        protected $_street=null; 
 
 	public function __construct($element = null) {
         $this->registerAllNamespaces(Zend_Gdata_Contacts::$namespaces);
@@ -326,4 +332,113 @@ class Zend_Gdata_Contacts_ListEntry extends Zend_Gdata_Entry
     public function getByCategory($name,$caseSensitive = true) {
 		$this->_categories;
 	}
+        
+     /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getCity() {
+        return $this->_city;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setCity($values) {
+        $this->_city = $values;
+        return $this;
+    }
+
+    /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getPobox() {
+        return $this->_pobox;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setPobox($values) {
+        $this->_pobox = $values;
+        return $this;
+    }
+
+    /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getCountry() {
+        return $this->_country;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setCountry($values) {
+        $this->_country = $values;
+        return $this;
+    }
+
+    /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getPostcode() {
+        return $this->_postcode;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setPostcode($values) {
+        $this->_postcode = $values;
+        return $this;
+    }
+
+    /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getRegion() {
+        return $this->_region;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setRegion($values) {
+        $this->_region = $values;
+        return $this;
+    }
+
+    /**
+     * Retrieves a list of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     *
+     * @todo return primary first, if any
+     * @return List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item.
+     */
+    public function getStreet() {
+        return $this->_street;
+    }
+
+    /**
+     * @param mixed $value List of Zend_Gdata_Contacts_Extension_StructuredPostalAddress item
+     */
+    public function setStreet($values) {
+        $this->_street = $values;
+        return $this;
+    }
+
 }

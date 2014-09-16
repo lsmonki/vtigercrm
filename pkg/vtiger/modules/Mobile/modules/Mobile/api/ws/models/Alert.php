@@ -8,28 +8,28 @@
  * All Rights Reserved.
  ************************************************************************************/
 abstract class Mobile_WS_AlertModel {
-
+	
 	var $alertid;    // Unique id refering the instance
 	var $name;       // Name of the alert - should be unique to make it easy on client side
-	var $moduleName; // If alert is targeting module record count, this should be set along with $recordsLinked
+	var $moduleName; // If alert is targeting module record count, this should be set along with $recordsLinked 
 	var $refreshRate;// Recommended lookup rate in SECONDS
 	var $description;// Describe the purpose of alert to client
 	var $recordsLinked;// TRUE if message is based on records of module, FALSE otherwise
-
+	
 	protected $user;
-
+	
 	function __construct() {
 		$this->recordsLinked = true;
 	}
-
+	
 	function setUser($userInstance) {
 		$this->user = $userInstance;
 	}
-
+	
 	function getUser() {
 		return $this->user;
 	}
-
+	
 	function serializeToSend() {
 		$category = $this->moduleName;
 		if (empty($category)) {
@@ -44,34 +44,34 @@ abstract class Mobile_WS_AlertModel {
 			'recordsLinked'=> $this->recordsLinked
 		);
 	}
-
+	
  	abstract function query();
 	abstract function queryParameters();
-
+	
 	function message() {
 		return (string) $this->executeCount();
 	}
-
+	
 	/*function execute() {
 		global $adb;
 		$result = $adb->pquery($this->query(), $this->queryParameters());
 		return $result;
 	}*/
-
+	
 	function executeCount() {
 		global $adb;
 		$result = $adb->pquery($this->countQuery(), $this->queryParameters());
 		return $adb->query_result($result, 0, 'count');
 	}
-
-	// Function provided to enable sub-classes to over-ride in case required
+	
+	// Function provided to enable sub-classes to over-ride in case required 
 	protected function countQuery() {
 		return Vtiger_Functions::mkCountQuery($this->query());
 	}
-
+	
 	static function models() {
 		global $adb;
-
+		
 		$models = array();
 		$handlerResult = $adb->pquery("SELECT * FROM vtiger_mobile_alerts WHERE deleted = 0", array());
 		if ($adb->num_rows($handlerResult)) {
@@ -82,13 +82,13 @@ abstract class Mobile_WS_AlertModel {
 					include_once $handlerPath;
 					$alertModel = new $handlerRow['handler_class'];
 					$alertModel->alertid = $handlerRow['id'];
-					$models[] = $alertModel;
+					$models[] = $alertModel; 
 				}
 			}
 		}
 		return $models;
 	}
-
+	
 	static function modelWithId($alertid) {
 		$models = self::models();
 		foreach($models as $model) {

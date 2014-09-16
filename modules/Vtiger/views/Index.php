@@ -22,7 +22,7 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 	public function preProcess (Vtiger_Request $request, $display=true) {
 		parent::preProcess($request, false);
 
-		$viewer = $this->getViewer($request);
+                $viewer = $this->getViewer($request);
 
 		$moduleName = $request->getModule();
 		if(!empty($moduleName)) {
@@ -93,4 +93,8 @@ class Vtiger_Index_View extends Vtiger_Basic_View {
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
 	}
+        
+        public function validateRequest(Vtiger_Request $request) { 
+            $request->validateReadAccess(); 
+        } 
 }

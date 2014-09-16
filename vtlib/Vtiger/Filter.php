@@ -65,7 +65,7 @@ class Vtiger_Filter {
 		$this->isdefault = ($this->isdefault===true||$this->isdefault=='true')?1:0;
 		$this->inmetrics = ($this->inmetrics===true||$this->inmetrics=='true')?1:0;
 
-		$adb->pquery("INSERT INTO vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) VALUES(?,?,?,?,?)",
+		$adb->pquery("INSERT INTO vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) VALUES(?,?,?,?,?)", 
 			Array($this->id, $this->name, $this->isdefault, $this->inmetrics, $this->module->name));
 
 		self::log("Creating Filter $this->name ... DONE");
@@ -79,7 +79,7 @@ class Vtiger_Filter {
 			self::log("Setting Filter $this->name to status [$this->status] ... DONE");
 		}
 		// END
-
+		
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Vtiger_Filter {
 
 		$cvcolvalue = $this->__getColumnValue($fieldInstance);
 
-		$adb->pquery("UPDATE vtiger_cvcolumnlist SET columnindex=columnindex+1 WHERE cvid=? AND columnindex>=? ORDER BY columnindex DESC",
+		$adb->pquery("UPDATE vtiger_cvcolumnlist SET columnindex=columnindex+1 WHERE cvid=? AND columnindex>=? ORDER BY columnindex DESC", 
 			Array($this->id, $index));
 		$adb->pquery("INSERT INTO vtiger_cvcolumnlist(cvid,columnindex,columnname) VALUES(?,?,?)", Array($this->id, $index, $cvcolvalue));
 
@@ -153,7 +153,7 @@ class Vtiger_Filter {
 	/**
 	 * Add rule to this filter instance
 	 * @param Vtiger_Field Instance of the field
-	 * @param String One of [EQUALS, NOT_EQUALS, STARTS_WITH, ENDS_WITH, CONTAINS, DOES_NOT_CONTAINS, LESS_THAN,
+	 * @param String One of [EQUALS, NOT_EQUALS, STARTS_WITH, ENDS_WITH, CONTAINS, DOES_NOT_CONTAINS, LESS_THAN, 
 	 *                       GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL]
 	 * @param String Value to use for comparision
 	 * @param Integer Index count to use
@@ -167,12 +167,12 @@ class Vtiger_Filter {
 		$cvcolvalue = $this->__getColumnValue($fieldInstance);
 
 		$adb->pquery("UPDATE vtiger_cvadvfilter set columnindex=columnindex+1 WHERE cvid=? AND columnindex>=? ORDER BY columnindex DESC",
-			Array($this->id, $index));
+			Array($this->id, $index));		
 		$adb->pquery("INSERT INTO vtiger_cvadvfilter(cvid, columnindex, columnname, comparator, value, groupid, column_condition) VALUES(?,?,?,?,?,?,?)",
 			Array($this->id, $index, $cvcolvalue, $comparator, $comparevalue, $group, $condition));
 
 		Vtiger_Utils::Log("Adding Condition " . self::translateComparator($comparator,true) ." on $fieldInstance->name of $this->name filter ... DONE");
-
+		
 		return $this;
 	}
 
@@ -257,7 +257,7 @@ class Vtiger_Filter {
 
 		$query = "SELECT * FROM vtiger_customview WHERE entitytype=?";
 		$queryParams = Array($moduleInstance->name);
-
+		
 		$result = $adb->pquery($query, $queryParams);
 		for($index = 0; $index < $adb->num_rows($result); ++$index) {
 			$instance = new self();

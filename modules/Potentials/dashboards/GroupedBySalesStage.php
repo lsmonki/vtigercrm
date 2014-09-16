@@ -10,24 +10,6 @@
 
 class Potentials_GroupedBySalesStage_Dashboard extends Vtiger_IndexAjax_View {
 
-
-	/**
-	 * Function to get the list of Script models to be included
-	 * @param Vtiger_Request $request
-	 * @return <Array> - List of Vtiger_JsScript_Model instances
-	 */
-	function getHeaderScripts(Vtiger_Request $request) {
-
-		$jsFileNames = array(
-			'~/libraries/jquery/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js',
-			'~/libraries/jquery/jqplot/plugins/jqplot.funnelRenderer.min.js'
-		);
-
-		$headerScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
-		return $headerScriptInstances;
-	}
-
 	/**
 	 * Retrieves css styles that need to loaded in the page
 	 * @param Vtiger_Request $request - request model
@@ -40,7 +22,32 @@ class Potentials_GroupedBySalesStage_Dashboard extends Vtiger_IndexAjax_View {
 		$headerCssScriptInstances = $this->checkAndConvertCssStyles($cssFileNames);
 		return $headerCssScriptInstances;
 	}
-
+    
+    function getSearchParams($stage,$assignedto,$dates) {
+        $listSearchParams = array();
+        $conditions = array();
+        array_push($conditions,array("sales_stage","e",$stage));
+        if($assignedto == ''){
+            $currenUserModel = Users_Record_Model::getCurrentUserModel();
+			$assignedto = $currenUserModel->getId();
+        }
+        if($assignedto != 'all'){
+            $ownerType = vtws_getOwnerType($assignedto);
+            if($ownerType == 'Users')
+                array_push($conditions,array("assigned_user_id","e",getUserFullName($assignedto)));
+            else{
+                $groupName = getGroupName($assignedto);
+                $groupName = $groupName[0];
+                array_push($conditions,array("assigned_user_id","e",$groupName));
+            }
+        } 
+        if(!empty($dates)) {
+            array_push($conditions,array("closingdate","bw",$dates['start'].','.$dates['end']));
+        }
+        $listSearchParams[] = $conditions;
+        return '&search_params='. json_encode($listSearchParams);
+    }
+    
 	public function process(Vtiger_Request $request) {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$viewer = $this->getViewer($request);
@@ -58,7 +65,11 @@ class Potentials_GroupedBySalesStage_Dashboard extends Vtiger_IndexAjax_View {
 		
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 		$data = $moduleModel->getPotentialsCountBySalesStage($owner, $dates);
-
+        $listViewUrl = $moduleModel->getListViewUrl();
+        for($i = 0;$i<count($data);$i++){
+            $data[$i][] = $listViewUrl.$this->getSearchParams($data[$i][0],$owner,$dates);
+        }
+        
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 
 		$viewer->assign('WIDGET', $widget);
@@ -66,7 +77,6 @@ class Potentials_GroupedBySalesStage_Dashboard extends Vtiger_IndexAjax_View {
 		$viewer->assign('DATA', $data);
 
 		//Include special script and css needed for this widget
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
 		$viewer->assign('STYLES',$this->getHeaderCss($request));
 		$viewer->assign('CURRENTUSER', $currentUser);
 

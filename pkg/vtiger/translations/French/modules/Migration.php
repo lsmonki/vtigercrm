@@ -6,24 +6,21 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Translated by ABOnline solutions - http://www.abo-s.com/
- * Boris CLEMENT
- * December 2013     
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_VTIGER_MIGRATION' => 'Bienvenue dans l\'assistant de migration Vtiger',
-	'LBL_MIGRATION_COMPLETED' => 'Migration terminé',
-	'LBL_MIGRATION_WIZARD' => 'Assistant de migration',
-	'LBL_PRIDE_BEING_ASSOCIATED' => 'Merci d\'avoir choisi vtiger 6.',
-	'LBL_TALK_TO_US_AT_FORUMS' => 'Des questions? de l\'aide sur le <a href="http://forums.vtiger.com" target="_blank">forum Vtiger</a><br>',
-	'LBL_DISCUSS_WITH_US_AT_BLOGS' => 'Suivez l\'actulaité Vtiger sur le <a href="http://blogs.vtiger.com" target="_blank">Blog</a> (en anglais)',
-	'LBL_CRM_DOCUMENTATION' => 'Aide Vtiger 6 (en anglais^) - <a href="http://wiki.vtiger.com/vtiger6" target="_blank">Documentation</a> , <a href="http://www.youtube.com/vtiger" target="_blank">Videos</a> <BR>',
-	'LBL_THANKS' => 'Merci d\'utiliser <b>vtiger CRM</b>',
-	'LBL_WE_AIM_TO_BE_BEST' => 'We aim to be - simply the best',
-	'LBL_SPACE_FOR_YOU' => 'Come on over, there is space for you too!',
-	'LBL_MIGRATION_COMPLETED_SUCCESSFULLY' => 'Votre migration vers vtiger 6 est terminée. Traduction française par <a href="http://www.abo-s.com" target="_blank">ABOnline solutions</a>',
-	'LBL_RELEASE_NOTES' => 'Pour connaitre les nouveautés, Lisez les <a href="#" target="_blank">Release Notes</a> <br>',
-	'LBL_WAIT' => 'Veuillez patienter ...',
+	'LBL_VTIGER_MIGRATION' => 'Bienvenue à la migration Vtiger',
+	'LBL_MIGRATION_COMPLETED' => 'Migration Terminé',
+	'LBL_MIGRATION_WIZARD' => 'Assistant Migration',
+	'LBL_PRIDE_BEING_ASSOCIATED' => 'Nous sommes fiers dêtre associés avec vous.',
+	'LBL_TALK_TO_US_AT_FORUMS' => 'Vous avez des questions? Trouver de laide sur Vtiger <a href="http://forums.vtiger.com" target="_blank"> Discussions </a><br>',
+	'LBL_DISCUSS_WITH_US_AT_BLOGS' => 'Pour en savoir plus sur Vtiger nous suivre notre <a href="http://blogs.vtiger.com" target="_blank">Blog</a>',
+	'LBL_CRM_DOCUMENTATION' => 'Aide Vtiger6 - <a href="http://wiki.vtiger.com/vtiger6" target="_blank">Documentaion</a> , <a href="http://www.youtube.com/vtiger" target="_blank">Vidéos</a> <BR>',
+	'LBL_THANKS' => 'Merci pour laide<b>vtiger CRM</b>',
+	'LBL_WE_AIM_TO_BE_BEST' => 'Nous visons à être - tout simplement le meilleur',
+	'LBL_SPACE_FOR_YOU' => 'Allons plus, il ya un espace pour vous aussi!',
+	'LBL_MIGRATION_COMPLETED_SUCCESSFULLY' => 'La migration de votre vtiger6 réussi.',
+	'LBL_RELEASE_NOTES' => 'Pour savoir ce qui est nouveau dans cette version, sil vous plaît lire<a href="#" target="_blank">Notes de mise à</a> <br>',
+	'LBL_WAIT' => 'Sil vous plaît patienter ...',
 	'LBL_INPROGRESS' => 'Migration en cours',
-	'LBL_DATABASE_CHANGE_LOG' => 'Migration : Database Changes Log',
+	'LBL_DATABASE_CHANGE_LOG' => 'Migration: Base de données Changements Connexion',
 );

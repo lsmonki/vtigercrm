@@ -166,7 +166,7 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 	 * @param <Boolean> $skipRecords - List of the RecordIds to be skipped
 	 * @return <Array> List of RecordsIds
 	 */
-	public function getRecordIds($skipRecords=false, $module) {
+	public function getRecordIds($skipRecords=false, $module= false) {
 		$db = PearDatabase::getInstance();
 		$cvId = $this->getId();
 		$moduleModel = $this->getModule();
@@ -183,6 +183,13 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		if(!empty($searchValue)) {
 			$queryGenerator->addUserSearchConditions(array('search_field' => $searchKey, 'search_text' => $searchValue, 'operator' => $operator));
 		}
+        
+        $searchParams = $this->get('search_params');
+        if(empty($searchParams)) {
+            $searchParams = array();
+        }
+        $transformedSearchParams = Vtiger_Util_Helper::transferListSearchParamsToFilterCondition($searchParams, $moduleModel);
+        $queryGenerator->parseAdvFilterList($transformedSearchParams);
 
 		$listQuery = $queryGenerator->getQuery();
 		if($module == 'RecycleBin'){
@@ -322,10 +329,19 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 					$columnInfo = explode(":",$advFilterColumn);
 					$fieldName = $columnInfo[2];
 					$fieldModel = $moduleModel->getField($fieldName);
+                    //Required if Events module fields are selected for the condition
+                     if(!$fieldModel) {
+                        $modulename = $moduleModel->get('name');
+                        if($modulename == 'Calendar') {
+                            $eventModuleModel = Vtiger_Module_model::getInstance('Events');
+                            $fieldModel  = $eventModuleModel->getField($fieldName);
+                        }
+                    }
 					$fieldType = $fieldModel->getFieldDataType();
 
 					if($fieldType == 'currency') {
-						if($fieldModel->get('uitype') == '71') {
+						if($fieldModel->get('uitype') == '72') {
+                            // Some of the currency fields like Unit Price, Totoal , Sub-total - doesn't need currency conversion during save
 							$advFitlerValue = CurrencyField::convertToDBFormat($advFitlerValue, null, true);
 						} else {
 							$advFitlerValue = CurrencyField::convertToDBFormat($advFitlerValue);
@@ -390,7 +406,10 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		$db->pquery('DELETE FROM vtiger_cvstdfilter WHERE cvid = ?', array($cvId));
 		$db->pquery('DELETE FROM vtiger_cvadvfilter WHERE cvid = ?', array($cvId));
 		$db->pquery('DELETE FROM vtiger_cvadvfilter_grouping WHERE cvid = ?', array($cvId));
-	}
+                
+		// To Delete the mini list widget associated with the filter 
+        $db->pquery('DELETE FROM vtiger_module_dashboard_widgets WHERE filterid = ?', array($cvId));               
+    }
 
 	/**
 	 * Function to get the list of selected fields for the current custom view
@@ -503,6 +522,14 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 					$val = Array();
 					for ($x = 0; $x < count($temp_val); $x++) {
 						if ($col[4] == 'D') {
+                            /** while inserting in db for due_date it was taking date and time values also as it is 
+                            * date time field. We only need to take date from that value
+                            */
+							if($col[0] == 'vtiger_activity' && $col[1] == 'due_date'){
+                                $originalValue = $temp_val[$x];
+								$dateTime = explode(' ',$originalValue);
+								$temp_val[$x] = $dateTime[0];
+                            }
 							$date = new DateTimeField(trim($temp_val[$x]));
 							$val[$x] = $date->getDisplayDate();
 						} elseif ($col[4] == 'DT') {
@@ -876,6 +903,9 @@ class CustomView_Record_Model extends Vtiger_Base_Model {
 		for ($i=0; $i<$noOfCVs; ++$i) {
 			$row = $db->query_result_rowdata($result, $i);
 			$customView = new self();
+            if(strlen(decode_html($row['viewname'])) > 40) {
+                $row['viewname'] = substr(decode_html($row['viewname']), 0, 36).'...';
+            }
 			$customViews[] = $customView->setData($row)->setModule($row['entitytype']);
 		}
 		return $customViews;

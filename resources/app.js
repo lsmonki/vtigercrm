@@ -515,7 +515,7 @@ var app = {
                     element.DatePickerHide();
                     element.blur();
                 }
-				element.val(formated).trigger('change');
+				element.val(formated).trigger('change').focusout();
 			}
 		}
 		if(typeof customParams != 'undefined'){
@@ -677,23 +677,6 @@ var app = {
 
 
 	initGuiders: function (list) {
-		if (list) {
-			for (var index=0, len=list.length; index < len; ++index) {
-				var guiderData = list[index];
-				guiderData['id'] = ""+index;
-				guiderData['overlay'] = true;
-				guiderData['highlight'] = true;
-				guiderData['xButton'] = true;
-				if (index < len-1) {
-					guiderData['buttons'] = [{name: 'Next'}];
-					guiderData['next'] = ""+(index+1);
-
-				}
-				guiders.createGuider(guiderData);
-			}
-			// TODO auto-trigger the guider.
-			guiders.show('0');
-		}
 	},
 
 	showScrollBar : function(element, options) {
@@ -746,11 +729,8 @@ var app = {
 	 * Function which will set the contents height to window height
 	 */
 	setContentsHeight : function() {
-		var bodyContentsElement = app.getContentsContainer();
-		var borderTopWidth = parseInt(bodyContentsElement.css('borderTopWidth'));
-		var borderBottomWidth = parseInt(bodyContentsElement.css('borderBottomWidth'));
-		//Height should not include padding, margins and borders width. So reducing those values
-		bodyContentsElement.css('min-height',(jQuery(window).height()- (borderTopWidth + borderBottomWidth)));
+		var borderTopWidth = parseInt(jQuery(".mainContainer").css('margin-top'))+21; // (footer height 21px)
+		jQuery('.bodyContents').css('min-height',(jQuery(window).innerHeight()-borderTopWidth));
 	},
 
 	/**
@@ -906,7 +886,39 @@ var app = {
                 jQuery(rowType).val(serverWidth);
             });
         }
-    }
+    },
+	
+	getCookie : function(c_name) {
+		var c_value = document.cookie;
+		var c_start = c_value.indexOf(" " + c_name + "=");
+		if (c_start == -1)
+		  {
+		  c_start = c_value.indexOf(c_name + "=");
+		  }
+		if (c_start == -1)
+		  {
+		  c_value = null;
+		  }
+		else
+		  {
+		  c_start = c_value.indexOf("=", c_start) + 1;
+		  var c_end = c_value.indexOf(";", c_start);
+		  if (c_end == -1)
+			{
+			c_end = c_value.length;
+			}
+		  c_value = unescape(c_value.substring(c_start,c_end));
+		  }
+		return c_value;
+	},
+
+	setCookie : function(c_name,value,exdays) {
+		var exdate=new Date();
+		exdate.setDate(exdate.getDate() + exdays);
+		var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+		document.cookie=c_name + "=" + c_value;
+	}
+	
 }
 
 jQuery(document).ready(function(){
@@ -929,6 +941,11 @@ jQuery(document).ready(function(){
 		return  value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
 	}
 
+    // in IE resize option for textarea is not there, so we have to use .resizable() api
+    if(jQuery.browser.msie || (/Trident/).test(navigator.userAgent)) {
+        jQuery('textarea').resizable();
+    }
+    
 	// Instantiate Page Controller
 	var pageController = app.getPageController();
 	if(pageController) pageController.registerEvents();

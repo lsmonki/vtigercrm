@@ -12,30 +12,36 @@
 {strip}
 <input type='hidden' id='pageNumber' value="{$PAGE_NUMBER}">
 <input type='hidden' id='pageLimit' value="{$PAGING_MODEL->getPageLimit()}">
-<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTIRES_COUNT}">
+<input type="hidden" id="noOfEntries" value="{$LISTVIEW_ENTRIES_COUNT}">
 <input type="hidden" id="pageStartRange" value="{$PAGING_MODEL->getRecordStartRange()}" />
 <input type="hidden" id="pageEndRange" value="{$PAGING_MODEL->getRecordEndRange()}" />
 <input type="hidden" id="previousPageExist" value="{$PAGING_MODEL->isPrevPageExists()}" />
 <input type="hidden" id="nextPageExist" value="{$PAGING_MODEL->isNextPageExists()}" />
 <input type="hidden" id="totalCount" value="{$LISTVIEW_COUNT}" />
-<div class="popupEntriesDiv">
+<div class="contents-topscroll">
+    <div class="topscroll-div">
+        &nbsp;
+    </div>
+</div>
+<div class="popupEntriesDiv relatedContents contents-bottomscroll">
 	<input type="hidden" value="{$ORDER_BY}" id="orderBy">
 	<input type="hidden" value="{$SORT_ORDER}" id="sortOrder">
 	{if $SOURCE_MODULE eq "Emails"}
 		<input type="hidden" value="Vtiger_EmailsRelatedModule_Popup_Js" id="popUpClassName"/>
 	{/if}
 	{assign var=WIDTHTYPE value=$CURRENT_USER_MODEL->get('rowheight')}
+<div class="bottomscroll-div">
 	<table class="table table-bordered listViewEntriesTable">
 		<thead>
 			<tr class="listViewHeaders">
 				{if $MULTI_SELECT}
-				<td class="{$WIDTHTYPE}">
+				<th class="{$WIDTHTYPE}">
 					<input type="checkbox"  class="selectAllInCurrentPage" />
-				</td>
+				</th>
 				{/if}
 				{foreach item=LISTVIEW_HEADER from=$LISTVIEW_HEADERS}
 				<th class="{$WIDTHTYPE}">
-					<a href="javascript:void(0);" class="listViewHeaderValues" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
+					<a href="javascript:void(0);" class="listViewHeaderValues {if $LISTVIEW_HEADER->get('name') eq 'listprice'} noSorting {/if}" data-nextsortorderval="{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}{$NEXT_SORT_ORDER}{else}ASC{/if}" data-columnname="{$LISTVIEW_HEADER->get('column')}">{vtranslate($LISTVIEW_HEADER->get('label'), $MODULE)}
 						{if $ORDER_BY eq $LISTVIEW_HEADER->get('column')}<img class="sortImage" src="{vimage_path( $SORT_IMAGE, $MODULE)}">{else}<img class="hide sortingImage" src="{vimage_path( 'downArrowSmall.png', $MODULE)}">{/if}</a>
 				</th>
 				{/foreach}
@@ -61,6 +67,8 @@
 					{else}
 						{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 					{/if}
+				{else if $LISTVIEW_HEADERNAME eq 'listprice'}
+					{CurrencyField::convertToUserFormat($LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME), null, true, true)}
 				{else}
 					{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 				{/if}
@@ -69,11 +77,12 @@
 		</tr>
 		{/foreach}
 	</table>
+</div>
 
 	<!--added this div for Temporarily -->
-{if $LISTVIEW_ENTIRES_COUNT eq '0'}
+{if $LISTVIEW_ENTRIES_COUNT eq '0'}
 	<div class="row-fluid">
-		<div class="emptyRecordsDiv">{vtranslate('LBL_NO', $MODULE)} {vtranslate($MODULE, $MODULE)} {vtranslate('LBL_FOUND', $MODULE)}.</div>
+		<div class="emptyRecordsDiv">{vtranslate('LBL_NO', $MODULE)} {vtranslate($RELATED_MODULE, $RELATED_MODULE)} {vtranslate('LBL_FOUND', $MODULE)}.</div>
 	</div>
 {/if}
 </div>

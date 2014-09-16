@@ -55,13 +55,8 @@ jQuery.Class("Vtiger_CkEditor_Js",{},{
 		this.setElement(element);
 		var instance = this.getCkEditorInstanceFromName();
 		var elementName = this.getElementId();
-		var vtiger_ckeditor_toolbar = this.defaultVtigerCkEditorToolBar();
-		var config = {
-			fullPage : true,
-			extraPlugins : 'docprops',
-			toolbar : vtiger_ckeditor_toolbar
-		}
-		
+		var config = {}
+        
 		if(typeof customConfig != 'undefined'){
 			var config = jQuery.extend(config,customConfig);
 		}
@@ -70,33 +65,9 @@ jQuery.Class("Vtiger_CkEditor_Js",{},{
 			CKEDITOR.remove(instance);
 		}
 		
-		config.filebrowserBrowseUrl = 'kcfinder/browse.php?type=images';
-		config.filebrowserUploadUrl = 'kcfinder/upload.php?type=images';
 		
+    
 		CKEDITOR.replace( elementName,config);
-	},
-	
-	/*
-	 * Function to retunr default ckeditor toolbar
-	 */
-	defaultVtigerCkEditorToolBar : function(){
-		
-		//configured ckeditor toolbar for vtiger
-		var Vtiger_ckeditor_toolbar = 
-		[
-			['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-			['NumberedList','BulletedList','-','Outdent','Indent'],
-			['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-			['Link','Unlink','Anchor'],
-			['Source','-','NewPage','Preview','Templates'],
-			'/',
-			['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker'],
-			['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-			['Image','Table','HorizontalRule','SpecialChar','PageBreak','TextColor','BGColor'], //,'Smiley','UniversalKey'],
-			'/',
-			['Styles','Format','Font','FontSize']
-		];
-		return Vtiger_ckeditor_toolbar;	
 	},
 	
 	/*

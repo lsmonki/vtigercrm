@@ -36,18 +36,24 @@ class EmailTemplate {
 	}
 
 	public function setDescription($description) {
+        // Because if we have two dollars like this "$$" it's not working because it'll be like escape char
+        $description = preg_replace("/\\$\\$/","$ $",$description);
 		$this->rawDescription = $description;
 		$this->processedDescription = $description;
-		$templateVariablePair = explode('$', $this->rawDescription);
-		$this->templateFields = Array();
-		for ($i = 1; $i < count($templateVariablePair); $i+=2) {
-			list($module, $columnName) = explode('-', $templateVariablePair[$i]);
-			list($parentColumn, $childColumn) = explode(':', $columnName);
-			$this->templateFields[$module][] = $parentColumn;
-			$this->referencedFields[$parentColumn][] = $childColumn;
-			$this->processedmodules[$module] = false;
-		}
-		$this->processed = false;
+        $result = preg_match_all("/\\$(?:[a-zA-Z0-9]+)-(?:[a-zA-Z0-9]+)(?:_[a-zA-Z0-9]+)?(?::[a-zA-Z0-9]+)?(?:_[a-zA-Z0-9]+)?\\$/", $this->rawDescription, $matches);
+        if($result != 0){
+            $templateVariablePair = $matches[0];
+            $this->templateFields = Array();
+            for ($i = 0; $i < count($templateVariablePair); $i++) {
+                $templateVariablePair[$i] = str_replace('$', '', $templateVariablePair[$i]);
+                list($module, $columnName) = explode('-', $templateVariablePair[$i]);
+                list($parentColumn, $childColumn) = explode(':', $columnName);
+                $this->templateFields[$module][] = $parentColumn;
+                $this->referencedFields[$parentColumn][] = $childColumn;
+                $this->processedmodules[$module] = false;
+            }
+            $this->processed = false;
+        }
 	}
 
 	private function getTemplateVariableListForModule($module) {
@@ -198,6 +204,8 @@ class EmailTemplate {
 						$this->processedDescription = str_replace($needle,
 								$values[array_search($column, $fieldColumnMapping)], $this->processedDescription);
 					}
+                    // Is process Description will send false even that module don't have reference record set
+                    $this->processedDescription = preg_replace("/\\$(?:[a-zA-Z0-9]+)-(?:[a-zA-Z0-9]+)(?:_[a-zA-Z0-9]+)?(?::[a-zA-Z0-9]+)(?:[a-zA-Z0-9]+)?(?:_[a-zA-Z0-9]+)?\\$/", '', $this->processedDescription);
 				} else {
 					foreach ($columnList as $column) {
 						$needle = '$' . strtolower($this->module) . '-' . $parentFieldColumnMapping[$params['field']] . ':' . $column . '$';

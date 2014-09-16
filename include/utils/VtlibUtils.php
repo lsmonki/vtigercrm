@@ -111,7 +111,8 @@ function vtlib_isModuleActive($module) {
 	}
 
 	$active = false;
-	if($presence == 0) $active = true;
+	//Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7991
+        if($presence === 0 || $presence==='0') $active = true; 
 
 	return $active;
 }
@@ -361,6 +362,9 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_invoice',
 				'table_index'=> 'invoiceid',
 				'popup_fields'=> Array('subject'),
+                'related_tables'=> Array( 
+					'vtiger_invoicecf' => Array('invoiceid', 'vtiger_invoice', 'invoiceid')
+					),
 			),
 			'HelpDesk'=>
 			Array(
@@ -445,6 +449,15 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_index'=> 'servicecontractsid',
 				'related_tables'=> Array( 
 					'vtiger_servicecontractscf' => Array('servicecontractsid')
+					),
+			),
+            'Assets' => 
+			Array(
+				'IsCustomModule'=>false,
+				'table_name' => 'vtiger_assets',
+				'table_index'=> 'assetsid',
+				'related_tables'=> Array( 
+					'vtiger_assetscf' => Array('assetsid')
 					),
 			)
 		);
@@ -598,6 +611,8 @@ function vtlib_purify($input, $ignore=false) {
 	global $__htmlpurifier_instance, $root_directory, $default_charset;
 
 	static $purified_cache = array();
+    $value = $input;
+    
 	if(!is_array($input)) {
 		$md5OfInput = md5($input); 
 		if (array_key_exists($md5OfInput, $purified_cache)) { 
@@ -609,7 +624,7 @@ function vtlib_purify($input, $ignore=false) {
 	$use_charset = $default_charset;
 	$use_root_directory = $root_directory;
 
-	$value = $input;
+	
 	if(!$ignore) {
 		// Initialize the instance if it has not yet done
 		if($__htmlpurifier_instance == false) {

@@ -76,7 +76,6 @@ jQuery.Class("Settings_Vtiger_OutgoingServer_Js",{},{
 	registerEditViewEvents : function() {
 		var thisInstance = this;
 		var form = jQuery('#OutgoingServerForm');
-		var resetButton = jQuery('.resetButton', form);
 		var cancelLink = jQuery('.cancelLink', form);
 		
 		//register validation engine
@@ -91,20 +90,6 @@ jQuery.Class("Settings_Vtiger_OutgoingServer_Js",{},{
 		
 		form.submit(function(e) {
 			e.preventDefault();
-		})
-		
-		//register click event for resetToDefault Button
-		resetButton.click(function(e) {
-			jQuery('[name="default"]', form).val('true');
-			
-			var message = app.vtranslate('JS_CONFIRM_DEFAULT_SETTINGS');
-			Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
-				function(e) {
-					thisInstance.saveOutgoingDetails(form);
-				},
-				function(error, err){
-				}
-			);
 		})
 		
 		//register click event for cancelLink

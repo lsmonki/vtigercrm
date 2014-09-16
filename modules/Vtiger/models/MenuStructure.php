@@ -13,7 +13,7 @@
  */
 class Vtiger_MenuStructure_Model extends Vtiger_Base_Model {
 
-	protected $limit = 7; // Max. limit of persistent top-menu items to display.
+	protected $limit = 5; // Max. limit of persistent top-menu items to display.
 	protected $enableResponsiveMode = true; // Should the top-menu items be responsive (width) on UI?
 
 	const TOP_MENU_INDEX = 'top';

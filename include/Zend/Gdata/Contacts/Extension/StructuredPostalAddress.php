@@ -22,17 +22,27 @@ require_once 'Zend/Gdata/Contacts/Extension.php';
 
 require_once 'Zend/Gdata/Contacts/Extension/FormattedAddress.php';
 require_once 'Zend/Gdata/Contacts/Extension/Street.php';
+require_once 'Zend/Gdata/Contacts/Extension/Postcode.php';
+require_once 'Zend/Gdata/Contacts/Extension/Region.php';
+require_once 'Zend/Gdata/Contacts/Extension/Country.php';
+require_once 'Zend/Gdata/Contacts/Extension/City.php';
+require_once 'Zend/Gdata/Contacts/Extension/Pobox.php';
 
 class Zend_Gdata_Contacts_Extension_StructuredPostalAddress extends Zend_Gdata_Contacts_Extension {
 	protected $_rootElement = 'structuredPostalAddress';
 	
 	protected $_rel;
-	protected $_formattedAddress, $_street;
+	protected $_formattedAddress, $_street,$_postcode,$_city,$_pobox,$_region,$_country; 
 	
 	public function __construct($value = null, $rel = 'work') {
         parent::__construct();
 		$this->_rel = $rel;
 		$this->_formattedAddress = new Zend_Gdata_Contacts_Extension_FormattedAddress($value);
+                $this->_city = new Zend_Gdata_Contacts_Extension_City($value);
+                $this->_country = new Zend_Gdata_Contacts_Extension_Country($value);
+                $this->_pobox = new Zend_Gdata_Contacts_Extension_Pobox($value);
+                $this->_postcode = new Zend_Gdata_Contacts_Extension_Postcode($value);
+                $this->_region = new Zend_Gdata_Contacts_Extension_Region($value);
     }
 	
 	public function getDOM($doc = null, $majorVersion = 1, $minorVersion = null) {
@@ -43,6 +53,22 @@ class Zend_Gdata_Contacts_Extension_StructuredPostalAddress extends Zend_Gdata_C
 		}
 		if ($this->_street != null) {
 			$element->appendChild($this->_street->getDOM($element->ownerDocument));
+		}
+                if ($this->_postcode != null) {
+                    
+			$element->appendChild($this->_postcode->getDOM($element->ownerDocument));
+		}
+                if ($this->_pobox!= null) {
+			$element->appendChild($this->_pobox->getDOM($element->ownerDocument));
+		}
+                if ($this->_city != null) {
+			$element->appendChild($this->_city->getDOM($element->ownerDocument));
+		}
+                if ($this->_region != null) {
+			$element->appendChild($this->_region->getDOM($element->ownerDocument));
+		}
+                if ($this->_country != null) {
+			$element->appendChild($this->_country->getDOM($element->ownerDocument));
 		}
 		return $element;
 	}
@@ -67,6 +93,31 @@ class Zend_Gdata_Contacts_Extension_StructuredPostalAddress extends Zend_Gdata_C
                 $street = new Zend_Gdata_Contacts_Extension_Street();
                 $street->transferFromDOM($child);
                 $this->_street = $street;
+                break;
+            case $gdNamespacePrefix . 'pobox';
+                $pobox = new Zend_Gdata_Contacts_Extension_Pobox();
+                $pobox->transferFromDOM($child);
+                $this->_pobox = $pobox;
+                break;
+            case $gdNamespacePrefix . 'city';
+                $city = new Zend_Gdata_Contacts_Extension_City();
+                $city->transferFromDOM($child);
+                $this->_city = $city;
+                break;
+            case $gdNamespacePrefix . 'country';
+                $country = new Zend_Gdata_Contacts_Extension_Country();
+                $country->transferFromDOM($child);
+                $this->_country = $country;
+                break;
+            case $gdNamespacePrefix . 'region';
+                $region = new Zend_Gdata_Contacts_Extension_Region();
+                $region->transferFromDOM($child);
+                $this->_region = $region;
+                break;
+            case $gdNamespacePrefix . 'postcode';
+                $postcode = new Zend_Gdata_Contacts_Extension_Postcode();
+                $postcode->transferFromDOM($child);
+                $this->_postcode = $postcode;
                 break;
         }
     }
@@ -98,5 +149,41 @@ class Zend_Gdata_Contacts_Extension_StructuredPostalAddress extends Zend_Gdata_C
 	
 	public function getStreet() {
 		return $this->_street;
+	}
+        
+        public function getPobox() {
+		return $this->_pobox;
+	}
+        public function setCity($value) {
+		$this->_city = $value;
+		return $this;
+	}
+	
+	public function getCity() {
+		return $this->_city;
+	}
+        public function setCountry($value) {
+		$this->_country = $value;
+		return $this;
+	}
+	
+	public function getCountry() {
+		return $this->_country;
+	}
+         public function setRegion($value) {
+		$this->_region = $value;
+		return $this;
+	}
+	
+	public function getRegion() {
+		return $this->_region;
+	}
+         public function setPostCode($value) {
+		$this->_postcode = $value;
+		return $this;
+	}
+	
+	public function getPostCode() {
+		return $this->_postcode;
 	}
 }

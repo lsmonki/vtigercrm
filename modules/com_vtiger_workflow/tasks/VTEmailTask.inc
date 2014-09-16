@@ -11,6 +11,8 @@ require_once('modules/com_vtiger_workflow/VTEntityCache.inc');
 require_once('modules/com_vtiger_workflow/VTWorkflowUtils.php');
 require_once('modules/com_vtiger_workflow/VTEmailRecipientsTemplate.inc');
 require_once('modules/Emails/mail.php');
+require_once('include/simplehtmldom/simple_html_dom.php');
+
 class VTEmailTask extends VTTask{
 	// Sending email takes more time, this should be handled via queue all the time.
 	public $executeImmediately = false;
@@ -58,7 +60,7 @@ class VTEmailTask extends VTTask{
 			);
 			$emailFocus->column_fields = $emailFieldValues;
 			$emailFocus->save($moduleName);
-	
+
 
 			//Including email tracking details
 			global $site_URL, $application_unique_key;
@@ -81,9 +83,8 @@ class VTEmailTask extends VTTask{
 			}
 		}
 		$util->revertUser();
-        
-	}
 
+	}
 
 	/**
 	 * Function to get contents of this task
@@ -95,7 +96,7 @@ class VTEmailTask extends VTTask{
 			global $adb, $current_user;
 			$taskContents = array();
 			$entityId = $entity->getId();
-            
+
             $utils = new VTWorkflowUtils();
             $adminUser = $utils->adminUser();
 			if (!$entityCache) {
@@ -118,8 +119,12 @@ class VTEmailTask extends VTTask{
 				$et = new VTEmailRecipientsTemplate($this->fromEmail);
 				$fromEmailDetails = $et->render($entityCache, $entityId);
 
-				list($fromName, $fromEmail) = explode('&lt;', $fromEmailDetails);
-				list($fromEmail, $rest) = explode('&gt;', $fromEmail);
+				if(strpos($this->fromEmail, '&lt;') && strpos($this->fromEmail, '&gt;')) {
+					list($fromName, $fromEmail) = explode('&lt;', $fromEmailDetails);
+					list($fromEmail, $rest) = explode('&gt;', $fromEmail);
+				} else {
+					$fromEmail = $fromEmailDetails;
+				}
 			} else {
 				$userObj = CRMEntity::getInstance('Users');
 				$userObj->retrieveCurrentUserInfoFromFile($fromUserId);

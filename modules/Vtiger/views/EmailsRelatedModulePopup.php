@@ -40,16 +40,19 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$searchKey = $request->get('search_key');
 		$searchValue = $request->get('search_value');
 		$currencyId = $request->get('currency_id');
+        $selectedFields=$request->get('selectedFields'); 
+        if(!empty($selectedFields)){
+            foreach($selectedFields as $key=>$value){  
+                $selectFields[$value]=$value;  
+            }  
+        }
 		$view = $request->get('view');
 
 		//To handle special operation when selecting record from Popup
 		$getUrl = $request->get('get_url');
 
-		//Check whether the request is in multi select mode
-		$multiSelectMode = $request->get('multi_select');
-		if(empty($multiSelectMode)) {
-			$multiSelectMode = false;
-		}
+		//Enable multiselect mode for email related popup
+		$multiSelectMode = true;
 
 		if(empty($cvId)) {
 			$cvId = '0';
@@ -106,6 +109,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		}
 		$viewer->assign('MODULE', $moduleName);
 
+                $viewer->assign('SELECT_FIELDS',$selectFields); 
 		$viewer->assign('SOURCE_MODULE', $sourceModule);
 		$viewer->assign('SOURCE_FIELD', $sourceField);
 		$viewer->assign('SOURCE_RECORD', $sourceRecord);
@@ -127,7 +131,7 @@ class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
 		$viewer->assign('PAGING_MODEL', $pagingModel);
 		$viewer->assign('PAGE_NUMBER',$pageNumber);
 
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 		

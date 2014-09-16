@@ -11,9 +11,17 @@
 -->*}
 {strip}
 <div class="container-fluid">
-	<h3>{vtranslate('LBL_CREATE_PROFILE', $QUALIFIED_MODULE)}</h3>
-	<hr>
 	<form id="EditView" name="EditProfile" action="index.php" method="post" class="form-horizontal">
+        <div class="widget_header row-fluid"> 
+        <div class="span8"><h3>{vtranslate('LBL_CREATE_PROFILE', $QUALIFIED_MODULE)}</h3></div> 
+        <div class="span4 btn-toolbar">
+            <div class="pull-right"> 
+                <button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE',$QUALIFIED_MODULE)}</strong></button>
+                <a class="cancelLink" onclick="javascript:window.history.back();" type="reset">{vtranslate('LBL_CANCEL', $QUALIFIED_MODULE)}</a> 
+            </div>
+        </div> 
+        </div> 
+        <hr> 
 		<input type="hidden" name="module" value="Profiles" />
 		<input type="hidden" name="action" value="Save" />
 		<input type="hidden" name="parent" value="Settings" />
@@ -22,11 +30,11 @@
 		<input type="hidden" name="mode" value="{$MODE}" />
 		<div class="row-fluid">
 			<div class="row-fluid">
-				<label class="fieldLabel span2"><span class="redColor">*</span><strong>{vtranslate('LBL_PROFILE_NAME', $QUALIFIED_MODULE)}: </strong></label>
+				<label class="span2"><span class="redColor">*</span><strong>{vtranslate('LBL_PROFILE_NAME', $QUALIFIED_MODULE)}: </strong></label>
 				<input type="text" class="fieldValue span6" name="profilename" id="profilename" value="{$RECORD_MODEL->getName()}" data-validation-engine="validate[required]"  />
 			</div><br>
 			<div class="row-fluid">
-				<label class="fieldLabel span2"><strong>{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}:</strong></label>
+				<label class="span2"><strong>{vtranslate('LBL_DESCRIPTION', $QUALIFIED_MODULE)}:</strong></label>
 				<textarea class="input-xxlarge fieldValue span8" name="description" id="description">{$RECORD_MODEL->getDescription()}</textarea>
 			</div><br>
             <div class="summaryWidgetContainer">
@@ -50,8 +58,8 @@
                 </label>
             </div>
 			<div class="row-fluid">
-				<label class="fieldLabel"><strong>{vtranslate('LBL_EDIT_PRIVILIGES_FOR_THIS_PROFILE',$QUALIFIED_MODULE)}:</strong></label><br>
-				<table class="table table-striped table-bordered profilesEditView">
+				<label class=""><strong>{vtranslate('LBL_EDIT_PRIVILIGES_FOR_THIS_PROFILE',$QUALIFIED_MODULE)}:</strong></label><br>
+				<table class="table table-bordered profilesEditView">
 					<thead>
 						<tr class="blockHeader">
 							<th width="30%" style="border-left: 1px solid #DDD !important;">
@@ -94,7 +102,7 @@
 									</td>
 								{/foreach}
 								<td style="border-left: 1px solid #DDD !important;">
-									{if $PROFILE_MODULE->getFields()}
+									{if $PROFILE_MODULE->getFields() || $PROFILE_MODULE->isUtilityActionEnabled()}
 										<div class="row-fluid">
 											<span class="span4">&nbsp;</span>
 											<span class="span4"><button type="button" data-handlerfor="fields" data-togglehandler="{$TABID}-fields" class="btn btn-mini" style="padding-right: 20px; padding-left: 20px;">
@@ -112,21 +120,21 @@
 											<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)}{if $MODULE_NAME eq 'Calendar'} {vtranslate('LBL_OF', $MODULE_NAME)} {vtranslate('LBL_TASKS', $MODULE_NAME)}{/if}</strong></label>
 											<div class="pull-right">
 												<span class="mini-slider-control ui-slider" data-value="0">
-													<a style="margin-top: 5px" class="ui-slider-handle"></a>
+													<a style="margin-top: 3px;" class="ui-slider-handle"></a>
 												</span>
-												<span style="margin-left:15px;">{vtranslate('LBL_INIVISIBLE',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
+												<span style="margin: 0 20px;">{vtranslate('LBL_INIVISIBLE',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 												<span class="mini-slider-control ui-slider" data-value="1">
-													<a style="margin-top: 5px" class="ui-slider-handle"></a>
+													<a style="margin-top: 3px;" class="ui-slider-handle"></a>
 												</span>
-												<span style="margin-left:15px;">{vtranslate('LBL_READ_ONLY',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
+												<span style="margin: 0 20px;">{vtranslate('LBL_READ_ONLY',$QUALIFIED_MODULE)}</span>&nbsp;&nbsp;
 												<span class="mini-slider-control ui-slider" data-value="2">
-													<a style="margin-top: 5px" class="ui-slider-handle"></a>
+													<a style="margin-top: 3px;" class="ui-slider-handle"></a>
 												</span>
-												<span style="margin-left:15px;">{vtranslate('LBL_WRITE',$QUALIFIED_MODULE)}</span>
+												<span style="margin: 0 20px;">{vtranslate('LBL_WRITE',$QUALIFIED_MODULE)}</span>
 											</div>
 											<div class="clearfix"></div>
 										</div>
-										<table class="table table-bordered table-striped">
+										<table class="table table-bordered">
 										{assign var=COUNTER value=0}
 										{foreach from=$PROFILE_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
 											{if $FIELD_MODEL->isActiveField()}
@@ -153,7 +161,7 @@
 											{assign var=EVENT_MODULE value=$PROFILE_MODULES[16]}
 											{assign var=COUNTER value=0}
 											<label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_FIELDS',$QUALIFIED_MODULE)} {vtranslate('LBL_OF', $EVENT_MODULE->getName())} {vtranslate('LBL_EVENTS', $EVENT_MODULE->getName())}</strong></label>
-											<table class="table table-bordered table-striped">
+											<table class="table table-bordered">
 											{foreach from=$EVENT_MODULE->getFields() key=FIELD_NAME item=FIELD_MODEL name="fields"}
 											{if $FIELD_MODEL->isActiveField()}
 											{assign var="FIELD_ID" value=$FIELD_MODEL->getId()}
@@ -186,7 +194,7 @@
 							<td colspan="6" class="row-fluid" style="padding-left: 5%;padding-right: 5%;background-image: none !important;">
 								<div class="row-fluid hide" data-togglecontent="{$TABID}-fields">
 								<div class="span12"><label class="themeTextColor font-x-large pull-left"><strong>{vtranslate('LBL_TOOLS',$QUALIFIED_MODULE)}</strong></label></div>
-								<table class="table table-bordered table-striped">
+								<table class="table table-bordered">
 								{assign var=UTILITY_ACTION_COUNT value=0}
 								{assign var="ALL_UTILITY_ACTIONS_ARRAY" value=array()}
 								{foreach from=$ALL_UTILITY_ACTIONS item=ACTION_MODEL}
@@ -221,9 +229,11 @@
 			</table>
 			</div>
 		</div>
+        <br>
 		<div class="pull-right">
-			<button class="btn btn-success" type="submit">{vtranslate('LBL_SAVE',$MODULE)}</button>
+			<button class="btn btn-success" type="submit"><strong>{vtranslate('LBL_SAVE',$MODULE)}</strong></button>
 			<a class="cancelLink" onclick="javascript:window.history.back();" type="reset">Cancel</a>
+			<br><br>
 		</div>
 	</form>
 </div>

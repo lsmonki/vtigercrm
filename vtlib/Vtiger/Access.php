@@ -101,7 +101,7 @@ class Vtiger_Access {
 		global $adb;
 
 		$permission_text = strtolower($permission_text);
-		
+
 		if($permission_text == 'public_readonly')             $permission = 0;
 		else if($permission_text == 'public_readwrite')       $permission = 1;
 		else if($permission_text == 'public_readwritedelete') $permission = 2;
@@ -116,7 +116,7 @@ class Vtiger_Access {
 			$adb->pquery("UPDATE vtiger_def_org_share SET permission=? WHERE ruleid=?", Array($permission, $ruleid));
 		} else {
 			$ruleid = self::__getDefaultSharingAccessId();
-			$adb->pquery("INSERT INTO vtiger_def_org_share (ruleid,tabid,permission,editstatus) VALUES(?,?,?,?)", 
+			$adb->pquery("INSERT INTO vtiger_def_org_share (ruleid,tabid,permission,editstatus) VALUES(?,?,?,?)",
 				Array($ruleid,$moduleInstance->id,$permission,$editstatus));
 		}
 
@@ -127,7 +127,7 @@ class Vtiger_Access {
 	 * Enable tool for module.
 	 * @param Vtiger_Module Instance of module to use
 	 * @param String Tool (action name) like Import, Export, Merge
-	 * @param Boolean true to enable tool, false to disable 
+	 * @param Boolean true to enable tool, false to disable
 	 * @param Integer (optional) profile id to use, false applies to all profile.
 	 * @access private
 	 */
@@ -149,12 +149,12 @@ class Vtiger_Access {
 			self::log( ($flag? 'Enabling':'Disabling') . " $toolAction for Profile [", false);
 
 			foreach($profileids as $useprofileid) {
-				$result = $adb->pquery("SELECT permission FROM vtiger_profile2utility WHERE profileid=? AND tabid=? AND activityid=?", 
+				$result = $adb->pquery("SELECT permission FROM vtiger_profile2utility WHERE profileid=? AND tabid=? AND activityid=?",
 					Array($useprofileid, $moduleInstance->id, $actionid));
 				if($adb->num_rows($result)) {
 					$curpermission = $adb->query_result($result, 0, 'permission');
 					if($curpermission != $permission) {
-						$adb->pquery("UPDATE vtiger_profile2utility set permission=? WHERE profileid=? AND tabid=? AND activityid=?", 
+						$adb->pquery("UPDATE vtiger_profile2utility set permission=? WHERE profileid=? AND tabid=? AND activityid=?",
 							Array($permission, $useprofileid, $moduleInstance->id, $actionid));
 					}
 				} else {

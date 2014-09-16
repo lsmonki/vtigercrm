@@ -36,33 +36,85 @@ Vtiger_Detail_Js("Reports_Detail_Js",{},{
 	registerSaveOrGenerateReportEvent : function(){
 		var thisInstance = this;
 		jQuery('.generateReport').on('click',function(e){
+            e.preventDefault();
 			var advFilterCondition = thisInstance.calculateValues();
-			var recordId = thisInstance.getRecordId();
-			var currentMode = jQuery(e.currentTarget).data('mode');
-			var postData = {
-				'advanced_filter': advFilterCondition,
-				'record' : recordId,
-				'view' : "SaveAjax",
-				'module' : app.getModuleName(),
-				'mode' : currentMode
-			};
-			var progressIndicatorElement = jQuery.progressIndicator({
-			});
-			AppConnector.request(postData).then(
-				function(data){
-					progressIndicatorElement.progressIndicator({mode:'hide'})
-					thisInstance.getContentHolder().find('#reportContentsDiv').html(data);
-					Vtiger_Helper_Js.showHorizontalTopScrollBar();
-					var updatedCount = jQuery('#updatedCount',data).val();
-					jQuery('#countValue').text(updatedCount);
-				}
-			);
+            var recordId = thisInstance.getRecordId();
+            var currentMode = jQuery(e.currentTarget).data('mode');
+            var postData = {
+                'advanced_filter': advFilterCondition,
+                'record' : recordId,
+                'view' : "SaveAjax",
+                'module' : app.getModuleName(),
+                'mode' : currentMode
+            };
+            var form = thisInstance.getForm();
+            var result = form.validationEngine('validate');
+            if(result === true) {
+                var progressIndicatorElement = jQuery.progressIndicator({
+                });
+                AppConnector.request(postData).then(
+                    function(data){
+                        progressIndicatorElement.progressIndicator({mode:'hide'})
+                        thisInstance.getContentHolder().find('#reportContentsDiv').html(data);
+                        Vtiger_Helper_Js.showHorizontalTopScrollBar();
+
+                        // To get total records count
+                        var count  = parseInt(jQuery('#updatedCount').val());
+                        if(count < 1000){
+                            jQuery('#countValue').text(count);
+                            jQuery('#moreRecordsText').hide();
+                        }else{        
+                            jQuery('#countValue').html('<img src="layouts/vlayout/skins/images/loading.gif">');
+                            var params = {
+                                'module' : app.getModuleName(),
+                                'advanced_filter': advFilterCondition,
+                                'record' : recordId,
+                                'action' : "DetailAjax",
+                                'mode': "getRecordsCount"
+                            };
+                            AppConnector.request(params).then(
+                                function(data){
+                                    var count = parseInt(data.result);
+                                    jQuery('#countValue').text(count);
+                                    if(count > 1000)
+                                        jQuery('#moreRecordsText').show();
+                                    else
+                                        jQuery('#moreRecordsText').hide();
+                                }
+                            );
+                        }
+                    }
+                );
+            }
 		});
 	},
+	
+    registerEventsForActions : function() {
+      var thisInstance = this;
+      jQuery('.reportActions').click(function(e){
+        var element = jQuery(e.currentTarget); 
+        var href = element.data('href');
+        var type = element.attr("name");
+        var advFilterCondition = thisInstance.calculateValues();
+        var headerContainer = thisInstance.getHeaderContentsHolder();
+        if(type.indexOf("Print") != -1){
+            var newEle = '<form action='+href+' method="POST" target="_blank">\n\
+                    <input type="hidden" value="" name="advanced_filter" /></form>';
+        }else{
+            newEle = '<form action='+href+' method="POST">\n\
+                    <input type="hidden" value="" name="advanced_filter" /></form>';
+        }
+        var ele = jQuery(newEle); 
+        var form = ele.appendTo(headerContainer);
+        form.find('input').val(advFilterCondition);
+        form.submit();
+      })  
+    },
 	
 	registerEvents : function(){
 		this._super();
 		this.registerSaveOrGenerateReportEvent();
+        this.registerEventsForActions();
 		var container = this.getContentHolder();
 		this.advanceFilterInstance = Vtiger_AdvanceFilter_Js.getInstance(jQuery('.filterContainer',container));
 	}

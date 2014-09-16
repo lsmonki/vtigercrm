@@ -8,14 +8,14 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'CronTasks'                    => 'Scheduler'                   , // TODO: Review
-	'Id'                           => 'Id'                          , // TODO: Review
-	'Cron Job'                     => 'Cron Job'                    , // TODO: Review
-	'Frequency'                    => 'Frequency'                   , // TODO: Review
+	'CronTasks'                    => 'Планировщик'                   , 
+	'Id'                           => 'Id'                          , 
+	'Cron Job'                     => 'Крон работы'                    , 
+	'Frequency'                    => 'Частота'                   , 
 	'Status'                       => 'Статус'                , 
-	'Last Start'                   => 'Last scan started'           , // TODO: Review
-	'Last End'                     => 'Last scan ended'             , // TODO: Review
-	'Sequence'                     => 'Sequence'                    , // TODO: Review
+	'Last Start'                   => 'Последнее сканирование началось'           , 
+	'Last End'                     => 'Последнее сканирование состава'             , 
+	'Sequence'                     => 'Последовательность'                    , 
 	'LBL_COMPLETED'                => 'Завершено'          , // KEY 5.x: Completed
 	'LBL_RUNNING'                  => 'работа'                , 
 	'LBL_ACTIVE'                   => 'Активен'              , 

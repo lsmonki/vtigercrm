@@ -41,12 +41,20 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$commentor = $this->getCommentedByModel();
 		if($commentor) {
 			$customer = $this->get('customer');
-			if (!empty($customer)) {
-				return 'CustomerPortal.png';
-			} else {
+            $isMailConverterType = $this->get('from_mailconverter');
+			if (!empty($customer) && $isMailConverterType != 1) {
+                $recordModel = Vtiger_Record_Model::getInstanceById($customer);
+                $imageDetails = $recordModel->getImageDetails();
+                if(!empty($imageDetails)) {
+                    return $imageDetails[0]['path'].'_'.$imageDetails[0]['name'];
+                } else
+                    return vimage_path('CustomerPortal.png');
+			} else if($isMailConverterType == 1) {
+                return vimage_path('MailConverterComment.png');
+            } else {
 				$imagePath = $commentor->getImageDetails();
 				if (!empty($imagePath[0]['name'])) {
-					return '../' . $imagePath[0]['path'] . '_' . $imagePath[0]['name'];
+					return $imagePath[0]['path'] . '_' . $imagePath[0]['name'];
 				}
 			}
 		}
@@ -107,8 +115,14 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 			return Vtiger_Record_Model::getInstanceById($customer, 'Contacts');
 		} else {
 			$commentedBy = $this->get('smownerid');
-			if($commentedBy)
-			return Vtiger_Record_Model::getInstanceById($commentedBy, 'Users');
+			if($commentedBy) {
+			    $commentedByModel = Vtiger_Record_Model::getInstanceById($commentedBy, 'Users');
+			    if(empty($commentedByModel->entity->column_fields['user_name'])) {
+				$activeAdmin = Users::getActiveAdminUser();
+				$commentedByModel = Vtiger_Record_Model::getInstanceById($activeAdmin->id, 'Users');
+			    }
+			    return $commentedByModel;
+			}
 		}
 		return false;
 	}
@@ -121,7 +135,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$commentTime = $this->get('createdtime');
 		return $commentTime;
 	}
-
+	
 	/**
 	 * Function returns the commented time
 	 * @return <String>
@@ -144,7 +158,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		$listView = Vtiger_ListView_Model::getInstance('ModComments');
 		$queryGenerator = $listView->get('query_generator');
 		$queryGenerator->setFields(array('parent_comments', 'createdtime', 'modifiedtime', 'related_to',
-									'assigned_user_id', 'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid'));
+									'assigned_user_id', 'commentcontent', 'creator', 'id', 'customer', 'reasontoedit', 'userid', 'from_mailconverter'));
 
 		$query = $queryGenerator->getQuery();
 		$query = $query ." AND related_to = ? ORDER BY vtiger_crmentity.createdtime DESC
@@ -179,7 +193,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 		//Condition are directly added as query_generator transforms the
 		//reference field and searches their entity names
 		$query = $query ." AND related_to = ? AND parent_comments = '' ORDER BY vtiger_crmentity.createdtime DESC";
-
+		
 		$result = $db->pquery($query, array($parentId));
 		$rows = $db->num_rows($result);
 
@@ -240,7 +254,7 @@ class ModComments_Record_Model extends Vtiger_Record_Model {
 			$recordInstance->setData($row);
 			$recordInstances[] = $recordInstance;
 		}
-
+		
 		return $recordInstances;
 	}
 

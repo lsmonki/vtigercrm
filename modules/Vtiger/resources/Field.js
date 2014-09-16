@@ -157,16 +157,16 @@ jQuery.Class("Vtiger_Field_Js",{
 	addValidationToElement : function(element) {
 		var element = jQuery(element);
 		var addValidationToElement = element;
-		var elementInStructure = element.find('[name="'+ this.getName() +'"]');
-		if(elementInStructure.length > 0){
-			var addValidationToElement = elementInStructure;
+		var elementInStructure = element.find('[name="'+this.getName()+'"]'); 
+		if(elementInStructure.length > 0){ 
+			addValidationToElement = elementInStructure; 
 		}
 		var validationHandler = 'validate[';
 		if(this.isMandatory()) {
 			validationHandler +="required,";
 		}
 		validationHandler +="funcCall[Vtiger_Base_Validator_Js.invokeValidation]]";
-		addValidationToElement.attr('data-validation-engine', validationHandler).attr('data-fieldinfo',JSON.stringify(this.getData()));
+		addValidationToElement.attr('data-validation-engine', validationHandler).attr('data-fieldinfo',JSON.stringify(this.getData())).attr('data-validator',JSON.stringify(this.getData().specialValidator));
 		return element;
 	}
 })
@@ -392,10 +392,10 @@ Vtiger_Field_Js('Vtiger_Percentage_Field_Js',{},{
 	 * @return - input percentage field
 	 */
 	getUi : function() {
-		var html = '<span class="input-append row-fluid">'+
-									'<input type="text" name="'+ this.getName() +'" value="'+  this.getValue() + '"  />'+
+		var html = '<div class="input-append row-fluid">'+
+									'<input type="number" class="input-medium" min="0" max="100" name="'+this.getName() +'" value="'+  this.getValue() + '" step="any"/>'+
 									'<span class="add-on">%</span>'+
-					'</span>';
+					'</div>';
 		var element = jQuery(html);
 		return this.addValidationToElement(element);
 	}

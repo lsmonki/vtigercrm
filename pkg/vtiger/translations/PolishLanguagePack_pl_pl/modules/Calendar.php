@@ -9,51 +9,44 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	
-	'SINGLE_Calendar' => 'Kalendarz',
-	'SINGLE_Events' => 'Czynność',
-	'LBL_ADD_TASK' => 'Dodaj zadanie',
-	'LBL_ADD_EVENT' => 'Dodaj zdarzenie',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'SINGLE_Calendar' => 'Uwagi',
+	'LBL_ADD_TASK' => 'Dodaj Uwagi',
+	'LBL_ADD_EVENT' => 'Dodaj Czynność',
+	'LBL_RECORDS_LIST' => 'Lista wydarzeń',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie wydarzenia',
 	'LBL_EVENTS' => 'Czynności',
 	'LBL_TODOS' => 'Zadania',
-	'LBL_CALENDAR_SETTINGS' => 'Ustawienia',
-	'LBL_CALENDAR_SHARING' => 'Udostępnione kalendarze',
-	'LBL_DEFAULT_EVENT_DURATION' => 'Domyślny czas czynności',
-	'LBL_CALL' => 'Telefon',
-	'LBL_OTHER_EVENTS' => 'Inne czynności',
-	'LBL_MINUTES' => 'Minuty',
-	'LBL_SELECT_USERS' => 'Zaznacz użytkowników',
+	'LBL_EVENT_OR_TASK' => 'Wydarzenie / Uwagi',
 
 	// Blocks
-	'LBL_TASK_INFORMATION' => 'Szczegóły zadania',
+	'LBL_TASK_INFORMATION' => 'Szczegóły Uwagi',
+    'LBL_EVENT_INFORMATION'=> 'Szczegóły wydarzenia',
 
 	//Fields
 	'Subject' => 'Temat',
-	'Start Date & Time' => 'Czas rozpoczęcia',
-	'Activity Type'=>'Rodzaj zdarzenia',
+	'Start Date & Time' => 'Data rozpoczęcia',
+	'Activity Type'=>'Typ czynności',
 	'Send Notification'=>'Wyślij powiadomienie',
 	'Location'=>'Lokalizacja',
-	'End Date & Time' => 'Czas zakończenia',
+	'End Date & Time' => 'Data zakończenia',
 
 	//Side Bar Names
-	'LBL_ACTIVITY_TYPES' => 'Filtrowanie',
-	'LBL_CONTACTS_SUPPORT_END_DATE' => 'Czas zakończenia wsparcia',
-	'LBL_CONTACTS_BIRTH_DAY' => 'Daty urodzin',
-	'LBL_ADDED_CALENDARS' => 'Dodaj kalendarze',
-
+	'LBL_ACTIVITY_TYPES' => 'Typ czynności',
+	'LBL_CONTACTS_SUPPORT_END_DATE' => 'Data zakończenia wsparcia',
+	'LBL_CONTACTS_BIRTH_DAY' => 'Data urodzin',
 
 	//Activity Type picklist values
 	'Call' => 'Telefon',
 	'Meeting' => 'Spotkanie',
-	'Task' => 'Zadanie',
 
 	//Status picklist values
-	'Planned' => 'Planowane',
-	'Completed' => 'Ukończone',
-	'Pending Input' => 'Oczekujące',
+	'Planned' => 'Planowany',
+        'Held'    => 'Held',
+        'Not Held'=> 'Nie Held',
+	'Completed' => 'Zakończone',
+	'Pending Input' => 'W realizacji',
 	'Not Started' => 'Nierozpoczęte',
-	'Deferred' => 'Odrocz w czasie',
+	'Deferred' => 'Przełożone',
 
 	//Priority picklist values
 	'Medium' => 'Normalny',
@@ -61,89 +54,29 @@ $languageStrings = array(
 	'LBL_CHANGE_OWNER' => 'Zmień właściciela',
 
 	'LBL_EVENT' => 'Czynność',
-	'LBL_TASK' => 'Zadanie',
-	'LBL_TASKS' => 'Zadania',
+	'LBL_TASK' => 'Uwagi',
+	'LBL_TASKS' => 'Uwagi',
 
-	'LBL_CALENDAR_VIEW' => 'Mój kalendarz',
-	'LBL_SHARED_CALENDAR' => 'Wspólny kalendarz',
-
-	//Repeat Lables - used by getTranslatedString
-	'LBL_DAY0' => 'Niedziela',
-	'LBL_DAY1' => 'Poniedziałek',
-	'LBL_DAY2' => 'Wtorek',
-	'LBL_DAY3' => 'Środa',
-	'LBL_DAY4' => 'Czwartek',
-	'LBL_DAY5' => 'Piątek',
-	'LBL_DAY6' => 'Sobota',
-
-	'first' => 'Pierwszy',
-	'last' => 'Ostatni',
-	'LBL_DAY_OF_THE_MONTH' => 'dni w miesiącu',
-	'LBL_ON' => 'po',
-
-	'Daily'=>'Dzienny',
-	'Weekly'=>'Tygodniowy',
-	'Monthly'=>'Miesięczny',
-	'Yearly'=>'Roczny',
+	'LBL_CALENDAR_VIEW' => 'Widok kalendarza',
 	
-	//Import and Export Labels
-	'LBL_IMPORT_RECORDS' => 'Importuj rekordy',
-	'LBL_RESULT' => 'Wynik',
-	'LBL_FINISH' => 'Zakończ',
-	'LBL_TOTAL_TASKS_IMPORTED' => 'Liczba zadań poprawnie zaimportowanych',
-	'LBL_TOTAL_TASKS_SKIPPED' => 'Liczba zadań pominiętych, z powodu braku wartości w polach wymaganych',
-	'LBL_TOTAL_EVENTS_IMPORTED' => 'Liczba czynności poprawnie zaimportowanych',
-	'LBL_TOTAL_EVENTS_SKIPPED' => 'Liczba czynności pominiętych, z powodu braku wartości w polach wymaganych',
+	'Mobile Call' => 'Mobile Call',
 	
-	'ICAL_FORMAT' => 'Format iCal',
-	'LBL_LAST_IMPORT_UNDONE'=>'Ostatni import nie został zakończony.',
-	'LBL_UNDO_LAST_IMPORT' => 'Cofnij ostatni import',
-	
-	//OpenSaaS
-	//NetInteractive
-	'Reminder Interval' => 'Częstotliwość powiadomień',
-    'Starting Day of the week' => 'Pierwszy dzień tygodnia',
-    'Default Activity View' => 'Domyślny widok czynności',
-    'Date Format' => 'Format daty',
-    'Calendar Hour Format' => 'Format godzin w kalendarzu',
-    'Day starts at' => 'Dzień rozpoczyna się o',
-    'Time Zone' => 'Strefa Czasowa',
-	'LBL_EVENT_OR_TASK' => 'Czynność / Zadanie', //Michał Zygmuntowicz
-    'Sunday' => 'Niedziela',
-	'Monday' => 'Poniedziałek',
-	'Tuesday' => 'Wtorek',
-	'Wednesday' => 'Środa',
-	'Thursday' => 'Czwartek',
-	'Friday' => 'Piątek',
-	'Saturday' => 'Sobota',
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'Kolor Edit',
+	'LBL_ADD_CALENDAR_VIEW' => 'Dodaj kalendarz',
+	'LBL_SELECT_USER_CALENDAR' => 'Wybierz kalendarz użytkownika',
+	'LBL_SELECT_CALENDAR_COLOR' => 'Wybierz kolor kalendarz',
+	'LBL_EDITING_CALENDAR_VIEW' => 'Montaż kalendarza View',
+	'LBL_DELETE_CALENDAR' => 'Usuń kalendarz',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'Wybierz typ aktywny',
+	'Tasks' => 'Zadania',
 
-    'Private' => 'Prywatne',
-    'Selected Users' => 'Wybrani użytkownicy',
- 
-    '1 Minute' => '1 Minuta',
-    '5 Minutes' => '5 Minut',
-    '15 Minutes' => '15 Minut',
-    '30 Minutes' => '30 Minut',
-    '45 Minutes' => '45 Minut',
-   	'1 Hour' => '1 Godzina',
-	'1 Day' => '1 Dzień',
-	'This Week' => 'Ten tydzień',
-        'This Month' => 'Ten miesiąc',
-        'Today' => 'Dziś',	
-        'Friday' => 'Piątek',
-	'Saturday' => 'Sobota',
 );
 
 $jsLanguageStrings = array(
-	'JS_FUTURE_EVENT_CANNOT_BE_HELD' => 'Przyszłego wydarzenia nie można oznaczyć jako wykonanego', //Michał Zygmuntowicz
-	'LBL_ADD_EVENT_TASK' => 'Dodaj rekord',
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'Zadanie zostało poprawnie dodane do kalendarza',
-    'LBL_SYNC_BUTTON' => 'Synchronizuj teraz',
-    'LBL_SYNCRONIZING' => 'Trwa synchronizowanie',
-    'LBL_NOT_SYNCRONIZED' => 'Kalendarz nie był jeszcze synchronizowany',
-    'LBL_FIELD_MAPPING' => 'Pola mapowane',
-    'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'Nie można powiązać kontaktów z potencjalnymi klientami',
-	
+
+	'LBL_ADD_EVENT_TASK' => 'Dodaj zadanie / Uwagi',
+    
 	//Calendar view label translation
 	'LBL_MONTH' => 'Miesiąc',
 	'LBL_TODAY' => 'Dzisiaj',
@@ -158,42 +91,50 @@ $jsLanguageStrings = array(
 	'LBL_FRIDAY' => 'Piątek',
 	'LBL_SATURDAY' => 'Sobota',
 	
-	'LBL_SUN' => 'Nie',
-	'LBL_MON' => 'Pon',
-	'LBL_TUE' => 'Wto',
-	'LBL_WED' => 'Śro',
+	'LBL_SUN' => 'Cz',
+	'LBL_MON' => 'pon',
+	'LBL_TUE' => 'Wt',
+	'LBL_WED' => 'Poślubić',
 	'LBL_THU' => 'Czw',
-	'LBL_FRI' => 'Pią',
+	'LBL_FRI' => 'pt',
 	'LBL_SAT' => 'Sob',
 	
-	'LBL_JANUARY' => 'Styczeń',
+	'LBL_JANUARY' => 'Styczen',
 	'LBL_FEBRUARY' => 'Luty',
-	'LBL_MARCH' => 'Marzec',
-	'LBL_APRIL' => 'Kwiecień',
-	'LBL_MAY' => 'Maj',
-	'LBL_JUNE' => 'Czerwiec',
-	'LBL_JULY' => 'Lipiec',
+	'LBL_MARCH' => 'mar',
+	'LBL_APRIL' => 'kwi',
+	'LBL_MAY' => 'maja',
+	'LBL_JUNE' => 'cze',
+	'LBL_JULY' => 'lipiec',
 	'LBL_AUGUST' => 'Sierpień',
-	'LBL_SEPTEMBER' => 'Wrzesień',
-	'LBL_OCTOBER' => 'Październik',
+	'LBL_SEPTEMBER' => 'wrzesnia',
+	'LBL_OCTOBER' => 'paź',
 	'LBL_NOVEMBER' => 'Listopad',
 	'LBL_DECEMBER' => 'Grudzień',
 	
 	'LBL_JAN' => 'Sty',
-	'LBL_FEB' => 'Lut',
-	'LBL_MAR' => 'Mar',
-	'LBL_APR' => 'Kwi',
-	'LBL_MAY' => 'Maj',
-	'LBL_JUN' => 'Cze',
-	'LBL_JUL' => 'Lip',
+	'LBL_FEB' => 'Lutego',
+	'LBL_MAR' => 'Zniszczyć',
+	'LBL_APR' => 'Kwietnia',
+	'LBL_MAY' => 'maja',
+	'LBL_JUN' => 'Czer',
+	'LBL_JUL' => 'Lipca',
 	'LBL_AUG' => 'Sie',
 	'LBL_SEP' => 'Wrz',
-	'LBL_OCT' => 'Paź',
-	'LBL_NOV' => 'Lis',
-	'LBL_DEC' => 'Gru',
+	'LBL_OCT' => 'Październik',
+	'LBL_NOV' => 'Listopad',
+	'LBL_DEC' => 'Grudnia',
 	
 	'LBL_ALL_DAY' => 'Wszystkie dni',
-	//End
-	'Medium' => 'Średni',
 	
+	'Mobile Call' => 'Mobile Call',
+	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'Zobacz kalendarz kolor zaktualizowane',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'Czy na pewno chcesz usunąć ten pogląd kalendarz?',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'Kalendarz Zobacz pomyślnie dodana',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'Kalendarz Zobacz pomyślnie usunięty',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'Nie Kalendarz Zobacz dodać',
+	'JS_EDIT_CALENDAR' => 'Edit Calendar',
 );

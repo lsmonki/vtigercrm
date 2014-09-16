@@ -23,6 +23,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 		if(empty($idList)) {
 			$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
 			$taxes = $recordModel->getTaxes();
+            $listPriceValues = $recordModel->getListPriceValues($recordModel->getId());
 
 			$priceDetails = $recordModel->getPriceDetails();
 			foreach ($priceDetails as $currencyDetails) {
@@ -35,7 +36,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 			$response->setResult(array(
 									$recordId => array(
 										'id'=>$recordId, 'name'=>decode_html($recordModel->getName()),
-										'taxes'=>$taxes, 'listprice'=>$listPrice,
+										'taxes'=>$taxes, 'listprice'=>$listPrice, 'listpricevalues'=>$listPriceValues,
 										'description' => decode_html($recordModel->get('description')),
 										'quantityInStock' => $recordModel->get('qtyinstock')
 									)));
@@ -43,6 +44,7 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 			foreach($idList as $id) {
 				$recordModel = Vtiger_Record_Model::getInstanceById($id);
 				$taxes = $recordModel->getTaxes();
+                $listPriceValues = $recordModel->getListPriceValues($recordModel->getId());
 
 				$priceDetails = $recordModel->getPriceDetails();
 				foreach ($priceDetails as $currencyDetails) {
@@ -55,8 +57,8 @@ class Inventory_GetTaxes_Action extends Vtiger_Action_Controller {
 				$info[] = array(
 							$id => array(
 								'id'=>$id, 'name'=>decode_html($recordModel->getName()),
-								'taxes'=>$taxes, 'listprice'=>$listPrice,
-								'description' => $recordModel->get('description'),
+								'taxes'=>$taxes, 'listprice'=>$listPrice, 'listpricevalues'=>$listPriceValues,
+								'description' => decode_html($recordModel->get('description')),
 								'quantityInStock' => $recordModel->get('qtyinstock')
 							));
 			}

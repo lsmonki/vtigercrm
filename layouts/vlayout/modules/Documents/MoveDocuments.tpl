@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 {strip}
-	<div class="modelContainer">
+	<div class="modelContainer" style='min-width:350px;'>
 		<div class="modal-header">
 			<button data-dismiss="modal" class="close" type="button" title="{vtranslate('LBL_CLOSE')}">x</button>
 			<h3>{vtranslate('LBL_MOVE', $MODULE)} {vtranslate($MODULE, $MODULE)}</h3>

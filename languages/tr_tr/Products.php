@@ -72,4 +72,5 @@ $languageStrings = array(
 	'Spiral Binder'                => 'Spiral Binder'               , 
 	'Sq Ft'                        => 'Sq Ft'                       , 
 	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
+    'LBL_PRODUCTSMOD_DISABLED'     => 'Ürünleri görmek için Ürünler Modülü etkinleştirin',
 );

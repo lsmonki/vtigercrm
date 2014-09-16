@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 class EmailTemplates_Record_Model extends Vtiger_Record_Model {
-
+	
 	/**
 	 * Function to get the id of the record
 	 * @return <Number> - Record Id
@@ -17,7 +17,7 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 	public function getId() {
 		return $this->get('templateid');
 	}
-
+	
 	/**
 	 * Function to set the id of the record
 	 * @param <type> $value - id value
@@ -26,7 +26,7 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 	public function setId($value) {
 		return $this->set('templateid',$value);
 	}
-
+	
 	/**
 	 * Function to delete the email template
 	 * @param type $recordIds
@@ -34,7 +34,7 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 	public function delete(){
 		$this->getModule()->deleteRecord($this);
 	}
-
+	
 	/**
 	 * Function to delete all the email templates
 	 * @param type $recordIds
@@ -42,7 +42,7 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 	public function deleteAllRecords(){
 		$this->getModule()->deleteAllRecords();
 	}
-
+	
 	/**
 	 * Function to get template fields
 	 * To get the fields from module, which has the email field
@@ -51,17 +51,17 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 	public function getEmailTemplateFields(){
 		return $this->getModule()->getAllModuleEmailTemplateFields();
 	}
-
+	
 	/**
 	 * Function to get the Email Template Record
 	 * @param type $record
 	 * @return <EmailTemplate_Record_Model>
 	 */
-
+	
 	public function getTemplateData($record){
 		return $this->getModule()->getTemplateData($record);
 	}
-
+	
 	/**
 	 * Function to get the Detail View url for the record
 	 * @return <String> - Record Detail View Url
@@ -70,7 +70,7 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 		$module = $this->getModule();
 		return 'index.php?module='.$this->getModuleName().'&view='.$module->getDetailViewName().'&record='.$this->getId();
 	}
-
+	
 	/**
 	 * Function to get the instance of Custom View module, given custom view id
 	 * @param <Integer> $cvId
@@ -88,5 +88,5 @@ class EmailTemplates_Record_Model extends Vtiger_Record_Model {
 		}
 		return null;
 	}
-
+	
 }

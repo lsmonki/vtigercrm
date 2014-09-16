@@ -245,8 +245,16 @@ Reports_Edit_Js("Reports_Edit2_Js",{},{
 	registerLineItemCalculationLimit : function() {
 		var thisInstance = this;
 		var primaryModule = jQuery('input[name="primary_module"]').val();
-		var inventoryModules = ['Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder'];
-		if(jQuery.inArray(primaryModule, inventoryModules) !== -1) {
+        var inventoryModules = ['Invoice', 'Quotes', 'PurchaseOrder', 'SalesOrder'];
+        // To limit the calculation fields if secondary module contains inventoryModule
+        var secodaryModules = jQuery('input[name="secondary_modules"]').val();
+        var secondaryIsInventory = false;
+		inventoryModules.forEach(function(entry){
+           if(secodaryModules.indexOf(entry) != -1){
+               secondaryIsInventory = true;
+           } 
+        });
+		if(jQuery.inArray(primaryModule, inventoryModules) !== -1 || secondaryIsInventory) {
 			jQuery('.CalculationFields').on('change', 'input[type="checkbox"]', function(e) {
 				var element = jQuery(e.currentTarget);
 				var value = element.val();

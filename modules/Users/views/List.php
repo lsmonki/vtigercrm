@@ -56,11 +56,16 @@ class Users_List_View extends Settings_Vtiger_List_View {
 		if(empty ($pageNumber)){
 			$pageNumber = '1';
 		}
+                
+        $status = $request->get('status');
+        if(empty($status))
+            $status = 'Active';
 
 		$listViewModel = Vtiger_ListView_Model::getInstance($moduleName, $cvId);
 
 		$linkParams = array('MODULE'=>$moduleName, 'ACTION'=>$request->get('view'), 'CVID'=>$cvId);
 		$linkModels = $listViewModel->getListViewMassActions($linkParams);
+                $listViewModel->set('status', $status);
 
 		$pagingModel = new Vtiger_Paging_Model();
 		$pagingModel->set('page', $pageNumber);
@@ -109,7 +114,7 @@ class Users_List_View extends Settings_Vtiger_List_View {
 		$viewer->assign('COLUMN_NAME',$orderBy);
 		$viewer->assign('QUALIFIED_MODULE', $moduleName);
 		
-		$viewer->assign('LISTVIEW_ENTIRES_COUNT',$noOfEntries);
+		$viewer->assign('LISTVIEW_ENTRIES_COUNT',$noOfEntries);
 		$viewer->assign('LISTVIEW_HEADERS', $this->listViewHeaders);
 		$viewer->assign('LISTVIEW_ENTRIES', $this->listViewEntries);
 

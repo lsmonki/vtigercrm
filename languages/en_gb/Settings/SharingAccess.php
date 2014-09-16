@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Accounts'                     => 'Organizations & Contacts'    , // TODO: Review
+	'Accounts'                     => 'Organisations & Contacts'    , // TODO: Review
 	'LBL_ADD_CUSTOM_RULE'          => 'Add Custom Privilege Rule'   , 
 	'Read Only'                    => 'R'                           , 
 	'Read Write'                   => 'R+W'                         , 
@@ -32,5 +32,5 @@ $jsLanguageStrings = array(
 	'JS_CUSTOM_RULE_SAVED_SUCCESSFULLY' => 'Custom Sharing Rule Saved Successfully', // TODO: Review
 	'JS_SELECT_ANY_OTHER_ACCESSING_USER' => 'Select any other accessing user', // TODO: Review
 	'JS_NEW_SHARING_RULES_APPLIED_SUCCESSFULLY' => 'New Sharing Rules Applied Successfully', // TODO: Review
-	'JS_DEPENDENT_PRIVILEGES_SHOULD_CHANGE' => 'Opportunities, Tickets, Quotes, SalesOrder & Invoice Access must be set to Private when the Organization Access is set to Private', // TODO: Review
+	'JS_DEPENDENT_PRIVILEGES_SHOULD_CHANGE' => 'Opportunities, Tickets, Quotes, Sales Orders & Invoices access must be set to Private when the Organisation access is set to Private', // TODO: Review
 );

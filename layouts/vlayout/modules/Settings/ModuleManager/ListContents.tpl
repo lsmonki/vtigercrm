@@ -14,11 +14,11 @@
 		<div class="widget_header row-fluid">
 			<div class="span6"><h3>{vtranslate('LBL_MODULE_MANAGER', $QUALIFIED_MODULE)}</h3></div>
 			<div class="span6">
-				<span class="btn-toolbar pull-right margin0px">
+				<span class="btn-toolbar pull-right">
 					<span class="btn-group">
-						<button class="btn" type="button" onclick='window.location.href="{$IMPORT_USER_MODULE_URL}"'>
-							<strong>{vtranslate('LBL_IMPORT_ZIP', $QUALIFIED_MODULE)}</strong>
-						</button>
+                                            <button class="btn" type="button" onclick='window.location.href="index.php?module=ExtensionStore&parent=Settings&view=ExtensionStore"'>
+                                                    <strong>{vtranslate('LBL_EXTENSION_STORE', $QUALIFIED_MODULE)}</strong>
+                                            </button>
 					</span>
 				</span>
 			</div>
@@ -79,5 +79,8 @@
 				</tr>
 			</table>
 		</div>
+                <div class="row-fluid" style="padding: 20px 0px;">
+                    <a href="{$IMPORT_USER_MODULE_FROM_FILE_URL}">{vtranslate('LBL_INSTALL_FROM_ZIP', $QUALIFIED_MODULE)}</a>
+                </div>
 	</div>
 {/strip}

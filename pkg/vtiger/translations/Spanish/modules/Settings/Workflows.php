@@ -11,7 +11,7 @@
  *  Version      : 6.0.0
  *  Created Date : 2013-05-10
  *  Author       : JPL TSolucio, S. L. Joe Bordes
- *  Last change  : 2013-10-05
+ *  Last change  : 2013-05-11
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  *************************************************************************************/
 $languageStrings = array(
@@ -30,6 +30,7 @@ $languageStrings = array(
 	'ONCE' => 'Solo la primera vez que se cumple la condición',
 	'ON_EVERY_SAVE' => 'Cada vez que se guarda la entidad',
 	'ON_MODIFY' => 'Cada vez que se modifica la entidad',
+        'ON_SCHEDULE' => 'Horario',
 	'MANUAL' => 'Sistema',
 	'SCHEDULE_WORKFLOW' => 'Programa Flujo de Trabajo',
 	'ADD_CONDITIONS' => 'Añadir Condición',
@@ -88,8 +89,33 @@ $languageStrings = array(
 	'LBL_EXAMPLE_FIELD_NAME' => 'Campo',
 	'LBL_NOTIFY_OWNER' => 'notify_owner',
 	'LBL_ANNUAL_REVENUE' => 'annual_revenue',
-	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end"
+	'LBL_EXPRESSION_EXAMPLE2' => "if mailingcountry == 'India' then concat(firstname,' ',lastname) else concat(lastname,' ',firstname) end",
+	'LBL_FROM' => 'De',
+	'Optional' => 'Opcional',
+	'LBL_ADD_TASK' => 'Añadir Tarea',
+        'Portal Pdf Url' =>'URL del PDF para el Portal del Cliente',
+        'LBL_ADD_TEMPLATE' => 'Añadir plantilla',
+        'LBL_LINEITEM_BLOCK_GROUP' => 'Impuesto de Grupo',
+        'LBL_LINEITEM_BLOCK_INDIVIDUAL' => 'Impuesto Individual',
+        'LBL_RUN_WORKFLOW' => 'Ejecutar flujo de trabajo',
+	'LBL_AT_TIME' => 'En el Tiempo',
+	'LBL_HOURLY' => 'Cada hora',
 	
+	'LBL_DAILY' => 'Diario',
+	'LBL_WEEKLY' => 'Semanal',
+	'LBL_ON_THESE_DAYS' => 'En estos días',
+	'LBL_MONTHLY_BY_DATE' => 'Mensualmente por fecha',
+	'LBL_MONTHLY_BY_WEEKDAY' => 'Mensualmente por día de la semana',
+	'LBL_YEARLY' => 'Anual',
+	'LBL_SPECIFIC_DATE' => 'En Específica Fecha',
+	'LBL_CHOOSE_DATE' => 'Seleccionar fecha',
+	'LBL_SELECT_MONTH_AND_DAY' => 'Seleccione Mes y Fecha',
+	'LBL_SELECTED_DATES' => 'Fechas Seleccionadas',
+	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Superado el límite máximo',
+	'LBL_NEXT_TRIGGER_TIME' => 'Tiempo de activación en Siguiente en',
+	'LBL_MESSAGE' => 'Mensaje',
+	//Translation for module
+	'Calendar' => 'Calendario',
 );
 
 $jsLanguageStrings = array(

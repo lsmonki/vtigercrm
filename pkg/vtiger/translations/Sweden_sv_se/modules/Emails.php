@@ -38,4 +38,5 @@ $languageStrings = array(
 	'LBL_OWNER' => 'Ägare',
 	
 	'Datum & Time Sent' => 'Datum Skickat',
+    'LBL_EMAIL_INFORMATION' => 'Email Information',
 );

@@ -7,26 +7,43 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-Vtiger_Header_Js.extend('MailManager_QuickCreate_Js', {}, {
-	
-	showQuickCreateCustom: function(data, saveHandler) {
-		this.handleQuickCreateData(data);
-		
-		// After the QuickCreate Modal is shown (transition delay to be accounted)
-		setTimeout(function(){
-			var form = jQuery('form[name="QuickCreate"]', '#globalmodal');
-			form.on(Vtiger_Edit_Js.recordPreSave, function(e){
+Vtiger_Header_Js.extend('MailManager_QuickCreate_Js', {
+	foldersClicked : false
+}, {
+
+	registerQuickCreatePostLoadEvents: function(form, params) {
+		var thisInstance = this;
+		form.find('#goToFullForm').remove();
+
+		form.on('click','.cancelLink',function() {
+			MailManager.resetLinkToDropDown();
+		});
+
+		form.on('submit', function(e){
+			var invalidFields = form.data('jqv').InvalidFields;
+
+			if (invalidFields.length > 0) {
+				//If validation fails, form should submit again
+				form.removeData('submit');
+				form.closest('#globalmodal').find('.modal-header h3').progressIndicator({
+					'mode': 'hide'
+				});
 				e.preventDefault();
-				if (typeof saveHandler == 'function') saveHandler(form);
-			});
-			jQuery('#goToFullForm', '#globalmodal').remove();
-		}, 250);
+				return;
+			}
+			var recordPreSaveEvent = jQuery.Event(Vtiger_Edit_Js.recordPreSave);
+			form.trigger(recordPreSaveEvent, {'value': 'edit', 'module': form.find('[name="module"]').val()});
+			if (!(recordPreSaveEvent.isDefaultPrevented())) {
+				MailManager.mail_associate_create(form, jQuery('form[name="relationship"]'));
+			}
+			e.preventDefault();
+		});
+		thisInstance.registerTabEventsInQuickCreate(form);
 	}
-	
 });
 
 if (typeof(MailManager) == 'undefined') {
-	
+
 	// Legacy classes used
 	if (typeof VtigerJS_DialogBox == 'undefined') {
 		VtigerJS_DialogBox = {
@@ -63,11 +80,11 @@ if (typeof(MailManager) == 'undefined') {
 			}
 			return printString;
 		},
-		
+
 		/* Show error message */
 		show_error: function(message){
 			var errordiv = jQuery('#_messagediv_');
-			
+
 			if (message == '') {
 				errordiv.text('').hide();
 			} else {
@@ -98,48 +115,58 @@ if (typeof(MailManager) == 'undefined') {
 		_baseurl: function(){
 			return "index.php?module=MailManager&view=Index&";
 		},
-		
+
 		/* Translation support */
 		i18n: function(key){
 			return app.vtranslate(key);
 		},
-		
+
 		/* Build the main ui */
 		mainui: function(){
-			MailManager.openCurrentFolder();
+			var isMailBoxExists = jQuery('#isMailBoxExists').val();
+			if (isMailBoxExists == 1) {
+				MailManager.openCurrentFolder();
+			}
 			setTimeout(function() {
-				jQuery("#_folderprogress_").show();
-				MailManager.mail_open_meta = {};
-				if (MailManager.mail_reply_rteinstance) {
-					MailManager.mail_reply_rteinstance.destroy();
-					MailManager.mail_reply_rteinstance = false;
-				}
-				var message = app.vtranslate('JSLBL_Loading_Please_Wait')+' ....';
-				var progressIndicatorElement = jQuery.progressIndicator({
-					'message' : message,
-					'position' : 'html',
-					'blockInfo' : {
-						'enabled' : true
+				if (isMailBoxExists == 1) {
+					jQuery("#_folderprogress_").show();
+					MailManager.mail_open_meta = {};
+					if (MailManager.mail_reply_rteinstance) {
+						MailManager.mail_reply_rteinstance.destroy();
+						MailManager.mail_reply_rteinstance = false;
 					}
-				});
-				jQuery.post(MailManager._baseurl() + "_operation=mainui",
-					function(response){
-						//var response = MailManager.removeHidElement(transport.responseText);
-						//response = JSON.parse(response);
-						MailManager._mainui_callback(response);
-						progressIndicatorElement.progressIndicator({
-							'mode' : 'hide'
-						})
-						jQuery("#_folderprogress_").hide();
-						var timeOut = jQuery("#refresh_timeout").val();
-						if(timeOut != "" && timeOut !=0) {
-							setInterval(MailManager.updateMailFolders, timeOut);
+					var message = app.vtranslate('JSLBL_Loading_Please_Wait')+' ....';
+					var progressIndicatorElement = jQuery.progressIndicator({
+						'message' : message,
+						'position' : 'html',
+						'blockInfo' : {
+							'enabled' : true
 						}
-						// Update the seleted folders to highlight them.
+					});
+				}
+				AppConnector.request(MailManager._baseurl() + "_operation=mainui").then(function(response) { 
+						//var response = MailManager.removeHidElement(transport.responseText);
+						response = JSON.parse(response);
+						MailManager._mainui_callback(response);
+						if (isMailBoxExists == 1) {
+							progressIndicatorElement.progressIndicator({
+								'mode' : 'hide'
+							})
+							jQuery("#_folderprogress_").hide();
+							var timeOut = jQuery("#refresh_timeout").val();
+							if(timeOut != "" && timeOut !=0) {
+								setInterval(MailManager.updateMailFolders, timeOut);
+							}
+							// Update the seleted folders to highlight them.
+							jQuery('.defaultContainer').addClass('show');
+							jQuery('.defaultContainer').removeClass('hide');
+						} else {
+							jQuery('.defaultContainer').addClass('hide');
+							jQuery('.defaultContainer').removeClass('show');
+						}
 						var folderName = jQuery('#mm_selected_folder').val();
 						MailManager.updateSelectedFolder(folderName);
-					}
-					);
+					});
 			}, 400);
 		},
 
@@ -161,39 +188,43 @@ if (typeof(MailManager) == 'undefined') {
 		},
 
 		updateMailFolders : function() {
-			jQuery.post(MailManager._baseurl() + "_operation=mainui",
-				function(response){
+			 AppConnector.request(MailManager._baseurl() + "_operation=mainui").then(function(response) { 
 					//var response = MailManager.removeHidElement(transport.responseText);
-					//response = JSON.parse(response);
+					response = JSON.parse(response);
 					jQuery('#_mainfolderdiv_').html(response['result']['ui']);
 					MailManager.refreshCurrentFolder(); // this is used to refresh the mails in the folders
 
 					var folderName = jQuery('#mm_selected_folder').val();
 					MailManager.updateSelectedFolder(folderName);
-					
+
 					MailManager.triggerUI5Resize();
 				}
 				);
 		},
 
 		quicklinks_update: function() {
-			jQuery.post(MailManager._baseurl() + "_operation=mainui&_operationarg=_quicklinks",
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=mainui&_operationarg=_quicklinks").then(function(response) { 
 					//var response = MailManager.removeHidElement(transport.responseText);
-					//response = JSON.parse(response);
+					response = JSON.parse(response);
 					jQuery("#_quicklinks_mainuidiv_").html(response['result']['ui']);
 				}
 				);
 		},
-		
+
+		showSelectFolderDesc: function() {
+			jQuery(".selectFolderValue").addClass('hide');
+			jQuery(".selectFolderDesc").show();
+			jQuery(".selectFolderDesc").removeClass('hide');
+		},
+
 		/* Intermedidate call back to build main ui */
 		_mainui_callback: function(responseJSON){
 			jQuery('#_mainfolderdiv_').html(responseJSON['result']['ui']);
 
 			if (!responseJSON['result']['mailbox']) {
-				MailManager.open_settings();
+				MailManager.open_settings_detail();
 			}
-			
+
 			MailManager.triggerUI5Resize();
 		},
 
@@ -202,10 +233,10 @@ if (typeof(MailManager) == 'undefined') {
 
 			function execute() {
 				var temp = new Array();
-				
+
 				function getCheckedMails() {
 					var cb_elements = jQuery('[name="mc_box"]');
-					
+
 					for (var i = 0; i < cb_elements.length; i++) {
 						if (cb_elements[i].checked) {
 							temp.push(cb_elements[i].value);
@@ -250,7 +281,7 @@ if (typeof(MailManager) == 'undefined') {
 						'_folder' : encodeURIComponent(currentFolderName),
 						'_moveFolder' : moveToFolderName.replace('�','')
 					};
-					MailManager.Request('index.php?'+MailManager._baseurl() , params, callbackFunction).then( function () {
+					MailManager.Request(MailManager._baseurl() , params, callbackFunction).then( function () {
 						MailManager.folder_open(currentFolderName);
 						progressIndicatorElement.progressIndicator({
 							'mode' : 'hide'
@@ -266,7 +297,7 @@ if (typeof(MailManager) == 'undefined') {
 		reload_now: function(){
 			MailManager.mainui();
 		},
-		
+
 		/* Close all the div */
 		close_all: function(){
 			if (jQuery('#_contentdiv_'))    jQuery('#_contentdiv_').hide();
@@ -275,7 +306,7 @@ if (typeof(MailManager) == 'undefined') {
 			if (jQuery('#_settingsdiv_'))   jQuery('#_settingsdiv_').hide();
 			if (jQuery('#_replydiv_'))      jQuery('#_replydiv_').hide();
 		},
-		
+
 		/* Open settings page */
 		open_settings: function(){
 			var message = app.vtranslate('JSLBL_Settings')+' ....';
@@ -286,9 +317,8 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=settings&_operationarg=edit",
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=settings&_operationarg=edit").then(function(response) { 
+                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -305,11 +335,39 @@ if (typeof(MailManager) == 'undefined') {
 				}
 				);
 		},
-		
-		
+
+		/* Open settings detail page */
+		open_settings_detail: function(){
+			var message = app.vtranslate('JSLBL_Settings')+' ....';
+			var progressIndicatorElement = jQuery.progressIndicator({
+				'message' : message,
+				'position' : 'html',
+				'blockInfo' : {
+					'enabled' : true
+				}
+			});
+                        AppConnector.request(MailManager._baseurl() + "_operation=settings&_operationarg=detail").then(function(response) { 
+                                        response = JSON.parse(response);
+					progressIndicatorElement.progressIndicator({
+						'mode' : 'hide'
+					})
+					MailManager.close_all();
+					jQuery('#_settingsdiv_').show();
+					//var response = MailManager.removeHidElement(transport.responseText);
+					jQuery('#_settingsdiv_').html(response.result);
+
+					// Update the seleted folders to highlight them.
+					MailManager.updateSelectedFolder('mm_settings');
+					jQuery('#mm_selected_folder').val('mm_settings');
+
+					MailManager.triggerUI5Resize();
+				}
+				);
+		},
+
 		handle_settings_confighelper: function(selectBox){
 			var form = selectBox.form;
-			
+
 			var useServer = '', useProtocol = '', useSSLType = '', useCert = '';
 			if (selectBox.value == 'gmail' || selectBox.value == 'yahoo') {
 				useServer = 'imap.gmail.com';
@@ -319,32 +377,33 @@ if (typeof(MailManager) == 'undefined') {
 				useProtocol = 'IMAP4';
 				useSSLType = 'ssl';
 				useCert = 'novalidate-cert';
-				jQuery('#settings_details').show();
-				jQuery('#additional_settings').hide();
+				jQuery('.settings_details').show();
+				jQuery('.additional_settings').hide();
 			} else  if (selectBox.value == 'fastmail') {
 				useServer = 'mail.messagingengine.com';
 				useProtocol = 'IMAP2';
 				useSSLType = 'tls';
 				useCert = 'novalidate-cert';
-				jQuery('#settings_details').show();
-				jQuery('#additional_settings').hide();
+				jQuery('.settings_details').show();
+				jQuery('.additional_settings').hide();
 			} else if (selectBox.value == 'other') {
 				useServer = '';
 				useProtocol = 'IMAP4';
 				useSSLType = 'ssl';
 				useCert = 'novalidate-cert';
-				jQuery('#settings_details').show();
-				jQuery('#additional_settings').show();
+				jQuery('.settings_details').show();
+				jQuery('.additional_settings').show();
 			} else {
-				jQuery('#settings_details').hide();
+				jQuery('.settings_details').hide();
 			}
+			jQuery('.refresh_settings').show();
 			// Clear the User Name and Password field
 			jQuery('#_mbox_user').val('');
 			jQuery('#_mbox_pwd').val('');
 
 			if (useProtocol != '') {
 				form._mbox_server.value = useServer;
-				
+
 				jQuery(form._mbox_protocol).each(function(node){
 					node.checked = (node.value == useProtocol);
 				});
@@ -356,7 +415,7 @@ if (typeof(MailManager) == 'undefined') {
 				});
 			}
 		},
-		
+
 		/* Save the settings */
 		save_settings: function(form){
 			if(form._mbox_server.value == "") {
@@ -380,15 +439,20 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
 			var url = MailManager._baseurl() + "_operation=settings&_operationarg=save&" + Form.serialize(form);
-			jQuery.post(url,function(data){
+                        AppConnector.request(url).then(function(data) { 
+                                data = JSON.parse(data);
 				progressIndicatorElement.progressIndicator({
 					'mode' : 'hide'
 				})
 				//var response = MailManager.removeHidElement(transport.responseText);
 				//var responseJSON = JSON.parse(response);
 				if (data['success']) {
-					MailManager.quicklinks_update();
-					MailManager.folder_open('INBOX');
+					jQuery('#isMailBoxExists').val(1);
+					jQuery('#folders').find(':last-child').remove();
+					MailManager_QuickCreate_Js.foldersClicked = false;
+					var imageEle = jQuery('.imageElement');
+					var imagePath = imageEle.data('rightimage');
+					imageEle.attr('src', imagePath);
 					MailManager.mainui();
 				} else {
 					alert(app.vtranslate(data['error']['message']));
@@ -407,15 +471,19 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=settings&_operationarg=remove&" + Form.serialize(form),
-				function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=settings&_operationarg=remove&" + Form.serialize(form)).then(function(responseJSON) { 
+                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
 					MailManager.close_all();
-					//var response = MailManager.removeHidElement(transport.responseText);
-					//var responseJSON = JSON.parse(response);
+					jQuery('#folders').find(':last-child').remove();
+					jQuery('#isMailBoxExists').val(0);
+					MailManager_QuickCreate_Js.foldersClicked = false;
+					var imageEle = jQuery('.imageElement');
+					var imagePath = imageEle.data('rightimage');
+					imageEle.attr('src', imagePath);
+					jQuery('#quickLinksInfo').html('');
 					if (responseJSON['success']) {
 						MailManager.reload_now();
 					} else {
@@ -435,7 +503,7 @@ if (typeof(MailManager) == 'undefined') {
 			MailManager.updateSelectedFolder(folderName);
 			jQuery('#mm_selected_folder').val(folderName);
 		},
-		
+
 		/* Open the folder listing */
 		folder_open: function(name, page){
 			if (typeof(page) == 'undefined')
@@ -457,10 +525,9 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=folder&_operationarg=open&_folder=" + encodeURIComponent(name)  +
-				"&_page=" + encodeURIComponent(page) + query,
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=folder&_operationarg=open&_folder=" + encodeURIComponent(name)  +
+				"&_page=" + encodeURIComponent(page) + query).then(function(response) { 
+                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -493,7 +560,7 @@ if (typeof(MailManager) == 'undefined') {
 						if(element.length != 0) {
 							element.closest('div').addClass('date')
 							element.addClass('dateField').attr('data-date-format', dateformat);
-							element.after("<span class='add-on'><i class='icon-calendar icon-white'></i></span>");
+							element.after(" <span class='add-on'><i class='icon-calendar'></i></span>");
 							app.registerEventForDatePickerFields(element, true);
 						}
 					}else {
@@ -525,7 +592,7 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
 		},
-		
+
 		updateMoveFolderList : function() {
 			if(jQuery('#mailbox_folder') && jQuery('#moveFolderList')) {
 				var currentFolder = jQuery('#mailbox_folder').val();
@@ -533,7 +600,7 @@ if (typeof(MailManager) == 'undefined') {
 
 			}
 		},
-		
+
 		refreshCurrentFolder: function(){
 			var selectedFolder = jQuery('#mm_selected_folder').val();
 			var currentFolderName = jQuery("#mailbox_folder").val();
@@ -555,11 +622,11 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			}
 		},
-		
+
 		/* Basic search for folder emails */
 		search_basic: function(form){
 			var frmparams = Form.serialize(form);
-			
+
 			var message = app.vtranslate('JSLBL_Searching')+' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
@@ -568,30 +635,29 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=folder&_operationarg=open&" + frmparams,
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=folder&_operationarg=open&" + frmparams).then(function(response) { 
+                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
-					
+
 					MailManager.mail_close();
 					//var response = MailManager.removeHidElement(transport.responseText);
 					jQuery('#_contentdiv_').html(response.result);
-					
+
 					MailManager.triggerUI5Resize();
 				}
 				);
-			
+
 			return false;
 		},
-		
+
 		// Meta information of currently opened mail
 		mail_open_meta: {},
-		
+
 		/* Open email */
 		mail_open: function(folder, msgno){
-		
+
 			var message = app.vtranslate('JSLBL_Opening')+' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
@@ -600,11 +666,11 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery('#_mailrow_' + msgno).removeClass('mm_bold');
+			jQuery('#_mailrow_' + msgno).removeClass('fontBold');
 			jQuery('#_mailrow_' + msgno).addClass('mm_normal');
 
-			jQuery.post(MailManager._baseurl() + "_operation=mail&_operationarg=open&_folder=" + encodeURIComponent(folder) + "&_msgno=" + encodeURIComponent(msgno),
-				function(responseJSON){
+                         AppConnector.request(MailManager._baseurl() + "_operation=mail&_operationarg=open&_folder=" + encodeURIComponent(folder) + "&_msgno=" + encodeURIComponent(msgno)).then(function(responseJSON) { 
+                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -612,20 +678,20 @@ if (typeof(MailManager) == 'undefined') {
 					//var responseJSON = JSON.parse(response);
 					var resultJSON = responseJSON['result'];
 					if (!resultJSON['ui']) {
-						MailManager.show_error(MailManager.i18n('JSLBL_Failed_To_Open_Email'));
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Failed_To_Open_Email'));
 						return;
 					}
-					
+
 					MailManager.close_all();
 					jQuery('#_contentdiv2_').show();
 					jQuery('#_contentdiv2_').html(resultJSON['ui']);
-					
+
 					MailManager.mail_open_meta = resultJSON['meta'];
 					var folderName = resultJSON['folder'];
-					
+
 					// Update folder count on UI
 					MailManager.folder_updateCount(folderName, resultJSON['unread']);
-					
+
 					MailManager.mail_find_relationship();
 				}
 				);
@@ -638,10 +704,10 @@ if (typeof(MailManager) == 'undefined') {
 			jQuery('#_contentdiv_').show();
 			MailManager.mail_open_meta = {};
 		},
-		
+
 		/* Mark mail as read */
 		mail_mark_unread: function(folder, msgno){
-		
+
 			var message = app.vtranslate('JSLBL_Updating')+' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
@@ -650,22 +716,22 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(MailManager._baseurl() + "_operation=mail&_operationarg=mark&_markas=unread&_folder=" + encodeURIComponent(folder) + "&_msgno=" + encodeURIComponent(msgno),
-				function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=mail&_operationarg=mark&_markas=unread&_folder=" + encodeURIComponent(folder) + "&_msgno=" + encodeURIComponent(msgno)).then(function(responseJSON) { 
+                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
 					//var response = MailManager.removeHidElement(transport.responseText);
 					//var responseJSON = JSON.parse(response);
 					var resultJSON = responseJSON['result'];
-					
+
 					if (responseJSON && resultJSON['status']) {
 						MailManager.mail_close();
-						
+
 						var msgno = resultJSON['msgno'];
 						jQuery('#_mailrow_' + msgno).removeClass('mm_normal');
-						jQuery('#_mailrow_' + msgno).addClass('mm_bold');
-						
+						jQuery('#_mailrow_' + msgno).addClass('fontBold');
+
 						MailManager.folder_updateCount(resultJSON['folder'], resultJSON['unread']);
 					}
 				}
@@ -697,33 +763,34 @@ if (typeof(MailManager) == 'undefined') {
 		mail_find_relationship: function(){
 			jQuery('#_mailrecord_findrel_btn_').html(MailManager.i18n('JSLBL_Finding_Relation') + '...');
 			jQuery("#_mailrecord_findrel_btn_").attr('disabled', true);
-			
+
 			var meta = MailManager.mail_open_meta;
-			jQuery.post(MailManager._baseurl() + "_operation=relation&_operationarg=find&_mfrom=" + encodeURIComponent(meta['from']) +
+                        AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=find&_mfrom=" + encodeURIComponent(meta['from']) +
 				'&_folder=' +encodeURIComponent(meta['folder']) +'&_msgno=' +encodeURIComponent(meta['msgno']) +'&_msguid=' +
-				encodeURIComponent(meta['msguid'].replace('<', '&lt;').replace('>', '&gt;')), function(responseJSON){
+				encodeURIComponent(meta['msguid'].replace('<', '&lt;').replace('>', '&gt;'))).then(function(responseJSON) { 
+                                        responseJSON = JSON.parse(responseJSON);
 					jQuery('#_mailrecord_findrel_btn_').html(MailManager.i18n('JSLBL_Find_Relation_Now'));
 					jQuery("#_mailrecord_findrel_btn_").attr('disabled', false);
 					jQuery('#_mailrecord_findrel_btn_').hide();
 					//var response = MailManager.removeHidElement(transport.responseText);
 					//var responseJSON = JSON.parse(response);
 					var resultJSON = responseJSON['result'];
-					
+
 					jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
-					
+
 					MailManager.triggerUI5Resize();
 				}
 				);
 		},
-		
+
 		/* Associate email to CRM record */
 		mail_associate: function(form){
-		
+
 			var frmparams = Form.serialize(form);
 			// No record is selected for linking?
 			if (frmparams.indexOf('_mlinkto') == -1)
 				return;
-			
+
 			var message = app.vtranslate('JSLBL_Associating')+' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
 				'message' : message,
@@ -732,8 +799,8 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(MailManager._baseurl() + "_operation=relation&_operationarg=link&" + frmparams,
-				function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=link&" + frmparams).then(function(responseJSON) { 
+                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -743,12 +810,12 @@ if (typeof(MailManager) == 'undefined') {
 					if (resultJSON['ui']) {
 						jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
 					}
-					
+
 					MailManager.triggerUI5Resize();
 				}
 				);
 		},
-		
+
 		/* Extended support for creating and linking */
 		mail_associate_create_wizard: function(form){
 			if (form._mlinktotype.value == '') {
@@ -756,20 +823,24 @@ if (typeof(MailManager) == 'undefined') {
 				return;
 			}
 			var thisInstance = this;
-			
+
+			var message = app.vtranslate('JSLBL_Loading')+' ...';
+			var progressIndicatorElement = jQuery.progressIndicator({
+				'message' : message,
+				'position' : 'html',
+				'blockInfo' : {
+					'enabled' : true
+				}
+			});
 			var frmparams = Form.serialize(form);
-			jQuery.post(
-				MailManager._baseurl() + "_operation=relation&_operationarg=create_wizard&" + frmparams,
-				function(response){
-					
+                         AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=create_wizard&" + frmparams).then(function(response) {
+                                        response = JSON.parse(response);
 					var quickCreateController = new MailManager_QuickCreate_Js();
-					quickCreateController.showQuickCreateCustom(response, function(quickcreateform){
-						thisInstance.mail_associate_create(quickcreateform, form);
-					});
+					quickCreateController.handleQuickCreateData(response);
 				}
 				);
 		},
-		
+
 		/* This will be used to perform actions on mails with an Linked record*/
 		mail_associate_actions : function(form) {
 			var selected = false;
@@ -788,14 +859,14 @@ if (typeof(MailManager) == 'undefined') {
 					selected = true;
 				}
 			}
-			
+
 			// No record is selected for linking?
 			if (selected == false) {
-				MailManager.show_error(MailManager.i18n('JSLBL_PLEASE_SELECT_ATLEAST_ONE_RECORD'));
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_PLEASE_SELECT_ATLEAST_ONE_RECORD'));
 				MailManager.resetLinkToDropDown();
 				return false;
 			}
-			
+
 			if(form._mlinktotype.value == 'Emails') {
 				MailManager.mail_associate(form);
 			} else if(form._mlinktotype.value == 'ModComments') {
@@ -810,7 +881,7 @@ if (typeof(MailManager) == 'undefined') {
 			MailManager.resetLinkToDropDown();
 			app.hideModalWindow();
 		},
-		
+
 		mail_associate_create: function(form, mainform){
 
 			var frmparams = Form.serialize(form);
@@ -826,8 +897,7 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(MailManager._baseurl() + "_operation=relation&_operationarg=create&" + frmparams,
-				function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=create&" + frmparams).then(function(responseJSON) {
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -837,14 +907,15 @@ if (typeof(MailManager) == 'undefined') {
 					if (resultJSON['ui']) {
 						MailManager.mail_associate_create_cancel();
 						jQuery('#_mailrecord_relationshipdiv_').html(resultJSON['ui']);
-						
+						MailManager.resetLinkToDropDown();
+
 						MailManager.triggerUI5Resize();
 						return true;
 					}
 				}
 				);
 		},
-		
+
 		// function to show the comment widget
 		showCommentWidget : function(form) {
 			var frmparams = Form.serialize(form);
@@ -855,12 +926,16 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(MailManager._baseurl() + "_operation=relation&_operationarg=commentwidget&" + frmparams,
-				function(response){
+                        AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=commentwidget&" + frmparams).then(function(response) {
+                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
 					var callBackFunction = function(data){
+						jQuery('.cancelLink', data).on('click',function(e){
+							MailManager.resetLinkToDropDown();
+						});
+
 						jQuery('[name="saveButton"]',data).on('click',function(e){
 							var valid = MailManager.addCommentValidate(data);
 							if(valid){
@@ -888,9 +963,9 @@ if (typeof(MailManager) == 'undefined') {
 			}
 			return true;
 		},
-		
+
 		saveComment : function(form){
-			var _mlinkto = jQuery('[name="_mlinkto"]').val();
+			var _mlinkto = jQuery('[name="_mlinkto"]:checked').val();
 			var _mlinktotype = jQuery('[name="_mlinktotype"]').val();
 			var _msgno = jQuery('[name="_msgno"]').val();
 			var _folder = jQuery('[name="_folder"]').val()
@@ -904,13 +979,15 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(MailManager._baseurl() + "_operation=relation&_operationarg=create&" + frmparams, function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=create&" + frmparams).then(function(responseJSON) {
+                            responseJSON = JSON.parse(responseJSON);
                     progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
                     var resultJSON = responseJSON['result'];
 					if (resultJSON['ui']) {
 						app.hideModalWindow(form);
+						MailManager.resetLinkToDropDown();
 					}
                 }
             );
@@ -923,10 +1000,11 @@ if (typeof(MailManager) == 'undefined') {
 			element.css("left", ((jQuery(window).width() - element.outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
 
 		},
-		
+
 		/* Compose new mail */
 		mail_compose: function(){
-			var params = {step: "step1", module: "MailManager", view: "MassActionAjax", mode: "showComposeEmailForm"}
+			var params = {step: "step1", module: "MailManager", view: "MassActionAjax", mode: "showComposeEmailForm",
+				selected_ids : "[]", excluded_ids : "[]"};
 			Vtiger_Index_Js.showComposeEmailPopup(params);
 		},
 
@@ -981,12 +1059,12 @@ if (typeof(MailManager) == 'undefined') {
 			var win = emailEditInstance.showComposeEmailForm(params);
 			var folder = jQuery('#mailbox_folder').val();
 			if (folder == 'mm_drafts') {
-				var timer = setInterval(function() {   
-					if(win.closed) {  
-						clearInterval(timer);  
+				var timer = setInterval(function() {
+					if(win.closed) {
+						clearInterval(timer);
 						MailManager.folder_drafts(0);
-					}  
-				}, 500); 
+					}
+				}, 500);
 			}
 		},
 
@@ -999,10 +1077,9 @@ if (typeof(MailManager) == 'undefined') {
 					'enabled' : true
 				}
 			});
-			jQuery.post(
-				MailManager._baseurl() + "_operation=mail&_operationarg=deleteAttachment&emailid="+ encodeURIComponent(id)
-				+"&docid="+ encodeURIComponent(docid),
-				function(responseJSON){
+                        AppConnector.request(MailManager._baseurl() + "_operation=mail&_operationarg=deleteAttachment&emailid="+ encodeURIComponent(id)
+				+"&docid="+ encodeURIComponent(docid)).then(function(responseJSON) {
+                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -1014,31 +1091,29 @@ if (typeof(MailManager) == 'undefined') {
 							jQuery(ele).parent().remove();
 						});
 					} else {
-						MailManager.show_error(MailManager.i18n('JSLBL_ATTACHMENT_NOT_DELETED'));
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_ATTACHMENT_NOT_DELETED'));
 					}
 				}
 				);
 		},
-		
+
 		/* Reply to mail */
 		mail_reply: function(all){
 			if (typeof(all) == 'undefined')
 				all = true;
-			
+
 			// TODO Strip invalid HTML?
 			var from = jQuery('#_mailopen_from').html();
 			var cc = all ? jQuery('#_mailopen_cc').html() : '';
 			var subject = jQuery('#_mailopen_subject').html();
 			var body = jQuery('#_mailopen_body').html();
 			var date = jQuery('#_mailopen_date').html();
-			
+
 			var replySubject = (subject.toUpperCase().indexOf('RE:') == 0) ? subject : 'Re: ' + subject;
 			var replyBody = MailManager.sprintf('<p></p><p style="margin:0;padding:0;">%s, %s, %s:</p><blockquote style="border:0;margin:0;border-left:1px solid gray;padding:0 0 0 2px;">%s</blockquote><br />', 'On ' + date, from, 'wrote', body);
-            
+
 			function fillComposeEmailForm(win) {
 				var formValues = {
-					'[name="toemailinfo"]': JSON.stringify({0:[from]}),
-					'.toEmailField input': from,
 					'#ccContainer input' : cc,
 					'[name="subject"]': replySubject
 				}
@@ -1051,15 +1126,15 @@ if (typeof(MailManager) == 'undefined') {
 					win['jQuery']('#ccLink').trigger('click');
 				}
 			}
-			
-			var params = {step: "step1", module: "MailManager", view: "MassActionAjax", mode: "showComposeEmailForm", selected_ids:"[]", excluded_ids: "[]"}
+
+			var params = {step: "step1", module: "MailManager", view: "MassActionAjax", mode: "showComposeEmailForm", selected_ids:"[]", excluded_ids: "[]", to:'["'+from+'"]'}
 			Vtiger_Index_Js.showComposeEmailPopup(params, function(win){
 				if (typeof win != 'undefined') {
-					setTimeout(function() { fillComposeEmailForm(win); }, 750);
+					setTimeout(function() {fillComposeEmailForm(win);}, 2000);
 				}
 			});
 		},
-		
+
 		/* Track and Initialize RTE instance for reply */
 		mail_reply_rteinstance: false,
 		mail_reply_rteinit: function(data){
@@ -1072,12 +1147,12 @@ if (typeof(MailManager) == 'undefined') {
 				});
 				MailManager.mail_reply_rteinstance = CKEDITOR.instances[textAreaName];
 			}
-			
+
 			MailManager.mail_reply_rteinstance.setData(data, function(){
 				});
 			MailManager.mail_reply_rteinstance.focus();
 		},
-		
+
 		/* Close reply UI */
 		mail_reply_close: function(){
 			jQuery('#_replydiv_').hide();
@@ -1091,25 +1166,24 @@ if (typeof(MailManager) == 'undefined') {
 				} else {
 					jQuery('#_contentdiv2_').show();
 				}
-			
-            
+
 				// Updated to highlight selected folder
 				var currentSelectedFolder = jQuery('#mailbox_folder').val();
 				MailManager.updateSelectedFolder(currentSelectedFolder);
 				jQuery('#mm_selected_folder').val(currentSelectedFolder);
 			}
-			
+
 			MailManager.triggerUI5Resize();
 		},
-		
+
 		/* Forward email */
 		mail_forward: function(messageId){
-			
+
 			/**
 			 * If mail has no attachment - open the popup in compose mode.
 			 * Else create a draft with attachment - open the popup as draft edit mode.
 			 */
-			
+
 			var from = jQuery('#_mailopen_from').html();
 			var to = jQuery('#_mailopen_to').html();
 			var cc = jQuery('#_mailopen_cc') ? jQuery('#_mailopen_cc').html() : '';
@@ -1117,25 +1191,24 @@ if (typeof(MailManager) == 'undefined') {
 			var body = jQuery('#_mailopen_body').html();
 			var date = jQuery('#_mailopen_date').html();
 			var folder = jQuery('#mailbox_folder').val();
-			
+
 			var fwdMsgMetaInfo = MailManager.i18n('JSLBL_FROM') + from + '<br/>'+MailManager.i18n('JSLBL_DATE') + date + '<br/>'+MailManager.i18n('JSLBL_SUBJECT') + subject;
 			if (to != '' && to != null)
 				fwdMsgMetaInfo += '<br/>'+MailManager.i18n('JSLBL_TO') + to;
 			if (cc != '' && cc != null)
 				fwdMsgMetaInfo += '<br/>'+MailManager.i18n('JSLBL_CC') + cc;
 			fwdMsgMetaInfo += '<br/>';
-			
+
 			var fwdSubject = (subject.toUpperCase().indexOf('FWD:') == 0) ? subject : 'Fwd: ' + subject;
 			var fwdBody = MailManager.sprintf('<p></p><p>%s<br/>%s</p>%s', MailManager.i18n('JSLBL_FORWARD_MESSAGE_TEXT'), fwdMsgMetaInfo, body);
 
 			var attachmentCount = jQuery("#_mail_attachmentcount_").val();
 			if(attachmentCount) {
 				VtigerJS_DialogBox.block();
-				jQuery.post(
-					MailManager._baseurl() + "_operation=mail&_operationarg=forward&messageid=" + 
+                                AppConnector.request(MailManager._baseurl() + "_operation=mail&_operationarg=forward&messageid=" + 
 					encodeURIComponent(messageId) +"&folder=" + encodeURIComponent(folder) +"&subject=" + encodeURIComponent(fwdSubject) +
-					"&body=" + fwdBody,
-					function(responseJSON){
+					"&body=" + fwdBody).then(function(responseJSON) {
+                                            responseJSON = JSON.parse(responseJSON);
 						VtigerJS_DialogBox.unblock();
 						// Open the draft the was saved.
 						if (responseJSON['success']) {
@@ -1143,7 +1216,7 @@ if (typeof(MailManager) == 'undefined') {
 						}
 					}
 					);
-					
+
 			} else {
 				// Populate the popup window
 				function fillComposeEmailForm(win) {
@@ -1159,36 +1232,36 @@ if (typeof(MailManager) == 'undefined') {
 				var params = {step: "step1", module: "MailManager", view: "MassActionAjax", mode: "showComposeEmailForm", selected_ids:"[]", excluded_ids: "[]"}
 				Vtiger_Index_Js.showComposeEmailPopup(params, function(win){
 					if (typeof win != 'undefined') {
-						setTimeout(function() { fillComposeEmailForm(win); }, 750);
+						setTimeout(function() {fillComposeEmailForm(win);}, 2000);
 					}
 				});
 			}
 		},
-		
+
 		/* Send reply to email */
 		mail_reply_send: function(form){
 			if (MailManager.mail_reply_rteinstance) {
 				MailManager.mail_reply_rteinstance.updateElement();
 			}
 			var meta = MailManager.mail_open_meta;
-			
+
 			var msguid = encodeURIComponent(meta['msguid'] ? meta['msguid'].replace('<', '&lt;').replace('>', '&gt;') : '');
-			
+
 			if(!MailManager.validateEmailFields(form.to.value, form.cc.value, form.bcc.value)) {
 				return false;
 			}
 
 			if (form.to.value == '') {
-				MailManager.show_error(MailManager.i18n('JSLBL_Recepient_Cannot_Be_Empty'));
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Recepient_Cannot_Be_Empty'));
 				return false;
 			}
 			if (form.subject.value == '') {
-				MailManager.show_error(MailManager.i18n('JSLBL_Subject_Cannot_Be_Empty'));
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Subject_Cannot_Be_Empty'));
 				return false;
 			}
 			var bodyval = $('_mail_replyfrm_body_').value.trim();
 			if (bodyval == '<br />' || bodyval == '') {
-				MailManager.show_error(MailManager.i18n('JSLBL_Body_Cannot_Be_Empty'));
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Body_Cannot_Be_Empty'));
 				return false;
 			}
 			var message = app.vtranslate('JSLBL_Sending')+' ...';
@@ -1200,7 +1273,7 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
 			var params = {
-				'_operation':'mail', 
+				'_operation':'mail',
 				'_operationarg':'send',
 				'_msgid':msguid,
 				'to':encodeURIComponent(form.to.value),
@@ -1221,12 +1294,8 @@ if (typeof(MailManager) == 'undefined') {
 				if (responseJSON['success']) {
 					MailManager.mail_reply_close();
 					MailManager.show_message(MailManager.i18n('JSLBL_MAIL_SENT'));
-
-				//                    var currentSelectedFolder = jQuery('#mm_selected_folder').val();
-				//                    MailManager.updateSelectedFolder(currentSelectedFolder);
-				//                    jQuery('#mm_selected_folder').val(currentSelectedFolder);
 				} else {
-					MailManager.show_error(MailManager.i18n('JSLBL_Failed_To_Send_Mail') +
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Failed_To_Send_Mail') +
 						': ' + responseJSON['error']['message']);
 				}
 			});
@@ -1241,7 +1310,7 @@ if (typeof(MailManager) == 'undefined') {
 			if(!MailManager.validateEmailFields(form.to.value, form.cc.value, form.bcc.value)) {
 				return false;
 			}
-			
+
 			if (form.subject.value == '' ) {
 				if(!confirm(MailManager.i18n('JSLBL_SaveWith_EmptySubject'))) {
 					return false;
@@ -1257,7 +1326,7 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
 			var params = {
-				'_operation':'mail', 
+				'_operation':'mail',
 				'_operationarg':'save',
 				'emailid':encodeURIComponent(form.emailid.value),
 				'to':encodeURIComponent(form.to.value),
@@ -1279,7 +1348,7 @@ if (typeof(MailManager) == 'undefined') {
 				if (responseJSON['success']) {
 					MailManager.show_message(MailManager.i18n('JSLBL_DRAFT_MAIL_SAVED'));
 				} else {
-					MailManager.show_error(MailManager.i18n('JSLBL_Failed_To_Save_Mail'));
+					Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_Failed_To_Save_Mail'));
 				}
 			});
 		},
@@ -1304,8 +1373,8 @@ if (typeof(MailManager) == 'undefined') {
 					'mode' : 'hide'
 				})
 				MailManager.mail_close();
-				var response = MailManager.removeHidElement(transport.responseText);
-				jQuery('#_contentdiv_').html(response.result);
+				var resultObject = JSON.parse(transport.responseText);
+				jQuery('#_contentdiv_').html(resultObject.result);
 				// Initialize upload
 				//MailManager.createUploader();
 
@@ -1315,11 +1384,11 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.updateSelectedFolder('mm_drafts');
 				jQuery('#mm_selected_folder').val('mm_drafts');
 				jQuery('#mailbox_folder').val('mm_drafts');
-				
+
 				MailManager.triggerUI5Resize();
 			});
 		},
-		
+
 		search_popupui: function(target, handle){
 			var message = app.vtranslate('JSLBL_Loading')+' ...';
 			var progressIndicatorElement = jQuery.progressIndicator({
@@ -1343,18 +1412,18 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.placeAtCenter(jQuery('#_popupsearch_'));
 				jQuery('#_popupsearch_').show().draggable();
 				MailManager.search_popup_init(target);
-				
+
 				MailManager.triggerUI5Resize();
 			});
 		},
-		
+
 		search_popup_init: function(target){
-			var url = 'index.php?' + MailManager._baseurl() + "_operation=search&_operationarg=email&";
-			
+			var url = MailManager._baseurl() + "_operation=search&_operationarg=email&";
+
 			if (jQuery('#_search_popupui_target_')) {
 				jQuery('#_search_popupui_target_').val(target);
 			}
-			
+
 			var elem = jQuery('#_search_popupui_input_');
 			if (elem) {
 				if (elem.attr('_tokeninput_init_'))
@@ -1384,7 +1453,7 @@ if (typeof(MailManager) == 'undefined') {
 		search_consume_input: function(form){
 			var inputstr = form._search_popupui_input_.value;
 			var target = form._search_popupui_target_.value;
-			
+
 			// Based on target perform the operation
 			var targetnode = $(target);
 			if (targetnode) {
@@ -1395,19 +1464,19 @@ if (typeof(MailManager) == 'undefined') {
 			}
 			MailManager.popup_close();
 		},
-		
+
 		popup_close: function(){
 			jQuery('#_popupsearch_').html('');
 			jQuery('#_popupsearch_').hide();
-			
+
 			MailManager.triggerUI5Resize();
 		},
-		
+
 		clear_input: function(id){
 			if (jQuery("#"+id))
 				jQuery("#"+id).val('');
 		},
-		
+
 		selectTemplate: function() {
 			url = 'module=EmailTemplate&parent=Settings&view=List';
 			var popupInstance = Vtiger_Popup_Js.getInstance();
@@ -1444,7 +1513,7 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.maildelete(folder, temp, true);
 			}
 		},
-		
+
 		maildelete: function(foldername, msgno, reloadfolder){
 			var message = app.vtranslate('LBL_DELETE_CONFIRMATION');
 			if (!confirm(message)) return;
@@ -1497,13 +1566,13 @@ if (typeof(MailManager) == 'undefined') {
 				var body = CKEDITOR.instances['_mail_replyfrm_body_'];
 				if(body != "")
 					body =  body.getData();
-				
+
 				var to = jQuery('#_mail_replyfrm_to_').val();
 				var cc = jQuery('#_mail_replyfrm_cc_').val();
 				var bcc = jQuery('#_mail_replyfrm_bcc_').val();
 				var subject = jQuery('#_mail_replyfrm_subject_').val();
 				VtigerJS_DialogBox.block();
-                
+
 				var params = {
 					'_operation':'mail',
 					'_operationarg':'save',
@@ -1556,10 +1625,10 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.mail_close();
 				var responseText = MailManager.removeHidElement(response.responseText);
 				jQuery('#_contentdiv_').html(responseText.result);
-				
+
 				MailManager.triggerUI5Resize();
 			});
-            
+
 			return false;
 		},
 
@@ -1594,14 +1663,14 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.mail_close();
 				response = JSON.parse(response['responseText']);
 				jQuery('#_contentdiv_').html(response.result);
-				
+
 				jQuery('#_mailfolder_' + foldername).addClass('mm_folder_selected');
 				var element = jQuery('#search_txt');
 				if(type == 'ON') {
 					if(element.length != 0) {
 						element.closest('div').addClass('date')
 						element.addClass('dateField').attr('data-date-format', dateformat);
-						element.after("<span class='add-on'><i class='icon-calendar icon-white'></i></span>");
+						element.after(" <span class='add-on'><i class='icon-calendar'></i></span>");
 						app.registerEventForDatePickerFields(element, true);
 					}
 				}else {
@@ -1615,9 +1684,9 @@ if (typeof(MailManager) == 'undefined') {
 				MailManager.triggerUI5Resize();
 
 				MailManager.bindEnterKeyForSearch();
-				
+
 			});
-                    
+
 			return false;
 		},
 
@@ -1633,16 +1702,16 @@ if (typeof(MailManager) == 'undefined') {
 				window.close();
 				return false;
 			}
-			
+
 			attachContent = "<li class='qq-upload-success small'><span class='qq-upload-file small'>"+res['name']+"</span>\n\
 							<span class='qq-upload-size small' style='display: inline;'>"+fileSize+"</span>\n\
 							<a class='qq-upload-deleteupload small' onclick='MailManager.deleteAttachment(\""+res['emailid']+"\", \""+res['docid']+"\", this);' href='#'>\n\
 							<img height='12' border='0' width='12' title='Delete' src='themes/images/no.gif'></a></li>";
-			
+
 			try
 			{
 				element = jQuery(window.opener.document).find('.qq-upload-list');
-			
+
 				if(element[0]) {
 					jQuery(element[0]).append(attachContent);
 				} else {
@@ -1659,7 +1728,6 @@ if (typeof(MailManager) == 'undefined') {
 
 		},
 
-		
 		computeDisplayableFileSize : function(size) {
 			var fileSize;
 			if(size <= 1024) {
@@ -1673,7 +1741,7 @@ if (typeof(MailManager) == 'undefined') {
 			}
 			return fileSize;
 		},
-		
+
 		validateEmailFields :  function(to, cc, bcc) {
 			if(to != "") {
 				if(!MailManager.mail_validate(to)) {
@@ -1702,13 +1770,13 @@ if (typeof(MailManager) == 'undefined') {
 				tmp = arr[i];
 				if(tmp.match('<') && tmp.match('>')) {
 					if(!MailManager.findAngleBracket(arr[i])) {
-						var errorMsg = MailManager.i18n("JSLBL_EMAIL_FORMAT_INCORRECT");
-						MailManager.show_error(errorMsg+": "+arr[i]);
+						var errorMsg = app.vtranslate('JSLBL_EMAIL_FORMAT_INCORRECT');
+						Vtiger_Helper_Js.showPnotify(errorMsg+": "+arr[i]);
 						return false;
 					}
 				} else if(trim(arr[i]) != "" && !(email_regex.test(trim(arr[i])))) {
-					var errorMsg2 = MailManager.i18n("JSLBL_EMAIL_FORMAT_INCORRECT");
-					MailManager.show_error(errorMsg2+": "+arr[i]);
+					var errorMsg2 = app.vtranslate('JSLBL_EMAIL_FORMAT_INCORRECT');
+					Vtiger_Helper_Js.showPnotify(errorMsg2+": "+arr[i]);
 					return false;
 				}
 			}
@@ -1755,7 +1823,7 @@ if (typeof(MailManager) == 'undefined') {
 		checkUploadCount : function() {
 			var MailManagerCurrentUploadCount = jQuery("#attachmentCount").val();
 			if(MailManagerCurrentUploadCount >= MailManager.MailManagerUploadLimit) {
-				MailManager.show_error(MailManager.i18n('JSLBL_FILEUPLOAD_LIMIT_EXCEEDED'));
+				Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_FILEUPLOAD_LIMIT_EXCEEDED'));
 				return false;
 			}
 			return true;
@@ -1771,13 +1839,13 @@ if (typeof(MailManager) == 'undefined') {
 
 				function validate() {
 					if(fieldvalue == '') {
-						MailManager.show_error(MailManager.i18n('JSLBL_ACCOUNTNAME_CANNOT_EMPTY'));
+						Vtiger_Helper_Js.showPnotify(app.vtranslate('JSLBL_ACCOUNTNAME_CANNOT_EMPTY'));
 						deffered.reject(form);
 						return false;
 					}
 					return true;
 				}
-				
+
 				function requestOnComplete(response) {
 					var str = response.responseText;
 					VtigerJS_DialogBox.unblock();
@@ -1860,6 +1928,21 @@ if (typeof(MailManager) == 'undefined') {
 			} else {
 				jQuery(element).parent().parent().addClass('mm_lvtColData').removeClass('mm_lvtColDataHover');
 			}
+
+			var allChecked = false;
+			if (state) {
+				var allChecked = true;
+				var elements = jQuery('[name="mc_box"]');
+				for(var i=0; i<elements.length; i++) {
+					var element = jQuery(elements[i]);
+					var isChecked = jQuery(element).parent().parent().hasClass('mm_lvtColDataHover');
+					if (!isChecked) {
+						var allChecked = false;
+						break;
+					}
+				}
+			}
+			jQuery('#parentCheckBox').attr('checked', allChecked);
 		},
 
 		highLightListMail : function(element) {
@@ -1881,7 +1964,7 @@ if (typeof(MailManager) == 'undefined') {
 			if(option == 'ON') {
 				element.closest('div').addClass('date')
 				element.addClass('dateField').attr('data-date-format', dateformat);
-				element.after("<span class='add-on'><i class='icon-calendar icon-white'></i></span>");
+				element.after(" <span class='add-on'><i class='icon-calendar'></i></span>");
 				jQuery('#search_txt').val("");
 				app.registerEventForDatePickerFields(jQuery('.dateField'), true);
 			} else {
@@ -1892,7 +1975,38 @@ if (typeof(MailManager) == 'undefined') {
 				jQuery('#jscal_trigger_fval').hide();
 			}
 		},
-		
+
+		getFoldersList: function() {
+			var foldersList = jQuery('#foldersList').val();
+			if (typeof foldersList !== 'undefined') {
+				var imageEle = jQuery('.imageElement');
+				if (jQuery('#foldersList').hasClass('hide')) {
+					var imagePath = imageEle.data('downimage');
+					jQuery('#foldersList').removeClass('hide');
+				} else {
+					var imagePath = imageEle.data('rightimage');
+					jQuery('#foldersList').addClass('hide');
+				}
+				imageEle.attr('src', imagePath);
+			} else {
+				var progressElement = jQuery('#folders');
+				progressElement.progressIndicator();
+
+				var imageEle = jQuery('.imageElement');
+				var imagePath = imageEle.data('downimage');
+				imageEle.attr('src', imagePath);
+
+				if(MailManager_QuickCreate_Js.foldersClicked == false) {
+                                    AppConnector.request(MailManager._baseurl() + "_operation=folder&_operationarg=getFoldersList").then(function(response) { 
+                                                response = JSON.parse(response);
+						jQuery('#folders').append(response.result);
+						progressElement.progressIndicator({'mode':'hide'});
+						MailManager_QuickCreate_Js.foldersClicked = true;
+					});
+				}
+			}
+		},
+
 		triggerUI5Resize: function() {
 			if (parent.resizeUI5Iframe) parent.resizeUI5Iframe(self.document.body.scrollHeight);
 		}

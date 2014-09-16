@@ -10,47 +10,46 @@
 $languageStrings = array(
 	//DetailView Actions
 	'SINGLE_SalesOrder' => 'Zamówienie od Klienta',
-	'LBL_EXPORT_TO_PDF' => 'Generuj do PDF',
-    'LBL_SEND_MAIL_PDF' => 'Wyślij w mailu PDF',
+	'LBL_EXPORT_TO_PDF' => 'Eksport do PDF',
 
 	//Basic strings
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'LBL_ADD_RECORD' => 'Dodaj zamówienie od Klienta',
+	'LBL_RECORDS_LIST' => 'Lista zamówień od Klientów',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie zamówienia od Klienta',
 
 	// Blocks
-	'LBL_SO_INFORMATION' => 'Szczegóły zamówienia',
-
+	'LBL_SO_INFORMATION' => 'Szczegóły zamówienia od Klienta',
+    'Recurring Invoive Information'=>'Informacja faktury cykliczne',
+	
 	//Field labels
-	'SalesOrder No'=>'Numer',
+	'SalesOrder No'=>'Numer zamówienia od Klienta',
 	'Quote Name'=>'Oferta',
-	'Customer No' => 'Numer kontrahenta',
-	'Requisition No'=>'Nr zapotrzebowania',
-	'Tracking Number'=>'Numer listu przewozowego',
-	'Sales Commission' => 'Prowizja od sprzedaży',
-	'Purchase Order'=>'Zamówienie do dostawcy',
-	'Vendor Terms'=>'Warunki dostawcy',
-	'Pending'=>'Oczekuje',
-	'Enable Recurring' => 'Włącz automatyczne generowanie faktury',
+	'Customer No' => 'Numer Kontrahenta',
+	'Requisition No'=>'Numer rezerwacji',
+	'Tracking Number'=>'Numer przesyłki',
+	'Sales Commission' => 'Marża ze sprzedaży',
+	'Purchase Order'=>'Zamówienie do Dostawcy',
+	'Vendor Terms'=>'Warunki zamówienia do Dostawcy',
+	'Pending'=>'Oczekujące',
+	'Enable Recurring' => 'Włącz automatyczne fakturowanie',
 	'Frequency' => 'Częstotliwość',
 	'Start Period' => 'Data rozpoczęcia',
 	'End Period' => 'Data zakończenia',
-	'Payment Duration' => 'Termin płatności',
-	'Invoice Status' => 'Status tworzonej faktury',
-
+	'Payment Duration' => 'Okres płatności',
+	'Invoice Status' => 'Status faktury',
+	
 	//Added for existing Picklist Entries
 
-	'Sub Total'=>'Brutto',
-	'AutoCreated'=>'Automatycznie utworzona',
+	'Sub Total'=>'Podsumowanie',
+	'AutoCreated'=>'Utworzona automatycznie',
 	'Sent'=>'Wysłana',
 	'Credit Invoice'=>'Faktura kredytowa',
 	'Paid'=>'Zapłacona',
-	
-	//Translation for product not found
-	'LBL_THIS' => 'Ten',
-	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ten produkt/usługa został/a usunięta, spróbuj zastąpić ją innym produktem/usługą',
-	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Ta linia została usunięta w systemie, usuń ją z rekordu.',
-);
-
-$jsLanguageStrings = array(
-	'JS_PLEASE_REMOVE_LINE_ITEM_THAT_IS_DELETED' => 'Usuń linię, której produkt/usługa został/a usunięty/a z/w systemie.',
+    'Daily'=>'Codziennie',
+    'Monthly'=>'Miesięcznie',
+    'Quarterly'=>'Kwartalnie',
+    'Yearly'=>'Rocznie',
+    'Net 30 days'=>'Netto 30 dni',
+    'Net 45 days'=>'Netto 45 dni',
+    'Net 60 days'=>'Netto 60 dni',
 );

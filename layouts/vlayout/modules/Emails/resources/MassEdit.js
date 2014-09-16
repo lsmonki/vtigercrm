@@ -6,6 +6,39 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *************************************************************************************/
+
+Vtiger_Email_Validator_Js("Vtiger_To_Email_Validator_Js", {
+
+	/**
+	 *Function which invokes field validation
+	 *@param accepts field element as parameter
+	 * @return error if validation fails true on success
+	 */
+	invokeValidation: function(field, rules, i, options){
+		var toEmailInstance = new Vtiger_To_Email_Validator_Js();
+		toEmailInstance.setElement(field);
+		return toEmailInstance.validate();
+	}
+},{
+
+	/**
+	 * Function to validate the email field data
+	 */
+	validate: function() {
+		var fieldValue = this.getFieldValue();
+		var fieldValuesList = fieldValue.split(',');
+		for (var i in fieldValuesList) {
+			var splittedFieldValue = fieldValuesList[i];
+			var emailInstance = new Vtiger_Email_Validator_Js();
+			var response = emailInstance.validateValue(splittedFieldValue);
+			if(response != true) {
+				return emailInstance.getError();
+			}
+		}
+	}
+
+});
+
 jQuery.Class("Emails_MassEdit_Js",{},{
 
 	ckEditorInstance : false,
@@ -393,12 +426,28 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			thisInstance.getMassEmailForm().find('[name="toemailinfo"]').val(JSON.stringify(new Array()));
 			thisInstance.getMassEmailForm().find('[name="selected_ids"]').val(JSON.stringify(new Array()));
 			thisInstance.getMassEmailForm().find('[name="to"]').val(JSON.stringify(new Array()));
+
+			var preloadData = [];
+			thisInstance.setPreloadData(preloadData);
+			thisInstance.getMassEmailForm().find('#emailField').select2('data', preloadData);
 		});
 		
 		
 	},
 	
 	setReferenceFieldValue : function(container,object){
+		var thisInstance = this;
+		var preloadData = thisInstance.getPreloadData();
+
+		var emailInfo = {
+			'recordId' : object.id,
+			'id' : object.emailid,
+			'text' : object.name+' <b>('+object.emailid+')</b>'
+		}
+		preloadData.push(emailInfo);
+		thisInstance.setPreloadData(preloadData);
+		container.find('#emailField').select2('data', preloadData);
+
 		var toEmailField = container.find('.sourceField');
 		var toEmailFieldExistingValue = toEmailField.val();
 		var toEmailFieldNewValue;
@@ -423,9 +472,15 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 
     appendToSelectedIds : function(selectedId) {
         var selectedIdElement = this.getMassEmailForm().find('[name="selected_ids"]');
-        var previousValue = JSON.parse(selectedIdElement.val());
-        previousValue.push(selectedId);
-        selectedIdElement.val(JSON.stringify(previousValue));
+        var previousValue = '';
+        if(JSON.parse(selectedIdElement.val()) != '') {
+            previousValue = JSON.parse(selectedIdElement.val());
+            previousValue.push(selectedId);
+        } else {
+			previousValue = new Array(selectedId);
+        }
+		selectedIdElement.val(JSON.stringify(previousValue));
+
     },
 
     addToEmails : function(mailInfo){
@@ -509,7 +564,254 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			self.location.href = url;
 		})
 	},
-	
+
+	preloadData : new Array(),
+
+	getPreloadData : function() {
+		return this.preloadData;
+	},
+
+	setPreloadData : function(dataInfo){
+		this.preloadData = dataInfo;
+		return this;
+	},
+
+	searchEmails : function(params) {
+		var aDeferred = jQuery.Deferred();
+
+		if(typeof params.module == 'undefined') {
+			params.module = app.getModuleName();
+		}
+
+		if(typeof params.action == 'undefined') {
+			params.action = 'BasicAjax';
+		}
+		AppConnector.request(params).then(
+			function(data){
+				aDeferred.resolve(data);
+			},
+			function(error){
+				aDeferred.reject();
+			}
+		)
+		return aDeferred.promise();
+	},
+
+	/**
+	 * Function which will handle the reference auto complete event registrations
+	 * @params - container <jQuery> - element in which auto complete fields needs to be searched
+	 */
+	registerAutoCompleteFields : function(container) {
+		var thisInstance = this;
+
+		container.find('#emailField').select2({
+			minimumInputLength: 3,
+			closeOnSelect : false,
+
+			tags : [],
+			tokenSeparators: [","],
+
+			createSearchChoice : function(term) {
+				return {id: term, text: term};
+			},
+
+			ajax : {
+                'url' : 'index.php?module=Emails&action=BasicAjax',
+                'dataType' : 'json',
+                'data' : function(term,page){
+                     var data = {};
+                     data['searchValue'] = term;
+                     return data;
+                },
+                'results' : function(data){
+					var finalResult = [];
+					var results = data.result;
+					var resultData = new Array();
+                    for(var moduleName in results) {
+						var moduleResult = [];
+						moduleResult.text = moduleName;
+
+						var children = new Array();
+						for(var recordId in data.result[moduleName]) {
+							var emailInfo = data.result[moduleName][recordId];
+							for (var i in emailInfo) {
+								var childrenInfo = [];
+								childrenInfo.recordId = recordId;
+								childrenInfo.id = emailInfo[i].value;
+								childrenInfo.text = emailInfo[i].label;
+								children.push(childrenInfo);
+							}
+						}
+						moduleResult.children = children;
+						resultData.push(moduleResult);
+                    }
+					finalResult.results = resultData;
+                    return finalResult;
+                },
+				transport : function(params) {
+					return jQuery.ajax(params);
+				}
+            }
+
+		}).on("change", function (selectedData) {
+			var addedElement = selectedData.added;
+			if (typeof addedElement != 'undefined') {
+				var data = {
+					'id' : addedElement.recordId,
+					'name' : addedElement.text,
+					'emailid' : addedElement.id
+				}
+				thisInstance.addToEmails(data);
+				if (typeof addedElement.recordId != 'undefined') {
+					thisInstance.addToEmailAddressData(data);
+					thisInstance.appendToSelectedIds(addedElement.recordId);
+				}
+
+				var preloadData = thisInstance.getPreloadData();
+				var emailInfo = {
+					'id' : addedElement.id
+				}
+				if (typeof addedElement.recordId != 'undefined') {
+					emailInfo['text'] = addedElement.text;
+					emailInfo['recordId'] = addedElement.recordId;
+				} else {
+					emailInfo['text'] = addedElement.id;
+				}
+				preloadData.push(emailInfo);
+				thisInstance.setPreloadData(preloadData);
+			}
+
+			var removedElement = selectedData.removed;
+			if (typeof removedElement != 'undefined') {
+				var data = {
+					'id' : removedElement.recordId,
+					'name' : removedElement.text,
+					'emailid' : removedElement.id
+				}
+				thisInstance.removeFromEmails(data);
+				if (typeof removedElement.recordId != 'undefined') {
+					thisInstance.removeFromEmailAddressData(data);
+					thisInstance.removeFromSelectedIds(removedElement.recordId);
+				}
+
+				var preloadData = thisInstance.getPreloadData();
+				var updatedPreloadData = [];
+				for(var i in preloadData) {
+					var preloadDataInfo = preloadData[i];
+					var skip = false;
+					if (removedElement.id == preloadDataInfo.id) {
+						skip = true;
+					}
+					if (skip == false) {
+						updatedPreloadData.push(preloadDataInfo);
+					}
+				}
+				thisInstance.setPreloadData(updatedPreloadData);
+			}
+		});
+
+		container.find('#emailField').select2("container").find("ul.select2-choices").sortable({
+			containment: 'parent',
+			start: function(){
+				container.find('#emailField').select2("onSortStart");
+			},
+			update: function(){
+				container.find('#emailField').select2("onSortEnd");
+			}
+		});
+
+		var toEmailNamesList = JSON.parse(container.find('[name="toMailNamesList"]').val());
+		var toEmailInfo = JSON.parse(container.find('[name="toemailinfo"]').val());
+		var toEmails = container.find('[name="toEmail"]').val();
+		var toFieldValues = Array();
+		if (toEmails.length > 0) {
+			toFieldValues = toEmails.split(',');
+		}
+
+		var preloadData = thisInstance.getPreloadData();
+		if (typeof toEmailInfo != 'undefined') {
+			for(var key in toEmailInfo) {
+				if (toEmailNamesList.hasOwnProperty(key)) {
+					for (var i in toEmailNamesList[key]) {
+						var emailInfo = [];
+						var emailId = toEmailNamesList[key][i].value;
+						var emailInfo = {
+							'recordId' : key,
+							'id' : emailId,
+							'text' : toEmailNamesList[key][i].label+' <b>('+emailId+')</b>'
+						}
+						preloadData.push(emailInfo);
+						if (jQuery.inArray(emailId, toFieldValues) != -1) {
+							var index = toFieldValues.indexOf(emailId);
+							if (index !== -1) {
+								toFieldValues.splice(index, 1);
+							}
+						}
+					}
+				}
+			}
+		}
+		if (typeof toFieldValues != 'undefined') {
+			for(var i in toFieldValues) {
+				var emailId = toFieldValues[i];
+				var emailInfo = {
+					'id' : emailId,
+					'text' : emailId
+				}
+				preloadData.push(emailInfo);
+			}
+		}
+		if (typeof preloadData != 'undefined') {
+			thisInstance.setPreloadData(preloadData);
+			container.find('#emailField').select2('data', preloadData);
+		}
+
+	},
+
+	removeFromEmailAddressData : function(mailInfo) {
+        var mailInfoElement = this.getMassEmailForm().find('[name="toemailinfo"]');
+        var previousValue = JSON.parse(mailInfoElement.val());
+
+		delete previousValue[mailInfo.id];
+        mailInfoElement.val(JSON.stringify(previousValue));
+    },
+
+    removeFromSelectedIds : function(selectedId) {
+        var selectedIdElement = this.getMassEmailForm().find('[name="selected_ids"]');
+        var previousValue = JSON.parse(selectedIdElement.val());
+
+		var updatedValue = [];
+		for (var i in previousValue) {
+			var id = previousValue[i];
+			var skip = false;
+			if (id == selectedId) {
+				skip = true;
+			}
+			if (skip == false) {
+				updatedValue.push(id);
+			}
+		}
+        selectedIdElement.val(JSON.stringify(updatedValue));
+    },
+
+    removeFromEmails : function(mailInfo){
+        var toEmails = this.getMassEmailForm().find('[name="to"]');
+        var previousValue = JSON.parse(toEmails.val());
+
+		var updatedValue = [];
+		for (var i in previousValue) {
+			var email = previousValue[i];
+			var skip = false;
+			if (email == mailInfo.emailid) {
+				skip = true;
+			}
+			if (skip == false) {
+				updatedValue.push(email);
+			}
+		}
+        toEmails.val(JSON.stringify(updatedValue));
+    },
+
 	registerEvents : function(){
 		var thisInstance = this;
 		var composeEmailForm = this.getMassEmailForm();
@@ -534,6 +836,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 			var textAreaElement = jQuery('#description');
 			var ckEditorInstance = this.getckEditorInstance(textAreaElement);
 			ckEditorInstance.loadCkEditor(textAreaElement);
+			this.registerAutoCompleteFields(this.getMassEmailForm());
 			this.registerRemoveAttachmentEvent();
 			this.registerEventsToGetFlagValue();
 			this.registerCcAndBccEvents();

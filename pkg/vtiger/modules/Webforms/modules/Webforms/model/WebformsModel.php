@@ -127,7 +127,7 @@ class Webforms_Model {
 	function getEnabled() {
 		return vtlib_purify($this->data["enabled"]);
 	}
-
+    
 	function getDescription() {
 		return vtlib_purify($this->data["description"]);
 	}
@@ -139,6 +139,23 @@ class Webforms_Model {
 	function getOwnerId() {
 		return vtlib_purify($this->data["ownerid"]);
 	}
+    
+    function getRoundrobin() {
+        return vtlib_purify($this->data["roundrobin"]);
+    }
+    
+    function getRoundrobinOwnerId() {
+        global $adb;
+        $roundrobin_userid = vtlib_purify($this->data["roundrobin_userid"]);
+        $roundrobin_logic = vtlib_purify($this->data["roundrobin_logic"]);
+        $useridList = json_decode($roundrobin_userid,true);
+        if($roundrobin_logic >= count($useridList))
+            $roundrobin_logic=0;
+        $roundrobinOwnerId = $useridList[$roundrobin_logic];
+        $nextRoundrobinLogic = ($roundrobin_logic+1)%count($useridList);
+        $adb->pquery("UPDATE vtiger_webforms SET roundrobin_logic = ? WHERE id = ?", array($nextRoundrobinLogic,$this->getId()));
+        return vtlib_purify($roundrobinOwnerId);
+    }
 
 	function getFields() {
 		return $this->fields;

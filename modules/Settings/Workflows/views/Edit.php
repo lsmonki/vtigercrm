@@ -52,7 +52,10 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
                 $viewer->assign('SELECTED_MODULE', $selectedModule);
             }
 		}
-
+		$db = PearDatabase::getInstance();
+		$workflowManager = new VTWorkflowManager($db);
+		$viewer->assign('MAX_ALLOWED_SCHEDULED_WORKFLOWS', $workflowManager->getMaxAllowedScheduledWorkflows());
+		$viewer->assign('SCHEDULED_WORKFLOW_COUNT', $workflowManager->getScheduledWorkflowsCount());
 		$viewer->assign('WORKFLOW_MODEL', $workflowModel);
 		$viewer->assign('ALL_MODULES', Settings_Workflows_Module_Model::getSupportedModules());
 		$viewer->assign('TRIGGER_TYPES', Settings_Workflows_Module_Model::getTriggerTypes());
@@ -84,7 +87,12 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 		}
 
 		$requestData = $request->getAll();
-		foreach($requestData as $name=>$value) {
+		foreach($requestData as $name=>$value) {			
+			if($name == 'schdayofweek' || $name == 'schdayofmonth' || $name == 'schannualdates') {
+				if(is_string($value)) {	// need to save these as json data
+					$value = array($value);
+				}
+			}
 			$workFlowModel->set($name,$value);
 		}
 		//Added to support advance filters
@@ -92,7 +100,12 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 																			Settings_Workflows_RecordStructure_Model::RECORD_STRUCTURE_MODE_FILTER);
 
 		$viewer->assign('RECORD_STRUCTURE_MODEL', $recordStructureInstance);
-		$viewer->assign('RECORD_STRUCTURE', $recordStructureInstance->getStructure());
+        $recordStructure = $recordStructureInstance->getStructure();
+        if(in_array($selectedModuleName,  getInventoryModules())){
+            $itemsBlock = "LBL_ITEM_DETAILS";
+            unset($recordStructure[$itemsBlock]);
+        }
+		$viewer->assign('RECORD_STRUCTURE', $recordStructure);
 
 		$viewer->assign('WORKFLOW_MODEL',$workFlowModel);
 
@@ -170,10 +183,22 @@ class Settings_Workflows_Edit_View extends Settings_Vtiger_Index_View {
 			"modules.Settings.$moduleName.resources.AdvanceFilter",
 			'~libraries/jquery/ckeditor/ckeditor.js',
 			"modules.Vtiger.resources.CkEditor",
-		);
+			'~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.js',
+			);
 
 		$jsScriptInstances = $this->checkAndConvertJsScripts($jsFileNames);
 		$headerScriptInstances = array_merge($headerScriptInstances, $jsScriptInstances);
 		return $headerScriptInstances;
+	}
+        
+        function getHeaderCss(Vtiger_Request $request) {
+		$headerCssInstances = parent::getHeaderCss($request);
+		$moduleName = $request->getModule();
+		$cssFileNames = array(
+			'~libraries/jquery/jquery.datepick.package-4.1.0/jquery.datepick.css',
+		);
+		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
+		$headerCssInstances = array_merge($cssInstances, $headerCssInstances);
+		return $headerCssInstances;
 	}
 }

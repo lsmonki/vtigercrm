@@ -67,7 +67,7 @@
 					<div class="widget_header row-fluid">
 						<input type="hidden" name="relatedModule" value="{$DOCUMENT_WIDGET_MODEL->get('linkName')}" />
 						<span class="span9 margin0px"><h4 class="textOverflowEllipsis">{vtranslate($DOCUMENT_WIDGET_MODEL->getLabel(),$MODULE_NAME)}</h4></span>
-						<span class="span3">
+						<span class="pull-right">
 							<span class="pull-right">
 								{if $DOCUMENT_WIDGET_MODEL->get('action')}
 									<button class="btn pull-right addButton createRecord" type="button" data-url="{$DOCUMENT_WIDGET_MODEL->get('actionURL')}">

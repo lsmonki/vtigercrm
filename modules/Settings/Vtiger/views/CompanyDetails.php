@@ -18,6 +18,7 @@ class Settings_Vtiger_CompanyDetails_View extends Settings_Vtiger_Index_View {
 		$viewer->assign('MODULE_MODEL', $moduleModel);
 		$viewer->assign('ERROR_MESSAGE', $request->get('error'));
 		$viewer->assign('QUALIFIED_MODULE', $qualifiedModuleName);
+		$viewer->assign('CURRENT_USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->view('CompanyDetails.tpl', $qualifiedModuleName);
 	}
 	

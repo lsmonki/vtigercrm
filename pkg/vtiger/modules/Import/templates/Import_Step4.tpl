@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 
-<table width="100%" cellspacing="0" cellpadding="2" class="importContents padding1per">
+<table width="100%" cellspacing="0" cellpadding="10" class="importContents">
 	<tr>
 		<td>
 			<strong>{'LBL_IMPORT_STEP_4'|@vtranslate:$MODULE}:</strong>
@@ -18,20 +18,15 @@
 		<td>
 			<span class="big">{'LBL_IMPORT_STEP_4_DESCRIPTION'|@vtranslate:$MODULE}</span>
 		</td>
-		<td>&nbsp;</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
 		<td>
-			<div id="savedMapsContainer" class="textAlignRight pull-right">
+            <div id="savedMapsContainer" class="textAlignRight pull-right">
 				{include file="Import_Saved_Maps.tpl"|@vtemplate_path:'Import'}
 			</div>
-		</td>
-		<td>&nbsp;</td>
+        </td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td>
+        <td colspan="2">
 			<input type="hidden" name="field_mapping" id="field_mapping" value="" />
 			<input type="hidden" name="default_values" id="default_values" value="" />
 			<table width="100%" cellspacing="0" cellpadding="2" class="listRow table table-bordered table-condensed listViewEntriesTable">
@@ -73,16 +68,13 @@
 			</tbody>
 			</table>
 		</td>
-		<td>&nbsp;</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td align="right">
-			<input type="checkbox" name="save_map" id="save_map" class="font-x-small" />
-			<span>{'LBL_SAVE_AS_CUSTOM_MAPPING'|@vtranslate:$MODULE}</span>&nbsp; : &nbsp;
-			<input type="text" name="save_map_as" id="save_map_as" class="font-x-small" />
+        <td align="right" colspan="2">
+            <input type="checkbox" name="save_map" id="save_map"/>&nbsp;{'LBL_SAVE_AS_CUSTOM_MAPPING'|@vtranslate:$MODULE}&nbsp;&nbsp;
+            <input type="text" name="save_map_as" id="save_map_as"/>
 		</td>
-		<td>&nbsp;</td>
 	</tr>
 </table>
 {include file="Import_Default_Values_Widget.tpl"|@vtemplate_path:'Import'}

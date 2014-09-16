@@ -22,4 +22,7 @@ $languageStrings = array(
 	'LTFAQ' => 'Moje ostatnie instrukcje',
 	'UA' => 'Nadchodzące wydarzenia',
 	'PA' => 'Oczekujące wydarzenia',
+	'Home' => 'Pulpit',
+        'Key Metrics'                  => 'kluczowych wskaźników',
+	'Tag Cloud'                    => 'Tag Cloud',
 );

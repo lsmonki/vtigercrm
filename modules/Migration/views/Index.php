@@ -22,6 +22,9 @@ class Migration_Index_View extends Vtiger_Basic_View {
 	}
 
 	public function process(Vtiger_Request $request) {
+                // Override error reporting to production mode
+                version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT); 
+            
 		$mode = $request->getMode();
 		if(!empty($mode)) {
 			$this->invokeExposedMethod($mode, $request);
@@ -76,11 +79,11 @@ class Migration_Index_View extends Vtiger_Basic_View {
 	}
 
 	public function applyDBChanges(){
-		$moduleModel = Migration_Module_Model::getInstance();
+		$migrationModuleModel = Migration_Module_Model::getInstance();
 
-		$getAllowedMigrationVersions = $moduleModel->getAllowedMigrationVersions();
-		$getDBVersion = str_replace(array('.', ' '),'', $moduleModel->getDBVersion());
-		$getLatestSourceVersion = str_replace(array('.', ' '),'', $moduleModel->getLatestSourceVersion());
+		$getAllowedMigrationVersions = $migrationModuleModel->getAllowedMigrationVersions();
+		$getDBVersion = str_replace(array('.', ' '),'', $migrationModuleModel->getDBVersion());
+		$getLatestSourceVersion = str_replace(array('.', ' '),'', $migrationModuleModel->getLatestSourceVersion());
 		$migrateVersions = array();
 		foreach($getAllowedMigrationVersions as $getAllowedMigrationVersion) {
 			foreach($getAllowedMigrationVersion as $version => $label) {
@@ -115,9 +118,9 @@ class Migration_Index_View extends Vtiger_Basic_View {
 		}
 
 		//update vtiger version in db
-		$moduleModel->updateVtigerVersion();
+		$migrationModuleModel->updateVtigerVersion();
 		// To carry out all the necessary actions after migration
-		$moduleModel->postMigrateActivities();
+		$migrationModuleModel->postMigrateActivities();
 	}
 
 	public static function ExecuteQuery($query, $params){

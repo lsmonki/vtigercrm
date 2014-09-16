@@ -9,9 +9,9 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'SINGLE_Calendar' => 'مفكرة',
+	'SINGLE_Calendar' => 'هل ل',
 	'SINGLE_Events' => 'حدث',
-	'LBL_ADD_TASK' => 'اضافة مهمة',
+	'LBL_ADD_TASK' => 'إضافة إلى عدم',
 	'LBL_ADD_EVENT' => 'اضافة حدث',
 	'LBL_RECORDS_LIST' => 'قائمة المفكرة',
 	'LBL_EVENTS' => 'الاحداث',
@@ -23,9 +23,11 @@ $languageStrings = array(
 	'LBL_OTHER_EVENTS' => 'احداث اخرى',
 	'LBL_MINUTES' => 'دقائق',
 	'LBL_SELECT_USERS' => 'حدد المستخدمين',
+	'LBL_EVENT_OR_TASK' => 'الحدث / القيام',
 
 	// Blocks
-	'LBL_TASK_INFORMATION' => 'تفاصيل المهمة',
+	'LBL_TASK_INFORMATION' => 'هل لمعلومات',
+    'LBL_EVENT_INFORMATION'=> 'تفاصيل الحدث',
 
 	//Fields
 	'Subject' => 'الموضوع',
@@ -45,10 +47,12 @@ $languageStrings = array(
 	//Activity Type picklist values
 	'Call' => 'اتصال',
 	'Meeting' => 'مقابلة',
-	'Task' => 'مهمة',
+	'Task' => 'هل ل',
 
 	//Status picklist values
 	'Planned' => 'مخطط',
+         'Held'   => 'عقد',
+         'Not Held' => 'لا تعقد',
 	'Completed' => 'مكتمل',
 	'Pending Input' => 'في انتظار ادخال',
 	'Not Started' => 'لم يبدء',
@@ -60,8 +64,8 @@ $languageStrings = array(
 	'LBL_CHANGE_OWNER' => 'تغير المالك',
 
 	'LBL_EVENT' => 'حدث',
-	'LBL_TASK' => 'مهمة',
-	'LBL_TASKS' => 'مهمات',
+	'LBL_TASK' => 'هل ل',
+	'LBL_TASKS' => 'هل ل',
 
 	'LBL_RECORDS_LIST' => 'قائمة عرض',
 	'LBL_CALENDAR_VIEW' => 'مفكرتي',
@@ -97,16 +101,89 @@ $languageStrings = array(
 	
 	'ICAL_FORMAT' => 'iCal Format',
 	'LBL_LAST_IMPORT_UNDONE'=>'الاستيراد الاخير لم يتم',
-	'LBL_UNDO_LAST_IMPORT' => 'التراجع عن اخر استيراد'
+	'LBL_UNDO_LAST_IMPORT' => 'التراجع عن اخر استيراد',
+	
+	'Mobile Call' => 'الإتصال موبايل',
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'LBL_EDIT_COLOR' => 'تحرير اللون',
+	'LBL_ADD_CALENDAR_VIEW' => 'إضافة طريقة عرض التقويم',
+	'LBL_SELECT_USER_CALENDAR' => 'حدد التقويم المستخدم',
+	'LBL_SELECT_CALENDAR_COLOR' => 'حدد التقويم اللون',
+	'LBL_EDITING_CALENDAR_VIEW' => 'تحرير طريقة عرض التقويم',
+	'LBL_DELETE_CALENDAR' => 'حذف التقويم',
+	'LBL_SELECT_ACTIVITY_TYPE' => 'حدد نوع آخر',
+	'Tasks' => 'للعمل',
 
 );
 
 $jsLanguageStrings = array(
-	'LBL_ADD_EVENT_TASK' => 'اضافة حدث \ مهمة',
-	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'تم اضافة المهمة بنجاح في المفكرة',
+	'LBL_ADD_EVENT_TASK' => 'إضافة حدث / القيام',
+	'JS_TASK_IS_SUCCESSFULLY_ADDED_TO_YOUR_CALENDAR' => 'هل ليضاف إلى التقويم الخاص بك بنجاح',
     'LBL_SYNC_BUTTON' => 'مزامنة الان',
     'LBL_SYNCRONIZING' => 'مزامنة ‫....‬',
     'LBL_NOT_SYNCRONIZED' => 'غير متزامنة حتى الان',
     'LBL_FIELD_MAPPING' => 'ربط الحقول',
     'LBL_CANT_SELECT_CONTACT_FROM_LEADS' => 'لايمكن تحديد جهات الاتصال ذات الصلة للزبون المحتمل',
+    
+    //Calendar view label translation
+	'LBL_MONTH' => 'شهر',
+	'LBL_TODAY' => 'اليوم',
+	'LBL_DAY' => 'يوم',
+	'LBL_WEEK' => 'أسبوع',
+	
+	'LBL_SUNDAY' => 'الأحد',
+	'LBL_MONDAY' => 'يوم الاثنين',
+	'LBL_TUESDAY' => 'الثلاثاء',
+	'LBL_WEDNESDAY' => 'الأربعاء',
+	'LBL_THURSDAY' => 'الخميس',
+	'LBL_FRIDAY' => 'الجمعة',
+	'LBL_SATURDAY' => 'السبت',
+	
+	'LBL_SUN' => 'شمس',
+	'LBL_MON' => 'الاثنين',
+	'LBL_TUE' => 'الثلاثاء',
+	'LBL_WED' => 'تزوج',
+	'LBL_THU' => 'الخميس',
+	'LBL_FRI' => 'الجمعة',
+	'LBL_SAT' => 'السبت',
+	
+	'LBL_JANUARY' => 'يناير',
+	'LBL_FEBRUARY' => 'فبراير',
+	'LBL_MARCH' => 'مسيرة',
+	'LBL_APRIL' => 'أبريل',
+	'LBL_MAY' => 'قد',
+	'LBL_JUNE' => 'يونيو',
+	'LBL_JULY' => 'يوليو',
+	'LBL_AUGUST' => 'أغسطس',
+	'LBL_SEPTEMBER' => 'سبتمبر',
+	'LBL_OCTOBER' => 'أكتوبر',
+	'LBL_NOVEMBER' => 'نوفمبر',
+	'LBL_DECEMBER' => 'ديسمبر',
+	
+	'LBL_JAN' => 'يناير',
+	'LBL_FEB' => 'فبراير',
+	'LBL_MAR' => 'مارس',
+	'LBL_APR' => 'أبريل',
+	'LBL_MAY' => 'قد',
+	'LBL_JUN' => 'يونيو',
+	'LBL_JUL' => 'يوليو',
+	'LBL_AUG' => 'أغسطس',
+	'LBL_SEP' => 'سبتمبر',
+	'LBL_OCT' => 'أكتوبر',
+	'LBL_NOV' => 'نوفمبر',
+	'LBL_DEC' => 'ديسمبر',
+	
+	'LBL_ALL_DAY' => 'كل يوم،',
+	
+	'Mobile Call' => 'دعوة المحمول',
+	//End
+	
+	//Fixing colors for Shared Calendar and My Calendar
+	'JS_CALENDAR_VIEW_COLOR_UPDATED_SUCCESSFULLY' => 'تقويم عرض اللون تحديثها بنجاح',
+	'JS_CALENDAR_VIEW_DELETE_CONFIRMATION' => 'هل أنت متأكد أنك تريد حذف هذا الرأي التقويم؟',
+	'JS_CALENDAR_VIEW_ADDED_SUCCESSFULLY' => 'تقويم عرض أضاف بنجاح',
+	'JS_CALENDAR_VIEW_DELETED_SUCCESSFULLY' => 'عرض تقويم حذف بنجاح',
+	'JS_NO_CALENDAR_VIEWS_TO_ADD' => 'لا التقويم الشخصي لإضافة',
+	'JS_EDIT_CALENDAR' => 'تحرير التقويم',
 );

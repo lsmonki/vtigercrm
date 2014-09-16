@@ -8,17 +8,11 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	// Basic Strings
-	'SINGLE_ProjectMilestone' => 'Project Milestone',
 	'LBL_ADD_RECORD' => 'Add Project Milestone',
-	'LBL_RECORDS_LIST' => 'Project Milestones List',
-
-	// Blocks
 	'LBL_PROJECT_MILESTONE_INFORMATION' => 'Project Milestone Details',
-	
-	//Field Labels
-	'Project Milestone Name' => 'Project Milestone Name',
+	'LBL_RECORDS_LIST' => 'Project Milestones List',
 	'Milestone Date' => 'Milestone Date',
+	'Project Milestone Name' => 'Project Milestone Name',
 	'Project Milestone No' => 'Project Milestone Number',
-	
+	'SINGLE_ProjectMilestone' => 'Project Milestone',
 );

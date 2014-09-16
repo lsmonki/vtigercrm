@@ -436,7 +436,7 @@ function _getTicketModComments($ticketId) {
 			$output[$i]['owner'] = getOwnerName($owner);
 		}
 
-		$output[$i]['comments'] = decode_html(nl2br($adb->query_result($result, $i, 'commentcontent')));
+		$output[$i]['comments'] = nl2br($adb->query_result($result, $i, 'commentcontent'));
 		$output[$i]['createdtime'] = $adb->query_result($result, $i, 'createdtime');
 	}
 	return $output;
@@ -515,10 +515,10 @@ function get_combo_values($input_array)
 		$params = array($id);
 		$showAll = show_all('HelpDesk');
 		if($showAll == 'true') {
-			$servicequery .= ' OR vtiger_servicecontracts.sc_related_to = (SELECT accountid FROM vtiger_contactdetails WHERE contactid=?)
+			$servicequery .= ' OR vtiger_servicecontracts.sc_related_to = (SELECT accountid FROM vtiger_contactdetails WHERE contactid=? AND accountid <> 0)
 								OR vtiger_servicecontracts.sc_related_to IN
 											(SELECT contactid FROM vtiger_contactdetails WHERE accountid =
-													(SELECT accountid FROM vtiger_contactdetails WHERE contactid=?))
+													(SELECT accountid FROM vtiger_contactdetails WHERE contactid=? AND accountid <> 0))
 							';
 			array_push($params, $id);
 			array_push($params, $id);
@@ -928,7 +928,7 @@ function update_ticket_comment($input_array)
 
 	if(trim($comments) != '') {
 		$modComments = CRMEntity::getInstance('ModComments');
-		$modComments->column_fields['commentcontent'] = vtlib_purify($comments);
+		$modComments->column_fields['commentcontent'] = $comments;
 		$modComments->column_fields['assigned_user_id'] =  $current_user->id;
 		$modComments->column_fields['customer'] = $ownerid;
 		$modComments->column_fields['related_to'] = $ticketid;
@@ -970,6 +970,7 @@ function close_current_ticket($input_array)
 	$focus->column_fields['ticketstatus'] ='Closed';
 	// Blank out the comments information to avoid un-necessary duplication
 	$focus->column_fields['comments'] = '';
+    $focus->column_fields['from_portal'] = 1;
 	// END
 	$focus->save("HelpDesk");
 	return "closed";
@@ -2277,11 +2278,11 @@ function get_details($id,$module,$customerid,$sessionid)
 		$query =  "SELECT
 			vtiger_notes.*,vtiger_crmentity.*,vtiger_attachmentsfolder.foldername,vtiger_notescf.*
 			FROM vtiger_notes
-			INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_notes.notesid
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_notes.notesid
 			LEFT JOIN vtiger_attachmentsfolder
 				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid
 			LEFT JOIN vtiger_notescf ON vtiger_notescf.notesid = vtiger_notes.notesid
-			where vtiger_notes.notesid=(". generateQuestionMarks($id) .") AND vtiger_crmentity.deleted=0";
+			WHERE vtiger_notes.notesid=(". generateQuestionMarks($id) .") AND vtiger_crmentity.deleted=0";
 	}
 	else if($module == 'HelpDesk'){
 		$query ="SELECT
@@ -2507,13 +2508,32 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 		}
 		if($module == 'HelpDesk' && $fieldname == 'ticketstatus'){
-			$parentid = $adb->query_result($res,0,'contact_id');
-			$status = $adb->query_result($res,0,'status');
-			if($customerid != $parentid ){ //allow only the owner to close the ticket
-				$fieldvalue = '';
-			}else{
-				$fieldvalue = $status;
-			}
+                $parentid = $adb->query_result($res,0,'parent_id');
+ 		        $contactid = $adb->query_result($res,0,'contact_id');
+ 		        $status = $adb->query_result($res,0,'status');
+
+ 		        if($parentid!=0) {//allow contacts related to organization to close the ticket
+                        $focus = CRMEntity::getInstance('Accounts');
+                        $focus->id = $parentid;
+                        $entityIds = $focus->getRelatedContactsIds();
+                        if($contactid != 0 ) {
+                                if(in_array($customerid, $entityIds) && in_array($contactid, $entityIds))
+                                        $fieldvalue = $status;
+                                else if($customerid == $contactid)
+                                        $fieldvalue = $status;
+                                else
+                                        $fieldvalue = '';
+                        } else {
+                                if(in_array($customerid, $entityIds))
+                                        $fieldvalue = $status;
+                                else
+                                        $fieldvalue = '';
+                        }
+                } else if($customerid != $contactid ) {//allow only the owner to close the ticket
+                        $fieldvalue = '';
+                } else {
+                        $fieldvalue = $status;
+                }
 		}
 		if($fieldname == 'unit_price'){
 			$sym = getCurrencySymbol($res,0,'currency_id');

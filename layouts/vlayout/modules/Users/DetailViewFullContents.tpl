@@ -39,5 +39,6 @@
 			</tr>
 		</tbody>
 	</table>
+	<br>
 	{* Tag Clous block ends *}
 {/strip}

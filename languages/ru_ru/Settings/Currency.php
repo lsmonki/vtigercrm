@@ -8,15 +8,15 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD'               => 'Add Currency'                , // TODO: Review
-	'LBL_EDIT_CURRENCY'            => 'Edit Currency'               , // TODO: Review
-	'LBL_ADD_NEW_CURRENCY'         => 'Add New Currency'            , // TODO: Review
+	'LBL_ADD_RECORD'               => 'Добавить Валюта'                , 
+	'LBL_EDIT_CURRENCY'            => 'Редактировать валют'               , 
+	'LBL_ADD_NEW_CURRENCY'         => 'Добавить новую валюту'            , 
 	'LBL_CURRENCY_NAME'            => 'Валюта'                , 
 	'LBL_CURRENCY_CODE'            => 'Код Валюты'         , 
 	'LBL_CURRENCY_SYMBOL'          => 'Символ'                , 
 	'LBL_CONVERSION_RATE'          => 'Обменный курс'   , 
-	'LBL_ENTER_CONVERSION_RATE'    => 'Enter Conversion Rate'       , // TODO: Review
-	'LBL_CURRENCY_STATUS_DESC'     => 'Enable checkbox to make currency Active', // TODO: Review
+	'LBL_ENTER_CONVERSION_RATE'    => 'Введите Коэффициент конверсии'       , 
+	'LBL_CURRENCY_STATUS_DESC'     => 'Включить флажок, чтобы валюта активность', 
 	'LBL_TRANSFER_CURRENCY'        => 'Конвертировать Валюту', 
 	'LBL_CURRENT_CURRENCY'         => 'Основная Валюта', 
 	'Albania, Leke'                => 'Albania, Leke'               , // TODO: Review
@@ -151,6 +151,6 @@ $languageStrings = array(
 	'Moroccan, Dirham'             => 'Moroccan, Dirham'            , // TODO: Review
 );
 $jsLanguageStrings = array(
-	'JS_CURRENCY_DETAILS_SAVED'    => 'Currency Details Saved'      , // TODO: Review
-	'JS_CURRENCY_DELETED_SUEESSFULLY' => 'Currency Deleted Successfully', // TODO: Review
+	'JS_CURRENCY_DETAILS_SAVED'    => 'Валюта Данные сохранены'      , 
+	'JS_CURRENCY_DELETED_SUEESSFULLY' => 'Валюта успешно удален', 
 );

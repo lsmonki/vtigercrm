@@ -16,7 +16,7 @@
 		{assign var="_FIELD_TYPE" value=$_FIELD_INFO->getFieldDataType()}
 		{if $_FIELD_TYPE eq 'picklist' || $_FIELD_TYPE eq 'multipicklist'}
 			<select id="{$_FIELD_NAME}_defaultvalue" name="{$_FIELD_NAME}_defaultvalue" class="small chzn-select">
-            <option value="">{vtranslate('LBL_SELECT_OPTION','Vtiger')}</option>
+            {if $_FIELD_NAME neq 'hdnTaxType'} <option value="">{vtranslate('LBL_SELECT_OPTION','Vtiger')}</option> {/if}
 			{foreach item=_PICKLIST_DETAILS from=$_FIELD_INFO->getPicklistDetails()}
 				<option value="{$_PICKLIST_DETAILS.value}">{$_PICKLIST_DETAILS.label|@vtranslate:$FOR_MODULE}</option>
 			{/foreach}

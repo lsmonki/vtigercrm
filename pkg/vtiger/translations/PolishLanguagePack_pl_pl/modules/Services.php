@@ -11,14 +11,15 @@ $languageStrings = array(
 	// Basic Strings
 	'Services' => 'Usługi',
 	'SINGLE_Services' => 'Usługa',
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
-	'LBL_RECORDS_LIST' => 'Lista rekordów',
+	'LBL_ADD_RECORD' => 'Dodaj usługę',
+	'LBL_RECORDS_LIST' => 'Lista usług',
+	'LBL_RECORD_SUMMARY' => 'Podsumowanie usługi',
 
 	// Blocks
 	'LBL_SERVICE_INFORMATION' => 'Szczegóły usługi',
 	
 	'LBL_MORE_CURRENCIES' => 'więcej walut', 
-	'LBL_PRICES' => 'Cena usługi',
+	'LBL_PRICES' => 'Cena za usługę',
 	'LBL_PRICE' => 'Cena',
 	'LBL_RESET_PRICE' => 'Wyczyść cenę',
 	'LBL_RESET' => 'Wyczyść',
@@ -28,16 +29,16 @@ $languageStrings = array(
 
 	//Field Labels
 	'Service Name'=>'Nazwa usługi',
-	'Service Active'=>'W sprzedaży',
+	'Service Active'=>'Usługa aktywna',
 	'Service Category'=>'Kategoria',
-	'Service No'=>'Numer',
-	'Owner'=>'Własciciel',
+	'Service No'=>'Numer usługi',
+	'Owner'=>'Właściciel',
 	'No of Units'=>'Liczba jednostek',
-	'Commission Rate'=>'Stawka prowizji',
+	'Commission Rate'=>'Marża za usługę',
 	'Price'=>'Cena',
 	'Usage Unit'=>'Użytych jednostek',
 	'Tax Class'=>'Rodzaj podatku',
-	'Website'=>'Strona internetowa',
+	'Website'=>'Strona WWW',
 	
 	//Services popup of pricebook
 	'LBL_ADD_TO_PRICEBOOKS' => 'Dodaj do cennika',

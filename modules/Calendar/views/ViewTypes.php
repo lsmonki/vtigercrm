@@ -19,8 +19,11 @@ class Calendar_ViewTypes_View extends Vtiger_IndexAjax_View {
 	function getViewTypes(Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
+		$currentUser = Users_Record_Model::getCurrentUserModel();
+		$calendarViews = Calendar_Module_Model::getCalendarViewTypes($currentUser->id);
 
 		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('VIEWTYPES', $calendarViews);
 		$viewer->view('CalendarViewTypes.tpl', $moduleName);
 	}
 	
@@ -35,8 +38,11 @@ class Calendar_ViewTypes_View extends Vtiger_IndexAjax_View {
 
 		$moduleName = $request->getModule();
 		$sharedUsers = Calendar_Module_Model::getSharedUsersOfCurrentUser($currentUser->id);
+		$sharedUsersInfo = Calendar_Module_Model::getSharedUsersInfoOfCurrentUser($currentUser->id);
+		
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('SHAREDUSERS', $sharedUsers);
+		$viewer->assign('SHAREDUSERS_INFO', $sharedUsersInfo);
 		$viewer->assign('CURRENTUSER_MODEL',$currentUser);
 		$viewer->view('CalendarSharedUsers.tpl', $moduleName);
 	}

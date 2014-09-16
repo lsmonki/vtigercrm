@@ -42,9 +42,10 @@ class ModComments_MassSaveAjax_Action extends Vtiger_Mass_Action {
 		foreach($recordIds as $recordId) {
 			$recordModel = Vtiger_Record_Model::getCleanInstance($moduleName);
 			$recordModel->set('mode', '');
-			$recordModel->set('commentcontent', $request->get('commentcontent'));
+			$recordModel->set('commentcontent', $request->getRaw('commentcontent'));
 			$recordModel->set('related_to', $recordId);
 			$recordModel->set('assigned_user_id', $currentUserModel->getId());
+			$recordModel->set('userid', $currentUserModel->getId());
 			$recordModels[$recordId] = $recordModel;
 		}
 		return $recordModels;
