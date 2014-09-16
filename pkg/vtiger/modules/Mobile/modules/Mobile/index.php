@@ -20,7 +20,7 @@ if (file_exists('config_override.php')) {
 }
 
 
-
+require_once 'includes/main/WebUI.php';
 include_once dirname(__FILE__) . '/api/Request.php';
 include_once dirname(__FILE__) . '/api/Response.php';
 include_once dirname(__FILE__) . '/api/Session.php';
@@ -30,7 +30,6 @@ include_once dirname(__FILE__) . '/api/ws/Controller.php';
 include_once dirname(__FILE__) . '/Mobile.php';
 include_once dirname(__FILE__) . '/ui/Viewer.php';
 include_once dirname(__FILE__) . '/ui/models/Module.php'; // Required for auto de-serializatio of session data
-require_once 'includes/main/WebUI.php';
 
 class Mobile_Index_Controller {
 
