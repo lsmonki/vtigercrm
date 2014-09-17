@@ -1404,9 +1404,13 @@ jQuery.Class("Vtiger_List_Js",{
 				var message = app.vtranslate('JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE');
 				Vtiger_Helper_Js.showConfirmationBox({'message' : message}).then(
 					function(e) {
-						var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
-						var deleteUrl = currentOptionElement.data('deleteurl');
-						window.location.href = deleteUrl;
+						var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement); 
+                                                var deleteUrl = currentOptionElement.data('deleteurl'); 
+                                                var newEle = '<form action='+deleteUrl+' method="POST">'+ 
+ 		                                  '<input type = "hidden" name ="'+csrfMagicName+'"  value=\''+csrfMagicToken+'\'>'+
+ 		                                  '</form>'; 
+                                                var formElement = jQuery(newEle);  
+                                                formElement.appendTo('body').submit(); 
 					},
 					function(error, err){
 					}
