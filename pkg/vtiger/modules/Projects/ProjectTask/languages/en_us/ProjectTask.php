@@ -14,4 +14,5 @@ $languageStrings = array(
 	'LBL_RECORDS_LIST' => 'Project Task List',
 	'LBL_TASKS_LIST' => 'Tasks List',
 	'SINGLE_ProjectTask' => 'Project Task',
+        'LBL_MILESTONES_LIST' => 'Milestones List',
 );

@@ -800,7 +800,6 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
                         AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=link&" + frmparams).then(function(responseJSON) { 
-                                        responseJSON = JSON.parse(responseJSON);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
@@ -834,7 +833,6 @@ if (typeof(MailManager) == 'undefined') {
 			});
 			var frmparams = Form.serialize(form);
                          AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=create_wizard&" + frmparams).then(function(response) {
-                                        response = JSON.parse(response);
 					var quickCreateController = new MailManager_QuickCreate_Js();
 					quickCreateController.handleQuickCreateData(response);
 				}
@@ -927,7 +925,6 @@ if (typeof(MailManager) == 'undefined') {
 				}
 			});
                         AppConnector.request(MailManager._baseurl() + "_operation=relation&_operationarg=commentwidget&" + frmparams).then(function(response) {
-                                        response = JSON.parse(response);
 					progressIndicatorElement.progressIndicator({
 						'mode' : 'hide'
 					})
