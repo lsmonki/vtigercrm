@@ -20,7 +20,7 @@
 				&nbsp;|&nbsp;
 				<a href="#" onclick="window.open('../copyright.html','copyright', 'height=115,width=575').moveTo(210,620)">{vtranslate('LBL_READ_LICENSE')}</a>
 				&nbsp;|&nbsp;
-				<a href="https://www.vtiger.com/crm/privacy-policy" target="_blank">{vtranslate('LBL_PRIVACY_POLICY')}</a>
+				<a href="https://www.vtiger.com/privacy-policy" target="_blank">{vtranslate('LBL_PRIVACY_POLICY')}</a>
 			</p>
 		</div>
 	</footer>
