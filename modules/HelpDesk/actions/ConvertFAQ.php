@@ -37,8 +37,4 @@ class HelpDesk_ConvertFAQ_Action extends Vtiger_Action_Controller {
 			}
 		}
 	}
-        
-        public function validateRequest(Vtiger_Request $request) { 
-            $request->validateWriteAccess(); 
-        } 
 }
