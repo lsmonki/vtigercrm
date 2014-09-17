@@ -15,4 +15,7 @@ $languageStrings = array(
 	'Project Milestone Name' => 'Project Milestone Name',
 	'Project Milestone No' => 'Project Milestone Number',
 	'SINGLE_ProjectMilestone' => 'Project Milestone',
+        'LBL_PROJECTS_LIST' => 'Projects List',
+        'LBL_TASKS_LIST' => 'Tasks List',
+        'LBL_MILESTONES_LIST' => 'Milestones List'
 );

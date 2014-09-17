@@ -15,7 +15,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="logo">
-				<img src="{'vt1.png'|vimage_path}"/>
+				<img src="{'logo.png'|vimage_path}"/>
 			</div>
 		</div>
 		<div class="span6">
