@@ -4454,7 +4454,7 @@ http://www.stanford.edu/dept/itss/docs/oracle/10g/server.101/b10759/statements_1
 		$dict = new $class();
 		$dict->dataProvider = $conn->dataProvider;
 		$dict->connection = $conn;
-		$dict->upperName = strtoupper($drivername);
+		$dict->upperName = stripos($drivername, 'mysql') === 0? strtoupper($conn->databaseType) : strtoupper($drivername); // _adodb_getdriver - mysql,mysqli,mysqlt => mysql
 		$dict->quote = $conn->nameQuote;
 		if (!empty($conn->_connectionID))
 			$dict->serverInfo = $conn->ServerInfo();
