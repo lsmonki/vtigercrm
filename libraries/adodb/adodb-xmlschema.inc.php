@@ -243,6 +243,12 @@ class dbTable extends dbObject {
 	var $drop_field = array();
 
 	/**
+	* @var array Platform-specific options
+	* @access private
+	*/
+	var $currentPlatform = true;
+
+	/**
 	* Iniitializes a new table object.
 	*
 	* @param string $prefix DB Object prefix
@@ -306,6 +312,11 @@ class dbTable extends dbObject {
 				// Add a field option to the table object
 				$this->addFieldOpt( $this->current_field, $this->currentElement );
 				break;
+			case 'OPT':
+			case 'CONSTRAINT':
+				// Accept platform-specific options
+				$this->currentPlatform = ( !isset( $attributes['PLATFORM'] ) OR $this->supportedPlatform( $attributes['PLATFORM'] ) );
+				break;
 			default:
 				// print_r( array( $tag, $attributes ) );
 		}
@@ -351,6 +362,10 @@ class dbTable extends dbObject {
 				break;
 			case 'FIELD':
 				unset($this->current_field);
+				break;
+			case 'OPT':
+			case 'CONSTRAINT':
+				$this->currentPlatform = true;
 				break;
 
 		}
