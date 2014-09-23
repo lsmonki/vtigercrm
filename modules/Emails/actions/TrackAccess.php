@@ -39,6 +39,11 @@ class Emails_TrackAccess_Action extends Vtiger_Action_Controller {
 			$recordModel->updateTrackDetails($parentId);
 		}
 	}
+
+	function validateRequest(Vtiger_Request $request) {
+		// This is a callback entry point file.
+		return true;
+	}
 }
 
 $track = new Emails_TrackAccess_Action();
