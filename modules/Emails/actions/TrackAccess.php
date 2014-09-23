@@ -14,7 +14,7 @@ header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 header('Cache-Control: private', false);
 
 //Opensource fix for tracking email access count
-chdir('../../../');
+chdir(dirname(__FILE__). '/../../../');
 
 require_once 'includes/Loader.php';
 require_once 'include/utils/utils.php';
