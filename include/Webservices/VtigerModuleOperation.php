@@ -217,7 +217,7 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$typeDetails = array();
 		if (!is_array($this->partialDescribeFields)) {
 			$typeDetails = $this->getFieldTypeDetails($webserviceField);
-		} else if (in_array($webserviceField->getFieldName(), $this->partialDescribeFields)) {
+		} else if (!in_array($webserviceField->getFieldType(), $this->partialDescribeFields)) {
 			$typeDetails = $this->getFieldTypeDetails($webserviceField);
 		}
 		
