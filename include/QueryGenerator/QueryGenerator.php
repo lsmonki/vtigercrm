@@ -902,13 +902,18 @@ class QueryGenerator {
 		$db = PearDatabase::getInstance();
 
 		if(is_string($value) && $this->ignoreComma == false) {
-			$valueArray = explode(',' , $value);
-			if ($field->getFieldDataType() == 'multipicklist' && in_array($operator, array('e', 'n'))) {
-				$valueArray = getCombinations($valueArray);
-				foreach ($valueArray as $key => $value) {
-					$valueArray[$key] = ltrim($value, ' |##| ');
-				}
-			}
+            $commaSeparatedFieldTypes = array('picklist', 'multipicklist', 'owner', 'date', 'datetime', 'time');
+            if(in_array($field->getFieldDataType(), $commaSeparatedFieldTypes)) {
+                $valueArray = explode(',' , $value);
+                if ($field->getFieldDataType() == 'multipicklist' && in_array($operator, array('e', 'n'))) {
+                    $valueArray = getCombinations($valueArray);
+                    foreach ($valueArray as $key => $value) {
+                        $valueArray[$key] = ltrim($value, ' |##| ');
+                    }
+                }
+            } else {
+                $valueArray = array($value);
+            }
 		} elseif(is_array($value)) {
 			$valueArray = $value;
 		} else{
@@ -983,8 +988,8 @@ class QueryGenerator {
 					$sql[] = "IS NULL";
 					continue;
 				}
-				$sql[] = "IS NOT NULL";
-				continue;
+					$sql[] = "IS NOT NULL";
+					continue;
 			} elseif($field->getFieldDataType() == 'boolean') {
 				$value = strtolower($value);
 				if ($value == 'yes') {
