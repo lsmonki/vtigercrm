@@ -1557,9 +1557,6 @@ jQuery.Class("Vtiger_Detail_Js",{
 		var thisInstance = this;
 		var detailContentsHolder = thisInstance.getContentHolder();
 		var detailContainer = detailContentsHolder.closest('div.detailViewInfo');
-		app.registerEventForDatePickerFields(detailContentsHolder);
-		//Attach time picker event to time fields
-		app.registerEventForTimeFields(detailContentsHolder);
 
 		jQuery('.related', detailContainer).on('click', 'li', function(e, urlAttributes){
 			var tabElement = jQuery(e.currentTarget);
@@ -1580,6 +1577,9 @@ jQuery.Class("Vtiger_Detail_Js",{
 				function(data){
 					thisInstance.deSelectAllrelatedTabs();
 					thisInstance.markTabAsSelected(tabElement);
+                                        app.registerEventForDatePickerFields(detailContentsHolder);
+                                        //Attach time picker event to time fields
+                                        app.registerEventForTimeFields(detailContentsHolder);
 					Vtiger_Helper_Js.showHorizontalTopScrollBar();
 					element.progressIndicator({'mode': 'hide'});
 					if(typeof callBack == 'function'){
