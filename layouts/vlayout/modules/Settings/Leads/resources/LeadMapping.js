@@ -185,13 +185,31 @@ jQuery.Class("Settings_LeadMapping_Js",{
 						'module' : app.getModuleName(),
 						'parent' : app.getParentModuleName(),
 						'view' : 'MappingDetail'
-					}
+					};
 					AppConnector.request(detailViewParams).then(function(data){
 						var detailContentsHolder = jQuery('.contentsDiv');
 						detailContentsHolder.html(data);
 						progressIndicatorElement.progressIndicator({'mode' : 'hide'});
-					})
+					});
 				}
+				if(!data.result.status){
+                                    var notifyParams={
+                                            title:app.vtranslate('JS_INVALID_MAPPING'),
+                                            text:data.result,
+                                            type:'error',
+                                            width:'25%'
+                                    };
+				}
+				else{
+					notifyParams={
+						title:app.vtranslate('JS_MAPPING_SAVED_SUCCESSFULLY'),
+						text:data.result,
+						type:'info',
+						width:'25%'
+					};
+				}
+
+				Vtiger_Helper_Js.showPnotify(notifyParams);
 			},
 			function(error) {
 				progressIndicatorElement.progressIndicator({'mode' : 'hide'});
