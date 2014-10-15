@@ -492,6 +492,5 @@ class Vtiger_ListView_Model extends Vtiger_Base_Model {
 		$listFields[] = 'id';
 		$listFields = array_merge($listFields, $fieldsList);
 		$queryGenerator->setFields($listFields);
-		$this->get('query_generator', $queryGenerator);
 	}
 }
