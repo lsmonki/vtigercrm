@@ -218,7 +218,7 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 		$entityfieldlabel = ucwords($this->prompt(sprintf("Entity field (%s): ",
 				$moduleInformation['entityfieldlabel']), self::PROMPT_OPTIONAL));
 		if ($entityfieldlabel) {
-			$moduleInformation['entityfieldlael'] = $entityfieldlabel;
+			$moduleInformation['entityfieldlabel'] = $entityfieldlabel;
 		}
 
 		echo "Creating ...";
