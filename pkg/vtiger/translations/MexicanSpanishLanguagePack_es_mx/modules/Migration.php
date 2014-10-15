@@ -25,5 +25,5 @@ $languageStrings = array(
 	'LBL_RELEASE_NOTES' 				=> 'Para saber lo que es nuevo en esta versión, por favor lee <a href="#" target="_blank">Notas de la versión</a> <br>',
 	'LBL_WAIT' 							=> 'Por favor, espera...',
 	'LBL_INPROGRESS' 					=> 'La migración está  en curso',
-	'LBL_DATABASE_CHANGE_LOG' 			=> 'Registro de cambios a la base de datos,
+	'LBL_DATABASE_CHANGE_LOG' 			=> 'Registro de cambios a la base de datos',
 );

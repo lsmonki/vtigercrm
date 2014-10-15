@@ -30,11 +30,11 @@ $languageStrings = array(
     'Inventory Manager'            => 'Voorraadmanager'             , 
     'Accepted'                     => 'Geaccepteerd'                , 
     'Rejected'                     => 'Geweigerd'                   , 
-		'Open Quotes'                  => 'Open Offertes',
-	/Taxes 
-        'VAT'                          => 'BTW', 
-        'Service'                      => 'Service', 
-        'Sales'                        => 'Sales'
+    'Open Quotes'                  => 'Open Offertes',
+    //Taxes 
+    'VAT'                          => 'BTW', 
+    'Service'                      => 'Service', 
+    'Sales'                        => 'Sales'
 );
 
 // ?? lists ?? or combined label?
