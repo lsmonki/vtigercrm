@@ -25,4 +25,5 @@ $languageStrings = array(
 	'Received Shipment'            => 'Received Shipment'           , 
         'LBL_LIST_PRICE'               => 'List Price',
         'List Price'                   => 'List Price',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Copy Company Address',
 );

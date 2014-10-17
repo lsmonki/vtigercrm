@@ -25,4 +25,5 @@ $languageStrings = array(
 	'Received Shipment'            => 'Marfa primita'               , 
         'LBL_LIST_PRICE'               => 'Lista de preturi',
         'List Price'                   => 'Lista de preturi',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Adresa copie de companie',
 );

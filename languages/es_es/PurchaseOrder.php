@@ -33,4 +33,5 @@ $languageStrings = array(
 	'LBL_BALANCE' => 'Balance',
         'LBL_LIST_PRICE'               => 'Precio de lista',
         'List Price'                   => 'Precio de lista',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Copiar Dirección de la empresa',
 );

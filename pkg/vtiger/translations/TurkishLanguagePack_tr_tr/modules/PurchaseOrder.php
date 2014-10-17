@@ -25,4 +25,5 @@ $languageStrings = array(
 	'Received Shipment'            => 'Gönderi Tamamlandı'        , 
         'LBL_LIST_PRICE'               => 'Liste Fiyatı',
         'List Price'                   => 'Liste Fiyatı',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Kopya Şirket Adresi',
 );
