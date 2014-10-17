@@ -48,7 +48,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 					'ui' => $uicontent, 'meta' => $metainfo )
 			);
 
-		} else if ('mark' == $this->getOperationArg($request)) {
+		} else if ('mark' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$foldername = $request->get('_folder');
 			$connector = $this->getConnector($foldername);
@@ -64,7 +64,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$response->setResult ( array('folder' => $foldername, 'unread' => $folder->unreadCount()+1,
 					'status' => true, 'msgno' => $request->get('_msgno') ));
 
-		} else if('delete' == $this->getOperationArg($request)) {
+		} else if('delete' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$msg_no = $request->get('_msgno');
 			$foldername = $request->get('_folder');
@@ -74,7 +74,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$response->isJson(true);
 			$response->setResult(array('folder' => $foldername,'status'=>true));
 
-		} else if('move' == $this->getOperationArg($request)) {
+		} else if('move' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$msg_no = $request->get('_msgno');
 			$foldername = $request->get('_folder');
@@ -86,7 +86,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$response->isJson(true);
 			$response->setResult(array('folder' => $foldername,'status'=>true));
 
-		} else if ('send' == $this->getOperationArg($request)) {
+		} else if ('send' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			require_once 'modules/MailManager/Config.php';
 			$memory_limit = MailManager_Config_Model::get('MEMORY_LIMIT');
@@ -248,14 +248,14 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			}
 			flush();
 			exit;
-		} elseif('getdraftmail' == $this->getOperationArg($request)) {
+		} elseif('getdraftmail' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$connector = $this->getConnector('__vt_drafts');
 			$draftMail = $connector->getDraftMail($request);
 			$response->isJson(true);
 			$response->setResult(array($draftMail));
 
-		} elseif('save' == $this->getOperationArg($request)) {
+		} elseif('save' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$connector = $this->getConnector('__vt_drafts');
 			$draftId = $connector->saveDraft($request);
@@ -267,7 +267,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 				$response->setResult( array('success'=> false,'error'=>"Draft was not saved") );
 			}
 
-		} elseif('deleteAttachment' == $this->getOperationArg($request)) {
+		} elseif('deleteAttachment' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$connector = $this->getConnector('__vt_drafts');
 			$deleteResponse = $connector->deleteAttachment($request);
@@ -275,7 +275,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 			$response->isJson(true);
 			$response->setResult(array('success'=> $deleteResponse));
 
-		} elseif('forward' == $this->getOperationArg($request)) {
+		} elseif('forward' == $this->getOperationArg($request) && $request->validateWriteAccess()) {
 
 			$messageId = $request->get('messageid');
 			$folderName = $request->get('folder');
@@ -320,7 +320,7 @@ class MailManager_Mail_View extends MailManager_Abstract_View {
 	}
         
         public function validateRequest(Vtiger_Request $request) { 
-            return $request->validateWriteAccess(); 
+            return $request->validateReadAccess(); 
         } 
 }
 ?>
