@@ -68,7 +68,7 @@
 							{$LISTVIEW_ENTRY->get('currencySymbol')}{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 						{/if}
 					{else}
-						{$LISTVIEW_ENTRY->getDisplayValue($LISTVIEW_HEADERNAME)}
+						{$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME)}
 					{/if}
 				</td>
 				{/foreach}
