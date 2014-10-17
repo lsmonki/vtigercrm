@@ -33,7 +33,7 @@
          {/if}   
     {/foreach}
     <div class='row-fluid'>
-        <p class="muted span12"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($SYNCTIME)}">{vtranslate('LBL_SYNCRONIZED',$MODULE_NAME)} : {Vtiger_Util_Helper::formatDateDiffInStrings($SYNCTIME)}</small></p>
+        {if $SYNCTIME}<p class="muted span12"><small title="{Vtiger_Util_Helper::formatDateTimeIntoDayString($SYNCTIME)}">{vtranslate('LBL_SYNCRONIZED',$MODULE_NAME)} : {Vtiger_Util_Helper::formatDateDiffInStrings($SYNCTIME)}</small></p>{/if}
     </div>
 {if $NORECORDS}
         <input type="hidden" value='yes' id ='norefresh'/>
