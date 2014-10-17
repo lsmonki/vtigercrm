@@ -57,16 +57,12 @@ class ModTracker {
 			$em = new VTEventsManager($adb);
 			$em->setHandlerInActive('ModTrackerHandler');
 			
-			// De-register Common Javascript
-			$modtrackerModule->deleteLink( 'HEADERSCRIPT', 'ModTrackerCommon_JS');
-
+			
         }  else if($eventType == 'module.enabled') {
 			$em = new VTEventsManager($adb);
 			$em->setHandlerActive('ModTrackerHandler');
 			
-			// Register Common Javascript
-			$modtrackerModule->addLink( 'HEADERSCRIPT', 'ModTrackerCommon_JS', 'modules/ModTracker/ModTrackerCommon.js');
-
+		
 		} else if($eventType == 'module.preuninstall') {
 			// TODO Handle actions when this module is about to be deleted.
 		} else if($eventType == 'module.preupdate') {
