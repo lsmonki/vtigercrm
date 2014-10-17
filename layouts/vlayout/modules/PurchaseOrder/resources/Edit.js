@@ -9,6 +9,27 @@
 
 Inventory_Edit_Js("PurchaseOrder_Edit_Js",{},{
 
+    billingShippingFields: {'bill' :{
+										'street':'',
+										'pobox':'',
+										'city'	:'',
+										'state':'',
+										'code'	:'',
+										'country':''
+								},
+                            'ship' :{
+                                        'street':'',
+										'pobox':'',
+										'city'	:'',
+										'state':'',
+										'code'	:'',
+										'country':''
+                                    }
+										
+								},
+    companyDetails: false,
+                              
+    
 	/**
 	 * Function to get popup params
 	 */
@@ -62,23 +83,49 @@ Inventory_Edit_Js("PurchaseOrder_Edit_Js",{},{
 		return aDeferred.promise();
 	},
 	
-	/**
-	 * Function which will register event for Reference Fields Selection
-	 */
-	registerReferenceSelectionEvent : function(container) {
-		this._super(container);
+    registerCopyCompanyAddress : function(){
 		var thisInstance = this;
-		
-		jQuery('input[name="vendor_id"]', container).on(Vtiger_Edit_Js.referenceSelectionEvent, function(e, data){
-			thisInstance.referenceSelectionEventHandler(data, container);
+        var editViewForm = this.getForm();
+        jQuery('[name="copyCompanyAddress"]', editViewForm).on('click', function(e){
+            var addressType = (jQuery(e.currentTarget).data('target'));
+            var container = jQuery(e.currentTarget).closest('table');
+            
+            var moduleName = app.getModuleName();
+            var url = {
+                'mode': 'getCompanyDetails',
+                'action': 'CompanyDetails',
+                'module' : moduleName
+            }
+            
+            if(!thisInstance.companyDetails){
+                AppConnector.request(url).then(function(data){
+                    var response = data['result'];
+                    thisInstance.companyDetails = response;
+                    thisInstance.copyAddressFields(addressType, container);
+                },
+                function(error, err){
+                });
+            }else{
+                thisInstance.copyAddressFields(addressType, container);
+            }
 		});
+    }, 
+		
+    copyAddressFields: function(addressType, container){
+        var thisInstance = this;
+        var company = thisInstance.companyDetails;
+        var fields = thisInstance.billingShippingFields[addressType];
+        for(var key in fields){
+            container.find('[name="'+ addressType +'_' + key+'"]').val(company[key]);
+            container.find('[name="'+ addressType +'_' + key+'"]').trigger('change');
+        }
 	},
     
 	
 	registerEvents: function(){
 		this._super();
 		this.registerEventForCopyAddress();
+        this.registerCopyCompanyAddress();
 	}
 });
-
 

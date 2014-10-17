@@ -22,11 +22,13 @@
     {if $smarty.request.view neq 'Detail'}
 		{if $FIELD_NAME eq "bill_street"}
 			<div>
-				<a class="cursorPointer" name="copyAddress" data-target="shipping">{vtranslate('LBL_COPY_SHIPPING_ADDRESS', $MODULE)}</a>
+				<a class="cursorPointer" name="copyAddress" data-target="shipping">{vtranslate('LBL_COPY_SHIPPING_ADDRESS', $MODULE)}</a> <br>
+                <a class="cursorPointer" name="copyCompanyAddress" data-target="bill">{vtranslate('LBL_COPY_COMPANY_ADDRESS', $MODULE)}</a>
 			</div>
 		{else if $FIELD_NAME eq "ship_street"}
 			<div>
-				<a class="cursorPointer" name="copyAddress" data-target="billing">{vtranslate('LBL_COPY_BILLING_ADDRESS', $MODULE)}</a>
+				<a class="cursorPointer" name="copyAddress" data-target="billing">{vtranslate('LBL_COPY_BILLING_ADDRESS', $MODULE)}</a> <br>
+               <a class="cursorPointer" name="copyCompanyAddress" data-target="ship">{vtranslate('LBL_COPY_COMPANY_ADDRESS', $MODULE)}</a>
 			</div>
 		{/if}
     {/if}
