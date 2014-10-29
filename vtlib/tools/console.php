@@ -221,6 +221,8 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 			$moduleInformation['entityfieldlabel'] = $entityfieldlabel;
 		}
 
+		$moduleInformation['parent'] = 'Tools';
+
 		echo "Creating ...";
 		$this->create($moduleInformation);
 		echo "DONE.\n";
@@ -235,6 +237,7 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 
 		$module = new Vtiger_Module();
 		$module->name = $moduleInformation['name'];
+		$module->parent=$moduleInformation['parent'];
 		$module->save();
 
 		$module->initTables();
