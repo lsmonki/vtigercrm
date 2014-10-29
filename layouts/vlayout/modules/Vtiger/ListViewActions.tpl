@@ -35,7 +35,7 @@
 										<span class="span2 textAlignCenter pushUpandDown2per">
 											{vtranslate('LBL_OF',$moduleName)}&nbsp;
 										</span>
-										<span class="span2 pushUpandDown2per" id="totalPageCount">{$PAGE_COUNT}</span>
+										<span class="span3 pushUpandDown2per" id="totalPageCount">{$PAGE_COUNT}</span>
 									</span>
 								</li>
 							</ul>

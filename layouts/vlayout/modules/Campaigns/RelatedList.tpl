@@ -87,7 +87,7 @@
                         <span class="span2 textAlignCenter">
                             {vtranslate('LBL_OF',$moduleName)}
                         </span>
-                        <span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
+                        <span class="span3" id="totalPageCount">{$PAGE_COUNT}</span>
                     </span>
                 </li>
             </ul>
