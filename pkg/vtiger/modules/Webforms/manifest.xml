@@ -4,10 +4,10 @@
 <label>Webforms</label>
 <parent></parent>
 <type>extension</type>
-<version>1.5</version>
+<version>1.6</version>
 <dependencies>
-  <vtiger_version>6.0.0rc</vtiger_version> 
-  <vtiger_max_version>6.*</vtiger_max_version> 
+  <vtiger_version>6.0.0rc</vtiger_version>
+  <vtiger_max_version>6.*</vtiger_max_version>
 </dependencies>
 <migrations>
 	<migration version='1.4'>
@@ -18,6 +18,34 @@
 			</table>
 		</tables>
 	</migration>
+  <migration version='1.6'>
+    <tables>
+      <table>
+        <name>vtiger_webforms</name>
+          <sql><![CDATA[ALTER TABLE vtiger_webforms ADD COLUMN(captcha int(1) NOT NULL DEFAULT 0)]]></sql>
+      </table>
+      <table>
+        <name>vtiger_webforms</name>
+          <sql><![CDATA[ALTER TABLE vtiger_webforms ADD COLUMN(roundrobin int(1) NOT NULL DEFAULT 0)]]></sql>
+      </table>
+      <table>
+        <name>vtiger_webforms</name>
+          <sql><![CDATA[ALTER TABLE vtiger_webforms ADD COLUMN(roundrobin_userid varchar(256) DEFAULT NULL)]]></sql>
+      </table>
+      <table>
+        <name>vtiger_webforms</name>
+          <sql><![CDATA[ALTER TABLE vtiger_webforms ADD COLUMN(roundrobin_logic int(11) NOT NULL DEFAULT 0)]]></sql>
+      </table>
+      <table>
+        <name>vtiger_webforms_field</name>
+        <sql><![CDATA[ALTER TABLE vtiger_webforms_field ADD COLUMN(sequence int(10) DEFAULT NULL)]]></sql>
+      </table>
+      <table>
+        <name>vtiger_webforms_field</name>
+        <sql><![CDATA[ALTER TABLE vtiger_webforms_field ADD COLUMN(hidden int(10) DEFAULT NULL)]]></sql>
+      </table>
+    </tables>
+  </migration>
 </migrations>
 <tables>
 <table>
