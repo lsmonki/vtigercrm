@@ -176,7 +176,21 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
                                 }
                         );
                 });
-        }
+        },
+
+        triggerExportAction: function() {
+            var url = window.location.href;
+            var siteUrl = url.split('?');
+            var newForm = jQuery('<form>', {
+                'method': 'post',
+                'action': siteUrl[0] + '?module=Users&source_module=Users&action=ExportData',
+            }).append(jQuery('<input>', {
+                'name': csrfMagicName,
+                'value': csrfMagicToken,
+                'type': 'hidden'
+            }));
+            newForm.submit();
+    }
 	
 },{
 
