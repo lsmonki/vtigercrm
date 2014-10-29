@@ -903,4 +903,18 @@ class Vtiger_Functions {
         $unitpice = $adb->query_result($result,0,'unit_price');
         return $unitpice;
     }
+
+
+    /**
+    * Function to fetch the list of vtiger_groups from group vtiger_table
+    * Takes no value as input
+    * returns the query result set object
+    */
+    static function get_group_options() {
+        global $adb, $noof_group_rows;
+        $sql = "select groupname,groupid from vtiger_groups";
+        $result = $adb->pquery($sql, array());
+        $noof_group_rows = $adb->num_rows($result);
+        return $result;
+    }
 }
