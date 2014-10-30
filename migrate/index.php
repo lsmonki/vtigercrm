@@ -95,7 +95,7 @@ if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
 								<h3> Welcome to Vtiger Migration </h3>
 								<?php
 								if(isset($_REQUEST['error'])) {
-									echo '<span><font color="red"><b>'.$_REQUEST['error'].'</b></font></span><br><br>';
+									echo '<span><font color="red"><b>'.filter_var($_REQUEST['error'], FILTER_SANITIZE_STRING).'</b></font></span><br><br>';
 								}?>
 								<p>We have detected that you have <strong>Vtiger <?php echo $vtiger_current_version?> </strong>installation. <br> <br> </p>
 								<p>
