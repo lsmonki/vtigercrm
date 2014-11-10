@@ -19,3 +19,7 @@ $seDeleteQuery="DELETE from vtiger_senotesrel WHERE crmid NOT IN(select crmid fr
 Migration_Index_View::ExecuteQuery($seDeleteQuery,array());
 $seNotesSql="ALTER TABLE vtiger_senotesrel ADD CONSTRAINT fk1_crmid FOREIGN KEY(crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE";
 Migration_Index_View::ExecuteQuery($seNotesSql,array());
+
+//Update uitype of created_user_id field of vtiger_field from 53 to 52
+$updateQuery = "UPDATE vtiger_field SET uitype = 52 WHERE fieldname = 'created_user_id'";
+Migration_Index_View::ExecuteQuery($updateQuery,array());
