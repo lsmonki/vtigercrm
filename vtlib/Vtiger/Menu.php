@@ -50,9 +50,25 @@ class Vtiger_Menu {
 		return ++$maxseq;
 	}
 
-	//No requirement of addModule and removeModule api()
+	/**
+	 * Add module to this menu instance
+	 * @param Vtiger_Module Instance of the module
+	 */
+	function addModule($moduleInstance) {
+		if($this->id) {
+			global $adb;
+			$relsequence = $this->__getNextRelSequence();
+			$adb->pquery("INSERT INTO vtiger_parenttabrel (parenttabid,tabid,sequence) VALUES(?,?,?)",
+					Array($this->id, $moduleInstance->id, $relsequence));
+			self::log("Added to menu $this->label ... DONE");
+		} else {
+			self::log("Menu could not be found!");
+		}
+		self::syncfile();
+	}
+	//No requirement of removeModule api()
         //Confirmed by (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7477)
-	
+        
 	/**
 	 * Detach module from menu
 	 * @param Vtiger_Module Instance of the module
