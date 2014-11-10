@@ -9,6 +9,14 @@
  ************************************************************************************/
 
 class Vtiger_EmailsRelatedModulePopup_View extends Vtiger_Popup_View {
+    
+        function checkPermission(Vtiger_Request $request) {
+		$moduleName = $request->getModule();
+		if($moduleName == 'Users') {
+			return true;
+		}
+		return parent::checkPermission($request);
+	}
 	
 	function process (Vtiger_Request $request) {
 		$viewer = $this->getViewer ($request);
