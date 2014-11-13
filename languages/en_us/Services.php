@@ -30,4 +30,16 @@ $languageStrings = array(
 	'Tax Class'=>'Tax Class',
 	'Usage Unit'=>'Usage Unit',
 	'Website'=>'Website',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        //Picklist values 
+        'Hours' => 'Hours', 
+        'Days' => 'Days', 
+        'Incidents' => 'Incidents', 
+
+        'Support' => 'Support', 
+        'Installation' => 'Installation', 
+        'Migration' => 'Migration', 
+        'Customization' => 'Customization', 
+        'Training' => 'Training', 
 );

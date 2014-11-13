@@ -23,4 +23,22 @@ $languageStrings = array(
 	'Total Units' => 'Total Units',
 	'Tracking Unit' => 'Tracking Unit',
 	'Used Units' => 'Used Units',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Due date' => 'Due Date', 
+        //Picklist values 
+        'Hours' => 'Hours', 
+        'Days' => 'Days', 
+        'Incidents' => 'Incidents', 
+
+        'Support' => 'Support', 
+        'Services' => 'Services', 
+        'Administrative' => 'Administrative', 
+
+        'Undefined' => 'Undefined', 
+        'In Planning' => 'In Planning', 
+        'In Progress' => 'In Progress', 
+        'On Hold' => 'On Hold', 
+        'Complete' => 'Complete', 
+        'Archived' => 'Archived', 
 );

@@ -93,6 +93,13 @@ $languageStrings = array(
 	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Maximum limit exceeded',
 	'LBL_NEXT_TRIGGER_TIME' => 'Next trigger time on',
 	'LBL_MESSAGE' => 'Message',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Workflows' => 'Workflow', 
+        //Field names 
+        'Summary' => 'Summary', 
+        'Module' => 'Module', 
+        'Execution Condition' => 'Execution Condition',
 );
 
 $jsLanguageStrings = array(

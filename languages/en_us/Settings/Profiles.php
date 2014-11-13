@@ -47,6 +47,10 @@ $languageStrings = array(
         'ReceiveIncomingCalls' => 'Receive Incoming Calls',
         'MakeOutgoingCalls' => 'Make Outgoing Calls',
         'Print' => 'Print',
+        
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        //Field names 
+        'Name' => 'Profile Name', 
 );
 
 $jsLanguageStrings = array(

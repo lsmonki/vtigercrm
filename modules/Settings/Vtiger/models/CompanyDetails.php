@@ -148,4 +148,21 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 		$moduleModel->getFields();
 		return $moduleModel;
 	}
+        
+        /** 
+        * @var array(string => string) 
+        */ 
+       private static $settings = array();  
+
+       /** 
+        * @param string $fieldname 
+        * @return string 
+        */ 
+       public static function getSetting($fieldname) { 
+            global $adb; 
+            if (!self::$settings) { 
+                    self::$settings = $adb->database->GetRow("SELECT * FROM vtiger_organizationdetails"); 
+            } 
+            return self::$settings[$fieldname]; 
+       } 
 }

@@ -201,15 +201,22 @@ class CurrencyField {
         $currencyPattern = $this->currencyFormat;
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
-		$currencyDecimalPlaces = $this->numberOfDecimal;
-		$value = number_format($value, $currencyDecimalPlaces,'.','');
-		if(empty($currencySeparator)) $currencySeparator = ' ';
-		if(empty($decimalSeparator)) $decimalSeparator = ' ';
+        $currencyDecimalPlaces = $this->numberOfDecimal;
+        $value = number_format($value, $currencyDecimalPlaces,'.','');
+        if(empty($currencySeparator)) $currencySeparator = ' ';
+        if(empty($decimalSeparator)) $decimalSeparator = ' ';
+        
+        if ($value < 0) { 
+            $sign = "-"; 
+            $value = substr($value, 1); 
+        } else { 
+            $sign = ""; 
+        } 
 
         if($currencyPattern == $this->CURRENCY_PATTERN_PLAIN) {
 			// Replace '.' with Decimal Separator
 			$number = str_replace('.', $decimalSeparator, $value);
-			return $number;
+			return $sign . $number; 
 		}
 		if($currencyPattern == $this->CURRENCY_PATTERN_SINGLE_GROUPING) {
 			// Separate the numeric and decimal parts
@@ -229,7 +236,7 @@ class CurrencyField {
 			}
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
         }
 		if($currencyPattern == $this->CURRENCY_PATTERN_THOUSAND_GROUPING) {
 			$negativeNumber = false;
@@ -272,7 +279,7 @@ class CurrencyField {
 			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
 		}
 		if($currencyPattern == $this->CURRENCY_PATTERN_MIXED_GROUPING) {
 			$negativeNumber = false;
@@ -327,7 +334,7 @@ class CurrencyField {
 			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
 		}
 		return $number;
 	}

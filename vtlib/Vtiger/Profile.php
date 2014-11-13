@@ -15,7 +15,55 @@ include_once('vtlib/Vtiger/Utils.php');
  */
 class Vtiger_Profile {
 
-	/**
+        var $id; 
+        var $name; 
+        var $desc; 
+
+        public function save() { 
+            if (!$this->id) { 
+                    $this->create(); 
+            } else { 
+                    $this->update(); 
+            } 
+        } 
+
+        private function create() { 
+            global $adb; 
+
+            $this->id = $adb->getUniqueID('vtiger_profile'); 
+
+            $sql = "INSERT INTO vtiger_profile (profileid, profilename, description) 
+                            VALUES (?,?,?)"; 
+            $binds = array($this->id, $this->name, $this->desc); 
+            $adb->pquery($sql, $binds); 
+
+            $sql = "INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) 
+                            SELECT ?, tabid, fieldid, 0, 0 
+                            FROM vtiger_field"; 
+            $binds = array($this->id); 
+            $adb->pquery($sql, $binds); 
+
+            $sql = "INSERT INTO vtiger_profile2tab (profileid, tabid, permissions) 
+                            SELECT ?, tabid, 0 
+                            FROM vtiger_tab"; 
+            $binds = array($this->id); 
+            $adb->pquery($sql, $binds); 
+
+            $sql = "INSERT INTO vtiger_profile2standardpermissions (profileid, tabid, Operation, permissions) 
+                            SELECT ?, tabid, actionid, 0 
+                    FROM vtiger_actionmapping, vtiger_tab 
+                            WHERE actionname IN ('Save', 'EditView', 'Delete', 'index', 'DetailView') AND isentitytype = 1"; 
+            $binds = array($this->id); 
+            $adb->pquery($sql, $binds); 
+
+            self::log("Initializing profile permissions ... DONE"); 
+        } 
+
+        private function update() { 
+            throw new Exception("Not implemented"); 
+        } 
+ 		 
+        /**
 	 * Helper function to log messages
 	 * @param String Message to log
 	 * @param Boolean true appends linebreak, false to avoid it

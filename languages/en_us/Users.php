@@ -112,6 +112,39 @@ $languageStrings = array(
 	'User Name' => 'User Name',
 	'Webservice Access Key' => 'Access Key',
 	'Yahoo id' => 'Yahoo id',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Day starts at' => 'Day starts at', 
+
+        //User status 
+        'Active' => 'Active', 
+        'Inactive' => 'Inactive', 
+
+        //Lead View settings 
+        'Today' => 'Today', 
+        'Last 2 Days' => 'Last 2 Days', 
+        'Last Week' => 'Last Week', 
+
+        //Calendar settings 
+        'This Week' => 'This Week', 
+        'This Month' => 'This Month', 
+        'This Year' => 'This Year', 
+
+        'Sunday' => 'Sunday', 
+        'Monday' => 'Monday', 
+        'Tuesday' => 'Tuesday', 
+        'Wednesday' => 'Wednesday', 
+        'Thursday' => 'Thursday', 
+        'Friday' => 'Friday', 
+        'Saturday' => 'Saturday', 
+
+        '1 Minute' => '1 Minute', 
+        '5 Minutes' => '5 Minutes', 
+        '15 Minutes' => '15 Minutes', 
+        '30 Minutes' => '30 Minutes', 
+        '45 Minutes' => '45 Minutes', 
+        '1 Hour' => '1 Hour', 
+        '1 Day' => '1 Day', 
 
 	//Time zones-Dont change any value
     'Kwajalein'  =>  '(UTC-12:00) International Date Line West',

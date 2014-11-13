@@ -632,6 +632,11 @@ $languageStrings = array(
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Users' => 'Users', 
+        'Service Requests' => 'Service Requests', 
+        'Terms &amp; Conditions' => 'Terms & Conditions', 
 );
 
 $jsLanguageStrings = array(

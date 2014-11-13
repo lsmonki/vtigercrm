@@ -18,6 +18,16 @@ $languageStrings = array(
 	'LBL_TRANSFORM_OWNERSHIP' => 'Transfer ownership',
 	'RoleAndSubordinates' => 'Role and Subordinates',
 	'SINGLE_Groups' => 'Group',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'LBL_DUPLICATES_EXIST' => 'Group Name already Exists', 
+        //Member names 
+        'Groups' => 'Groups', 
+        'Users' => 'Users', 
+        'Roles' => 'Roles', 
+    
+        //Field names 
+        'Name' => 'Group Name', 
 );
 
 $jsLanguageStrings = array(

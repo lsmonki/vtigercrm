@@ -86,6 +86,15 @@ $languageStrings = array(
 	'Task' => 'To Do',
 	'Weekly'=>'Week(s)',
 	'Yearly'=>'Year',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Start Date &amp; Time' => 'Start Date & Time', 
+        'End Date &amp; Time' => 'End Date & Time', 
+        'End Date' => 'End Date', 
+    
+        //Event Status picklist values 
+        'Held' => 'Held', 
+        'Not Held' => 'Not Held', 
 );
 
 $jsLanguageStrings = array(

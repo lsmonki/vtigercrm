@@ -21,6 +21,13 @@ $languageStrings = array(
 	'LBL_SELECT_SOURCE_VALUES' => 'Select Source Values',
 	'LBL_SOURCE_FIELD' => 'Source Field',
 	'LBL_TARGET_FIELD' => 'Target Field',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'PickListDependency' => 'Picklist Dependency', 
+        //Field names 
+        'Module' => 'Module', 
+        'Source Field' => 'Source Field', 
+        'Target Field' => 'Target Field', 
 );
 
 $jsLanguageStrings = array(

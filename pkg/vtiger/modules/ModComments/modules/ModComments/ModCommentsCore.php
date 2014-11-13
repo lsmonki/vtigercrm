@@ -186,6 +186,8 @@ class ModCommentsCore extends CRMEntity {
 			}
 		}
 
+                global $current_user; 
+                $query .= getNonAdminAccessControlQuery($module, $current_user); 
 		$query .= "	WHERE vtiger_crmentity.deleted = 0 ";
 		if($usewhere) {
 			$query .= $usewhere;
