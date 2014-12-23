@@ -16,12 +16,22 @@ class Google_Contacts_Controller extends WSAPP_SynchronizeController {
      * @return Google_Contacts_Connector
      */
     public function getTargetConnector() {
-        $oauthConnector = new Google_Oauth_Connector(Google_Utils_Helper::getCallbackUrl(array('module' => 'Google', 'sourcemodule' => $this->getSourceType()), array('operation' => 'sync')));
-        $client = $oauthConnector->getHttpClient($this->getSourceType());
-        $connector = new Google_Contacts_Connector($client);
+        $oauth2Connector = new Google_Oauth2_Connector($this->getSourceType(),$this->user->id); 
+        $oauth2Connection = $oauth2Connector->authorize(); 
+        $connector = new Google_Contacts_Connector($oauth2Connection); 
         $connector->setSynchronizeController($this);
         return $connector;
     }
+    
+    public function getSourceConnector() { 
+        $connector = new Google_Vtiger_Connector(); 
+        $connector->setSynchronizeController($this); 
+        $targetName = $this->targetConnector->getName(); 
+               if(empty ($targetName)){ 
+                       throw new Exception('Target Name cannot be empty'); 
+               } 
+        return $connector->setName('Vtiger_'.$targetName); 
+    } 
 
     /**
      * Return the types of snyc 

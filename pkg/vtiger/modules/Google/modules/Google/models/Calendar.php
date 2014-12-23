@@ -11,11 +11,7 @@
 vimport('~~/modules/WSAPP/synclib/models/SyncRecordModel.php');
 
 class Google_Calendar_Model extends WSAPP_SyncRecordModel {
-
-    const TYPE_ORGANIZER = "http://schemas.google.com/g/2005#event.organizer";
-
-    public $organizer;
-    public $whoList;
+    
     public $startUTC;
     public $endUTC;
 
@@ -24,7 +20,7 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> id
      */
     function getId() {
-        return $this->data['entity']->id->text;
+        return $this->data['entity']->getId();
     }
 
     /**
@@ -32,7 +28,7 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <date> modified time 
      */
     public function getModifiedTime() {
-        return $this->vtigerFormat($this->data['entity']->updated->text);
+        return $this->vtigerFormat($this->data['entity']->getUpdated());
     }
 
     /**
@@ -40,22 +36,25 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> Subject
      */
     function getSubject() {
-        return $this->data['entity']->title->text;
+        return $this->data['entity']->getSummary();
     }
 
     /**
      * return Start time time in UTC of Google Record
      * @return <date> start time
      */
-    function getStartTimeUTC() {
+    function getStartTimeUTC($user = false) {
         if (isset($this->startUTC)) {
             return $this->startUTC;
         }
-        $when = $this->data['entity']->getWhen();
+        if(!$user) {
+            $user = Users_Record_Model::getCurrentUserModel();
+        }
+        $when = $this->data['entity']->getStart();
         if (empty($when)) {
             $gStart = "00:00";
-        } else if ($when[0]->getStartTime()) {
-            $gStart = $when[0]->getStartTime();
+        } else if ($when->getDateTime()) {
+            $gStart = $when->getDateTime();
         } else {
             $gStart = "00:00";
         }
@@ -63,6 +62,12 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
         $timeZone = new DateTimeZone('UTC');
         $start->setTimezone($timeZone);
         $startUTC = $start->format('H:i:s');
+        $gDateTime = $when->getDateTime();
+        if($startUTC == '00:00:00' && empty($gDateTime)) {
+            $userTimezone = $user->get('time_zone');
+            $startUTCObj = DateTimeField::convertTimeZone($startUTC, $userTimezone, DateTimeField::getDBTimeZone());
+            $startUTC = $startUTCObj->format('H:i:s');
+        }
         $this->startUTC = $startUTC;
         return $startUTC;
     }
@@ -71,15 +76,18 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * return End time time in UTC of Google Record
      * @return <date> end time
      */
-    function getEndTimeUTC() {
+    function getEndTimeUTC($user = false) {
         if (isset($this->endUTC)) {
             return $this->endUTC;
         }
-        $when = $this->data['entity']->getWhen();
+        if(!$user) {
+            $user = Users_Record_Model::getCurrentUserModel();
+        }
+        $when = $this->data['entity']->getEnd();
         if (empty($when)) {
             $gEnd = "00:00";
-        } else if ($when[0]->getEndTime()) {
-            $gEnd = $when[0]->getEndTime();
+        } else if ($when->getDateTime()) {
+            $gEnd = $when->getDateTime();
         } else {
             $gEnd = "00:00";
         }
@@ -87,6 +95,12 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
         $timeZone = new DateTimeZone('UTC');
         $end->setTimezone($timeZone);
         $endUTC = $end->format('H:i:s');
+        $gDateTime = $when->getDateTime();
+        if($endUTC == '00:00:00' && empty($gDateTime)) {
+            $userTimezone = $user->get('time_zone');
+            $startUTCObj = DateTimeField::convertTimeZone($endUTC, $userTimezone, DateTimeField::getDBTimeZone());
+            $endUTC = $startUTCObj->format('H:i:s');
+        }
         $this->endUTC = $endUTC;
         return $endUTC;
     }
@@ -95,15 +109,20 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * return start date in UTC of Google Record
      * @return <date> start date
      */
-    function getStartDate() {
+    function getStartDate($user = false) {
         if (isset($this->startDate)) {
             return $this->startdate;
         }
-        $when = $this->data['entity']->getWhen();
+        if(!$user) {
+            $user = Users_Record_Model::getCurrentUserModel();
+        }
+        $when = $this->data['entity']->getStart();
         if (empty($when)) {
             $gStart = date('Y-m-d');
-        } else if ($when[0]->getStartTime()) {
-            $gStart = $when[0]->getStartTime();
+        } else if ($when->getDateTime()) {
+            $gStart = $when->getDateTime();
+        } else if($when->getDate()) {
+            $gStart = $when->getDate();
         } else {
             $gStart = date('Y-m-d');
         }
@@ -111,6 +130,12 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
         $timeZone = new DateTimeZone('UTC');
         $start->setTimezone($timeZone);
         $startDate = $start->format('Y-m-d');
+        $gDateTime = $when->getDateTime();
+        if($start->format('H:i:s') == '00:00:00' && empty($gDateTime)) {
+            $userTimezone = $user->get('time_zone');
+            $startUTCObj = DateTimeField::convertTimeZone($startDate, $userTimezone, DateTimeField::getDBTimeZone());
+            $startDate = $startUTCObj->format('Y-m-d');
+        }
         $this->startDate = $startDate;
         return $startDate;
     }
@@ -119,15 +144,20 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * return  End  date in UTC of Google Record
      * @return <date> end date
      */
-    function getEndDate() {
+    function getEndDate($user = false) {
         if (isset($this->endUTC)) {
             return $this->endUTC;
         }
-        $when = $this->data['entity']->getWhen();
+        if(!$user) {
+            $user = Users_Record_Model::getCurrentUserModel();
+        }
+        $when = $this->data['entity']->getEnd();
         if (empty($when)) {
             $gEnd = date('Y-m-d');
-        } else if ($when[0]->getEndTime()) {
-            $gEnd = $when[0]->getEndTime();
+        } else if ($when->getDateTime()) {
+            $gEnd = $when->getDateTime();
+        } else if ($when->getDate()) {
+            $gEnd = $when->getDate();
         } else {
             $gEnd = date('Y-m-d');
         }
@@ -135,51 +165,14 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
         $timeZone = new DateTimeZone('UTC');
         $end->setTimezone($timeZone);
         $endDate = $end->format('Y-m-d');
+        $gDateTime = $when->getDateTime();
+        if($end->format('H:i:s') == '00:00:00' && empty($gDateTime)) {
+            $userTimezone = $user->get('time_zone');
+            $endUTCObj = DateTimeField::convertTimeZone($endDate, $userTimezone, DateTimeField::getDBTimeZone());
+            $endDate = $endUTCObj->format('Y-m-d');
+        }
         $this->endDate = $endDate;
         return $endDate;
-    }
-
-    /**
-     * return Organizer of Google Record
-     * @return <string> Organizer
-     */
-    function getOrganizer() {
-        if (isset($this->organizer)) {
-            return $this->organizer;
-        }
-        $whoList = $this->getWhoList();
-        $this->organizer = $whoList['organizer'];
-        return $this->organizer;
-    }
-
-    /**
-     * return Who List of Google Record
-     * @return <array> Who List
-     */
-    function getWhoList() {
-        if (isset($this->whoList)) {
-            return $this->whoList;
-        }
-        $whoList = $this->data['entity']->getWho();
-        $guests = array();
-        $organizer = array();
-        foreach ($whoList as $i => $who) {
-            $type = $who->getRel();
-            if ($type == self::TYPE_ORGANIZER) {
-                $organizer['name'] = $who->getValueString();
-                $organizer['email'] = $who->getEmail();
-            } else {
-                $detail = array();
-                $detail['name'] = $who->getValueString();
-                $detail['email'] = $who->getEmail();
-                array_push($guests, $detail);
-            }
-        }
-        $this->organizer = $organizer;
-        $list = array();
-        $list['organizer'] = $organizer;
-        $list['guests'] = $guests;
-        return $list;
     }
 
     /**
@@ -187,7 +180,7 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> title
      */
     function getTitle() {
-        $title = $this->data['entity']->title->text;
+        $title = $this->data['entity']->getSummary();
         return empty($title) ? null : $title;
     }
     
@@ -196,14 +189,19 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> visibility of google event (Private or Public)
      * @return <null> if google event visibility is default
      */
-    function getVisibility() {
-        $visibility = $this->data['entity']->getVisibility()->getValue();
+    function getVisibility($user) {
+        $visibility = $this->data['entity']->getVisibility();
         if(strpos($visibility, 'private') !== false)
-                return 'Private';
+            return 'Private';
         else if(strpos($visibility, 'public') !== false)
+            return 'Public';
+        else {
+            $calendarsharedtype = $user->get('calendarsharedtype');
+            if($calendarsharedtype == 'selectedusers' || $calendarsharedtype == 'public') {
                 return 'Public';
-        else
-                return null;
+            }
+            return 'Private';
+        }
     }
 
     /**
@@ -211,7 +209,7 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> Discription
      */
     function getDescription() {
-        return $this->data['entity']->content->text;
+        return $this->data['entity']->getDescription();
     }
 
     /**
@@ -219,10 +217,8 @@ class Google_Calendar_Model extends WSAPP_SyncRecordModel {
      * @return <string> location
      */
     function getWhere() {
-        $where = $this->data['entity']->where;
-        if (!empty($where)) {
-            return $where[0]->valueString;
-        }
+        $where = $this->data['entity']->getLocation();
+        return $where;
     }
 
     /**

@@ -21,7 +21,9 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         switch ($request->get('operation')) {
             case "sync" : $this->renderSyncUI($request);
                 break;
-            case "removeSync" : $this->removeSynchronization($request);
+            case "removeSync" : if($request->validateWriteAccess()){
+                                    $this->deleteSync($request);
+                                }
                 break;
             default: $this->renderWidgetUI($request);
                 break;
@@ -31,8 +33,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
     function renderWidgetUI(Vtiger_Request $request) {
         $sourceModule = $request->get('sourcemodule');
         $viewer = $this->getViewer($request);
-        $oauth = new Google_Oauth_Connector(Google_Utils_Helper::getCallbackUrl(array('module' => 'Google', 'sourcemodule' => $sourceModule, array('operation' => 'sync'))));
-        $firstime = $oauth->hasStoredToken($sourceModule, true);
+        $oauth2 = new Google_Oauth2_Connector($sourceModule); 
+        $firstime = $oauth2->hasStoredToken(); 
         $viewer->assign('MODULE_NAME', $request->getModule());
         $viewer->assign('FIRSTTIME', $firstime);
         $viewer->assign('STATE', 'home');
@@ -46,7 +48,7 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         $sourceModule = $request->get('sourcemodule');
         $viewer = $this->getViewer($request);
         $viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
-        $oauth = new Google_Oauth_Connector(Google_Utils_Helper::getCallbackUrl(array('module' => 'Google', 'sourcemodule' => $sourceModule, array('operation' => 'sync'))));
+        $oauth2 = new Google_Oauth2_Connector($sourceModule); 
         if ($request->has('oauth_verifier')) {
             try {
                 $oauth->getHttpClient($sourceModule);
@@ -72,7 +74,7 @@ class Google_List_View extends Vtiger_PopupAjax_View {
                     }
                 }
             }
-            $firstime = $oauth->hasStoredToken($sourceModule, false, true);
+            $firstime = $oauth2->hasStoredToken(); 
             $viewer->assign('MODULE_NAME', $request->getModule());
             $viewer->assign('FIRSTTIME', $firstime);
             $viewer->assign('RECORDS', $records);
@@ -95,7 +97,8 @@ class Google_List_View extends Vtiger_PopupAjax_View {
     public function Contacts() {
         $user = Users_Record_Model::getCurrentUserModel();
         $controller = new Google_Contacts_Controller($user);
-        $records = $controller->synchronize();
+        $syncDirection = Google_Utils_Helper::getSyncDirectionForUser($user); 
+        $records = $controller->synchronize(true,$syncDirection[0],$syncDirection[1]); 
         $syncRecords = $this->getSyncRecordsCount($records);
         $syncRecords['vtiger']['more'] = $controller->targetConnector->moreRecordsExits();
         $syncRecords['google']['more'] = $controller->sourceConnector->moreRecordsExits();
@@ -106,8 +109,14 @@ class Google_List_View extends Vtiger_PopupAjax_View {
      * Sync Calendar Records 
      * @return <array> Count of Calendar Records
      */
-    public function Calendar() {
-        $user = Users_Record_Model::getCurrentUserModel();
+    public function Calendar($userId = false) {
+        if(!$userId){
+            $user = Users_Record_Model::getCurrentUserModel();
+        } else {
+            $user = new Users();
+            $user = $user->retrieve_entity_info($userId, 'Users');
+            $user = Users_Record_Model::getInstanceFromUserObject($user);
+        }
         $controller = new Google_Calendar_Controller($user);
         $records = $controller->synchronize();
         $syncRecords = $this->getSyncRecordsCount($records);
@@ -123,6 +132,12 @@ class Google_List_View extends Vtiger_PopupAjax_View {
         $sourceModule = $request->get('sourcemodule');
         $userModel = Users_Record_Model::getCurrentUserModel();
         Google_Module_Model::removeSync($sourceModule, $userModel->getId());
+    }
+    
+    function deleteSync($request) {
+        $sourceModule = $request->get('sourcemodule');
+        $userModel = Users_Record_Model::getCurrentUserModel();
+        Google_Module_Model::deleteSync($sourceModule, $userModel->getId());
     }
 
     /**
@@ -188,11 +203,9 @@ class Google_List_View extends Vtiger_PopupAjax_View {
 		return $this->checkAndConvertJsScripts(array("~libraries/bootstrap/js/bootstrap-popover.js","modules.$moduleName.resources.List"));
         
     }
-
-    public function validateRequest(Vtiger_Request $request) { 
-        // NOTE: This is also entry point for google oauth callback so referer check ould fail
-        // skippping it
-        //$request->validateReadAccess(); 
-    } 
+    
+    public function validateRequest(Vtiger_Request $request) {
+        //don't do validation because there is a redirection from google
+    }
 }
 
