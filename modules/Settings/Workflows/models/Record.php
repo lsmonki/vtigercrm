@@ -189,30 +189,6 @@ class Settings_Workflows_Record_Model extends Settings_Vtiger_Record_Model {
 		return $arr[$executionCondition-1];
 	}
 
-    /**
-     * Function to get the count of active workflows
-     * @return <Integer> count of acive workflows
-     */
-    public static function getActiveCount() {
-
-        $db = PearDatabase::getInstance();
-        vimport('~~/modules/com_vtiger_workflow/VTTaskManager.inc');
-        $taskManager = new VTTaskManager($db);
-        $taskList = $taskManager->getTasks();
-
-        $examinedIdList = array();
-        foreach($taskList as $taskDetails) {
-            $workFlowId = $taskDetails->workflowId;
-            if(in_array($workFlowId,$examinedIdList)) {
-                continue;
-            }
-            if($taskDetails->active) {
-                array_push($examinedIdList,$workFlowId);
-            }
-        }
-        return count($examinedIdList);
-    }
-
 	function isFilterSavedInNew() {
 		$wf = $this->getWorkflowObject();
 		if($wf->filtersavedinnew == '6') {
