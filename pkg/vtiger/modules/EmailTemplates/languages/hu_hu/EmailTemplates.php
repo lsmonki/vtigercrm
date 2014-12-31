@@ -8,17 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
+	'Email Templates' => 'E-mail sablonok' ,
+	'LBL_ADD_RECORD' => 'E-mail sablon hozzáadása',
+	'SINGLE_EmailTemplates' => 'E-mail sablon',
+	'LBL_EMAIL_TEMPLATES'=> 'E-mail sablonok',
+	'LBL_EMAIL_TEMPLATE' => 'E-mail sablon',
 	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
+	'LBL_TEMPLATE_NAME' => 'E-mail sablon neve',
+	'LBL_DESCRIPTION' => 'Leírás',
+	'LBL_SUBJECT' => 'Tárgysor',
 	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
+	'LBL_SELECT_FIELD_TYPE' => 'Válasszon mezőtípust',
 	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Sablonok kezelése az E-Mail modul számára',
 	
 );

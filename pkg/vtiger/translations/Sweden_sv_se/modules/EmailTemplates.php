@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+    'Email Templates' => 'E-postmallar',
 	'LBL_ADD_RECORD' => 'Lägg till E-postmall',
 	'SINGLE_EmailTemplates' => 'E-postmall',
 	'LBL_EMAIL_TEMPLATES'=> 'E-postmallar',

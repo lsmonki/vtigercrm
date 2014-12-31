@@ -9,7 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-	'RecycleBin' => 'Papperskorgen',
+	'Recycle Bin' => 'Papperskorgen',
 	'LBL_SELECT_MODULE' => 'Välj Modul',
 	'LBL_EMPTY_RECYCLEBIN' => 'Tom Papperskorgen',
 	'LBL_RESTORE' => 'Återställ',

@@ -8,13 +8,13 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'LBL_EMPTY_RECYCLEBIN'         => 'Lomtár ürítése'              ,
+		'LBL_EMPTY_RECYCLEBIN'         => 'Lomtár ürítése'              ,
 	'LBL_NO_PERMITTED_MODULES'     => 'Nincs elérhető engedélyezett Modul',
 	'LBL_NO_RECORDS_FOUND'         => 'Ehhez a Modulhoz nem találtunk visszaállítható rekordokat',
 	'LBL_RECORDS_LIST'             => 'Lomtár lista'                ,
 	'LBL_RESTORE'                  => 'Visszaállítás'               ,
 	'LBL_SELECT_MODULE'            => 'Válasszon Modult'            ,
-	'RecycleBin'                   => 'Lomtár'                      ,
+	'Recycle Bin'                   => 'Lomtár'                      ,
 );
 
 $jsLanguageStrings = array(

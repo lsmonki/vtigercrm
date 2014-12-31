@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	 'Email Templates' => 'E-mail sablonok' ,
 	'LBL_ADD_RECORD'        => 'E-mail sablon hozzáadása' ,
 	'LBL_DESCRIPTION'       => 'Leírás'                   ,
 	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Sablonok kezelése az E-Mail modul számára',

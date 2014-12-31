@@ -9,7 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-	'RecycleBin' => 'Kosz',
+	'Recycle Bin' => 'Kosz',
 	'LBL_SELECT_MODULE' => 'Zaznacz moduł',
 	'LBL_EMPTY_RECYCLEBIN' => 'Opróżnij cały kosz',
 	'LBL_RESTORE' => 'Przywróć',

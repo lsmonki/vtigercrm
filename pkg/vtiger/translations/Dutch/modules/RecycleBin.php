@@ -18,7 +18,7 @@
  * @link      http://www.vicus.nl
  ************************************************************************************/
 $languageStrings = array(
-    'RecycleBin'                   => 'Prullenbak'                     ,
+   'Recycle Bin'                   => 'Prullenbak'                     ,
     'LBL_SELECT_MODULE'            => 'Selecteer Module'               ,
     'LBL_EMPTY_RECYCLEBIN'         => 'Maak Prullenbak leeg'           ,
     'LBL_RESTORE'                  => 'Herstel'                        ,

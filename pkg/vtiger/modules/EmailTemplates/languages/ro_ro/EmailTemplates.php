@@ -8,17 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
+	 'Email Templates' => 'Template-uri de e-mail' ,
+	'LBL_ADD_RECORD' => 'Adăugați șablon de e-mail',
+	'SINGLE_EmailTemplates' => 'Format e-mail',
+	'LBL_EMAIL_TEMPLATES'=> 'Template-uri de e-mail',
+	'LBL_EMAIL_TEMPLATE' => 'Format e-mail',
 	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
+	'LBL_TEMPLATE_NAME' => 'Numele Format',
+	'LBL_DESCRIPTION' => 'Descriere',
+	'LBL_SUBJECT' => 'Subiect',
+	'LBL_GENERAL_FIELDS' => 'General Domenii',
+	'LBL_SELECT_FIELD_TYPE' => 'Selectați tipul câmpului',
 	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Gestionarea template-uri pentru E-Mail modul',
 	
 );

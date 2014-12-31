@@ -9,7 +9,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-	'RecycleBin' => 'Lixeira',
+	'Recycle Bin' => 'Lixeira',
 	'LBL_SELECT_MODULE' => 'Selecionar Módulo',
 	'LBL_EMPTY_RECYCLEBIN' => 'Limpar Lixeira',
 	'LBL_RESTORE' => 'Restaurar',

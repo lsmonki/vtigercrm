@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'RecycleBin'                   => 'Recycle Bin'                 , // TODO: Review
+	'Recycle Bin'                   => 'Recycle Bin'                 , // TODO: Review
 	'LBL_SELECT_MODULE'            => 'Select Module'               , // TODO: Review
 	'LBL_EMPTY_RECYCLEBIN'         => 'Empty Recycle Bin'           , // TODO: Review
 	'LBL_RESTORE'                  => 'Restore'                     , // TODO: Review

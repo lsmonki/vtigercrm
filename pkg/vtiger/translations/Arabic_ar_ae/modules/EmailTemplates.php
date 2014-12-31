@@ -8,17 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
+	'Email Templates' => 'قوالب البريد الإلكتروني',
+	'LBL_ADD_RECORD' => 'إضافة قالب البريد الإلكتروني',
+	'SINGLE_EmailTemplates' => 'قالب البريد الإلكتروني',
+	'LBL_EMAIL_TEMPLATES'=> 'قوالب البريد الإلكتروني',
+	'LBL_EMAIL_TEMPLATE' => 'قالب البريد الإلكتروني',
 	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
+	'LBL_TEMPLATE_NAME' => 'اسم القالب',
+	'LBL_DESCRIPTION' => 'وصف',
+	'LBL_SUBJECT' => 'موضوع',
+	'LBL_GENERAL_FIELDS' => 'الحقول عامة',
+	'LBL_SELECT_FIELD_TYPE' => 'حدد نوع الحقل',
 	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'إدارة قوالب للالبريد الإلكتروني وحدة',
 	
 );
