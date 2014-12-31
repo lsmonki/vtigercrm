@@ -12,9 +12,9 @@
 {strip}
 	{foreach item=HEADER from=$RELATED_HEADERS}
 		{if $HEADER->get('label') eq "Project Milestone Name"}
-			{assign var=PROJECTMILESTONE_NAME_HEADER value={vtranslate($HEADER->get('label'),$MODULE_NAME)}}
+			{assign var=PROJECTMILESTONE_NAME_HEADER value={vtranslate($HEADER->get('label'),$MODULE)}}
 		{elseif $HEADER->get('label') eq "Milestone Date"}
-			{assign var=PROJECTMILESTONE_DATE_HEADER value={vtranslate($HEADER->get('label'),$MODULE_NAME)}}
+			{assign var=PROJECTMILESTONE_DATE_HEADER value={vtranslate($HEADER->get('label'),$MODULE)}}
 		{/if}
 	{/foreach}
 	<div class="row-fluid">		
@@ -48,7 +48,7 @@
 	{if $NUMBER_OF_RECORDS eq 5}
 		<div class="row-fluid">
 			<div class="pull-right">
-				<a class="moreRecentMilestones cursorPointer">{vtranslate('LBL_MORE',$MODULE_NAME)}</a>
+				<a class="moreRecentMilestones cursorPointer">{vtranslate('LBL_MORE',$MODULE)}</a>
 			</div>
 		</div>
 	{/if}

@@ -12,9 +12,9 @@
 {strip}
 	{foreach item=HEADER from=$RELATED_HEADERS}
 		{if $HEADER->get('label') eq "Project Task Name"}
-			{assign var=TASK_NAME_HEADER value={vtranslate($HEADER->get('label'),$MODULE_NAME)}}
+			{assign var=TASK_NAME_HEADER value={vtranslate($HEADER->get('label'),$MODULE)}}
 		{elseif $HEADER->get('label') eq "Progress"}
-			{assign var=TASK_PROGRESS_HEADER value={vtranslate($HEADER->get('label'),$MODULE_NAME)}}
+			{assign var=TASK_PROGRESS_HEADER value={vtranslate($HEADER->get('label'),$MODULE)}}
 		{/if}
 	{/foreach}
 	<div class="row-fluid">		
@@ -49,7 +49,7 @@
 	{if $NUMBER_OF_RECORDS eq 5}
 		<div class="row-fluid">
 			<div class="pull-right">
-				<a class="moreRecentTasks cursorPointer">{vtranslate('LBL_MORE',$MODULE_NAME)}</a>
+				<a class="moreRecentTasks cursorPointer">{vtranslate('LBL_MORE',$MODULE)}</a>
 			</div>
 		</div>
 	{/if}
