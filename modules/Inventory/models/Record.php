@@ -182,8 +182,8 @@ class Inventory_Record_Model extends Vtiger_Record_Model {
 
 		$controller = new $controllerClassName($moduleName);
 		$controller->loadRecord($recordId);
-
-		$fileName = $moduleName.'_'.getModuleSequenceNumber($moduleName, $recordId);
+                $translatedmodname= vtranslate($moduleName,$moduleName);
+		$fileName = $translatedmodname.'_'.getModuleSequenceNumber($moduleName, $recordId);
 		$controller->Output($fileName.'.pdf', 'D');
 	}
 
