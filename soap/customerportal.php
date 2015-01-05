@@ -909,7 +909,8 @@ function create_ticket($input_array)
 	*/
 function update_ticket_comment($input_array)
 {
-	global $adb,$mod_strings,$current_user;
+	global $adb,$mod_strings,$current_language; 
+        $mod_strings = return_module_language($current_language, 'HelpDesk');
 	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
 
