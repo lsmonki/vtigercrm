@@ -1,6 +1,6 @@
 
 This software is a collective work consisting of the following major Open Source components: 
-Apache software, MySQL server, PHP, SugarCRM, ADOdb, Smarty, PHPMailer, phpSysinfo, MagpieRSS and others, each licensed under a separate Open Source License. 
+Apache software, MySQL server, PHP, SugarCRM, ADOdb, Smarty, PHPMailer, MagpieRSS and others, each licensed under a separate Open Source License. 
 vtiger.com is not affiliated with nor endorsed by any of the above providers.                  
 
 For Linux
@@ -23,30 +23,26 @@ For Linux
 
 10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at http://magpierss.sourceforge.net/
 
-11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
+11. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
 
-12. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
+12. Smarty Template Engine for PHP used under the GNU LGPL available at available at <vtiger CRM Home>/vtigerCRM/Smarty/COPYING.lib
 
-13. Mailfeed used under GNU GPL downloaded from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright   
+13. freetag is used under dual license BSD and LGPL downloaded from http://www.getluky.net available at <vtiger CRM Home>/vtigerCRM/include/freetag/license.txt
 
-14. Smarty Template Engine for PHP used under the GNU LGPL available at available at <vtiger CRM Home>/vtigerCRM/Smarty/COPYING.lib
+14. Image_Canvas is used under GNU LGPL downloaded from http://pear.php.net/pepr/pepr-proposal-show.php?id=212 available at http://www.gnu.org/copyleft/lesser.html 
 
-15. freetag is used under dual license BSD and LGPL downloaded from http://www.getluky.net available at <vtiger CRM Home>/vtigerCRM/include/freetag/license.txt
+15. Image_Color is used under PHP license 3.0 downloaded from http://pear.php.net/package/Image_Color available at http://www.php.net/license/3_0.txt
 
-16. Image_Canvas is used under GNU LGPL downloaded from http://pear.php.net/pepr/pepr-proposal-show.php?id=212 available at http://www.gnu.org/copyleft/lesser.html 
+16. Image_Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
 
-17. Image_Color is used under PHP license 3.0 downloaded from http://pear.php.net/package/Image_Color available at http://www.php.net/license/3_0.txt
+17. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
 
-18. Image_Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
+18. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
-19. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
+19. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
+20. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
 
-20. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
-
-21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
-22. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
-
-23. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
+21. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
 
 The licenses of the Open Source components are reproduced in full below.
 
@@ -1030,7 +1026,7 @@ Version 1.1.2
 
 13. MULTIPLE-LICENSED CODE.
 
-      Initial Developer may designate portions of the Covered Code as “Multiple-Licensed”.  “Multiple-Licensed” means that the Initial Developer permits you to utilize portions of the Covered Code under Your choice of the SPL or the alternative licenses, if any, specified by the Initial Developer in the file described in Exhibit A.
+      Initial Developer may designate portions of the Covered Code as ï¿½Multiple-Licensedï¿½.  ï¿½Multiple-Licensedï¿½ means that the Initial Developer permits you to utilize portions of the Covered Code under Your choice of the SPL or the alternative licenses, if any, specified by the Initial Developer in the file described in Exhibit A.
 
 SugarCRM Public License 1.1.2 - Exhibit A
 
@@ -1055,7 +1051,7 @@ SugarCRM Public License 1.1.2 - Exihibit B
 Additional Terms applicable to the SugarCRM Public License.
 
 I. Effect.
-These additional terms described in this SugarCRM Public License – Additional Terms shall apply to the Covered Code under this License.
+These additional terms described in this SugarCRM Public License ï¿½ Additional Terms shall apply to the Covered Code under this License.
 
 II. SugarCRM and logo.
 This License does not grant any rights to use the trademarks "SugarCRM" and the "SugarCRM" logos even if such marks are included in the Original Code or Modifications. 
