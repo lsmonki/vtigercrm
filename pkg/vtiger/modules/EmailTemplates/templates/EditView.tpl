@@ -57,7 +57,7 @@
 				<td class="fieldLabel {$WIDTHTYPE}">{vtranslate('LBL_SELECT_FIELD_TYPE', $MODULE)}</td>
 				<td class="fieldValue {$WIDTHTYPE}">
 					<span class="filterContainer" >
-						<input type=hidden name="moduleFields" data-value='{ZEND_JSON::encode($ALL_FIELDS)}' />
+						<input type="hidden" name="moduleFields" data-value='{ZEND_JSON::encode($ALL_FIELDS)|escape}' />
 						<span class="span4 conditionRow">
 							<select class="chzn-select" name="modulename" >
 								<option value="none">{vtranslate('LBL_SELECT_MODULE',$MODULE)}</option>
