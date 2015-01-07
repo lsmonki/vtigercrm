@@ -8,18 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'Email Templates' => 'E-Mail-Vorlagen' ,
-	'LBL_ADD_RECORD' => 'In E-Mail-Vorlage',
-	'SINGLE_EmailTemplates' => 'E-Mail-Vorlage',
-	'LBL_EMAIL_TEMPLATES'=> 'E-Mail-Vorlagen',
-	'LBL_EMAIL_TEMPLATE' => 'E-Mail-Vorlage',
+	'Email Templates' => 'Email Templates' ,
+	'LBL_ADD_RECORD' => 'Aggiungi Email Template',
+	'SINGLE_EmailTemplates' => 'Email Template',
+	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
+	'LBL_EMAIL_TEMPLATE' => 'Email Template',
 	
-	'LBL_TEMPLATE_NAME' => 'Vorlagenname',
-	'LBL_DESCRIPTION' => 'Beschreibung',
-	'LBL_SUBJECT' => 'Gegenstand',
-	'LBL_GENERAL_FIELDS' => 'Allgemeine Felder',
-	'LBL_SELECT_FIELD_TYPE' => 'Wählen Sie Feldtyp',
+	'LBL_TEMPLATE_NAME' => 'Nome modello',
+	'LBL_DESCRIPTION' => 'Descrizione',
+	'LBL_SUBJECT' => 'Soggetto',
+	'LBL_GENERAL_FIELDS' => 'Campi Generale',
+	'LBL_SELECT_FIELD_TYPE' => 'Selezionare il tipo di campo',
 	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Vorlagen verwalten für E-Mail-Modul',
+	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Gestire modelli per il modulo E-Mail',
 	
 );
