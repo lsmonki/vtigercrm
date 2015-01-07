@@ -1128,13 +1128,13 @@ function send_mail_for_password($mailid)
 	$initialfrom = $adb->query_result($from_res,0,'user_name');
 	$from = $adb->query_result($from_res,0,'email1');
 
-	$contents = $mod_strings['LBL_LOGIN_DETAILS'];
-	$contents .= "<br><br>".$mod_strings['LBL_USERNAME']." ".$user_name;
-	$contents .= "<br>".$mod_strings['LBL_PASSWORD']." ".$password;
+	$contents = getTranslatedString('LBL_LOGIN_DETAILS');
+	$contents .= "<br><br>".getTranslatedString('LBL_USERNAME')." ".$user_name;
+	$contents .= "<br>".getTranslatedString('LBL_PASSWORD')." ".$password;
 
 	$mail = new PHPMailer();
 
-	$mail->Subject = $mod_strings['LBL_SUBJECT_PORTAL_LOGIN_DETAILS'];
+	$mail->Subject =  getTranslatedString('LBL_SUBJECT_PORTAL_LOGIN_DETAILS');
 	$mail->Body    = $contents;
 	$mail->IsSMTP();
 
@@ -1145,7 +1145,7 @@ function send_mail_for_password($mailid)
 	$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
 	$mail->Host = $mail_server;
-	if($smtp_auth == 'true')
+	if($smtp_auth) 
 	$mail->SMTPAuth = 'true';
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;
