@@ -132,19 +132,19 @@ class Vtiger_MailScannerAction {
 		$returnid = false;
 		if($this->actiontype == 'CREATE') {
 			if($this->module == 'HelpDesk') {
-				$returnid = $this->__CreateTicket($mailscanner, $mailrecord);
+				$returnid = $this->__CreateTicket($mailscanner, $mailrecord,$mailscannerrule);
 			} else if ($this->module == 'Contacts') {
-				$returnid = $this->__CreateContact($mailscanner, $mailrecord);
+				$returnid = $this->__CreateContact($mailscanner, $mailrecord,$mailscannerrule);
 			} else if ($this->module == 'Leads') {
-				$returnid = $this->__CreateLead($mailscanner, $mailrecord);
+				$returnid = $this->__CreateLead($mailscanner, $mailrecord,$mailscannerrule);
 			} else if ($this->module == 'Accounts') {
-				$returnid = $this->__CreateAccount($mailscanner, $mailrecord);
+				$returnid = $this->__CreateAccount($mailscanner, $mailrecord,$mailscannerrule);
 			}
 		} else if($this->actiontype == 'LINK') {
 			$returnid = $this->__LinkToRecord($mailscanner, $mailrecord);
 		} else if ($this->actiontype == 'UPDATE') {
 			if ($this->module == 'HelpDesk') {
-				$returnid = $this->__UpdateTicket($mailscanner, $mailrecord, $mailscannerrule->hasRegexMatch($matchresult));
+				$returnid = $this->__UpdateTicket($mailscanner, $mailrecord, $mailscannerrule->hasRegexMatch($matchresult),$mailscannerrule);
 			}
 		}
 		return $returnid;
@@ -153,7 +153,7 @@ class Vtiger_MailScannerAction {
 	/**
 	 * Update ticket action.
 	 */
-	function __UpdateTicket($mailscanner, $mailrecord, $regexMatchInfo) {
+	function __UpdateTicket($mailscanner, $mailrecord, $regexMatchInfo,$mailscannerrule) {
 		global $adb;
 		$returnid = false;
 
@@ -179,12 +179,12 @@ class Vtiger_MailScannerAction {
 				$commentFocus = new ModComments();
 				$commentFocus->column_fields['commentcontent'] = $mailrecord->getBodyText();
 				$commentFocus->column_fields['related_to'] = $linkfocus->id;
-				$commentFocus->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+				$commentFocus->column_fields['assigned_user_id'] =  $mailscannerrule->assigned_to;
                 if($commentedBy) {
                     $commentFocus->column_fields['customer'] = $commentedBy;
                     $commentFocus->column_fields['from_mailconverter'] = 1;
                 } else {
-                    $commentFocus->column_fields['userid'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+                    $commentFocus->column_fields['userid'] = $mailscannerrule->assigned_to;
                 }
 				$commentFocus->saveentity('ModComments');
 
@@ -204,7 +204,7 @@ class Vtiger_MailScannerAction {
 	/**
 	 * Create ticket action.
 	 */
-	function __CreateContact($mailscanner, $mailrecord) {
+	function __CreateContact($mailscanner, $mailrecord, $mailscannerrule) {
         if($mailscanner->LookupContact($mailrecord->_from[0])) {
             $this->lookup = 'FROM';
             return $this->__LinkToRecord($mailscanner, $mailrecord);
@@ -219,7 +219,7 @@ class Vtiger_MailScannerAction {
         $this->setDefaultValue('Contacts', $contact);
 		$contact->column_fields['lastname'] = $lastname;
 		$contact->column_fields['email'] = $email;
-		$contact->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+		$contact->column_fields['assigned_user_id'] =  $mailscannerrule->assigned_to;
 		$contact->column_fields['description'] = $description;
 		$contact->save('Contacts');
 
@@ -231,7 +231,7 @@ class Vtiger_MailScannerAction {
 	/**
 	 * Create Lead action.
 	 */
-	function __CreateLead($mailscanner, $mailrecord) {
+	function __CreateLead($mailscanner, $mailrecord, $mailscannerrule) {
         if($mailscanner->LookupLead($mailrecord->_from[0])) {
             $this->lookup = 'FROM';
             return $this->__LinkToRecord($mailscanner, $mailrecord);
@@ -246,7 +246,7 @@ class Vtiger_MailScannerAction {
         $this->setDefaultValue('Leads', $lead);
 		$lead->column_fields['lastname'] = $lastname;
 		$lead->column_fields['email'] = $email;
-		$lead->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+		$lead->column_fields['assigned_user_id'] = $mailscannerrule->assigned_to;
 		$lead->column_fields['description'] = $description;
 		$lead->save('Leads');
 
@@ -258,7 +258,7 @@ class Vtiger_MailScannerAction {
 	/**
 	 * Create Account action.
 	 */
-	function __CreateAccount($mailscanner, $mailrecord) {
+	function __CreateAccount($mailscanner, $mailrecord, $mailscannerrule) {
         if($mailscanner->LookupAccount($mailrecord->_from[0])) {
             $this->lookup = 'FROM';
             return $this->__LinkToRecord($mailscanner, $mailrecord);
@@ -273,7 +273,7 @@ class Vtiger_MailScannerAction {
         $this->setDefaultValue('Accounts', $account);
 		$account->column_fields['accountname'] = $accountname;
 		$account->column_fields['email1'] = $email;
-		$account->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+		$account->column_fields['assigned_user_id'] =  $mailscannerrule->assigned_to;
 		$account->column_fields['description'] = $description;
 		$account->save('Accounts');
 
@@ -285,7 +285,7 @@ class Vtiger_MailScannerAction {
 	/**
 	 * Create ticket action.
 	 */
-	function __CreateTicket($mailscanner, $mailrecord) {
+	function __CreateTicket($mailscanner, $mailrecord, $mailscannerrule) {
 		// Prepare data to create trouble ticket
 		$usetitle = $mailrecord->_subject;
 		$description = $mailrecord->getBodyText();
@@ -294,7 +294,7 @@ class Vtiger_MailScannerAction {
 		$fromemail = $mailrecord->_from[0];
 		$contactLinktoid = $mailscanner->LookupContact($fromemail);
         if(!$contactLinktoid) {
-            $contactLinktoid = $this-> __CreateContact($mailscanner, $mailrecord);
+            $contactLinktoid = $this-> __CreateContact($mailscanner, $mailrecord, $mailscannerrule);
         }
 		if ($contactLinktoid)
 			$linktoid = $mailscanner->getAccountId($contactLinktoid);
@@ -308,7 +308,7 @@ class Vtiger_MailScannerAction {
                     $ticket->column_fields['ticketstatus'] = 'Open';
                 $ticket->column_fields['ticket_title'] = $usetitle;
 		$ticket->column_fields['description'] = $description;
-		$ticket->column_fields['assigned_user_id'] = $mailscanner->_scannerinfo->rules[0]->assigned_to;
+		$ticket->column_fields['assigned_user_id'] =  $mailscannerrule->assigned_to;
 		if ($contactLinktoid)
 			$ticket->column_fields['contact_id'] = $contactLinktoid;
 		if ($linktoid)
