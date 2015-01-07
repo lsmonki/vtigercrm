@@ -720,4 +720,7 @@ $jsLanguageStrings = array(
         
         //No Tax exist 
         'JS_LBL_NO_TAXES'=>'Hayır Vergiler', 
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Sizin Değişiklikler Kayıp Will Be!',
 );

@@ -401,7 +401,7 @@ $languageStrings = array(
 	'LBL_REASON_FOR_CHANGING_COMMENT' => 'Reason for changing comment',
 	'LBL_RECENTLY_MODIFIED' => 'Recently Modified',
 	'LBL_RECORD' => 'Record',
-	'LBL_RECORDS_LIST' => 'Records List', 
+	'LBL_RECORDS_LIST' => 'Records List',
 	'LBL_RECORD_DELETE' => 'The record you are trying to view has been deleted.',
 	'LBL_RECORD_NOT_FOUND' => 'Record you are trying to access is not found',
 	'LBL_RECORD_SUMMARY' => 'Module Summary', //Duplicated key-value pairs
@@ -633,6 +633,11 @@ $languageStrings = array(
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
     
+        //customerportal forgot password 
+        'LBL_LOGIN_DETAILS' => 'Login Details' ,
+        'LBL_USERNAME' => ' Username',
+        'LBL_PASSWORD' => 'Password',
+        'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
          //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
         'Users' => 'Users', 
         'Service Requests' => 'Service Requests', 
@@ -776,4 +781,7 @@ $jsLanguageStrings = array(
         'LBL_SYNCRONIZING' => 'Syncronizing',
     
         'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
 );

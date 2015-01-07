@@ -808,4 +808,7 @@ $jsLanguageStrings = array(
     'JS_LBL_NO_TAXES'              => 'Nincsenek adók'    ,
     'JS_HIDE_PROMOTION' 		   => 'Reklám elrejtése'  ,
     'JS_SHOW_PROMOTION'            => 'Reklám mutatása'   ,
+    
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'A változtatások elvesznek!',
 );

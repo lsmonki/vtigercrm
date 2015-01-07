@@ -8,15 +8,15 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Recycle Bin'                   => 'Papierkorb'                 , // TODO: Review
+	'Recycle Bin'                   => 'Cestino'                 , // TODO: Review
 	'LBL_SELECT_MODULE'            => 'Select Module'               , // TODO: Review
-	'LBL_EMPTY_RECYCLEBIN'         => 'Papierkorb leeren'           , // TODO: Review
-	'LBL_RESTORE'                  => 'Wiederherstellen'                     , // TODO: Review
-	'LBL_NO_PERMITTED_MODULES'     => 'Keine zulässigen Module', // TODO: Review
-	'LBL_RECORDS_LIST'             => 'Papierkorb Liste'            , // TODO: Review
-	'LBL_NO_RECORDS_FOUND'         => 'Keine Datensätze gefunden, um in Modul wiederherstellen', // TODO: Review
+	'LBL_EMPTY_RECYCLEBIN'         => 'Svuota Cestino'           , // TODO: Review
+	'LBL_RESTORE'                  => 'Ripristinare'                     , // TODO: Review
+	'LBL_NO_PERMITTED_MODULES'     => 'Nessun modulo consentiti disponibile', // TODO: Review
+	'LBL_RECORDS_LIST'             => 'Recycle Bin List'            , // TODO: Review
+	'LBL_NO_RECORDS_FOUND'         => 'Nessuna voce trovata per ripristinare nel modulo', // TODO: Review
 );
 $jsLanguageStrings = array(
-	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Sind Sie sicher, Sie wollen, um alle gelöschten Datensätze aus Ihrer Datenbank dauerhaft zu entfernen?', // TODO: Review
-	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => 'Sind Sie sicher, dass Sie die Datensätze wiederherstellen?', // TODO: Review
+	'JS_MSG_EMPTY_RB_CONFIRMATION' => 'Sei sicuro di voler rimuovere definitivamente tutti i record eliminati dal database?', // TODO: Review
+	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => 'Sei sicuro di voler ripristinare i record?', // TODO: Review
 );

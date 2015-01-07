@@ -723,4 +723,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Call Failed',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Please fill all the fields',
 	// ends
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
 );

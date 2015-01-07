@@ -805,4 +805,7 @@ $jsLanguageStrings = array(
 	'SHOULD_BE_LESS_THAN_TODAY'    => 'Ennek a mai nap előttinek kell lennie',
 	'SINGLE_Accounts'              => 'Szervezet'                   ,
 	'SINGLE_Contacts'              => 'Kapcsolat'                   ,
+     
+//Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'A változtatások elvesznek!',
 );

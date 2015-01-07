@@ -717,4 +717,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Çağrı Başarısız',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Tüm alanları doldurunuz',
 	// ends
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Sizin Değişiklikler Kayıp Will Be!',
 );

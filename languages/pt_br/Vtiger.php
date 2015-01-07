@@ -717,4 +717,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Ligação Perdida',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Por favor, preencha todos os campos',
 	// ends
+    
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Suas alterações serão perdidas!',
 );

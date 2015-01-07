@@ -748,6 +748,9 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Bel mislukt',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Gelieve alle velden in te vullen',
 	// ends
+    
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Uw wijzigingen zullen verloren gaan!',
 
 );
 
