@@ -609,6 +609,9 @@ $languageStrings = array(
     'LBL_SETUP_WEBFORMS'                 => 'Настройка WebForms'              ,
     
     'LBL_MERGE'                    => 'Слияние',
+    
+	'LBL_CONVERSION_RATE'          => 'Обменный курс'   , 
+    
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Пожалуйста, настроить параметры исходящей сервера на странице настроек', 

@@ -639,6 +639,7 @@ $languageStrings = array(
     'LBL_SETUP_WEBFORMS' => 'Konfiguracja formularzy WWW',
     
     'LBL_MERGE'                    => 'Łączyć',
+    'LBL_CONVERSION_RATE'          => 'Conversion Rate', //TOreview
 	
 );
 

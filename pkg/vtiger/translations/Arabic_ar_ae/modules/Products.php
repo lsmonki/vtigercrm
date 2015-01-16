@@ -87,6 +87,5 @@ $languageStrings = array(
 	'Sq Ft'=>'قدم مربع',
 	
 	'LBL_ADD_TO_PRICEBOOKS' => 'الاضافة لكتاب الاسعار',
-	'LBL_CONVERSION_RATE' => 'قيمة التحويل',
     'LBL_PRODUCTSMOD_DISABLED' => 'تمكين المنتجات وحدة لعرض المنتجات',
 );

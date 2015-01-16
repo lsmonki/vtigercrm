@@ -590,6 +590,8 @@ $languageStrings = array(
 	'S&H Amount' => 'S&H Amount',
 	'Status' => 'الحالة',
 	'Vendor Name'=>'اسم المورد',
+    
+	'LBL_CONVERSION_RATE' => 'قيمة التحويل',
 
 	'LBL_ADDRESS_INFORMATION' => 'تفاصيل العنوان',
 	'LBL_DESCRIPTION_INFORMATION' => 'تفاصيل الوصف',
@@ -747,7 +749,7 @@ $languageStrings = array(
     'LBL_MARK_AS_HELD' => 'علامة على أنها محتفظ بها',
     'LBL_SMS_MAX_CHARACTERS_ALLOWED' => 'يسمح أقصى 160 حرفا للرسالة نصية',
     'LBL_HIDE_COMPLETED_EVENTS' => 'إخفاء مكتمل الأحداث',
-    'LBL_SETUP_WEBFORMS' => 'اعداد نموذج الويب'
+    'LBL_SETUP_WEBFORMS' => 'اعداد نموذج الويب'   
 );
 
 $jsLanguageStrings = array(

@@ -569,6 +569,8 @@ $languageStrings = array(
     'LBL_TRANSFER_OWNERSHIP'       => 'Eigenaarsrecht overdragen'   ,
 		'LBL_MERGE'                    => 'Samensmelten',
     
+	'LBL_CONVERSION_RATE'          => 'Succespercentage'             , // TODO: Review
+    
 	//Translations used for Export to Pdf
     'Valid Date' => 'geldige Datum',
     'Phone: ' => 'telefoon: ',

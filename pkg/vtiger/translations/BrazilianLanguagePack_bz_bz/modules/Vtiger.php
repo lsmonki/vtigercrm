@@ -628,6 +628,8 @@ $languageStrings = array(
 	'Web Site' => 'Web Site',
 	'Website: ' => 'Website: ',
 	'Word of mouth'=> 'Boca a Boca' ,
+    
+	'LBL_CONVERSION_RATE' => 'Taxa de Câmbio',
 	    
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Ocultar Promoção',

@@ -79,6 +79,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Hoja',
 	'Spiral Binder'                => 'Cuaderno espiral',
 	'Sq Ft'                        => 'm<sup>2</sup>',
-	'LBL_CONVERSION_RATE' => 'Tasa Conversión',
     'LBL_PRODUCTSMOD_DISABLED' => 'Habilitar Productos Módulo para ver Productos',
 );

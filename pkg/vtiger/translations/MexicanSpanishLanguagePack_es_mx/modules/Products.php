@@ -73,7 +73,6 @@ $languageStrings = array(
 	'Reams'                        => 'Resma'                       , 
 	'Sheet'                        => 'Hoja'                        , 
 	'Spiral Binder'                => 'Encuadernado Espiral'        , 
-	'Sq Ft'                        => 'm&sup2;'                     , 
-	'LBL_CONVERSION_RATE'          => 'Tasa de Conversión'     	    , 
+	'Sq Ft'                        => 'm&sup2;'                     ,
     'LBL_PRODUCTSMOD_DISABLED' => 'Habilita el módulo de Productos para poder ver Productos',
 );

@@ -628,6 +628,8 @@ $languageStrings = array(
 	'Web Site'                     => 'Weboldal'                    ,
 	'Website: '                    => 'weboldal: '                  ,
 	'Word of mouth'                => 'Szóbeszéd'                   ,
+    
+	'LBL_CONVERSION_RATE'          => 'Konverziós arány'           ,
 	
 	//Missing keys - TO-DO handle en_us file (Calendar settings)
 	'Starting Day of the week'     => 'A hét kezdő napja'           ,

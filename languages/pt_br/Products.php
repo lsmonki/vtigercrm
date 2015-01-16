@@ -71,6 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Folhas'                      , 
 	'Spiral Binder'                => ''                            , 
 	'Sq Ft'                        => ''                            , 
-	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
     'LBL_PRODUCTSMOD_DISABLED' => 'Ativar Produtos Módulo para ver os produtos',
 );

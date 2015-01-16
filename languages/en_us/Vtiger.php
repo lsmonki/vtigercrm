@@ -628,7 +628,7 @@ $languageStrings = array(
 	'Web Site' => 'Web Site',
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
-    
+    	  
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
@@ -642,6 +642,8 @@ $languageStrings = array(
         'Users' => 'Users', 
         'Service Requests' => 'Service Requests', 
         'Terms &amp; Conditions' => 'Terms & Conditions', 
+	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
+    
 );
 
 $jsLanguageStrings = array(

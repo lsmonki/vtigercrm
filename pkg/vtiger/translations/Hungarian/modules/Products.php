@@ -32,7 +32,6 @@ $languageStrings = array(
 	'LBL_ADD_RECORD'               => 'Termék hozzáadása'          ,
 	'LBL_ADD_TO_PRICEBOOKS'        => 'Csomagárhoz ad'             ,
 	'Lb'                           => 'Font'                       ,
-	'LBL_CONVERSION_RATE'          => 'Konverziós arány'           ,
 	'LBL_IMAGE_INFORMATION'        => 'Képek a Termékről (max. 6):',
 	'LBL_MORE_CURRENCIES'          => 'több pénznem'               ,
 	'LBL_PRICE'                    => 'Ár'                         ,

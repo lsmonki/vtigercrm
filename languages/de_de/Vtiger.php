@@ -554,6 +554,7 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , 
 	'LBL_EXCEEDED'                 => 'Exceeded'                    ,
         'LBL_MERGE'                    => 'Verschmelzen',
+    	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , 
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Gültig seit',

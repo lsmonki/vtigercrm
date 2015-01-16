@@ -71,6 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Lagen'                       , 
 	'Spiral Binder'                => 'Spiralen'                    , 
 	'Sq Ft'                        => 'Quadratmeter'                , 
-	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , 
     'LBL_PRODUCTSMOD_DISABLED' => 'Aktivieren Produkte Modul zur Produktansicht',
 );
