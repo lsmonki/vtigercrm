@@ -459,14 +459,21 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 		toEmailField.val(toEmailFieldNewValue);
 	},
 
-    addToEmailAddressData : function(mailInfo) {
+    addToEmailAddressData : function(mailInfo) {    
         var mailInfoElement = this.getMassEmailForm().find('[name="toemailinfo"]');
         var existingToMailInfo = JSON.parse(mailInfoElement.val());
-        //If it is an array then there are no previous records so make as map
-        if(typeof existingToMailInfo.length != 'undefined') {
-          existingToMailInfo = {};
+         if(typeof existingToMailInfo.length != 'undefined') {
+            existingToMailInfo = {};
+        } 
+        //If same record having two different email id's then it should be appended to
+        //existing email id
+         if(existingToMailInfo.hasOwnProperty(mailInfo.id) === true){
+            var existingValues = existingToMailInfo[mailInfo.id];
+            var newValue = new Array(mailInfo.emailid);
+            existingToMailInfo[mailInfo.id] = jQuery.merge(existingValues,newValue);
+        } else {
+            existingToMailInfo[mailInfo.id] = new Array(mailInfo.emailid);
         }
-        existingToMailInfo[mailInfo.id] = new Array(mailInfo.emailid);
         mailInfoElement.val(JSON.stringify(existingToMailInfo));
     },
 
@@ -475,7 +482,10 @@ jQuery.Class("Emails_MassEdit_Js",{},{
         var previousValue = '';
         if(JSON.parse(selectedIdElement.val()) != '') {
             previousValue = JSON.parse(selectedIdElement.val());
-            previousValue.push(selectedId);
+            //If value doesn't exist then insert into an array
+            if(jQuery.inArray(selectedId,previousValue) === -1){
+                previousValue.push(selectedId);
+            }
         } else {
 			previousValue = new Array(selectedId);
         }
@@ -654,6 +664,7 @@ jQuery.Class("Emails_MassEdit_Js",{},{
             }
 
 		}).on("change", function (selectedData) {
+                    console.log("Change of select element");
 			var addedElement = selectedData.added;
 			if (typeof addedElement != 'undefined') {
 				var data = {
@@ -771,27 +782,50 @@ jQuery.Class("Emails_MassEdit_Js",{},{
 	removeFromEmailAddressData : function(mailInfo) {
         var mailInfoElement = this.getMassEmailForm().find('[name="toemailinfo"]');
         var previousValue = JSON.parse(mailInfoElement.val());
-
-		delete previousValue[mailInfo.id];
-        mailInfoElement.val(JSON.stringify(previousValue));
+		var elementSize = previousValue[mailInfo.id].length;
+		var emailAddress = mailInfo.emailid;
+		var selectedId = mailInfo.id;
+		//If element length is not more than two delete existing record.
+		if(elementSize < 2){
+			delete previousValue[selectedId];
+		} else {
+			// Update toemailinfo hidden element value
+			var newValue;
+			var reserveValue = previousValue[selectedId];
+			delete previousValue[selectedId];
+			//Remove value from an array and return the resultant array
+			newValue = jQuery.grep(reserveValue, function(value) {
+				return value != emailAddress;
+			});
+			previousValue[selectedId] = newValue;
+			//update toemailnameslist hidden element value
+		}
+		mailInfoElement.val(JSON.stringify(previousValue));
     },
 
     removeFromSelectedIds : function(selectedId) {
         var selectedIdElement = this.getMassEmailForm().find('[name="selected_ids"]');
         var previousValue = JSON.parse(selectedIdElement.val());
-
-		var updatedValue = [];
-		for (var i in previousValue) {
-			var id = previousValue[i];
-			var skip = false;
-			if (id == selectedId) {
-				skip = true;
+		var mailInfoElement = this.getMassEmailForm().find('[name="toemailinfo"]');
+        var mailAddress = JSON.parse(mailInfoElement.val());
+		var elements  = mailAddress[selectedId];
+		var noOfEmailAddress = elements.length; 
+		
+		//Don't remove id from selected_ids if element is having more than two email id's
+		if(noOfEmailAddress < 2){
+			var updatedValue = [];
+			for (var i in previousValue) {
+				var id = previousValue[i];
+				var skip = false;
+				if (id == selectedId) {
+					skip = true;
+				}
+				if (skip == false) {
+					updatedValue.push(id);
+				}
 			}
-			if (skip == false) {
-				updatedValue.push(id);
-			}
+			selectedIdElement.val(JSON.stringify(updatedValue));
 		}
-        selectedIdElement.val(JSON.stringify(updatedValue));
     },
 
     removeFromEmails : function(mailInfo){
