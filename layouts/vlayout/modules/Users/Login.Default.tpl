@@ -115,7 +115,7 @@
 												{/if}
 												{if isset($smarty.request.status)}
 													<div class="alert alert-success">
-														<p>Mail was send to your inbox, please check your e-mail.</p>
+														<p>Mail has been sent to your inbox, please check your e-mail.</p>
 													</div>
 												{/if}
 												{if isset($smarty.request.statusError)}
