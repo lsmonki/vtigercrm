@@ -154,7 +154,7 @@ Vtiger_Edit_Js("Contacts_Edit_Js",{},{
 	checkForPortalUser : function(form){
 		var element = jQuery('[name="portal"]',form);
 		var response = element.is(':checked');
-		var primaryEmailField = jQuery('[name="email"]');
+	        var primaryEmailField = jQuery('[name="email"]',form);
 		var primaryEmailValue = primaryEmailField.val();
 		if(response){
 			if(primaryEmailField.length == 0){
