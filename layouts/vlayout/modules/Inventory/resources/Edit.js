@@ -931,6 +931,12 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this.setGrandTotal(grandTotal);
 	},
 
+        setShippingAndHandlingAmountForTax : function() {
+           shippingAndHandlingValue= this.getShippingAndHandling();
+           jQuery('#shAmountForTax').text(shippingAndHandlingValue);
+           return this;
+	},
+    
 	registerFinalDiscountShowEvent : function(){
 		var thisInstance = this;
 		jQuery('#finalDiscount').on('click',function(e){
@@ -1134,6 +1140,7 @@ Vtiger_Edit_Js("Inventory_Edit_Js",{
 		this.setShippingAndHandlingTaxTotal();
 		this.calculatePreTaxTotal();
 		this.calculateGrandTotal();
+                this.setShippingAndHandlingAmountForTax();
 	},
 
 	finalDiscountChangeActions : function() {

@@ -254,7 +254,7 @@
                     <table class="table table-nobordered popupTable">
                         <thead>
                             <tr>
-                                <th id="sh_tax_div_title" colspan="2" nowrap align="left" >{vtranslate('LBL_SET_SHIPPING_AND_HANDLING_TAXES_FOR',$MODULE)}: {if $FINAL.shipping_handling_charge}{$FINAL.shipping_handling_charge}{else}0.00{/if}</th>
+                                            <th id="sh_tax_div_title" colspan="2" nowrap align="left" >{vtranslate('LBL_SET_SHIPPING_AND_HANDLING_TAXES_FOR',$MODULE)}: <span id="shAmountForTax" >{if $FINAL.shipping_handling_charge}{$FINAL.shipping_handling_charge}{else}0.00{/if}</span></th>
                                 <th align="right">
                                     <button type="button" class="close closeDiv">x</button>
                                 </th>
