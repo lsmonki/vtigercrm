@@ -545,7 +545,11 @@ class Vtiger_Util_Helper {
                     if($fieldInfo->getFieldDataType() == "time") {
  		                $fieldValue = Vtiger_Time_UIType::getTimeValueWithSeconds($fieldValue);
  		            }
-
+                  
+                     if($fieldName == 'amount' && $fieldInfo->getFieldDataType() == 'currency'){
+                        $fieldValue = CurrencyField::convertToDBFormat($fieldValue);
+                    }
+                    
                     if($fieldName == 'date_start' || $fieldName == 'due_date' || $fieldInfo->getFieldDataType() == "datetime" ) {
 	 	                $dateValues = explode(',', $fieldValue);
 	 	                //Indicate whether it is fist date in the between condition
