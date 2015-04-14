@@ -1314,7 +1314,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
 		//modify query if any module has summary fields, those fields we are displayed in related list of that module
 		$relatedListFields = $relatedModule->getConfigureRelatedListFields();
-		if(count($relatedListFields) > 0) {
+		
+        if($relatedModuleName == 'Documents') {
+                    $relatedListFields['filelocationtype'] = 'filelocationtype';
+                    $relatedListFields['filestatus'] = 'filestatus';
+                }
+
+        if(count($relatedListFields) > 0) {
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$queryGenerator = new QueryGenerator($relatedModuleName, $currentUser);
 			$queryGenerator->setFields($relatedListFields);
