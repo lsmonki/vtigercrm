@@ -667,6 +667,12 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",18,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",40,5,0)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",40,6,0)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",40,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",19,5,0)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",19,6,0)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId1.",19,10,0)", array());
 
 		//Inserting into vtiger_profile2utility Sales Profile
 		//Import Export Not Allowed.
@@ -697,6 +703,12 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",18,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",40,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",40,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",40,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",19,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",19,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId2.",19,10,0)", array());
 
 		//Inserting into vtiger_profile2utility Support Profile
 		//Import Export Not Allowed.
@@ -727,6 +739,12 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",18,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",40,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",40,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",40,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",19,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",19,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId3.",19,10,0)", array());
 
 		//Inserting into vtiger_profile2utility Guest Profile Read-Only
 		//Import Export BusinessCar Not Allowed.
@@ -757,6 +775,12 @@ class Install_InitSchema_Model {
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",13,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",14,10,0)", array());
 		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",18,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",40,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",40,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",40,10,0)", array());
+        $adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",19,5,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",19,6,1)", array());
+		$adb->pquery("INSERT INTO vtiger_profile2utility VALUES (".$profileId4.",19,10,0)", array());
 
 		 // Invalidate any cached information
     	VTCacheUtils::clearRoleSubordinates();
