@@ -47,6 +47,7 @@ $languageStrings = array(
 	'LBL_CLEAR'                    => 'Limpiar',
 	'LBL_YES'                      => 'Sí',
 	'LBL_NO'                       => 'No',
+        'LBL_EQ_ZERO'                  => 'Ningún', 
 	'LBL_SHOW_COMPLETE_DETAILS' => 'Detalles Completos',
 	'LBL_MASS_EDITING'             => 'Edición Masiva',
 	'LBL_DESELECT_ALL_RECORDS'     => 'Anular selección',

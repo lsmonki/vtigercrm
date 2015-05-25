@@ -39,6 +39,7 @@ $languageStrings = array(
 	'LBL_CLEAR'                    => 'Borrar'                      , 
 	'LBL_YES'                      => 'Si'                          , 
 	'LBL_NO'                       => 'No'                          , 
+	'LBL_EQ_ZERO'                  => 'Ningún'                      , 
 	'LBL_SHOW_COMPLETE_DETAILS'    => 'Complete Details'            , // TODO: Review
 	'LBL_MASS_EDITING'             => 'Edición masiva'             , 
 	'LBL_DESELECT_ALL_RECORDS'     => 'Anular selección', 
