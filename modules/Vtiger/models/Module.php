@@ -554,19 +554,17 @@ class Vtiger_Module_Model extends Vtiger_Module {
      * @return <Array> returns related fields list.
      */
 	public function getRelatedListFields() {
-		$entityInstance = CRMEntity::getInstance($this->getName());
-        $list_fields_name = $entityInstance->list_fields_name;
-        $list_fields = $entityInstance->list_fields;
-        $relatedListFields = array();
-		foreach ($list_fields as $key => $fieldInfo) {
-			foreach ($fieldInfo as $columnName) {
-				if(array_key_exists($key, $list_fields_name)){
-					$relatedListFields[$columnName] = $list_fields_name[$key];
-				}
-			}
-
-		}
-        return $relatedListFields;
+            $entityInstance = CRMEntity::getInstance($this->getName());
+            $list_fields_name = $entityInstance->list_fields_name;
+            $list_fields = $entityInstance->list_fields;
+            $relatedListFields = array();
+            foreach ($list_fields as $key => $fieldInfo) {
+                $columnName = $fieldInfo[1];
+                if(array_key_exists($key, $list_fields_name)){
+                    $relatedListFields[$columnName] = $list_fields_name[$key];
+                }
+            }
+            return $relatedListFields;
 	}
 
 	public function getConfigureRelatedListFields(){
@@ -622,9 +620,9 @@ class Vtiger_Module_Model extends Vtiger_Module {
                 $instance = self::getInstanceFromModuleObject($moduleObject);
                 Vtiger_Cache::set('module',$value,$instance);
 				if (is_string($value)) {
-					Vtiger_Cache::set('module', $moduleObject->id, $instance);
-				} else if (is_int($value)) {
 					Vtiger_Cache::set('module', $moduleObject->name, $instance);
+				} else if (is_int($value)) {
+					Vtiger_Cache::set('module', $moduleObject->id, $instance);
 				}
             }
         }
