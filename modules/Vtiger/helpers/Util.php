@@ -214,14 +214,11 @@ class Vtiger_Util_Helper {
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$dateTimeInUserFormat = Vtiger_Datetime_UIType::getDisplayDateTimeValue($dateTime);
 
-		list($dateInUserFormat, $timeInUserFormat) = explode(' ', $dateTimeInUserFormat);
+		list($dateInUserFormat, $timeInUserFormat,$meridiem) = explode(' ', $dateTimeInUserFormat);
 		list($hours, $minutes, $seconds) = explode(':', $timeInUserFormat);
-
-		$displayTime = $hours .':'. $minutes;
-		if ($currentUser->get('hour_format') === '12') {
-			$displayTime = Vtiger_Time_UIType::getTimeValueInAMorPM($displayTime);
-		}
-
+        
+		$displayTime = $hours .':'. $minutes .' '. $meridiem;
+        
 		/**
 		 * To support strtotime() for 'mm-dd-yyyy' format the seperator should be '/'
 		 * For more referrences
@@ -451,10 +448,6 @@ class Vtiger_Util_Helper {
 		$date = $dateTimeField->getDisplayDate($userModel);
 		$time = $dateTimeField->getDisplayTime($userModel);
 
-                //Convert time to user preferred value
-                if($userModel->get('hour_format') == '12'){
-                        $time = Vtiger_Time_UIType::getTimeValueInAMorPM($time);
-                }
 		return $date . ' ' .$time;
 	}
 
