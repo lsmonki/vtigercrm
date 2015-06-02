@@ -8,11 +8,6 @@
  * All Rights Reserved.
  *********************************************************************************/
 
-if (!defined('VTIGER_UPGRADE'))
-die('Invalid entry point');
-chdir(dirname(__FILE__) . '/../../../');
-
-
 if(defined('VTIGER_UPGRADE')) {
     
 global $adb;
@@ -39,19 +34,20 @@ Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid
 Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,6,1)',array());
 Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_profile2utility(profileid,tabid,activityid,permission) VALUES ('.$profileId.',19,10,0)',array());
 
+}
+}
+chdir(dirname(__FILE__) . '/../../../');
+require_once 'includes/main/WebUI.php';
+
 $pickListFieldName = 'no_of_currency_decimals'; 
 $moduleModel = Settings_Picklist_Module_Model::getInstance('Users'); 
-$fieldModel = Settings_Picklist_Field_Model::getInstance($pickListFieldName, $moduleModel); 
+$fieldModel = Vtiger_Field_Model::getInstance($pickListFieldName, $moduleModel); 
+
 if ($fieldModel) { 
-        $moduleModel->addPickListValues($fieldModel, 0); 
-        $moduleModel->addPickListValues($fieldModel, 1); 
-
-        $pickListValues = Vtiger_Util_Helper::getPickListValues($pickListFieldName); 
-        $moduleModel->updateSequence($pickListFieldName, $pickListValues); 
+    $moduleModel->addPickListValues($fieldModel, 0); 
+    $moduleModel->addPickListValues($fieldModel, 1); 
+    
+    $pickListValues = Vtiger_Util_Helper::getPickListValues($pickListFieldName); 
+    $moduleModel->updateSequence($pickListFieldName, $pickListValues); 
 } 
-echo '<br>Number of decimals as 0 is done<br>'; 
-
-}     
-   
-}
 ?>
