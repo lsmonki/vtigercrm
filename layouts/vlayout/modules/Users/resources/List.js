@@ -43,6 +43,7 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 	},
 	
 	deleteUser: function (form){
+        var listInstance = Vtiger_List_Js.getInstance();	
 		var userid = form.find('[name="userid"]').val();
 		var transferUserId = form.find('[name="tranfer_owner_id"]').val();
         var progressInstance = jQuery.progressIndicator({
@@ -65,6 +66,18 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
                                         progressInstance.progressIndicator({
                                                 'mode' : 'hide'
                                         });
+                                        var orderBy = jQuery('#orderBy').val();
+                                        var sortOrder = jQuery("#sortOrder").val();
+                                        var urlParams = {
+                                            "viewname": data.result.viewname,
+                                            "orderby": orderBy,
+                                            "sortorder": sortOrder
+                                        };
+                                        jQuery('#recordsCount').val('');
+                                        jQuery('#totalPageCount').text('');
+                                        listInstance.getListViewRecords(urlParams).then(function(){
+                                            listInstance.updatePagination();
+                                        });
                     params = {
                         title : app.vtranslate('JS_MESSAGE'),
                         text : data.result.message,
@@ -72,8 +85,7 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
 						type: 'error'
                     };
 					Vtiger_Helper_Js.showPnotify(params);
-                    jQuery('[data-id='+userid+"]").hide();
-				}
+              }
 			}
 		);
 	},
