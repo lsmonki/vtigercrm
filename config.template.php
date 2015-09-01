@@ -197,6 +197,9 @@ $php_max_execution_time = 0;
 // Set the default timezone as per your preference
 $default_timezone = 'UTC';
 
+// Set the default layout 
+$default_layout = 'vlayout';
+
 /** If timezone is configured, try to set it */
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
