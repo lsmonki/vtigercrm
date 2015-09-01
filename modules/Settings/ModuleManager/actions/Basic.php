@@ -49,7 +49,11 @@ class Settings_ModuleManager_Basic_Action extends Settings_Vtiger_IndexAjax_View
         $importType = $request->get('module_import_type');
         if(strtolower($importType) == 'language') {
                 $package = new Vtiger_Language();
-        } else {
+        }else  if(strtolower($importType) == 'layout') {
+                 require_once('vtlib/Vtiger/Layout.php');
+                 $package = new Vtiger_Layout();
+                 }
+        else {
                 $package = new Vtiger_Package();
         }
 

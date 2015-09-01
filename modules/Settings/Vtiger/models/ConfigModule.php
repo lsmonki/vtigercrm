@@ -111,6 +111,22 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 			}
 			return $moduleData;
 		}
+        
+          else if ($fieldName === 'default_layout'){
+                 global $root_directory;
+                 $dir = $root_directory.'layouts';
+                 $scanned_directory = array_diff(scandir($dir), array('..', '.'));
+                 $folders=array();
+                 foreach ($scanned_directory as $file) {
+                   if(!(is_file($file))){
+                              array_push($folders,$file);
+                       }
+               }
+             
+               return $folders;
+            
+        }
+        
 		return array('true', 'false');
 	}
 
@@ -130,7 +146,8 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 //			'history_max_viewed'			=> array('label' => 'LBL_MAX_HISTORY_VIEWED',				'fieldType' => 'input'),
 			'default_module'				=> array('label' => 'LBL_DEFAULT_MODULE',					'fieldType' => 'picklist'),
 			'listview_max_textlength'		=> array('label' => 'LBL_MAX_TEXT_LENGTH_IN_LISTVIEW',		'fieldType' => 'input'),
-			'list_max_entries_per_page'		=> array('label' => 'LBL_MAX_ENTRIES_PER_PAGE_IN_LISTVIEW',	'fieldType' => 'input')
+			'list_max_entries_per_page'		=> array('label' => 'LBL_MAX_ENTRIES_PER_PAGE_IN_LISTVIEW',	'fieldType' => 'input'),
+            'default_layout'              => array('label' => 'LBL_DEFAULT_LAYOUT',					'fieldType' => 'picklist')
 		);
 	}
 
