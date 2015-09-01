@@ -133,7 +133,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			}
 
 			$dateTimeFieldInstance = new DateTimeField($record['date_start'] . ' ' . $record['time_start']);
-			$userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue($currentUser);
+			$userDateTimeString = $dateTimeFieldInstance->getFullcalenderDateTimevalue($currentUser);
 			$dateTimeComponents = explode(' ',$userDateTimeString);
 			$dateComponent = $dateTimeComponents[0];
 			//Conveting the date format in to Y-m-d . since full calendar expects in the same format
@@ -141,7 +141,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 			$item['start'] = $dataBaseDateFormatedString.' '. $dateTimeComponents[1];
 
 			$dateTimeFieldInstance = new DateTimeField($record['due_date'] . ' ' . $record['time_end']);
-			$userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue($currentUser);
+			$userDateTimeString = $dateTimeFieldInstance->getFullcalenderDateTimevalue($currentUser);
 			$dateTimeComponents = explode(' ',$userDateTimeString);
 			$dateComponent = $dateTimeComponents[0];
 			//Conveting the date format in to Y-m-d . since full calendar expects in the same format
@@ -198,7 +198,7 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
             $item['activitytype'] = $record['activitytype'];
             $item['id'] = $crmid;
 			$dateTimeFieldInstance = new DateTimeField($record['date_start'] . ' ' . $record['time_start']);
-			$userDateTimeString = $dateTimeFieldInstance->getDisplayDateTimeValue();
+			$userDateTimeString = $dateTimeFieldInstance->getFullcalenderDateTimevalue();
 			$dateTimeComponents = explode(' ',$userDateTimeString);
 			$dateComponent = $dateTimeComponents[0];
 			//Conveting the date format in to Y-m-d . since full calendar expects in the same format
