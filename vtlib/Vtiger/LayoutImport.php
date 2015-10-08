@@ -10,7 +10,7 @@
 include_once('vtlib/Vtiger/LayoutExport.php');
 
 /**
- * Provides API to import language into vtiger CRM
+ * Provides API to import layout into vtiger CRM
  * @package vtlib
  */
 class Vtiger_LayoutImport extends Vtiger_LayoutExport {
@@ -46,8 +46,8 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 	}
 
 	/**
-	 * Update Module from zip file
-	 * @param Object Instance of Language (to keep Module update API consistent)
+	 * Update Layout from zip file
+	 * @param Object Instance of Layout
 	 * @param String Zip file name
 	 * @param Boolean True for overwriting existing module
 	 */
@@ -56,10 +56,10 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 	}
 
 	/**
-	 * Import Module
+	 * Import Layout
 	 * @access private
 	 */
-	function import_Layout($zipfile) {
+function import_Layout($zipfile) {
 		$name = $this->_modulexml->name;
 		$label = $this->_modulexml->label;
 
@@ -67,7 +67,7 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
 		$vtiger6format = false;
-
+        
 		foreach($filelist as $filename=>$fileinfo) {
 			if(!$unzip->isdir($filename)) {
 
@@ -87,19 +87,37 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
                                     $vtiger6format = true;
                                     $dounzip = true;
                                 }
+                                //case handling for the  special library files
+                                else if (stripos($targetdir, "layouts/$label/libraries") === 0) {
+                                    $vtiger6format = true;
+                                    $dounzip = true;
+                                }
 				if($dounzip) {
 					// vtiger6 format
 					if ($vtiger6format) {
-                                               $targetdir = "layouts/$label/" . str_replace("layouts/$label", "", $targetdir);
+                     $targetdir = "layouts/$label/" . str_replace("layouts/$label", "", $targetdir);
 						@mkdir($targetdir, 0777, true);
 					}
-
-					if($unzip->unzip($filename, "$targetdir/$targetfile") !== false) {
-						self::log("Copying file $filename ... DONE");
-					} else {
-						self::log("Copying file $filename ... FAILED");
-					}
-				} else {
+    
+                    global $upload_badext;
+                    $badFileExtensions= array_diff($upload_badext, array('js'));
+                    $filepath = 'zip://'.$zipfile.'#'.$filename ;
+                    $fileValidation = Vtiger_Functions::verifyClaimedMIME($filepath, $badFileExtensions);
+         
+                    $imageContents = file_get_contents('zip://'.$zipfile.'#'.$filename); 
+                    // Check for php code injection
+                    if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
+                    $fileValidation = false;
+                    }
+                    
+                   if($fileValidation){
+                           if($unzip->unzip($filename, "$targetdir/$targetfile") !== false){
+                                 self::log("Copying file $filename ... DONE");
+                             } else {
+                                 self::log("Copying file $filename ... FAILED");
+                             } 
+                     }
+				    } else {
 					self::log("Copying file $filename ... SKIPPED");
 				}
 			}
@@ -108,8 +126,10 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 
 		self::register($label, $name);
 
-		self::log("Importing $label [$prefix] ... DONE");
+		self::log("Importing $label ... DONE");
 
 		return;
-	}    
+	}
+   
+   
 }
