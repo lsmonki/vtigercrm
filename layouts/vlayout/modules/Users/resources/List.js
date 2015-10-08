@@ -240,7 +240,7 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
         /*
          *Function to filter Active and Inactive users from Users List View
          */
-        usersFilter : function() {
+          usersFilter : function() {
                 var thisInstance = this;
                 jQuery('#usersFilter').change(function() {
                         var progressInstance = jQuery.progressIndicator({
@@ -263,12 +263,20 @@ Settings_Vtiger_List_Js("Settings_Users_List_Js",{
                                                 'mode' : 'hide'
                                         });
                                         jQuery('#listViewContents').html(data);
-                                        thisInstance.updatePagination();
-                            }
+                                        thisInstance.getPageCount().then(function(data){
+                                            var pageCount = data['result']['page'];
+                                            jQuery('#totalCount').val(data['result']['numberOfRecords']);
+                                            if(pageCount == 0){
+                                                pageCount = 1;
+                                            }
+                                            jQuery('#totalPageCount').text(pageCount);
+                                            thisInstance.updatePagination();
+                                        });
+                         }
                         );
                 });
         },
-        
+
         
 	registerEvents : function() {
 		this._super();
