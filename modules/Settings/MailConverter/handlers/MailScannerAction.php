@@ -389,7 +389,11 @@ class Vtiger_MailScannerAction {
 		if(!$current_user) {
 			$current_user = Users::getActiveAdminUser();
 		}
-
+        $assignedToId = $linkfocus->column_fields['assigned_user_id'];
+        if(vtws_getOwnerType($assignedToId) == 'Groups') {
+            $assignedToId = Users::getActiveAdminId();
+        }
+        
 		$focus = new Emails();
 		$focus->column_fields['parent_type'] = $module;
 		$focus->column_fields['activitytype'] = 'Emails';
@@ -397,7 +401,7 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['subject'] = $mailrecord->_subject;
 
 		$focus->column_fields['description'] = $mailrecord->getBodyHTML();
-		$focus->column_fields['assigned_user_id'] = $linkfocus->column_fields['assigned_user_id'];
+		$focus->column_fields['assigned_user_id'] = $assignedToId;
 		$focus->column_fields["date_start"] = date('Y-m-d', $mailrecord->_date);
 		$focus->column_fields["time_start"] = gmdate("H:i:s");
 		$focus->column_fields["email_flag"] = 'MAILSCANNER';
