@@ -124,6 +124,8 @@ class Install_ConfigFileUtils_Model {
 
 include('vtigerversion.php');
 
+include('config.security.php'); 
+
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
 ini_set('memory_limit','64M');
