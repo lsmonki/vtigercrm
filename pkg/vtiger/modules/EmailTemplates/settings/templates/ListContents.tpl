@@ -39,6 +39,6 @@
 			</table>
 		</div>
 	</div>
-		<input type="hidden" class="triggerEventName" value="{$smarty.request.triggerEventName}"/>
+		<input type="hidden" class="triggerEventName" value="{getRequestSmartyParam('triggerEventName')}"/>
 </div>
 {/strip}

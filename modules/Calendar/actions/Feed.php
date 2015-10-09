@@ -184,9 +184,10 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
         $hideCompleted = $currentUser->get('hidecompletedevents');
         if($hideCompleted)
             $query.= "vtiger_activity.status != 'Completed' AND ";
-		$query.= " ((date_start >= '$start' AND due_date < '$end') OR ( due_date >= '$start'))";
-        $params = $userAndGroupIds;
-		$query.= " AND vtiger_crmentity.smownerid IN (".generateQuestionMarks($params).")";
+		$query.= " ((date_start >= ? AND due_date < ?) OR ( due_date >= ?))";
+                $params = array($start,$end,$start);
+        $params = array_merge($params, $userAndGroupIds);
+		$query.= " AND vtiger_crmentity.smownerid IN (".generateQuestionMarks($userAndGroupIds).")";
 		
 		$queryResult = $db->pquery($query,$params);
 		
@@ -260,23 +261,24 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		$endDateComponents = split('-', $end);
         
         $userAndGroupIds = array_merge(array($user->getId()),$this->getGroupsIdsForUsers($user->getId()));
-        $params = $userAndGroupIds;
+        $params = array($start,$end,$start,$end);
+        $params = array_merge($userAndGroupIds, $params);
         
 		$year = $startDateComponents[0];
 
 		$query = "SELECT firstname,lastname,birthday,crmid FROM vtiger_contactdetails";
 		$query.= " INNER JOIN vtiger_contactsubdetails ON vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid";
 		$query.= " INNER JOIN vtiger_crmentity ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid";
-		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid IN (".  generateQuestionMarks($params) .") AND";
-		$query.= " ((CONCAT('$year-', date_format(birthday,'%m-%d')) >= '$start'
-						AND CONCAT('$year-', date_format(birthday,'%m-%d')) <= '$end')";
+		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid IN (".  generateQuestionMarks($userAndGroupIds) .") AND";
+		$query.= " ((CONCAT('$year-', date_format(birthday,'%m-%d')) >= ?
+						AND CONCAT('$year-', date_format(birthday,'%m-%d')) <= ?)";
 
         
 		$endDateYear = $endDateComponents[0];
 		if ($year !== $endDateYear) {
 			$query .= " OR
-						(CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) >= '$start'
-							AND CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) <= '$end')";
+						(CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) >= ?
+							AND CONCAT('$endDateYear-', date_format(birthday,'%m-%d')) <= ?)";
 		}
 		$query .= ")";
 
@@ -331,12 +333,13 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		$db = PearDatabase::getInstance();
 		$user = Users_Record_Model::getCurrentUserModel();
 		$userAndGroupIds = array_merge(array($user->getId()),$this->getGroupsIdsForUsers($user->getId()));
-        $params = $userAndGroupIds;
+        $params = array($start,$end,$start);
+        $params = array_merge($params, $userAndGroupIds);
         
 		$query = "SELECT projectname, startdate, targetenddate, crmid FROM vtiger_project";
 		$query.= " INNER JOIN vtiger_crmentity ON vtiger_project.projectid = vtiger_crmentity.crmid";
-		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid IN (". generateQuestionMarks($params) .") AND ";
-		$query.= " ((startdate >= '$start' AND targetenddate < '$end') OR ( targetenddate >= '$start'))";
+		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid IN (". generateQuestionMarks($userAndGroupIds) .") AND ";
+		$query.= " ((startdate >= ? AND targetenddate < ?) OR ( targetenddate >= ?))";
 		$queryResult = $db->pquery($query, $params);
 
 		while($record = $db->fetchByAssoc($queryResult)){
@@ -365,12 +368,14 @@ class Calendar_Feed_Action extends Vtiger_BasicAjax_Action {
 		$db = PearDatabase::getInstance();
 		$user = Users_Record_Model::getCurrentUserModel();
         $userAndGroupIds = array_merge(array($user->getId()),$this->getGroupsIdsForUsers($user->getId()));
-        $params = $userAndGroupIds;
+         $params = array($start,$end,$start);
+        $params = array_merge($params, $userAndGroupIds);
 		
 		$query = "SELECT projecttaskname, startdate, enddate, crmid FROM vtiger_projecttask";
 		$query.= " INNER JOIN vtiger_crmentity ON vtiger_projecttask.projecttaskid = vtiger_crmentity.crmid";
-		$query.= " WHERE vtiger_crmentity.deleted=0 AND smownerid IN (". generateQuestionMarks($params) .") AND ";
-		$query.= " ((startdate >= '$start' AND enddate < '$end') OR ( enddate >= '$start'))";
+		$query.= " WHERE vtiger_crmentity.deleted=0 AND ";
+		$query.= " ((startdate >= ? AND enddate < ?) OR ( enddate >= ?))";
+                $query.= " AND smownerid IN (". generateQuestionMarks($userAndGroupIds) .")";
 		$queryResult = $db->pquery($query, $params);
 
 		while($record = $db->fetchByAssoc($queryResult)){

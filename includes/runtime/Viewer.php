@@ -218,3 +218,6 @@ function vresource_url($url) {
     }
     return $url;
 }
+function getRequestSmartyParam($param){
+    return htmlentities($_REQUEST[$param]);
+}
