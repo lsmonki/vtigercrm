@@ -10,8 +10,8 @@
 <ul>
 {foreach from=$ROLE->getChildren() item=CHILD_ROLE}
 	<li data-role="{$CHILD_ROLE->getParentRoleString()}" data-roleid="{$CHILD_ROLE->getId()}">
-            {assign var=VIEW_NAME value={getRequestSmartyParam('view')}}
-            {assign var=VIEW_TYPE value={getRequestSmartyParam('type')}}
+            {assign var=VIEW_NAME value={getPurifiedSmartyParameters('view')}}
+            {assign var=VIEW_TYPE value={getPurifiedSmartyParameters('type')}}
             <div {if $VIEW_NAME != 'Popup'}class="toolbar-handle"{/if}>
                 {if $VIEW_TYPE == 'Transfer'}
 				{assign var="SOURCE_ROLE_SUBPATTERN" value='::'|cat:$SOURCE_ROLE->getId()}

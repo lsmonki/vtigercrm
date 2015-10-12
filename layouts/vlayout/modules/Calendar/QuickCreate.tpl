@@ -89,8 +89,8 @@
 								{/if}
 							{/foreach}
 							</tr>
-                                                        {assign var=PARENT_ID value={getRequestSmartyParam('parent_id')}}
-                                                        {assign var=CONTACT_ID value={getRequestSmartyParam('contact_id')}}
+                                                        {assign var=PARENT_ID value={getPurifiedSmartyParameters('parent_id')}}
+                                                        {assign var=CONTACT_ID value={getPurifiedSmartyParameters('contact_id')}}
 							{if $PARENT_ID neq ''}
 								<input type="hidden" name="parent_id" value="{$PARENT_ID}" />
 							{else if $CONTACT_ID neq ''}

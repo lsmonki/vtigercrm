@@ -147,7 +147,7 @@
 
 </div>
 
-{assign var=REQUEST_MODE value={getRequestSmartyParam('mode')}}
+{assign var=REQUEST_MODE value={getPurifiedSmartyParameters('mode')}}
 {if $REQUEST_MODE eq 'ajax'}
 	<div id="search_ajax" style="display:none;">
 	<table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
