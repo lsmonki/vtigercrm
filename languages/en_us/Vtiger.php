@@ -648,6 +648,8 @@ $languageStrings = array(
       //Email template  edit Convertion
        'LBL_CURRENT_DATE' => 'Current Date',
        'LBL_CURRENT_TIME' => 'Current Time',
+    
+        'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide'
 );
 
 $jsLanguageStrings = array(
