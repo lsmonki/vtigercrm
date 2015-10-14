@@ -16,10 +16,10 @@ global $adb;
 $query = 'UPDATE vtiger_currencies_seq SET id = (SELECT currencyid FROM vtiger_currencies ORDER BY currencyid DESC LIMIT 1)';
 $adb->pquery($query, array());
 
-$uniqId = $db->getUniqueID('vtiger_currencies'); 
-$result = $db->pquery('SELECT 1 FROM vtiger_currencies WHERE currency_name = ?',array('CFP Franc')); 
+$uniqId = $adb->getUniqueID('vtiger_currencies'); 
+$result = $adb->pquery('SELECT 1 FROM vtiger_currencies WHERE currency_name = ?',array('CFP Franc')); 
  
-if($db->num_rows($result)<=0){ 
+if($adb->num_rows($result)<=0){ 
 Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies VALUES (?,?,?,?)', array($uniqId, 'CFP Franc', 'XPF', 'F')); 
 } 
 
