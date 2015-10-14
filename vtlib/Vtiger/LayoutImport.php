@@ -63,7 +63,7 @@ function import_Layout($zipfile) {
 		$name = $this->_modulexml->name;
 		$label = $this->_modulexml->label;
 
-		self::log("Importing $label ... STARTED");
+		self::log("Importing Layout $name ($label) ... STARTED");
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
 		$vtiger6format = false;
@@ -78,25 +78,25 @@ function import_Layout($zipfile) {
 				$targetfile = basename($filename);
                                 $dounzip = false;
                                 // Case handling for jscalendar
-                                if(stripos($targetdir, "layouts/$label/skins") === 0) {
+                                if(stripos($targetdir, "layouts/$name/skins") === 0) {
                                     $dounzip = true;
                                     $vtiger6format = true;
                                 }
                                 // vtiger6 format
-                                else if (stripos($targetdir, "layouts/$label/modules") === 0) {
+                                else if (stripos($targetdir, "layouts/$name/modules") === 0) {
                                     $vtiger6format = true;
                                     $dounzip = true;
                                 }
                                 //case handling for the  special library files
-                                else if (stripos($targetdir, "layouts/$label/libraries") === 0) {
+                                else if (stripos($targetdir, "layouts/$name/libraries") === 0) {
                                     $vtiger6format = true;
                                     $dounzip = true;
                                 }
 				if($dounzip) {
 					// vtiger6 format
 					if ($vtiger6format) {
-                     $targetdir = "layouts/$label/" . str_replace("layouts/$label", "", $targetdir);
-						@mkdir($targetdir, 0777, true);
+                     $targetdir = "layouts/$name/" . str_replace("layouts/$name", "", $targetdir);
+						@mkdir($targetdir, 0755, true);
 					}
     
                     global $upload_badext;
@@ -126,7 +126,7 @@ function import_Layout($zipfile) {
 
 		self::register($label, $name);
 
-		self::log("Importing $label ... DONE");
+		self::log("Importing layout $name ($label) ... DONE");
 
 		return;
 	}
