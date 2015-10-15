@@ -40,7 +40,7 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 	 */
 	function import($zipfile, $overwrite=false) {
 		$this->initImport($zipfile, $overwrite);
-
+       
 		// Call module import function
 		$this->import_Layout($zipfile);
 	}
@@ -62,12 +62,12 @@ class Vtiger_LayoutImport extends Vtiger_LayoutExport {
 function import_Layout($zipfile) {
 		$name = $this->_modulexml->name;
 		$label = $this->_modulexml->label;
-
-		self::log("Importing Layout $name ($label) ... STARTED");
+       
+		self::log("Importing $name ... STARTED");
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
 		$vtiger6format = false;
-        
+      
 		foreach($filelist as $filename=>$fileinfo) {
 			if(!$unzip->isdir($filename)) {
 
@@ -124,9 +124,9 @@ function import_Layout($zipfile) {
 		}
 		if($unzip) $unzip->close();
 
-		self::register($label, $name);
+		self::register($name,$label);
 
-		self::log("Importing layout $name ($label) ... DONE");
+		self::log("Importing $name($label) ... DONE");
 
 		return;
 	}

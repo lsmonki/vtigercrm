@@ -112,18 +112,19 @@ class Settings_Vtiger_ConfigModule_Model extends Settings_Vtiger_Module_Model {
 			return $moduleData;
 		}
         
-          else if ($fieldName === 'default_layout') {
+             else if ($fieldName === 'default_layout') {
             $db = PearDatabase::getInstance();
-            $query = 'SELECT label FROM vtiger_layout';
+            $query = 'SELECT name,label FROM vtiger_layout';
 
             $result = $db->pquery($query, array());
             $numOfRows = $db->num_rows($result);
 
-            $folders = array('vlayout');
+            $folders =  array('vlayout' => 'Vlayout');
+            
             for ($i = 0; $i < $numOfRows; $i++) {
                 $row = $db->query_result_rowdata($result, $i);
-                array_push($folders, $db->query_result($result, $i, 'label'));
-            }
+                $folders[$db->query_result($result, $i, 'name')] = $db->query_result($result, $i, 'label');
+           }
             return $folders;
         }
         

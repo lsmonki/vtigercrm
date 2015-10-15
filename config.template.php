@@ -20,8 +20,6 @@ version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTI
 
 include('vtigerversion.php');
 
-include('config.security.php');
-
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
 ini_set('memory_limit','512M');
@@ -198,11 +196,13 @@ $php_max_execution_time = 0;
 // Set the default timezone as per your preference
 $default_timezone = 'UTC';
 
-// Set the default layout 
-$default_layout = 'vlayout';
-
 /** If timezone is configured, try to set it */
 if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set($default_timezone);
 }
+
+//Set the default layout 
+$default_layout = 'vlayout';
+
+include_once 'config.security.php';
 ?>

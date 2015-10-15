@@ -124,8 +124,6 @@ class Install_ConfigFileUtils_Model {
 
 include('vtigerversion.php');
 
-include('config.security.php'); 
-
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
 ini_set('memory_limit','64M');
@@ -286,13 +284,16 @@ ini_set('memory_limit','64M');
 // Set the default timezone as per your preference
 //\$default_timezone = '';
 
-// Set the default layout 
-//\$default_layout = 'vlayout';
 
 /** If timezone is configured, try to set it */
 if(isset(\$default_timezone) && function_exists('date_default_timezone_set')) {
 	@date_default_timezone_set(\$default_timezone);
-}";
+}
+
+//Set the default layout 
+\$default_layout = 'vlayout';
+
+include_once 'config.security.php';";
 		return $configFileContents;
 	}
 }

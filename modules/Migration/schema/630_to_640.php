@@ -32,6 +32,25 @@ Migration_Index_View::ExecuteQuery('INSERT INTO vtiger_currencies VALUES (?,?,?,
         echo "New timezone (GMT+11:00) New Caledonia added.<br>";
     }
 
-}
+//updating the config file to support multiple layout
+$filename = 'config.inc.php';
+if (file_exists($filename)) {
+    $contents = file_get_contents($filename);
+    if (empty($contents)) {
+        echo '<tr><td width="80%"><span>Your Configuration file couldnot able to edit, Please asdd it manually</span></td><td style="color:red">Unsuccess</td></tr>';
+    } else {
+        $config_content = explode('?>', $contents);
+        if (strpos($config_content[0], '$default_layout') == false) {
+            $config_code = "// Set the default layout 
+\$default_layout = 'vlayout';
 
+include_once 'config.security.php';
+?>";
+            $contents = $config_content[0] .  $config_code;
+        }
+        file_put_contents($filename, $contents);
+        echo '<tr><td width="80%"><span>Configuration file Updated</span></td><td style="color:green">Success</td></tr>';
+    }
+}
+}
 ?>

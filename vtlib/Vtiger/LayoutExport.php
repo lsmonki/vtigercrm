@@ -147,7 +147,7 @@ class Vtiger_LayoutExport extends Vtiger_Package {
     /**
      * Register layout pack information.
      */
-    static function register($label, $name='', $isdefault=false, $isactive=true, $overrideCore=false) {
+    static function register($name, $label='', $isdefault=false, $isactive=true, $overrideCore=false) {
             self::__initSchema();
 
             $prefix = trim($prefix);
@@ -158,7 +158,7 @@ class Vtiger_LayoutExport extends Vtiger_Package {
             $useisactive  = ($isactive)?  1 : 0;
 
             global $adb;
-            $checkres = $adb->pquery('SELECT * FROM '.self::TABLENAME.' WHERE label=?', Array($label));
+            $checkres = $adb->pquery('SELECT * FROM '.self::TABLENAME.' WHERE name=?', Array($name));
             $datetime = date('Y-m-d H:i:s');
             if($adb->num_rows($checkres)) {
                     $id = $adb->query_result($checkres, 0, 'id');
@@ -169,17 +169,18 @@ class Vtiger_LayoutExport extends Vtiger_Package {
                     $adb->pquery('INSERT INTO '.self::TABLENAME.' (id,name,label,lastupdated,isdefault,active) VALUES(?,?,?,?,?,?)',
                             Array($uniqueid, $name, $label, $datetime, $useisdefault, $useisactive));
             }
-            self::log("Registering Layout $label ... DONE");		
+            self::log("Registering Layout $name ... DONE");		
     }
-
-    static function deregister($label) {
-	     if(strtolower($label) == 'vlayout') return;
+    
+    
+        static function deregister($name) {
+	     if(strtolower($name) == 'vlayout') return;
 
 		 self::__initSchema();
 
 		global $adb;
-	    $adb->pquery('DELETE FROM '.self::TABLENAME.' WHERE label=?', Array($label));
-		self::log("Deregistering Layout $label ... DONE");
+	    $adb->pquery('DELETE FROM '.self::TABLENAME.' WHERE name=?', Array($name));
+		self::log("Deregistering Layout $name ... DONE");
 	}
 
 }

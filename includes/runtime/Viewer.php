@@ -49,7 +49,8 @@ class Vtiger_Viewer extends SmartyBC {
 			$compileDir = $THISDIR . '/../../test/templates_c/'.$media;
 		}
 		global $default_layout;
-          if($default_layout)
+          $checkforlayout = file_exists($THISDIR . '/../../layouts/'.$default_layout) ;
+          if($default_layout && $checkforlayout )
         {
             self::$currentLayout = $default_layout;
 			$templatesDir = $THISDIR . '/../../layouts/'.$default_layout;
