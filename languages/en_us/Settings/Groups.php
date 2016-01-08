@@ -18,9 +18,19 @@ $languageStrings = array(
 	'LBL_TRANSFORM_OWNERSHIP' => 'Transfer ownership',
 	'RoleAndSubordinates' => 'Role and Subordinates',
 	'SINGLE_Groups' => 'Group',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'LBL_DUPLICATES_EXIST' => 'Group Name already Exists', 
+        //Member names 
+        'Groups' => 'Groups', 
+        'Users' => 'Users', 
+        'Roles' => 'Roles', 
+    
+        //Field names 
+        'Name' => 'Group Name', 
 );
 
 $jsLanguageStrings = array(
-	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select atleast one member for a group',
+	'JS_PLEASE_SELECT_ATLEAST_ONE_MEMBER_FOR_A_GROUP' => 'Please select at least one member for a group',
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'Group deleted successfully',
 );

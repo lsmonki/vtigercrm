@@ -22,6 +22,7 @@ vimport('~~/include/Zend/Gdata/Query.php');
 class Google_Oauth_Connector {
 
     var $db = false;
+    var $userId = false;
     protected $_scopes = array(
         'Contacts' => 'http://www.google.com/m8/feeds',
         'Calendar' => 'http://www.google.com/calendar/feeds',
@@ -39,11 +40,12 @@ class Google_Oauth_Connector {
         'callbackUrl' => '' // Will be updated at runtime if not specified.
     );
 
-    function __construct($callbackUrl) {
+    function __construct($callbackUrl, $userId = false) {
 //		if (empty($this->_oauthOptions['callbackUrl'])) {
 //			$this->_oauthOptions['callbackUrl'] = $this->getCurrentUrl();
 //		}
         self::initializeSchema();
+        $this->userId = $userId;
         $this->_oauthOptions['callbackUrl'] = $callbackUrl;
         $this->db = PearDatabase::getInstance();
     }
@@ -71,19 +73,20 @@ class Google_Oauth_Connector {
     }
 
     function hasStoredToken($service, $accessToken = false, $requestToken = false) {
-        $user = Users_Record_Model::getCurrentUserModel();
-
+        if(!$this->userId)
+            $this->userId = Users_Record_Model::getCurrentUserModel()->getId();
+        
         if (!$accessToken && !$requestToken){
             $query = "SELECT  1 FROM vtiger_google_oauth WHERE  userid=? and service=?";
-            $params = array($user->getId(), $service);
+            $params = array($this->userId, $service);
         }
         else if ($accessToken){
-            $query = "SELECT  access_token FROM vtiger_google_oauth WHERE  userid=? and service=? AND access_token!=?";
-            $params = array($user->getId(), $service, "NULL");
+            $query = "SELECT  access_token FROM vtiger_google_oauth WHERE  userid=? and service=? AND access_token<>? AND access_token IS NOT NULL";
+            $params = array($this->userId, $service, '');
         }
         else if ($requestToken){
-            $query = "SELECT  request_token FROM vtiger_google_oauth WHERE  userid=? and service=? AND request_token!=?";
-            $params = array($user->getId(), $service, "NULL");
+            $query = "SELECT  request_token FROM vtiger_google_oauth WHERE  userid=? and service=? AND request_token<>? AND request_token IS NOT NULL";
+            $params = array($this->userId, $service, '');
         }
         $result = $this->db->pquery($query, $params);
         if ($this->db->num_rows($result) > 0) {
@@ -108,14 +111,14 @@ class Google_Oauth_Connector {
         }
 
         $this->db->pquery($query, $params);
-
     }
 
     protected function retreiveAccessToken($service) {
-        $user = Users_Record_Model::getCurrentUserModel();
-
+        if(!$this->userId)
+            $this->userId = Users_Record_Model::getCurrentUserModel()->getId();
+        
         $query = "SELECT access_token FROM vtiger_google_oauth WHERE userid=? AND service =?";
-        $params = array($user->getId(), $service);
+        $params = array($this->userId, $service);
 
         $result = $this->db->pquery($query, $params);
         $data = $this->db->fetch_array($result);
@@ -148,9 +151,7 @@ class Google_Oauth_Connector {
     function getHttpClient($service) {
 
         $token = NULL;
-
-        if (!$this->hasStoredToken($service, true)) {
-
+        if (!$this->hasStoredToken($service, true, false, $this->userId)) {
             $consumer = new Zend_Oauth_Consumer($this->_oauthOptions);
 
             if (isset($_GET['oauth_token'])) {

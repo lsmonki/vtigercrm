@@ -43,6 +43,7 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 	public function getSelectableDashboard() {
 		$db = PearDatabase::getInstance();
 		$currentUser = Users_Record_Model::getCurrentUserModel();
+        $currentUserPrivilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 		$moduleModel = $this->getModule();
 
 		$sql = 'SELECT * FROM vtiger_links WHERE linktype = ?
@@ -65,7 +66,9 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 					continue;
 				}
 			}
-			$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
+			 if($this->checkModulePermission($row)) {
+                $widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
+            }
 		}
 
 		return $widgets;
@@ -76,11 +79,12 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 	 * @return <Array of Vtiger_Widget_Model>
 	 */
 	public function getDashboards() {
+            ini_set("error_reporting", "6135");
 		$db = PearDatabase::getInstance();
 		$currentUser = Users_Record_Model::getCurrentUserModel();
 		$moduleModel = $this->getModule();
 
-		$sql = " SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_links.linkid as id FROM vtiger_links ".
+		$sql = " SELECT vtiger_links.*, vtiger_module_dashboard_widgets.userid, vtiger_module_dashboard_widgets.filterid, vtiger_module_dashboard_widgets.data, vtiger_module_dashboard_widgets.id as widgetid, vtiger_module_dashboard_widgets.position as position, vtiger_links.linkid as id FROM vtiger_links ".
 				" INNER JOIN vtiger_module_dashboard_widgets ON vtiger_links.linkid=vtiger_module_dashboard_widgets.linkid".
 				" WHERE (vtiger_module_dashboard_widgets.userid = ? AND linktype = ? AND tabid = ?)";
 		$params = array($currentUser->getId(), 'DASHBOARDWIDGET', $moduleModel->getId());
@@ -91,7 +95,9 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 		for($i=0, $len=$db->num_rows($result); $i<$len; $i++) {
 			$row = $db->query_result_rowdata($result, $i);
 			$row['linkid'] = $row['id'];
-			$widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
+                        if($this->checkModulePermission($row)) {
+                            $widgets[] = Vtiger_Widget_Model::getInstanceFromValues($row);
+                        }
 		}
 
 		foreach ($widgets as $index => $widget) {
@@ -131,6 +137,43 @@ class Vtiger_DashBoard_Model extends Vtiger_Base_Model {
 
 		return $instance->setModule($moduleModel);
 	}
+        
+        /**
+     * Function to get the module and check if the module has permission from the query data
+     * @param <array> $resultData - Result Data From Query
+     * @return <boolean>
+     */
+    public function checkModulePermission($resultData) {
+        $currentUserPrivilegeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
+        $linkUrl = $resultData['linkurl'];
+        $linkLabel = $resultData['linklabel'];
+        $filterId = $resultData['filterid'];
+        $data = decode_html($resultData['data']);
+        $module = $this->getModuleNameFromLink($linkUrl, $linkLabel);
+        
+        if($module == 'Home' && !empty($filterId) && !empty($data)) {
+            $filterData = Zend_Json::decode($data);
+            $module = $filterData['module'];
+        }
+        
+        return $currentUserPrivilegeModel->hasModulePermission(getTabid($module));
+    }
 
+     /**
+     * Function to get the module name of a widget using linkurl
+     * @param <string> $linkUrl
+     * @param <string> $linkLabel
+     * @return <string> $module - Module Name
+     */
+    public function getModuleNameFromLink($linkUrl, $linkLabel) {
+        $urlParts = parse_url($linkUrl);
+        parse_str($urlParts['query'], $params);
+        $module = $params['module'];
 
+        if($linkLabel == 'Overdue Activities' || $linkLabel == 'Upcoming Activities') {
+            $module = 'Calendar';
+        }
+        
+        return $module;
+    }
 }

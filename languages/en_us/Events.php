@@ -72,4 +72,13 @@ $languageStrings = array(
 	'Visibility' => 'Visibility',
 	'Weekly'=>'Week(s)',
 	'Yearly'=>'Year',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'End Date &amp; Time' => 'End Date & Time', 
+        'Start Date &amp; Time'=>'Start Date & Time', 
+    
+        //Priority picklist values 
+        'High' => 'High', 
+        'Medium' => 'Medium', 
+        'Low' => 'Low', 
 );

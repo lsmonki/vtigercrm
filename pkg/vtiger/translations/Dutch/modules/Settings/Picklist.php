@@ -52,7 +52,6 @@ $languageStrings = array(
 	'Calendar'					   => 'Te doen'						,
 );
 
-);
 $jsLanguageStrings = array(
     'JS_ITEM_RENAMED_SUCCESSFULLY' => 'Item Renamed Succesvol'   , // TODO: Review
     'JS_ITEM_ADDED_SUCCESSFULLY'   => 'Item added Succesvol'     , // TODO: Review

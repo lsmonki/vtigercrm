@@ -31,5 +31,6 @@ $languageStrings = array(
 	'Received Shipment'=>'Przyjęty Transport',
         'LBL_LIST_PRICE'               => 'Cennik',
         'List Price'                   => 'Cennik',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Adres kopia firmy',
 
 );

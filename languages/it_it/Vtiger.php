@@ -39,6 +39,7 @@ $languageStrings = array(
 	'LBL_CLEAR'                    => 'Pulisci'                     , 
 	'LBL_YES'                      => 'S&igrave;'                   , 
 	'LBL_NO'                       => 'No'                          , 
+	'LBL_EQ_ZERO'                  => 'Nessun'                      , 
 	'LBL_SHOW_COMPLETE_DETAILS'    => 'Complete Details'            , // TODO: Review
 	'LBL_MASS_EDITING'             => 'Mass Editing'                , 
 	'LBL_DESELECT_ALL_RECORDS'     => 'Deseleziona tutto'        , 
@@ -554,6 +555,8 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
         'LBL_MERGE'                    => 'Unire',
+    
+	'LBL_CONVERSION_RATE'          => 'Conversione Tasso'             , // TODO: Review
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Data valida',
@@ -719,5 +722,8 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Chiamata non riuscita',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Si prega di compilare tutti i campi',
 	// ends
+        // 
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Le tue modifiche saranno perse!',
 	
 );

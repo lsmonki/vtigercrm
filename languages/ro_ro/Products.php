@@ -71,6 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Fisa'                        , 
 	'Spiral Binder'                => 'Spiral Binder'               , 
 	'Sq Ft'                        => 'Sq Ft'                       , 
-	'LBL_CONVERSION_RATE'          => 'Conversion Rate'             , // TODO: Review
     'LBL_PRODUCTSMOD_DISABLED'     => 'Permite Produse Module pentru a vizualiza produsele',
 );

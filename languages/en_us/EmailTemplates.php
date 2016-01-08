@@ -18,4 +18,10 @@ $languageStrings = array(
 	'LBL_SUBJECT' => 'Subject',
 	'LBL_TEMPLATE_NAME' => 'Template name',
 	'SINGLE_EmailTemplates' => 'Email Template',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Template Name' => 'Template Name', 
+        'Templatename' => 'Templatename', 
+        'Message' => 'Message', 
+        'Email Template - Properties of ' => 'Email Template - Properties of ', 
 );

@@ -1140,7 +1140,7 @@ foreach($modules as $module){
             $field->label = 'Created By';
             $field->table = 'vtiger_crmentity';
             $field->column = 'smcreatorid';
-            $field->uitype = 53;
+            $field->uitype = 52;
             $field->typeofdata = 'V~O';
             $field->displaytype= 2;
             $field->quickcreate = 3;

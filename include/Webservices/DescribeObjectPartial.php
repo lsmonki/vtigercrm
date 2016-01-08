@@ -27,7 +27,7 @@
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
 		
-		$entity = $handler->describePartial($elementType, array('leadsource'));
+		$entity = $handler->describePartial($elementType, array('picklist','multipicklist'));
 		VTWS_PreserveGlobal::flush();
 		return $entity;
 	}

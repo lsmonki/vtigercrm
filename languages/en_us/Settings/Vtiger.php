@@ -118,7 +118,7 @@ $languageStrings = array(
 	'LBL_OPTIONS2'=>"",
 	'LBL_OTHER_SETTINGS' => 'Other Settings',
 	'LBL_OUTGOING_SERVER_DESC' => 'Configure your Outgoing Mail Server details',
-	'LBL_OUTGOING_SERVER_FROM_FIELD'=>'NOTE: If "From Email" field is set to blank then the User Email address will be picked up.',
+    'LBL_OUTGOING_SERVER_NOTE' => 'NOTE: Outgoing server should be set to SSL or TLS Protocal and If "From Email" field is set to blank then the User Email address will be picked up.',
 	'LBL_OUTGOING_SERVER' => 'Outgoing Server',
 	'LBL_PASSWORD' => 'Password',
 	'LBL_PBXMANAGER' => 'PBXManager',
@@ -195,7 +195,8 @@ $languageStrings = array(
 	'website' => 'Website',
         'vatid'=>'VAT ID', 
         //Exchange Connector
-        'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
+     'LBL_EXCHANGE_CONNECTOR' => 'Exchange Connector',
+   'LBL_DEFAULT_LAYOUT' => 'Default Layout',   
 );
 
 $jsLanguageStrings = array(

@@ -18,22 +18,12 @@ class Users_Login_View extends Vtiger_View_Controller {
 		return true;
 	}
 	
-	function preProcess(Vtiger_Request $request, $display = true) {
-		$viewer = $this->getViewer($request);
-		$viewer->assign('PAGETITLE', $this->getPageTitle($request));
-		$viewer->assign('SCRIPTS',$this->getHeaderScripts($request));
-		$viewer->assign('STYLES',$this->getHeaderCss($request));
-		$viewer->assign('CURRENT_VERSION', vglobal('vtiger_current_version'));
-		if($display) {
-			$this->preProcessDisplay($request);
-		}
-	}
-
 	function process (Vtiger_Request $request) {
 		$viewer = $this->getViewer($request);
 		$moduleName = $request->getModule();
 		
 		$viewer->assign('MODULE', $moduleName);
+		$viewer->assign('CURRENT_VERSION', vglobal('vtiger_current_version'));
 		$viewer->view('Login.tpl', 'Users');
 }
 }

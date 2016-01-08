@@ -19,9 +19,7 @@
   width: 100%;
   min-height: 28px;
   /* Make inputs at least the height of their button counterpart */
-
   /* Makes inputs behave like true block-level elements */
-
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -1114,14 +1112,12 @@ li.ui-timepicker-selected,
 .summaryView .summaryViewEntries:hover .summaryViewEdit {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }
 .summaryView .summaryViewEntries .summaryViewEdit {
   opacity: 0;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
@@ -1387,7 +1383,6 @@ td.fieldValue .input-append {
 .actionImages {
   opacity: 0;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
@@ -1437,7 +1432,6 @@ td.fieldValue .input-append {
 .listViewEntries td:hover .actions {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }
@@ -1447,7 +1441,6 @@ td.fieldValue .input-append {
 .addedCalendars .actionImage {
   opacity: 0;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
@@ -1456,14 +1449,12 @@ td.fieldValue .input-append {
 .addedCalendars:hover .actionImage {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }
 .listViewEntriesTable tr:hover td .actions .actionImages {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }
@@ -2094,14 +2085,12 @@ th.htColHeader,
 .opacity .actions {
   opacity: 0;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
 .opacity:hover .actions {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }
@@ -3031,7 +3020,6 @@ textarea,
 .modal-open {
   overflow: hidden;
   /** modal will be having z-index as 10001 **/
-
 }
 .modal-open .datepicker,
 .modal-open .timePicker {
@@ -3117,21 +3105,18 @@ textarea {
 .zeroOpacity {
   opacity: 0;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
 .dullOpacity {
   opacity: 0.8;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
   filter: alpha(opacity=80);
 }
 .fullOpacity {
   opacity: 1;
   /*for IE*/
-
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: alpha(opacity=100);
 }

@@ -82,13 +82,14 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 
 		// Merge Users module merge tags based on current user.
 		$mergedDescription = getMergedDescription($this->get('description'), $currentUserModel->getId(), 'Users');
-
+                $mergedSubject = getMergedDescription($this->get('subject'),$currentUserModel->getId(), 'Users');
+                
 		foreach($toEmailInfo as $id => $emails) {
 			$mailer->reinitialize();
 			$mailer->ConfigSenderInfo($fromEmail, $userName, $replyTo);
 			$old_mod_strings = vglobal('mod_strings');
 			$description = $this->get('description');
-
+                        $subject = $this->get('subject');
 			$parentModule = $this->getEntityType($id);
 			if ($parentModule) {
 			$currentLanguage = Vtiger_Language_Handler::getLanguage();
@@ -98,9 +99,11 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 			if ($parentModule != 'Users') {
 				// Apply merge for non-Users module merge tags.
 				$description = getMergedDescription($mergedDescription, $id, $parentModule);
+                                $subject = getMergedDescription($mergedSubject, $id, $parentModule);
 			} else {
 				// Re-merge the description for user tags based on actual user.
 					$description = getMergedDescription($description, $id, 'Users');
+                                        $subject = getMergedDescription($mergedSubject, $id, 'Users');
 					vglobal('mod_strings', $old_mod_strings);
 				}
 			}
@@ -120,7 +123,7 @@ class Emails_Record_Model extends Vtiger_Record_Model {
 				if($mailer->Signature != '') {
 					$mailer->Body.= '<br><br>'.decode_html($mailer->Signature);
 				}
-				$mailer->Subject = $this->get('subject');
+				$mailer->Subject = $subject;
 				$mailer->AddAddress($email);
 
 				//Adding attachments to mail

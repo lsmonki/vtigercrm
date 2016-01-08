@@ -8,17 +8,18 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Add Email Template',
-	'SINGLE_EmailTemplates' => 'Email Template',
-	'LBL_EMAIL_TEMPLATES'=> 'Email Templates',
-	'LBL_EMAIL_TEMPLATE' => 'Email Template',
-	
-	'LBL_TEMPLATE_NAME' => 'Template name',
-	'LBL_DESCRIPTION' => 'Description',
-	'LBL_SUBJECT' => 'Subject',
-	'LBL_GENERAL_FIELDS' => 'General Fields',
-	'LBL_SELECT_FIELD_TYPE' => 'Select Field Type',
-	
-	'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
+	'Email Templates' => 'E-mailsjablonen' ,
+	 'LBL_ADD_RECORD' => 'Voeg E-mailsjabloon toe',
+    'SINGLE_EmailTemplates' => 'E-mailsjabloon',
+    'LBL_EMAIL_TEMPLATES'=> 'E-mailsjablonen',
+    'LBL_EMAIL_TEMPLATE' => 'E-mailsjabloon',
+    
+    'LBL_TEMPLATE_NAME' => 'Sjabloonnaam',
+    'LBL_DESCRIPTION' => 'Omschrijving',
+    'LBL_SUBJECT' => 'Onderwerp',
+    'LBL_GENERAL_FIELDS' => 'Algemene velden',
+    'LBL_SELECT_FIELD_TYPE' => 'Selecteer veldtype',
+    
+    'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Beheer sjablonen voor E-mail module',
 	
 );

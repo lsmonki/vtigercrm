@@ -15,6 +15,7 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		parent::__construct();
 		$this->exposeMethod('userExists');
 		$this->exposeMethod('savePassword');
+                $this->exposeMethod('restoreUser');
 	}
 
 	public function checkPermission(Vtiger_Request $request) {
@@ -52,6 +53,11 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 			if($fieldName == 'language') {
 				$displayValue =  Vtiger_Language_Handler::getLanguageLabel($fieldValue);
 			}
+            
+            if(($fieldName == 'currency_decimal_separator' || $fieldName == 'currency_grouping_separator') && ($displayValue == '&nbsp;')) {
+                $displayValue = vtranslate('LBL_Space', 'Users');
+            }
+            
 			$result[$fieldName] = array('value' => $fieldValue, 'display_value' => $displayValue);
 		}
 
@@ -112,4 +118,30 @@ class Users_SaveAjax_Action extends Vtiger_SaveAjax_Action {
 		}
 		$response->emit();
 	}
+        
+        /*
+         * To restore a user
+         * @param Vtiger_Request Object
+         */
+        public function restoreUser(Vtiger_Request $request) {
+                $moduleName = $request->getModule();
+                $record = $request->get('userid');
+                
+                $recordModel = Users_Record_Model::getInstanceById($record, $moduleName);
+                $recordModel->set('status', 'Active');
+                $recordModel->set('id', $record);
+                $recordModel->set('mode', 'edit');
+                $recordModel->set('user_hash', $recordModel->getUserHash());
+                $recordModel->save();
+                
+                $db = PearDatabase::getInstance();
+                $db->pquery("UPDATE vtiger_users SET deleted=? WHERE id=?", array(0,$record));
+                
+                $userModuleModel = Users_Module_Model::getInstance($moduleName);
+		$listViewUrl = $userModuleModel->getListViewUrl();
+		
+		$response = new Vtiger_Response();
+		$response->setResult(array('message'=>vtranslate('LBL_USER_RESTORED_SUCCESSFULLY', $moduleName), 'listViewUrl' => $listViewUrl));
+		$response->emit();
+        }
         }

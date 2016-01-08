@@ -909,7 +909,8 @@ function create_ticket($input_array)
 	*/
 function update_ticket_comment($input_array)
 {
-	global $adb,$mod_strings,$current_user;
+	global $adb,$mod_strings,$current_language; 
+        $mod_strings = return_module_language($current_language, 'HelpDesk');
 	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
 
@@ -1064,7 +1065,7 @@ function change_password($input_array)
 		return array('MORE_THAN_ONE_USER');
 	}
 	$sql = "update vtiger_portalinfo set user_password=? where id=? and user_name=?";
-	$result = $adb->pquery($sql, array($password, $id, $username));
+	$result = $adb->pquery($sql, array(md5($password), $id, $username));
 
 	$log->debug("Exiting customer portal function change_password");
 	return $list;
@@ -1127,13 +1128,13 @@ function send_mail_for_password($mailid)
 	$initialfrom = $adb->query_result($from_res,0,'user_name');
 	$from = $adb->query_result($from_res,0,'email1');
 
-	$contents = $mod_strings['LBL_LOGIN_DETAILS'];
-	$contents .= "<br><br>".$mod_strings['LBL_USERNAME']." ".$user_name;
-	$contents .= "<br>".$mod_strings['LBL_PASSWORD']." ".$password;
+	$contents = getTranslatedString('LBL_LOGIN_DETAILS');
+	$contents .= "<br><br>".getTranslatedString('LBL_USERNAME')." ".$user_name;
+	$contents .= "<br>".getTranslatedString('LBL_PASSWORD')." ".$password;
 
 	$mail = new PHPMailer();
 
-	$mail->Subject = $mod_strings['LBL_SUBJECT_PORTAL_LOGIN_DETAILS'];
+	$mail->Subject =  getTranslatedString('LBL_SUBJECT_PORTAL_LOGIN_DETAILS');
 	$mail->Body    = $contents;
 	$mail->IsSMTP();
 
@@ -1144,7 +1145,7 @@ function send_mail_for_password($mailid)
 	$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
 	$mail->Host = $mail_server;
-	if($smtp_auth == 'true')
+	if($smtp_auth) 
 	$mail->SMTPAuth = 'true';
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;

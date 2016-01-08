@@ -10,24 +10,6 @@
  * *********************************************************************************** */
 
 class HelpDesk_ListView_Model extends Vtiger_ListView_Model {
-	/*
-	 * Function to get Setting links
-	 * @return array of setting links
-	 */
-
-	public function getSettingLinks() {
-		$settingsLinks = parent::getSettingLinks();
-		$currentUserModel = Users_Record_Model::getCurrentUserModel();
-		$moduleModel = $this->getModule();
-		if ($currentUserModel->isAdminUser()) {
-			$settingsLinks[] = array(
-				'linktype' => 'LISTVIEWSETTING',
-				'linklabel' => 'LBL_EDIT_MAILSCANNER',
-				'linkurl' => 'index.php?module=MailScanner&parent=Settings&view=List',
-				'linkicon' => ''
-			);
-			return $settingsLinks;
-		}
-	}
+	
 
 }

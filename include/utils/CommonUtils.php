@@ -497,4 +497,8 @@ function updateRecordLabel($module,$recordId){
 	return Vtiger_Functions::updateCRMRecordLabel($module, $recordId);
 }
 
+
+function get_group_options() {
+return Vtiger_Functions::get_group_options();
+}
 ?>

@@ -37,7 +37,7 @@ $languageStrings = array(
 	'LBL_EXPRESSION' => 'Expression',
 	'LBL_FIELD_NAME' => 'Field',
 	'LBL_FINISH' => 'Finish',
-	'LBL_IN_ACTIVE' => 'In Active',
+	'LBL_IN_ACTIVE' => 'Inactive',
 	'LBL_METHOD_NAME' => 'Method Name',
 	'LBL_MODULES_TO_CREATE_RECORD' => 'Modules to create record',
 	'LBL_NEW' => 'New',
@@ -93,6 +93,13 @@ $languageStrings = array(
 	'LBL_EXCEEDING_MAXIMUM_LIMIT' => 'Maximum limit exceeded',
 	'LBL_NEXT_TRIGGER_TIME' => 'Next trigger time on',
 	'LBL_MESSAGE' => 'Message',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Workflows' => 'Workflow', 
+        //Field names 
+        'Summary' => 'Summary', 
+        'Module' => 'Module', 
+        'Execution Condition' => 'Execution Condition',
 );
 
 $jsLanguageStrings = array(

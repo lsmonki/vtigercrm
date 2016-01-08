@@ -609,6 +609,9 @@ $languageStrings = array(
     'LBL_SETUP_WEBFORMS'                 => 'Настройка WebForms'              ,
     
     'LBL_MERGE'                    => 'Слияние',
+    
+	'LBL_CONVERSION_RATE'          => 'Обменный курс'   , 
+    
 );
 $jsLanguageStrings = array(
 	'JS_EMAIL_SERVER_CONFIGURATION' => 'Пожалуйста, настроить параметры исходящей сервера на странице настроек', 
@@ -762,4 +765,7 @@ $jsLanguageStrings = array(
     
     //No Tax exist 
     'JS_LBL_NO_TAXES'=>'Нет Налоги', 
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Ваши изменения будут потеряны!',
 );

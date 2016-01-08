@@ -59,7 +59,7 @@
                         <span class="span2 textAlignCenter">
                             {vtranslate('LBL_OF',$moduleName)}
                         </span>
-                        <span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
+                        <span class="span3" id="totalPageCount">{$PAGE_COUNT}</span>
                     </span>
                 </li>
             </ul>
@@ -117,8 +117,10 @@
                                 {if $RELATED_HEADERNAME eq 'listprice'}
                                     {assign var="LISTPRICE" value=CurrencyField::convertToUserFormat($RELATED_RECORD->get($RELATED_HEADERNAME), null, true)}
                                 {/if}
-                            {else}
-                                {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+                            {else if $RELATED_HEADERNAME eq 'filename'}
+                                 {$RELATED_RECORD->get($RELATED_HEADERNAME)}
+                                 {else}
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}   
                             {/if}
                             {if $HEADER_FIELD@last}
                             </td><td nowrap class="{$WIDTHTYPE}">

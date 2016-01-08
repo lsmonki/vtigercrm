@@ -13,7 +13,7 @@
 class Vtiger_Widget_Model extends Vtiger_Base_Model {
 
 	public function getWidth() {
-		$largerSizedWidgets = array('GroupedBySalesPerson', 'PipelinedAmountPerSalesPerson', 'GroupedBySalesStage', 'Funnel Amount');
+		$largerSizedWidgets = array('GroupedBySalesPerson', 'PipelinedAmountPerSalesPerson', 'GroupedBySalesStage', 'Funnel Amount','LeadsByIndustry');
 		$title = $this->getName();
 		if(in_array($title, $largerSizedWidgets)) {
 			$this->set('width', '6');
@@ -73,7 +73,7 @@ class Vtiger_Widget_Model extends Vtiger_Base_Model {
 	 */
 	public function getTitle() {
 		$title = $this->get('title');
-		if(!isset($title)) {
+		if(empty($title)) {
 			$title = $this->get('linklabel');
 		}
 		return $title;

@@ -71,6 +71,5 @@ $languageStrings = array(
 	'Sheet'                        => 'Лист'                    , 
 	'Spiral Binder'                => 'Переплет'            , 
 	'Sq Ft'                        => 'м2'                         , 
-	'LBL_CONVERSION_RATE'          => 'Обменный курс'   , 
     'LBL_PRODUCTSMOD_DISABLED'     => 'Включить Продукты модуль для просмотра продуктов',
 );

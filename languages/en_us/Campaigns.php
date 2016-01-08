@@ -22,7 +22,7 @@ $languageStrings = array(
 	'Campaign Status' => 'Campaign Status',
 	'Campaign Type' => 'Campaign Type', 
 	'Cancelled'=>'Cancelled',							      
-	'Complete'=>'Complete',
+	'Completed'=>'Completed',
 	'Contacted - Never Contact Again' => 'Contacted - Never Contact Again',
 	'Contacted - Successful' => 'Contacted - Successful',
 	'Contacted - Unsuccessful' => 'Contacted - Unsuccessful',
@@ -52,4 +52,13 @@ $languageStrings = array(
 	'TargetSize' => 'TargetSize',
 	'Telemarketing'=>'Telemarketing',
 	'Webinar'=>'Webinar',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+         //campaignstatus picklist values 
+        'Planning'=>'Planning', 
+        'Active'=>'Active'
 );
+
+$jsLanguageStrings = array(
+       'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_ADD_THIS_FILTER' => 'Are you sure you want to add this filter records?.',
+ );

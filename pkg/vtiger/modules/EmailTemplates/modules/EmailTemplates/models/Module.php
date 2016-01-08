@@ -97,9 +97,9 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 			$allFields = "";
 		}
 		
-		$option = array('Current Date', '$custom-currentdate$');
-		$allFields[] = $option;
-		$option = array('Current Time', '$custom-currenttime$');
+		$option = array(vtranslate('LBL_CURRENT_DATE'), '$custom-currentdate$');
+        $allFields[] = $option;
+        $option = array(vtranslate('LBL_CURRENT_TIME'), '$custom-currenttime$');
 		$allFields[] = $option;
 		$allOptions['generalFields'] = $allFields;
 		return $allOptions;
@@ -171,11 +171,11 @@ class EmailTemplates_Module_Model extends Vtiger_Module_Model {
 	 */
 	public function getAllModuleList(){
 		$db = PearDatabase::getInstance();
-		
+		//return the modules which are only enable 
 		$query = 'SELECT DISTINCT(name) AS modulename FROM vtiger_tab 
 				  LEFT JOIN vtiger_field ON vtiger_field.tabid = vtiger_tab.tabid
-				  WHERE vtiger_field.uitype = ?';
-		$result = $db->pquery($query, array(13));
+				  WHERE (vtiger_field.uitype = ? AND vtiger_tab.presence = ?)';
+		$result = $db->pquery($query, array(13,0));
 		$num_rows = $db->num_rows($result);
 		$moduleList = array();
 		for($i=0; $i<$num_rows; $i++){

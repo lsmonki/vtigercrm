@@ -38,7 +38,8 @@ $languageStrings = array(
 	'LBL_SELECT'                   => 'Selecteaza'                  , 
 	'LBL_CLEAR'                    => 'Sterge'                      , 
 	'LBL_YES'                      => 'Da'                          , 
-	'LBL_NO'                       => 'Nu exista'                   , 
+	'LBL_NO'                       => 'Nu'                          , 
+	'LBL_EQ_ZERO'                  => 'Niciun'                      , 
 	'LBL_SHOW_COMPLETE_DETAILS'    => 'Complete Details'            , // TODO: Review
 	'LBL_MASS_EDITING'             => 'Mass Editing'                , 
 	'LBL_DESELECT_ALL_RECORDS'     => 'Deselecta toate'        , 
@@ -554,6 +555,8 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
         'LBL_MERGE'                    => 'Îmbina',
+    
+	'LBL_CONVERSION_RATE'          => 'Rata de conversie'             , // TODO: Review
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'valabil Data',
@@ -719,4 +722,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Suna a eșuat',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Vă rugăm să completați toate câmpurile',
 	// ends
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Modificările dvs. se vor pierde!',
 );

@@ -8,6 +8,7 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
+	'Email Templates' => 'Шаблоны Email' ,
 	'LBL_ADD_RECORD' => 'Добавить E-mail шаблон',
 	'SINGLE_EmailTemplates' => 'E-mail шаблона',
 	'LBL_EMAIL_TEMPLATES'=> 'Шаблоны Email',

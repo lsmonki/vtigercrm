@@ -279,7 +279,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		if($this->fieldColumnMapping === null){
 			$this->fieldColumnMapping =  array();
 			foreach ($this->moduleFields as $fieldName=>$webserviceField) {
-				if(strcasecmp($webserviceField->getFieldDataType(),'file') !== 0){
+                if(strcasecmp($webserviceField->getFieldDataType(),'file') !== 0){
 					$this->fieldColumnMapping[$fieldName] = $webserviceField->getColumnName();
 				}
 			}

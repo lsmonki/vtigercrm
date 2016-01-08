@@ -652,7 +652,7 @@ function vtlib_purify($input, $ignore=false) {
 		}
 		$purified_cache[$md5OfInput] = $value;
 	}
-	$value = str_replace('&amp;','&',$value);
+	 $value = str_replace('&amp;','&',$value);
 	return $value;
 }
 
@@ -702,6 +702,10 @@ function vtlib_module_icon($modulename){
 		return "modules/$modulename/$modulename.png";
 	}
 	return "modules/Vtiger/Vtiger.png";
+}
+
+function vtlib_mime_content_type($filename) {
+	return Vtiger_Functions::mime_content_type($filename);
 }
 
 ?>

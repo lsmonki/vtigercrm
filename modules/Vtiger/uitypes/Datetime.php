@@ -37,7 +37,7 @@ class Vtiger_Datetime_UIType extends Vtiger_Date_UIType {
 		return $date->getDisplayDateTimeValue();
 	}
 
-	/**
+    /**
 	 * Function to get Date and Time value for Display
 	 * @param <type> $date
 	 * @return <String>

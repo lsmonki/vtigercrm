@@ -34,6 +34,15 @@ class MailManager_Folder_Model {
 			return $prefix.$this->mName;
 		}
 	}
+    
+     public function isSentFolder() {
+		$mailBoxModel = MailManager_Mailbox_Model::activeInstance();
+        $folderName = $mailBoxModel->folder();
+		if($this->mName == $folderName) {
+			return true;
+		}
+		return false;
+	}
 
 	public function setName($name) {
 		$this->mName = $name;
@@ -74,7 +83,7 @@ class MailManager_Folder_Model {
 
 		$e = min($st + $this->mPageLimit, $this->mCount);
 		$t = $this->mCount;
-		return sprintf("%s - %s of %s", $s, $e, $t);
+		return sprintf("%s - %s ".vtranslate('LBL_OF')." %s", $s, $e, $t);
 	}
 
 	public function pageCurrent($offset=0) {

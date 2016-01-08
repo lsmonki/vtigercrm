@@ -8,7 +8,8 @@
  * All Rights Reserved.
  *************************************************************************************/
 $languageStrings = array(
-	'LBL_ADD_RECORD' => 'Dodaj rekord',
+	'Email Templates' => 'Szablony mailowe' ,
+   ' LBL_ADD_RECORD' => 'Dodaj rekord',
 	'SINGLE_EmailTemplates' => 'Szablon mailowy',
 	'LBL_EMAIL_TEMPLATES'=> 'Szablony mailowe',
 	'LBL_EMAIL_TEMPLATE' => 'Szablon mailowy',

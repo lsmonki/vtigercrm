@@ -25,4 +25,5 @@ $languageStrings = array(
 	'Received Shipment'            => 'Получено с Доставкой', 
         'LBL_LIST_PRICE'               => 'Прайс-лист',
         'List Price'                   => 'Прайс-лист',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Копировать Адрес компании',
 );

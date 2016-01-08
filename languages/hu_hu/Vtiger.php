@@ -352,6 +352,7 @@ $languageStrings = array(
 	'LBL_NEXT_MONTH'               => 'Következő hónap'             ,
 	'LBL_NEXT_WEEK'                => 'Következő hét'               ,
 	'LBL_NO'                       => 'Nem'                         ,
+	'LBL_EQ_ZERO'                  => 'Nincs'                       ,
 	'LBL_NONE'                     => '--'                          ,
 	'LBL_NOTE'                     => 'Megjegyzés'                  ,
 	'LBL_NOTEPAD' 				   => 'Jegyzetfüzet'                ,
@@ -628,6 +629,8 @@ $languageStrings = array(
 	'Web Site'                     => 'Weboldal'                    ,
 	'Website: '                    => 'weboldal: '                  ,
 	'Word of mouth'                => 'Szóbeszéd'                   ,
+    
+	'LBL_CONVERSION_RATE'          => 'Konverziós arány'           ,
 	
 	//Missing keys - TO-DO handle en_us file (Calendar settings)
 	'Starting Day of the week'     => 'A hét kezdő napja'           ,
@@ -792,7 +795,7 @@ $jsLanguageStrings = array(
 	'JS_YOU_ARE_IN_PAGE_NUMBER'    => 'Ön itt van,oldalszám: ',
 	'JS_YOU_CAN_SELECT_ONLY'       => 'Kiválasztható: '        ,
 	'LBL_DELETE_CONFIRMATION'      => 'Biztos ön abban, hogy törölni akarja?',
-	'LBL_DELETE_USER_CONFIRMATION' => 'Amikor a felhasználót töröljük, a felhasználó inaktívként lesz jelölve, és egyetlen új rekord sem lesz hozzárendelve, valamint a felhasználó nem lesz képes belépni a rendszerbe. A számlázás (díjbekérők) le fog állni ehhez a felhasználóhoz kapcsolódóan. Ha újra szeretné aktiválni a törölt felhasználót, akkor önnek önnek küldenie kell egy e-mailt a support@vtiger.com címre. Biztosan törölni akarja?',
+	'LBL_DELETE_USER_CONFIRMATION' => 'Amikor a felhasználó törlésre kerül, a felhasználó meg kell jelölni "inaktív" és nem az új rekordok lehet rendelni a Felhasználó, és a felhasználó nem tud bejelentkezni. Biztosan törölni szeretné?',
 	'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Képet sikeresen töröltük',
 	'LBL_IMAGE_NOT_DELETED'        => 'Képet nem sikerült törölni',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Biztos ön abban, hogy törölni akarja a kiválasztott rekordokat?',
@@ -805,4 +808,7 @@ $jsLanguageStrings = array(
 	'SHOULD_BE_LESS_THAN_TODAY'    => 'Ennek a mai nap előttinek kell lennie',
 	'SINGLE_Accounts'              => 'Szervezet'                   ,
 	'SINGLE_Contacts'              => 'Kapcsolat'                   ,
+     
+//Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'A változtatások elvesznek!',
 );

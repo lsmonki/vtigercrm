@@ -16,6 +16,7 @@
  *  Author       : JPL TSolucio, S. L. Joe Bordes
  ************************************************************************************/
 $languageStrings = array(
+	'Email Templates' => 'Plantillas de Email' ,
 	'LBL_ADD_RECORD' => 'Añadir Plantilla Email',
 	'SINGLE_EmailTemplates' => 'Plantilla Email',
 	'LBL_EMAIL_TEMPLATES'=> 'Plantillas de Email',

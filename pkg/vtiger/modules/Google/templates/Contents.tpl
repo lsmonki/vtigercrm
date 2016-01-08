@@ -29,9 +29,16 @@
         <div class='row-fluid'>
             <span class='span0'>&nbsp;</span>
             <button id="sync_button" class="btn btn-success span9"  data-url='index.php?module=Google&view=List&operation=sync&sourcemodule={$SOURCEMODULE}'><b>{vtranslate('LBL_SYNC_BUTTON',$MODULE_NAME)}</b></button>
-            <span class="span0">
-                <i class="icon-question-sign pushDown" id="popid"  data-placement="right" rel="popover" ></i>
-            </span>
+            {if $SOURCEMODULE == 'Calendar'} 
+                <span class="span0"> 
+                    <i class="icon-question-sign pushDown" id="popid"  data-placement="right" rel="popover" ></i> 
+                </span> 
+            {/if} 
+            {if $SOURCEMODULE == 'Contacts'} 
+                <span class="span0"> 
+                    <a id="syncSetting" data-sourcemodule="{$SOURCEMODULE}" title="{vtranslate('SYNC_SETTINGS',$MODULE_NAME)}"><i class="icon-cog pushDown" style="margin-top:15px !important;"></i></a> 
+                </span> 
+            {/if} 
         </div>
         <br />
         <div class='row-fluid {if !$FIRSTTIME}hide {/if}' id="removeSyncBlock">
@@ -45,36 +52,7 @@
         
 </div>
 
-{if $SOURCEMODULE == 'Contacts'}
-    <div id="mappingTable">
-        <table  class="table table-condensed table-striped table-bordered "  >
-            <thead>
-                <tr>
-                    <td><b>{vtranslate('APPTITLE',$MODULE_NAME)}</b></td>
-                    <td><b>{vtranslate('EXTENTIONNAME',$MODULE_NAME)}</b></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{vtranslate('First Name',$SOURCEMODULE)} {vtranslate('Last Name',$SOURCEMODULE)}</td>
-                    <td>{vtranslate('Contact Name',$MODULE_NAME)}</td>
-                </tr>
-                <tr>
-                    <td>{vtranslate('Email',$SOURCEMODULE)}</td>
-                    <td>{vtranslate('Email',$MODULE_NAME)}</td>
-                </tr>
-                <tr>
-                    <td>{vtranslate('Mobile Phone',$SOURCEMODULE)}</td>
-                    <td>{vtranslate('Mobile Phone',$MODULE_NAME)}</td>
-                </tr>
-                <tr>
-                    <td>{vtranslate('Mailing Address',$SOURCEMODULE)}</td>
-                    <td>{vtranslate('Address',$MODULE_NAME)}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-{else}
+{if $SOURCEMODULE == 'Calendar'} 
     <div id="mappingTable">
         <table  class="table table-condensed table-striped table-bordered "  >
             <thead>

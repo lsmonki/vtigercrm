@@ -22,5 +22,5 @@ $languageStrings = array(
 $jsLanguageStrings = array(
 	'JS_CONFIGURATION_SAVED' => 'SMS Provider Configurations saved',
 	'JS_RECORD_DELETED_SUCCESSFULLY' => 'SMS Provider Deleted Successfully',
-	'LBL_DELETE_CONFIRMATION' => 'Are you sure, you want to delete this SMSNotifier Configuration',
+	'LBL_DELETE_CONFIRMATION' => 'Are you sure, you want to delete this SMSNotifier Configuration?',
 );	

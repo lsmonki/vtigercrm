@@ -863,8 +863,15 @@ class Users extends CRMEntity {
                     else {
                         $fldvalue = $this->column_fields[$fieldname];
                     }
-                }
-                elseif($uitype == 33) {
+                }elseif ($uitype == 5 || $uitype == 6 || $uitype == 23) {
+					
+					if (isset($current_user->date_format)) {
+						$fldvalue = getValidDBInsertDateValue($this->column_fields[$fieldname]);
+                        
+                        } else {
+						$fldvalue = $this->column_fields[$fieldname];
+					}
+				}elseif($uitype == 33) {
                     if(is_array($this->column_fields[$fieldname])) {
                         $field_list = implode(' |##| ',$this->column_fields[$fieldname]);
                     }else {
@@ -1085,7 +1092,16 @@ class Users extends CRMEntity {
         if(!isset($ownerid) || $ownerid=='')
             $ownerid = $current_user->id;
 
-        $file = $file_details['name'];
+        $save_file = 'true'; 
+        //only images are allowed for these modules 
+        if($module == 'Users') { 
+            $save_file = validateImageFile($file_details); 
+        } 
+        if ($save_file == 'false') { 
+                return; 
+        } 
+
+        $file = $file_details['name']; 
         $binFile = sanitizeUploadFileName($file, $upload_badext);
 
         $filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters
@@ -1100,11 +1116,6 @@ class Users extends CRMEntity {
         //upload the file in server
         $upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$current_id."_".$binFile);
 
-        $save_file = 'true';
-        //only images are allowed for these modules
-        if($module == 'Users') {
-            $save_file = validateImageFile($file_details);
-        }
         if($save_file == 'true') {
 
             $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
@@ -1477,9 +1488,9 @@ class Users extends CRMEntity {
 
 		vtws_transferOwnership($userId, $transformToUserId);
 
-		//delete from user vtiger_table;
-		$sql = "delete from vtiger_users where id=?";
-		$adb->pquery($sql, array($userId));
+			//updating the   vtiger_users table;
+		$sql = "UPDATE vtiger_users SET status=?,deleted=? where id=?";
+	    $adb->pquery($sql, array('Inactive',true,$userId));
 	}
 
     /**

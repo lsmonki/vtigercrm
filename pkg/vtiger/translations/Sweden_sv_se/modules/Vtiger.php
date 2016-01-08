@@ -770,7 +770,8 @@ $languageStrings = array(
     'LBL_MARK_AS_HELD' => 'Markera som Held',
     'LBL_HIDE_COMPLETED_EVENTS' => 'Göm Avslutade Kalenderhändelser',
     'LBL_SETUP_WEBFORMS' => 'Ställ in Webbformulär',
-	
+
+	'LBL_CONVERSION_RATE' => 'Omvandlingshastighet',
 );
 
 $jsLanguageStrings = array(

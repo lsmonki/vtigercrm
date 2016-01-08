@@ -14,7 +14,7 @@ header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 header('Cache-Control: private', false);
 
 //Opensource fix for tracking email access count
-chdir('../../../');
+chdir(dirname(__FILE__). '/../../../');
 
 require_once 'includes/Loader.php';
 require_once 'include/utils/utils.php';
@@ -38,6 +38,11 @@ class Emails_TrackAccess_Action extends Vtiger_Action_Controller {
 			$recordModel = Emails_Record_Model::getInstanceById($recordId);
 			$recordModel->updateTrackDetails($parentId);
 		}
+	}
+
+	function validateRequest(Vtiger_Request $request) {
+		// This is a callback entry point file.
+		return true;
 	}
 }
 

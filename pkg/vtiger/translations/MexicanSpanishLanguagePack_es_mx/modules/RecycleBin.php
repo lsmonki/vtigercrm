@@ -11,7 +11,7 @@
  *  Author       : Proudly, the best Vtiger's Partner in Mexico
  ************************************************************************************/
 $languageStrings = array(
-	'RecycleBin'                   => 'Papelera de reciclaje'                 , 
+	'Recycle Bin'                   => 'Papelera de reciclaje'                 , 
 	'LBL_SELECT_MODULE'            => 'Seleccionar módulo'               , 
 	'LBL_EMPTY_RECYCLEBIN'         => 'Vaciar Papelera'           , 
 	'LBL_RESTORE'                  => 'Restaurar'                     , 

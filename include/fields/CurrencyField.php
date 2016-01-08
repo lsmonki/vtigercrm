@@ -94,8 +94,8 @@ class CurrencyField {
 
 		if(!empty($user->currency_grouping_pattern)) {
 			$this->currencyFormat = html_entity_decode($user->currency_grouping_pattern, ENT_QUOTES, $default_charset);
-			$this->currencySeparator = html_entity_decode($user->currency_grouping_separator, ENT_QUOTES, $default_charset);
-			$this->decimalSeparator = html_entity_decode($user->currency_decimal_separator, ENT_QUOTES, $default_charset);
+			$this->currencySeparator = str_replace("\xC2\xA0", ' ', html_entity_decode($user->currency_grouping_separator, ENT_QUOTES, $default_charset));
+			$this->decimalSeparator = str_replace("\xC2\xA0", ' ', html_entity_decode($user->currency_decimal_separator, ENT_QUOTES, $default_charset));
 		}
 
 		if(!empty($user->currency_id)) {
@@ -201,15 +201,22 @@ class CurrencyField {
         $currencyPattern = $this->currencyFormat;
         $currencySeparator = $this->currencySeparator;
         $decimalSeparator  = $this->decimalSeparator;
-		$currencyDecimalPlaces = $this->numberOfDecimal;
-		$value = number_format($value, $currencyDecimalPlaces,'.','');
-		if(empty($currencySeparator)) $currencySeparator = ' ';
-		if(empty($decimalSeparator)) $decimalSeparator = ' ';
+        $currencyDecimalPlaces = $this->numberOfDecimal;
+        $value = number_format($value, $currencyDecimalPlaces,'.','');
+        if(empty($currencySeparator)) $currencySeparator = ' ';
+        if(empty($decimalSeparator)) $decimalSeparator = ' ';
+        
+        if ($value < 0) { 
+            $sign = "-"; 
+            $value = substr($value, 1); 
+        } else { 
+            $sign = ""; 
+        } 
 
         if($currencyPattern == $this->CURRENCY_PATTERN_PLAIN) {
 			// Replace '.' with Decimal Separator
 			$number = str_replace('.', $decimalSeparator, $value);
-			return $number;
+			return $sign . $number; 
 		}
 		if($currencyPattern == $this->CURRENCY_PATTERN_SINGLE_GROUPING) {
 			// Separate the numeric and decimal parts
@@ -229,7 +236,7 @@ class CurrencyField {
 			}
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
         }
 		if($currencyPattern == $this->CURRENCY_PATTERN_THOUSAND_GROUPING) {
 			$negativeNumber = false;
@@ -272,7 +279,7 @@ class CurrencyField {
 			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
 		}
 		if($currencyPattern == $this->CURRENCY_PATTERN_MIXED_GROUPING) {
 			$negativeNumber = false;
@@ -327,7 +334,7 @@ class CurrencyField {
 			
 			// Re-create the currency value combining the whole number and the decimal part using Decimal separator
 			$number = implode($decimalSeparator, $numericParts);
-			return $number;
+			return $sign . $number; 
 		}
 		return $number;
 	}
@@ -422,12 +429,20 @@ class CurrencyField {
                  */
                 $value = rtrim($value, '0');
             }
-			$fld_value = explode(decode_html($user->currency_decimal_separator), $value);
-			if(strlen($fld_value[1]) <= 1){
-				if(strlen($fld_value[1]) == 1)
-					return $value = $fld_value[0].$user->currency_decimal_separator.$fld_value[1].'0';
-				else
-					return $value = $fld_value[0].$user->currency_decimal_separator.'00';
+            if($user->currency_decimal_separator == '&nbsp;')
+                $decimalSeperator = ' ';
+            else
+				$decimalSeperator = $user->currency_decimal_separator;
+
+			$fieldValue = explode(decode_html($decimalSeperator), $value);
+			if(strlen($fieldValue[1]) <= 1){
+				if(strlen($fieldValue[1]) == 1) {
+					return $value = $fieldValue[0].$decimalSeperator.$fieldValue[1];
+				} else if (!strlen($fieldValue[1])) {
+					return $value = $fieldValue[0];
+				} else {
+					return $value = $fieldValue[0].$decimalSeperator;
+				}
 			}else{
 				return preg_replace("/(?<=\\.[0-9])[0]+\$/","",$value);
 			}

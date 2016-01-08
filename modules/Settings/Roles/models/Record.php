@@ -346,6 +346,16 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 		$db->pquery('DELETE FROM vtiger_group2role WHERE roleid=?', array($roleId));
 		$db->pquery('DELETE FROM vtiger_group2rs WHERE roleandsubid=?', array($roleId));
 
+                $user_result=$db->pquery('select userid from vtiger_user2role WHERE roleid=?',array($roleId));
+                $noOfUsers = $db->num_rows($user_result);
+                $array_users = array();
+
+                if($noOfUsers > 0) {
+                    for($i=0; $i<$noOfUsers; ++$i) {
+                        $array_users[] = $db->query_result($user_result, $i, 'userid');
+                    }
+                }
+
 		//delete handling for sharing rules
 		deleteRoleRelatedSharingRules($roleId);
 
@@ -363,8 +373,16 @@ class Settings_Roles_Record_Model extends Settings_Vtiger_Record_Model {
 			$roleModel->set('parentrole', $newChildParentRoleString);
 			$roleModel->save();
 		}
+                
+                if(is_array($array_users)){
+                    require_once('modules/Users/CreateUserPrivilegeFile.php');
+                    foreach($array_users as $userid){
+                        createUserPrivilegesfile($userid);
+                        createUserSharingPrivilegesfile($userid);
+                    }
+                }
 	}
-
+        
 	/**
 	 * Function to get the list view actions for the record
 	 * @return <Array> - Associate array of Vtiger_Link_Model instances

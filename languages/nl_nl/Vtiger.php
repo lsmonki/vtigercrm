@@ -38,7 +38,8 @@ $languageStrings = array(
 	'LBL_SELECT'                   => 'Selecteer'                   , 
 	'LBL_CLEAR'                    => 'Leegmaken'                   , 
 	'LBL_YES'                      => 'Ja'                          , 
-	'LBL_NO'                       => 'Geen'                         , 
+	'LBL_NO'                       => 'Neen'                        , 
+	'LBL_EQ_ZERO'                  => 'Geen'                        , 
 	'LBL_SHOW_COMPLETE_DETAILS'    => 'Complete Details'            , // TODO: Review
 	'LBL_MASS_EDITING'             => 'Bulkbewerking'               , 
 	'LBL_DESELECT_ALL_RECORDS'     => 'Deselecteer alle'    , 
@@ -554,6 +555,8 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
         'LBL_MERGE'                    => 'Samensmelten',
+    
+	'LBL_CONVERSION_RATE'          => 'Succespercentage'             , // TODO: Review
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'geldige Date',
@@ -711,4 +714,7 @@ $jsLanguageStrings = array(
 	'JS_PBX_OUTGOING_FAILURE'=>'Bel mislukt',
 	'JS_PBX_FILL_ALL_FIELDS'=>'Gelieve alle velden in te vullen',
 	// ends
+        // 
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Uw wijzigingen zullen verloren gaan!',
 );

@@ -33,6 +33,7 @@ $languageStrings = array(
 	'LBL_BALANCE' => 'Balance',
 	'LBL_LIST_PRICE'               => 'Precio Venta',
 	'List Price'                   => 'Precio Venta',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Copiar Dirección de la empresa',
 	//Translation for product not found
 	'LBL_THIS' => 'Este',
 	'LBL_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_OR_REPLACE_THIS_ITEM' => 'ha sido eliminado de la aplicación. Por favor, elimina o sustituye este artículo.',

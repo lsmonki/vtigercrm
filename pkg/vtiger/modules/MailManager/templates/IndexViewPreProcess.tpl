@@ -6,8 +6,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/-->*}
-
-{strip}
+ {strip}
 {include file="Header.tpl"|vtemplate_path:$MODULE}
 {include file="BasicHeader.tpl"|vtemplate_path:$MODULE}
 

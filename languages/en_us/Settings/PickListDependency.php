@@ -21,10 +21,17 @@ $languageStrings = array(
 	'LBL_SELECT_SOURCE_VALUES' => 'Select Source Values',
 	'LBL_SOURCE_FIELD' => 'Source Field',
 	'LBL_TARGET_FIELD' => 'Target Field',
+    
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'PickListDependency' => 'Picklist Dependency', 
+        //Field names 
+        'Module' => 'Module', 
+        'Source Field' => 'Source Field', 
+        'Target Field' => 'Target Field', 
 );
 
 $jsLanguageStrings = array(
-        'JS_DEPENDENCY_ATLEAST_ONE_VALUE' => 'You need to select atleast one value for',
+        'JS_DEPENDENCY_ATLEAST_ONE_VALUE' => 'You need to select at least one value for',
 	'JS_DEPENDENCY_DELETED_SUEESSFULLY' => 'Dependency deleted successfully',
 	'JS_LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE' => 'Are you sure you want to delete this picklist dependency?',
 	'JS_PICKLIST_DEPENDENCY_SAVED' => 'Picklist Dependency Saved',

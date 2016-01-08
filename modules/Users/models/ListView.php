@@ -30,6 +30,10 @@ class Users_ListView_Model extends Vtiger_ListView_Model {
 		foreach($basicLinks as $basicLink) {
 			$links['LISTVIEWBASIC'][] = Vtiger_Link_Model::getInstanceFromValues($basicLink);
 		}
+		$advancedLinks = $this->getAdvancedLinks();
+		foreach($advancedLinks as $advancedLink) {
+			$links['LISTVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($advancedLink);
+		}
 
 		return $links;
 	}
@@ -47,11 +51,14 @@ class Users_ListView_Model extends Vtiger_ListView_Model {
 	 * Functions returns the query
 	 * @return string
 	 */
-    public function getQuery() {
+     public function getQuery() {
             $listQuery = parent::getQuery();
         //remove the status active condition since in users list view we need to consider inactive users as well
-        $listQueryComponents = explode(" WHERE vtiger_users.status='Active' AND",$listQuery);
+            $searchKey = $this->get('search_key');
+            if(!empty($searchKey)) {
+                $listQueryComponents = explode(" WHERE vtiger_users.status='Active' AND", $listQuery);
                 $listQuery = implode(' WHERE ', $listQueryComponents);
+            }
             return $listQuery;
     }
 
@@ -62,12 +69,33 @@ class Users_ListView_Model extends Vtiger_ListView_Model {
 	 */
 	public function getListViewEntries($pagingModel) {
 		$queryGenerator = $this->get('query_generator');
-                
+
 		// Added as Users module do not have custom filters and id column is added by querygenerator.
 		$fields = $queryGenerator->getFields();
 		$fields[] = 'id';
 		$queryGenerator->setFields($fields);
 		
 		return parent::getListViewEntries($pagingModel);
+	}
+
+	/*
+	 * Function to give advance links of Users module
+	 * @return array of advanced links
+	 */
+	public function getAdvancedLinks(){
+		$moduleModel = $this->getModule();
+		$createPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'EditView');
+		$advancedLinks = array();
+		$importPermission = Users_Privileges_Model::isPermitted($moduleModel->getName(), 'Import');
+		if($importPermission && $createPermission) {
+                    $advancedLinks[] = array(
+                        'linktype' => 'LISTVIEW',
+                        'linklabel' => 'LBL_EXPORT',
+                        'linkurl' => 'javascript:Settings_Users_List_Js.triggerExportAction()',
+                        'linkicon' => ''
+                    );
+		}
+
+		return $advancedLinks;
 	}
 }

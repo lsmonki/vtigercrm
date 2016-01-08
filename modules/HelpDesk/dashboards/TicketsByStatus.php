@@ -42,7 +42,7 @@ class HelpDesk_TicketsByStatus_Dashboard extends Vtiger_IndexAjax_View {
 
         $listViewUrl = $moduleModel->getListViewUrl();
         for($i = 0;$i<count($data);$i++){
-            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][1],$request->get('owner'),$dates);
+            $data[$i]["links"] = $listViewUrl.$this->getSearchParams($data[$i][2],$request->get('owner'),$dates);
         }
 		$widget = Vtiger_Widget_Model::getInstance($linkId, $currentUser->getId());
 

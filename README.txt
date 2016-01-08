@@ -102,15 +102,15 @@ S.No ID    Subject
 
 25. 414 - Field positioning Sales/Support Start dates
 
-26. 415 - Inventory Related List
+26. 415 - Inventoryï¿½Relatedï¿½List
 
-27. 416 - Inventory RL
+27. 416 - Inventoryï¿½RL
 
-28. 417 - Inventory RL - Activity History missing
+28. 417 - Inventoryï¿½RL - Activity History missing
 
 29. 418 - Ticket - Create
 
-30. 419 - Email - Edit View
+30. 419 - Emailï¿½-ï¿½Editï¿½View
 
 31. 420 - Availability of user
 
@@ -526,7 +526,7 @@ B. Bug Fixes
 
 24. FORUM:5795 - Roles and Passwords
 
-25. SF1102842 - CSV import, problem with ä,ö,ü
+25. SF1102842 - CSV import, problem with ï¿½,ï¿½,ï¿½
 
 26. SF1097215 - Mass Delete in Accounts, Contacts and Opportunities
 
@@ -762,7 +762,7 @@ A. General
 
 1. Database layer is redesigned for a better data integrity
 
-2. Multiple database support for MySQL, Oracle, MSSQL, and Postgres through ADOdb (We have tested in MySQL and Oracle only)   
+2. Multiple database support for MySQL.
 3. Microsoft Office Plug-in to create mail merge templates in Microsoft Word and create on-the-fly documents with customer specific data in vtiger CRM
 
 4. Mozilla Thunderbird Plug-in to add E-mail messages and addresses from Thunderbird to vtiger CRM
@@ -900,7 +900,7 @@ vtiger Discussions
 Important Notes
 ----------------
 
-* We have tested vtiger CRM 4 in MySQL and Oracle database software. Though we didn't tested in other database software, we feel it should work.
+* We have tested vtiger CRM 4 in MySQL database software. Though we didn't tested in other database software, we feel it should work.
 
 * Cases Module is phased out (Help desk module take care of all the customer support related features)
 
@@ -1303,7 +1303,7 @@ Please feel free to send your valuable comments to contact@vtiger.com so that we
 We have incorporated the following features in this release based on SugarCRM. 
 
 Opportunities
-vtiger.Sales provides a complete, yet easy-to-use Opportunities module.  From deal size to each contact’s role, from listing the competitors to tracking the lead source, sales reps can easily manage each sales opportunity to completion.  
+vtiger.Sales provides a complete, yet easy-to-use Opportunities module.  From deal size to each contactï¿½s role, from listing the competitors to tracking the lead source, sales reps can easily manage each sales opportunity to completion.  
 
 Accounts & Contacts
 With the Accounts & Contacts module, you can easily enter and update key account and contact information. Tracking and staying in touch with your customers is simply a click away. 

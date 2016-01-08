@@ -45,7 +45,8 @@ $languageStrings = array(
 	'LBL_CLEAR' => 'Wyczyść',
 	'LBL_YES' => 'Tak',
 	'LBL_NO' => 'Nie',
-    'LBL_MASS_EDITING' => 'Edycja masowa',
+        'LBL_EQ_ZERO' => 'Żaden',
+        'LBL_MASS_EDITING' => 'Edycja masowa',
 	'LBL_DESELECT_ALL_RECORDS' => 'Odznacz wszystko',
 	'LBL_QUICK_CREATE' => 'Szybkie tworzenie',
 	'LBL_SEND_EMAIL' => 'Wyślij maila',
@@ -625,6 +626,8 @@ $languageStrings = array(
     'LBL_SETUP_WEBFORMS' => 'Konfiguracja formularzy WWW',
     
     'LBL_MERGE'                    => 'Łączyć',
+    
+    	'LBL_CONVERSION_RATE'          => 'Conversion Rate', //TOreview
 	
 );
 

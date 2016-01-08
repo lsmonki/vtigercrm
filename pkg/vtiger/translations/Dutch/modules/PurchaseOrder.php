@@ -33,8 +33,9 @@ $languageStrings = array(
     'LBL_PAID'                     => 'Betaald'                     ,
     'LBL_BALANCE'                  => 'Saldo'                       ,
     'Received Shipment'            => 'Goederen ontvangen'          ,
-        'LBL_LIST_PRICE'               => 'Adviesprijs'             , // Adviesprijs is de offici�le benaming volgens van Dale
-        'List Price'                   => 'Adviesprijs'             ,
+    'LBL_LIST_PRICE'               => 'Adviesprijs'             , // Adviesprijs is de offici�le benaming volgens van Dale
+    'List Price'                   => 'Adviesprijs'             ,
+    'LBL_COPY_COMPANY_ADDRESS' => 'Copy Company Adres',
 );
 
 // added by Vicus

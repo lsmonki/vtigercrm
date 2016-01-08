@@ -554,6 +554,8 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
         'LBL_MERGE'                    => 'fusionner',
+    
+	'LBL_CONVERSION_RATE'          => 'Taux de conversion'             , 
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'date de validité',
@@ -722,4 +724,7 @@ $jsLanguageStrings = array(
         
         //No Tax exist 
         'JS_LBL_NO_TAXES'=>'Pas de taxes', 
+    
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Vos modifications seront perdues!',
 );

@@ -62,7 +62,8 @@ class Products_Record_Model extends Vtiger_Record_Model {
 
 		$result = $db->pquery("SELECT vtiger_products.productid FROM vtiger_products
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
-			LEFT JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_products.productid AND vtiger_seproductsrel.setype='Products'
+			LEFT JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_products.productid AND vtiger_products.discontinued = 1 
+                        AND vtiger_seproductsrel.setype='Products'
 			LEFT JOIN vtiger_users ON vtiger_users.id=vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 AND vtiger_seproductsrel.productid = ? ", array($this->getId()));
@@ -139,7 +140,7 @@ class Products_Record_Model extends Vtiger_Record_Model {
 		$productTaxes = $productDetails[1]['taxes'];
 		if (!empty ($productDetails)) {
 			$taxCount = count($productTaxes);
-			$taxTotal = '0.00';
+			$taxTotal = '0';
 
 			for($i=0; $i<$taxCount; $i++) {
 				$taxValue = $productTaxes[$i]['percentage'];

@@ -80,8 +80,7 @@ $languageStrings = array(
     'Reams'                        => 'Riemen'                      , // a measure for paper, equal to 480 sheets.
     'Sheet'                        => 'Vel'                         , 
     'Spiral Binder'                => 'Spiraalbinding'              , 
-    'Sq Ft'                        => 'm2'                          , // freely translated to sqere meters otherwise use "Vierkante meter"
-    'LBL_CONVERSION_RATE'          => 'Succespercentage'            , 
+    'Sq Ft'                        => 'm2'                          , // freely translated to sqere meters otherwise use "Vierkante meter" 
     'LBL_PRODUCTSMOD_DISABLED'     => 'Productenmodule aanzetten',
 );
 

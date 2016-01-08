@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-$languageStrings = Array(
+$languageStrings  = Array(
 	'RecycleBin' => 'Recycle Bin',
 	'LBL_SELECT_MODULE' => 'Select Module',
 	'LBL_EMPTY_RECYCLEBIN' => 'Empty Recycle Bin',

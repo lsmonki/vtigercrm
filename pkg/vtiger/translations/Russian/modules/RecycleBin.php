@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'RecycleBin'                   => 'Корзина'              , 
+	'Recycle Bin'                   => 'Корзина'              , 
 	'LBL_SELECT_MODULE'            => 'Выберите Модуль', 
 	'LBL_EMPTY_RECYCLEBIN'         => 'Очистить Корзину', 
 	'LBL_RESTORE'                  => 'Востановить'      , // KEY 5.x: LBL_MASS_RESTORE

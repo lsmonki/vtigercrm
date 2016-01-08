@@ -312,7 +312,7 @@ class Vtiger_MailScannerRule {
             case 'Has Ticket Number':
             $regmatches = Array();
             $matchfound = false;
-            $searchfor = "^Ticket Id[^:]?: ([0-9]+)$";
+            $searchfor = "Ticket Id[^:]?: ([0-9]+)"; 
             $searchfor = str_replace('/', '\/', $searchfor);
             if (preg_match("/$searchfor/i", $input, $regmatches)) {
                 // Pick the last matching group
@@ -349,7 +349,7 @@ class Vtiger_MailScannerRule {
 		foreach($matchresult as $matchinfo) {
             $match_condition = $matchinfo['condition'];
             $match_string = $matchinfo['matches'];
-                if($match_condition == 'Regex' && $match_string)
+                if(($match_condition == 'Regex' || $match_condition == 'Has Ticket Number') && $match_string) 
             return $matchinfo;
         }
         return false;

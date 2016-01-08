@@ -11,7 +11,7 @@
  * December 2013    
  ************************************************************************************/
 $languageStrings = array(
-	'RecycleBin'                   => 'Corbeille'                 , 
+	'Recycle Bin'                   => 'Corbeille'                 , 
 	'LBL_SELECT_MODULE'            => 'Choix du module'               , 
 	'LBL_EMPTY_RECYCLEBIN'         => 'Corbeille vide'           , 
 	'LBL_RESTORE'                  => 'Restaurer'                     , 

@@ -94,10 +94,10 @@ class Documents_Record_Model extends Vtiger_Record_Model {
 		echo $fileContent;
 	}
 
-	function updateFileStatus() {
+	function updateFileStatus($status) {
 		$db = PearDatabase::getInstance();
 
-		$db->pquery("UPDATE vtiger_notes SET filestatus = 0 WHERE notesid= ?", array($this->get('id')));
+                $db->pquery("UPDATE vtiger_notes SET filestatus = ? WHERE notesid= ?", array($status,$this->get('id')));
 	}
 
 	function updateDownloadCount() {

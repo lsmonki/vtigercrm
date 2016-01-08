@@ -58,7 +58,7 @@
                         <span class="span2 textAlignCenter">
                             {vtranslate('LBL_OF',$moduleName)}
                         </span>
-                        <span class="span2" id="totalPageCount">{$PAGE_COUNT}</span>
+                        <span class="span3" id="totalPageCount">{$PAGE_COUNT}</span>
                     </span>
                 </li>
             </ul>
@@ -101,19 +101,18 @@
                                 <a>{$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}</a>
                             {elseif $RELATED_HEADERNAME eq 'access_count'}
                                 {$RELATED_RECORD->getAccessCountValue($PARENT_RECORD->getId())}
-                            {elseif $RELATED_HEADERNAME eq 'date_start'}
-                                {if $RELATED_RECORD->isSentMail()} 
-                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)} 
+                              {elseif $RELATED_HEADERNAME eq 'date_start'}
+                                {if $EMAIL_FLAG neq 'SAVED'}
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
                                 {elseif $RELATED_RECORD->isFromMailManager()} 
-                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE_NAME)}</span>  
-                                {else} 
-                                    <span class="label label-info">{vtranslate('LBL_DRAFT',$RELATED_MODULE_NAME)}</span>  
-                                {/if}   
+                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE_NAME)}</span>
+				{/if}
                             {else if $RELATED_HEADERNAME eq 'time_start'}
-                                {if $RELATED_RECORD->isSentMail()} 
-                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}   
-                                 {else}--- 
-                                 {/if}
+                                {if $EMAIL_FLAG neq 'SAVED'}  
+                                    {$RELATED_RECORD->getDisplayValue($RELATED_HEADERNAME)}
+                                {elseif $RELATED_RECORD->isFromMailManager()} 
+                                    <span class="label label-warning">{vtranslate('LBL_ATTACHED',$RELATED_MODULE_NAME)}</span>
+                                {/if}
                             {elseif $RELATED_HEADERNAME eq 'parent_id'}
                                 {assign var=REFERENCE_RECORD value=$RELATED_RECORD->get($RELATED_HEADERNAME)}
                                 {assign var=RECORD_MODULE_MODEL value=$RELATED_RECORD->getModule()}

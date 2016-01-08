@@ -39,6 +39,7 @@ $languageStrings = array(
 	'LBL_CLEAR'                    => 'Borrar'                      , 
 	'LBL_YES'                      => 'Si'                          , 
 	'LBL_NO'                       => 'No'                          , 
+	'LBL_EQ_ZERO'                  => 'Ningún'                      , 
 	'LBL_SHOW_COMPLETE_DETAILS'    => 'Complete Details'            , // TODO: Review
 	'LBL_MASS_EDITING'             => 'Edición masiva'             , 
 	'LBL_DESELECT_ALL_RECORDS'     => 'Anular selección', 
@@ -554,6 +555,8 @@ $languageStrings = array(
 	'LBL_MAX_UPLOAD_SIZE'          => 'Maximum upload size is'      , // TODO: Review
 	'LBL_EXCEEDED'                 => 'Exceeded'                    , // TODO: Review
         'LBL_MERGE'                    => 'Fundirse',
+    
+   'LBL_CONVERSION_RATE'          => 'Tasa de Conversión'     	    , 
 	
 	//Translations used for Export to Pdf
 	'Valid Date' => 'Fecha válida',

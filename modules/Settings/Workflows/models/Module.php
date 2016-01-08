@@ -102,4 +102,19 @@ class Settings_Workflows_Module_Model extends Settings_Vtiger_Module_Model {
 		}
 		return $this->listFieldModels;
 	}
+        
+        /**
+     * Function to get the count of active workflows
+     * @return <Integer> count of active workflows
+     */
+    public function getActiveWorkflowCount(){
+        $db = PearDatabase::getInstance();
+
+		$query = 'SELECT count(*) AS count FROM com_vtiger_workflows 
+                  INNER JOIN vtiger_tab ON vtiger_tab.name = com_vtiger_workflows.module_name 
+                  AND vtiger_tab.presence IN (0,2)';
+
+		$result = $db->pquery($query, array());
+		return $db->query_result($result, 0, 'count');
+    }      
 }

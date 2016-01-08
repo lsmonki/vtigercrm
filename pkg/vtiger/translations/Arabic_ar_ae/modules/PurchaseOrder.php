@@ -40,7 +40,7 @@ $languageStrings = array(
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'هذا البند ملغي من النظام ، الرجاء ازالة هذا البند',
         'LBL_LIST_PRICE'               => 'قائمة الأسعار',
         'List Price'                   => 'قائمة الأسعار',
-
+        'LBL_COPY_COMPANY_ADDRESS'=> 'نسخة عنوان الشركة',
 );
 
 $jsLanguageStrings = array(

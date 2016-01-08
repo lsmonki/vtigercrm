@@ -16,7 +16,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-	'RecycleBin' => 'Papelera de Reciclaje',
+	'Recycle Bin' => 'Papelera de Reciclaje',
 	'LBL_SELECT_MODULE' => 'Selecciona Módulo',
 	'LBL_EMPTY_RECYCLEBIN' => 'Vaciar Papelera de Reciclaje',
 	'LBL_RESTORE' => 'Restaurar',

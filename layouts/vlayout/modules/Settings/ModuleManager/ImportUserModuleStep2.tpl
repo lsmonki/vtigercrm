@@ -74,24 +74,32 @@
                                                     </div>
                                                 {/if}<br>
                                                 <div class="row-fluid">
-                                                    <div class="span7">
+                                                    <div class="span4">
                                                         {if $MODULEIMPORT_EXISTS neq 'true'}
                                                                 <input type="checkbox"  class="acceptLicense"> {vtranslate('LBL_LICENSE_ACCEPT_AGREEMENT', $QUALIFIED_MODULE)}
                                                         {/if}&nbsp;
                                                     </div>
-                                                    <div class="span5">
+                                                    <div class="span8">
                                                         <span class="pull-right">
-                                                            {if $MODULEIMPORT_EXISTS eq 'true' || $MODULEIMPORT_DIR_EXISTS eq 'true'}
-                                                                {if $MODULEIMPORT_EXISTS eq 'true'}
-                                                                        <input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">
-                                                                        <input type="hidden" name="module_import_type" value="{$MODULEIMPORT_TYPE}">
-                                                                        <input type="hidden" name="module_import_name" value="{$MODULEIMPORT_NAME}">
+                                                                <div class="row-fluid">
+                                                                    {if $MODULEIMPORT_EXISTS eq 'true' || $MODULEIMPORT_DIR_EXISTS eq 'true'}
+                                                                        <div class="span10">
+                                                                            {if $MODULEIMPORT_EXISTS eq 'true'}
+                                                                                    <input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">
+                                                                                    <input type="hidden" name="module_import_type" value="{$MODULEIMPORT_TYPE}">
+                                                                                    <input type="hidden" name="module_import_name" value="{$MODULEIMPORT_NAME}">
 
-                                                                        <button class="btn btn-success updateModule" name="saveButton">{vtranslate('LBL_UPDATE_NOW', $QUALIFIED_MODULE)}</button>
-                                                                {/if}
-                                                                <div class=" pull-right cancelLinkContainer">
-                                                                        <a class="cancelLink" type="reset" data-dismiss="modal" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
-                                                                </div>
+                                                                                    <button class="btn btn-success updateModule" name="saveButton">{vtranslate('LBL_UPDATE_NOW', $QUALIFIED_MODULE)}</button>
+                                                                            {else}
+                                                                                <p class="alert-info">{vtranslate('LBL_DELETE_EXIST_DIRECTORY', $QUALIFIED_MODULE)}</p>
+                                                                            {/if}
+                                                                        </div>
+                                                                        <div class="span2">
+                                                                            <div class=" pull-right cancelLinkContainer">
+                                                                                    <a class="cancelLink" type="reset" data-dismiss="modal" onclick="javascript:window.history.back();">{vtranslate('LBL_CANCEL', $MODULE)}</a>
+                                                                            </div>
+                                                                        </div>
+                                                                 </div>
                                                             </span>
                                                         {else}
                                                                 <input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">

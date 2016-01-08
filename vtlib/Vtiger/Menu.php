@@ -66,27 +66,9 @@ class Vtiger_Menu {
 		}
 		self::syncfile();
 	}
-	
-	/**
-	 * Remove module from this menu instance.
-	 * @param Vtiger_Module Instance of the module
-	 */
-	function removeModule($moduleInstance) {
-		if(empty($moduleInstance) || empty($moduleInstance)) {
-			self::log("Module instance is not set!");
-			return;
-		}
-		if($this->id) {
-			global $adb;
-			$adb->pquery("DELETE FROM vtiger_parenttabrel WHERE parenttabid = ? AND tabid = ?",
-					Array($this->id, $moduleInstance->id));
-			self::log("Removed $moduleInstance->name from menu $this->label ... DONE");
-		} else {
-			self::log("Menu could not be found!");
-		}
-		self::syncfile();
-	}
-
+	//No requirement of removeModule api()
+        //Confirmed by (http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7477)
+        
 	/**
 	 * Detach module from menu
 	 * @param Vtiger_Module Instance of the module

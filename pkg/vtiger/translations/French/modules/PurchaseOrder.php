@@ -41,4 +41,5 @@ $languageStrings = array(
 	'Grand Total:' => 'Total:',
         'LBL_LIST_PRICE'               => 'Prix',
         'List Price'                   => 'Prix',
+        'LBL_COPY_COMPANY_ADDRESS' => 'Copie Adresse de la Société',
 );

@@ -11,6 +11,7 @@
  *  Author       : Proudly, the best Vtiger's Partner in Mexico
  ************************************************************************************/
 $languageStrings = array(
+	'Email Templates' => 'Plantillas de correo' ,
 	'LBL_ADD_RECORD' => 'Agregar plantilla de correo',
 	'SINGLE_EmailTemplates' 	=> 'Plantilla de correo',
 	'LBL_EMAIL_TEMPLATES'		=> 'Plantillas de correo',

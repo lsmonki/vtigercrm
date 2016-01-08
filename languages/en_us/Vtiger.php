@@ -352,6 +352,7 @@ $languageStrings = array(
 	'LBL_NEXT_MONTH' => 'Next Month',
 	'LBL_NEXT_WEEK' => 'Next Week',
 	'LBL_NO' => 'No',
+	'LBL_EQ_ZERO' => 'No',
 	'LBL_NONE' => 'None',
 	'LBL_NOTE' => 'Note',
 	'LBL_NOTEPAD' => 'Notepad',
@@ -401,7 +402,7 @@ $languageStrings = array(
 	'LBL_REASON_FOR_CHANGING_COMMENT' => 'Reason for changing comment',
 	'LBL_RECENTLY_MODIFIED' => 'Recently Modified',
 	'LBL_RECORD' => 'Record',
-	'LBL_RECORDS_LIST' => 'Records List', 
+	'LBL_RECORDS_LIST' => 'Records List',
 	'LBL_RECORD_DELETE' => 'The record you are trying to view has been deleted.',
 	'LBL_RECORD_NOT_FOUND' => 'Record you are trying to access is not found',
 	'LBL_RECORD_SUMMARY' => 'Module Summary', //Duplicated key-value pairs
@@ -628,10 +629,27 @@ $languageStrings = array(
 	'Web Site' => 'Web Site',
 	'Website: ' => 'Website: ',
 	'Word of mouth' => 'Word of mouth',
-    
+    	  
         //Promotion translations
         'LBL_HIDE_PROMOTION' => 'Hide Promotion',
         'LBL_SHOW_PROMOTION' => 'Show Promotion',
+    
+        //customerportal forgot password 
+        'LBL_LOGIN_DETAILS' => 'Login Details' ,
+        'LBL_USERNAME' => ' Username',
+        'LBL_PASSWORD' => 'Password',
+        'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Portal Login Details',
+         //Patch provided by http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/7884
+        'Users' => 'Users', 
+        'Service Requests' => 'Service Requests', 
+        'Terms &amp; Conditions' => 'Terms & Conditions', 
+	'LBL_CONVERSION_RATE'          => 'Conversion Rate',
+    
+      //Email template  edit Convertion
+       'LBL_CURRENT_DATE' => 'Current Date',
+       'LBL_CURRENT_TIME' => 'Current Time',
+    
+        'LBL_LEFT_PANEL_SHOW_HIDE' => 'Left panel show/hide'
 );
 
 $jsLanguageStrings = array(
@@ -747,8 +765,10 @@ $jsLanguageStrings = array(
 	'JS_YOU_ARE_IN_PAGE_NUMBER' => 'You are in page number',
 	'JS_YOU_CAN_SELECT_ONLY' => 'You can select only',
 	'LBL_DELETE_CONFIRMATION' => 'Are you sure you want to delete?', // This is added as duplicate as we need to show different message for different modules. Ex:Accounts has different message
-	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Billing will stop for this user.If you need to reactivate a deleted user, you will need to send email to support@vtiger.com.Are you sure you want to delete?',
-	'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Image Deleted Successfully',
+	'LBL_DELETE_USER_CONFIRMATION' => 'When a User is deleted, the user will be marked as "Inactive" and no new records can be assigned to the User, and the user will not be able to login. Are you sure you want to delete?',
+	'LBL_RESTORE_CONFIRMATION' => 'Records previously assigned to this user will not be restored. Are you sure you want to restore this user?',
+    'LBL_DELETE_USER_PERMANENT_CONFIRMATION' => 'Once deleted this user cannot be restored back. Are you sure you want to delete this user permanently?',
+    'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Image Deleted Successfully',
 	'LBL_IMAGE_NOT_DELETED' => 'Image Not Deleted',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected Records?',
 	'LBL_NO' => 'No',
@@ -771,4 +791,10 @@ $jsLanguageStrings = array(
         'LBL_SYNCRONIZING' => 'Syncronizing',
     
         'JS_RECORDS_TRANSFERRED_SUCCESSFULLY' => 'Records ownership transferred successfully.',
+    
+    //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'Your Changes Will Be Lost!',
+    
+    //Mass edit failure
+    'JS_MASS_EDIT_NOT_SUCCESSFULL' => 'Mass edit of some record is not successfull',
 );

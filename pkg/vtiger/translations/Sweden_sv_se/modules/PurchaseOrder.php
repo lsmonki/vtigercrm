@@ -40,7 +40,7 @@ $languageStrings = array(
 	'LBL_THIS_LINE_ITEM_IS_DELETED_FROM_THE_SYSTEM_PLEASE_REMOVE_THIS_LINE_ITEM' => 'Denna artikel tas bort från systemet, vänligen ta bort artikel',
         'LBL_LIST_PRICE'               => 'Pris',
         'List Price'                   => 'Pris',
-
+        'LBL_COPY_COMPANY_ADDRESS'=> 'Kopiera Företag Adress',
 );
 
 $jsLanguageStrings = array(

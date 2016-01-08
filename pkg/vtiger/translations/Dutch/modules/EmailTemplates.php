@@ -18,7 +18,8 @@
  * @link      http://www.vicus.nl
  ************************************************************************************/
 $languageStrings = array(
-    'LBL_ADD_RECORD' => 'Voeg E-mailsjabloon toe',
+    'Email Templates' => 'E-mailsjablonen' ,
+	 'LBL_ADD_RECORD' => 'Voeg E-mailsjabloon toe',
     'SINGLE_EmailTemplates' => 'E-mailsjabloon',
     'LBL_EMAIL_TEMPLATES'=> 'E-mailsjablonen',
     'LBL_EMAIL_TEMPLATE' => 'E-mailsjabloon',

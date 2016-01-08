@@ -263,6 +263,31 @@ class Vtiger_Module_Model extends Vtiger_Module {
 		return 'index.php?module='.$this->get('name').'&view='.$this->getListViewName();
 	}
 
+     /**
+     * Function to get listview url with all filter
+     * @return <string> URL
+     */
+    
+    public function getListViewUrlWithAllFilter(){
+        return $this->getListViewUrl().'&viewname='.$this->getAllFilterCvidForModule();
+    }
+    
+      /**
+	 * Function returns the All filter for the module
+	 * @return <Int> custom filter id
+	 */
+    public function getAllFilterCvidForModule() {
+		$db = PearDatabase::getInstance();
+
+		$result = $db->pquery("SELECT cvid FROM vtiger_customview WHERE viewname = 'All' AND entitytype = ?",
+					array($this->getName()));
+		if ($db->num_rows($result)) {
+			return $db->query_result($result, 0, 'cvid');
+		}
+		return false;
+	}
+    
+    
 	/**
 	 * Function to get the url for the Create Record view of the module
 	 * @return <String> - url
@@ -554,20 +579,19 @@ class Vtiger_Module_Model extends Vtiger_Module {
      * @return <Array> returns related fields list.
      */
 	public function getRelatedListFields() {
-		$entityInstance = CRMEntity::getInstance($this->getName());
+        $entityInstance = CRMEntity::getInstance($this->getName());
         $list_fields_name = $entityInstance->list_fields_name;
         $list_fields = $entityInstance->list_fields;
         $relatedListFields = array();
-		foreach ($list_fields as $key => $fieldInfo) {
-			foreach ($fieldInfo as $columnName) {
-				if(array_key_exists($key, $list_fields_name)){
-					$relatedListFields[$columnName] = $list_fields_name[$key];
-				}
-			}
-
-		}
+        foreach ($list_fields as $key => $fieldInfo) {
+            foreach ($fieldInfo as $columnName) {
+                if (array_key_exists($key, $list_fields_name)) {
+                    $relatedListFields[$columnName] = $list_fields_name[$key];
+                }
+            }
+        }
         return $relatedListFields;
-	}
+    }
 
 	public function getConfigureRelatedListFields(){
 		$showRelatedFieldModel = $this->getSummaryViewFieldsList();
@@ -622,9 +646,9 @@ class Vtiger_Module_Model extends Vtiger_Module {
                 $instance = self::getInstanceFromModuleObject($moduleObject);
                 Vtiger_Cache::set('module',$value,$instance);
 				if (is_string($value)) {
-					Vtiger_Cache::set('module', $moduleObject->id, $instance);
-				} else if (is_int($value)) {
 					Vtiger_Cache::set('module', $moduleObject->name, $instance);
+				} else if (is_int($value)) {
+					Vtiger_Cache::set('module', $moduleObject->id, $instance);
 				}
             }
         }
@@ -1314,7 +1338,13 @@ class Vtiger_Module_Model extends Vtiger_Module {
 
 		//modify query if any module has summary fields, those fields we are displayed in related list of that module
 		$relatedListFields = $relatedModule->getConfigureRelatedListFields();
-		if(count($relatedListFields) > 0) {
+		
+        if($relatedModuleName == 'Documents') {
+                    $relatedListFields['filelocationtype'] = 'filelocationtype';
+                    $relatedListFields['filestatus'] = 'filestatus';
+                }
+
+        if(count($relatedListFields) > 0) {
 			$currentUser = Users_Record_Model::getCurrentUserModel();
 			$queryGenerator = new QueryGenerator($relatedModuleName, $currentUser);
 			$queryGenerator->setFields($relatedListFields);
@@ -1419,9 +1449,12 @@ class Vtiger_Module_Model extends Vtiger_Module {
 					$sql .= " INNER JOIN $tablename ON $tablename.$tabIndex = vtiger_crmentity.crmid
 						WHERE $tablename.$relIndex IN (".  generateQuestionMarks($recordIds).")";
 				}
+
+				$sql .=' AND vtiger_crmentity.deleted = 0';
 				foreach ($recordIds as $key => $recordId) {
 					array_push($params, $recordId);
 				}
+
 				$result1 = $db->pquery($sql, $params);
 				$num_rows = $db->num_rows($result1);
 				for($j=0; $j<$num_rows; $j++){

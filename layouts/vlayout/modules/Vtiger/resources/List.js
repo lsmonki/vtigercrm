@@ -751,6 +751,14 @@ jQuery.Class("Vtiger_List_Js",{
                     'mode' : 'hide'
                 });
 				app.hideModalWindow();
+                if (!(data.result))
+                {
+                   var params = {
+						     text: app.vtranslate('JS_MASS_EDIT_NOT_SUCCESSFULL'),
+						     type: 'info'
+						 };
+				    Vtiger_Helper_Js.showPnotify(params);
+                }
 				aDeferred.resolve(data);
 			},
 			function(error,err){
@@ -1434,7 +1442,12 @@ jQuery.Class("Vtiger_List_Js",{
 				var liElement = jQuery(event.currentTarget).closest('.select2-result-selectable');
 				var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
 				var approveUrl = currentOptionElement.data('approveurl');
-				window.location.href = approveUrl;
+				var newEle = '<form action='+approveUrl+' method="POST">'+ 
+                    '<input type = "hidden" name ="'+csrfMagicName+'"  value=\''+csrfMagicToken+'\'>'+
+                    '</form>'; 
+                var formElement = jQuery(newEle);  
+                                              
+                formElement.appendTo('body').submit(); 
 				event.stopPropagation();
 			});
 		}
@@ -1454,7 +1467,12 @@ jQuery.Class("Vtiger_List_Js",{
 				var liElement = jQuery(event.currentTarget).closest('.select2-result-selectable');
 				var currentOptionElement = thisInstance.getSelectOptionFromChosenOption(liElement);
 				var denyUrl = currentOptionElement.data('denyurl');
-				window.location.href = denyUrl;
+				var newEle = '<form action='+denyUrl+' method="POST">'+ 
+                    '<input type = "hidden" name ="'+csrfMagicName+'"  value=\''+csrfMagicToken+'\'>'+
+                    '</form>'; 
+                var formElement = jQuery(newEle);  
+                                              
+                formElement.appendTo('body').submit(); 
 				event.stopPropagation();
 			});
 		}
@@ -1893,10 +1911,22 @@ jQuery.Class("Vtiger_List_Js",{
             var searchOperator = 'c';
             if(fieldInfo.type == "date" || fieldInfo.type == "datetime") {
                 searchOperator = 'bw';
-            }else if (fieldInfo.type == 'percentage' || fieldInfo.type == "double" || fieldInfo.type == "integer"
-                || fieldInfo.type == 'currency' || fieldInfo.type == "number" || fieldInfo.type == "boolean" ||
-                fieldInfo.type == "picklist") {
+             }else if (  fieldInfo.type == "boolean" || fieldInfo.type == "picklist") {
                 searchOperator = 'e';
+            }else if( fieldInfo.type == 'currency'  || fieldInfo.type == "double" || 
+                fieldInfo.type == 'percentage' || fieldInfo.type == "integer"  ||
+                fieldInfo.type == "number"){
+                if(searchValue.substring(0,2) == '>=' ) {
+                    searchOperator = 'h';
+                } else if ( searchValue.substring(0,2)== '<=') { 
+                    searchOperator = 'm';   
+                } else   if(searchValue.substring(0,1) == '>' ) { 
+                    searchOperator = 'g';
+                } else if ( searchValue.substring(0,1)== '<') {
+                    searchOperator = 'l';   
+                } else {
+                    searchOperator = 'e';
+                }
             }
             searchInfo.push(fieldName);
             searchInfo.push(searchOperator);

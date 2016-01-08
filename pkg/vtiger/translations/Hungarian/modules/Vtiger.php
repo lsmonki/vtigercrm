@@ -629,6 +629,8 @@ $languageStrings = array(
 	'Website: '                    => 'weboldal: '                  ,
 	'Word of mouth'                => 'Szóbeszéd'                   ,
 	
+	'LBL_CONVERSION_RATE'          => 'Konverziós arány'           ,
+    
 	//Missing keys - TO-DO handle en_us file (Calendar settings)
 	'Starting Day of the week'     => 'A hét kezdő napja'           ,
 	'Day starts at'                => 'Nap kezdete'                 ,
@@ -792,7 +794,7 @@ $jsLanguageStrings = array(
 	'JS_YOU_ARE_IN_PAGE_NUMBER'    => 'Ön itt van,oldalszám: ',
 	'JS_YOU_CAN_SELECT_ONLY'       => 'Kiválasztható: '        ,
 	'LBL_DELETE_CONFIRMATION'      => 'Biztos ön abban, hogy törölni akarja?',
-	'LBL_DELETE_USER_CONFIRMATION' => 'Amikor a felhasználót töröljük, a felhasználó inaktívként lesz jelölve, és egyetlen új rekord sem lesz hozzárendelve, valamint a felhasználó nem lesz képes belépni a rendszerbe. A számlázás (díjbekérők) le fog állni ehhez a felhasználóhoz kapcsolódóan. Ha újra szeretné aktiválni a törölt felhasználót, akkor önnek önnek küldenie kell egy e-mailt a support@vtiger.com címre. Biztosan törölni akarja?',
+	'LBL_DELETE_USER_CONFIRMATION' => 'Amikor a felhasználó törlésre kerül, a felhasználó meg kell jelölni "inaktív" és nem az új rekordok lehet rendelni a Felhasználó, és a felhasználó nem tud bejelentkezni. Biztosan törölni szeretné?',
 	'LBL_IMAGE_DELETED_SUCCESSFULLY' => 'Képet sikeresen töröltük',
 	'LBL_IMAGE_NOT_DELETED'        => 'Képet nem sikerült törölni',
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Biztos ön abban, hogy törölni akarja a kiválasztott rekordokat?',
@@ -808,4 +810,7 @@ $jsLanguageStrings = array(
     'JS_LBL_NO_TAXES'              => 'Nincsenek adók'    ,
     'JS_HIDE_PROMOTION' 		   => 'Reklám elrejtése'  ,
     'JS_SHOW_PROMOTION'            => 'Reklám mutatása'   ,
+    
+     //Edit view mode Translations
+        'JS_CHANGES_WILL_BE_LOST' => 'A változtatások elvesznek!',
 );

@@ -16,7 +16,7 @@
  ************************************************************************************/
 
 $languageStrings = Array(
-	'RecycleBin' => 'Papelera de Reciclaje',
+	'Recycle Bin' => 'Papelera de Reciclaje',
 	'LBL_SELECT_MODULE' => 'Selecciona Módulo',
 	'LBL_EMPTY_RECYCLEBIN' => 'Vaciar Papelera de Reciclaje',
 	'LBL_RESTORE' => 'Restaurar',
@@ -28,6 +28,7 @@ $languageStrings = Array(
 $jsLanguageStrings = array(
 	'JS_MSG_EMPTY_RB_CONFIRMATION' => '¿Estás seguro que quieres eliminar permanentemente todos los registros borrados de la base de datos?',
 	'JS_LBL_RESTORE_RECORDS_CONFIRMATION' => '¿Estás seguro que quieres restaurar los registros?',
+	'JS_RESTORING_RECORDS' => 'Recuperando registros',
 );
 
 ?>

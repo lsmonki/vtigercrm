@@ -22,7 +22,7 @@ class Google {
      */
     function vtlib_handler($moduleName, $eventType) {
         $adb = PearDatabase::getInstance();
-        $forModules = array('Contacts', 'Leads');
+        $forModules = array('Contacts', 'Leads','Accounts');
         $syncModules = array('Contacts' => 'Google Contacts', 'Calendar' => 'Google Calendar');
 
         if ($eventType == 'module.postinstall') {

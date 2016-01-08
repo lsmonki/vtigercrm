@@ -27,7 +27,8 @@ class ModTrackerHandler extends VTEventHandler {
                 
                 $newerEntity = $vtEntityDelta->getNewEntity($moduleName, $recordId);
                 $newerColumnFields = $newerEntity->getData();
-
+                $newerColumnFields=array_change_key_case($newerColumnFields,CASE_LOWER);
+                $delta=  array_change_key_case($delta,CASE_LOWER);
                 if(is_array($delta)) {
                     $inserted = false;
                     foreach($delta as $fieldName => $values) {

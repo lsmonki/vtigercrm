@@ -32,7 +32,7 @@
  * @author Jim Jagielski
  * @copyright 2010 - 2011 Jim Jagielski
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
- * @version $Id$
+ * @version $Id: class.smtp.php 13883 2013-10-03 06:36:17Z prasad $
  */
 
 /**

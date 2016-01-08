@@ -418,7 +418,12 @@ class Vtiger_Functions {
 		$moduleInfo = self::getBasicModuleInfo($mixed);
 		$module = $moduleInfo['name'];
 
-		if ($module && !isset(self::$moduleFieldInfoByNameCache[$module])) {
+                $no_of_fields = $adb->pquery('SELECT COUNT(fieldname) FROM vtiger_field WHERE tabid=?',array(self::getModuleId($module)));
+                $fields_count = $adb->query_result($no_of_fields,0,'COUNT(fieldname)');
+                
+                $cached_fields_count = isset(self::$moduleFieldInfoByNameCache[$module]) ? count(self::$moduleFieldInfoByNameCache[$module]) : NULL;
+                
+		if ($module && (!isset(self::$moduleFieldInfoByNameCache[$module]) || ((int)$fields_count != (int)$cached_fields_count))) {
 			$result =
 				($module == 'Calendar')?
 				$adb->pquery('SELECT * FROM vtiger_field WHERE tabid=? OR tabid=?', array(9, 16)) :
@@ -572,15 +577,31 @@ class Vtiger_Functions {
 
 	static function validateImage($file_details) {
 		global $app_strings;
+		$allowedImageFormats = array('jpeg', 'png', 'jpg', 'pjpeg', 'x-png', 'gif', 'bmp');
+		
+		$mimeTypesList = array_merge($allowedImageFormats, array('x-ms-bmp'));//bmp another format
 		$file_type_details = explode("/", $file_details['type']);
 		$filetype = $file_type_details['1'];
-		if (!empty($filetype))
+		if ($filetype) {
 			$filetype = strtolower($filetype);
-		if (($filetype == "jpeg" ) || ($filetype == "png") || ($filetype == "jpg" ) || ($filetype == "pjpeg" ) || ($filetype == "x-png") || ($filetype == "gif") || ($filetype == 'bmp')) {
-			$saveimage = 'true';
-		} else {
+		}
+
+		$saveimage = 'true';
+		if (!in_array($filetype, $allowedImageFormats)) {
 			$saveimage = 'false';
-			$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>" . $file_details[name] . "</b>" . $app_strings['MSG_IS_NOT_UPLOADED'];
+		}
+
+		//mime type check
+		$mimeType = mime_content_type($file_details['tmp_name']);
+		$mimeTypeContents = explode('/', $mimeType);
+		if (!$file_details['size'] || !in_array($mimeTypeContents[1], $mimeTypesList)) {
+			$saveimage = 'false';
+		}
+
+		// Check for php code injection
+		$imageContents = file_get_contents($file_details['tmp_name']);
+		if (preg_match('/(<\?php?(.*?))/i', $imageContents) == 1) {
+			$saveimage = 'false';
 		}
 		return $saveimage;
 	}
@@ -903,4 +924,50 @@ class Vtiger_Functions {
         $unitpice = $adb->query_result($result,0,'unit_price');
         return $unitpice;
     }
+
+
+    /**
+    * Function to fetch the list of vtiger_groups from group vtiger_table
+    * Takes no value as input
+    * returns the query result set object
+    */
+    static function get_group_options() {
+        global $adb, $noof_group_rows;
+        $sql = "select groupname,groupid from vtiger_groups";
+        $result = $adb->pquery($sql, array());
+        $noof_group_rows = $adb->num_rows($result);
+        return $result;
+    }
+
+	/**
+	* Function to determine mime type of file. 
+	* Compatible with mime_magic or fileinfo php extension.
+	*/
+	static function mime_content_type($filename) {
+		$type = null;
+		if (function_exists('mime_content_type')) {
+			$type = mime_content_type($filename);
+		} else if (function_exists('finfo_open')) {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$type = finfo_file($finfo, $filename);
+			finfo_close($finfo);
+		} else {
+			throw new Exception('mime_magic or fileinfo extension required.');
+		}
+		return $type;
+	}
+   
+     /**
+	 * Check the file MIME Type
+	 * @param $targetFile  Filepath to validate
+	 * @param  $claimedMime Array of bad file extenstions
+	 */
+    static function verifyClaimedMIME($targetFile,$claimedMime) {
+    $fileMimeContentType= self::mime_content_type($targetFile);
+    if (in_array(strtolower($fileMimeContentType), $claimedMime)) {
+     return false; 
+    }
+    return true;
+    } 
+    
 }

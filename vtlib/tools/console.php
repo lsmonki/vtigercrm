@@ -218,8 +218,10 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 		$entityfieldlabel = ucwords($this->prompt(sprintf("Entity field (%s): ",
 				$moduleInformation['entityfieldlabel']), self::PROMPT_OPTIONAL));
 		if ($entityfieldlabel) {
-			$moduleInformation['entityfieldlael'] = $entityfieldlabel;
+			$moduleInformation['entityfieldlabel'] = $entityfieldlabel;
 		}
+
+		$moduleInformation['parent'] = 'Tools';
 
 		echo "Creating ...";
 		$this->create($moduleInformation);
@@ -235,6 +237,7 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 
 		$module = new Vtiger_Module();
 		$module->name = $moduleInformation['name'];
+		$module->parent=$moduleInformation['parent'];
 		$module->save();
 
 		$module->initTables();
@@ -269,7 +272,7 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 		$block->addField($field2);
 
 		$field3 = new Vtiger_Field();
-		$field3->name = 'CreatedTime';
+		$field3->name = 'createdtime';
 		$field3->label= 'Created Time';
 		$field3->table = 'vtiger_crmentity';
 		$field3->column = 'createdtime';
@@ -279,7 +282,7 @@ class Vtiger_Tools_Console_ModuleController extends Vtiger_Tools_Console_Control
 		$block->addField($field3);
 
 		$field4 = new Vtiger_Field();
-		$field4->name = 'ModifiedTime';
+		$field4->name = 'modifiedtime';
 		$field4->label= 'Modified Time';
 		$field4->table = 'vtiger_crmentity';
 		$field4->column = 'modifiedtime';
